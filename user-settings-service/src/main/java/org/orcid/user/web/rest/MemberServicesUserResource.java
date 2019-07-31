@@ -70,21 +70,17 @@ public class MemberServicesUserResource {
         }
         
         //TODO: create user in UAA, then, get the user_id, populate the userId in the memberServicesUser and store it in the DB
-        try {
-        	String login = memberServicesUserDTO.getLogin();
-        	String password = memberServicesUserDTO.getPassword();
-        	String email = memberServicesUserDTO.getEmail();
-        	//String authorities = String.join(",", memberServicesUserDTO.getAuthorities());
-        	Map<String, Object> map = new HashMap<String, Object>();
-        	map.put("login", memberServicesUserDTO.getLogin());
-        	map.put("password", memberServicesUserDTO.getPassword());
-        	map.put("email", memberServicesUserDTO.getEmail());
-        	map.put("authorities", memberServicesUserDTO.getAuthorities());
-        	
-        	oauth2ServiceClient.registerUser(map);
-        } catch(Exception e) {
-        	System.out.println(e.getMessage());
-        }
+    	String login = memberServicesUserDTO.getLogin();
+    	String password = memberServicesUserDTO.getPassword();
+    	String email = memberServicesUserDTO.getEmail();
+    	//String authorities = String.join(",", memberServicesUserDTO.getAuthorities());
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("login", memberServicesUserDTO.getLogin());
+    	map.put("password", memberServicesUserDTO.getPassword());
+    	map.put("email", memberServicesUserDTO.getEmail());
+    	map.put("authorities", memberServicesUserDTO.getAuthorities());
+    	
+    	oauth2ServiceClient.registerUser(map);
         
         MemberServicesUserDTO result = memberServicesUserRepository.save(memberServicesUserDTO);
         return ResponseEntity.created(new URI("/api/member-services-users/" + result.getId()))
