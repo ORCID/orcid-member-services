@@ -2,7 +2,8 @@
   "generator-jhipster": {
     "promptValues": {
       "packageName": "org.orcid.gateway",
-      "nativeLanguage": "en"
+      "nativeLanguage": "en",
+      "microservicePath": "../user-settings-service"
     },
     "jhipsterVersion": "6.1.2",
     "applicationType": "gateway",
@@ -35,6 +36,9 @@
     "otherModules": [],
     "enableTranslation": true,
     "nativeLanguage": "en",
-    "languages": ["en", "es"]
+    "languages": [
+      "en",
+      "es"
+    ]
   }
 }

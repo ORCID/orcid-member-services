@@ -1,0 +1,32 @@
+{
+  "gatewayApp": {
+    "userSettingsServiceMemberServicesUser": {
+      "home": {
+        "title": "Member Services Users",
+        "createLabel": "Crear nuevo Member Services User",
+        "createOrEditLabel": "Crear o editar Member Services User",
+        "notFound": "No Member Services User found"
+      },
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Member Services User {{ id }}?"
+      },
+      "detail": {
+        "title": "Member Services User"
+      },
+      "user_id": "User Id",
+      "salesforceId": "Salesforce Id",
+      "parentSalesforceId": "Parent Salesforce Id",
+      "disabled": "Disabled",
+      "mainContact": "Main Contact",
+      "assertionServiceEnabled": "Assertion Service Enabled",
+      "oboClientId": "Obo Client Id"
+    }
+  },
+  "userSettingsServiceApp": {
+    "userSettingsServiceMemberServicesUser": {
+      "created": "Un nuevo Member Services User ha sido creado con el identificador {{ param }}",
+      "updated": "Un Member Services User ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Member Services User ha sido eliminado con el identificador {{ param }}"
+    }
+  }
+}
