@@ -1,0 +1,32 @@
+{
+  "health": {
+    "title": "Control de salud",
+    "refresh.button": "Refrescar",
+    "stacktrace": "Stacktrace",
+    "details": {
+      "details": "Details",
+      "properties": "Properties",
+      "name": "Name",
+      "value": "Value",
+      "error": "Error"
+    },
+    "indicator": {
+      "discoveryComposite": "Discovery Composite",
+      "refreshScope": "Microservice Refresh Scope",
+      "configServer": "Microservice Config Server",
+      "hystrix": "Hystrix",
+      "diskSpace": "Espacio en disco",
+      "mail": "Email",
+      "mongo": "MongoDB"
+    },
+    "table": {
+      "service": "Nombre del servicio",
+      "status": "Estado"
+    },
+    "status": {
+      "UNKNOWN": "UNKNOWN",
+      "UP": "LEVANTADO",
+      "DOWN": "CAÍDO"
+    }
+  }
+}
