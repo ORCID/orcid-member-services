@@ -1,29 +1,29 @@
 package org.orcid.user.client;
 
-import java.util.List;
 import java.util.Map;
 
-import org.orcid.user.config.FeignFormEncoderConfig;
-import org.springframework.cloud.openfeign.FeignClient;
+import javax.ws.rs.core.MediaType;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import feign.Body;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+
 import feign.Headers;
-import feign.Param;
 
 @AuthorizedFeignClient (
 		name = "OAUTH2SERVICE"   
 	)
 public interface Oauth2ServiceClient {
 
-	@RequestMapping(method = RequestMethod.POST, value = "/api/register")
-    @Headers("Content-Type: application/json")
-    /*@Body("%7B\n" +
-            "  \"login\": \"{login}\"," +
-            "  \"password\": {password}," +
-            "  \"email\": {email}," +
-            "  \"authorities\": {authorities}" +
-            "%7D")*/	
-    void registerUser(Map<String, ?> queryMap);
+	@RequestMapping(method = RequestMethod.POST, value = "/api/users", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
+	@HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "3000")
+	ResponseEntity<Void> registerUser(Map<String, ?> queryMap);
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/api/users/{login}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
+	@HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "3000")
+    //@Headers("Content-Type: " + MediaType.APPLICATION_JSON) 
+	ResponseEntity<String> getUser(@PathVariable("login") String login);
 }
