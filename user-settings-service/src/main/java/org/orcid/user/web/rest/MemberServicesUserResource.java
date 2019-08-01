@@ -1,5 +1,7 @@
 package org.orcid.user.web.rest;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.orcid.user.client.Oauth2ServiceClient;
 import org.orcid.user.domain.MemberServicesUser;
 import org.orcid.user.repository.MemberServicesUserRepository;
@@ -61,10 +63,11 @@ public class MemberServicesUserResource {
      * @param memberServicesUser the memberServicesUser to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new memberServicesUser, or with status {@code 400 (Bad Request)} if the memberServicesUser has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @throws JSONException 
      */
     @PostMapping("/member-services-users")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<MemberServicesUserDTO> createMemberServicesUser(@Valid @RequestBody MemberServicesUserDTO memberServicesUserDTO) throws URISyntaxException {
+    public ResponseEntity<MemberServicesUserDTO> createMemberServicesUser(@Valid @RequestBody MemberServicesUserDTO memberServicesUserDTO) throws URISyntaxException, JSONException {
         log.debug("REST request to save MemberServicesUserDTO : {}", memberServicesUserDTO);
         if (memberServicesUserDTO.getId() != null) {
             throw new BadRequestAlertException("A new memberServicesUser cannot already have an ID", ENTITY_NAME, "idexists");
@@ -85,8 +88,13 @@ public class MemberServicesUserResource {
         }
     	
     	// Now fetch the user to get the user id and populate the member services user information
-        @SuppressWarnings("unused")
-		ResponseEntity<String> userInfo = oauth2ServiceClient.getUser(login);
+        ResponseEntity<String> userInfo = oauth2ServiceClient.getUser(login);
+        
+        String user = userInfo.getBody();
+        JSONObject obj = new JSONObject(user);
+        String userId = obj.getString("id");
+        
+        memberServicesUserDTO.setUserId(userId);
         
         MemberServicesUserDTO result = memberServicesUserRepository.save(memberServicesUserDTO);
         return ResponseEntity.created(new URI("/api/member-services-users/" + result.getId()))
