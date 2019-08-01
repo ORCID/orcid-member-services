@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
@@ -70,21 +71,22 @@ public class MemberServicesUserResource {
         }
         
         //TODO: create user in UAA, then, get the user_id, populate the userId in the memberServicesUser and store it in the DB
-        try {
-        	String login = memberServicesUserDTO.getLogin();
-        	String password = memberServicesUserDTO.getPassword();
-        	String email = memberServicesUserDTO.getEmail();
-        	//String authorities = String.join(",", memberServicesUserDTO.getAuthorities());
-        	Map<String, Object> map = new HashMap<String, Object>();
-        	map.put("login", memberServicesUserDTO.getLogin());
-        	map.put("password", memberServicesUserDTO.getPassword());
-        	map.put("email", memberServicesUserDTO.getEmail());
-        	map.put("authorities", memberServicesUserDTO.getAuthorities());
-        	
-        	oauth2ServiceClient.registerUser(map);
-        } catch(Exception e) {
-        	System.out.println(e.getMessage());
+    	String login = memberServicesUserDTO.getLogin();
+    	//String authorities = String.join(",", memberServicesUserDTO.getAuthorities());
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("login", login);
+    	map.put("password", memberServicesUserDTO.getPassword());
+    	map.put("email", memberServicesUserDTO.getEmail());
+    	map.put("authorities", memberServicesUserDTO.getAuthorities());
+    	
+    	ResponseEntity<Void> response = oauth2ServiceClient.registerUser(map);
+        if(response == null || !HttpStatus.CREATED.equals(response.getStatusCode())) {
+        	throw new RuntimeException("User creation failed: " + response.getStatusCode().getReasonPhrase());
         }
+    	
+    	// Now fetch the user to get the user id and populate the member services user information
+        @SuppressWarnings("unused")
+		ResponseEntity<String> userInfo = oauth2ServiceClient.getUser(login);
         
         MemberServicesUserDTO result = memberServicesUserRepository.save(memberServicesUserDTO);
         return ResponseEntity.created(new URI("/api/member-services-users/" + result.getId()))

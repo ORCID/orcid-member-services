@@ -9,11 +9,7 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "orgName",
-            "fieldType": "String"
-        },
+        },        
         {
             "fieldName": "salesforceId",
             "fieldType": "String"
@@ -33,6 +29,10 @@
         {
             "fieldName": "assertionServiceEnabled",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "oboClientId",
+            "fieldType": "String"
         }
     ],
     "dto": "no",
