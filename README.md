@@ -1,38 +1,57 @@
-- Prerequisites
+# Development setup
 
-Java – tested with java 8, should be tested on java 11
-Git
-NodeJS
-Yeoman
-Yarn
-MongoDB
+## Prerequisites
+
+1. Install the following software
+
+    - OpenJDK 11
+    - Git
+    - NodeJS
+    - Yeoman
+    - Yarn
+    - MongoDB
+
+## Development setup
 
 - Clone the orcid-member-services repository:
 
-git clone git@github.com:ORCID/orcid-member-services.git
+    git clone git@github.com:ORCID/orcid-member-services.git
 
+- Start the JHipster UAA services
+
+[JHipster UAA](https://www.jhipster.tech/using-uaa/) is the service we use to secure our member services, it consists on three different applications:
+    - The JHipster [registry](https://github.com/jhipster/jhipster-registry)
+    - The JHipster [gateway](https://www.jhipster.tech/api-gateway/)
+    - The JHipster [oauth2-service](https://www.jhipster.tech/using-uaa)
+    
+So, the first thing we should do is starting the different JHipster services as follows:   
 
 1. Start the JHipster registry:
-- Open a new terminal 
-- cd orcid-member-services/jhipster-registry/
-- Run .\mvnw
-- Wait for it to start
+    - Open a new terminal 
+    - cd orcid-member-services/jhipster-registry/
+    - Run `bash mvnw`
+    - Wait for it to start
 
-2. Start the gateway/
-- Open a new terminal 
-- cd orcid-member-services/gateway/    
-- Run .\mvnw
-- Wait for it to start
+2. Start the JHipster gateway:
+    - Open a new terminal 
+    - cd orcid-member-services/gateway/    
+    - Run `bash mvnw`
+    - Wait for it to start
 
-- Open a new terminal 
-- cd orcid-member-services/oauth2-service/  
-- Run .\mvnw
-- Wait for it to start
+3. Start the oauth2-services
+    - Open a new terminal 
+    - cd orcid-member-services/oauth2-service/  
+    - Run `bash mvnw`
+    - Wait for it to start
+
+At this point, all required services are up and running, time to start the `user-settings-service`
+
 
 - Open a new terminal 
 - cd orcid-member-services/user-settings-service/
 - Run .\mvnw
 - Wait for it to start
+
 
 ---
  Create  user test: 
