@@ -73,8 +73,7 @@ public class MemberServicesUserResource {
             throw new BadRequestAlertException("A new memberServicesUser cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
-        //TODO: create user in UAA, then, get the user_id, populate the userId in the memberServicesUser and store it in the DB
-    	String login = memberServicesUserDTO.getLogin();
+        String login = memberServicesUserDTO.getLogin();
     	//String authorities = String.join(",", memberServicesUserDTO.getAuthorities());
     	Map<String, Object> map = new HashMap<String, Object>();
     	map.put("login", login);
