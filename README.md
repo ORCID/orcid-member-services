@@ -13,13 +13,16 @@
 
 ## Development setup
 
-- Clone the orcid-member-services repository:
+### Clone the orcid-member-services repository
 
-    git clone git@github.com:ORCID/orcid-member-services.git
+Create a `git` directory in your home folder, and clone the orcid-member-services project there:
+    - mkdir ~/git
+    - cd ~/git
+    - git clone git@github.com:ORCID/orcid-member-services.git
 
-- Start the JHipster UAA services
+### Start the JHipster UAA services
 
-[JHipster UAA](https://www.jhipster.tech/using-uaa/) is the service we use to secure our member services, it consists on three different applications:
+[JHipster UAA](https://www.jhipster.tech/using-uaa/) is the service we use to secure our member services, it consists on     three different applications:
     - The JHipster [registry](https://github.com/jhipster/jhipster-registry)
     - The JHipster [gateway](https://www.jhipster.tech/api-gateway/)
     - The JHipster [oauth2-service](https://www.jhipster.tech/using-uaa)
