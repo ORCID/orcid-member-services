@@ -95,6 +95,9 @@ public class MemberServicesUserResource {
         
         memberServicesUserDTO.setUserId(userId);
         
+        // Remove the password, so we dont store plain passwords anywhere
+        memberServicesUserDTO.setPassword(null);
+        
         MemberServicesUserDTO result = memberServicesUserRepository.save(memberServicesUserDTO);
         return ResponseEntity.created(new URI("/api/member-services-users/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
