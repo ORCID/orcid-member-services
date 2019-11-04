@@ -24,6 +24,5 @@ public interface Oauth2ServiceClient {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/api/users/{login}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
 	@HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "3000")
-    //@Headers("Content-Type: " + MediaType.APPLICATION_JSON) 
 	ResponseEntity<String> getUser(@PathVariable("login") String login);
 }
