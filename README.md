@@ -37,6 +37,7 @@ So, the first thing we should do is starting the different JHipster services as 
     - cd orcid-member-services/jhipster-registry/
     - Run `bash mvnw`
     - Wait for it to start
+    - Go to (http://localhost:8761/#/)[http://localhost:8761/#/] and sign in with the admin credentials `admin / admin`
 
 2. Start the JHipster gateway:
 
@@ -44,6 +45,7 @@ So, the first thing we should do is starting the different JHipster services as 
     - cd orcid-member-services/gateway/    
     - Run `bash mvnw`
     - Wait for it to start
+    - Go to (http://localhost:8080/)[http://localhost:8080/] and sing in with the admin credentials `admin / admin`
 
 3. Start the oauth2-services
 
@@ -71,9 +73,11 @@ To test that the `user-settings-service` is working as expected, we will create 
 
 1. First we need to generate an access token using the default admin user credentials `admin / admin`:
 
-    curl -X POST --data "username=admin&password=admin&grant_type=password&scope=openid" http://web_app:changeit@localhost:9999/oauth/token
+````
+curl -X POST --data "username=admin&password=admin&grant_type=password&scope=openid" http://web_app:changeit@localhost:9999/oauth/token
+````
 
-    This will return an access token that looks like this one: 
+This will return an access token that looks like this one: 
     
 ```json
 {
@@ -87,24 +91,26 @@ To test that the `user-settings-service` is working as expected, we will create 
 }
 ```
 
-From it, we just need to get the value of the `access_token` parameter.
-    
+From it, take the `access_token` parameter and use it to create a new user, as follows:
 
----
- Create  user test: 
- 
- 1. Get a token: 
- 
-    curl -X POST --data "username=admin&password=admin&grant_type=password&scope=openid" http://web_app:changeit@localhost:9999/oauth/token
- 
-    This will  
- 
- 2. Create the user:
- 
- curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer <TOKEN>" -X POST --data '{"login":"user99996","password":"password123","email":"user99996@test.com","authorities":["ROLE_USER","CONSORTIUM_LEAD"]},"salesforceId":"salesforce-id","parentSalesforceId":"parent-salesforce-id"'  http://localhost:8081/api/member-services-users
+```
+curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer <TOKEN>" -X POST --data '{"login":"test_user_1","password":"password123","email":"test_user_1@test.com","authorities":["ROLE_USER","CONSORTIUM_LEAD"]},"salesforceId":"salesforce-id","parentSalesforceId":"parent-salesforce-id"'  http://localhost:8081/api/member-services-users
+```
 
-3. Result:
+From it, notice the user parameters: 
 
-You should end up with:
-- One user in the Oauth2Service.jhi_user table, so we can login using the UAA.
-- One user in the UserSettingsService.member_services_user, that will keep other user information, like salesforce and client ids
+- login: The name used to login
+- password: The user password
+- email: The user email
+- authorities: The authorities the user should have, by default, they should be `ROLE_USER` and `CONSORTIUM_LEAD`.
+- salesforceId: TBD
+- parentSalesforceId: TBD
+
+After that, please go to the (gateway app)[http://localhost:8080/], logout if you are not, and, now login using the new credentials you just created.
+
+Then, if you want to explore the database entries created by this call, you can login to you database (MongoDB by default), and, you will see the following changes: 
+
+- In the `Oauth2Service` collection, in the `jhi_user` table, you will see a new user, which is the one used by the UAA to allow you to login.
+- In the `UserSettingsService` collection, in the `member_services_user` table, there will be a new user as well, and, on it, the `user_id` field must match the id of the new user in the `Oauth2Service`.`jhi_user` table
+
+If all that is correct, then, the setup is done.
