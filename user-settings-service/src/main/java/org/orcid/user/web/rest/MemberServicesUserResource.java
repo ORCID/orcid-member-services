@@ -3,8 +3,8 @@ package org.orcid.user.web.rest;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.user.client.Oauth2ServiceClient;
-import org.orcid.user.domain.MemberServicesUser;
-import org.orcid.user.repository.MemberServicesUserRepository;
+import org.orcid.user.domain.UserSettings;
+import org.orcid.user.repository.UserSettingsRepository;
 import org.orcid.user.service.dto.MemberServicesUserDTO;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 
@@ -51,10 +51,10 @@ public class MemberServicesUserResource {
     @Autowired
     private Oauth2ServiceClient oauth2ServiceClient;
     
-    private final MemberServicesUserRepository memberServicesUserRepository;
+    private final UserSettingsRepository userSettingsRepository;
 
-    public MemberServicesUserResource(MemberServicesUserRepository memberServicesUserRepository) {
-        this.memberServicesUserRepository = memberServicesUserRepository;
+    public MemberServicesUserResource(UserSettingsRepository userSettingsRepository) {
+        this.userSettingsRepository = userSettingsRepository;
     }
 
     /**
