@@ -4,12 +4,12 @@
 
 1. Install the following software
 
-    - OpenJDK 11
-    - Git
-    - NodeJS
-    - Yeoman
-    - Yarn
-    - MongoDB
+    - [OpenJDK 11](https://openjdk.java.net/install/)
+    - [Git](https://git-scm.com/downloads)
+    - [NodeJS](https://nodejs.org/en/download)
+    - [Yeoman](https://yeoman.io/learning/)
+    - [Yarn](https://yarnpkg.com/lang/en/docs/install/#mac-stable)
+    - [MongoDB](https://docs.mongodb.com/manual/installation/)
 
 ## Development setup
 
@@ -40,7 +40,8 @@ So, the first thing we should do is starting the different JHipster services as 
     - Go to (http://localhost:8761/#/)[http://localhost:8761/#/] and sign in with the admin credentials `admin / admin`
 
 2. Start the JHipster gateway:
-
+    
+    - Start MongoDB
     - Open a new terminal 
     - cd orcid-member-services/gateway/    
     - Run `bash mvnw`
