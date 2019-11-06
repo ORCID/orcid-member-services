@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import java.util.Date;
+import java.time.Instant;
 
 @Document(collection = "user_settings")
 public class UserSettings implements Serializable {
@@ -37,13 +37,13 @@ public class UserSettings implements Serializable {
     private String createdBy;
 
     @Field("created_date")
-    private Date createdDate;
+    private Instant createdDate;
 
     @Field("last_modified_by")
     private String lastModifiedBy;
 
     @Field("last_modified_date")
-    private String lastModifiedDate;
+    private Instant lastModifiedDate;
 
     public String getId() {
         return id;
@@ -101,11 +101,11 @@ public class UserSettings implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public Date getCreatedDate() {
+    public Instant getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(Instant createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -117,11 +117,11 @@ public class UserSettings implements Serializable {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    public String getLastModifiedDate() {
+    public Instant getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(String lastModifiedDate) {
+    public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 
