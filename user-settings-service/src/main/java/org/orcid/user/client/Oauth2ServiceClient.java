@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
-import feign.Headers;
-
 @AuthorizedFeignClient (
 		name = "OAUTH2SERVICE"   
 	)
