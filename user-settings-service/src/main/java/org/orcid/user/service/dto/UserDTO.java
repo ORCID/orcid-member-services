@@ -124,5 +124,20 @@ public class UserDTO extends UserSettings {
         return "UserDTO [login=" + login + ", password=" + password + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", authorities="
                 + authorities + "]";
     }
+    
+    public static UserDTO valueOf(UserSettings us) {
+        UserDTO result = new UserDTO();
+        result.setCreatedBy(us.getCreatedBy());
+        result.setCreatedDate(us.getCreatedDate());
+        result.setDisabled(us.getDisabled());               
+        result.setId(us.getId());
+        result.setJhiUserId(us.getJhiUserId());
+        result.setLastModifiedBy(us.getLastModifiedBy());
+        result.setLastModifiedDate(us.getLastModifiedDate());
+        result.setMainContact(us.getMainContact());
+        result.setMemberId(us.getMemberId());
+        result.setSalesforceId(us.getSalesforceId());
+        return result;
+    }
 
 }
