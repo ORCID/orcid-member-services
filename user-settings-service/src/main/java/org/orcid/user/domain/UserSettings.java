@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.Instant;
 
+import javax.validation.constraints.NotNull;
+
 @Document(collection = "user_settings")
 public class UserSettings implements Serializable {
 
@@ -17,15 +19,12 @@ public class UserSettings implements Serializable {
 
     @Id
     private String id;
-
+    
     @Field("jhi_user_id")
     private String jhiUserId;
 
     @Field("salesforce_id")
     private String salesforceId;
-
-    @Field("member_id")
-    private String memberId;
 
     @Field("disabled")
     private Boolean disabled;
@@ -69,15 +68,7 @@ public class UserSettings implements Serializable {
         this.salesforceId = salesforceId;
     }
 
-    public String getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(String memberId) {
-        this.memberId = memberId;
-    }
-
-    public Boolean getDisabled() {
+   public Boolean getDisabled() {
         return disabled;
     }
 
@@ -136,8 +127,7 @@ public class UserSettings implements Serializable {
         result = prime * result + ((jhiUserId == null) ? 0 : jhiUserId.hashCode());
         result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
         result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
-        result = prime * result + ((mainContact == null) ? 0 : mainContact.hashCode());
-        result = prime * result + ((memberId == null) ? 0 : memberId.hashCode());
+        result = prime * result + ((mainContact == null) ? 0 : mainContact.hashCode());        
         result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
         return result;
     }
@@ -191,11 +181,6 @@ public class UserSettings implements Serializable {
                 return false;
         } else if (!mainContact.equals(other.mainContact))
             return false;
-        if (memberId == null) {
-            if (other.memberId != null)
-                return false;
-        } else if (!memberId.equals(other.memberId))
-            return false;
         if (salesforceId == null) {
             if (other.salesforceId != null)
                 return false;
@@ -206,7 +191,7 @@ public class UserSettings implements Serializable {
 
     @Override
     public String toString() {
-        return "UserSettings [id=" + id + ", jhiUserId=" + jhiUserId + ", salesforceId=" + salesforceId + ", memberId=" + memberId + ", disabled=" + disabled
+        return "UserSettings [id=" + id + ", jhiUserId=" + jhiUserId + ", salesforceId=" + salesforceId + ", disabled=" + disabled
                 + ", mainContact=" + mainContact + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy
                 + ", lastModifiedDate=" + lastModifiedDate + "]";
     }

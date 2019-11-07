@@ -134,8 +134,7 @@ public class UserDTO extends UserSettings {
         result.setJhiUserId(us.getJhiUserId());
         result.setLastModifiedBy(us.getLastModifiedBy());
         result.setLastModifiedDate(us.getLastModifiedDate());
-        result.setMainContact(us.getMainContact());
-        result.setMemberId(us.getMemberId());
+        result.setMainContact(us.getMainContact());        
         result.setSalesforceId(us.getSalesforceId());
         return result;
     }
