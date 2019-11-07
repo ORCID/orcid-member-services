@@ -35,19 +35,15 @@ public class MemberSettings implements Serializable {
     @Field("assertion_service_enabled")
     private Boolean assertionServiceEnabled;
 
-    @NotNull
     @Field("created_by")
     private String createdBy;
 
-    @NotNull
     @Field("created_date")
     private Instant createdDate;
 
-    @NotNull
     @Field("last_modified_by")
     private String lastModifiedBy;
 
-    @NotNull
     @Field("last_modified_date")
     private Instant lastModifiedDate;
 
