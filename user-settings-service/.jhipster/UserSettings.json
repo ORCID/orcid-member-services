@@ -16,7 +16,7 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "disabled",
+            "fieldName": "assertionsServiceDisabled",
             "fieldType": "Boolean"
         },
         {

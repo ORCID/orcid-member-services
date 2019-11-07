@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -70,6 +71,27 @@ public class UserSettingsResource {
         this.userSettingsRepository = userSettingsRepository;
     }
 
+    /**
+     * {@code POST  /users} : Create a list of users.
+     *
+     * @param usersFile:
+     *            file containing the users to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and
+     *         with a map indicating if each user was created or not, or with status {@code 400 (Bad Request)}
+     *         if the file cannot be parsed.
+     * @throws URISyntaxException
+     *             if the Location URI syntax is incorrect.
+     * @throws JSONException
+     * @throws ParseException
+     */
+    @PostMapping("/user/import")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
+    public ResponseEntity<Map<Integer, Boolean>> createUsers(@RequestParam("file") MultipartFile file) throws URISyntaxException, JSONException, ParseException {
+        //TODO: see https://github.com/ORCID/orcid-assertion-service/blob/master/src/main/java/org/orcid/assertionService/web/rest/AffiliationResource.java#L222
+        return null;
+    }
+    
+    
     /**
      * {@code POST  /user} : Create a new memberServicesUser.
      *
@@ -120,7 +142,7 @@ public class UserSettingsResource {
 
         UserSettings us = new UserSettings();
         us.setLogin(userLogin);
-        us.setDisabled(false);       
+        us.setAssertionsServiceDisabled(false);       
         us.setMainContact(userDTO.getMainContact());        
         us.setSalesforceId(userDTO.getSalesforceId());
         us.setCreatedBy(createdBy);
@@ -264,7 +286,7 @@ public class UserSettingsResource {
         }
 
         UserSettings us = msu.get();
-        us.setDisabled(true);
+        us.setAssertionsServiceDisabled(true);
 
         userSettingsRepository.save(us);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();

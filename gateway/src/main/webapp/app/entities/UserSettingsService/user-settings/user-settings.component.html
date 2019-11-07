@@ -20,7 +20,7 @@
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="login"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login">User login</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="salesforceId"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId">Salesforce Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="disabled"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.disabled">Disabled</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="assertionsServiceDisabled"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.assertionsServiceDisabled">Assertion Service</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="mainContact"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.mainContact">Main Contact</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="createdBy"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="createdDate"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -34,7 +34,7 @@
                 <td><a [routerLink]="['/user-settings', userSettings.id, 'view' ]">{{userSettings.id}}</a></td>
                 <td>{{userSettings.login}}</td>
                 <td>{{userSettings.salesforceId}}</td>
-                <td>{{userSettings.disabled}}</td>
+                <td>{{userSettings.assertionsServiceDisabled}}</td>
                 <td>{{userSettings.mainContact}}</td>
                 <td>{{userSettings.createdBy}}</td>
                 <td>{{userSettings.createdDate | date:'medium'}}</td>
