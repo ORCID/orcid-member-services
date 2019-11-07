@@ -131,7 +131,6 @@ public class UserDTO extends UserSettings {
         result.setCreatedDate(us.getCreatedDate());
         result.setDisabled(us.getDisabled());               
         result.setId(us.getId());
-        result.setJhiUserId(us.getJhiUserId());
         result.setLastModifiedBy(us.getLastModifiedBy());
         result.setLastModifiedDate(us.getLastModifiedDate());
         result.setMainContact(us.getMainContact());        

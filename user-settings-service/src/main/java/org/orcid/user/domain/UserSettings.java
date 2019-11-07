@@ -1,13 +1,11 @@
 package org.orcid.user.domain;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import java.time.Instant;
-
-import javax.validation.constraints.NotNull;
 
 @Document(collection = "user_settings")
 public class UserSettings implements Serializable {
@@ -20,8 +18,8 @@ public class UserSettings implements Serializable {
     @Id
     private String id;
     
-    @Field("jhi_user_id")
-    private String jhiUserId;
+    @Field("login")
+    private String login;
 
     @Field("salesforce_id")
     private String salesforceId;
@@ -52,12 +50,12 @@ public class UserSettings implements Serializable {
         this.id = id;
     }
 
-    public String getJhiUserId() {
-        return jhiUserId;
+    public String getLogin() {
+        return login;
     }
 
-    public void setJhiUserId(String jhiUserId) {
-        this.jhiUserId = jhiUserId;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getSalesforceId() {
@@ -124,7 +122,7 @@ public class UserSettings implements Serializable {
         result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
         result = prime * result + ((disabled == null) ? 0 : disabled.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((jhiUserId == null) ? 0 : jhiUserId.hashCode());
+        result = prime * result + ((login == null) ? 0 : login.hashCode());
         result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
         result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
         result = prime * result + ((mainContact == null) ? 0 : mainContact.hashCode());        
@@ -161,10 +159,10 @@ public class UserSettings implements Serializable {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (jhiUserId == null) {
-            if (other.jhiUserId != null)
+        if (login == null) {
+            if (other.login != null)
                 return false;
-        } else if (!jhiUserId.equals(other.jhiUserId))
+        } else if (!login.equals(other.login))
             return false;
         if (lastModifiedBy == null) {
             if (other.lastModifiedBy != null)
@@ -191,7 +189,7 @@ public class UserSettings implements Serializable {
 
     @Override
     public String toString() {
-        return "UserSettings [id=" + id + ", jhiUserId=" + jhiUserId + ", salesforceId=" + salesforceId + ", disabled=" + disabled
+        return "UserSettings [id=" + id + ", login=" + login + ", salesforceId=" + salesforceId + ", disabled=" + disabled
                 + ", mainContact=" + mainContact + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy
                 + ", lastModifiedDate=" + lastModifiedDate + "]";
     }
