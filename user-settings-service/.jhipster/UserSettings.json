@@ -1,0 +1,47 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "UserSettingsService",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "jhiUserId",
+            "fieldType": "String",            
+        },
+        {
+            "fieldName": "salesforceId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "disabled",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "mainContact",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "String"            
+        },
+        {
+            "fieldName": "createdDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "lastModifiedBy",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastModifiedDate",
+            "fieldType": "Instant"
+        }
+    ],
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "user_settings",
+    "databaseType": "mongodb",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination",
+    "microserviceName": "UserSettingsService"
+}

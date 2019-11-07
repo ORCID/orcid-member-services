@@ -98,8 +98,7 @@ public class UserSettingsResource {
         map.put("email", userDTO.getEmail());
         map.put("authorities", userDTO.getAuthorities());
         map.put("firstName", userDTO.getFirstName());
-        map.put("lastName", userDTO.getLastName());
-        map.put("memberId", userDTO.getMemberId());
+        map.put("lastName", userDTO.getLastName());        
 
         ResponseEntity<Void> response = oauth2ServiceClient.registerUser(map);
         if (response == null || !HttpStatus.CREATED.equals(response.getStatusCode())) {
@@ -122,8 +121,7 @@ public class UserSettingsResource {
         UserSettings us = new UserSettings();
         us.setJhiUserId(userId);
         us.setDisabled(false);       
-        us.setMainContact(userDTO.getMainContact());
-        us.setMemberId(userDTO.getMemberId());
+        us.setMainContact(userDTO.getMainContact());        
         us.setSalesforceId(userDTO.getSalesforceId());
         us.setCreatedBy(createdBy);
         us.setCreatedDate(createdDate);
