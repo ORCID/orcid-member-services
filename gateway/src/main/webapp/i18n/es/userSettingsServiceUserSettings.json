@@ -1,0 +1,33 @@
+{
+  "gatewayApp": {
+    "userSettingsServiceUserSettings": {
+      "home": {
+        "title": "User Settings",
+        "createLabel": "Crear nuevo User Settings",
+        "createOrEditLabel": "Crear o editar User Settings",
+        "notFound": "No User Settings found"
+      },
+      "delete": {
+        "question": "¿Seguro que quiere eliminar User Settings {{ id }}?"
+      },
+      "detail": {
+        "title": "User Settings"
+      },
+      "login": "Login de usuario",
+      "salesforceId": "Salesforce Id",
+      "disabled": "Disabled",
+      "mainContact": "Main Contact",
+      "createdBy": "Created By",
+      "createdDate": "Created Date",
+      "lastModifiedBy": "Last Modified By",
+      "lastModifiedDate": "Last Modified Date"
+    }
+  },
+  "userSettingsServiceApp": {
+    "userSettingsServiceUserSettings": {
+      "created": "Un nuevo User Settings ha sido creado con el identificador {{ param }}",
+      "updated": "Un User Settings ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un User Settings ha sido eliminado con el identificador {{ param }}"
+    }
+  }
+}

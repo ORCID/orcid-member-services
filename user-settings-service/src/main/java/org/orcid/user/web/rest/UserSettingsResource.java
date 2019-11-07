@@ -112,14 +112,14 @@ public class UserSettingsResource {
         String user = userInfo.getBody();
 
         JSONObject obj = new JSONObject(user);
-        String userId = obj.getString("id");
+        String userLogin = obj.getString("login");
         String createdBy = obj.getString("createdBy");
         Instant createdDate = Instant.parse(obj.getString("createdDate"));
         String lastModifiedBy = obj.getString("lastModifiedBy");
         Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
 
         UserSettings us = new UserSettings();
-        us.setJhiUserId(userId);
+        us.setLogin(userLogin);
         us.setDisabled(false);       
         us.setMainContact(userDTO.getMainContact());        
         us.setSalesforceId(userDTO.getSalesforceId());
@@ -132,7 +132,7 @@ public class UserSettingsResource {
         us = userSettingsRepository.save(us);
 
         userDTO.setId(us.getId());
-        userDTO.setJhiUserId(userId);
+        userDTO.setLogin(userLogin);
         userDTO.setCreatedBy(createdBy);
         userDTO.setCreatedDate(createdDate);
         userDTO.setLastModifiedBy(lastModifiedBy);
@@ -154,15 +154,38 @@ public class UserSettingsResource {
      *         updated.
      * @throws URISyntaxException
      *             if the Location URI syntax is incorrect.
+     * @throws JSONException 
      */
-    @PutMapping("/users")
-    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
+    @PutMapping("/user")
+    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException, JSONException {
         log.debug("REST request to update UserDTO : {}", userDTO);
-        if (StringUtils.isBlank(userDTO.getId()) || StringUtils.isBlank(userDTO.getJhiUserId())) {
+        if (StringUtils.isBlank(userDTO.getId()) || StringUtils.isBlank(userDTO.getLogin())) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        // TODO: Update jhi_user entry
+        // Verify the user exists
+        ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(userDTO.getLogin());
+        JSONObject existingUser = new JSONObject(existingUserResponse.getBody());
+
+        String userLogin = existingUser.getString("login");
+        // userLogin must match
+        if(!userDTO.getLogin().equals(userLogin)) {
+            throw new RuntimeException("User login doesn't match: " + userDTO.getLogin() + " - " + userLogin);
+        }
+        
+        // Update jhi_user entry
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("login", userDTO.getLogin());
+        map.put("password", userDTO.getPassword());
+        map.put("email", userDTO.getEmail());
+        map.put("authorities", userDTO.getAuthorities());
+        map.put("firstName", userDTO.getFirstName());
+        map.put("lastName", userDTO.getLastName());        
+
+        ResponseEntity<String> response = oauth2ServiceClient.updateUser(map);
+        if (response == null || !HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new RuntimeException("User creation failed: " + response.getStatusCode().getReasonPhrase());
+        }
 
         // Update UserSettings
         UserDTO result = userSettingsRepository.save(userDTO);
@@ -180,20 +203,21 @@ public class UserSettingsResource {
      *            a {@link UriComponentsBuilder} URI builder.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the
      *         list of Users in body.
+     * @throws JSONException 
      */
-    @GetMapping("/users")
-    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
+    @GetMapping("/user")
+    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) throws JSONException {
         log.debug("REST request to get a page of users");
         Page<UserSettings> page = userSettingsRepository.findAll(pageable);
-
-        // TODO: fetch User info from UAA and populate missing values in the
-        // UserDTO
         List<UserDTO> dtoList = new ArrayList<UserDTO>();
 
-        for (UserSettings msu : page) {
-            UserDTO u = UserDTO.valueOf(msu);
-            // TODO: fetch User info from UAA and populate missing values in the
-            // UserDTO
+        for (UserSettings us : page) {
+            UserDTO u = UserDTO.valueOf(us);            
+            ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(us.getLogin());
+            JSONObject existingUser = new JSONObject(existingUserResponse.getBody());
+            u.setEmail(existingUser.getString("email"));
+            u.setFirstName(existingUser.getString("firstName"));
+            u.setLastName(existingUser.getString("lastName"));
             dtoList.add(u);
         }
 
@@ -211,7 +235,7 @@ public class UserSettingsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      *         body the User, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/users/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
         log.debug("REST request to get UserDTO : {}", id);
         Optional<UserSettings> msu = userSettingsRepository.findById(id);
@@ -231,7 +255,7 @@ public class UserSettingsResource {
      *            the id of the User to disable.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/user/{id}")
     public ResponseEntity<Void> disableUser(@PathVariable String id) {
         log.debug("REST request to delete UserDTO : {}", id);
         Optional<UserSettings> msu = userSettingsRepository.findById(id);

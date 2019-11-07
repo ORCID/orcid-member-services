@@ -4,8 +4,12 @@
     "relationships": [],
     "fields": [
         {
-            "fieldName": "jhiUserId",
-            "fieldType": "String",            
+            "fieldName": "login",
+            "fieldType": "String"            
+        },
+        {
+            "fieldName": "clientId",
+            "fieldType": "String"
         },
         {
             "fieldName": "salesforceId",
