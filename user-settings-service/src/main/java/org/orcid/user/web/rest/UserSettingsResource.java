@@ -1,20 +1,29 @@
 package org.orcid.user.web.rest;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.user.client.Oauth2ServiceClient;
+import org.orcid.user.domain.MemberSettings;
 import org.orcid.user.domain.UserSettings;
 import org.orcid.user.repository.UserSettingsRepository;
 import org.orcid.user.service.dto.UserDTO;
@@ -42,6 +51,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.google.common.collect.Lists;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -77,21 +88,61 @@ public class UserSettingsResource {
      * @param usersFile:
      *            file containing the users to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and
-     *         with a map indicating if each user was created or not, or with status {@code 400 (Bad Request)}
-     *         if the file cannot be parsed.
+     *         with a map indicating if each user was created or not, or with
+     *         status {@code 400 (Bad Request)} if the file cannot be parsed.
      * @throws URISyntaxException
      *             if the Location URI syntax is incorrect.
      * @throws JSONException
      * @throws ParseException
+     * @throws IOException
      */
     @PostMapping("/user/import")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<Map<Integer, Boolean>> createUsers(@RequestParam("file") MultipartFile file) throws URISyntaxException, JSONException, ParseException {
-        //TODO: see https://github.com/ORCID/orcid-assertion-service/blob/master/src/main/java/org/orcid/assertionService/web/rest/AffiliationResource.java#L222
+    public ResponseEntity<Map<Integer, Boolean>> createUsers(@RequestParam("file") MultipartFile file)
+            throws URISyntaxException, JSONException, ParseException, IOException {
+        // TODO: see
+        // https://github.com/ORCID/orcid-assertion-service/blob/master/src/main/java/org/orcid/assertionService/web/rest/AffiliationResource.java#L222
+
+        try (InputStream is = file.getInputStream();) {
+            InputStreamReader isr = new InputStreamReader(is);
+            Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
+            // Validate affiliations
+            for (CSVRecord record : elements) {
+                try {
+                    UserDTO u = parseLine(record);
+                } catch (Exception e) {
+
+                }
+            }
+        }
         return null;
     }
-    
-    
+
+    private UserDTO parseLine(CSVRecord record) {
+        UserDTO u = new UserDTO();
+        u.setLogin(record.get("email"));
+        u.setEmail(record.get("email"));
+        u.setFirstName(record.get("firstName"));
+        u.setLastName(record.get("lastName"));
+        String grants = record.get("grant");
+        if (!StringUtils.isBlank(grants)) {
+            if (!(grants.startsWith("[") && grants.endsWith("]"))) {
+                throw new IllegalArgumentException("Grant list should start with '[' and ends with ']'");
+            }
+            List<String> authorities = Arrays.stream(grants.replace("[", "").replace("]", "").split(",")).collect(Collectors.toList());
+            u.setAuthorities(authorities);
+        }
+        MemberSettings ms = new MemberSettings();
+        Boolean isConsoriumLead = StringUtils.isBlank(record.get("isConsortiumLead")) ? false : Boolean.parseBoolean(record.get("isConsortiumLead"));
+        ms.setIsConsortiumLead(isConsoriumLead);
+        ms.setSalesforceId(record.get("salesforceId"));
+        if (!isConsoriumLead) {
+            ms.setParentSalesforceId(record.get("parentSalesforceId"));
+        }
+        u.setMember(ms);
+        return u;
+    }
+
     /**
      * {@code POST  /user} : Create a new memberServicesUser.
      *
@@ -120,7 +171,7 @@ public class UserSettingsResource {
         map.put("email", userDTO.getEmail());
         map.put("authorities", userDTO.getAuthorities());
         map.put("firstName", userDTO.getFirstName());
-        map.put("lastName", userDTO.getLastName());        
+        map.put("lastName", userDTO.getLastName());
 
         ResponseEntity<Void> response = oauth2ServiceClient.registerUser(map);
         if (response == null || !HttpStatus.CREATED.equals(response.getStatusCode())) {
@@ -142,14 +193,13 @@ public class UserSettingsResource {
 
         UserSettings us = new UserSettings();
         us.setLogin(userLogin);
-        us.setAssertionsServiceDisabled(false);       
-        us.setMainContact(userDTO.getMainContact());        
+        us.setMainContact(userDTO.getMainContact());
         us.setSalesforceId(userDTO.getSalesforceId());
         us.setCreatedBy(createdBy);
         us.setCreatedDate(createdDate);
         us.setLastModifiedBy(lastModifiedBy);
         us.setLastModifiedDate(lastModifiedDate);
-        
+
         // Persist it
         us = userSettingsRepository.save(us);
 
@@ -159,7 +209,7 @@ public class UserSettingsResource {
         userDTO.setCreatedDate(createdDate);
         userDTO.setLastModifiedBy(lastModifiedBy);
         userDTO.setLastModifiedDate(lastModifiedDate);
-        
+
         return ResponseEntity.created(new URI("/settings/api/users/" + us.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, us.getId().toString())).body(userDTO);
     }
@@ -176,7 +226,7 @@ public class UserSettingsResource {
      *         updated.
      * @throws URISyntaxException
      *             if the Location URI syntax is incorrect.
-     * @throws JSONException 
+     * @throws JSONException
      */
     @PutMapping("/user")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException, JSONException {
@@ -191,10 +241,10 @@ public class UserSettingsResource {
 
         String userLogin = existingUser.getString("login");
         // userLogin must match
-        if(!userDTO.getLogin().equals(userLogin)) {
+        if (!userDTO.getLogin().equals(userLogin)) {
             throw new RuntimeException("User login doesn't match: " + userDTO.getLogin() + " - " + userLogin);
         }
-        
+
         // Update jhi_user entry
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("login", userDTO.getLogin());
@@ -202,7 +252,7 @@ public class UserSettingsResource {
         map.put("email", userDTO.getEmail());
         map.put("authorities", userDTO.getAuthorities());
         map.put("firstName", userDTO.getFirstName());
-        map.put("lastName", userDTO.getLastName());        
+        map.put("lastName", userDTO.getLastName());
 
         ResponseEntity<String> response = oauth2ServiceClient.updateUser(map);
         if (response == null || !HttpStatus.OK.equals(response.getStatusCode())) {
@@ -225,16 +275,17 @@ public class UserSettingsResource {
      *            a {@link UriComponentsBuilder} URI builder.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the
      *         list of Users in body.
-     * @throws JSONException 
+     * @throws JSONException
      */
     @GetMapping("/user")
-    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) throws JSONException {
+    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder)
+            throws JSONException {
         log.debug("REST request to get a page of users");
         Page<UserSettings> page = userSettingsRepository.findAll(pageable);
         List<UserDTO> dtoList = new ArrayList<UserDTO>();
 
         for (UserSettings us : page) {
-            UserDTO u = UserDTO.valueOf(us);            
+            UserDTO u = UserDTO.valueOf(us);
             ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(us.getLogin());
             JSONObject existingUser = new JSONObject(existingUserResponse.getBody());
             u.setEmail(existingUser.getString("email"));
@@ -277,18 +328,35 @@ public class UserSettingsResource {
      *            the id of the User to disable.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/user/{id}")
-    public ResponseEntity<Void> disableUser(@PathVariable String id) {
-        log.debug("REST request to delete UserDTO : {}", id);
-        Optional<UserSettings> msu = userSettingsRepository.findById(id);
-        if (!msu.isPresent()) {
-            return ResponseEntity.notFound().build();
+    @DeleteMapping("/user/{login}/{authority}")
+    public ResponseEntity<Void> disableUser(@PathVariable String login, @PathVariable String authority) {
+        log.debug("REST request to remove authority {} from user {}", authority, login);
+
+        // Now fetch the user to get the user id and populate the member
+        // services user information
+        ResponseEntity<String> userInfo = oauth2ServiceClient.getUser(login);
+
+        if (HttpStatus.NOT_FOUND.equals(userInfo.getStatusCode())) {
+            throw new RuntimeException("User not found: " + login);
         }
+        String user = userInfo.getBody();
 
-        UserSettings us = msu.get();
-        us.setAssertionsServiceDisabled(true);
+        JSONObject obj = new JSONObject(user);
 
-        userSettingsRepository.save(us);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("login", login);
+        map.put("password", obj.getString(""));
+        map.put("email", obj.getString(""));
+
+        map.put("firstName", obj.getString(""));
+        map.put("lastName", obj.getString(""));
+        map.put("imageUrl", obj.getString(""));
+        map.put("activated", obj.getString(""));
+        map.put("langKey", obj.getString(""));
+
+        // TODO: process authorities, remove the one indicated
+        map.put("authorities", userDTO.getAuthorities());
+
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
     }
 }
