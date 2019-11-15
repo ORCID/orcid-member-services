@@ -1,4 +1,5 @@
 package org.orcid.user.domain;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -47,7 +48,11 @@ public class MemberSettings implements Serializable {
     @Field("last_modified_date")
     private Instant lastModifiedDate;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    @Field("is_consortium_lead")
+    private Boolean isConsortiumLead;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not
+    // remove
     public String getId() {
         return id;
     }
@@ -172,37 +177,109 @@ public class MemberSettings implements Serializable {
     public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof MemberSettings)) {
-            return false;
-        }
-        return id != null && id.equals(((MemberSettings) o).id);
+    public Boolean getIsConsortiumLead() {
+        return isConsortiumLead;
+    }
+
+    public void setIsConsortiumLead(Boolean isConsortiumLead) {
+        this.isConsortiumLead = isConsortiumLead;
+    }
+
+    public Boolean getAssertionServiceEnabled() {
+        return assertionServiceEnabled;
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((assertionServiceEnabled == null) ? 0 : assertionServiceEnabled.hashCode());
+        result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
+        result = prime * result + ((clientSecret == null) ? 0 : clientSecret.hashCode());
+        result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
+        result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((isConsortiumLead == null) ? 0 : isConsortiumLead.hashCode());
+        result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
+        result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
+        result = prime * result + ((parentSalesforceId == null) ? 0 : parentSalesforceId.hashCode());
+        result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        MemberSettings other = (MemberSettings) obj;
+        if (assertionServiceEnabled == null) {
+            if (other.assertionServiceEnabled != null)
+                return false;
+        } else if (!assertionServiceEnabled.equals(other.assertionServiceEnabled))
+            return false;
+        if (clientId == null) {
+            if (other.clientId != null)
+                return false;
+        } else if (!clientId.equals(other.clientId))
+            return false;
+        if (clientSecret == null) {
+            if (other.clientSecret != null)
+                return false;
+        } else if (!clientSecret.equals(other.clientSecret))
+            return false;
+        if (createdBy == null) {
+            if (other.createdBy != null)
+                return false;
+        } else if (!createdBy.equals(other.createdBy))
+            return false;
+        if (createdDate == null) {
+            if (other.createdDate != null)
+                return false;
+        } else if (!createdDate.equals(other.createdDate))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (isConsortiumLead == null) {
+            if (other.isConsortiumLead != null)
+                return false;
+        } else if (!isConsortiumLead.equals(other.isConsortiumLead))
+            return false;
+        if (lastModifiedBy == null) {
+            if (other.lastModifiedBy != null)
+                return false;
+        } else if (!lastModifiedBy.equals(other.lastModifiedBy))
+            return false;
+        if (lastModifiedDate == null) {
+            if (other.lastModifiedDate != null)
+                return false;
+        } else if (!lastModifiedDate.equals(other.lastModifiedDate))
+            return false;
+        if (parentSalesforceId == null) {
+            if (other.parentSalesforceId != null)
+                return false;
+        } else if (!parentSalesforceId.equals(other.parentSalesforceId))
+            return false;
+        if (salesforceId == null) {
+            if (other.salesforceId != null)
+                return false;
+        } else if (!salesforceId.equals(other.salesforceId))
+            return false;
+        return true;
     }
 
     @Override
     public String toString() {
-        return "MemberSettings{" +
-            "id=" + getId() +
-            ", clientId='" + getClientId() + "'" +
-            ", clientSecret='" + getClientSecret() + "'" +
-            ", salesforceId='" + getSalesforceId() + "'" +
-            ", parentSalesforceId='" + getParentSalesforceId() + "'" +
-            ", assertionServiceEnabled='" + isAssertionServiceEnabled() + "'" +
-            ", createdBy='" + getCreatedBy() + "'" +
-            ", createdDate='" + getCreatedDate() + "'" +
-            ", lastModifiedBy='" + getLastModifiedBy() + "'" +
-            ", lastModifiedDate='" + getLastModifiedDate() + "'" +
-            "}";
+        return "MemberSettings [id=" + id + ", clientId=" + clientId + ", clientSecret=" + clientSecret + ", salesforceId=" + salesforceId + ", parentSalesforceId="
+                + parentSalesforceId + ", assertionServiceEnabled=" + assertionServiceEnabled + ", createdBy=" + createdBy + ", createdDate=" + createdDate
+                + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + ", isConsortiumLead=" + isConsortiumLead + "]";
     }
+
 }

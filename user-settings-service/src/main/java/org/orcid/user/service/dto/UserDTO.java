@@ -2,6 +2,7 @@ package org.orcid.user.service.dto;
 
 import java.util.List;
 
+import org.orcid.user.domain.MemberSettings;
 import org.orcid.user.domain.UserSettings;
 
 public class UserDTO extends UserSettings {
@@ -15,6 +16,7 @@ public class UserDTO extends UserSettings {
     private String lastName;
     private String email;
     private List<String> authorities;
+    private MemberSettings member;
 
     public List<String> getAuthorities() {
         return authorities;
@@ -64,6 +66,14 @@ public class UserDTO extends UserSettings {
         this.lastName = lastName;
     }
 
+    public MemberSettings getMember() {
+        return member;
+    }
+
+    public void setMember(MemberSettings member) {
+        this.member = member;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -73,6 +83,7 @@ public class UserDTO extends UserSettings {
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + ((login == null) ? 0 : login.hashCode());
+        result = prime * result + ((member == null) ? 0 : member.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
         return result;
     }
@@ -111,6 +122,11 @@ public class UserDTO extends UserSettings {
                 return false;
         } else if (!login.equals(other.login))
             return false;
+        if (member == null) {
+            if (other.member != null)
+                return false;
+        } else if (!member.equals(other.member))
+            return false;
         if (password == null) {
             if (other.password != null)
                 return false;
@@ -124,16 +140,15 @@ public class UserDTO extends UserSettings {
         return "UserDTO [login=" + login + ", password=" + password + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", authorities="
                 + authorities + "]";
     }
-    
+
     public static UserDTO valueOf(UserSettings us) {
         UserDTO result = new UserDTO();
         result.setCreatedBy(us.getCreatedBy());
-        result.setCreatedDate(us.getCreatedDate());
-        result.setDisabled(us.getDisabled());               
+        result.setCreatedDate(us.getCreatedDate());        
         result.setId(us.getId());
         result.setLastModifiedBy(us.getLastModifiedBy());
         result.setLastModifiedDate(us.getLastModifiedDate());
-        result.setMainContact(us.getMainContact());        
+        result.setMainContact(us.getMainContact());
         result.setSalesforceId(us.getSalesforceId());
         return result;
     }

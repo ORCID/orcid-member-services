@@ -17,18 +17,15 @@ public class UserSettings implements Serializable {
 
     @Id
     private String id;
-    
+
     @Field("login")
     private String login;
 
     @Field("client_id")
     private String clientId;
-    
+
     @Field("salesforce_id")
     private String salesforceId;
-
-    @Field("assertions_service_disabled")
-    private Boolean assertionsServiceDisabled;
 
     @Field("main_contact")
     private Boolean mainContact;
@@ -60,7 +57,7 @@ public class UserSettings implements Serializable {
     public void setLogin(String login) {
         this.login = login;
     }
-    
+
     public String getClientId() {
         return clientId;
     }
@@ -75,14 +72,6 @@ public class UserSettings implements Serializable {
 
     public void setSalesforceId(String salesforceId) {
         this.salesforceId = salesforceId;
-    }
-
-   public Boolean getAssertionsServiceDisabled() {
-        return assertionsServiceDisabled;
-    }
-
-    public void setAssertionsServiceDisabled(Boolean assertionsServiceDisabled) {
-        this.assertionsServiceDisabled = assertionsServiceDisabled;
     }
 
     public Boolean getMainContact() {
@@ -131,13 +120,12 @@ public class UserSettings implements Serializable {
         int result = 1;
         result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
         result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
-        result = prime * result + ((assertionsServiceDisabled == null) ? 0 : assertionsServiceDisabled.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((login == null) ? 0 : login.hashCode());
         result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
         result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
         result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
-        result = prime * result + ((mainContact == null) ? 0 : mainContact.hashCode());        
+        result = prime * result + ((mainContact == null) ? 0 : mainContact.hashCode());
         result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
         return result;
     }
@@ -160,11 +148,6 @@ public class UserSettings implements Serializable {
             if (other.createdDate != null)
                 return false;
         } else if (!createdDate.equals(other.createdDate))
-            return false;
-        if (assertionsServiceDisabled == null) {
-            if (other.assertionsServiceDisabled != null)
-                return false;
-        } else if (!assertionsServiceDisabled.equals(other.assertionsServiceDisabled))
             return false;
         if (id == null) {
             if (other.id != null)
@@ -206,9 +189,8 @@ public class UserSettings implements Serializable {
 
     @Override
     public String toString() {
-        return "UserSettings [id=" + id + ", login=" + login + ", salesforceId=" + salesforceId + ", assertionsServiceDisabled=" + assertionsServiceDisabled
-                + ", mainContact=" + mainContact + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy
-                + ", lastModifiedDate=" + lastModifiedDate + "]";
+        return "UserSettings [id=" + id + ", login=" + login + ", salesforceId=" + salesforceId + ", mainContact=" + mainContact + ", createdBy=" + createdBy
+                + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + "]";
     }
 
 }
