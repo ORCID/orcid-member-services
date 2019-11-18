@@ -19,6 +19,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.user.client.Oauth2ServiceClient;
@@ -55,6 +56,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.micrometer.core.instrument.util.StringUtils;
+import net.logstash.logback.encoder.org.apache.commons.lang3.BooleanUtils;
 
 /**
  * REST controller for managing
@@ -75,7 +77,7 @@ public class UserSettingsResource {
     private Oauth2ServiceClient oauth2ServiceClient;
 
     private final UserSettingsRepository userSettingsRepository;
-    
+
     private final MemberSettingsRepository memberSettingsRepository;
 
     public UserSettingsResource(UserSettingsRepository userSettingsRepository, MemberSettingsRepository memberSettingsRepository) {
@@ -99,26 +101,30 @@ public class UserSettingsResource {
      */
     @PostMapping("/user/import")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<Map<Integer, Boolean>> createUsers(@RequestParam("file") MultipartFile file)
-            throws URISyntaxException, JSONException, ParseException, IOException {
-        // TODO: see
-        // https://github.com/ORCID/orcid-assertion-service/blob/master/src/main/java/org/orcid/assertionService/web/rest/AffiliationResource.java#L222
-
+    public ResponseEntity<Map<Long, String>> createUsers(@RequestParam("file") MultipartFile file) throws URISyntaxException, JSONException, ParseException, IOException {
+        Map<Long, String> userIds = new HashMap<Long, String>();
         try (InputStream is = file.getInputStream();) {
             InputStreamReader isr = new InputStreamReader(is);
             Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
-            // Validate affiliations
             for (CSVRecord line : elements) {
+                long index = line.getRecordNumber();
                 try {
-                    JSONObject obj = createUserOnUAA(parseLine(line));
-                    createUserSettings(obj, line.get("salesforceId"), Boolean.valueOf(line.get("mainContact")));
-                    createMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, obj)
+                    UserDTO userDTO = parseLine(line);
+                    // Validate for errors
+                    if (!validate(userDTO)) {
+                        userIds.put(index, buildErrorString(userDTO));
+                    }
+                    JSONObject obj = createUserOnUAA(userDTO);
+                    createUserSettings(obj, line.get("salesforceId"), false);
+                    createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());
+                    userIds.put(index, obj.getString("id"));
                 } catch (Exception e) {
-
+                    log.error("Error on line " + index, e);
+                    userIds.put(index, e.getMessage());
                 }
             }
         }
-        return null;
+        return ResponseEntity.ok().body(userIds);
     }
 
     private UserDTO parseLine(CSVRecord record) {
@@ -127,6 +133,7 @@ public class UserSettingsResource {
         u.setEmail(record.get("email"));
         u.setFirstName(record.get("firstName"));
         u.setLastName(record.get("lastName"));
+        u.setPassword(RandomStringUtils.random(10));
         String grants = record.get("grant");
         if (!StringUtils.isBlank(grants)) {
             if (!(grants.startsWith("[") && grants.endsWith("]"))) {
@@ -142,6 +149,44 @@ public class UserSettingsResource {
             u.setParentSalesforceId(record.get("parentSalesforceId"));
         }
         return u;
+    }
+
+    private String buildErrorString(UserDTO userDTO) {
+        StringBuilder error = new StringBuilder();
+        if (userDTO.getLoginError() != null) {
+            error.append(userDTO.getLoginError());
+        }
+        if (userDTO.getEmailError() != null) {
+            if (error.length() > 0)
+                error.append(", ");
+            error.append(userDTO.getEmailError());
+        }
+        if (userDTO.getFirstNameError() != null) {
+            if (error.length() > 0)
+                error.append(", ");
+            error.append(userDTO.getFirstNameError());
+        }
+        if (userDTO.getLastNameError() != null) {
+            if (error.length() > 0)
+                error.append(", ");
+            error.append(userDTO.getLastNameError());
+        }
+        if (userDTO.getAuthoritiesError() != null) {
+            if (error.length() > 0)
+                error.append(", ");
+            error.append(userDTO.getAuthoritiesError());
+        }
+        if (userDTO.getParentSalesforceIdError() != null) {
+            if (error.length() > 0)
+                error.append(", ");
+            error.append(userDTO.getParentSalesforceIdError());
+        }
+        if (userDTO.getSalesforceIdError() != null) {
+            if (error.length() > 0)
+                error.append(", ");
+            error.append(userDTO.getSalesforceIdError());
+        }
+        return error.toString();
     }
 
     /**
@@ -164,7 +209,12 @@ public class UserSettingsResource {
         if (!StringUtils.isBlank(userDTO.getId())) {
             throw new BadRequestAlertException("A new user cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        
+
+        // Validate for errors
+        if (!validate(userDTO)) {
+            return ResponseEntity.badRequest().body(userDTO);
+        }
+
         // Create the user on UAA
         JSONObject obj = createUserOnUAA(userDTO);
         String userLogin = obj.getString("login");
@@ -177,8 +227,8 @@ public class UserSettingsResource {
         UserSettings us = createUserSettings(obj, userDTO.getSalesforceId(), userDTO.getMainContact());
 
         // Create the member settings
-        MemberSettings m = createMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), obj);
-        
+        createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());
+
         userDTO.setId(us.getId());
         userDTO.setLogin(userLogin);
         userDTO.setCreatedBy(createdBy);
@@ -186,10 +236,35 @@ public class UserSettingsResource {
         userDTO.setLastModifiedBy(lastModifiedBy);
         userDTO.setLastModifiedDate(lastModifiedDate);
 
-        return ResponseEntity.created(new URI("/settings/api/users/" + us.getId()))
+        return ResponseEntity.created(new URI("/settings/api/user/" + us.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, us.getId().toString())).body(userDTO);
     }
-    
+
+    private boolean validate(UserDTO user) {
+        boolean isOk = true;
+        if (StringUtils.isBlank(user.getLogin())) {
+            isOk = false;
+            user.setLoginError("Login should not be empty");
+        }
+        if (StringUtils.isBlank(user.getEmail())) {
+            isOk = false;
+            user.setEmailError("Email should not be empty");
+        }
+        if (user.getAuthorities() == null || user.getAuthorities().isEmpty()) {
+            isOk = false;
+            user.setAuthoritiesError("You should specify at least one authority");
+        }
+        if (StringUtils.isBlank(user.getSalesforceId())) {
+            isOk = false;
+            user.setSalesforceIdError("Salesforce Id should not be empty");
+        }
+        if (StringUtils.isBlank(user.getParentSalesforceId()) && BooleanUtils.isFalse(user.getIsConsortiumLead())) {
+            isOk = false;
+            user.setParentSalesforceIdError("Parent Salesforce Id should not be empty if it is not a consortium lead ");
+        }
+        return isOk;
+    }
+
     private JSONObject createUserOnUAA(UserDTO userDTO) throws JSONException {
         String login = userDTO.getLogin();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -211,9 +286,9 @@ public class UserSettingsResource {
         ResponseEntity<String> userInfo = oauth2ServiceClient.getUser(login);
         String user = userInfo.getBody();
         System.out.println(user);
-        return new JSONObject(user);        
+        return new JSONObject(user);
     }
-    
+
     private UserSettings createUserSettings(JSONObject obj, String salesforceId, Boolean mainContact) throws JSONException {
         String userLogin = obj.getString("login");
         String createdBy = obj.getString("createdBy");
@@ -223,7 +298,7 @@ public class UserSettingsResource {
 
         UserSettings us = new UserSettings();
         us.setLogin(userLogin);
-        us.setMainContact(false);
+        us.setMainContact(mainContact);
         us.setSalesforceId(salesforceId);
         us.setCreatedBy(createdBy);
         us.setCreatedDate(createdDate);
@@ -234,24 +309,31 @@ public class UserSettingsResource {
         return userSettingsRepository.save(us);
     }
 
-    private MemberSettings createMemberSettings(String salesforceId, String parentSalesforceId, Boolean isConsortiumLead, JSONObject obj) throws JSONException {
-        String createdBy = obj.getString("createdBy");
-        Instant createdDate = Instant.parse(obj.getString("createdDate"));
-        String lastModifiedBy = obj.getString("lastModifiedBy");
-        Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
-        
-        MemberSettings m = new MemberSettings();
-        m.setSalesforceId(salesforceId);
-        m.setParentSalesforceId(parentSalesforceId);
-        m.setIsConsortiumLead(isConsortiumLead);
-        m.setCreatedBy(createdBy);
-        m.setCreatedDate(createdDate);
-        m.setLastModifiedBy(lastModifiedBy);
-        m.setLastModifiedDate(lastModifiedDate);
-        
-        return memberSettingsRepository.save(m);
+    private MemberSettings createMemberSettings(JSONObject obj, String salesforceId, String parentSalesforceId, Boolean isConsortiumLead) throws JSONException {
+        Optional<MemberSettings> existingMemberSettings = memberSettingsRepository.findBySalesforceId(salesforceId);
+        MemberSettings ms;
+        // Check if member settings already exists
+        if (!existingMemberSettings.isPresent()) {
+            log.info("Creating MemberSettings with Salesforce Id {}", salesforceId);
+            String createdBy = obj.getString("createdBy");
+            Instant createdDate = Instant.parse(obj.getString("createdDate"));
+            String lastModifiedBy = obj.getString("lastModifiedBy");
+            Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
+
+            ms = new MemberSettings();
+            ms.setSalesforceId(salesforceId);
+            ms.setParentSalesforceId(parentSalesforceId);
+            ms.setIsConsortiumLead(isConsortiumLead);
+            ms.setCreatedBy(createdBy);
+            ms.setCreatedDate(createdDate);
+            ms.setLastModifiedBy(lastModifiedBy);
+            ms.setLastModifiedDate(lastModifiedDate);
+            return memberSettingsRepository.save(ms);
+        } else {
+            return existingMemberSettings.get();
+        }
     }
-    
+
     /**
      * {@code PUT  /user} : Updates an existing memberServicesUser.
      *
@@ -282,10 +364,10 @@ public class UserSettingsResource {
         if (!userDTO.getLogin().equals(uaaUserLogin)) {
             throw new RuntimeException("User login doesn't match: " + userDTO.getLogin() + " - " + uaaUserLogin);
         }
-        
+
         // Verify the user exists on the UserSettings table
         Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findById(userDTO.getId());
-        if(!existingUserSettingsOptional.isPresent()) {
+        if (!existingUserSettingsOptional.isPresent()) {
             throw new BadRequestAlertException("Invalid id, unable to find UserSettings for " + userDTO.getId(), ENTITY_NAME, "idnull");
         }
 
@@ -301,7 +383,7 @@ public class UserSettingsResource {
         if (response == null || !HttpStatus.OK.equals(response.getStatusCode())) {
             throw new RuntimeException("User creation failed: " + response.getStatusCode().getReasonPhrase());
         }
-        
+
         JSONObject obj = new JSONObject(response.getBody());
         System.out.println(obj);
         String lastModifiedBy = obj.getString("lastModifiedBy");
@@ -310,23 +392,23 @@ public class UserSettingsResource {
         Boolean userSettingsModified = false;
         UserSettings existingUserSettings = existingUserSettingsOptional.get();
         Boolean existingMainContactFlag = existingUserSettings.getMainContact();
-        if(existingMainContactFlag != userDTO.getMainContact()) {
+        if (existingMainContactFlag != userDTO.getMainContact()) {
             existingUserSettings.setMainContact(userDTO.getMainContact());
             userSettingsModified = true;
-        }        
-        
+        }
+
         // Check if salesforceId changed
         String existingSalesforceId = existingUserSettings.getSalesforceId();
-        if(!existingSalesforceId.equals(userDTO.getSalesforceId())) {
+        if (!existingSalesforceId.equals(userDTO.getSalesforceId())) {
             existingUserSettings.setSalesforceId(userDTO.getSalesforceId());
             userSettingsModified = true;
         }
-        
+
         // Update UserSettings
-        if(userSettingsModified) {
+        if (userSettingsModified) {
             existingUserSettings.setLastModifiedBy(lastModifiedBy);
             existingUserSettings.setLastModifiedDate(lastModifiedDate);
-            userSettingsRepository.save(existingUserSettings);        
+            userSettingsRepository.save(existingUserSettings);
         }
         userDTO.setLastModifiedBy(lastModifiedBy);
         userDTO.setLastModifiedDate(lastModifiedDate);
@@ -396,7 +478,7 @@ public class UserSettingsResource {
      * @param id
      *            the id of the User to disable.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     * @throws JSONException 
+     * @throws JSONException
      */
     @DeleteMapping("/user/{login}/{authority}")
     public ResponseEntity<Void> disableUser(@PathVariable String login, @PathVariable String authority) throws JSONException {

@@ -19,19 +19,22 @@ public class MemberSettings implements Serializable {
     @Id
     private String id;
 
-    @NotNull
     @Field("client_id")
     private String clientId;
 
-    @NotNull
     @Field("client_secret")
     private String clientSecret;
 
+    @NotNull
     @Field("salesforce_id")
     private String salesforceId;
 
     @Field("parent_salesforce_id")
     private String parentSalesforceId;
+
+    @NotNull
+    @Field("is_consortium_lead")
+    private Boolean isConsortiumLead;
 
     @Field("assertion_service_enabled")
     private Boolean assertionServiceEnabled;
@@ -47,10 +50,7 @@ public class MemberSettings implements Serializable {
 
     @Field("last_modified_date")
     private Instant lastModifiedDate;
-
-    @Field("is_consortium_lead")
-    private Boolean isConsortiumLead;
-
+        
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not
     // remove
     public String getId() {
