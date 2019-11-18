@@ -1,29 +1,50 @@
 package org.orcid.user.service.dto;
 
+import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 
-import org.orcid.user.domain.MemberSettings;
 import org.orcid.user.domain.UserSettings;
 
-public class UserDTO extends UserSettings {
+public class UserDTO implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 6064146099241309846L;
+    private static final long serialVersionUID = -9077279756163937807L;
+    
+    // UserSettings data
+    private String id;
     private String login;
     private String password;
     private String firstName;
     private String lastName;
     private String email;
     private List<String> authorities;
-    private MemberSettings member;
-
-    public List<String> getAuthorities() {
-        return authorities;
+    private Boolean mainContact;
+    public Boolean getMainContact() {
+        return mainContact;
     }
 
-    public void setAuthorities(List<String> authorities) {
-        this.authorities = authorities;
+    public void setMainContact(Boolean mainContact) {
+        this.mainContact = mainContact;
+    }
+
+    // MemberSettings data
+    private String salesforceId;
+    private String parentSalesforceId;
+    private Boolean isConsortiumLead;
+    // Metadata
+    private String createdBy;
+    private Instant createdDate;
+    private String lastModifiedBy;
+    private Instant lastModifiedDate;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getLogin() {
@@ -42,14 +63,6 @@ public class UserDTO extends UserSettings {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -66,25 +79,101 @@ public class UserDTO extends UserSettings {
         this.lastName = lastName;
     }
 
-    public MemberSettings getMember() {
-        return member;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMember(MemberSettings member) {
-        this.member = member;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<String> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(List<String> authorities) {
+        this.authorities = authorities;
+    }
+
+    public String getSalesforceId() {
+        return salesforceId;
+    }
+
+    public void setSalesforceId(String salesforceId) {
+        this.salesforceId = salesforceId;
+    }
+
+    public String getParentSalesforceId() {
+        return parentSalesforceId;
+    }
+
+    public void setParentSalesforceId(String parentSalesforceId) {
+        this.parentSalesforceId = parentSalesforceId;
+    }
+
+    public Boolean getIsConsortiumLead() {
+        return isConsortiumLead;
+    }
+
+    public void setIsConsortiumLead(Boolean isConsortiumLead) {
+        this.isConsortiumLead = isConsortiumLead;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = super.hashCode();
+        int result = 1;
         result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
+        result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
+        result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((isConsortiumLead == null) ? 0 : isConsortiumLead.hashCode());
+        result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
+        result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + ((login == null) ? 0 : login.hashCode());
-        result = prime * result + ((member == null) ? 0 : member.hashCode());
+        result = prime * result + ((mainContact == null) ? 0 : mainContact.hashCode());
+        result = prime * result + ((parentSalesforceId == null) ? 0 : parentSalesforceId.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
+        result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
         return result;
     }
 
@@ -92,7 +181,7 @@ public class UserDTO extends UserSettings {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (!super.equals(obj))
+        if (obj == null)
             return false;
         if (getClass() != obj.getClass())
             return false;
@@ -101,6 +190,16 @@ public class UserDTO extends UserSettings {
             if (other.authorities != null)
                 return false;
         } else if (!authorities.equals(other.authorities))
+            return false;
+        if (createdBy == null) {
+            if (other.createdBy != null)
+                return false;
+        } else if (!createdBy.equals(other.createdBy))
+            return false;
+        if (createdDate == null) {
+            if (other.createdDate != null)
+                return false;
+        } else if (!createdDate.equals(other.createdDate))
             return false;
         if (email == null) {
             if (other.email != null)
@@ -112,6 +211,26 @@ public class UserDTO extends UserSettings {
                 return false;
         } else if (!firstName.equals(other.firstName))
             return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (isConsortiumLead == null) {
+            if (other.isConsortiumLead != null)
+                return false;
+        } else if (!isConsortiumLead.equals(other.isConsortiumLead))
+            return false;
+        if (lastModifiedBy == null) {
+            if (other.lastModifiedBy != null)
+                return false;
+        } else if (!lastModifiedBy.equals(other.lastModifiedBy))
+            return false;
+        if (lastModifiedDate == null) {
+            if (other.lastModifiedDate != null)
+                return false;
+        } else if (!lastModifiedDate.equals(other.lastModifiedDate))
+            return false;
         if (lastName == null) {
             if (other.lastName != null)
                 return false;
@@ -122,33 +241,43 @@ public class UserDTO extends UserSettings {
                 return false;
         } else if (!login.equals(other.login))
             return false;
-        if (member == null) {
-            if (other.member != null)
+        if (mainContact == null) {
+            if (other.mainContact != null)
                 return false;
-        } else if (!member.equals(other.member))
+        } else if (!mainContact.equals(other.mainContact))
+            return false;
+        if (parentSalesforceId == null) {
+            if (other.parentSalesforceId != null)
+                return false;
+        } else if (!parentSalesforceId.equals(other.parentSalesforceId))
             return false;
         if (password == null) {
             if (other.password != null)
                 return false;
         } else if (!password.equals(other.password))
             return false;
+        if (salesforceId == null) {
+            if (other.salesforceId != null)
+                return false;
+        } else if (!salesforceId.equals(other.salesforceId))
+            return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "UserDTO [login=" + login + ", password=" + password + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", authorities="
-                + authorities + "]";
+        return "UserDTO [id=" + id + ", login=" + login + ", password=" + password + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+                + ", authorities=" + authorities + ", mainContact=" + mainContact + ", salesforceId=" + salesforceId + ", parentSalesforceId=" + parentSalesforceId
+                + ", isConsortiumLead=" + isConsortiumLead + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy
+                + ", lastModifiedDate=" + lastModifiedDate + "]";
     }
 
     public static UserDTO valueOf(UserSettings us) {
         UserDTO result = new UserDTO();
         result.setCreatedBy(us.getCreatedBy());
-        result.setCreatedDate(us.getCreatedDate());        
-        result.setId(us.getId());
+        result.setCreatedDate(us.getCreatedDate());
         result.setLastModifiedBy(us.getLastModifiedBy());
         result.setLastModifiedDate(us.getLastModifiedDate());
-        result.setMainContact(us.getMainContact());
         result.setSalesforceId(us.getSalesforceId());
         return result;
     }
