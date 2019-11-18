@@ -5,25 +5,29 @@
     "fields": [
         {
             "fieldName": "clientId",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "String"
         },
         {
             "fieldName": "clientSecret",
+            "fieldType": "String"            
+        },
+        {
+            "fieldName": "salesforceId",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "salesforceId",
-            "fieldType": "String"
         },
         {
             "fieldName": "parentSalesforceId",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "isConsortiumLead",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldName": "assertionServiceEnabled",

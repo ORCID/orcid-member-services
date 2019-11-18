@@ -11,28 +11,29 @@ public class UserDTO implements Serializable {
      * 
      */
     private static final long serialVersionUID = -9077279756163937807L;
-    
+
     // UserSettings data
     private String id;
     private String login;
+    private String loginError;
     private String password;
     private String firstName;
+    private String firstNameError;
     private String lastName;
+    private String lastNameError;
     private String email;
+    private String emailError;
     private List<String> authorities;
+    private String authoritiesError;
     private Boolean mainContact;
-    public Boolean getMainContact() {
-        return mainContact;
-    }
-
-    public void setMainContact(Boolean mainContact) {
-        this.mainContact = mainContact;
-    }
 
     // MemberSettings data
     private String salesforceId;
+    private String salesforceIdError;
     private String parentSalesforceId;
+    private String parentSalesforceIdError;
     private Boolean isConsortiumLead;
+
     // Metadata
     private String createdBy;
     private Instant createdDate;
@@ -119,6 +120,14 @@ public class UserDTO implements Serializable {
         this.isConsortiumLead = isConsortiumLead;
     }
 
+    public Boolean getMainContact() {
+        return mainContact;
+    }
+
+    public void setMainContact(Boolean mainContact) {
+        this.mainContact = mainContact;
+    }
+
     public String getCreatedBy() {
         return createdBy;
     }
@@ -151,8 +160,60 @@ public class UserDTO implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public static long getSerialversionuid() {
-        return serialVersionUID;
+    public String getLoginError() {
+        return loginError;
+    }
+
+    public void setLoginError(String loginError) {
+        this.loginError = loginError;
+    }
+
+    public String getFirstNameError() {
+        return firstNameError;
+    }
+
+    public void setFirstNameError(String firstNameError) {
+        this.firstNameError = firstNameError;
+    }
+
+    public String getLastNameError() {
+        return lastNameError;
+    }
+
+    public void setLastNameError(String lastNameError) {
+        this.lastNameError = lastNameError;
+    }
+
+    public String getEmailError() {
+        return emailError;
+    }
+
+    public void setEmailError(String emailError) {
+        this.emailError = emailError;
+    }
+
+    public String getAuthoritiesError() {
+        return authoritiesError;
+    }
+
+    public void setAuthoritiesError(String authoritiesError) {
+        this.authoritiesError = authoritiesError;
+    }
+
+    public String getSalesforceIdError() {
+        return salesforceIdError;
+    }
+
+    public void setSalesforceIdError(String salesforceIdError) {
+        this.salesforceIdError = salesforceIdError;
+    }
+
+    public String getParentSalesforceIdError() {
+        return parentSalesforceIdError;
+    }
+
+    public void setParentSalesforceIdError(String parentSalesforceIdError) {
+        this.parentSalesforceIdError = parentSalesforceIdError;
     }
 
     @Override

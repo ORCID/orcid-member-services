@@ -3,6 +3,7 @@ package org.orcid.user.web.rest;
 import org.orcid.user.UserSettingsServiceApp;
 import org.orcid.user.config.SecurityBeanOverrideConfiguration;
 import org.orcid.user.domain.UserSettings;
+import org.orcid.user.repository.MemberSettingsRepository;
 import org.orcid.user.repository.UserSettingsRepository;
 import org.orcid.user.web.rest.errors.ExceptionTranslator;
 
@@ -41,9 +42,6 @@ public class UserSettingsResourceIT {
     private static final String DEFAULT_SALESFORCE_ID = "AAAAAAAAAA";
     private static final String UPDATED_SALESFORCE_ID = "BBBBBBBBBB";
 
-    private static final Boolean DEFAULT_DISABLED = false;
-    private static final Boolean UPDATED_DISABLED = true;
-
     private static final Boolean DEFAULT_MAIN_CONTACT = false;
     private static final Boolean UPDATED_MAIN_CONTACT = true;
     
@@ -63,6 +61,9 @@ public class UserSettingsResourceIT {
     private UserSettingsRepository userSettingsRepository;
 
     @Autowired
+    private MemberSettingsRepository memberSettingsRepository;
+    
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -81,7 +82,7 @@ public class UserSettingsResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final UserSettingsResource userSettingsResource = new UserSettingsResource(userSettingsRepository);
+        final UserSettingsResource userSettingsResource = new UserSettingsResource(userSettingsRepository, memberSettingsRepository);
         this.restUserSettingsMockMvc = MockMvcBuilders.standaloneSetup(userSettingsResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -103,7 +104,6 @@ public class UserSettingsResourceIT {
         userSettings.setCreatedDate(DEFAULT_CREATED_DATE);
         userSettings.setLastModifiedBy(DEFAULT_LAST_MODIFIED_BY);
         userSettings.setLastModifiedDate(DEFAULT_LAST_MODIFIED_DATE);
-        userSettings.setDisabled(DEFAULT_DISABLED);
         userSettings.setLogin(DEFAULT_LOGIN);
         userSettings.setMainContact(DEFAULT_MAIN_CONTACT);
         return userSettings;
@@ -121,7 +121,6 @@ public class UserSettingsResourceIT {
         userSettings.setCreatedDate(UPDATED_CREATED_DATE);
         userSettings.setLastModifiedBy(UPDATED_LAST_MODIFIED_BY);
         userSettings.setLastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
-        userSettings.setDisabled(UPDATED_DISABLED);
         userSettings.setLogin(UPDATED_LOGIN);
         userSettings.setMainContact(UPDATED_MAIN_CONTACT);
         return userSettings;
@@ -148,7 +147,6 @@ public class UserSettingsResourceIT {
         assertThat(userSettingsList).hasSize(databaseSizeBeforeCreate + 1);
         UserSettings testUserSettings = userSettingsList.get(userSettingsList.size() - 1);
         assertThat(testUserSettings.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(testUserSettings.getDisabled()).isEqualTo(DEFAULT_DISABLED);
         assertThat(testUserSettings.getMainContact()).isEqualTo(DEFAULT_MAIN_CONTACT);
         assertThat(testUserSettings.getSalesforceId()).isEqualTo(DEFAULT_SALESFORCE_ID);
         assertThat(testUserSettings.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
@@ -187,7 +185,6 @@ public class UserSettingsResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(userSettings.getId())))
             .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))            
             .andExpect(jsonPath("$.[*].salesforceId").value(hasItem(DEFAULT_SALESFORCE_ID)))
-            .andExpect(jsonPath("$.[*].disabled").value(hasItem(DEFAULT_DISABLED.booleanValue())))
             .andExpect(jsonPath("$.[*].mainContact").value(hasItem(DEFAULT_MAIN_CONTACT.booleanValue())))
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
             .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
@@ -207,7 +204,6 @@ public class UserSettingsResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(userSettings.getId())))
             .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))            
             .andExpect(jsonPath("$.[*].salesforceId").value(hasItem(DEFAULT_SALESFORCE_ID)))
-            .andExpect(jsonPath("$.[*].disabled").value(hasItem(DEFAULT_DISABLED.booleanValue())))
             .andExpect(jsonPath("$.[*].mainContact").value(hasItem(DEFAULT_MAIN_CONTACT.booleanValue())))
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
             .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
@@ -236,7 +232,6 @@ public class UserSettingsResourceIT {
         updatedUserSettings.setCreatedDate(UPDATED_CREATED_DATE);
         updatedUserSettings.setLastModifiedBy(UPDATED_LAST_MODIFIED_BY);
         updatedUserSettings.setLastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
-        updatedUserSettings.setDisabled(UPDATED_DISABLED);
         updatedUserSettings.setLogin(UPDATED_LOGIN);
         updatedUserSettings.setMainContact(UPDATED_MAIN_CONTACT);
 
@@ -250,7 +245,6 @@ public class UserSettingsResourceIT {
         assertThat(userSettingsList).hasSize(databaseSizeBeforeUpdate);
         UserSettings testUserSettings = userSettingsList.get(userSettingsList.size() - 1);
         assertThat(testUserSettings.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(testUserSettings.getDisabled()).isEqualTo(DEFAULT_DISABLED);
         assertThat(testUserSettings.getMainContact()).isEqualTo(DEFAULT_MAIN_CONTACT);
         assertThat(testUserSettings.getSalesforceId()).isEqualTo(DEFAULT_SALESFORCE_ID);
         assertThat(testUserSettings.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
