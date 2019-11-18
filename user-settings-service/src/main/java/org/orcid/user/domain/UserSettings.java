@@ -20,10 +20,7 @@ public class UserSettings implements Serializable {
 
     @Field("login")
     private String login;
-
-    @Field("client_id")
-    private String clientId;
-
+    
     @Field("salesforce_id")
     private String salesforceId;
 
@@ -56,14 +53,6 @@ public class UserSettings implements Serializable {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
     }
 
     public String getSalesforceId() {
@@ -121,8 +110,7 @@ public class UserSettings implements Serializable {
         result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
         result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((login == null) ? 0 : login.hashCode());
-        result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
+        result = prime * result + ((login == null) ? 0 : login.hashCode());        
         result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
         result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
         result = prime * result + ((mainContact == null) ? 0 : mainContact.hashCode());
@@ -153,11 +141,6 @@ public class UserSettings implements Serializable {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
-            return false;
-        if (clientId == null) {
-            if (other.clientId != null)
-                return false;
-        } else if (!clientId.equals(other.clientId))
             return false;
         if (login == null) {
             if (other.login != null)
