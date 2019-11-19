@@ -450,33 +450,9 @@ public class UserSettingsResource {
         log.debug("REST request to get a page of users");
         Page<UserSettings> page = userSettingsRepository.findAll(pageable);
         List<UserDTO> dtoList = new ArrayList<UserDTO>();
-
+        
         for (UserSettings us : page) {
-            // UserSettings data
-            UserDTO u = UserDTO.valueOf(us);
-            // UAA data
-            ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(us.getLogin());
-            JSONObject existingUser = new JSONObject(existingUserResponse.getBody());
-            u.setFirstName(existingUser.getString("firstName"));
-            u.setLastName(existingUser.getString("lastName"));
-            u.setEmail(existingUser.getString("email"));
-            List<String> authorities = new ArrayList<String>();
-            JSONArray array = existingUser.getJSONArray("authorities");
-            for (int i = 0; i < array.length(); i++) {
-                authorities.add(array.getString(i));
-            }            
-            u.setAuthorities(authorities);
-
-            // MemberSettings data
-            Optional<MemberSettings> oms = memberSettingsRepository.findBySalesforceId(us.getSalesforceId());
-            if (oms.isPresent()) {
-                MemberSettings ms = oms.get();
-                u.setSalesforceId(ms.getSalesforceId());
-                u.setParentSalesforceId(ms.getParentSalesforceId());
-                u.setIsConsortiumLead(ms.getIsConsortiumLead());
-            }
-
-            dtoList.add(u);
+            dtoList.add(populateDTO(us));
         }
 
         Page<UserDTO> dtoPage = new PageImpl<UserDTO>(dtoList, page.getPageable(), page.getTotalElements());
@@ -492,18 +468,46 @@ public class UserSettingsResource {
      *            the id of the User to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      *         body the User, or with status {@code 404 (Not Found)}.
+     * @throws JSONException 
      */
     @GetMapping("/user/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
+    public ResponseEntity<UserDTO> getUser(@PathVariable String id) throws JSONException {
         log.debug("REST request to get UserDTO : {}", id);
         Optional<UserSettings> msu = userSettingsRepository.findById(id);
         if (!msu.isPresent()) {
             return ResponseEntity.notFound().build();
         }
 
-        // TODO: fetch User info from UAA and populate missing values in the
-        // UserDTO
-        return ResponseEntity.ok().body(UserDTO.valueOf(msu.get()));
+        // UserSettings data
+        UserDTO dto = populateDTO(msu.get());
+
+        return ResponseEntity.ok().body(dto);
+    }
+    
+    private UserDTO populateDTO(UserSettings us) throws JSONException {
+        UserDTO u = UserDTO.valueOf(us);
+        // UAA data
+        ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(us.getLogin());
+        JSONObject existingUser = new JSONObject(existingUserResponse.getBody());
+        u.setFirstName(existingUser.getString("firstName"));
+        u.setLastName(existingUser.getString("lastName"));
+        u.setEmail(existingUser.getString("email"));
+        List<String> authorities = new ArrayList<String>();
+        JSONArray array = existingUser.getJSONArray("authorities");
+        for (int i = 0; i < array.length(); i++) {
+            authorities.add(array.getString(i));
+        }            
+        u.setAuthorities(authorities);
+
+        // MemberSettings data
+        Optional<MemberSettings> oms = memberSettingsRepository.findBySalesforceId(us.getSalesforceId());
+        if (oms.isPresent()) {
+            MemberSettings ms = oms.get();
+            u.setSalesforceId(ms.getSalesforceId());
+            u.setParentSalesforceId(ms.getParentSalesforceId());
+            u.setIsConsortiumLead(ms.getIsConsortiumLead());
+        }
+        return u;
     }
 
     /**
