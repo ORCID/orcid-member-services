@@ -1,11 +1,9 @@
 package org.orcid.user.web.rest;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.ParseException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +18,7 @@ import javax.validation.Valid;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.RandomStringUtils;
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.user.client.Oauth2ServiceClient;
@@ -93,15 +92,11 @@ public class UserSettingsResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and
      *         with a map indicating if each user was created or not, or with
      *         status {@code 400 (Bad Request)} if the file cannot be parsed.
-     * @throws URISyntaxException
-     *             if the Location URI syntax is incorrect.
-     * @throws JSONException
-     * @throws ParseException
-     * @throws IOException
+     * @throws Throwable
      */
     @PostMapping("/user/import")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<Map<Long, String>> createUsers(@RequestParam("file") MultipartFile file) throws URISyntaxException, JSONException, ParseException, IOException {
+    public ResponseEntity<Map<Long, String>> createUsers(@RequestParam("file") MultipartFile file) throws Throwable {
         Map<Long, String> userIds = new HashMap<Long, String>();
         try (InputStream is = file.getInputStream();) {
             InputStreamReader isr = new InputStreamReader(is);
@@ -203,14 +198,11 @@ public class UserSettingsResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and
      *         with body the new user, or with status {@code 400 (Bad Request)}
      *         if the user has already an ID.
-     * @throws URISyntaxException
-     *             if the Location URI syntax is incorrect.
-     * @throws JSONException
-     * @throws ParseException
+     * @throws Throwable
      */
     @PostMapping("/user")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException, JSONException, ParseException {
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) throws Throwable {
         log.debug("REST request to save UserDTO : {}", userDTO);
         if (!StringUtils.isBlank(userDTO.getId())) {
             throw new BadRequestAlertException("A new user cannot already have an ID", ENTITY_NAME, "idexists");
@@ -274,7 +266,7 @@ public class UserSettingsResource {
         return isOk;
     }
 
-    private JSONObject createUserOnUAA(UserDTO userDTO) throws JSONException {
+    private JSONObject createUserOnUAA(UserDTO userDTO) throws Throwable {
         String login = userDTO.getLogin();
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("login", login);
@@ -285,9 +277,17 @@ public class UserSettingsResource {
         map.put("lastName", userDTO.getLastName());
         map.put("activated", false);
 
-        ResponseEntity<Void> response = oauth2ServiceClient.registerUser(map);
-        if (response == null || !HttpStatus.CREATED.equals(response.getStatusCode())) {
-            throw new RuntimeException("User creation failed: " + response.getStatusCode().getReasonPhrase());
+        try {
+            ResponseEntity<Void> response = oauth2ServiceClient.registerUser(map);
+            if (response == null || !HttpStatus.CREATED.equals(response.getStatusCode())) {
+                throw new RuntimeException("User creation failed: " + response.getStatusCode().getReasonPhrase());
+            }
+        } catch (Exception rse) {
+            if (rse.getCause() != null) {
+                throw rse.getCause();
+            } else {
+                throw rse;
+            }
         }
 
         // Now fetch the user to get the user id and populate the member
@@ -375,13 +375,16 @@ public class UserSettingsResource {
         }
 
         // Verify the user exists on the UserSettings table
-        Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findById(userDTO.getId());
+        Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByLogin(userDTO.getLogin());
         if (!existingUserSettingsOptional.isPresent()) {
-            throw new BadRequestAlertException("Invalid id, unable to find UserSettings for " + userDTO.getId(), ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for " + userDTO.getId(), ENTITY_NAME, "idnull");
         }
 
         // Update jhi_user entry
         Map<String, Object> map = new HashMap<String, Object>();
+
+        map.put("id", userDTO.getId());
+        map.put("login", userDTO.getLogin());
         map.put("password", userDTO.getPassword());
         map.put("email", userDTO.getEmail());
         map.put("authorities", userDTO.getAuthorities());
@@ -390,11 +393,10 @@ public class UserSettingsResource {
 
         ResponseEntity<String> response = oauth2ServiceClient.updateUser(map);
         if (response == null || !HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new RuntimeException("User creation failed: " + response.getStatusCode().getReasonPhrase());
+            throw new RuntimeException("Update user failed: " + response.getStatusCode().getReasonPhrase());
         }
 
         JSONObject obj = new JSONObject(response.getBody());
-        System.out.println(obj);
         String lastModifiedBy = obj.getString("lastModifiedBy");
         Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
 
@@ -409,6 +411,11 @@ public class UserSettingsResource {
         // Check if salesforceId changed
         String existingSalesforceId = existingUserSettings.getSalesforceId();
         if (!existingSalesforceId.equals(userDTO.getSalesforceId())) {
+            // Check if new salesforceId exists in MemberSettings
+            if (!memberSettingsRepository.existsBySalesforceId(userDTO.getSalesforceId())) {
+                throw new BadRequestAlertException("Invalid salesforceId, there is not MemberSettings entry for " + userDTO.getSalesforceId(), ENTITY_NAME,
+                        "salesforceIdInvalid");
+            }
             existingUserSettings.setSalesforceId(userDTO.getSalesforceId());
             userSettingsModified = true;
         }
@@ -437,7 +444,7 @@ public class UserSettingsResource {
      *         list of Users in body.
      * @throws JSONException
      */
-    @GetMapping("/user")
+    @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder)
             throws JSONException {
         log.debug("REST request to get a page of users");
@@ -445,12 +452,30 @@ public class UserSettingsResource {
         List<UserDTO> dtoList = new ArrayList<UserDTO>();
 
         for (UserSettings us : page) {
+            // UserSettings data
             UserDTO u = UserDTO.valueOf(us);
+            // UAA data
             ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(us.getLogin());
             JSONObject existingUser = new JSONObject(existingUserResponse.getBody());
-            u.setEmail(existingUser.getString("email"));
             u.setFirstName(existingUser.getString("firstName"));
             u.setLastName(existingUser.getString("lastName"));
+            u.setEmail(existingUser.getString("email"));
+            List<String> authorities = new ArrayList<String>();
+            JSONArray array = existingUser.getJSONArray("authorities");
+            for (int i = 0; i < array.length(); i++) {
+                authorities.add(array.getString(i));
+            }            
+            u.setAuthorities(authorities);
+
+            // MemberSettings data
+            Optional<MemberSettings> oms = memberSettingsRepository.findBySalesforceId(us.getSalesforceId());
+            if (oms.isPresent()) {
+                MemberSettings ms = oms.get();
+                u.setSalesforceId(ms.getSalesforceId());
+                u.setParentSalesforceId(ms.getParentSalesforceId());
+                u.setIsConsortiumLead(ms.getIsConsortiumLead());
+            }
+
             dtoList.add(u);
         }
 

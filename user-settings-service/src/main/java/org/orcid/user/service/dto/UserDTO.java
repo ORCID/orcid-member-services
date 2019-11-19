@@ -335,11 +335,14 @@ public class UserDTO implements Serializable {
 
     public static UserDTO valueOf(UserSettings us) {
         UserDTO result = new UserDTO();
+        result.setId(us.getId());
+        result.setLogin(us.getLogin());
+        result.setMainContact(us.getMainContact());
+        result.setSalesforceId(us.getSalesforceId());
         result.setCreatedBy(us.getCreatedBy());
         result.setCreatedDate(us.getCreatedDate());
         result.setLastModifiedBy(us.getLastModifiedBy());
-        result.setLastModifiedDate(us.getLastModifiedDate());
-        result.setSalesforceId(us.getSalesforceId());
+        result.setLastModifiedDate(us.getLastModifiedDate());        
         return result;
     }
 
