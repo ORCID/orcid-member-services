@@ -14,4 +14,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberSettingsRepository extends MongoRepository<MemberSettings, String> {
     Optional<MemberSettings> findBySalesforceId(String salesforceId);
+    Boolean existsBySalesforceId(String salesforceId);
 }
