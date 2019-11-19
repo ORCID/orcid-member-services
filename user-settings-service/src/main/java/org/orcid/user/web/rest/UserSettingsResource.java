@@ -119,8 +119,14 @@ public class UserSettingsResource {
                     createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());
                     userIds.put(index, obj.getString("id"));
                 } catch (Exception e) {
-                    log.error("Error on line " + index, e);
-                    userIds.put(index, e.getMessage());
+                    Throwable t = e.getCause();
+                    if (t != null) {
+                        log.error("Error on line " + index, t.getMessage());
+                        userIds.put(index, t.getMessage());
+                    } else {
+                        log.error("Error on line " + index, e.getMessage());
+                        userIds.put(index, e.getMessage());
+                    }
                 }
             }
         }
@@ -236,6 +242,9 @@ public class UserSettingsResource {
         userDTO.setLastModifiedBy(lastModifiedBy);
         userDTO.setLastModifiedDate(lastModifiedDate);
 
+        // Remove user password from response
+        userDTO.setPassword(null);
+
         return ResponseEntity.created(new URI("/settings/api/user/" + us.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, us.getId().toString())).body(userDTO);
     }
@@ -323,7 +332,7 @@ public class UserSettingsResource {
             ms = new MemberSettings();
             ms.setSalesforceId(salesforceId);
             ms.setParentSalesforceId(parentSalesforceId);
-            ms.setIsConsortiumLead(isConsortiumLead);
+            ms.setIsConsortiumLead((isConsortiumLead == null) ? false : isConsortiumLead);
             ms.setCreatedBy(createdBy);
             ms.setCreatedDate(createdDate);
             ms.setLastModifiedBy(lastModifiedBy);
