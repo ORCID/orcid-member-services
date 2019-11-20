@@ -108,11 +108,12 @@ public class UserSettingsResource {
                     // Validate for errors
                     if (!validate(userDTO)) {
                         userIds.put(index, buildErrorString(userDTO));
+                    } else {
+                        JSONObject obj = createUserOnUAA(userDTO);
+                        UserSettings us = createUserSettings(obj, line.get("salesforceId"), false);
+                        createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());
+                        userIds.put(index, us.getId());
                     }
-                    JSONObject obj = createUserOnUAA(userDTO);
-                    UserSettings us = createUserSettings(obj, line.get("salesforceId"), false);
-                    createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());
-                    userIds.put(index, us.getId());
                 } catch (Exception e) {
                     Throwable t = e.getCause();
                     if (t != null) {
@@ -251,10 +252,6 @@ public class UserSettingsResource {
             isOk = false;
             user.setEmailError("Email should not be empty");
         }
-        if (user.getAuthorities() == null || user.getAuthorities().isEmpty()) {
-            isOk = false;
-            user.setAuthoritiesError("You should specify at least one authority");
-        }
         if (StringUtils.isBlank(user.getSalesforceId())) {
             isOk = false;
             user.setSalesforceIdError("Salesforce Id should not be empty");
@@ -272,6 +269,12 @@ public class UserSettingsResource {
         map.put("login", login);
         map.put("password", userDTO.getPassword());
         map.put("email", userDTO.getEmail());
+        if (userDTO.getAuthorities() == null) {
+            userDTO.setAuthorities(new ArrayList<String>());
+        }
+        if (!userDTO.getAuthorities().contains("ROLE_USER")) {
+            userDTO.getAuthorities().add("ROLE_USER");
+        }
         map.put("authorities", userDTO.getAuthorities());
         map.put("firstName", userDTO.getFirstName());
         map.put("lastName", userDTO.getLastName());
@@ -293,9 +296,7 @@ public class UserSettingsResource {
         // Now fetch the user to get the user id and populate the member
         // services user information
         ResponseEntity<String> userInfo = oauth2ServiceClient.getUser(login);
-        String user = userInfo.getBody();
-        System.out.println(user);
-        return new JSONObject(user);
+        return new JSONObject(userInfo.getBody());
     }
 
     private UserSettings createUserSettings(JSONObject obj, String salesforceId, Boolean mainContact) throws JSONException {
@@ -383,9 +384,10 @@ public class UserSettingsResource {
         // Update jhi_user entry
         Map<String, Object> map = new HashMap<String, Object>();
 
-        map.put("id", userDTO.getId());
+        // Remember to use the UAA user id, since we are updating the user info
+        map.put("id", existingUaaUser.getString("id"));
         map.put("login", userDTO.getLogin());
-        map.put("password", userDTO.getPassword());
+        map.put("password", "requires_not_empty_but_doesnt_get_updated");
         map.put("email", userDTO.getEmail());
         map.put("authorities", userDTO.getAuthorities());
         map.put("firstName", userDTO.getFirstName());
@@ -527,7 +529,7 @@ public class UserSettingsResource {
             return ResponseEntity.notFound().build();
         }
         UserSettings us = ous.get();
-        
+
         // Now fetch the user to get the user id and populate the member
         // services user information
         ResponseEntity<String> userInfo = oauth2ServiceClient.getUser(us.getLogin());
@@ -554,17 +556,17 @@ public class UserSettingsResource {
         JSONArray array = obj.getJSONArray("authorities");
         for (int i = 0; i < array.length(); i++) {
             String authName = array.getString(i);
-            if(!authority.equalsIgnoreCase(authName)) {
+            if (!authority.equalsIgnoreCase(authName)) {
                 authorities.add(authName);
-            }            
+            }
         }
         map.put("authorities", authorities);
-        
+
         ResponseEntity<String> response = oauth2ServiceClient.updateUser(map);
         if (response == null || !HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new RuntimeException("Unable to remove authority " + authority + " from user " + us.getLogin() + ": "  + response.getStatusCode().getReasonPhrase());
+            throw new RuntimeException("Unable to remove authority " + authority + " from user " + us.getLogin() + ": " + response.getStatusCode().getReasonPhrase());
         }
-        
+
         return ResponseEntity.accepted().build();
     }
 }
