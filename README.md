@@ -68,11 +68,11 @@ To start the `user-settings-service`:
 - Run `bash mvnw`
 - Wait for it to start
 
-#### Test it is working as expected
+### Test it is working as expected
 
 To test that the `user-settings-service` is working as expected, we will create a user through it and then retrive the user information.
 
-##### Create a user
+#### Create a user
 
 First we need to generate an access token using the default admin user credentials `admin / admin`:
 
@@ -148,7 +148,7 @@ Then, if you want to explore the database entries created by this call, you can 
 - In the `Oauth2Service` collection, in the `jhi_user` table, you will see a new user, which is the one used by the UAA to allow you to login.
 - In the `UserSettingsService` collection, in the `member_services_user` table, there will be a new user as well, and, on it, the `user_id` field must match the id of the new user in the `Oauth2Service`.`jhi_user` table
 
-##### Update the user
+#### Update the user
 
 Now, we want to update the name of the new user, for that, we will need to reuse the json data of the user, but changing the first name and last name for a new value, as follows:
 
@@ -158,5 +158,56 @@ curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Aut
 
 If that works fine, you will get a `200 OK` from the server, along with the updated user info in JSON format
 
-##### Import users using CSV
+#### Import users using CSV
 
+Now we want to test that you can upload multiple users at once, this is done through the CSV user inport endpoint, but, before going into the technical details, lets see how the CSV should look like: 
+
+```csv
+isConsortiumLead,salesforceId,parentSalesforceId,email,firstName,lastName,grant
+false,SF1,PSF1,1a@test.com,FirstName1,LastName1,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
+false,SF2,PSF2,2a@test.com,FirstName2,LastName2,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
+```
+
+Notice that the first line in the file must be the header, and define the fields we should include as part of each user:
+
+name | required
+-----| ----------
+isConsortiumLead | No
+salesforceId | Yes
+parentSalesforceId | No
+email | Yes
+firstName | No 
+lastName | No
+grant | No
+
+So, save the above csv as file `users.csv` and import it as follow:
+
+```
+curl -i -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1NzQ3ODIwNDUsImlhdCI6MTU3NDE3NzI0NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyZTBkODYxZS1kNDg1LTQ3ZGItODJhZS02MGY0NGU4YTNlMWEiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.J1Qfl75v1JohAfi0Mbv_h0-g8EK7i-yhfJZ1is-5-nwPrOMaQk7NwSGp9_GFJktYCA7SCvGjODkgyvjKiBiZ1M2_rJNa5BnL_foL6rr98zTtwv0NmsGUXIyehrbc03aTdLYjQCh9svNspfrPuGKYm_IkfoWkMb6BcZ5MgvI5DaLh2aIciLtCGUY-eG3s4CMfrquEcgxn4a_F9eIX9TGA9ixRZvJj9EixXv7ZorOlfeiY749Ra8v1a-aX34fWJX2Uvyq5sODFx6IE0f81iTdODwAe2FS0xN02YSqoyOFIKU1j0DP1wuTEpMzlqeRwnvlVy0-3q9VMgCdUKMlL1ze5aQ" -F file=@users.csv -X POST  http://localhost:8081/settings/api/user/import
+```
+
+The server will process the file and return a json result like the following one: 
+
+```json
+{
+  "1" : "5dd598c72c833775062406a2",
+  "2" : "5dd598c72c833775062406a3"
+}
+```
+
+Which indicates that the user in line `1` was created with id `5dd598c72c833775062406a2` and user in line `2` was created with id `5dd598c72c833775062406a3`
+
+If any of your lines have an error, the server will put the error in the given line index and the process the rest of the lines, for example:
+
+```json
+{
+  "1" : "5dd598c72c833775062406a2",
+  "2" : "Login should not be empty, Email should not be empty"
+}
+```
+
+#### Retrive all users
+
+#### Retrive a single user
+
+#### Remove a privilege (authorization) from an user
