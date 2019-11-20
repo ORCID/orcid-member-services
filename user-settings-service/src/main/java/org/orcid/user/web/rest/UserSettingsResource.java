@@ -110,9 +110,9 @@ public class UserSettingsResource {
                         userIds.put(index, buildErrorString(userDTO));
                     }
                     JSONObject obj = createUserOnUAA(userDTO);
-                    createUserSettings(obj, line.get("salesforceId"), false);
+                    UserSettings us = createUserSettings(obj, line.get("salesforceId"), false);
                     createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());
-                    userIds.put(index, obj.getString("id"));
+                    userIds.put(index, us.getId());
                 } catch (Exception e) {
                     Throwable t = e.getCause();
                     if (t != null) {
@@ -450,7 +450,7 @@ public class UserSettingsResource {
         log.debug("REST request to get a page of users");
         Page<UserSettings> page = userSettingsRepository.findAll(pageable);
         List<UserDTO> dtoList = new ArrayList<UserDTO>();
-        
+
         for (UserSettings us : page) {
             dtoList.add(populateDTO(us));
         }
@@ -468,7 +468,7 @@ public class UserSettingsResource {
      *            the id of the User to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      *         body the User, or with status {@code 404 (Not Found)}.
-     * @throws JSONException 
+     * @throws JSONException
      */
     @GetMapping("/user/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable String id) throws JSONException {
@@ -483,7 +483,7 @@ public class UserSettingsResource {
 
         return ResponseEntity.ok().body(dto);
     }
-    
+
     private UserDTO populateDTO(UserSettings us) throws JSONException {
         UserDTO u = UserDTO.valueOf(us);
         // UAA data
@@ -496,7 +496,7 @@ public class UserSettingsResource {
         JSONArray array = existingUser.getJSONArray("authorities");
         for (int i = 0; i < array.length(); i++) {
             authorities.add(array.getString(i));
-        }            
+        }
         u.setAuthorities(authorities);
 
         // MemberSettings data
@@ -518,35 +518,53 @@ public class UserSettingsResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      * @throws JSONException
      */
-    @DeleteMapping("/user/{login}/{authority}")
-    public ResponseEntity<Void> disableUser(@PathVariable String login, @PathVariable String authority) throws JSONException {
-        log.debug("REST request to remove authority {} from user {}", authority, login);
+    @DeleteMapping("/user/{id}/{authority}")
+    public ResponseEntity<Void> removeAuthority(@PathVariable String id, @PathVariable String authority) throws JSONException {
+        log.debug("REST request to remove authority {} from user {}", authority, id);
 
+        Optional<UserSettings> ous = userSettingsRepository.findById(id);
+        if (!ous.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        UserSettings us = ous.get();
+        
         // Now fetch the user to get the user id and populate the member
         // services user information
-        ResponseEntity<String> userInfo = oauth2ServiceClient.getUser(login);
+        ResponseEntity<String> userInfo = oauth2ServiceClient.getUser(us.getLogin());
 
         if (HttpStatus.NOT_FOUND.equals(userInfo.getStatusCode())) {
-            throw new RuntimeException("User not found: " + login);
+            throw new RuntimeException("User not found: " + us.getLogin());
         }
         String user = userInfo.getBody();
 
         JSONObject obj = new JSONObject(user);
 
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("login", login);
-        map.put("password", obj.getString(""));
-        map.put("email", obj.getString(""));
+        map.put("id", obj.getString("id"));
+        map.put("login", obj.getString("login"));
+        map.put("firstName", obj.getString("firstName"));
+        map.put("lastName", obj.getString("lastName"));
+        map.put("email", obj.getString("email"));
+        map.put("password", "requires_not_empty_but_doesnt_get_updated");
+        map.put("imageUrl", obj.getString("imageUrl"));
+        map.put("activated", obj.getBoolean("activated"));
+        map.put("langKey", obj.getString("langKey"));
 
-        map.put("firstName", obj.getString(""));
-        map.put("lastName", obj.getString(""));
-        map.put("imageUrl", obj.getString(""));
-        map.put("activated", obj.getString(""));
-        map.put("langKey", obj.getString(""));
-
-        // TODO: process authorities, remove the one indicated
-        map.put("authorities", obj.getString(""));
-
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, login)).build();
+        List<String> authorities = new ArrayList<String>();
+        JSONArray array = obj.getJSONArray("authorities");
+        for (int i = 0; i < array.length(); i++) {
+            String authName = array.getString(i);
+            if(!authority.equalsIgnoreCase(authName)) {
+                authorities.add(authName);
+            }            
+        }
+        map.put("authorities", authorities);
+        
+        ResponseEntity<String> response = oauth2ServiceClient.updateUser(map);
+        if (response == null || !HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new RuntimeException("Unable to remove authority " + authority + " from user " + us.getLogin() + ": "  + response.getStatusCode().getReasonPhrase());
+        }
+        
+        return ResponseEntity.accepted().build();
     }
 }
