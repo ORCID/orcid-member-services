@@ -6,8 +6,8 @@
       "home": "Inicio",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
-        "main": "Entidades",
-        "userSettingsServiceMemberServicesUser": "Member Services User",
+        "main": "Entidades",        
+        "userSettingsServiceUserSettings": "User Settings",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

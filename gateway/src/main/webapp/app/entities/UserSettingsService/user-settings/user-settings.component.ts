@@ -5,19 +5,19 @@ import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { IMemberServicesUser } from 'app/shared/model/UserSettingsService/member-services-user.model';
+import { IUserSettings } from 'app/shared/model/UserSettingsService/user-settings.model';
 import { AccountService } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
-import { MemberServicesUserService } from './member-services-user.service';
+import { UserSettingsService } from './user-settings.service';
 
 @Component({
-  selector: 'jhi-member-services-user',
-  templateUrl: './member-services-user.component.html'
+  selector: 'jhi-user-settings',
+  templateUrl: './user-settings.component.html'
 })
-export class MemberServicesUserComponent implements OnInit, OnDestroy {
+export class UserSettingsComponent implements OnInit, OnDestroy {
   currentAccount: any;
-  memberServicesUsers: IMemberServicesUser[];
+  userSettings: IUserSettings[];
   error: any;
   success: any;
   eventSubscriber: Subscription;
@@ -31,7 +31,7 @@ export class MemberServicesUserComponent implements OnInit, OnDestroy {
   reverse: any;
 
   constructor(
-    protected memberServicesUserService: MemberServicesUserService,
+    protected userSettingsService: UserSettingsService,
     protected parseLinks: JhiParseLinks,
     protected jhiAlertService: JhiAlertService,
     protected accountService: AccountService,
@@ -49,14 +49,14 @@ export class MemberServicesUserComponent implements OnInit, OnDestroy {
   }
 
   loadAll() {
-    this.memberServicesUserService
+    this.userSettingsService
       .query({
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort()
       })
       .subscribe(
-        (res: HttpResponse<IMemberServicesUser[]>) => this.paginateMemberServicesUsers(res.body, res.headers),
+        (res: HttpResponse<IUserSettings[]>) => this.paginateUserSettings(res.body, res.headers),
         (res: HttpErrorResponse) => this.onError(res.message)
       );
   }
@@ -69,7 +69,7 @@ export class MemberServicesUserComponent implements OnInit, OnDestroy {
   }
 
   transition() {
-    this.router.navigate(['/member-services-user'], {
+    this.router.navigate(['/user-settings'], {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
@@ -82,7 +82,7 @@ export class MemberServicesUserComponent implements OnInit, OnDestroy {
   clear() {
     this.page = 0;
     this.router.navigate([
-      '/member-services-user',
+      '/user-settings',
       {
         page: this.page,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
@@ -96,19 +96,19 @@ export class MemberServicesUserComponent implements OnInit, OnDestroy {
     this.accountService.identity().then(account => {
       this.currentAccount = account;
     });
-    this.registerChangeInMemberServicesUsers();
+    this.registerChangeInUserSettings();
   }
 
   ngOnDestroy() {
     this.eventManager.destroy(this.eventSubscriber);
   }
 
-  trackId(index: number, item: IMemberServicesUser) {
+  trackId(index: number, item: IUserSettings) {
     return item.id;
   }
 
-  registerChangeInMemberServicesUsers() {
-    this.eventSubscriber = this.eventManager.subscribe('memberServicesUserListModification', response => this.loadAll());
+  registerChangeInUserSettings() {
+    this.eventSubscriber = this.eventManager.subscribe('userSettingsListModification', response => this.loadAll());
   }
 
   sort() {
@@ -119,10 +119,10 @@ export class MemberServicesUserComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  protected paginateMemberServicesUsers(data: IMemberServicesUser[], headers: HttpHeaders) {
+  protected paginateUserSettings(data: IUserSettings[], headers: HttpHeaders) {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-    this.memberServicesUsers = data;
+    this.userSettings = data;
   }
 
   protected onError(errorMessage: string) {

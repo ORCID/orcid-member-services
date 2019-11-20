@@ -5,34 +5,34 @@ import { FormBuilder } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { MemberServicesUserUpdateComponent } from 'app/entities/UserSettingsService/member-services-user/member-services-user-update.component';
-import { MemberServicesUserService } from 'app/entities/UserSettingsService/member-services-user/member-services-user.service';
-import { MemberServicesUser } from 'app/shared/model/UserSettingsService/member-services-user.model';
+import { UserSettingsUpdateComponent } from 'app/entities/UserSettingsService/user-settings/user-settings-update.component';
+import { UserSettingsService } from 'app/entities/UserSettingsService/user-settings/user-settings.service';
+import { UserSettings } from 'app/shared/model/UserSettingsService/user-settings.model';
 
 describe('Component Tests', () => {
-  describe('MemberServicesUser Management Update Component', () => {
-    let comp: MemberServicesUserUpdateComponent;
-    let fixture: ComponentFixture<MemberServicesUserUpdateComponent>;
-    let service: MemberServicesUserService;
+  describe('UserSettings Management Update Component', () => {
+    let comp: UserSettingsUpdateComponent;
+    let fixture: ComponentFixture<UserSettingsUpdateComponent>;
+    let service: UserSettingsService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [GatewayTestModule],
-        declarations: [MemberServicesUserUpdateComponent],
+        declarations: [UserSettingsUpdateComponent],
         providers: [FormBuilder]
       })
-        .overrideTemplate(MemberServicesUserUpdateComponent, '')
+        .overrideTemplate(UserSettingsUpdateComponent, '')
         .compileComponents();
 
-      fixture = TestBed.createComponent(MemberServicesUserUpdateComponent);
+      fixture = TestBed.createComponent(UserSettingsUpdateComponent);
       comp = fixture.componentInstance;
-      service = fixture.debugElement.injector.get(MemberServicesUserService);
+      service = fixture.debugElement.injector.get(UserSettingsService);
     });
 
     describe('save', () => {
       it('Should call update service on save for existing entity', fakeAsync(() => {
         // GIVEN
-        const entity = new MemberServicesUser('123');
+        const entity = new UserSettings('123');
         spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
         comp.updateForm(entity);
         // WHEN
@@ -46,7 +46,7 @@ describe('Component Tests', () => {
 
       it('Should call create service on save for new entity', fakeAsync(() => {
         // GIVEN
-        const entity = new MemberServicesUser();
+        const entity = new UserSettings();
         spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
         comp.updateForm(entity);
         // WHEN
