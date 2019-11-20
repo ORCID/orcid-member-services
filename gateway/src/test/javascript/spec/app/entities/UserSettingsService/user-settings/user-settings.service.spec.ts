@@ -4,31 +4,41 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
-import { MemberServicesUserService } from 'app/entities/UserSettingsService/member-services-user/member-services-user.service';
-import { IMemberServicesUser, MemberServicesUser } from 'app/shared/model/UserSettingsService/member-services-user.model';
+import * as moment from 'moment';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+import { UserSettingsService } from 'app/entities/UserSettingsService/user-settings/user-settings.service';
+import { IUserSettings, UserSettings } from 'app/shared/model/UserSettingsService/user-settings.model';
 
 describe('Service Tests', () => {
-  describe('MemberServicesUser Service', () => {
+  describe('UserSettings Service', () => {
     let injector: TestBed;
-    let service: MemberServicesUserService;
+    let service: UserSettingsService;
     let httpMock: HttpTestingController;
-    let elemDefault: IMemberServicesUser;
+    let elemDefault: IUserSettings;
     let expectedResult;
+    let currentDate: moment.Moment;
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule]
       });
       expectedResult = {};
       injector = getTestBed();
-      service = injector.get(MemberServicesUserService);
+      service = injector.get(UserSettingsService);
       httpMock = injector.get(HttpTestingController);
+      currentDate = moment();
 
-      elemDefault = new MemberServicesUser('ID', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', false, false, false, 'AAAAAAA');
+      elemDefault = new UserSettings('ID', 'AAAAAAA', 'AAAAAAA', false, false, 'AAAAAAA', currentDate, 'AAAAAAA', currentDate);
     });
 
     describe('Service methods', () => {
       it('should find an element', async () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = Object.assign(
+          {
+            createdDate: currentDate.format(DATE_TIME_FORMAT),
+            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
+          },
+          elemDefault
+        );
         service
           .find('123')
           .pipe(take(1))
@@ -39,16 +49,24 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: elemDefault });
       });
 
-      it('should create a MemberServicesUser', async () => {
+      it('should create a UserSettings', async () => {
         const returnedFromService = Object.assign(
           {
-            id: 'ID'
+            id: 'ID',
+            createdDate: currentDate.format(DATE_TIME_FORMAT),
+            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
-        const expected = Object.assign({}, returnedFromService);
+        const expected = Object.assign(
+          {
+            createdDate: currentDate,
+            lastModifiedDate: currentDate
+          },
+          returnedFromService
+        );
         service
-          .create(new MemberServicesUser(null))
+          .create(new UserSettings(null))
           .pipe(take(1))
           .subscribe(resp => (expectedResult = resp));
         const req = httpMock.expectOne({ method: 'POST' });
@@ -56,21 +74,28 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: expected });
       });
 
-      it('should update a MemberServicesUser', async () => {
+      it('should update a UserSettings', async () => {
         const returnedFromService = Object.assign(
           {
-            user_id: 'BBBBBB',
+            jhiUserId: 'BBBBBB',
             salesforceId: 'BBBBBB',
-            parentSalesforceId: 'BBBBBB',
             disabled: true,
             mainContact: true,
-            assertionServiceEnabled: true,
-            oboClientId: 'BBBBBB'
+            createdBy: 'BBBBBB',
+            createdDate: currentDate.format(DATE_TIME_FORMAT),
+            lastModifiedBy: 'BBBBBB',
+            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
 
-        const expected = Object.assign({}, returnedFromService);
+        const expected = Object.assign(
+          {
+            createdDate: currentDate,
+            lastModifiedDate: currentDate
+          },
+          returnedFromService
+        );
         service
           .update(expected)
           .pipe(take(1))
@@ -80,20 +105,27 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: expected });
       });
 
-      it('should return a list of MemberServicesUser', async () => {
+      it('should return a list of UserSettings', async () => {
         const returnedFromService = Object.assign(
           {
-            user_id: 'BBBBBB',
+            jhiUserId: 'BBBBBB',
             salesforceId: 'BBBBBB',
-            parentSalesforceId: 'BBBBBB',
             disabled: true,
             mainContact: true,
-            assertionServiceEnabled: true,
-            oboClientId: 'BBBBBB'
+            createdBy: 'BBBBBB',
+            createdDate: currentDate.format(DATE_TIME_FORMAT),
+            lastModifiedBy: 'BBBBBB',
+            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
-        const expected = Object.assign({}, returnedFromService);
+        const expected = Object.assign(
+          {
+            createdDate: currentDate,
+            lastModifiedDate: currentDate
+          },
+          returnedFromService
+        );
         service
           .query(expected)
           .pipe(
@@ -107,7 +139,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toContainEqual(expected);
       });
 
-      it('should delete a MemberServicesUser', async () => {
+      it('should delete a UserSettings', async () => {
         const rxPromise = service.delete('123').subscribe(resp => (expectedResult = resp.ok));
 
         const req = httpMock.expectOne({ method: 'DELETE' });

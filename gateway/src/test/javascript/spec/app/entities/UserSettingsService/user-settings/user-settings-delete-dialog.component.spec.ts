@@ -5,27 +5,27 @@ import { Observable, of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { MemberServicesUserDeleteDialogComponent } from 'app/entities/UserSettingsService/member-services-user/member-services-user-delete-dialog.component';
-import { MemberServicesUserService } from 'app/entities/UserSettingsService/member-services-user/member-services-user.service';
+import { UserSettingsDeleteDialogComponent } from 'app/entities/UserSettingsService/user-settings/user-settings-delete-dialog.component';
+import { UserSettingsService } from 'app/entities/UserSettingsService/user-settings/user-settings.service';
 
 describe('Component Tests', () => {
-  describe('MemberServicesUser Management Delete Component', () => {
-    let comp: MemberServicesUserDeleteDialogComponent;
-    let fixture: ComponentFixture<MemberServicesUserDeleteDialogComponent>;
-    let service: MemberServicesUserService;
+  describe('UserSettings Management Delete Component', () => {
+    let comp: UserSettingsDeleteDialogComponent;
+    let fixture: ComponentFixture<UserSettingsDeleteDialogComponent>;
+    let service: UserSettingsService;
     let mockEventManager: any;
     let mockActiveModal: any;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [GatewayTestModule],
-        declarations: [MemberServicesUserDeleteDialogComponent]
+        declarations: [UserSettingsDeleteDialogComponent]
       })
-        .overrideTemplate(MemberServicesUserDeleteDialogComponent, '')
+        .overrideTemplate(UserSettingsDeleteDialogComponent, '')
         .compileComponents();
-      fixture = TestBed.createComponent(MemberServicesUserDeleteDialogComponent);
+      fixture = TestBed.createComponent(UserSettingsDeleteDialogComponent);
       comp = fixture.componentInstance;
-      service = fixture.debugElement.injector.get(MemberServicesUserService);
+      service = fixture.debugElement.injector.get(UserSettingsService);
       mockEventManager = fixture.debugElement.injector.get(JhiEventManager);
       mockActiveModal = fixture.debugElement.injector.get(NgbActiveModal);
     });

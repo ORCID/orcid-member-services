@@ -23,7 +23,7 @@ public class InitialSetupMigration {
     	Authority userAuthority = new Authority();
     	userAuthority.setName(AuthoritiesConstants.USER);
     	Authority consortiumLeadAuthority = new Authority();
-    	consortiumLeadAuthority.setName(AuthoritiesConstants.CONSORTIUM_LEAD);
+    	consortiumLeadAuthority.setName(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
     	Authority memberAuthority = new Authority();
     	memberAuthority.setName(AuthoritiesConstants.MEMBER);
     	mongoTemplate.save(adminAuthority);

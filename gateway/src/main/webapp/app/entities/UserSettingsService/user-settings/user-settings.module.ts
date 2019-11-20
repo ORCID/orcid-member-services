@@ -5,36 +5,36 @@ import { JhiLanguageHelper } from 'app/core';
 
 import { GatewaySharedModule } from 'app/shared';
 import {
-  MemberServicesUserComponent,
-  MemberServicesUserDetailComponent,
-  MemberServicesUserUpdateComponent,
-  MemberServicesUserDeletePopupComponent,
-  MemberServicesUserDeleteDialogComponent,
-  memberServicesUserRoute,
-  memberServicesUserPopupRoute
+  UserSettingsComponent,
+  UserSettingsDetailComponent,
+  UserSettingsUpdateComponent,
+  UserSettingsDeletePopupComponent,
+  UserSettingsDeleteDialogComponent,
+  userSettingsRoute,
+  userSettingsPopupRoute
 } from './';
 
-const ENTITY_STATES = [...memberServicesUserRoute, ...memberServicesUserPopupRoute];
+const ENTITY_STATES = [...userSettingsRoute, ...userSettingsPopupRoute];
 
 @NgModule({
   imports: [GatewaySharedModule, RouterModule.forChild(ENTITY_STATES)],
   declarations: [
-    MemberServicesUserComponent,
-    MemberServicesUserDetailComponent,
-    MemberServicesUserUpdateComponent,
-    MemberServicesUserDeleteDialogComponent,
-    MemberServicesUserDeletePopupComponent
+    UserSettingsComponent,
+    UserSettingsDetailComponent,
+    UserSettingsUpdateComponent,
+    UserSettingsDeleteDialogComponent,
+    UserSettingsDeletePopupComponent
   ],
   entryComponents: [
-    MemberServicesUserComponent,
-    MemberServicesUserUpdateComponent,
-    MemberServicesUserDeleteDialogComponent,
-    MemberServicesUserDeletePopupComponent
+    UserSettingsComponent,
+    UserSettingsUpdateComponent,
+    UserSettingsDeleteDialogComponent,
+    UserSettingsDeletePopupComponent
   ],
   providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class UserSettingsServiceMemberServicesUserModule {
+export class UserSettingsServiceUserSettingsModule {
   constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
     this.languageHelper.language.subscribe((languageKey: string) => {
       if (languageKey !== undefined) {

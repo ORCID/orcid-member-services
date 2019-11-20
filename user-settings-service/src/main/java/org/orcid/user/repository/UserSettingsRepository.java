@@ -1,7 +1,8 @@
 package org.orcid.user.repository;
 
-import org.orcid.user.domain.MemberServicesUser;
-import org.springframework.data.mongodb.repository.Query;
+import java.util.Optional;
+
+import org.orcid.user.domain.UserSettings;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,8 +10,7 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data MongoDB repository for the MemberServicesUser entity.
  */
-@SuppressWarnings("unused")
 @Repository
-public interface MemberServicesUserRepository extends MongoRepository<MemberServicesUser, String> {
-
+public interface UserSettingsRepository extends MongoRepository<UserSettings, String> {
+    Optional<UserSettings> findByLogin(String login);
 }

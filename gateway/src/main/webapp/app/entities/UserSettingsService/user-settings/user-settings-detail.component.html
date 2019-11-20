@@ -1,0 +1,55 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="userSettings">
+            <h2><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.detail.title">User Settings</span> {{userSettings.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login">User login</span></dt>
+                <dd>
+                    <span>{{userSettings.login}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId">Salesforce Id</span></dt>
+                <dd>
+                    <span>{{userSettings.salesforceId}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.assertionsServiceDisabled">Assertions Service</span></dt>
+                <dd>
+                    <span>{{userSettings.assertionsServiceDisabled}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.mainContact">Main Contact</span></dt>
+                <dd>
+                    <span>{{userSettings.mainContact}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdBy">Created By</span></dt>
+                <dd>
+                    <span>{{userSettings.createdBy}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdDate">Created Date</span></dt>
+                <dd>
+                    <span>{{userSettings.createdDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastModifiedBy">Last Modified By</span></dt>
+                <dd>
+                    <span>{{userSettings.lastModifiedBy}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastModifiedDate">Last Modified Date</span></dt>
+                <dd>
+                    <span>{{userSettings.lastModifiedDate}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/user-settings', userSettings.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

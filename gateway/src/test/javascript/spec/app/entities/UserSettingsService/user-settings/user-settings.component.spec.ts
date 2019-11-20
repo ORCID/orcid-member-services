@@ -5,20 +5,20 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Data } from '@angular/router';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { MemberServicesUserComponent } from 'app/entities/UserSettingsService/member-services-user/member-services-user.component';
-import { MemberServicesUserService } from 'app/entities/UserSettingsService/member-services-user/member-services-user.service';
-import { MemberServicesUser } from 'app/shared/model/UserSettingsService/member-services-user.model';
+import { UserSettingsComponent } from 'app/entities/UserSettingsService/user-settings/user-settings.component';
+import { UserSettingsService } from 'app/entities/UserSettingsService/user-settings/user-settings.service';
+import { UserSettings } from 'app/shared/model/UserSettingsService/user-settings.model';
 
 describe('Component Tests', () => {
-  describe('MemberServicesUser Management Component', () => {
-    let comp: MemberServicesUserComponent;
-    let fixture: ComponentFixture<MemberServicesUserComponent>;
-    let service: MemberServicesUserService;
+  describe('UserSettings Management Component', () => {
+    let comp: UserSettingsComponent;
+    let fixture: ComponentFixture<UserSettingsComponent>;
+    let service: UserSettingsService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [GatewayTestModule],
-        declarations: [MemberServicesUserComponent],
+        declarations: [UserSettingsComponent],
         providers: [
           {
             provide: ActivatedRoute,
@@ -37,12 +37,12 @@ describe('Component Tests', () => {
           }
         ]
       })
-        .overrideTemplate(MemberServicesUserComponent, '')
+        .overrideTemplate(UserSettingsComponent, '')
         .compileComponents();
 
-      fixture = TestBed.createComponent(MemberServicesUserComponent);
+      fixture = TestBed.createComponent(UserSettingsComponent);
       comp = fixture.componentInstance;
-      service = fixture.debugElement.injector.get(MemberServicesUserService);
+      service = fixture.debugElement.injector.get(UserSettingsService);
     });
 
     it('Should call load all on init', () => {
@@ -51,7 +51,7 @@ describe('Component Tests', () => {
       spyOn(service, 'query').and.returnValue(
         of(
           new HttpResponse({
-            body: [new MemberServicesUser('123')],
+            body: [new UserSettings('123')],
             headers
           })
         )
@@ -62,7 +62,7 @@ describe('Component Tests', () => {
 
       // THEN
       expect(service.query).toHaveBeenCalled();
-      expect(comp.memberServicesUsers[0]).toEqual(jasmine.objectContaining({ id: '123' }));
+      expect(comp.userSettings[0]).toEqual(jasmine.objectContaining({ id: '123' }));
     });
 
     it('should load a page', () => {
@@ -71,7 +71,7 @@ describe('Component Tests', () => {
       spyOn(service, 'query').and.returnValue(
         of(
           new HttpResponse({
-            body: [new MemberServicesUser('123')],
+            body: [new UserSettings('123')],
             headers
           })
         )
@@ -82,7 +82,7 @@ describe('Component Tests', () => {
 
       // THEN
       expect(service.query).toHaveBeenCalled();
-      expect(comp.memberServicesUsers[0]).toEqual(jasmine.objectContaining({ id: '123' }));
+      expect(comp.userSettings[0]).toEqual(jasmine.objectContaining({ id: '123' }));
     });
 
     it('should not load a page is the page is the same as the previous page', () => {
@@ -101,7 +101,7 @@ describe('Component Tests', () => {
       spyOn(service, 'query').and.returnValue(
         of(
           new HttpResponse({
-            body: [new MemberServicesUser('123')],
+            body: [new UserSettings('123')],
             headers
           })
         )
@@ -114,7 +114,7 @@ describe('Component Tests', () => {
       // THEN
       expect(comp.page).toEqual(0);
       expect(service.query).toHaveBeenCalledTimes(2);
-      expect(comp.memberServicesUsers[0]).toEqual(jasmine.objectContaining({ id: '123' }));
+      expect(comp.userSettings[0]).toEqual(jasmine.objectContaining({ id: '123' }));
     });
     it('should calculate the sort attribute for an id', () => {
       // WHEN
