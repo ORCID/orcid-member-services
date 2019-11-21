@@ -68,8 +68,8 @@ public class AccountResource {
         }
         
         // Validate login and email are available
-        String login = managedUserVM.getLogin();
-        String email = managedUserVM.getEmail();
+        String login = managedUserVM.getLogin().toLowerCase();
+        String email = managedUserVM.getEmail().toLowerCase();
         List<User> existingUsers = userService.findAllByLoginOrEmail(login, email);
         if(existingUsers == null || !existingUsers.isEmpty()) {
         	User user0 = existingUsers.get(0);
