@@ -29,6 +29,8 @@ services:
       - SPRING_DATA_MONGODB_DATABASE=Oauth2Service
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
+    ports:
+      - '9999:9999'
   oauth2service-mongodb:
     image: 'mongo:4.0.10'
 
@@ -44,10 +46,8 @@ services:
       - SPRING_DATA_MONGODB_DATABASE=UserSettingsService
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
-    depends_on:
-      - 'gateway-app'
-      - 'oauth2service-app'
-    restart: on-failure
+    ports:
+      - '8081:8081'
   usersettingsservice-mongodb:
     image: 'mongo:4.0.10'
 
