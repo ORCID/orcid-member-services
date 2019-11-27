@@ -18,10 +18,14 @@
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="login"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login">User login</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="salesforceId"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId">Salesforce Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="assertionsServiceDisabled"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.assertionsServiceDisabled">Assertion Service</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="login"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login">Login</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="email"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="password"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.password">Password</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="firstName"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.firstName">First Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="lastName"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastName">Last Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="mainContact"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.mainContact">Main Contact</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="salesforceId"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId">Salesforce Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="parentSalesforceId"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.parentSalesforceId">Parent Salesforce Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="createdBy"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="createdDate"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="lastModifiedBy"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -33,9 +37,13 @@
             <tr *ngFor="let userSettings of userSettings ;trackBy: trackId">
                 <td><a [routerLink]="['/user-settings', userSettings.id, 'view' ]">{{userSettings.id}}</a></td>
                 <td>{{userSettings.login}}</td>
-                <td>{{userSettings.salesforceId}}</td>
-                <td>{{userSettings.assertionsServiceDisabled}}</td>
+                <td>{{userSettings.email}}</td>
+                <td>{{userSettings.password}}</td>
+                <td>{{userSettings.firstName}}</td>
+                <td>{{userSettings.lastName}}</td>
                 <td>{{userSettings.mainContact}}</td>
+                <td>{{userSettings.salesforceId}}</td>
+                <td>{{userSettings.parentSalesforceId}}</td>
                 <td>{{userSettings.createdBy}}</td>
                 <td>{{userSettings.createdDate | date:'medium'}}</td>
                 <td>{{userSettings.lastModifiedBy}}</td>

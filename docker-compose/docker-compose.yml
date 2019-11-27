@@ -44,10 +44,6 @@ services:
       - SPRING_DATA_MONGODB_DATABASE=UserSettingsService
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
-    depends_on:
-      - 'gateway-app'
-      - 'oauth2service-app'
-    restart: on-failure
   usersettingsservice-mongodb:
     image: 'mongo:4.0.10'
 
@@ -76,5 +72,11 @@ services:
     extends:
       file: jhipster-console.yml
       service: jhipster-import-dashboards
+    depends_on:
+      - jhipster-elasticsearch
+  jhipster-zipkin:
+    extends:
+      file: jhipster-console.yml
+      service: jhipster-zipkin
     depends_on:
       - jhipster-elasticsearch

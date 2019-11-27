@@ -8,21 +8,33 @@
             "fieldType": "String"            
         },
         {
-            "fieldName": "clientId",
-            "fieldType": "String"
+            "fieldName": "email",
+            "fieldType": "String"            
         },
         {
-            "fieldName": "salesforceId",
-            "fieldType": "String"
+            "fieldName": "password",
+            "fieldType": "String"            
         },
         {
-            "fieldName": "assertionsServiceDisabled",
-            "fieldType": "Boolean"
+            "fieldName": "firstName",
+            "fieldType": "String"            
         },
+        {
+            "fieldName": "lastName",
+            "fieldType": "String"            
+        }, 
         {
             "fieldName": "mainContact",
             "fieldType": "Boolean"
         },
+        {
+            "fieldName": "salesforceId",
+            "fieldType": "String"            
+        },
+        {
+            "fieldName": "parentSalesforceId",
+            "fieldType": "String"            
+        },                
         {
             "fieldName": "createdBy",
             "fieldType": "String"            
