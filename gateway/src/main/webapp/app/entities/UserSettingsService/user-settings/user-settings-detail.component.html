@@ -5,21 +5,37 @@
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login">User login</span></dt>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login">Login</span></dt>
                 <dd>
                     <span>{{userSettings.login}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.email">Email</span></dt>
+                <dd>
+                    <span>{{userSettings.email}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.password">Password</span></dt>
+                <dd>
+                    <span>{{userSettings.password}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.firstName">First Name</span></dt>
+                <dd>
+                    <span>{{userSettings.firstName}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastName">Last Name</span></dt>
+                <dd>
+                    <span>{{userSettings.lastName}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.mainContact">Main Contact</span></dt>
+                <dd>
+                    <span>{{userSettings.mainContact}}</span>
                 </dd>
                 <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId">Salesforce Id</span></dt>
                 <dd>
                     <span>{{userSettings.salesforceId}}</span>
                 </dd>
-                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.assertionsServiceDisabled">Assertions Service</span></dt>
+                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.parentSalesforceId">Parent Salesforce Id</span></dt>
                 <dd>
-                    <span>{{userSettings.assertionsServiceDisabled}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.mainContact">Main Contact</span></dt>
-                <dd>
-                    <span>{{userSettings.mainContact}}</span>
+                    <span>{{userSettings.parentSalesforceId}}</span>
                 </dd>
                 <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdBy">Created By</span></dt>
                 <dd>

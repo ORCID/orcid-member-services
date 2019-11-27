@@ -95,7 +95,7 @@ public class UserService {
                 throw new LoginAlreadyUsedException();
             }
         });
-        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
+        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
                 throw new EmailAlreadyUsedException();

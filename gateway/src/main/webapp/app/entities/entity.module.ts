@@ -7,6 +7,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'user-settings',
         loadChildren: './UserSettingsService/user-settings/user-settings.module#UserSettingsServiceUserSettingsModule'
+      },
+      {
+        path: 'member-settings',
+        loadChildren: './UserSettingsService/member-settings/member-settings.module#UserSettingsServiceMemberSettingsModule'
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

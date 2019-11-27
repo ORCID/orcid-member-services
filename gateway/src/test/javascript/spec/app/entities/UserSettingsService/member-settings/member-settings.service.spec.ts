@@ -6,15 +6,15 @@ import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { UserSettingsService } from 'app/entities/UserSettingsService/user-settings/user-settings.service';
-import { IUserSettings, UserSettings } from 'app/shared/model/UserSettingsService/user-settings.model';
+import { MemberSettingsService } from 'app/entities/UserSettingsService/member-settings/member-settings.service';
+import { IMemberSettings, MemberSettings } from 'app/shared/model/UserSettingsService/member-settings.model';
 
 describe('Service Tests', () => {
-  describe('UserSettings Service', () => {
+  describe('MemberSettings Service', () => {
     let injector: TestBed;
-    let service: UserSettingsService;
+    let service: MemberSettingsService;
     let httpMock: HttpTestingController;
-    let elemDefault: IUserSettings;
+    let elemDefault: IMemberSettings;
     let expectedResult;
     let currentDate: moment.Moment;
     beforeEach(() => {
@@ -23,20 +23,18 @@ describe('Service Tests', () => {
       });
       expectedResult = {};
       injector = getTestBed();
-      service = injector.get(UserSettingsService);
+      service = injector.get(MemberSettingsService);
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new UserSettings(
+      elemDefault = new MemberSettings(
         'ID',
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
-        'AAAAAAA',
         false,
-        'AAAAAAA',
-        'AAAAAAA',
+        false,
         'AAAAAAA',
         currentDate,
         'AAAAAAA',
@@ -63,7 +61,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: elemDefault });
       });
 
-      it('should create a UserSettings', async () => {
+      it('should create a MemberSettings', async () => {
         const returnedFromService = Object.assign(
           {
             id: 'ID',
@@ -80,7 +78,7 @@ describe('Service Tests', () => {
           returnedFromService
         );
         service
-          .create(new UserSettings(null))
+          .create(new MemberSettings(null))
           .pipe(take(1))
           .subscribe(resp => (expectedResult = resp));
         const req = httpMock.expectOne({ method: 'POST' });
@@ -88,17 +86,15 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: expected });
       });
 
-      it('should update a UserSettings', async () => {
+      it('should update a MemberSettings', async () => {
         const returnedFromService = Object.assign(
           {
-            login: 'BBBBBB',
-            email: 'BBBBBB',
-            password: 'BBBBBB',
-            firstName: 'BBBBBB',
-            lastName: 'BBBBBB',
-            mainContact: true,
+            clientId: 'BBBBBB',
+            clientSecret: 'BBBBBB',
             salesforceId: 'BBBBBB',
             parentSalesforceId: 'BBBBBB',
+            isConsortiumLead: true,
+            assertionServiceEnabled: true,
             createdBy: 'BBBBBB',
             createdDate: currentDate.format(DATE_TIME_FORMAT),
             lastModifiedBy: 'BBBBBB',
@@ -123,17 +119,15 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: expected });
       });
 
-      it('should return a list of UserSettings', async () => {
+      it('should return a list of MemberSettings', async () => {
         const returnedFromService = Object.assign(
           {
-            login: 'BBBBBB',
-            email: 'BBBBBB',
-            password: 'BBBBBB',
-            firstName: 'BBBBBB',
-            lastName: 'BBBBBB',
-            mainContact: true,
+            clientId: 'BBBBBB',
+            clientSecret: 'BBBBBB',
             salesforceId: 'BBBBBB',
             parentSalesforceId: 'BBBBBB',
+            isConsortiumLead: true,
+            assertionServiceEnabled: true,
             createdBy: 'BBBBBB',
             createdDate: currentDate.format(DATE_TIME_FORMAT),
             lastModifiedBy: 'BBBBBB',
@@ -161,7 +155,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toContainEqual(expected);
       });
 
-      it('should delete a UserSettings', async () => {
+      it('should delete a MemberSettings', async () => {
         const rxPromise = service.delete('123').subscribe(resp => (expectedResult = resp.ok));
 
         const req = httpMock.expectOne({ method: 'DELETE' });

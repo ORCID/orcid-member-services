@@ -1,0 +1,88 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-member-settings-heading" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.home.createOrEditLabel">Create or edit a Member Settings</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.clientId" for="field_clientId">Client Id</label>
+                    <input type="text" class="form-control" name="clientId" id="field_clientId"
+                           formControlName="clientId"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.clientSecret" for="field_clientSecret">Client Secret</label>
+                    <input type="text" class="form-control" name="clientSecret" id="field_clientSecret"
+                           formControlName="clientSecret"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.salesforceId" for="field_salesforceId">Salesforce Id</label>
+                    <input type="text" class="form-control" name="salesforceId" id="field_salesforceId"
+                           formControlName="salesforceId"/>
+                    <div *ngIf="editForm.get('salesforceId').invalid && (editForm.get('salesforceId').dirty || editForm.get('salesforceId').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('salesforceId').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.parentSalesforceId" for="field_parentSalesforceId">Parent Salesforce Id</label>
+                    <input type="text" class="form-control" name="parentSalesforceId" id="field_parentSalesforceId"
+                           formControlName="parentSalesforceId"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.isConsortiumLead" for="field_isConsortiumLead">Is Consortium Lead</label>
+                    <input type="checkbox" class="form-control" name="isConsortiumLead" id="field_isConsortiumLead"
+                           formControlName="isConsortiumLead"/>
+                    <div *ngIf="editForm.get('isConsortiumLead').invalid && (editForm.get('isConsortiumLead').dirty || editForm.get('isConsortiumLead').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('isConsortiumLead').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.assertionServiceEnabled" for="field_assertionServiceEnabled">Assertion Service Enabled</label>
+                    <input type="checkbox" class="form-control" name="assertionServiceEnabled" id="field_assertionServiceEnabled"
+                           formControlName="assertionServiceEnabled"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.createdBy" for="field_createdBy">Created By</label>
+                    <input type="text" class="form-control" name="createdBy" id="field_createdBy"
+                           formControlName="createdBy"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.createdDate" for="field_createdDate">Created Date</label>
+                    <div class="d-flex">
+                        <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" formControlName="createdDate" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.lastModifiedBy" for="field_lastModifiedBy">Last Modified By</label>
+                    <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy"
+                           formControlName="lastModifiedBy"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.lastModifiedDate" for="field_lastModifiedDate">Last Modified Date</label>
+                    <div class="d-flex">
+                        <input id="field_lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" formControlName="lastModifiedDate" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

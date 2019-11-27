@@ -1,0 +1,35 @@
+{
+  "gatewayApp": {
+    "userSettingsServiceMemberSettings": {
+      "home": {
+        "title": "Member Settings",
+        "createLabel": "Create a new Member Settings",
+        "createOrEditLabel": "Create or edit a Member Settings",
+        "notFound": "No Member Settings found"
+      },
+      "delete": {
+        "question": "Are you sure you want to delete Member Settings {{ id }}?"
+      },
+      "detail": {
+        "title": "Member Settings"
+      },
+      "clientId": "Client Id",
+      "clientSecret": "Client Secret",
+      "salesforceId": "Salesforce Id",
+      "parentSalesforceId": "Parent Salesforce Id",
+      "isConsortiumLead": "Is Consortium Lead",
+      "assertionServiceEnabled": "Assertion Service Enabled",
+      "createdBy": "Created By",
+      "createdDate": "Created Date",
+      "lastModifiedBy": "Last Modified By",
+      "lastModifiedDate": "Last Modified Date"
+    }
+  },
+  "userSettingsServiceApp": {
+    "userSettingsServiceMemberSettings": {
+      "created": "A new Member Settings is created with identifier {{ param }}",
+      "updated": "A Member Settings is updated with identifier {{ param }}",
+      "deleted": "A Member Settings is deleted with identifier {{ param }}"
+    }
+  }
+}

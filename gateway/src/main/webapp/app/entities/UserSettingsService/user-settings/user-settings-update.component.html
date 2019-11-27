@@ -10,9 +10,34 @@
                         readonly />
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login" for="field_login">User login</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login" for="field_login">Login</label>
                     <input type="text" class="form-control" name="login" id="field_login"
                            formControlName="login"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.email" for="field_email">Email</label>
+                    <input type="text" class="form-control" name="email" id="field_email"
+                           formControlName="email"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.password" for="field_password">Password</label>
+                    <input type="text" class="form-control" name="password" id="field_password"
+                           formControlName="password"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.firstName" for="field_firstName">First Name</label>
+                    <input type="text" class="form-control" name="firstName" id="field_firstName"
+                           formControlName="firstName"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastName" for="field_lastName">Last Name</label>
+                    <input type="text" class="form-control" name="lastName" id="field_lastName"
+                           formControlName="lastName"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.mainContact" for="field_mainContact">Main Contact</label>
+                    <input type="checkbox" class="form-control" name="mainContact" id="field_mainContact"
+                           formControlName="mainContact"/>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId" for="field_salesforceId">Salesforce Id</label>
@@ -20,14 +45,9 @@
                            formControlName="salesforceId"/>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.assertionsServiceDisabled" for="field_assertionsServiceDisabled">Assertions Service</label>
-                    <input type="checkbox" class="form-control" name="assertionsServiceDisabled" id="field_assertionsServiceDisabled"
-                           formControlName="assertionsServiceDisabled"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.mainContact" for="field_mainContact">Main Contact</label>
-                    <input type="checkbox" class="form-control" name="mainContact" id="field_mainContact"
-                           formControlName="mainContact"/>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.parentSalesforceId" for="field_parentSalesforceId">Parent Salesforce Id</label>
+                    <input type="text" class="form-control" name="parentSalesforceId" id="field_parentSalesforceId"
+                           formControlName="parentSalesforceId"/>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdBy" for="field_createdBy">Created By</label>
