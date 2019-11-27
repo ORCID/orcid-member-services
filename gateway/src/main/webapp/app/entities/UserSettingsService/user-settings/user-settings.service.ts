@@ -14,7 +14,7 @@ type EntityArrayResponseType = HttpResponse<IUserSettings[]>;
 
 @Injectable({ providedIn: 'root' })
 export class UserSettingsService {
-  public resourceUrl = SERVER_API_URL + 'services/usersettingsservice/api/user-settings';
+  public resourceUrl = SERVER_API_URL + 'services/usersettingsservice/settings/api/user';
 
   constructor(protected http: HttpClient) {}
 
@@ -41,7 +41,7 @@ export class UserSettingsService {
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IUserSettings[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .get<IUserSettings[]>(this.resourceUrl + 's', { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
