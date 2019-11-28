@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.orcid.user.domain.MemberSettings;
 import org.orcid.user.repository.MemberSettingsRepository;
+import org.orcid.user.repository.UserSettingsRepository;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +46,13 @@ public class MemberSettingsResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final UserSettingsRepository userSettingsRepository;
+
     private final MemberSettingsRepository memberSettingsRepository;
 
-    public MemberSettingsResource(MemberSettingsRepository memberSettingsRepository) {
+    public MemberSettingsResource(MemberSettingsRepository memberSettingsRepository, UserSettingsRepository userSettingsRepository) {
         this.memberSettingsRepository = memberSettingsRepository;
+        this.userSettingsRepository = userSettingsRepository;
     }
 
     /**
@@ -93,7 +97,25 @@ public class MemberSettingsResource {
         if (memberSettings.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        Optional<MemberSettings> mso = memberSettingsRepository.findById(memberSettings.getId());
+        if (!mso.isPresent()) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idunavailable");
+        }
+
         MemberSettings result = memberSettingsRepository.save(memberSettings);
+
+        // Check if salesforceId changed
+        MemberSettings existingMemberSettings = mso.get();
+
+        if (!existingMemberSettings.getSalesforceId().equals(memberSettings.getSalesforceId())) {
+            // If salesforceId changed, update each of the existing users with
+            // the new salesforceId
+            userSettingsRepository.findBySalesforceId(existingMemberSettings.getSalesforceId()).stream().forEach(userSettings -> {
+                userSettings.setSalesforceId(memberSettings.getSalesforceId());
+                userSettingsRepository.save(userSettings);
+            });
+        }
+
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, memberSettings.getId().toString())).body(result);
     }
 
@@ -140,6 +162,20 @@ public class MemberSettingsResource {
     @DeleteMapping("/member-settings/{id}")
     public ResponseEntity<Void> deleteMemberSettings(@PathVariable String id) {
         log.debug("REST request to delete MemberSettings : {}", id);
+
+        // Can't delete a memberSettings object if there is at least one
+        // userSettings linked to it
+        Optional<MemberSettings> mso = memberSettingsRepository.findById(id);
+        if (!mso.isPresent()) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idunavailable");
+        }
+
+        // If there is at least one userSettings assigned to this
+        // memberSettings, throw an exception
+        userSettingsRepository.findBySalesforceId(id).stream().map(userSettings -> {
+            throw new BadRequestAlertException("Unable to delete MemberSettings, user '" + userSettings.getLogin() + "' still use it", ENTITY_NAME, "idused");
+        });
+
         memberSettingsRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
     }

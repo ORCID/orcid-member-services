@@ -14,7 +14,7 @@ type EntityArrayResponseType = HttpResponse<IMemberSettings[]>;
 
 @Injectable({ providedIn: 'root' })
 export class MemberSettingsService {
-  public resourceUrl = SERVER_API_URL + 'services/usersettingsservice/api/member-settings';
+  public resourceUrl = SERVER_API_URL + 'services/usersettingsservice/settings/api/member-settings';
 
   constructor(protected http: HttpClient) {}
 

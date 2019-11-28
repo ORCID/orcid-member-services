@@ -17,12 +17,10 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="clientId"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.clientId">Client Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="clientSecret"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.clientSecret">Client Secret</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="isConsortiumLead"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.isConsortiumLead">Is Consortium Lead</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="salesforceId"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.salesforceId">Salesforce Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="parentSalesforceId"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.parentSalesforceId">Parent Salesforce Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="isConsortiumLead"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.isConsortiumLead">Is Consortium Lead</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="clientId"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.clientId">Client Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="assertionServiceEnabled"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.assertionServiceEnabled">Assertion Service Enabled</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="createdBy"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="createdDate"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -32,13 +30,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let memberSettings of memberSettings ;trackBy: trackId">
-                <td><a [routerLink]="['/member-settings', memberSettings.id, 'view' ]">{{memberSettings.id}}</a></td>
-                <td>{{memberSettings.clientId}}</td>
-                <td>{{memberSettings.clientSecret}}</td>
-                <td>{{memberSettings.salesforceId}}</td>
-                <td>{{memberSettings.parentSalesforceId}}</td>
+            <tr *ngFor="let memberSettings of memberSettings ;trackBy: trackId">                
                 <td>{{memberSettings.isConsortiumLead}}</td>
+                <td><a [routerLink]="['/member-settings', memberSettings.id, 'view' ]">{{memberSettings.salesforceId}}</a></td>
+                <td>{{memberSettings.parentSalesforceId}}</td>
+                <td><a [routerLink]="['/member-settings', memberSettings.id, 'view' ]">{{memberSettings.clientId}}</a></td>
                 <td>{{memberSettings.assertionServiceEnabled}}</td>
                 <td>{{memberSettings.createdBy}}</td>
                 <td>{{memberSettings.createdDate | date:'medium'}}</td>
