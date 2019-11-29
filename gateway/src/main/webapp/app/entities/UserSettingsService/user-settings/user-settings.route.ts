@@ -11,6 +11,7 @@ import { UserSettingsComponent } from './user-settings.component';
 import { UserSettingsDetailComponent } from './user-settings-detail.component';
 import { UserSettingsUpdateComponent } from './user-settings-update.component';
 import { UserSettingsDeletePopupComponent } from './user-settings-delete-dialog.component';
+import { UserSettingsImportPopupComponent } from './user-settings-import-dialog.component';
 import { IUserSettings } from 'app/shared/model/UserSettingsService/user-settings.model';
 
 @Injectable({ providedIn: 'root' })
@@ -90,6 +91,19 @@ export const userSettingsPopupRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
+      pageTitle: 'gatewayApp.userSettingsServiceUserSettings.home.title'
+    },
+    canActivate: [UserRouteAccessService],
+    outlet: 'popup'
+  },
+  {
+    path: 'import',
+    component: UserSettingsImportPopupComponent,
+    resolve: {
+      userSettings: UserSettingsResolve
+    },
+    data: {
+      authorities: ['ROLE_ADMIN'],
       pageTitle: 'gatewayApp.userSettingsServiceUserSettings.home.title'
     },
     canActivate: [UserRouteAccessService],
