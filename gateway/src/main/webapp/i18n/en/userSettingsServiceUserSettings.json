@@ -5,13 +5,19 @@
         "title": "User Settings",
         "createLabel": "Create a new User Settings",
         "createOrEditLabel": "Create or edit a User Settings",
-        "notFound": "No User Settings found"
+        "notFound": "No User Settings found",
+        "uploadLabel": "Upload User Settings"
       },
       "delete": {
         "question": "Are you sure you want to delete User Settings {{ id }}?"
       },
       "detail": {
         "title": "User Settings"
+      },
+      "import": {
+        "title": "User Settings",
+        "label": "Please select the CSV file to upload",
+        "filePath": "File path"
       },
       "login": "Login",
       "email": "Email",

@@ -7,6 +7,14 @@
             Create new User Settings
             </span>
         </button>
+        <br />
+        <button id="jh-upload-entities" class="btn btn-primary float-right jh-create-entity create-user-settings" [routerLink]="['/', 'user-settings', { outlets: { popup: '/import'} }]">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="gatewayApp.userSettingsServiceUserSettings.home.uploadLabel">
+            Upload User Settings
+            </span>
+        </button>
+        <br />
     </h2>
     <jhi-alert></jhi-alert>
     <br/>
