@@ -10,6 +10,8 @@ import {
   UserSettingsUpdateComponent,
   UserSettingsDeletePopupComponent,
   UserSettingsDeleteDialogComponent,
+  UserSettingsImportPopupComponent,
+  UserSettingsImportDialogComponent,
   userSettingsRoute,
   userSettingsPopupRoute
 } from './';
@@ -23,13 +25,17 @@ const ENTITY_STATES = [...userSettingsRoute, ...userSettingsPopupRoute];
     UserSettingsDetailComponent,
     UserSettingsUpdateComponent,
     UserSettingsDeleteDialogComponent,
-    UserSettingsDeletePopupComponent
+    UserSettingsDeletePopupComponent,
+    UserSettingsImportDialogComponent,
+    UserSettingsImportPopupComponent
   ],
   entryComponents: [
     UserSettingsComponent,
     UserSettingsUpdateComponent,
     UserSettingsDeleteDialogComponent,
-    UserSettingsDeletePopupComponent
+    UserSettingsDeletePopupComponent,
+    UserSettingsImportDialogComponent,
+    UserSettingsImportPopupComponent
   ],
   providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

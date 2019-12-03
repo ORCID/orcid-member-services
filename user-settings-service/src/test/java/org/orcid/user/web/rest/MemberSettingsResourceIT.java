@@ -1,14 +1,24 @@
 package org.orcid.user.web.rest;
 
-import org.orcid.user.UserSettingsServiceApp;
-import org.orcid.user.config.SecurityBeanOverrideConfiguration;
-import org.orcid.user.domain.MemberSettings;
-import org.orcid.user.repository.MemberSettingsRepository;
-import org.orcid.user.web.rest.errors.ExceptionTranslator;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.orcid.user.web.rest.TestUtil.createFormattingConversionService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
+import org.orcid.user.UserSettingsServiceApp;
+import org.orcid.user.config.SecurityBeanOverrideConfiguration;
+import org.orcid.user.domain.MemberSettings;
+import org.orcid.user.repository.MemberSettingsRepository;
+import org.orcid.user.repository.UserSettingsRepository;
+import org.orcid.user.web.rest.errors.ExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
@@ -17,17 +27,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-
-import static org.orcid.user.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link MemberSettingsResource} REST controller.
@@ -63,6 +62,9 @@ public class MemberSettingsResourceIT {
     private static final Instant UPDATED_LAST_MODIFIED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     @Autowired
+    private UserSettingsRepository userSettingsRepository;
+    
+    @Autowired
     private MemberSettingsRepository memberSettingsRepository;
 
     @Autowired
@@ -84,7 +86,7 @@ public class MemberSettingsResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MemberSettingsResource memberSettingsResource = new MemberSettingsResource(memberSettingsRepository);
+        final MemberSettingsResource memberSettingsResource = new MemberSettingsResource(memberSettingsRepository, userSettingsRepository);
         this.restMemberSettingsMockMvc = MockMvcBuilders.standaloneSetup(memberSettingsResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

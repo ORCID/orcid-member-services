@@ -9,7 +9,9 @@
     "gatewayType": "zuul",
     "clusteredDbApps": [],
     "monitoring": "elk",
-    "consoleOptions": [],
+    "consoleOptions": [
+      "zipkin"
+    ],
     "serviceDiscoveryType": "eureka",
     "jwtSecretKey": "NzlmMGI1ZTE4YjA3ZTQ0NTRiNDViYjczYWNkYjJlOTkxYTZiMjE1YzYxOTBmMWU0NzllNTExYzg4NjkxMWIxZTNiYmM0MWU0Mjk1NThhNGU1YTQxZTkwN2RjYTE2MWFkNTY4Yg=="
   }

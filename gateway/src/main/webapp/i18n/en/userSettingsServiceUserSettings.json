@@ -5,7 +5,8 @@
         "title": "User Settings",
         "createLabel": "Create a new User Settings",
         "createOrEditLabel": "Create or edit a User Settings",
-        "notFound": "No User Settings found"
+        "notFound": "No User Settings found",
+        "uploadLabel": "Upload User Settings"
       },
       "delete": {
         "question": "Are you sure you want to delete User Settings {{ id }}?"
@@ -13,10 +14,19 @@
       "detail": {
         "title": "User Settings"
       },
-      "login": "User login",
-      "salesforceId": "Salesforce Id",
-      "disabled": "Disabled",
+      "import": {
+        "title": "User Settings",
+        "label": "Please select the CSV file to upload",
+        "filePath": "File path"
+      },
+      "login": "Login",
+      "email": "Email",
+      "password": "Password",
+      "firstName": "First Name",
+      "lastName": "Last Name",
       "mainContact": "Main Contact",
+      "salesforceId": "Salesforce Id",
+      "parentSalesforceId": "Parent Salesforce Id",
       "createdBy": "Created By",
       "createdDate": "Created Date",
       "lastModifiedBy": "Last Modified By",

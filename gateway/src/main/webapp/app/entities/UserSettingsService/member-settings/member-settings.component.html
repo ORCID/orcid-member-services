@@ -1,0 +1,79 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.home.title">Member Settings</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-member-settings" [routerLink]="['/member-settings/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.home.createLabel">
+            Create new Member Settings
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="memberSettings?.length === 0">
+        <span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.home.notFound">No memberSettings found</span>
+    </div>
+    <div class="table-responsive" *ngIf="memberSettings?.length > 0">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="isConsortiumLead"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.isConsortiumLead">Is Consortium Lead</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="salesforceId"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.salesforceId">Salesforce Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="parentSalesforceId"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.parentSalesforceId">Parent Salesforce Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="clientId"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.clientId">Client Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="assertionServiceEnabled"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.assertionServiceEnabled">Assertion Service Enabled</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="createdBy"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="createdDate"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="lastModifiedBy"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let memberSettings of memberSettings ;trackBy: trackId">                
+                <td>{{memberSettings.isConsortiumLead}}</td>
+                <td><a [routerLink]="['/member-settings', memberSettings.id, 'view' ]">{{memberSettings.salesforceId}}</a></td>
+                <td>{{memberSettings.parentSalesforceId}}</td>
+                <td><a [routerLink]="['/member-settings', memberSettings.id, 'view' ]">{{memberSettings.clientId}}</a></td>
+                <td>{{memberSettings.assertionServiceEnabled}}</td>
+                <td>{{memberSettings.createdBy}}</td>
+                <td>{{memberSettings.createdDate | date:'medium'}}</td>
+                <td>{{memberSettings.lastModifiedBy}}</td>
+                <td>{{memberSettings.lastModifiedDate | date:'medium'}}</td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/member-settings', memberSettings.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/member-settings', memberSettings.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', 'member-settings', { outlets: { popup: memberSettings.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div [hidden]="memberSettings?.length === 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

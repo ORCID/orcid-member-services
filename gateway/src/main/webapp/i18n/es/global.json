@@ -6,8 +6,9 @@
       "home": "Inicio",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
-        "main": "Entidades",        
+        "main": "Entidades",
         "userSettingsServiceUserSettings": "User Settings",
+        "userSettingsServiceMemberSettings": "Member Settings",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
@@ -98,6 +99,7 @@
       "cancel": "Cancelar",
       "delete": "Eliminar",
       "edit": "Editar",
+      "import": "Import",
       "open": "Abrir",
       "save": "Guardar",
       "view": "Vista"
