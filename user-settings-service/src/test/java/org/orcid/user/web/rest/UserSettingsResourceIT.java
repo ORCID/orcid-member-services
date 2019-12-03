@@ -132,7 +132,7 @@ public class UserSettingsResourceIT {
         userSettings = createEntity();
     }
 
-    /*@Test
+    @Test
     public void createUserSettings() throws Exception {
         int databaseSizeBeforeCreate = userSettingsRepository.findAll().size();
 
@@ -153,7 +153,7 @@ public class UserSettingsResourceIT {
         assertThat(testUserSettings.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
         assertThat(testUserSettings.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
         assertThat(testUserSettings.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
-    }*/
+    }
 
     @Test
     public void createUserSettingsWithExistingId() throws Exception {
@@ -173,7 +173,7 @@ public class UserSettingsResourceIT {
         assertThat(userSettingsList).hasSize(databaseSizeBeforeCreate);
     }
 
-    /*@Test
+    @Test
     public void getAllUserSettings() throws Exception {
         // Initialize the database
         userSettingsRepository.save(userSettings);
@@ -251,7 +251,7 @@ public class UserSettingsResourceIT {
         assertThat(testUserSettings.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
         assertThat(testUserSettings.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
         assertThat(testUserSettings.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
-    }*/
+    }
 
     @Test
     public void updateNonExistingUserSettings() throws Exception {
@@ -270,7 +270,7 @@ public class UserSettingsResourceIT {
         assertThat(userSettingsList).hasSize(databaseSizeBeforeUpdate);
     }
 
-    /*@Test
+    @Test
     public void deleteUserSettings() throws Exception {
         // Initialize the database
         userSettingsRepository.save(userSettings);
@@ -299,5 +299,5 @@ public class UserSettingsResourceIT {
         assertThat(userSettings1).isNotEqualTo(userSettings2);
         userSettings1.setId(null);
         assertThat(userSettings1).isNotEqualTo(userSettings2);
-    }*/
+    }
 }

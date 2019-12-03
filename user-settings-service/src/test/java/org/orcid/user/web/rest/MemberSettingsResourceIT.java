@@ -138,7 +138,7 @@ public class MemberSettingsResourceIT {
         memberSettings = createEntity();
     }
 
-    /*@Test
+    @Test
     public void createMemberSettings() throws Exception {
         int databaseSizeBeforeCreate = memberSettingsRepository.findAll().size();
 
@@ -419,5 +419,5 @@ public class MemberSettingsResourceIT {
         assertThat(memberSettings1).isNotEqualTo(memberSettings2);
         memberSettings1.setId(null);
         assertThat(memberSettings1).isNotEqualTo(memberSettings2);
-    }*/
+    }
 }
