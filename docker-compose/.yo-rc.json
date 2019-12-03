@@ -1,0 +1,16 @@
+{
+  "generator-jhipster": {
+    "appsFolders": [
+      "gateway",
+      "oauth2-service",
+      "user-settings-service"
+    ],
+    "directoryPath": "../",
+    "gatewayType": "zuul",
+    "clusteredDbApps": [],
+    "monitoring": "elk",
+    "consoleOptions": [],
+    "serviceDiscoveryType": "eureka",
+    "jwtSecretKey": "NzlmMGI1ZTE4YjA3ZTQ0NTRiNDViYjczYWNkYjJlOTkxYTZiMjE1YzYxOTBmMWU0NzllNTExYzg4NjkxMWIxZTNiYmM0MWU0Mjk1NThhNGU1YTQxZTkwN2RjYTE2MWFkNTY4Yg=="
+  }
+}

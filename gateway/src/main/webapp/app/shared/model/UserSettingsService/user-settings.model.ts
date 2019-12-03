@@ -5,6 +5,7 @@ export interface IUserSettings {
   login?: string;
   salesforceId?: string;
   disabled?: boolean;
+  assertionsServiceDisabled?: boolean;
   mainContact?: boolean;
   createdBy?: string;
   createdDate?: Moment;
@@ -18,6 +19,7 @@ export class UserSettings implements IUserSettings {
     public login?: string,
     public salesforceId?: string,
     public disabled?: boolean,
+    public assertionsServiceDisabled?: boolean,
     public mainContact?: boolean,
     public createdBy?: string,
     public createdDate?: Moment,
