@@ -13,10 +13,14 @@
       "detail": {
         "title": "User Settings"
       },
-      "login": "Login de usuario",
-      "salesforceId": "Salesforce Id",
-      "disabled": "Disabled",
+      "login": "Login",
+      "email": "Email",
+      "password": "Password",
+      "firstName": "First Name",
+      "lastName": "Last Name",
       "mainContact": "Main Contact",
+      "salesforceId": "Salesforce Id",
+      "parentSalesforceId": "Parent Salesforce Id",
       "createdBy": "Created By",
       "createdDate": "Created Date",
       "lastModifiedBy": "Last Modified By",
