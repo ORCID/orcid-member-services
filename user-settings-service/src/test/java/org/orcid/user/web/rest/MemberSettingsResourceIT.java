@@ -1,11 +1,17 @@
 package org.orcid.user.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.orcid.user.web.rest.TestUtil.createFormattingConversionService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.orcid.user.UserSettingsServiceApp;
 import org.orcid.user.config.SecurityBeanOverrideConfiguration;
@@ -16,6 +22,7 @@ import org.orcid.user.web.rest.errors.ExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -133,7 +140,7 @@ public class MemberSettingsResourceIT {
         memberSettings = createEntity();
     }
 
-    /*@Test
+    @Test
     public void createMemberSettings() throws Exception {
         int databaseSizeBeforeCreate = memberSettingsRepository.findAll().size();
 
@@ -414,5 +421,5 @@ public class MemberSettingsResourceIT {
         assertThat(memberSettings1).isNotEqualTo(memberSettings2);
         memberSettings1.setId(null);
         assertThat(memberSettings1).isNotEqualTo(memberSettings2);
-    }*/
+    }
 }
