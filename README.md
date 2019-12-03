@@ -250,13 +250,15 @@ If successful, the server will respond with a `202 Acepted`, and, you can now ge
 2. Build a Docker image of each application using Jib Maven plugin (ref: https://www.jhipster.tech/docker-compose/#3)
 
     cd ~/git/orcid-member-services/gateway/ 
-    ./mvnw package -Pprod verify jib:dockerBuild
+    bash mvnw package -Pprod verify jib:dockerBuild
 
     cd ~/git/orcid-member-services/oauth2-service/ 
-    ./mvnw package -Pprod verify jib:dockerBuild
+    bash mvnw package -Pprod verify jib:dockerBuild
 
     cd ~/git/orcid-member-services/user-settings-service/ 
-    ./mvnw package -Pprod verify jib:dockerBuild
+    bash mvnw package -Pprod verify jib:dockerBuild
+
+Note: To build without running tests use ```bash mvnw package -Pprod jib:dockerBuild```
 
 3. Start all services using Docker Compose
 
