@@ -94,7 +94,7 @@ public class UserSettingsResource {
      *         status {@code 400 (Bad Request)} if the file cannot be parsed.
      * @throws Throwable
      */
-    @PostMapping("/user/import")
+    @PostMapping("/user/upload")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<Map<Long, String>> createUsers(@RequestParam("file") MultipartFile file) throws Throwable {
         Map<Long, String> userIds = new HashMap<Long, String>();
