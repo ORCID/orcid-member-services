@@ -94,11 +94,11 @@ public class UserSettingsResource {
      *         status {@code 400 (Bad Request)} if the file cannot be parsed.
      * @throws Throwable
      */
-    @PostMapping("/user/import")
+    @PostMapping("/user/upload")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<Map<Long, String>> createUsers(@RequestParam("file") MultipartFile file) throws Throwable {
-        Map<Long, String> userIds = new HashMap<Long, String>();
-        try (InputStream is = file.getInputStream();) {
+    public ResponseEntity<String> createUsers(@RequestParam("file") MultipartFile file) throws Throwable {        
+        JSONArray errors = new JSONArray();
+        try (InputStream is = file.getInputStream();) {            
             InputStreamReader isr = new InputStreamReader(is);
             Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
             for (CSVRecord line : elements) {
@@ -107,26 +107,31 @@ public class UserSettingsResource {
                     UserDTO userDTO = parseLine(line);
                     // Validate for errors
                     if (!validate(userDTO)) {
-                        userIds.put(index, buildErrorString(userDTO));
+                        JSONObject error = new JSONObject();
+                        error.put("index", index);
+                        error.put("message", buildErrorString(userDTO));
+                        errors.put(error);
                     } else {
                         JSONObject obj = createUserOnUAA(userDTO);
                         UserSettings us = createUserSettings(obj, line.get("salesforceId"), false);
-                        createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());
-                        userIds.put(index, us.getId());
+                        createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());                        
                     }
                 } catch (Exception e) {
                     Throwable t = e.getCause();
+                    JSONObject error = new JSONObject();
+                    error.put("index", index);
                     if (t != null) {
                         log.error("Error on line " + index, t.getMessage());
-                        userIds.put(index, t.getMessage());
+                        error.put("message", t.getMessage());
                     } else {
                         log.error("Error on line " + index, e.getMessage());
-                        userIds.put(index, e.getMessage());
+                        error.put("message", e.getMessage());
                     }
+                    errors.put(error);
                 }
             }
         }
-        return ResponseEntity.ok().body(userIds);
+        return ResponseEntity.ok().body(errors.toString());
     }
 
     private UserDTO parseLine(CSVRecord record) {
