@@ -1,4 +1,4 @@
-<form name="uploadForm" (ngSubmit)="uploadUsers()">
+<form name="uploadForm" (ngSubmit)="upload()">
     <div class="modal-header">
         <h4 class="modal-title" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.import.title">Import users</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -18,7 +18,22 @@
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
         <button id="jhi-confirm-delete-userSettings" type="submit" class="btn btn-danger">
-            <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.import">Import</span>
+            <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.upload">Upload</span>
         </button>
     </div>
 </form>
+<div class="modal-body" *ngIf="csvErrors && csvErrors.length > 0">    
+    <p jhiTranslate="gatewayApp.userSettingsServiceUserSettings.import.errors.lagel">Please fix the following errors</p>
+    <table>
+    	<thead>
+    		<th>Index</th>
+    		<th>Error</th>
+    	</thead>
+    	<tbody>
+    		<tr *ngFor="let error of csvErrors">
+        		<td>{{error['index']}}</td>
+        		<td>{{error['message']}}</td>
+       		</tr>
+    	</tbody>        
+    </table>
+</div>
