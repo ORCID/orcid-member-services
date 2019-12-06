@@ -43,21 +43,19 @@ export class UserSettingsImportDialogComponent {
       this.currentFile = event.target.files;
   }
   
-  upload() {
-    console.log('Uploading to ' + this.resourceUrl);
+  upload() {    
   	var f = this.currentFile.item(0);
       this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
-      	console.log(typeof event);
-          if (event instanceof HttpResponse) {                               
+      	  if (event instanceof HttpResponse) {                               
          		var body = event.body;
          		this.csvErrors = JSON.parse(body.toString()); 
          		if(this.csvErrors.length == 0) {
-         		    this.eventManager.broadcast({
-                      name: 'userSettingsListModification',
-                      content: 'New user settings uploaded'
+         		  this.eventManager.broadcast({
+                    name: 'userSettingsListModification',
+                    content: 'New user settings uploaded'
                   });
-         			this.activeModal.dismiss(true);
-         		}          		
+         	      this.activeModal.dismiss(true);
+         		} 
           }
       });        
   }
