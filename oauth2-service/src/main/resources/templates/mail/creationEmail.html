@@ -1,25 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title th:text="#{email.activation.title}">JHipster creation</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
-    </head>
-    <body>
-        <p th:text="#{email.activation.greeting(${user.login})}">
-            Dear
-        </p>
-        <p th:text="#{email.creation.text1}">
-            Your JHipster account has been created, please click on the URL below to access it:
-        </p>
-        <p>
-            <a th:with="url=(@{|${baseUrl}/reset/finish?key=${user.resetKey}|})" th:href="${url}"
-            th:text="${url}">Login link</a>
-        </p>
-        <p>
-            <span th:text="#{email.activation.text2}">Regards, </span>
-            <br/>
-            <em th:text="#{email.signature}">JHipster.</em>
-        </p>
-    </body>
+<head>
+<title th:text="#{email.activation.title}">ORCID member tools
+	account creation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body
+	style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+	<div style="padding: 20px; padding-top: 10px; margin: auto;">
+		<div th:insert="~{mail/common :: emailHeader}"></div>
+
+		<p th:text="#{email.creation.text1}">Thank you for creating an
+			ORCID Member Tools account! Please click on the URL below to access
+			your account:</p>
+		<p>
+			<a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}/reset/finish?key=${user.resetKey}|})"
+				th:href="${url}" th:text="${url}">Login link</a>
+		</p>
+		<p>
+			<span th:text="#{email.reset.text4}">If you have any questions
+				or need help, please contact us at</span> <a style="color: #2E7F9F;"
+				href="https://orcid.org/help/contact-us">https://orcid.org/help/contact-us</a>
+		</p>
+		<p>
+			<span th:text="#{email.common.warmRegards}">Warm Regards,</span> <br />
+			<span th:text="#{email.common.signature}">The ORCID Team</span> <br />
+			<a style="color: #2E7F9F;" href="https://orcid.org/help/contact-us">https://orcid.org/help/contact-us</a>
+		</p>
+		<p th:text="#{email.common.youHaveReceived}">You have received
+			this email as a service announcement related to your ORCID member
+			tools account.</p>
+		<div th:insert="~{mail/common :: emailFooter}"></div>
+	</div>
+</body>
 </html>

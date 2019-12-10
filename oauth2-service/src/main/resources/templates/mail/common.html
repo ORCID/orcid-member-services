@@ -3,16 +3,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-	<!-- THIS FILE CONTAINS FRAGMENTS THAT CAN BE INCLUDED IN OTHER TEMPLATES  -->
 	<!-- EMAIL HEADER -->
-	<!-- USAGE: <div th:insert="~{mail/common :: emailHeader}"></div> -->
 	<div th:fragment="emailHeader">
 		<img src="https://orcid.org/sites/all/themes/orcid/img/orcid-logo.png"
 			alt="ORCID logo" />
 		<hr />
 	</div>
 	<!-- EMAIL FOOTER -->
-	<!-- USAGE: <div th:insert="~{mail/common :: emailFooter}"></div> -->
 	<div th:fragment="emailFooter">
 		<small> <a href="${baseUrl}" target="_blank"
 			style="color: #2E7F9F;"><span
