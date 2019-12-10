@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title th:text="#{email.activation.title}">ORCID member tools
+<title th:text="#{email.activation.title}">ORCID member tools account
 	account creation</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
@@ -11,9 +11,9 @@
 	<div style="padding: 20px; padding-top: 10px; margin: auto;">
 		<div th:insert="~{mail/common :: emailHeader}"></div>
 
-		<p th:text="#{email.creation.text1}">Thank you for creating an
-			ORCID Member Tools account! Please click on the URL below to access
-			your account:</p>
+		<p th:text="#{email.creation.text1}">An account on the ORCID
+			Member Tools site has been created for you. Please click on the URL
+			below to activate your account and set a password:</p>
 		<p>
 			<a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}/reset/finish?key=${user.resetKey}|})"
 				th:href="${url}" th:text="${url}">Login link</a>
