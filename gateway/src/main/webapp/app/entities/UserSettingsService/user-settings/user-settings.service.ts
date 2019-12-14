@@ -41,9 +41,10 @@ export class UserSettingsService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  find(id: string): Observable<EntityResponseType> {
+  find(login: string): Observable<EntityResponseType> {
+      console.log("login:" + login);
     return this.http
-      .get<IUserSettings>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .get<IUserSettings>(`${this.resourceUrl}/${login}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
