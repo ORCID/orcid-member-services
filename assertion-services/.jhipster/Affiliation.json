@@ -1,5 +1,6 @@
 {
     "fluentMethods": true,
+    "clientRootFolder": "AssertionServices",
     "relationships": [],
     "fields": [
         {
@@ -132,8 +133,11 @@
         }
     ],
     "dto": "no",
+    "searchEngine": false,
     "service": "no",
     "entityTableName": "affiliation",
+    "databaseType": "mongodb",
     "jpaMetamodelFiltering": false,
-    "pagination": "infinite-scroll"
+    "pagination": "pagination",
+    "microserviceName": "AssertionServices"
 }

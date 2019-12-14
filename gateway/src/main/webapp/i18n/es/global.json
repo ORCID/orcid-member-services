@@ -8,7 +8,8 @@
       "entities": {
         "main": "Entidades",
         "userSettingsServiceUserSettings": "User Settings",
-        "userSettingsServiceMemberSettings": "Member Settings",        
+        "userSettingsServiceMemberSettings": "Member Settings",
+        "assertionServicesAffiliation": "Affiliation",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
