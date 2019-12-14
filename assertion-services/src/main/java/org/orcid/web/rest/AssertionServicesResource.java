@@ -43,7 +43,7 @@ public class AssertionServicesResource {
         return loggedInUser;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/affiliation/{id}")
     public ResponseEntity<String> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
         String loggedInUser = getAuthenticatedUser();
 
@@ -57,7 +57,7 @@ public class AssertionServicesResource {
         return ResponseEntity.ok().body(StringUtils.join("getAssertions", firstName, lastName, salesforceId));
     }
     
-    @PutMapping
+    @PutMapping("/affiliation")
     public ResponseEntity<String> updateAssertion(@RequestBody Affiliation assertion) throws BadRequestAlertException, JSONException {
         String loggedInUser = getAuthenticatedUser();
 
@@ -71,7 +71,7 @@ public class AssertionServicesResource {
         return ResponseEntity.ok().body(StringUtils.join("getAssertions", firstName, lastName, salesforceId));
     }
     
-    @PostMapping
+    @PostMapping("/affiliation")
     public ResponseEntity<String> createAssertion(@RequestBody Affiliation assertion) throws BadRequestAlertException, JSONException {
         String loggedInUser = getAuthenticatedUser();
 
@@ -85,7 +85,7 @@ public class AssertionServicesResource {
         return ResponseEntity.ok().body(StringUtils.join("getAssertions", firstName, lastName, salesforceId));
     }
     
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/affiliation/{id}")
     public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
         String loggedInUser = getAuthenticatedUser();
 

@@ -1,0 +1,113 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="gatewayApp.assertionServicesAffiliation.home.title">Affiliations</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-affiliation" [routerLink]="['/affiliation/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="gatewayApp.assertionServicesAffiliation.home.createLabel">
+            Create new Affiliation
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="affiliations?.length === 0">
+        <span jhiTranslate="gatewayApp.assertionServicesAffiliation.home.notFound">No affiliations found</span>
+    </div>
+    <div class="table-responsive" *ngIf="affiliations?.length > 0">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="email"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="affiliationSection"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.affiliationSection">Affiliation Section</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="departmentName"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.departmentName">Department Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="roleTitle"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.roleTitle">Role Title</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="startYear"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.startYear">Start Year</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="startMonth"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.startMonth">Start Month</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="startDay"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.startDay">Start Day</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="endYear"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.endYear">End Year</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="endMonth"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.endMonth">End Month</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="endDay"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.endDay">End Day</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="orgName"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.orgName">Org Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="orgCountry"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.orgCountry">Org Country</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="orgCity"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.orgCity">Org City</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="orgRegion"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.orgRegion">Org Region</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="disambiguatedOrgId"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.disambiguatedOrgId">Disambiguated Org Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="disambiguationSource"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.disambiguationSource">Disambiguation Source</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="externalId"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.externalId">External Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="externalIdType"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.externalIdType">External Id Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="externalIdUrl"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.externalIdUrl">External Id Url</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="putCode"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.putCode">Put Code</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="created"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.created">Created</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="modified"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.modified">Modified</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="deletedFromORCID"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.deletedFromORCID">Deleted From ORCID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="sent"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.sent">Sent</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="adminId"><span jhiTranslate="gatewayApp.assertionServicesAffiliation.adminId">Admin Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let affiliation of affiliations ;trackBy: trackId">
+                <td><a [routerLink]="['/affiliation', affiliation.id, 'view' ]">{{affiliation.id}}</a></td>
+                <td>{{affiliation.email}}</td>
+                <td jhiTranslate="{{'gatewayApp.AffiliationSection.' + affiliation.affiliationSection}}">{{affiliation.affiliationSection}}</td>
+                <td>{{affiliation.departmentName}}</td>
+                <td>{{affiliation.roleTitle}}</td>
+                <td>{{affiliation.startYear}}</td>
+                <td>{{affiliation.startMonth}}</td>
+                <td>{{affiliation.startDay}}</td>
+                <td>{{affiliation.endYear}}</td>
+                <td>{{affiliation.endMonth}}</td>
+                <td>{{affiliation.endDay}}</td>
+                <td>{{affiliation.orgName}}</td>
+                <td>{{affiliation.orgCountry}}</td>
+                <td>{{affiliation.orgCity}}</td>
+                <td>{{affiliation.orgRegion}}</td>
+                <td>{{affiliation.disambiguatedOrgId}}</td>
+                <td>{{affiliation.disambiguationSource}}</td>
+                <td>{{affiliation.externalId}}</td>
+                <td>{{affiliation.externalIdType}}</td>
+                <td>{{affiliation.externalIdUrl}}</td>
+                <td>{{affiliation.putCode}}</td>
+                <td>{{affiliation.created | date:'medium'}}</td>
+                <td>{{affiliation.modified | date:'medium'}}</td>
+                <td>{{affiliation.deletedFromORCID | date:'medium'}}</td>
+                <td>{{affiliation.sent}}</td>
+                <td>{{affiliation.adminId}}</td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/affiliation', affiliation.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/affiliation', affiliation.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', 'affiliation', { outlets: { popup: affiliation.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div [hidden]="affiliations?.length === 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>
