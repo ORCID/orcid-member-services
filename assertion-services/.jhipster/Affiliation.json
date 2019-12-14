@@ -1,0 +1,139 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "email",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "pattern"
+            ],
+            "fieldValidateRulesPattern": ".*@.*\\..*"
+        },
+        {
+            "fieldName": "affiliationSection",
+            "fieldType": "AffiliationSection",
+            "fieldValues": "EMPLOYMENT,EDUCATION,QUALIFICATION,INVITED_POSITION,DISTINCTION,MEMBERSHIP,SERVICE"
+        },
+        {
+            "fieldName": "departmentName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "4000"
+        },
+        {
+            "fieldName": "roleTitle",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "4000"
+        },
+        {
+            "fieldName": "startYear",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "startMonth",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "startDay",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "endYear",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "endMonth",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "endDay",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "orgName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "orgCountry",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "orgCity",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "orgRegion",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "disambiguatedOrgId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "disambiguationSource",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "externalId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "externalIdType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "externalIdUrl",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "putCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "created",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "modified",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "deletedFromORCID",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "sent",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "adminId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "affiliation",
+    "jpaMetamodelFiltering": false,
+    "pagination": "infinite-scroll"
+}
