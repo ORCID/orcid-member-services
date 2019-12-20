@@ -4,11 +4,6 @@
             <h2 id="jhi-affiliation-heading" jhiTranslate="gatewayApp.assertionServicesAffiliation.home.createOrEditLabel">Create or edit a Affiliation</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id').value">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
-                        readonly />
-                </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.email" for="field_email">Email</label>
                     <input type="text" class="form-control" name="email" id="field_email"
@@ -153,46 +148,6 @@
                     <input type="text" class="form-control" name="externalIdUrl" id="field_externalIdUrl"
                            formControlName="externalIdUrl"/>
                 </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.putCode" for="field_putCode">Put Code</label>
-                    <input type="text" class="form-control" name="putCode" id="field_putCode"
-                           formControlName="putCode"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.created" for="field_created">Created</label>
-                    <div class="d-flex">
-                        <input id="field_created" type="datetime-local" class="form-control" name="created" formControlName="created" placeholder="YYYY-MM-DD HH:mm"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.modified" for="field_modified">Modified</label>
-                    <div class="d-flex">
-                        <input id="field_modified" type="datetime-local" class="form-control" name="modified" formControlName="modified" placeholder="YYYY-MM-DD HH:mm"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.deletedFromORCID" for="field_deletedFromORCID">Deleted From ORCID</label>
-                    <div class="d-flex">
-                        <input id="field_deletedFromORCID" type="datetime-local" class="form-control" name="deletedFromORCID" formControlName="deletedFromORCID" placeholder="YYYY-MM-DD HH:mm"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.sent" for="field_sent">Sent</label>
-                    <input type="checkbox" class="form-control" name="sent" id="field_sent"
-                           formControlName="sent"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.adminId" for="field_adminId">Admin Id</label>
-                    <input type="text" class="form-control" name="adminId" id="field_adminId"
-                           formControlName="adminId"/>
-                    <div *ngIf="editForm.get('adminId').invalid && (editForm.get('adminId').dirty || editForm.get('adminId').touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('adminId').errors.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
-                </div>
-
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
