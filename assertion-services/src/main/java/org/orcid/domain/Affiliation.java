@@ -8,6 +8,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.orcid.domain.enumeration.AffiliationSection;
+import org.orcid.security.SecurityUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -92,9 +93,10 @@ public class Affiliation implements Serializable {
     @Field("modified")
     private Instant modified;
 
+    // jhi_user.login, which could be extracted from SecurityUtils.getCurrentUserLogin().get()
     @NotNull
-    @Field("admin_id")
-    private String adminId;
+    @Field("owner_id")
+    private String ownerId;
 
     @Field("orcid_error")
     private String orcidError;
@@ -403,17 +405,17 @@ public class Affiliation implements Serializable {
         this.modified = modified;
     }
 
-    public String getAdminId() {
-        return adminId;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public Affiliation adminId(String adminId) {
-        this.adminId = adminId;
+    public Affiliation ownerId(String ownerId) {
+        this.ownerId = ownerId;
         return this;
     }
 
-    public void setAdminId(String adminId) {
-        this.adminId = adminId;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters
     // and setters here, do not remove
@@ -478,7 +480,7 @@ public class Affiliation implements Serializable {
                 + ", orgName='" + getOrgName() + "'" + ", orgCountry='" + getOrgCountry() + "'" + ", orgCity='" + getOrgCity() + "'" + ", orgRegion='" + getOrgRegion()
                 + "'" + ", disambiguatedOrgId='" + getDisambiguatedOrgId() + "'" + ", disambiguationSource='" + getDisambiguationSource() + "'" + ", externalId='"
                 + getExternalId() + "'" + ", externalIdType='" + getExternalIdType() + "'" + ", externalIdUrl='" + getExternalIdUrl() + "'" + ", putCode='" + getPutCode()
-                + "'" + ", created='" + getCreated() + "'" + ", modified='" + getModified() + "'" + ", adminId='" + getAdminId() + "'" + ", orcidError='"
+                + "'" + ", created='" + getCreated() + "'" + ", modified='" + getModified() + "'" + ", ownerId='" + getOwnerId() + "'" + ", orcidError='"
                 + getOrcidError() + "'" + ", updated='" + isUpdated() + "'" + ", deletedFromORCID='" + getDeletedFromORCID() + "'" + "}";
     }
 }
