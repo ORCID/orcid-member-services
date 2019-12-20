@@ -1,19 +1,24 @@
 package org.orcid.web.rest;
 
+import java.time.Instant;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.client.UserSettingsClient;
-import org.orcid.domain.Affiliation;
+import org.orcid.domain.Assertion;
 import org.orcid.repository.AffiliationsRepository;
 import org.orcid.security.AuthoritiesConstants;
 import org.orcid.security.SecurityUtils;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +32,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import io.github.jhipster.web.util.PaginationUtil;
+
 @RestController
-@RequestMapping("/assertion/api")
+@RequestMapping("/api")
 public class AssertionServicesResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -56,24 +63,19 @@ public class AssertionServicesResource {
         return loggedInUser;
     }
 
-    @GetMapping("/affiliations")
-    public ResponseEntity<List<Affiliation>> getAssertions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) throws BadRequestAlertException, JSONException {
+    @GetMapping("/assertions")
+    public ResponseEntity<List<Assertion>> getAssertions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) throws BadRequestAlertException, JSONException {
         String loggedInUserId = getAuthenticatedUser();
 
-        ResponseEntity<String> userSettingsResponse = userSettingsClient.getUserSettings(loggedInUserId);
-
-        JSONObject userSettings = new JSONObject(userSettingsResponse.getBody());
-        String firstName = userSettings.getString("firstName");
-        String lastName = userSettings.getString("lastName");
-        String salesforceId = userSettings.getString("salesforceId");
-
-        List<Affiliation> affiliations = affiliationsRepository.findByOwnerId(loggedInUserId);
+        Page<Assertion> affiliations = affiliationsRepository.findByOwnerId(loggedInUserId, pageable);
         
-        return ResponseEntity.ok().body(affiliations);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
+        return ResponseEntity.ok().headers(headers).body(affiliations.getContent());
     }
     
-    @GetMapping("/affiliation/{id}")
+    @GetMapping("/assertion/{id}")
     public ResponseEntity<String> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
+        //TODO
         String loggedInUser = getAuthenticatedUser();
 
         ResponseEntity<String> userSettingsResponse = userSettingsClient.getUserSettings(loggedInUser);
@@ -86,8 +88,9 @@ public class AssertionServicesResource {
         return ResponseEntity.ok().body(StringUtils.join("getAssertions", firstName, lastName, salesforceId));
     }
     
-    @PutMapping("/affiliation")
-    public ResponseEntity<String> updateAssertion(@RequestBody Affiliation assertion) throws BadRequestAlertException, JSONException {
+    @PutMapping("/assertion")
+    public ResponseEntity<String> updateAssertion(@RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
+        //TODO
         String loggedInUser = getAuthenticatedUser();
 
         ResponseEntity<String> userSettingsResponse = userSettingsClient.getUserSettings(loggedInUser);
@@ -100,21 +103,47 @@ public class AssertionServicesResource {
         return ResponseEntity.ok().body(StringUtils.join("getAssertions", firstName, lastName, salesforceId));
     }
     
-    @PostMapping("/affiliation")
-    public ResponseEntity<String> createAssertion(@RequestBody Affiliation assertion) throws BadRequestAlertException, JSONException {
+    @PostMapping("/assertion")
+    public ResponseEntity<String> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
         String loggedInUser = getAuthenticatedUser();
 
-        ResponseEntity<String> userSettingsResponse = userSettingsClient.getUserSettings(loggedInUser);
+        Instant now = Instant.now();
+        
+        assertion.setOwnerId(loggedInUser);
+        assertion.setCreated(now);
+        assertion.setModified(now);
 
-        JSONObject userSettings = new JSONObject(userSettingsResponse.getBody());
-        String firstName = userSettings.getString("firstName");
-        String lastName = userSettings.getString("lastName");
-        String salesforceId = userSettings.getString("salesforceId");
-
-        return ResponseEntity.ok().body(StringUtils.join("getAssertions", firstName, lastName, salesforceId));
+        assertion = affiliationsRepository.save(assertion);
+        
+        return ResponseEntity.ok().body(assertion.getId());
     }
     
-    @DeleteMapping("/affiliation/{id}")
+    private void validateAssertion(Assertion assertion) {
+        if (StringUtils.isBlank(assertion.getEmail())) {
+            throw new IllegalArgumentException("email must not be null");
+        }
+        
+        if (assertion.getAffiliationSection() == null) {
+            throw new IllegalArgumentException("affiliation-section must not be null");
+        }
+        if (StringUtils.isBlank(assertion.getOrgName())) {
+            throw new IllegalArgumentException("org-name must not be null");
+        }        
+        if (StringUtils.isBlank(assertion.getOrgCountry())) {
+            throw new IllegalArgumentException("org-country must not be null");
+        } 
+        if (StringUtils.isBlank(assertion.getOrgCity())) {
+            throw new IllegalArgumentException("org-city must not be null");
+        }
+        if (StringUtils.isBlank(assertion.getDisambiguatedOrgId())) {
+            throw new IllegalArgumentException("disambiguated-organization-identifier must not be null");
+        }
+        if (StringUtils.isBlank(assertion.getDisambiguationSource())) {
+            throw new IllegalArgumentException("disambiguation-source must not be null");
+        }        
+    }
+    
+    @DeleteMapping("/assertion/{id}")
     public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
         String loggedInUser = getAuthenticatedUser();
 
