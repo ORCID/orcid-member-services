@@ -14,7 +14,7 @@ type EntityArrayResponseType = HttpResponse<IAffiliation[]>;
 
 @Injectable({ providedIn: 'root' })
 export class AffiliationService {
-  public resourceUrl = SERVER_API_URL + 'services/assertionservices/assertion/api/affiliation';
+  public resourceUrl = SERVER_API_URL + 'services/assertionservices/api/assertion';
 
   constructor(protected http: HttpClient) {}
 
@@ -25,6 +25,13 @@ export class AffiliationService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  upload(affiliation: IAffiliation): Observable<EntityResponseType> {
+      const copy = this.convertDateFromClient(IAffiliation);
+      return this.http
+        .post<IAffiliation>(this.resourceUrl, copy, { observe: 'response' })
+        .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+    }
+  
   update(affiliation: IAffiliation): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(affiliation);
     return this.http
@@ -41,7 +48,7 @@ export class AffiliationService {
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IAffiliation[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .get<IAffiliation[]>(this.resourceUrl + 's', { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 

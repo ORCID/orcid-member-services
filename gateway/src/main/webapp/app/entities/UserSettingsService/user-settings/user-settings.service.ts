@@ -25,7 +25,6 @@ export class UserSettingsService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
   
-  
   upload(userSettings: IUserSettings): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(userSettings);
 	return this.http
@@ -33,7 +32,6 @@ export class UserSettingsService {
 	  .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
   
-
   update(userSettings: IUserSettings): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(userSettings);
     return this.http
