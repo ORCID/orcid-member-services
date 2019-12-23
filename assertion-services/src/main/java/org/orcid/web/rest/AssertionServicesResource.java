@@ -1,5 +1,7 @@
 package org.orcid.web.rest;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.List;
 
@@ -32,11 +34,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 
 @RestController
 @RequestMapping("/api")
 public class AssertionServicesResource {
+    private static final String ENTITY_NAME = "affiliation";
+    
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
@@ -104,7 +109,7 @@ public class AssertionServicesResource {
     }
     
     @PostMapping("/assertion")
-    public ResponseEntity<String> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
+    public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException, URISyntaxException {
         String loggedInUser = getAuthenticatedUser();
 
         Instant now = Instant.now();
@@ -115,7 +120,8 @@ public class AssertionServicesResource {
 
         assertion = affiliationsRepository.save(assertion);
         
-        return ResponseEntity.ok().body(assertion.getId());
+        return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, assertion.getId())).body(assertion);
     }
     
     private void validateAssertion(Assertion assertion) {

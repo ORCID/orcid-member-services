@@ -17,8 +17,8 @@ export class AffiliationUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    email: [null, [Validators.pattern('.*@.*..*')]],
-    affiliationSection: [],
+    email: [null, [Validators.pattern('.*@.*..*'), Validators.required]],
+    affiliationSection: [null, [Validators.required]],
     departmentName: [null, [Validators.maxLength(4000)]],
     roleTitle: [null, [Validators.maxLength(4000)]],
     startYear: [],

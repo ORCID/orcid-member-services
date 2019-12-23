@@ -26,7 +26,7 @@ export class AffiliationService {
   }
 
   upload(affiliation: IAffiliation): Observable<EntityResponseType> {
-      const copy = this.convertDateFromClient(IAffiliation);
+      const copy = this.convertDateFromClient(affiliation);
       return this.http
         .post<IAffiliation>(this.resourceUrl, copy, { observe: 'response' })
         .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
