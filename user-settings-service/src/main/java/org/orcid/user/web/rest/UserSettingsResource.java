@@ -365,6 +365,7 @@ public class UserSettingsResource {
      */
     @PutMapping("/user")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException, JSONException {
+        //TODO: Secure this endpoint, only admins or the user himself should be able to update a user
         log.debug("REST request to update UserDTO : {}", userDTO);
         if (StringUtils.isBlank(userDTO.getId()) || StringUtils.isBlank(userDTO.getLogin())) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -469,7 +470,7 @@ public class UserSettingsResource {
     }
 
     /**
-     * {@code GET  /users/:id} : get the "id" User.
+     * {@code GET  /user/:login} : get the "login" User.
      *
      * @param id
      *            the id of the User to retrieve.
@@ -477,10 +478,13 @@ public class UserSettingsResource {
      *         body the User, or with status {@code 404 (Not Found)}.
      * @throws JSONException
      */
-    @GetMapping("/user/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable String id) throws JSONException {
-        log.debug("REST request to get UserDTO : {}", id);
-        Optional<UserSettings> msu = userSettingsRepository.findById(id);
+    @GetMapping("/user/{login}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable String login) throws JSONException {
+        // TODO: Secure this endpoint, we should make it available for the admin
+        // or the logged in user IF it is the same user as the one specified in
+        // the id param
+        log.debug("REST request to get UserDTO : {}", login);
+        Optional<UserSettings> msu = userSettingsRepository.findByLogin(login);
         if (!msu.isPresent()) {
             return ResponseEntity.notFound().build();
         }

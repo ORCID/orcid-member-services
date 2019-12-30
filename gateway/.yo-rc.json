@@ -3,7 +3,7 @@
     "promptValues": {
       "packageName": "org.orcid.gateway",
       "nativeLanguage": "en",
-      "microservicePath": "../user-settings-service"
+      "microservicePath": "../assertion-services"
     },
     "jhipsterVersion": "6.1.2",
     "applicationType": "gateway",

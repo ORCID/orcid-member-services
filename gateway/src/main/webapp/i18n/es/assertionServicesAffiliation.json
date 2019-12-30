@@ -1,0 +1,50 @@
+{
+  "gatewayApp": {
+    "assertionServicesAffiliation": {
+      "home": {
+        "title": "Affiliations",
+        "createLabel": "Crear nuevo Affiliation",
+        "createOrEditLabel": "Crear o editar Affiliation",
+        "notFound": "No Affiliation found"
+      },
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Affiliation {{ id }}?"
+      },
+      "detail": {
+        "title": "Affiliation"
+      },
+      "email": "Email",
+      "affiliationSection": "Affiliation Section",
+      "departmentName": "Department Name",
+      "roleTitle": "Role Title",
+      "startYear": "Start Year",
+      "startMonth": "Start Month",
+      "startDay": "Start Day",
+      "endYear": "End Year",
+      "endMonth": "End Month",
+      "endDay": "End Day",
+      "orgName": "Org Name",
+      "orgCountry": "Org Country",
+      "orgCity": "Org City",
+      "orgRegion": "Org Region",
+      "disambiguatedOrgId": "Disambiguated Org Id",
+      "disambiguationSource": "Disambiguation Source",
+      "externalId": "External Id",
+      "externalIdType": "External Id Type",
+      "externalIdUrl": "External Id Url",
+      "putCode": "Put Code",
+      "created": "Created",
+      "modified": "Modified",
+      "deletedFromORCID": "Deleted From ORCID",
+      "sent": "Sent",
+      "adminId": "Admin Id"
+    }
+  },
+  "assertionServicesApp": {
+    "assertionServicesAffiliation": {
+      "created": "Un nuevo Affiliation ha sido creado con el identificador {{ param }}",
+      "updated": "Un Affiliation ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Affiliation ha sido eliminado con el identificador {{ param }}"
+    }
+  }
+}

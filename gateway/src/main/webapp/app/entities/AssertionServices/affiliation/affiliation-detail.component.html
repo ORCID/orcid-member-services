@@ -1,0 +1,123 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="affiliation">
+            <h2><span jhiTranslate="gatewayApp.assertionServicesAffiliation.detail.title">Affiliation</span> {{affiliation.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.email">Email</span></dt>
+                <dd>
+                    <span>{{affiliation.email}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.affiliationSection">Affiliation Section</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'gatewayApp.AffiliationSection.' + affiliation.affiliationSection}}">{{affiliation.affiliationSection}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.departmentName">Department Name</span></dt>
+                <dd>
+                    <span>{{affiliation.departmentName}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.roleTitle">Role Title</span></dt>
+                <dd>
+                    <span>{{affiliation.roleTitle}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.startYear">Start Year</span></dt>
+                <dd>
+                    <span>{{affiliation.startYear}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.startMonth">Start Month</span></dt>
+                <dd>
+                    <span>{{affiliation.startMonth}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.startDay">Start Day</span></dt>
+                <dd>
+                    <span>{{affiliation.startDay}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.endYear">End Year</span></dt>
+                <dd>
+                    <span>{{affiliation.endYear}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.endMonth">End Month</span></dt>
+                <dd>
+                    <span>{{affiliation.endMonth}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.endDay">End Day</span></dt>
+                <dd>
+                    <span>{{affiliation.endDay}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.orgName">Org Name</span></dt>
+                <dd>
+                    <span>{{affiliation.orgName}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.orgCountry">Org Country</span></dt>
+                <dd>
+                    <span>{{affiliation.orgCountry}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.orgCity">Org City</span></dt>
+                <dd>
+                    <span>{{affiliation.orgCity}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.orgRegion">Org Region</span></dt>
+                <dd>
+                    <span>{{affiliation.orgRegion}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.disambiguatedOrgId">Disambiguated Org Id</span></dt>
+                <dd>
+                    <span>{{affiliation.disambiguatedOrgId}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.disambiguationSource">Disambiguation Source</span></dt>
+                <dd>
+                    <span>{{affiliation.disambiguationSource}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.externalId">External Id</span></dt>
+                <dd>
+                    <span>{{affiliation.externalId}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.externalIdType">External Id Type</span></dt>
+                <dd>
+                    <span>{{affiliation.externalIdType}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.externalIdUrl">External Id Url</span></dt>
+                <dd>
+                    <span>{{affiliation.externalIdUrl}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.putCode">Put Code</span></dt>
+                <dd>
+                    <span>{{affiliation.putCode}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.created">Created</span></dt>
+                <dd>
+                    <span>{{affiliation.created}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.modified">Modified</span></dt>
+                <dd>
+                    <span>{{affiliation.modified}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.deletedFromORCID">Deleted From ORCID</span></dt>
+                <dd>
+                    <span>{{affiliation.deletedFromORCID}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.sent">Sent</span></dt>
+                <dd>
+                    <span>{{affiliation.sent}}</span>
+                </dd>
+                <dt><span jhiTranslate="gatewayApp.assertionServicesAffiliation.adminId">Admin Id</span></dt>
+                <dd>
+                    <span>{{affiliation.adminId}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/affiliation', affiliation.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -11,6 +11,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'member-settings',
         loadChildren: './UserSettingsService/member-settings/member-settings.module#UserSettingsServiceMemberSettingsModule'
+      },
+      {
+        path: 'affiliation',
+        loadChildren: './AssertionServices/affiliation/affiliation.module#AssertionServicesAffiliationModule'
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

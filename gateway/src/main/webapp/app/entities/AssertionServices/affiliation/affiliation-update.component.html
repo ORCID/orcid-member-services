@@ -1,0 +1,162 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-affiliation-heading" jhiTranslate="gatewayApp.assertionServicesAffiliation.home.createOrEditLabel">Create or edit a Affiliation</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.email" for="field_email">Email</label>
+                    <input type="text" class="form-control" name="email" id="field_email"
+                           formControlName="email"/>
+                    <div *ngIf="editForm.get('email').invalid && (editForm.get('email').dirty || editForm.get('email').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('email').errors.pattern" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: 'Email' }">
+                            This field should follow pattern for "Email".
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.affiliationSection" for="field_affiliationSection">Affiliation Section</label>
+                    <select class="form-control" name="affiliationSection" formControlName="affiliationSection" id="field_affiliationSection">
+                        <option value="EMPLOYMENT">{{'gatewayApp.AffiliationSection.EMPLOYMENT' | translate}}</option>
+                        <option value="EDUCATION">{{'gatewayApp.AffiliationSection.EDUCATION' | translate}}</option>
+                        <option value="QUALIFICATION">{{'gatewayApp.AffiliationSection.QUALIFICATION' | translate}}</option>
+                        <option value="INVITED_POSITION">{{'gatewayApp.AffiliationSection.INVITED_POSITION' | translate}}</option>
+                        <option value="DISTINCTION">{{'gatewayApp.AffiliationSection.DISTINCTION' | translate}}</option>
+                        <option value="MEMBERSHIP">{{'gatewayApp.AffiliationSection.MEMBERSHIP' | translate}}</option>
+                        <option value="SERVICE">{{'gatewayApp.AffiliationSection.SERVICE' | translate}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.departmentName" for="field_departmentName">Department Name</label>
+                    <input type="text" class="form-control" name="departmentName" id="field_departmentName"
+                           formControlName="departmentName"/>
+                    <div *ngIf="editForm.get('departmentName').invalid && (editForm.get('departmentName').dirty || editForm.get('departmentName').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('departmentName').errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 4000 }">
+                        This field cannot be longer than 4000 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.roleTitle" for="field_roleTitle">Role Title</label>
+                    <input type="text" class="form-control" name="roleTitle" id="field_roleTitle"
+                           formControlName="roleTitle"/>
+                    <div *ngIf="editForm.get('roleTitle').invalid && (editForm.get('roleTitle').dirty || editForm.get('roleTitle').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('roleTitle').errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 4000 }">
+                        This field cannot be longer than 4000 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.startYear" for="field_startYear">Start Year</label>
+                    <input type="text" class="form-control" name="startYear" id="field_startYear"
+                           formControlName="startYear"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.startMonth" for="field_startMonth">Start Month</label>
+                    <input type="text" class="form-control" name="startMonth" id="field_startMonth"
+                           formControlName="startMonth"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.startDay" for="field_startDay">Start Day</label>
+                    <input type="text" class="form-control" name="startDay" id="field_startDay"
+                           formControlName="startDay"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.endYear" for="field_endYear">End Year</label>
+                    <input type="text" class="form-control" name="endYear" id="field_endYear"
+                           formControlName="endYear"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.endMonth" for="field_endMonth">End Month</label>
+                    <input type="text" class="form-control" name="endMonth" id="field_endMonth"
+                           formControlName="endMonth"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.endDay" for="field_endDay">End Day</label>
+                    <input type="text" class="form-control" name="endDay" id="field_endDay"
+                           formControlName="endDay"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.orgName" for="field_orgName">Org Name</label>
+                    <input type="text" class="form-control" name="orgName" id="field_orgName"
+                           formControlName="orgName"/>
+                    <div *ngIf="editForm.get('orgName').invalid && (editForm.get('orgName').dirty || editForm.get('orgName').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('orgName').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.orgCountry" for="field_orgCountry">Org Country</label>
+                    <input type="text" class="form-control" name="orgCountry" id="field_orgCountry"
+                           formControlName="orgCountry"/>
+                    <div *ngIf="editForm.get('orgCountry').invalid && (editForm.get('orgCountry').dirty || editForm.get('orgCountry').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('orgCountry').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.orgCity" for="field_orgCity">Org City</label>
+                    <input type="text" class="form-control" name="orgCity" id="field_orgCity"
+                           formControlName="orgCity"/>
+                    <div *ngIf="editForm.get('orgCity').invalid && (editForm.get('orgCity').dirty || editForm.get('orgCity').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('orgCity').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.orgRegion" for="field_orgRegion">Org Region</label>
+                    <input type="text" class="form-control" name="orgRegion" id="field_orgRegion"
+                           formControlName="orgRegion"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.disambiguatedOrgId" for="field_disambiguatedOrgId">Disambiguated Org Id</label>
+                    <input type="text" class="form-control" name="disambiguatedOrgId" id="field_disambiguatedOrgId"
+                           formControlName="disambiguatedOrgId"/>
+                    <div *ngIf="editForm.get('disambiguatedOrgId').invalid && (editForm.get('disambiguatedOrgId').dirty || editForm.get('disambiguatedOrgId').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('disambiguatedOrgId').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.disambiguationSource" for="field_disambiguationSource">Disambiguation Source</label>
+                    <input type="text" class="form-control" name="disambiguationSource" id="field_disambiguationSource"
+                           formControlName="disambiguationSource"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.externalId" for="field_externalId">External Id</label>
+                    <input type="text" class="form-control" name="externalId" id="field_externalId"
+                           formControlName="externalId"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.externalIdType" for="field_externalIdType">External Id Type</label>
+                    <input type="text" class="form-control" name="externalIdType" id="field_externalIdType"
+                           formControlName="externalIdType"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAffiliation.externalIdUrl" for="field_externalIdUrl">External Id Url</label>
+                    <input type="text" class="form-control" name="externalIdUrl" id="field_externalIdUrl"
+                           formControlName="externalIdUrl"/>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
