@@ -24,12 +24,9 @@ public class InitialSetupMigration {
     	userAuthority.setName(AuthoritiesConstants.USER);
     	Authority consortiumLeadAuthority = new Authority();
     	consortiumLeadAuthority.setName(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
-    	Authority memberAuthority = new Authority();
-    	memberAuthority.setName(AuthoritiesConstants.MEMBER);
     	mongoTemplate.save(adminAuthority);
     	mongoTemplate.save(userAuthority);
     	mongoTemplate.save(consortiumLeadAuthority);
-    	mongoTemplate.save(memberAuthority);
     }
 
     @ChangeSet(order = "02", author = "initiator", id = "02-addUsers")
