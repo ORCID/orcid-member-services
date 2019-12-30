@@ -17,8 +17,11 @@
       "import": {
         "title": "User Settings",
         "label": "Please select the CSV file to upload",
-        "filePath": "File path"
-      },
+        "filePath": "File path",
+        "errors": {
+          "label": "Please fix the following errors"	
+        }
+       },
       "login": "Login",
       "email": "Email",
       "password": "Password",
