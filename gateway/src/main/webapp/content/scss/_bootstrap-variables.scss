@@ -8,11 +8,12 @@
 // Colors:
 // Grayscale and brand colors for use across Bootstrap.
 
-$primary: #3e8acc;
-$success: #28a745;
-$info: #17a2b8;
-$warning: #ffc107;
-$danger: #dc3545;
+$primary: #2e7f9f;
+$secondary: #a6ce39;
+$success: #2e7f9f;
+$info: #2e7f9f;
+$warning: #f44336;
+$danger: #f44336;
 
 // Options:
 // Quickly modify global styling by enabling or disabling optional features.
@@ -34,9 +35,19 @@ $border-radius-sm: 0.1rem;
 // Body:
 // Settings for the `<body>` element.
 
-$body-bg: #e4e5e6;
+$body-bg: #fff;
+$body-color: rgba(0, 0, 0, 0.87);
 
 // Typography:
 // Font, line-height, and color for body text, headings, and more.
 
+$font-family-sans-serif: "Noto Sans", san-serif;
+
 $font-size-base: 1rem;
+
+$h3-font-size:                $font-size-base * 1.5;
+$h4-font-size:                $font-size-base * 1.25;
+$h5-font-size:                $font-size-base * 1.17;
+$h6-font-size:                $font-size-base * 1.12;
+
+$link-hover-color: $primary;

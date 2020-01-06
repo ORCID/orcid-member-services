@@ -15,15 +15,7 @@ h4 {
 }
 
 a {
-  color: #533f03;
-  font-weight: bold;
-}
-
-a:hover {
-  color: #533f03;
-  font-weight: bold;
-  /* make sure browsers use the pointer cursor for anchors, even with no href */
-  cursor: pointer;
+  font-weight: $font-weight-bold;
 }
 
 .dropdown-item:hover {
@@ -35,7 +27,6 @@ Browser Upgrade Prompt
 ========================================================================== */
 .browserupgrade {
   margin: 0.2em 0;
-  background: #ccc;
   color: #000;
   padding: 0.2em 0;
 }
