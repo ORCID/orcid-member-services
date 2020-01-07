@@ -1,0 +1,72 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+/* ==========================================================================
+Footer
+========================================================================== */
+a {
+    color: rgba(0,0,0,0.87);
+    font-family: "Noto Sans", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.3px !important;
+    text-align: center;
+}
+
+p {
+    margin: 0 0 6px;
+    text-align: center;
+    font: 400 14px/16px "Noto Sans", sans-serif;
+}
+
+.copyright,
+.copyright > a,
+.copyright > p {
+    display: block;
+    float: left;
+}
+
+.copyright > p {
+    line-height: 33px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.footer {
+    background-color: #f5f5f5;
+    font-size: 14px;
+    padding-bottom: 16px;
+    padding-top: 14px;
+    line-height: normal
+}
+  
+.list-group-item {
+    border: none;
+    background-color: #f5f5f5;
+    padding: .5rem 1rem;
+}
+
+.footer-row-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+}
+
+@media (max-width:767px) {
+    nav > ul{
+        clear: both;
+    }
+    nav > .list-group-horizontal .list-group-item {
+        display: block;
+        clear: both;
+        width: 100%;
+        text-align: center;
+    }
+    .copyright,
+    .copyright > a,
+    .copyright > p {
+        clear: both;
+        width: 100%;
+    }
+}
