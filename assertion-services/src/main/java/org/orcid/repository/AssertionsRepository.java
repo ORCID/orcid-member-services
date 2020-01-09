@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AffiliationsRepository extends MongoRepository<Assertion, String> {
+public interface AssertionsRepository extends MongoRepository<Assertion, String> {
     
     @Query("{ownerId: ?0}")    
     Page<Assertion> findByOwnerId(String ownerId, Pageable pageable);
