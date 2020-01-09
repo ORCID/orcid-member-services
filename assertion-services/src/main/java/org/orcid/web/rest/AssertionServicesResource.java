@@ -31,13 +31,13 @@ import org.orcid.repository.AssertionsRepository;
 import org.orcid.repository.OrcidRecordRepository;
 import org.orcid.security.AuthoritiesConstants;
 import org.orcid.security.SecurityUtils;
-import org.orcid.user.service.dto.UserDTO;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -165,13 +165,13 @@ public class AssertionServicesResource {
                 try {
                     Assertion assertion = parseLine(record);
                     // Throw exception if found a duplicate
-                    Assertion existingAssertion = getExistingAffiliation(assertion, existingAssertion);
+                    Assertion existingAssertion = getExistingAssertion(assertion, existingAssertions);
                     // If the same affiliation exists, and, the put code for it
                     // exists, check if it is an updated org
-                    if (existingAff != null) {
+                    if (existingAssertion != null) {
                         // If something is updated in the aff, update the
                         // existing one in the DB
-                        if (!StringUtils.isBlank(existingAff.getPutCode()) && isUpdated(aff, existingAff)) {
+                        if (!StringUtils.isBlank(existingAssertion.getPutCode()) && isUpdated(assertion, existingAssertion)) {
                             copyFieldsToUpdate(aff, existingAff);
                             existingAff.setUpdated(true);
                             affiliationService.save(existingAff);
@@ -343,5 +343,56 @@ public class AssertionServicesResource {
             return null;
         }
         return line.get(name);
+    }
+
+    private Assertion getExistingAssertion(Assertion a, List<Assertion> existing) {
+        for (Assertion existingAAssertion : existing) {
+            // If the email is the same
+            if (a.getEmail().equals(existingAAssertion.getEmail())) {
+                // And is the same affiliation type
+                if (a.getAffiliationSection().equals(existingAAssertion.getAffiliationSection())) {
+                    // And the same department name
+                    if ((StringUtils.isBlank(a.getDepartmentName()) && StringUtils.isBlank(existingAAssertion.getDepartmentName()))
+                            || (a.getDepartmentName().equals(existingAAssertion.getDepartmentName()))) {
+                        // And the same role title
+                        if ((StringUtils.isBlank(a.getRoleTitle()) && StringUtils.isBlank(existingAAssertion.getRoleTitle()))
+                                || (a.getRoleTitle().equals(existingAAssertion.getRoleTitle()))) {
+                            // And the same org name
+                            if (a.getOrgName().equals(existingAAssertion.getOrgName())) {
+                                return existingAAssertion;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isUpdated(Assertion a, Assertion existingAssertion) {
+        // Check if something changed, if not, just ignore it
+        // @formatter:off
+        if (!equals(a.getDisambiguatedOrgId(), existingAssertion.getDisambiguatedOrgId()) 
+                || !equals(a.getDisambiguationSource(), existingAssertion.getDisambiguationSource())
+                || !equals(a.getEndDay(), existingAssertion.getEndDay()) 
+                || !equals(a.getEndMonth(), existingAssertion.getEndMonth())
+                || !equals(a.getEndYear(), existingAssertion.getEndYear()) 
+                || !equals(a.getExternalId(), existingAssertion.getExternalId())
+                || !equals(a.getExternalIdType(), existingAssertion.getExternalIdType()) 
+                || !equals(a.getExternalIdUrl(), existingAssertion.getExternalIdUrl())
+                || !equals(a.getOrgCity(), existingAssertion.getOrgCity()) 
+                || !equals(a.getOrgCountry(), existingAssertion.getOrgCountry())
+                || !equals(a.getOrgRegion(), existingAssertion.getOrgRegion()) 
+                || !equals(a.getStartDay(), existingAssertion.getStartDay())
+                || !equals(a.getStartMonth(), existingAssertion.getStartMonth()) 
+                || !equals(a.getStartYear(), existingAssertion.getStartYear())) {
+            return true;
+        }
+        // @formatter:on       
+        return false;
+    }
+
+    private boolean equals(String a, String b) {
+        return (a == null ? b == null : a.equals(b));
     }
 }
