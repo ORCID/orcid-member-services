@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -12,7 +13,9 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.client.UserSettingsClient;
 import org.orcid.domain.Assertion;
-import org.orcid.repository.AffiliationsRepository;
+import org.orcid.domain.OrcidRecord;
+import org.orcid.repository.AssertionsRepository;
+import org.orcid.repository.OrcidRecordRepository;
 import org.orcid.security.AuthoritiesConstants;
 import org.orcid.security.SecurityUtils;
 import org.orcid.web.rest.errors.BadRequestAlertException;
@@ -48,12 +51,12 @@ public class AssertionServicesResource {
     @Autowired
     private UserSettingsClient userSettingsClient;
     
-    private final AffiliationsRepository affiliationsRepository;
-
-    public AssertionServicesResource(AffiliationsRepository affiliationsRepository) {
-        this.affiliationsRepository = affiliationsRepository;
-    }
+    @Autowired
+    private AssertionsRepository assertionsRepository;
     
+    @Autowired
+    private OrcidRecordRepository orcidRecordRepository;
+
     private String getAuthenticatedUser() {
         if (!SecurityUtils.isAuthenticated()) {
             throw new BadRequestAlertException("User is not logged in", "login", "null");
@@ -72,7 +75,7 @@ public class AssertionServicesResource {
     public ResponseEntity<List<Assertion>> getAssertions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) throws BadRequestAlertException, JSONException {
         String loggedInUserId = getAuthenticatedUser();
 
-        Page<Assertion> affiliations = affiliationsRepository.findByOwnerId(loggedInUserId, pageable);
+        Page<Assertion> affiliations = assertionsRepository.findByOwnerId(loggedInUserId, pageable);
         
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
         return ResponseEntity.ok().headers(headers).body(affiliations.getContent());
@@ -118,10 +121,26 @@ public class AssertionServicesResource {
         assertion.setCreated(now);
         assertion.setModified(now);
 
-        assertion = affiliationsRepository.save(assertion);
+        String email = assertion.getEmail();
+        
+        Optional<OrcidRecord> optionalRecord = orcidRecordRepository.findOneByEmail(email);
+        if(!optionalRecord.isPresent()) {
+            createOrcidRecord(email, loggedInUser, now);
+        }
+        
+        assertion = assertionsRepository.save(assertion);
         
         return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, assertion.getId())).body(assertion);
+    }
+    
+    private void createOrcidRecord(String email, String ownerId, Instant now) {
+        OrcidRecord or = new OrcidRecord();
+        or.setEmail(email);
+        or.setOwnerId(ownerId);
+        or.setCreated(now);
+        or.setModified(now);
+        orcidRecordRepository.insert(or);
     }
     
     private void validateAssertion(Assertion assertion) {
