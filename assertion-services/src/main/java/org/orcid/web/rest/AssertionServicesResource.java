@@ -6,18 +6,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -32,6 +29,8 @@ import org.orcid.repository.OrcidRecordRepository;
 import org.orcid.security.AuthoritiesConstants;
 import org.orcid.security.SecurityUtils;
 import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -58,6 +57,8 @@ import io.github.jhipster.web.util.PaginationUtil;
 @RestController
 @RequestMapping("/api")
 public class AssertionServicesResource {
+    private final Logger log = LoggerFactory.getLogger(AssertionServicesResource.class);
+
     private static final String ENTITY_NAME = "affiliation";
 
     @Value("${jhipster.clientApp.name}")
@@ -150,15 +151,16 @@ public class AssertionServicesResource {
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, assertion.getId())).body(assertion);
     }
 
-    @PostMapping("/assertions")
+    @PostMapping("/assertion/upload")
     public ResponseEntity<String> uploadAssertions(@RequestParam("file") MultipartFile file) {
         String loggedInUser = getAuthenticatedUser();
-
+        JSONArray errors = new JSONArray();
+        Instant now = Instant.now();
         try (InputStream is = file.getInputStream();) {
             InputStreamReader isr = new InputStreamReader(is);
             Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
             List<Assertion> existingAssertions = assertionsRepository.findAllByOwnerId(loggedInUser);
-            List<Assertion> affiliationsToAdd = new ArrayList<Assertion>();
+            List<Assertion> assertionsToAdd = new ArrayList<Assertion>();
             Set<String> usersToAdd = new HashSet<String>();
             // Validate affiliations
             for (CSVRecord record : elements) {
@@ -166,24 +168,26 @@ public class AssertionServicesResource {
                     Assertion assertion = parseLine(record);
                     // Throw exception if found a duplicate
                     Assertion existingAssertion = getExistingAssertion(assertion, existingAssertions);
-                    // If the same affiliation exists, and, the put code for it
+                    // If the same assertion exists, and, the put code for it
                     // exists, check if it is an updated org
                     if (existingAssertion != null) {
                         // If something is updated in the aff, update the
                         // existing one in the DB
                         if (!StringUtils.isBlank(existingAssertion.getPutCode()) && isUpdated(assertion, existingAssertion)) {
-                            copyFieldsToUpdate(aff, existingAff);
-                            existingAff.setUpdated(true);
-                            affiliationService.save(existingAff);
+                            copyFieldsToUpdate(assertion, existingAssertion);
+                            existingAssertion.setUpdated(true);
+                            assertionsRepository.save(existingAssertion);
                         }
                     } else {
-                        aff.setAdminId(adminUser.getId());
+                        assertion.setOwnerId(loggedInUser);
+                        assertion.setCreated(now);
+                        assertion.setModified(now);
                         // Create the userInfo if needed
-                        if (!usersToAdd.contains(aff.getEmail())) {
-                            usersToAdd.add(aff.getEmail());
+                        if (!usersToAdd.contains(assertion.getEmail())) {
+                            usersToAdd.add(assertion.getEmail());
                         }
-                        affiliationsToAdd.add(aff);
-                        existingAffiliations.add(aff);
+                        assertionsToAdd.add(assertion);
+                        existingAssertions.add(assertion);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -195,17 +199,17 @@ public class AssertionServicesResource {
             }
 
             if (errors.length() == 0) {
-                // Create affiliations
-                for (Affiliation aff : affiliationsToAdd) {
-                    // Create the affiliation
-                    aff = affiliationService.insert(aff);
+                // Create assertions
+                for (Assertion a : assertionsToAdd) {
+                    // Create the assertion
+                    assertionsRepository.insert(a);
                 }
 
                 // Create users
                 for (String userEmail : usersToAdd) {
-                    if (!userInfoRepository.findOneByEmail(userEmail).isPresent()) {
+                    if (!orcidRecordRepository.findOneByEmail(userEmail).isPresent()) {
                         log.info("Creating UserInfo for email {}", usersToAdd);
-                        createUser(userEmail, adminUser);
+                        createOrcidRecord(userEmail, loggedInUser, now);
                     }
                 }
             }
@@ -394,5 +398,30 @@ public class AssertionServicesResource {
 
     private boolean equals(String a, String b) {
         return (a == null ? b == null : a.equals(b));
+    }
+
+    private void copyFieldsToUpdate(Assertion source, Assertion destination) {
+        // Update start date
+        destination.setStartYear(source.getStartYear());
+        destination.setStartMonth(source.getStartMonth());
+        destination.setStartDay(source.getStartDay());
+
+        // Update end date
+        destination.setEndYear(source.getEndYear());
+        destination.setEndMonth(source.getEndMonth());
+        destination.setEndDay(source.getEndDay());
+
+        // Update external identifiers
+        destination.setExternalId(source.getExternalId());
+        destination.setExternalIdType(source.getExternalIdType());
+        destination.setExternalIdUrl(source.getExternalIdUrl());
+
+        // Update organization
+        destination.setOrgCity(source.getOrgCity());
+        destination.setOrgCountry(source.getOrgCountry());
+        destination.setOrgName(source.getOrgName());
+        destination.setOrgRegion(source.getOrgRegion());
+        destination.setDisambiguatedOrgId(source.getDisambiguatedOrgId());
+        destination.setDisambiguationSource(source.getDisambiguationSource());
     }
 }
