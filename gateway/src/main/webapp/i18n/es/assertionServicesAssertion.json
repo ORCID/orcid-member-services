@@ -1,20 +1,29 @@
 {
   "gatewayApp": {
-    "assertionServicesAffiliation": {
+    "assertionServicesAssertion": {
       "home": {
-        "title": "Affiliations",
-        "createLabel": "Create a new Affiliation",
-        "createOrEditLabel": "Create or edit a Affiliation",
-        "notFound": "No Affiliation found"
+        "title": "Assertions",
+        "createLabel": "Crear nuevo Assertion",
+        "createOrEditLabel": "Crear o editar Assertion",
+        "notFound": "No Assertion found",
+        "uploadLabel": "Upload Assertions"
       },
       "delete": {
-        "question": "Are you sure you want to delete Affiliation {{ id }}?"
+        "question": "¿Seguro que quiere eliminar Assertion {{ id }}?"
       },
       "detail": {
-        "title": "Affiliation"
+        "title": "Assertion"
+      }, 
+      "import": {
+        "title": "Import Assertions",
+        "label": "Please select the CSV file to upload",
+        "filePath": "File path",
+        "errors": {
+          "label": "Please fix the following errors"	
+        }
       },
       "email": "Email",
-      "affiliationSection": "Affiliation Section",
+      "assertionSection": "Assertion Section",
       "departmentName": "Department Name",
       "roleTitle": "Role Title",
       "startYear": "Start Year",
@@ -41,10 +50,10 @@
     }
   },
   "assertionServicesApp": {
-    "assertionServicesAffiliation": {
-      "created": "A new Affiliation is created with identifier {{ param }}",
-      "updated": "A Affiliation is updated with identifier {{ param }}",
-      "deleted": "A Affiliation is deleted with identifier {{ param }}"
+    "assertionServicesAssertion": {
+      "created": "Un nuevo Assertion ha sido creado con el identificador {{ param }}",
+      "updated": "Un Assertion ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Assertion ha sido eliminado con el identificador {{ param }}"
     }
   }
 }
