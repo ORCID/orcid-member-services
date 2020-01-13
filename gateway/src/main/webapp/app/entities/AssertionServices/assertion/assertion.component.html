@@ -27,7 +27,7 @@
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="email"><span jhiTranslate="gatewayApp.assertionServicesAssertion.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="assertionSection"><span jhiTranslate="gatewayApp.assertionServicesAssertion.assertionSection">Assertion Section</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="affiliationSection"><span jhiTranslate="gatewayApp.assertionServicesAssertion.affiliationSection">Affiliation Section</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="departmentName"><span jhiTranslate="gatewayApp.assertionServicesAssertion.departmentName">Department Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="roleTitle"><span jhiTranslate="gatewayApp.assertionServicesAssertion.roleTitle">Role Title</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="startYear"><span jhiTranslate="gatewayApp.assertionServicesAssertion.startYear">Start Year</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -58,7 +58,7 @@
             <tr *ngFor="let assertion of assertions ;trackBy: trackId">
                 <td><a [routerLink]="['/assertion', assertion.id, 'view' ]">{{assertion.id}}</a></td>
                 <td>{{assertion.email}}</td>
-                <td jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.assertionSection}}">{{assertion.assertionSection}}</td>
+                <td jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.affiliationSection}}">{{assertion.affiliationSection}}</td>
                 <td>{{assertion.departmentName}}</td>
                 <td>{{assertion.roleTitle}}</td>
                 <td>{{assertion.startYear}}</td>
