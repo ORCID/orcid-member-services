@@ -1,4 +1,10 @@
-## Run with Docker
+# Run with Docker
+
+## Prerequisites
+
+Configure the orcid-mermber-services JHipster UAA services, as explained [here](README.md).
+
+## Configuration
 
 1. Install [Docker Desktop](https://docs.docker.com/v17.09/engine/installation/#desktop) and [Docker Compose](https://docs.docker.com/compose/install/)
 
