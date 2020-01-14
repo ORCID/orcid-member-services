@@ -99,18 +99,22 @@ public class AssertionServicesResource {
     }
 
     @GetMapping("/assertion/{id}")
-    public ResponseEntity<String> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
-        // TODO
+    public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
         String loggedInUser = getAuthenticatedUser();
 
-        ResponseEntity<String> userSettingsResponse = userSettingsClient.getUserSettings(loggedInUser);
-
-        JSONObject userSettings = new JSONObject(userSettingsResponse.getBody());
-        String firstName = userSettings.getString("firstName");
-        String lastName = userSettings.getString("lastName");
-        String salesforceId = userSettings.getString("salesforceId");
-
-        return ResponseEntity.ok().body(StringUtils.join("getAssertions", firstName, lastName, salesforceId));
+        Optional<Assertion> optional = assertionsRepository.findById(id);
+        
+        if(!optional.isPresent()) {
+            ResponseEntity.notFound();
+        }             
+        
+        Assertion a = optional.get();
+        
+        if(!loggedInUser.equals(a.getOwnerId())) {
+            throw new IllegalArgumentException("Invalid assertion id");
+        }
+        
+        return ResponseEntity.ok().body(optional.get());
     }
 
     @PutMapping("/assertion")
@@ -224,14 +228,21 @@ public class AssertionServicesResource {
     public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
         String loggedInUser = getAuthenticatedUser();
 
-        ResponseEntity<String> userSettingsResponse = userSettingsClient.getUserSettings(loggedInUser);
+        Optional<Assertion> optional = assertionsRepository.findById(id);
+        
+        if(!optional.isPresent()) {
+            ResponseEntity.notFound();
+        }             
+        
+        Assertion a = optional.get();
+        
+        if(!loggedInUser.equals(a.getOwnerId())) {
+            throw new IllegalArgumentException("Invalid assertion id");
+        }
 
-        JSONObject userSettings = new JSONObject(userSettingsResponse.getBody());
-        String firstName = userSettings.getString("firstName");
-        String lastName = userSettings.getString("lastName");
-        String salesforceId = userSettings.getString("salesforceId");
-
-        return ResponseEntity.ok().body(StringUtils.join("getAssertions", firstName, lastName, salesforceId));
+        assertionsRepository.deleteById(id);
+        
+        return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
     }
 
     private void createOrcidRecord(String email, String ownerId, Instant now) {
