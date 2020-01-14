@@ -157,7 +157,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             email: 'BBBBBB',
-            assertionSection: 'BBBBBB',
+            affiliationSection: 'BBBBBB',
             departmentName: 'BBBBBB',
             roleTitle: 'BBBBBB',
             startYear: 'BBBBBB',
