@@ -23,7 +23,7 @@ Create a `git` directory in your home folder, and clone the orcid-member-service
 
 ### Start the JHipster UAA services
 
-[JHipster UAA](https://www.jhipster.tech/using-uaa/) is the service we use to secure our member services, it consists on     three different applications:
+[JHipster UAA](https://www.jhipster.tech/using-uaa/) is the service we use to secure our member services, it consists on three different applications:
 
 - The JHipster [registry](https://github.com/jhipster/jhipster-registry)
 - The JHipster [gateway](https://www.jhipster.tech/api-gateway/)
@@ -55,7 +55,7 @@ So, the first thing we should do is starting the different JHipster services as 
     - Run `bash mvnw`
     - Wait for it to start
 
-At this point, all required services are up and running, time to start the `user-settings-service`
+At this point, all required services are up and running, time to start the `user-settings-service` and `assertion-services`
 
 ### Start the user-settings-service
 
@@ -242,6 +242,75 @@ curl -i -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX
 ```
 
 If successful, the server will respond with a `202 Acepted`, and, you can now get the user info again and confirm their grants have been updated.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Start the assertion-services
+
+The `assertion-services` is the service that will allow us to CUD assertions (affiliations) in ORCID records, using this microservice, you will be able to create, update or delete assertions associated with specific ORCID records.
+
+To start the `assertion-services`:
+
+- Open a new terminal 
+- cd orcid-member-services/assertion-services/
+- Run `bash mvnw`
+- Wait for it to start
+
+### Test it
+
+To test that the `assertion-services` is working as expected, we will go through the process of uploading an affiliation and wait until it get pushed to an ORCID record.
+
+#### Setup a new user
+
+We will access the `assertion-services` functionality through the JHipster gateway, and, to be able to use it, we will need a user with the `ASSERTION_SERVICE_ENABLED` authority enabled, so, lets create a new user:
+
+- Generate an access token as explained in [Create a user](#Create-a-user) section
+- Use that token to create a user with the `ASSERTION_SERVICE_ENABLED` authority enabled:
+```
+curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer <TOKEN>" -X POST --data '{"login":"test_user_1","email":"test_user_1@test.com", "firstName":"Angel", "lastName":"Montenegro", "password":"password123","authorities":["ROLE_USER","ASSERTION_SERVICE_ENABLED"],"salesforceId":"SF1", "parentSalesforceId":"PSF1"}'  http://localhost:8081/settings/api/user
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Run with Docker
 
