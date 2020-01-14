@@ -32,7 +32,7 @@ curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Aut
 
 #### Create an assertions file
 
-3. Assertions can be manually entered into the assertion service app, or, they can be uploaded using a CSV file, that contains the following format:
+Assertions can be manually entered into the assertion service app, or, they can be uploaded using a CSV file, that contains the following format:
 
  Column name | Description | Validation Rules
 --------------------|--------------------------|--------------------------
@@ -56,6 +56,16 @@ There is an example CSV file [here](./README/test.csv).
 
 #### Login to the gateway app
 
+![Login](./README/login.png)
+
 #### Upload the assertions file
 
+![Go to the assertions page](./README/go_to_assertions.png)
+
+![Open the upload dialog](./README/open_upload_dialog.png)
+
+![Choose a file](.//README/choose_file.png)
+
 #### Review the existing assertions
+
+![Show the existing assertions](./README/show_assertions.png)
