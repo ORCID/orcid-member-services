@@ -30,9 +30,31 @@ curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Aut
 
 ```
 
-#### Login to the gateway app
-
 #### Create an assertions file
+
+3. Assertions can be manually entered into the assertion service app, or, they can be uploaded using a CSV file, that contains the following format:
+
+ Column name | Description | Validation Rules
+--------------------|--------------------------|--------------------------
+ email | The email of the owner of the affiliation. | Required. Must be a valid email address. 
+ affiliation-section | The section of the ORCID record to which the affiliation should be added. | Required. Must be one of the following values: <ul><li>employment</li><li>education</li><li>qualification</li><li>invited-position</li><li>distinction</li><limembership></li><li>service</li></ul>
+department-name | The name of the department. | Optional. 4000 characters maximum. | 
+role-title | Role/title/degree. | Optional. 4000 characters maximum. | 
+start-date | The start date of the affiliation. | Optional. ISO 8601 date, with a least year specified, and at most day of month. Examples:<ul><li>2019</li><li>2019-02</li><li>2019-02-20</li></ul> | 
+end-date | The end date of the affiliation. | Required if start-date is specified. ISO 8601 date, with a least year specified, and at most day of month. Examples:  <ul> <li>2019</li> <li>2019-02</li> <li>2019-02-20</li> </ul> |
+org-name | The organization name | Required, 4000 characters |
+org-country | The organization country | Required, iso-3166-country |
+org-city | The organization city | Required, 4000 characters |
+org-region | The organization region | Optional, 4000 characters |
+disambiguated-organization-identifier | A persistent identifier for the organization that the affiliation is to. |   |
+disambiguation-source | The type of the organization persistent identifier. | Required if disambiguated-organization-identifier is specified. Must be one of the following values:  <ul> <li>GRID</li> <li>RINGGOLD</li> <li>FUNDREF</li> <li>LEI</li> </ul> |
+external-id | An identifier type used by the originating system | Optional.  One of existing external-id types - required if external-id-type is present |
+external-id-type | An identifier for this affiliation in the originating system | Optional - required if external-id is present |
+external-id-url | |
+
+There is an example CSV file [here](./README/test.csv).
+
+#### Login to the gateway app
 
 #### Upload the assertions file
 
