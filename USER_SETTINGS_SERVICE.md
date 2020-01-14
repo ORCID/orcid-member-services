@@ -1,4 +1,10 @@
-### Start the user-settings-service
+# User settings service
+
+## Prerequisites
+
+Configure the orcid-mermber-services JHipster UAA services, as explained [here](README.md).
+
+## Start the user-settings-service
 
 The `user-settings-service` is the user management micro service, it will keep information of user roles and will allow users to perform administrative stuff like resetting their password.
 
@@ -9,7 +15,7 @@ To start the `user-settings-service`:
 - Run `bash mvnw`
 - Wait for it to start
 
-### Test it
+## Test it
 
 To test that the `user-settings-service` is working as expected, we will create a user through it and then retrive the user information.
 
