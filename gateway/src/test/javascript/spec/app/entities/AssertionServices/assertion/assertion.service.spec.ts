@@ -6,15 +6,15 @@ import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { AffiliationService } from 'app/entities/AssertionServices/affiliation/affiliation.service';
-import { IAffiliation, Affiliation, AffiliationSection } from 'app/shared/model/AssertionServices/affiliation.model';
+import { AssertionService } from 'app/entities/AssertionServices/assertion/assertion.service';
+import { IAssertion, Assertion, AffiliationSection } from 'app/shared/model/AssertionServices/assertion.model';
 
 describe('Service Tests', () => {
-  describe('Affiliation Service', () => {
+  describe('Assertion Service', () => {
     let injector: TestBed;
-    let service: AffiliationService;
+    let service: AssertionService;
     let httpMock: HttpTestingController;
-    let elemDefault: IAffiliation;
+    let elemDefault: IAssertion;
     let expectedResult;
     let currentDate: moment.Moment;
     beforeEach(() => {
@@ -23,11 +23,11 @@ describe('Service Tests', () => {
       });
       expectedResult = {};
       injector = getTestBed();
-      service = injector.get(AffiliationService);
+      service = injector.get(AssertionService);
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Affiliation(
+      elemDefault = new Assertion(
         'ID',
         'AAAAAAA',
         AffiliationSection.EMPLOYMENT,
@@ -77,7 +77,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: elemDefault });
       });
 
-      it('should create a Affiliation', async () => {
+      it('should create a Assertion', async () => {
         const returnedFromService = Object.assign(
           {
             id: 'ID',
@@ -96,7 +96,7 @@ describe('Service Tests', () => {
           returnedFromService
         );
         service
-          .create(new Affiliation(null))
+          .create(new Assertion(null))
           .pipe(take(1))
           .subscribe(resp => (expectedResult = resp));
         const req = httpMock.expectOne({ method: 'POST' });
@@ -104,7 +104,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: expected });
       });
 
-      it('should update a Affiliation', async () => {
+      it('should update a Assertion', async () => {
         const returnedFromService = Object.assign(
           {
             email: 'BBBBBB',
@@ -153,7 +153,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: expected });
       });
 
-      it('should return a list of Affiliation', async () => {
+      it('should return a list of Assertion', async () => {
         const returnedFromService = Object.assign(
           {
             email: 'BBBBBB',
@@ -205,7 +205,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toContainEqual(expected);
       });
 
-      it('should delete a Affiliation', async () => {
+      it('should delete a Assertion', async () => {
         const rxPromise = service.delete('123').subscribe(resp => (expectedResult = resp.ok));
 
         const req = httpMock.expectOne({ method: 'DELETE' });
