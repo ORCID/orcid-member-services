@@ -65,9 +65,6 @@ public class AssertionServicesResource {
     private String applicationName;
 
     @Autowired
-    private UserSettingsClient userSettingsClient;
-
-    @Autowired
     private AssertionsRepository assertionsRepository;
 
     @Autowired
@@ -92,6 +89,8 @@ public class AssertionServicesResource {
             throws BadRequestAlertException, JSONException {
         String loggedInUserId = getAuthenticatedUser();
 
+        log.debug("REST request to fetch assertions from user {}", loggedInUserId);
+
         Page<Assertion> affiliations = assertionsRepository.findByOwnerId(loggedInUserId, pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
@@ -100,36 +99,48 @@ public class AssertionServicesResource {
 
     @GetMapping("/assertion/{id}")
     public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
-        String loggedInUser = getAuthenticatedUser();
+        String loggedInUserId = getAuthenticatedUser();
+
+        log.debug("REST request to fetch assertion {} from user {}", id, loggedInUserId);
 
         Optional<Assertion> optional = assertionsRepository.findById(id);
-        
-        if(!optional.isPresent()) {
+
+        if (!optional.isPresent()) {
             ResponseEntity.notFound();
-        }             
-        
+        }
+
         Assertion a = optional.get();
-        
-        if(!loggedInUser.equals(a.getOwnerId())) {
+
+        if (!loggedInUserId.equals(a.getOwnerId())) {
             throw new IllegalArgumentException("Invalid assertion id");
         }
-        
+
         return ResponseEntity.ok().body(optional.get());
     }
 
     @PutMapping("/assertion")
-    public ResponseEntity<String> updateAssertion(@RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
-        // TODO
-        String loggedInUser = getAuthenticatedUser();
+    public ResponseEntity<Assertion> updateAssertion(@RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
+        String loggedInUserId = getAuthenticatedUser();
 
-        ResponseEntity<String> userSettingsResponse = userSettingsClient.getUserSettings(loggedInUser);
+        log.debug("REST request to update assertion : {}", assertion);
 
-        JSONObject userSettings = new JSONObject(userSettingsResponse.getBody());
-        String firstName = userSettings.getString("firstName");
-        String lastName = userSettings.getString("lastName");
-        String salesforceId = userSettings.getString("salesforceId");
+        Optional<Assertion> optional = assertionsRepository.findById(assertion.getId());
 
-        return ResponseEntity.ok().body(StringUtils.join("getAssertions", firstName, lastName, salesforceId));
+        if (!optional.isPresent()) {
+            ResponseEntity.notFound();
+        }
+
+        Assertion existingAssertion = optional.get();
+
+        if (!loggedInUserId.equals(existingAssertion.getOwnerId())) {
+            throw new IllegalArgumentException("Invalid assertion id");
+        }
+
+        copyFieldsToUpdate(assertion, existingAssertion);
+
+        assertionsRepository.save(existingAssertion);
+
+        return ResponseEntity.ok().body(existingAssertion);
     }
 
     @PostMapping("/assertion")
@@ -229,19 +240,19 @@ public class AssertionServicesResource {
         String loggedInUser = getAuthenticatedUser();
 
         Optional<Assertion> optional = assertionsRepository.findById(id);
-        
-        if(!optional.isPresent()) {
+
+        if (!optional.isPresent()) {
             ResponseEntity.notFound();
-        }             
-        
+        }
+
         Assertion a = optional.get();
-        
-        if(!loggedInUser.equals(a.getOwnerId())) {
+
+        if (!loggedInUser.equals(a.getOwnerId())) {
             throw new IllegalArgumentException("Invalid assertion id");
         }
 
         assertionsRepository.deleteById(id);
-        
+
         return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
     }
 
