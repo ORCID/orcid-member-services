@@ -26,6 +26,7 @@ import org.orcid.user.domain.MemberSettings;
 import org.orcid.user.domain.UserSettings;
 import org.orcid.user.repository.MemberSettingsRepository;
 import org.orcid.user.repository.UserSettingsRepository;
+import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
@@ -85,9 +86,9 @@ public class UserSettingsResource {
     }
 
     /**
-     * {@code POST  /users} : Create a list of users.
+     * {@code POST  /user/upload} : Create a list of users.
      *
-     * @param usersFile:
+     * @param file:
      *            file containing the users to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and
      *         with a map indicating if each user was created or not, or with
@@ -96,7 +97,8 @@ public class UserSettingsResource {
      */
     @PostMapping("/user/upload")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<String> createUsers(@RequestParam("file") MultipartFile file) throws Throwable {        
+    public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) throws Throwable {     
+        log.debug("Uploading users settings CSV");
         JSONArray errors = new JSONArray();
         try (InputStream is = file.getInputStream();) {            
             InputStreamReader isr = new InputStreamReader(is);
@@ -113,7 +115,7 @@ public class UserSettingsResource {
                         errors.put(error);
                     } else {
                         JSONObject obj = createUserOnUAA(userDTO);
-                        UserSettings us = createUserSettings(obj, line.get("salesforceId"), false);
+                        createUserSettings(obj, line.get("salesforceId"), false);
                         createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());                        
                     }
                 } catch (Exception e) {
@@ -306,7 +308,7 @@ public class UserSettingsResource {
 
     private UserSettings createUserSettings(JSONObject obj, String salesforceId, Boolean mainContact) throws JSONException {
         String userLogin = obj.getString("login");
-        String createdBy = obj.getString("createdBy");
+        String createdBy = SecurityUtils.getAuthenticatedUser();
         Instant createdDate = Instant.parse(obj.getString("createdDate"));
         String lastModifiedBy = obj.getString("lastModifiedBy");
         Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
@@ -330,7 +332,7 @@ public class UserSettingsResource {
         // Check if member settings already exists
         if (!existingMemberSettings.isPresent()) {
             log.info("Creating MemberSettings with Salesforce Id {}", salesforceId);
-            String createdBy = obj.getString("createdBy");
+            String createdBy = SecurityUtils.getAuthenticatedUser();
             Instant createdDate = Instant.parse(obj.getString("createdDate"));
             String lastModifiedBy = obj.getString("lastModifiedBy");
             Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));

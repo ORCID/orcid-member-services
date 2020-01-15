@@ -5,7 +5,8 @@
         "title": "Member Settings",
         "createLabel": "Crear nuevo Member Settings",
         "createOrEditLabel": "Crear o editar Member Settings",
-        "notFound": "No Member Settings found"
+        "notFound": "No Member Settings found",
+        "uploadLabel": "Upload Member Settings"
       },
       "delete": {
         "question": "¿Seguro que quiere eliminar Member Settings {{ id }}?"
