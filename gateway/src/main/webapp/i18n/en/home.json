@@ -1,5 +1,6 @@
 {
   "home": {
+    "title": "ORCID Member Portal",
     "alert": {
       "thisSiteIsFor": "This site is for administrators of ORCID member organizations and is separate from the ORCID registry. Go to the ORCID Registry to",
       "signIntoOrcid": "sign into your ORCID record"
