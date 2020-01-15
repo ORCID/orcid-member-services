@@ -5,27 +5,27 @@ import { Observable, of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { AffiliationDeleteDialogComponent } from 'app/entities/AssertionServices/affiliation/affiliation-delete-dialog.component';
-import { AffiliationService } from 'app/entities/AssertionServices/affiliation/affiliation.service';
+import { AssertionDeleteDialogComponent } from 'app/entities/AssertionServices/assertion/assertion-delete-dialog.component';
+import { AssertionService } from 'app/entities/AssertionServices/assertion/assertion.service';
 
 describe('Component Tests', () => {
-  describe('Affiliation Management Delete Component', () => {
-    let comp: AffiliationDeleteDialogComponent;
-    let fixture: ComponentFixture<AffiliationDeleteDialogComponent>;
-    let service: AffiliationService;
+  describe('Assertion Management Delete Component', () => {
+    let comp: AssertionDeleteDialogComponent;
+    let fixture: ComponentFixture<AssertionDeleteDialogComponent>;
+    let service: AssertionService;
     let mockEventManager: any;
     let mockActiveModal: any;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [GatewayTestModule],
-        declarations: [AffiliationDeleteDialogComponent]
+        declarations: [AssertionDeleteDialogComponent]
       })
-        .overrideTemplate(AffiliationDeleteDialogComponent, '')
+        .overrideTemplate(AssertionDeleteDialogComponent, '')
         .compileComponents();
-      fixture = TestBed.createComponent(AffiliationDeleteDialogComponent);
+      fixture = TestBed.createComponent(AssertionDeleteDialogComponent);
       comp = fixture.componentInstance;
-      service = fixture.debugElement.injector.get(AffiliationService);
+      service = fixture.debugElement.injector.get(AssertionService);
       mockEventManager = fixture.debugElement.injector.get(JhiEventManager);
       mockActiveModal = fixture.debugElement.injector.get(NgbActiveModal);
     });

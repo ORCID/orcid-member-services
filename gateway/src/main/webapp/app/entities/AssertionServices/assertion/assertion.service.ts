@@ -7,48 +7,48 @@ import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
-import { IAffiliation } from 'app/shared/model/AssertionServices/affiliation.model';
+import { IAssertion } from 'app/shared/model/AssertionServices/assertion.model';
 
-type EntityResponseType = HttpResponse<IAffiliation>;
-type EntityArrayResponseType = HttpResponse<IAffiliation[]>;
+type EntityResponseType = HttpResponse<IAssertion>;
+type EntityArrayResponseType = HttpResponse<IAssertion[]>;
 
 @Injectable({ providedIn: 'root' })
-export class AffiliationService {
+export class AssertionService {
   public resourceUrl = SERVER_API_URL + 'services/assertionservices/api/assertion';
 
   constructor(protected http: HttpClient) {}
 
-  create(affiliation: IAffiliation): Observable<EntityResponseType> {
-    const copy = this.convertDateFromClient(affiliation);
+  create(assertion: IAssertion): Observable<EntityResponseType> {
+    const copy = this.convertDateFromClient(assertion);
     return this.http
-      .post<IAffiliation>(this.resourceUrl, copy, { observe: 'response' })
+      .post<IAssertion>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  upload(affiliation: IAffiliation): Observable<EntityResponseType> {
-      const copy = this.convertDateFromClient(affiliation);
+  upload(assertion: IAssertion): Observable<EntityResponseType> {
+      const copy = this.convertDateFromClient(assertion);
       return this.http
-        .post<IAffiliation>(this.resourceUrl, copy, { observe: 'response' })
+        .post<IAssertion>(this.resourceUrl, copy, { observe: 'response' })
         .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
   
-  update(affiliation: IAffiliation): Observable<EntityResponseType> {
-    const copy = this.convertDateFromClient(affiliation);
+  update(assertion: IAssertion): Observable<EntityResponseType> {
+    const copy = this.convertDateFromClient(assertion);
     return this.http
-      .put<IAffiliation>(this.resourceUrl, copy, { observe: 'response' })
+      .put<IAssertion>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   find(id: string): Observable<EntityResponseType> {
     return this.http
-      .get<IAffiliation>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .get<IAssertion>(`${this.resourceUrl}/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IAffiliation[]>(this.resourceUrl + 's', { params: options, observe: 'response' })
+      .get<IAssertion[]>(this.resourceUrl + 's', { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
@@ -56,12 +56,12 @@ export class AffiliationService {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  protected convertDateFromClient(affiliation: IAffiliation): IAffiliation {
-    const copy: IAffiliation = Object.assign({}, affiliation, {
-      created: affiliation.created != null && affiliation.created.isValid() ? affiliation.created.toJSON() : null,
-      modified: affiliation.modified != null && affiliation.modified.isValid() ? affiliation.modified.toJSON() : null,
+  protected convertDateFromClient(assertion: IAssertion): IAssertion {
+    const copy: IAssertion = Object.assign({}, assertion, {
+      created: assertion.created != null && assertion.created.isValid() ? assertion.created.toJSON() : null,
+      modified: assertion.modified != null && assertion.modified.isValid() ? assertion.modified.toJSON() : null,
       deletedFromORCID:
-        affiliation.deletedFromORCID != null && affiliation.deletedFromORCID.isValid() ? affiliation.deletedFromORCID.toJSON() : null
+        assertion.deletedFromORCID != null && assertion.deletedFromORCID.isValid() ? assertion.deletedFromORCID.toJSON() : null
     });
     return copy;
   }
@@ -77,10 +77,10 @@ export class AffiliationService {
 
   protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
     if (res.body) {
-      res.body.forEach((affiliation: IAffiliation) => {
-        affiliation.created = affiliation.created != null ? moment(affiliation.created) : null;
-        affiliation.modified = affiliation.modified != null ? moment(affiliation.modified) : null;
-        affiliation.deletedFromORCID = affiliation.deletedFromORCID != null ? moment(affiliation.deletedFromORCID) : null;
+      res.body.forEach((assertion: IAssertion) => {
+        assertion.created = assertion.created != null ? moment(assertion.created) : null;
+        assertion.modified = assertion.modified != null ? moment(assertion.modified) : null;
+        assertion.deletedFromORCID = assertion.deletedFromORCID != null ? moment(assertion.deletedFromORCID) : null;
       });
     }
     return res;

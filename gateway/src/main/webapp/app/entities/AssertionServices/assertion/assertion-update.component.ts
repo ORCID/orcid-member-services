@@ -5,14 +5,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { IAffiliation, Affiliation } from 'app/shared/model/AssertionServices/affiliation.model';
-import { AffiliationService } from './affiliation.service';
+import { IAssertion, Assertion } from 'app/shared/model/AssertionServices/assertion.model';
+import { AssertionService } from './assertion.service';
 
 @Component({
-  selector: 'jhi-affiliation-update',
-  templateUrl: './affiliation-update.component.html'
+  selector: 'jhi-assertion-update',
+  templateUrl: './assertion-update.component.html'
 })
-export class AffiliationUpdateComponent implements OnInit {
+export class AssertionUpdateComponent implements OnInit {
   isSaving: boolean;
 
   editForm = this.fb.group({
@@ -44,43 +44,43 @@ export class AffiliationUpdateComponent implements OnInit {
     adminId: [null, [Validators.required]]
   });
 
-  constructor(protected affiliationService: AffiliationService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(protected assertionService: AssertionService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
 
   ngOnInit() {
     this.isSaving = false;
-    this.activatedRoute.data.subscribe(({ affiliation }) => {
-      this.updateForm(affiliation);
+    this.activatedRoute.data.subscribe(({ assertion }) => {
+      this.updateForm(assertion);
     });
   }
 
-  updateForm(affiliation: IAffiliation) {
+  updateForm(assertion: IAssertion) {
     this.editForm.patchValue({
-      id: affiliation.id,
-      email: affiliation.email,
-      affiliationSection: affiliation.affiliationSection,
-      departmentName: affiliation.departmentName,
-      roleTitle: affiliation.roleTitle,
-      startYear: affiliation.startYear,
-      startMonth: affiliation.startMonth,
-      startDay: affiliation.startDay,
-      endYear: affiliation.endYear,
-      endMonth: affiliation.endMonth,
-      endDay: affiliation.endDay,
-      orgName: affiliation.orgName,
-      orgCountry: affiliation.orgCountry,
-      orgCity: affiliation.orgCity,
-      orgRegion: affiliation.orgRegion,
-      disambiguatedOrgId: affiliation.disambiguatedOrgId,
-      disambiguationSource: affiliation.disambiguationSource,
-      externalId: affiliation.externalId,
-      externalIdType: affiliation.externalIdType,
-      externalIdUrl: affiliation.externalIdUrl,
-      putCode: affiliation.putCode,
-      created: affiliation.created != null ? affiliation.created.format(DATE_TIME_FORMAT) : null,
-      modified: affiliation.modified != null ? affiliation.modified.format(DATE_TIME_FORMAT) : null,
-      deletedFromORCID: affiliation.deletedFromORCID != null ? affiliation.deletedFromORCID.format(DATE_TIME_FORMAT) : null,
-      sent: affiliation.sent,
-      adminId: affiliation.adminId
+      id: assertion.id,
+      email: assertion.email,
+      affiliationSection: assertion.affiliationSection,
+      departmentName: assertion.departmentName,
+      roleTitle: assertion.roleTitle,
+      startYear: assertion.startYear,
+      startMonth: assertion.startMonth,
+      startDay: assertion.startDay,
+      endYear: assertion.endYear,
+      endMonth: assertion.endMonth,
+      endDay: assertion.endDay,
+      orgName: assertion.orgName,
+      orgCountry: assertion.orgCountry,
+      orgCity: assertion.orgCity,
+      orgRegion: assertion.orgRegion,
+      disambiguatedOrgId: assertion.disambiguatedOrgId,
+      disambiguationSource: assertion.disambiguationSource,
+      externalId: assertion.externalId,
+      externalIdType: assertion.externalIdType,
+      externalIdUrl: assertion.externalIdUrl,
+      putCode: assertion.putCode,
+      created: assertion.created != null ? assertion.created.format(DATE_TIME_FORMAT) : null,
+      modified: assertion.modified != null ? assertion.modified.format(DATE_TIME_FORMAT) : null,
+      deletedFromORCID: assertion.deletedFromORCID != null ? assertion.deletedFromORCID.format(DATE_TIME_FORMAT) : null,
+      sent: assertion.sent,
+      adminId: assertion.adminId
     });
   }
 
@@ -90,17 +90,17 @@ export class AffiliationUpdateComponent implements OnInit {
 
   save() {
     this.isSaving = true;
-    const affiliation = this.createFromForm();
-    if (affiliation.id !== undefined) {
-      this.subscribeToSaveResponse(this.affiliationService.update(affiliation));
+    const assertion = this.createFromForm();
+    if (assertion.id !== undefined) {
+      this.subscribeToSaveResponse(this.assertionService.update(assertion));
     } else {
-      this.subscribeToSaveResponse(this.affiliationService.create(affiliation));
+      this.subscribeToSaveResponse(this.assertionService.create(assertion));
     }
   }
 
-  private createFromForm(): IAffiliation {
+  private createFromForm(): IAssertion {
     return {
-      ...new Affiliation(),
+      ...new Assertion(),
       id: this.editForm.get(['id']).value,
       email: this.editForm.get(['email']).value,
       affiliationSection: this.editForm.get(['affiliationSection']).value,
@@ -133,7 +133,7 @@ export class AffiliationUpdateComponent implements OnInit {
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IAffiliation>>) {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IAssertion>>) {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 

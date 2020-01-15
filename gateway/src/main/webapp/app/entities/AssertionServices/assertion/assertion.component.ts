@@ -5,19 +5,19 @@ import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { IAffiliation } from 'app/shared/model/AssertionServices/affiliation.model';
+import { IAssertion } from 'app/shared/model/AssertionServices/assertion.model';
 import { AccountService } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
-import { AffiliationService } from './affiliation.service';
+import { AssertionService } from './assertion.service';
 
 @Component({
-  selector: 'jhi-affiliation',
-  templateUrl: './affiliation.component.html'
+  selector: 'jhi-assertion',
+  templateUrl: './assertion.component.html'
 })
-export class AffiliationComponent implements OnInit, OnDestroy {
+export class AssertionComponent implements OnInit, OnDestroy {
   currentAccount: any;
-  affiliations: IAffiliation[];
+  assertions: IAssertion[];
   error: any;
   success: any;
   eventSubscriber: Subscription;
@@ -31,7 +31,7 @@ export class AffiliationComponent implements OnInit, OnDestroy {
   reverse: any;
 
   constructor(
-    protected affiliationService: AffiliationService,
+    protected assertionService: AssertionService,
     protected parseLinks: JhiParseLinks,
     protected jhiAlertService: JhiAlertService,
     protected accountService: AccountService,
@@ -49,14 +49,14 @@ export class AffiliationComponent implements OnInit, OnDestroy {
   }
 
   loadAll() {
-    this.affiliationService
+    this.assertionService
       .query({
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort()
       })
       .subscribe(
-        (res: HttpResponse<IAffiliation[]>) => this.paginateAffiliations(res.body, res.headers),
+        (res: HttpResponse<IAssertion[]>) => this.paginateAssertions(res.body, res.headers),
         (res: HttpErrorResponse) => this.onError(res.message)
       );
   }
@@ -69,7 +69,7 @@ export class AffiliationComponent implements OnInit, OnDestroy {
   }
 
   transition() {
-    this.router.navigate(['/affiliation'], {
+    this.router.navigate(['/assertion'], {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
@@ -82,7 +82,7 @@ export class AffiliationComponent implements OnInit, OnDestroy {
   clear() {
     this.page = 0;
     this.router.navigate([
-      '/affiliation',
+      '/assertion',
       {
         page: this.page,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
@@ -96,19 +96,19 @@ export class AffiliationComponent implements OnInit, OnDestroy {
     this.accountService.identity().then(account => {
       this.currentAccount = account;
     });
-    this.registerChangeInAffiliations();
+    this.registerChangeInAssertions();
   }
 
   ngOnDestroy() {
     this.eventManager.destroy(this.eventSubscriber);
   }
 
-  trackId(index: number, item: IAffiliation) {
+  trackId(index: number, item: IAssertion) {
     return item.id;
   }
 
-  registerChangeInAffiliations() {
-    this.eventSubscriber = this.eventManager.subscribe('affiliationListModification', response => this.loadAll());
+  registerChangeInAssertions() {
+    this.eventSubscriber = this.eventManager.subscribe('assertionListModification', response => this.loadAll());
   }
 
   sort() {
@@ -119,10 +119,10 @@ export class AffiliationComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  protected paginateAffiliations(data: IAffiliation[], headers: HttpHeaders) {
+  protected paginateAssertions(data: IAssertion[], headers: HttpHeaders) {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-    this.affiliations = data;
+    this.assertions = data;
   }
 
   protected onError(errorMessage: string) {

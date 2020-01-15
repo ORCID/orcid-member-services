@@ -5,34 +5,34 @@ import { FormBuilder } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { AffiliationUpdateComponent } from 'app/entities/AssertionServices/affiliation/affiliation-update.component';
-import { AffiliationService } from 'app/entities/AssertionServices/affiliation/affiliation.service';
-import { Affiliation } from 'app/shared/model/AssertionServices/affiliation.model';
+import { AssertionUpdateComponent } from 'app/entities/AssertionServices/assertion/assertion-update.component';
+import { AssertionService } from 'app/entities/AssertionServices/assertion/assertion.service';
+import { Assertion } from 'app/shared/model/AssertionServices/assertion.model';
 
 describe('Component Tests', () => {
-  describe('Affiliation Management Update Component', () => {
-    let comp: AffiliationUpdateComponent;
-    let fixture: ComponentFixture<AffiliationUpdateComponent>;
-    let service: AffiliationService;
+  describe('Assertion Management Update Component', () => {
+    let comp: AssertionUpdateComponent;
+    let fixture: ComponentFixture<AssertionUpdateComponent>;
+    let service: AssertionService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [GatewayTestModule],
-        declarations: [AffiliationUpdateComponent],
+        declarations: [AssertionUpdateComponent],
         providers: [FormBuilder]
       })
-        .overrideTemplate(AffiliationUpdateComponent, '')
+        .overrideTemplate(AssertionUpdateComponent, '')
         .compileComponents();
 
-      fixture = TestBed.createComponent(AffiliationUpdateComponent);
+      fixture = TestBed.createComponent(AssertionUpdateComponent);
       comp = fixture.componentInstance;
-      service = fixture.debugElement.injector.get(AffiliationService);
+      service = fixture.debugElement.injector.get(AssertionService);
     });
 
     describe('save', () => {
       it('Should call update service on save for existing entity', fakeAsync(() => {
         // GIVEN
-        const entity = new Affiliation('123');
+        const entity = new Assertion('123');
         spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
         comp.updateForm(entity);
         // WHEN
@@ -46,7 +46,7 @@ describe('Component Tests', () => {
 
       it('Should call create service on save for new entity', fakeAsync(() => {
         // GIVEN
-        const entity = new Affiliation();
+        const entity = new Assertion();
         spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
         comp.updateForm(entity);
         // WHEN
