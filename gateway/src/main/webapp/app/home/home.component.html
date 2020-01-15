@@ -1,15 +1,15 @@
 <div class="row">
     <div class="col-md-12">
-        <div class="alert alert-info mt-3">
-            <span jhiTranslate="home.alert.thisSiteIsFor">This site is for administrators of ORCID member organizations and is separate from the ORCID registry. Go to the ORCID Registry to</span>&nbsp;
-            <a jhiTranslate="home.alert.signIntoOrcid" class="alert-link" href="https://orcid.org/signin">sign into your ORCID record</a></span>
-        </div>
         <div [ngSwitch]="isAuthenticated()">
-            <div class="alert alert-success" *ngSwitchCase="true">
+            <div class="alert alert-success mt-3" *ngSwitchCase="true">
                 <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message"
                     [translateValues]="{username: account.login}"> You are logged in as user "{{account.login}}". </span>
             </div>
-            <div *ngSwitchCase="false" class="mt-5">
+            <div *ngSwitchCase="false">
+                <div class="alert alert-info mt-3 mb-5">
+                    <span jhiTranslate="home.alert.thisSiteIsFor">This site is for administrators of ORCID member organizations and is separate from the ORCID registry. Go to the ORCID Registry to</span>&nbsp;
+                    <a jhiTranslate="home.alert.signIntoOrcid" class="alert-link" href="https://orcid.org/signin">sign into your ORCID record</a></span>
+                </div>
                 <jhi-login-modal></jhi-login-modal>
             </div>
         </div>
