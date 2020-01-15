@@ -10,7 +10,7 @@ export const enum AffiliationSection {
   SERVICE = 'SERVICE'
 }
 
-export interface IAffiliation {
+export interface IAssertion {
   id?: string;
   email?: string;
   affiliationSection?: AffiliationSection;
@@ -39,7 +39,7 @@ export interface IAffiliation {
   adminId?: string;
 }
 
-export class Affiliation implements IAffiliation {
+export class Assertion implements IAssertion {
   constructor(
     public id?: string,
     public email?: string,

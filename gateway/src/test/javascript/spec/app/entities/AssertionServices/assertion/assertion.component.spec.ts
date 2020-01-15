@@ -5,20 +5,20 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Data } from '@angular/router';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { AffiliationComponent } from 'app/entities/AssertionServices/affiliation/affiliation.component';
-import { AffiliationService } from 'app/entities/AssertionServices/affiliation/affiliation.service';
-import { Affiliation } from 'app/shared/model/AssertionServices/affiliation.model';
+import { AssertionComponent } from 'app/entities/AssertionServices/assertion/assertion.component';
+import { AssertionService } from 'app/entities/AssertionServices/assertion/assertion.service';
+import { Assertion } from 'app/shared/model/AssertionServices/assertion.model';
 
 describe('Component Tests', () => {
-  describe('Affiliation Management Component', () => {
-    let comp: AffiliationComponent;
-    let fixture: ComponentFixture<AffiliationComponent>;
-    let service: AffiliationService;
+  describe('Assertion Management Component', () => {
+    let comp: AssertionComponent;
+    let fixture: ComponentFixture<AssertionComponent>;
+    let service: AssertionService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [GatewayTestModule],
-        declarations: [AffiliationComponent],
+        declarations: [AssertionComponent],
         providers: [
           {
             provide: ActivatedRoute,
@@ -37,12 +37,12 @@ describe('Component Tests', () => {
           }
         ]
       })
-        .overrideTemplate(AffiliationComponent, '')
+        .overrideTemplate(AssertionComponent, '')
         .compileComponents();
 
-      fixture = TestBed.createComponent(AffiliationComponent);
+      fixture = TestBed.createComponent(AssertionComponent);
       comp = fixture.componentInstance;
-      service = fixture.debugElement.injector.get(AffiliationService);
+      service = fixture.debugElement.injector.get(AssertionService);
     });
 
     it('Should call load all on init', () => {
@@ -51,7 +51,7 @@ describe('Component Tests', () => {
       spyOn(service, 'query').and.returnValue(
         of(
           new HttpResponse({
-            body: [new Affiliation('123')],
+            body: [new Assertion('123')],
             headers
           })
         )
@@ -62,7 +62,7 @@ describe('Component Tests', () => {
 
       // THEN
       expect(service.query).toHaveBeenCalled();
-      expect(comp.affiliations[0]).toEqual(jasmine.objectContaining({ id: '123' }));
+      expect(comp.assertions[0]).toEqual(jasmine.objectContaining({ id: '123' }));
     });
 
     it('should load a page', () => {
@@ -71,7 +71,7 @@ describe('Component Tests', () => {
       spyOn(service, 'query').and.returnValue(
         of(
           new HttpResponse({
-            body: [new Affiliation('123')],
+            body: [new Assertion('123')],
             headers
           })
         )
@@ -82,7 +82,7 @@ describe('Component Tests', () => {
 
       // THEN
       expect(service.query).toHaveBeenCalled();
-      expect(comp.affiliations[0]).toEqual(jasmine.objectContaining({ id: '123' }));
+      expect(comp.assertions[0]).toEqual(jasmine.objectContaining({ id: '123' }));
     });
 
     it('should not load a page is the page is the same as the previous page', () => {
@@ -101,7 +101,7 @@ describe('Component Tests', () => {
       spyOn(service, 'query').and.returnValue(
         of(
           new HttpResponse({
-            body: [new Affiliation('123')],
+            body: [new Assertion('123')],
             headers
           })
         )
@@ -114,7 +114,7 @@ describe('Component Tests', () => {
       // THEN
       expect(comp.page).toEqual(0);
       expect(service.query).toHaveBeenCalledTimes(2);
-      expect(comp.affiliations[0]).toEqual(jasmine.objectContaining({ id: '123' }));
+      expect(comp.assertions[0]).toEqual(jasmine.objectContaining({ id: '123' }));
     });
     it('should calculate the sort attribute for an id', () => {
       // WHEN

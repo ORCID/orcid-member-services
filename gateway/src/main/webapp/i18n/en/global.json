@@ -9,7 +9,7 @@
         "main": "Entities",
         "userSettingsServiceUserSettings": "User Settings",
         "userSettingsServiceMemberSettings": "Member Settings",
-        "assertionServicesAffiliation": "Affiliation",
+        "assertionServicesAssertion": "Assertion",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
