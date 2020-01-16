@@ -1,4 +1,5 @@
 export * from './member-settings.service';
+export * from './member-settings-import-dialog.component';
 export * from './member-settings-update.component';
 export * from './member-settings-delete-dialog.component';
 export * from './member-settings-detail.component';

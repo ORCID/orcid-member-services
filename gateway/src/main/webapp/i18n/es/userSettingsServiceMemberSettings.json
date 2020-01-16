@@ -5,7 +5,8 @@
         "title": "Member Settings",
         "createLabel": "Crear nuevo Member Settings",
         "createOrEditLabel": "Crear o editar Member Settings",
-        "notFound": "No Member Settings found"
+        "notFound": "No Member Settings found",
+        "uploadLabel": "Upload Member Settings"
       },
       "delete": {
         "question": "¿Seguro que quiere eliminar Member Settings {{ id }}?"
@@ -13,6 +14,14 @@
       "detail": {
         "title": "Member Settings"
       },
+      "import": {
+        "title": "Member Settings",
+        "label": "Please select the CSV file to upload",
+        "filePath": "File path",
+        "errors": {
+          "label": "Please fix the following errors"	
+        }
+       },
       "clientId": "Client Id",
       "clientSecret": "Client Secret",
       "salesforceId": "Salesforce Id",
