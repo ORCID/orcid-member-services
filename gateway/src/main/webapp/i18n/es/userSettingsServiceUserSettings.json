@@ -5,7 +5,8 @@
         "title": "User Settings",
         "createLabel": "Crear nuevo User Settings",
         "createOrEditLabel": "Crear o editar User Settings",
-        "notFound": "No User Settings found"
+        "notFound": "No User Settings found",
+        "uploadLabel": "Upload User Settings"
       },
       "delete": {
         "question": "¿Seguro que quiere eliminar User Settings {{ id }}?"
@@ -13,6 +14,15 @@
       "detail": {
         "title": "User Settings"
       },
+      "import": {
+        "title": "User Settings",
+        "label": "Please select the CSV file to upload",
+        "filePath": "File path",
+        "errors": {
+          "label": "Please fix the following errors"	
+        }
+       },
+      "confirm_password": "Confirm password",
       "login": "Login",
       "email": "Email",
       "password": "Password",
