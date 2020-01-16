@@ -20,9 +20,7 @@ public class UserDTO implements Serializable {
     private String firstName;
     private String firstNameError;
     private String lastName;
-    private String lastNameError;
-    private String email;
-    private String emailError;
+    private String lastNameError;    
     private List<String> authorities;
     private String authoritiesError;
     private Boolean mainContact;
@@ -78,14 +76,6 @@ public class UserDTO implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public List<String> getAuthorities() {
@@ -184,14 +174,6 @@ public class UserDTO implements Serializable {
         this.lastNameError = lastNameError;
     }
 
-    public String getEmailError() {
-        return emailError;
-    }
-
-    public void setEmailError(String emailError) {
-        this.emailError = emailError;
-    }
-
     public String getAuthoritiesError() {
         return authoritiesError;
     }
@@ -223,7 +205,6 @@ public class UserDTO implements Serializable {
         result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
         result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
         result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((isConsortiumLead == null) ? 0 : isConsortiumLead.hashCode());
@@ -261,12 +242,7 @@ public class UserDTO implements Serializable {
             if (other.createdDate != null)
                 return false;
         } else if (!createdDate.equals(other.createdDate))
-            return false;
-        if (email == null) {
-            if (other.email != null)
-                return false;
-        } else if (!email.equals(other.email))
-            return false;
+            return false;        
         if (firstName == null) {
             if (other.firstName != null)
                 return false;
@@ -327,7 +303,7 @@ public class UserDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "UserDTO [id=" + id + ", login=" + login + ", password=" + password + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+        return "UserDTO [id=" + id + ", login=" + login + ", password=" + password + ", firstName=" + firstName + ", lastName=" + lastName 
                 + ", authorities=" + authorities + ", mainContact=" + mainContact + ", salesforceId=" + salesforceId + ", parentSalesforceId=" + parentSalesforceId
                 + ", isConsortiumLead=" + isConsortiumLead + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy
                 + ", lastModifiedDate=" + lastModifiedDate + "]";
