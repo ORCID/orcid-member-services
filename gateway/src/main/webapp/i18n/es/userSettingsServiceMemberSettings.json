@@ -14,6 +14,14 @@
       "detail": {
         "title": "Member Settings"
       },
+      "import": {
+        "title": "Member Settings",
+        "label": "Please select the CSV file to upload",
+        "filePath": "File path",
+        "errors": {
+          "label": "Please fix the following errors"	
+        }
+       },
       "clientId": "Client Id",
       "clientSecret": "Client Secret",
       "salesforceId": "Salesforce Id",
