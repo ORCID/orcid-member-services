@@ -103,8 +103,7 @@ public class MemberSettingsResourceIT {
      */
     public static MemberSettings createEntity() {
         MemberSettings memberSettings = new MemberSettings()
-            .clientId(DEFAULT_CLIENT_ID)
-            .clientSecret(DEFAULT_CLIENT_SECRET)
+            .clientId(DEFAULT_CLIENT_ID)            
             .salesforceId(DEFAULT_SALESFORCE_ID)
             .parentSalesforceId(DEFAULT_PARENT_SALESFORCE_ID)
             .assertionServiceEnabled(DEFAULT_ASSERTION_SERVICE_ENABLED)
@@ -123,7 +122,6 @@ public class MemberSettingsResourceIT {
     public static MemberSettings createUpdatedEntity() {
         MemberSettings memberSettings = new MemberSettings()
             .clientId(UPDATED_CLIENT_ID)
-            .clientSecret(UPDATED_CLIENT_SECRET)
             .salesforceId(UPDATED_SALESFORCE_ID)
             .parentSalesforceId(UPDATED_PARENT_SALESFORCE_ID)
             .assertionServiceEnabled(UPDATED_ASSERTION_SERVICE_ENABLED)
@@ -155,7 +153,6 @@ public class MemberSettingsResourceIT {
         assertThat(memberSettingsList).hasSize(databaseSizeBeforeCreate + 1);
         MemberSettings testMemberSettings = memberSettingsList.get(memberSettingsList.size() - 1);
         assertThat(testMemberSettings.getClientId()).isEqualTo(DEFAULT_CLIENT_ID);
-        assertThat(testMemberSettings.getClientSecret()).isEqualTo(DEFAULT_CLIENT_SECRET);
         assertThat(testMemberSettings.getSalesforceId()).isEqualTo(DEFAULT_SALESFORCE_ID);
         assertThat(testMemberSettings.getParentSalesforceId()).isEqualTo(DEFAULT_PARENT_SALESFORCE_ID);
         assertThat(testMemberSettings.isAssertionServiceEnabled()).isEqualTo(DEFAULT_ASSERTION_SERVICE_ENABLED);
@@ -189,23 +186,6 @@ public class MemberSettingsResourceIT {
         int databaseSizeBeforeTest = memberSettingsRepository.findAll().size();
         // set the field null
         memberSettings.setClientId(null);
-
-        // Create the MemberSettings, which fails.
-
-        restMemberSettingsMockMvc.perform(post("/api/member-settings")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(memberSettings)))
-            .andExpect(status().isBadRequest());
-
-        List<MemberSettings> memberSettingsList = memberSettingsRepository.findAll();
-        assertThat(memberSettingsList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    public void checkClientSecretIsRequired() throws Exception {
-        int databaseSizeBeforeTest = memberSettingsRepository.findAll().size();
-        // set the field null
-        memberSettings.setClientSecret(null);
 
         // Create the MemberSettings, which fails.
 
@@ -346,7 +326,6 @@ public class MemberSettingsResourceIT {
         MemberSettings updatedMemberSettings = memberSettingsRepository.findById(memberSettings.getId()).get();
         updatedMemberSettings
             .clientId(UPDATED_CLIENT_ID)
-            .clientSecret(UPDATED_CLIENT_SECRET)
             .salesforceId(UPDATED_SALESFORCE_ID)
             .parentSalesforceId(UPDATED_PARENT_SALESFORCE_ID)
             .assertionServiceEnabled(UPDATED_ASSERTION_SERVICE_ENABLED)
@@ -365,7 +344,6 @@ public class MemberSettingsResourceIT {
         assertThat(memberSettingsList).hasSize(databaseSizeBeforeUpdate);
         MemberSettings testMemberSettings = memberSettingsList.get(memberSettingsList.size() - 1);
         assertThat(testMemberSettings.getClientId()).isEqualTo(UPDATED_CLIENT_ID);
-        assertThat(testMemberSettings.getClientSecret()).isEqualTo(UPDATED_CLIENT_SECRET);
         assertThat(testMemberSettings.getSalesforceId()).isEqualTo(UPDATED_SALESFORCE_ID);
         assertThat(testMemberSettings.getParentSalesforceId()).isEqualTo(UPDATED_PARENT_SALESFORCE_ID);
         assertThat(testMemberSettings.isAssertionServiceEnabled()).isEqualTo(UPDATED_ASSERTION_SERVICE_ENABLED);

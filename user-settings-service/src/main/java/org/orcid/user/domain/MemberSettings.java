@@ -1,6 +1,7 @@
 package org.orcid.user.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.*;
@@ -21,9 +22,6 @@ public class MemberSettings implements Serializable {
 
     @Field("client_id")
     private String clientId;
-
-    @Field("client_secret")
-    private String clientSecret;
 
     @NotNull
     @Field("salesforce_id")
@@ -50,6 +48,9 @@ public class MemberSettings implements Serializable {
 
     @Field("last_modified_date")
     private Instant lastModifiedDate;
+    
+    @Transient
+    private String error;
         
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not
     // remove
@@ -72,19 +73,6 @@ public class MemberSettings implements Serializable {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
-    }
-
-    public String getClientSecret() {
-        return clientSecret;
-    }
-
-    public MemberSettings clientSecret(String clientSecret) {
-        this.clientSecret = clientSecret;
-        return this;
-    }
-
-    public void setClientSecret(String clientSecret) {
-        this.clientSecret = clientSecret;
     }
 
     public String getSalesforceId() {
@@ -189,14 +177,21 @@ public class MemberSettings implements Serializable {
     public Boolean getAssertionServiceEnabled() {
         return assertionServiceEnabled;
     }
+    
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((assertionServiceEnabled == null) ? 0 : assertionServiceEnabled.hashCode());
-        result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
-        result = prime * result + ((clientSecret == null) ? 0 : clientSecret.hashCode());
+        result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());        
         result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
         result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -226,11 +221,6 @@ public class MemberSettings implements Serializable {
             if (other.clientId != null)
                 return false;
         } else if (!clientId.equals(other.clientId))
-            return false;
-        if (clientSecret == null) {
-            if (other.clientSecret != null)
-                return false;
-        } else if (!clientSecret.equals(other.clientSecret))
             return false;
         if (createdBy == null) {
             if (other.createdBy != null)
@@ -277,7 +267,7 @@ public class MemberSettings implements Serializable {
 
     @Override
     public String toString() {
-        return "MemberSettings [id=" + id + ", clientId=" + clientId + ", clientSecret=" + clientSecret + ", salesforceId=" + salesforceId + ", parentSalesforceId="
+        return "MemberSettings [id=" + id + ", clientId=" + clientId + ", salesforceId=" + salesforceId + ", parentSalesforceId="
                 + parentSalesforceId + ", assertionServiceEnabled=" + assertionServiceEnabled + ", createdBy=" + createdBy + ", createdDate=" + createdDate
                 + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + ", isConsortiumLead=" + isConsortiumLead + "]";
     }

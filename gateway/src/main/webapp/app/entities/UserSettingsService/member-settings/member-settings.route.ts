@@ -10,6 +10,7 @@ import { MemberSettingsService } from './member-settings.service';
 import { MemberSettingsComponent } from './member-settings.component';
 import { MemberSettingsDetailComponent } from './member-settings-detail.component';
 import { MemberSettingsUpdateComponent } from './member-settings-update.component';
+import { MemberSettingsImportPopupComponent } from './member-settings-import-dialog.component';
 import { MemberSettingsDeletePopupComponent } from './member-settings-delete-dialog.component';
 import { IMemberSettings } from 'app/shared/model/UserSettingsService/member-settings.model';
 
@@ -94,5 +95,18 @@ export const memberSettingsPopupRoute: Routes = [
     },
     canActivate: [UserRouteAccessService],
     outlet: 'popup'
-  }
+  },
+  {
+      path: 'import',
+      component: MemberSettingsImportPopupComponent,
+      resolve: {
+        memberSettings: MemberSettingsResolve
+      },
+      data: {
+        authorities: ['ROLE_ADMIN'],
+        pageTitle: 'gatewayApp.memberSettingsServiceUserSettings.home.title'
+      },
+      canActivate: [UserRouteAccessService],
+      outlet: 'popup'
+    }
 ];
