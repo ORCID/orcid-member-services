@@ -1,11 +1,11 @@
 package org.orcid.user.security;
 
+import java.util.Optional;
+
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Optional;
 
 /**
  * Utility class for Spring Security.

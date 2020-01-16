@@ -86,9 +86,9 @@ public class UserSettingsResource {
     }
 
     /**
-     * {@code POST  /users} : Create a list of users.
+     * {@code POST  /user/upload} : Create a list of users.
      *
-     * @param usersFile:
+     * @param file:
      *            file containing the users to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and
      *         with a map indicating if each user was created or not, or with
@@ -97,7 +97,8 @@ public class UserSettingsResource {
      */
     @PostMapping("/user/upload")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<String> createUsers(@RequestParam("file") MultipartFile file) throws Throwable {        
+    public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) throws Throwable {     
+        log.debug("Uploading users settings CSV");
         JSONArray errors = new JSONArray();
         try (InputStream is = file.getInputStream();) {            
             InputStreamReader isr = new InputStreamReader(is);
@@ -114,7 +115,7 @@ public class UserSettingsResource {
                         errors.put(error);
                     } else {
                         JSONObject obj = createUserOnUAA(userDTO);
-                        UserSettings us = createUserSettings(obj, line.get("salesforceId"), false);
+                        createUserSettings(obj, line.get("salesforceId"), false);
                         createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());                        
                     }
                 } catch (Exception e) {

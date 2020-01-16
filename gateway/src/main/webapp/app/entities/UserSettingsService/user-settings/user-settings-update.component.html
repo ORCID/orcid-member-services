@@ -3,12 +3,7 @@
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
             <h2 id="jhi-user-settings-heading" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.home.createOrEditLabel">Create or edit a User Settings</h2>
             <div>
-                <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id').value">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
-                        readonly />
-                </div>
+                <jhi-alert-error></jhi-alert-error>              
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login" for="field_login">Login</label>
                     <input type="text" class="form-control" name="login" id="field_login"
