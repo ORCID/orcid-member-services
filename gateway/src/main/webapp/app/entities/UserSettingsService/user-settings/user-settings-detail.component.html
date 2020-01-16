@@ -1,21 +1,13 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="userSettings">
-            <h2><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.detail.title">User Settings</span> {{userSettings.id}}</h2>
+            <h2><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.detail.title">User Settings</span></h2>
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login">Login</span></dt>
-                <dd>
-                    <span>{{userSettings.login}}</span>
-                </dd>
                 <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.email">Email</span></dt>
                 <dd>
                     <span>{{userSettings.email}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.password">Password</span></dt>
-                <dd>
-                    <span>{{userSettings.password}}</span>
                 </dd>
                 <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.firstName">First Name</span></dt>
                 <dd>
@@ -32,10 +24,6 @@
                 <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId">Salesforce Id</span></dt>
                 <dd>
                     <span>{{userSettings.salesforceId}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.parentSalesforceId">Parent Salesforce Id</span></dt>
-                <dd>
-                    <span>{{userSettings.parentSalesforceId}}</span>
                 </dd>
                 <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdBy">Created By</span></dt>
                 <dd>
