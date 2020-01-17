@@ -87,7 +87,7 @@ public class MemberSettingsResource {
         }
         Optional<MemberSettings> optional = memberSettingsRepository.findBySalesforceId(memberSettings.getSalesforceId());
         // If user doesn't exists, create it
-        if(!optional.isPresent()) {
+        if(optional.isPresent()) {
             throw new BadRequestAlertException("A member settings with that salesforce id already exists", ENTITY_NAME, "idexists");
         }
         MemberSettings result = memberSettingsRepository.save(memberSettings);
