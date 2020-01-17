@@ -3,6 +3,7 @@ import './vendor.ts';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { NgJhipsterModule } from 'ng-jhipster';
@@ -55,7 +56,8 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
       provide: HTTP_INTERCEPTORS,
       useClass: NotificationInterceptor,
       multi: true
-    }
+    },
+    NgbActiveModal
   ],
   bootstrap: [JhiMainComponent]
 })

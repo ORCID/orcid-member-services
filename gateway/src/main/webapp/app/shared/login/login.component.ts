@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Renderer, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, OnInit, Renderer, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
@@ -11,8 +11,9 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
   selector: 'jhi-login-modal',
   templateUrl: './login.component.html'
 })
-export class JhiLoginModalComponent implements AfterViewInit {
+export class JhiLoginModalComponent implements AfterViewInit, OnInit {
   authenticationError: boolean;
+  isModal: boolean;
 
   loginForm = this.fb.group({
     username: [''],
@@ -41,7 +42,9 @@ export class JhiLoginModalComponent implements AfterViewInit {
       username: '',
       password: ''
     });
-    this.activeModal.dismiss('cancel');
+    if (this.isModal) {
+      this.activeModal.dismiss('cancel');
+    }
   }
 
   login() {
@@ -53,7 +56,9 @@ export class JhiLoginModalComponent implements AfterViewInit {
       })
       .then(() => {
         this.authenticationError = false;
-        this.activeModal.dismiss('login success');
+        if (this.isModal) {
+          this.activeModal.dismiss('login success');
+        }
         if (this.router.url === '/register' || /^\/activate\//.test(this.router.url) || /^\/reset\//.test(this.router.url)) {
           this.router.navigate(['']);
         }
@@ -77,12 +82,22 @@ export class JhiLoginModalComponent implements AfterViewInit {
   }
 
   register() {
-    this.activeModal.dismiss('to state register');
+    if (this.isModal) {
+      this.activeModal.dismiss('to state register');
+    }
     this.router.navigate(['/register']);
   }
 
   requestResetPassword() {
-    this.activeModal.dismiss('to state requestReset');
+    if (this.isModal) {
+      this.activeModal.dismiss('to state requestReset');
+    }
     this.router.navigate(['/reset', 'request']);
+  }
+
+  ngOnInit() {
+    // We don't show signin in a modal currently
+    // Add logic to change isModal here if needed
+    this.isModal = false;
   }
 }
