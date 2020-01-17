@@ -1,16 +1,14 @@
-<div class="modal-header">
+<div *ngIf="isModal" class="modal-header">
     <h4 class="modal-title" jhiTranslate="login.title">Sign in</h4>
     <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')"><span aria-hidden="true">x</span>
     </button>
 </div>
-<div class="modal-body">
+<div [ngClass]="{'modal-body': isModal}">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div [ngClass]="{'col-md-8': isModal, 'col-md-4': !isModal}">
             <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication">
                 <strong>Failed to sign in!</strong> Please check your credentials and try again.
             </div>
-        </div>
-        <div class="col-md-8">
             <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
                 <div class="form-group">
                     <label class="username-label" for="username" jhiTranslate="global.form.username.label">Login</label>
@@ -33,10 +31,6 @@
             <p></p>
             <div class="alert alert-warning">
                 <a class="alert-link" (click)="requestResetPassword()" jhiTranslate="login.password.forgot">Did you forget your password?</a>
-            </div>
-            <div class="alert alert-warning">
-                <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span>
-                <a class="alert-link" (click)="register()" jhiTranslate="global.messages.info.register.link">Register a new account</a>
             </div>
         </div>
     </div>

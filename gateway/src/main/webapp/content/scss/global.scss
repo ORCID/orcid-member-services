@@ -5,6 +5,9 @@
 /* ==============================================================
 Bootstrap tweaks
 ===============================================================*/
+html, body {
+  height: 100%;
+}
 
 body,
 h1,
@@ -15,15 +18,11 @@ h4 {
 }
 
 a {
-  color: #533f03;
-  font-weight: bold;
+  font-weight: $font-weight-bold;
 }
 
-a:hover {
-  color: #533f03;
-  font-weight: bold;
-  /* make sure browsers use the pointer cursor for anchors, even with no href */
-  cursor: pointer;
+.container-fluid {
+  min-height: calc(100% - 103px);
 }
 
 .dropdown-item:hover {
@@ -35,7 +34,6 @@ Browser Upgrade Prompt
 ========================================================================== */
 .browserupgrade {
   margin: 0.2em 0;
-  background: #ccc;
   color: #000;
   padding: 0.2em 0;
 }
@@ -87,10 +85,6 @@ Generic styles
 .readonly {
   background-color: #eee;
   opacity: 1;
-}
-
-.footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 .hand,
