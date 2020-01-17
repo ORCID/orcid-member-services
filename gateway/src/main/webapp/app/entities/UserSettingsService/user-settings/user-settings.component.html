@@ -26,7 +26,6 @@
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="login"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login">Login</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="email"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="password"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.password">Password</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="firstName"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.firstName">First Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="lastName"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastName">Last Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -43,7 +42,6 @@
             <tbody>
             <tr *ngFor="let userSettings of userSettings ;trackBy: trackId">                
                 <td><a [routerLink]="['/user-settings', userSettings.login, 'view' ]">{{userSettings.login}}</a></td>
-                <td>{{userSettings.email}}</td>
                 <td>{{userSettings.password}}</td>
                 <td>{{userSettings.firstName}}</td>
                 <td>{{userSettings.lastName}}</td>
