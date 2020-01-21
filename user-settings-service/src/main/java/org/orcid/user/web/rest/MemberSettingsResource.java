@@ -90,6 +90,10 @@ public class MemberSettingsResource {
         if(optional.isPresent()) {
             throw new BadRequestAlertException("A member settings with that salesforce id already exists", ENTITY_NAME, "idexists");
         }
+        if (!validate(memberSettings)) {
+            ResponseEntity.badRequest()
+            .headers(HeaderUtil.createFailureAlert(applicationName, true, ENTITY_NAME, "memberSettings.create.error", memberSettings.getError()));                    
+        }
         MemberSettings result = memberSettingsRepository.save(memberSettings);
         return ResponseEntity.created(new URI("/api/member-settings/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString())).body(result);
@@ -184,7 +188,11 @@ public class MemberSettingsResource {
         if (!mso.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idunavailable");
         }
-
+        if (!validate(memberSettings)) {
+            ResponseEntity.badRequest()
+            .headers(HeaderUtil.createFailureAlert(applicationName, true, ENTITY_NAME, "memberSettings.create.error", memberSettings.getError()));                    
+        }
+        
         MemberSettings result = memberSettingsRepository.save(memberSettings);
 
         // Check if salesforceId changed
@@ -280,6 +288,9 @@ public class MemberSettingsResource {
 
         if (!isConsortiumLead) {
             ms.setParentSalesforceId(record.get("parent_salesforce_id"));
+        }
+        if(record.isSet("client_name")) {
+            ms.setClientName(record.get("client_name"));
         }
         return ms;
     }
