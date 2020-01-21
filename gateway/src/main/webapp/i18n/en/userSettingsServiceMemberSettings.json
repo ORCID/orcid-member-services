@@ -23,6 +23,7 @@
         }
        },
       "clientId": "Client Id",
+      "clientName": "Client name",
       "clientSecret": "Client Secret",
       "salesforceId": "Salesforce Id",
       "parentSalesforceId": "Parent Salesforce Id",

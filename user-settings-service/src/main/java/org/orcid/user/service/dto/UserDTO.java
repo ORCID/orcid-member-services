@@ -30,6 +30,10 @@ public class UserDTO implements Serializable {
     private String salesforceIdError;
     private String parentSalesforceId;
     private String parentSalesforceIdError;
+    private String clientId;
+    private String clientIdError;
+    private String clientName;
+    private String clientNameError;
     private Boolean isConsortiumLead;
 
     // Metadata
@@ -198,24 +202,66 @@ public class UserDTO implements Serializable {
         this.parentSalesforceIdError = parentSalesforceIdError;
     }
 
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getClientIdError() {
+        return clientIdError;
+    }
+
+    public void setClientIdError(String clientIdError) {
+        this.clientIdError = clientIdError;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public String getClientNameError() {
+        return clientNameError;
+    }
+
+    public void setClientNameError(String clientNameError) {
+        this.clientNameError = clientNameError;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
+        result = prime * result + ((authoritiesError == null) ? 0 : authoritiesError.hashCode());
+        result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
+        result = prime * result + ((clientIdError == null) ? 0 : clientIdError.hashCode());
+        result = prime * result + ((clientName == null) ? 0 : clientName.hashCode());
+        result = prime * result + ((clientNameError == null) ? 0 : clientNameError.hashCode());
         result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
         result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+        result = prime * result + ((firstNameError == null) ? 0 : firstNameError.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((isConsortiumLead == null) ? 0 : isConsortiumLead.hashCode());
         result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
         result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+        result = prime * result + ((lastNameError == null) ? 0 : lastNameError.hashCode());
         result = prime * result + ((login == null) ? 0 : login.hashCode());
+        result = prime * result + ((loginError == null) ? 0 : loginError.hashCode());
         result = prime * result + ((mainContact == null) ? 0 : mainContact.hashCode());
         result = prime * result + ((parentSalesforceId == null) ? 0 : parentSalesforceId.hashCode());
+        result = prime * result + ((parentSalesforceIdError == null) ? 0 : parentSalesforceIdError.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
         result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
+        result = prime * result + ((salesforceIdError == null) ? 0 : salesforceIdError.hashCode());
         return result;
     }
 
@@ -233,6 +279,31 @@ public class UserDTO implements Serializable {
                 return false;
         } else if (!authorities.equals(other.authorities))
             return false;
+        if (authoritiesError == null) {
+            if (other.authoritiesError != null)
+                return false;
+        } else if (!authoritiesError.equals(other.authoritiesError))
+            return false;
+        if (clientId == null) {
+            if (other.clientId != null)
+                return false;
+        } else if (!clientId.equals(other.clientId))
+            return false;
+        if (clientIdError == null) {
+            if (other.clientIdError != null)
+                return false;
+        } else if (!clientIdError.equals(other.clientIdError))
+            return false;
+        if (clientName == null) {
+            if (other.clientName != null)
+                return false;
+        } else if (!clientName.equals(other.clientName))
+            return false;
+        if (clientNameError == null) {
+            if (other.clientNameError != null)
+                return false;
+        } else if (!clientNameError.equals(other.clientNameError))
+            return false;
         if (createdBy == null) {
             if (other.createdBy != null)
                 return false;
@@ -242,11 +313,16 @@ public class UserDTO implements Serializable {
             if (other.createdDate != null)
                 return false;
         } else if (!createdDate.equals(other.createdDate))
-            return false;        
+            return false;
         if (firstName == null) {
             if (other.firstName != null)
                 return false;
         } else if (!firstName.equals(other.firstName))
+            return false;
+        if (firstNameError == null) {
+            if (other.firstNameError != null)
+                return false;
+        } else if (!firstNameError.equals(other.firstNameError))
             return false;
         if (id == null) {
             if (other.id != null)
@@ -273,10 +349,20 @@ public class UserDTO implements Serializable {
                 return false;
         } else if (!lastName.equals(other.lastName))
             return false;
+        if (lastNameError == null) {
+            if (other.lastNameError != null)
+                return false;
+        } else if (!lastNameError.equals(other.lastNameError))
+            return false;
         if (login == null) {
             if (other.login != null)
                 return false;
         } else if (!login.equals(other.login))
+            return false;
+        if (loginError == null) {
+            if (other.loginError != null)
+                return false;
+        } else if (!loginError.equals(other.loginError))
             return false;
         if (mainContact == null) {
             if (other.mainContact != null)
@@ -288,6 +374,11 @@ public class UserDTO implements Serializable {
                 return false;
         } else if (!parentSalesforceId.equals(other.parentSalesforceId))
             return false;
+        if (parentSalesforceIdError == null) {
+            if (other.parentSalesforceIdError != null)
+                return false;
+        } else if (!parentSalesforceIdError.equals(other.parentSalesforceIdError))
+            return false;
         if (password == null) {
             if (other.password != null)
                 return false;
@@ -298,15 +389,22 @@ public class UserDTO implements Serializable {
                 return false;
         } else if (!salesforceId.equals(other.salesforceId))
             return false;
+        if (salesforceIdError == null) {
+            if (other.salesforceIdError != null)
+                return false;
+        } else if (!salesforceIdError.equals(other.salesforceIdError))
+            return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "UserDTO [id=" + id + ", login=" + login + ", password=" + password + ", firstName=" + firstName + ", lastName=" + lastName 
-                + ", authorities=" + authorities + ", mainContact=" + mainContact + ", salesforceId=" + salesforceId + ", parentSalesforceId=" + parentSalesforceId
-                + ", isConsortiumLead=" + isConsortiumLead + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy
-                + ", lastModifiedDate=" + lastModifiedDate + "]";
+        return "UserDTO [id=" + id + ", login=" + login + ", loginError=" + loginError + ", password=" + password + ", firstName=" + firstName + ", firstNameError="
+                + firstNameError + ", lastName=" + lastName + ", lastNameError=" + lastNameError + ", authorities=" + authorities + ", authoritiesError="
+                + authoritiesError + ", mainContact=" + mainContact + ", salesforceId=" + salesforceId + ", salesforceIdError=" + salesforceIdError
+                + ", parentSalesforceId=" + parentSalesforceId + ", parentSalesforceIdError=" + parentSalesforceIdError + ", clientId=" + clientId + ", clientIdError="
+                + clientIdError + ", clientName=" + clientName + ", clientNameError=" + clientNameError + ", isConsortiumLead=" + isConsortiumLead + ", createdBy="
+                + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + "]";
     }
 
     public static UserDTO valueOf(UserSettings us) {
