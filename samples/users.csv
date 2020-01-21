@@ -1,0 +1,2 @@
+isConsortiumLead,salesforceId,parentSalesforceId,email,firstName,lastName,grant
+false,salesforceid1,parentsalesforceid1,user_1@user.com,Angel,Montenegro,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"

@@ -139,7 +139,6 @@ public class UserSettingsResource {
     private UserDTO parseLine(CSVRecord record) {
         UserDTO u = new UserDTO();
         u.setLogin(record.get("email"));
-        u.setEmail(record.get("email"));
         u.setFirstName(record.get("firstName"));
         u.setLastName(record.get("lastName"));
         u.setPassword(RandomStringUtils.random(10));
@@ -164,11 +163,6 @@ public class UserSettingsResource {
         StringBuilder error = new StringBuilder();
         if (userDTO.getLoginError() != null) {
             error.append(userDTO.getLoginError());
-        }
-        if (userDTO.getEmailError() != null) {
-            if (error.length() > 0)
-                error.append(", ");
-            error.append(userDTO.getEmailError());
         }
         if (userDTO.getFirstNameError() != null) {
             if (error.length() > 0)
@@ -224,7 +218,7 @@ public class UserSettingsResource {
         // Create the user on UAA
         JSONObject obj = createUserOnUAA(userDTO);
         String userLogin = obj.getString("login");
-        String createdBy = obj.getString("createdBy");
+        String createdBy = SecurityUtils.getAuthenticatedUser();
         Instant createdDate = Instant.parse(obj.getString("createdDate"));
         String lastModifiedBy = obj.getString("lastModifiedBy");
         Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
@@ -254,11 +248,7 @@ public class UserSettingsResource {
         if (StringUtils.isBlank(user.getLogin())) {
             isOk = false;
             user.setLoginError("Login should not be empty");
-        }
-        if (StringUtils.isBlank(user.getEmail())) {
-            isOk = false;
-            user.setEmailError("Email should not be empty");
-        }
+        }        
         if (StringUtils.isBlank(user.getSalesforceId())) {
             isOk = false;
             user.setSalesforceIdError("Salesforce Id should not be empty");
@@ -275,7 +265,7 @@ public class UserSettingsResource {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("login", login);
         map.put("password", userDTO.getPassword());
-        map.put("email", userDTO.getEmail());
+        map.put("email", login);
         if (userDTO.getAuthorities() == null) {
             userDTO.setAuthorities(new ArrayList<String>());
         }
@@ -396,7 +386,7 @@ public class UserSettingsResource {
         map.put("id", existingUaaUser.getString("id"));
         map.put("login", userDTO.getLogin());
         map.put("password", "requires_not_empty_but_doesnt_get_updated");
-        map.put("email", userDTO.getEmail());
+        map.put("email", userDTO.getLogin());
         map.put("authorities", userDTO.getAuthorities());
         map.put("firstName", userDTO.getFirstName());
         map.put("lastName", userDTO.getLastName());
@@ -504,7 +494,7 @@ public class UserSettingsResource {
         JSONObject existingUser = new JSONObject(existingUserResponse.getBody());
         u.setFirstName(existingUser.getString("firstName"));
         u.setLastName(existingUser.getString("lastName"));
-        u.setEmail(existingUser.getString("email"));
+        u.setLogin(existingUser.getString("login"));
         List<String> authorities = new ArrayList<String>();
         JSONArray array = existingUser.getJSONArray("authorities");
         for (int i = 0; i < array.length(); i++) {
