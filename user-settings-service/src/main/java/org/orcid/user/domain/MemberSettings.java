@@ -30,6 +30,9 @@ public class MemberSettings implements Serializable {
     @Field("parent_salesforce_id")
     private String parentSalesforceId;
 
+    @Field("client_name")
+    private String clientName;
+
     @NotNull
     @Field("is_consortium_lead")
     private Boolean isConsortiumLead;
@@ -48,10 +51,10 @@ public class MemberSettings implements Serializable {
 
     @Field("last_modified_date")
     private Instant lastModifiedDate;
-    
+
     @Transient
     private String error;
-        
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not
     // remove
     public String getId() {
@@ -177,7 +180,7 @@ public class MemberSettings implements Serializable {
     public Boolean getAssertionServiceEnabled() {
         return assertionServiceEnabled;
     }
-    
+
     public String getError() {
         return error;
     }
@@ -186,14 +189,24 @@ public class MemberSettings implements Serializable {
         this.error = error;
     }
 
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((assertionServiceEnabled == null) ? 0 : assertionServiceEnabled.hashCode());
-        result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());        
+        result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
+        result = prime * result + ((clientName == null) ? 0 : clientName.hashCode());
         result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
         result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
+        result = prime * result + ((error == null) ? 0 : error.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((isConsortiumLead == null) ? 0 : isConsortiumLead.hashCode());
         result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
@@ -222,6 +235,11 @@ public class MemberSettings implements Serializable {
                 return false;
         } else if (!clientId.equals(other.clientId))
             return false;
+        if (clientName == null) {
+            if (other.clientName != null)
+                return false;
+        } else if (!clientName.equals(other.clientName))
+            return false;
         if (createdBy == null) {
             if (other.createdBy != null)
                 return false;
@@ -231,6 +249,11 @@ public class MemberSettings implements Serializable {
             if (other.createdDate != null)
                 return false;
         } else if (!createdDate.equals(other.createdDate))
+            return false;
+        if (error == null) {
+            if (other.error != null)
+                return false;
+        } else if (!error.equals(other.error))
             return false;
         if (id == null) {
             if (other.id != null)
@@ -267,9 +290,9 @@ public class MemberSettings implements Serializable {
 
     @Override
     public String toString() {
-        return "MemberSettings [id=" + id + ", clientId=" + clientId + ", salesforceId=" + salesforceId + ", parentSalesforceId="
-                + parentSalesforceId + ", assertionServiceEnabled=" + assertionServiceEnabled + ", createdBy=" + createdBy + ", createdDate=" + createdDate
-                + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + ", isConsortiumLead=" + isConsortiumLead + "]";
+        return "MemberSettings [id=" + id + ", clientId=" + clientId + ", salesforceId=" + salesforceId + ", parentSalesforceId=" + parentSalesforceId + ", clientName="
+                + clientName + ", isConsortiumLead=" + isConsortiumLead + ", assertionServiceEnabled=" + assertionServiceEnabled + ", createdBy=" + createdBy
+                + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + ", error=" + error + "]";
     }
 
 }

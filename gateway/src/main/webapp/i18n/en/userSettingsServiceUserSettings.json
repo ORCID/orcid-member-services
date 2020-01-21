@@ -22,6 +22,7 @@
           "label": "Please fix the following errors"	
         }
        },
+      "confirm_password": "Confirm password",
       "login": "Login",
       "email": "Email",
       "password": "Password",

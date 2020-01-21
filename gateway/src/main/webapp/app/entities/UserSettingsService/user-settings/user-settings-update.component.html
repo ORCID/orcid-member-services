@@ -3,12 +3,12 @@
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
             <h2 id="jhi-user-settings-heading" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.home.createOrEditLabel">Create or edit a User Settings</h2>
             <div>
-                <jhi-alert-error></jhi-alert-error>
+                <jhi-alert-error></jhi-alert-error>              
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.email" for="field_email">Email</label>
-                    <input type="text" class="form-control" name="email" id="field_email"
-                           formControlName="email"/>
-                </div>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login" for="field_login">Login</label>
+                    <input type="text" class="form-control" name="login" id="field_login"
+                           formControlName="login"/>
+                </div>                
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.password" for="field_password">Password</label>
                     <input type="password" class="form-control" name="password" id="field_password"
