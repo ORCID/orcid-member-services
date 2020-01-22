@@ -31,8 +31,9 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId" for="field_salesforceId">Salesforce Id</label>
-                    <input type="text" class="form-control" name="salesforceId" id="field_salesforceId"
-                           formControlName="salesforceId"/>
+                    <select  *ngIf="membersList" class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
+                        <option *ngFor="let member of membersList[0]?.body;let i = index" [ngValue]="member.salesforceId">{{member.clientName}}</option>
+                    </select>
                 </div>
             </div>
             <div>

@@ -8,6 +8,9 @@ import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { IUserSettings, UserSettings } from 'app/shared/model/UserSettingsService/user-settings.model';
 import { UserSettingsService } from './user-settings.service';
 
+import { IMemberSettings } from 'app/shared/model/UserSettingsService/member-settings.model';
+import { MemberSettingsService } from 'app/entities/UserSettingsService/member-settings/member-settings.service';
+
 @Component({
   selector: 'jhi-user-settings-update',
   templateUrl: './user-settings-update.component.html'
@@ -17,11 +20,11 @@ export class UserSettingsUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    login: [],
+    login: ['', Validators.required],
     email: [],
     password: [],
-    firstName: [],
-    lastName: [],
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
     mainContact: [],
     salesforceId: [],
     parentSalesforceId: [],
@@ -32,13 +35,30 @@ export class UserSettingsUpdateComponent implements OnInit {
     lastModifiedDate: []
   });
 
-  constructor(protected userSettingsService: UserSettingsService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  membersList: IMemberSettings;
+
+  constructor(protected userSettingsService: UserSettingsService, protected memberSettingsService: MemberSettingsService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
 
   ngOnInit() {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ userSettings }) => {
       this.updateForm(userSettings);
     });
+    this.loadMemberList();
+  }
+
+  loadMemberList() {
+    this.memberSettingsService
+    .query()
+    .subscribe(
+      (res: HttpResponse<IMemberSettings[]>) => {
+        this.membersList = res;
+        this.membersList = Array.of(this.membersList);
+      },
+      (res: HttpErrorResponse) => {
+        return this.onError(res.message);
+      };
+    )
   }
 
   updateForm(userSettings: IUserSettings) {
@@ -108,5 +128,9 @@ export class UserSettingsUpdateComponent implements OnInit {
 
   protected onSaveError() {
     this.isSaving = false;
+  }
+
+  protected onError(errorMessage: string) {
+    this.jhiAlertService.error(errorMessage, null, null);
   }
 }
