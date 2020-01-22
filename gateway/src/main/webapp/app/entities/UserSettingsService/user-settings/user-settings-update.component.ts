@@ -25,6 +25,7 @@ export class UserSettingsUpdateComponent implements OnInit {
     mainContact: [],
     salesforceId: [],
     parentSalesforceId: [],
+    authorities: [],
     createdBy: [],
     createdDate: [],
     lastModifiedBy: [],
@@ -44,13 +45,13 @@ export class UserSettingsUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: userSettings.id,
       login: userSettings.login,
-      email: userSettings.email,
       password: userSettings.password,
       firstName: userSettings.firstName,
       lastName: userSettings.lastName,
       mainContact: userSettings.mainContact,
       salesforceId: userSettings.salesforceId,
       parentSalesforceId: userSettings.parentSalesforceId,
+      authorities: userSettings.authorities,
       createdBy: userSettings.createdBy,
       createdDate: userSettings.createdDate != null ? userSettings.createdDate.format(DATE_TIME_FORMAT) : null,
       lastModifiedBy: userSettings.lastModifiedBy,
@@ -65,6 +66,7 @@ export class UserSettingsUpdateComponent implements OnInit {
   save() {
     this.isSaving = true;
     const userSettings = this.createFromForm();
+    console.log(userSettings);
     if (userSettings.id !== undefined) {
       this.subscribeToSaveResponse(this.userSettingsService.update(userSettings));
     } else {
@@ -77,13 +79,13 @@ export class UserSettingsUpdateComponent implements OnInit {
       ...new UserSettings(),
       id: this.editForm.get(['id']).value,
       login: this.editForm.get(['login']).value,
-      email: this.editForm.get(['email']).value,
       password: this.editForm.get(['password']).value,
       firstName: this.editForm.get(['firstName']).value,
       lastName: this.editForm.get(['lastName']).value,
       mainContact: this.editForm.get(['mainContact']).value,
       salesforceId: this.editForm.get(['salesforceId']).value,
       parentSalesforceId: this.editForm.get(['parentSalesforceId']).value,
+      authorities: this.editForm.get(['authorities']).value,
       createdBy: this.editForm.get(['createdBy']).value,
       createdDate:
         this.editForm.get(['createdDate']).value != null ? moment(this.editForm.get(['createdDate']).value, DATE_TIME_FORMAT) : undefined,
