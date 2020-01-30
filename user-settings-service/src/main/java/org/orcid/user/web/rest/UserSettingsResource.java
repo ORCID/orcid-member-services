@@ -97,16 +97,19 @@ public class UserSettingsResource {
      */
     @PostMapping("/user/upload")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) throws Throwable {     
+    public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) throws Throwable {
         log.debug("Uploading users settings CSV");
         JSONArray errors = new JSONArray();
-        try (InputStream is = file.getInputStream();) {            
+        Instant now = Instant.now();
+        try (InputStream is = file.getInputStream();) {
             InputStreamReader isr = new InputStreamReader(is);
             Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
             for (CSVRecord line : elements) {
                 long index = line.getRecordNumber();
                 try {
                     UserDTO userDTO = parseLine(line);
+                    log.debug("userDTO:");
+                    log.debug(userDTO.toString());
                     // Validate for errors
                     if (!validate(userDTO)) {
                         JSONObject error = new JSONObject();
@@ -114,19 +117,43 @@ public class UserSettingsResource {
                         error.put("message", buildErrorString(userDTO));
                         errors.put(error);
                     } else {
-                        JSONObject obj = createUserOnUAA(userDTO);
-                        createUserSettings(obj, line.get("salesforceId"), false);
-                        createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());                        
+                        log.debug("Looking for existing user: " + userDTO.getLogin());
+                        ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(userDTO.getLogin());
+                        if (response == null || !HttpStatus.CREATED.equals(response.getStatusCode())) {
+                            
+                        }
+                        JSONObject existingUaaUser = new JSONObject(existingUserResponse.getBody());
+                        String uaaUserLogin = existingUaaUser.getString("login");
+                        // If user exists, update it
+                        if (StringUtils.isNotBlank(uaaUserLogin)) {
+                            // Update or create MemberSettings
+                            if (memberSettingsExists(userDTO.getSalesforceId())) {
+                                updateMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), now);
+                            } else {
+                                createMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), now);
+                            }
+                            // Update or create UserSettings
+                            if (userSettingsExists(userDTO.getLogin())) {
+                                updateUserSettings(userDTO, now);                                
+                            } else {
+                                createUserSettings(userDTO.getLogin(), userDTO.getSalesforceId(), false, now);
+                            }
+                        } else {
+                            // Else create the user
+                            createUserOnUAA(userDTO);
+                            createUserSettings(userDTO.getLogin(), line.get("salesforceId"), false, now);
+                            createMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), now);
+                        }
                     }
                 } catch (Exception e) {
                     Throwable t = e.getCause();
                     JSONObject error = new JSONObject();
                     error.put("index", index);
                     if (t != null) {
-                        log.error("Error on line " + index, t.getMessage());
+                        log.error("Error on line " + index, t);
                         error.put("message", t.getMessage());
                     } else {
-                        log.error("Error on line " + index, e.getMessage());
+                        log.error("Error on line " + index, e);
                         error.put("message", e.getMessage());
                     }
                     errors.put(error);
@@ -141,7 +168,7 @@ public class UserSettingsResource {
         u.setLogin(record.get("email"));
         u.setFirstName(record.get("firstName"));
         u.setLastName(record.get("lastName"));
-        u.setPassword(RandomStringUtils.random(10));
+        u.setPassword(RandomStringUtils.randomAlphanumeric(10));
         String grants = record.get("grant");
         if (!StringUtils.isBlank(grants)) {
             if (!(grants.startsWith("[") && grants.endsWith("]"))) {
@@ -224,10 +251,10 @@ public class UserSettingsResource {
         Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
 
         // Create the user settings
-        UserSettings us = createUserSettings(obj, userDTO.getSalesforceId(), userDTO.getMainContact());
+        UserSettings us = createUserSettings(userLogin, userDTO.getSalesforceId(), userDTO.getMainContact(), createdDate);
 
         // Create the member settings
-        createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());
+        createMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), createdDate);
 
         userDTO.setId(us.getId());
         userDTO.setLogin(userLogin);
@@ -248,7 +275,7 @@ public class UserSettingsResource {
         if (StringUtils.isBlank(user.getLogin())) {
             isOk = false;
             user.setLoginError("Login should not be empty");
-        }        
+        }
         if (StringUtils.isBlank(user.getSalesforceId())) {
             isOk = false;
             user.setSalesforceIdError("Salesforce Id should not be empty");
@@ -296,49 +323,34 @@ public class UserSettingsResource {
         return new JSONObject(userInfo.getBody());
     }
 
-    private UserSettings createUserSettings(JSONObject obj, String salesforceId, Boolean mainContact) throws JSONException {
-        String userLogin = obj.getString("login");
-        String createdBy = SecurityUtils.getAuthenticatedUser();
-        Instant createdDate = Instant.parse(obj.getString("createdDate"));
-        String lastModifiedBy = obj.getString("lastModifiedBy");
-        Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
-
-        UserSettings us = new UserSettings();
-        us.setLogin(userLogin);
-        us.setMainContact(mainContact);
-        us.setSalesforceId(salesforceId);
-        us.setCreatedBy(createdBy);
-        us.setCreatedDate(createdDate);
-        us.setLastModifiedBy(lastModifiedBy);
-        us.setLastModifiedDate(lastModifiedDate);
-
-        // Persist it
-        return userSettingsRepository.save(us);
+    private Boolean memberSettingsExists(String salesforceId) {
+        Optional<MemberSettings> existingMemberSettings = memberSettingsRepository.findBySalesforceId(salesforceId);
+        return existingMemberSettings.isPresent();
     }
 
-    private MemberSettings createMemberSettings(JSONObject obj, String salesforceId, String parentSalesforceId, Boolean isConsortiumLead) throws JSONException {
-        Optional<MemberSettings> existingMemberSettings = memberSettingsRepository.findBySalesforceId(salesforceId);
-        MemberSettings ms;
-        // Check if member settings already exists
-        if (!existingMemberSettings.isPresent()) {
-            log.info("Creating MemberSettings with Salesforce Id {}", salesforceId);
-            String createdBy = SecurityUtils.getAuthenticatedUser();
-            Instant createdDate = Instant.parse(obj.getString("createdDate"));
-            String lastModifiedBy = obj.getString("lastModifiedBy");
-            Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
+    private MemberSettings createMemberSettings(String salesforceId, String parentSalesforceId, Boolean isConsortiumLead, Instant now) throws JSONException {
+        log.info("Creating MemberSettings with Salesforce Id {}", salesforceId);
+        MemberSettings ms = new MemberSettings();
+        String createdBy = SecurityUtils.getAuthenticatedUser();
+        ms.setSalesforceId(salesforceId);
+        ms.setParentSalesforceId(parentSalesforceId);
+        ms.setIsConsortiumLead((isConsortiumLead == null) ? false : isConsortiumLead);
+        ms.setCreatedBy(createdBy);
+        ms.setCreatedDate(now);
+        ms.setLastModifiedBy(createdBy);
+        ms.setLastModifiedDate(now);
+        return memberSettingsRepository.save(ms);
+    }
 
-            ms = new MemberSettings();
-            ms.setSalesforceId(salesforceId);
-            ms.setParentSalesforceId(parentSalesforceId);
-            ms.setIsConsortiumLead((isConsortiumLead == null) ? false : isConsortiumLead);
-            ms.setCreatedBy(createdBy);
-            ms.setCreatedDate(createdDate);
-            ms.setLastModifiedBy(lastModifiedBy);
-            ms.setLastModifiedDate(lastModifiedDate);
-            return memberSettingsRepository.save(ms);
-        } else {
-            return existingMemberSettings.get();
-        }
+    private MemberSettings updateMemberSettings(String salesforceId, String parentSalesforceId, Boolean isConsortiumLead, Instant lastModifiedDate) {
+        log.info("Updating MemberSettings with Salesforce Id {}", salesforceId);
+        Optional<MemberSettings> existingMemberSettings = memberSettingsRepository.findBySalesforceId(salesforceId);
+        MemberSettings ms = existingMemberSettings.get();
+        ms.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
+        ms.setLastModifiedDate(lastModifiedDate);
+        ms.setParentSalesforceId(parentSalesforceId);
+        ms.setIsConsortiumLead((isConsortiumLead == null) ? false : isConsortiumLead);
+        return memberSettingsRepository.save(ms);
     }
 
     /**
@@ -357,7 +369,8 @@ public class UserSettingsResource {
      */
     @PutMapping("/user")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException, JSONException {
-        //TODO: Secure this endpoint, only admins or the user himself should be able to update a user
+        // TODO: Secure this endpoint, only admins or the user himself should be
+        // able to update a user
         log.debug("REST request to update UserDTO : {}", userDTO);
         if (StringUtils.isBlank(userDTO.getId()) || StringUtils.isBlank(userDTO.getLogin())) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -373,17 +386,25 @@ public class UserSettingsResource {
             throw new RuntimeException("User login doesn't match: " + userDTO.getLogin() + " - " + uaaUserLogin);
         }
 
-        // Verify the user exists on the UserSettings table
-        Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByLogin(userDTO.getLogin());
-        if (!existingUserSettingsOptional.isPresent()) {
-            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for " + userDTO.getId(), ENTITY_NAME, "idnull");
-        }
+        // Update jhi_user entry
+        JSONObject obj = updateUserOnUAA(existingUaaUser.getString("id"), userDTO);
+        String lastModifiedBy = obj.getString("lastModifiedBy");
+        Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
 
+        // Update UserSettings
+        updateUserSettings(userDTO, lastModifiedDate);
+
+        userDTO.setLastModifiedBy(lastModifiedBy);
+        userDTO.setLastModifiedDate(lastModifiedDate);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userDTO.getId().toString())).body(userDTO);
+    }
+
+    private JSONObject updateUserOnUAA(String id, UserDTO userDTO) throws JSONException {
         // Update jhi_user entry
         Map<String, Object> map = new HashMap<String, Object>();
 
         // Remember to use the UAA user id, since we are updating the user info
-        map.put("id", existingUaaUser.getString("id"));
+        map.put("id", id);
         map.put("login", userDTO.getLogin());
         map.put("password", "requires_not_empty_but_doesnt_get_updated");
         map.put("email", userDTO.getLogin());
@@ -396,10 +417,38 @@ public class UserSettingsResource {
             throw new RuntimeException("Update user failed: " + response.getStatusCode().getReasonPhrase());
         }
 
-        JSONObject obj = new JSONObject(response.getBody());
-        String lastModifiedBy = obj.getString("lastModifiedBy");
-        Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
+        return new JSONObject(response.getBody());
+    }
 
+    private Boolean userSettingsExists(String login) {
+        Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByLogin(login);
+        return existingUserSettingsOptional.isPresent();
+    }
+
+    private UserSettings createUserSettings(String userLogin, String salesforceId, Boolean mainContact, Instant now) throws JSONException {
+        log.info("Creating userSettings for: " + userLogin);
+        String createdBy = SecurityUtils.getAuthenticatedUser();
+
+        UserSettings us = new UserSettings();
+        us.setLogin(userLogin);
+        us.setMainContact(mainContact);
+        us.setSalesforceId(salesforceId);
+        us.setCreatedBy(createdBy);
+        us.setCreatedDate(now);
+        us.setLastModifiedBy(createdBy);
+        us.setLastModifiedDate(now);
+
+        // Persist it
+        return userSettingsRepository.save(us);
+    }
+
+    private void updateUserSettings(UserDTO userDTO, Instant lastModifiedDate) {
+        log.info("Updating userSettings for: " + userDTO.toString());
+        // Verify the user exists on the UserSettings table
+        Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByLogin(userDTO.getLogin());
+        if (!existingUserSettingsOptional.isPresent()) {
+            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for " + userDTO.getLogin(), ENTITY_NAME, "id null");
+        }
         Boolean userSettingsModified = false;
         UserSettings existingUserSettings = existingUserSettingsOptional.get();
         Boolean existingMainContactFlag = existingUserSettings.getMainContact();
@@ -420,15 +469,18 @@ public class UserSettingsResource {
             userSettingsModified = true;
         }
 
+        // Check if main contact changed
+        if (Boolean.compare(existingUserSettings.getMainContact(), userDTO.getMainContact()) != 0) {
+            existingUserSettings.setMainContact(userDTO.getMainContact());
+            userSettingsModified = true;
+        }
+
         // Update UserSettings
         if (userSettingsModified) {
-            existingUserSettings.setLastModifiedBy(lastModifiedBy);
+            existingUserSettings.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
             existingUserSettings.setLastModifiedDate(lastModifiedDate);
             userSettingsRepository.save(existingUserSettings);
         }
-        userDTO.setLastModifiedBy(lastModifiedBy);
-        userDTO.setLastModifiedDate(lastModifiedDate);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userDTO.getId().toString())).body(userDTO);
     }
 
     /**
