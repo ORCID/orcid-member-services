@@ -51,7 +51,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -105,62 +108,81 @@ public class UserSettingsResource {
             InputStreamReader isr = new InputStreamReader(is);
             Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
             for (CSVRecord line : elements) {
-                long index = line.getRecordNumber();
-                try {
-                    UserDTO userDTO = parseLine(line);
-                    log.debug("userDTO:");
-                    log.debug(userDTO.toString());
-                    // Validate for errors
-                    if (!validate(userDTO)) {
-                        JSONObject error = new JSONObject();
-                        error.put("index", index);
-                        error.put("message", buildErrorString(userDTO));
-                        errors.put(error);
-                    } else {
-                        log.debug("Looking for existing user: " + userDTO.getLogin());
-                        ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(userDTO.getLogin());
-                        if (response == null || !HttpStatus.CREATED.equals(response.getStatusCode())) {
-                            
-                        }
-                        JSONObject existingUaaUser = new JSONObject(existingUserResponse.getBody());
-                        String uaaUserLogin = existingUaaUser.getString("login");
-                        // If user exists, update it
-                        if (StringUtils.isNotBlank(uaaUserLogin)) {
-                            // Update or create MemberSettings
-                            if (memberSettingsExists(userDTO.getSalesforceId())) {
-                                updateMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), now);
-                            } else {
-                                createMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), now);
-                            }
-                            // Update or create UserSettings
-                            if (userSettingsExists(userDTO.getLogin())) {
-                                updateUserSettings(userDTO, now);                                
-                            } else {
-                                createUserSettings(userDTO.getLogin(), userDTO.getSalesforceId(), false, now);
-                            }
-                        } else {
-                            // Else create the user
-                            createUserOnUAA(userDTO);
-                            createUserSettings(userDTO.getLogin(), line.get("salesforceId"), false, now);
-                            createMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), now);
-                        }
-                    }
-                } catch (Exception e) {
-                    Throwable t = e.getCause();
-                    JSONObject error = new JSONObject();
-                    error.put("index", index);
-                    if (t != null) {
-                        log.error("Error on line " + index, t);
-                        error.put("message", t.getMessage());
-                    } else {
-                        log.error("Error on line " + index, e);
-                        error.put("message", e.getMessage());
-                    }
-                    errors.put(error);
-                }
+                processElement(line, now, errors);
             }
         }
         return ResponseEntity.ok().body(errors.toString());
+    }
+
+    private void processElement(CSVRecord element, Instant now, JSONArray errors) throws Throwable {
+        long index = element.getRecordNumber();
+        try {
+            UserDTO userDTO = parseLine(element);
+            // Validate for errors
+            if (!validate(userDTO)) {
+                JSONObject error = new JSONObject();
+                error.put("index", index);
+                error.put("message", buildErrorString(userDTO));
+                errors.put(error);
+            } else {
+                log.debug("Looking for existing user: " + userDTO.getLogin());
+                String uaaUserLogin = null;
+                String uaaUserId = null;
+                try {
+                    ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(userDTO.getLogin());
+                    log.debug("Status code: " + existingUserResponse.getStatusCodeValue());
+                    if (existingUserResponse != null) {
+                        JSONObject existingUaaUser = new JSONObject(existingUserResponse.getBody());
+                        uaaUserLogin = existingUaaUser.getString("login");
+                        uaaUserId = existingUaaUser.getString("id");
+                    }
+                } catch (HystrixRuntimeException hre) {
+                    if (hre.getCause() != null && ResponseStatusException.class.isAssignableFrom(hre.getCause().getClass())) {
+                        ResponseStatusException rse = (ResponseStatusException) hre.getCause();
+                        if (HttpStatus.NOT_FOUND.equals(rse.getStatus())) {
+                            log.debug("User not found: " + userDTO.getLogin());
+                        } else {
+                            throw hre;
+                        }
+                    }
+                }
+
+                // If user exists, update it
+                if (StringUtils.isNotBlank(uaaUserLogin)) {
+                    // Updates the UAA user
+                    updateUserOnUAA(uaaUserId, userDTO);
+                    // Update or create MemberSettings
+                    if (memberSettingsExists(userDTO.getSalesforceId())) {
+                        updateMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), now);
+                    } else {
+                        createMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), now);
+                    }
+                    // Update or create UserSettings
+                    if (userSettingsExists(userDTO.getLogin())) {
+                        updateUserSettings(userDTO, now);
+                    } else {
+                        createUserSettings(userDTO.getLogin(), userDTO.getSalesforceId(), false, now);
+                    }
+                } else {
+                    // Else create the user
+                    createUserOnUAA(userDTO);
+                    createUserSettings(userDTO.getLogin(), element.get("salesforceId"), false, now);
+                    createMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), now);
+                }
+            }
+        } catch (Exception e) {
+            Throwable t = e.getCause();
+            JSONObject error = new JSONObject();
+            error.put("index", index);
+            if (t != null) {
+                log.error("Error on line " + index, t);
+                error.put("message", t.getMessage());
+            } else {
+                log.error("Error on line " + index, e);
+                error.put("message", e.getMessage());
+            }
+            errors.put(error);
+        }
     }
 
     private UserDTO parseLine(CSVRecord record) {
@@ -185,7 +207,7 @@ public class UserSettingsResource {
         }
         return u;
     }
-
+    
     private String buildErrorString(UserDTO userDTO) {
         StringBuilder error = new StringBuilder();
         if (userDTO.getLoginError() != null) {
@@ -470,7 +492,7 @@ public class UserSettingsResource {
         }
 
         // Check if main contact changed
-        if (Boolean.compare(existingUserSettings.getMainContact(), userDTO.getMainContact()) != 0) {
+        if ((existingUserSettings.getMainContact() == null) || !(existingUserSettings.getMainContact().equals(userDTO.getMainContact()))) {
             existingUserSettings.setMainContact(userDTO.getMainContact());
             userSettingsModified = true;
         }
