@@ -368,10 +368,10 @@ public class UserSettingsResource {
         log.info("Updating MemberSettings with Salesforce Id {}", salesforceId);
         Optional<MemberSettings> existingMemberSettings = memberSettingsRepository.findBySalesforceId(salesforceId);
         MemberSettings ms = existingMemberSettings.get();
-        ms.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
-        ms.setLastModifiedDate(lastModifiedDate);
         ms.setParentSalesforceId(parentSalesforceId);
         ms.setIsConsortiumLead((isConsortiumLead == null) ? false : isConsortiumLead);
+        ms.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
+        ms.setLastModifiedDate(lastModifiedDate);
         return memberSettingsRepository.save(ms);
     }
 
@@ -390,9 +390,8 @@ public class UserSettingsResource {
      * @throws JSONException
      */
     @PutMapping("/user")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException, JSONException {
-        // TODO: Secure this endpoint, only admins or the user himself should be
-        // able to update a user
         log.debug("REST request to update UserDTO : {}", userDTO);
         if (StringUtils.isBlank(userDTO.getId()) || StringUtils.isBlank(userDTO.getLogin())) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
