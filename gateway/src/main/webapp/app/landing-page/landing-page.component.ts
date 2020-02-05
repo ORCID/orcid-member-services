@@ -6,8 +6,7 @@ import { AccountService, Account } from 'app/core';
 
 @Component({
   selector: 'jhi-landing-page',
-  templateUrl: './landing-page.component.html',
-  styleUrls: ['landing-page.scss']
+  templateUrl: './landing-page.component.html'
 })
 export class LandingPageComponent implements OnInit {
   
