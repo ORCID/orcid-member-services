@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -51,11 +52,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
-import io.micrometer.core.instrument.util.StringUtils;
 import net.logstash.logback.encoder.org.apache.commons.lang3.BooleanUtils;
 
 /**
@@ -97,101 +100,114 @@ public class UserSettingsResource {
      */
     @PostMapping("/user/upload")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) throws Throwable {     
+    public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) throws Throwable {
         log.debug("Uploading users settings CSV");
         JSONArray errors = new JSONArray();
-        try (InputStream is = file.getInputStream();) {            
+        Instant now = Instant.now();
+        try (InputStream is = file.getInputStream();) {
             InputStreamReader isr = new InputStreamReader(is);
             Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
             for (CSVRecord line : elements) {
-                long index = line.getRecordNumber();
-                try {
-                    UserDTO userDTO = parseLine(line);
-                    // Validate for errors
-                    if (!validate(userDTO)) {
-                        JSONObject error = new JSONObject();
-                        error.put("index", index);
-                        error.put("message", buildErrorString(userDTO));
-                        errors.put(error);
-                    } else {
-                        JSONObject obj = createUserOnUAA(userDTO);
-                        createUserSettings(obj, line.get("salesforceId"), false);
-                        createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());                        
-                    }
-                } catch (Exception e) {
-                    Throwable t = e.getCause();
-                    JSONObject error = new JSONObject();
-                    error.put("index", index);
-                    if (t != null) {
-                        log.error("Error on line " + index, t.getMessage());
-                        error.put("message", t.getMessage());
-                    } else {
-                        log.error("Error on line " + index, e.getMessage());
-                        error.put("message", e.getMessage());
-                    }
-                    errors.put(error);
-                }
+                processElement(line, now, errors);
             }
         }
         return ResponseEntity.ok().body(errors.toString());
     }
 
-    private UserDTO parseLine(CSVRecord record) {
+    private void processElement(CSVRecord element, Instant now, JSONArray errors) throws Throwable {
+        long index = element.getRecordNumber();
+        String errorString = new String();
+        try {
+            // Validate for errors
+            if (!validate(element, errorString)) {
+                JSONObject error = new JSONObject();
+                error.put("index", index);
+                error.put("message", errorString);
+                errors.put(error);
+            } else {
+                String login = element.get("email");
+                log.debug("Looking for existing user: " + login);
+                String uaaUserLogin = null;
+                String uaaUserId = null;
+                try {
+                    ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(login);
+                    log.debug("Status code: " + existingUserResponse.getStatusCodeValue());
+                    if (existingUserResponse != null) {
+                        JSONObject existingUaaUser = new JSONObject(existingUserResponse.getBody());
+                        uaaUserLogin = existingUaaUser.getString("login");
+                        uaaUserId = existingUaaUser.getString("id");
+                    }
+                } catch (HystrixRuntimeException hre) {
+                    if (hre.getCause() != null && ResponseStatusException.class.isAssignableFrom(hre.getCause().getClass())) {
+                        ResponseStatusException rse = (ResponseStatusException) hre.getCause();
+                        if (HttpStatus.NOT_FOUND.equals(rse.getStatus())) {
+                            log.debug("User not found: " + login);
+                        } else {
+                            throw hre;
+                        }
+                    }
+                }
+                String salesforceId = element.get("salesforceId");
+                String parentSalesforceId = element.get("parentSalesforceId");
+                Boolean isConsortiumLead = StringUtils.isBlank(element.get("isConsortiumLead")) ? false : Boolean.parseBoolean(element.get("isConsortiumLead"));
+                UserDTO userDTO = getUserDTO(element);
+                // If user exists, update it
+                if (StringUtils.isNotBlank(uaaUserLogin)) {
+                    // Updates the UAA user
+                    updateUserOnUAA(uaaUserId, userDTO);
+                    // Update or create MemberSettings
+                    if (memberSettingsExists(salesforceId)) {
+                        updateMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, now);
+                    } else {
+                        createMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, now);
+                    }
+                    // Update or create UserSettings
+                    if (userSettingsExists(login)) {
+                        updateUserSettings(userDTO, now);
+                    } else {
+                        createUserSettings(login, salesforceId, false, now);
+                    }
+                } else {
+                    // Else create the user
+                    createUserOnUAA(userDTO);
+                    createUserSettings(userDTO.getLogin(), element.get("salesforceId"), false, now);
+                    createMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, now);
+                }
+            }
+        } catch (Exception e) {
+            Throwable t = e.getCause();
+            JSONObject error = new JSONObject();
+            error.put("index", index);
+            if (t != null) {
+                log.error("Error on line " + index, t);
+                error.put("message", t.getMessage());
+            } else {
+                log.error("Error on line " + index, e);
+                error.put("message", e.getMessage());
+            }
+            errors.put(error);
+        }
+    }
+    
+    private UserDTO getUserDTO(CSVRecord record) {
         UserDTO u = new UserDTO();
         u.setLogin(record.get("email"));
         u.setFirstName(record.get("firstName"));
         u.setLastName(record.get("lastName"));
-        u.setPassword(RandomStringUtils.random(10));
+        u.setSalesforceId(record.get("salesforceId"));
+        u.setPassword(RandomStringUtils.randomAlphanumeric(10));
+        List<String> authorities = new ArrayList<String>();
         String grants = record.get("grant");
         if (!StringUtils.isBlank(grants)) {
             if (!(grants.startsWith("[") && grants.endsWith("]"))) {
                 throw new IllegalArgumentException("Grant list should start with '[' and ends with ']'");
             }
-            List<String> authorities = Arrays.stream(grants.replace("[", "").replace("]", "").split(",")).collect(Collectors.toList());
-            u.setAuthorities(authorities);
+            authorities = Arrays.stream(grants.replace("[", "").replace("]", "").split(",")).collect(Collectors.toList());            
         }
-        Boolean isConsortiumLead = StringUtils.isBlank(record.get("isConsortiumLead")) ? false : Boolean.parseBoolean(record.get("isConsortiumLead"));
-        u.setIsConsortiumLead(isConsortiumLead);
-        u.setSalesforceId(record.get("salesforceId"));
-        if (!isConsortiumLead) {
-            u.setParentSalesforceId(record.get("parentSalesforceId"));
-        }
+        u.setAuthorities(authorities);
         return u;
     }
-
-    private String buildErrorString(UserDTO userDTO) {
-        StringBuilder error = new StringBuilder();
-        if (userDTO.getLoginError() != null) {
-            error.append(userDTO.getLoginError());
-        }
-        if (userDTO.getFirstNameError() != null) {
-            if (error.length() > 0)
-                error.append(", ");
-            error.append(userDTO.getFirstNameError());
-        }
-        if (userDTO.getLastNameError() != null) {
-            if (error.length() > 0)
-                error.append(", ");
-            error.append(userDTO.getLastNameError());
-        }
-        if (userDTO.getAuthoritiesError() != null) {
-            if (error.length() > 0)
-                error.append(", ");
-            error.append(userDTO.getAuthoritiesError());
-        }
-        if (userDTO.getParentSalesforceIdError() != null) {
-            if (error.length() > 0)
-                error.append(", ");
-            error.append(userDTO.getParentSalesforceIdError());
-        }
-        if (userDTO.getSalesforceIdError() != null) {
-            if (error.length() > 0)
-                error.append(", ");
-            error.append(userDTO.getSalesforceIdError());
-        }
-        return error.toString();
-    }
-
+    
     /**
      * {@code POST  /user} : Create a new memberServicesUser.
      *
@@ -224,10 +240,10 @@ public class UserSettingsResource {
         Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
 
         // Create the user settings
-        UserSettings us = createUserSettings(obj, userDTO.getSalesforceId(), userDTO.getMainContact());
+        UserSettings us = createUserSettings(userLogin, userDTO.getSalesforceId(), userDTO.getMainContact(), createdDate);
 
         // Create the member settings
-        createMemberSettings(obj, userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead());
+        createMemberSettings(userDTO.getSalesforceId(), StringUtils.EMPTY, false, createdDate);
 
         userDTO.setId(us.getId());
         userDTO.setLogin(userLogin);
@@ -243,19 +259,40 @@ public class UserSettingsResource {
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, us.getId().toString())).body(userDTO);
     }
 
+    private boolean validate(CSVRecord record, String error) {
+        boolean isOk = true;
+        if (StringUtils.isBlank(record.get("email"))) {
+            isOk = false;
+            error = "Login should not be empty";
+        }
+        if (StringUtils.isBlank(record.get("salesforceId"))) {
+            if(!isOk) {
+                error += ", ";
+            }
+            isOk = false;
+            error += "Salesforce Id should not be empty";
+        }
+        Boolean isConsortiumLead = StringUtils.isBlank(record.get("isConsortiumLead")) ? false : Boolean.parseBoolean(record.get("isConsortiumLead"));
+        
+        if (StringUtils.isBlank(record.get("parentSalesforceId")) && BooleanUtils.isFalse(isConsortiumLead)) {
+            if(!isOk) {
+                error += ", ";
+            }
+            isOk = false;
+            error += "Parent Salesforce Id should not be empty if it is not a consortium lead";
+        }
+        return isOk;
+    }
+    
     private boolean validate(UserDTO user) {
         boolean isOk = true;
         if (StringUtils.isBlank(user.getLogin())) {
             isOk = false;
             user.setLoginError("Login should not be empty");
-        }        
+        }
         if (StringUtils.isBlank(user.getSalesforceId())) {
             isOk = false;
             user.setSalesforceIdError("Salesforce Id should not be empty");
-        }
-        if (StringUtils.isBlank(user.getParentSalesforceId()) && BooleanUtils.isFalse(user.getIsConsortiumLead())) {
-            isOk = false;
-            user.setParentSalesforceIdError("Parent Salesforce Id should not be empty if it is not a consortium lead ");
         }
         return isOk;
     }
@@ -296,49 +333,34 @@ public class UserSettingsResource {
         return new JSONObject(userInfo.getBody());
     }
 
-    private UserSettings createUserSettings(JSONObject obj, String salesforceId, Boolean mainContact) throws JSONException {
-        String userLogin = obj.getString("login");
-        String createdBy = SecurityUtils.getAuthenticatedUser();
-        Instant createdDate = Instant.parse(obj.getString("createdDate"));
-        String lastModifiedBy = obj.getString("lastModifiedBy");
-        Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
-
-        UserSettings us = new UserSettings();
-        us.setLogin(userLogin);
-        us.setMainContact(mainContact);
-        us.setSalesforceId(salesforceId);
-        us.setCreatedBy(createdBy);
-        us.setCreatedDate(createdDate);
-        us.setLastModifiedBy(lastModifiedBy);
-        us.setLastModifiedDate(lastModifiedDate);
-
-        // Persist it
-        return userSettingsRepository.save(us);
+    private Boolean memberSettingsExists(String salesforceId) {
+        Optional<MemberSettings> existingMemberSettings = memberSettingsRepository.findBySalesforceId(salesforceId);
+        return existingMemberSettings.isPresent();
     }
 
-    private MemberSettings createMemberSettings(JSONObject obj, String salesforceId, String parentSalesforceId, Boolean isConsortiumLead) throws JSONException {
-        Optional<MemberSettings> existingMemberSettings = memberSettingsRepository.findBySalesforceId(salesforceId);
-        MemberSettings ms;
-        // Check if member settings already exists
-        if (!existingMemberSettings.isPresent()) {
-            log.info("Creating MemberSettings with Salesforce Id {}", salesforceId);
-            String createdBy = SecurityUtils.getAuthenticatedUser();
-            Instant createdDate = Instant.parse(obj.getString("createdDate"));
-            String lastModifiedBy = obj.getString("lastModifiedBy");
-            Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
+    private MemberSettings createMemberSettings(String salesforceId, String parentSalesforceId, Boolean isConsortiumLead, Instant now) throws JSONException {
+        log.info("Creating MemberSettings with Salesforce Id {}", salesforceId);
+        MemberSettings ms = new MemberSettings();
+        String createdBy = SecurityUtils.getAuthenticatedUser();
+        ms.setSalesforceId(salesforceId);
+        ms.setParentSalesforceId(parentSalesforceId);
+        ms.setIsConsortiumLead((isConsortiumLead == null) ? false : isConsortiumLead);
+        ms.setCreatedBy(createdBy);
+        ms.setCreatedDate(now);
+        ms.setLastModifiedBy(createdBy);
+        ms.setLastModifiedDate(now);
+        return memberSettingsRepository.save(ms);
+    }
 
-            ms = new MemberSettings();
-            ms.setSalesforceId(salesforceId);
-            ms.setParentSalesforceId(parentSalesforceId);
-            ms.setIsConsortiumLead((isConsortiumLead == null) ? false : isConsortiumLead);
-            ms.setCreatedBy(createdBy);
-            ms.setCreatedDate(createdDate);
-            ms.setLastModifiedBy(lastModifiedBy);
-            ms.setLastModifiedDate(lastModifiedDate);
-            return memberSettingsRepository.save(ms);
-        } else {
-            return existingMemberSettings.get();
-        }
+    private MemberSettings updateMemberSettings(String salesforceId, String parentSalesforceId, Boolean isConsortiumLead, Instant lastModifiedDate) {
+        log.info("Updating MemberSettings with Salesforce Id {}", salesforceId);
+        Optional<MemberSettings> existingMemberSettings = memberSettingsRepository.findBySalesforceId(salesforceId);
+        MemberSettings ms = existingMemberSettings.get();
+        ms.setParentSalesforceId(parentSalesforceId);
+        ms.setIsConsortiumLead((isConsortiumLead == null) ? false : isConsortiumLead);
+        ms.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
+        ms.setLastModifiedDate(lastModifiedDate);
+        return memberSettingsRepository.save(ms);
     }
 
     /**
@@ -356,8 +378,8 @@ public class UserSettingsResource {
      * @throws JSONException
      */
     @PutMapping("/user")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException, JSONException {
-        //TODO: Secure this endpoint, only admins or the user himself should be able to update a user
         log.debug("REST request to update UserDTO : {}", userDTO);
         if (StringUtils.isBlank(userDTO.getId()) || StringUtils.isBlank(userDTO.getLogin())) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -373,17 +395,25 @@ public class UserSettingsResource {
             throw new RuntimeException("User login doesn't match: " + userDTO.getLogin() + " - " + uaaUserLogin);
         }
 
-        // Verify the user exists on the UserSettings table
-        Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByLogin(userDTO.getLogin());
-        if (!existingUserSettingsOptional.isPresent()) {
-            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for " + userDTO.getId(), ENTITY_NAME, "idnull");
-        }
+        // Update jhi_user entry
+        JSONObject obj = updateUserOnUAA(existingUaaUser.getString("id"), userDTO);
+        String lastModifiedBy = obj.getString("lastModifiedBy");
+        Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
 
+        // Update UserSettings
+        updateUserSettings(userDTO, lastModifiedDate);
+
+        userDTO.setLastModifiedBy(lastModifiedBy);
+        userDTO.setLastModifiedDate(lastModifiedDate);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userDTO.getId().toString())).body(userDTO);
+    }
+
+    private JSONObject updateUserOnUAA(String id, UserDTO userDTO) throws JSONException {
         // Update jhi_user entry
         Map<String, Object> map = new HashMap<String, Object>();
 
         // Remember to use the UAA user id, since we are updating the user info
-        map.put("id", existingUaaUser.getString("id"));
+        map.put("id", id);
         map.put("login", userDTO.getLogin());
         map.put("password", "requires_not_empty_but_doesnt_get_updated");
         map.put("email", userDTO.getLogin());
@@ -396,14 +426,42 @@ public class UserSettingsResource {
             throw new RuntimeException("Update user failed: " + response.getStatusCode().getReasonPhrase());
         }
 
-        JSONObject obj = new JSONObject(response.getBody());
-        String lastModifiedBy = obj.getString("lastModifiedBy");
-        Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
+        return new JSONObject(response.getBody());
+    }
 
+    private Boolean userSettingsExists(String login) {
+        Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByLogin(login);
+        return existingUserSettingsOptional.isPresent();
+    }
+
+    private UserSettings createUserSettings(String userLogin, String salesforceId, Boolean mainContact, Instant now) throws JSONException {
+        log.info("Creating userSettings for: " + userLogin);
+        String createdBy = SecurityUtils.getAuthenticatedUser();
+
+        UserSettings us = new UserSettings();
+        us.setLogin(userLogin);
+        us.setMainContact(mainContact);
+        us.setSalesforceId(salesforceId);
+        us.setCreatedBy(createdBy);
+        us.setCreatedDate(now);
+        us.setLastModifiedBy(createdBy);
+        us.setLastModifiedDate(now);
+
+        // Persist it
+        return userSettingsRepository.save(us);
+    }
+
+    private void updateUserSettings(UserDTO userDTO, Instant lastModifiedDate) {
+        log.info("Updating userSettings for: " + userDTO.toString());
+        // Verify the user exists on the UserSettings table
+        Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByLogin(userDTO.getLogin());
+        if (!existingUserSettingsOptional.isPresent()) {
+            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for " + userDTO.getLogin(), ENTITY_NAME, "id null");
+        }
         Boolean userSettingsModified = false;
         UserSettings existingUserSettings = existingUserSettingsOptional.get();
         Boolean existingMainContactFlag = existingUserSettings.getMainContact();
-        if (existingMainContactFlag != userDTO.getMainContact()) {
+        if (userDTO.getMainContact() != null && existingMainContactFlag != userDTO.getMainContact()) {
             existingUserSettings.setMainContact(userDTO.getMainContact());
             userSettingsModified = true;
         }
@@ -420,15 +478,18 @@ public class UserSettingsResource {
             userSettingsModified = true;
         }
 
+        // Check if main contact changed
+        if ((existingUserSettings.getMainContact() == null) || !(existingUserSettings.getMainContact().equals(userDTO.getMainContact()))) {
+            existingUserSettings.setMainContact(userDTO.getMainContact());
+            userSettingsModified = true;
+        }
+
         // Update UserSettings
         if (userSettingsModified) {
-            existingUserSettings.setLastModifiedBy(lastModifiedBy);
+            existingUserSettings.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
             existingUserSettings.setLastModifiedDate(lastModifiedDate);
             userSettingsRepository.save(existingUserSettings);
         }
-        userDTO.setLastModifiedBy(lastModifiedBy);
-        userDTO.setLastModifiedDate(lastModifiedDate);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userDTO.getId().toString())).body(userDTO);
     }
 
     /**
@@ -500,16 +561,7 @@ public class UserSettingsResource {
         for (int i = 0; i < array.length(); i++) {
             authorities.add(array.getString(i));
         }
-        u.setAuthorities(authorities);
-
-        // MemberSettings data
-        Optional<MemberSettings> oms = memberSettingsRepository.findBySalesforceId(us.getSalesforceId());
-        if (oms.isPresent()) {
-            MemberSettings ms = oms.get();
-            u.setSalesforceId(ms.getSalesforceId());
-            u.setParentSalesforceId(ms.getParentSalesforceId());
-            u.setIsConsortiumLead(ms.getIsConsortiumLead());
-        }
+        u.setAuthorities(authorities);        
         return u;
     }
 

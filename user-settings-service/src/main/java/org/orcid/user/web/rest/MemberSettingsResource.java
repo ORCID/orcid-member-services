@@ -114,6 +114,7 @@ public class MemberSettingsResource {
     public ResponseEntity<String> uploadMemberSettings(@RequestParam("file") MultipartFile file) throws Throwable {
         log.debug("Uploading member settings CSV");
         JSONArray errors = new JSONArray();
+        Instant now = Instant.now();
         try (InputStream is = file.getInputStream();) {
             InputStreamReader isr = new InputStreamReader(is);
             Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
@@ -130,8 +131,7 @@ public class MemberSettingsResource {
                     } else {
                         Optional<MemberSettings> optional = memberSettingsRepository.findBySalesforceId(memberSettings.getSalesforceId());
                         // If user doesn't exists, create it
-                        if(!optional.isPresent()) {
-                            Instant now = Instant.now();
+                        if(!optional.isPresent()) {                            
                             memberSettings.setCreatedBy(SecurityUtils.getAuthenticatedUser());
                             memberSettings.setCreatedDate(now);
                             memberSettings.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
@@ -144,6 +144,8 @@ public class MemberSettingsResource {
                             existingMemberSettings.setClientId(memberSettings.getClientId());
                             existingMemberSettings.setIsConsortiumLead(memberSettings.getIsConsortiumLead());
                             existingMemberSettings.setParentSalesforceId(memberSettings.getParentSalesforceId());
+                            memberSettings.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
+                            memberSettings.setLastModifiedDate(now);
                             memberSettingsRepository.save(existingMemberSettings);
                         }
                     }
@@ -193,6 +195,9 @@ public class MemberSettingsResource {
             .headers(HeaderUtil.createFailureAlert(applicationName, true, ENTITY_NAME, "memberSettings.create.error", memberSettings.getError()));                    
         }
         
+        Instant now = Instant.now();
+        memberSettings.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
+        memberSettings.setLastModifiedDate(now);
         MemberSettings result = memberSettingsRepository.save(memberSettings);
 
         // Check if salesforceId changed
@@ -203,6 +208,8 @@ public class MemberSettingsResource {
             // the new salesforceId
             userSettingsRepository.findBySalesforceId(existingMemberSettings.getSalesforceId()).stream().forEach(userSettings -> {
                 userSettings.setSalesforceId(memberSettings.getSalesforceId());
+                userSettings.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
+                userSettings.setLastModifiedDate(now);
                 userSettingsRepository.save(userSettings);
             });
         }
