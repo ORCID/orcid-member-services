@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -58,7 +59,6 @@ import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
-import io.micrometer.core.instrument.util.StringUtils;
 import net.logstash.logback.encoder.org.apache.commons.lang3.BooleanUtils;
 
 /**
@@ -116,20 +116,21 @@ public class UserSettingsResource {
 
     private void processElement(CSVRecord element, Instant now, JSONArray errors) throws Throwable {
         long index = element.getRecordNumber();
+        String errorString = new String();
         try {
-            UserDTO userDTO = parseLine(element);
             // Validate for errors
-            if (!validate(userDTO)) {
+            if (!validate(element, errorString)) {
                 JSONObject error = new JSONObject();
                 error.put("index", index);
-                error.put("message", buildErrorString(userDTO));
+                error.put("message", errorString);
                 errors.put(error);
             } else {
-                log.debug("Looking for existing user: " + userDTO.getLogin());
+                String login = element.get("email");
+                log.debug("Looking for existing user: " + login);
                 String uaaUserLogin = null;
                 String uaaUserId = null;
                 try {
-                    ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(userDTO.getLogin());
+                    ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(login);
                     log.debug("Status code: " + existingUserResponse.getStatusCodeValue());
                     if (existingUserResponse != null) {
                         JSONObject existingUaaUser = new JSONObject(existingUserResponse.getBody());
@@ -140,34 +141,37 @@ public class UserSettingsResource {
                     if (hre.getCause() != null && ResponseStatusException.class.isAssignableFrom(hre.getCause().getClass())) {
                         ResponseStatusException rse = (ResponseStatusException) hre.getCause();
                         if (HttpStatus.NOT_FOUND.equals(rse.getStatus())) {
-                            log.debug("User not found: " + userDTO.getLogin());
+                            log.debug("User not found: " + login);
                         } else {
                             throw hre;
                         }
                     }
                 }
-
+                String salesforceId = element.get("salesforceId");
+                String parentSalesforceId = element.get("parentSalesforceId");
+                Boolean isConsortiumLead = StringUtils.isBlank(element.get("isConsortiumLead")) ? false : Boolean.parseBoolean(element.get("isConsortiumLead"));
+                UserDTO userDTO = getUserDTO(element);
                 // If user exists, update it
                 if (StringUtils.isNotBlank(uaaUserLogin)) {
                     // Updates the UAA user
                     updateUserOnUAA(uaaUserId, userDTO);
                     // Update or create MemberSettings
-                    if (memberSettingsExists(userDTO.getSalesforceId())) {
-                        updateMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), now);
+                    if (memberSettingsExists(salesforceId)) {
+                        updateMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, now);
                     } else {
-                        createMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), now);
+                        createMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, now);
                     }
                     // Update or create UserSettings
-                    if (userSettingsExists(userDTO.getLogin())) {
+                    if (userSettingsExists(login)) {
                         updateUserSettings(userDTO, now);
                     } else {
-                        createUserSettings(userDTO.getLogin(), userDTO.getSalesforceId(), false, now);
+                        createUserSettings(login, salesforceId, false, now);
                     }
                 } else {
                     // Else create the user
                     createUserOnUAA(userDTO);
                     createUserSettings(userDTO.getLogin(), element.get("salesforceId"), false, now);
-                    createMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), now);
+                    createMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, now);
                 }
             }
         } catch (Exception e) {
@@ -184,63 +188,26 @@ public class UserSettingsResource {
             errors.put(error);
         }
     }
-
-    private UserDTO parseLine(CSVRecord record) {
+    
+    private UserDTO getUserDTO(CSVRecord record) {
         UserDTO u = new UserDTO();
         u.setLogin(record.get("email"));
         u.setFirstName(record.get("firstName"));
         u.setLastName(record.get("lastName"));
+        u.setSalesforceId(record.get("salesforceId"));
         u.setPassword(RandomStringUtils.randomAlphanumeric(10));
+        List<String> authorities = new ArrayList<String>();
         String grants = record.get("grant");
         if (!StringUtils.isBlank(grants)) {
             if (!(grants.startsWith("[") && grants.endsWith("]"))) {
                 throw new IllegalArgumentException("Grant list should start with '[' and ends with ']'");
             }
-            List<String> authorities = Arrays.stream(grants.replace("[", "").replace("]", "").split(",")).collect(Collectors.toList());
-            u.setAuthorities(authorities);
+            authorities = Arrays.stream(grants.replace("[", "").replace("]", "").split(",")).collect(Collectors.toList());            
         }
-        Boolean isConsortiumLead = StringUtils.isBlank(record.get("isConsortiumLead")) ? false : Boolean.parseBoolean(record.get("isConsortiumLead"));
-        u.setIsConsortiumLead(isConsortiumLead);
-        u.setSalesforceId(record.get("salesforceId"));
-        if (!isConsortiumLead) {
-            u.setParentSalesforceId(record.get("parentSalesforceId"));
-        }
+        u.setAuthorities(authorities);
         return u;
     }
     
-    private String buildErrorString(UserDTO userDTO) {
-        StringBuilder error = new StringBuilder();
-        if (userDTO.getLoginError() != null) {
-            error.append(userDTO.getLoginError());
-        }
-        if (userDTO.getFirstNameError() != null) {
-            if (error.length() > 0)
-                error.append(", ");
-            error.append(userDTO.getFirstNameError());
-        }
-        if (userDTO.getLastNameError() != null) {
-            if (error.length() > 0)
-                error.append(", ");
-            error.append(userDTO.getLastNameError());
-        }
-        if (userDTO.getAuthoritiesError() != null) {
-            if (error.length() > 0)
-                error.append(", ");
-            error.append(userDTO.getAuthoritiesError());
-        }
-        if (userDTO.getParentSalesforceIdError() != null) {
-            if (error.length() > 0)
-                error.append(", ");
-            error.append(userDTO.getParentSalesforceIdError());
-        }
-        if (userDTO.getSalesforceIdError() != null) {
-            if (error.length() > 0)
-                error.append(", ");
-            error.append(userDTO.getSalesforceIdError());
-        }
-        return error.toString();
-    }
-
     /**
      * {@code POST  /user} : Create a new memberServicesUser.
      *
@@ -276,7 +243,7 @@ public class UserSettingsResource {
         UserSettings us = createUserSettings(userLogin, userDTO.getSalesforceId(), userDTO.getMainContact(), createdDate);
 
         // Create the member settings
-        createMemberSettings(userDTO.getSalesforceId(), userDTO.getParentSalesforceId(), userDTO.getIsConsortiumLead(), createdDate);
+        createMemberSettings(userDTO.getSalesforceId(), StringUtils.EMPTY, false, createdDate);
 
         userDTO.setId(us.getId());
         userDTO.setLogin(userLogin);
@@ -292,6 +259,31 @@ public class UserSettingsResource {
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, us.getId().toString())).body(userDTO);
     }
 
+    private boolean validate(CSVRecord record, String error) {
+        boolean isOk = true;
+        if (StringUtils.isBlank(record.get("email"))) {
+            isOk = false;
+            error = "Login should not be empty";
+        }
+        if (StringUtils.isBlank(record.get("salesforceId"))) {
+            if(!isOk) {
+                error += ", ";
+            }
+            isOk = false;
+            error += "Salesforce Id should not be empty";
+        }
+        Boolean isConsortiumLead = StringUtils.isBlank(record.get("isConsortiumLead")) ? false : Boolean.parseBoolean(record.get("isConsortiumLead"));
+        
+        if (StringUtils.isBlank(record.get("parentSalesforceId")) && BooleanUtils.isFalse(isConsortiumLead)) {
+            if(!isOk) {
+                error += ", ";
+            }
+            isOk = false;
+            error += "Parent Salesforce Id should not be empty if it is not a consortium lead";
+        }
+        return isOk;
+    }
+    
     private boolean validate(UserDTO user) {
         boolean isOk = true;
         if (StringUtils.isBlank(user.getLogin())) {
@@ -301,10 +293,6 @@ public class UserSettingsResource {
         if (StringUtils.isBlank(user.getSalesforceId())) {
             isOk = false;
             user.setSalesforceIdError("Salesforce Id should not be empty");
-        }
-        if (StringUtils.isBlank(user.getParentSalesforceId()) && BooleanUtils.isFalse(user.getIsConsortiumLead())) {
-            isOk = false;
-            user.setParentSalesforceIdError("Parent Salesforce Id should not be empty if it is not a consortium lead ");
         }
         return isOk;
     }
@@ -473,7 +461,7 @@ public class UserSettingsResource {
         Boolean userSettingsModified = false;
         UserSettings existingUserSettings = existingUserSettingsOptional.get();
         Boolean existingMainContactFlag = existingUserSettings.getMainContact();
-        if (existingMainContactFlag != userDTO.getMainContact()) {
+        if (userDTO.getMainContact() != null && existingMainContactFlag != userDTO.getMainContact()) {
             existingUserSettings.setMainContact(userDTO.getMainContact());
             userSettingsModified = true;
         }
@@ -573,16 +561,7 @@ public class UserSettingsResource {
         for (int i = 0; i < array.length(); i++) {
             authorities.add(array.getString(i));
         }
-        u.setAuthorities(authorities);
-
-        // MemberSettings data
-        Optional<MemberSettings> oms = memberSettingsRepository.findBySalesforceId(us.getSalesforceId());
-        if (oms.isPresent()) {
-            MemberSettings ms = oms.get();
-            u.setSalesforceId(ms.getSalesforceId());
-            u.setParentSalesforceId(ms.getParentSalesforceId());
-            u.setIsConsortiumLead(ms.getIsConsortiumLead());
-        }
+        u.setAuthorities(authorities);        
         return u;
     }
 
