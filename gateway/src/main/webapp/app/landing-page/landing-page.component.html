@@ -7,8 +7,10 @@
         <p>Our records show that you served on an ORCID Working Group, Task Force, Steering Group, or the ORCID Board.</p> 
         <p>We'd like to recognize your contribution by updating the <a href="https://support.orcid.org/hc/en-us/articles/360008897694-Add-a-membership-or-service-to-your-ORCID-record" target="ORCID_membership_service">Membership and service</a> section your ORCID record.</p>
         <p>Click to connect your ORCID iD (or register for an iD) and grant permission to update your record.</p>
-        <!--ORCID widget-->
-        <script src="js/orcid-widget.js"></script>
-        <div id="orcidWidget" data-size='lg' data-clientid='APP-99MR3GU01PBQK8FP' data-env='sandbox' data-scopes='/activities/update' data-redirecturi='https://orcid.github.io/orcid-auth-widget/widget.html' data-submituri='https://assertion-service.orcid.org/api/id-token'></div>
+        <a id="orcidAuthButton" *ngIf="showOauth" href='{{oauthUrl}}'><img src="https://orcid.org/sites/default/files/images/orcid_24x24.png" />Connect your ORCID iD</a>
+        <p id="orcidAuthFail" *ngIf="showError">Oops, something went terribly wrong<br> and we couldn\'t fetch your ORCID iD</p>
+        <p id="orcidAuthFail" *ngIf="showDenied">Oops, you have denied access<br> so we will not be able to update your ORCID iD</p>
+        <p id="orcidAuthSuccess" *ngIf="showSuccess"><b>Thanks, {{signedInIdToken.given_name}} {{signedInIdToken.family_name}}</b><br><img src="https://orcid.org/sites/default/files/images/orcid_24x24.png"/><a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{signedInIdToken.sub}}</a></p>
+    
     </div>
 </div>
