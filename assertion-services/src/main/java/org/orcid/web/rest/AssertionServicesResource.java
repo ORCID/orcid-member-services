@@ -4,12 +4,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import com.nimbusds.jwt.SignedJWT;
 
 import javax.validation.Valid;
 
@@ -27,7 +29,10 @@ import org.orcid.jaxb.model.common.Iso3166Country;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.repository.OrcidRecordRepository;
 import org.orcid.security.AuthoritiesConstants;
+import org.orcid.security.EncryptUtil;
+import org.orcid.security.JWTUtil;
 import org.orcid.security.SecurityUtils;
+import org.orcid.service.OrcidRecordService;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +56,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 
@@ -68,7 +75,13 @@ public class AssertionServicesResource {
     private AssertionsRepository assertionsRepository;
 
     @Autowired
-    private OrcidRecordRepository orcidRecordRepository;
+    private OrcidRecordService orcidRecordService;
+
+    @Autowired
+    private EncryptUtil encryptUtil;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     private String getAuthenticatedUser() {
         if (!SecurityUtils.isAuthenticated()) {
@@ -155,9 +168,9 @@ public class AssertionServicesResource {
 
         String email = assertion.getEmail();
 
-        Optional<OrcidRecord> optionalRecord = orcidRecordRepository.findOneByEmail(email);
+        Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(email);
         if (!optionalRecord.isPresent()) {
-            createOrcidRecord(email, loggedInUser, now);
+            orcidRecordService.createOrcidRecord(email, loggedInUser, now);
         }
 
         assertion = assertionsRepository.save(assertion);
@@ -222,9 +235,9 @@ public class AssertionServicesResource {
 
                 // Create users
                 for (String userEmail : usersToAdd) {
-                    if (!orcidRecordRepository.findOneByEmail(userEmail).isPresent()) {
+                    if (!orcidRecordService.findOneByEmail(userEmail).isPresent()) {
                         log.info("Creating UserInfo for email {}", usersToAdd);
-                        createOrcidRecord(userEmail, loggedInUser, now);
+                        orcidRecordService.createOrcidRecord(userEmail, loggedInUser, now);
                     }
                 }
             }
@@ -256,13 +269,34 @@ public class AssertionServicesResource {
         return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
     }
 
-    private void createOrcidRecord(String email, String ownerId, Instant now) {
-        OrcidRecord or = new OrcidRecord();
-        or.setEmail(email);
-        or.setOwnerId(ownerId);
-        or.setCreated(now);
-        or.setModified(now);
-        orcidRecordRepository.insert(or);
+    @PostMapping("/id-token")
+    public ResponseEntity<Void> storeIdToken(@RequestBody ObjectNode json) throws ParseException {
+        String state = json.get("state").asText();
+        String idToken = json.has("id_token") ? json.get("id_token").asText() : null;
+        Boolean denied = json.has("denied") ? json.get("denied").asBoolean() : false;
+        String emailInStatus = encryptUtil.decrypt(state);
+
+        if (!denied) {
+            SignedJWT jwt = jwtUtil.getSignedJWT(idToken);
+            String orcidIdInJWT = String.valueOf(jwt.getJWTClaimsSet().getClaim("sub"));
+
+            if (!StringUtils.isBlank(emailInStatus) && !StringUtils.isBlank(orcidIdInJWT)) {
+                orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT);
+            } else {
+                if (StringUtils.isBlank(emailInStatus)) {
+                    log.warn("emailInStatus is empty in the state key: " + state);
+                }
+
+                if (StringUtils.isBlank(orcidIdInJWT)) {
+                    log.warn("orcidIdInJWT is empty in the id token: " + idToken);
+                }
+            }
+        } else {
+            log.warn("User {} have denied access", emailInStatus);
+            orcidRecordService.storeUserDeniedAccess(emailInStatus);
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     private void validateAssertion(Assertion assertion) {

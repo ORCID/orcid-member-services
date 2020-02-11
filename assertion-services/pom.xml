@@ -337,6 +337,12 @@
             <artifactId>commons-csv</artifactId>
             <version>1.7</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt -->
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>8.5.1</version>
+        </dependency>        
         <dependency>
             <groupId>org.orcid</groupId>
             <artifactId>orcid-model</artifactId>
