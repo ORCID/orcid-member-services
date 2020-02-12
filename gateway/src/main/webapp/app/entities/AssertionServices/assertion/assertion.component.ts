@@ -119,6 +119,11 @@ export class AssertionComponent implements OnInit, OnDestroy {
     return result;
   }
 
+  getLinks() {
+    console.log('GET LINKS');
+    this.assertionService.getLinks();
+  }
+  
   protected paginateAssertions(data: IAssertion[], headers: HttpHeaders) {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
