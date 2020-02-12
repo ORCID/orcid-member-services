@@ -3,6 +3,7 @@ package org.orcid.service;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import java.util.Optional;
 
 import org.apache.commons.csv.CSVFormat;
@@ -37,6 +38,16 @@ public class OrcidRecordService {
         or.setCreated(now);
         or.setModified(now);
         orcidRecordRepository.insert(or);
+    }
+    
+    public void createOrcidRecords(String ownerId, Set<String> emails) {
+        Instant now = Instant.now();
+        // Create assertions
+        for (String e : emails) {
+            if (!findOneByEmail(e).isPresent()) {
+                createOrcidRecord(e, ownerId, now);
+            }
+        }
     }
     
     public void storeIdToken(String emailInStatus, String idToken, String orcidIdInJWT) {
