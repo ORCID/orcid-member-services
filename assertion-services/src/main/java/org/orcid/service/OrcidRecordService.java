@@ -74,7 +74,7 @@ public class OrcidRecordService {
         for(OrcidRecord record : records) {
             String email = record.getEmail();
             String encrypted = encryptUtil.encrypt(email);
-            String link = landingPageUrl + '/' + encrypted;
+            String link = landingPageUrl + "?state=" + encrypted;
             csvPrinter.printRecord(email, link);
         }
         
