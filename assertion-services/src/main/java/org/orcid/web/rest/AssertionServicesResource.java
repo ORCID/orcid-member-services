@@ -1,5 +1,6 @@
 package org.orcid.web.rest;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -11,9 +12,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import com.nimbusds.jwt.SignedJWT;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.ws.rs.InternalServerErrorException;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -21,17 +23,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.orcid.client.UserSettingsClient;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.jaxb.model.common.Iso3166Country;
 import org.orcid.repository.AssertionsRepository;
-import org.orcid.repository.OrcidRecordRepository;
 import org.orcid.security.AuthoritiesConstants;
 import org.orcid.security.EncryptUtil;
 import org.orcid.security.JWTUtil;
 import org.orcid.security.SecurityUtils;
+import org.orcid.service.AssertionsService;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
@@ -57,6 +58,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.nimbusds.jwt.SignedJWT;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -72,7 +74,7 @@ public class AssertionServicesResource {
     private String applicationName;
 
     @Autowired
-    private AssertionsRepository assertionsRepository;
+    private AssertionsService assertionsService;
 
     @Autowired
     private OrcidRecordService orcidRecordService;
@@ -104,7 +106,7 @@ public class AssertionServicesResource {
 
         log.debug("REST request to fetch assertions from user {}", loggedInUserId);
 
-        Page<Assertion> affiliations = assertionsRepository.findByOwnerId(loggedInUserId, pageable);
+        Page<Assertion> affiliations = assertionsService.findByOwnerId(loggedInUserId, pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
         return ResponseEntity.ok().headers(headers).body(affiliations.getContent());
@@ -113,15 +115,8 @@ public class AssertionServicesResource {
     @GetMapping("/assertion/{id}")
     public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
         String loggedInUserId = getAuthenticatedUser();
-
         log.debug("REST request to fetch assertion {} from user {}", id, loggedInUserId);
-
-        Optional<Assertion> optional = assertionsRepository.findById(id);
-
-        if (!optional.isPresent()) {
-            ResponseEntity.notFound();
-        }
-
+        Optional<Assertion> optional = assertionsService.findById(id);
         Assertion a = optional.get();
 
         if (!loggedInUserId.equals(a.getOwnerId())) {
@@ -130,50 +125,36 @@ public class AssertionServicesResource {
 
         return ResponseEntity.ok().body(optional.get());
     }
+    
+    
+    @GetMapping("/assertion/links")
+    public void generateLinks(HttpServletResponse response) throws IOException {
+        final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
+        final String fileName = userLogin + '_' +  System.currentTimeMillis() + "_report.csv";        
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+        response.setHeader("Content-Type", "text/csv");
+        response.setHeader("filename", fileName);
+        String csvReport = orcidRecordService.generateLinks(userLogin);
+        response.getOutputStream().write(csvReport.getBytes());
+        response.flushBuffer();
+    }
 
     @PutMapping("/assertion")
     public ResponseEntity<Assertion> updateAssertion(@RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
-        String loggedInUserId = getAuthenticatedUser();
-
         log.debug("REST request to update assertion : {}", assertion);
-
-        Optional<Assertion> optional = assertionsRepository.findById(assertion.getId());
-
-        if (!optional.isPresent()) {
-            ResponseEntity.notFound();
-        }
-
-        Assertion existingAssertion = optional.get();
-
-        if (!loggedInUserId.equals(existingAssertion.getOwnerId())) {
-            throw new IllegalArgumentException("Invalid assertion id");
-        }
-
-        copyFieldsToUpdate(assertion, existingAssertion);
-
-        assertionsRepository.save(existingAssertion);
-
+        String loggedInUserId = getAuthenticatedUser();
+        validateAssertion(assertion);
+        Assertion existingAssertion = assertionsService.updateAssertion(loggedInUserId, assertion);
+        
         return ResponseEntity.ok().body(existingAssertion);
     }
 
     @PostMapping("/assertion")
     public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException, URISyntaxException {
+        log.debug("REST request to create assertion : {}", assertion);        
+        String loggedInUserId = getAuthenticatedUser();
         validateAssertion(assertion);
-        String loggedInUser = getAuthenticatedUser();
-        Instant now = Instant.now();
-
-        assertion.setOwnerId(loggedInUser);
-        assertion.setCreated(now);
-        assertion.setModified(now);
-
-        String email = assertion.getEmail();
-
-        Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(email);
-        if (!optionalRecord.isPresent()) {
-            orcidRecordService.createOrcidRecord(email, loggedInUser, now);
-        }
-
-        assertion = assertionsRepository.save(assertion);
+        assertion = assertionsService.createAssertion(loggedInUserId, assertion);
 
         return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, assertion.getId())).body(assertion);
@@ -187,7 +168,7 @@ public class AssertionServicesResource {
         try (InputStream is = file.getInputStream();) {
             InputStreamReader isr = new InputStreamReader(is);
             Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
-            List<Assertion> existingAssertions = assertionsRepository.findAllByOwnerId(loggedInUser);
+            List<Assertion> existingAssertions = assertionsService.findAllByOwnerId(loggedInUser);
             List<Assertion> assertionsToAdd = new ArrayList<Assertion>();
             Set<String> usersToAdd = new HashSet<String>();
             // Validate affiliations
@@ -454,30 +435,5 @@ public class AssertionServicesResource {
 
     private boolean equals(String a, String b) {
         return (a == null ? b == null : a.equals(b));
-    }
-
-    private void copyFieldsToUpdate(Assertion source, Assertion destination) {
-        // Update start date
-        destination.setStartYear(source.getStartYear());
-        destination.setStartMonth(source.getStartMonth());
-        destination.setStartDay(source.getStartDay());
-
-        // Update end date
-        destination.setEndYear(source.getEndYear());
-        destination.setEndMonth(source.getEndMonth());
-        destination.setEndDay(source.getEndDay());
-
-        // Update external identifiers
-        destination.setExternalId(source.getExternalId());
-        destination.setExternalIdType(source.getExternalIdType());
-        destination.setExternalIdUrl(source.getExternalIdUrl());
-
-        // Update organization
-        destination.setOrgCity(source.getOrgCity());
-        destination.setOrgCountry(source.getOrgCountry());
-        destination.setOrgName(source.getOrgName());
-        destination.setOrgRegion(source.getOrgRegion());
-        destination.setDisambiguatedOrgId(source.getDisambiguatedOrgId());
-        destination.setDisambiguationSource(source.getDisambiguationSource());
-    }
+    }    
 }
