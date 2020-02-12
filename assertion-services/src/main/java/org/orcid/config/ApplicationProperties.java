@@ -11,6 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
     private String jwtSignatureUrl;
+    
+    private String landingPageUrl;
 
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
@@ -19,4 +21,12 @@ public class ApplicationProperties {
     public void setJwtSignatureUrl(String jwtSignatureUrl) {
         this.jwtSignatureUrl = jwtSignatureUrl;
     }
+
+    public String getLandingPageUrl() {
+        return landingPageUrl;
+    }
+
+    public void setLandingPageUrl(String landingPageUrl) {
+        this.landingPageUrl = landingPageUrl;
+    }        
 }
