@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,10 +23,8 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.domain.Assertion;
-import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.jaxb.model.common.Iso3166Country;
-import org.orcid.repository.AssertionsRepository;
 import org.orcid.security.AuthoritiesConstants;
 import org.orcid.security.EncryptUtil;
 import org.orcid.security.JWTUtil;
@@ -90,13 +87,13 @@ public class AssertionServicesResource {
             throw new BadRequestAlertException("User is not logged in", "login", "null");
         }
 
-        String loggedInUser = SecurityUtils.getCurrentUserLogin().get();
+        String loggedInUserId = SecurityUtils.getCurrentUserLogin().get();
 
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
-            throw new BadRequestAlertException("User does not have the required scope 'AuthoritiesConstants.ASSERTION_SERVICE_ENABLED'", "login", loggedInUser);
+            throw new BadRequestAlertException("User does not have the required scope 'AuthoritiesConstants.ASSERTION_SERVICE_ENABLED'", "login", loggedInUserId);
         }
 
-        return loggedInUser;
+        return loggedInUserId;
     }
 
     @GetMapping("/assertions")
@@ -162,13 +159,12 @@ public class AssertionServicesResource {
 
     @PostMapping("/assertion/upload")
     public ResponseEntity<String> uploadAssertions(@RequestParam("file") MultipartFile file) {
-        String loggedInUser = getAuthenticatedUser();
+        String loggedInUserId = getAuthenticatedUser();
         JSONArray errors = new JSONArray();
-        Instant now = Instant.now();
         try (InputStream is = file.getInputStream();) {
             InputStreamReader isr = new InputStreamReader(is);
             Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
-            List<Assertion> existingAssertions = assertionsService.findAllByOwnerId(loggedInUser);
+            List<Assertion> existingAssertions = assertionsService.findAllByOwnerId(loggedInUserId);
             List<Assertion> assertionsToAdd = new ArrayList<Assertion>();
             Set<String> usersToAdd = new HashSet<String>();
             // Validate affiliations
@@ -183,14 +179,9 @@ public class AssertionServicesResource {
                         // If something is updated in the aff, update the
                         // existing one in the DB
                         if (!StringUtils.isBlank(existingAssertion.getPutCode()) && isUpdated(assertion, existingAssertion)) {
-                            copyFieldsToUpdate(assertion, existingAssertion);
-                            existingAssertion.setUpdated(true);
-                            assertionsRepository.save(existingAssertion);
+                            assertionsService.updateAssertion(loggedInUserId, existingAssertion);
                         }
                     } else {
-                        assertion.setOwnerId(loggedInUser);
-                        assertion.setCreated(now);
-                        assertion.setModified(now);
                         // Create the userInfo if needed
                         if (!usersToAdd.contains(assertion.getEmail())) {
                             usersToAdd.add(assertion.getEmail());
@@ -208,19 +199,8 @@ public class AssertionServicesResource {
             }
 
             if (errors.length() == 0) {
-                // Create assertions
-                for (Assertion a : assertionsToAdd) {
-                    // Create the assertion
-                    assertionsRepository.insert(a);
-                }
-
-                // Create users
-                for (String userEmail : usersToAdd) {
-                    if (!orcidRecordService.findOneByEmail(userEmail).isPresent()) {
-                        log.info("Creating UserInfo for email {}", usersToAdd);
-                        orcidRecordService.createOrcidRecord(userEmail, loggedInUser, now);
-                    }
-                }
+                assertionsService.createAssertions(loggedInUserId, assertionsToAdd);
+                orcidRecordService.createOrcidRecords(loggedInUserId, usersToAdd);                
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -231,9 +211,9 @@ public class AssertionServicesResource {
 
     @DeleteMapping("/assertion/{id}")
     public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
-        String loggedInUser = getAuthenticatedUser();
+        String loggedInUserId = getAuthenticatedUser();
 
-        Optional<Assertion> optional = assertionsRepository.findById(id);
+        Optional<Assertion> optional = assertionsService.findById(id);
 
         if (!optional.isPresent()) {
             ResponseEntity.notFound();
@@ -241,11 +221,11 @@ public class AssertionServicesResource {
 
         Assertion a = optional.get();
 
-        if (!loggedInUser.equals(a.getOwnerId())) {
+        if (!loggedInUserId.equals(a.getOwnerId())) {
             throw new IllegalArgumentException("Invalid assertion id");
         }
 
-        assertionsRepository.deleteById(id);
+        assertionsService.deleteById(id);
 
         return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
     }

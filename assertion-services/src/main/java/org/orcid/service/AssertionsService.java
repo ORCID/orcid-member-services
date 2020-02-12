@@ -50,6 +50,18 @@ public class AssertionsService {
         return assertionsRepository.save(assertion);
     }
     
+    public void createAssertions(String loggedInUserId, List<Assertion> assertions) {
+        Instant now = Instant.now();
+        // Create assertions
+        for (Assertion a : assertions) {
+            a.setOwnerId(loggedInUserId);
+            a.setCreated(now);            
+            a.setModified(now);
+            // Create the assertion
+            assertionsRepository.insert(a);
+        }
+    }
+    
     public Assertion updateAssertion(String loggedInUserId, Assertion assertion) {
         Optional<Assertion> optional = assertionsRepository.findById(assertion.getId());
         Assertion existingAssertion = optional.get();
@@ -59,7 +71,12 @@ public class AssertionsService {
         }
 
         copyFieldsToUpdate(assertion, existingAssertion);
+        assertion.setUpdated(true);
         return assertionsRepository.save(existingAssertion);
+    }
+    
+    public void deleteById(String id) {
+        assertionsRepository.deleteById(id);
     }
     
     private void copyFieldsToUpdate(Assertion source, Assertion destination) {
