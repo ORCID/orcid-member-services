@@ -20,7 +20,7 @@
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">                   
                     <li *jhiHasAnyAuthority="'ASSERTION_SERVICE_ENABLED' || 'ROLE_ADMIN'">
-                        <a class="dropdown-item" routerLink="affiliation" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="affiliations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon icon="addres-card" fixedWidth="true"></fa-icon>
                             <span jhiTranslate="global.menu.entities.assertionServicesAffiliation">Affiliation</span>
 
