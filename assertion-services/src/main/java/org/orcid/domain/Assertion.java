@@ -100,6 +100,9 @@ public class Assertion implements Serializable {
     @Field("updated")
     private boolean updated;
 
+    @Field("added_to_orcid")
+    private Instant addedToORCID;
+    
     @Field("deleted_from_orcid")
     private Instant deletedFromORCID;
 
@@ -440,10 +443,19 @@ public class Assertion implements Serializable {
         this.status = status;
     }
 
+    public Instant getAddedToORCID() {
+        return addedToORCID;
+    }
+
+    public void setAddedToORCID(Instant addedToORCID) {
+        this.addedToORCID = addedToORCID;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((addedToORCID == null) ? 0 : addedToORCID.hashCode());
         result = prime * result + ((affiliationSection == null) ? 0 : affiliationSection.hashCode());
         result = prime * result + ((created == null) ? 0 : created.hashCode());
         result = prime * result + ((deletedFromORCID == null) ? 0 : deletedFromORCID.hashCode());
@@ -483,6 +495,11 @@ public class Assertion implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Assertion other = (Assertion) obj;
+        if (addedToORCID == null) {
+            if (other.addedToORCID != null)
+                return false;
+        } else if (!addedToORCID.equals(other.addedToORCID))
+            return false;
         if (affiliationSection != other.affiliationSection)
             return false;
         if (created == null) {

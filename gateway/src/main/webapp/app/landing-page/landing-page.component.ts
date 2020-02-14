@@ -26,13 +26,12 @@ export class LandingPageComponent implements OnInit {
   issuer: String;
   key: any;
   oauthUrl: String;
-  signedInIdToken: any;
-
+  
   constructor(private eventManager: JhiEventManager, private landingPageService: LandingPageService, private route: ActivatedRoute) {
     // TODO: need to make this switch from sandbox to prod
     this.issuer = this.sandboxIssuer;
     this.key = this.sandboxKey;
-    this.oauthUrl = this.sandboxOauthUrl + '?response_type=token&redirect_uri=' + this.redirectUri + '&client_id=' + this.clientId + '&scope=openid%20/activities/update';
+    this.oauthUrl = this.sandboxOauthUrl + '?response_type=token&redirect_uri=' + this.redirectUri + '&client_id=' + this.clientId + '&scope=/activities/update openid';
   }
 
   ngOnInit() {
@@ -41,8 +40,7 @@ export class LandingPageComponent implements OnInit {
     
     if (id_token != null && id_token != '') {
       if (this.checkSig(id_token)) {
-        this.signedInIdToken = JSON.parse(KJUR.jws.JWS.parse(id_token).payloadPP);
-        this.submitIdTokenData(this.signedInIdToken, state_param);
+        this.submitIdTokenData(id_token, state_param);
       } else {
         this.showErrorElement();
       }
