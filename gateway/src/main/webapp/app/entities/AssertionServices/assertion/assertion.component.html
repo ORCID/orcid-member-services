@@ -1,20 +1,27 @@
 <div>
     <h2 id="page-heading">
         <span jhiTranslate="gatewayApp.assertionServicesAssertion.home.title">Assertions</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-assertion" [routerLink]="['/assertion/new']">
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-assertion" [routerLink]="['/assertions/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.createLabel">
             Create new Assertion
             </span>
         </button>
         <br />
-        <button id="jh-upload-entities" class="btn btn-primary float-right jh-create-entity create-assertions" [routerLink]="['/', 'assertion', { outlets: { popup: 'import'} }]">
+        <button id="jh-upload-entities" class="btn btn-primary float-right jh-upload-entities upload-assertions" [routerLink]="['/', 'assertions', { outlets: { popup: 'import'} }]">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.uploadLabel">
             Upload Assertions
             </span>
         </button>
         <br />
+        <button id="jh-generate-links" class="btn btn-primary float-right jh-generate-links generate-links" (click)="getLinks()">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.getLinks">
+            Get links
+            </span>
+        </button>
+        <br />        
     </h2>
     <jhi-alert></jhi-alert>
     <br/>

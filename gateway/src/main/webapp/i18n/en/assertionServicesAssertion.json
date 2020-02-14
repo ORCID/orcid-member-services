@@ -6,7 +6,8 @@
         "createLabel": "Create a new Assertion",
         "createOrEditLabel": "Create or edit a Assertions",
         "notFound": "No Assertion found",
-        "uploadLabel": "Upload Assertions"
+        "uploadLabel": "Upload Assertions",
+        "getLinks": "Get links"
       },
       "delete": {
         "question": "Are you sure you want to delete Assertion {{ id }}?"
