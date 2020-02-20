@@ -9,6 +9,7 @@ import java.util.Optional;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONException;
 import org.orcid.client.OrcidAPIClient;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
@@ -59,7 +60,7 @@ public class AssertionsService {
             orcidRecordService.createOrcidRecord(email, loggedInUserId, now);
         }
 
-        return assertionsRepository.save(assertion);
+        return assertionsRepository.insert(assertion);
     }
 
     public void createAssertions(String loggedInUserId, List<Assertion> assertions) {
@@ -84,6 +85,7 @@ public class AssertionsService {
 
         copyFieldsToUpdate(assertion, existingAssertion);
         assertion.setUpdated(true);
+        assertion.setModified(Instant.now());
         return assertionsRepository.save(existingAssertion);
     }
 
@@ -116,7 +118,7 @@ public class AssertionsService {
         destination.setDisambiguationSource(source.getDisambiguationSource());
     }
 
-    public void pushAssertionsToOrcid() throws JAXBException  {
+    public void postAssertionsToOrcid() throws JAXBException  {
         List<Assertion> assertionsToAdd = assertionsRepository.findAllToCreate();
         Map<String, String> accessTokens = new HashMap<String, String>();
         // TODO: What we will do if the user revoke permissions?
@@ -155,9 +157,97 @@ public class AssertionsService {
             log.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
             String putCode = orcidAPIClient.postAffiliation(orcid, accessToken, assertion);
             assertion.setPutCode(putCode);
-            assertion.setAddedToORCID(Instant.now());
+            Instant now = Instant.now();
+            assertion.setAddedToORCID(now);
+            assertion.setModified(now);
             assertionsRepository.save(assertion);
         }
     }
-
+    
+    public void putAssertionsToOrcid() throws JAXBException {
+        List<Assertion> assertionsToUpdate = assertionsRepository.findAllToUpdate();
+        Map<String, String> accessTokens = new HashMap<String, String>();
+        // TODO: What we will do if the user revoke permissions?
+        for (Assertion assertion : assertionsToUpdate) {
+            Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(assertion.getEmail());
+            if (!optional.isPresent()) {
+                log.error("OrcidRecord not available for email {}", assertion.getEmail());
+                break;
+            }
+            OrcidRecord record = optional.get();
+            if (StringUtils.isBlank(record.getOrcid())) {
+                log.warn("Orcid id still not available for {}", assertion.getEmail());
+                break;
+            }
+            if (StringUtils.isBlank(record.getIdToken())) {
+                log.warn("Id token still not available for {}", assertion.getEmail());
+                break;
+            }
+            
+            String orcid = record.getOrcid();
+            String idToken = record.getIdToken();
+            String accessToken;
+            if(accessTokens.containsKey(orcid)) {
+                accessToken = accessTokens.get(orcid);
+            } else {
+                log.info("Exchanging id token for {}", orcid);
+                try {
+                    accessToken = orcidAPIClient.exchangeToken(idToken);
+                } catch(Exception e) {
+                    log.error("Unable to exchange id token for " + orcid, e);                    
+                    break;
+                }
+                accessTokens.put(orcid, idToken);
+            }
+            
+            log.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
+            orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
+            Instant now = Instant.now();
+            assertion.setUpdatedInORCID(now);
+            assertion.setModified(now);
+            assertionsRepository.save(assertion);
+        }
+    }
+    
+    public boolean deleteAssertionFromOrcid(String loggedInUserId, String assertionId) throws JSONException, JAXBException {
+        Assertion assertion = assertionsRepository.findById(assertionId).orElseThrow(() -> new IllegalArgumentException("Invalid assertion id"));
+        
+        if (!loggedInUserId.equals(assertion.getOwnerId())) {
+            throw new IllegalArgumentException("Invalid assertion id");
+        }
+        
+        Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(assertion.getEmail());
+        if (!optional.isPresent()) {
+            log.error("OrcidRecord not available for email {}", assertion.getEmail());
+            return false;
+        }
+        OrcidRecord record = optional.get();
+        if (StringUtils.isBlank(record.getOrcid())) {
+            log.warn("Orcid id still not available for {}", assertion.getEmail());
+            return false;
+        }
+        if (StringUtils.isBlank(record.getIdToken())) {
+            log.warn("Id token still not available for {}", assertion.getEmail());
+            return false;
+        }
+        
+        log.info("Exchanging id token for {}", record.getOrcid());
+        String accessToken = null;
+        try {
+            accessToken = orcidAPIClient.exchangeToken(record.getIdToken());
+        } catch(Exception e) {
+            log.error("Unable to exchange id token for " + record.getOrcid(), e);                    
+            return false;
+        }
+        
+        Boolean deleted = orcidAPIClient.deleteAffiliation(record.getOrcid(), accessToken, assertion);
+        if(deleted) {
+            Instant now = Instant.now();
+            assertion.setDeletedFromORCID(now);
+            assertion.setModified(now);
+            assertionsRepository.save(assertion);
+        }
+        return deleted;
+    }
+    
 }

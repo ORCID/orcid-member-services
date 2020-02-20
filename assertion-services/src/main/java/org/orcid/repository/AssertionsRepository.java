@@ -20,4 +20,7 @@ public interface AssertionsRepository extends MongoRepository<Assertion, String>
     
     @Query("{putCode: null}")
     List<Assertion> findAllToCreate();
+
+    @Query("{updated: true, putCode: {$ne:null}}")
+    List<Assertion> findAllToUpdate();
 }

@@ -103,6 +103,9 @@ public class Assertion implements Serializable {
     @Field("added_to_orcid")
     private Instant addedToORCID;
     
+    @Field("updated_in_orcid")
+    private Instant updatedInORCID;
+    
     @Field("deleted_from_orcid")
     private Instant deletedFromORCID;
 
@@ -450,6 +453,14 @@ public class Assertion implements Serializable {
     public void setAddedToORCID(Instant addedToORCID) {
         this.addedToORCID = addedToORCID;
     }
+    
+    public Instant getUpdatedInORCID() {
+        return updatedInORCID;
+    }
+
+    public void setUpdatedInORCID(Instant updatedInORCID) {
+        this.updatedInORCID = updatedInORCID;
+    }
 
     @Override
     public int hashCode() {
@@ -483,6 +494,7 @@ public class Assertion implements Serializable {
         result = prime * result + ((startYear == null) ? 0 : startYear.hashCode());
         result = prime * result + ((status == null) ? 0 : status.hashCode());
         result = prime * result + (updated ? 1231 : 1237);
+        result = prime * result + ((updatedInORCID == null) ? 0 : updatedInORCID.hashCode());
         return result;
     }
 
@@ -628,6 +640,11 @@ public class Assertion implements Serializable {
         } else if (!status.equals(other.status))
             return false;
         if (updated != other.updated)
+            return false;
+        if (updatedInORCID == null) {
+            if (other.updatedInORCID != null)
+                return false;
+        } else if (!updatedInORCID.equals(other.updatedInORCID))
             return false;
         return true;
     }  
