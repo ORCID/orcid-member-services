@@ -21,7 +21,13 @@ public class OrcidSyncManager {
     
     @Scheduled(fixedDelayString = "${application.cron.postAffiliations}")
     public void createAffiliations() throws JAXBException {
-        log.info("Running cron to push assertions to ORCID");
-        assertionsService.pushAssertionsToOrcid();
+        log.info("Running cron to create assertions to ORCID");
+        assertionsService.postAssertionsToOrcid();
+    }
+    
+    @Scheduled(fixedDelayString = "${application.cron.putAffiliations}")
+    public void updateAffiliations() throws JAXBException {
+        log.info("Running cron to update assertions to ORCID");
+        assertionsService.putAssertionsToOrcid();
     }
 }
