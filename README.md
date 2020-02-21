@@ -54,6 +54,13 @@ So, the first thing we should do is starting the different JHipster services as 
     - cd orcid-member-services/oauth2-service/  
     - Run `bash mvnw`
     - Wait for it to start
+    
+4. Start the Angular frontend
+
+     - Open a new terminal 
+    - cd orcid-member-services/gateway 
+    - Run `npm install` then `npm start`
+    - Wait for it to start
 
 At this point, all required services are up and running, time to setup the `user-settings-service` and `assertion-services` and start working on them.
 
