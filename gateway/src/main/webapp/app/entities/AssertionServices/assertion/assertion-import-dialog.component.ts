@@ -77,11 +77,11 @@ export class AssertionImportPopupComponent implements OnInit, OnDestroy {
         this.ngbModalRef.componentInstance.assertion = assertion;
         this.ngbModalRef.result.then(
           result => {
-            this.router.navigate(['/assertion', { outlets: { popup: null } }]);
+            this.router.navigate(['/assertions', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           },
           reason => {
-            this.router.navigate(['/assertion', { outlets: { popup: null } }]);
+            this.router.navigate(['/assertions', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           }
         );

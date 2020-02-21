@@ -13,7 +13,7 @@ import { RouterModule } from '@angular/router';
         loadChildren: './UserSettingsService/member-settings/member-settings.module#UserSettingsServiceMemberSettingsModule'
       },
       {
-        path: 'assertion',
+        path: 'assertions',
         loadChildren: './AssertionServices/assertion/assertion.module#AssertionServicesAssertionModule'
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */

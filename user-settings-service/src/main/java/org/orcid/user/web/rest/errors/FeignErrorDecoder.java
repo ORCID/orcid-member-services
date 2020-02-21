@@ -3,6 +3,7 @@ package org.orcid.user.web.rest.errors;
 import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -41,8 +42,12 @@ public class FeignErrorDecoder implements ErrorDecoder {
 
     private String getErrorMessage(Response response) throws JSONException {        
         try {
-            JSONObject j = new JSONObject(IOUtils.toString(response.body().asInputStream(), java.nio.charset.StandardCharsets.UTF_8));
-            return j.getString("title");
+            if(response.body() != null) {
+                JSONObject j = new JSONObject(IOUtils.toString(response.body().asInputStream(), java.nio.charset.StandardCharsets.UTF_8));
+                return j.getString("title");   
+            } else {
+                return StringUtils.EMPTY;
+            }            
         } catch (IOException e) {
             logger.error("read conflict response body exception. {}", e.toString());
             return "Unknown: " + e.toString();

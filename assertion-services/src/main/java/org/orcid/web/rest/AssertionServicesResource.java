@@ -1,17 +1,20 @@
 package org.orcid.web.rest;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.ws.rs.InternalServerErrorException;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -19,15 +22,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.orcid.client.UserSettingsClient;
 import org.orcid.domain.Assertion;
-import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.jaxb.model.common.Iso3166Country;
-import org.orcid.repository.AssertionsRepository;
-import org.orcid.repository.OrcidRecordRepository;
 import org.orcid.security.AuthoritiesConstants;
+import org.orcid.security.EncryptUtil;
+import org.orcid.security.JWTUtil;
 import org.orcid.security.SecurityUtils;
+import org.orcid.service.AssertionsService;
+import org.orcid.service.OrcidRecordService;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +54,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.nimbusds.jwt.SignedJWT;
+
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 
@@ -65,23 +71,29 @@ public class AssertionServicesResource {
     private String applicationName;
 
     @Autowired
-    private AssertionsRepository assertionsRepository;
+    private AssertionsService assertionsService;
 
     @Autowired
-    private OrcidRecordRepository orcidRecordRepository;
+    private OrcidRecordService orcidRecordService;
+
+    @Autowired
+    private EncryptUtil encryptUtil;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     private String getAuthenticatedUser() {
         if (!SecurityUtils.isAuthenticated()) {
             throw new BadRequestAlertException("User is not logged in", "login", "null");
         }
 
-        String loggedInUser = SecurityUtils.getCurrentUserLogin().get();
+        String loggedInUserId = SecurityUtils.getCurrentUserLogin().get();
 
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
-            throw new BadRequestAlertException("User does not have the required scope 'AuthoritiesConstants.ASSERTION_SERVICE_ENABLED'", "login", loggedInUser);
+            throw new BadRequestAlertException("User does not have the required scope 'AuthoritiesConstants.ASSERTION_SERVICE_ENABLED'", "login", loggedInUserId);
         }
 
-        return loggedInUser;
+        return loggedInUserId;
     }
 
     @GetMapping("/assertions")
@@ -91,7 +103,7 @@ public class AssertionServicesResource {
 
         log.debug("REST request to fetch assertions from user {}", loggedInUserId);
 
-        Page<Assertion> affiliations = assertionsRepository.findByOwnerId(loggedInUserId, pageable);
+        Page<Assertion> affiliations = assertionsService.findByOwnerId(loggedInUserId, pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
         return ResponseEntity.ok().headers(headers).body(affiliations.getContent());
@@ -100,15 +112,8 @@ public class AssertionServicesResource {
     @GetMapping("/assertion/{id}")
     public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
         String loggedInUserId = getAuthenticatedUser();
-
         log.debug("REST request to fetch assertion {} from user {}", id, loggedInUserId);
-
-        Optional<Assertion> optional = assertionsRepository.findById(id);
-
-        if (!optional.isPresent()) {
-            ResponseEntity.notFound();
-        }
-
+        Optional<Assertion> optional = assertionsService.findById(id);
         Assertion a = optional.get();
 
         if (!loggedInUserId.equals(a.getOwnerId())) {
@@ -117,50 +122,36 @@ public class AssertionServicesResource {
 
         return ResponseEntity.ok().body(optional.get());
     }
+    
+    
+    @GetMapping("/assertion/links")
+    public void generateLinks(HttpServletResponse response) throws IOException {
+        final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
+        final String fileName = userLogin + '_' +  System.currentTimeMillis() + "_report.csv";        
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+        response.setHeader("Content-Type", "text/csv");
+        response.setHeader("filename", fileName);
+        String csvReport = orcidRecordService.generateLinks(userLogin);
+        response.getOutputStream().write(csvReport.getBytes());
+        response.flushBuffer();
+    }
 
     @PutMapping("/assertion")
     public ResponseEntity<Assertion> updateAssertion(@RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
-        String loggedInUserId = getAuthenticatedUser();
-
         log.debug("REST request to update assertion : {}", assertion);
-
-        Optional<Assertion> optional = assertionsRepository.findById(assertion.getId());
-
-        if (!optional.isPresent()) {
-            ResponseEntity.notFound();
-        }
-
-        Assertion existingAssertion = optional.get();
-
-        if (!loggedInUserId.equals(existingAssertion.getOwnerId())) {
-            throw new IllegalArgumentException("Invalid assertion id");
-        }
-
-        copyFieldsToUpdate(assertion, existingAssertion);
-
-        assertionsRepository.save(existingAssertion);
-
+        String loggedInUserId = getAuthenticatedUser();
+        validateAssertion(assertion);
+        Assertion existingAssertion = assertionsService.updateAssertion(loggedInUserId, assertion);
+        
         return ResponseEntity.ok().body(existingAssertion);
     }
 
     @PostMapping("/assertion")
     public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException, URISyntaxException {
+        log.debug("REST request to create assertion : {}", assertion);        
+        String loggedInUserId = getAuthenticatedUser();
         validateAssertion(assertion);
-        String loggedInUser = getAuthenticatedUser();
-        Instant now = Instant.now();
-
-        assertion.setOwnerId(loggedInUser);
-        assertion.setCreated(now);
-        assertion.setModified(now);
-
-        String email = assertion.getEmail();
-
-        Optional<OrcidRecord> optionalRecord = orcidRecordRepository.findOneByEmail(email);
-        if (!optionalRecord.isPresent()) {
-            createOrcidRecord(email, loggedInUser, now);
-        }
-
-        assertion = assertionsRepository.save(assertion);
+        assertion = assertionsService.createAssertion(loggedInUserId, assertion);
 
         return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, assertion.getId())).body(assertion);
@@ -168,13 +159,12 @@ public class AssertionServicesResource {
 
     @PostMapping("/assertion/upload")
     public ResponseEntity<String> uploadAssertions(@RequestParam("file") MultipartFile file) {
-        String loggedInUser = getAuthenticatedUser();
+        String loggedInUserId = getAuthenticatedUser();
         JSONArray errors = new JSONArray();
-        Instant now = Instant.now();
         try (InputStream is = file.getInputStream();) {
             InputStreamReader isr = new InputStreamReader(is);
             Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
-            List<Assertion> existingAssertions = assertionsRepository.findAllByOwnerId(loggedInUser);
+            List<Assertion> existingAssertions = assertionsService.findAllByOwnerId(loggedInUserId);
             List<Assertion> assertionsToAdd = new ArrayList<Assertion>();
             Set<String> usersToAdd = new HashSet<String>();
             // Validate affiliations
@@ -189,14 +179,9 @@ public class AssertionServicesResource {
                         // If something is updated in the aff, update the
                         // existing one in the DB
                         if (!StringUtils.isBlank(existingAssertion.getPutCode()) && isUpdated(assertion, existingAssertion)) {
-                            copyFieldsToUpdate(assertion, existingAssertion);
-                            existingAssertion.setUpdated(true);
-                            assertionsRepository.save(existingAssertion);
+                            assertionsService.updateAssertion(loggedInUserId, existingAssertion);
                         }
                     } else {
-                        assertion.setOwnerId(loggedInUser);
-                        assertion.setCreated(now);
-                        assertion.setModified(now);
                         // Create the userInfo if needed
                         if (!usersToAdd.contains(assertion.getEmail())) {
                             usersToAdd.add(assertion.getEmail());
@@ -214,19 +199,8 @@ public class AssertionServicesResource {
             }
 
             if (errors.length() == 0) {
-                // Create assertions
-                for (Assertion a : assertionsToAdd) {
-                    // Create the assertion
-                    assertionsRepository.insert(a);
-                }
-
-                // Create users
-                for (String userEmail : usersToAdd) {
-                    if (!orcidRecordRepository.findOneByEmail(userEmail).isPresent()) {
-                        log.info("Creating UserInfo for email {}", usersToAdd);
-                        createOrcidRecord(userEmail, loggedInUser, now);
-                    }
-                }
+                assertionsService.createAssertions(loggedInUserId, assertionsToAdd);
+                orcidRecordService.createOrcidRecords(loggedInUserId, usersToAdd);                
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -237,9 +211,9 @@ public class AssertionServicesResource {
 
     @DeleteMapping("/assertion/{id}")
     public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
-        String loggedInUser = getAuthenticatedUser();
+        String loggedInUserId = getAuthenticatedUser();
 
-        Optional<Assertion> optional = assertionsRepository.findById(id);
+        Optional<Assertion> optional = assertionsService.findById(id);
 
         if (!optional.isPresent()) {
             ResponseEntity.notFound();
@@ -247,22 +221,43 @@ public class AssertionServicesResource {
 
         Assertion a = optional.get();
 
-        if (!loggedInUser.equals(a.getOwnerId())) {
+        if (!loggedInUserId.equals(a.getOwnerId())) {
             throw new IllegalArgumentException("Invalid assertion id");
         }
 
-        assertionsRepository.deleteById(id);
+        assertionsService.deleteById(id);
 
         return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
     }
 
-    private void createOrcidRecord(String email, String ownerId, Instant now) {
-        OrcidRecord or = new OrcidRecord();
-        or.setEmail(email);
-        or.setOwnerId(ownerId);
-        or.setCreated(now);
-        or.setModified(now);
-        orcidRecordRepository.insert(or);
+    @PostMapping("/id-token")
+    public ResponseEntity<Void> storeIdToken(@RequestBody ObjectNode json) throws ParseException {
+        String state = json.get("state").asText();
+        String idToken = json.has("id_token") ? json.get("id_token").asText() : null;
+        Boolean denied = json.has("denied") ? json.get("denied").asBoolean() : false;
+        String emailInStatus = encryptUtil.decrypt(state);
+
+        if (!denied) {
+            SignedJWT jwt = jwtUtil.getSignedJWT(idToken);
+            String orcidIdInJWT = String.valueOf(jwt.getJWTClaimsSet().getClaim("sub"));
+
+            if (!StringUtils.isBlank(emailInStatus) && !StringUtils.isBlank(orcidIdInJWT)) {
+                orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT);
+            } else {
+                if (StringUtils.isBlank(emailInStatus)) {
+                    log.warn("emailInStatus is empty in the state key: " + state);
+                }
+
+                if (StringUtils.isBlank(orcidIdInJWT)) {
+                    log.warn("orcidIdInJWT is empty in the id token: " + idToken);
+                }
+            }
+        } else {
+            log.warn("User {} have denied access", emailInStatus);
+            orcidRecordService.storeUserDeniedAccess(emailInStatus);
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     private void validateAssertion(Assertion assertion) {
@@ -420,30 +415,5 @@ public class AssertionServicesResource {
 
     private boolean equals(String a, String b) {
         return (a == null ? b == null : a.equals(b));
-    }
-
-    private void copyFieldsToUpdate(Assertion source, Assertion destination) {
-        // Update start date
-        destination.setStartYear(source.getStartYear());
-        destination.setStartMonth(source.getStartMonth());
-        destination.setStartDay(source.getStartDay());
-
-        // Update end date
-        destination.setEndYear(source.getEndYear());
-        destination.setEndMonth(source.getEndMonth());
-        destination.setEndDay(source.getEndDay());
-
-        // Update external identifiers
-        destination.setExternalId(source.getExternalId());
-        destination.setExternalIdType(source.getExternalIdType());
-        destination.setExternalIdUrl(source.getExternalIdUrl());
-
-        // Update organization
-        destination.setOrgCity(source.getOrgCity());
-        destination.setOrgCountry(source.getOrgCountry());
-        destination.setOrgName(source.getOrgName());
-        destination.setOrgRegion(source.getOrgRegion());
-        destination.setDisambiguatedOrgId(source.getDisambiguatedOrgId());
-        destination.setDisambiguationSource(source.getDisambiguationSource());
-    }
+    }    
 }
