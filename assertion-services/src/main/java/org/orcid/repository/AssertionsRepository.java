@@ -17,4 +17,7 @@ public interface AssertionsRepository extends MongoRepository<Assertion, String>
     
     @Query("{ownerId: ?0}")    
     List<Assertion> findAllByOwnerId(String ownerId);
+    
+    @Query("{putCode: null}")
+    List<Assertion> findAllToCreate();
 }
