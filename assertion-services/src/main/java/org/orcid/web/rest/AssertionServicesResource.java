@@ -14,6 +14,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.ws.rs.InternalServerErrorException;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.csv.CSVFormat;
@@ -266,6 +267,19 @@ public class AssertionServicesResource {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(path = "/assertion/report")    
+    public void generateReport(HttpServletResponse response) throws IOException {
+        String loggedInUserId = getAuthenticatedUser();
+        final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
+        final String fileName = userLogin + '_' +  System.currentTimeMillis() + "_report.csv";        
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+        response.setHeader("Content-Type", "text/csv");
+        response.setHeader("filename", fileName);
+        String csvReport = assertionsService.generateAssertionsReport(loggedInUserId);
+        response.getOutputStream().write(csvReport.getBytes());
+        response.flushBuffer();
+    }
+    
     private void validateAssertion(Assertion assertion) {
         if (StringUtils.isBlank(assertion.getEmail())) {
             throw new IllegalArgumentException("email must not be null");

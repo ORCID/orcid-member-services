@@ -108,7 +108,10 @@ public class Assertion implements Serializable {
     
     @Field("deleted_from_orcid")
     private Instant deletedFromORCID;
-
+    
+    @Field("orcid_error")
+    private String orcidError;
+    
     private String status;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not
@@ -462,6 +465,14 @@ public class Assertion implements Serializable {
         this.updatedInORCID = updatedInORCID;
     }
 
+    public String getOrcidError() {
+        return orcidError;
+    }
+
+    public void setOrcidError(String orcidError) {
+        this.orcidError = orcidError;
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -482,6 +493,7 @@ public class Assertion implements Serializable {
         result = prime * result + ((externalIdUrl == null) ? 0 : externalIdUrl.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((modified == null) ? 0 : modified.hashCode());
+        result = prime * result + ((orcidError == null) ? 0 : orcidError.hashCode());
         result = prime * result + ((orgCity == null) ? 0 : orgCity.hashCode());
         result = prime * result + ((orgCountry == null) ? 0 : orgCountry.hashCode());
         result = prime * result + ((orgName == null) ? 0 : orgName.hashCode());
@@ -583,6 +595,11 @@ public class Assertion implements Serializable {
             if (other.modified != null)
                 return false;
         } else if (!modified.equals(other.modified))
+            return false;
+        if (orcidError == null) {
+            if (other.orcidError != null)
+                return false;
+        } else if (!orcidError.equals(other.orcidError))
             return false;
         if (orgCity == null) {
             if (other.orgCity != null)
