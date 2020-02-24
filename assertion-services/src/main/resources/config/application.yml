@@ -201,8 +201,8 @@ application:
         grantType: urn:ietf:params:oauth:grant-type:token-exchange
         subjectTokenType: urn:ietf:params:oauth:token-type:id_token
         requestedTokenType: urn:ietf:params:oauth:token-type:access_token
-        clientId: 0000-0002-1223-3173 # To overwrite it, export it as an env variable before running gradlew: 'export APPLICATION_TOKENEXCHANGE_CLIENTID=<client id>'
-        clientSecret: 14fc17f3-3414-4628-bee9-4ba80d7a4b9a # Export it as an env variable before running gradlew: 'export APPLICATION_TOKENEXCHANGE_CLIENTSECRET=<client secret>'
+        clientId: APP-99MR3GU01PBQK8FP # To overwrite it, export it as an env variable before running gradlew: 'export APPLICATION_TOKENEXCHANGE_CLIENTID=<client id>'
+        clientSecret: ee3d0f8b-027a-42aa-b9bb-f3e922453a29 # Export it as an env variable before running gradlew: 'export APPLICATION_TOKENEXCHANGE_CLIENTSECRET=<client secret>'
     cron:        
-        postAffiliations: 30000
-        putAffiliations: 30000
+        postAffiliations: 300000
+        putAffiliations: 300000

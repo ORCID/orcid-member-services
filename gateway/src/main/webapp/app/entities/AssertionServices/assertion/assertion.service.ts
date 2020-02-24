@@ -56,6 +56,10 @@ export class AssertionService {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
   
+  deleteFromOrcid(id: string): Observable<HttpResponse<any>> {
+      return this.http.delete<any>(`${this.resourceUrl}/orcid/${id}`, { observe: 'response' });
+    }
+  
   getLinks() {
       this.http.get(`${this.resourceUrl}/links`, {observe: 'response', responseType: 'blob'} )
     .subscribe(response => {

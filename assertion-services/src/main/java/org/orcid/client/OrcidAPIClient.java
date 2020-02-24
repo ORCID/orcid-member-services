@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import org.orcid.config.ApplicationProperties;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.adapter.OrcidAffiliationAdapter;
+import org.orcid.jaxb.model.v3.release.error.OrcidError;
 import org.orcid.jaxb.model.v3.release.record.Affiliation;
 import org.orcid.jaxb.model.v3.release.record.Distinction;
 import org.orcid.jaxb.model.v3.release.record.Education;
@@ -39,27 +40,28 @@ import org.orcid.jaxb.model.v3.release.record.Membership;
 import org.orcid.jaxb.model.v3.release.record.Qualification;
 import org.orcid.jaxb.model.v3.release.record.Service;
 import org.orcid.web.rest.AssertionServicesResource;
+import org.orcid.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrcidAPIClient {
     private final Logger log = LoggerFactory.getLogger(AssertionServicesResource.class);
 
-    private final Marshaller jaxbMarshaller;
-    
+    private final Marshaller jaxbMarshaller;        
+
     @Autowired
     private ApplicationProperties applicationProperties;
 
-    public OrcidAPIClient () throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Affiliation.class, Distinction.class, Employment.class, Education.class, InvitedPosition.class, Membership.class, Qualification.class, Service.class);
+    public OrcidAPIClient() throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Affiliation.class, Distinction.class, Employment.class, Education.class, InvitedPosition.class,
+                Membership.class, Qualification.class, Service.class, OrcidError.class);
         this.jaxbMarshaller = jaxbContext.createMarshaller();
-        this.jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE); // To format XML
+        this.jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);                       
     }
-    
+
     public String exchangeToken(String idToken) throws JSONException, ClientProtocolException, IOException, JAXBException {
         HttpClient client = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(applicationProperties.getTokenExchange().getEndpoint());
@@ -79,11 +81,10 @@ public class OrcidAPIClient {
         if (statusCode != Status.OK.getStatusCode()) {
             String responseString = EntityUtils.toString(response.getEntity());
             log.error("Unable to exchange id_token: {}", responseString);
-            checkAndHandleInvalidTokenException(response, responseString);
-            throw new IllegalArgumentException("Unable to exchange id_token, status code: " + statusCode);
+            throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
         }
 
-        String responseString = EntityUtils.toString(response.getEntity());        
+        String responseString = EntityUtils.toString(response.getEntity());
         JSONObject json = new JSONObject(responseString);
 
         return json.get("access_token").toString();
@@ -99,8 +100,8 @@ public class OrcidAPIClient {
         httpPost.setHeader(HttpHeaders.ACCEPT, "application/xml");
         httpPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
         httpPost.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-        
-        //Print XML String to Console
+
+        // Print XML String to Console
         StringWriter sw = new StringWriter();
         jaxbMarshaller.marshal(orcidAffiliation, sw);
         String xmlObject = sw.toString();
@@ -113,8 +114,7 @@ public class OrcidAPIClient {
             if (response.getStatusLine().getStatusCode() != Status.CREATED.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
                 log.error("Unable to create {} for {}. Status code: {}, error {}", affType, orcid, response.getStatusLine().getStatusCode(), responseString);
-                checkAndHandleInvalidTokenException(response, responseString);
-                throw new RuntimeException(responseString);
+                throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
             String location = response.getFirstHeader("location").getValue();
             return location.substring(location.lastIndexOf('/') + 1);
@@ -136,8 +136,8 @@ public class OrcidAPIClient {
         httpPut.setHeader(HttpHeaders.ACCEPT, "application/xml");
         httpPut.setHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
         httpPut.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-        
-        //Print XML String to Console
+
+        // Print XML String to Console
         StringWriter sw = new StringWriter();
         jaxbMarshaller.marshal(orcidAffiliation, sw);
         String xmlObject = sw.toString();
@@ -149,9 +149,9 @@ public class OrcidAPIClient {
             HttpResponse response = client.execute(httpPut);
             if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
-                log.error("Unable to update {} with putcode {} for {}. Status code: {}, error {}", affType, assertion.getPutCode(), orcid, response.getStatusLine().getStatusCode(), responseString);
-                checkAndHandleInvalidTokenException(response, responseString);
-                throw new RuntimeException(responseString);
+                log.error("Unable to update {} with putcode {} for {}. Status code: {}, error {}", affType, assertion.getPutCode(), orcid,
+                        response.getStatusLine().getStatusCode(), responseString);
+                throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
             return true;
         } catch (ClientProtocolException e) {
@@ -171,14 +171,14 @@ public class OrcidAPIClient {
         httpDelete.setHeader(HttpHeaders.ACCEPT, "application/xml");
         httpDelete.setHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
         httpDelete.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-        
+
         try {
             HttpResponse response = client.execute(httpDelete);
             if (response.getStatusLine().getStatusCode() != Status.NO_CONTENT.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
-                log.error("Unable to delete {} with putcode {} for {}. Status code: {}, error {}", affType, assertion.getPutCode(), orcid, response.getStatusLine().getStatusCode(), responseString);
-                checkAndHandleInvalidTokenException(response, responseString);
-                throw new RuntimeException(responseString);
+                log.error("Unable to delete {} with putcode {} for {}. Status code: {}, error {}", affType, assertion.getPutCode(), orcid,
+                        response.getStatusLine().getStatusCode(), responseString);
+                throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
             return true;
         } catch (ClientProtocolException e) {
@@ -187,15 +187,5 @@ public class OrcidAPIClient {
             log.error("Unable to update affiliation in ORCID", e);
         }
         return false;
-    }
-
-    private void checkAndHandleInvalidTokenException(HttpResponse response, String responseString) throws JSONException, JAXBException {
-        if (response.getStatusLine().getStatusCode() == Status.BAD_REQUEST.getStatusCode()
-                || response.getStatusLine().getStatusCode() == Status.UNAUTHORIZED.getStatusCode()) {
-            JSONObject obj = new JSONObject(responseString);
-            if (obj.has("error") && (obj.getString("error").equals("invalid_scope") || obj.getString("error").equals("invalid_token"))) {
-                throw new InvalidTokenException("id_token is no longer valid");
-            }
-        }
     }
 }
