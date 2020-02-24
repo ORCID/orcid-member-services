@@ -38,7 +38,7 @@ export const memberSettingsRoute: Routes = [
       pagingParams: JhiResolvePagingParams
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_ADMIN'],
       defaultSort: 'id,asc',
       pageTitle: 'gatewayApp.userSettingsServiceMemberSettings.home.title'
     },
@@ -51,7 +51,7 @@ export const memberSettingsRoute: Routes = [
       memberSettings: MemberSettingsResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_ADMIN'],
       pageTitle: 'gatewayApp.userSettingsServiceMemberSettings.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -63,7 +63,7 @@ export const memberSettingsRoute: Routes = [
       memberSettings: MemberSettingsResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_ADMIN'],
       pageTitle: 'gatewayApp.userSettingsServiceMemberSettings.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -75,7 +75,7 @@ export const memberSettingsRoute: Routes = [
       memberSettings: MemberSettingsResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_ADMIN'],
       pageTitle: 'gatewayApp.userSettingsServiceMemberSettings.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -90,7 +90,7 @@ export const memberSettingsPopupRoute: Routes = [
       memberSettings: MemberSettingsResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_ADMIN'],
       pageTitle: 'gatewayApp.userSettingsServiceMemberSettings.home.title'
     },
     canActivate: [UserRouteAccessService],
