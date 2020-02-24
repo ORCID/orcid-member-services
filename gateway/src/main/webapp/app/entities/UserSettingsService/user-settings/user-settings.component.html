@@ -54,7 +54,7 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/user-settings', userSettings.id, 'delete']"
+                                [routerLink]="['/', 'user-settings', { outlets: { popup: userSettings.login + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm ml-1">

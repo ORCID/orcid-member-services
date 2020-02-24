@@ -51,7 +51,7 @@ export const userSettingsRoute: Routes = [
       userSettings: UserSettingsResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_ADMIN'],
       pageTitle: 'gatewayApp.userSettingsServiceUserSettings.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -63,7 +63,7 @@ export const userSettingsRoute: Routes = [
       userSettings: UserSettingsResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_ADMIN'],
       pageTitle: 'gatewayApp.userSettingsServiceUserSettings.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -75,7 +75,7 @@ export const userSettingsRoute: Routes = [
       userSettings: UserSettingsResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_ADMIN'],
       pageTitle: 'gatewayApp.userSettingsServiceUserSettings.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -90,7 +90,7 @@ export const userSettingsPopupRoute: Routes = [
       userSettings: UserSettingsResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_ADMIN'],
       pageTitle: 'gatewayApp.userSettingsServiceUserSettings.home.title'
     },
     canActivate: [UserRouteAccessService],
