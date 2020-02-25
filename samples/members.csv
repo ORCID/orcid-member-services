@@ -1,2 +1,3 @@
 salesforce_id,parent_salesforce_id,client_id,client_name,is_consortium_lead,assertion_services_enabled
-salesforceid1,parentsalesforceid1,APP-0000000000000001,My client name,false,false
+salesforceid1,parentsalesforceid1,APP-0000000000000001,Orcid One,false,false
+salesforceid2,parentsalesforceid2,APP-0000000000000002,Orcid Two,false,false

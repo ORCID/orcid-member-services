@@ -2,7 +2,6 @@ package org.orcid.user.service.dto;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.List;
 
 import org.orcid.user.domain.UserSettings;
 
@@ -20,10 +19,9 @@ public class UserDTO implements Serializable {
     private String firstName;
     private String firstNameError;
     private String lastName;
-    private String lastNameError;    
-    private List<String> authorities;
-    private String authoritiesError;
+    private String lastNameError;        
     private Boolean mainContact;
+    private Boolean assertionServicesEnabled;
 
     // MemberSettings data
     private String salesforceId;
@@ -33,7 +31,7 @@ public class UserDTO implements Serializable {
     private String createdBy;
     private Instant createdDate;
     private String lastModifiedBy;
-    private Instant lastModifiedDate;
+    private Instant lastModifiedDate;    
 
     public String getId() {
         return id;
@@ -73,14 +71,6 @@ public class UserDTO implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public List<String> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(List<String> authorities) {
-        this.authorities = authorities;
     }
 
     public String getSalesforceId() {
@@ -155,14 +145,6 @@ public class UserDTO implements Serializable {
         this.lastNameError = lastNameError;
     }
 
-    public String getAuthoritiesError() {
-        return authoritiesError;
-    }
-
-    public void setAuthoritiesError(String authoritiesError) {
-        this.authoritiesError = authoritiesError;
-    }
-
     public String getSalesforceIdError() {
         return salesforceIdError;
     }
@@ -171,12 +153,19 @@ public class UserDTO implements Serializable {
         this.salesforceIdError = salesforceIdError;
     }
 
+    public Boolean getAssertionServicesEnabled() {
+        return assertionServicesEnabled;
+    }
+
+    public void setAssertionServicesEnabled(Boolean assertionServicesEnabled) {
+        this.assertionServicesEnabled = assertionServicesEnabled;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
-        result = prime * result + ((authoritiesError == null) ? 0 : authoritiesError.hashCode());
+        result = prime * result + ((assertionServicesEnabled == null) ? 0 : assertionServicesEnabled.hashCode());
         result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
         result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
@@ -204,15 +193,10 @@ public class UserDTO implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         UserDTO other = (UserDTO) obj;
-        if (authorities == null) {
-            if (other.authorities != null)
+        if (assertionServicesEnabled == null) {
+            if (other.assertionServicesEnabled != null)
                 return false;
-        } else if (!authorities.equals(other.authorities))
-            return false;
-        if (authoritiesError == null) {
-            if (other.authoritiesError != null)
-                return false;
-        } else if (!authoritiesError.equals(other.authoritiesError))
+        } else if (!assertionServicesEnabled.equals(other.assertionServicesEnabled))
             return false;
         if (createdBy == null) {
             if (other.createdBy != null)
@@ -290,14 +274,6 @@ public class UserDTO implements Serializable {
         } else if (!salesforceIdError.equals(other.salesforceIdError))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "UserDTO [id=" + id + ", login=" + login + ", loginError=" + loginError + ", password=" + password + ", firstName=" + firstName + ", firstNameError="
-                + firstNameError + ", lastName=" + lastName + ", lastNameError=" + lastNameError + ", authorities=" + authorities + ", authoritiesError="
-                + authoritiesError + ", mainContact=" + mainContact + ", salesforceId=" + salesforceId + ", salesforceIdError=" + salesforceIdError
-                + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + "]";
     }
 
     public static UserDTO valueOf(UserSettings us) {

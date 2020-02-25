@@ -3,6 +3,7 @@ import { Moment } from 'moment';
 export interface IMemberSettings {
   id?: string;
   clientId?: string;
+  clientName?: string;
   clientSecret?: string;
   salesforceId?: string;
   parentSalesforceId?: string;
@@ -18,6 +19,7 @@ export class MemberSettings implements IMemberSettings {
   constructor(
     public id?: string,
     public clientId?: string,
+    public clientName?: string,        
     public clientSecret?: string,
     public salesforceId?: string,
     public parentSalesforceId?: string,

@@ -10,6 +10,8 @@ import {
   AssertionUpdateComponent,
   AssertionDeletePopupComponent,
   AssertionDeleteDialogComponent,
+  AssertionDeleteFromOrcidDialogComponent,
+  AssertionDeleteFromOrcidPopupComponent,
   AssertionImportPopupComponent,
   AssertionImportDialogComponent,
   assertionRoute,
@@ -26,10 +28,12 @@ const ENTITY_STATES = [...assertionRoute, ...assertionPopupRoute];
     AssertionUpdateComponent,
     AssertionDeleteDialogComponent,
     AssertionDeletePopupComponent,
+    AssertionDeleteFromOrcidDialogComponent,
+    AssertionDeleteFromOrcidPopupComponent,
     AssertionImportPopupComponent,
     AssertionImportDialogComponent
   ],
-  entryComponents: [AssertionComponent, AssertionUpdateComponent, AssertionDeleteDialogComponent, AssertionDeletePopupComponent, AssertionImportPopupComponent, AssertionImportDialogComponent],
+  entryComponents: [AssertionComponent, AssertionUpdateComponent, AssertionDeleteDialogComponent, AssertionDeletePopupComponent, AssertionDeleteFromOrcidDialogComponent, AssertionDeleteFromOrcidPopupComponent, AssertionImportPopupComponent, AssertionImportDialogComponent],
   providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

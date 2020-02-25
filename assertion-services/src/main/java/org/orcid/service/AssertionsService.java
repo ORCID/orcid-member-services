@@ -93,8 +93,8 @@ public class AssertionsService {
         }
 
         copyFieldsToUpdate(assertion, existingAssertion);
-        assertion.setUpdated(true);
-        assertion.setModified(Instant.now());
+        existingAssertion.setUpdated(true);
+        existingAssertion.setModified(Instant.now());
         return assertionsRepository.save(existingAssertion);
     }
 
@@ -164,6 +164,8 @@ public class AssertionsService {
                 Instant now = Instant.now();
                 assertion.setAddedToORCID(now);
                 assertion.setModified(now);
+                // Remove error if any
+                assertion.setOrcidError(null);
                 assertionsRepository.save(assertion);
             } catch (ORCIDAPIException oae) {
                 storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
@@ -209,6 +211,8 @@ public class AssertionsService {
                 Instant now = Instant.now();
                 assertion.setUpdatedInORCID(now);
                 assertion.setModified(now);
+                // Remove error if any
+                assertion.setOrcidError(null);
                 assertionsRepository.save(assertion);
             } catch (ORCIDAPIException oae) {
                 storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
