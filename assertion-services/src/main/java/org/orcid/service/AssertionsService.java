@@ -349,7 +349,7 @@ public class AssertionsService {
         }
         csvPrinter.flush();
         csvPrinter.close();
-        return csvPrinter.toString();
+        return buffer.toString();
     }
 
     private String getAffiliationStatus(Assertion a, OrcidRecord orcidRecord) {
