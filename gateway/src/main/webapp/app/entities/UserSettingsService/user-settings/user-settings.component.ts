@@ -97,9 +97,11 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   }
 
   getOrgName(id: string) {
-    for (const member of this.membersList[0].body) {
-      if (id === member.salesforceId) {
-        return member.clientName;
+    if(this.membersList) {
+      for (const member of this.membersList[0].body) {
+        if (id === member.salesforceId) {
+          return member.clientName;
+        }
       }
     }
   }
