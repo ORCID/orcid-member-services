@@ -42,7 +42,11 @@
                 <td><a [routerLink]="['/user-settings', userSettings.login, 'view' ]">{{userSettings.login}}</a></td>
                 <td>{{userSettings.firstName}}</td>
                 <td>{{userSettings.lastName}}</td>
-                <td>{{userSettings.mainContact}}</td>
+                <td class="text-center">
+                    <span class="sr-only">{{userSettings.mainContact}}</span>
+                    <fa-icon aria-hidden="true" *ngIf="userSettings.mainContact=='true'" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                    <fa-icon aria-hidden="true" *ngIf="userSettings.mainContact!='true'" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                </td>
                 <td>{{memberSettingsService.orgNameMap[userSettings.salesforceId]}}</td>
                 <td>{{userSettings.lastModifiedDate | date:'medium'}}</td>
                 <td class="text-right">

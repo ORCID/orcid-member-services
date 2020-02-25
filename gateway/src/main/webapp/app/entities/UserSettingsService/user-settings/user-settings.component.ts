@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
+import { faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { IUserSettings } from 'app/shared/model/UserSettingsService/user-settings.model';
 import { AccountService } from 'app/core';
@@ -30,6 +31,9 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   predicate: any;
   previousPage: any;
   reverse: any;
+
+  faTimesCircle = faTimesCircle;
+  faCheckCircle = faCheckCircle;
 
   constructor(
     protected userSettingsService: UserSettingsService,
