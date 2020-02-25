@@ -7,8 +7,6 @@ import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { IUserSettings } from 'app/shared/model/UserSettingsService/user-settings.model';
 import { AccountService } from 'app/core';
-
-import { IMemberSettings } from 'app/shared/model/UserSettingsService/member-settings.model';
 import { MemberSettingsService } from 'app/entities/UserSettingsService/member-settings/member-settings.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
@@ -32,7 +30,6 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   predicate: any;
   previousPage: any;
   reverse: any;
-  membersList: any;
 
   constructor(
     protected userSettingsService: UserSettingsService,
@@ -96,32 +93,13 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     this.loadAll();
   }
 
-  getOrgName(id: string) {
-    if(this.membersList) {
-      for (const member of this.membersList[0].body) {
-        if (id === member.salesforceId) {
-          return member.clientName;
-        }
-      }
-    }
-  }
-
   ngOnInit() {
     this.loadAll();
     this.accountService.identity().then(account => {
       this.currentAccount = account;
     });
     this.registerChangeInUserSettings();
-    this.memberSettingsService.allMembers$
-      .subscribe(
-        (res: HttpResponse<IMemberSettings[]>) => {
-          this.membersList = res;
-          this.membersList = Array.of(this.membersList);
-        },
-        (res: HttpErrorResponse) => {
-          return this.onError(res.message);
-        };
-      )
+    this.memberSettingsService.getOrgNameMap();
   }
 
   ngOnDestroy() {

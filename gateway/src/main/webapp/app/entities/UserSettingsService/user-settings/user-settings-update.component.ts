@@ -44,16 +44,7 @@ export class UserSettingsUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ userSettings }) => {
       this.updateForm(userSettings);
     });
-    this.memberSettingsService.allMembers$
-      .subscribe(
-        (res: HttpResponse<IMemberSettings[]>) => {
-          this.membersList = res;
-          this.membersList = Array.of(this.membersList);
-        },
-        (res: HttpErrorResponse) => {
-          return this.onError(res.message);
-        };
-      )
+    this.membersList = this.memberSettingsService.getOrgNameMap();
   }
 
   updateForm(userSettings: IUserSettings) {
