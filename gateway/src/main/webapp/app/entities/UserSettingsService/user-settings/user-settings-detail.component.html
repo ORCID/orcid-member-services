@@ -23,7 +23,7 @@
                 </dd>
                 <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId">Salesforce Id</span></dt>
                 <dd>
-                    <span [innerHtml]="getOrgName(userSettings.salesforceId)"></span>
+                    <span>{{memberSettingsService.orgNameMap[userSettings.salesforceId]}}</span>
                 </dd>                
                 <dt><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdBy">Created By</span></dt>
                 <dd>
