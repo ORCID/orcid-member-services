@@ -5,7 +5,7 @@
             <div>
                 <jhi-alert-error></jhi-alert-error>              
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login" for="field_login">Login</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.email" for="field_login">Login</label>
                     <input type="text" class="form-control" name="login" id="field_login"
                            formControlName="login"/>
                 </div>                
@@ -13,11 +13,6 @@
                     <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.password" for="field_password">Password</label>
                     <input type="password" class="form-control" name="password" id="field_password"
                            formControlName="password"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.confirm_password" for="field_confirm_password">Confirm password</label>
-                    <input type="password" class="form-control" name="confirm_password" id="field_confirm_password"
-                           formControlName="confirm_password"/>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.firstName" for="field_firstName">First Name</label>
@@ -36,8 +31,10 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId" for="field_salesforceId">Salesforce Id</label>
-                    <input type="text" class="form-control" name="salesforceId" id="field_salesforceId"
-                           formControlName="salesforceId"/>
+                    <select  *ngIf="membersList" class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
+                        <option *ngFor="let member of membersList | keyvalue" [ngValue]="member.key">{{member.value}}</option>
+                    </select>
+
                 </div>
             </div>
             <div>

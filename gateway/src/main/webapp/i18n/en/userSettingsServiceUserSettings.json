@@ -2,20 +2,20 @@
   "gatewayApp": {
     "userSettingsServiceUserSettings": {
       "home": {
-        "title": "User Settings",
-        "createLabel": "Create a new User Settings",
-        "createOrEditLabel": "Create or edit a User Settings",
-        "notFound": "No User Settings found",
-        "uploadLabel": "Upload User Settings"
+        "title": "Manage users",
+        "createLabel": "Add user",
+        "createOrEditLabel": "Add or edit user",
+        "notFound": "No users to show",
+        "uploadLabel": "Import users from CSV"
       },
       "delete": {
-        "question": "Are you sure you want to delete User Settings {{ id }}?"
+        "question": "Are you sure you want to delete user {{ id }}?"
       },
       "detail": {
-        "title": "User Settings"
+        "title": "User details"
       },
       "import": {
-        "title": "User Settings",
+        "title": "Import users",
         "label": "Please select the CSV file to upload",
         "filePath": "File path",
         "errors": {
@@ -26,22 +26,23 @@
       "login": "Login",
       "email": "Email",
       "password": "Password",
+      "confirm_password": "Confirm Password",
       "firstName": "First Name",
       "lastName": "Last Name",
       "mainContact": "Main Contact",
-      "salesforceId": "Salesforce Id",
+      "salesforceId": "Organization",
       "parentSalesforceId": "Parent Salesforce Id",
       "createdBy": "Created By",
-      "createdDate": "Created Date",
+      "createdDate": "Created",
       "lastModifiedBy": "Last Modified By",
-      "lastModifiedDate": "Last Modified Date"
+      "lastModifiedDate": "Last Modified"
     }
   },
   "userSettingsServiceApp": {
     "userSettingsServiceUserSettings": {
-      "created": "A new User Settings is created with identifier {{ param }}",
-      "updated": "A User Settings is updated with identifier {{ param }}",
-      "deleted": "A User Settings is deleted with identifier {{ param }}"
+      "created": "A new user was created with ID {{ param }}",
+      "updated": "User {{ param }} was updated successfully",
+      "deleted": "User {{ param }} was deleted successfully"
     }
   }
 }
