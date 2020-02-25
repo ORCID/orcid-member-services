@@ -1,9 +1,9 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="jhi-member-settings-heading" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.home.createOrEditLabel">Create or edit a Member Settings</h2>
+            <h2 id="jhi-member-settings-heading" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.home.createOrEditLabel">Add or edit member</h2>
             <div>
-                <jhi-alert-error></jhi-alert-error>                
+                <jhi-alert-error></jhi-alert-error>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.salesforceId" for="field_salesforceId">Salesforce Id</label>
                     <input type="text" class="form-control" name="salesforceId" id="field_salesforceId"

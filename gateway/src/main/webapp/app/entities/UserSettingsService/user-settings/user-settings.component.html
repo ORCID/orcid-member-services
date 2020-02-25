@@ -1,76 +1,67 @@
 <div>
-    <h2 id="page-heading">
-        <span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.home.title">User Settings</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-user-settings" [routerLink]="['/user-settings/new']">
-            <fa-icon [icon]="'plus'"></fa-icon>
-            <span  jhiTranslate="gatewayApp.userSettingsServiceUserSettings.home.createLabel">
-            Create new User Settings
-            </span>
-        </button>
-        <br />
-        <button id="jh-upload-entities" class="btn btn-primary float-right jh-create-entity create-user-settings" [routerLink]="['/', 'user-settings', { outlets: { popup: 'import'} }]">
-            <fa-icon [icon]="'plus'"></fa-icon>
-            <span  jhiTranslate="gatewayApp.userSettingsServiceUserSettings.home.uploadLabel">
-            Upload User Settings
-            </span>
-        </button>
-        <br />
-    </h2>
-    <jhi-alert></jhi-alert>
-    <br/>
-    <div class="alert alert-warning" *ngIf="userSettings?.length === 0">
-        <span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.home.notFound">No userSettings found</span>
+    <h1 id="page-heading" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.home.title">Manage users</h1>
+    <div class="row justify-content-end">
+        <div class="col-md-12 mb-2">
+            <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity ml-1" [routerLink]="['/user-settings/new']">
+                <fa-icon [icon]="'plus'"></fa-icon>
+                <span  jhiTranslate="gatewayApp.userSettingsServiceUserSettings.home.createLabel">
+                Add user
+                </span>
+            </button>
+            <button id="jh-upload-entities" class="btn btn-primary float-right jh-create-entity create-user-settings ml-1" [routerLink]="['/', 'user-settings', { outlets: { popup: 'import'} }]">
+                <fa-icon [icon]="'plus'"></fa-icon>
+                <span  jhiTranslate="gatewayApp.userSettingsServiceUserSettings.home.uploadLabel">
+                Import users from CSV
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <jhi-alert></jhi-alert>
+            <div class="alert alert-warning" *ngIf="userSettings?.length === 0">
+                <span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.home.notFound">No users to show</span>
+            </div>
+        </div>
     </div>
     <div class="table-responsive" *ngIf="userSettings?.length > 0">
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="login"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.login">Login</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="password"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.password">Password</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="firstName"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.firstName">First Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="lastName"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastName">Last Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="mainContact"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.mainContact">Main Contact</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="salesforceId"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId">Salesforce Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="parentSalesforceId"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.parentSalesforceId">Parent Salesforce Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdBy"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdDate"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedBy"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="salesforceId"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId">Organization</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastModifiedDate">Last Modified</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let userSettings of userSettings ;trackBy: trackId">                
                 <td><a [routerLink]="['/user-settings', userSettings.login, 'view' ]">{{userSettings.login}}</a></td>
-                <td>{{userSettings.password}}</td>
                 <td>{{userSettings.firstName}}</td>
                 <td>{{userSettings.lastName}}</td>
-                <td>{{userSettings.mainContact}}</td>
-                <td>{{userSettings.salesforceId}}</td>
-                <td>{{userSettings.parentSalesforceId}}</td>
-                <td>{{userSettings.createdBy}}</td>
-                <td>{{userSettings.createdDate | date:'medium'}}</td>
-                <td>{{userSettings.lastModifiedBy}}</td>
+                <td class="text-center">
+                    <span class="sr-only">{{userSettings.mainContact}}</span>
+                    <fa-icon aria-hidden="true" *ngIf="userSettings.mainContact=='true'" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                    <fa-icon aria-hidden="true" *ngIf="userSettings.mainContact!='true'" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                </td>
+                <td>{{memberSettingsService.orgNameMap[userSettings.salesforceId]}}</td>
                 <td>{{userSettings.lastModifiedDate | date:'medium'}}</td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
-                                [routerLink]="['/user-settings', userSettings.login, 'view' ]"
-                                class="btn btn-info btn-sm">
-                            <fa-icon [icon]="'eye'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                        </button>
-                        <button type="submit"
                                 [routerLink]="['/user-settings', userSettings.login, 'edit']"
-                                class="btn btn-primary btn-sm">
+                                class="btn btn-primary btn-sm ml-1">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', 'user-settings', { outlets: { popup: userSettings.id + '/delete'} }]"
+                                [routerLink]="['/', 'user-settings', { outlets: { popup: userSettings.login + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
+                                class="btn btn-danger btn-sm ml-1">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>

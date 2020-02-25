@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
+import { faAddressCard, faUniversity } from '@fortawesome/free-solid-svg-icons';
 
 import { VERSION } from 'app/app.constants';
 import { JhiLanguageHelper, AccountService, LoginModalService, LoginService } from 'app/core';
@@ -20,6 +21,9 @@ export class NavbarComponent implements OnInit {
   swaggerEnabled: boolean;
   modalRef: NgbModalRef;
   version: string;
+
+  faAddressCard = faAddressCard;
+  faUniversity = faUniversity;
 
   constructor(
     private loginService: LoginService,
