@@ -4,9 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
+import { faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { IUserSettings } from 'app/shared/model/UserSettingsService/user-settings.model';
 import { AccountService } from 'app/core';
+import { MemberSettingsService } from 'app/entities/UserSettingsService/member-settings/member-settings.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { UserSettingsService } from './user-settings.service';
@@ -30,8 +32,12 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   previousPage: any;
   reverse: any;
 
+  faTimesCircle = faTimesCircle;
+  faCheckCircle = faCheckCircle;
+
   constructor(
     protected userSettingsService: UserSettingsService,
+    protected memberSettingsService: MemberSettingsService,
     protected parseLinks: JhiParseLinks,
     protected jhiAlertService: JhiAlertService,
     protected accountService: AccountService,
@@ -97,6 +103,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
       this.currentAccount = account;
     });
     this.registerChangeInUserSettings();
+    this.memberSettingsService.getOrgNameMap();
   }
 
   ngOnDestroy() {

@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { IMemberSettings, MemberSettings } from 'app/shared/model/UserSettingsService/member-settings.model';
 import { MemberSettingsService } from './member-settings.service';
+import { AccountService, Account } from 'app/core';
 
 @Component({
   selector: 'jhi-member-settings-update',
@@ -28,10 +29,17 @@ export class MemberSettingsUpdateComponent implements OnInit {
     lastModifiedDate: []
   });
 
-  constructor(protected memberSettingsService: MemberSettingsService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    private accountService: AccountService,
+    protected activatedRoute: ActivatedRoute, 
+    protected memberSettingsService: MemberSettingsService, 
+    private fb: FormBuilder) {}
 
   ngOnInit() {
     this.isSaving = false;
+    this.accountService.identity().then((account: Account) => {
+      this.account = account;
+    });
     this.activatedRoute.data.subscribe(({ memberSettings }) => {
       this.updateForm(memberSettings);
     });
