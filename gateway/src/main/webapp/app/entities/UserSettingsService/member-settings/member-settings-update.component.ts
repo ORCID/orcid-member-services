@@ -18,6 +18,7 @@ export class MemberSettingsUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     clientId: [],
+    clientName: [],
     salesforceId: [null, [Validators.required]],
     parentSalesforceId: [],
     isConsortiumLead: [null, [Validators.required]],
@@ -41,6 +42,7 @@ export class MemberSettingsUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: memberSettings.id,
       clientId: memberSettings.clientId,
+      clientName: memberSettings.clientName,
       salesforceId: memberSettings.salesforceId,
       parentSalesforceId: memberSettings.parentSalesforceId,
       isConsortiumLead: memberSettings.isConsortiumLead,
@@ -71,6 +73,7 @@ export class MemberSettingsUpdateComponent implements OnInit {
       ...new MemberSettings(),
       id: this.editForm.get(['id']).value,
       clientId: this.editForm.get(['clientId']).value,
+      clientName: this.editForm.get(['clientName']).value,
       salesforceId: this.editForm.get(['salesforceId']).value,
       parentSalesforceId: this.editForm.get(['parentSalesforceId']).value,
       isConsortiumLead: this.editForm.get(['isConsortiumLead']).value,

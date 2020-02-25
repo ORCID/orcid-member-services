@@ -33,6 +33,7 @@ describe('Service Tests', () => {
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
+        'AAAAAAA',
         false,
         false,
         'AAAAAAA',
@@ -90,6 +91,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             clientId: 'BBBBBB',
+            clientName: 'BBBBBB',
             clientSecret: 'BBBBBB',
             salesforceId: 'BBBBBB',
             parentSalesforceId: 'BBBBBB',
@@ -123,6 +125,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             clientId: 'BBBBBB',
+            clientName: 'BBBBBB',
             clientSecret: 'BBBBBB',
             salesforceId: 'BBBBBB',
             parentSalesforceId: 'BBBBBB',
