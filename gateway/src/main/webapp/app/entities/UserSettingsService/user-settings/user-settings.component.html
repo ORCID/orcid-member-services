@@ -43,7 +43,7 @@
                 <td>{{userSettings.firstName}}</td>
                 <td>{{userSettings.lastName}}</td>
                 <td>{{userSettings.mainContact}}</td>
-                <td>{{userSettings.salesforceId}}</td>
+                <td [innerHtml]="getOrgName(userSettings.salesforceId)"></td>
                 <td>{{userSettings.lastModifiedDate | date:'medium'}}</td>
                 <td class="text-right">
                     <div class="btn-group">

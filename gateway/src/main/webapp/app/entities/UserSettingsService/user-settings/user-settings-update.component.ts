@@ -4,6 +4,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
+import { JhiAlertService } from 'ng-jhipster';
+
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { IUserSettings, UserSettings } from 'app/shared/model/UserSettingsService/user-settings.model';
 import { UserSettingsService } from './user-settings.service';
@@ -21,13 +23,11 @@ export class UserSettingsUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     login: ['', Validators.required],
-    email: [],
     password: [],
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     mainContact: [],
     salesforceId: [],
-    parentSalesforceId: [],
     authorities: [],
     createdBy: [],
     createdDate: [],
@@ -37,28 +37,23 @@ export class UserSettingsUpdateComponent implements OnInit {
 
   membersList: IMemberSettings;
 
-  constructor(protected userSettingsService: UserSettingsService, protected memberSettingsService: MemberSettingsService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(protected jhiAlertService: JhiAlertService, protected userSettingsService: UserSettingsService, protected memberSettingsService: MemberSettingsService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
 
   ngOnInit() {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ userSettings }) => {
       this.updateForm(userSettings);
     });
-    this.loadMemberList();
-  }
-
-  loadMemberList() {
-    this.memberSettingsService
-    .query()
-    .subscribe(
-      (res: HttpResponse<IMemberSettings[]>) => {
-        this.membersList = res;
-        this.membersList = Array.of(this.membersList);
-      },
-      (res: HttpErrorResponse) => {
-        return this.onError(res.message);
-      };
-    )
+    this.memberSettingsService.allMembers$
+      .subscribe(
+        (res: HttpResponse<IMemberSettings[]>) => {
+          this.membersList = res;
+          this.membersList = Array.of(this.membersList);
+        },
+        (res: HttpErrorResponse) => {
+          return this.onError(res.message);
+        };
+      )
   }
 
   updateForm(userSettings: IUserSettings) {
@@ -70,7 +65,6 @@ export class UserSettingsUpdateComponent implements OnInit {
       lastName: userSettings.lastName,
       mainContact: userSettings.mainContact,
       salesforceId: userSettings.salesforceId,
-      parentSalesforceId: userSettings.parentSalesforceId,
       authorities: userSettings.authorities,
       createdBy: userSettings.createdBy,
       createdDate: userSettings.createdDate != null ? userSettings.createdDate.format(DATE_TIME_FORMAT) : null,
@@ -104,7 +98,6 @@ export class UserSettingsUpdateComponent implements OnInit {
       lastName: this.editForm.get(['lastName']).value,
       mainContact: this.editForm.get(['mainContact']).value,
       salesforceId: this.editForm.get(['salesforceId']).value,
-      parentSalesforceId: this.editForm.get(['parentSalesforceId']).value,
       authorities: this.editForm.get(['authorities']).value,
       createdBy: this.editForm.get(['createdBy']).value,
       createdDate:
