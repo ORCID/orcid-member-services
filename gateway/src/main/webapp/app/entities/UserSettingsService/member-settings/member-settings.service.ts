@@ -62,19 +62,19 @@ export class MemberSettingsService {
   }
 
   getOrgNameMap(): any {
-    if(Object.keys(this.orgNameMap).length===0){
+    if (Object.keys(this.orgNameMap).length === 0) {
       this.allMembers$
       .subscribe(
         (res: HttpResponse<IMemberSettings[]>) => {
           let membersList = res;
           membersList = Array.of(membersList);
-          for(const member of membersList[0].body) {
+          for (const member of membersList[0].body) {
             this.orgNameMap[member.salesforceId] = member.clientName;
           }
           return this.orgNameMap;
         },
         (res: HttpErrorResponse) => {
-          console.log("member-settings.service: error fetching org name map")
+          console.log('member-settings.service: error fetching org name map');
         };
       )
     } else {
