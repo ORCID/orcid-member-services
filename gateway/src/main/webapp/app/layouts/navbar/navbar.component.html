@@ -18,12 +18,11 @@
                         </span>
                     </span>
                 </a>
-                <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">                   
+                <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
                     <li>
                         <a class="dropdown-item" routerLink="assertions" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon icon="addres-card" fixedWidth="true"></fa-icon>
+                            <fa-icon [icon]="faAddressCard" fixedWidth="true"></fa-icon>
                             <span jhiTranslate="global.menu.entities.assertionServicesAssertions">Assert affiliations</span>
-
                         </a>
                     </li>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
@@ -45,7 +44,7 @@
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="member-settings" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon icon="institution" fixedWidth="true"></fa-icon>
+                            <fa-icon [icon]="faUniversity" fixedWidth="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.userSettingsServiceMemberSettings">Manage members</span>
                         </a>
                     </li> 

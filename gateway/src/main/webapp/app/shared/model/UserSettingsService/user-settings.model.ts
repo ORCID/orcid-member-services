@@ -1,5 +1,12 @@
 import { Moment } from 'moment';
 
+export const enum UserAuthorities {
+  ROLE_USER = 'ROLE_USER',
+  CONSORTIUM_LEAD = 'CONSORTIUM_LEAD',
+  ASSERTION_SERVICE_ENABLED = 'ASSERTION_SERVICE_ENABLED'
+
+}
+
 export interface IUserSettings {
   id?: string;
   login?: string;
@@ -8,8 +15,9 @@ export interface IUserSettings {
   firstName?: string;
   lastName?: string;
   mainContact?: boolean;
+  assertionServiceEnabled?: boolean;
   salesforceId?: string;
-  parentSalesforceId?: string;
+  parentSalesforceId?: string;  
   createdBy?: string;
   createdDate?: Moment;
   lastModifiedBy?: string;
@@ -25,6 +33,7 @@ export class UserSettings implements IUserSettings {
     public firstName?: string,
     public lastName?: string,
     public mainContact?: boolean,
+    public assertionServiceEnabled?: boolean,
     public salesforceId?: string,
     public parentSalesforceId?: string,
     public createdBy?: string,

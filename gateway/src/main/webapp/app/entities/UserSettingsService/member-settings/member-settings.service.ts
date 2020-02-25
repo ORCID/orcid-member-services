@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { Observable, Subject, ReplaySubject } from 'rxjs';
+import { share, shareReplay } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { map } from 'rxjs/operators';
@@ -15,8 +16,13 @@ type EntityArrayResponseType = HttpResponse<IMemberSettings[]>;
 @Injectable({ providedIn: 'root' })
 export class MemberSettingsService {
   public resourceUrl = SERVER_API_URL + 'services/usersettingsservice/settings/api/member-settings';
+  public allMembers$: Observable<EntityArrayResponseType>;
+  public orgNameMap: any;
 
-  constructor(protected http: HttpClient) {}
+  constructor(protected http: HttpClient) {
+    this.allMembers$ = this.getAllMembers().pipe(share());
+    this.orgNameMap = new Object();
+  }
 
   create(memberSettings: IMemberSettings): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(memberSettings);
@@ -45,8 +51,35 @@ export class MemberSettingsService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
+  getAllMembers(): Observable<EntityArrayResponseType> {
+    return this.http
+    .get<IMemberSettings[]>(this.resourceUrl, { observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
   delete(id: string): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  getOrgNameMap(): any {
+    if (Object.keys(this.orgNameMap).length === 0) {
+      this.allMembers$
+      .subscribe(
+        (res: HttpResponse<IMemberSettings[]>) => {
+          let membersList = res;
+          membersList = Array.of(membersList);
+          for (const member of membersList[0].body) {
+            this.orgNameMap[member.salesforceId] = member.clientName;
+          }
+          return this.orgNameMap;
+        },
+        (res: HttpErrorResponse) => {
+          console.log('member-settings.service: error fetching org name map');
+        };
+      )
+    } else {
+      return this.orgNameMap;
+    }
   }
 
   protected convertDateFromClient(memberSettings: IMemberSettings): IMemberSettings {
