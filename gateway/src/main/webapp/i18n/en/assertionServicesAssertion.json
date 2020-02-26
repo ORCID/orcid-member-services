@@ -7,10 +7,12 @@
         "createOrEditLabel": "Create or edit a Assertions",
         "notFound": "No Assertion found",
         "uploadLabel": "Upload Assertions",
-        "getLinks": "Get links"
+        "getLinks": "Get links",
+        "generateReport": "Generate report"
       },
       "delete": {
-        "question": "Are you sure you want to delete Assertion {{ id }}?"
+        "question": "Are you sure you want to delete Assertion {{ id }}?",
+        "note": "This will not delete the element from ORCID, if you want to do so, first you need to press the <b>Delete from ORCID</b> button"
       },
       "detail": {
         "title": "Assertion"

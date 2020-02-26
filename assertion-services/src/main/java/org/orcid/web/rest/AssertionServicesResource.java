@@ -15,12 +15,12 @@ import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.ws.rs.InternalServerErrorException;
+import javax.xml.bind.JAXBException;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.enumeration.AffiliationSection;
@@ -98,7 +98,7 @@ public class AssertionServicesResource {
 
     @GetMapping("/assertions")
     public ResponseEntity<List<Assertion>> getAssertions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder)
-            throws BadRequestAlertException, JSONException {
+            throws BadRequestAlertException {
         String loggedInUserId = getAuthenticatedUser();
 
         log.debug("REST request to fetch assertions from user {}", loggedInUserId);
@@ -110,7 +110,7 @@ public class AssertionServicesResource {
     }
 
     @GetMapping("/assertion/{id}")
-    public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
+    public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException {
         String loggedInUserId = getAuthenticatedUser();
         log.debug("REST request to fetch assertion {} from user {}", id, loggedInUserId);
         Optional<Assertion> optional = assertionsService.findById(id);
@@ -126,18 +126,18 @@ public class AssertionServicesResource {
     
     @GetMapping("/assertion/links")
     public void generateLinks(HttpServletResponse response) throws IOException {
-        final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
-        final String fileName = userLogin + '_' +  System.currentTimeMillis() + "_report.csv";        
+        String loggedInUserId = getAuthenticatedUser();
+        final String fileName = loggedInUserId + '_' +  System.currentTimeMillis() + "_report.csv";        
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         response.setHeader("Content-Type", "text/csv");
         response.setHeader("filename", fileName);
-        String csvReport = orcidRecordService.generateLinks(userLogin);
+        String csvReport = orcidRecordService.generateLinks(loggedInUserId);
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
     }
 
     @PutMapping("/assertion")
-    public ResponseEntity<Assertion> updateAssertion(@RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
+    public ResponseEntity<Assertion> updateAssertion(@RequestBody Assertion assertion) throws BadRequestAlertException {
         log.debug("REST request to update assertion : {}", assertion);
         String loggedInUserId = getAuthenticatedUser();
         validateAssertion(assertion);
@@ -147,7 +147,7 @@ public class AssertionServicesResource {
     }
 
     @PostMapping("/assertion")
-    public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException, URISyntaxException {
+    public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, URISyntaxException {
         log.debug("REST request to create assertion : {}", assertion);        
         String loggedInUserId = getAuthenticatedUser();
         validateAssertion(assertion);
@@ -210,7 +210,7 @@ public class AssertionServicesResource {
     }
 
     @DeleteMapping("/assertion/{id}")
-    public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
+    public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
         String loggedInUserId = getAuthenticatedUser();
 
         Optional<Assertion> optional = assertionsService.findById(id);
@@ -230,6 +230,13 @@ public class AssertionServicesResource {
         return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
     }
 
+    @DeleteMapping("/assertion/orcid/{id}")
+    public ResponseEntity<String> deleteAssertionFromOrcid(@PathVariable String id) throws JAXBException {
+        String loggedInUserId = getAuthenticatedUser();
+        Boolean deleted = assertionsService.deleteAssertionFromOrcid(loggedInUserId, id);
+        return ResponseEntity.ok().body("{\"deleted\":\"" + deleted + "\"}");
+    }
+    
     @PostMapping("/id-token")
     public ResponseEntity<Void> storeIdToken(@RequestBody ObjectNode json) throws ParseException {
         String state = json.get("state").asText();
@@ -260,6 +267,19 @@ public class AssertionServicesResource {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(path = "/assertion/report")    
+    public void generateReport(HttpServletResponse response) throws IOException {
+        String loggedInUserId = getAuthenticatedUser();
+        final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
+        final String fileName = userLogin + '_' +  System.currentTimeMillis() + "_report.csv";        
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+        response.setHeader("Content-Type", "text/csv");
+        response.setHeader("filename", fileName);
+        String csvReport = assertionsService.generateAssertionsReport(loggedInUserId);
+        response.getOutputStream().write(csvReport.getBytes());
+        response.flushBuffer();
+    }
+    
     private void validateAssertion(Assertion assertion) {
         if (StringUtils.isBlank(assertion.getEmail())) {
             throw new IllegalArgumentException("email must not be null");

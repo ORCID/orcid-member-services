@@ -7,7 +7,7 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Member Tools",
-        "assertionServicesAffiliation": "Assert affiliations",
+        "assertionServicesAssertions": "Assert affiliations",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
@@ -102,6 +102,7 @@
       "back": "Back",
       "cancel": "Cancel",
       "delete": "Delete",
+      "delete-from-orcid": "Delete from orcid",
       "edit": "Edit",
       "open": "Open",
       "save": "Save",

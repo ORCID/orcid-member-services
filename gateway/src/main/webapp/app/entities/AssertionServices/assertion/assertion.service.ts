@@ -55,19 +55,39 @@ export class AssertionService {
   delete(id: string): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
-  
+
+  deleteFromOrcid(id: string): Observable<HttpResponse<any>> {
+      return this.http.delete<any>(`${this.resourceUrl}/orcid/${id}`, { observe: 'response' });
+    }
+
   getLinks() {
       this.http.get(`${this.resourceUrl}/links`, {observe: 'response', responseType: 'blob'} )
     .subscribe(response => {
-          var filename = (response.headers.get('filename') != null ? response.headers.get('filename') : 'links.csv');
-          var blob = new Blob([response.body], { type: 'text/csv' });
-          var link = document.createElement('a');
+          let filename = (response.headers.get('filename') != null ? response.headers.get('filename') : 'links.csv');
+          let blob = new Blob([response.body], { type: 'text/csv' });
+          let link = document.createElement('a');
           link.href = window.URL.createObjectURL(blob);
           link.download = filename;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
-    });
+    }); 
+  }
+  
+  generateReport() {
+      this.http.get(`${this.resourceUrl}/report`, {observe: 'response', responseType: 'blob'} )
+      .subscribe(response => {
+            let filename = (response.headers.get('filename') != null ? response.headers.get('filename') : 'report.csv');
+            let blob = new Blob([response.body], { type: 'text/csv' });
+            let link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+      });
+  }
+  
 
   protected convertDateFromClient(assertion: IAssertion): IAssertion {
     const copy: IAssertion = Object.assign({}, assertion, {
