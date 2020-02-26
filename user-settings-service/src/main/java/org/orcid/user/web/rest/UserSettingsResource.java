@@ -27,6 +27,7 @@ import org.orcid.user.domain.MemberSettings;
 import org.orcid.user.domain.UserSettings;
 import org.orcid.user.repository.MemberSettingsRepository;
 import org.orcid.user.repository.UserSettingsRepository;
+import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
@@ -127,15 +128,12 @@ public class UserSettingsResource {
             } else {
                 String login = element.get("email");
                 log.debug("Looking for existing user: " + login);
-                String uaaUserLogin = null;
-                String uaaUserId = null;
+                JSONObject existingUaaUser = null;
                 try {
                     ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(login);
                     log.debug("Status code: " + existingUserResponse.getStatusCodeValue());
                     if (existingUserResponse != null) {
-                        JSONObject existingUaaUser = new JSONObject(existingUserResponse.getBody());
-                        uaaUserLogin = existingUaaUser.getString("login");
-                        uaaUserId = existingUaaUser.getString("id");
+                        existingUaaUser = new JSONObject(existingUserResponse.getBody());                        
                     }
                 } catch (HystrixRuntimeException hre) {
                     if (hre.getCause() != null && ResponseStatusException.class.isAssignableFrom(hre.getCause().getClass())) {
@@ -152,9 +150,9 @@ public class UserSettingsResource {
                 Boolean isConsortiumLead = StringUtils.isBlank(element.get("isConsortiumLead")) ? false : Boolean.parseBoolean(element.get("isConsortiumLead"));
                 UserDTO userDTO = getUserDTO(element);
                 // If user exists, update it
-                if (StringUtils.isNotBlank(uaaUserLogin)) {
+                if (existingUaaUser != null) {
                     // Updates the UAA user
-                    updateUserOnUAA(uaaUserId, userDTO);
+                    updateUserOnUAA(userDTO, existingUaaUser);
                     // Update or create MemberSettings
                     if (memberSettingsExists(salesforceId)) {
                         updateMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, now);
@@ -204,7 +202,9 @@ public class UserSettingsResource {
             }
             authorities = Arrays.stream(grants.replace("[", "").replace("]", "").split(",")).collect(Collectors.toList());            
         }
-        u.setAuthorities(authorities);
+        if(authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
+            u.setAssertionServicesEnabled(true);
+        }
         return u;
     }
     
@@ -303,17 +303,17 @@ public class UserSettingsResource {
         map.put("login", login);
         map.put("password", userDTO.getPassword());
         map.put("email", login);
-        if (userDTO.getAuthorities() == null) {
-            userDTO.setAuthorities(new ArrayList<String>());
-        }
-        if (!userDTO.getAuthorities().contains("ROLE_USER")) {
-            userDTO.getAuthorities().add("ROLE_USER");
-        }
-        map.put("authorities", userDTO.getAuthorities());
         map.put("firstName", userDTO.getFirstName());
         map.put("lastName", userDTO.getLastName());
         map.put("activated", false);
 
+        List<String> authorities = new ArrayList<String>();
+        authorities.add(AuthoritiesConstants.USER);
+        if(userDTO.getAssertionServicesEnabled() != null && userDTO.getAssertionServicesEnabled()) {
+            authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
+        }
+        map.put("authorities", authorities);       
+        
         try {
             ResponseEntity<Void> response = oauth2ServiceClient.registerUser(map);
             if (response == null || !HttpStatus.CREATED.equals(response.getStatusCode())) {
@@ -389,6 +389,8 @@ public class UserSettingsResource {
         ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(userDTO.getLogin());
         JSONObject existingUaaUser = new JSONObject(existingUserResponse.getBody());
 
+        System.out.println(existingUaaUser.toString());
+        
         String uaaUserLogin = existingUaaUser.getString("login");
         // userLogin must match
         if (!userDTO.getLogin().equals(uaaUserLogin)) {
@@ -396,7 +398,7 @@ public class UserSettingsResource {
         }
 
         // Update jhi_user entry
-        JSONObject obj = updateUserOnUAA(existingUaaUser.getString("id"), userDTO);
+        JSONObject obj = updateUserOnUAA(userDTO, existingUaaUser);
         String lastModifiedBy = obj.getString("lastModifiedBy");
         Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
 
@@ -408,26 +410,40 @@ public class UserSettingsResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userDTO.getId().toString())).body(userDTO);
     }
 
-    private JSONObject updateUserOnUAA(String id, UserDTO userDTO) throws JSONException {
+    private JSONObject updateUserOnUAA(UserDTO userDTO, JSONObject existingUaaUser) throws JSONException {
         // Update jhi_user entry
         Map<String, Object> map = new HashMap<String, Object>();
 
         // Remember to use the UAA user id, since we are updating the user info
-        map.put("id", id);
-        map.put("login", userDTO.getLogin());
+        map.put("id", existingUaaUser.getString("id"));
+        map.put("login", existingUaaUser.getString("login"));
+        map.put("email", existingUaaUser.getString("login"));
         map.put("password", "requires_not_empty_but_doesnt_get_updated");
-        map.put("email", userDTO.getLogin());
-        map.put("authorities", userDTO.getAuthorities());
         map.put("firstName", userDTO.getFirstName());
         map.put("lastName", userDTO.getLastName());
-
+        
+        List<String> authList = new ArrayList<String>();
+        JSONArray existingAuth = existingUaaUser.getJSONArray("authorities");
+        for (int i=0; i < existingAuth.length(); i++) {
+            authList.add( existingAuth.getString(i) );
+        }
+        if(userDTO.getAssertionServicesEnabled() != null && userDTO.getAssertionServicesEnabled() && !authList.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
+            authList.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
+        }
+        
+        map.put("authorities", authList);
+        //TODO: We should be able to set the activated flag from here
+        map.put("activated", existingUaaUser.getString("activated"));
+        //TODO: We should be able to set the lang key from here
+        map.put("langKey", existingUaaUser.getString("langKey"));
+        
         ResponseEntity<String> response = oauth2ServiceClient.updateUser(map);
         if (response == null || !HttpStatus.OK.equals(response.getStatusCode())) {
             throw new RuntimeException("Update user failed: " + response.getStatusCode().getReasonPhrase());
         }
 
         return new JSONObject(response.getBody());
-    }
+    }       
 
     private Boolean userSettingsExists(String login) {
         Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByLogin(login);
@@ -555,13 +571,14 @@ public class UserSettingsResource {
         JSONObject existingUser = new JSONObject(existingUserResponse.getBody());
         u.setFirstName(existingUser.getString("firstName"));
         u.setLastName(existingUser.getString("lastName"));
-        u.setLogin(existingUser.getString("login"));
-        List<String> authorities = new ArrayList<String>();
+        u.setLogin(existingUser.getString("login"));        
         JSONArray array = existingUser.getJSONArray("authorities");
         for (int i = 0; i < array.length(); i++) {
-            authorities.add(array.getString(i));
-        }
-        u.setAuthorities(authorities);        
+            String authority = array.getString(i);
+            if(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED.equals(authority)) {
+                u.setAssertionServicesEnabled(true);
+            }
+        }        
         return u;
     }
 

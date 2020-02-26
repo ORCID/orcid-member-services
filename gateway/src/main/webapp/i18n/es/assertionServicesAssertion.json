@@ -6,10 +6,13 @@
         "createLabel": "Crear nuevo Assertion",
         "createOrEditLabel": "Crear o editar Assertion",
         "notFound": "No Assertion found",
-        "uploadLabel": "Upload Assertions"
+        "uploadLabel": "Upload Assertions",
+        "getLinks": "Get links",
+        "generateReport": "Generate report"
       },
       "delete": {
-        "question": "¿Seguro que quiere eliminar Assertion {{ id }}?"
+        "question": "¿Seguro que quiere eliminar Assertion {{ id }}?",
+        "note": "Esto no borrara el elemento en ORCID, si quieres hacer eso, primero tienes que presionar el boton <b>Borrar de ORCID</b>"
       },
       "detail": {
         "title": "Assertion"

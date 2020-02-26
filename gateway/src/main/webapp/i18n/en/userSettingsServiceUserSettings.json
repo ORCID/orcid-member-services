@@ -22,6 +22,9 @@
           "label": "Please fix the following errors"	
         }
        },
+       "assertionServices": {
+         "enabled": "Assertion services nabled"
+       },
       "confirm_password": "Confirm password",
       "login": "Login",
       "email": "Email",

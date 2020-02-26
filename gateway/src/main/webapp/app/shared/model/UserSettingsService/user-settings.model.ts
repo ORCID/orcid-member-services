@@ -15,9 +15,9 @@ export interface IUserSettings {
   firstName?: string;
   lastName?: string;
   mainContact?: boolean;
+  assertionServiceEnabled?: boolean;
   salesforceId?: string;
-  parentSalesforceId?: string;
-  authorities?: UserAuthorities;
+  parentSalesforceId?: string;  
   createdBy?: string;
   createdDate?: Moment;
   lastModifiedBy?: string;
@@ -33,9 +33,9 @@ export class UserSettings implements IUserSettings {
     public firstName?: string,
     public lastName?: string,
     public mainContact?: boolean,
+    public assertionServiceEnabled?: boolean,
     public salesforceId?: string,
     public parentSalesforceId?: string,
-    public authorities?: UserAuthorities,
     public createdBy?: string,
     public createdDate?: Moment,
     public lastModifiedBy?: string,

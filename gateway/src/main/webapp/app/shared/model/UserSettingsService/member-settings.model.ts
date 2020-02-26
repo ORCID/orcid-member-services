@@ -19,7 +19,7 @@ export class MemberSettings implements IMemberSettings {
   constructor(
     public id?: string,
     public clientId?: string,
-    public clientName?: string,
+    public clientName?: string,        
     public clientSecret?: string,
     public salesforceId?: string,
     public parentSalesforceId?: string,

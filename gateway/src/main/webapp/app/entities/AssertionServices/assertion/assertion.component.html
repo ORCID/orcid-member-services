@@ -21,7 +21,14 @@
             Get links
             </span>
         </button>
-        <br />        
+        <br />   
+        <button id="jh-generate-report" class="btn btn-primary float-right jh-generate-reports generate-report" (click)="generateReport()">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.generateReport">
+            Get links
+            </span>
+        </button>
+        <br />       
     </h2>
     <jhi-alert></jhi-alert>
     <br/>
@@ -92,24 +99,32 @@
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
-                                [routerLink]="['/assertion', assertion.id, 'view' ]"
+                                [routerLink]="['/assertions', assertion.id, 'view' ]"
                                 class="btn btn-info btn-sm">
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/assertion', assertion.id, 'edit']"
+                                [routerLink]="['/assertions', assertion.id, 'edit']"
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', 'assertion', { outlets: { popup: assertion.id + '/delete'} }]"
+                                [routerLink]="['/', 'assertions', { outlets: { popup: assertion.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', 'assertions', { outlets: { popup: assertion.id + '/delete/orcid'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-light btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete-from-orcid">Delete from ORCID</span>
                         </button>
                     </div>
                 </td>

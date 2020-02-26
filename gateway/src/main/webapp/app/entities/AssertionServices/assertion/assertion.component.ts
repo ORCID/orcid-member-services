@@ -119,9 +119,12 @@ export class AssertionComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  getLinks() {
-    console.log('GET LINKS');
+  getLinks() {    
     this.assertionService.getLinks();
+  }
+  
+  generateReport() {    
+    this.assertionService.generateReport();
   }
   
   protected paginateAssertions(data: IAssertion[], headers: HttpHeaders) {

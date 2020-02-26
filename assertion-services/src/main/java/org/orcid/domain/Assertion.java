@@ -103,9 +103,15 @@ public class Assertion implements Serializable {
     @Field("added_to_orcid")
     private Instant addedToORCID;
     
+    @Field("updated_in_orcid")
+    private Instant updatedInORCID;
+    
     @Field("deleted_from_orcid")
     private Instant deletedFromORCID;
-
+    
+    @Field("orcid_error")
+    private String orcidError;
+    
     private String status;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not
@@ -450,7 +456,23 @@ public class Assertion implements Serializable {
     public void setAddedToORCID(Instant addedToORCID) {
         this.addedToORCID = addedToORCID;
     }
+    
+    public Instant getUpdatedInORCID() {
+        return updatedInORCID;
+    }
 
+    public void setUpdatedInORCID(Instant updatedInORCID) {
+        this.updatedInORCID = updatedInORCID;
+    }
+
+    public String getOrcidError() {
+        return orcidError;
+    }
+
+    public void setOrcidError(String orcidError) {
+        this.orcidError = orcidError;
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -471,6 +493,7 @@ public class Assertion implements Serializable {
         result = prime * result + ((externalIdUrl == null) ? 0 : externalIdUrl.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((modified == null) ? 0 : modified.hashCode());
+        result = prime * result + ((orcidError == null) ? 0 : orcidError.hashCode());
         result = prime * result + ((orgCity == null) ? 0 : orgCity.hashCode());
         result = prime * result + ((orgCountry == null) ? 0 : orgCountry.hashCode());
         result = prime * result + ((orgName == null) ? 0 : orgName.hashCode());
@@ -483,6 +506,7 @@ public class Assertion implements Serializable {
         result = prime * result + ((startYear == null) ? 0 : startYear.hashCode());
         result = prime * result + ((status == null) ? 0 : status.hashCode());
         result = prime * result + (updated ? 1231 : 1237);
+        result = prime * result + ((updatedInORCID == null) ? 0 : updatedInORCID.hashCode());
         return result;
     }
 
@@ -572,6 +596,11 @@ public class Assertion implements Serializable {
                 return false;
         } else if (!modified.equals(other.modified))
             return false;
+        if (orcidError == null) {
+            if (other.orcidError != null)
+                return false;
+        } else if (!orcidError.equals(other.orcidError))
+            return false;
         if (orgCity == null) {
             if (other.orgCity != null)
                 return false;
@@ -628,6 +657,11 @@ public class Assertion implements Serializable {
         } else if (!status.equals(other.status))
             return false;
         if (updated != other.updated)
+            return false;
+        if (updatedInORCID == null) {
+            if (other.updatedInORCID != null)
+                return false;
+        } else if (!updatedInORCID.equals(other.updatedInORCID))
             return false;
         return true;
     }  
