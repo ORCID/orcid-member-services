@@ -10,10 +10,8 @@ import { MemberSettingsService } from 'app/entities/UserSettingsService/member-s
 })
 export class UserSettingsDetailComponent implements OnInit {
   userSettings: IUserSettings;
-
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
-
 
   constructor(protected activatedRoute: ActivatedRoute, protected memberSettingsService: MemberSettingsService) {}
 
@@ -23,7 +21,6 @@ export class UserSettingsDetailComponent implements OnInit {
     });
     this.memberSettingsService.getOrgNameMap();
   }
-
 
   previousState() {
     window.history.back();
