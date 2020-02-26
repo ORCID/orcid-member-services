@@ -66,17 +66,17 @@ export class MemberSettingsService {
       this.allMembers$
       .subscribe(
         (res: HttpResponse<IMemberSettings[]>) => {
-          let membersList = res;
-          membersList = Array.of(membersList);
-          for (const member of membersList[0].body) {
-            this.orgNameMap[member.salesforceId] = member.clientName;
+          if (res.body) {
+            res.body.forEach((memberSettings: IMemberSettings) => {
+              this.orgNameMap[memberSettings.salesforceId] = memberSettings.clientName;
+            });
           }
           return this.orgNameMap;
         },
         (res: HttpErrorResponse) => {
           console.log('member-settings.service: error fetching org name map');
-        };
-      )
+        }
+      );
     } else {
       return this.orgNameMap;
     }
