@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { IUserSettings } from 'app/shared/model/UserSettingsService/user-settings.model';
 import { MemberSettingsService } from 'app/entities/UserSettingsService/member-settings/member-settings.service';
 
@@ -9,6 +10,10 @@ import { MemberSettingsService } from 'app/entities/UserSettingsService/member-s
 })
 export class UserSettingsDetailComponent implements OnInit {
   userSettings: IUserSettings;
+
+  faTimesCircle = faTimesCircle;
+  faCheckCircle = faCheckCircle;
+
 
   constructor(protected activatedRoute: ActivatedRoute, protected memberSettingsService: MemberSettingsService) {}
 
