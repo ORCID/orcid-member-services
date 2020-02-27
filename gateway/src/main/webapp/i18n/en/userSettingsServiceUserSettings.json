@@ -9,7 +9,7 @@
         "uploadLabel": "Import users from CSV"
       },
       "delete": {
-        "question": "Are you sure you want to delete user {{ id }}?"
+        "question": "Are you sure you want to delete user {{ login }}?"
       },
       "detail": {
         "title": "User details"
@@ -19,11 +19,11 @@
         "label": "Please select the CSV file to upload",
         "filePath": "File path",
         "errors": {
-          "label": "Please fix the following errors"	
+          "label": "Please fix the following errors"
         }
        },
        "assertionServices": {
-         "enabled": "Assertion services nabled"
+         "enabled": "Assertions enabled"
        },
       "confirm_password": "Confirm password",
       "login": "Login",

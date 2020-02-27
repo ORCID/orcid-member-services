@@ -6,10 +6,10 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <p id="jhi-delete-memberSettings-heading" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.delete.question" [translateValues]="{id: memberSettings.id}">Are you sure you want to delete this Member Settings?</p>
+        <p id="jhi-delete-memberSettings-heading" jhiTranslate="gatewayApp.userSettingsServiceMemberSettings.delete.question" [translateValues]="{clientName: memberSettings.clientName}">Are you sure you want to delete this Member Settings?</p>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+        <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
         <button id="jhi-confirm-delete-memberSettings" type="submit" class="btn btn-danger">

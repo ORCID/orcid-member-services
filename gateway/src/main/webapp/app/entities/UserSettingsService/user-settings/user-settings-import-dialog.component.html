@@ -6,9 +6,9 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <p id="jhi-delete-userSettings-heading" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.import.label">Please select the CSV file to upload</p>
+        <p id="jhi-delete-userSettings-heading" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.import.label">Please select a CSV file to upload</p>
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.import.filePath" for="field_filePath">File Path</label>
+            <label class="form-control-label sr-only" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.import.filePath" for="field_filePath">File Path</label>
             <input type="file" class="form-control" name="filePath" id="field_filePath"
                 (change)="selectFile($event)"/>
         </div>
@@ -17,12 +17,12 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
-        <button id="jhi-confirm-delete-userSettings" type="submit" class="btn btn-danger">
+        <button id="jhi-confirm-delete-userSettings" type="submit" class="btn btn-primary">
             <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.upload">Upload</span>
         </button>
     </div>
 </form>
-<div class="modal-body" *ngIf="csvErrors && csvErrors.length > 0">    
+<div class="modal-body" *ngIf="csvErrors && csvErrors.length > 0">
     <p jhiTranslate="gatewayApp.userSettingsServiceUserSettings.import.errors.lagel">Please fix the following errors</p>
     <table>
     	<thead>
@@ -34,6 +34,6 @@
         		<td>{{error['index']}}</td>
         		<td>{{error['message']}}</td>
        		</tr>
-    	</tbody>        
+    	</tbody>
     </table>
 </div>
