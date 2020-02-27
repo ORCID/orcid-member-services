@@ -10,11 +10,14 @@ html, body {
 }
 
 body,
-h1,
+h1 {
+  font-weight: 300;
+}
+
 h2,
 h3,
 h4 {
-  font-weight: 300;
+  font-weight: 700;
 }
 
 a {
@@ -146,6 +149,9 @@ entity detail page css
     margin-bottom: 15px;
     float: left;
   }
+  dd:last-child {
+    margin-bottom: 0;
+  }
   dt {
     float: left;
     clear: both;
@@ -195,5 +201,9 @@ input.form-control[type=checkbox] {
   float: left;
   margin-right: .5rem;
   margin-bottom: .5rem;
-
 }
+
+input.form-control[type=file] {
+  border: none;
+}
+

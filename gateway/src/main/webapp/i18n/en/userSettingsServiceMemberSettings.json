@@ -9,21 +9,21 @@
         "uploadLabel": "Import members from CSV"
       },
       "delete": {
-        "question": "Are you sure you want to delete member {{ id }}?"
+        "question": "Are you sure you want to delete member {{ clientName }}?"
       },
       "detail": {
         "title": "Member details"
       },
       "import": {
         "title": "Member Settings",
-        "label": "Please select the CSV file to upload",
+        "label": "Please select a CSV file to upload",
         "filePath": "File path",
         "errors": {
-          "label": "Please fix the following errors"	
+          "label": "Please fix the following errors"
         }
        },
       "clientId": "Client Id",
-      "clientName": "Client name",
+      "clientName": "Name",
       "clientSecret": "Client Secret",
       "salesforceId": "Salesforce Id",
       "parentSalesforceId": "Parent Salesforce Id",
