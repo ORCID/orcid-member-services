@@ -5,47 +5,47 @@
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <div class="row">
-            <dl class="jh-entity-details">
-                <dt class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.email">Email</dt>
-                <dd class="col-md-10">
-                    {{userSettings.login}}
-                </dd>                
-                <dt  class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.firstName">First Name</dt>
-                <dd class="col-md-10">
-                    {{userSettings.firstName}}
-                </dd>
-                <dt  class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastName">Last Name</dt>
-                <dd class="col-md-10">
-                    {{userSettings.lastName}}
-                </dd>
-                <dt class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.mainContact">Main Contact</dt>
-                <dd class="col-md-10">
-                    <span class="sr-only" *ngIf="userSettings.mainContact=='true'" jhiTranslate="global.true">True</span>
-                    <span class="sr-only" *ngIf="userSettings.mainContact!='true'" jhiTranslate="global.false">False</span>
-                    <fa-icon aria-hidden="true" *ngIf="userSettings.mainContact=='true'" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
-                    <fa-icon aria-hidden="true" *ngIf="userSettings.mainContact!='true'" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
-                </dd>
-                <dt class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId">Salesforce Id</dt>
-                <dd class="col-md-10">
-                    {{memberSettingsService.orgNameMap[userSettings.salesforceId]}}
-                </dd>                
-                <dt class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdDate">Created Date</dt>
-                <dd class="col-md-10">
-                    {{userSettings.createdDate}} <i><span jhiTranslate="global.by">by</span> {{userSettings.createdBy}}</i>
-                </dd>
-                <dt class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastModifiedDate">Last Modified Date</dt>
-                <dd class="col-md-10">
-                    <span>{{userSettings.lastModifiedDate}} <i><span jhiTranslate="global.by">by</span> {{userSettings.lastModifiedBy}}</i>
-                </dd>
-            </dl>
+                <dl class="jh-entity-details">
+                    <dt class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.email">Email</dt>
+                    <dd class="col-md-10">
+                        {{userSettings.login}}
+                    </dd>
+                    <dt  class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.firstName">First Name</dt>
+                    <dd class="col-md-10">
+                        {{userSettings.firstName}}
+                    </dd>
+                    <dt  class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastName">Last Name</dt>
+                    <dd class="col-md-10">
+                        {{userSettings.lastName}}
+                    </dd>
+                    <dt class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.mainContact">Main Contact</dt>
+                    <dd class="col-md-10">
+                        <span class="sr-only" *ngIf="userSettings.mainContact=='true'" jhiTranslate="global.true">True</span>
+                        <span class="sr-only" *ngIf="userSettings.mainContact!='true'" jhiTranslate="global.false">False</span>
+                        <fa-icon aria-hidden="true" *ngIf="userSettings.mainContact=='true'" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                        <fa-icon aria-hidden="true" *ngIf="userSettings.mainContact!='true'" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                    </dd>
+                    <dt class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.salesforceId">Salesforce Id</dt>
+                    <dd class="col-md-10">
+                        {{memberSettingsService.orgNameMap[userSettings.salesforceId]}}
+                    </dd>
+                    <dt class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.createdDate">Created Date</dt>
+                    <dd class="col-md-10">
+                        {{userSettings.createdDate}} <i><span jhiTranslate="global.by">by</span> {{userSettings.createdBy}}</i>
+                    </dd>
+                    <dt class="col-md-2" jhiTranslate="gatewayApp.userSettingsServiceUserSettings.lastModifiedDate">Last Modified Date</dt>
+                    <dd class="col-md-10">
+                        <span>{{userSettings.lastModifiedDate}} <i><span jhiTranslate="global.by">by</span> {{userSettings.lastModifiedBy}}</i>
+                    </dd>
+                </dl>
             </div>
-            <div class="row"></div>
+            <hr>
+            <div>
                 <button type="submit"
                         (click)="previousState()"
-                        class="btn btn-info">
+                        class="btn btn-outline-primary">
                     <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
                 </button>
-
                 <button type="button"
                         [routerLink]="['/user-settings', userSettings.login, 'edit']"
                         class="btn btn-primary">
