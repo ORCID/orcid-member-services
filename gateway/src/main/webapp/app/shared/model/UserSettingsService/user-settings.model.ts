@@ -10,14 +10,12 @@ export const enum UserAuthorities {
 export interface IUserSettings {
   id?: string;
   login?: string;
-  email?: string;
-  password?: string;
   firstName?: string;
   lastName?: string;
   mainContact?: boolean;
   assertionServiceEnabled?: boolean;
   salesforceId?: string;
-  parentSalesforceId?: string;  
+  parentSalesforceId?: string;
   createdBy?: string;
   createdDate?: Moment;
   lastModifiedBy?: string;
@@ -28,8 +26,6 @@ export class UserSettings implements IUserSettings {
   constructor(
     public id?: string,
     public login?: string,
-    public email?: string,
-    public password?: string,
     public firstName?: string,
     public lastName?: string,
     public mainContact?: boolean,

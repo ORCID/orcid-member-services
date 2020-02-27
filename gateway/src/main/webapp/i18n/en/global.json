@@ -1,6 +1,9 @@
 {
   "global": {
     "title": "ORCID Member Portal",
+    "by": "by",
+    "false": "false",
+    "true": "true",
     "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
     "menu": {
       "memberPortal": "Member Portal",
@@ -114,7 +117,7 @@
       "value": "Value"
     },
     "delete": {
-      "title": "Confirm delete operation"
+      "title": "Confirm deletion"
     },
     "validation": {
       "required": "This field is required.",

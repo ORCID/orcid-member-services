@@ -10,11 +10,14 @@ html, body {
 }
 
 body,
-h1,
+h1 {
+  font-weight: 300;
+}
+
 h2,
 h3,
 h4 {
-  font-weight: 300;
+  font-weight: 700;
 }
 
 a {
@@ -137,20 +140,32 @@ Custom alerts for notification
 /* ==========================================================================
 entity detail page css
 ========================================================================== */
-.row.jh-entity-details > {
+.row dl.jh-entity-details {
+  width: 100%;
+}
+
+.row .jh-entity-details > {
   dd {
     margin-bottom: 15px;
+    float: left;
+  }
+  dd:last-child {
+    margin-bottom: 0;
+  }
+  dt {
+    float: left;
+    clear: both;
   }
 }
 
 @media screen and (min-width: 768px) {
-  .row.jh-entity-details > {
+  .row-md.jh-entity-details > {
     dt {
+      border-bottom: 1px solid #eee;
       margin-bottom: 15px;
     }
     dd {
       border-bottom: 1px solid #eee;
-      padding-left: 180px;
       margin-left: 0;
     }
   }
@@ -174,3 +189,21 @@ ui bootstrap tweaks
 }
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+
+.form-control-label {
+  font-weight: bold;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+}
+
+input.form-control[type=checkbox] {
+  width: initial;
+  float: left;
+  margin-right: .5rem;
+  margin-bottom: .5rem;
+}
+
+input.form-control[type=file] {
+  border: none;
+}
+
