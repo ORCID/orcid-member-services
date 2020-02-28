@@ -2,27 +2,27 @@
   "gatewayApp": {
     "assertionServicesAssertion": {
       "home": {
-        "title": "Assertions",
-        "createLabel": "Create a new Assertion",
-        "createOrEditLabel": "Create or edit a Assertions",
-        "notFound": "No Assertion found",
-        "uploadLabel": "Upload Assertions",
-        "getLinks": "Get links",
+        "title": "Affiliations",
+        "createLabel": "Add affiliation",
+        "createOrEditLabel": "Add or edit affiliation",
+        "notFound": "No affiliations found",
+        "uploadLabel": "Import affiliations from CSV",
+        "getLinks": "Download permission links",
         "generateReport": "Generate report"
       },
       "delete": {
-        "question": "Are you sure you want to delete Assertion {{ id }}?",
+        "question": "Are you sure you want to delete affiliation {{ id }}?",
         "note": "This will not delete the element from ORCID, if you want to do so, first you need to press the <b>Delete from ORCID</b> button"
       },
       "detail": {
-        "title": "Assertion"
-      }, 
+        "title": "Affiliation"
+      },
       "import": {
-        "title": "Import Assertions",
-        "label": "Please select the CSV file to upload",
+        "title": "Import affiliations",
+        "label": "Please select a CSV file to upload",
         "filePath": "File path",
         "errors": {
-          "label": "Please fix the following errors"	
+          "label": "Please fix the following errors"
         }
       },
       "email": "Email",
@@ -54,9 +54,9 @@
   },
   "assertionServicesApp": {
     "assertionServicesAssertion": {
-      "created": "A new Assertion is created with identifier {{ param }}",
-      "updated": "A Assertion is updated with identifier {{ param }}",
-      "deleted": "A Assertion is deleted with identifier {{ param }}"
+      "created": "New affiliation {{ param }} was created",
+      "updated": "Affiliation {{ param }} was updated",
+      "deleted": "Affiliation {{ param }} was deleted"
     }
   }
 }

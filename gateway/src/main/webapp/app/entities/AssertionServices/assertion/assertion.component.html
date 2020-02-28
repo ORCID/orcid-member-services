@@ -1,39 +1,39 @@
 <div>
-    <h2 id="page-heading">
-        <span jhiTranslate="gatewayApp.assertionServicesAssertion.home.title">Assertions</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-assertion" [routerLink]="['/assertions/new']">
-            <fa-icon [icon]="'plus'"></fa-icon>
-            <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.createLabel">
-            Create new Assertion
-            </span>
-        </button>
-        <br />
-        <button id="jh-upload-entities" class="btn btn-primary float-right jh-upload-entities upload-assertions" [routerLink]="['/', 'assertions', { outlets: { popup: 'import'} }]">
-            <fa-icon [icon]="'plus'"></fa-icon>
-            <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.uploadLabel">
-            Upload Assertions
-            </span>
-        </button>
-        <br />
-        <button id="jh-generate-links" class="btn btn-primary float-right jh-generate-links generate-links" (click)="getLinks()">
-            <fa-icon [icon]="'plus'"></fa-icon>
-            <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.getLinks">
-            Get links
-            </span>
-        </button>
-        <br />   
-        <button id="jh-generate-report" class="btn btn-primary float-right jh-generate-reports generate-report" (click)="generateReport()">
-            <fa-icon [icon]="'plus'"></fa-icon>
-            <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.generateReport">
-            Get links
-            </span>
-        </button>
-        <br />       
-    </h2>
+    <h1 id="page-heading" class="mt-3" jhiTranslate="gatewayApp.assertionServicesAssertion.home.title">Affiliations</h1>
+    <div class="row justify-content-end">
+        <div class="col-md-12 mb-2">
+
+
+            <button id="jh-generate-links" class="btn btn-primary float-right jh-generate-links generate-links ml-1" (click)="getLinks()">
+                <fa-icon [icon]="faFileDownload"></fa-icon>
+                <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.getLinks">
+                Download permission links
+                </span>
+            </button>
+            <button id="jh-generate-report" class="btn btn-primary float-right jh-generate-reports generate-report ml-1" (click)="generateReport()">
+                <fa-icon [icon]="faChartBar"></fa-icon>
+                <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.generateReport">
+                Generate report
+                </span>
+            </button>
+            <button id="jh-upload-entities" class="btn btn-primary float-right jh-upload-entities upload-assertions ml-1" [routerLink]="['/', 'assertions', { outlets: { popup: 'import'} }]">
+                <fa-icon [icon]="faFileImport"></fa-icon>
+                <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.uploadLabel">
+                Import affiliations from CSV
+                </span>
+            </button>
+            <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-assertion ml-1" [routerLink]="['/assertions/new']">
+                <fa-icon [icon]="'plus'"></fa-icon>
+                <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.createLabel">
+                Add affiliation
+                </span>
+            </button>
+        </div>
+    </div>
     <jhi-alert></jhi-alert>
     <br/>
     <div class="alert alert-warning" *ngIf="assertions?.length === 0">
-        <span jhiTranslate="gatewayApp.assertionServicesAssertion.home.notFound">No assertions found</span>
+        <span jhiTranslate="gatewayApp.assertionServicesAssertion.home.notFound">No affiliations found</span>
     </div>
     <div class="table-responsive" *ngIf="assertions?.length > 0">
         <table class="table table-striped">
