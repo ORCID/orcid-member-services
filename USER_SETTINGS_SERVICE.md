@@ -44,18 +44,16 @@ This will return an access token that looks like this one:
 From it, take the `access_token` parameter and use it to create a new user, as follows:
 
 ```
-curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer <TOKEN>" -X POST --data '{"login":"test_user_1","email":"test_user_1@test.com", "firstName":"Angel", "lastName":"Montenegro", "password":"password123","authorities":["ROLE_USER"],"salesforceId":"SF1", "parentSalesforceId":"PSF1"}'  http://localhost:8081/settings/api/user
+curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer <TOKEN>" -X POST --data '{"login":"test_user_1@test.com", "firstName":"Angel", "lastName":"Montenegro", "password":"password123","authorities":["ROLE_USER"],"salesforceId":"SF1"}'  http://localhost:8081/settings/api/user
 
 ```
 
 From it, notice the user parameters: 
 
-- login: The name used to login
+- login: The user email
 - password: The user password
-- email: The user email
 - authorities: The authorities the user should have, by default, they should be `ROLE_USER` and `CONSORTIUM_LEAD`.
-- salesforceId: TBD
-- parentSalesforceId: TBD
+- salesforceId: The ID of the member that the user is associated with
 
 If the login and email parameters are available, then, the user will be created, and, the server will return the new user information as follows:
 
