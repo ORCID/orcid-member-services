@@ -100,7 +100,7 @@ curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Aut
 Notice we now include the `"id"` field, which represent the users id in the database. 
 If that works fine, you will get a `200 OK` from the server, along with the updated user info in JSON format
 
-#### Import users using CSV
+#### Import users and members using CSV
 
 Now we want to test that you can upload multiple users at once, this is done through the CSV user inport endpoint, but, before going into the technical details, lets see how the CSV should look like: 
 
