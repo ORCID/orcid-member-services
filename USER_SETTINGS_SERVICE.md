@@ -114,7 +114,9 @@ Notice that the first line in the file must be the header, and define the fields
 
 name | required
 -----| ----------
+isConsortiumLead | Yes
 salesforceId | Yes
+parentSalesforceId | Yes
 email | Yes
 firstName | No 
 lastName | No
