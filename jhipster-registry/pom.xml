@@ -5,9 +5,9 @@
 
     <groupId>io.github.jhipster.registry</groupId>
     <artifactId>jhipster-registry</artifactId>
-    <version>5.0.2</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
-    <name>JHipster Registry</name>
+    <name>orcid-jhipster-registry</name>
     <description>JHipster service registry, made with Netflix Eureka and Spring Cloud Config</description>
 
     <properties>
@@ -530,18 +530,14 @@
                     <groupId>com.spotify</groupId>
                     <artifactId>dockerfile-maven-plugin</artifactId>
                     <version>${dockerfile-maven-plugin.version}</version>
-                    <!--
-                    Uncomment the section below to build the docker image with mvn package and and push it with mvn deploy
                     <executions>
                         <execution>
                         <id>default</id>
                         <goals>
                             <goal>build</goal>
-                            <goal>push</goal>
                         </goals>
                         </execution>
                     </executions>
-                    -->
                     <configuration>
                         <repository>jhipster-registry</repository>
                         <tag>latest</tag>
