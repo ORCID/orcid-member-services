@@ -89,6 +89,10 @@ public class UserSettingsResource {
         this.memberSettingsRepository = memberSettingsRepository;
     }
 
+    public void setOauth2ServiceClient(Oauth2ServiceClient oauth2ServiceClient) {
+        this.oauth2ServiceClient = oauth2ServiceClient;
+    }
+
     /**
      * {@code POST  /user/upload} : Create a list of users.
      *

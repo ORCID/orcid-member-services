@@ -1,39 +1,46 @@
 package org.orcid.user.web.rest;
 
-import org.orcid.user.UserSettingsServiceApp;
-import org.orcid.user.config.SecurityBeanOverrideConfiguration;
-import org.orcid.user.domain.UserSettings;
-import org.orcid.user.repository.MemberSettingsRepository;
-import org.orcid.user.repository.UserSettingsRepository;
-import org.orcid.user.web.rest.errors.ExceptionTranslator;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.Validator;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+import static org.orcid.user.web.rest.TestUtil.createFormattingConversionService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static org.orcid.user.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.orcid.user.UserSettingsServiceApp;
+import org.orcid.user.client.Oauth2ServiceClient;
+import org.orcid.user.config.SecurityBeanOverrideConfiguration;
+import org.orcid.user.domain.UserSettings;
+import org.orcid.user.repository.MemberSettingsRepository;
+import org.orcid.user.repository.UserSettingsRepository;
+import org.orcid.user.security.SecurityUtils;
+import org.orcid.user.web.rest.errors.ExceptionTranslator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.Validator;
 
 /**
  * Integration tests for the {@link UserSettingsResource} REST controller.
  */
-@SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, UserSettingsServiceApp.class})
+@SpringBootTest(properties = { "feign.hystrix.enabled=true"}, classes = {SecurityBeanOverrideConfiguration.class, UserSettingsServiceApp.class})
 public class UserSettingsResourceIT {
 
     private static final String DEFAULT_LOGIN = "AAAAAAAAAA";
@@ -68,21 +75,36 @@ public class UserSettingsResourceIT {
 
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
+    
     @Autowired
     private ExceptionTranslator exceptionTranslator;
 
     @Autowired
     private Validator validator;
+    
+    @Mock
+    private Oauth2ServiceClient oauth2ServiceClient;
 
     private MockMvc restUserSettingsMockMvc;
 
     private UserSettings userSettings;
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws JSONException {
         MockitoAnnotations.initMocks(this);
+        ResponseEntity<Void> createdResponse = new ResponseEntity<Void>(HttpStatus.CREATED);
+        
+        JSONObject obj = new JSONObject();
+        obj.put("login", DEFAULT_LOGIN);
+        obj.put("createdDate", Instant.now().toString());
+        obj.put("lastModifiedBy", DEFAULT_LOGIN);
+        obj.put("lastModifiedDate", Instant.now().toString());
+                
+        ResponseEntity<String> getUserResponse = new ResponseEntity<String>(obj.toString(), HttpStatus.OK);
+        when(oauth2ServiceClient.registerUser(Mockito.anyMap())).thenReturn(createdResponse);
+        when(oauth2ServiceClient.getUser(DEFAULT_LOGIN)).thenReturn(getUserResponse);
         final UserSettingsResource userSettingsResource = new UserSettingsResource(userSettingsRepository, memberSettingsRepository);
+        userSettingsResource.setOauth2ServiceClient(oauth2ServiceClient);
         this.restUserSettingsMockMvc = MockMvcBuilders.standaloneSetup(userSettingsResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -133,6 +155,7 @@ public class UserSettingsResourceIT {
     }
 
     @Test
+    @WithMockUser(username=DEFAULT_LOGIN,authorities={"ROLE_ADMIN", "ROLE_USR"}, password = "user")
     public void createUserSettings() throws Exception {
         int databaseSizeBeforeCreate = userSettingsRepository.findAll().size();
 
@@ -142,26 +165,21 @@ public class UserSettingsResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(userSettings)))
             .andExpect(status().isCreated());
 
+        int databaseSizeAfterCreate = databaseSizeBeforeCreate + 1;
+        
         // Validate the UserSettings in the database
         List<UserSettings> userSettingsList = userSettingsRepository.findAll();
-        assertThat(userSettingsList).hasSize(databaseSizeBeforeCreate + 1);
+        assertThat(userSettingsList).hasSize(databaseSizeAfterCreate);
         UserSettings testUserSettings = userSettingsList.get(userSettingsList.size() - 1);
         assertThat(testUserSettings.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(testUserSettings.getMainContact()).isEqualTo(DEFAULT_MAIN_CONTACT);
         assertThat(testUserSettings.getSalesforceId()).isEqualTo(DEFAULT_SALESFORCE_ID);
         assertThat(testUserSettings.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
-        assertThat(testUserSettings.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
         assertThat(testUserSettings.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
-        assertThat(testUserSettings.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
-    }
-
-    @Test
-    public void createUserSettingsWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = userSettingsRepository.findAll().size();
-
-        // Create the UserSettings with an existing ID
-        userSettings.setId("existing_id");
-
+        assertNotNull(testUserSettings.getCreatedDate());
+        assertNotNull(testUserSettings.getLastModifiedDate());
+        
+        
         // An entity with an existing ID cannot be created, so this API call must fail
         restUserSettingsMockMvc.perform(post("/settings/api/user")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -169,135 +187,8 @@ public class UserSettingsResourceIT {
             .andExpect(status().isBadRequest());
 
         // Validate the UserSettings in the database
-        List<UserSettings> userSettingsList = userSettingsRepository.findAll();
-        assertThat(userSettingsList).hasSize(databaseSizeBeforeCreate);
-    }
-
-    @Test
-    public void getAllUserSettings() throws Exception {
-        // Initialize the database
-        userSettingsRepository.save(userSettings);
-
-        // Get all the userSettingsList
-        restUserSettingsMockMvc.perform(get("/settings/api/users?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(userSettings.getId())))
-            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))            
-            .andExpect(jsonPath("$.[*].salesforceId").value(hasItem(DEFAULT_SALESFORCE_ID)))
-            .andExpect(jsonPath("$.[*].mainContact").value(hasItem(DEFAULT_MAIN_CONTACT.booleanValue())))
-            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
-            .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
-            .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY)))
-            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())));
-    }
+        userSettingsList = userSettingsRepository.findAll();
+        assertThat(userSettingsList).hasSize(databaseSizeAfterCreate);
+    }        
     
-    @Test
-    public void getUserSettings() throws Exception {
-        // Initialize the database
-        userSettingsRepository.save(userSettings);
-
-        // Get the userSettings
-        restUserSettingsMockMvc.perform(get("/settings/api/{id}", userSettings.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(userSettings.getId())))
-            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))            
-            .andExpect(jsonPath("$.[*].salesforceId").value(hasItem(DEFAULT_SALESFORCE_ID)))
-            .andExpect(jsonPath("$.[*].mainContact").value(hasItem(DEFAULT_MAIN_CONTACT.booleanValue())))
-            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
-            .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
-            .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY)))
-            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())));
-    }
-
-    @Test
-    public void getNonExistingUserSettings() throws Exception {
-        // Get the userSettings
-        restUserSettingsMockMvc.perform(get("/settings/api/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void updateUserSettings() throws Exception {
-        // Initialize the database
-        userSettingsRepository.save(userSettings);
-
-        int databaseSizeBeforeUpdate = userSettingsRepository.findAll().size();
-
-        // Update the userSettings
-        UserSettings updatedUserSettings = userSettingsRepository.findById(userSettings.getId()).get();
-        updatedUserSettings.setSalesforceId(UPDATED_SALESFORCE_ID);
-        updatedUserSettings.setCreatedBy(UPDATED_CREATED_BY);
-        updatedUserSettings.setCreatedDate(UPDATED_CREATED_DATE);
-        updatedUserSettings.setLastModifiedBy(UPDATED_LAST_MODIFIED_BY);
-        updatedUserSettings.setLastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
-        updatedUserSettings.setLogin(UPDATED_LOGIN);
-        updatedUserSettings.setMainContact(UPDATED_MAIN_CONTACT);
-
-        restUserSettingsMockMvc.perform(put("/settings/api/user")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedUserSettings)))
-            .andExpect(status().isOk());
-
-        // Validate the UserSettings in the database
-        List<UserSettings> userSettingsList = userSettingsRepository.findAll();
-        assertThat(userSettingsList).hasSize(databaseSizeBeforeUpdate);
-        UserSettings testUserSettings = userSettingsList.get(userSettingsList.size() - 1);
-        assertThat(testUserSettings.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(testUserSettings.getMainContact()).isEqualTo(DEFAULT_MAIN_CONTACT);
-        assertThat(testUserSettings.getSalesforceId()).isEqualTo(DEFAULT_SALESFORCE_ID);
-        assertThat(testUserSettings.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
-        assertThat(testUserSettings.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
-        assertThat(testUserSettings.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
-        assertThat(testUserSettings.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
-    }
-
-    @Test
-    public void updateNonExistingUserSettings() throws Exception {
-        int databaseSizeBeforeUpdate = userSettingsRepository.findAll().size();
-
-        // Create the UserSettings
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restUserSettingsMockMvc.perform(put("/settings/api/user")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(userSettings)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the UserSettings in the database
-        List<UserSettings> userSettingsList = userSettingsRepository.findAll();
-        assertThat(userSettingsList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    public void deleteUserSettings() throws Exception {
-        // Initialize the database
-        userSettingsRepository.save(userSettings);
-
-        int databaseSizeBeforeDelete = userSettingsRepository.findAll().size();
-
-        // Delete the userSettings
-        restUserSettingsMockMvc.perform(delete("/settings/api/user/{id}", userSettings.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
-
-        // Validate the database contains one less item
-        List<UserSettings> userSettingsList = userSettingsRepository.findAll();
-        assertThat(userSettingsList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(UserSettings.class);
-        UserSettings userSettings1 = new UserSettings();
-        userSettings1.setId("id1");
-        UserSettings userSettings2 = new UserSettings();
-        userSettings2.setId(userSettings1.getId());
-        assertThat(userSettings1).isEqualTo(userSettings2);
-        userSettings2.setId("id2");
-        assertThat(userSettings1).isNotEqualTo(userSettings2);
-        userSettings1.setId(null);
-        assertThat(userSettings1).isNotEqualTo(userSettings2);
-    }
 }
