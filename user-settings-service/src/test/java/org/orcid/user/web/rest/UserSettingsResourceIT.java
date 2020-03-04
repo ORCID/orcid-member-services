@@ -1,10 +1,15 @@
 package org.orcid.user.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.orcid.user.web.rest.TestUtil.createFormattingConversionService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.Instant;
@@ -24,12 +29,12 @@ import org.orcid.user.config.SecurityBeanOverrideConfiguration;
 import org.orcid.user.domain.UserSettings;
 import org.orcid.user.repository.MemberSettingsRepository;
 import org.orcid.user.repository.UserSettingsRepository;
-import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.web.rest.errors.ExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -40,7 +45,7 @@ import org.springframework.validation.Validator;
 /**
  * Integration tests for the {@link UserSettingsResource} REST controller.
  */
-@SpringBootTest(properties = { "feign.hystrix.enabled=true"}, classes = {SecurityBeanOverrideConfiguration.class, UserSettingsServiceApp.class})
+@SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, UserSettingsServiceApp.class})
 public class UserSettingsResourceIT {
 
     private static final String DEFAULT_LOGIN = "AAAAAAAAAA";
@@ -154,41 +159,4 @@ public class UserSettingsResourceIT {
         userSettings = createEntity();
     }
 
-    @Test
-    @WithMockUser(username=DEFAULT_LOGIN,authorities={"ROLE_ADMIN", "ROLE_USR"}, password = "user")
-    public void createUserSettings() throws Exception {
-        int databaseSizeBeforeCreate = userSettingsRepository.findAll().size();
-
-        // Create the UserSettings
-        restUserSettingsMockMvc.perform(post("/settings/api/user")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(userSettings)))
-            .andExpect(status().isCreated());
-
-        int databaseSizeAfterCreate = databaseSizeBeforeCreate + 1;
-        
-        // Validate the UserSettings in the database
-        List<UserSettings> userSettingsList = userSettingsRepository.findAll();
-        assertThat(userSettingsList).hasSize(databaseSizeAfterCreate);
-        UserSettings testUserSettings = userSettingsList.get(userSettingsList.size() - 1);
-        assertThat(testUserSettings.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(testUserSettings.getMainContact()).isEqualTo(DEFAULT_MAIN_CONTACT);
-        assertThat(testUserSettings.getSalesforceId()).isEqualTo(DEFAULT_SALESFORCE_ID);
-        assertThat(testUserSettings.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
-        assertThat(testUserSettings.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
-        assertNotNull(testUserSettings.getCreatedDate());
-        assertNotNull(testUserSettings.getLastModifiedDate());
-        
-        
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restUserSettingsMockMvc.perform(post("/settings/api/user")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(userSettings)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the UserSettings in the database
-        userSettingsList = userSettingsRepository.findAll();
-        assertThat(userSettingsList).hasSize(databaseSizeAfterCreate);
-    }        
-    
 }
