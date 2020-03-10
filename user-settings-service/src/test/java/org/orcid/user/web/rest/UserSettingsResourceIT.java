@@ -36,8 +36,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, UserSettingsServiceApp.class})
 public class UserSettingsResourceIT {
 
-    private static final String DEFAULT_LOGIN = "AAAAAAAAAA";
-    private static final String UPDATED_LOGIN = "BBBBBBBBBB";
+    private static final String DEFAULT_JHI_USER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_JHI_USER_ID = "BBBBBBBBBB";
 
     private static final String DEFAULT_SALESFORCE_ID = "AAAAAAAAAA";
     private static final String UPDATED_SALESFORCE_ID = "BBBBBBBBBB";
@@ -104,7 +104,7 @@ public class UserSettingsResourceIT {
         userSettings.setCreatedDate(DEFAULT_CREATED_DATE);
         userSettings.setLastModifiedBy(DEFAULT_LAST_MODIFIED_BY);
         userSettings.setLastModifiedDate(DEFAULT_LAST_MODIFIED_DATE);
-        userSettings.setLogin(DEFAULT_LOGIN);
+        userSettings.setJhiUserId(DEFAULT_JHI_USER_ID);
         userSettings.setMainContact(DEFAULT_MAIN_CONTACT);
         return userSettings;
     }
@@ -121,7 +121,7 @@ public class UserSettingsResourceIT {
         userSettings.setCreatedDate(UPDATED_CREATED_DATE);
         userSettings.setLastModifiedBy(UPDATED_LAST_MODIFIED_BY);
         userSettings.setLastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
-        userSettings.setLogin(UPDATED_LOGIN);
+        userSettings.setJhiUserId(UPDATED_JHI_USER_ID);
         userSettings.setMainContact(UPDATED_MAIN_CONTACT);
         return userSettings;
     }
@@ -146,7 +146,7 @@ public class UserSettingsResourceIT {
         List<UserSettings> userSettingsList = userSettingsRepository.findAll();
         assertThat(userSettingsList).hasSize(databaseSizeBeforeCreate + 1);
         UserSettings testUserSettings = userSettingsList.get(userSettingsList.size() - 1);
-        assertThat(testUserSettings.getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(testUserSettings.getJhiUserId()).isEqualTo(DEFAULT_JHI_USER_ID);
         assertThat(testUserSettings.getMainContact()).isEqualTo(DEFAULT_MAIN_CONTACT);
         assertThat(testUserSettings.getSalesforceId()).isEqualTo(DEFAULT_SALESFORCE_ID);
         assertThat(testUserSettings.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
@@ -183,7 +183,7 @@ public class UserSettingsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userSettings.getId())))
-            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))            
+            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_JHI_USER_ID)))            
             .andExpect(jsonPath("$.[*].salesforceId").value(hasItem(DEFAULT_SALESFORCE_ID)))
             .andExpect(jsonPath("$.[*].mainContact").value(hasItem(DEFAULT_MAIN_CONTACT.booleanValue())))
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
@@ -202,7 +202,7 @@ public class UserSettingsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userSettings.getId())))
-            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))            
+            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_JHI_USER_ID)))            
             .andExpect(jsonPath("$.[*].salesforceId").value(hasItem(DEFAULT_SALESFORCE_ID)))
             .andExpect(jsonPath("$.[*].mainContact").value(hasItem(DEFAULT_MAIN_CONTACT.booleanValue())))
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
@@ -232,7 +232,7 @@ public class UserSettingsResourceIT {
         updatedUserSettings.setCreatedDate(UPDATED_CREATED_DATE);
         updatedUserSettings.setLastModifiedBy(UPDATED_LAST_MODIFIED_BY);
         updatedUserSettings.setLastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
-        updatedUserSettings.setLogin(UPDATED_LOGIN);
+        updatedUserSettings.setJhiUserId(UPDATED_JHI_USER_ID);
         updatedUserSettings.setMainContact(UPDATED_MAIN_CONTACT);
 
         restUserSettingsMockMvc.perform(put("/settings/api/user")
@@ -244,7 +244,7 @@ public class UserSettingsResourceIT {
         List<UserSettings> userSettingsList = userSettingsRepository.findAll();
         assertThat(userSettingsList).hasSize(databaseSizeBeforeUpdate);
         UserSettings testUserSettings = userSettingsList.get(userSettingsList.size() - 1);
-        assertThat(testUserSettings.getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(testUserSettings.getJhiUserId()).isEqualTo(DEFAULT_JHI_USER_ID);
         assertThat(testUserSettings.getMainContact()).isEqualTo(DEFAULT_MAIN_CONTACT);
         assertThat(testUserSettings.getSalesforceId()).isEqualTo(DEFAULT_SALESFORCE_ID);
         assertThat(testUserSettings.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);

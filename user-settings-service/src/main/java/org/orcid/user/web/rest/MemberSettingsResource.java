@@ -271,7 +271,7 @@ public class MemberSettingsResource {
         // If there is at least one userSettings assigned to this
         // memberSettings, throw an exception
         userSettingsRepository.findBySalesforceId(id).stream().map(userSettings -> {
-            throw new BadRequestAlertException("Unable to delete MemberSettings, user '" + userSettings.getLogin() + "' still use it", ENTITY_NAME, "idused");
+            throw new BadRequestAlertException("Unable to delete MemberSettings, user '" + userSettings.getJhiUserId() + "' still use it", ENTITY_NAME, "idused");
         });
 
         memberSettingsRepository.deleteById(id);

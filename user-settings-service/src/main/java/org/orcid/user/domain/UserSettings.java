@@ -18,9 +18,9 @@ public class UserSettings implements Serializable {
     @Id
     private String id;
 
-    @Field("login")
-    private String login;
-    
+    @Field("jhi_user_id")
+    private String jhiUserId;
+
     @Field("salesforce_id")
     private String salesforceId;
 
@@ -45,14 +45,6 @@ public class UserSettings implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getSalesforceId() {
@@ -103,6 +95,14 @@ public class UserSettings implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public String getJhiUserId() {
+        return jhiUserId;
+    }
+
+    public void setJhiUserId(String jhiUserId) {
+        this.jhiUserId = jhiUserId;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -110,7 +110,7 @@ public class UserSettings implements Serializable {
         result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
         result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((login == null) ? 0 : login.hashCode());        
+        result = prime * result + ((jhiUserId == null) ? 0 : jhiUserId.hashCode());
         result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
         result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
         result = prime * result + ((mainContact == null) ? 0 : mainContact.hashCode());
@@ -142,10 +142,10 @@ public class UserSettings implements Serializable {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (login == null) {
-            if (other.login != null)
+        if (jhiUserId == null) {
+            if (other.jhiUserId != null)
                 return false;
-        } else if (!login.equals(other.login))
+        } else if (!jhiUserId.equals(other.jhiUserId))
             return false;
         if (lastModifiedBy == null) {
             if (other.lastModifiedBy != null)
@@ -172,8 +172,7 @@ public class UserSettings implements Serializable {
 
     @Override
     public String toString() {
-        return "UserSettings [id=" + id + ", login=" + login + ", salesforceId=" + salesforceId + ", mainContact=" + mainContact + ", createdBy=" + createdBy
+        return "UserSettings [id=" + id + ", jhiUserId=" + jhiUserId + ", salesforceId=" + salesforceId + ", mainContact=" + mainContact + ", createdBy=" + createdBy
                 + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + "]";
     }
-
 }
