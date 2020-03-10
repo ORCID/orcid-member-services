@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserSettingsRepository extends MongoRepository<UserSettings, String> {
-    Optional<UserSettings> findByLogin(String login);
+    Optional<UserSettings> findByJhiUserId(String jhiUserId);
 
     List<UserSettings> findBySalesforceId(String salesforceId);
 }

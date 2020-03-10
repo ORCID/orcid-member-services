@@ -1,4 +1,4 @@
-package org.orcid.user.client;
+package org.orcid.client;
 
 import java.util.Map;
 

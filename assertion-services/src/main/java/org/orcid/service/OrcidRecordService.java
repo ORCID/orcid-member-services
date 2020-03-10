@@ -12,6 +12,7 @@ import org.orcid.config.ApplicationProperties;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.repository.OrcidRecordRepository;
 import org.orcid.security.EncryptUtil;
+import org.orcid.security.UaaUserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,25 +28,28 @@ public class OrcidRecordService {
     @Autowired
     private ApplicationProperties applicationProperties;
     
+    @Autowired
+    private UaaUserUtils uaaUserUtils;
+    
     public Optional<OrcidRecord> findOneByEmail(String email) {
         return orcidRecordRepository.findOneByEmail(email);
     }
     
-    public void createOrcidRecord(String email, String ownerId, Instant now) {
+    public void createOrcidRecord(String email, Instant now) {
         OrcidRecord or = new OrcidRecord();
         or.setEmail(email);
-        or.setOwnerId(ownerId);
+        or.setOwnerId(uaaUserUtils.getAuthenticatedUaaUserId());
         or.setCreated(now);
         or.setModified(now);
         orcidRecordRepository.insert(or);
     }
     
-    public void createOrcidRecords(String ownerId, Set<String> emails) {
+    public void createOrcidRecords(Set<String> emails) {
         Instant now = Instant.now();
         // Create assertions
         for (String e : emails) {
             if (!findOneByEmail(e).isPresent()) {
-                createOrcidRecord(e, ownerId, now);
+                createOrcidRecord(e, now);
             }
         }
     }
@@ -64,12 +68,12 @@ public class OrcidRecordService {
         orcidRecordRepository.save(orcidRecord);
     }
     
-    public String generateLinks(String currentUser) throws IOException {
+    public String generateLinks() throws IOException {
         String landingPageUrl = applicationProperties.getLandingPageUrl();
         StringBuffer buffer = new StringBuffer();
         CSVPrinter csvPrinter = new CSVPrinter(buffer, CSVFormat.DEFAULT
                 .withHeader("email", "link"));
-        List<OrcidRecord> records = orcidRecordRepository.findAllToInvite(currentUser);
+        List<OrcidRecord> records = orcidRecordRepository.findAllToInvite(uaaUserUtils.getAuthenticatedUaaUserId());
         
         for(OrcidRecord record : records) {
             String email = record.getEmail();
