@@ -56,6 +56,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.netflix.discovery.util.StringUtil;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -87,6 +88,10 @@ public class UserSettingsResource {
     public UserSettingsResource(UserSettingsRepository userSettingsRepository, MemberSettingsRepository memberSettingsRepository) {
         this.userSettingsRepository = userSettingsRepository;
         this.memberSettingsRepository = memberSettingsRepository;
+    }
+
+    public void setOauth2ServiceClient(Oauth2ServiceClient oauth2ServiceClient) {
+        this.oauth2ServiceClient = oauth2ServiceClient;
     }
 
     /**
@@ -128,23 +133,7 @@ public class UserSettingsResource {
             } else {
                 String login = element.get("email");
                 log.debug("Looking for existing user: " + login);
-                JSONObject existingUaaUser = null;
-                try {
-                    ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(login);
-                    log.debug("Status code: " + existingUserResponse.getStatusCodeValue());
-                    if (existingUserResponse != null) {
-                        existingUaaUser = new JSONObject(existingUserResponse.getBody());                        
-                    }
-                } catch (HystrixRuntimeException hre) {
-                    if (hre.getCause() != null && ResponseStatusException.class.isAssignableFrom(hre.getCause().getClass())) {
-                        ResponseStatusException rse = (ResponseStatusException) hre.getCause();
-                        if (HttpStatus.NOT_FOUND.equals(rse.getStatus())) {
-                            log.debug("User not found: " + login);
-                        } else {
-                            throw hre;
-                        }
-                    }
-                }
+                JSONObject existingUaaUser = getUAAUser(login);
                 String salesforceId = element.get("salesforceId");
                 String parentSalesforceId = element.get("parentSalesforceId");
                 Boolean isConsortiumLead = StringUtils.isBlank(element.get("isConsortiumLead")) ? false : Boolean.parseBoolean(element.get("isConsortiumLead"));
@@ -208,6 +197,27 @@ public class UserSettingsResource {
         return u;
     }
     
+    private JSONObject getUAAUser(String login) throws JSONException {
+        JSONObject existingUaaUser = null;
+        try {
+            ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(login);
+            log.debug("Status code: " + existingUserResponse.getStatusCodeValue());
+            if (existingUserResponse != null) {
+                existingUaaUser = new JSONObject(existingUserResponse.getBody());                        
+            }
+        } catch (HystrixRuntimeException hre) {
+            if (hre.getCause() != null && ResponseStatusException.class.isAssignableFrom(hre.getCause().getClass())) {
+                ResponseStatusException rse = (ResponseStatusException) hre.getCause();
+                if (HttpStatus.NOT_FOUND.equals(rse.getStatus())) {
+                    log.debug("User not found: " + login);
+                } else {
+                    throw hre;
+                }
+            }
+        }
+        return existingUaaUser;
+    }
+    
     /**
      * {@code POST  /user} : Create a new memberServicesUser.
      *
@@ -231,6 +241,13 @@ public class UserSettingsResource {
             return ResponseEntity.badRequest().body(userDTO);
         }
 
+        // Validate user does not exists
+        ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(userDTO.getLogin());
+        if(!existingUserResponse.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+            log.debug("User '{}' couldn't be created because it already exists, status code {}", userDTO.getLogin(), existingUserResponse.getStatusCode());
+            return ResponseEntity.badRequest().body(userDTO);
+        }
+        
         // Create the user on UAA
         JSONObject obj = createUserOnUAA(userDTO);
         String userLogin = obj.getString("login");
@@ -583,10 +600,59 @@ public class UserSettingsResource {
     }
 
     /**
-     * {@code DELETE  /users/:id} : disable the "id" User.
+     * {@code DELETE  /users/:login} : delete the 'login' user.
+     *
+     * @param login
+     *            the id of the User to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @throws JSONException
+     */
+    @DeleteMapping("/user/{login}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String login) throws JSONException {
+        log.debug("REST request to delete user {}", login);
+        
+        
+        JSONObject uaaUser = getUAAUser(login);
+        // Empty user on UAA
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        // Remember to use the UAA user id, since we are updating the user info
+        map.put("id", uaaUser.getString("id"));
+        map.put("login", StringUtils.EMPTY);
+        map.put("email", StringUtils.EMPTY);
+        map.put("password", "requires_not_empty_but_doesnt_get_updated");
+        map.put("firstName", StringUtils.EMPTY);
+        map.put("lastName", StringUtils.EMPTY);
+        
+        map.put("authorities", new ArrayList<String>());
+        map.put("activated", false);
+        
+        ResponseEntity<String> response = oauth2ServiceClient.updateUser(map);
+        if (response == null || !HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new RuntimeException("Delete user failed: " + response.getStatusCode().getReasonPhrase());
+        }
+        
+        
+        
+        Optional<UserSettings> ous = userSettingsRepository.findById(login);
+        if (!ous.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        UserSettings us = ous.get();
+         
+        
+        //TODO: remove info from UserSettings
+        return ResponseEntity.accepted().build();
+    }
+    
+    
+    /**
+     * {@code DELETE  /users/:id/:authority} : remove the authority from the given user.
      *
      * @param id
-     *            the id of the User to disable.
+     *            the id of the User.
+     * @param authority
+     *            the authority to be removed           
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      * @throws JSONException
      */
