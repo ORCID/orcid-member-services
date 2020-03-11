@@ -1,123 +1,80 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="assertion">
-            <h2><span jhiTranslate="gatewayApp.assertionServicesAssertion.detail.title">Assertion</span> {{assertion.id}}</h2>
+            <h1 class="mt-5" jhiTranslate="gatewayApp.assertionServicesAssertion.detail.title">Affiliation</h1>
             <hr>
             <jhi-alert-error></jhi-alert-error>
-            <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.email">Email</span></dt>
-                <dd>
-                    <span>{{assertion.email}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.affiliationSection">Affiliation Section</span></dt>
-                <dd>
-                    <span jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.affiliationSection}}">{{assertion.affiliationSection}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.departmentName">Department Name</span></dt>
-                <dd>
-                    <span>{{assertion.departmentName}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.roleTitle">Role Title</span></dt>
-                <dd>
-                    <span>{{assertion.roleTitle}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.startYear">Start Year</span></dt>
-                <dd>
-                    <span>{{assertion.startYear}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.startMonth">Start Month</span></dt>
-                <dd>
-                    <span>{{assertion.startMonth}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.startDay">Start Day</span></dt>
-                <dd>
-                    <span>{{assertion.startDay}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.endYear">End Year</span></dt>
-                <dd>
-                    <span>{{assertion.endYear}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.endMonth">End Month</span></dt>
-                <dd>
-                    <span>{{assertion.endMonth}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.endDay">End Day</span></dt>
-                <dd>
-                    <span>{{assertion.endDay}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.orgName">Org Name</span></dt>
-                <dd>
-                    <span>{{assertion.orgName}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.orgCountry">Org Country</span></dt>
-                <dd>
-                    <span>{{assertion.orgCountry}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.orgCity">Org City</span></dt>
-                <dd>
-                    <span>{{assertion.orgCity}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.orgRegion">Org Region</span></dt>
-                <dd>
-                    <span>{{assertion.orgRegion}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.disambiguatedOrgId">Disambiguated Org Id</span></dt>
-                <dd>
-                    <span>{{assertion.disambiguatedOrgId}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.disambiguationSource">Disambiguation Source</span></dt>
-                <dd>
-                    <span>{{assertion.disambiguationSource}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.externalId">External Id</span></dt>
-                <dd>
-                    <span>{{assertion.externalId}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.externalIdType">External Id Type</span></dt>
-                <dd>
-                    <span>{{assertion.externalIdType}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.externalIdUrl">External Id Url</span></dt>
-                <dd>
-                    <span>{{assertion.externalIdUrl}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.putCode">Put Code</span></dt>
-                <dd>
-                    <span>{{assertion.putCode}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.created">Created</span></dt>
-                <dd>
-                    <span>{{assertion.created}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.modified">Modified</span></dt>
-                <dd>
-                    <span>{{assertion.modified}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.deletedFromORCID">Deleted From ORCID</span></dt>
-                <dd>
-                    <span>{{assertion.deletedFromORCID}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.sent">Sent</span></dt>
-                <dd>
-                    <span>{{assertion.sent}}</span>
-                </dd>
-                <dt><span jhiTranslate="gatewayApp.assertionServicesAssertion.adminId">Admin Id</span></dt>
-                <dd>
-                    <span>{{assertion.adminId}}</span>
-                </dd>
-            </dl>
+            <div class="row">
+                <dl class="jh-entity-details">
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.email">Email</dt>
+                    <dd class="col-md-9">
+                        {{assertion.email}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.detail.org">Organization</dt>
+                    <dd class="col-md-9">
+                        {{assertion.orgName}}<br>
+                        {{assertion.orgCountry}}<span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCity">, {{assertion.orgCity}}</span><br>
+                        {{assertion.disambiguationSource}} {{assertion.disambiguatedOrgId}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.affiliationSection">Affiliation Section</dt>
+                    <dd class="col-md-9">
+                        <span jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.affiliationSection}}">{{assertion.affiliationSection}}</span>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.departmentName">Department Name</dt>
+                    <dd class="col-md-9">
+                        {{assertion.departmentName}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.roleTitle">Role Title</dt>
+                    <dd class="col-md-9">
+                        {{assertion.roleTitle}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.startDate">Start Date</dt>
+                    <dd class="col-md-9">
+                        {{assertion.startYear}}<span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startMonth&&assertion.startDay"></span>-{{assertion.startDay}}</span>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.endDate">End Date</dt>
+                    <dd class="col-md-9">
+                        {{assertion.endYear}}<span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endMonth&&assertion.endDay"></span>-{{assertion.endDay}}</span>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.externalId">External Id</dt>
+                    <dd class="col-md-9">
+                        {{assertion.externalIdType}} <a *ngIf="assertion.externalIdUrl" href="{{assertion.externalIdUrl}}">{{assertion.externalId}}</a> <span *ngIf="!assertion.externalIdUrl">{{assertion.externalId}}</span>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.created">Created</dt>
+                    <dd class="col-md-9">
+                        {{assertion.created}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.modified">Modified</dt>
+                    <dd class="col-md-9">
+                        {{assertion.modified}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.status">Deleted From ORCID</dt>
+                    <dd class="col-md-9">
+                        <span *ngIf="assertion.putCode">In ORCID</span>
+                        <span *ngIf="assertion.deletedFromORCID">Deleted by admin</span>
+                        <span *ngIf="assertion.orcidError">Error</span>
+                        <span *ngIf="!assertion.putCode && !assertion.deletedFromORCID && !assertion.orcidError">Pending</span>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.adminId">Admin Id</dt>
+                    <dd class="col-md-9">
+                        {{assertion.ownerId}}
+                    </dd>
+                </dl>
+            </div>
+            <hr>
+            <div class="mb-3">
+                <button type="submit"
+                        (click)="previousState()"
+                        class="btn btn-outline-primary">
+                    <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+                </button>
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
-                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-            </button>
-
-            <button type="button"
-                    [routerLink]="['/assertion', assertion.id, 'edit']"
-                    class="btn btn-primary">
-                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
-            </button>
+                <button type="button"
+                        [routerLink]="['/assertions', assertion.id, 'edit']"
+                        class="btn btn-primary">
+                    <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+                </button>
+            </div>
         </div>
     </div>
 </div>
