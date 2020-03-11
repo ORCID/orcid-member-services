@@ -15,7 +15,8 @@
         "note": "This will not delete the element from ORCID, if you want to do so, first you need to press the <b>Delete from ORCID</b> button"
       },
       "detail": {
-        "title": "Affiliation"
+        "title": "Affiliation",
+        "org": "Organization"
       },
       "import": {
         "title": "Import affiliations",
@@ -30,9 +31,11 @@
       "affiliationSection": "Affiliation Section",
       "departmentName": "Department Name",
       "roleTitle": "Role Title",
+      "startDate": "Start Date",
       "startYear": "Start Year",
       "startMonth": "Start Month",
       "startDay": "Start Day",
+      "endDate": "End Date",
       "endYear": "End Year",
       "endMonth": "End Month",
       "endDay": "End Day",
