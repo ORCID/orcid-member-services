@@ -1,9 +1,9 @@
-package org.orcid.security;
+package org.orcid.user.security;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.orcid.client.Oauth2ServiceClient;
-import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.orcid.user.client.Oauth2ServiceClient;
+import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,21 +27,29 @@ public class UaaUserUtils {
         }
 
         String loggedInUserId = SecurityUtils.getCurrentUserLogin().get();
-
-        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
-            throw new BadRequestAlertException("User does not have the required scope 'AuthoritiesConstants.ASSERTION_SERVICE_ENABLED'", "login", loggedInUserId);
-        }
-
-        JSONObject uaaUser = getUAAUser(loggedInUserId);
+        
+        JSONObject uaaUser = getUAAUserByLogin(loggedInUserId);
         
         return uaaUser.getString("id");
     }
     
-    private JSONObject getUAAUser(String userLogin) throws JSONException {
+    public JSONObject getUAAUserByLogin(String login) throws JSONException {
+        return getUAAUser(login, false);
+    }
+
+    public JSONObject getUAAUserById(String id) throws JSONException {
+        return getUAAUser(id, true);
+    }
+
+    private JSONObject getUAAUser(String loginOrId, boolean isId) throws JSONException {
         JSONObject existingUaaUser = null;
         try {
-            ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(userLogin);
-            log.debug("Status code: " + existingUserResponse.getStatusCodeValue());
+            ResponseEntity<String> existingUserResponse = null;
+            if (isId) {
+                existingUserResponse = oauth2ServiceClient.getUserById(loginOrId);
+            } else {
+                existingUserResponse = oauth2ServiceClient.getUser(loginOrId);
+            }
             if (existingUserResponse != null) {
                 existingUaaUser = new JSONObject(existingUserResponse.getBody());
             }
@@ -49,12 +57,12 @@ public class UaaUserUtils {
             if (hre.getCause() != null && ResponseStatusException.class.isAssignableFrom(hre.getCause().getClass())) {
                 ResponseStatusException rse = (ResponseStatusException) hre.getCause();
                 if (HttpStatus.NOT_FOUND.equals(rse.getStatus())) {
-                    log.debug("User not found: " + userLogin);
+                    log.debug("User not found: " + loginOrId);
                 } else {
                     throw hre;
                 }
             }
         }
         return existingUaaUser;
-    }    
+    }
 }

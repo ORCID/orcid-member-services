@@ -1,13 +1,14 @@
 package org.orcid.user.domain;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
-import javax.validation.constraints.*;
-
 import java.io.Serializable;
 import java.time.Instant;
+
+import javax.validation.constraints.NotNull;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * A MemberSettings.
@@ -51,7 +52,7 @@ public class MemberSettings implements Serializable {
 
     @Field("last_modified_date")
     private Instant lastModifiedDate;
-
+    
     @Transient
     private String error;
 
