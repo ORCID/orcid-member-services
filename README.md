@@ -15,7 +15,7 @@
 
 Install and start [MongoDB Community Edition for your OS](https://docs.mongodb.com/manual/administration/install-community/)
 
-### Clone the orcid-member-services repository
+## Clone the orcid-member-services repository
 
 Create a `git` directory in your home folder, and clone the orcid-member-services project there:
 
@@ -23,7 +23,7 @@ Create a `git` directory in your home folder, and clone the orcid-member-service
 - cd ~/git
 - git clone git@github.com:ORCID/orcid-member-services.git
 
-### Start the JHipster UAA services
+## Start the JHipster UAA services
 
 [JHipster UAA](https://www.jhipster.tech/using-uaa/) is the service we use to secure our member services app. It serves as the base for user account management in our custom microservices and consists of 3 different applications:
 
