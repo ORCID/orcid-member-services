@@ -29,6 +29,7 @@ import org.orcid.user.repository.MemberSettingsRepository;
 import org.orcid.user.repository.UserSettingsRepository;
 import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.security.SecurityUtils;
+import org.orcid.user.security.UaaUserUtils;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
@@ -53,10 +54,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -79,6 +77,9 @@ public class UserSettingsResource {
 
     @Autowired
     private Oauth2ServiceClient oauth2ServiceClient;
+    
+    @Autowired
+    private UaaUserUtils uaaUserUtils;
 
     private final UserSettingsRepository userSettingsRepository;
 
@@ -132,7 +133,7 @@ public class UserSettingsResource {
             } else {
                 String login = element.get("email");
                 log.debug("Looking for existing user: " + login);
-                JSONObject existingUaaUser = getUAAUserByLogin(login);
+                JSONObject existingUaaUser = uaaUserUtils.getUAAUserByLogin(login);
                 String salesforceId = element.get("salesforceId");
                 String parentSalesforceId = element.get("parentSalesforceId");
                 Boolean isConsortiumLead = StringUtils.isBlank(element.get("isConsortiumLead")) ? false : Boolean.parseBoolean(element.get("isConsortiumLead"));
@@ -195,42 +196,7 @@ public class UserSettingsResource {
             u.setAssertionServicesEnabled(true);
         }
         return u;
-    }
-
-    private JSONObject getUAAUserByLogin(String login) throws JSONException {
-        return getUAAUser(login, false);
-    }
-
-    private JSONObject getUAAUserById(String id) throws JSONException {
-        return getUAAUser(id, true);
-    }
-
-    private JSONObject getUAAUser(String loginOrId, boolean isId) throws JSONException {
-        JSONObject existingUaaUser = null;
-        try {
-            ResponseEntity<String> existingUserResponse = null;
-            if (isId) {
-                System.out.println("Getting UAA user by id");
-                existingUserResponse = oauth2ServiceClient.getUserById(loginOrId);
-            } else {
-                existingUserResponse = oauth2ServiceClient.getUser(loginOrId);
-            }
-            log.debug("Status code: " + existingUserResponse.getStatusCodeValue());
-            if (existingUserResponse != null) {
-                existingUaaUser = new JSONObject(existingUserResponse.getBody());
-            }
-        } catch (HystrixRuntimeException hre) {
-            if (hre.getCause() != null && ResponseStatusException.class.isAssignableFrom(hre.getCause().getClass())) {
-                ResponseStatusException rse = (ResponseStatusException) hre.getCause();
-                if (HttpStatus.NOT_FOUND.equals(rse.getStatus())) {
-                    log.debug("User not found: " + loginOrId);
-                } else {
-                    throw hre;
-                }
-            }
-        }
-        return existingUaaUser;
-    }
+    }    
 
     /**
      * {@code POST  /user} : Create a new memberServicesUser.
@@ -374,7 +340,7 @@ public class UserSettingsResource {
     private MemberSettings createMemberSettings(String salesforceId, String parentSalesforceId, Boolean isConsortiumLead, Instant now) throws JSONException {
         log.info("Creating MemberSettings with Salesforce Id {}", salesforceId);
         MemberSettings ms = new MemberSettings();
-        String createdBy = getJhiUserId(SecurityUtils.getAuthenticatedUser());
+        String createdBy = uaaUserUtils.getAuthenticatedUaaUserId();
         ms.setSalesforceId(salesforceId);
         ms.setParentSalesforceId(parentSalesforceId);
         ms.setIsConsortiumLead((isConsortiumLead == null) ? false : isConsortiumLead);
@@ -389,7 +355,7 @@ public class UserSettingsResource {
         log.info("Updating MemberSettings with Salesforce Id {}", salesforceId);
         Optional<MemberSettings> existingMemberSettings = memberSettingsRepository.findBySalesforceId(salesforceId);
         MemberSettings ms = existingMemberSettings.get();
-        String lastModifiedBy = getJhiUserId(SecurityUtils.getAuthenticatedUser());
+        String lastModifiedBy = uaaUserUtils.getAuthenticatedUaaUserId();
         ms.setParentSalesforceId(parentSalesforceId);
         ms.setIsConsortiumLead((isConsortiumLead == null) ? false : isConsortiumLead);
         ms.setLastModifiedBy(lastModifiedBy);
@@ -420,7 +386,7 @@ public class UserSettingsResource {
         }
 
         // Verify the user exists on the UAA table
-        JSONObject existingUaaUser = getUAAUserByLogin(userDTO.getLogin());
+        JSONObject existingUaaUser = uaaUserUtils.getUAAUserByLogin(userDTO.getLogin());
 
         String uaaUserLogin = existingUaaUser.getString("login");
         // userLogin must match
@@ -484,7 +450,7 @@ public class UserSettingsResource {
 
     private UserSettings createUserSettings(String jhiUserId, String salesforceId, Boolean mainContact, Instant now) throws JSONException {
         log.info("Creating userSettings for: " + jhiUserId);
-        String createdBy = getJhiUserId(SecurityUtils.getAuthenticatedUser());
+        String createdBy = uaaUserUtils.getAuthenticatedUaaUserId();
 
         UserSettings us = new UserSettings();
         us.setJhiUserId(jhiUserId);
@@ -534,7 +500,7 @@ public class UserSettingsResource {
 
         // Update UserSettings
         if (userSettingsModified) {
-            existingUserSettings.setLastModifiedBy(getJhiUserId(SecurityUtils.getAuthenticatedUser()));
+            existingUserSettings.setLastModifiedBy(uaaUserUtils.getAuthenticatedUaaUserId());
             existingUserSettings.setLastModifiedDate(lastModifiedDate);
             userSettingsRepository.save(existingUserSettings);
         }
@@ -599,14 +565,7 @@ public class UserSettingsResource {
     private UserDTO populateDTO(UserSettings us) throws JSONException {
         UserDTO u = UserDTO.valueOf(us);
         // UAA data
-        System.out.println("jhiUserId? " + us.getJhiUserId());
-        JSONObject existingUaaUser = getUAAUserById(us.getJhiUserId());
-        
-        System.out.println("-----------------------------------------------------------------------------------------");
-        System.out.println("The user is null? " + (existingUaaUser == null));
-        System.out.println(existingUaaUser.toString());
-        System.out.println("-----------------------------------------------------------------------------------------");
-        
+        JSONObject existingUaaUser = uaaUserUtils.getUAAUserById(us.getJhiUserId());
         u.setFirstName(existingUaaUser.getString("firstName"));
         u.setLastName(existingUaaUser.getString("lastName"));
         u.setLogin(existingUaaUser.getString("login"));
@@ -632,7 +591,7 @@ public class UserSettingsResource {
     public ResponseEntity<Void> deleteUser(@PathVariable String login) throws JSONException {
         log.debug("REST request to delete user {}", login);
 
-        JSONObject uaaUser = getUAAUserByLogin(login);
+        JSONObject uaaUser = uaaUserUtils.getUAAUserByLogin(login);
         // Empty user on UAA
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -686,7 +645,7 @@ public class UserSettingsResource {
         }
         UserSettings us = ous.get();
 
-        JSONObject obj = getUAAUserById(us.getJhiUserId());
+        JSONObject obj = uaaUserUtils.getUAAUserById(us.getJhiUserId());
 
         if (obj == null || obj.isNull("login")) {
             // TODO: handle exception properly
@@ -720,11 +679,5 @@ public class UserSettingsResource {
         }
 
         return ResponseEntity.accepted().build();
-    }
-
-    private String getJhiUserId(String userLogin) throws JSONException {
-        JSONObject uaaUser = getUAAUserByLogin(userLogin);
-        log.debug(uaaUser.toString());
-        return uaaUser.getString("id");
-    }
+    }    
 }
