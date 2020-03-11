@@ -70,5 +70,5 @@ With UAA up and running, we can now start the custom microservices that depend o
 - [User settings service](USER_SETTINGS_SERVICE.md)
 - [Assertion services](ASSERTION_SERVICES.md)
 
-## Docker configuration
-[IN PROGRESS AND DOESN'T WORK VERY WELL] [Docker Compose for local development](DOCKER_CONFIG.md)
+## Docker Compose configuration
+[IN PROGRESS AND KINDA WORKS BUT NOT THAT WELL] [Docker Compose for local development](DOCKER_CONFIG.md)
