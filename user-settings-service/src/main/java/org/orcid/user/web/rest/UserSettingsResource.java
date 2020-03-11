@@ -54,7 +54,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -222,13 +225,25 @@ public class UserSettingsResource {
         }
 
         // Validate user does not exists
-        ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(userDTO.getLogin());
-        if (!existingUserResponse.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
-            log.debug("User '{}' couldn't be created because it already exists, status code {}", userDTO.getLogin(), existingUserResponse.getStatusCode());
+        try {
+            ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(userDTO.getLogin());
+            // We must get a NOT_FOUND exception, if not, we assume we cant create the user
+            log.debug("User '{}' couldn't be created, status code {}", userDTO.getLogin(), existingUserResponse.getStatusCode());
             return ResponseEntity.badRequest().body(userDTO);
+        } catch (HystrixRuntimeException hre) {
+            if (hre.getCause() != null && ResponseStatusException.class.isAssignableFrom(hre.getCause().getClass())) {
+                ResponseStatusException rse = (ResponseStatusException) hre.getCause();
+                // Only exception possible should be NOT_FOUND, any other, return error
+                if (!HttpStatus.NOT_FOUND.equals(rse.getStatus())) {
+                    log.debug("User '{}' couldn't be created because it already exists, status code {}", userDTO.getLogin(), rse.getStatus());
+                    return ResponseEntity.badRequest().body(userDTO);
+                }
+            }
         }
 
-        // Create the user on UAA
+        // Hack: The password is not set,but, it is a requierd field, so, lets put something on it
+        userDTO.setPassword("placeholder");
+        // Create the user on UAA                
         JSONObject obj = createUserOnUAA(userDTO);
         String userIdOnUAA = obj.getString("id");
         String userLogin = obj.getString("login");
