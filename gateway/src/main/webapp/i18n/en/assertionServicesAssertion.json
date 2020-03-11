@@ -26,6 +26,7 @@
         }
       },
       "email": "Email",
+      "affiliationDetails": "Affiliation Details",
       "affiliationSection": "Affiliation Section",
       "departmentName": "Department Name",
       "roleTitle": "Role Title",
@@ -47,9 +48,11 @@
       "putCode": "Put Code",
       "created": "Created",
       "modified": "Modified",
+      "status": "Status",
       "deletedFromORCID": "Deleted From ORCID",
       "sent": "Sent",
-      "adminId": "Admin Id"
+      "adminId": "Admin Id",
+      "email": "Email"
     }
   },
   "assertionServicesApp": {
