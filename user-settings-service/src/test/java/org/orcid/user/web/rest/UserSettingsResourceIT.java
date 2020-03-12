@@ -29,6 +29,7 @@ import org.orcid.user.config.SecurityBeanOverrideConfiguration;
 import org.orcid.user.domain.UserSettings;
 import org.orcid.user.repository.MemberSettingsRepository;
 import org.orcid.user.repository.UserSettingsRepository;
+import org.orcid.user.security.UaaUserUtils;
 import org.orcid.user.web.rest.errors.ExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -91,6 +92,9 @@ public class UserSettingsResourceIT {
     
     @Mock
     private Oauth2ServiceClient oauth2ServiceClient;
+    
+    @Mock
+    private UaaUserUtils mockUaaUserUtils;
 
     private MockMvc restUserSettingsMockMvc;
 
@@ -110,8 +114,12 @@ public class UserSettingsResourceIT {
         ResponseEntity<String> getUserResponse = new ResponseEntity<String>(obj.toString(), HttpStatus.OK);
         when(oauth2ServiceClient.registerUser(Mockito.anyMap())).thenReturn(createdResponse);
         when(oauth2ServiceClient.getUser(DEFAULT_LOGIN)).thenReturn(getUserResponse);
+        
+        when(mockUaaUserUtils.getAuthenticatedUaaUserId()).thenReturn("0000");
+        
         final UserSettingsResource userSettingsResource = new UserSettingsResource(userSettingsRepository, memberSettingsRepository);
         userSettingsResource.setOauth2ServiceClient(oauth2ServiceClient);
+        userSettingsResource.setUaaUserUtils(mockUaaUserUtils);
         this.restUserSettingsMockMvc = MockMvcBuilders.standaloneSetup(userSettingsResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

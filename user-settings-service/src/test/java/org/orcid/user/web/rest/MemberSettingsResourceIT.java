@@ -2,6 +2,8 @@ package org.orcid.user.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.hasItem;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 import static org.orcid.user.web.rest.TestUtil.createFormattingConversionService;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -10,14 +12,18 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.orcid.user.UserSettingsServiceApp;
+import org.orcid.user.client.Oauth2ServiceClient;
 import org.orcid.user.config.SecurityBeanOverrideConfiguration;
 import org.orcid.user.domain.MemberSettings;
 import org.orcid.user.repository.MemberSettingsRepository;
 import org.orcid.user.repository.UserSettingsRepository;
+import org.orcid.user.security.UaaUserUtils;
 import org.orcid.user.web.rest.errors.ExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -77,14 +83,21 @@ public class MemberSettingsResourceIT {
     @Autowired
     private Validator validator;
 
+    @Mock
+    private UaaUserUtils mockUaaUserUtils;
+    
     private MockMvc restMemberSettingsMockMvc;
 
     private MemberSettings memberSettings;
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws JSONException {
         MockitoAnnotations.initMocks(this);
+        
+        when(mockUaaUserUtils.getAuthenticatedUaaUserId()).thenReturn(DEFAULT_CREATED_BY);
+        
         final MemberSettingsResource memberSettingsResource = new MemberSettingsResource(memberSettingsRepository, userSettingsRepository);
+        memberSettingsResource.setUaaUserUtils(mockUaaUserUtils);
         this.restMemberSettingsMockMvc = MockMvcBuilders.standaloneSetup(memberSettingsResource).setCustomArgumentResolvers(pageableArgumentResolver)
                 .setControllerAdvice(exceptionTranslator).setConversionService(createFormattingConversionService()).setMessageConverters(jacksonMessageConverter)
                 .setValidator(validator).build();
@@ -101,7 +114,7 @@ public class MemberSettingsResourceIT {
                 .parentSalesforceId(DEFAULT_PARENT_SALESFORCE_ID).assertionServiceEnabled(DEFAULT_ASSERTION_SERVICE_ENABLED).createdBy(DEFAULT_CREATED_BY)
                 .createdDate(DEFAULT_CREATED_DATE).lastModifiedBy(DEFAULT_LAST_MODIFIED_BY).lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE);
 
-        memberSettings.setIsConsortiumLead(false);
+        memberSettings.setIsConsortiumLead(false);        
         return memberSettings;
     }
 
@@ -142,9 +155,9 @@ public class MemberSettingsResourceIT {
         assertThat(testMemberSettings.getParentSalesforceId()).isEqualTo(DEFAULT_PARENT_SALESFORCE_ID);
         assertThat(testMemberSettings.isAssertionServiceEnabled()).isEqualTo(DEFAULT_ASSERTION_SERVICE_ENABLED);
         assertThat(testMemberSettings.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
-        assertThat(testMemberSettings.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
+        assertNotNull(testMemberSettings.getCreatedDate());
         assertThat(testMemberSettings.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
-        assertThat(testMemberSettings.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
+        assertNotNull(testMemberSettings.getLastModifiedDate());
     }
 
     @Test
@@ -295,9 +308,11 @@ public class MemberSettingsResourceIT {
     @Test
     @WithMockUser(username=UPDATED_LAST_MODIFIED_BY,authorities={"ROLE_ADMIN", "ROLE_USR"}, password = "user")
     public void updateMemberSettings() throws Exception {
+        when(mockUaaUserUtils.getAuthenticatedUaaUserId()).thenReturn(UPDATED_LAST_MODIFIED_BY);
+        
         // Initialize the database
         memberSettingsRepository.save(memberSettings);
-
+        
         int databaseSizeBeforeUpdate = memberSettingsRepository.findAll().size();
 
         // Update the memberSettings

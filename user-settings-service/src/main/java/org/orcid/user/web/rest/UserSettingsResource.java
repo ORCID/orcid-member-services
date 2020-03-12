@@ -97,6 +97,10 @@ public class UserSettingsResource {
         this.oauth2ServiceClient = oauth2ServiceClient;
     }
 
+    public void setUaaUserUtils(UaaUserUtils uaaUserUtils) {
+        this.uaaUserUtils = uaaUserUtils;
+    }
+    
     /**
      * {@code POST  /user/upload} : Create a list of users.
      *

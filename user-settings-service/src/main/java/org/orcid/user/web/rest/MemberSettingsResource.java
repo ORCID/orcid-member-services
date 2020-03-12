@@ -73,6 +73,10 @@ public class MemberSettingsResource {
         this.userSettingsRepository = userSettingsRepository;
     }
 
+    public void setUaaUserUtils(UaaUserUtils uaaUserUtils) {
+        this.uaaUserUtils = uaaUserUtils;
+    }
+    
     /**
      * {@code POST  /member-settings} : Create a new memberSettings.
      *
