@@ -295,5 +295,4 @@ public class MemberSettings implements Serializable {
                 + clientName + ", isConsortiumLead=" + isConsortiumLead + ", assertionServiceEnabled=" + assertionServiceEnabled + ", createdBy=" + createdBy
                 + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + ", error=" + error + "]";
     }
-
 }

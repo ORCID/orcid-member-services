@@ -243,7 +243,8 @@ public class UserSettingsResource {
 
         // Hack: The password is not set,but, it is a requierd field, so, lets put something on it
         userDTO.setPassword("placeholder");
-        // Create the user on UAA                
+        
+        // Create the user on UAA
         JSONObject obj = createUserOnUAA(userDTO);
         String userIdOnUAA = obj.getString("id");
         String userLogin = obj.getString("login");

@@ -24,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
@@ -31,14 +32,11 @@ import org.springframework.validation.Validator;
 /**
  * Integration tests for the {@link MemberSettingsResource} REST controller.
  */
-@SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, UserSettingsServiceApp.class})
+@SpringBootTest(classes = { SecurityBeanOverrideConfiguration.class, UserSettingsServiceApp.class })
 public class MemberSettingsResourceIT {
 
     private static final String DEFAULT_CLIENT_ID = "AAAAAAAAAA";
     private static final String UPDATED_CLIENT_ID = "BBBBBBBBBB";
-
-    private static final String DEFAULT_CLIENT_SECRET = "AAAAAAAAAA";
-    private static final String UPDATED_CLIENT_SECRET = "BBBBBBBBBB";
 
     private static final String DEFAULT_SALESFORCE_ID = "AAAAAAAAAA";
     private static final String UPDATED_SALESFORCE_ID = "BBBBBBBBBB";
@@ -59,11 +57,11 @@ public class MemberSettingsResourceIT {
     private static final String UPDATED_LAST_MODIFIED_BY = "BBBBBBBBBB";
 
     private static final Instant DEFAULT_LAST_MODIFIED_DATE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_LAST_MODIFIED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    
 
     @Autowired
     private UserSettingsRepository userSettingsRepository;
-    
+
     @Autowired
     private MemberSettingsRepository memberSettingsRepository;
 
@@ -87,12 +85,9 @@ public class MemberSettingsResourceIT {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         final MemberSettingsResource memberSettingsResource = new MemberSettingsResource(memberSettingsRepository, userSettingsRepository);
-        this.restMemberSettingsMockMvc = MockMvcBuilders.standaloneSetup(memberSettingsResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
+        this.restMemberSettingsMockMvc = MockMvcBuilders.standaloneSetup(memberSettingsResource).setCustomArgumentResolvers(pageableArgumentResolver)
+                .setControllerAdvice(exceptionTranslator).setConversionService(createFormattingConversionService()).setMessageConverters(jacksonMessageConverter)
+                .setValidator(validator).build();
     }
 
     /**
@@ -102,17 +97,14 @@ public class MemberSettingsResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static MemberSettings createEntity() {
-        MemberSettings memberSettings = new MemberSettings()
-            .clientId(DEFAULT_CLIENT_ID)            
-            .salesforceId(DEFAULT_SALESFORCE_ID)
-            .parentSalesforceId(DEFAULT_PARENT_SALESFORCE_ID)
-            .assertionServiceEnabled(DEFAULT_ASSERTION_SERVICE_ENABLED)
-            .createdBy(DEFAULT_CREATED_BY)
-            .createdDate(DEFAULT_CREATED_DATE)
-            .lastModifiedBy(DEFAULT_LAST_MODIFIED_BY)
-            .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE);
+        MemberSettings memberSettings = new MemberSettings().clientId(DEFAULT_CLIENT_ID).salesforceId(DEFAULT_SALESFORCE_ID)
+                .parentSalesforceId(DEFAULT_PARENT_SALESFORCE_ID).assertionServiceEnabled(DEFAULT_ASSERTION_SERVICE_ENABLED).createdBy(DEFAULT_CREATED_BY)
+                .createdDate(DEFAULT_CREATED_DATE).lastModifiedBy(DEFAULT_LAST_MODIFIED_BY).lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE);
+
+        memberSettings.setIsConsortiumLead(false);
         return memberSettings;
     }
+
     /**
      * Create an updated entity for this test.
      *
@@ -120,15 +112,9 @@ public class MemberSettingsResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static MemberSettings createUpdatedEntity() {
-        MemberSettings memberSettings = new MemberSettings()
-            .clientId(UPDATED_CLIENT_ID)
-            .salesforceId(UPDATED_SALESFORCE_ID)
-            .parentSalesforceId(UPDATED_PARENT_SALESFORCE_ID)
-            .assertionServiceEnabled(UPDATED_ASSERTION_SERVICE_ENABLED)
-            .createdBy(UPDATED_CREATED_BY)
-            .createdDate(UPDATED_CREATED_DATE)
-            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
-            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
+        MemberSettings memberSettings = new MemberSettings().clientId(UPDATED_CLIENT_ID).salesforceId(UPDATED_SALESFORCE_ID)
+                .parentSalesforceId(UPDATED_PARENT_SALESFORCE_ID).assertionServiceEnabled(UPDATED_ASSERTION_SERVICE_ENABLED).createdBy(UPDATED_CREATED_BY)
+                .createdDate(UPDATED_CREATED_DATE).lastModifiedBy(UPDATED_LAST_MODIFIED_BY);
         return memberSettings;
     }
 
@@ -143,10 +129,9 @@ public class MemberSettingsResourceIT {
         int databaseSizeBeforeCreate = memberSettingsRepository.findAll().size();
 
         // Create the MemberSettings
-        restMemberSettingsMockMvc.perform(post("/api/member-settings")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(memberSettings)))
-            .andExpect(status().isCreated());
+        restMemberSettingsMockMvc
+                .perform(post("/settings/api/member-settings").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(memberSettings)))
+                .andExpect(status().isCreated());
 
         // Validate the MemberSettings in the database
         List<MemberSettings> memberSettingsList = memberSettingsRepository.findAll();
@@ -169,115 +154,108 @@ public class MemberSettingsResourceIT {
         // Create the MemberSettings with an existing ID
         memberSettings.setId("existing_id");
 
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restMemberSettingsMockMvc.perform(post("/api/member-settings")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(memberSettings)))
-            .andExpect(status().isBadRequest());
+        // An entity with an existing ID cannot be created, so this API call
+        // must fail
+        restMemberSettingsMockMvc
+                .perform(post("/settings/api/member-settings").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(memberSettings)))
+                .andExpect(status().isBadRequest());
 
         // Validate the MemberSettings in the database
         List<MemberSettings> memberSettingsList = memberSettingsRepository.findAll();
         assertThat(memberSettingsList).hasSize(databaseSizeBeforeCreate);
     }
 
-
     @Test
-    public void checkClientIdIsRequired() throws Exception {
+    public void checkClientIdIsNotRequired() throws Exception {
         int databaseSizeBeforeTest = memberSettingsRepository.findAll().size();
         // set the field null
         memberSettings.setClientId(null);
 
         // Create the MemberSettings, which fails.
 
-        restMemberSettingsMockMvc.perform(post("/api/member-settings")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(memberSettings)))
-            .andExpect(status().isBadRequest());
+        restMemberSettingsMockMvc
+                .perform(post("/settings/api/member-settings").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(memberSettings)))
+                .andExpect(status().isCreated());
 
         List<MemberSettings> memberSettingsList = memberSettingsRepository.findAll();
-        assertThat(memberSettingsList).hasSize(databaseSizeBeforeTest);
+        assertThat(memberSettingsList).hasSize(databaseSizeBeforeTest + 1);
     }
 
     @Test
-    public void checkCreatedByIsRequired() throws Exception {
+    public void checkCreatedByIsNotRequired() throws Exception {
         int databaseSizeBeforeTest = memberSettingsRepository.findAll().size();
         // set the field null
         memberSettings.setCreatedBy(null);
 
         // Create the MemberSettings, which fails.
 
-        restMemberSettingsMockMvc.perform(post("/api/member-settings")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(memberSettings)))
-            .andExpect(status().isBadRequest());
+        restMemberSettingsMockMvc
+                .perform(post("/settings/api/member-settings").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(memberSettings)))
+                .andExpect(status().isCreated());
 
         List<MemberSettings> memberSettingsList = memberSettingsRepository.findAll();
-        assertThat(memberSettingsList).hasSize(databaseSizeBeforeTest);
+        assertThat(memberSettingsList).hasSize(databaseSizeBeforeTest + 1);
     }
 
     @Test
-    public void checkCreatedDateIsRequired() throws Exception {
+    public void checkCreatedDateIsNotRequired() throws Exception {
         int databaseSizeBeforeTest = memberSettingsRepository.findAll().size();
         // set the field null
         memberSettings.setCreatedDate(null);
 
         // Create the MemberSettings, which fails.
 
-        restMemberSettingsMockMvc.perform(post("/api/member-settings")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(memberSettings)))
-            .andExpect(status().isBadRequest());
+        restMemberSettingsMockMvc
+                .perform(post("/settings/api/member-settings").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(memberSettings)))
+                .andExpect(status().isCreated());
 
         List<MemberSettings> memberSettingsList = memberSettingsRepository.findAll();
-        assertThat(memberSettingsList).hasSize(databaseSizeBeforeTest);
+        assertThat(memberSettingsList).hasSize(databaseSizeBeforeTest + 1);
     }
 
     @Test
-    public void checkLastModifiedByIsRequired() throws Exception {
+    public void checkLastModifiedByIsNotRequired() throws Exception {
         int databaseSizeBeforeTest = memberSettingsRepository.findAll().size();
         // set the field null
         memberSettings.setLastModifiedBy(null);
 
         // Create the MemberSettings, which fails.
 
-        restMemberSettingsMockMvc.perform(post("/api/member-settings")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(memberSettings)))
-            .andExpect(status().isBadRequest());
+        restMemberSettingsMockMvc
+                .perform(post("/settings/api/member-settings").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(memberSettings)))
+                .andExpect(status().isCreated());
 
         List<MemberSettings> memberSettingsList = memberSettingsRepository.findAll();
-        assertThat(memberSettingsList).hasSize(databaseSizeBeforeTest);
+        assertThat(memberSettingsList).hasSize(databaseSizeBeforeTest + 1);
     }
 
     @Test
-    public void checkLastModifiedDateIsRequired() throws Exception {
+    public void checkLastModifiedDateIsNotRequired() throws Exception {
         int databaseSizeBeforeTest = memberSettingsRepository.findAll().size();
         // set the field null
         memberSettings.setLastModifiedDate(null);
 
         // Create the MemberSettings, which fails.
 
-        restMemberSettingsMockMvc.perform(post("/api/member-settings")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(memberSettings)))
-            .andExpect(status().isBadRequest());
+        restMemberSettingsMockMvc
+                .perform(post("/settings/api/member-settings").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(memberSettings)))
+                .andExpect(status().isCreated());
 
         List<MemberSettings> memberSettingsList = memberSettingsRepository.findAll();
-        assertThat(memberSettingsList).hasSize(databaseSizeBeforeTest);
+        assertThat(memberSettingsList).hasSize(databaseSizeBeforeTest + 1);
     }
-
+    
     @Test
     public void getAllMemberSettings() throws Exception {
         // Initialize the database
         memberSettingsRepository.save(memberSettings);
 
         // Get all the memberSettingsList
-        restMemberSettingsMockMvc.perform(get("/api/member-settings?sort=id,desc"))
+        restMemberSettingsMockMvc.perform(get("/settings/api/member-settings?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(memberSettings.getId())))
             .andExpect(jsonPath("$.[*].clientId").value(hasItem(DEFAULT_CLIENT_ID)))
-            .andExpect(jsonPath("$.[*].clientSecret").value(hasItem(DEFAULT_CLIENT_SECRET)))
             .andExpect(jsonPath("$.[*].salesforceId").value(hasItem(DEFAULT_SALESFORCE_ID)))
             .andExpect(jsonPath("$.[*].parentSalesforceId").value(hasItem(DEFAULT_PARENT_SALESFORCE_ID)))
             .andExpect(jsonPath("$.[*].assertionServiceEnabled").value(hasItem(DEFAULT_ASSERTION_SERVICE_ENABLED.booleanValue())))
@@ -293,12 +271,11 @@ public class MemberSettingsResourceIT {
         memberSettingsRepository.save(memberSettings);
 
         // Get the memberSettings
-        restMemberSettingsMockMvc.perform(get("/api/member-settings/{id}", memberSettings.getId()))
+        restMemberSettingsMockMvc.perform(get("/settings/api/member-settings/{id}", memberSettings.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(memberSettings.getId()))
             .andExpect(jsonPath("$.clientId").value(DEFAULT_CLIENT_ID))
-            .andExpect(jsonPath("$.clientSecret").value(DEFAULT_CLIENT_SECRET))
             .andExpect(jsonPath("$.salesforceId").value(DEFAULT_SALESFORCE_ID))
             .andExpect(jsonPath("$.parentSalesforceId").value(DEFAULT_PARENT_SALESFORCE_ID))
             .andExpect(jsonPath("$.assertionServiceEnabled").value(DEFAULT_ASSERTION_SERVICE_ENABLED.booleanValue()))
@@ -311,11 +288,12 @@ public class MemberSettingsResourceIT {
     @Test
     public void getNonExistingMemberSettings() throws Exception {
         // Get the memberSettings
-        restMemberSettingsMockMvc.perform(get("/api/member-settings/{id}", Long.MAX_VALUE))
+        restMemberSettingsMockMvc.perform(get("/settings/api/member-settings/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
-
+    
     @Test
+    @WithMockUser(username=UPDATED_LAST_MODIFIED_BY,authorities={"ROLE_ADMIN", "ROLE_USR"}, password = "user")
     public void updateMemberSettings() throws Exception {
         // Initialize the database
         memberSettingsRepository.save(memberSettings);
@@ -324,6 +302,7 @@ public class MemberSettingsResourceIT {
 
         // Update the memberSettings
         MemberSettings updatedMemberSettings = memberSettingsRepository.findById(memberSettings.getId()).get();
+        Instant initialLastModified = updatedMemberSettings.getLastModifiedDate();
         updatedMemberSettings
             .clientId(UPDATED_CLIENT_ID)
             .salesforceId(UPDATED_SALESFORCE_ID)
@@ -331,10 +310,9 @@ public class MemberSettingsResourceIT {
             .assertionServiceEnabled(UPDATED_ASSERTION_SERVICE_ENABLED)
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE)
-            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
-            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
+            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY);
 
-        restMemberSettingsMockMvc.perform(put("/api/member-settings")
+        restMemberSettingsMockMvc.perform(put("/settings/api/member-settings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(updatedMemberSettings)))
             .andExpect(status().isOk());
@@ -350,9 +328,9 @@ public class MemberSettingsResourceIT {
         assertThat(testMemberSettings.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
         assertThat(testMemberSettings.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
         assertThat(testMemberSettings.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
-        assertThat(testMemberSettings.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
+        assertThat(testMemberSettings.getLastModifiedDate()).isAfter(initialLastModified);
     }
-
+    
     @Test
     public void updateNonExistingMemberSettings() throws Exception {
         int databaseSizeBeforeUpdate = memberSettingsRepository.findAll().size();
@@ -360,7 +338,7 @@ public class MemberSettingsResourceIT {
         // Create the MemberSettings
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restMemberSettingsMockMvc.perform(put("/api/member-settings")
+        restMemberSettingsMockMvc.perform(put("/settings/api/member-settings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(memberSettings)))
             .andExpect(status().isBadRequest());
@@ -378,7 +356,7 @@ public class MemberSettingsResourceIT {
         int databaseSizeBeforeDelete = memberSettingsRepository.findAll().size();
 
         // Delete the memberSettings
-        restMemberSettingsMockMvc.perform(delete("/api/member-settings/{id}", memberSettings.getId())
+        restMemberSettingsMockMvc.perform(delete("/settings/api/member-settings/{id}", memberSettings.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
@@ -386,18 +364,18 @@ public class MemberSettingsResourceIT {
         List<MemberSettings> memberSettingsList = memberSettingsRepository.findAll();
         assertThat(memberSettingsList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
+    
     @Test
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(MemberSettings.class);
+    public void equalsVerifier() throws Exception {        
         MemberSettings memberSettings1 = new MemberSettings();
         memberSettings1.setId("id1");
+        assertThat(memberSettings1).isEqualTo(memberSettings1);
         MemberSettings memberSettings2 = new MemberSettings();
         memberSettings2.setId(memberSettings1.getId());
         assertThat(memberSettings1).isEqualTo(memberSettings2);
         memberSettings2.setId("id2");
         assertThat(memberSettings1).isNotEqualTo(memberSettings2);
         memberSettings1.setId(null);
-        assertThat(memberSettings1).isNotEqualTo(memberSettings2);
+        assertThat(memberSettings1).isNotEqualTo(memberSettings2);           
     }
 }
