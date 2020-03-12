@@ -82,7 +82,7 @@ After that, please go to the (gateway app)[http://localhost:8080/], logout if yo
 - In the `Oauth2Service` collection, in the `jhi_user` table, you will see a new user, which is the one used by the UAA to allow you to login.
 - In the `UserSettingsService` collection, in the `member_services_user` table, there will be a new user as well, and, on it, the `user_id` field must match the id of the new user in the `Oauth2Service`.`jhi_user` table
 
-#### Retrieve single user
+### Retrieve user
 
 Now we want to retrive the information of a specific user, so, from the prevous list, get the `login` of the user you want to fetch, and replace the `{login}` in the following CURL command with that value:
 
@@ -102,7 +102,7 @@ curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Aut
 Notice we now include the `"id"` field, which represent the users id in the database. 
 If that works fine, you will get a `200 OK` from the server, along with the updated user info in JSON format
 
-#### Delete privilege (authority) from user
+### Delete privilege (authority) from user
 Currently, it's not possible to delete users. You can, however, delete authorities from users, which restricts them from actions such as logging in or accessing assertions;
 
 Replace `{id}` and `{authority}` n the following CURL command. Available authorities are `ROLE_USER` and `ASSERTION_SERVICE_ENABLED`
@@ -111,10 +111,9 @@ Replace `{id}` and `{authority}` n the following CURL command. Available authori
 curl -i -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1ODQ2MzE0NDgsImlhdCI6MTU4NDAyNjY0OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyNTg3NWMzNC02NDM4LTRlNmItOWJmNS00YWIyODQ2MzgyNjkiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.h61Api8W21fjqWKB1YGd-jmrw76Z81qauD9W6SMYsXj8LP9_vXvXh2deX6Lyx_NUPdzNJwnBQZs7HKS5DgcoiCA5Ji_kUXC8TfLnD9SmcCcHbr-usNMg9b5N_7liRfz6h8Yh5fcrnDErCVezZwN3_hLSce9PeT0ccX6aY-8VnlB7pZcHyNPN0np1TRUwRkNxOfbwOLOiMBTXVCUlDXos2F9qNruCkar0QUZ3URmxtm63cG1aHLzekxf2Fuvayfkr0upEoucXfD9A-hzB1YPvIvMe7eGHvFtDFH84ROzz0gZyQanoBafCpVmQv8xgBd2jcIUNnZBoN9JteFMhsNDscA" -X DELETE  http://localhost:8081/settings/api/user/{id}/{authority}
 ```
 
-If successful, the server will respond with a `202 Accepted`, and, you can now get the user info again and confirm their grants have been updated.
+If successful, the server will respond with a `202 Accepted`
 
-
-#### Import users and members using CSV
+### Create multiple users from CSV
 
 Now we want to test that you can upload multiple users at once, this is done through the CSV user inport endpoint, but, before going into the technical details, lets see how the CSV should look like: 
 
@@ -163,7 +162,7 @@ If any of your lines have an error, the server will put the error in the given l
 }
 ```
 
-#### Retrieve all users
+### Retrieve all users
 
 Now we want to fetch all existing users, to do that, execute the following command:
 
