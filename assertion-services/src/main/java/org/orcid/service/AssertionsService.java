@@ -19,6 +19,7 @@ import org.orcid.client.OrcidAPIClient;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.repository.AssertionsRepository;
+import org.orcid.security.UaaUserUtils;
 import org.orcid.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,22 +44,35 @@ public class AssertionsService {
     @Autowired
     private OrcidAPIClient orcidAPIClient;
 
-    public Page<Assertion> findByOwnerId(String loggedInUserId, Pageable pageable) {
-        return assertionsRepository.findByOwnerId(loggedInUserId, pageable);
+    @Autowired
+    private UaaUserUtils uaaUserUtils;
+    
+    public Page<Assertion> findByOwnerId(Pageable pageable) {
+        return assertionsRepository.findByOwnerId(uaaUserUtils.getAuthenticatedUaaUserId(), pageable);
     }
 
-    public List<Assertion> findAllByOwnerId(String loggedInUserId) {
-        return assertionsRepository.findAllByOwnerId(loggedInUserId, SORT);
+    public List<Assertion> findAllByOwnerId() {
+        return assertionsRepository.findAllByOwnerId(uaaUserUtils.getAuthenticatedUaaUserId(), SORT);
     }
 
-    public Optional<Assertion> findById(String id) {
-        return assertionsRepository.findById(id);
+    public Assertion findById(String id) {
+        String userUaaId = uaaUserUtils.getAuthenticatedUaaUserId();
+        Optional<Assertion> optional = assertionsRepository.findById(id);
+        if(!optional.isPresent()) {
+            throw new IllegalArgumentException("Invalid assertion id");
+        }
+        Assertion assertion = optional.get();
+        if(!assertion.getOwnerId().equals(userUaaId)) {
+            throw new IllegalArgumentException(userUaaId + " is not the owner of " + assertion.getId());
+        }
+        return assertion;
     }
 
-    public Assertion createAssertion(String loggedInUserId, Assertion assertion) {
+    public Assertion createAssertion(Assertion assertion) {
         Instant now = Instant.now();
-
-        assertion.setOwnerId(loggedInUserId);
+        String ownerId = uaaUserUtils.getAuthenticatedUaaUserId();
+        
+        assertion.setOwnerId(ownerId);
         assertion.setCreated(now);
         assertion.setModified(now);
 
@@ -66,17 +80,18 @@ public class AssertionsService {
 
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(email);
         if (!optionalRecord.isPresent()) {
-            orcidRecordService.createOrcidRecord(email, loggedInUserId, now);
+            orcidRecordService.createOrcidRecord(email, now);
         }
 
         return assertionsRepository.insert(assertion);
     }
 
-    public void createAssertions(String loggedInUserId, List<Assertion> assertions) {
+    public void createAssertions(List<Assertion> assertions) {
         Instant now = Instant.now();
+        String ownerId = uaaUserUtils.getAuthenticatedUaaUserId();
         // Create assertions
         for (Assertion a : assertions) {
-            a.setOwnerId(loggedInUserId);
+            a.setOwnerId(ownerId);
             a.setCreated(now);
             a.setModified(now);
             // Create the assertion
@@ -84,11 +99,12 @@ public class AssertionsService {
         }
     }
 
-    public Assertion updateAssertion(String loggedInUserId, Assertion assertion) {
+    public Assertion updateAssertion(Assertion assertion) {
+        String uaaUserId = uaaUserUtils.getAuthenticatedUaaUserId();
         Optional<Assertion> optional = assertionsRepository.findById(assertion.getId());
         Assertion existingAssertion = optional.get();
 
-        if (!loggedInUserId.equals(existingAssertion.getOwnerId())) {
+        if (!uaaUserId.equals(existingAssertion.getOwnerId())) {
             throw new IllegalArgumentException("Invalid assertion id");
         }
 
@@ -125,6 +141,9 @@ public class AssertionsService {
         destination.setOrgRegion(source.getOrgRegion());
         destination.setDisambiguatedOrgId(source.getDisambiguatedOrgId());
         destination.setDisambiguationSource(source.getDisambiguationSource());
+        
+        // Update department name
+        destination.setDepartmentName(source.getDepartmentName());
     }
 
     public void postAssertionsToOrcid() throws JAXBException {
@@ -223,10 +242,11 @@ public class AssertionsService {
         }
     }
 
-    public boolean deleteAssertionFromOrcid(String loggedInUserId, String assertionId) throws JSONException, JAXBException {
+    public boolean deleteAssertionFromOrcid(String assertionId) throws JSONException, JAXBException {
         Assertion assertion = assertionsRepository.findById(assertionId).orElseThrow(() -> new IllegalArgumentException("Invalid assertion id"));
-
-        if (!loggedInUserId.equals(assertion.getOwnerId())) {
+        String uaaUserId = uaaUserUtils.getAuthenticatedUaaUserId();
+        
+        if (!uaaUserId.equals(assertion.getOwnerId())) {
             throw new IllegalArgumentException("Invalid assertion id");
         }
 
@@ -266,8 +286,9 @@ public class AssertionsService {
         return false;
     }
 
-    public String generateAssertionsReport(String loggedInUserId) throws IOException {
-        List<Assertion> assertions = assertionsRepository.findAllByOwnerId(loggedInUserId, this.SORT);
+    public String generateAssertionsReport() throws IOException {
+        String ownerId = uaaUserUtils.getAuthenticatedUaaUserId();
+        List<Assertion> assertions = assertionsRepository.findAllByOwnerId(ownerId, this.SORT);
 
         StringBuffer buffer = new StringBuffer();
         CSVPrinter csvPrinter = new CSVPrinter(buffer,

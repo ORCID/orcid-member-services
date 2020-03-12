@@ -9,7 +9,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,11 +20,11 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.jaxb.model.common.Iso3166Country;
-import org.orcid.security.AuthoritiesConstants;
 import org.orcid.security.EncryptUtil;
 import org.orcid.security.JWTUtil;
 import org.orcid.security.SecurityUtils;
@@ -81,67 +80,41 @@ public class AssertionServicesResource {
 
     @Autowired
     private JWTUtil jwtUtil;
-
-    private String getAuthenticatedUser() {
-        if (!SecurityUtils.isAuthenticated()) {
-            throw new BadRequestAlertException("User is not logged in", "login", "null");
-        }
-
-        String loggedInUserId = SecurityUtils.getCurrentUserLogin().get();
-
-        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
-            throw new BadRequestAlertException("User does not have the required scope 'AuthoritiesConstants.ASSERTION_SERVICE_ENABLED'", "login", loggedInUserId);
-        }
-
-        return loggedInUserId;
-    }
-
+    
     @GetMapping("/assertions")
     public ResponseEntity<List<Assertion>> getAssertions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder)
-            throws BadRequestAlertException {
-        String loggedInUserId = getAuthenticatedUser();
+            throws BadRequestAlertException, JSONException {
+        log.debug("REST request to fetch assertions from user {}", SecurityUtils.getCurrentUserLogin().get());
 
-        log.debug("REST request to fetch assertions from user {}", loggedInUserId);
-
-        Page<Assertion> affiliations = assertionsService.findByOwnerId(loggedInUserId, pageable);
+        Page<Assertion> affiliations = assertionsService.findByOwnerId(pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
         return ResponseEntity.ok().headers(headers).body(affiliations.getContent());
     }
 
     @GetMapping("/assertion/{id}")
-    public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException {
-        String loggedInUserId = getAuthenticatedUser();
-        log.debug("REST request to fetch assertion {} from user {}", id, loggedInUserId);
-        Optional<Assertion> optional = assertionsService.findById(id);
-        Assertion a = optional.get();
-
-        if (!loggedInUserId.equals(a.getOwnerId())) {
-            throw new IllegalArgumentException("Invalid assertion id");
-        }
-
-        return ResponseEntity.ok().body(optional.get());
+    public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {        
+        log.debug("REST request to fetch assertion {} from user {}", id, SecurityUtils.getCurrentUserLogin().get());
+        return ResponseEntity.ok().body(assertionsService.findById(id));
     }
     
-    
     @GetMapping("/assertion/links")
-    public void generateLinks(HttpServletResponse response) throws IOException {
-        String loggedInUserId = getAuthenticatedUser();
+    public void generateLinks(HttpServletResponse response) throws IOException, JSONException {
+        String loggedInUserId = SecurityUtils.getCurrentUserLogin().get();
         final String fileName = loggedInUserId + '_' +  System.currentTimeMillis() + "_report.csv";        
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         response.setHeader("Content-Type", "text/csv");
         response.setHeader("filename", fileName);
-        String csvReport = orcidRecordService.generateLinks(loggedInUserId);
+        String csvReport = orcidRecordService.generateLinks();
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
     }
 
     @PutMapping("/assertion")
-    public ResponseEntity<Assertion> updateAssertion(@RequestBody Assertion assertion) throws BadRequestAlertException {
-        log.debug("REST request to update assertion : {}", assertion);
-        String loggedInUserId = getAuthenticatedUser();
+    public ResponseEntity<Assertion> updateAssertion(@RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
+        log.debug("REST request to update assertion : {}", assertion);        
         validateAssertion(assertion);
-        Assertion existingAssertion = assertionsService.updateAssertion(loggedInUserId, assertion);
+        Assertion existingAssertion = assertionsService.updateAssertion(assertion);
         
         return ResponseEntity.ok().body(existingAssertion);
     }
@@ -149,9 +122,8 @@ public class AssertionServicesResource {
     @PostMapping("/assertion")
     public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, URISyntaxException {
         log.debug("REST request to create assertion : {}", assertion);        
-        String loggedInUserId = getAuthenticatedUser();
         validateAssertion(assertion);
-        assertion = assertionsService.createAssertion(loggedInUserId, assertion);
+        assertion = assertionsService.createAssertion(assertion);
 
         return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, assertion.getId())).body(assertion);
@@ -159,12 +131,11 @@ public class AssertionServicesResource {
 
     @PostMapping("/assertion/upload")
     public ResponseEntity<String> uploadAssertions(@RequestParam("file") MultipartFile file) {
-        String loggedInUserId = getAuthenticatedUser();
         JSONArray errors = new JSONArray();
         try (InputStream is = file.getInputStream();) {
             InputStreamReader isr = new InputStreamReader(is);
             Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
-            List<Assertion> existingAssertions = assertionsService.findAllByOwnerId(loggedInUserId);
+            List<Assertion> existingAssertions = assertionsService.findAllByOwnerId();
             List<Assertion> assertionsToAdd = new ArrayList<Assertion>();
             Set<String> usersToAdd = new HashSet<String>();
             // Validate affiliations
@@ -179,7 +150,7 @@ public class AssertionServicesResource {
                         // If something is updated in the aff, update the
                         // existing one in the DB
                         if (!StringUtils.isBlank(existingAssertion.getPutCode()) && isUpdated(assertion, existingAssertion)) {
-                            assertionsService.updateAssertion(loggedInUserId, existingAssertion);
+                            assertionsService.updateAssertion(existingAssertion);
                         }
                     } else {
                         // Create the userInfo if needed
@@ -199,8 +170,8 @@ public class AssertionServicesResource {
             }
 
             if (errors.length() == 0) {
-                assertionsService.createAssertions(loggedInUserId, assertionsToAdd);
-                orcidRecordService.createOrcidRecords(loggedInUserId, usersToAdd);                
+                assertionsService.createAssertions(assertionsToAdd);
+                orcidRecordService.createOrcidRecords(usersToAdd);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -211,20 +182,6 @@ public class AssertionServicesResource {
 
     @DeleteMapping("/assertion/{id}")
     public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
-        String loggedInUserId = getAuthenticatedUser();
-
-        Optional<Assertion> optional = assertionsService.findById(id);
-
-        if (!optional.isPresent()) {
-            ResponseEntity.notFound();
-        }
-
-        Assertion a = optional.get();
-
-        if (!loggedInUserId.equals(a.getOwnerId())) {
-            throw new IllegalArgumentException("Invalid assertion id");
-        }
-
         assertionsService.deleteById(id);
 
         return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
@@ -232,8 +189,7 @@ public class AssertionServicesResource {
 
     @DeleteMapping("/assertion/orcid/{id}")
     public ResponseEntity<String> deleteAssertionFromOrcid(@PathVariable String id) throws JAXBException {
-        String loggedInUserId = getAuthenticatedUser();
-        Boolean deleted = assertionsService.deleteAssertionFromOrcid(loggedInUserId, id);
+        Boolean deleted = assertionsService.deleteAssertionFromOrcid(id);
         return ResponseEntity.ok().body("{\"deleted\":\"" + deleted + "\"}");
     }
     
@@ -268,14 +224,13 @@ public class AssertionServicesResource {
     }
 
     @GetMapping(path = "/assertion/report")    
-    public void generateReport(HttpServletResponse response) throws IOException {
-        String loggedInUserId = getAuthenticatedUser();
+    public void generateReport(HttpServletResponse response) throws IOException {        
         final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
         final String fileName = userLogin + '_' +  System.currentTimeMillis() + "_report.csv";        
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         response.setHeader("Content-Type", "text/csv");
         response.setHeader("filename", fileName);
-        String csvReport = assertionsService.generateAssertionsReport(loggedInUserId);
+        String csvReport = assertionsService.generateAssertionsReport();
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
     }
@@ -426,7 +381,8 @@ public class AssertionServicesResource {
                 || !equals(a.getOrgRegion(), existingAssertion.getOrgRegion()) 
                 || !equals(a.getStartDay(), existingAssertion.getStartDay())
                 || !equals(a.getStartMonth(), existingAssertion.getStartMonth()) 
-                || !equals(a.getStartYear(), existingAssertion.getStartYear())) {
+                || !equals(a.getStartYear(), existingAssertion.getStartYear())
+                || !equals(a.getDepartmentName(), existingAssertion.getDepartmentName())) {
             return true;
         }
         // @formatter:on       

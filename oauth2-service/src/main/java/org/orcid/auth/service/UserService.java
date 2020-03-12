@@ -1,5 +1,15 @@
 package org.orcid.auth.service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.orcid.auth.config.Constants;
 import org.orcid.auth.domain.Authority;
 import org.orcid.auth.domain.User;
@@ -9,8 +19,9 @@ import org.orcid.auth.security.AuthoritiesConstants;
 import org.orcid.auth.security.SecurityUtils;
 import org.orcid.auth.service.dto.UserDTO;
 import org.orcid.auth.service.util.RandomUtil;
-import org.orcid.auth.web.rest.errors.*;
-
+import org.orcid.auth.web.rest.errors.EmailAlreadyUsedException;
+import org.orcid.auth.web.rest.errors.InvalidPasswordException;
+import org.orcid.auth.web.rest.errors.LoginAlreadyUsedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -19,11 +30,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Service class for managing users.
@@ -228,6 +234,27 @@ public class UserService {
             userRepository.delete(user);
             this.clearUserCaches(user);
             log.debug("Deleted User: {}", user);
+        });
+    }
+    
+    public void clearUser(String id) {
+        userRepository.findOneById(id).ifPresent(user -> {
+            log.debug("About to clear User with id: {}", id);
+            user.setActivated(false);
+            user.setActivationKey(null);
+            user.setAuthorities(new HashSet<Authority>());
+            user.setEmail(id + "@deleted.orcid.org");
+            user.setFirstName(null);
+            user.setImageUrl(null);
+            user.setLangKey(null);
+            user.setLastName(null);
+            user.setLogin(id);
+            user.setPassword(RandomStringUtils.randomAlphanumeric(60));
+            user.setResetDate(null);
+            user.setResetKey(null);
+            userRepository.save(user);
+            this.clearUserCaches(user);
+            log.debug("User cleared: {}", id);
         });
     }
 

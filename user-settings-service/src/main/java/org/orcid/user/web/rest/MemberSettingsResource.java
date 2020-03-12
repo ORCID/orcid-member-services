@@ -13,14 +13,17 @@ import javax.validation.Valid;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.user.domain.MemberSettings;
+import org.orcid.user.domain.UserSettings;
 import org.orcid.user.repository.MemberSettingsRepository;
 import org.orcid.user.repository.UserSettingsRepository;
-import org.orcid.user.security.SecurityUtils;
+import org.orcid.user.security.UaaUserUtils;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,6 +60,9 @@ public class MemberSettingsResource {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
+    
+    @Autowired
+    private UaaUserUtils uaaUserUtils;
 
     private final UserSettingsRepository userSettingsRepository;
 
@@ -78,9 +84,10 @@ public class MemberSettingsResource {
      *         ID.
      * @throws URISyntaxException
      *             if the Location URI syntax is incorrect.
+     * @throws JSONException 
      */
     @PostMapping("/member-settings")
-    public ResponseEntity<MemberSettings> createMemberSettings(@Valid @RequestBody MemberSettings memberSettings) throws URISyntaxException {
+    public ResponseEntity<MemberSettings> createMemberSettings(@Valid @RequestBody MemberSettings memberSettings) throws URISyntaxException, JSONException {
         log.debug("REST request to save MemberSettings : {}", memberSettings);
         if (memberSettings.getId() != null) {
             throw new BadRequestAlertException("A new memberSettings cannot already have an ID", ENTITY_NAME, "idexists");
@@ -94,6 +101,13 @@ public class MemberSettingsResource {
             ResponseEntity.badRequest()
             .headers(HeaderUtil.createFailureAlert(applicationName, true, ENTITY_NAME, "memberSettings.create.error", memberSettings.getError()));                    
         }
+        
+        Instant now = Instant.now();
+        memberSettings.setCreatedBy(uaaUserUtils.getAuthenticatedUaaUserId());
+        memberSettings.setCreatedDate(now);
+        memberSettings.setLastModifiedBy(uaaUserUtils.getAuthenticatedUaaUserId());
+        memberSettings.setLastModifiedDate(now);
+        
         MemberSettings result = memberSettingsRepository.save(memberSettings);
         return ResponseEntity.created(new URI("/api/member-settings/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString())).body(result);
@@ -132,9 +146,9 @@ public class MemberSettingsResource {
                         Optional<MemberSettings> optional = memberSettingsRepository.findBySalesforceId(memberSettings.getSalesforceId());
                         // If user doesn't exists, create it
                         if(!optional.isPresent()) {                            
-                            memberSettings.setCreatedBy(SecurityUtils.getAuthenticatedUser());
+                            memberSettings.setCreatedBy(uaaUserUtils.getAuthenticatedUaaUserId());
                             memberSettings.setCreatedDate(now);
-                            memberSettings.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
+                            memberSettings.setLastModifiedBy(uaaUserUtils.getAuthenticatedUaaUserId());
                             memberSettings.setLastModifiedDate(now);
                             memberSettingsRepository.save(memberSettings);
                         } else {
@@ -144,7 +158,7 @@ public class MemberSettingsResource {
                             existingMemberSettings.setClientId(memberSettings.getClientId());
                             existingMemberSettings.setIsConsortiumLead(memberSettings.getIsConsortiumLead());
                             existingMemberSettings.setParentSalesforceId(memberSettings.getParentSalesforceId());
-                            memberSettings.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
+                            memberSettings.setLastModifiedBy(uaaUserUtils.getAuthenticatedUaaUserId());
                             memberSettings.setLastModifiedDate(now);
                             memberSettingsRepository.save(existingMemberSettings);
                         }
@@ -179,9 +193,10 @@ public class MemberSettingsResource {
      *         memberSettings couldn't be updated.
      * @throws URISyntaxException
      *             if the Location URI syntax is incorrect.
+     * @throws JSONException 
      */
     @PutMapping("/member-settings")
-    public ResponseEntity<MemberSettings> updateMemberSettings(@Valid @RequestBody MemberSettings memberSettings) throws URISyntaxException {
+    public ResponseEntity<MemberSettings> updateMemberSettings(@Valid @RequestBody MemberSettings memberSettings) throws URISyntaxException, JSONException {
         log.debug("REST request to update MemberSettings : {}", memberSettings);
         if (memberSettings.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -196,7 +211,7 @@ public class MemberSettingsResource {
         }
         
         Instant now = Instant.now();
-        memberSettings.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
+        memberSettings.setLastModifiedBy(uaaUserUtils.getAuthenticatedUaaUserId());
         memberSettings.setLastModifiedDate(now);
         MemberSettings result = memberSettingsRepository.save(memberSettings);
 
@@ -206,12 +221,13 @@ public class MemberSettingsResource {
         if (!existingMemberSettings.getSalesforceId().equals(memberSettings.getSalesforceId())) {
             // If salesforceId changed, update each of the existing users with
             // the new salesforceId
-            userSettingsRepository.findBySalesforceId(existingMemberSettings.getSalesforceId()).stream().forEach(userSettings -> {
-                userSettings.setSalesforceId(memberSettings.getSalesforceId());
-                userSettings.setLastModifiedBy(SecurityUtils.getAuthenticatedUser());
-                userSettings.setLastModifiedDate(now);
-                userSettingsRepository.save(userSettings);
-            });
+            List<UserSettings> usList = userSettingsRepository.findBySalesforceId(existingMemberSettings.getSalesforceId());
+            for (UserSettings us : usList) {
+                us.setSalesforceId(memberSettings.getSalesforceId());
+                us.setLastModifiedBy(uaaUserUtils.getAuthenticatedUaaUserId());
+                us.setLastModifiedDate(now);
+                userSettingsRepository.save(us);
+            }
         }
 
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, memberSettings.getId().toString())).body(result);
@@ -271,7 +287,7 @@ public class MemberSettingsResource {
         // If there is at least one userSettings assigned to this
         // memberSettings, throw an exception
         userSettingsRepository.findBySalesforceId(id).stream().map(userSettings -> {
-            throw new BadRequestAlertException("Unable to delete MemberSettings, user '" + userSettings.getLogin() + "' still use it", ENTITY_NAME, "idused");
+            throw new BadRequestAlertException("Unable to delete MemberSettings, user '" + userSettings.getJhiUserId() + "' still use it", ENTITY_NAME, "idused");
         });
 
         memberSettingsRepository.deleteById(id);

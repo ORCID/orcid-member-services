@@ -176,6 +176,20 @@ public class UserResource {
             userService.getUserWithAuthoritiesByLogin(login)
                 .map(UserDTO::new));
     }
+    
+    /**
+     * {@code GET /users/id/:id} : get the "id" user.
+     *
+     * @param id the id of the user to find.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the "id" user, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/users/id/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
+        log.debug("REST request to get User : {}", id);
+        return ResponseUtil.wrapOrNotFound(
+            userService.getUserWithAuthorities(id)
+                .map(UserDTO::new));
+    }
 
     /**
      * {@code DELETE /users/:login} : delete the "login" User.
@@ -189,5 +203,19 @@ public class UserResource {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
         return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName,  "userManagement.deleted", login)).build();
+    }
+    
+    /**
+     * {@code DELETE /users/clear/:id} : clear the "id" User.
+     *
+     * @param id the id of the user to clear.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/users/clear/{id}")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<Void> clearUser(@PathVariable String id) {
+        log.debug("REST request to clear User: {}", id);
+        userService.clearUser(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert(applicationName, "userManagement.deleted", id)).build();
     }
 }
