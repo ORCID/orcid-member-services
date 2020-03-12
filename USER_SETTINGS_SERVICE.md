@@ -105,9 +105,10 @@ If that works fine, you will get a `200 OK` from the server, along with the upda
 Now we want to test that you can upload multiple users at once, this is done through the CSV user inport endpoint, but, before going into the technical details, lets see how the CSV should look like: 
 
 ```csv
-email,firstName,lastName,grant
-1a@test.com,FirstName1,LastName1,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
-2a@test.com,FirstName2,LastName2,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
+isConsortiumLead,salesforceId,parentSalesforceId,email,firstName,lastName,grant
+false,salesforceid1,parentsalesforceid1,1@user.com,Angel,Montenegro,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
+false,salesforceid1,parentsalesforceid1,2@user.com,Leonardo,Mendoza,"[ROLE_USER]"
+true,salesforceid2,parentsalesforceid2,3@user.com,Daniel,Palafox,"[ROLE_USER]"
 ```
 
 Notice that the first line in the file must be the header, and define the fields we should include as part of each user:
