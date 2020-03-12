@@ -19,19 +19,21 @@ public class UserDTO implements Serializable {
     private String firstName;
     private String firstNameError;
     private String lastName;
-    private String lastNameError;        
+    private String lastNameError;
     private Boolean mainContact;
     private Boolean assertionServicesEnabled;
 
     // MemberSettings data
     private String salesforceId;
     private String salesforceIdError;
-    
+
     // Metadata
+    private String jhiUserId;
     private String createdBy;
     private Instant createdDate;
     private String lastModifiedBy;
-    private Instant lastModifiedDate;    
+    private Instant lastModifiedDate;
+    private Boolean deleted;
 
     public String getId() {
         return id;
@@ -161,6 +163,22 @@ public class UserDTO implements Serializable {
         this.assertionServicesEnabled = assertionServicesEnabled;
     }
 
+    public String getJhiUserId() {
+        return jhiUserId;
+    }
+
+    public void setJhiUserId(String jhiUserId) {
+        this.jhiUserId = jhiUserId;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -168,9 +186,11 @@ public class UserDTO implements Serializable {
         result = prime * result + ((assertionServicesEnabled == null) ? 0 : assertionServicesEnabled.hashCode());
         result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
         result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
+        result = prime * result + ((deleted == null) ? 0 : deleted.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((firstNameError == null) ? 0 : firstNameError.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((jhiUserId == null) ? 0 : jhiUserId.hashCode());
         result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
         result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
@@ -208,6 +228,11 @@ public class UserDTO implements Serializable {
                 return false;
         } else if (!createdDate.equals(other.createdDate))
             return false;
+        if (deleted == null) {
+            if (other.deleted != null)
+                return false;
+        } else if (!deleted.equals(other.deleted))
+            return false;
         if (firstName == null) {
             if (other.firstName != null)
                 return false;
@@ -222,6 +247,11 @@ public class UserDTO implements Serializable {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
+            return false;
+        if (jhiUserId == null) {
+            if (other.jhiUserId != null)
+                return false;
+        } else if (!jhiUserId.equals(other.jhiUserId))
             return false;
         if (lastModifiedBy == null) {
             if (other.lastModifiedBy != null)
@@ -279,14 +309,23 @@ public class UserDTO implements Serializable {
     public static UserDTO valueOf(UserSettings us) {
         UserDTO result = new UserDTO();
         result.setId(us.getId());
-        result.setLogin(us.getLogin());
+        result.setJhiUserId(us.getJhiUserId());
         result.setMainContact(us.getMainContact());
         result.setSalesforceId(us.getSalesforceId());
         result.setCreatedBy(us.getCreatedBy());
         result.setCreatedDate(us.getCreatedDate());
         result.setLastModifiedBy(us.getLastModifiedBy());
-        result.setLastModifiedDate(us.getLastModifiedDate());        
+        result.setLastModifiedDate(us.getLastModifiedDate());
+        result.setDeleted(us.getDeleted());
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "UserDTO [id=" + id + ", login=" + login + ", loginError=" + loginError + ", password=" + password + ", firstName=" + firstName + ", firstNameError="
+                + firstNameError + ", lastName=" + lastName + ", lastNameError=" + lastNameError + ", mainContact=" + mainContact + ", assertionServicesEnabled="
+                + assertionServicesEnabled + ", salesforceId=" + salesforceId + ", salesforceIdError=" + salesforceIdError + ", jhiUserId=" + jhiUserId + ", createdBy="
+                + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + ", deleted=" + deleted
+                + "]";
+    }
 }
