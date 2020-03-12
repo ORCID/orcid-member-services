@@ -44,7 +44,7 @@ This will return an access token that looks like this one:
 From it, take the `access_token` parameter and use it to create a new user, as follows:
 
 ```
-curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1ODQ2MzE0NDgsImlhdCI6MTU4NDAyNjY0OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyNTg3NWMzNC02NDM4LTRlNmItOWJmNS00YWIyODQ2MzgyNjkiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.h61Api8W21fjqWKB1YGd-jmrw76Z81qauD9W6SMYsXj8LP9_vXvXh2deX6Lyx_NUPdzNJwnBQZs7HKS5DgcoiCA5Ji_kUXC8TfLnD9SmcCcHbr-usNMg9b5N_7liRfz6h8Yh5fcrnDErCVezZwN3_hLSce9PeT0ccX6aY-8VnlB7pZcHyNPN0np1TRUwRkNxOfbwOLOiMBTXVCUlDXos2F9qNruCkar0QUZ3URmxtm63cG1aHLzekxf2Fuvayfkr0upEoucXfD9A-hzB1YPvIvMe7eGHvFtDFH84ROzz0gZyQanoBafCpVmQv8xgBd2jcIUNnZBoN9JteFMhsNDscA" -X POST --data '{"login":"12mar2020@mailinator.com", "firstName":"Thursday", "lastName":"12mar2020", "password":"password123","authorities":["ROLE_USER"],"salesforceId":"SF1"}'  http://localhost:8081/settings/api/user
+curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1ODQ2MzE0NDgsImlhdCI6MTU4NDAyNjY0OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyNTg3NWMzNC02NDM4LTRlNmItOWJmNS00YWIyODQ2MzgyNjkiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.h61Api8W21fjqWKB1YGd-jmrw76Z81qauD9W6SMYsXj8LP9_vXvXh2deX6Lyx_NUPdzNJwnBQZs7HKS5DgcoiCA5Ji_kUXC8TfLnD9SmcCcHbr-usNMg9b5N_7liRfz6h8Yh5fcrnDErCVezZwN3_hLSce9PeT0ccX6aY-8VnlB7pZcHyNPN0np1TRUwRkNxOfbwOLOiMBTXVCUlDXos2F9qNruCkar0QUZ3URmxtm63cG1aHLzekxf2Fuvayfkr0upEoucXfD9A-hzB1YPvIvMe7eGHvFtDFH84ROzz0gZyQanoBafCpVmQv8xgBd2jcIUNnZBoN9JteFMhsNDscA" -X POST --data '{"login":"test@mailinator.com", "firstName":"Firstname", "lastName":"Lastname", "password":"password123","authorities":["ROLE_USER"],"salesforceId":"SF1"}'  http://localhost:8081/settings/api/user
 
 ```
 
@@ -59,26 +59,26 @@ If the request is successful, server will return the new user information as fol
 
 ```json
 {
-  "id" : "5e6a55106798abba0f754533",
-  "login" : "12mar2020@mailinator.com",
+  "id" : "5e6a5e3c6798abba0f754535",
+  "login" : "test@mailinator.com",
   "loginError" : null,
   "password" : null,
-  "firstName" : "Thursday",
+  "firstName" : "Firstname",
   "firstNameError" : null,
-  "lastName" : "12mar2020",
+  "lastName" : "Lastname",
   "lastNameError" : null,
   "mainContact" : null,
   "assertionServicesEnabled" : null,
   "salesforceId" : "SF1",
   "salesforceIdError" : null,
   "createdBy" : "admin",
-  "createdDate" : "2020-03-12T15:28:16.129Z",
-  "lastModifiedBy" : "admin",
-  "lastModifiedDate" : "2020-03-12T15:28:16.129Z"
+  "createdDate" : "2020-03-12T16:07:24.380Z",
+  "lastModifiedBy" : "internal",
+  "lastModifiedDate" : "2020-03-12T16:07:24.380Z"
 }
 ```
 
-Save the `login` parameter somewhere because you will need it later on.
+Save the `id` and `login` parameters somewhere because you will need it later on.
 
 After that, please go to the (gateway app)[http://localhost:8080/], logout if you are not, and, now login using the new credentials you just created.
 
@@ -91,7 +91,7 @@ After that, please go to the (gateway app)[http://localhost:8080/], logout if yo
 Now, we want to update the name of the new user, for that, we will need to reuse the json data of the user, but changing the first name and last name for a new value, as follows:
 
 ```
-curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1ODQ2MzE0NDgsImlhdCI6MTU4NDAyNjY0OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyNTg3NWMzNC02NDM4LTRlNmItOWJmNS00YWIyODQ2MzgyNjkiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.h61Api8W21fjqWKB1YGd-jmrw76Z81qauD9W6SMYsXj8LP9_vXvXh2deX6Lyx_NUPdzNJwnBQZs7HKS5DgcoiCA5Ji_kUXC8TfLnD9SmcCcHbr-usNMg9b5N_7liRfz6h8Yh5fcrnDErCVezZwN3_hLSce9PeT0ccX6aY-8VnlB7pZcHyNPN0np1TRUwRkNxOfbwOLOiMBTXVCUlDXos2F9qNruCkar0QUZ3URmxtm63cG1aHLzekxf2Fuvayfkr0upEoucXfD9A-hzB1YPvIvMe7eGHvFtDFH84ROzz0gZyQanoBafCpVmQv8xgBd2jcIUNnZBoN9JteFMhsNDscA" -X PUT --data '{"id":"5e6a55106798abba0f754533", "login":"12mar2020@mailinator.com", "firstName":"Thursdayish", "lastName":"12mar2020", "password":"password123","authorities":["ROLE_USER"],"salesforceId":"SF1", "parentSalesforceId":"PSF1"}'  http://localhost:8081/settings/api/user
+curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1ODQ2MzE0NDgsImlhdCI6MTU4NDAyNjY0OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyNTg3NWMzNC02NDM4LTRlNmItOWJmNS00YWIyODQ2MzgyNjkiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.h61Api8W21fjqWKB1YGd-jmrw76Z81qauD9W6SMYsXj8LP9_vXvXh2deX6Lyx_NUPdzNJwnBQZs7HKS5DgcoiCA5Ji_kUXC8TfLnD9SmcCcHbr-usNMg9b5N_7liRfz6h8Yh5fcrnDErCVezZwN3_hLSce9PeT0ccX6aY-8VnlB7pZcHyNPN0np1TRUwRkNxOfbwOLOiMBTXVCUlDXos2F9qNruCkar0QUZ3URmxtm63cG1aHLzekxf2Fuvayfkr0upEoucXfD9A-hzB1YPvIvMe7eGHvFtDFH84ROzz0gZyQanoBafCpVmQv8xgBd2jcIUNnZBoN9JteFMhsNDscA" -X PUT --data '{"id":"5e6a5e3c6798abba0f754535", "login":"test@mailinator.com", "firstName":"Awesome", "lastName":"Lastname", "password":"password123","authorities":["ROLE_USER", "ASSERTION_SERVICE_ENABLED"],"salesforceId":"SF1"}'  http://localhost:8081/settings/api/user
 ```
 Notice we now include the `"id"` field, which represent the users id in the database. 
 If that works fine, you will get a `200 OK` from the server, along with the updated user info in JSON format
