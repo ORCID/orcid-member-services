@@ -38,6 +38,9 @@ public class UserSettings implements Serializable {
 
     @Field("last_modified_date")
     private Instant lastModifiedDate;
+    
+    @Field("deleted")
+    private Boolean deleted = false;
 
     public String getId() {
         return id;
@@ -103,12 +106,21 @@ public class UserSettings implements Serializable {
         this.jhiUserId = jhiUserId;
     }
 
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
         result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
+        result = prime * result + ((deleted == null) ? 0 : deleted.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((jhiUserId == null) ? 0 : jhiUserId.hashCode());
         result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
@@ -136,6 +148,11 @@ public class UserSettings implements Serializable {
             if (other.createdDate != null)
                 return false;
         } else if (!createdDate.equals(other.createdDate))
+            return false;
+        if (deleted == null) {
+            if (other.deleted != null)
+                return false;
+        } else if (!deleted.equals(other.deleted))
             return false;
         if (id == null) {
             if (other.id != null)
@@ -173,6 +190,6 @@ public class UserSettings implements Serializable {
     @Override
     public String toString() {
         return "UserSettings [id=" + id + ", jhiUserId=" + jhiUserId + ", salesforceId=" + salesforceId + ", mainContact=" + mainContact + ", createdBy=" + createdBy
-                + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + "]";
+                + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + ", deleted=" + deleted + "]";
     }
 }

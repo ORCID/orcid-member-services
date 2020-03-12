@@ -602,38 +602,24 @@ public class UserSettingsResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      * @throws JSONException
      */
-    @DeleteMapping("/user/{login}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String login) throws JSONException {
-        log.debug("REST request to delete user {}", login);
+    @DeleteMapping("/user/{jhiUserId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String jhiUserId) throws JSONException {
+        log.debug("REST request to delete user {}", jhiUserId);
 
-        JSONObject uaaUser = uaaUserUtils.getUAAUserByLogin(login);
         // Empty user on UAA
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        // Remember to use the UAA user id, since we are updating the user info
-        map.put("id", uaaUser.getString("id"));
-        map.put("login", StringUtils.EMPTY);
-        map.put("email", StringUtils.EMPTY);
-        map.put("password", "requires_not_empty_but_doesnt_get_updated");
-        map.put("firstName", StringUtils.EMPTY);
-        map.put("lastName", StringUtils.EMPTY);
-
-        map.put("authorities", new ArrayList<String>());
-        map.put("activated", false);
-
-        ResponseEntity<String> response = oauth2ServiceClient.updateUser(map);
+        ResponseEntity<String> response = oauth2ServiceClient.clearUser(jhiUserId);
         if (response == null || !HttpStatus.OK.equals(response.getStatusCode())) {
             throw new RuntimeException("Delete user failed: " + response.getStatusCode().getReasonPhrase());
         }
 
-        Optional<UserSettings> ous = userSettingsRepository.findById(login);
+        Optional<UserSettings> ous = userSettingsRepository.findByJhiUserId(jhiUserId);
         if (!ous.isPresent()) {
             return ResponseEntity.notFound().build();
         }
         UserSettings us = ous.get();
         us.setSalesforceId(null);
         us.setMainContact(null);
-
+        us.setDeleted(true);
         userSettingsRepository.save(us);
 
         return ResponseEntity.accepted().build();

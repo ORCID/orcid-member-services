@@ -204,4 +204,18 @@ public class UserResource {
         userService.deleteUser(login);
         return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName,  "userManagement.deleted", login)).build();
     }
+    
+    /**
+     * {@code DELETE /users/clear/:id} : clear the "id" User.
+     *
+     * @param id the id of the user to clear.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/users/clear/{id}")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<Void> clearUser(@PathVariable String id) {
+        log.debug("REST request to clear User: {}", id);
+        userService.clearUser(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert(applicationName, "userManagement.deleted", id)).build();
+    }
 }

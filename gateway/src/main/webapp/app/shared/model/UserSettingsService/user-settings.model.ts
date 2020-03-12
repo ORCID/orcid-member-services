@@ -10,6 +10,7 @@ export const enum UserAuthorities {
 export interface IUserSettings {
   id?: string;
   login?: string;
+  jhiUserId?: string;
   firstName?: string;
   lastName?: string;
   mainContact?: boolean;
@@ -26,6 +27,7 @@ export class UserSettings implements IUserSettings {
   constructor(
     public id?: string,
     public login?: string,
+    public jhiUserId?: string;
     public firstName?: string,
     public lastName?: string,
     public mainContact?: boolean,
