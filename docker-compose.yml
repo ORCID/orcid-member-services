@@ -1,5 +1,31 @@
 version: '2'
 services:
+  assertionservices-app:
+    image: assertionservices
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - 'SPRING_PROFILES_ACTIVE=prod,swagger'
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
+      - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
+      - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
+      - SPRING_DATA_MONGODB_DATABASE=AssertionServices
+      - JHIPSTER_SLEEP=30
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - 'APPLICATION_ORCID_API_ENDPOINT=${ORCID_API_ENDPOINT}'
+      - 'APPLICATION_JWT_SIGNATURE_URL=${JWT_SIGNATURE_URL}'
+      - 'APPLICATION_LANDING_PAGE_URL=${LANDING_PAGE_URL}'
+      - 'APPLICATION_TOKEN_EXCHANGE_ENDPONT=${TOKEN_EXCHANGE_ENDPONT}'
+      - 'APPLICATION_TOKEN_EXCHANGE_GRANT_TYPE=${TOKEN_EXCHANGE_GRANT_TYPE}'
+      - 'APPLICATION_TOKEN_EXCHANGE_SUBJECT_TOKEN_TYPE=${TOKEN_EXCHANGE_SUBJECT_TOKEN_TYPE}'
+      - 'APPLICATION_TOKEN_EXCHANGE_REQUESTED_TOKEN_TYPE=${TOKEN_EXCHANGE_REQUESTED_TOKEN_TYPE}'
+      - 'APPLICATION_TOKEN_EXCHANGE_CLIENT_ID=${TOKEN_EXCHANGE_CLIENT_ID}'
+      - 'APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET=${TOKEN_EXCHANGE_CLIENT_SECRET}'
+      - 'APPLICATION_CRON_POST_AFFILIATIONS=${CRON_POST_AFFILIATIONS}'
+      - 'APPLICATION_CRON_PUT_AFFILIATIONS=${CRON_PUT_AFFILIATIONS}'
+  assertionservices-mongodb:
+    image: 'mongo:4.0.13'
+
   gateway-app:
     image: gateway
     environment:
@@ -8,7 +34,7 @@ services:
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
       - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
-      - 'SPRING_DATA_MONGODB_URI=mongodb://gateway-mongodb:27017'
+      - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
       - SPRING_DATA_MONGODB_DATABASE=gateway
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
@@ -25,12 +51,10 @@ services:
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
       - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
-      - 'SPRING_DATA_MONGODB_URI=mongodb://oauth2service-mongodb:27017'
+      - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
       - SPRING_DATA_MONGODB_DATABASE=Oauth2Service
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
-    ports:
-      - '9999:9999'
   oauth2service-mongodb:
     image: 'mongo:4.0.10'
 
@@ -42,15 +66,10 @@ services:
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
       - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
-      - 'SPRING_DATA_MONGODB_URI=mongodb://usersettingsservice-mongodb:27017'
+      - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
       - SPRING_DATA_MONGODB_DATABASE=UserSettingsService
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
-<<<<<<< HEAD
-=======
-    ports:
-      - '8081:8081'
->>>>>>> master
   usersettingsservice-mongodb:
     image: 'mongo:4.0.10'
 
@@ -58,32 +77,3 @@ services:
     extends:
       file: jhipster-registry.yml
       service: jhipster-registry
-
-  jhipster-elasticsearch:
-    extends:
-      file: jhipster-console.yml
-      service: jhipster-elasticsearch
-  jhipster-logstash:
-    extends:
-      file: jhipster-console.yml
-      service: jhipster-logstash
-    depends_on:
-      - jhipster-elasticsearch
-  jhipster-console:
-    extends:
-      file: jhipster-console.yml
-      service: jhipster-console
-    depends_on:
-      - jhipster-elasticsearch
-  jhipster-import-dashboards:
-    extends:
-      file: jhipster-console.yml
-      service: jhipster-import-dashboards
-    depends_on:
-      - jhipster-elasticsearch
-  jhipster-zipkin:
-    extends:
-      file: jhipster-console.yml
-      service: jhipster-zipkin
-    depends_on:
-      - jhipster-elasticsearch

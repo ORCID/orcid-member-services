@@ -1,34 +1,45 @@
 package org.orcid.user.web.rest;
 
-import org.orcid.user.UserSettingsServiceApp;
-import org.orcid.user.config.SecurityBeanOverrideConfiguration;
-import org.orcid.user.domain.UserSettings;
-import org.orcid.user.repository.MemberSettingsRepository;
-import org.orcid.user.repository.UserSettingsRepository;
-import org.orcid.user.web.rest.errors.ExceptionTranslator;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.Validator;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.mockito.Mockito.when;
+import static org.orcid.user.web.rest.TestUtil.createFormattingConversionService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static org.orcid.user.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.orcid.user.UserSettingsServiceApp;
+import org.orcid.user.client.Oauth2ServiceClient;
+import org.orcid.user.config.SecurityBeanOverrideConfiguration;
+import org.orcid.user.domain.UserSettings;
+import org.orcid.user.repository.MemberSettingsRepository;
+import org.orcid.user.repository.UserSettingsRepository;
+import org.orcid.user.web.rest.errors.ExceptionTranslator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.Validator;
 
 /**
  * Integration tests for the {@link UserSettingsResource} REST controller.
@@ -36,6 +47,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, UserSettingsServiceApp.class})
 public class UserSettingsResourceIT {
 
+    private static final String DEFAULT_LOGIN = "AAAAAAAAAA";
+    private static final String UPDATED_LOGIN = "BBBBBBBBBB";
+    
     private static final String DEFAULT_JHI_USER_ID = "AAAAAAAAAA";
     private static final String UPDATED_JHI_USER_ID = "BBBBBBBBBB";
 
@@ -68,21 +82,36 @@ public class UserSettingsResourceIT {
 
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
+    
     @Autowired
     private ExceptionTranslator exceptionTranslator;
 
     @Autowired
     private Validator validator;
+    
+    @Mock
+    private Oauth2ServiceClient oauth2ServiceClient;
 
     private MockMvc restUserSettingsMockMvc;
 
     private UserSettings userSettings;
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws JSONException {
         MockitoAnnotations.initMocks(this);
+        ResponseEntity<Void> createdResponse = new ResponseEntity<Void>(HttpStatus.CREATED);
+        
+        JSONObject obj = new JSONObject();
+        obj.put("login", DEFAULT_LOGIN);
+        obj.put("createdDate", Instant.now().toString());
+        obj.put("lastModifiedBy", DEFAULT_LOGIN);
+        obj.put("lastModifiedDate", Instant.now().toString());
+                
+        ResponseEntity<String> getUserResponse = new ResponseEntity<String>(obj.toString(), HttpStatus.OK);
+        when(oauth2ServiceClient.registerUser(Mockito.anyMap())).thenReturn(createdResponse);
+        when(oauth2ServiceClient.getUser(DEFAULT_LOGIN)).thenReturn(getUserResponse);
         final UserSettingsResource userSettingsResource = new UserSettingsResource(userSettingsRepository, memberSettingsRepository);
+        userSettingsResource.setOauth2ServiceClient(oauth2ServiceClient);
         this.restUserSettingsMockMvc = MockMvcBuilders.standaloneSetup(userSettingsResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
