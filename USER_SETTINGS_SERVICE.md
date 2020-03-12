@@ -1,34 +1,30 @@
 # User settings service
 
+The `user-settings-service` is the user management microservice. It suports creating, reading and updating users, as well as managing their roles and permissions.
+
 ## Prerequisites
 
 Configure the orcid-mermber-services JHipster UAA services, as explained [here](README.md).
 
-## Start the user-settings-service
+## Start user-settings-service
 
-The `user-settings-service` is the user management micro service, it will keep information of user roles and will allow users to perform administrative stuff like resetting their password.
+1. Open a new terminal 
+2. cd orcid-member-services/user-settings-service/
+3. Run `bash mvnw`
+4. Wait for it to start
 
-To start the `user-settings-service`:
+## User API
 
-- Open a new terminal 
-- cd orcid-member-services/user-settings-service/
-- Run `bash mvnw`
-- Wait for it to start
+### Generate access token
 
-## Test it
-
-To test that the `user-settings-service` is working as expected, we will create a user through it and then retrive the user information.
-
-#### Create a user
-
-First we need to generate an access token using the default admin user credentials `admin / admin`:
+Generate an access token using the default admin user credentials `admin / admin`:
 
 ````
 curl -X POST --data "username=admin&password=admin&grant_type=password&scope=openid" http://web_app:changeit@localhost:9999/oauth/token
 ````
 
-This will return an access token that looks like this one: 
-    
+Response:
+
 ```json
 {
   "access_token" : "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1ODQ2MzE0NDgsImlhdCI6MTU4NDAyNjY0OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyNTg3NWMzNC02NDM4LTRlNmItOWJmNS00YWIyODQ2MzgyNjkiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.h61Api8W21fjqWKB1YGd-jmrw76Z81qauD9W6SMYsXj8LP9_vXvXh2deX6Lyx_NUPdzNJwnBQZs7HKS5DgcoiCA5Ji_kUXC8TfLnD9SmcCcHbr-usNMg9b5N_7liRfz6h8Yh5fcrnDErCVezZwN3_hLSce9PeT0ccX6aY-8VnlB7pZcHyNPN0np1TRUwRkNxOfbwOLOiMBTXVCUlDXos2F9qNruCkar0QUZ3URmxtm63cG1aHLzekxf2Fuvayfkr0upEoucXfD9A-hzB1YPvIvMe7eGHvFtDFH84ROzz0gZyQanoBafCpVmQv8xgBd2jcIUNnZBoN9JteFMhsNDscA",
@@ -41,7 +37,7 @@ This will return an access token that looks like this one:
 }
 ```
 
-From it, take the `access_token` parameter and use it to create a new user, as follows:
+### Create new user
 
 ```
 curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1ODQ2MzE0NDgsImlhdCI6MTU4NDAyNjY0OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyNTg3NWMzNC02NDM4LTRlNmItOWJmNS00YWIyODQ2MzgyNjkiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.h61Api8W21fjqWKB1YGd-jmrw76Z81qauD9W6SMYsXj8LP9_vXvXh2deX6Lyx_NUPdzNJwnBQZs7HKS5DgcoiCA5Ji_kUXC8TfLnD9SmcCcHbr-usNMg9b5N_7liRfz6h8Yh5fcrnDErCVezZwN3_hLSce9PeT0ccX6aY-8VnlB7pZcHyNPN0np1TRUwRkNxOfbwOLOiMBTXVCUlDXos2F9qNruCkar0QUZ3URmxtm63cG1aHLzekxf2Fuvayfkr0upEoucXfD9A-hzB1YPvIvMe7eGHvFtDFH84ROzz0gZyQanoBafCpVmQv8xgBd2jcIUNnZBoN9JteFMhsNDscA" -X POST --data '{"login":"test@mailinator.com", "firstName":"Firstname", "lastName":"Lastname", "password":"password123","authorities":["ROLE_USER"],"salesforceId":"SF1"}'  http://localhost:8081/settings/api/user
@@ -52,10 +48,10 @@ From it, notice the user parameters:
 
 - login: The user email
 - password: The user password
-- authorities: The authorities the user should have, by default, they should be `ROLE_USER` and `CONSORTIUM_LEAD`.
-- salesforceId: The ID of the member that the user is associated with
+- authorities: The authorities the user should have; all users should have `ROLE_USER`, users who should have access to add/edit affiliations should also have `ASSERTION_SERVICE_ENABLED`
+- salesforceId: The Salesforce ID of the member organization that the user is associated with
 
-If the request is successful, server will return the new user information as follows:
+Response:
 
 ```json
 {
@@ -86,7 +82,17 @@ After that, please go to the (gateway app)[http://localhost:8080/], logout if yo
 - In the `Oauth2Service` collection, in the `jhi_user` table, you will see a new user, which is the one used by the UAA to allow you to login.
 - In the `UserSettingsService` collection, in the `member_services_user` table, there will be a new user as well, and, on it, the `user_id` field must match the id of the new user in the `Oauth2Service`.`jhi_user` table
 
-#### Update the user
+#### Retrieve single user
+
+Now we want to retrive the information of a specific user, so, from the prevous list, get the `login` of the user you want to fetch, and replace the `{login}` in the following CURL command with that value:
+
+```
+curl -i -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1ODQ2MzE0NDgsImlhdCI6MTU4NDAyNjY0OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyNTg3NWMzNC02NDM4LTRlNmItOWJmNS00YWIyODQ2MzgyNjkiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.h61Api8W21fjqWKB1YGd-jmrw76Z81qauD9W6SMYsXj8LP9_vXvXh2deX6Lyx_NUPdzNJwnBQZs7HKS5DgcoiCA5Ji_kUXC8TfLnD9SmcCcHbr-usNMg9b5N_7liRfz6h8Yh5fcrnDErCVezZwN3_hLSce9PeT0ccX6aY-8VnlB7pZcHyNPN0np1TRUwRkNxOfbwOLOiMBTXVCUlDXos2F9qNruCkar0QUZ3URmxtm63cG1aHLzekxf2Fuvayfkr0upEoucXfD9A-hzB1YPvIvMe7eGHvFtDFH84ROzz0gZyQanoBafCpVmQv8xgBd2jcIUNnZBoN9JteFMhsNDscA" -X GET  http://localhost:8081/settings/api/user/{login}
+```
+
+That will return the information of that specific user.
+
+### Update user
 
 Now, we want to update the name of the new user, for that, we will need to reuse the json data of the user, but changing the first name and last name for a new value, as follows:
 
@@ -95,6 +101,18 @@ curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Aut
 ```
 Notice we now include the `"id"` field, which represent the users id in the database. 
 If that works fine, you will get a `200 OK` from the server, along with the updated user info in JSON format
+
+#### Delete privilege (authority) from user
+Currently, it's not possible to delete users. You can, however, delete authorities from users, which restricts them from actions such as logging in or accessing assertions;
+
+Replace `{id}` and `{authority}` n the following CURL command. Available authorities are `ROLE_USER` and `ASSERTION_SERVICE_ENABLED`
+
+```
+curl -i -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1ODQ2MzE0NDgsImlhdCI6MTU4NDAyNjY0OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyNTg3NWMzNC02NDM4LTRlNmItOWJmNS00YWIyODQ2MzgyNjkiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.h61Api8W21fjqWKB1YGd-jmrw76Z81qauD9W6SMYsXj8LP9_vXvXh2deX6Lyx_NUPdzNJwnBQZs7HKS5DgcoiCA5Ji_kUXC8TfLnD9SmcCcHbr-usNMg9b5N_7liRfz6h8Yh5fcrnDErCVezZwN3_hLSce9PeT0ccX6aY-8VnlB7pZcHyNPN0np1TRUwRkNxOfbwOLOiMBTXVCUlDXos2F9qNruCkar0QUZ3URmxtm63cG1aHLzekxf2Fuvayfkr0upEoucXfD9A-hzB1YPvIvMe7eGHvFtDFH84ROzz0gZyQanoBafCpVmQv8xgBd2jcIUNnZBoN9JteFMhsNDscA" -X DELETE  http://localhost:8081/settings/api/user/{id}/{authority}
+```
+
+If successful, the server will respond with a `202 Accepted`, and, you can now get the user info again and confirm their grants have been updated.
+
 
 #### Import users and members using CSV
 
@@ -155,27 +173,4 @@ curl -i -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX
 
 That will return a list of all existing users
 
-#### Retrive a single user
 
-Now we want to retrive the information of a specific user, so, from the prevous list, get the `login` of the user you want to fetch, and replace the `{login}` in the following CURL command with that value:
-
-```
-curl -i -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1ODQ2MzE0NDgsImlhdCI6MTU4NDAyNjY0OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyNTg3NWMzNC02NDM4LTRlNmItOWJmNS00YWIyODQ2MzgyNjkiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.h61Api8W21fjqWKB1YGd-jmrw76Z81qauD9W6SMYsXj8LP9_vXvXh2deX6Lyx_NUPdzNJwnBQZs7HKS5DgcoiCA5Ji_kUXC8TfLnD9SmcCcHbr-usNMg9b5N_7liRfz6h8Yh5fcrnDErCVezZwN3_hLSce9PeT0ccX6aY-8VnlB7pZcHyNPN0np1TRUwRkNxOfbwOLOiMBTXVCUlDXos2F9qNruCkar0QUZ3URmxtm63cG1aHLzekxf2Fuvayfkr0upEoucXfD9A-hzB1YPvIvMe7eGHvFtDFH84ROzz0gZyQanoBafCpVmQv8xgBd2jcIUNnZBoN9JteFMhsNDscA" -X GET  http://localhost:8081/settings/api/user/{login}
-```
-
-That will return the information of that specific user.
-
-#### Remove a privilege (authorization) from an user
-
-Each user will be granted with a set of privileges on creation, in this case, if you used the above CSV, those users would have the following grants: 
-
-- ROLE_USER
-- ASSERTION_SERVICE_ENABLED
-
-We want to have the avility to remove grants, to do that, go and select one of the user id's that have two grants, and replace the `{id}` in the following CURL command with that value:
-
-```
-curl -i -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1ODQ2MzE0NDgsImlhdCI6MTU4NDAyNjY0OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyNTg3NWMzNC02NDM4LTRlNmItOWJmNS00YWIyODQ2MzgyNjkiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.h61Api8W21fjqWKB1YGd-jmrw76Z81qauD9W6SMYsXj8LP9_vXvXh2deX6Lyx_NUPdzNJwnBQZs7HKS5DgcoiCA5Ji_kUXC8TfLnD9SmcCcHbr-usNMg9b5N_7liRfz6h8Yh5fcrnDErCVezZwN3_hLSce9PeT0ccX6aY-8VnlB7pZcHyNPN0np1TRUwRkNxOfbwOLOiMBTXVCUlDXos2F9qNruCkar0QUZ3URmxtm63cG1aHLzekxf2Fuvayfkr0upEoucXfD9A-hzB1YPvIvMe7eGHvFtDFH84ROzz0gZyQanoBafCpVmQv8xgBd2jcIUNnZBoN9JteFMhsNDscA" -X DELETE  http://localhost:8081/settings/api/user/5e6a5e3c6798abba0f754535/ASSERTION_SERVICE_ENABLED
-```
-
-If successful, the server will respond with a `202 Acepted`, and, you can now get the user info again and confirm their grants have been updated.
