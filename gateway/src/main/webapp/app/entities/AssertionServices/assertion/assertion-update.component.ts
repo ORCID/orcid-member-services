@@ -7,12 +7,16 @@ import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { IAssertion, Assertion } from 'app/shared/model/AssertionServices/assertion.model';
 import { AssertionService } from './assertion.service';
+import { AFFILIATION_TYPES, COUNTRIES, ORG_ID_TYPES } from 'app/shared/constants/orcid-api.constants';
 
 @Component({
   selector: 'jhi-assertion-update',
   templateUrl: './assertion-update.component.html'
 })
 export class AssertionUpdateComponent implements OnInit {
+  AFFILIATION_TYPES = AFFILIATION_TYPES;
+  COUNTRIES = COUNTRIES;
+  ORG_ID_TYPES = ORG_ID_TYPES;
   isSaving: boolean;
 
   editForm = this.fb.group({

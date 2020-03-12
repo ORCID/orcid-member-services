@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="jhi-assertion-heading" jhiTranslate="gatewayApp.assertionServicesAssertion.home.createOrEditLabel">Create or edit a Assertion</h2>
+            <h1 id="jhi-assertion-heading" class="mt-5" jhiTranslate="gatewayApp.assertionServicesAssertion.home.createOrEditLabel">Add or edit affiliation</h1>
             <div>
                 <jhi-alert-error></jhi-alert-error>
                 <div class="form-group">
@@ -18,13 +18,63 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.affiliationSection" for="field_affiliationSection">Assertion Section</label>
                     <select class="form-control" name="affiliationSection" formControlName="affiliationSection" id="field_affiliationSection">
-                        <option value="EMPLOYMENT">{{'gatewayApp.AffiliationSection.EMPLOYMENT' | translate}}</option>
-                        <option value="EDUCATION">{{'gatewayApp.AffiliationSection.EDUCATION' | translate}}</option>
-                        <option value="QUALIFICATION">{{'gatewayApp.AffiliationSection.QUALIFICATION' | translate}}</option>
-                        <option value="INVITED_POSITION">{{'gatewayApp.AffiliationSection.INVITED_POSITION' | translate}}</option>
-                        <option value="DISTINCTION">{{'gatewayApp.AffiliationSection.DISTINCTION' | translate}}</option>
-                        <option value="MEMBERSHIP">{{'gatewayApp.AffiliationSection.MEMBERSHIP' | translate}}</option>
-                        <option value="SERVICE">{{'gatewayApp.AffiliationSection.SERVICE' | translate}}</option>
+                        <option *ngFor="let type of AFFILIATION_TYPES" [ngValue]="type" >{{('gatewayApp.AffiliationSection.' + type) | translate}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.orgName" for="field_orgName">Org Name</label>
+                    <input type="text" class="form-control" name="orgName" id="field_orgName"
+                           formControlName="orgName"/>
+                    <div *ngIf="editForm.get('orgName').invalid && (editForm.get('orgName').dirty || editForm.get('orgName').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('orgName').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.orgCity" for="field_orgCity">Org City</label>
+                    <input type="text" class="form-control" name="orgCity" id="field_orgCity"
+                           formControlName="orgCity"/>
+                    <div *ngIf="editForm.get('orgCity').invalid && (editForm.get('orgCity').dirty || editForm.get('orgCity').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('orgCity').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.orgRegion" for="field_orgRegion">Org Region</label>
+                    <input type="text" class="form-control" name="orgRegion" id="field_orgRegion"
+                           formControlName="orgRegion"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.orgCountry" for="field_orgCountry">Org Country</label>
+                    <select class="form-control" name="orgCountry" id="field_orgCountry" formControlName="orgCountry">
+                           <option *ngFor="let country of COUNTRIES" [ngValue]="country[1]" >{{country[0]}}</option>
+                    </select>
+                    <div *ngIf="editForm.get('orgCountry').invalid && (editForm.get('orgCountry').dirty || editForm.get('orgCountry').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('orgCountry').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.disambiguatedOrgId" for="field_disambiguatedOrgId">Disambiguated Org Id</label>
+                    <input type="text" class="form-control" name="disambiguatedOrgId" id="field_disambiguatedOrgId"
+                           formControlName="disambiguatedOrgId"/>
+                    <div *ngIf="editForm.get('disambiguatedOrgId').invalid && (editForm.get('disambiguatedOrgId').dirty || editForm.get('disambiguatedOrgId').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('disambiguatedOrgId').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.disambiguationSource" for="field_disambiguationSource">Disambiguation Source</label>
+                    <select class="form-control" name="disambiguationSource" id="field_disambiguationSource" formControlName="disambiguationSource">
+                        <option *ngFor="let type of ORG_ID_TYPES" [ngValue]="type" >{{type}}</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -80,60 +130,6 @@
                            formControlName="endDay"/>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.orgName" for="field_orgName">Org Name</label>
-                    <input type="text" class="form-control" name="orgName" id="field_orgName"
-                           formControlName="orgName"/>
-                    <div *ngIf="editForm.get('orgName').invalid && (editForm.get('orgName').dirty || editForm.get('orgName').touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('orgName').errors.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.orgCountry" for="field_orgCountry">Org Country</label>
-                    <input type="text" class="form-control" name="orgCountry" id="field_orgCountry"
-                           formControlName="orgCountry"/>
-                    <div *ngIf="editForm.get('orgCountry').invalid && (editForm.get('orgCountry').dirty || editForm.get('orgCountry').touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('orgCountry').errors.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.orgCity" for="field_orgCity">Org City</label>
-                    <input type="text" class="form-control" name="orgCity" id="field_orgCity"
-                           formControlName="orgCity"/>
-                    <div *ngIf="editForm.get('orgCity').invalid && (editForm.get('orgCity').dirty || editForm.get('orgCity').touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('orgCity').errors.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.orgRegion" for="field_orgRegion">Org Region</label>
-                    <input type="text" class="form-control" name="orgRegion" id="field_orgRegion"
-                           formControlName="orgRegion"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.disambiguatedOrgId" for="field_disambiguatedOrgId">Disambiguated Org Id</label>
-                    <input type="text" class="form-control" name="disambiguatedOrgId" id="field_disambiguatedOrgId"
-                           formControlName="disambiguatedOrgId"/>
-                    <div *ngIf="editForm.get('disambiguatedOrgId').invalid && (editForm.get('disambiguatedOrgId').dirty || editForm.get('disambiguatedOrgId').touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('disambiguatedOrgId').errors.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.disambiguationSource" for="field_disambiguationSource">Disambiguation Source</label>
-                    <input type="text" class="form-control" name="disambiguationSource" id="field_disambiguationSource"
-                           formControlName="disambiguationSource"/>
-                </div>
-                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.externalId" for="field_externalId">External Id</label>
                     <input type="text" class="form-control" name="externalId" id="field_externalId"
                            formControlName="externalId"/>
@@ -149,7 +145,7 @@
                            formControlName="externalIdUrl"/>
                 </div>
             </div>
-            <div>
+            <div class="form-group">
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
