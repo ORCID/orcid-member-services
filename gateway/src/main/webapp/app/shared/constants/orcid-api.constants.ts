@@ -260,3 +260,7 @@ export const COUNTRIES = [
 ];
 
 export const ORG_ID_TYPES = ['RINGGOLD', 'GRID', 'FUNDREF', 'LEI'];
+
+export const DEFAULT_EARLIEST_YEAR = 1913;
+
+export const DEFAULT_LATEST_YEAR_INCREMENT = 10;
