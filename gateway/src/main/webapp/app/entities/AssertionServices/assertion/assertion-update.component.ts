@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import * as moment from 'moment';
+import {NgbDateStruct, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { IAssertion, Assertion } from 'app/shared/model/AssertionServices/assertion.model';
 import { AssertionService } from './assertion.service';
-import { AFFILIATION_TYPES, COUNTRIES, ORG_ID_TYPES } from 'app/shared/constants/orcid-api.constants';
+import { DateUtilService } from 'app/shared/util/date-util.service';
+import { AFFILIATION_TYPES, COUNTRIES, ORG_ID_TYPES, DEFAULT_EARLIEST_YEAR, DEFAULT_LATEST_YEAR_INCREMENT } from 'app/shared/constants/orcid-api.constants';
 
 @Component({
   selector: 'jhi-assertion-update',
@@ -17,7 +19,12 @@ export class AssertionUpdateComponent implements OnInit {
   AFFILIATION_TYPES = AFFILIATION_TYPES;
   COUNTRIES = COUNTRIES;
   ORG_ID_TYPES = ORG_ID_TYPES;
+  startYearsList: any;
+  endYearsList: any;
+  monthsList: any;
+  daysList: any;
   isSaving: boolean;
+  ngbDate: any;
 
   editForm = this.fb.group({
     id: [],
@@ -25,12 +32,12 @@ export class AssertionUpdateComponent implements OnInit {
     affiliationSection: [null, [Validators.required]],
     departmentName: [null, [Validators.maxLength(4000)]],
     roleTitle: [null, [Validators.maxLength(4000)]],
-    startYear: [],
-    startMonth: [],
-    startDay: [],
-    endYear: [],
-    endMonth: [],
-    endDay: [],
+    startYear: [null],
+    startMonth: [null],
+    startDay: [null],
+    endYear: [null],
+    endMonth: [null],
+    endDay: [null],
     orgName: [null, [Validators.required]],
     orgCountry: [null, [Validators.required]],
     orgCity: [null, [Validators.required]],
@@ -48,12 +55,28 @@ export class AssertionUpdateComponent implements OnInit {
     adminId: [null, [Validators.required]]
   });
 
-  constructor(protected assertionService: AssertionService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(protected assertionService: AssertionService, protected dateUtilService: DateUtilService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
 
   ngOnInit() {
+    this.startYearsList = this.dateUtilService.getYearsList(0);
+    this.endYearsList = this.dateUtilService.getYearsList(DEFAULT_LATEST_YEAR_INCREMENT);
+    this.monthsList = this.dateUtilService.getMonthsList();
+    this.daysList = this.dateUtilService.getDaysList();
     this.isSaving = false;
+
     this.activatedRoute.data.subscribe(({ assertion }) => {
       this.updateForm(assertion);
+    });
+
+    this.onChanges();
+  }
+
+  onChanges(): void {
+    this.editForm.get('startMonth').valueChanges.subscribe(val => {
+      this.daysList = this.dateUtilService.getDaysList(this.editForm.get('startYear').value, this.editForm.get('startMonth').value);
+    });
+    this.editForm.get('endMonth').valueChanges.subscribe(val => {
+      this.daysList = this.dateUtilService.getDaysList(this.editForm.get('endYear').value, this.editForm.get('endMonth').value);
     });
   }
 
