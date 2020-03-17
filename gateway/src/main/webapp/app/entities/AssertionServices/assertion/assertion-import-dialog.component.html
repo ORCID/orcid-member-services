@@ -17,12 +17,12 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
-        <button id="jhi-confirm-delete-userSettings" type="submit" class="btn btn-danger">
+        <button id="jhi-confirm-delete-userSettings" type="submit" class="btn btn-primary">
             <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.upload">Upload</span>
         </button>
     </div>
 </form>
-<div class="modal-body" *ngIf="csvErrors && csvErrors.length > 0">    
+<div class="modal-body" *ngIf="csvErrors && csvErrors.length > 0">
     <p jhiTranslate="gatewayApp.assertionServicesAssertion.import.errors.lagel">Please fix the following errors</p>
     <table>
     	<thead>
@@ -34,6 +34,6 @@
         		<td>{{error['index']}}</td>
         		<td>{{error['message']}}</td>
        		</tr>
-    	</tbody>        
+    	</tbody>
     </table>
 </div>
