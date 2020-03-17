@@ -404,24 +404,30 @@ public class UserSettingsResource {
         if (StringUtils.isBlank(userDTO.getId()) || StringUtils.isBlank(userDTO.getLogin())) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-
+        System.out.println("----------------------------------------------------------------------------------0");
         // Verify the user exists on the UAA table
         JSONObject existingUaaUser = uaaUserUtils.getUAAUserByLogin(userDTO.getLogin());
 
+        
         String uaaUserLogin = existingUaaUser.getString("login");
         // userLogin must match
         if (!userDTO.getLogin().equals(uaaUserLogin)) {
             throw new RuntimeException("User login doesn't match: " + userDTO.getLogin() + " - " + uaaUserLogin);
         }
 
+        System.out.println("----------------------------------------------------------------------------------1");
+        
         // Update jhi_user entry
         JSONObject obj = updateUserOnUAA(userDTO, existingUaaUser);
+        System.out.println("----------------------------------------------------------------------------------2");
         String lastModifiedBy = obj.getString("lastModifiedBy");
         Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
 
+        System.out.println("----------------------------------------------------------------------------------3");
         // Update UserSettings
         updateUserSettings(userDTO, lastModifiedDate);
 
+        System.out.println("----------------------------------------------------------------------------------4");
         userDTO.setLastModifiedBy(lastModifiedBy);
         userDTO.setLastModifiedDate(lastModifiedDate);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userDTO.getId().toString())).body(userDTO);
@@ -578,7 +584,6 @@ public class UserSettingsResource {
 
         // UserSettings data
         UserDTO dto = populateDTO(ous.get());
-
         return ResponseEntity.ok().body(dto);
     }
 
