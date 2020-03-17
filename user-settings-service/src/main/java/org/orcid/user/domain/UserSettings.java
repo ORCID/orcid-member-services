@@ -3,6 +3,7 @@ package org.orcid.user.domain;
 import java.io.Serializable;
 import java.time.Instant;
 
+import org.orcid.user.service.dto.UserDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -191,5 +192,19 @@ public class UserSettings implements Serializable {
     public String toString() {
         return "UserSettings [id=" + id + ", jhiUserId=" + jhiUserId + ", salesforceId=" + salesforceId + ", mainContact=" + mainContact + ", createdBy=" + createdBy
                 + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + ", deleted=" + deleted + "]";
+    }
+    
+    public static UserSettings valueOf(UserDTO userDTO) {
+        UserSettings us = new UserSettings();
+        us.setCreatedBy(userDTO.getCreatedBy());
+        us.setCreatedDate(userDTO.getCreatedDate());
+        us.setDeleted(userDTO.getDeleted());
+        us.setId(userDTO.getId());
+        us.setJhiUserId(userDTO.getJhiUserId());
+        us.setLastModifiedBy(userDTO.getLastModifiedBy());
+        us.setLastModifiedDate(userDTO.getLastModifiedDate());
+        us.setMainContact(userDTO.getMainContact());
+        us.setSalesforceId(userDTO.getSalesforceId());        
+        return us;
     }
 }
