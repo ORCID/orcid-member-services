@@ -97,6 +97,10 @@ public class UserSettingsResource {
         this.oauth2ServiceClient = oauth2ServiceClient;
     }
 
+    public void setUaaUserUtils(UaaUserUtils uaaUserUtils) {
+        this.uaaUserUtils = uaaUserUtils;
+    }
+    
     /**
      * {@code POST  /user/upload} : Create a list of users.
      *
@@ -397,10 +401,9 @@ public class UserSettingsResource {
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException, JSONException {
         log.debug("REST request to update UserDTO : {}", userDTO);
-        if (StringUtils.isBlank(userDTO.getId()) || StringUtils.isBlank(userDTO.getLogin())) {
+        if (StringUtils.isBlank(userDTO.getId()) || StringUtils.isBlank(userDTO.getId())) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-
         // Verify the user exists on the UAA table
         JSONObject existingUaaUser = uaaUserUtils.getUAAUserByLogin(userDTO.getLogin());
 
@@ -417,7 +420,7 @@ public class UserSettingsResource {
 
         // Update UserSettings
         updateUserSettings(userDTO, lastModifiedDate);
-
+       
         userDTO.setLastModifiedBy(lastModifiedBy);
         userDTO.setLastModifiedDate(lastModifiedDate);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userDTO.getId().toString())).body(userDTO);
@@ -486,7 +489,7 @@ public class UserSettingsResource {
         // Verify the user exists on the UserSettings table
         Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByJhiUserId(userDTO.getJhiUserId());
         if (!existingUserSettingsOptional.isPresent()) {
-            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for " + userDTO.getLogin(), ENTITY_NAME, "id null");
+            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for JHI User Id" + userDTO.getJhiUserId(), ENTITY_NAME, "id null");
         }
         Boolean userSettingsModified = false;
         UserSettings existingUserSettings = existingUserSettingsOptional.get();
@@ -574,7 +577,6 @@ public class UserSettingsResource {
 
         // UserSettings data
         UserDTO dto = populateDTO(ous.get());
-
         return ResponseEntity.ok().body(dto);
     }
 
