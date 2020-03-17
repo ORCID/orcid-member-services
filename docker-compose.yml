@@ -55,6 +55,10 @@ services:
       - SPRING_DATA_MONGODB_DATABASE=Oauth2Service
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_MAIL_HOST=${MAIL_HOST}
+      - SPRING_MAIL_PORT=${MAIL_PORT}
+      - SPRING_MAIL_USERNAME=${MAIL_USER}
+      - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
   oauth2service-mongodb:
     image: 'mongo:4.0.10'
 
