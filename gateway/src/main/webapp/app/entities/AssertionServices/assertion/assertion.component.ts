@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
+import { faChartBar, faFileDownload, faFileImport } from '@fortawesome/free-solid-svg-icons';
 
 import { IAssertion } from 'app/shared/model/AssertionServices/assertion.model';
 import { AccountService } from 'app/core';
@@ -29,6 +30,9 @@ export class AssertionComponent implements OnInit, OnDestroy {
   predicate: any;
   previousPage: any;
   reverse: any;
+  faChartBar = faChartBar;
+  faFileDownload = faFileDownload;
+  faFileImport = faFileImport;
 
   constructor(
     protected assertionService: AssertionService,
@@ -119,14 +123,14 @@ export class AssertionComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  getLinks() {    
+  getLinks() {
     this.assertionService.getLinks();
   }
-  
-  generateReport() {    
+
+  generateReport() {
     this.assertionService.generateReport();
   }
-  
+
   protected paginateAssertions(data: IAssertion[], headers: HttpHeaders) {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
