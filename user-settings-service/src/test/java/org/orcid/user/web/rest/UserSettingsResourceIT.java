@@ -31,6 +31,7 @@ import org.mockito.MockitoAnnotations;
 import org.orcid.user.UserSettingsServiceApp;
 import org.orcid.user.client.Oauth2ServiceClient;
 import org.orcid.user.config.SecurityBeanOverrideConfiguration;
+import org.orcid.user.domain.MemberSettings;
 import org.orcid.user.domain.UserSettings;
 import org.orcid.user.repository.MemberSettingsRepository;
 import org.orcid.user.repository.UserSettingsRepository;
@@ -123,7 +124,7 @@ public class UserSettingsResourceIT {
 
         when(mockUaaUserUtils.getAuthenticatedUaaUserId()).thenReturn(DEFAULT_JHI_USER_ID);
         when(mockUaaUserUtils.getUAAUserById(DEFAULT_JHI_USER_ID)).thenReturn(obj);
-
+        
         final UserSettingsResource userSettingsResource = new UserSettingsResource(userSettingsRepository, memberSettingsRepository);
         userSettingsResource.setOauth2ServiceClient(oauth2ServiceClient);
         userSettingsResource.setUaaUserUtils(mockUaaUserUtils);
@@ -141,6 +142,8 @@ public class UserSettingsResourceIT {
         obj.put("firstName", "firstName");
         obj.put("lastName", "lastName");
         obj.put("authorities", Lists.emptyList());
+        obj.put("activated", "true");
+        obj.put("langKey", "en");
         return obj;
     }
 
@@ -166,6 +169,7 @@ public class UserSettingsResourceIT {
     @BeforeEach
     public void initTest() {
         userSettingsRepository.deleteAll();
+        memberSettingsRepository.deleteAll();
         userSettings = createEntity();
     }
 
@@ -294,25 +298,37 @@ public class UserSettingsResourceIT {
     @Test
     @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
     public void updateUserSettings() throws Exception {                
-        when(oauth2ServiceClient.updateUser(Mockito.anyMap())).thenReturn(new ResponseEntity<String>(getJSONUser().toString(), HttpStatus.OK));
+        JSONObject obj = getJSONUser();
+        when(oauth2ServiceClient.updateUser(Mockito.anyMap())).thenReturn(new ResponseEntity<String>(obj.toString(), HttpStatus.OK));
+                
         // Initialize the database
         UserSettings us = userSettingsRepository.save(UserSettings.valueOf(userSettings));
 
+        obj.put("id", us.getId());
+        when(mockUaaUserUtils.getUAAUserByLogin(DEFAULT_JHI_USER_ID)).thenReturn(obj);
+        
         int databaseSizeBeforeUpdate = userSettingsRepository.findAll().size();
 
+        MemberSettings ms = new MemberSettings();
+        ms.setAssertionServiceEnabled(true);
+        ms.setSalesforceId(UPDATED_SALESFORCE_ID);
+        ms.setIsConsortiumLead(true);
+        memberSettingsRepository.insert(ms);
+        
         // Update the userSettings
         UserSettings updatedUserSettings = userSettingsRepository.findById(us.getId()).get();
         updatedUserSettings.setSalesforceId(UPDATED_SALESFORCE_ID);
         updatedUserSettings.setCreatedBy(UPDATED_CREATED_BY);
         updatedUserSettings.setCreatedDate(UPDATED_CREATED_DATE);
-        updatedUserSettings.setLastModifiedBy(UPDATED_LAST_MODIFIED_BY);
         updatedUserSettings.setLastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
-        updatedUserSettings.setJhiUserId(UPDATED_JHI_USER_ID);
         updatedUserSettings.setMainContact(UPDATED_MAIN_CONTACT);
 
+        UserDTO dto = UserDTO.valueOf(updatedUserSettings);
+        dto.setLogin(DEFAULT_LOGIN);
+        
         restUserSettingsMockMvc.perform(put("/settings/api/user")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedUserSettings)))
+            .content(TestUtil.convertObjectToJsonBytes(dto)))
             .andExpect(status().isOk());
 
         // Validate the UserSettings in the database
@@ -320,12 +336,11 @@ public class UserSettingsResourceIT {
         assertThat(userSettingsList).hasSize(databaseSizeBeforeUpdate);
         UserSettings testUserSettings = userSettingsList.get(userSettingsList.size() - 1);
         assertThat(testUserSettings.getJhiUserId()).isEqualTo(DEFAULT_JHI_USER_ID);
-        assertThat(testUserSettings.getMainContact()).isEqualTo(DEFAULT_MAIN_CONTACT);
-        assertThat(testUserSettings.getSalesforceId()).isEqualTo(DEFAULT_SALESFORCE_ID);
-        assertThat(testUserSettings.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
-        assertThat(testUserSettings.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
-        assertThat(testUserSettings.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
-        assertThat(testUserSettings.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
+        assertThat(testUserSettings.getMainContact()).isEqualTo(UPDATED_MAIN_CONTACT);
+        assertThat(testUserSettings.getSalesforceId()).isEqualTo(UPDATED_SALESFORCE_ID);
+        assertThat(testUserSettings.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
+        assertNotNull(testUserSettings.getCreatedDate());
+        assertNotNull(testUserSettings.getLastModifiedDate());
     }
 
     @Test
