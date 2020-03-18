@@ -489,7 +489,7 @@ public class UserSettingsResource {
         // Verify the user exists on the UserSettings table
         Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByJhiUserId(userDTO.getJhiUserId());
         if (!existingUserSettingsOptional.isPresent()) {
-            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for JHI User Id" + userDTO.getJhiUserId(), ENTITY_NAME, "id null");
+            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for JHI User Id " + userDTO.getJhiUserId(), ENTITY_NAME, "id null");
         }
         Boolean userSettingsModified = false;
         UserSettings existingUserSettings = existingUserSettingsOptional.get();
