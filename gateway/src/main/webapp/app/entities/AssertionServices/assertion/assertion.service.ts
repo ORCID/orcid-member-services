@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
-import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -16,7 +15,7 @@ type EntityArrayResponseType = HttpResponse<IAssertion[]>;
 export class AssertionService {
   public resourceUrl = SERVER_API_URL + 'services/assertionservices/api/assertion';
 
-  constructor(protected http: HttpClient) {}
+  constructor(protected http: HttpClient, protected errorHandler: ErrorHandlerService) {}
 
   create(assertion: IAssertion): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(assertion);
@@ -31,7 +30,7 @@ export class AssertionService {
         .post<IAssertion>(this.resourceUrl, copy, { observe: 'response' })
         .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
-  
+
   update(assertion: IAssertion): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(assertion);
     return this.http
@@ -63,23 +62,23 @@ export class AssertionService {
   getLinks() {
       this.http.get(`${this.resourceUrl}/links`, {observe: 'response', responseType: 'blob'} )
     .subscribe(response => {
-          let filename = (response.headers.get('filename') != null ? response.headers.get('filename') : 'links.csv');
-          let blob = new Blob([response.body], { type: 'text/csv' });
-          let link = document.createElement('a');
+          const filename = (response.headers.get('filename') != null ? response.headers.get('filename') : 'links.csv');
+          const blob = new Blob([response.body], { type: 'text/csv' });
+          const link = document.createElement('a');
           link.href = window.URL.createObjectURL(blob);
           link.download = filename;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
-    }); 
+    });
   }
-  
+
   generateReport() {
       this.http.get(`${this.resourceUrl}/report`, {observe: 'response', responseType: 'blob'} )
       .subscribe(response => {
-            let filename = (response.headers.get('filename') != null ? response.headers.get('filename') : 'report.csv');
-            let blob = new Blob([response.body], { type: 'text/csv' });
-            let link = document.createElement('a');
+            const filename = (response.headers.get('filename') != null ? response.headers.get('filename') : 'report.csv');
+            const blob = new Blob([response.body], { type: 'text/csv' });
+            const link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
             link.download = filename;
             document.body.appendChild(link);
@@ -87,7 +86,6 @@ export class AssertionService {
             document.body.removeChild(link);
       });
   }
-  
 
   protected convertDateFromClient(assertion: IAssertion): IAssertion {
     const copy: IAssertion = Object.assign({}, assertion, {
