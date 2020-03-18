@@ -46,6 +46,7 @@ We will access the `assertion-services` functionality through the JHipster gatew
 curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer <TOKEN>" -X POST --data '{"login":"test_user_1","email":"test_user_1@test.com", "firstName":"Angel", "lastName":"Montenegro", "password":"password123","authorities":["ROLE_USER","ASSERTION_SERVICE_ENABLED"],"salesforceId":"SF1", "parentSalesforceId":"PSF1"}'  http://localhost:8081/settings/api/user
 
 ```
+******* End not working stuff *************************************************************************************
 
 #### Create an assertions file
 
