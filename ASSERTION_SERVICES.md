@@ -36,7 +36,8 @@ To test that the `assertion-services` is working as expected, we will go through
 
 OR just add ASSERTION_SERVICE_ENABLED authority to the user in in Oauth2Service.jhi_user
 
-******* Not working *******
+******* Not working ****************************************************************************************************************
+
 We will access the `assertion-services` functionality through the JHipster gateway, and, to be able to use it, we will need a user with the `ASSERTION_SERVICE_ENABLED` authority enabled, so, lets create a new user:
 
 - Generate an access token as explained in [Create a user](#Create-a-user) section
@@ -45,6 +46,7 @@ We will access the `assertion-services` functionality through the JHipster gatew
 curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer <TOKEN>" -X POST --data '{"login":"test_user_1","email":"test_user_1@test.com", "firstName":"Angel", "lastName":"Montenegro", "password":"password123","authorities":["ROLE_USER","ASSERTION_SERVICE_ENABLED"],"salesforceId":"SF1", "parentSalesforceId":"PSF1"}'  http://localhost:8081/settings/api/user
 
 ```
+*************************************************************************************************************************************
 
 #### Create an assertions file
 
