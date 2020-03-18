@@ -20,7 +20,23 @@ To start the `assertion-services`:
 To test that the `assertion-services` is working as expected, we will go through the process of uploading an affiliation and wait until it get pushed to an ORCID record.
 
 #### Create a new user
+**2020/03/18 Creating a single user with ASSERTION_SERVICE_ENABLED doesn't currently work. To create a user with ASSERTION_SERVICE_ENABLED:**
+1. [Create user with ASSERTION_SERVICE_ENABLED via CSV](https://github.com/ORCID/orcid-member-services/blob/master/USER_SETTINGS_SERVICE.md#create-multiple-users-from-csv)
+2. The user will not have a password. To set on, send a reset request from the UI http://localhost:8080/reset/request
+3. Reset email will not be sent, but will be displayed in oauth2-service console, ex:
 
+		    <p>We&#39;re sorry that you are having problems signing in to your ORCID member tools account.</p>
+		    <p>Please click the link below to reset your password. You can also copy and paste the link directly into your browser:</p>
+		    <p>
+			    <a style="color: #2E7F9F;"
+				    href="http://127.0.0.1:8080/reset/finish?key=71878773678680222638">http://127.0.0.1:8080/reset/finish?key=71878773678680222638</a>
+		    </p>
+
+4. Use the reset link to reset the password.
+
+OR just add ASSERTION_SERVICE_ENABLED authority to the user in in Oauth2Service.jhi_user
+
+******* Not working *******
 We will access the `assertion-services` functionality through the JHipster gateway, and, to be able to use it, we will need a user with the `ASSERTION_SERVICE_ENABLED` authority enabled, so, lets create a new user:
 
 - Generate an access token as explained in [Create a user](#Create-a-user) section
