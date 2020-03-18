@@ -104,6 +104,7 @@
       "addimage": "Add image",
       "back": "Back",
       "cancel": "Cancel",
+      "close": "Close",
       "delete": "Delete",
       "delete-from-orcid": "Delete from orcid",
       "edit": "Edit",
@@ -117,7 +118,9 @@
       "value": "Value"
     },
     "delete": {
-      "title": "Confirm deletion"
+      "title": "Confirm deletion",
+      "error": "Oops, something went wrong!"
+
     },
     "validation": {
       "required": "This field is required.",

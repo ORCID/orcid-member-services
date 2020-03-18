@@ -83,14 +83,6 @@
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
-                        <button type="submit"
-                                [routerLink]="['/', 'assertions', { outlets: { popup: assertion.id + '/delete/orcid'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm ml-1">
-                            <fa-icon [icon]="'times'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete-from-orcid">Delete from ORCID</span>
-                        </button>
                     </div>
                 </td>
             </tr>
