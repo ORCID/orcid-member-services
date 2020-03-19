@@ -23,6 +23,7 @@ services:
       - 'APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET=${TOKEN_EXCHANGE_CLIENT_SECRET}'
       - 'APPLICATION_CRON_POST_AFFILIATIONS=${CRON_POST_AFFILIATIONS}'
       - 'APPLICATION_CRON_PUT_AFFILIATIONS=${CRON_PUT_AFFILIATIONS}'
+      - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
   assertionservices-mongodb:
     image: 'mongo:4.0.13'
 
@@ -38,6 +39,7 @@ services:
       - SPRING_DATA_MONGODB_DATABASE=gateway
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
+      - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
     ports:
       - '8080:8080'
   gateway-mongodb:
@@ -59,6 +61,7 @@ services:
       - SPRING_MAIL_PORT=${MAIL_PORT}
       - SPRING_MAIL_USERNAME=${MAIL_USER}
       - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
+      - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
   oauth2service-mongodb:
     image: 'mongo:4.0.10'
 
@@ -74,6 +77,7 @@ services:
       - SPRING_DATA_MONGODB_DATABASE=UserSettingsService
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
+      - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
   usersettingsservice-mongodb:
     image: 'mongo:4.0.10'
 

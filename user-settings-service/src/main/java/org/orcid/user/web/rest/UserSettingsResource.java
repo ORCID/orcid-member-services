@@ -62,7 +62,6 @@ import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
-import net.logstash.logback.encoder.org.apache.commons.lang3.BooleanUtils;
 
 /**
  * REST controller for managing
@@ -153,8 +152,8 @@ public class UserSettingsResource {
                 if (existingUaaUser != null) {
                     JSONObject uaaUser = updateUserOnUAA(userDTO, existingUaaUser);
                     String jhiUserId = uaaUser.getString("id");
-
-                    if (userSettingsExists(uaaUser.getString("id"))) {
+                    
+                    if (userSettingsExists(jhiUserId)) {
                         updateUserSettings(jhiUserId, userDTO, now);
                     } else {
                         createUserSettings(jhiUserId, salesforceId, false, now);
@@ -464,7 +463,7 @@ public class UserSettingsResource {
         // Verify the user exists on the UserSettings table
         Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByJhiUserId(jhiUserId);
         if (!existingUserSettingsOptional.isPresent()) {
-            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for JHI User Id" + jhiUserId, ENTITY_NAME, "id null");
+            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for JHI User Id " + jhiUserId, ENTITY_NAME, "id null");
         }
         Boolean userSettingsModified = false;
         UserSettings existingUserSettings = existingUserSettingsOptional.get();
