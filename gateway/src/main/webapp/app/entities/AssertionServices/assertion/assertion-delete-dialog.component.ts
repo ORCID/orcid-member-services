@@ -13,25 +13,50 @@ import { AssertionService } from './assertion.service';
 })
 export class AssertionDeleteDialogComponent {
   assertion: IAssertion;
+  errorDeletingFromOrcid: boolean;
 
   constructor(
     protected assertionService: AssertionService,
     public activeModal: NgbActiveModal,
     protected eventManager: JhiEventManager
-  ) {}
+  ) {
+    this.errorDeletingFromOrcid = false;
+  }
 
   clear() {
     this.activeModal.dismiss('cancel');
   }
 
-  confirmDelete(id: string) {
-    this.assertionService.delete(id).subscribe(response => {
-      this.eventManager.broadcast({
-        name: 'assertionListModification',
-        content: 'Deleted an assertion'
+  confirmDelete(id: string, putCode?: string) {
+    this.errorDeletingFromOrcid = false;
+    if (putCode) {
+      this.assertionService.deleteFromOrcid(id).subscribe(res => {
+        // TODO: add response code to res.body
+        // if 404, delete from assertion service
+        // if 403, change assertion status to token revoked
+        if (res.body.deleted === 'true') {
+          this.assertionService.delete(id).subscribe(response => {
+            this.activeModal.dismiss(true);
+            this.eventManager.broadcast({
+              name: 'assertionListModification',
+              content: 'Deleted an assertion'
+            });
+            this.activeModal.dismiss(true);
+          });
+        } else {
+          this.errorDeletingFromOrcid = true;
+        }
       });
-      this.activeModal.dismiss(true);
-    });
+    } else {
+      this.assertionService.delete(id).subscribe(response => {
+        this.activeModal.dismiss(true);
+         this.eventManager.broadcast({
+           name: 'assertionListModification',
+           content: 'Deleted an assertion'
+         });
+         this.activeModal.dismiss(true);
+       });
+    }
   }
 }
 
@@ -51,11 +76,11 @@ export class AssertionDeletePopupComponent implements OnInit, OnDestroy {
         this.ngbModalRef.componentInstance.assertion = assertion;
         this.ngbModalRef.result.then(
           result => {
-            this.router.navigate(['/assertion', { outlets: { popup: null } }]);
+            this.router.navigate(['/assertions', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           },
           reason => {
-            this.router.navigate(['/assertion', { outlets: { popup: null } }]);
+            this.router.navigate(['/assertions', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           }
         );
