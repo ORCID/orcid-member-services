@@ -12,7 +12,6 @@ import { AssertionDetailComponent } from './assertion-detail.component';
 import { AssertionUpdateComponent } from './assertion-update.component';
 import { AssertionDeletePopupComponent } from './assertion-delete-dialog.component';
 import { AssertionImportPopupComponent } from './assertion-import-dialog.component';
-import { AssertionDeleteFromOrcidPopupComponent } from './assertion-delete-from-orcid-dialog.component';
 import { IAssertion } from 'app/shared/model/AssertionServices/assertion.model';
 
 @Injectable({ providedIn: 'root' })
@@ -96,19 +95,6 @@ export const assertionPopupRoute: Routes = [
     },
     canActivate: [UserRouteAccessService],
     outlet: 'popup'
-  },
-  {
-      path: ':id/delete/orcid',
-      component: AssertionDeleteFromOrcidPopupComponent,
-      resolve: {
-        assertion: AssertionResolve
-      },
-      data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'gatewayApp.assertionServicesAssertion.home.title'
-      },
-      canActivate: [UserRouteAccessService],
-      outlet: 'popup'
   },
   {
       path: 'import',

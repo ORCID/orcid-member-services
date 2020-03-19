@@ -22,7 +22,7 @@ export class AssertionImportDialogComponent {
   public resourceUrl;
   assertion: IAssertion;
   isSaving: boolean;
-  currentFile: FileList;	
+  currentFile: FileList;
   csvErrors: any;
 
   constructor(
@@ -31,9 +31,9 @@ export class AssertionImportDialogComponent {
     protected eventManager: JhiEventManager,
     private uploadService: FileUploadService
   ) {
-	  this.isSaving = false;
-	  this.resourceUrl = this.assertionService.resourceUrl + '/upload';
-  }
+      this.isSaving = false;
+      this.resourceUrl = this.assertionService.resourceUrl + '/upload';
+    }
 
   clear() {
     this.activeModal.dismiss('cancel');
@@ -42,22 +42,22 @@ export class AssertionImportDialogComponent {
   selectFile(event) {
       this.currentFile = event.target.files;
   }
-  
-  upload() {    
-  	var f = this.currentFile.item(0);
-      this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
-      	  if (event instanceof HttpResponse) {                               
-         		var body = event.body;
-         		this.csvErrors = JSON.parse(body.toString()); 
-         		if(this.csvErrors.length == 0) {
-         		  this.eventManager.broadcast({
-                    name: 'userSettingsListModification',
-                    content: 'New user settings uploaded'
-                  });
-         	      this.activeModal.dismiss(true);
-         		} 
-          }
-      });        
+
+  upload() {
+    const f = this.currentFile.item(0);
+    this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
+      if (event instanceof HttpResponse) {
+        const body = event.body;
+        this.csvErrors = JSON.parse(body.toString());
+        if (this.csvErrors.length === 0) {
+          this.eventManager.broadcast({
+            name: 'assertionListModification',
+            content: 'New assertions uploaded'
+          });
+          this.activeModal.dismiss(true);
+        }
+      }
+    });
   }
 }
 
