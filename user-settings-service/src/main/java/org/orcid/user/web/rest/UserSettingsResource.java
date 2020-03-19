@@ -150,6 +150,7 @@ public class UserSettingsResource {
                     // Updates the UAA user
                     JSONObject uaaUser = updateUserOnUAA(userDTO, existingUaaUser);
                     String jhiUserId = uaaUser.getString("id");
+                    
                     // Update or create MemberSettings
                     if (memberSettingsExists(salesforceId)) {
                         updateMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, now);
@@ -157,8 +158,8 @@ public class UserSettingsResource {
                         createMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, now);
                     }
                     // Update or create UserSettings
-                    if (userSettingsExists(uaaUser.getString("id"))) {
-                        updateUserSettings(userDTO, now);
+                    if (userSettingsExists(jhiUserId)) {
+                        updateUserSettings(jhiUserId, userDTO, now);
                     } else {
                         createUserSettings(jhiUserId, salesforceId, false, now);
                     }
@@ -417,9 +418,10 @@ public class UserSettingsResource {
         JSONObject obj = updateUserOnUAA(userDTO, existingUaaUser);
         String lastModifiedBy = obj.getString("lastModifiedBy");
         Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
+        String jhiUserId = obj.getString("id");
 
         // Update UserSettings
-        updateUserSettings(userDTO, lastModifiedDate);
+        updateUserSettings(jhiUserId, userDTO, lastModifiedDate);
        
         userDTO.setLastModifiedBy(lastModifiedBy);
         userDTO.setLastModifiedDate(lastModifiedDate);
@@ -484,12 +486,12 @@ public class UserSettingsResource {
         return userSettingsRepository.save(us);
     }
 
-    private void updateUserSettings(UserDTO userDTO, Instant lastModifiedDate) throws JSONException {
+    private void updateUserSettings(String jhiUserId, UserDTO userDTO, Instant lastModifiedDate) throws JSONException {
         log.info("Updating userSettings for: " + userDTO.toString());
         // Verify the user exists on the UserSettings table
-        Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByJhiUserId(userDTO.getJhiUserId());
+        Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByJhiUserId(jhiUserId);
         if (!existingUserSettingsOptional.isPresent()) {
-            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for JHI User Id" + userDTO.getJhiUserId(), ENTITY_NAME, "id null");
+            throw new BadRequestAlertException("Invalid login, unable to find UserSettings for JHI User Id " + jhiUserId, ENTITY_NAME, "id null");
         }
         Boolean userSettingsModified = false;
         UserSettings existingUserSettings = existingUserSettingsOptional.get();
