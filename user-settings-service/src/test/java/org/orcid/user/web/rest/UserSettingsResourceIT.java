@@ -304,7 +304,7 @@ public class UserSettingsResourceIT {
         // Initialize the database
         UserSettings us = userSettingsRepository.save(UserSettings.valueOf(userSettings));
 
-        obj.put("id", us.getId());
+        obj.put("id", DEFAULT_JHI_USER_ID);
         when(mockUaaUserUtils.getUAAUserByLogin(DEFAULT_JHI_USER_ID)).thenReturn(obj);
         
         int databaseSizeBeforeUpdate = userSettingsRepository.findAll().size();
@@ -325,6 +325,9 @@ public class UserSettingsResourceIT {
 
         UserDTO dto = UserDTO.valueOf(updatedUserSettings);
         dto.setLogin(DEFAULT_LOGIN);
+        
+        // Return the user including the jhiUserId
+        when(oauth2ServiceClient.updateUser(Mockito.anyMap())).thenReturn(new ResponseEntity<String>(obj.toString(), HttpStatus.OK));
         
         restUserSettingsMockMvc.perform(put("/settings/api/user")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
