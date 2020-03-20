@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { IAssertion } from 'app/shared/model/AssertionServices/assertion.model';
+import { ErrorHandlerService } from 'app/shared/errorHandler/error-handler.service';
 
 type EntityResponseType = HttpResponse<IAssertion>;
 type EntityArrayResponseType = HttpResponse<IAssertion[]>;
