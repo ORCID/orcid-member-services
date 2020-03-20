@@ -1,7 +1,7 @@
 version: '2'
 services:
   assertionservices-app:
-    image: assertionservices
+    image: assertionservices:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - 'SPRING_PROFILES_ACTIVE=prod,swagger'
@@ -28,7 +28,7 @@ services:
     image: 'mongo:4.0.13'
 
   gateway-app:
-    image: gateway
+    image: gateway:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - 'SPRING_PROFILES_ACTIVE=prod,swagger'
@@ -46,7 +46,7 @@ services:
     image: 'mongo:4.0.10'
 
   oauth2service-app:
-    image: oauth2service
+    image: oauth2service:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - 'SPRING_PROFILES_ACTIVE=prod,swagger'
@@ -66,7 +66,7 @@ services:
     image: 'mongo:4.0.10'
 
   usersettingsservice-app:
-    image: usersettingsservice
+    image: usersettingsservice:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - 'SPRING_PROFILES_ACTIVE=prod,swagger'
