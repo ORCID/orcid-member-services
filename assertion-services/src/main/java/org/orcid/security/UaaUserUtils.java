@@ -14,6 +14,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 
+/**
+ * Utils class for User Account and Authentication (UAA).
+ *
+ */
+
 @Component
 public class UaaUserUtils {
     private final Logger log = LoggerFactory.getLogger(UaaUserUtils.class);
