@@ -45,7 +45,7 @@ public class AssertionsCSVReportWriter implements AssertionsReportWriter {
 				CSVFormat.DEFAULT.withHeader("email", "orcid", "status", "putCode", "created", "modified",
 						"affiliation-section", "department-name", "role-title", "start-date", "end-date", "org-name",
 						"org-country", "org-city", "org-region", "disambiguated-organization-identifier",
-						"disambiguation-source,external-id", "external-id-type", "external-id-url"));
+						"disambiguation-source", "external-id", "external-id-type", "external-id-url"));
 		Map<String, OrcidRecord> orcidRecordMap = new HashMap<>();
 		List<String> elements = new ArrayList<String>();
 		for (Assertion a : assertions) {
