@@ -97,16 +97,16 @@ export const assertionPopupRoute: Routes = [
     outlet: 'popup'
   },
   {
-      path: 'import',
-      component: AssertionImportPopupComponent,
-      resolve: {
-        assertion: AssertionResolve
-      },
-      data: {
-        authorities: ['ASSERTION_SERVICE_ENABLED'],
-        pageTitle: 'gatewayApp.assertionServicesAssertion.home.title'
-      },
-      canActivate: [UserRouteAccessService],
-      outlet: 'popup'
-    }
+    path: 'import',
+    component: AssertionImportPopupComponent,
+    resolve: {
+      assertion: AssertionResolve
+    },
+    data: {
+      authorities: ['ASSERTION_SERVICE_ENABLED'],
+      pageTitle: 'gatewayApp.assertionServicesAssertion.home.title'
+    },
+    canActivate: [UserRouteAccessService],
+    outlet: 'popup'
+  }
 ];
