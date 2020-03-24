@@ -2,7 +2,7 @@
 <!DOCTYPE configuration>
 
 <configuration scan="true">
-    <property name="LOG_PATH" value="logs"/>
+    <property name="LOG_PATH" value="gateway_logs"/>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <logger name="javax.activation" level="WARN"/>
@@ -16,7 +16,7 @@
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
-    <logger name="io.undertow" level="WARN"/>
+    <logger name="io.undertow" level="DEBUG"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
     <logger name="org.ehcache" level="WARN"/>
     <logger name="org.apache" level="WARN"/>
