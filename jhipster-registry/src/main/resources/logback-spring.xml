@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration scan="true">
-    <property name="LOG_PATH" value="logs"/>
+    <property name="LOG_PATH" value="jhipster_registry_logs"/>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <logger name="io.github.jhipster.registry" level="#logback.loglevel#"/>
@@ -16,7 +16,7 @@
     <logger name="com.netflix.discovery" level="INFO"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
-    <logger name="io.undertow" level="WARN"/>
+    <logger name="io.undertow" level="DEBUG"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
     <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
