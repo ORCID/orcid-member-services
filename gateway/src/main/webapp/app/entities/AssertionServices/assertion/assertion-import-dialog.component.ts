@@ -18,7 +18,6 @@ import { SERVER_API_URL } from 'app/app.constants';
   providers: [FileUploadService]
 })
 export class AssertionImportDialogComponent {
-
   public resourceUrl;
   assertion: IAssertion;
   isSaving: boolean;
@@ -31,16 +30,16 @@ export class AssertionImportDialogComponent {
     protected eventManager: JhiEventManager,
     private uploadService: FileUploadService
   ) {
-      this.isSaving = false;
-      this.resourceUrl = this.assertionService.resourceUrl + '/upload';
-    }
+    this.isSaving = false;
+    this.resourceUrl = this.assertionService.resourceUrl + '/upload';
+  }
 
   clear() {
     this.activeModal.dismiss('cancel');
   }
 
   selectFile(event) {
-      this.currentFile = event.target.files;
+    this.currentFile = event.target.files;
   }
 
   upload() {

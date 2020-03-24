@@ -32,6 +32,7 @@ import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.security.UaaUserUtils;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
+import org.orcid.user.web.rest.errors.MemberNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,6 @@ import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
-import net.logstash.logback.encoder.org.apache.commons.lang3.BooleanUtils;
 
 /**
  * REST controller for managing
@@ -142,32 +142,25 @@ public class UserSettingsResource {
                 log.debug("Looking for existing user: " + login);
                 JSONObject existingUaaUser = uaaUserUtils.getUAAUserByLogin(login);
                 String salesforceId = element.get("salesforceId");
-                String parentSalesforceId = element.get("parentSalesforceId");
-                Boolean isConsortiumLead = StringUtils.isBlank(element.get("isConsortiumLead")) ? false : Boolean.parseBoolean(element.get("isConsortiumLead"));
+                
+                if (!memberSettingsExists(salesforceId)) {
+                	String errorMessage = String.format("Member not found with salesforceId %s", salesforceId);
+                	throw new MemberNotFoundException(errorMessage);
+                }
+                
                 UserDTO userDTO = getUserDTO(element);
-                // If user exists, update it
                 if (existingUaaUser != null) {
-                    // Updates the UAA user
                     JSONObject uaaUser = updateUserOnUAA(userDTO, existingUaaUser);
                     String jhiUserId = uaaUser.getString("id");
                     
-                    // Update or create MemberSettings
-                    if (memberSettingsExists(salesforceId)) {
-                        updateMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, now);
-                    } else {
-                        createMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, now);
-                    }
-                    // Update or create UserSettings
                     if (userSettingsExists(jhiUserId)) {
                         updateUserSettings(jhiUserId, userDTO, now);
                     } else {
                         createUserSettings(jhiUserId, salesforceId, false, now);
                     }
                 } else {
-                    // Else create the user
                     JSONObject uaaUser = createUserOnUAA(userDTO);
-                    createUserSettings(uaaUser.getString("id"), element.get("salesforceId"), false, now);
-                    createMemberSettings(salesforceId, parentSalesforceId, isConsortiumLead, now);
+                    createUserSettings(uaaUser.getString("id"), salesforceId, false, now);
                 }
             }
         } catch (Exception e) {
@@ -292,15 +285,6 @@ public class UserSettingsResource {
             isOk = false;
             error += "Salesforce Id should not be empty";
         }
-        Boolean isConsortiumLead = StringUtils.isBlank(record.get("isConsortiumLead")) ? false : Boolean.parseBoolean(record.get("isConsortiumLead"));
-
-        if (StringUtils.isBlank(record.get("parentSalesforceId")) && BooleanUtils.isFalse(isConsortiumLead)) {
-            if (!isOk) {
-                error += ", ";
-            }
-            isOk = false;
-            error += "Parent Salesforce Id should not be empty if it is not a consortium lead";
-        }
         return isOk;
     }
 
@@ -369,18 +353,6 @@ public class UserSettingsResource {
         ms.setCreatedDate(now);
         ms.setLastModifiedBy(createdBy);
         ms.setLastModifiedDate(now);
-        return memberSettingsRepository.save(ms);
-    }
-
-    private MemberSettings updateMemberSettings(String salesforceId, String parentSalesforceId, Boolean isConsortiumLead, Instant lastModifiedDate) throws JSONException {
-        log.info("Updating MemberSettings with Salesforce Id {}", salesforceId);
-        Optional<MemberSettings> existingMemberSettings = memberSettingsRepository.findBySalesforceId(salesforceId);
-        MemberSettings ms = existingMemberSettings.get();
-        String lastModifiedBy = uaaUserUtils.getAuthenticatedUaaUserId();
-        ms.setParentSalesforceId(parentSalesforceId);
-        ms.setIsConsortiumLead((isConsortiumLead == null) ? false : isConsortiumLead);
-        ms.setLastModifiedBy(lastModifiedBy);
-        ms.setLastModifiedDate(lastModifiedDate);
         return memberSettingsRepository.save(ms);
     }
 
