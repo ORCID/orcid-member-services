@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { throwError } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ErrorHandlerService {
   constructor() {}
@@ -14,16 +14,14 @@ export class ErrorHandlerService {
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
-      console.error(
-        `Backend returned code ${error.status}, ` + `body was: ${error.error}`
-      );
+      console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
     }
     // return an observable with a user-facing error message
     // TODO display response errors
     console.error(error);
     return throwError({
       error,
-      message: 'Something bad happened; please try again later.',
+      message: 'Something bad happened; please try again later.'
     });
   }
 

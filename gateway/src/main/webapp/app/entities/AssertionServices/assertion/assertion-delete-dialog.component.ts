@@ -15,11 +15,7 @@ export class AssertionDeleteDialogComponent {
   assertion: IAssertion;
   errorDeletingFromOrcid: boolean;
 
-  constructor(
-    protected assertionService: AssertionService,
-    public activeModal: NgbActiveModal,
-    protected eventManager: JhiEventManager
-  ) {
+  constructor(protected assertionService: AssertionService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {
     this.errorDeletingFromOrcid = false;
   }
 
@@ -50,12 +46,12 @@ export class AssertionDeleteDialogComponent {
     } else {
       this.assertionService.delete(id).subscribe(response => {
         this.activeModal.dismiss(true);
-         this.eventManager.broadcast({
-           name: 'assertionListModification',
-           content: 'Deleted an assertion'
-         });
-         this.activeModal.dismiss(true);
-       });
+        this.eventManager.broadcast({
+          name: 'assertionListModification',
+          content: 'Deleted an assertion'
+        });
+        this.activeModal.dismiss(true);
+      });
     }
   }
 }

@@ -120,7 +120,6 @@
     "delete": {
       "title": "Confirm deletion",
       "error": "Oops, something went wrong!"
-
     },
     "validation": {
       "required": "This field is required.",
@@ -153,6 +152,5 @@
     "termsOfUse": "Terms of Use",
     "contactUs": "Contact Us",
     "orcidRegistry": "ORCID Registry"
-
   }
 }

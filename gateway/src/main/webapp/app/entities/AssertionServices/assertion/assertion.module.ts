@@ -29,7 +29,14 @@ const ENTITY_STATES = [...assertionRoute, ...assertionPopupRoute];
     AssertionImportPopupComponent,
     AssertionImportDialogComponent
   ],
-  entryComponents: [AssertionComponent, AssertionUpdateComponent, AssertionDeleteDialogComponent, AssertionDeletePopupComponent, AssertionImportPopupComponent, AssertionImportDialogComponent],
+  entryComponents: [
+    AssertionComponent,
+    AssertionUpdateComponent,
+    AssertionDeleteDialogComponent,
+    AssertionDeletePopupComponent,
+    AssertionImportPopupComponent,
+    AssertionImportDialogComponent
+  ],
   providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
