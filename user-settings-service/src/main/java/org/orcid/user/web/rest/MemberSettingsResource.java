@@ -60,7 +60,7 @@ public class MemberSettingsResource {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
-    
+
     @Autowired
     private UaaUserUtils uaaUserUtils;
 
@@ -76,7 +76,7 @@ public class MemberSettingsResource {
     public void setUaaUserUtils(UaaUserUtils uaaUserUtils) {
         this.uaaUserUtils = uaaUserUtils;
     }
-    
+
     /**
      * {@code POST  /member-settings} : Create a new memberSettings.
      *
@@ -88,7 +88,7 @@ public class MemberSettingsResource {
      *         ID.
      * @throws URISyntaxException
      *             if the Location URI syntax is incorrect.
-     * @throws JSONException 
+     * @throws JSONException
      */
     @PostMapping("/member-settings")
     public ResponseEntity<MemberSettings> createMemberSettings(@Valid @RequestBody MemberSettings memberSettings) throws URISyntaxException, JSONException {
@@ -103,15 +103,15 @@ public class MemberSettingsResource {
         }
         if (!validate(memberSettings)) {
             ResponseEntity.badRequest()
-            .headers(HeaderUtil.createFailureAlert(applicationName, true, ENTITY_NAME, "memberSettings.create.error", memberSettings.getError()));                    
+            .headers(HeaderUtil.createFailureAlert(applicationName, true, ENTITY_NAME, "memberSettings.create.error", memberSettings.getError()));
         }
-        
+
         Instant now = Instant.now();
         memberSettings.setCreatedBy(uaaUserUtils.getAuthenticatedUaaUserId());
         memberSettings.setCreatedDate(now);
         memberSettings.setLastModifiedBy(uaaUserUtils.getAuthenticatedUaaUserId());
         memberSettings.setLastModifiedDate(now);
-        
+
         MemberSettings result = memberSettingsRepository.save(memberSettings);
         return ResponseEntity.created(new URI("/api/member-settings/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString())).body(result);
@@ -149,7 +149,7 @@ public class MemberSettingsResource {
                     } else {
                         Optional<MemberSettings> optional = memberSettingsRepository.findBySalesforceId(memberSettings.getSalesforceId());
                         // If user doesn't exists, create it
-                        if(!optional.isPresent()) {                            
+                        if(!optional.isPresent()) {
                             memberSettings.setCreatedBy(uaaUserUtils.getAuthenticatedUaaUserId());
                             memberSettings.setCreatedDate(now);
                             memberSettings.setLastModifiedBy(uaaUserUtils.getAuthenticatedUaaUserId());
@@ -197,7 +197,7 @@ public class MemberSettingsResource {
      *         memberSettings couldn't be updated.
      * @throws URISyntaxException
      *             if the Location URI syntax is incorrect.
-     * @throws JSONException 
+     * @throws JSONException
      */
     @PutMapping("/member-settings")
     public ResponseEntity<MemberSettings> updateMemberSettings(@Valid @RequestBody MemberSettings memberSettings) throws URISyntaxException, JSONException {
@@ -211,9 +211,9 @@ public class MemberSettingsResource {
         }
         if (!validate(memberSettings)) {
             ResponseEntity.badRequest()
-            .headers(HeaderUtil.createFailureAlert(applicationName, true, ENTITY_NAME, "memberSettings.create.error", memberSettings.getError()));                    
+            .headers(HeaderUtil.createFailureAlert(applicationName, true, ENTITY_NAME, "memberSettings.create.error", memberSettings.getError()));
         }
-        
+
         Instant now = Instant.now();
         memberSettings.setLastModifiedBy(uaaUserUtils.getAuthenticatedUaaUserId());
         memberSettings.setLastModifiedDate(now);
@@ -240,10 +240,10 @@ public class MemberSettingsResource {
     /**
      * {@code GET  /member-settings} : get all the memberSettings.
      *
-     * 
+     *
      * @param pageable
      *            the pagination information.
-     * 
+     *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the
      *         list of memberSettings in body.
      */
@@ -300,40 +300,40 @@ public class MemberSettingsResource {
 
     private MemberSettings parseLine(CSVRecord record) {
         MemberSettings ms = new MemberSettings();
-        if (record.isSet("assertion_services_enabled")) {
-            ms.setAssertionServiceEnabled(Boolean.parseBoolean(record.get("assertion_services_enabled")));
+        if (record.isSet("assertionServiceEnabled")) {
+            ms.setAssertionServiceEnabled(Boolean.parseBoolean(record.get("assertionServiceEnabled")));
         } else {
             ms.setAssertionServiceEnabled(false);
         }
-        ms.setClientId(record.get("client_id"));
+        ms.setClientId(record.get("clientId"));
         Boolean isConsortiumLead = false;
-        if (record.isSet("is_consortium_lead")) {
-            isConsortiumLead = Boolean.parseBoolean(record.get("is_consortium_lead"));
+        if (record.isSet("isConsortiumLead")) {
+            isConsortiumLead = Boolean.parseBoolean(record.get("isConsortiumLead"));
         }
         ms.setIsConsortiumLead(isConsortiumLead);
-        ms.setSalesforceId(record.get("salesforce_id"));
+        ms.setSalesforceId(record.get("salesforceId"));
 
         if (!isConsortiumLead) {
-            ms.setParentSalesforceId(record.get("parent_salesforce_id"));
+            ms.setParentSalesforceId(record.get("parentSalesforceId"));
         }
-        if(record.isSet("client_name")) {
-            ms.setClientName(record.get("client_name"));
+        if(record.isSet("clientName")) {
+            ms.setClientName(record.get("clientName"));
         }
         return ms;
     }
-    
+
     private boolean validate(MemberSettings ms) {
         boolean isOk = true;
         if (StringUtils.isBlank(ms.getClientId())) {
             isOk = false;
             ms.setError("Client id should not be empty");
         }
-        
+
         if (StringUtils.isBlank(ms.getSalesforceId())) {
             isOk = false;
             ms.setError("Salesforce id should not be empty");
         }
-        
+
         if (StringUtils.isBlank(ms.getParentSalesforceId()) && !ms.getIsConsortiumLead()) {
             isOk = false;
             ms.setError("Parent salesforce id should not be empty if it is not a consortium lead");
