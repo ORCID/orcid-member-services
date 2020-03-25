@@ -21,6 +21,7 @@ import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.security.UaaUserUtils;
 import org.orcid.service.OrcidRecordService;
+import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
 import org.springframework.data.domain.Sort;
 
 public class AssertionsCSVReportWriterTest {
