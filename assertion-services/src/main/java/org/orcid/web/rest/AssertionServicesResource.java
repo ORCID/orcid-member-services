@@ -2,34 +2,26 @@ package org.orcid.web.rest;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.ws.rs.InternalServerErrorException;
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.orcid.domain.Assertion;
-import org.orcid.domain.enumeration.AffiliationSection;
-import org.orcid.jaxb.model.common.Iso3166Country;
 import org.orcid.security.EncryptUtil;
 import org.orcid.security.JWTUtil;
 import org.orcid.security.SecurityUtils;
 import org.orcid.service.AssertionsService;
 import org.orcid.service.OrcidRecordService;
+import org.orcid.service.assertions.upload.AssertionsUpload;
+import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +54,8 @@ import io.github.jhipster.web.util.PaginationUtil;
 @RestController
 @RequestMapping("/api")
 public class AssertionServicesResource {
-    private final Logger log = LoggerFactory.getLogger(AssertionServicesResource.class);
+    
+	private static final Logger LOG = LoggerFactory.getLogger(AssertionServicesResource.class);
 
     private static final String ENTITY_NAME = "affiliation";
 
@@ -81,10 +74,13 @@ public class AssertionServicesResource {
     @Autowired
     private JWTUtil jwtUtil;
     
+    @Autowired
+    private AssertionsCsvReader assertionsCsvReader;
+    
     @GetMapping("/assertions")
     public ResponseEntity<List<Assertion>> getAssertions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder)
             throws BadRequestAlertException, JSONException {
-        log.debug("REST request to fetch assertions from user {}", SecurityUtils.getCurrentUserLogin().get());
+        LOG.debug("REST request to fetch assertions from user {}", SecurityUtils.getCurrentUserLogin().get());
 
         Page<Assertion> affiliations = assertionsService.findByOwnerId(pageable);
 
@@ -94,7 +90,7 @@ public class AssertionServicesResource {
 
     @GetMapping("/assertion/{id}")
     public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {        
-        log.debug("REST request to fetch assertion {} from user {}", id, SecurityUtils.getCurrentUserLogin().get());
+        LOG.debug("REST request to fetch assertion {} from user {}", id, SecurityUtils.getCurrentUserLogin().get());
         return ResponseEntity.ok().body(assertionsService.findById(id));
     }
     
@@ -112,7 +108,7 @@ public class AssertionServicesResource {
 
     @PutMapping("/assertion")
     public ResponseEntity<Assertion> updateAssertion(@RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
-        log.debug("REST request to update assertion : {}", assertion);        
+        LOG.debug("REST request to update assertion : {}", assertion);        
         validateAssertion(assertion);
         Assertion existingAssertion = assertionsService.updateAssertion(assertion);
         
@@ -121,7 +117,7 @@ public class AssertionServicesResource {
 
     @PostMapping("/assertion")
     public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, URISyntaxException {
-        log.debug("REST request to create assertion : {}", assertion);        
+        LOG.debug("REST request to create assertion : {}", assertion);        
         validateAssertion(assertion);
         assertion = assertionsService.createAssertion(assertion);
 
@@ -131,56 +127,41 @@ public class AssertionServicesResource {
 
     @PostMapping("/assertion/upload")
     public ResponseEntity<String> uploadAssertions(@RequestParam("file") MultipartFile file) {
-        JSONArray errors = new JSONArray();
-        try (InputStream is = file.getInputStream();) {
-            InputStreamReader isr = new InputStreamReader(is);
-            Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
-            List<Assertion> existingAssertions = assertionsService.findAllByOwnerId();
-            List<Assertion> assertionsToAdd = new ArrayList<Assertion>();
-            Set<String> usersToAdd = new HashSet<String>();
-            // Validate affiliations
-            for (CSVRecord record : elements) {
-                try {
-                    Assertion assertion = parseLine(record);
-                    // Throw exception if found a duplicate
-                    Assertion existingAssertion = getExistingAssertion(assertion, existingAssertions);
-                    // If the same assertion exists, and, the put code for it
-                    // exists, check if it is an updated org
-                    if (existingAssertion != null) {
-                        // If something is updated in the aff, update the
-                        // existing one in the DB
-                        if (!StringUtils.isBlank(existingAssertion.getPutCode()) && isUpdated(assertion, existingAssertion)) {
-                            assertionsService.updateAssertion(existingAssertion);
-                        }
-                    } else {
-                        // Create the userInfo if needed
-                        if (!usersToAdd.contains(assertion.getEmail())) {
-                            usersToAdd.add(assertion.getEmail());
-                        }
-                        assertionsToAdd.add(assertion);
-                        existingAssertions.add(assertion);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    JSONObject error = new JSONObject();
-                    error.put("index", record.getRecordNumber());
-                    error.put("message", e.getMessage());
-                    errors.put(error);
-                }
-            }
-
-            if (errors.length() == 0) {
-                assertionsService.createAssertions(assertionsToAdd);
-                orcidRecordService.createOrcidRecords(usersToAdd);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+    	InputStream inputStream = null;
+    	try {
+			inputStream = file.getInputStream();
+		} catch (IOException e) {
+			LOG.warn("Error reading upload file", e);
+			return ResponseEntity.badRequest().build();
+		}
+        AssertionsUpload upload = null;
+		try {
+			upload = assertionsCsvReader.readAssertionsUpload(inputStream);
+		} catch (IOException e) {
+			return ResponseEntity.badRequest().build();
+		}
+		
+		// add put codes for assertions that already exist
+		updateIdsForExistingAssertions(upload.getAssertions());
+		assertionsService.createOrUpdateAssertions(upload.getAssertions());
+        
+        if (upload.getErrors().length() > 0) {
+        	return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body(upload.getErrors().toString());
+        } else {
+        	return ResponseEntity.ok().build();
         }
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(errors.toString());
     }
 
-    @DeleteMapping("/assertion/{id}")
+    private void updateIdsForExistingAssertions(List<Assertion> assertions) {
+		assertions.forEach(a -> {
+			Assertion existing = getExistingAssertion(a);
+			if (existing != null) {
+				a.setId(existing.getId());
+			}
+		});
+	}
+
+	@DeleteMapping("/assertion/{id}")
     public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
         assertionsService.deleteById(id);
 
@@ -208,15 +189,15 @@ public class AssertionServicesResource {
                 orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT);
             } else {
                 if (StringUtils.isBlank(emailInStatus)) {
-                    log.warn("emailInStatus is empty in the state key: " + state);
+                    LOG.warn("emailInStatus is empty in the state key: " + state);
                 }
 
                 if (StringUtils.isBlank(orcidIdInJWT)) {
-                    log.warn("orcidIdInJWT is empty in the id token: " + idToken);
+                    LOG.warn("orcidIdInJWT is empty in the id token: " + idToken);
                 }
             }
         } else {
-            log.warn("User {} have denied access", emailInStatus);
+            LOG.warn("User {} have denied access", emailInStatus);
             orcidRecordService.storeUserDeniedAccess(emailInStatus);
         }
 
@@ -260,88 +241,8 @@ public class AssertionServicesResource {
         }
     }
 
-    private Assertion parseLine(CSVRecord line) {
-        Assertion a = new Assertion();
-        if (StringUtils.isBlank(line.get("email"))) {
-            throw new IllegalArgumentException("email must not be null");
-        }
-        a.setEmail(line.get("email"));
-
-        if (StringUtils.isBlank(line.get("affiliation-section"))) {
-            throw new IllegalArgumentException("affiliation-section must not be null");
-        }
-        a.setAffiliationSection(AffiliationSection.valueOf(line.get("affiliation-section").toUpperCase()));
-        a.setDepartmentName(getValueOrNull(line, "department-name"));
-        a.setRoleTitle(getValueOrNull(line, "role-title"));
-
-        // Dates follows the format yyyy-MM-dd
-        String startDate = line.get("start-date");
-        if (!StringUtils.isBlank(startDate)) {
-            String[] startDateParts = startDate.split("-|/|\\s");
-            a.setStartYear(startDateParts[0]);
-            if (startDateParts.length > 1) {
-                a.setStartMonth(startDateParts[1]);
-            }
-
-            if (startDateParts.length > 2) {
-                a.setStartDay(startDateParts[2]);
-            }
-        }
-
-        // Dates follows the format yyyy-MM-dd
-        String endDate = line.get("end-date");
-        if (!StringUtils.isBlank(endDate)) {
-            String endDateParts[] = endDate.split("-|/|\\s");
-            a.setEndYear(endDateParts[0]);
-            if (endDateParts.length > 1) {
-                a.setEndMonth(endDateParts[1]);
-            }
-
-            if (endDateParts.length > 2) {
-                a.setEndDay(endDateParts[2]);
-            }
-        }
-        if (StringUtils.isBlank(line.get("org-name"))) {
-            throw new IllegalArgumentException("org-name must not be null");
-        }
-        a.setOrgName(line.get("org-name"));
-        if (StringUtils.isBlank(line.get("org-country"))) {
-            throw new IllegalArgumentException("org-country must not be null");
-        } else {
-            try {
-                Iso3166Country.valueOf(line.get("org-country"));
-            } catch (Exception e) {
-                throw new IllegalArgumentException("Invalid org-country provided: " + line.get("org-country") + " it should be one from the Iso3166Country enum");
-            }
-        }
-        a.setOrgCountry(line.get("org-country"));
-        if (StringUtils.isBlank(line.get("org-city"))) {
-            throw new IllegalArgumentException("org-city must not be null");
-        }
-        a.setOrgCity(line.get("org-city"));
-        a.setOrgRegion(line.get("org-region"));
-        if (StringUtils.isBlank(line.get("disambiguated-organization-identifier"))) {
-            throw new IllegalArgumentException("disambiguated-organization-identifier must not be null");
-        }
-        a.setDisambiguatedOrgId(line.get("disambiguated-organization-identifier"));
-        if (StringUtils.isBlank(line.get("disambiguation-source"))) {
-            throw new IllegalArgumentException("disambiguation-source must not be null");
-        }
-        a.setDisambiguationSource(getValueOrNull(line, "disambiguation-source"));
-        a.setExternalId(getValueOrNull(line, "external-id"));
-        a.setExternalIdType(getValueOrNull(line, "external-id-type"));
-        a.setExternalIdUrl(getValueOrNull(line, "external-id-url"));
-        return a;
-    }
-
-    private String getValueOrNull(CSVRecord line, String name) {
-        if (StringUtils.isBlank(line.get(name))) {
-            return null;
-        }
-        return line.get(name);
-    }
-
-    private Assertion getExistingAssertion(Assertion a, List<Assertion> existing) {
+	private Assertion getExistingAssertion(Assertion a) {
+		List<Assertion> existing = assertionsService.findAllByOwnerId();
         for (Assertion existingAAssertion : existing) {
             // If the email is the same
             if (a.getEmail().equals(existingAAssertion.getEmail())) {
@@ -364,32 +265,5 @@ public class AssertionServicesResource {
         }
         return null;
     }
-
-    private boolean isUpdated(Assertion a, Assertion existingAssertion) {
-        // Check if something changed, if not, just ignore it
-        // @formatter:off
-        if (!equals(a.getDisambiguatedOrgId(), existingAssertion.getDisambiguatedOrgId()) 
-                || !equals(a.getDisambiguationSource(), existingAssertion.getDisambiguationSource())
-                || !equals(a.getEndDay(), existingAssertion.getEndDay()) 
-                || !equals(a.getEndMonth(), existingAssertion.getEndMonth())
-                || !equals(a.getEndYear(), existingAssertion.getEndYear()) 
-                || !equals(a.getExternalId(), existingAssertion.getExternalId())
-                || !equals(a.getExternalIdType(), existingAssertion.getExternalIdType()) 
-                || !equals(a.getExternalIdUrl(), existingAssertion.getExternalIdUrl())
-                || !equals(a.getOrgCity(), existingAssertion.getOrgCity()) 
-                || !equals(a.getOrgCountry(), existingAssertion.getOrgCountry())
-                || !equals(a.getOrgRegion(), existingAssertion.getOrgRegion()) 
-                || !equals(a.getStartDay(), existingAssertion.getStartDay())
-                || !equals(a.getStartMonth(), existingAssertion.getStartMonth()) 
-                || !equals(a.getStartYear(), existingAssertion.getStartYear())
-                || !equals(a.getDepartmentName(), existingAssertion.getDepartmentName())) {
-            return true;
-        }
-        // @formatter:on       
-        return false;
-    }
-
-    private boolean equals(String a, String b) {
-        return (a == null ? b == null : a.equals(b));
-    }    
+	
 }

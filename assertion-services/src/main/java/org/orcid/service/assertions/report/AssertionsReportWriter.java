@@ -1,4 +1,4 @@
-package org.orcid.service.report;
+package org.orcid.service.assertions.report;
 
 import java.io.IOException;
 
