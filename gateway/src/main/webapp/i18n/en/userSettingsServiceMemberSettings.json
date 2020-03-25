@@ -39,7 +39,7 @@
     "userSettingsServiceMemberSettings": {
       "created": "A new member was created with ID {{ param }}",
       "updated": "Member {{ param }} was updated successfully",
-      "deleted": "Member {{ param }} was updated successfully"
+      "deleted": "Member {{ param }} was deleted successfully"
     }
   }
 }
