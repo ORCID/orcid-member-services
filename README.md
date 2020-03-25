@@ -51,7 +51,14 @@ So, the first thing we should do is starting the different JHipster services as 
     - Go to [http://localhost:8080/](http://localhost:8080/) and sing in with the admin credentials `admin / admin`
 
 3. Start the oauth2-services
-
+    For running locally without an email server connected, disable mail health check for oauth2-services before starting. 
+    - Edit [oauth2-service/src/main/resources/config/application.yml](https://github.com/ORCID/orcid-member-services/blob/master/oauth2-service/src/main/resources/config/application.yml#L60)
+    - Set 
+        ```
+        health:
+            mail:
+               enabled: false
+        ```
     - Open a new terminal 
     - cd orcid-member-services/oauth2-service/  
     - Run `bash mvnw`
