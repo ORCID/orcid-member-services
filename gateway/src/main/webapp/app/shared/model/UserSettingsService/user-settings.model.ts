@@ -14,7 +14,7 @@ export interface IUserSettings {
   firstName?: string;
   lastName?: string;
   mainContact?: boolean;
-  assertionServiceEnabled?: boolean;
+  assertionServicesEnabled?: boolean;
   salesforceId?: string;
   parentSalesforceId?: string;
   createdBy?: string;
@@ -31,7 +31,7 @@ export class UserSettings implements IUserSettings {
     public firstName?: string,
     public lastName?: string,
     public mainContact?: boolean,
-    public assertionServiceEnabled?: boolean,
+    public assertionServicesEnabled?: boolean,
     public salesforceId?: string,
     public parentSalesforceId?: string,
     public createdBy?: string,
