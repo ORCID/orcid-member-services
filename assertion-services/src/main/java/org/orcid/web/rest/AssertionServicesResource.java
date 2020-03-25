@@ -271,8 +271,8 @@ public class AssertionServicesResource {
             throw new IllegalArgumentException("affiliation-section must not be null");
         }
         a.setAffiliationSection(AffiliationSection.valueOf(line.get("affiliation-section").toUpperCase()));
-        a.setDepartmentName(getValueOrNull(line, "department-name"));
-        a.setRoleTitle(getValueOrNull(line, "role-title"));
+        a.setDepartmentName(getMandatoryNullableValue(line, "department-name"));
+        a.setRoleTitle(getMandatoryNullableValue(line, "role-title"));
 
         // Dates follows the format yyyy-MM-dd
         String startDate = line.get("start-date");
@@ -327,18 +327,29 @@ public class AssertionServicesResource {
         if (StringUtils.isBlank(line.get("disambiguation-source"))) {
             throw new IllegalArgumentException("disambiguation-source must not be null");
         }
-        a.setDisambiguationSource(getValueOrNull(line, "disambiguation-source"));
-        a.setExternalId(getValueOrNull(line, "external-id"));
-        a.setExternalIdType(getValueOrNull(line, "external-id-type"));
-        a.setExternalIdUrl(getValueOrNull(line, "external-id-url"));
+        a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source"));
+        a.setExternalId(getOptionalMandatoryNullable(line, "external-id"));
+        a.setExternalIdType(getOptionalMandatoryNullable(line, "external-id-type"));
+        a.setExternalIdUrl(getOptionalMandatoryNullable(line, "external-id-url"));
         return a;
     }
 
-    private String getValueOrNull(CSVRecord line, String name) {
+    private String getMandatoryNullableValue(CSVRecord line, String name) {
         if (StringUtils.isBlank(line.get(name))) {
             return null;
         }
         return line.get(name);
+    }
+    
+    private String getOptionalMandatoryNullable(CSVRecord line, String name) {
+    	try {
+	        if (StringUtils.isBlank(line.get(name))) {
+	            return null;
+	        }
+	        return line.get(name);
+    	} catch (IllegalArgumentException e) {
+    		return null;
+    	}
     }
 
     private Assertion getExistingAssertion(Assertion a, List<Assertion> existing) {
