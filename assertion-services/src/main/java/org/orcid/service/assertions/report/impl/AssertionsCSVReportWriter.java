@@ -1,4 +1,4 @@
-package org.orcid.service.report.impl;
+package org.orcid.service.assertions.report.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import org.orcid.domain.utils.AffiliationUtils;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.security.UaaUserUtils;
 import org.orcid.service.OrcidRecordService;
-import org.orcid.service.report.AssertionsReportWriter;
+import org.orcid.service.assertions.report.AssertionsReportWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
