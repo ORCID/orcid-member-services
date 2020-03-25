@@ -73,14 +73,14 @@ public class UserSettingsResource {
 
     private final Logger log = LoggerFactory.getLogger(UserSettingsResource.class);
 
-    private static final String ENTITY_NAME = "userSettingsServiceMemberServicesUser";
+    private static final String ENTITY_NAME = "userSettingsServiceUserSettings";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     @Autowired
     private Oauth2ServiceClient oauth2ServiceClient;
-    
+
     @Autowired
     private UaaUserUtils uaaUserUtils;
 
@@ -100,7 +100,7 @@ public class UserSettingsResource {
     public void setUaaUserUtils(UaaUserUtils uaaUserUtils) {
         this.uaaUserUtils = uaaUserUtils;
     }
-    
+
     /**
      * {@code POST  /user/upload} : Create a list of users.
      *
@@ -142,17 +142,17 @@ public class UserSettingsResource {
                 log.debug("Looking for existing user: " + login);
                 JSONObject existingUaaUser = uaaUserUtils.getUAAUserByLogin(login);
                 String salesforceId = element.get("salesforceId");
-                
+
                 if (!memberSettingsExists(salesforceId)) {
                 	String errorMessage = String.format("Member not found with salesforceId %s", salesforceId);
                 	throw new MemberNotFoundException(errorMessage);
                 }
-                
+
                 UserDTO userDTO = getUserDTO(element);
                 if (existingUaaUser != null) {
                     JSONObject uaaUser = updateUserOnUAA(userDTO, existingUaaUser);
                     String jhiUserId = uaaUser.getString("id");
-                    
+
                     if (userSettingsExists(jhiUserId)) {
                         updateUserSettings(jhiUserId, userDTO, now);
                     } else {
@@ -197,7 +197,7 @@ public class UserSettingsResource {
             u.setAssertionServicesEnabled(true);
         }
         return u;
-    }    
+    }
 
     /**
      * {@code POST  /user} : Create a new memberServicesUser.
@@ -241,7 +241,7 @@ public class UserSettingsResource {
 
         // Hack: The password is not set,but, it is a requierd field, so, lets put something on it
         userDTO.setPassword("placeholder");
-        
+
         // Create the user on UAA
         JSONObject obj = createUserOnUAA(userDTO);
         String userIdOnUAA = obj.getString("id");
@@ -269,7 +269,7 @@ public class UserSettingsResource {
         userDTO.setPassword(null);
 
         return ResponseEntity.created(new URI("/settings/api/user/" + us.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, us.getId().toString())).body(userDTO);
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, userDTO.getLogin().toString())).body(userDTO);
     }
 
     private boolean validate(CSVRecord record, String error) {
@@ -394,10 +394,10 @@ public class UserSettingsResource {
 
         // Update UserSettings
         updateUserSettings(jhiUserId, userDTO, lastModifiedDate);
-       
+
         userDTO.setLastModifiedBy(lastModifiedBy);
         userDTO.setLastModifiedDate(lastModifiedDate);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userDTO.getId().toString())).body(userDTO);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userDTO.getLogin().toString())).body(userDTO);
     }
 
     private JSONObject updateUserOnUAA(UserDTO userDTO, JSONObject existingUaaUser) throws JSONException {
@@ -657,5 +657,5 @@ public class UserSettingsResource {
         }
 
         return ResponseEntity.accepted().build();
-    }    
+    }
 }
