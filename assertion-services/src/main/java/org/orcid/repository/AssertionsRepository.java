@@ -19,6 +19,9 @@ public interface AssertionsRepository extends MongoRepository<Assertion, String>
     @Query("{ownerId: ?0}")    
     List<Assertion> findAllByOwnerId(String ownerId, Sort sort);
     
+    @Query("{salesforceId: ?0}")    
+    Page<Assertion> findBySalesforceId(String salesforceId, Pageable pageable);
+    
     @Query("{putCode: null}")
     List<Assertion> findAllToCreate();
 
