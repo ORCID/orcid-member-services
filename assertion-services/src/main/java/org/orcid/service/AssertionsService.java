@@ -17,7 +17,7 @@ import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.security.UaaUserUtils;
-import org.orcid.service.report.impl.AssertionsCSVReportWriter;
+import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
 import org.orcid.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +47,19 @@ public class AssertionsService {
     
     @Autowired
     private AssertionsCSVReportWriter assertionsReportWriter;
+    
+    public Assertion createOrUpdateAssertion(Assertion assertion) {
+    	if (assertion.getId() != null) {
+    		return updateAssertion(assertion);
+    	} else {
+    		return createAssertion(assertion);
+    	}
+    }
+    
+    public List<Assertion> createOrUpdateAssertions(List<Assertion> assertions) {
+    	assertions.forEach(this::createOrUpdateAssertion);
+    	return assertions;
+    }
     
     public Page<Assertion> findByOwnerId(Pageable pageable) {
         return assertionsRepository.findByOwnerId(uaaUserUtils.getAuthenticatedUaaUserId(), pageable);
