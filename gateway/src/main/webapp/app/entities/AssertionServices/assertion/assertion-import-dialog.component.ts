@@ -46,15 +46,11 @@ export class AssertionImportDialogComponent {
     const f = this.currentFile.item(0);
     this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
       if (event instanceof HttpResponse) {
-        const body = event.body;
-        this.csvErrors = JSON.parse(body.toString());
-        if (this.csvErrors.length === 0) {
           this.eventManager.broadcast({
             name: 'assertionListModification',
             content: 'New assertions uploaded'
           });
           this.activeModal.dismiss(true);
-        }
       }
     });
   }
