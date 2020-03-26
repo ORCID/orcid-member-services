@@ -84,15 +84,15 @@ public class UserSettingsResource {
     @Autowired
     private UaaUserUtils uaaUserUtils;
 
-    private final UserSettingsRepository userSettingsRepository;
+    @Autowired
+    private UserSettingsRepository userSettingsRepository;
 
-    private final MemberSettingsRepository memberSettingsRepository;
-
-    public UserSettingsResource(UserSettingsRepository userSettingsRepository, MemberSettingsRepository memberSettingsRepository) {
-        this.userSettingsRepository = userSettingsRepository;
-        this.memberSettingsRepository = memberSettingsRepository;
-    }
-
+    @Autowired
+    private MemberSettingsRepository memberSettingsRepository;
+    
+    @Autowired
+    private SecurityUtils securityUtils;
+    
     public void setOauth2ServiceClient(Oauth2ServiceClient oauth2ServiceClient) {
         this.oauth2ServiceClient = oauth2ServiceClient;
     }
@@ -207,11 +207,13 @@ public class UserSettingsResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and
      *         with body the new user, or with status {@code 400 (Bad Request)}
      *         if the user has already an ID.
+     * @throws JSONException 
+     * @throws URISyntaxException 
      * @throws Throwable
      */
     @PostMapping("/user")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) throws Throwable {
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) throws JSONException, URISyntaxException {
         log.debug("REST request to save UserDTO : {}", userDTO);
         if (!StringUtils.isBlank(userDTO.getId())) {
             throw new BadRequestAlertException("A new user cannot already have an ID", ENTITY_NAME, "idexists");
@@ -252,7 +254,7 @@ public class UserSettingsResource {
         JSONObject obj = createUserOnUAA(userDTO);
         String userIdOnUAA = obj.getString("id");
         String userLogin = obj.getString("login");
-        String createdBy = SecurityUtils.getAuthenticatedUser();
+        String createdBy = securityUtils.getAuthenticatedUser();
         Instant createdDate = Instant.parse(obj.getString("createdDate"));
         String lastModifiedBy = obj.getString("lastModifiedBy");
         Instant lastModifiedDate = Instant.parse(obj.getString("lastModifiedDate"));
@@ -304,7 +306,7 @@ public class UserSettingsResource {
         return isOk;
     }
 
-    private JSONObject createUserOnUAA(UserDTO userDTO) throws Throwable {
+    private JSONObject createUserOnUAA(UserDTO userDTO) throws JSONException  {
         String login = userDTO.getLogin();
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("login", login);
@@ -321,17 +323,9 @@ public class UserSettingsResource {
         }
         map.put("authorities", authorities);
 
-        try {
-            ResponseEntity<Void> response = oauth2ServiceClient.registerUser(map);
-            if (response == null || !HttpStatus.CREATED.equals(response.getStatusCode())) {
-                throw new RuntimeException("User creation failed: " + response.getStatusCode().getReasonPhrase());
-            }
-        } catch (Exception rse) {
-            if (rse.getCause() != null) {
-                throw rse.getCause();
-            } else {
-                throw rse;
-            }
+        ResponseEntity<Void> response = oauth2ServiceClient.registerUser(map);
+        if (response == null || !HttpStatus.CREATED.equals(response.getStatusCode())) {
+            throw new RuntimeException("User creation failed: " + response.getStatusCode().getReasonPhrase());
         }
 
         // Now fetch the user to get the user id and populate the member
@@ -343,20 +337,6 @@ public class UserSettingsResource {
     private Boolean memberSettingsExists(String salesforceId) {
         Optional<MemberSettings> existingMemberSettings = memberSettingsRepository.findBySalesforceId(salesforceId);
         return existingMemberSettings.isPresent();
-    }
-
-    private MemberSettings createMemberSettings(String salesforceId, String parentSalesforceId, Boolean isConsortiumLead, Instant now) throws JSONException {
-        log.info("Creating MemberSettings with Salesforce Id {}", salesforceId);
-        MemberSettings ms = new MemberSettings();
-        String createdBy = uaaUserUtils.getAuthenticatedUaaUserId();
-        ms.setSalesforceId(salesforceId);
-        ms.setParentSalesforceId(parentSalesforceId);
-        ms.setIsConsortiumLead((isConsortiumLead == null) ? false : isConsortiumLead);
-        ms.setCreatedBy(createdBy);
-        ms.setCreatedDate(now);
-        ms.setLastModifiedBy(createdBy);
-        ms.setLastModifiedDate(now);
-        return memberSettingsRepository.save(ms);
     }
 
     /**

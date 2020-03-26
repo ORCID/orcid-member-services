@@ -6,21 +6,21 @@ import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 /**
  * Utility class for Spring Security.
  */
-public final class SecurityUtils {
 
-    private SecurityUtils() {
-    }
+@Component
+public class SecurityUtils {
 
     /**
      * Get the login of the current user.
      *
      * @return the login of the current user.
      */
-    public static Optional<String> getCurrentUserLogin() {
+    public Optional<String> getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
             .map(authentication -> {
@@ -39,7 +39,7 @@ public final class SecurityUtils {
      *
      * @return true if the user is authenticated, false otherwise.
      */
-    public static boolean isAuthenticated() {
+    public boolean isAuthenticated() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
             .map(authentication -> authentication.getAuthorities().stream()
@@ -55,7 +55,7 @@ public final class SecurityUtils {
      * @param authority the authority to check.
      * @return true if the current user has the authority, false otherwise.
      */
-    public static boolean isCurrentUserInRole(String authority) {
+    public boolean isCurrentUserInRole(String authority) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
             .map(authentication -> authentication.getAuthorities().stream()
@@ -63,14 +63,14 @@ public final class SecurityUtils {
             .orElse(false);
     }
     
-    public static String getAuthenticatedUser() {
-        if (!SecurityUtils.isAuthenticated()) {
+    public String getAuthenticatedUser() {
+        if (!isAuthenticated()) {
             throw new BadRequestAlertException("User is not logged in", "login", "null");
         }
 
-        String loggedInUser = SecurityUtils.getCurrentUserLogin().get();
+        String loggedInUser = getCurrentUserLogin().get();
 
-        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+        if (!isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
             throw new BadRequestAlertException("User does not have the required scope 'AuthoritiesConstants.ADMIN'", "login", loggedInUser);
         }
 
