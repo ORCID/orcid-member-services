@@ -125,7 +125,7 @@ public class UserSettingsResourceIT {
         when(mockUaaUserUtils.getAuthenticatedUaaUserId()).thenReturn(DEFAULT_JHI_USER_ID);
         when(mockUaaUserUtils.getUAAUserById(DEFAULT_JHI_USER_ID)).thenReturn(obj);
         
-        final UserSettingsResource userSettingsResource = new UserSettingsResource(userSettingsRepository, memberSettingsRepository);
+        final UserSettingsResource userSettingsResource = new UserSettingsResource();
         userSettingsResource.setOauth2ServiceClient(oauth2ServiceClient);
         userSettingsResource.setUaaUserUtils(mockUaaUserUtils);
         this.restUserSettingsMockMvc = MockMvcBuilders.standaloneSetup(userSettingsResource).setCustomArgumentResolvers(pageableArgumentResolver)
