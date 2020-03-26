@@ -118,19 +118,16 @@ If successful, the server will respond with a `202 Accepted`
 Now we want to test that you can upload multiple users at once, this is done through the CSV user inport endpoint, but, before going into the technical details, lets see how the CSV should look like: 
 
 ```csv
-isConsortiumLead,salesforceId,parentSalesforceId,email,firstName,lastName,grant
-false,salesforceid1,parentsalesforceid1,1@user.com,Angel,Montenegro,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
-false,salesforceid1,parentsalesforceid1,2@user.com,Leonardo,Mendoza,"[ROLE_USER]"
-true,salesforceid2,parentsalesforceid2,3@user.com,Daniel,Palafox,"[ROLE_USER]"
+salesforceId,email,firstName,lastName,grant
+SF1,test1@mailinator.com,FirstName5,LastName5,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
+SF2,test2@mailinator.com,FirstName6,LastName6,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
 ```
 
-Notice that the first line in the file must be the header, and define the fields we should include as part of each user:
+Notice that the first line in the file must be the header, which defines the fields we should include as part of each user:
 
 name | required
 -----| ----------
-isConsortiumLead | Yes
-salesforceId | Yes
-parentSalesforceId | Yes
+salesforceId | Yes (must be an existing member)
 email | Yes
 firstName | No 
 lastName | No
