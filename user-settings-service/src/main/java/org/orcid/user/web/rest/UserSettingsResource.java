@@ -239,6 +239,12 @@ public class UserSettingsResource {
             }
         }
 
+        // check member exists
+        if (!memberSettingsExists(userDTO.getSalesforceId())) {
+        	log.warn("Attempt to create user with non existent member {}", userDTO.getSalesforceId());
+        	return ResponseEntity.badRequest().body(userDTO);
+        }
+        
         // Hack: The password is not set,but, it is a requierd field, so, lets put something on it
         userDTO.setPassword("placeholder");
 
@@ -253,9 +259,6 @@ public class UserSettingsResource {
 
         // Create the user settings
         UserSettings us = createUserSettings(userIdOnUAA, userDTO.getSalesforceId(), userDTO.getMainContact(), createdDate);
-
-        // Create the member settings
-        createMemberSettings(userDTO.getSalesforceId(), StringUtils.EMPTY, false, createdDate);
 
         userDTO.setId(us.getId());
         userDTO.setLogin(userLogin);
