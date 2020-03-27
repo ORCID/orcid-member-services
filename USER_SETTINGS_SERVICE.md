@@ -37,6 +37,13 @@ Response:
 }
 ```
 
+### Create new member
+Each user is associated with a member, so before creating users, you need to create 1 or more members.
+```
+curl -i -H "Accept: application/json" -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1ODQ2MzE0NDgsImlhdCI6MTU4NDAyNjY0OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyNTg3NWMzNC02NDM4LTRlNmItOWJmNS00YWIyODQ2MzgyNjkiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.h61Api8W21fjqWKB1YGd-jmrw76Z81qauD9W6SMYsXj8LP9_vXvXh2deX6Lyx_NUPdzNJwnBQZs7HKS5DgcoiCA5Ji_kUXC8TfLnD9SmcCcHbr-usNMg9b5N_7liRfz6h8Yh5fcrnDErCVezZwN3_hLSce9PeT0ccX6aY-8VnlB7pZcHyNPN0np1TRUwRkNxOfbwOLOiMBTXVCUlDXos2F9qNruCkar0QUZ3URmxtm63cG1aHLzekxf2Fuvayfkr0upEoucXfD9A-hzB1YPvIvMe7eGHvFtDFH84ROzz0gZyQanoBafCpVmQv8xgBd2jcIUNnZBoN9JteFMhsNDscA" -X POST --data '{"salesforceId":"SF1","parentSalesforceId":"PSF2","clientName":"Client 1","isConsortiumLead": "false","assertionServiceEnabled":"true"}'  http://localhost:8081/settings/api/member-settings
+
+```
+
 ### Create new user
 
 ```
@@ -49,7 +56,7 @@ From it, notice the user parameters:
 - login: The user email
 - password: The user password
 - authorities: The authorities the user should have; all users should have `ROLE_USER`, users who should have access to add/edit affiliations should also have `ASSERTION_SERVICE_ENABLED`
-- salesforceId: The Salesforce ID of the member organization that the user is associated with
+- salesforceId: The Salesforce ID of the member organization that the user is associated with. Must be an existing member (see create new member above).
 
 Response:
 
@@ -113,24 +120,46 @@ curl -i -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX
 
 If successful, the server will respond with a `202 Accepted`
 
+### Create multiple members from CSV
+
+```csv
+salesforceId,parentSalesforceId,clientName,clientId,isConsortiumLead, assertionServiceEnabled
+SF4,PSF1,Client 4,APP-XXXXXXXXXXXXXXX4,false,true
+SF5,PSF2,Client 5,APP-XXXXXXXXXXXXXXX5,false,true
+```
+
+Notice that the first line in the file must be the header, which defines the fields we should include as part of each user:
+
+name | required
+-----| ----------
+salesforceId | Yes
+parentSalesforceId | No
+clientName | No 
+clientId | No
+isConsortiumLead | No
+assertionServiceEnabled | No
+
+So, save the above csv as file `members.csv` and import it as follow:
+
+```
+curl -i -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbIm9wZW5pZCJdLCJleHAiOjE1NzQ3ODIwNDUsImlhdCI6MTU3NDE3NzI0NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiIyZTBkODYxZS1kNDg1LTQ3ZGItODJhZS02MGY0NGU4YTNlMWEiLCJjbGllbnRfaWQiOiJ3ZWJfYXBwIn0.J1Qfl75v1JohAfi0Mbv_h0-g8EK7i-yhfJZ1is-5-nwPrOMaQk7NwSGp9_GFJktYCA7SCvGjODkgyvjKiBiZ1M2_rJNa5BnL_foL6rr98zTtwv0NmsGUXIyehrbc03aTdLYjQCh9svNspfrPuGKYm_IkfoWkMb6BcZ5MgvI5DaLh2aIciLtCGUY-eG3s4CMfrquEcgxn4a_F9eIX9TGA9ixRZvJj9EixXv7ZorOlfeiY749Ra8v1a-aX34fWJX2Uvyq5sODFx6IE0f81iTdODwAe2FS0xN02YSqoyOFIKU1j0DP1wuTEpMzlqeRwnvlVy0-3q9VMgCdUKMlL1ze5aQ" -F file=@members.csv -X POST  http://localhost:8081/settings/api/member-settings/upload
+```
+
 ### Create multiple users from CSV
 
 Now we want to test that you can upload multiple users at once, this is done through the CSV user inport endpoint, but, before going into the technical details, lets see how the CSV should look like: 
 
 ```csv
-isConsortiumLead,salesforceId,parentSalesforceId,email,firstName,lastName,grant
-false,salesforceid1,parentsalesforceid1,1@user.com,Angel,Montenegro,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
-false,salesforceid1,parentsalesforceid1,2@user.com,Leonardo,Mendoza,"[ROLE_USER]"
-true,salesforceid2,parentsalesforceid2,3@user.com,Daniel,Palafox,"[ROLE_USER]"
+salesforceId,email,firstName,lastName,grant
+SF1,test1@mailinator.com,FirstName5,LastName5,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
+SF2,test2@mailinator.com,FirstName6,LastName6,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
 ```
 
-Notice that the first line in the file must be the header, and define the fields we should include as part of each user:
+Notice that the first line in the file must be the header, which defines the fields we should include as part of each user:
 
 name | required
 -----| ----------
-isConsortiumLead | Yes
-salesforceId | Yes
-parentSalesforceId | Yes
+salesforceId | Yes (must be an existing member)
 email | Yes
 firstName | No 
 lastName | No
