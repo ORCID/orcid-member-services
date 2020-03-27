@@ -109,8 +109,12 @@ public class Assertion implements Serializable {
     @Field("deleted_from_orcid")
     private Instant deletedFromORCID;
     
+    @Field("url")
+    private String url;
+    
     @Field("orcid_error")
     private String orcidError;
+    
     
     private String status;
 
@@ -464,8 +468,16 @@ public class Assertion implements Serializable {
     public void setUpdatedInORCID(Instant updatedInORCID) {
         this.updatedInORCID = updatedInORCID;
     }
+    
+    public String getUrl() {
+		return url;
+	}
 
-    public String getOrcidError() {
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getOrcidError() {
         return orcidError;
     }
 
@@ -505,6 +517,7 @@ public class Assertion implements Serializable {
         result = prime * result + ((startMonth == null) ? 0 : startMonth.hashCode());
         result = prime * result + ((startYear == null) ? 0 : startYear.hashCode());
         result = prime * result + ((status == null) ? 0 : status.hashCode());
+        result = prime * result + ((url == null) ? 0 : url.hashCode());
         result = prime * result + (updated ? 1231 : 1237);
         result = prime * result + ((updatedInORCID == null) ? 0 : updatedInORCID.hashCode());
         return result;
@@ -655,6 +668,11 @@ public class Assertion implements Serializable {
             if (other.status != null)
                 return false;
         } else if (!status.equals(other.status))
+            return false;
+        if (url == null) {
+            if (other.url != null)
+                return false;
+        } else if (!url.equals(other.url))
             return false;
         if (updated != other.updated)
             return false;
