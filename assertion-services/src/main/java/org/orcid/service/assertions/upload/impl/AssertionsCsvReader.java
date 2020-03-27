@@ -3,12 +3,18 @@ package org.orcid.service.assertions.upload.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.enumeration.AffiliationSection;
+import org.orcid.domain.validation.OrcidUrlValidator;
 import org.orcid.jaxb.model.common.Iso3166Country;
 import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.AssertionsUploadReader;
@@ -20,6 +26,12 @@ import org.springframework.stereotype.Component;
 public class AssertionsCsvReader implements AssertionsUploadReader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AssertionsCsvReader.class);
+
+	String[] urlValschemes = { "http", "https", "ftp" }; // DEFAULT schemes =
+	// "http", "https",
+	// "ftp"
+
+	UrlValidator urlValidator = new OrcidUrlValidator(urlValschemes);
 
 	@Override
 	public AssertionsUpload readAssertionsUpload(InputStream inputStream) throws IOException {
@@ -126,6 +138,12 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		a.setExternalId(getOptionalMandatoryNullable(line, "external-id"));
 		a.setExternalIdType(getOptionalMandatoryNullable(line, "external-id-type"));
 		a.setExternalIdUrl(getOptionalMandatoryNullable(line, "external-id-url"));
+		
+		if (!StringUtils.isBlank(line.get("url"))) {
+			String url = validateUrl(line.get("url"));
+			a.setUrl(url);
+		}
+		
 		return a;
 	}
 
@@ -145,6 +163,35 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		} catch (IllegalArgumentException e) {
 			return null;
 		}
+	}
+
+	private String validateUrl(String url) {
+		if (!StringUtils.isBlank(url)) {
+			url = url.trim();
+			boolean valid = false;
+			try {
+				url = encodeUrl(url);
+				valid = urlValidator.isValid(url);
+			} catch (Exception e) {
+			}
+
+			if (!valid) {
+				throw new IllegalArgumentException("url is invalid");
+			}
+		}
+		return url;
+	}
+
+	private String encodeUrl(String urlString) throws MalformedURLException, URISyntaxException {
+		URL url = null;
+		try {
+			url = new URL(urlString);
+		} catch (MalformedURLException e) {
+			// try adding protocol, which could be missing
+			url = new URL("http://" + urlString);
+		}
+		URI encoded = new URI(url.getProtocol(), url.getHost(), url.getPath(), null);
+		return encoded.toASCIIString();
 	}
 
 }
