@@ -57,6 +57,7 @@
                     <span *ngIf="assertion.startYear">&nbsp;to&nbsp;</span>
                     <span *ngIf="assertion.endYear">{{assertion.endYear}}</span><span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endDay">-{{assertion.endDay}} </span>
                     <span *ngIf="assertion.departmentName">{{assertion.departmentName}}</span><span *ngIf="assertion.departmentName"> ({{assertion.roleTitle}})<br></span>
+                    <span *ngIf="assertion.url"><a href="{{assertion.url}}">{{assertion.url}}</a><br></span>
                     <span jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.affiliationSection}}">{{assertion.affiliationSection}}</span><br>
                     <span *ngIf="assertion.externalId">{{assertion.externalIdType}}: <a href="assertion.externalIdUrl">{{assertion.externalId}}</a></span>
                 </td>

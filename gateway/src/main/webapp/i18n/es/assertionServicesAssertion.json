@@ -16,19 +16,20 @@
       },
       "detail": {
         "title": "Assertion"
-      }, 
+      },
       "import": {
         "title": "Import Assertions",
         "label": "Please select the CSV file to upload",
         "filePath": "File path",
         "errors": {
-          "label": "Please fix the following errors"	
+          "label": "Please fix the following errors"
         }
       },
       "email": "Email",
       "affiliationSection": "Affiliation Section",
       "departmentName": "Department Name",
       "roleTitle": "Role Title",
+      "url": "Url",
       "startYear": "Start Year",
       "startMonth": "Start Month",
       "startDay": "Start Day",

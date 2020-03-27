@@ -133,22 +133,18 @@ public class AssertionsService {
     }
 
     private void copyFieldsToUpdate(Assertion source, Assertion destination) {
-        // Update start date
         destination.setStartYear(source.getStartYear());
         destination.setStartMonth(source.getStartMonth());
         destination.setStartDay(source.getStartDay());
 
-        // Update end date
         destination.setEndYear(source.getEndYear());
         destination.setEndMonth(source.getEndMonth());
         destination.setEndDay(source.getEndDay());
 
-        // Update external identifiers
         destination.setExternalId(source.getExternalId());
         destination.setExternalIdType(source.getExternalIdType());
         destination.setExternalIdUrl(source.getExternalIdUrl());
 
-        // Update organization
         destination.setOrgCity(source.getOrgCity());
         destination.setOrgCountry(source.getOrgCountry());
         destination.setOrgName(source.getOrgName());
@@ -156,8 +152,8 @@ public class AssertionsService {
         destination.setDisambiguatedOrgId(source.getDisambiguatedOrgId());
         destination.setDisambiguationSource(source.getDisambiguationSource());
         
-        // Update department name
         destination.setDepartmentName(source.getDepartmentName());
+        destination.setUrl(source.getUrl());
     }
 
     public void postAssertionsToOrcid() throws JAXBException {

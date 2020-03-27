@@ -16,6 +16,7 @@ export interface IAssertion {
   affiliationSection?: AffiliationSection;
   departmentName?: string;
   roleTitle?: string;
+  url?: string;
   startYear?: string;
   startMonth?: string;
   startDay?: string;
@@ -46,6 +47,7 @@ export class Assertion implements IAssertion {
     public affiliationSection?: AffiliationSection,
     public departmentName?: string,
     public roleTitle?: string,
+    public url?: string,
     public startYear?: string,
     public startMonth?: string,
     public startDay?: string,
