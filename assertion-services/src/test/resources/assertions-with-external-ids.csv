@@ -1,2 +1,2 @@
-email,affiliation-section,department-name,role-title,start-date,end-date,org-name,org-country,org-city,org-region,disambiguated-organization-identifier,disambiguation-source,external-id,external-id-type,external-id-url
-1@test.com,service,dept,role,2020-01-01,2020-01-01,ORCID,US,Bethesda,Region,875500AZPSXM0HP6VP03,LEI,ext-id,ext-id-type,https://test.orcid.org/0000-0000-0000-0000
+email,affiliation-section,department-name,role-title,url,start-date,end-date,org-name,org-country,org-city,org-region,disambiguated-organization-identifier,disambiguation-source,external-id,external-id-type,external-id-url
+1@test.com,service,dept,role,bbc.co.uk,2020-01-01,2020-01-01,ORCID,US,Bethesda,Region,875500AZPSXM0HP6VP03,LEI,ext-id,ext-id-type,https://test.orcid.org/0000-0000-0000-0000
