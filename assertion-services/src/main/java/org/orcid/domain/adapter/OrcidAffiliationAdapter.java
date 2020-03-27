@@ -56,6 +56,7 @@ public class OrcidAffiliationAdapter {
             orcidAffiliation.setPutCode(Long.valueOf(assertion.getPutCode()));
         }
         orcidAffiliation.setDepartmentName(assertion.getDepartmentName());
+        
         if (!StringUtils.isBlank(assertion.getEndYear())) {
             FuzzyDate endDate = new FuzzyDate();
             endDate.setYear(new Year(Integer.valueOf(assertion.getEndYear())));
@@ -99,7 +100,7 @@ public class OrcidAffiliationAdapter {
             orcidAffiliation.setStartDate(startDate);
         }
 
-        orcidAffiliation.setUrl(StringUtils.isBlank(assertion.getExternalIdUrl()) ? null : new Url(assertion.getExternalIdUrl()));
+        orcidAffiliation.setUrl(StringUtils.isBlank(assertion.getUrl()) ? null : new Url(assertion.getUrl()));
 
         return orcidAffiliation;
     }

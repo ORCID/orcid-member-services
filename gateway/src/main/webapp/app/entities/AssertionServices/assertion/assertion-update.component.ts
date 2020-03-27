@@ -4,12 +4,18 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import * as moment from 'moment';
-import {NgbDateStruct, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { IAssertion, Assertion } from 'app/shared/model/AssertionServices/assertion.model';
 import { AssertionService } from './assertion.service';
 import { DateUtilService } from 'app/shared/util/date-util.service';
-import { AFFILIATION_TYPES, COUNTRIES, ORG_ID_TYPES, DEFAULT_EARLIEST_YEAR, DEFAULT_LATEST_YEAR_INCREMENT } from 'app/shared/constants/orcid-api.constants';
+import {
+  AFFILIATION_TYPES,
+  COUNTRIES,
+  ORG_ID_TYPES,
+  DEFAULT_EARLIEST_YEAR,
+  DEFAULT_LATEST_YEAR_INCREMENT
+} from 'app/shared/constants/orcid-api.constants';
 
 @Component({
   selector: 'jhi-assertion-update',
@@ -32,6 +38,7 @@ export class AssertionUpdateComponent implements OnInit {
     affiliationSection: [null, [Validators.required]],
     departmentName: [null, [Validators.maxLength(4000)]],
     roleTitle: [null, [Validators.maxLength(4000)]],
+    url: [null, [Validators.maxLength(8000)]],
     startYear: [null],
     startMonth: [null],
     startDay: [null],
@@ -55,7 +62,12 @@ export class AssertionUpdateComponent implements OnInit {
     adminId: [null, [Validators.required]]
   });
 
-  constructor(protected assertionService: AssertionService, protected dateUtilService: DateUtilService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    protected assertionService: AssertionService,
+    protected dateUtilService: DateUtilService,
+    protected activatedRoute: ActivatedRoute,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.startYearsList = this.dateUtilService.getYearsList(0);
@@ -87,6 +99,7 @@ export class AssertionUpdateComponent implements OnInit {
       affiliationSection: assertion.affiliationSection,
       departmentName: assertion.departmentName,
       roleTitle: assertion.roleTitle,
+      url: assertion.url,
       startYear: assertion.startYear,
       startMonth: assertion.startMonth,
       startDay: assertion.startDay,
@@ -133,6 +146,7 @@ export class AssertionUpdateComponent implements OnInit {
       affiliationSection: this.editForm.get(['affiliationSection']).value,
       departmentName: this.editForm.get(['departmentName']).value,
       roleTitle: this.editForm.get(['roleTitle']).value,
+      url: this.editForm.get(['url']).value,
       startYear: this.editForm.get(['startYear']).value,
       startMonth: this.editForm.get(['startMonth']).value,
       startDay: this.editForm.get(['startDay']).value,
