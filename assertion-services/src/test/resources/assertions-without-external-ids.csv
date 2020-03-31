@@ -1,4 +1,4 @@
-email,affiliation-section,department-name,role-title,start-date,end-date,org-name,org-country,org-city,org-region,disambiguated-organization-identifier,disambiguation-source
-1@test.com,service,dept,role,2020-01-01,2020-01-01,TEST,US,Bethesda,Region,8a75500AZPSXM0HP6VP03,LEI
-2@test.com,service,dept,role,2020-01-01,2020-01-01,TEST-2,US,Bethesda,Region,8a75500AZPSXM0HP6VP02,LEI
-2@test.com,service,dept,role,2020-01-01,2020-01-01,TEST-3,US,Bethesda,Region,8a75500AZPSXM0HP6VP03,LEI
+email,affiliation-section,department-name,role-title,url,start-date,end-date,org-name,org-country,org-city,org-region,disambiguated-organization-identifier,disambiguation-source
+1@test.com,service,dept,role,google.com,2020-01-01,2020-01-01,TEST,US,Bethesda,Region,8a75500AZPSXM0HP6VP03,LEI
+2@test.com,service,dept,role,https://orcid.org,2020-01-01,2020-01-01,TEST-2,US,Bethesda,Region,8a75500AZPSXM0HP6VP02,LEI
+2@test.com,service,dept,role,www.bbc.co.uk,2020-01-01,2020-01-01,TEST-3,US,Bethesda,Region,8a75500AZPSXM0HP6VP03,LEI
