@@ -82,7 +82,7 @@ public class AssertionServicesResource {
             throws BadRequestAlertException, JSONException {
         LOG.debug("REST request to fetch assertions from user {}", SecurityUtils.getCurrentUserLogin().get());
 
-        Page<Assertion> affiliations = assertionsService.findByOwnerId(pageable);
+        Page<Assertion> affiliations = assertionsService.findBySalesforceId(pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
         return ResponseEntity.ok().headers(headers).body(affiliations.getContent());

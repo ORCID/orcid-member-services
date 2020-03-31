@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.client.OrcidAPIClient;
+import org.orcid.client.UserSettingsClient;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.repository.AssertionsRepository;
@@ -25,7 +26,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 @Service
 public class AssertionsService {
@@ -44,6 +50,9 @@ public class AssertionsService {
 
     @Autowired
     private UaaUserUtils uaaUserUtils;
+    
+    @Autowired
+    private UserSettingsClient userSettingsClient;
     
     @Autowired
     private AssertionsCSVReportWriter assertionsReportWriter;
@@ -68,6 +77,12 @@ public class AssertionsService {
     public List<Assertion> findAllByOwnerId() {
         return assertionsRepository.findAllByOwnerId(uaaUserUtils.getAuthenticatedUaaUserId(), SORT);
     }
+    
+    public Page<Assertion> findBySalesforceId(Pageable pageable) {
+        JSONObject userSettings = getUserSettings(uaaUserUtils.getAuthenticatedUaaUserId());
+        String salesforceId = userSettings.getString("salesforceId");
+        return assertionsRepository.findBySalesforceId(salesforceId, pageable);
+    }
 
     public Assertion findById(String id) {
         String userUaaId = uaaUserUtils.getAuthenticatedUaaUserId();
@@ -90,6 +105,10 @@ public class AssertionsService {
         assertion.setCreated(now);
         assertion.setModified(now);
 
+        // Store the salesforce id so we can group assertions
+        JSONObject userSettings = getUserSettings(ownerId);
+        assertion.setSalesforceId(userSettings.getString("salesforceId"));
+        
         String email = assertion.getEmail();
 
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(email);
@@ -313,4 +332,25 @@ public class AssertionsService {
         assertionsRepository.save(assertion);
     }
 
+    private JSONObject getUserSettings(String ownerId) throws JSONException {
+        JSONObject existingUserSettings = null;
+        try {
+            ResponseEntity<String> userSettingsResponse = userSettingsClient.getUserSettings(ownerId);
+            log.debug("Status code: " + userSettingsResponse.getStatusCodeValue());
+            if (userSettingsResponse != null) {
+                existingUserSettings = new JSONObject(userSettingsResponse.getBody());
+            }
+        } catch (HystrixRuntimeException hre) {
+            if (hre.getCause() != null && ResponseStatusException.class.isAssignableFrom(hre.getCause().getClass())) {
+                ResponseStatusException rse = (ResponseStatusException) hre.getCause();
+                if (HttpStatus.NOT_FOUND.equals(rse.getStatus())) {
+                    log.debug("User settings not found: " + ownerId);
+                } else {
+                    throw hre;
+                }
+            }
+        }
+        return existingUserSettings;
+    }
+    
 }
