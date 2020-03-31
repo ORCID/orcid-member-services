@@ -28,6 +28,10 @@
                     <dd class="col-md-9">
                         {{assertion.roleTitle}}
                     </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.url">Url</dt>
+                    <dd class="col-md-9">
+                        {{assertion.url}}
+                    </dd>
                     <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServicesAssertion.startDate">Start Date</dt>
                     <dd class="col-md-9">
                         {{assertion.startYear}}<span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startMonth&&assertion.startDay"></span>-{{assertion.startDay}}</span>
