@@ -20,13 +20,16 @@ public class UaaUserUtils {
     
     @Autowired
     private Oauth2ServiceClient oauth2ServiceClient;
+    
+    @Autowired
+    private SecurityUtils securityUtils;
 
     public String getAuthenticatedUaaUserId() throws JSONException {
-        if (!SecurityUtils.isAuthenticated()) {
+        if (!securityUtils.isAuthenticated()) {
             throw new BadRequestAlertException("User is not logged in", "login", "null");
         }
 
-        String loggedInUserId = SecurityUtils.getCurrentUserLogin().get();
+        String loggedInUserId = securityUtils.getCurrentUserLogin().get();
         
         JSONObject uaaUser = getUAAUserByLogin(loggedInUserId);
         
