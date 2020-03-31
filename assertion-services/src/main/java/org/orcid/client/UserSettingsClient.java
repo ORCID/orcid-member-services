@@ -12,8 +12,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 @AuthorizedFeignClient(name = "USERSETTINGSSERVICE")
 public interface UserSettingsClient {
 
-    @RequestMapping(method = RequestMethod.GET, value = "/settings/api/user/{login}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
+    @RequestMapping(method = RequestMethod.GET, value = "/settings/api/user/{jhiUserId}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "3000")
-    ResponseEntity<String> getUserSettings(@PathVariable("login") String login);
+    ResponseEntity<String> getUserSettings(@PathVariable("jhiUserId") String jhiUserId);
     
 }
