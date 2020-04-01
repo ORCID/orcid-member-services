@@ -51,6 +51,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 
@@ -130,10 +131,13 @@ public class UserSettingsResourceIT {
         when(mockUaaUserUtils.getAuthenticatedUaaUserId()).thenReturn(DEFAULT_JHI_USER_ID);
         when(mockUaaUserUtils.getUAAUserById(DEFAULT_JHI_USER_ID)).thenReturn(obj);
         
-        final UserSettingsResource userSettingsResource = new UserSettingsResource(memberSettingsRepository, userSettingsRepository);
-        userSettingsResource.setOauth2ServiceClient(oauth2ServiceClient);
-        userSettingsResource.setUaaUserUtils(mockUaaUserUtils);
-        userSettingsResource.setSecurityUtils(mockSecurityUtils);
+        final UserSettingsResource userSettingsResource = new UserSettingsResource();
+        ReflectionTestUtils.setField(userSettingsResource, "securityUtils", mockSecurityUtils); 
+        ReflectionTestUtils.setField(userSettingsResource, "oauth2ServiceClient", oauth2ServiceClient); 
+        ReflectionTestUtils.setField(userSettingsResource, "uaaUserUtils", mockUaaUserUtils);
+        ReflectionTestUtils.setField(userSettingsResource, "memberSettingsRepository", memberSettingsRepository);
+        ReflectionTestUtils.setField(userSettingsResource, "userSettingsRepository", userSettingsRepository);
+
         this.restUserSettingsMockMvc = MockMvcBuilders.standaloneSetup(userSettingsResource).setCustomArgumentResolvers(pageableArgumentResolver)
                 .setControllerAdvice(exceptionTranslator).setConversionService(createFormattingConversionService()).setMessageConverters(jacksonMessageConverter)
                 .setValidator(validator).build();
