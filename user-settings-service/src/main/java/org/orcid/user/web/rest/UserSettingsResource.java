@@ -93,6 +93,15 @@ public class UserSettingsResource {
     @Autowired
     private SecurityUtils securityUtils;
     
+    public UserSettingsResource(MemberSettingsRepository memberSettingsRepository, UserSettingsRepository userSettingsRepository) {
+        this.memberSettingsRepository = memberSettingsRepository;
+        this.userSettingsRepository = userSettingsRepository;
+    }
+    
+    public void setSecurityUtils(SecurityUtils securityUtils) {
+        this.securityUtils = securityUtils;
+    }
+    
     public void setOauth2ServiceClient(Oauth2ServiceClient oauth2ServiceClient) {
         this.oauth2ServiceClient = oauth2ServiceClient;
     }
