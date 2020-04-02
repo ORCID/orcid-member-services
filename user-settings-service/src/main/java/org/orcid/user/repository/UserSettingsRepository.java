@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.orcid.user.domain.UserSettings;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +17,8 @@ public interface UserSettingsRepository extends MongoRepository<UserSettings, St
     Optional<UserSettings> findByJhiUserId(String jhiUserId);
 
     List<UserSettings> findBySalesforceId(String salesforceId);
+    
+    Page<UserSettings> findByDeletedFalse(Pageable pageable);
+    
+    
 }
