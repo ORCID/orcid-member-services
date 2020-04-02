@@ -499,7 +499,7 @@ public class UserSettingsResource {
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder)
             throws JSONException {
         log.debug("REST request to get a page of users");
-        Page<UserSettings> page = userSettingsRepository.findAll(pageable);
+        Page<UserSettings> page = userSettingsRepository.findByDeletedFalse(pageable);
         List<UserDTO> dtoList = new ArrayList<UserDTO>();
 
         for (UserSettings us : page) {
