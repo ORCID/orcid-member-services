@@ -93,14 +93,6 @@ public class UserSettingsResource {
     @Autowired
     private SecurityUtils securityUtils;
     
-    public void setOauth2ServiceClient(Oauth2ServiceClient oauth2ServiceClient) {
-        this.oauth2ServiceClient = oauth2ServiceClient;
-    }
-
-    public void setUaaUserUtils(UaaUserUtils uaaUserUtils) {
-        this.uaaUserUtils = uaaUserUtils;
-    }
-
     /**
      * {@code POST  /user/upload} : Create a list of users.
      *
