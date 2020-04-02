@@ -35,6 +35,7 @@ import org.orcid.user.domain.MemberSettings;
 import org.orcid.user.domain.UserSettings;
 import org.orcid.user.repository.MemberSettingsRepository;
 import org.orcid.user.repository.UserSettingsRepository;
+import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.security.UaaUserUtils;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.web.rest.errors.ExceptionTranslator;
@@ -50,6 +51,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 
@@ -103,6 +105,9 @@ public class UserSettingsResourceIT {
 
     @Mock
     private Oauth2ServiceClient oauth2ServiceClient;
+    
+    @Mock
+    private SecurityUtils mockSecurityUtils;
 
     @Mock
     private UaaUserUtils mockUaaUserUtils;
@@ -121,13 +126,18 @@ public class UserSettingsResourceIT {
         ResponseEntity<String> getUserResponse = new ResponseEntity<String>(obj.toString(), HttpStatus.OK);
         when(oauth2ServiceClient.registerUser(Mockito.anyMap())).thenReturn(createdResponse);
         when(oauth2ServiceClient.getUser(DEFAULT_LOGIN)).thenReturn(getUserResponse);
-
+        
+        when(mockSecurityUtils.getAuthenticatedUser()).thenReturn(DEFAULT_LOGIN);
         when(mockUaaUserUtils.getAuthenticatedUaaUserId()).thenReturn(DEFAULT_JHI_USER_ID);
         when(mockUaaUserUtils.getUAAUserById(DEFAULT_JHI_USER_ID)).thenReturn(obj);
         
         final UserSettingsResource userSettingsResource = new UserSettingsResource();
-        userSettingsResource.setOauth2ServiceClient(oauth2ServiceClient);
-        userSettingsResource.setUaaUserUtils(mockUaaUserUtils);
+        ReflectionTestUtils.setField(userSettingsResource, "securityUtils", mockSecurityUtils); 
+        ReflectionTestUtils.setField(userSettingsResource, "oauth2ServiceClient", oauth2ServiceClient); 
+        ReflectionTestUtils.setField(userSettingsResource, "uaaUserUtils", mockUaaUserUtils);
+        ReflectionTestUtils.setField(userSettingsResource, "memberSettingsRepository", memberSettingsRepository);
+        ReflectionTestUtils.setField(userSettingsResource, "userSettingsRepository", userSettingsRepository);
+
         this.restUserSettingsMockMvc = MockMvcBuilders.standaloneSetup(userSettingsResource).setCustomArgumentResolvers(pageableArgumentResolver)
                 .setControllerAdvice(exceptionTranslator).setConversionService(createFormattingConversionService()).setMessageConverters(jacksonMessageConverter)
                 .setValidator(validator).build();
@@ -175,7 +185,14 @@ public class UserSettingsResourceIT {
 
     @Test
     @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
-    public void createUserSettings() throws Exception {
+    public void createUserSettings() throws Exception { 
+        
+        MemberSettings ms = new MemberSettings();
+        ms.setAssertionServiceEnabled(true);
+        ms.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        ms.setIsConsortiumLead(true);
+        memberSettingsRepository.insert(ms);
+        
         int databaseSizeBeforeCreate = userSettingsRepository.findAll().size();
 
         JSONObject obj = getJSONUser();
@@ -186,7 +203,7 @@ public class UserSettingsResourceIT {
         ResponseStatusException rse = new ResponseStatusException(HttpStatus.NOT_FOUND);
         HystrixRuntimeException hre = new HystrixRuntimeException(null, null, null, rse, null);
         when(oauth2ServiceClient.getUser(DEFAULT_LOGIN)).thenThrow(hre).thenReturn(getUserResponse);
-
+        
         // Create the UserSettings
         restUserSettingsMockMvc.perform(post("/settings/api/user").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(userSettings)))
                 .andExpect(status().isCreated());
