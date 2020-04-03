@@ -35,6 +35,7 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
@@ -100,8 +101,12 @@ public class MemberSettingsResourceIT {
         
         when(mockUaaUserUtils.getAuthenticatedUaaUserId()).thenReturn(DEFAULT_CREATED_BY);
         
-        final MemberSettingsResource memberSettingsResource = new MemberSettingsResource(memberSettingsRepository, userSettingsRepository);
-        memberSettingsResource.setUaaUserUtils(mockUaaUserUtils);
+        final MemberSettingsResource memberSettingsResource = new MemberSettingsResource();
+        
+        ReflectionTestUtils.setField(memberSettingsResource, "uaaUserUtils", mockUaaUserUtils);
+        ReflectionTestUtils.setField(memberSettingsResource, "memberSettingsRepository", memberSettingsRepository);
+        ReflectionTestUtils.setField(memberSettingsResource, "userSettingsRepository", userSettingsRepository);
+        
         this.restMemberSettingsMockMvc = MockMvcBuilders.standaloneSetup(memberSettingsResource).setCustomArgumentResolvers(pageableArgumentResolver)
                 .setControllerAdvice(exceptionTranslator).setConversionService(createFormattingConversionService()).setMessageConverters(jacksonMessageConverter)
                 .setValidator(validator).build();

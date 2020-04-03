@@ -173,6 +173,7 @@ public class UserSettingsResourceIT {
         userSettings.setJhiUserId(DEFAULT_JHI_USER_ID);
         userSettings.setLogin(DEFAULT_LOGIN);
         userSettings.setMainContact(DEFAULT_MAIN_CONTACT);
+        userSettings.setDeleted(false);
         return userSettings;
     }
 
@@ -271,20 +272,24 @@ public class UserSettingsResourceIT {
     @Test
     public void getAllUserSettings() throws Exception {
         // Initialize the database
+        userSettingsRepository.save(UserSettings.valueOf(userSettings));
+
         UserSettings us = userSettingsRepository.save(UserSettings.valueOf(userSettings));
-
         String id = us.getId();
-
+        
         // Get all the userSettingsList
-        restUserSettingsMockMvc.perform(get("/settings/api/users?sort=id,desc")).andExpect(status().isOk())
+        restUserSettingsMockMvc.perform(get("/settings/api/users"))
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.[*].id").value(id))
-                .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN))).andExpect(jsonPath("$.[*].salesforceId").value(hasItem(DEFAULT_SALESFORCE_ID)))
+                .andExpect(jsonPath("$.[*].id").value(hasItem(id)))
+                .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_JHI_USER_ID)))
+                .andExpect(jsonPath("$.[*].salesforceId").value(hasItem(DEFAULT_SALESFORCE_ID)))
                 .andExpect(jsonPath("$.[*].mainContact").value(hasItem(DEFAULT_MAIN_CONTACT.booleanValue())))
                 .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
                 .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
                 .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY)))
                 .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())));
+
     }
 
     @Test

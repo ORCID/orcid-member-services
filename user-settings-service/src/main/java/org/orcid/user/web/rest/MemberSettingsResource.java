@@ -64,18 +64,11 @@ public class MemberSettingsResource {
     @Autowired
     private UaaUserUtils uaaUserUtils;
 
-    private final UserSettingsRepository userSettingsRepository;
+    @Autowired
+    private UserSettingsRepository userSettingsRepository;
 
-    private final MemberSettingsRepository memberSettingsRepository;
-
-    public MemberSettingsResource(MemberSettingsRepository memberSettingsRepository, UserSettingsRepository userSettingsRepository) {
-        this.memberSettingsRepository = memberSettingsRepository;
-        this.userSettingsRepository = userSettingsRepository;
-    }
-
-    public void setUaaUserUtils(UaaUserUtils uaaUserUtils) {
-        this.uaaUserUtils = uaaUserUtils;
-    }
+    @Autowired
+    private MemberSettingsRepository memberSettingsRepository;
 
     /**
      * {@code POST  /member-settings} : Create a new memberSettings.
