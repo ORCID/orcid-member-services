@@ -105,7 +105,7 @@ public class UserSettingsResourceIT {
 
     @Mock
     private Oauth2ServiceClient oauth2ServiceClient;
-    
+
     @Mock
     private SecurityUtils mockSecurityUtils;
 
@@ -126,14 +126,14 @@ public class UserSettingsResourceIT {
         ResponseEntity<String> getUserResponse = new ResponseEntity<String>(obj.toString(), HttpStatus.OK);
         when(oauth2ServiceClient.registerUser(Mockito.anyMap())).thenReturn(createdResponse);
         when(oauth2ServiceClient.getUser(DEFAULT_LOGIN)).thenReturn(getUserResponse);
-        
+
         when(mockSecurityUtils.getAuthenticatedUser()).thenReturn(DEFAULT_LOGIN);
         when(mockUaaUserUtils.getAuthenticatedUaaUserId()).thenReturn(DEFAULT_JHI_USER_ID);
         when(mockUaaUserUtils.getUAAUserById(DEFAULT_JHI_USER_ID)).thenReturn(obj);
-        
+
         final UserSettingsResource userSettingsResource = new UserSettingsResource();
-        ReflectionTestUtils.setField(userSettingsResource, "securityUtils", mockSecurityUtils); 
-        ReflectionTestUtils.setField(userSettingsResource, "oauth2ServiceClient", oauth2ServiceClient); 
+        ReflectionTestUtils.setField(userSettingsResource, "securityUtils", mockSecurityUtils);
+        ReflectionTestUtils.setField(userSettingsResource, "oauth2ServiceClient", oauth2ServiceClient);
         ReflectionTestUtils.setField(userSettingsResource, "uaaUserUtils", mockUaaUserUtils);
         ReflectionTestUtils.setField(userSettingsResource, "memberSettingsRepository", memberSettingsRepository);
         ReflectionTestUtils.setField(userSettingsResource, "userSettingsRepository", userSettingsRepository);
@@ -186,14 +186,14 @@ public class UserSettingsResourceIT {
 
     @Test
     @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
-    public void createUserSettings() throws Exception { 
-        
+    public void createUserSettings() throws Exception {
+
         MemberSettings ms = new MemberSettings();
         ms.setAssertionServiceEnabled(true);
         ms.setSalesforceId(DEFAULT_SALESFORCE_ID);
         ms.setIsConsortiumLead(true);
         memberSettingsRepository.insert(ms);
-        
+
         int databaseSizeBeforeCreate = userSettingsRepository.findAll().size();
 
         JSONObject obj = getJSONUser();
@@ -204,7 +204,7 @@ public class UserSettingsResourceIT {
         ResponseStatusException rse = new ResponseStatusException(HttpStatus.NOT_FOUND);
         HystrixRuntimeException hre = new HystrixRuntimeException(null, null, null, rse, null);
         when(oauth2ServiceClient.getUser(DEFAULT_LOGIN)).thenThrow(hre).thenReturn(getUserResponse);
-        
+
         // Create the UserSettings
         restUserSettingsMockMvc.perform(post("/settings/api/user").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(userSettings)))
                 .andExpect(status().isCreated());
@@ -272,17 +272,12 @@ public class UserSettingsResourceIT {
     @Test
     public void getAllUserSettings() throws Exception {
         // Initialize the database
-        userSettingsRepository.save(UserSettings.valueOf(userSettings));
-
         UserSettings us = userSettingsRepository.save(UserSettings.valueOf(userSettings));
         String id = us.getId();
-        
+
         // Get all the userSettingsList
-        restUserSettingsMockMvc.perform(get("/settings/api/users"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.[*].id").value(hasItem(id)))
-                .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_JHI_USER_ID)))
+        restUserSettingsMockMvc.perform(get("/settings/api/users")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$.[*].id").value(hasItem(id))).andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_JHI_USER_ID)))
                 .andExpect(jsonPath("$.[*].salesforceId").value(hasItem(DEFAULT_SALESFORCE_ID)))
                 .andExpect(jsonPath("$.[*].mainContact").value(hasItem(DEFAULT_MAIN_CONTACT.booleanValue())))
                 .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
@@ -297,17 +292,13 @@ public class UserSettingsResourceIT {
         // Initialize the database
         UserSettings us = userSettingsRepository.save(UserSettings.valueOf(userSettings));
         String id = us.getId();
-        
+
         // Get the userSettings
         restUserSettingsMockMvc.perform(get("/settings/api/user/{jhiUserId}", userSettings.getJhiUserId())).andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.login").value(DEFAULT_JHI_USER_ID))
-                .andExpect(jsonPath("$.salesforceId").value(DEFAULT_SALESFORCE_ID))
-                .andExpect(jsonPath("$.mainContact").value(DEFAULT_MAIN_CONTACT.booleanValue()))
-                .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
-                .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()))
-                .andExpect(jsonPath("$.lastModifiedBy").value(DEFAULT_LAST_MODIFIED_BY))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.login").value(DEFAULT_JHI_USER_ID)).andExpect(jsonPath("$.salesforceId").value(DEFAULT_SALESFORCE_ID))
+                .andExpect(jsonPath("$.mainContact").value(DEFAULT_MAIN_CONTACT.booleanValue())).andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
+                .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString())).andExpect(jsonPath("$.lastModifiedBy").value(DEFAULT_LAST_MODIFIED_BY))
                 .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()));
     }
 
@@ -319,16 +310,16 @@ public class UserSettingsResourceIT {
 
     @Test
     @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
-    public void updateUserSettings() throws Exception {                
+    public void updateUserSettings() throws Exception {
         JSONObject obj = getJSONUser();
         when(oauth2ServiceClient.updateUser(Mockito.anyMap())).thenReturn(new ResponseEntity<String>(obj.toString(), HttpStatus.OK));
-                
+
         // Initialize the database
         UserSettings us = userSettingsRepository.save(UserSettings.valueOf(userSettings));
 
         obj.put("id", DEFAULT_JHI_USER_ID);
         when(mockUaaUserUtils.getUAAUserByLogin(DEFAULT_JHI_USER_ID)).thenReturn(obj);
-        
+
         int databaseSizeBeforeUpdate = userSettingsRepository.findAll().size();
 
         MemberSettings ms = new MemberSettings();
@@ -336,7 +327,7 @@ public class UserSettingsResourceIT {
         ms.setSalesforceId(UPDATED_SALESFORCE_ID);
         ms.setIsConsortiumLead(true);
         memberSettingsRepository.insert(ms);
-        
+
         // Update the userSettings
         UserSettings updatedUserSettings = userSettingsRepository.findById(us.getId()).get();
         updatedUserSettings.setSalesforceId(UPDATED_SALESFORCE_ID);
@@ -347,14 +338,12 @@ public class UserSettingsResourceIT {
 
         UserDTO dto = UserDTO.valueOf(updatedUserSettings);
         dto.setLogin(DEFAULT_LOGIN);
-        
+
         // Return the user including the jhiUserId
         when(oauth2ServiceClient.updateUser(Mockito.anyMap())).thenReturn(new ResponseEntity<String>(obj.toString(), HttpStatus.OK));
-        
-        restUserSettingsMockMvc.perform(put("/settings/api/user")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-            .andExpect(status().isOk());
+
+        restUserSettingsMockMvc.perform(put("/settings/api/user").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(dto)))
+                .andExpect(status().isOk());
 
         // Validate the UserSettings in the database
         List<UserSettings> userSettingsList = userSettingsRepository.findAll();
@@ -374,17 +363,16 @@ public class UserSettingsResourceIT {
 
         // Create the UserSettings
 
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restUserSettingsMockMvc.perform(put("/settings/api/user")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(userSettings)))
-            .andExpect(status().isBadRequest());
+        // If the entity doesn't have an ID, it will throw
+        // BadRequestAlertException
+        restUserSettingsMockMvc.perform(put("/settings/api/user").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(userSettings)))
+                .andExpect(status().isBadRequest());
 
         // Validate the UserSettings in the database
         List<UserSettings> userSettingsList = userSettingsRepository.findAll();
         assertThat(userSettingsList).hasSize(databaseSizeBeforeUpdate);
     }
-    
+
     @Test
     public void equalsVerifier() throws Exception {
         UserSettings userSettings1 = new UserSettings();
