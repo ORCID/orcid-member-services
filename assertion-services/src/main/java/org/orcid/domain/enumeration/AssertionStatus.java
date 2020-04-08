@@ -1,6 +1,6 @@
 package org.orcid.domain.enumeration;
 
-public enum AffiliationStatus {
+public enum AssertionStatus {
 	
 	USER_DENIED_ACCESS("User denied access"),
 	PENDING("Pending"),
@@ -13,7 +13,7 @@ public enum AffiliationStatus {
 	
 	public final String value;
 	
-	AffiliationStatus(String value) {
+	AssertionStatus(String value) {
 		this.value = value;
 	}
 	
