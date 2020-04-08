@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -22,6 +21,7 @@ import org.orcid.user.repository.MemberSettingsRepository;
 import org.orcid.user.repository.UserSettingsRepository;
 import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.security.UaaUserUtils;
+import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.UserDTO;
 import org.springframework.http.ResponseEntity;
 
@@ -43,6 +43,9 @@ class UserSettingsResourceTest {
 
 	@Mock
 	private SecurityUtils securityUtils;
+	
+	@Mock
+	private UserService userService;
 
 	@InjectMocks
 	private UserSettingsResource userSettingsResource;
@@ -57,8 +60,8 @@ class UserSettingsResourceTest {
 	void testCreateUser() throws JSONException, URISyntaxException {
 		Mockito.when(memberSettingsRepository.findBySalesforceId(Mockito.eq("salesforceId")))
 				.thenReturn(Optional.of(new MemberSettings()));
+		Mockito.when(userService.canCreateUser(Mockito.anyString())).thenReturn(Boolean.TRUE);
 		Mockito.when(oauth2ServiceClient.getUser(Mockito.anyString()))
-				.thenThrow(new HystrixRuntimeException(null, null, null, null, null))
 				.thenReturn(ResponseEntity.ok().body(
 						"{ 'id' : 'something', 'login' : 'login', 'createdDate' : '2020-03-26T00:42:32.655Z', 'lastModifiedBy' : 'something','lastModifiedDate' : '2020-03-26T00:42:32.655Z',  }"));
 		Mockito.when(oauth2ServiceClient.registerUser(Mockito.any(HashMap.class)))
