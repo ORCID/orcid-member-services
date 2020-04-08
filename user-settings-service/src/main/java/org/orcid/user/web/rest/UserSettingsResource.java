@@ -30,6 +30,7 @@ import org.orcid.user.repository.UserSettingsRepository;
 import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.security.UaaUserUtils;
+import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.orcid.user.web.rest.errors.MemberNotFoundException;
@@ -71,7 +72,7 @@ import io.github.jhipster.web.util.PaginationUtil;
 @RequestMapping("/settings/api")
 public class UserSettingsResource {
 
-    private final Logger log = LoggerFactory.getLogger(UserSettingsResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserSettingsResource.class);
 
     private static final String ENTITY_NAME = "userSettingsServiceUserSettings";
 
@@ -91,6 +92,9 @@ public class UserSettingsResource {
     private MemberSettingsRepository memberSettingsRepository;
     
     @Autowired
+    private UserService userService;
+    
+    @Autowired
     private SecurityUtils securityUtils;
     
     /**
@@ -106,7 +110,7 @@ public class UserSettingsResource {
     @PostMapping("/user/upload")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) throws Throwable {
-        log.debug("Uploading users settings CSV");
+        LOG.debug("Uploading users settings CSV");
         JSONArray errors = new JSONArray();
         Instant now = Instant.now();
         try (InputStream is = file.getInputStream();) {
@@ -131,7 +135,7 @@ public class UserSettingsResource {
                 errors.put(error);
             } else {
                 String login = element.get("email");
-                log.debug("Looking for existing user: " + login);
+                LOG.debug("Looking for existing user: " + login);
                 JSONObject existingUaaUser = uaaUserUtils.getUAAUserByLogin(login);
                 String salesforceId = element.get("salesforceId");
 
@@ -160,10 +164,10 @@ public class UserSettingsResource {
             JSONObject error = new JSONObject();
             error.put("index", index);
             if (t != null) {
-                log.error("Error on line " + index, t);
+                LOG.error("Error on line " + index, t);
                 error.put("message", t.getMessage());
             } else {
-                log.error("Error on line " + index, e);
+                LOG.error("Error on line " + index, e);
                 error.put("message", e.getMessage());
             }
             errors.put(error);
@@ -206,7 +210,7 @@ public class UserSettingsResource {
     @PostMapping("/user")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) throws JSONException, URISyntaxException {
-        log.debug("REST request to save UserDTO : {}", userDTO);
+        LOG.debug("REST request to save UserDTO : {}", userDTO);
         if (!StringUtils.isBlank(userDTO.getId())) {
             throw new BadRequestAlertException("A new user cannot already have an ID", ENTITY_NAME, "idexists");
         }
@@ -216,26 +220,14 @@ public class UserSettingsResource {
             return ResponseEntity.badRequest().body(userDTO);
         }
 
-        // Validate user does not exists
-        try {
-            ResponseEntity<String> existingUserResponse = oauth2ServiceClient.getUser(userDTO.getLogin());
-            // We must get a NOT_FOUND exception, if not, we assume we cant create the user
-            log.debug("User '{}' couldn't be created, status code {}", userDTO.getLogin(), existingUserResponse.getStatusCode());
-            return ResponseEntity.badRequest().body(userDTO);
-        } catch (HystrixRuntimeException hre) {
-            if (hre.getCause() != null && ResponseStatusException.class.isAssignableFrom(hre.getCause().getClass())) {
-                ResponseStatusException rse = (ResponseStatusException) hre.getCause();
-                // Only exception possible should be NOT_FOUND, any other, return error
-                if (!HttpStatus.NOT_FOUND.equals(rse.getStatus())) {
-                    log.debug("User '{}' couldn't be created because it already exists, status code {}", userDTO.getLogin(), rse.getStatus());
-                    return ResponseEntity.badRequest().body(userDTO);
-                }
-            }
+        if (!userService.canCreateUser(userDTO.getLogin())) {
+        	LOG.info("Can't create user {} as it already exists", userDTO.getLogin());
+        	return ResponseEntity.badRequest().body(userDTO);
         }
-
+        
         // check member exists
         if (!memberSettingsExists(userDTO.getSalesforceId())) {
-        	log.warn("Attempt to create user with non existent member {}", userDTO.getSalesforceId());
+        	LOG.warn("Attempt to create user with non existent member {}", userDTO.getSalesforceId());
         	return ResponseEntity.badRequest().body(userDTO);
         }
         
@@ -348,7 +340,7 @@ public class UserSettingsResource {
     @PutMapping("/user")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException, JSONException {
-        log.debug("REST request to update UserDTO : {}", userDTO);
+        LOG.debug("REST request to update UserDTO : {}", userDTO);
         if (StringUtils.isBlank(userDTO.getId()) || StringUtils.isBlank(userDTO.getId())) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -417,7 +409,7 @@ public class UserSettingsResource {
     }
 
     private UserSettings createUserSettings(String jhiUserId, String salesforceId, Boolean mainContact, Instant now) throws JSONException {
-        log.info("Creating userSettings for: " + jhiUserId);
+        LOG.info("Creating userSettings for: " + jhiUserId);
         String createdBy = uaaUserUtils.getAuthenticatedUaaUserId();
 
         UserSettings us = new UserSettings();
@@ -434,7 +426,7 @@ public class UserSettingsResource {
     }
 
     private void updateUserSettings(String jhiUserId, UserDTO userDTO, Instant lastModifiedDate) throws JSONException {
-        log.info("Updating userSettings for: " + userDTO.toString());
+        LOG.info("Updating userSettings for: " + userDTO.toString());
         // Verify the user exists on the UserSettings table
         Optional<UserSettings> existingUserSettingsOptional = userSettingsRepository.findByJhiUserId(jhiUserId);
         if (!existingUserSettingsOptional.isPresent()) {
@@ -490,7 +482,7 @@ public class UserSettingsResource {
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder)
             throws JSONException {
-        log.debug("REST request to get a page of users");
+        LOG.debug("REST request to get a page of users");
         Page<UserSettings> page = userSettingsRepository.findByDeletedFalse(pageable);
         List<UserDTO> dtoList = new ArrayList<UserDTO>();
 
@@ -518,7 +510,7 @@ public class UserSettingsResource {
         // TODO: Secure this endpoint, we should make it available for the admin
         // or the logged in user IF it is the same user as the one specified in
         // the id param
-        log.debug("REST request to get UserDTO : {}", jhiUserId);
+        LOG.debug("REST request to get UserDTO : {}", jhiUserId);
         Optional<UserSettings> ous = userSettingsRepository.findByJhiUserId(jhiUserId);
         if (!ous.isPresent()) {
             return ResponseEntity.notFound().build();
@@ -556,7 +548,7 @@ public class UserSettingsResource {
      */
     @DeleteMapping("/user/{jhiUserId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String jhiUserId) throws JSONException {
-        log.debug("REST request to delete user {}", jhiUserId);
+        LOG.debug("REST request to delete user {}", jhiUserId);
 
         // Empty user on UAA
         ResponseEntity<String> response = oauth2ServiceClient.clearUser(jhiUserId);
@@ -590,7 +582,7 @@ public class UserSettingsResource {
      */
     @DeleteMapping("/user/{id}/{authority}")
     public ResponseEntity<Void> removeAuthority(@PathVariable String id, @PathVariable String authority) throws JSONException {
-        log.debug("REST request to remove authority {} from user {}", authority, id);
+        LOG.debug("REST request to remove authority {} from user {}", authority, id);
 
         Optional<UserSettings> ous = userSettingsRepository.findById(id);
         if (!ous.isPresent()) {
