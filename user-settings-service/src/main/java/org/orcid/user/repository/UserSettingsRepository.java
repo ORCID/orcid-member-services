@@ -14,11 +14,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserSettingsRepository extends MongoRepository<UserSettings, String> {
-    Optional<UserSettings> findByJhiUserId(String jhiUserId);
+    
+	Optional<UserSettings> findByJhiUserId(String jhiUserId);
 
     List<UserSettings> findBySalesforceId(String salesforceId);
     
     Page<UserSettings> findByDeletedFalse(Pageable pageable);
-    
     
 }

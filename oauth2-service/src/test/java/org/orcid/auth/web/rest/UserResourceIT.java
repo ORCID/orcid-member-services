@@ -1,5 +1,24 @@
 package org.orcid.auth.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.Instant;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.orcid.auth.Oauth2ServiceApp;
 import org.orcid.auth.domain.Authority;
 import org.orcid.auth.domain.User;
@@ -7,13 +26,11 @@ import org.orcid.auth.repository.UserRepository;
 import org.orcid.auth.security.AuthoritiesConstants;
 import org.orcid.auth.service.MailService;
 import org.orcid.auth.service.UserService;
+import org.orcid.auth.service.cache.UserCaches;
 import org.orcid.auth.service.dto.UserDTO;
 import org.orcid.auth.service.mapper.UserMapper;
 import org.orcid.auth.web.rest.errors.ExceptionTranslator;
 import org.orcid.auth.web.rest.vm.ManagedUserVM;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
@@ -22,15 +39,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.time.Instant;
-import java.util.*;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link UserResource} REST controller.
@@ -84,6 +92,9 @@ public class UserResourceIT {
 
     @Autowired
     private CacheManager cacheManager;
+    
+    @Autowired
+    private UserResource userResource;
 
     private MockMvc restUserMockMvc;
 
@@ -91,9 +102,8 @@ public class UserResourceIT {
 
     @BeforeEach
     public void setup() {
-        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
-        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
-        UserResource userResource = new UserResource(userService, userRepository, mailService);
+        cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).clear();
+        cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).clear();
 
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -266,7 +276,7 @@ public class UserResourceIT {
         // Initialize the database
         userRepository.save(user);
 
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
+        assertThat(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
 
         // Get the user
         restUserMockMvc.perform(get("/api/users/{login}", user.getLogin()))
@@ -279,7 +289,7 @@ public class UserResourceIT {
             .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL))
             .andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
 
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
+        assertThat(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
     }
 
     @Test
@@ -452,25 +462,7 @@ public class UserResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
             .andExpect(status().isBadRequest());
     }
-
-    @Test
-    public void deleteUser() throws Exception {
-        // Initialize the database
-        userRepository.save(user);
-        int databaseSizeBeforeDelete = userRepository.findAll().size();
-
-        // Delete the user
-        restUserMockMvc.perform(delete("/api/users/{login}", user.getLogin())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
-
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
-
-        // Validate the database is empty
-        List<User> userList = userRepository.findAll();
-        assertThat(userList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
+    
     @Test
     public void getAllAuthorities() throws Exception {
         restUserMockMvc.perform(get("/api/users/authorities")

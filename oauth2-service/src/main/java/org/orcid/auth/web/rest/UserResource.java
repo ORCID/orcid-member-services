@@ -1,5 +1,12 @@
 package org.orcid.auth.web.rest;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
 import org.orcid.auth.config.Constants;
 import org.orcid.auth.domain.User;
 import org.orcid.auth.repository.UserRepository;
@@ -10,13 +17,9 @@ import org.orcid.auth.service.dto.UserDTO;
 import org.orcid.auth.web.rest.errors.BadRequestAlertException;
 import org.orcid.auth.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.auth.web.rest.errors.LoginAlreadyUsedException;
-
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,13 +28,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing users.
@@ -66,18 +76,15 @@ public class UserResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private final MailService mailService;
+    @Autowired
+    private MailService mailService;
 
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService) {
-
-        this.userService = userService;
-        this.userRepository = userRepository;
-        this.mailService = mailService;
-    }
 
     /**
      * {@code POST  /users}  : Creates a new user.
@@ -191,20 +198,6 @@ public class UserResource {
                 .map(UserDTO::new));
     }
 
-    /**
-     * {@code DELETE /users/:login} : delete the "login" User.
-     *
-     * @param login the login of the user to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
-    @DeleteMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> deleteUser(@PathVariable String login) {
-        log.debug("REST request to delete User: {}", login);
-        userService.deleteUser(login);
-        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName,  "userManagement.deleted", login)).build();
-    }
-    
     /**
      * {@code DELETE /users/clear/:id} : clear the "id" User.
      *
