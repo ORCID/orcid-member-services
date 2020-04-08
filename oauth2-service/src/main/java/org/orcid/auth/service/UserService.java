@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,6 +16,7 @@ import org.orcid.auth.repository.AuthorityRepository;
 import org.orcid.auth.repository.UserRepository;
 import org.orcid.auth.security.AuthoritiesConstants;
 import org.orcid.auth.security.SecurityUtils;
+import org.orcid.auth.service.cache.UserCaches;
 import org.orcid.auth.service.dto.UserDTO;
 import org.orcid.auth.service.util.RandomUtil;
 import org.orcid.auth.web.rest.errors.EmailAlreadyUsedException;
@@ -24,7 +24,7 @@ import org.orcid.auth.web.rest.errors.InvalidPasswordException;
 import org.orcid.auth.web.rest.errors.LoginAlreadyUsedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.CacheManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -37,39 +37,36 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    private final Logger log = LoggerFactory.getLogger(UserService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    private final AuthorityRepository authorityRepository;
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
-    private final CacheManager cacheManager;
-
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authorityRepository = authorityRepository;
-        this.cacheManager = cacheManager;
-    }
-
+    @Autowired
+    private UserCaches userCaches;
+    
     public Optional<User> activateRegistration(String key) {
-        log.debug("Activating user for activation key {}", key);
+        LOG.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
             .map(user -> {
                 // activate given user for the registration key.
                 user.setActivated(true);
                 user.setActivationKey(null);
                 userRepository.save(user);
-                this.clearUserCaches(user);
-                log.debug("Activated user: {}", user);
+                userCaches.evictEntryFromUserCaches(user.getEmail());
+                LOG.debug("Activated user: {}", user);
                 return user;
             });
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
-        log.debug("Reset user password for reset key {}", key);
+        LOG.debug("Reset user password for reset key {}", key);
         return userRepository.findOneByResetKey(key)
             .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400)))
             .map(user -> {
@@ -77,7 +74,7 @@ public class UserService {
                 user.setResetKey(null);
                 user.setResetDate(null);
                 userRepository.save(user);
-                this.clearUserCaches(user);
+                userCaches.evictEntryFromUserCaches(user.getEmail());
                 return user;
             });
     }
@@ -89,7 +86,7 @@ public class UserService {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(Instant.now());
                 userRepository.save(user);
-                this.clearUserCaches(user);
+                userCaches.evictEntryFromUserCaches(user.getEmail());
                 return user;
             });
     }
@@ -125,8 +122,8 @@ public class UserService {
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
-        this.clearUserCaches(newUser);
-        log.debug("Created Information for User: {}", newUser);
+        userCaches.evictEntryFromUserCaches(newUser.getEmail());
+        LOG.debug("Created Information for User: {}", newUser);
         return newUser;
     }
 
@@ -135,7 +132,7 @@ public class UserService {
              return false;
         }
         userRepository.delete(existingUser);
-        this.clearUserCaches(existingUser);
+        userCaches.evictEntryFromUserCaches(existingUser.getEmail());
         return true;
     }
 
@@ -165,8 +162,8 @@ public class UserService {
             user.setAuthorities(authorities);
         }
         userRepository.save(user);
-        this.clearUserCaches(user);
-        log.debug("Created Information for User: {}", user);
+        userCaches.evictEntryFromUserCaches(user.getEmail());
+        LOG.debug("Created Information for User: {}", user);
         return user;
     }
 
@@ -189,8 +186,8 @@ public class UserService {
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
                 userRepository.save(user);
-                this.clearUserCaches(user);
-                log.debug("Changed Information for User: {}", user);
+                userCaches.evictEntryFromUserCaches(user.getEmail());
+                LOG.debug("Changed Information for User: {}", user);
             });
     }
 
@@ -206,7 +203,7 @@ public class UserService {
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(user -> {
-                this.clearUserCaches(user);
+                userCaches.evictEntryFromUserCaches(user.getEmail());
                 user.setLogin(userDTO.getLogin().toLowerCase());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
@@ -222,8 +219,8 @@ public class UserService {
                     .map(Optional::get)
                     .forEach(managedAuthorities::add);
                 userRepository.save(user);
-                this.clearUserCaches(user);
-                log.debug("Changed Information for User: {}", user);
+                userCaches.evictEntryFromUserCaches(user.getEmail());
+                LOG.debug("Changed Information for User: {}", user);
                 return user;
             })
             .map(UserDTO::new);
@@ -232,30 +229,37 @@ public class UserService {
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
             userRepository.delete(user);
-            this.clearUserCaches(user);
-            log.debug("Deleted User: {}", user);
+            userCaches.evictEntryFromUserCaches(user.getEmail());
+            LOG.debug("Deleted User: {}", user);
         });
     }
     
     public void clearUser(String id) {
-        userRepository.findOneById(id).ifPresent(user -> {
-            log.debug("About to clear User with id: {}", id);
-            user.setActivated(false);
-            user.setActivationKey(null);
-            user.setAuthorities(new HashSet<Authority>());
-            user.setEmail(id + "@deleted.orcid.org");
-            user.setFirstName(null);
-            user.setImageUrl(null);
-            user.setLangKey(null);
-            user.setLastName(null);
-            user.setLogin(id);
-            user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-            user.setResetDate(null);
-            user.setResetKey(null);
-            userRepository.save(user);
-            this.clearUserCaches(user);
-            log.debug("User cleared: {}", id);
-        });
+    	Optional<User> u = userRepository.findOneById(id);
+    	if (u.isPresent()) {
+    		LOG.debug("About to clear User with id: {}", id);
+    		User user = u.get();
+    		String email = user.getEmail();
+    		userCaches.evictEntryFromUserCaches(email);
+
+    		user.setActivated(false);
+    		user.setActivationKey(null);
+    		user.setAuthorities(new HashSet<Authority>());
+    		user.setEmail(id + "@deleted.orcid.org");
+    		user.setFirstName(null);
+    		user.setImageUrl(null);
+    		user.setLangKey(null);
+    		user.setLastName(null);
+    		user.setLogin(id);
+    		user.setPassword(RandomStringUtils.randomAlphanumeric(60));
+    		user.setResetDate(null);
+    		user.setResetKey(null);
+    		userRepository.save(user);
+    		
+    		LOG.debug("userRepository.findOneByEmailIgnoreCase(email).isPresent(): {}", userRepository.findOneByEmailIgnoreCase(email).isPresent());
+    		LOG.debug("userRepository.findOneByLogin(email).isPresent(): {}", userRepository.findOneByLogin(email).isPresent());
+    		LOG.debug("User cleared: {}", id);
+    	}
     }
 
     public void changePassword(String currentClearTextPassword, String newPassword) {
@@ -269,8 +273,8 @@ public class UserService {
                 String encryptedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encryptedPassword);
                 userRepository.save(user);
-                this.clearUserCaches(user);
-                log.debug("Changed password for User: {}", user);
+                userCaches.evictEntryFromUserCaches(user.getEmail());
+                LOG.debug("Changed password for User: {}", user);
             });
     }
 
@@ -304,9 +308,9 @@ public class UserService {
         userRepository
             .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
             .forEach(user -> {
-                log.debug("Deleting not activated user {}", user.getLogin());
+                LOG.debug("Deleting not activated user {}", user.getLogin());
                 userRepository.delete(user);
-                this.clearUserCaches(user);
+                userCaches.evictEntryFromUserCaches(user.getEmail());
             });
     }
 
@@ -318,9 +322,4 @@ public class UserService {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }
 
-
-    private void clearUserCaches(User user) {
-        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
-        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
-    }
 }
