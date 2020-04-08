@@ -13,6 +13,18 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 300000
+
+ribbon:
+  ReadTimeout: 300000
+  ConnectTimeout: 300000
+
 logging:
   level:
     ROOT: DEBUG
