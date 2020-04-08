@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
-import org.orcid.domain.enumeration.AffiliationStatus;
+import org.orcid.domain.enumeration.AssertionStatus;
 
 class AffiliationUtilsTest {
 
@@ -19,18 +19,18 @@ class AffiliationUtilsTest {
 
 		JSONObject error = getDummyError(404);
 		assertion.setOrcidError(error.toString());
-		assertEquals(AffiliationStatus.USER_DELETED_FROM_ORCID.value,
-				AffiliationUtils.getAffiliationStatus(assertion, record));
+		assertEquals(AssertionStatus.USER_DELETED_FROM_ORCID.value,
+				AssertionUtils.getAssertionStatus(assertion, record));
 
 		error = getDummyError(403);
 		assertion.setOrcidError(error.toString());
-		assertEquals(AffiliationStatus.USER_REVOKED_ACCESS.value,
-				AffiliationUtils.getAffiliationStatus(assertion, record));
+		assertEquals(AssertionStatus.USER_REVOKED_ACCESS.value,
+				AssertionUtils.getAssertionStatus(assertion, record));
 
 		error = getDummyError(500);
 		assertion.setOrcidError(error.toString());
-		assertEquals(AffiliationStatus.ERROR_ADDIN_TO_ORCID.value,
-				AffiliationUtils.getAffiliationStatus(assertion, record));
+		assertEquals(AssertionStatus.ERROR_ADDIN_TO_ORCID.value,
+				AssertionUtils.getAssertionStatus(assertion, record));
 	}
 
 	@Test
@@ -39,22 +39,22 @@ class AffiliationUtilsTest {
 		Assertion assertion = new Assertion();
 
 		record.setDeniedDate(Instant.now());
-		assertEquals(AffiliationStatus.USER_DENIED_ACCESS.value,
-				AffiliationUtils.getAffiliationStatus(assertion, record));
+		assertEquals(AssertionStatus.USER_DENIED_ACCESS.value,
+				AssertionUtils.getAssertionStatus(assertion, record));
 		record.setDeniedDate(null);
 
 		record.setIdToken("idToken");
-		assertEquals(AffiliationStatus.USER_GRANTED_ACCESS.value,
-				AffiliationUtils.getAffiliationStatus(assertion, record));
+		assertEquals(AssertionStatus.USER_GRANTED_ACCESS.value,
+				AssertionUtils.getAssertionStatus(assertion, record));
 		record.setIdToken(null);
 
 		assertion.setPutCode("put-code");
 		assertion.setDeletedFromORCID(Instant.now());
-		assertEquals(AffiliationStatus.DELETED_IN_ORCID.value,
-				AffiliationUtils.getAffiliationStatus(assertion, record));
+		assertEquals(AssertionStatus.DELETED_IN_ORCID.value,
+				AssertionUtils.getAssertionStatus(assertion, record));
 		assertion.setDeletedFromORCID(null);
 
-		assertEquals(AffiliationStatus.IN_ORCID.value, AffiliationUtils.getAffiliationStatus(assertion, record));
+		assertEquals(AssertionStatus.IN_ORCID.value, AssertionUtils.getAssertionStatus(assertion, record));
 	}
 
 	private JSONObject getDummyError(int statusCode) {

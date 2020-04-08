@@ -11,7 +11,7 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
-import org.orcid.domain.utils.AffiliationUtils;
+import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.security.UaaUserUtils;
 import org.orcid.service.OrcidRecordService;
@@ -58,7 +58,7 @@ public class AssertionsCSVReportWriter implements AssertionsReportWriter {
 			}
 			elements.add((orcidRecordMap.get(a.getEmail()).getOrcid() == null) ? ""
 					: (orcidRecordMap.get(a.getEmail()).getOrcid()));
-			elements.add(AffiliationUtils.getAffiliationStatus(a, orcidRecordMap.get(a.getEmail())));
+			elements.add(AssertionUtils.getAssertionStatus(a, orcidRecordMap.get(a.getEmail())));
 			elements.add(a.getPutCode() == null ? "" : a.getPutCode());
 			elements.add(a.getCreated() == null ? "" : a.getCreated().toString());
 			elements.add(a.getModified() == null ? "" : a.getModified().toString());
