@@ -36,7 +36,8 @@ import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 @Service
 public class AssertionsService {
-	private final Logger log = LoggerFactory.getLogger(AssertionsService.class);
+	
+	private static final Logger LOG = LoggerFactory.getLogger(AssertionsService.class);
 
 	private final Sort SORT = new Sort(Sort.Direction.ASC, "email", "status", "created", "modified",
 			"deletedFromORCID");
@@ -194,17 +195,17 @@ public class AssertionsService {
 		for (Assertion assertion : assertionsToAdd) {
 			Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(assertion.getEmail());
 			if (!optional.isPresent()) {
-				log.error("OrcidRecord not available for email {}", assertion.getEmail());
-				break;
+				LOG.error("OrcidRecord not available for email {}", assertion.getEmail());
+				continue;
 			}
 			OrcidRecord record = optional.get();
 			if (StringUtils.isBlank(record.getOrcid())) {
-				log.warn("Orcid id still not available for {}", assertion.getEmail());
-				break;
+				LOG.warn("Orcid id still not available for {}", assertion.getEmail());
+				continue;
 			}
 			if (StringUtils.isBlank(record.getIdToken())) {
-				log.warn("Id token still not available for {}", assertion.getEmail());
-				break;
+				LOG.warn("Id token still not available for {}", assertion.getEmail());
+				continue;
 			}
 
 			String orcid = record.getOrcid();
@@ -214,12 +215,12 @@ public class AssertionsService {
 				if (accessTokens.containsKey(orcid)) {
 					accessToken = accessTokens.get(orcid);
 				} else {
-					log.info("Exchanging id token for {}", orcid);
+					LOG.info("Exchanging id token for {}", orcid);
 					accessToken = orcidAPIClient.exchangeToken(idToken);
 					accessTokens.put(orcid, idToken);
 				}
 
-				log.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
+				LOG.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
 				String putCode = orcidAPIClient.postAffiliation(orcid, accessToken, assertion);
 				assertion.setPutCode(putCode);
 				Instant now = Instant.now();
@@ -231,7 +232,7 @@ public class AssertionsService {
 			} catch (ORCIDAPIException oae) {
 				storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
 			} catch (Exception e) {
-				log.error("Error with assertion " + assertion.getId(), e);
+				LOG.error("Error with assertion " + assertion.getId(), e);
 				storeError(assertion.getId(), 0, e.getMessage());
 			}
 		}
@@ -243,17 +244,17 @@ public class AssertionsService {
 		for (Assertion assertion : assertionsToUpdate) {
 			Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(assertion.getEmail());
 			if (!optional.isPresent()) {
-				log.error("OrcidRecord not available for email {}", assertion.getEmail());
-				break;
+				LOG.error("OrcidRecord not available for email {}", assertion.getEmail());
+				continue;
 			}
 			OrcidRecord record = optional.get();
 			if (StringUtils.isBlank(record.getOrcid())) {
-				log.warn("Orcid id still not available for {}", assertion.getEmail());
-				break;
+				LOG.warn("Orcid id still not available for {}", assertion.getEmail());
+				continue;
 			}
 			if (StringUtils.isBlank(record.getIdToken())) {
-				log.warn("Id token still not available for {}", assertion.getEmail());
-				break;
+				LOG.warn("Id token still not available for {}", assertion.getEmail());
+				continue;
 			}
 
 			String orcid = record.getOrcid();
@@ -263,11 +264,11 @@ public class AssertionsService {
 				if (accessTokens.containsKey(orcid)) {
 					accessToken = accessTokens.get(orcid);
 				} else {
-					log.info("Exchanging id token for {}", orcid);
+					LOG.info("Exchanging id token for {}", orcid);
 					accessToken = orcidAPIClient.exchangeToken(idToken);
 					accessTokens.put(orcid, idToken);
 				}
-				log.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid,
+				LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid,
 						assertion.getId());
 				orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
 				Instant now = Instant.now();
@@ -279,7 +280,7 @@ public class AssertionsService {
 			} catch (ORCIDAPIException oae) {
 				storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
 			} catch (Exception e) {
-				log.error("Error with assertion " + assertion.getId(), e);
+				LOG.error("Error with assertion " + assertion.getId(), e);
 				storeError(assertion.getId(), 0, e.getMessage());
 			}
 		}
@@ -296,20 +297,20 @@ public class AssertionsService {
 
 		Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(assertion.getEmail());
 		if (!optional.isPresent()) {
-			log.error("OrcidRecord not available for email {}", assertion.getEmail());
+			LOG.error("OrcidRecord not available for email {}", assertion.getEmail());
 			return false;
 		}
 		OrcidRecord record = optional.get();
 		if (StringUtils.isBlank(record.getOrcid())) {
-			log.warn("Orcid id still not available for {}", assertion.getEmail());
+			LOG.warn("Orcid id still not available for {}", assertion.getEmail());
 			return false;
 		}
 		if (StringUtils.isBlank(record.getIdToken())) {
-			log.warn("Id token still not available for {}", assertion.getEmail());
+			LOG.warn("Id token still not available for {}", assertion.getEmail());
 			return false;
 		}
 
-		log.info("Exchanging id token for {}", record.getOrcid());
+		LOG.info("Exchanging id token for {}", record.getOrcid());
 		try {
 			String accessToken = orcidAPIClient.exchangeToken(record.getIdToken());
 
@@ -324,7 +325,7 @@ public class AssertionsService {
 		} catch (ORCIDAPIException oae) {
 			storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
 		} catch (Exception e) {
-			log.error("Error with assertion " + assertion.getId(), e);
+			LOG.error("Error with assertion " + assertion.getId(), e);
 			storeError(assertion.getId(), 0, e.getMessage());
 		}
 		return false;
@@ -348,7 +349,7 @@ public class AssertionsService {
 		JSONObject existingUserSettings = null;
 		try {
 			ResponseEntity<String> userSettingsResponse = userSettingsClient.getUserSettings(ownerId);
-			log.debug("Status code: " + userSettingsResponse.getStatusCodeValue());
+			LOG.debug("Status code: " + userSettingsResponse.getStatusCodeValue());
 			if (userSettingsResponse != null) {
 				existingUserSettings = new JSONObject(userSettingsResponse.getBody());
 			}
@@ -356,7 +357,7 @@ public class AssertionsService {
 			if (hre.getCause() != null && ResponseStatusException.class.isAssignableFrom(hre.getCause().getClass())) {
 				ResponseStatusException rse = (ResponseStatusException) hre.getCause();
 				if (HttpStatus.NOT_FOUND.equals(rse.getStatus())) {
-					log.debug("User settings not found: " + ownerId);
+					LOG.debug("User settings not found: " + ownerId);
 				} else {
 					throw hre;
 				}
