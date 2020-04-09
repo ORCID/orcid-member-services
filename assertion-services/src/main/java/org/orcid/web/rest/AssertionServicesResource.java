@@ -17,6 +17,7 @@ import javax.xml.bind.JAXBException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.codehaus.jettison.json.JSONException;
+import org.json.JSONObject;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.validation.OrcidUrlValidator;
 import org.orcid.security.EncryptUtil;
@@ -181,7 +182,21 @@ public class AssertionServicesResource {
     @DeleteMapping("/assertion/orcid/{id}")
     public ResponseEntity<String> deleteAssertionFromOrcid(@PathVariable String id) throws JAXBException {
         Boolean deleted = assertionsService.deleteAssertionFromOrcid(id);
-        return ResponseEntity.ok().body("{\"deleted\":\"" + deleted + "\"}");
+        JSONObject responseData = new JSONObject();
+        responseData.put("deleted", deleted);
+        
+        if (!deleted) {
+        	// fetch failure details
+        	Assertion assertion = assertionsService.findById(id);
+        	String errorJson = assertion.getOrcidError();
+        	JSONObject obj = new JSONObject(errorJson);
+    		int statusCode = (int) obj.get("statusCode");
+    		String error = (String) obj.get("error");
+    		responseData.put("statusCode", statusCode);
+    		responseData.put("error", error);
+        }
+        
+        return ResponseEntity.ok().body(responseData.toString());
     }
     
     @PostMapping("/id-token")
