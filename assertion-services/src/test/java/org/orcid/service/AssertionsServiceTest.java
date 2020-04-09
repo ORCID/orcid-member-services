@@ -5,9 +5,14 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import javax.xml.bind.JAXBException;
+
+import org.apache.http.client.ClientProtocolException;
 import org.assertj.core.util.Lists;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -239,14 +244,14 @@ class AssertionsServiceTest {
 		assertNotNull(a.getStatus());
 		Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
 	}
-	
+
 	@Test
 	void checkErrorWhereNoEmailInAssertion() {
 		// assertion with no email
 		Assertion a = new Assertion();
 		a.setId("1");
 		a.setOwnerId(DEFAULT_JHI_USER_ID);
-		
+
 		Mockito.when(assertionsRepository.findById("1")).thenReturn(Optional.of(a));
 		Mockito.when(uaaUserUtils.getAuthenticatedUaaUserId()).thenReturn(DEFAULT_JHI_USER_ID);
 		Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
@@ -258,8 +263,98 @@ class AssertionsServiceTest {
 				return assertion;
 			}
 		});
-		
-		Assertions.assertThrows(IllegalArgumentException.class, () -> { assertionsService.createOrUpdateAssertion(a); });
+
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			assertionsService.createOrUpdateAssertion(a);
+		});
+	}
+
+	@Test
+	void testPostAssertionsToOrcid()
+			throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+		Mockito.when(assertionsRepository.findAllToCreate()).thenReturn(getAssertionsForCreatingInOrcid());
+		for (int i = 1; i <= 20; i++) {
+			Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(getOptionalOrcidRecord(i));
+		}
+
+		for (int i = 16; i <= 20; i++) {
+			Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken" + i))).thenReturn("accessToken" + i);
+			Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid" + i), Mockito.eq("accessToken" + i),
+					Mockito.any(Assertion.class))).thenReturn("putCode" + i);
+		}
+
+		assertionsService.postAssertionsToOrcid();
+
+		Mockito.verify(orcidRecordService, Mockito.times(20)).findOneByEmail(Mockito.anyString());
+		Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
+		Mockito.verify(orcidAPIClient, Mockito.times(5)).postAffiliation(Mockito.anyString(), Mockito.anyString(),
+				Mockito.any(Assertion.class));
+	}
+	
+
+	@Test
+	void testPutAssertionsToOrcid()
+			throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+		Mockito.when(assertionsRepository.findAllToUpdate()).thenReturn(getAssertionsForCreatingInOrcid());
+		for (int i = 1; i <= 20; i++) {
+			Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(getOptionalOrcidRecord(i));
+		}
+
+		for (int i = 16; i <= 20; i++) {
+			Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken" + i))).thenReturn("accessToken" + i);
+			Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid" + i), Mockito.eq("accessToken" + i),
+					Mockito.any(Assertion.class))).thenReturn("putCode" + i);
+		}
+
+		assertionsService.putAssertionsToOrcid();
+
+		Mockito.verify(orcidRecordService, Mockito.times(20)).findOneByEmail(Mockito.anyString());
+		Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
+		Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(),
+				Mockito.any(Assertion.class));
+	}
+
+	private Optional<OrcidRecord> getOptionalOrcidRecord(int i) {
+		// quarter without orcid record
+		if (i > 0 && i <= 5) {
+			return Optional.empty();
+		}
+
+		// quarter with no orcid
+		if (i > 5 && i <= 10) {
+			return Optional.of(new OrcidRecord());
+		}
+
+		// quarter with no id token
+		if (i > 10 && i <= 15) {
+			OrcidRecord record = new OrcidRecord();
+			record.setOrcid("orcid" + i);
+			return Optional.of(record);
+		}
+
+		// quarter with id token and orcid
+		if (i > 15 && i <= 20) {
+			OrcidRecord record = new OrcidRecord();
+			record.setOrcid("orcid" + i);
+			record.setIdToken("idToken" + i);
+			return Optional.of(record);
+		}
+
+		return null;
+	}
+
+	private List<Assertion> getAssertionsForCreatingInOrcid() {
+		List<Assertion> assertions = new ArrayList<>();
+		for (int i = 1; i <= 20; i++) {
+			assertions.add(getAssertionWithEmail(i + "@email.com"));
+		}
+		return assertions;
+	}
+
+	private Assertion getAssertionWithEmail(String email) {
+		Assertion assertion = new Assertion();
+		assertion.setEmail(email);
+		return assertion;
 	}
 
 	private Optional<OrcidRecord> getOptionalOrcidRecord() {
