@@ -117,7 +117,7 @@ public class AssertionServicesResource {
     }
 
     @PutMapping("/assertion")
-    public ResponseEntity<Assertion> updateAssertion(@RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
+    public ResponseEntity<Assertion> updateAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
         LOG.debug("REST request to update assertion : {}", assertion);        
         validateAssertion(assertion);
         Assertion existingAssertion = assertionsService.updateAssertion(assertion);
