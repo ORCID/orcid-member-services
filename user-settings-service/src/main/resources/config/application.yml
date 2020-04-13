@@ -57,8 +57,8 @@ hystrix:
         isolation:
           strategy: SEMAPHORE
           # See https://github.com/spring-cloud/spring-cloud-netflix/issues/1330
-          # thread:
-          #     timeoutInMilliseconds: 10000
+          thread:
+              timeoutInMilliseconds: 10000
   shareSecurityContext: true
 
 management:
@@ -180,6 +180,17 @@ jhipster:
     contact-email:
     license:
     license-url:
+  metrics:
+    logs: # Reports metrics in the logs
+      enabled: true
+      report-frequency: 60 # in seconds
+  logging:
+    use-json-format: false # By default, logs are not in Json format
+    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+      enabled: true
+      host: localhost
+      port: 5000
+      queue-size: 512
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
