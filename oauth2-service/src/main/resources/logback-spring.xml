@@ -2,6 +2,7 @@
 <!DOCTYPE configuration>
 
 <configuration scan="true">
+    <property name="LOG_PATH" value="logs"/>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <logger name="javax.activation" level="WARN"/>
@@ -43,8 +44,19 @@
         <resetJUL>true</resetJUL>
     </contextListener>
 
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/oauth2_service.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>utf-8</charset>
+            <Pattern>%d %-5level [%thread] %logger{0}: %msg%n</Pattern>
+        </encoder>
+    </appender>
+
     <root level="${logging.level.root}">
-        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
     </root>
 
 </configuration>

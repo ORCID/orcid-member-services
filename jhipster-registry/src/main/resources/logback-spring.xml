@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration scan="true">
-    <property name="LOG_PATH" value="jhipster_registry_logs"/>
+    <property name="LOG_PATH" value="logs"/>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <logger name="io.github.jhipster.registry" level="#logback.loglevel#"/>
@@ -48,12 +48,12 @@
         </encoder>
     </appender>
 
-    <!--<root level="#logback.loglevel#">
+    <root level="#logback.loglevel#">
         <appender-ref ref="CONSOLE"/>
-    </root>-->
+    </root>
     
     <root level="${logging.level.root}">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 
 </configuration>
