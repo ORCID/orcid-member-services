@@ -132,7 +132,7 @@ public class AccountResourceIT {
     @Test
     public void testRegisterValid() throws Exception {
         ManagedUserVM validUser = new ManagedUserVM();
-        validUser.setLogin("test-register-valid");
+        validUser.setLogin("test-register-valid@example.com");
         validUser.setPassword("password");
         validUser.setFirstName("Alice");
         validUser.setLastName("Test");
@@ -140,12 +140,12 @@ public class AccountResourceIT {
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-        assertThat(userRepository.findOneByLogin("test-register-valid").isPresent()).isFalse();
+        assertThat(userRepository.findOneByLogin("test-register-valid@example.com").isPresent()).isFalse();
 
         restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(validUser)))
                 .andExpect(status().isCreated());
 
-        assertThat(userRepository.findOneByLogin("test-register-valid").isPresent()).isTrue();
+        assertThat(userRepository.findOneByLogin("test-register-valid@example.com").isPresent()).isTrue();
     }
 
     @Test
@@ -281,7 +281,7 @@ public class AccountResourceIT {
     public void testRegisterDuplicateEmail() throws Exception {
         // First user
         ManagedUserVM firstUser = new ManagedUserVM();
-        firstUser.setLogin("test-register-duplicate-email");
+        firstUser.setLogin("test-register-duplicate-email@example.com");
         firstUser.setPassword("password");
         firstUser.setFirstName("Alice");
         firstUser.setLastName("Test");
@@ -294,12 +294,12 @@ public class AccountResourceIT {
         restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(firstUser)))
                 .andExpect(status().isCreated());
 
-        Optional<User> testUser1 = userRepository.findOneByLogin("test-register-duplicate-email");
+        Optional<User> testUser1 = userRepository.findOneByLogin("test-register-duplicate-email@example.com");
         assertThat(testUser1.isPresent()).isTrue();
 
         // Duplicate email, different login
         ManagedUserVM secondUser = new ManagedUserVM();
-        secondUser.setLogin("test-register-duplicate-email-2");
+        secondUser.setLogin("test-register-duplicate-email-2@example.com");
         secondUser.setPassword(firstUser.getPassword());
         secondUser.setFirstName(firstUser.getFirstName());
         secondUser.setLastName(firstUser.getLastName());
@@ -312,16 +312,16 @@ public class AccountResourceIT {
         restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(secondUser)))
                 .andExpect(status().is5xxServerError());
 
-        Optional<User> testUser2 = userRepository.findOneByLogin("test-register-duplicate-email");
+        Optional<User> testUser2 = userRepository.findOneByLogin("test-register-duplicate-email@example.com");
         assertThat(testUser2.isPresent()).isTrue();
 
-        Optional<User> testUser3 = userRepository.findOneByLogin("test-register-duplicate-email-2");
+        Optional<User> testUser3 = userRepository.findOneByLogin("test-register-duplicate-email-2@example.com");
         assertThat(testUser3.isPresent()).isFalse();
 
         // Duplicate email - with uppercase email address
         ManagedUserVM userWithUpperCaseEmail = new ManagedUserVM();
         userWithUpperCaseEmail.setId(firstUser.getId());
-        userWithUpperCaseEmail.setLogin("test-register-duplicate-email-3");
+        userWithUpperCaseEmail.setLogin("test-register-duplicate-email-3@example.com");
         userWithUpperCaseEmail.setPassword(firstUser.getPassword());
         userWithUpperCaseEmail.setFirstName(firstUser.getFirstName());
         userWithUpperCaseEmail.setLastName(firstUser.getLastName());
@@ -334,10 +334,10 @@ public class AccountResourceIT {
         restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail)))
                 .andExpect(status().is5xxServerError());
 
-        Optional<User> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3");
+        Optional<User> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3@example.com");
         assertThat(testUser4.isPresent()).isFalse();
 
-        Optional<User> testUser5 = userRepository.findOneByLogin("test-register-duplicate-email");
+        Optional<User> testUser5 = userRepository.findOneByLogin("test-register-duplicate-email@example.com");
         assertThat(testUser5.isPresent()).isTrue();
         assertThat(testUser5.get().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
@@ -352,7 +352,7 @@ public class AccountResourceIT {
     @Test
     public void testRegisterAdminIsIgnored() throws Exception {
         ManagedUserVM validUser = new ManagedUserVM();
-        validUser.setLogin("badguy");
+        validUser.setLogin("badguy@example.com");
         validUser.setPassword("password");
         validUser.setFirstName("Bad");
         validUser.setLastName("Guy");
@@ -365,7 +365,7 @@ public class AccountResourceIT {
         restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(validUser)))
                 .andExpect(status().isCreated());
 
-        Optional<User> userDup = userRepository.findOneByLogin("badguy");
+        Optional<User> userDup = userRepository.findOneByLogin("badguy@example.com");
         assertThat(userDup.isPresent()).isTrue();
         assertThat(userDup.get().getAuthorities()).hasSize(1).containsExactly(authorityRepository.findById(AuthoritiesConstants.USER).get());
     }
