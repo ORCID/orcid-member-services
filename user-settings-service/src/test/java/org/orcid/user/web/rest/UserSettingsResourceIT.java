@@ -37,6 +37,7 @@ import org.orcid.user.repository.MemberSettingsRepository;
 import org.orcid.user.repository.UserSettingsRepository;
 import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.security.UaaUserUtils;
+import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.web.rest.errors.ExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,6 +112,9 @@ public class UserSettingsResourceIT {
 
     @Mock
     private UaaUserUtils mockUaaUserUtils;
+    
+    @Autowired
+    private UserSettingsResource userSettingsResource;
 
     private MockMvc restUserSettingsMockMvc;
 
@@ -131,7 +135,6 @@ public class UserSettingsResourceIT {
         when(mockUaaUserUtils.getAuthenticatedUaaUserId()).thenReturn(DEFAULT_JHI_USER_ID);
         when(mockUaaUserUtils.getUAAUserById(DEFAULT_JHI_USER_ID)).thenReturn(obj);
 
-        final UserSettingsResource userSettingsResource = new UserSettingsResource();
         ReflectionTestUtils.setField(userSettingsResource, "securityUtils", mockSecurityUtils);
         ReflectionTestUtils.setField(userSettingsResource, "oauth2ServiceClient", oauth2ServiceClient);
         ReflectionTestUtils.setField(userSettingsResource, "uaaUserUtils", mockUaaUserUtils);
@@ -187,7 +190,6 @@ public class UserSettingsResourceIT {
     @Test
     @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
     public void createUserSettings() throws Exception {
-
         MemberSettings ms = new MemberSettings();
         ms.setAssertionServiceEnabled(true);
         ms.setSalesforceId(DEFAULT_SALESFORCE_ID);
@@ -195,14 +197,17 @@ public class UserSettingsResourceIT {
         memberSettingsRepository.insert(ms);
 
         int databaseSizeBeforeCreate = userSettingsRepository.findAll().size();
+        
+        UserService userService = (UserService) ReflectionTestUtils.getField(userSettingsResource, "userService");
+        ReflectionTestUtils.setField(userService, "oauth2ServiceClient", oauth2ServiceClient);
+        
+        ResponseStatusException rse = new ResponseStatusException(HttpStatus.NOT_FOUND);
+        HystrixRuntimeException hre = new HystrixRuntimeException(null, null, null, rse, null);
 
         JSONObject obj = getJSONUser();
         obj.put("id", DEFAULT_JHI_USER_ID);
         ResponseEntity<String> getUserResponse = new ResponseEntity<String>(obj.toString(), HttpStatus.OK);
 
-        // Throw not found on getUser the first time
-        ResponseStatusException rse = new ResponseStatusException(HttpStatus.NOT_FOUND);
-        HystrixRuntimeException hre = new HystrixRuntimeException(null, null, null, rse, null);
         when(oauth2ServiceClient.getUser(DEFAULT_LOGIN)).thenThrow(hre).thenReturn(getUserResponse);
 
         // Create the UserSettings
@@ -358,10 +363,9 @@ public class UserSettingsResourceIT {
     }
 
     @Test
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
     public void updateNonExistingUserSettings() throws Exception {
         int databaseSizeBeforeUpdate = userSettingsRepository.findAll().size();
-
-        // Create the UserSettings
 
         // If the entity doesn't have an ID, it will throw
         // BadRequestAlertException
