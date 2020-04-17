@@ -29,6 +29,8 @@ services:
       - 'APPLICATION_CRON_POST_AFFILIATIONS=${CRON_POST_AFFILIATIONS}'
       - 'APPLICATION_CRON_PUT_AFFILIATIONS=${CRON_PUT_AFFILIATIONS}'
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
+    volumes:
+      - ./log-raw/:/logs
   assertionservices-mongodb:
     image: 'mongo:4.0.10'
 
@@ -47,6 +49,8 @@ services:
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
     ports:
       - '8080:8080'
+    volumes:
+      - ./log-raw/:/logs
   gateway-mongodb:
     image: 'mongo:4.0.10'
 
@@ -67,6 +71,8 @@ services:
       - SPRING_MAIL_USERNAME=${MAIL_USER}
       - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
+    volumes:
+      - ./log-raw/:/logs
   oauth2service-mongodb:
     image: 'mongo:4.0.10'
 
@@ -83,6 +89,8 @@ services:
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
+    volumes:
+      - ./log-raw/:/logs
   usersettingsservice-mongodb:
     image: 'mongo:4.0.10'
 
@@ -105,7 +113,6 @@ services:
       - jhipster-elasticsearch
     volumes:
       - ./log-conf/:/usr/share/logstash/pipeline/
-      - ./log-raw/:/var/log/logstash/
   jhipster-console:
     extends:
       file: jhipster-console.yml
