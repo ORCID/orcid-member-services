@@ -1,23 +1,16 @@
 package org.orcid.user.web.rest;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -32,6 +25,9 @@ import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.security.UaaUserUtils;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.UserDTO;
+import org.orcid.user.upload.MembersUploadReader;
+import org.orcid.user.upload.UsersUpload;
+import org.orcid.user.upload.UsersUploadReader;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.orcid.user.web.rest.errors.MemberNotFoundException;
 import org.slf4j.Logger;
@@ -56,10 +52,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import com.netflix.hystrix.exception.HystrixRuntimeException;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -97,6 +90,12 @@ public class UserSettingsResource {
     @Autowired
     private SecurityUtils securityUtils;
     
+    @Autowired
+    private UsersUploadReader usersUploadReader;
+    
+    @Autowired
+    private MembersUploadReader membersUploadReader;
+    
     /**
      * {@code POST  /user/upload} : Create a list of users.
      *
@@ -111,89 +110,39 @@ public class UserSettingsResource {
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) throws Throwable {
         LOG.debug("Uploading users settings CSV");
-        JSONArray errors = new JSONArray();
-        Instant now = Instant.now();
-        try (InputStream is = file.getInputStream();) {
-            InputStreamReader isr = new InputStreamReader(is);
-            Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
-            for (CSVRecord line : elements) {
-                processElement(line, now, errors);
-            }
+        String createdBy = uaaUserUtils.getAuthenticatedUaaUserId();
+        UsersUpload usersUpload = usersUploadReader.readUsersUpload(file.getInputStream(), createdBy);
+        
+        for (int i = 0; i < usersUpload.getUserDTOs().size(); i++) {
+        	UserDTO userDTO = usersUpload.getUserDTOs().get(i);
+        	UserSettings userSettings = usersUpload.getUserSettings().get(i);
+        	String salesforceId = userDTO.getSalesforceId();
+        	
+        	if (!memberSettingsExists(salesforceId)) {
+				String errorMessage = String.format("Member not found with salesforceId %s", salesforceId);
+				throw new MemberNotFoundException(errorMessage);
+			}
+
+        	String login = userDTO.getLogin();
+        	JSONObject existingUaaUser = uaaUserUtils.getUAAUserByLogin(login);
+        	if (existingUaaUser != null) {
+        		JSONObject uaaUser = updateUserOnUAA(userDTO, existingUaaUser);
+        		String jhiUserId = uaaUser.getString("id");
+        		
+        		if (userSettingsExists(jhiUserId)) {
+        			updateUserSettings(jhiUserId, userDTO, Instant.now());
+        		} else {
+        			userSettingsRepository.save(userSettings);
+        		}
+        	} else {
+        		createUserOnUAA(userDTO);
+        		userSettingsRepository.save(userSettings);
+        	}
         }
-        return ResponseEntity.ok().body(errors.toString());
+        return ResponseEntity.ok().body(usersUpload.getErrors().toString());
     }
 
-    private void processElement(CSVRecord element, Instant now, JSONArray errors) throws Throwable {
-        long index = element.getRecordNumber();
-        String errorString = new String();
-        try {
-            // Validate for errors
-            if (!validate(element, errorString)) {
-                JSONObject error = new JSONObject();
-                error.put("index", index);
-                error.put("message", errorString);
-                errors.put(error);
-            } else {
-                String login = element.get("email");
-                LOG.debug("Looking for existing user: " + login);
-                JSONObject existingUaaUser = uaaUserUtils.getUAAUserByLogin(login);
-                String salesforceId = element.get("salesforceId");
-
-                if (!memberSettingsExists(salesforceId)) {
-                	String errorMessage = String.format("Member not found with salesforceId %s", salesforceId);
-                	throw new MemberNotFoundException(errorMessage);
-                }
-
-                UserDTO userDTO = getUserDTO(element);
-                if (existingUaaUser != null) {
-                    JSONObject uaaUser = updateUserOnUAA(userDTO, existingUaaUser);
-                    String jhiUserId = uaaUser.getString("id");
-
-                    if (userSettingsExists(jhiUserId)) {
-                        updateUserSettings(jhiUserId, userDTO, now);
-                    } else {
-                        createUserSettings(jhiUserId, salesforceId, false, now);
-                    }
-                } else {
-                    JSONObject uaaUser = createUserOnUAA(userDTO);
-                    createUserSettings(uaaUser.getString("id"), salesforceId, false, now);
-                }
-            }
-        } catch (Exception e) {
-            Throwable t = e.getCause();
-            JSONObject error = new JSONObject();
-            error.put("index", index);
-            if (t != null) {
-                LOG.error("Error on line " + index, t);
-                error.put("message", t.getMessage());
-            } else {
-                LOG.error("Error on line " + index, e);
-                error.put("message", e.getMessage());
-            }
-            errors.put(error);
-        }
-    }
-
-    private UserDTO getUserDTO(CSVRecord record) {
-        UserDTO u = new UserDTO();
-        u.setLogin(record.get("email"));
-        u.setFirstName(record.get("firstName"));
-        u.setLastName(record.get("lastName"));
-        u.setSalesforceId(record.get("salesforceId"));
-        u.setPassword(RandomStringUtils.randomAlphanumeric(10));
-        List<String> authorities = new ArrayList<String>();
-        String grants = record.get("grant");
-        if (!StringUtils.isBlank(grants)) {
-            if (!(grants.startsWith("[") && grants.endsWith("]"))) {
-                throw new IllegalArgumentException("Grant list should start with '[' and ends with ']'");
-            }
-            authorities = Arrays.stream(grants.replace("[", "").replace("]", "").split(",")).collect(Collectors.toList());
-        }
-        if (authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
-            u.setAssertionServicesEnabled(true);
-        }
-        return u;
-    }
+    
 
     /**
      * {@code POST  /user} : Create a new memberServicesUser.
@@ -259,22 +208,6 @@ public class UserSettingsResource {
 
         return ResponseEntity.created(new URI("/settings/api/user/" + us.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, userDTO.getLogin().toString())).body(userDTO);
-    }
-
-    private boolean validate(CSVRecord record, String error) {
-        boolean isOk = true;
-        if (StringUtils.isBlank(record.get("email"))) {
-            isOk = false;
-            error = "Login should not be empty";
-        }
-        if (StringUtils.isBlank(record.get("salesforceId"))) {
-            if (!isOk) {
-                error += ", ";
-            }
-            isOk = false;
-            error += "Salesforce Id should not be empty";
-        }
-        return isOk;
     }
 
     private boolean validate(UserDTO user) {
