@@ -1,5 +1,6 @@
 package org.orcid.user.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
@@ -35,6 +36,9 @@ class UserServiceImplTest {
 		MockitoAnnotations.initMocks(this);
 	}
 
+	/**
+	 * Checks a user can be created for the first time
+	 */
 	@Test
 	void testCanCreateUserNoJhiUser() {
 		Mockito.when(oauth2ServiceClient.getUser(Mockito.eq("login"))).thenThrow(
@@ -42,6 +46,9 @@ class UserServiceImplTest {
 		assertTrue(userServiceImpl.canCreateUser("login"));
 	}
 
+	/**
+	 * Checks a previously deleted user can be created
+	 */
 	@Test
 	void testCanCreateUserPreviouslyDeleted() {
 		Mockito.when(oauth2ServiceClient.getUser(Mockito.eq("login"))).thenReturn(getJhiUserResponse());
@@ -49,11 +56,14 @@ class UserServiceImplTest {
 		assertTrue(userServiceImpl.canCreateUser("login"));
 	}
 	
+	/**
+	 * Checks existing user can't be created
+	 */
 	@Test
-	void testCantCreateUserNoyPreviouslyDeleted() {
+	void testCanCreateUserNotPreviouslyDeleted() {
 		Mockito.when(oauth2ServiceClient.getUser(Mockito.eq("login"))).thenReturn(getJhiUserResponse());
 		Mockito.when(userSettingsRepository.findByJhiUserId(Mockito.eq("something"))).thenReturn(getExistingUserSettings());
-		assertTrue(userServiceImpl.canCreateUser("login"));
+		assertFalse(userServiceImpl.canCreateUser("login"));
 	}
 
 	private Optional<UserSettings> getExistingUserSettings() {
