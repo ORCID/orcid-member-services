@@ -15,10 +15,10 @@ import { AccountService, Account } from 'app/core';
 })
 export class MemberSettingsUpdateComponent implements OnInit {
   isSaving: boolean;
-      
+
   editForm = this.fb.group({
     id: [],
-    clientId: [],
+    clientId: [null, [Validators.required]],
     clientName: [],
     salesforceId: [null, [Validators.required]],
     parentSalesforceId: [],
@@ -32,15 +32,14 @@ export class MemberSettingsUpdateComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
-    protected activatedRoute: ActivatedRoute, 
-    protected memberSettingsService: MemberSettingsService, 
-    private fb: FormBuilder) {}
+    protected activatedRoute: ActivatedRoute,
+    protected memberSettingsService: MemberSettingsService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.isSaving = false;
-    this.accountService.identity().then((account: Account) => {
-      
-    });
+    this.accountService.identity().then((account: Account) => {});
     this.activatedRoute.data.subscribe(({ memberSettings }) => {
       this.updateForm(memberSettings);
     });
