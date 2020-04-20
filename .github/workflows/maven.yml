@@ -27,4 +27,4 @@ jobs:
     - name: Build User Settings service
       run: mvn -B package --file user-settings-service/pom.xml
     - name: Build Assertion service
-      run: mvn -B package --file assertion-service/pom.xml
+      run: mvn -B package --file assertion-services/pom.xml
