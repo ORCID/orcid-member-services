@@ -118,6 +118,8 @@ public class Assertion implements Serializable {
     @Field("orcid_error")
     private String orcidError;
     
+    @Field("orcid_id")
+    private String orcidId;
     
     private String status;
 
@@ -496,7 +498,15 @@ public class Assertion implements Serializable {
         this.orcidError = orcidError;
     }
     
-    @Override
+    public String getOrcidId() {
+		return orcidId;
+	}
+
+	public void setOrcidId(String orcidId) {
+		this.orcidId = orcidId;
+	}
+
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -532,6 +542,7 @@ public class Assertion implements Serializable {
         result = prime * result + ((url == null) ? 0 : url.hashCode());
         result = prime * result + (updated ? 1231 : 1237);
         result = prime * result + ((updatedInORCID == null) ? 0 : updatedInORCID.hashCode());
+        result = prime * result + ((orcidId == null) ? 0 : orcidId.hashCode());
         return result;
     }
 
@@ -697,6 +708,11 @@ public class Assertion implements Serializable {
             if (other.updatedInORCID != null)
                 return false;
         } else if (!updatedInORCID.equals(other.updatedInORCID))
+            return false;
+        if (orcidId == null) {
+            if (other.orcidId != null)
+                return false;
+        } else if (!orcidId.equals(other.orcidId))
             return false;
         return true;
     }  

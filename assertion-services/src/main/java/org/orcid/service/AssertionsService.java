@@ -74,13 +74,25 @@ public class AssertionsService {
 
 	public Page<Assertion> findByOwnerId(Pageable pageable) {
 		Page<Assertion> assertionsPage = assertionsRepository.findByOwnerId(uaaUserUtils.getAuthenticatedUaaUserId(), pageable);
-		assertionsPage.forEach(a -> a.setStatus(getAssertionStatus(a)));
+		assertionsPage.forEach(a -> { 
+			a.setStatus(getAssertionStatus(a));
+			
+			if (a.getOrcidId() == null) {
+				a.setOrcidId(getAssertionOrcidId(a));
+			}
+		});
 		return assertionsPage;
 	}
 
 	public List<Assertion> findAllByOwnerId() {
 		List<Assertion> assertions = assertionsRepository.findAllByOwnerId(uaaUserUtils.getAuthenticatedUaaUserId(), SORT);
-		assertions.forEach(a -> a.setStatus(getAssertionStatus(a)));
+		assertions.forEach(a -> { 
+			a.setStatus(getAssertionStatus(a));
+			
+			if (a.getOrcidId() == null) {
+				a.setOrcidId(getAssertionOrcidId(a));
+			}
+		});
 		return assertions;
 	}
 
@@ -88,7 +100,13 @@ public class AssertionsService {
 		JSONObject userSettings = getUserSettings(uaaUserUtils.getAuthenticatedUaaUserId());
 		String salesforceId = userSettings.getString("salesforceId");
 		Page<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, pageable);
-		assertions.forEach(a -> a.setStatus(getAssertionStatus(a)));
+		assertions.forEach(a -> {
+			a.setStatus(getAssertionStatus(a));
+			
+			if (a.getOrcidId() == null) {
+				a.setOrcidId(getAssertionOrcidId(a));
+			}
+		});
 		return assertions;
 	}
 
@@ -103,6 +121,9 @@ public class AssertionsService {
 			throw new IllegalArgumentException(userUaaId + " is not the owner of " + assertion.getId());
 		}
 		assertion.setStatus(getAssertionStatus(assertion));
+		if (assertion.getOrcidId() == null) {
+			assertion.setOrcidId(getAssertionOrcidId(assertion));
+		}
 		return assertion;
 	}
 
@@ -127,6 +148,11 @@ public class AssertionsService {
 
 		assertion = assertionsRepository.insert(assertion);
 		assertion.setStatus(getAssertionStatus(assertion));
+
+		if (assertion.getOrcidId() == null) {
+			assertion.setOrcidId(getAssertionOrcidId(assertion));
+		}
+		
 		return assertion;
 	}
 
@@ -157,6 +183,10 @@ public class AssertionsService {
 		existingAssertion.setModified(Instant.now());
 		assertion = assertionsRepository.save(existingAssertion);
 		assertion.setStatus(getAssertionStatus(assertion));
+		
+		if (assertion.getOrcidId() == null) {
+			assertion.setOrcidId(getAssertionOrcidId(assertion));
+		}
 		return assertion;
 	}
 
@@ -372,6 +402,15 @@ public class AssertionsService {
 					+ assertion.getEmail() + " - " + assertion.getEmail());
 		}
 		return AssertionUtils.getAssertionStatus(assertion, optionalRecord.get());
+	}
+	
+	private String getAssertionOrcidId(Assertion assertion) {
+		Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(assertion.getEmail());
+		if (optionalRecord.isPresent()) {
+			OrcidRecord record = optionalRecord.get();
+			return !StringUtils.isBlank(record.getIdToken()) ? record.getOrcid() : null;
+		}
+		return null;
 	}
 
 }
