@@ -1,0 +1,3 @@
+assertionServiceEnabled,clientId,isConsortiumLead,salesforceId,parentSalesforceId,clientName
+true,client-id-1,false,salesforce-1,salesforce-parent,some-client-name
+false,,false,salesforce-2,salesforce-parent,some-other-client-name
