@@ -57,7 +57,7 @@ management:
       mode: full
   health:
     mail:
-      enabled: true # When using the MailService, configure an SMTP server and set this to true
+      enabled: false # When using the MailService, configure an SMTP server and set this to true
   metrics:
     export:
       # Prometheus is the default metrics backend
@@ -134,13 +134,6 @@ info:
 #
 # Full reference is available at: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 10000
 
 jhipster:
   clientApp:
