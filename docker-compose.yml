@@ -1,8 +1,5 @@
 version: '2'
 
-volumes:
-  log-data:
-
 services:
   assertionservices-app:
     image: assertionservices:${TAG}
@@ -103,7 +100,7 @@ services:
       file: jhipster-console.yml
       service: jhipster-elasticsearch
     volumes:
-      - log-data:/usr/share/elasticsearch/data
+      - ./log-data:/usr/share/elasticsearch/data
   jhipster-logstash:
     extends:
       file: jhipster-console.yml
