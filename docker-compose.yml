@@ -1,4 +1,8 @@
 version: '2'
+
+volumes:
+  log-data:
+
 services:
   assertionservices-app:
     image: assertionservices:${TAG}
@@ -85,3 +89,37 @@ services:
     extends:
       file: jhipster-registry.yml
       service: jhipster-registry
+
+  jhipster-elasticsearch:
+    extends:
+      file: jhipster-console.yml
+      service: jhipster-elasticsearch
+    volumes:
+      - log-data:/usr/share/elasticsearch/data
+  jhipster-logstash:
+    extends:
+      file: jhipster-console.yml
+      service: jhipster-logstash
+    depends_on:
+      - jhipster-elasticsearch
+    volumes:
+      - ./log-conf/:/usr/share/logstash/pipeline/
+      - ./log-raw/:/var/log/logstash/
+  jhipster-console:
+    extends:
+      file: jhipster-console.yml
+      service: jhipster-console
+    depends_on:
+      - jhipster-elasticsearch
+  jhipster-import-dashboards:
+    extends:
+      file: jhipster-console.yml
+      service: jhipster-import-dashboards
+    depends_on:
+      - jhipster-elasticsearch
+  jhipster-zipkin:
+    extends:
+      file: jhipster-console.yml
+      service: jhipster-zipkin
+    depends_on:
+      - jhipster-elasticsearch
