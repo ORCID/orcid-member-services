@@ -41,16 +41,7 @@ So, the first thing we should do is starting the different JHipster services as 
     - Wait for it to start
     - Go to [http://localhost:8761/#/](http://localhost:8761/#/) and sign in with the admin credentials `admin / admin`
 
-2. Start the JHipster console:
-    
-    - Start Docker desktop
-    - Open a new terminal 
-    - cd orcid-member-services/jhipster-console/
-    - Run ```docker-compose up```
-    - Wait for it to start
-    - Go to [http://localhost:5601](http://localhost:5601) to see Kibana logging dashboard
-
-3. Start the JHipster gateway:
+2. Start the JHipster gateway:
     
     - Start MongoDB
     - Open a new terminal 
@@ -59,7 +50,7 @@ So, the first thing we should do is starting the different JHipster services as 
     - Wait for it to start
     - Go to [http://localhost:8080/](http://localhost:8080/) and sing in with the admin credentials `admin / admin`
 
-4. Start the oauth2-services
+3. Start the oauth2-services
     
     - For running locally without an email server connected, disable mail health check for oauth2-services before starting. Edit [oauth2-service/src/main/resources/config/application.yml](https://github.com/ORCID/orcid-member-services/blob/master/oauth2-service/src/main/resources/config/application.yml#L60)
     - Set 
@@ -73,12 +64,28 @@ So, the first thing we should do is starting the different JHipster services as 
     - Run `bash mvnw`
     - Wait for it to start
     
-5. Start the Angular frontend
+4. Start the Angular frontend
 
     - Open a new terminal 
     - cd orcid-member-services/gateway 
     - Run `npm install` then `npm start`
     - Wait for it to start
+
+## Start Jhipster Console
+
+[Jhipster Console](https://github.com/jhipster/jhipster-console) provides and ELK stack logging and metrics UI. To run Jhipster Console locally:
+    
+    - In each microservice, edit src/main/resources/config/application-dev.yml to set 
+            logstash:
+                enabled: true
+                
+    - Start Docker desktop
+    - Open a new terminal 
+    - cd orcid-member-services/jhipster-console/
+    - Run ```docker-compose up```
+    - Wait for it to start
+    - Go to [http://localhost:5601](http://localhost:5601) to see Kibana logging dashboard
+
 
 ## Start the custom microservices
 With UAA up and running, we can now start the custom microservices that depend on it:
