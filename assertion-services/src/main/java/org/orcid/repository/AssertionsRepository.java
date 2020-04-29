@@ -27,4 +27,6 @@ public interface AssertionsRepository extends MongoRepository<Assertion, String>
 
     @Query("{updated: true, putCode: {$ne:null}}")
     List<Assertion> findAllToUpdate();
+
+	List<Assertion> findByEmail(String email);
 }

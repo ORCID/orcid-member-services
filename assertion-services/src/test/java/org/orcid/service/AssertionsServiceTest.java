@@ -1,6 +1,7 @@
 package org.orcid.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
@@ -37,7 +38,6 @@ import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.util.ReflectionUtils;
 
 class AssertionsServiceTest {
 
@@ -506,6 +506,19 @@ class AssertionsServiceTest {
 		Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
 		Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(),
 				Mockito.any(Assertion.class));
+	}
+	
+	@Test
+	void testFindByEmail() {
+		String email = "email@email.com";
+		Assertion assertion = getAssertionWithEmail(email);
+		Mockito.when(assertionsRepository.findByEmail(Mockito.eq(email))).thenReturn(Arrays.asList(assertion));
+		
+		List<Assertion> assertions = assertionsService.findByEmail(email);
+		assertFalse(assertions.isEmpty());
+		assertEquals(1, assertions.size());
+		
+		Mockito.verify(assertionsRepository, Mockito.times(1)).findByEmail(Mockito.eq(email));
 	}
 
 	private Optional<OrcidRecord> getOptionalOrcidRecord(int i) {
