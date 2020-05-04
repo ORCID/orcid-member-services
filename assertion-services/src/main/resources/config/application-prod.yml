@@ -118,8 +118,6 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
-  audit-events:
-    retention-period: 30 # Number of days before audit events are deleted.
 oauth2:
   signature-verification:
     public-key-endpoint-uri: http://oauth2service/oauth/token_key
