@@ -1,6 +1,12 @@
 package org.orcid.web.rest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
 
@@ -13,13 +19,22 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.domain.Assertion;
+import org.orcid.domain.OrcidRecord;
+import org.orcid.security.EncryptUtil;
 import org.orcid.service.AssertionsService;
+import org.orcid.service.OrcidRecordService;
 import org.springframework.http.ResponseEntity;
 
 class AssertionServicesResourceTest {
 	
 	@Mock
     private AssertionsService assertionsService;
+	
+	@Mock
+    private OrcidRecordService orcidRecordService;
+
+	@Mock
+    private EncryptUtil encryptUtil;
 	
 	@InjectMocks
 	private AssertionServicesResource assertionServicesResource;
@@ -46,6 +61,33 @@ class AssertionServicesResourceTest {
 		assertEquals("{\"deleted\":false,\"error\":\"not found\",\"statusCode\":404}", body);
 	}
 
+	@Test
+	void testGetOrcidRecord() throws IOException, org.codehaus.jettison.json.JSONException {
+		String encrypted = "blah";
+		String email = "email@email.com";
+		String encryptedOther = "nope";
+		String emailOther = "nope@email.com";
+		
+		Mockito.when(encryptUtil.decrypt(Mockito.eq(encrypted))).thenReturn(email);
+		Mockito.when(encryptUtil.decrypt(Mockito.eq(encryptedOther))).thenReturn(emailOther);
+		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq(email))).thenReturn(Optional.of(new OrcidRecord()));
+		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq(emailOther))).thenReturn(Optional.empty());
+		
+		ResponseEntity<OrcidRecord> response = assertionServicesResource.getOrcidRecord(encrypted);
+		assertTrue(response.getStatusCode().is2xxSuccessful());
+		assertNotNull(response.getBody());
+		
+		Mockito.verify(encryptUtil, Mockito.times(1)).decrypt(Mockito.eq(encrypted));
+		Mockito.verify(orcidRecordService, Mockito.times(1)).findOneByEmail(Mockito.eq(email));
+		
+		response = assertionServicesResource.getOrcidRecord(encryptedOther);
+		assertTrue(response.getStatusCode().is4xxClientError());
+		assertNull(response.getBody());
+		
+		Mockito.verify(encryptUtil, Mockito.times(1)).decrypt(Mockito.eq(encryptedOther));
+		Mockito.verify(orcidRecordService, Mockito.times(1)).findOneByEmail(Mockito.eq(emailOther));
+	}
+	
 	private Assertion getAssertionWithError() {
 		Assertion assertion = new Assertion();
 		assertion.setId("assertionId");

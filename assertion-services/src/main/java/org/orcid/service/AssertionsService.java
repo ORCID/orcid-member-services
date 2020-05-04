@@ -414,4 +414,8 @@ public class AssertionsService {
 		return null;
 	}
 
+	public List<Assertion> findByEmail(String email) {
+		return assertionsRepository.findByEmail(email);
+	}
+
 }

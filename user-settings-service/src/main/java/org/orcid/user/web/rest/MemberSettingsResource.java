@@ -1,7 +1,5 @@
 package org.orcid.user.web.rest;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
@@ -10,11 +8,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.orcid.user.domain.MemberSettings;
 import org.orcid.user.domain.UserSettings;
 import org.orcid.user.domain.validation.MemberSettingsValidator;
@@ -48,7 +42,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import io.micrometer.core.instrument.util.StringUtils;
 
 /**
  * REST controller for managing {@link org.orcid.user.domain.MemberSettings}.
@@ -233,7 +226,7 @@ public class MemberSettingsResource {
 	/**
 	 * {@code GET  /member-settings/:id} : get the "id" memberSettings.
 	 *
-	 * @param id the id of the memberSettings to retrieve.
+	 * @param id - the id or salesforce id of the memberSettings to retrieve.
 	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
 	 *         the memberSettings, or with status {@code 404 (Not Found)}.
 	 */
@@ -241,10 +234,14 @@ public class MemberSettingsResource {
 	public ResponseEntity<MemberSettings> getMemberSettings(@PathVariable String id) {
 		log.debug("REST request to get MemberSettings : {}", id);
 		Optional<MemberSettings> memberSettings = memberSettingsRepository.findById(id);
+		if (!memberSettings.isPresent()) {
+			log.debug("Member settings now found for id {}, searching against salesforceId", id);
+			memberSettings = memberSettingsRepository.findBySalesforceId(id);
+		}
 		return ResponseUtil.wrapOrNotFound(memberSettings);
 	}
 
-	/**
+	/**	
 	 * {@code DELETE  /member-settings/:id} : delete the "id" memberSettings.
 	 *
 	 * @param id the id of the memberSettings to delete.
