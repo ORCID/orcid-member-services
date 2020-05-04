@@ -4,7 +4,7 @@
       "packageName": "org.orcid",
       "nativeLanguage": "en"
     },
-    "jhipsterVersion": "6.5.1",
+    "jhipsterVersion": "6.1.2",
     "applicationType": "microservice",
     "baseName": "AssertionServices",
     "packageName": "org.orcid",
