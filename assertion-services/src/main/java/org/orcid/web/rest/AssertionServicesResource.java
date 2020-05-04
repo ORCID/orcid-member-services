@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -19,6 +20,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.codehaus.jettison.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.domain.Assertion;
+import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.validation.OrcidUrlValidator;
 import org.orcid.security.EncryptUtil;
 import org.orcid.security.JWTUtil;
@@ -98,6 +100,14 @@ public class AssertionServicesResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
         return ResponseEntity.ok().headers(headers).body(affiliations.getContent());
     }
+    
+    @GetMapping("/assertions/{email}")
+    public ResponseEntity<List<Assertion>> getAssertionsByEmail(@PathVariable String email)
+            throws BadRequestAlertException, JSONException {
+        LOG.debug("REST request to fetch assertions for email {}", email);
+        List<Assertion> assertions = assertionsService.findByEmail(email);
+        return ResponseEntity.ok().body(assertions);
+    }
 
     @GetMapping("/assertion/{id}")
     public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {        
@@ -116,7 +126,7 @@ public class AssertionServicesResource {
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
     }
-
+    
     @PutMapping("/assertion")
     public ResponseEntity<Assertion> updateAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
         LOG.debug("REST request to update assertion : {}", assertion);        
@@ -177,6 +187,17 @@ public class AssertionServicesResource {
         assertionsService.deleteById(id);
 
         return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
+    }
+	
+    @GetMapping("/assertion/orcid/{state}")
+    public ResponseEntity<OrcidRecord> getOrcidRecord(@PathVariable String state) throws IOException, JSONException {
+    	String email = encryptUtil.decrypt(state);
+    	Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
+    	if (record.isPresent()) {
+    		return ResponseEntity.ok().body(record.get());
+    	} else {
+    		return ResponseEntity.notFound().build();
+    	}
     }
 
     @DeleteMapping("/assertion/orcid/{id}")
