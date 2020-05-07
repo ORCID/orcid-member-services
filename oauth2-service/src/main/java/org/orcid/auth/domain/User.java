@@ -37,7 +37,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @JsonIgnore
     @NotNull
-    @Size(min = 60, max = 60)
+    @Size(min = 10, max = 60)
     private String password;
 
     @Size(max = 50)
@@ -75,9 +75,18 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Field("reset_date")
     private Instant resetDate = null;
+    
+    @Field("salesforce_id")
+    private String salesforceId;
+
+    @Field("main_contact")
+    private Boolean mainContact;
+
+    @Field("deleted")
+    private Boolean deleted = false;
 
     @JsonIgnore
-    private Set<Authority> authorities = new HashSet<>();
+    private Set<String> authorities = new HashSet<>();
 
     public String getId() {
         return id;
@@ -176,15 +185,39 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.langKey = langKey;
     }
 
-    public Set<Authority> getAuthorities() {
+    public Set<String> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
+    public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
     }
+    
+    public String getSalesforceId() {
+		return salesforceId;
+	}
 
-    @Override
+	public void setSalesforceId(String salesforceId) {
+		this.salesforceId = salesforceId;
+	}
+
+	public Boolean getMainContact() {
+		return mainContact;
+	}
+
+	public void setMainContact(Boolean mainContact) {
+		this.mainContact = mainContact;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

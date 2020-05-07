@@ -1,4 +1,4 @@
-package org.orcid.user.domain;
+package org.orcid.auth.domain;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -11,10 +11,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
- * A MemberSettings.
+ * A Member.
  */
-@Document(collection = "member_settings")
-public class MemberSettings implements Serializable {
+@Document(collection = "member")
+public class Member implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,7 +70,7 @@ public class MemberSettings implements Serializable {
         return clientId;
     }
 
-    public MemberSettings clientId(String clientId) {
+    public Member clientId(String clientId) {
         this.clientId = clientId;
         return this;
     }
@@ -83,7 +83,7 @@ public class MemberSettings implements Serializable {
         return salesforceId;
     }
 
-    public MemberSettings salesforceId(String salesforceId) {
+    public Member salesforceId(String salesforceId) {
         this.salesforceId = salesforceId;
         return this;
     }
@@ -96,7 +96,7 @@ public class MemberSettings implements Serializable {
         return parentSalesforceId;
     }
 
-    public MemberSettings parentSalesforceId(String parentSalesforceId) {
+    public Member parentSalesforceId(String parentSalesforceId) {
         this.parentSalesforceId = parentSalesforceId;
         return this;
     }
@@ -109,7 +109,7 @@ public class MemberSettings implements Serializable {
         return assertionServiceEnabled;
     }
 
-    public MemberSettings assertionServiceEnabled(Boolean assertionServiceEnabled) {
+    public Member assertionServiceEnabled(Boolean assertionServiceEnabled) {
         this.assertionServiceEnabled = assertionServiceEnabled;
         return this;
     }
@@ -122,7 +122,7 @@ public class MemberSettings implements Serializable {
         return createdBy;
     }
 
-    public MemberSettings createdBy(String createdBy) {
+    public Member createdBy(String createdBy) {
         this.createdBy = createdBy;
         return this;
     }
@@ -135,7 +135,7 @@ public class MemberSettings implements Serializable {
         return createdDate;
     }
 
-    public MemberSettings createdDate(Instant createdDate) {
+    public Member createdDate(Instant createdDate) {
         this.createdDate = createdDate;
         return this;
     }
@@ -148,7 +148,7 @@ public class MemberSettings implements Serializable {
         return lastModifiedBy;
     }
 
-    public MemberSettings lastModifiedBy(String lastModifiedBy) {
+    public Member lastModifiedBy(String lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
         return this;
     }
@@ -161,7 +161,7 @@ public class MemberSettings implements Serializable {
         return lastModifiedDate;
     }
 
-    public MemberSettings lastModifiedDate(Instant lastModifiedDate) {
+    public Member lastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
         return this;
     }
@@ -225,7 +225,7 @@ public class MemberSettings implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        MemberSettings other = (MemberSettings) obj;
+        Member other = (Member) obj;
         if (assertionServiceEnabled == null) {
             if (other.assertionServiceEnabled != null)
                 return false;
