@@ -39,7 +39,7 @@
             </thead>
             <tbody>
             <tr *ngFor="let userSettings of userSettings ;trackBy: trackId">
-                <td><a [routerLink]="['/user-settings', userSettings.jhiUserId, 'view' ]">{{userSettings.login}}</a></td>
+                <td><a [routerLink]="['/user-settings', userSettings.id, 'view' ]">{{userSettings.login}}</a></td>
                 <td>{{userSettings.firstName}}</td>
                 <td>{{userSettings.lastName}}</td>
                 <td class="text-center">
@@ -52,13 +52,13 @@
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
-                                [routerLink]="['/user-settings', userSettings.jhiUserId, 'edit']"
+                                [routerLink]="['/user-settings', userSettings.id, 'edit']"
                                 class="btn btn-primary btn-sm ml-1">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', 'user-settings', { outlets: { popup: userSettings.jhiUserId + '/delete'} }]"
+                                [routerLink]="['/', 'user-settings', { outlets: { popup: userSettings.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm ml-1">

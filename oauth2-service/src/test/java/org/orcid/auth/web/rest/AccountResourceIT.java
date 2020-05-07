@@ -31,6 +31,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -112,7 +113,7 @@ public class AccountResourceIT {
         user.setEmail("john.doe@jhipster.com");
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
-        user.setAuthorities(authorities);
+        user.setAuthorities(authorities.stream().map(a -> a.getName()).collect(Collectors.toSet()));
         when(mockUserService.getUserWithAuthorities()).thenReturn(Optional.of(user));
 
         restUserMockMvc.perform(get("/api/account").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
@@ -342,7 +343,7 @@ public class AccountResourceIT {
         assertThat(testUser5.get().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
         testUser5.get().setActivated(true);
-        userService.updateUser((new UserDTO(testUser5.get())));
+        userService.updateUser((UserDTO.valueOf(testUser5.get())));
 
         // Register 5th (already activated) user
         restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(secondUser)))
@@ -367,7 +368,7 @@ public class AccountResourceIT {
 
         Optional<User> userDup = userRepository.findOneByLogin("badguy@example.com");
         assertThat(userDup.isPresent()).isTrue();
-        assertThat(userDup.get().getAuthorities()).hasSize(1).containsExactly(authorityRepository.findById(AuthoritiesConstants.USER).get());
+        assertThat(userDup.get().getAuthorities()).hasSize(1).containsExactly(authorityRepository.findById(AuthoritiesConstants.USER).get().getName());
     }
 
     @Test

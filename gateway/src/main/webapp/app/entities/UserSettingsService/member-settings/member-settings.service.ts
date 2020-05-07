@@ -15,7 +15,7 @@ type EntityArrayResponseType = HttpResponse<IMemberSettings[]>;
 
 @Injectable({ providedIn: 'root' })
 export class MemberSettingsService {
-  public resourceUrl = SERVER_API_URL + 'services/usersettingsservice/settings/api/member-settings';
+  public resourceUrl = SERVER_API_URL + 'services/oauth2service/api/members';
   public allMembers$: Observable<EntityArrayResponseType>;
   public orgNameMap: any;
 
@@ -53,7 +53,7 @@ export class MemberSettingsService {
 
   getAllMembers(): Observable<EntityArrayResponseType> {
     return this.http
-    .get<IMemberSettings[]>(this.resourceUrl, { observe: 'response' })
+      .get<IMemberSettings[]>(this.resourceUrl, { observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
@@ -63,8 +63,7 @@ export class MemberSettingsService {
 
   getOrgNameMap(): any {
     if (Object.keys(this.orgNameMap).length === 0) {
-      this.allMembers$
-      .subscribe(
+      this.allMembers$.subscribe(
         (res: HttpResponse<IMemberSettings[]>) => {
           if (res.body) {
             res.body.forEach((memberSettings: IMemberSettings) => {
