@@ -121,19 +121,6 @@ public class AccountResource {
     }
 
     /**
-     * {@code GET  /account} : get the current user.
-     *
-     * @return the current user.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
-     */
-    @GetMapping("/account")
-    public UserDTO getAccount() {
-        return userService.getUserWithAuthorities()
-            .map(UserDTO::new)
-            .orElseThrow(() -> new AccountResourceException("User could not be found"));
-    }
-
-    /**
      * {@code POST  /account} : update the current user information.
      *
      * @param userDTO the current user information.
@@ -153,6 +140,19 @@ public class AccountResource {
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
             userDTO.getLangKey(), userDTO.getImageUrl());
+    }
+    
+    /**
+     * {@code GET  /account} : get the current user.
+     *
+     * @return the current user.
+     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
+     */
+    @GetMapping("/account")
+    public UserDTO getAccount() {
+        return userService.getUserWithAuthorities()
+            .map(UserDTO::valueOf)
+            .orElseThrow(() -> new AccountResourceException("User could not be found"));
     }
 
     /**
