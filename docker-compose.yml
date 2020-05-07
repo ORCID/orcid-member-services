@@ -59,20 +59,6 @@ services:
       - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
 
-  usersettingsservice-app:
-    image: usersettingsservice:${TAG}
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - 'SPRING_PROFILES_ACTIVE=dev'
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-      - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
-      - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
-      - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
-      - SPRING_DATA_MONGODB_DATABASE=UserSettingsService
-      - JHIPSTER_SLEEP=30
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
-
   jhipster-registry:
     extends:
       file: jhipster-registry.yml
