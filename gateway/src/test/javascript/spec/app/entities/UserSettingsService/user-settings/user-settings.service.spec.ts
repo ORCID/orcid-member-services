@@ -32,14 +32,14 @@ describe('Service Tests', () => {
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
-        'AAAAAAA',
         false,
         false,
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
         currentDate,
-        'AAAAAAA'
+        'AAAAAAA',
+        currentDate
       );
     });
 
