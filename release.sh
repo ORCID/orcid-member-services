@@ -21,10 +21,6 @@ echo "oauth2-service"
 cd ../oauth2-service
 bash mvnw clean
 bash mvnw -ntp -Pdev verify jib:dockerBuild -Drelease.tag=$1
-echo "user-settings-service"
-cd ../user-settings-service
-bash mvnw clean
-bash mvnw -ntp -Pdev verify jib:dockerBuild -Drelease.tag=$1
 echo "assertion-services"
 cd ../assertion-services
 bash mvnw clean
