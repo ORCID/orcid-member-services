@@ -1,12 +1,12 @@
-package org.orcid.user.domain.validation;
+package org.orcid.auth.web.rest;
 
-import org.orcid.user.domain.MemberSettings;
+import org.orcid.auth.domain.Member;
 
 import io.micrometer.core.instrument.util.StringUtils;
 
-public class MemberSettingsValidator {
+public class MemberValidator {
 
-	public static boolean validate(MemberSettings memberSettings) {
+	public static boolean validate(Member memberSettings) {
 		boolean isOk = true;
 		if (StringUtils.isBlank(memberSettings.getClientId())) {
 			isOk = false;

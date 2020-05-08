@@ -4,13 +4,11 @@ export const enum UserAuthorities {
   ROLE_USER = 'ROLE_USER',
   CONSORTIUM_LEAD = 'CONSORTIUM_LEAD',
   ASSERTION_SERVICE_ENABLED = 'ASSERTION_SERVICE_ENABLED'
-
 }
 
 export interface IUserSettings {
   id?: string;
   login?: string;
-  jhiUserId?: string;
   firstName?: string;
   lastName?: string;
   mainContact?: boolean;
@@ -27,7 +25,6 @@ export class UserSettings implements IUserSettings {
   constructor(
     public id?: string,
     public login?: string,
-    public jhiUserId?: string;
     public firstName?: string,
     public lastName?: string,
     public mainContact?: boolean,
