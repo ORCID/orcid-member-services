@@ -1,4 +1,4 @@
-package org.orcid.user.upload.impl;
+package org.orcid.auth.upload.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,8 +6,8 @@ import java.io.InputStreamReader;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.orcid.user.domain.MemberSettings;
-import org.orcid.user.domain.validation.MemberSettingsValidator;
+import org.orcid.auth.domain.Member;
+import org.orcid.auth.web.rest.MemberValidator;
 import org.orcid.user.upload.MembersUpload;
 import org.orcid.user.upload.MembersUploadReader;
 import org.slf4j.Logger;
@@ -42,12 +42,12 @@ public class MembersCsvReader implements MembersUploadReader {
 		try {
 			for (CSVRecord line : elements) {
 				long index = line.getRecordNumber();
-				MemberSettings memberSettings = parseLine(line);
+				Member member = parseLine(line);
 				
-				if (!MemberSettingsValidator.validate(memberSettings)) {
-					upload.addError(index, memberSettings.getError());
+				if (!MemberValidator.validate(member)) {
+					upload.addError(index, member.getError());
 				} else {
-					upload.addMemberSettings(memberSettings);
+					upload.addMemberSettings(member);
 				}
 			}
 		} finally {
@@ -61,28 +61,28 @@ public class MembersCsvReader implements MembersUploadReader {
 		return upload;
 	}
 
-	private MemberSettings parseLine(CSVRecord record) {
-		MemberSettings ms = new MemberSettings();
+	private Member parseLine(CSVRecord record) {
+		Member member = new Member();
 		if (record.isSet("assertionServiceEnabled")) {
-			ms.setAssertionServiceEnabled(Boolean.parseBoolean(record.get("assertionServiceEnabled")));
+			member.setAssertionServiceEnabled(Boolean.parseBoolean(record.get("assertionServiceEnabled")));
 		} else {
-			ms.setAssertionServiceEnabled(false);
+			member.setAssertionServiceEnabled(false);
 		}
-		ms.setClientId(record.get("clientId"));
+		member.setClientId(record.get("clientId"));
 		Boolean isConsortiumLead = false;
 		if (record.isSet("isConsortiumLead")) {
 			isConsortiumLead = Boolean.parseBoolean(record.get("isConsortiumLead"));
 		}
-		ms.setIsConsortiumLead(isConsortiumLead);
-		ms.setSalesforceId(record.get("salesforceId"));
+		member.setIsConsortiumLead(isConsortiumLead);
+		member.setSalesforceId(record.get("salesforceId"));
 
 		if (!isConsortiumLead) {
-			ms.setParentSalesforceId(record.get("parentSalesforceId"));
+			member.setParentSalesforceId(record.get("parentSalesforceId"));
 		}
 		if (record.isSet("clientName")) {
-			ms.setClientName(record.get("clientName"));
+			member.setClientName(record.get("clientName"));
 		}
-		return ms;
+		return member;
 	}
 
 }

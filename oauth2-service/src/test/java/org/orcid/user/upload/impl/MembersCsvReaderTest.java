@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
-import org.orcid.user.domain.MemberSettings;
+import org.orcid.auth.domain.Member;
+import org.orcid.auth.upload.impl.MembersCsvReader;
 import org.orcid.user.upload.MembersUpload;
 
 class MembersCsvReaderTest {
@@ -22,8 +23,8 @@ class MembersCsvReaderTest {
 
 		assertEquals(2, upload.getMembers().size());
 
-		MemberSettings one = upload.getMembers().get(0);
-		MemberSettings two = upload.getMembers().get(1);
+		Member one = upload.getMembers().get(0);
+		Member two = upload.getMembers().get(1);
 
 		assertTrue(one.getAssertionServiceEnabled());
 		assertFalse(two.getAssertionServiceEnabled());

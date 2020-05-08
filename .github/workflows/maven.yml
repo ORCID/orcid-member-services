@@ -24,7 +24,5 @@ jobs:
       run: mvn -B package --file gateway/pom.xml
     - name: Build OAuth2 service
       run: mvn -B package --file oauth2-service/pom.xml
-    - name: Build User Settings service
-      run: mvn -B package --file user-settings-service/pom.xml
     - name: Build Assertion service
       run: mvn -B package --file assertion-services/pom.xml
