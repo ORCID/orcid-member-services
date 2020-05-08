@@ -6,15 +6,15 @@ import java.util.List;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.orcid.user.domain.MemberSettings;
+import org.orcid.auth.domain.Member;
 
 public class MembersUpload {
 
 	private JSONArray errors = new JSONArray();
 
-	private List<MemberSettings> members = new ArrayList<>();
+	private List<Member> members = new ArrayList<>();
 
-	public void addMemberSettings(MemberSettings memberSettings) {
+	public void addMemberSettings(Member memberSettings) {
 		members.add(memberSettings);
 	}
 
@@ -37,12 +37,8 @@ public class MembersUpload {
 		this.errors = errors;
 	}
 
-	public List<MemberSettings> getMembers() {
+	public List<Member> getMembers() {
 		return members;
-	}
-
-	public void setMembers(List<MemberSettings> members) {
-		this.members = members;
 	}
 
 }

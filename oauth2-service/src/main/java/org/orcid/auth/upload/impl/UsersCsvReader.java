@@ -1,4 +1,4 @@
-package org.orcid.user.upload.impl;
+package org.orcid.auth.upload.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,9 +13,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.orcid.user.domain.UserSettings;
-import org.orcid.user.security.AuthoritiesConstants;
-import org.orcid.user.service.dto.UserDTO;
+import org.orcid.auth.security.AuthoritiesConstants;
+import org.orcid.auth.service.dto.UserDTO;
 import org.orcid.user.upload.UsersUpload;
 import org.orcid.user.upload.UsersUploadReader;
 import org.slf4j.Logger;
@@ -76,11 +75,8 @@ public class UsersCsvReader implements UsersUploadReader {
 			if (!validate(element, errorString)) {
 				upload.addError(index, errorString);
 			} else {
-				String salesforceId = element.get("salesforceId");
-				UserDTO userDTO = getUserDTO(element);
-				UserSettings userSettings = getUserSettings(userDTO.getId(), salesforceId, now, createdBy);
+				UserDTO userDTO = getUserDTO(element, now, createdBy);
 				upload.getUserDTOs().add(userDTO);
-				upload.getUserSettings().add(userSettings);
 			}
 		} catch (Exception e) {
 			Throwable t = e.getCause();
@@ -89,25 +85,20 @@ public class UsersCsvReader implements UsersUploadReader {
 		}
 	}
 
-	private UserSettings getUserSettings(String jhiUserId, String salesforceId, Instant now, String createdBy) {
-		UserSettings us = new UserSettings();
-		us.setJhiUserId(jhiUserId);
-		us.setMainContact(false);
-		us.setSalesforceId(salesforceId);
-		us.setCreatedBy(createdBy);
-		us.setCreatedDate(now);
-		us.setLastModifiedBy(createdBy);
-		us.setLastModifiedDate(now);
-		return us;
-	}
-
-	private UserDTO getUserDTO(CSVRecord record) {
+	private UserDTO getUserDTO(CSVRecord record, Instant now, String createdBy) {
 		UserDTO u = new UserDTO();
 		u.setLogin(record.get("email"));
 		u.setFirstName(record.get("firstName"));
 		u.setLastName(record.get("lastName"));
 		u.setSalesforceId(record.get("salesforceId"));
 		u.setPassword(RandomStringUtils.randomAlphanumeric(10));
+		u.setSalesforceId(record.get("salesforceId"));
+		u.setCreatedBy(createdBy);
+		u.setCreatedDate(now);
+		u.setLastModifiedBy(createdBy);
+		u.setLastModifiedDate(now);
+		u.setEmail(record.get("email"));
+		u.setLangKey("en");
 		List<String> authorities = new ArrayList<String>();
 		String grants = record.get("grant");
 		if (!StringUtils.isBlank(grants)) {
