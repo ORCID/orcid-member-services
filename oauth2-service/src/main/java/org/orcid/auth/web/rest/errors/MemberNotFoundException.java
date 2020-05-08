@@ -1,4 +1,4 @@
-package org.orcid.user.web.rest.errors;
+package org.orcid.auth.web.rest.errors;
 
 public class MemberNotFoundException extends RuntimeException {
 

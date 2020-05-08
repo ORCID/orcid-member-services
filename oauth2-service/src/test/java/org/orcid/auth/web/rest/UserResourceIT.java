@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +30,6 @@ import org.orcid.auth.service.MailService;
 import org.orcid.auth.service.UserService;
 import org.orcid.auth.service.cache.UserCaches;
 import org.orcid.auth.service.dto.UserDTO;
-import org.orcid.auth.service.mapper.UserMapper;
 import org.orcid.auth.web.rest.errors.ExceptionTranslator;
 import org.orcid.auth.web.rest.vm.ManagedUserVM;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,9 +82,6 @@ public class UserResourceIT {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -492,7 +490,7 @@ public class UserResourceIT {
         userDTO.setLastModifiedBy(DEFAULT_LOGIN);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
-        User user = userMapper.userDTOToUser(userDTO);
+        User user = userDTO.toUser();
         assertThat(user.getId()).isEqualTo(DEFAULT_ID);
         assertThat(user.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(user.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
@@ -519,9 +517,9 @@ public class UserResourceIT {
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.USER);
         authorities.add(authority);
-        user.setAuthorities(authorities);
+        user.setAuthorities(authorities.stream().map(a -> a.getName()).collect(Collectors.toSet()));
 
-        UserDTO userDTO = userMapper.userToUserDTO(user);
+        UserDTO userDTO = UserDTO.valueOf(user);
 
         assertThat(userDTO.getId()).isEqualTo(DEFAULT_ID);
         assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);

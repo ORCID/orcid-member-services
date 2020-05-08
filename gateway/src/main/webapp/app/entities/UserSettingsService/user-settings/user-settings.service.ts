@@ -14,7 +14,7 @@ type EntityArrayResponseType = HttpResponse<IUserSettings[]>;
 
 @Injectable({ providedIn: 'root' })
 export class UserSettingsService {
-  public resourceUrl = SERVER_API_URL + 'services/usersettingsservice/settings/api/user';
+  public resourceUrl = SERVER_API_URL + 'services/oauth2service/api/users';
 
   constructor(protected http: HttpClient) {}
 
@@ -24,14 +24,14 @@ export class UserSettingsService {
       .post<IUserSettings>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
-  
+
   upload(userSettings: IUserSettings): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(userSettings);
-	return this.http
-	  .post<IUserSettings>(this.resourceUrl, copy, { observe: 'response' })
-	  .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+    return this.http
+      .post<IUserSettings>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
-  
+
   update(userSettings: IUserSettings): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(userSettings);
     return this.http
@@ -40,7 +40,7 @@ export class UserSettingsService {
   }
 
   find(login: string): Observable<EntityResponseType> {
-      console.log("login:" + login);
+    console.log('login:' + login);
     return this.http
       .get<IUserSettings>(`${this.resourceUrl}/${login}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
@@ -49,7 +49,7 @@ export class UserSettingsService {
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IUserSettings[]>(this.resourceUrl + 's', { params: options, observe: 'response' })
+      .get<IUserSettings[]>(this.resourceUrl, { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 

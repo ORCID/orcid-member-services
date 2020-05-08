@@ -23,7 +23,6 @@ export class UserSettingsUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     login: ['', Validators.required],
-    jhiUserId: [],
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     mainContact: [],
@@ -37,7 +36,13 @@ export class UserSettingsUpdateComponent implements OnInit {
 
   membersList: IMemberSettings;
 
-  constructor(protected jhiAlertService: JhiAlertService, protected userSettingsService: UserSettingsService, protected memberSettingsService: MemberSettingsService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    protected jhiAlertService: JhiAlertService,
+    protected userSettingsService: UserSettingsService,
+    protected memberSettingsService: MemberSettingsService,
+    protected activatedRoute: ActivatedRoute,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.isSaving = false;
@@ -51,7 +56,6 @@ export class UserSettingsUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: userSettings.id,
       login: userSettings.login,
-      jhiUserId: userSettings.jhiUserId,
       firstName: userSettings.firstName,
       lastName: userSettings.lastName,
       mainContact: userSettings.mainContact,
@@ -83,7 +87,6 @@ export class UserSettingsUpdateComponent implements OnInit {
       ...new UserSettings(),
       id: this.editForm.get(['id']).value,
       login: this.editForm.get(['login']).value,
-      jhiUserId: this.editForm.get(['jhiUserId']).value,
       firstName: this.editForm.get(['firstName']).value,
       lastName: this.editForm.get(['lastName']).value,
       mainContact: this.editForm.get(['mainContact']).value,
