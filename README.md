@@ -83,8 +83,8 @@ So, the first thing we should do is starting the different JHipster services as 
 ## Start the custom microservices
 With UAA up and running, we can now start the custom microservices that depend on it:
 
-- [User settings service](USER_SETTINGS_SERVICE.md)
 - [Assertion services](ASSERTION_SERVICES.md)
 
-## Docker Compose configuration
-[IN PROGRESS AND KINDA WORKS BUT NOT THAT WELL] [Docker Compose for local development](DOCKER_CONFIG.md)
+## Deployment via Docker Compose
+Member services is deployed to AWS using Docker Compose.
+See [Member services wiki page](https://github.com/ORCID/ORCID-Internal/wiki/Member-services)
