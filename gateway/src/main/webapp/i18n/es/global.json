@@ -7,8 +7,8 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entidades",
-        "userSettingsServiceUserSettings": "User Settings",
-        "userSettingsServiceMemberSettings": "Member Settings",
+        "msUserServiceMSUser": "User Settings",
+        "msUserServiceMemberSettings": "Member Settings",
         "assertionServicesAssertion": "Assertion",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
