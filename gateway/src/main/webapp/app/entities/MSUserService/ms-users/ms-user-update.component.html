@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h1 id="jhi-ms-user-heading" class="mt-5" jhiTranslate="gatewayApp.msUserServiceMSUser.home.createOrEditLabel">Create or edit a User Settings</h1>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.email" for="field_login">Login</label>
+                    <input type="text" class="form-control" name="login" id="field_login"
+                           formControlName="login"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.firstName" for="field_firstName">First Name</label>
+                    <input type="text" class="form-control" name="firstName" id="field_firstName"
+                           formControlName="firstName"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.lastName" for="field_lastName">Last Name</label>
+                    <input type="text" class="form-control" name="lastName" id="field_lastName"
+                           formControlName="lastName"/>
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" class="form-control" name="mainContact" id="field_mainContact"
+                           formControlName="mainContact"/>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.mainContact" for="field_mainContact">Main Contact</label>
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" class="form-control" name="assertionServicesEnabled" id="field_assertionServicesEnabled"
+                           formControlName="assertionServicesEnabled"/>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.assertionServices.enabled" for="field_assertionServicesEnabled">Assertions enabled</label>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId" for="field_salesforceId">Salesforce Id</label>
+                    <select  *ngIf="membersList" class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
+                        <option *ngFor="let member of membersList | keyvalue" [ngValue]="member.key">{{member.value}}</option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" id="cancel-save" class="btn btn-outline-primary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="msMember">
+            <h1 class="mt-5" jhiTranslate="gatewayApp.msUserServiceMSMember.detail.title">Member details</h1>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <div class="row">
+                <dl class="jh-entity-details">
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.salesforceId">Salesforce Id</dt>
+                    <dd class="col-md-9">
+                        {{msMember.salesforceId}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.parentSalesforceId">Parent Salesforce Id</dt>
+                    <dd class="col-md-9">
+                        {{msMember.parentSalesforceId}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.clientName">Client Name</dt>
+                    <dd class="col-md-9">
+                        {{msMember.clientName}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.isConsortiumLead">Is Consortium Lead</dt>
+                    <dd class="col-md-9">
+                        <span class="sr-only" *ngIf="msMember.isConsortiumLead=='true'" jhiTranslate="global.true">True</span>
+                        <span class="sr-only" *ngIf="msMember.isConsortiumLead!='true'" jhiTranslate="global.false">False</span>
+                        <fa-icon aria-hidden="true" *ngIf="msMember.isConsortiumLead=='true'" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                        <fa-icon aria-hidden="true" *ngIf="msMember.isConsortiumLead!='true'" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.assertionServiceEnabled">Assertion Service Enabled</dt>
+                    <dd class="col-md-9">
+                        <span class="sr-only" *ngIf="msMember.asssertionServiceEnabled=='true'" jhiTranslate="global.true">True</span>
+                        <span class="sr-only" *ngIf="msMember.asssertionServiceEnabled!='true'" jhiTranslate="global.false">False</span>
+                        <fa-icon aria-hidden="true" *ngIf="msMember.asssertionServiceEnabled=='true'" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                        <fa-icon aria-hidden="true" *ngIf="msMember.asssertionServiceEnabled!='true'" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.createdDate">Created Date</dt>
+                    <dd class="col-md-9">
+                        {{msMember.createdDate}} <i><span jhiTranslate="global.by">by</span> {{msMember.createdBy}}</i>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.lastModifiedDate">Last Modified Date</dt>
+                    <dd class="col-md-9">
+                        {{msMember.lastModifiedDate}} <i><span jhiTranslate="global.by">by</span> {{msMember.lastModifiedBy}}</i>
+                    </dd>
+                </dl>
+            </div>
+            <hr>
+            <div>
+                <button type="submit"
+                        (click)="previousState()"
+                        class="btn btn-outline-primary
+                        ">
+                    <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+                </button>
+                <button type="button"
+                        [routerLink]="['/ms-member', msMember.id, 'edit']"
+                        class="btn btn-primary">
+                    <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
