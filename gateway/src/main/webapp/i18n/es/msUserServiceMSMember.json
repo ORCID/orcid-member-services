@@ -1,0 +1,45 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSMember": {
+      "home": {
+        "title": "Member Settings",
+        "createLabel": "Crear nuevo Member Settings",
+        "createOrEditLabel": "Crear o editar Member Settings",
+        "notFound": "No Member Settings found",
+        "uploadLabel": "Upload Member Settings"
+      },
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Member Settings {{ id }}?"
+      },
+      "detail": {
+        "title": "Member Settings"
+      },
+      "import": {
+        "title": "Member Settings",
+        "label": "Please select the CSV file to upload",
+        "filePath": "File path",
+        "errors": {
+          "label": "Please fix the following errors"
+        }
+      },
+      "clientId": "Client Id",
+      "clientName": "Client name",
+      "clientSecret": "Client Secret",
+      "salesforceId": "Salesforce Id",
+      "parentSalesforceId": "Parent Salesforce Id",
+      "isConsortiumLead": "Is Consortium Lead",
+      "assertionServiceEnabled": "Assertion Service Enabled",
+      "createdBy": "Created By",
+      "createdDate": "Created Date",
+      "lastModifiedBy": "Last Modified By",
+      "lastModifiedDate": "Last Modified Date"
+    }
+  },
+  "msUserServiceApp": {
+    "msUserServiceMSMember": {
+      "created": "Un nuevo Member Settings ha sido creado con el identificador {{ param }}",
+      "updated": "Un Member Settings ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Member Settings ha sido eliminado con el identificador {{ param }}"
+    }
+  }
+}
