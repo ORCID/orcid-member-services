@@ -24,8 +24,8 @@
       },
       "admin": {
         "main": "Administration",
-        "userSettingsServiceUserSettings": "Manage users",
-        "userSettingsServiceMemberSettings": "Manage members",
+        "msUserServiceMSUser": "Manage users",
+        "msUserServiceMSMember": "Manage members",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
       "dev": {

@@ -1,14 +1,15 @@
 <form name="uploadForm" (ngSubmit)="upload()">
     <div class="modal-header">
-        <h4 class="modal-title" jhiTranslate="gatewayApp.assertionServicesAssertion.import.title">Import users</h4>
+        <h4 class="modal-title" jhiTranslate="gatewayApp.msUserServiceMSUser.import.title">Import users</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 (click)="clear()">&times;</button>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <p id="jhi-delete-msUser-heading" jhiTranslate="gatewayApp.assertionServicesAssertion.import.label">Please select the CSV file to upload</p>
+        <p id="jhi-delete-msUser-heading" jhiTranslate="gatewayApp.msUserServiceMSUser.import.label">Please select a CSV file to upload</p>
+        
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.import.filePath" for="field_filePath">File Path</label>
+            <label class="form-control-label sr-only" jhiTranslate="gatewayApp.msUserServiceMSUser.import.filePath" for="field_filePath">File Path</label>
             <input type="file" class="form-control" name="filePath" id="field_filePath"
                 (change)="selectFile($event)"/>
         </div>
@@ -23,7 +24,7 @@
     </div>
 </form>
 <div class="modal-body" *ngIf="csvErrors && csvErrors.length > 0">
-    <p jhiTranslate="gatewayApp.assertionServicesAssertion.import.errors.lagel">Please fix the following errors</p>
+    <p jhiTranslate="gatewayApp.msUserServiceMSUser.import.errors.lagel">Please fix the following errors</p>
     <table>
     	<thead>
     		<th>Index</th>

@@ -1,0 +1,50 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSUser": {
+      "home": {
+        "title": "Manage users",
+        "createLabel": "Add user",
+        "createOrEditLabel": "Add or edit user",
+        "notFound": "No users to show",
+        "uploadLabel": "Import users from CSV"
+      },
+      "delete": {
+        "question": "Are you sure you want to delete user {{ login }}?"
+      },
+      "detail": {
+        "title": "User details"
+      },
+      "import": {
+        "title": "Import users",
+        "label": "Please select the CSV file to upload",
+        "filePath": "File path",
+        "errors": {
+          "label": "Please fix the following errors"
+        }
+      },
+      "assertionServices": {
+        "enabled": "Assertions enabled"
+      },
+      "login": "Login",
+      "email": "Email",
+      "password": "Password",
+      "confirm_password": "Confirm Password",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "mainContact": "Main Contact",
+      "salesforceId": "Organization",
+      "parentSalesforceId": "Parent Salesforce Id",
+      "createdBy": "Created By",
+      "createdDate": "Created",
+      "lastModifiedBy": "Last Modified By",
+      "lastModifiedDate": "Last Modified"
+    }
+  },
+  "msUserServiceApp": {
+    "msUserServiceMSUser": {
+      "created": "A new user was created with ID {{ param }}",
+      "updated": "User {{ param }} was updated successfully",
+      "deleted": "User {{ param }} was deleted successfully"
+    }
+  }
+}
