@@ -23,7 +23,17 @@ Create a `git` directory in your home folder, and clone the orcid-member-service
 - cd ~/git
 - git clone git@github.com:ORCID/orcid-member-services.git
 
+## Set Java version to Open JDK 11
+
+Install and start [MongoDB Community Edition for your OS](https://docs.mongodb.com/manual/administration/install-community/)
+
 ## Start the JHipster UAA services
+Edit bash profile to set JAVA_HOME to your OpenJDK 11 path, ex:
+
+        vim ~/.bash_profile
+        export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+
+**IMPORTANT!!!** You will need to set JAVA_HOME back to Java 8 in order to work on ORCID-Source       
 
 [JHipster UAA](https://www.jhipster.tech/using-uaa/) is the service we use to secure our member services app. It serves as the base for user account management in our custom microservices and consists of 3 different applications:
 
