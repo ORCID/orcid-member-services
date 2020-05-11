@@ -21,8 +21,8 @@ jobs:
       with:
         java-version: 11
     - name: Build Gateway service
-      run: mvn -B package --file gateway/pom.xml
+      run: mvn -B verify --file gateway/pom.xml
     - name: Build OAuth2 service
-      run: mvn -B package --file oauth2-service/pom.xml
+      run: mvn -B verify --file oauth2-service/pom.xml
     - name: Build Assertion service
-      run: mvn -B package --file assertion-services/pom.xml
+      run: mvn -B verify --file assertion-services/pom.xml
