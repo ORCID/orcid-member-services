@@ -1,7 +1,6 @@
 package org.orcid.user.web.rest;
 
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +9,6 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
-import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.service.MailService;
 import org.orcid.user.service.UserService;
@@ -19,19 +17,15 @@ import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.user.web.rest.errors.EmailNotFoundException;
 import org.orcid.user.web.rest.errors.InvalidPasswordException;
-import org.orcid.user.web.rest.errors.LoginAlreadyUsedException;
 import org.orcid.user.web.rest.vm.KeyAndPasswordVM;
 import org.orcid.user.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -59,39 +53,6 @@ public class AccountResource {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
-    }
-
-    /**
-     * {@code POST  /register} : register the user.
-     *
-     * @param managedUserVM the managed user View Model.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
-     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
-     */
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        if (!checkPasswordLength(managedUserVM.getPassword())) {
-            throw new InvalidPasswordException();
-        }
-        
-        // Validate login and email are available
-        String login = managedUserVM.getLogin().toLowerCase();
-        String email = managedUserVM.getEmail().toLowerCase();
-        List<User> existingUsers = userService.findAllByLoginOrEmail(login, email);
-        if(existingUsers == null || !existingUsers.isEmpty()) {
-        	User user0 = existingUsers.get(0);
-        	if(login.equals(user0.getLogin())) {
-        		throw new AccountResourceException("User with login '" + login + "' already exists");
-        	} else {
-        		throw new AccountResourceException("User with email '" + email + "' already exists");
-        	}
-        }
-        
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(user);
     }
 
     /**

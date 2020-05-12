@@ -1,29 +1,28 @@
 package org.orcid.user.repository;
 
-import org.orcid.user.UserServiceApp;
-import org.orcid.user.config.Constants;
-import org.orcid.user.config.audit.AuditEventConverter;
-import org.orcid.user.domain.PersistentAuditEvent;
-import org.orcid.user.repository.CustomAuditEventRepository;
-import org.orcid.user.repository.PersistenceAuditEventRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.audit.AuditEvent;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.orcid.user.repository.CustomAuditEventRepository.EVENT_DATA_COLUMN_MAX_LENGTH;
 
-import javax.servlet.http.HttpSession;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.orcid.user.repository.CustomAuditEventRepository.EVENT_DATA_COLUMN_MAX_LENGTH;
+import javax.servlet.http.HttpSession;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.orcid.user.UserServiceApp;
+import org.orcid.user.config.Constants;
+import org.orcid.user.config.audit.AuditEventConverter;
+import org.orcid.user.domain.PersistentAuditEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.audit.AuditEvent;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 /**
  * Integration tests for {@link CustomAuditEventRepository}.

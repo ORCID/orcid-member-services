@@ -67,7 +67,7 @@ public class UserDTO {
 
 	private Boolean mainContact;
 
-	private Boolean assertionServicesEnabled;
+	private Boolean assertionServicesEnabled = Boolean.FALSE;
 
 	private Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
 

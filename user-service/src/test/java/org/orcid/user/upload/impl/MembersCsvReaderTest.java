@@ -10,7 +10,6 @@ import java.io.InputStream;
 import org.junit.jupiter.api.Test;
 import org.orcid.user.domain.Member;
 import org.orcid.user.upload.MembersUpload;
-import org.orcid.user.upload.impl.MembersCsvReader;
 
 class MembersCsvReaderTest {
 
