@@ -1,0 +1,40 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "org.orcid.user",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "6.1.2",
+    "applicationType": "uaa",
+    "baseName": "user-service",
+    "packageName": "org.orcid.user",
+    "packageFolder": "org/orcid/user",
+    "serverPort": "9999",
+    "authenticationType": "uaa",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": false,
+    "websocket": false,
+    "databaseType": "mongodb",
+    "devDatabaseType": "mongodb",
+    "prodDatabaseType": "mongodb",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "YjhlYWRkZWU0Y2M0ZDdiYjNlMGRkNGI2NWFkMTk5OTljYTc3MzFiNDg5NzFhN2JmODg0MGJmMjQ5NGYxMzM3ZWVkY2IzZGFhOGIyYmI0NGYwNzZhNzEwYjA0YWI1N2I5MzU2NTYwZTVlODE0NzdhMWEzMGY3NWRlN2E0Mzk3M2Q=",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "clientPackageManager": "npm",
+    "nativeLanguage": "en",
+    "languages": [
+      "en",
+      "es"
+    ],
+    "skipClient": true
+  }
+}

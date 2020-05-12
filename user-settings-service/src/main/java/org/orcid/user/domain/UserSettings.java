@@ -22,27 +22,6 @@ public class UserSettings implements Serializable {
     @Field("jhi_user_id")
     private String jhiUserId;
 
-    @Field("salesforce_id")
-    private String salesforceId;
-
-    @Field("main_contact")
-    private Boolean mainContact;
-
-    @Field("created_by")
-    private String createdBy;
-
-    @Field("created_date")
-    private Instant createdDate;
-
-    @Field("last_modified_by")
-    private String lastModifiedBy;
-
-    @Field("last_modified_date")
-    private Instant lastModifiedDate;
-    
-    @Field("deleted")
-    private Boolean deleted = false;
-
     public String getId() {
         return id;
     }
@@ -51,68 +30,12 @@ public class UserSettings implements Serializable {
         this.id = id;
     }
 
-    public String getSalesforceId() {
-        return salesforceId;
-    }
-
-    public void setSalesforceId(String salesforceId) {
-        this.salesforceId = salesforceId;
-    }
-
-    public Boolean getMainContact() {
-        return mainContact;
-    }
-
-    public void setMainContact(Boolean mainContact) {
-        this.mainContact = mainContact;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
-    public Instant getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
     public String getJhiUserId() {
         return jhiUserId;
     }
 
     public void setJhiUserId(String jhiUserId) {
         this.jhiUserId = jhiUserId;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
     }
 
     @Override
