@@ -1,0 +1,16 @@
+version: '2'
+services:
+  user-service-mongodb:
+    image: mongo:4.0.10
+    ports:
+      - '27017:27017'
+    command: mongos --configdb user-service-mongodb-config
+  user-service-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  user-service-mongodb-config:
+    image: mongo:4.0.10
+    container_name: user-service-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db

@@ -14,7 +14,7 @@ type EntityArrayResponseType = HttpResponse<IMSUser[]>;
 
 @Injectable({ providedIn: 'root' })
 export class MSUserService {
-  public resourceUrl = SERVER_API_URL + 'services/oauth2service/api/users';
+  public resourceUrl = SERVER_API_URL + 'services/user-service/api/users';
 
   constructor(protected http: HttpClient) {}
 

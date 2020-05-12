@@ -80,8 +80,8 @@ jhipster:
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
     client-authorization:
-      access-token-uri: http://oauth2service/oauth/token
-      token-service-id: oauth2service
+      access-token-uri: http://user-service/oauth/token
+      token-service-id: user-service
       client-id: internal
       client-secret: internal
   metrics:
