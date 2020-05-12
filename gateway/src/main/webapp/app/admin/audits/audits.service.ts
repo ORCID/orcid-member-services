@@ -15,7 +15,7 @@ export class AuditsService {
     params.set('fromDate', req.fromDate);
     params.set('toDate', req.toDate);
 
-    const requestURL = SERVER_API_URL + 'services/oauth2service/management/audits';
+    const requestURL = SERVER_API_URL + 'services/user-service/management/audits';
 
     return this.http.get<Audit[]>(requestURL, {
       params,
