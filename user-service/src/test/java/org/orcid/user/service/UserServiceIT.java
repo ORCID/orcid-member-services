@@ -1,26 +1,25 @@
 package org.orcid.user.service;
 
-import org.orcid.user.UserServiceApp;
-import org.orcid.user.config.Constants;
-import org.orcid.user.domain.User;
-import org.orcid.user.repository.UserRepository;
-import org.orcid.user.service.UserService;
-import org.orcid.user.service.dto.UserDTO;
-import org.orcid.user.service.util.RandomUtil;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.orcid.user.UserServiceApp;
+import org.orcid.user.config.Constants;
+import org.orcid.user.domain.User;
+import org.orcid.user.repository.UserRepository;
+import org.orcid.user.service.dto.UserDTO;
+import org.orcid.user.service.util.RandomUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 /**
  * Integration tests for {@link UserService}.

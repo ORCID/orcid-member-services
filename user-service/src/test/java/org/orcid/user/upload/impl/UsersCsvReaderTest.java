@@ -10,7 +10,6 @@ import java.io.InputStream;
 import org.junit.jupiter.api.Test;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.upload.UsersUpload;
-import org.orcid.user.upload.impl.UsersCsvReader;
 
 class UsersCsvReaderTest {
 
