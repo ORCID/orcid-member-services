@@ -2,6 +2,8 @@ package org.orcid.user.service.dto;
 
 import java.time.Instant;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -67,7 +69,7 @@ public class UserDTO {
 
 	private Boolean assertionServicesEnabled;
 
-	private Set<String> authorities;
+	private Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
 
 	public UserDTO() {
 		// Empty constructor needed for Jackson.
