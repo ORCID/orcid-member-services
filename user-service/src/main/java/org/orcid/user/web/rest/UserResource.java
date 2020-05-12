@@ -10,7 +10,6 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
-import org.orcid.user.config.Constants;
 import org.orcid.user.domain.Member;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.MemberRepository;

@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -30,7 +29,6 @@ import org.orcid.user.service.MailService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
-import org.orcid.user.web.rest.UserResource;
 import org.orcid.user.web.rest.errors.ExceptionTranslator;
 import org.orcid.user.web.rest.vm.ManagedUserVM;
 import org.springframework.beans.factory.annotation.Autowired;
