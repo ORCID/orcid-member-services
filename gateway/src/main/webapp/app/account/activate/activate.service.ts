@@ -9,7 +9,7 @@ export class ActivateService {
   constructor(private http: HttpClient) {}
 
   get(key: string): Observable<any> {
-    return this.http.get(SERVER_API_URL + 'services/oauth2service/api/activate', {
+    return this.http.get(SERVER_API_URL + 'services/user-service/api/activate', {
       params: new HttpParams().set('key', key)
     });
   }
