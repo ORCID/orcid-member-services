@@ -1,0 +1,42 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "org.orcid.member",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "6.1.2",
+    "applicationType": "microservice",
+    "baseName": "MemberService",
+    "packageName": "org.orcid.member",
+    "packageFolder": "org/orcid/member",
+    "serverPort": "8118",
+    "authenticationType": "uaa",
+    "uaaBaseName": "UserService",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": false,
+    "websocket": false,
+    "databaseType": "mongodb",
+    "devDatabaseType": "mongodb",
+    "prodDatabaseType": "mongodb",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "ZWQ2YjRjYThiOGI4ZWZkMTRhZTE3ZTcyZGZmMDgwOWVlNTZhZTMzNTA0ZmZmOTdhODE5MWM3ZjlhNDA2MTFlZTliMTM2MGRmZWQ0OGI5MTdjMzYwYWJlNGRiYzQ2ZTcwYzBjZjg3OTk0YzgxOWM2MWM2MzBkNDQ3N2M0OTMxOWQ=",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "clientPackageManager": "npm",
+    "nativeLanguage": "en",
+    "languages": [
+      "en",
+      "es"
+    ],
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}
