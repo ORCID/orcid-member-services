@@ -6,7 +6,7 @@
     },
     "jhipsterVersion": "6.1.2",
     "applicationType": "uaa",
-    "baseName": "user-service",
+    "baseName": "UserService",
     "packageName": "org.orcid.user",
     "packageFolder": "org/orcid/user",
     "serverPort": "9999",
