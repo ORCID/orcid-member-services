@@ -89,6 +89,7 @@ public class UserService {
 					user.setPassword(passwordEncoder.encode(newPassword));
 					user.setResetKey(null);
 					user.setResetDate(null);
+					user.setActivated(true);
 					userRepository.save(user);
 					userCaches.evictEntryFromUserCaches(user.getEmail());
 					return user;

@@ -1,22 +1,20 @@
 package org.orcid.user.security;
 
-import org.orcid.user.UserServiceApp;
-import org.orcid.user.domain.User;
-import org.orcid.user.repository.UserRepository;
-import org.orcid.user.security.DomainUserDetailsService;
-import org.orcid.user.security.UserNotActivatedException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+
+import java.util.Locale;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.orcid.user.UserServiceApp;
+import org.orcid.user.domain.User;
+import org.orcid.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
-import java.util.Locale;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 /**
  * Integrations tests for {@link DomainUserDetailsService}.
