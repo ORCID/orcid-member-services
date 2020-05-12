@@ -1,16 +1,15 @@
 {
   "generator-jhipster": {
     "promptValues": {
-      "packageName": "org.orcid.gateway",
-      "nativeLanguage": "en",
-      "microservicePath": "../assertion-service"
+      "packageName": "org.orcid",
+      "nativeLanguage": "en"
     },
     "jhipsterVersion": "6.1.2",
-    "applicationType": "gateway",
-    "baseName": "gateway",
-    "packageName": "org.orcid.gateway",
-    "packageFolder": "org/orcid/gateway",
-    "serverPort": "8080",
+    "applicationType": "microservice",
+    "baseName": "AssertionService",
+    "packageName": "org.orcid",
+    "packageFolder": "org/orcid",
+    "serverPort": "8092",
     "authenticationType": "uaa",
     "uaaBaseName": "UserService",
     "cacheProvider": "ehcache",
@@ -24,18 +23,22 @@
     "serviceDiscoveryType": "eureka",
     "buildTool": "maven",
     "enableSwaggerCodegen": false,
-    "clientFramework": "angularX",
-    "clientTheme": "none",
-    "clientThemeVariant": "",
-    "useSass": true,
-    "clientPackageManager": "npm",
+    "jwtSecretKey": "N2E3MjlhMTFhMmQ0ODFmMzlhZDIwMWNjMjVlYTQ3YmY3YjcyMDAyZWZjZmUzZGJmYzA5NWY5Mjk3NjQ2N2Q2NmRiNDhlYzMyNDA1ZjQyNmQ4NjIxMGM1MjQ2ODIxYjkyM2E2YWY0ZWViODg0Yzk2MmIxMDUxMTY0YjA2ZjdjYWM=",
+    "embeddableLaunchScript": false,
     "testFrameworks": [],
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "otherModules": [],
     "enableTranslation": true,
+    "clientPackageManager": "npm",
     "nativeLanguage": "en",
-    "languages": ["en", "es"]
+    "languages": [
+      "en",
+      "es"
+    ],
+    "blueprints": [],
+    "skipClient": true,
+    "skipUserManagement": true
   }
 }
