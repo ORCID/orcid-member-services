@@ -27,7 +27,7 @@ spring:
     mongodb:
       host: localhost
       port: 0
-      database: MemberService
+      database: member-service
   mail:
     host: localhost
   main:

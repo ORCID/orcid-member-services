@@ -6,18 +6,18 @@ import java.util.List;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.orcid.user.domain.Member;
+import org.orcid.user.service.dto.UserDTO;
 
-public class MembersUpload {
-
-	private JSONArray errors = new JSONArray();
-
-	private List<Member> members = new ArrayList<>();
-
-	public void addMemberSettings(Member memberSettings) {
-		members.add(memberSettings);
+public class UserUpload {
+	
+	List<UserDTO> userDTOs = new ArrayList<>();
+	
+	JSONArray errors = new JSONArray();
+	
+	public void addUserDTO(UserDTO userDTO) {
+		userDTOs.add(userDTO);
 	}
-
+	
 	public void addError(long index, String message) {
 		JSONObject error = new JSONObject();
 		try {
@@ -29,16 +29,12 @@ public class MembersUpload {
 		errors.put(error);
 	}
 
+	public List<UserDTO> getUserDTOs() {
+		return userDTOs;
+	}
+
 	public JSONArray getErrors() {
 		return errors;
-	}
-
-	public void setErrors(JSONArray errors) {
-		this.errors = errors;
-	}
-
-	public List<Member> getMembers() {
-		return members;
 	}
 
 }

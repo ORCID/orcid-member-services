@@ -1,4 +1,4 @@
-package org.orcid.user.upload.impl;
+package org.orcid.member.upload.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,17 +8,17 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
-import org.orcid.user.domain.Member;
-import org.orcid.user.upload.MembersUpload;
+import org.orcid.member.upload.MemberUpload;
+import org.orcid.member.domain.Member;
 
-class MembersCsvReaderTest {
+class MemberCsvReaderTest {
 
-	private MembersCsvReader reader = new MembersCsvReader();
+	private MemberCsvReader reader = new MemberCsvReader();
 
 	@Test
 	void testReadMembersUpload() throws IOException {
 		InputStream inputStream = getClass().getResourceAsStream("/members.csv");
-		MembersUpload upload = reader.readMembersUpload(inputStream);
+		MemberUpload upload = reader.readMemberUpload(inputStream);
 
 		assertEquals(2, upload.getMembers().size());
 
