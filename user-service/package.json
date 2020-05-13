@@ -1,7 +1,7 @@
 {
-  "name": "user-service",
+  "name": "userservice",
   "version": "0.0.0",
-  "description": "Description for user-service",
+  "description": "Description for userservice",
   "private": true,
   "license": "UNLICENSED",
   "cacheDirectories": [

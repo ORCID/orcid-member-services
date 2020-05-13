@@ -27,7 +27,7 @@ spring:
     mongodb:
       host: localhost
       port: 0
-      database: assertion-service
+      database: assertionservice
   mail:
     host: localhost
   main:
@@ -39,13 +39,13 @@ spring:
       enabled: false
   task:
     execution:
-      thread-name-prefix: assertion-service-task-
+      thread-name-prefix: assertionservice-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: assertion-service-scheduling-
+      thread-name-prefix: assertionservice-scheduling-
       pool:
         size: 1
   thymeleaf:
@@ -80,8 +80,8 @@ jhipster:
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
     client-authorization:
-      access-token-uri: http://user-service/oauth/token
-      token-service-id: user-service
+      access-token-uri: http://userservice/oauth/token
+      token-service-id: userservice
       client-id: internal
       client-secret: internal
   metrics:

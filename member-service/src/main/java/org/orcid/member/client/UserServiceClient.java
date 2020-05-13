@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
-@AuthorizedFeignClient(name = "user-service")
+@AuthorizedFeignClient(name = "userservice")
 public interface UserServiceClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/users/{loginOrId}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
