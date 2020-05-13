@@ -198,10 +198,10 @@ public class UserService {
 						user.setAuthorities(userDTO.getAuthorities().stream()
 								.filter(s -> authorityRepository.findById(s).isPresent()).collect(Collectors.toSet()));
 					}
-					if (userDTO.getAssertionServicesEnabled()
+					if (userDTO.getAssertionServiceEnabled()
 							&& !user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
 						user.getAuthorities().add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
-					} else if (!userDTO.getAssertionServicesEnabled()
+					} else if (!userDTO.getAssertionServiceEnabled()
 							&& user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
 						user.getAuthorities().remove(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
 					}

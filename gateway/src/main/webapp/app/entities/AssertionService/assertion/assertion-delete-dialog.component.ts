@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { IAssertion } from 'app/shared/model/AssertionServices/assertion.model';
+import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 import { AssertionService } from './assertion.service';
 
 @Component({

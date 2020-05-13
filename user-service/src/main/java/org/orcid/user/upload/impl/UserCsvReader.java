@@ -109,9 +109,9 @@ public class UserCsvReader implements UserUploadReader {
 					.collect(Collectors.toList());
 		}
 		if (authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
-			u.setAssertionServicesEnabled(true);
+			u.setAssertionServiceEnabled(true);
 		} else {
-			u.setAssertionServicesEnabled(false);
+			u.setAssertionServiceEnabled(false);
 		}
 		return u;
 	}

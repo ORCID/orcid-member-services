@@ -5,14 +5,14 @@ import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
 import { UserRouteAccessService } from 'app/core';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { Assertion } from 'app/shared/model/AssertionServices/assertion.model';
+import { Assertion } from 'app/shared/model/AssertionService/assertion.model';
 import { AssertionService } from './assertion.service';
 import { AssertionComponent } from './assertion.component';
 import { AssertionDetailComponent } from './assertion-detail.component';
 import { AssertionUpdateComponent } from './assertion-update.component';
 import { AssertionDeletePopupComponent } from './assertion-delete-dialog.component';
 import { AssertionImportPopupComponent } from './assertion-import-dialog.component';
-import { IAssertion } from 'app/shared/model/AssertionServices/assertion.model';
+import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 
 @Injectable({ providedIn: 'root' })
 export class AssertionResolve implements Resolve<IAssertion> {
@@ -40,7 +40,7 @@ export const assertionRoute: Routes = [
     data: {
       authorities: ['ROLE_USER'],
       defaultSort: 'id,asc',
-      pageTitle: 'gatewayApp.assertionServicesAssertion.home.title'
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -52,7 +52,7 @@ export const assertionRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'gatewayApp.assertionServicesAssertion.home.title'
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -64,7 +64,7 @@ export const assertionRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'gatewayApp.assertionServicesAssertion.home.title'
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -76,7 +76,7 @@ export const assertionRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'gatewayApp.assertionServicesAssertion.home.title'
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
     },
     canActivate: [UserRouteAccessService]
   }
@@ -91,7 +91,7 @@ export const assertionPopupRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'gatewayApp.assertionServicesAssertion.home.title'
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
     },
     canActivate: [UserRouteAccessService],
     outlet: 'popup'
@@ -104,7 +104,7 @@ export const assertionPopupRoute: Routes = [
     },
     data: {
       authorities: ['ASSERTION_SERVICE_ENABLED'],
-      pageTitle: 'gatewayApp.assertionServicesAssertion.home.title'
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
     },
     canActivate: [UserRouteAccessService],
     outlet: 'popup'

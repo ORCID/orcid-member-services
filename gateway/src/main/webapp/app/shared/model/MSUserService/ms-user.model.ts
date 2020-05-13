@@ -12,7 +12,7 @@ export interface IMSUser {
   firstName?: string;
   lastName?: string;
   mainContact?: boolean;
-  assertionServicesEnabled?: boolean;
+  assertionServiceEnabled?: boolean;
   salesforceId?: string;
   parentSalesforceId?: string;
   createdBy?: string;
@@ -28,7 +28,7 @@ export class MSUser implements IMSUser {
     public firstName?: string,
     public lastName?: string,
     public mainContact?: boolean,
-    public assertionServicesEnabled?: boolean,
+    public assertionServiceEnabled?: boolean,
     public salesforceId?: string,
     public parentSalesforceId?: string,
     public createdBy?: string,
