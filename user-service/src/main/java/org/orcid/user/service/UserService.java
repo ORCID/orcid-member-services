@@ -13,19 +13,16 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.orcid.user.config.Constants;
 import org.orcid.user.domain.Authority;
-import org.orcid.user.domain.Member;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.AuthorityRepository;
-import org.orcid.user.repository.MemberRepository;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.service.util.RandomUtil;
-import org.orcid.user.upload.MembersUploadReader;
-import org.orcid.user.upload.UsersUpload;
-import org.orcid.user.upload.UsersUploadReader;
+import org.orcid.user.upload.UserUpload;
+import org.orcid.user.upload.UserUploadReader;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.user.web.rest.errors.InvalidPasswordException;
@@ -52,9 +49,6 @@ public class UserService {
 	private UserRepository userRepository;
 
 	@Autowired
-	private MemberRepository memberRepository;
-
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
@@ -64,10 +58,10 @@ public class UserService {
 	private UserCaches userCaches;
 
 	@Autowired
-	private UsersUploadReader usersUploadReader;
-
+	private UserUploadReader usersUploadReader;
+	
 	@Autowired
-	private MembersUploadReader membersUploadReader;
+	private MemberService memberService;
 
 	public Optional<User> activateRegistration(String key) {
 		LOG.debug("Activating user for activation key {}", key);
@@ -325,8 +319,8 @@ public class UserService {
 		return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
 	}
 
-	public UsersUpload uploadUserCSV(InputStream inputStream, String createdBy) {
-		UsersUpload usersUpload = null;
+	public UserUpload uploadUserCSV(InputStream inputStream, String createdBy) {
+		UserUpload usersUpload = null;
 		try {
 			usersUpload = usersUploadReader.readUsersUpload(inputStream, createdBy);
 		} catch (IOException e) {
@@ -336,7 +330,8 @@ public class UserService {
 
 		usersUpload.getUserDTOs().forEach(userDTO -> {
 			String salesforceId = userDTO.getSalesforceId();
-			if (!memberSettingsExists(salesforceId)) {
+			
+			if (!memberExists(salesforceId)) {
 				String errorMessage = String.format("Member not found with salesforceId %s", salesforceId);
 				throw new MemberNotFoundException(errorMessage);
 			}
@@ -351,9 +346,13 @@ public class UserService {
 		return usersUpload;
 	}
 
-	private Boolean memberSettingsExists(String salesforceId) {
-		Optional<Member> existingMemberSettings = memberRepository.findBySalesforceId(salesforceId);
-		return existingMemberSettings.isPresent();
+	public Boolean memberExists(String salesforceId) {
+		return memberService.memberExistsWithSalesforceId(salesforceId);
+	}
+
+	public List<UserDTO> getUsersBySalesforceId(String salesforceId) {
+		List<User> users = userRepository.findBySalesforceId(salesforceId);
+		return users.stream().map(UserDTO::valueOf).collect(Collectors.toList());
 	}
 
 }

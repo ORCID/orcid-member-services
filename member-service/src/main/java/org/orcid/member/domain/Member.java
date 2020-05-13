@@ -1,4 +1,4 @@
-package org.orcid.user.domain;
+package org.orcid.member.domain;
 
 import java.io.Serializable;
 import java.time.Instant;

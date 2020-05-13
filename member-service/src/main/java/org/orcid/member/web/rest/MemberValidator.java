@@ -1,6 +1,6 @@
-package org.orcid.user.web.rest;
+package org.orcid.member.web.rest;
 
-import org.orcid.user.domain.Member;
+import org.orcid.member.domain.Member;
 
 import io.micrometer.core.instrument.util.StringUtils;
 
