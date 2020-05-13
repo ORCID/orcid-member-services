@@ -14,7 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.client.OrcidAPIClient;
 import org.orcid.domain.Assertion;
-import org.orcid.domain.AssertionsUser;
+import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
@@ -49,7 +49,7 @@ public class AssertionService {
 	private AssertionsCSVReportWriter assertionsReportWriter;
 	
 	@Autowired
-	private AssertionsUserService assertionsUserService;
+	private UserService assertionsUserService;
 
 	public Assertion createOrUpdateAssertion(Assertion assertion) {
 		if (assertion.getId() != null) {
@@ -89,7 +89,7 @@ public class AssertionService {
 	}
 
 	public Page<Assertion> findBySalesforceId(Pageable pageable) {
-		AssertionsUser user = assertionsUserService.getLoggedInUser();
+		AssertionServiceUser user = assertionsUserService.getLoggedInUser();
 		Page<Assertion> assertions = assertionsRepository.findBySalesforceId(user.getSalesforceId(), pageable);
 		assertions.forEach(a -> {
 			a.setStatus(getAssertionStatus(a));
@@ -120,7 +120,7 @@ public class AssertionService {
 
 	public Assertion createAssertion(Assertion assertion) {
 		Instant now = Instant.now();
-		AssertionsUser user = assertionsUserService.getLoggedInUser();
+		AssertionServiceUser user = assertionsUserService.getLoggedInUser();
 
 		assertion.setOwnerId(user.getId());
 		assertion.setCreated(now);

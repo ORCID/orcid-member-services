@@ -1,6 +1,6 @@
 package org.orcid.domain;
 
-public class AssertionsUser {
+public class AssertionServiceUser {
 	
 	private String login;
 	

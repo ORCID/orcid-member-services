@@ -27,7 +27,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.orcid.client.OrcidAPIClient;
 import org.orcid.domain.Assertion;
-import org.orcid.domain.AssertionsUser;
+import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
@@ -53,7 +53,7 @@ class AssertionsServiceTest {
 	private OrcidAPIClient orcidAPIClient;
 
 	@Mock
-	private AssertionsUserService assertionsUserService;
+	private UserService assertionsUserService;
 
 	@InjectMocks
 	private AssertionService assertionsService;
@@ -65,8 +65,8 @@ class AssertionsServiceTest {
 		when(assertionsUserService.getLoggedInUserId()).thenReturn(getUser().getId());
 	}
 
-	private AssertionsUser getUser() {
-		AssertionsUser user = new AssertionsUser();
+	private AssertionServiceUser getUser() {
+		AssertionServiceUser user = new AssertionServiceUser();
 		user.setId(DEFAULT_JHI_USER_ID);
 		user.setLogin(DEFAULT_LOGIN);
 		user.setSalesforceId(DEFAULT_SALESFORCE_ID);
