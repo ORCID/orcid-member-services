@@ -6,7 +6,7 @@ import { SERVER_API_URL } from 'app/app.constants';
 @Injectable({ providedIn: 'root' })
 export class LandingPageService {
   private headers: HttpHeaders;
-  //TODO: Define sandbox and prod submit uri, current endpoint is: https://assertion-service.orcid.org/api/id-token
+  //TODO: Define sandbox and prod submit uri, current endpoint is: https://assertionservice.orcid.org/api/id-token
   //const assertionServiceSubmitUri:string = 'https://en2t82yaxhwvz.x.pipedream.net/sample/post/request/';
   assertionServiceSubmitUri: string = SERVER_API_URL + 'services/assertionservice/api/id-token';
 
