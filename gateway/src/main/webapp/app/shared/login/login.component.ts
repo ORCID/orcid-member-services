@@ -13,7 +13,7 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 })
 export class JhiLoginModalComponent implements AfterViewInit, OnInit {
   authenticationError: boolean;
-  isModal: boolean;
+  isModal = false;
 
   loginForm = this.fb.group({
     username: [''],
@@ -98,6 +98,5 @@ export class JhiLoginModalComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     // We don't show signin in a modal currently
     // Add logic to change isModal here if needed
-    this.isModal = false;
   }
 }
