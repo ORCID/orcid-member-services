@@ -44,7 +44,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017
-      database: user-service
+      database: userservice
   mail:
     host: localhost
     port: 25
@@ -103,7 +103,7 @@ jhipster:
       client-id: internal
       client-secret: internal
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    from: user-service@localhost
+    from: userservice@localhost
     base-url: http://127.0.0.1:8080
   metrics:
     logs: # Reports metrics in the logs
