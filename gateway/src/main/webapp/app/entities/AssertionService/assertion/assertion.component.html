@@ -1,28 +1,28 @@
 <div>
-    <h1 id="page-heading" class="mt-3" jhiTranslate="gatewayApp.assertionServicesAssertion.home.title">Affiliations</h1>
+    <h1 id="page-heading" class="mt-3" jhiTranslate="gatewayApp.assertionServiceAssertion.home.title">Affiliations</h1>
     <div class="row justify-content-end">
         <div class="col-md-12 mb-2">
             <button id="jh-generate-links" class="btn btn-primary float-right jh-generate-links generate-links ml-1" (click)="getLinks()">
                 <fa-icon [icon]="faFileDownload"></fa-icon>
-                <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.getLinks">
+                <span  jhiTranslate="gatewayApp.assertionServiceAssertion.home.getLinks">
                 Download permission links
                 </span>
             </button>
             <button id="jh-generate-report" class="btn btn-primary float-right jh-generate-reports generate-report ml-1" (click)="generateReport()">
                 <fa-icon [icon]="faChartBar"></fa-icon>
-                <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.generateReport">
+                <span  jhiTranslate="gatewayApp.assertionServiceAssertion.home.generateReport">
                 Generate report
                 </span>
             </button>
             <button id="jh-upload-entities" class="btn btn-primary float-right jh-upload-entities upload-assertions ml-1" [routerLink]="['/', 'assertions', { outlets: { popup: 'import'} }]">
                 <fa-icon [icon]="faFileImport"></fa-icon>
-                <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.uploadLabel">
+                <span  jhiTranslate="gatewayApp.assertionServiceAssertion.home.uploadLabel">
                 Import affiliations from CSV
                 </span>
             </button>
             <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-assertion ml-1" [routerLink]="['/assertions/new']">
                 <fa-icon [icon]="'plus'"></fa-icon>
-                <span  jhiTranslate="gatewayApp.assertionServicesAssertion.home.createLabel">
+                <span  jhiTranslate="gatewayApp.assertionServiceAssertion.home.createLabel">
                 Add affiliation
                 </span>
             </button>
@@ -33,7 +33,7 @@
             <jhi-alert></jhi-alert>
             <br/>
             <div class="alert alert-warning" *ngIf="assertions?.length === 0">
-                <span jhiTranslate="gatewayApp.assertionServicesAssertion.home.notFound">No affiliations found</span>
+                <span jhiTranslate="gatewayApp.assertionServiceAssertion.home.notFound">No affiliations found</span>
             </div>
         </div>
     </div>
@@ -41,10 +41,10 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-                <th jhiSortBy="email"><span jhiTranslate="gatewayApp.assertionServicesAssertion.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-                <th width="30%" jhiSortBy="affiliationSection"><span jhiTranslate="gatewayApp.assertionServicesAssertion.affiliationDetails">Affiliation Details</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-                <th jhiSortBy="modified"><span jhiTranslate="gatewayApp.assertionServicesAssertion.modified">Modified</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-                <th jhiSortBy="status"><span jhiTranslate="gatewayApp.assertionServicesAssertion.status">Status</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                <th jhiSortBy="email"><span jhiTranslate="gatewayApp.assertionServiceAssertion.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                <th width="30%" jhiSortBy="affiliationSection"><span jhiTranslate="gatewayApp.assertionServiceAssertion.affiliationDetails">Affiliation Details</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                <th jhiSortBy="modified"><span jhiTranslate="gatewayApp.assertionServiceAssertion.modified">Modified</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                <th jhiSortBy="status"><span jhiTranslate="gatewayApp.assertionServiceAssertion.status">Status</span> <fa-icon [icon]="'sort'"></fa-icon></th>
                 <th></th>
             </tr>
             </thead>

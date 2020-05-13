@@ -1,6 +1,6 @@
 {
   "gatewayApp": {
-    "assertionServicesAssertion": {
+    "assertionServiceAssertion": {
       "home": {
         "title": "Affiliations",
         "createLabel": "Add affiliation",
@@ -62,8 +62,8 @@
       "day": "Day"
     }
   },
-  "assertionServicesApp": {
-    "assertionServicesAssertion": {
+  "assertionServiceApp": {
+    "assertionServiceAssertion": {
       "created": "New affiliation {{ param }} was created",
       "updated": "Affiliation {{ param }} was updated",
       "deleted": "Affiliation {{ param }} was deleted"

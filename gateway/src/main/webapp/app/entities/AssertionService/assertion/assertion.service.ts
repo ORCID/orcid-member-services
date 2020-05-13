@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
-import { IAssertion } from 'app/shared/model/AssertionServices/assertion.model';
+import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 import { ErrorHandlerService } from 'app/shared/errorHandler/error-handler.service';
 
 type EntityResponseType = HttpResponse<IAssertion>;
@@ -14,7 +14,7 @@ type EntityArrayResponseType = HttpResponse<IAssertion[]>;
 
 @Injectable({ providedIn: 'root' })
 export class AssertionService {
-  public resourceUrl = SERVER_API_URL + 'services/assertionservices/api/assertion';
+  public resourceUrl = SERVER_API_URL + 'services/assertionservice/api/assertion';
 
   constructor(protected http: HttpClient, protected errorHandler: ErrorHandlerService) {}
 

@@ -1,16 +1,16 @@
 version: '2'
 services:
-  assertionservices-mongodb:
+  assertionservice-mongodb:
     image: mongo:4.0.10
     ports:
       - '27017:27017'
-    command: mongos --configdb assertionservices-mongodb-config
-  assertionservices-mongodb-node:
+    command: mongos --configdb assertionservice-mongodb-config
+  assertionservice-mongodb-node:
     build:
       context: .
       dockerfile: mongodb/MongoDB.Dockerfile
     command: mongod --replSet rs1 --noprealloc --smallfiles
-  assertionservices-mongodb-config:
+  assertionservice-mongodb-config:
     image: mongo:4.0.10
-    container_name: assertionservices-mongodb-config
+    container_name: assertionservice-mongodb-config
     command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db

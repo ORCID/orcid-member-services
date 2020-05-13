@@ -41,9 +41,9 @@ class UserCsvReaderTest {
 		assertEquals("salesforceid3", userDTO2.getSalesforceId());
 		assertEquals("salesforceid2", userDTO3.getSalesforceId());
 		
-		assertTrue(userDTO1.getAssertionServicesEnabled());
-		assertFalse(userDTO2.getAssertionServicesEnabled());
-		assertFalse(userDTO3.getAssertionServicesEnabled());
+		assertTrue(userDTO1.getAssertionServiceEnabled());
+		assertFalse(userDTO2.getAssertionServiceEnabled());
+		assertFalse(userDTO3.getAssertionServiceEnabled());
 		
 	}
 	

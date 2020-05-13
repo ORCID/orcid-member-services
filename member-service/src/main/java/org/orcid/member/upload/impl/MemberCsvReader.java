@@ -49,7 +49,7 @@ public class MemberCsvReader implements MembersUploadReader {
 				if (!MemberValidator.validate(member)) {
 					upload.addError(index, member.getError());
 				} else {
-					upload.addMemberSettings(member);
+					upload.addMember(member);
 				}
 			}
 		} finally {

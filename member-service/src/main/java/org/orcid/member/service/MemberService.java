@@ -86,8 +86,8 @@ public class MemberService {
 	}
 	
 	public Boolean memberExists(String salesforceId) {
-		Optional<Member> existingMemberSettings = memberRepository.findBySalesforceId(salesforceId);
-		return existingMemberSettings.isPresent();
+		Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
+		return existingMember.isPresent();
 	}
 
 	public Member createMember(Member member) {
@@ -129,7 +129,7 @@ public class MemberService {
 		
 		if (!MemberValidator.validate(member)) {
 			ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(applicationName, true, "Member",
-					"memberSettings.create.error", member.getError()));
+					"member.create.error", member.getError()));
 		}
 
 		Instant now = Instant.now();

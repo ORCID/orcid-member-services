@@ -6,8 +6,8 @@ import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { AssertionService } from 'app/entities/AssertionServices/assertion/assertion.service';
-import { IAssertion, Assertion, AffiliationSection } from 'app/shared/model/AssertionServices/assertion.model';
+import { AssertionService } from 'app/entities/AssertionService/assertion/assertion.service';
+import { IAssertion, Assertion, AffiliationSection } from 'app/shared/model/AssertionService/assertion.model';
 
 describe('Service Tests', () => {
   describe('Assertion Service', () => {

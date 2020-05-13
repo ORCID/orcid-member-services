@@ -1,11 +1,11 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h1 id="jhi-assertion-heading" class="mt-5" jhiTranslate="gatewayApp.assertionServicesAssertion.home.createOrEditLabel">Add or edit affiliation</h1>
+            <h1 id="jhi-assertion-heading" class="mt-5" jhiTranslate="gatewayApp.assertionServiceAssertion.home.createOrEditLabel">Add or edit affiliation</h1>
             <div>
                 <jhi-alert-error></jhi-alert-error>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.email" for="field_email">Email</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.email" for="field_email">Email</label>
                     <input type="text" class="form-control" name="email" id="field_email"
                            formControlName="email"/>
                     <div *ngIf="editForm.get('email').invalid && (editForm.get('email').dirty || editForm.get('email').touched)">
@@ -16,13 +16,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.affiliationSection" for="field_affiliationSection">Assertion Section</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.affiliationSection" for="field_affiliationSection">Assertion Section</label>
                     <select class="form-control" name="affiliationSection" formControlName="affiliationSection" id="field_affiliationSection">
                         <option *ngFor="let type of AFFILIATION_TYPES" [ngValue]="type" >{{('gatewayApp.AffiliationSection.' + type) | translate}}</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.orgName" for="field_orgName">Org Name</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgName" for="field_orgName">Org Name</label>
                     <input type="text" class="form-control" name="orgName" id="field_orgName"
                            formControlName="orgName"/>
                     <div *ngIf="editForm.get('orgName').invalid && (editForm.get('orgName').dirty || editForm.get('orgName').touched)">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-md-4 float-left pl-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.orgCity" for="field_orgCity">Org City</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgCity" for="field_orgCity">Org City</label>
                         <input type="text" class="form-control" name="orgCity" id="field_orgCity"
                             formControlName="orgCity"/>
                         <div *ngIf="editForm.get('orgCity').invalid && (editForm.get('orgCity').dirty || editForm.get('orgCity').touched)">
@@ -45,12 +45,12 @@
                         </div>
                     </div>
                     <div class="col-md-4 float-left">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.orgRegion" for="field_orgRegion">Org Region</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgRegion" for="field_orgRegion">Org Region</label>
                         <input type="text" class="form-control" name="orgRegion" id="field_orgRegion"
                                formControlName="orgRegion"/>
                     </div>
                     <div class="col-md-4 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.orgCountry" for="field_orgCountry">Org Country</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgCountry" for="field_orgCountry">Org Country</label>
                         <select class="form-control" name="orgCountry" id="field_orgCountry" formControlName="orgCountry">
                                <option *ngFor="let country of COUNTRIES" [ngValue]="country[1]" >{{country[0]}}</option>
                         </select>
@@ -64,13 +64,13 @@
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-md-6 float-left pl-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.disambiguationSource" for="field_disambiguationSource">Disambiguation Source</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.disambiguationSource" for="field_disambiguationSource">Disambiguation Source</label>
                         <select class="form-control" name="disambiguationSource" id="field_disambiguationSource" formControlName="disambiguationSource">
                             <option *ngFor="let type of ORG_ID_TYPES" [ngValue]="type" >{{type}}</option>
                         </select>
                     </div>
                     <div class="col-md-6 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.disambiguatedOrgId" for="field_disambiguatedOrgId">Disambiguated Org Id</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.disambiguatedOrgId" for="field_disambiguatedOrgId">Disambiguated Org Id</label>
                         <input type="text" class="form-control" name="disambiguatedOrgId" id="field_disambiguatedOrgId"
                             formControlName="disambiguatedOrgId"/>
                         <div *ngIf="editForm.get('disambiguatedOrgId').invalid && (editForm.get('disambiguatedOrgId').dirty || editForm.get('disambiguatedOrgId').touched)">
@@ -83,7 +83,7 @@
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-md-4 float-left pl-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.departmentName" for="field_departmentName">Department Name</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.departmentName" for="field_departmentName">Department Name</label>
                         <input type="text" class="form-control" name="departmentName" id="field_departmentName"
                             formControlName="departmentName"/>
                         <div *ngIf="editForm.get('departmentName').invalid && (editForm.get('departmentName').dirty || editForm.get('departmentName').touched)">
@@ -94,7 +94,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.roleTitle" for="field_roleTitle">Role Title</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.roleTitle" for="field_roleTitle">Role Title</label>
                         <input type="text" class="form-control" name="roleTitle" id="field_roleTitle"
                                formControlName="roleTitle"/>
                         <div *ngIf="editForm.get('roleTitle').invalid && (editForm.get('roleTitle').dirty || editForm.get('roleTitle').touched)">
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.url" for="field_url">Url</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.url" for="field_url">Url</label>
                         <input type="text" class="form-control" name="url" id="field_url"
                                formControlName="url"/>
                         <div *ngIf="editForm.get('url').invalid && (editForm.get('url').dirty || editForm.get('url').touched)">
@@ -118,63 +118,63 @@
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-md-4 float-left pl-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.startYear" for="field_startYear">Start Year</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.startYear" for="field_startYear">Start Year</label>
                         <select class="form-control" name="startYear" id="field_startYear" formControlName="startYear">
-                            <option jhiTranslate="gatewayApp.assertionServicesAssertion.year" [ngValue]="null">Year</option>
+                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.year" [ngValue]="null">Year</option>
                             <option *ngFor="let year of startYearsList" [ngValue]="year" >{{year}}</option>
                         </select>
                     </div>
                     <div class="col-md-4 float-left">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.startMonth" for="field_startMonth">Start Month</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.startMonth" for="field_startMonth">Start Month</label>
                         <select class="form-control" name="startMonth" id="field_startMonth" formControlName="startMonth">
-                            <option jhiTranslate="gatewayApp.assertionServicesAssertion.month" [ngValue]="null">Month</option>
+                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.month" [ngValue]="null">Month</option>
                             <option *ngFor="let month of monthsList" [ngValue]="month[0]" >{{month[1]}}</option>
                         </select>
                     </div>
                     <div class="col-md-4 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.startDay" for="field_startDay">Start Day</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.startDay" for="field_startDay">Start Day</label>
                         <select class="form-control" name="startDay" id="field_startDay" formControlName="startDay">
-                            <option jhiTranslate="gatewayApp.assertionServicesAssertion.day" [ngValue]="null">Day</option>
+                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.day" [ngValue]="null">Day</option>
                             <option *ngFor="let day of daysList" [ngValue]="day" >{{day}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-md-4 float-left pl-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.endYear" for="field_endYear">End Year</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.endYear" for="field_endYear">End Year</label>
                         <select class="form-control" name="endYear" id="field_endYear" formControlName="endYear">
-                            <option jhiTranslate="gatewayApp.assertionServicesAssertion.year" [ngValue]="null">Year</option>
+                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.year" [ngValue]="null">Year</option>
                             <option *ngFor="let year of endYearsList" [ngValue]="year" >{{year}}</option>
                         </select>
                     </div>
                     <div class="col-md-4 float-left">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.endMonth" for="field_endMonth">End Month</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.endMonth" for="field_endMonth">End Month</label>
                         <select class="form-control" name="endMonth" id="field_endMonth" formControlName="endMonth">
-                            <option jhiTranslate="gatewayApp.assertionServicesAssertion.month" [ngValue]="null">Month</option>
+                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.month" [ngValue]="null">Month</option>
                             <option *ngFor="let month of monthsList" [ngValue]="month[0]" >{{month[1]}}</option>
                         </select>
                     </div>
                     <div class="col-md-4 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.endDay" for="field_endDay">End Day</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.endDay" for="field_endDay">End Day</label>
                         <select class="form-control" name="endDay" id="field_endDay" formControlName="endDay">
-                            <option jhiTranslate="gatewayApp.assertionServicesAssertion.day" [ngValue]="null">Day</option>
+                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.day" [ngValue]="null">Day</option>
                             <option *ngFor="let day of daysList" [ngValue]="day" >{{day}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-md-4 float-left pl-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.externalIdType" for="field_externalIdType">External Id Type</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.externalIdType" for="field_externalIdType">External Id Type</label>
                         <input type="text" class="form-control" name="externalIdType" id="field_externalIdType"
                                formControlName="externalIdType"/>
                     </div>
                     <div class="col-md-4 float-left">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.externalId" for="field_externalId">External Id</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.externalId" for="field_externalId">External Id</label>
                         <input type="text" class="form-control" name="externalId" id="field_externalId"
                             formControlName="externalId"/>
                     </div>
                     <div class="col-md-4 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServicesAssertion.externalIdUrl" for="field_externalIdUrl">External Id Url</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.externalIdUrl" for="field_externalIdUrl">External Id Url</label>
                         <input type="text" class="form-control" name="externalIdUrl" id="field_externalIdUrl"
                                formControlName="externalIdUrl"/>
                     </div>

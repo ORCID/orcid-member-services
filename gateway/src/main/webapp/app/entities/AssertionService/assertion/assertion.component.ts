@@ -6,7 +6,7 @@ import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 import { faChartBar, faFileDownload, faFileImport } from '@fortawesome/free-solid-svg-icons';
 
-import { IAssertion } from 'app/shared/model/AssertionServices/assertion.model';
+import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 import { AccountService } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';

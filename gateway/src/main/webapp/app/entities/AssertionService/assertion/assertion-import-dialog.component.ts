@@ -5,7 +5,7 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { IAssertion } from 'app/shared/model/AssertionServices/assertion.model';
+import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 import { AssertionService } from './assertion.service';
 
 import { FileUploadService } from '../../../shared/fileUpload/fileUpload.service';
@@ -46,11 +46,11 @@ export class AssertionImportDialogComponent {
     const f = this.currentFile.item(0);
     this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
       if (event instanceof HttpResponse) {
-          this.eventManager.broadcast({
-            name: 'assertionListModification',
-            content: 'New assertions uploaded'
-          });
-          this.activeModal.dismiss(true);
+        this.eventManager.broadcast({
+          name: 'assertionListModification',
+          content: 'New assertions uploaded'
+        });
+        this.activeModal.dismiss(true);
       }
     });
   }
