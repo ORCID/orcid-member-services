@@ -1,29 +1,31 @@
-package org.orcid.user.upload.impl;
+package org.orcid.member.upload.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.Instant;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.orcid.user.domain.Member;
-import org.orcid.user.upload.MembersUpload;
-import org.orcid.user.upload.MembersUploadReader;
-import org.orcid.user.web.rest.MemberValidator;
+import org.orcid.member.domain.Member;
+import org.orcid.member.upload.MemberUpload;
+import org.orcid.member.upload.MembersUploadReader;
+import org.orcid.member.web.rest.MemberValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MembersCsvReader implements MembersUploadReader {
+public class MemberCsvReader implements MembersUploadReader {
 
-	private static final Logger LOG = LoggerFactory.getLogger(MembersCsvReader.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MemberCsvReader.class);
 
 	@Override
-	public MembersUpload readMembersUpload(InputStream inputStream) {
+	public MemberUpload readMemberUpload(InputStream inputStream) {
+		Instant now = Instant.now();
 		InputStreamReader isr = new InputStreamReader(inputStream);
 		Iterable<CSVRecord> elements = null;
-		MembersUpload upload = new MembersUpload();
+		MemberUpload upload = new MemberUpload();
 
 		try {
 			elements = CSVFormat.DEFAULT.withHeader().parse(isr);
@@ -42,7 +44,7 @@ public class MembersCsvReader implements MembersUploadReader {
 		try {
 			for (CSVRecord line : elements) {
 				long index = line.getRecordNumber();
-				Member member = parseLine(line);
+				Member member = parseLine(line, now);
 				
 				if (!MemberValidator.validate(member)) {
 					upload.addError(index, member.getError());
@@ -61,7 +63,7 @@ public class MembersCsvReader implements MembersUploadReader {
 		return upload;
 	}
 
-	private Member parseLine(CSVRecord record) {
+	private Member parseLine(CSVRecord record, Instant now) {
 		Member member = new Member();
 		if (record.isSet("assertionServiceEnabled")) {
 			member.setAssertionServiceEnabled(Boolean.parseBoolean(record.get("assertionServiceEnabled")));
@@ -82,6 +84,8 @@ public class MembersCsvReader implements MembersUploadReader {
 		if (record.isSet("clientName")) {
 			member.setClientName(record.get("clientName"));
 		}
+		member.setCreatedDate(now);
+		member.setLastModifiedDate(now);
 		return member;
 	}
 

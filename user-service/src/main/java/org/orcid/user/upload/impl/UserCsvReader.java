@@ -15,21 +15,21 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.service.dto.UserDTO;
-import org.orcid.user.upload.UsersUpload;
-import org.orcid.user.upload.UsersUploadReader;
+import org.orcid.user.upload.UserUpload;
+import org.orcid.user.upload.UserUploadReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UsersCsvReader implements UsersUploadReader {
+public class UserCsvReader implements UserUploadReader {
 
-	private static final Logger LOG = LoggerFactory.getLogger(UsersCsvReader.class);
+	private static final Logger LOG = LoggerFactory.getLogger(UserCsvReader.class);
 
 	@Override
-	public UsersUpload readUsersUpload(InputStream inputStream, String createdBy) {
+	public UserUpload readUsersUpload(InputStream inputStream, String createdBy) {
 		InputStreamReader isr = new InputStreamReader(inputStream);
-		UsersUpload upload = new UsersUpload();
+		UserUpload upload = new UserUpload();
 		Iterable<CSVRecord> elements = null;
 		Instant now = Instant.now();
 		
@@ -67,7 +67,7 @@ public class UsersCsvReader implements UsersUploadReader {
 		return upload;
 	}
 
-	private void addUsersToUpload(CSVRecord element, UsersUpload upload, Instant now, String createdBy) {
+	private void addUsersToUpload(CSVRecord element, UserUpload upload, Instant now, String createdBy) {
 		long index = element.getRecordNumber();
 		String errorString = new String();
 		try {

@@ -312,6 +312,22 @@
             <artifactId>metrics-core</artifactId>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
+        
+        <dependency>
+            <groupId>org.codehaus.jettison</groupId>
+            <artifactId>jettison</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.orcid</groupId>
+            <artifactId>orcid-model</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

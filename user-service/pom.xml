@@ -323,6 +323,11 @@
             <artifactId>commons-csv</artifactId>
             <version>1.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.orcid</groupId>
+            <artifactId>orcid-model</artifactId>
+            <version>3.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>

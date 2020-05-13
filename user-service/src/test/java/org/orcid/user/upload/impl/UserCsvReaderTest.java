@@ -9,16 +9,16 @@ import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
 import org.orcid.user.service.dto.UserDTO;
-import org.orcid.user.upload.UsersUpload;
+import org.orcid.user.upload.UserUpload;
 
-class UsersCsvReaderTest {
+class UserCsvReaderTest {
 
-	private UsersCsvReader reader = new UsersCsvReader();
+	private UserCsvReader reader = new UserCsvReader();
 	
 	@Test
 	void testReadUsersUpload() throws IOException {
 		InputStream inputStream = getClass().getResourceAsStream("/users.csv");
-		UsersUpload upload = reader.readUsersUpload(inputStream, "some-user");
+		UserUpload upload = reader.readUsersUpload(inputStream, "some-user");
 		assertEquals(3, upload.getUserDTOs().size());
 		
 		UserDTO userDTO1 = upload.getUserDTOs().get(0);
