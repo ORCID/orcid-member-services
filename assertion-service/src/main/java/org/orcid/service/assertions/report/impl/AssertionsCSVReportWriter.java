@@ -13,7 +13,7 @@ import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
-import org.orcid.service.AssertionsUserService;
+import org.orcid.service.UserService;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.assertions.report.AssertionsReportWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class AssertionsCSVReportWriter implements AssertionsReportWriter {
 			"deletedFromORCID");
 
 	@Autowired
-	private AssertionsUserService assertionsUserService;
+	private UserService assertionsUserService;
 
 	@Autowired
 	private AssertionsRepository assertionsRepository;
