@@ -3,10 +3,10 @@
     <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')"><span aria-hidden="true">x</span>
     </button>
 </div>
-<div [ngClass]="{'modal-body': isModal}">
+<div [ngClass]="{'modal-body': isModal === false}">
     <div class="container">
         <div class="row justify-content-center">
-            <div [ngClass]="{'col-md-8': isModal, 'col-md-4': !isModal}">
+            <div [ngClass]="{'col-md-8': isModal === false, 'col-md-4':  isModal === true}">
                 <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication">
                     <strong>Failed to sign in!</strong> Please check your credentials and try again.
                 </div>
