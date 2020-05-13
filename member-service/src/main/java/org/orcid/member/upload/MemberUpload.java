@@ -1,4 +1,4 @@
-package org.orcid.user.upload;
+package org.orcid.member.upload;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,18 +6,18 @@ import java.util.List;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.orcid.user.service.dto.UserDTO;
+import org.orcid.member.domain.Member;
 
-public class UsersUpload {
-	
-	List<UserDTO> userDTOs = new ArrayList<>();
-	
-	JSONArray errors = new JSONArray();
-	
-	public void addUserDTO(UserDTO userDTO) {
-		userDTOs.add(userDTO);
+public class MemberUpload {
+
+	private JSONArray errors = new JSONArray();
+
+	private List<Member> members = new ArrayList<>();
+
+	public void addMemberSettings(Member memberSettings) {
+		members.add(memberSettings);
 	}
-	
+
 	public void addError(long index, String message) {
 		JSONObject error = new JSONObject();
 		try {
@@ -29,12 +29,16 @@ public class UsersUpload {
 		errors.put(error);
 	}
 
-	public List<UserDTO> getUserDTOs() {
-		return userDTOs;
-	}
-
 	public JSONArray getErrors() {
 		return errors;
+	}
+
+	public void setErrors(JSONArray errors) {
+		this.errors = errors;
+	}
+
+	public List<Member> getMembers() {
+		return members;
 	}
 
 }
