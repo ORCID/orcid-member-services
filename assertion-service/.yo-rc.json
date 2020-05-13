@@ -6,7 +6,7 @@
     },
     "jhipsterVersion": "6.1.2",
     "applicationType": "microservice",
-    "baseName": "AssertionService",
+    "baseName": "assertionservice",
     "packageName": "org.orcid",
     "packageFolder": "org/orcid",
     "serverPort": "8092",
