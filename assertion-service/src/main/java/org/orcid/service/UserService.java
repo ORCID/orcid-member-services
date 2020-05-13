@@ -1,7 +1,7 @@
 package org.orcid.service;
 
 import org.orcid.client.UserServiceClient;
-import org.orcid.domain.AssertionsUser;
+import org.orcid.domain.AssertionServiceUser;
 import org.orcid.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,17 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AssertionsUserService {
+public class UserService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AssertionsUserService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 	
 	@Autowired
 	private UserServiceClient userServiceClient;
 	
 	// add cache to this
-	public AssertionsUser getLoggedInUser() {
+	public AssertionServiceUser getLoggedInUser() {
 		String login = SecurityUtils.getCurrentUserLogin().get();
-		ResponseEntity<AssertionsUser> userResponse = userServiceClient.getUser(login);
+		ResponseEntity<AssertionServiceUser> userResponse = userServiceClient.getUser(login);
 		if (userResponse.getStatusCode().is2xxSuccessful()) {
 			return userResponse.getBody();
 		}

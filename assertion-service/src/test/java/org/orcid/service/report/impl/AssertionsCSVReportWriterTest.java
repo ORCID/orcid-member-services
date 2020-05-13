@@ -17,11 +17,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.domain.Assertion;
-import org.orcid.domain.AssertionsUser;
+import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.repository.AssertionsRepository;
-import org.orcid.service.AssertionsUserService;
+import org.orcid.service.UserService;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
 import org.springframework.data.domain.Sort;
@@ -38,7 +38,7 @@ public class AssertionsCSVReportWriterTest {
 	private AssertionsRepository assertionsRepository;
 	
 	@Mock
-	private AssertionsUserService assertionsUserService;
+	private UserService assertionsUserService;
 	
 	@Mock
 	private OrcidRecordService orcidRecordService;
@@ -55,8 +55,8 @@ public class AssertionsCSVReportWriterTest {
 		Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getDummyOrcidRecord());
 	}
 	
-	private AssertionsUser getUser() {
-		AssertionsUser user = new AssertionsUser();
+	private AssertionServiceUser getUser() {
+		AssertionServiceUser user = new AssertionServiceUser();
 		user.setId(DEFAULT_JHI_USER_ID);
 		user.setLogin(DEFAULT_LOGIN);
 		user.setSalesforceId(DEFAULT_SALESFORCE_ID);
