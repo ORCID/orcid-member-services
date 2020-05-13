@@ -1,6 +1,6 @@
 version: '2'
 services:
-  assertionservices-mongodb:
+  assertionservice-mongodb:
     image: mongo:4.0.10
     ports:
       - '27017:27017'

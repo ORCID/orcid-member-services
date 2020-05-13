@@ -67,7 +67,7 @@ public class UserDTO {
 
 	private Boolean mainContact;
 
-	private Boolean assertionServicesEnabled = Boolean.FALSE;
+	private Boolean assertionServiceEnabled = Boolean.FALSE;
 
 	private Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
 
@@ -196,12 +196,12 @@ public class UserDTO {
 		this.mainContact = mainContact;
 	}
 
-	public Boolean getAssertionServicesEnabled() {
-		return assertionServicesEnabled;
+	public Boolean getAssertionServiceEnabled() {
+		return assertionServiceEnabled;
 	}
 
-	public void setAssertionServicesEnabled(Boolean assertionServicesEnabled) {
-		this.assertionServicesEnabled = assertionServicesEnabled;
+	public void setAssertionServiceEnabled(Boolean assertionServiceEnabled) {
+		this.assertionServiceEnabled = assertionServiceEnabled;
 	}
 
 	public String getParentSalesforceId() {
@@ -258,7 +258,7 @@ public class UserDTO {
 		user.setActivated(this.isActivated());
 		user.setAuthorities(this.getAuthorities());
 		
-		if (this.getAssertionServicesEnabled()
+		if (this.getAssertionServiceEnabled()
 				&& !user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
 			user.getAuthorities().add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
 		}
@@ -279,7 +279,7 @@ public class UserDTO {
 		userDTO.setCreatedDate(user.getCreatedDate());
 		userDTO.setLastModifiedBy(user.getLastModifiedBy());
 		userDTO.setLastModifiedDate(user.getLastModifiedDate());
-		userDTO.setAssertionServicesEnabled(
+		userDTO.setAssertionServiceEnabled(
 				user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
 		userDTO.setAuthorities(user.getAuthorities());
 		userDTO.setSalesforceId(user.getSalesforceId());
@@ -291,7 +291,7 @@ public class UserDTO {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((assertionServicesEnabled == null) ? 0 : assertionServicesEnabled.hashCode());
+		result = prime * result + ((assertionServiceEnabled == null) ? 0 : assertionServiceEnabled.hashCode());
 		result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
 		result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
@@ -315,10 +315,10 @@ public class UserDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		UserDTO other = (UserDTO) obj;
-		if (assertionServicesEnabled == null) {
-			if (other.assertionServicesEnabled != null)
+		if (assertionServiceEnabled == null) {
+			if (other.assertionServiceEnabled != null)
 				return false;
-		} else if (!assertionServicesEnabled.equals(other.assertionServicesEnabled))
+		} else if (!assertionServiceEnabled.equals(other.assertionServiceEnabled))
 			return false;
 		if (createdBy == null) {
 			if (other.createdBy != null)

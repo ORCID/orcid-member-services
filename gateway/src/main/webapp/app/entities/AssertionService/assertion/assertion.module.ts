@@ -40,7 +40,7 @@ const ENTITY_STATES = [...assertionRoute, ...assertionPopupRoute];
   providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class AssertionServicesAssertionModule {
+export class AssertionServiceAssertionModule {
   constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
     this.languageHelper.language.subscribe((languageKey: string) => {
       if (languageKey !== undefined) {
