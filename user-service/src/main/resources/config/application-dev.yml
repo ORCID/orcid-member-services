@@ -100,6 +100,8 @@ jhipster:
     max-age: 1800
   security:
     client-authorization:
+      access-token-uri: http://userservice/oauth/token
+      token-service-id: userservice
       client-id: internal
       client-secret: internal
   mail: # specific JHipster mail property, for standard properties see MailProperties

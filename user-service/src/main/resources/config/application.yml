@@ -146,6 +146,12 @@ jhipster:
   #     exposed-headers: "Authorization,Link,X-Total-Count"
   #     allow-credentials: true
   #     max-age: 1800
+  security:
+    client-authorization:
+      access-token-uri: http://userservice/oauth/token
+      token-service-id: userservice
+      client-id: internal
+      client-secret: internal
   mail:
     from: userservice@localhost
   swagger:
