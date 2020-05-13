@@ -12,7 +12,7 @@ public class MemberService {
 	private MemberServiceClient memberServiceClient;
 	
 	public boolean memberExistsWithSalesforceId(String salesforceId) {
-		ResponseEntity<String> response = memberServiceClient.getMember(salesforceId);
+		ResponseEntity<?> response = memberServiceClient.getMember(salesforceId);
 		if (response.getStatusCode().is2xxSuccessful()) {
 			return true;
 		}
