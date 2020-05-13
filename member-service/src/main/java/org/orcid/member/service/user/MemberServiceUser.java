@@ -25,7 +25,7 @@ private String login;
 
 	private Boolean mainContact;
 
-	private Boolean assertionServicesEnabled;
+	private Boolean assertionServiceEnabled;
 	
 	private String firstName;
 
@@ -121,12 +121,12 @@ private String login;
 		this.mainContact = mainContact;
 	}
 
-	public Boolean getAssertionServicesEnabled() {
-		return assertionServicesEnabled;
+	public Boolean getAssertionServiceEnabled() {
+		return assertionServiceEnabled;
 	}
 
-	public void setAssertionServicesEnabled(Boolean assertionServicesEnabled) {
-		this.assertionServicesEnabled = assertionServicesEnabled;
+	public void setAssertionServiceEnabled(Boolean assertionServiceEnabled) {
+		this.assertionServiceEnabled = assertionServiceEnabled;
 	}
 
 	public String getFirstName() {

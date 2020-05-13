@@ -5,9 +5,9 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Data } from '@angular/router';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { AssertionComponent } from 'app/entities/AssertionServices/assertion/assertion.component';
-import { AssertionService } from 'app/entities/AssertionServices/assertion/assertion.service';
-import { Assertion } from 'app/shared/model/AssertionServices/assertion.model';
+import { AssertionComponent } from 'app/entities/AssertionService/assertion/assertion.component';
+import { AssertionService } from 'app/entities/AssertionService/assertion/assertion.service';
+import { Assertion } from 'app/shared/model/AssertionService/assertion.model';
 
 describe('Component Tests', () => {
   describe('Assertion Management Component', () => {

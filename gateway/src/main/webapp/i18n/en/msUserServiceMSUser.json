@@ -22,7 +22,7 @@
           "label": "Please fix the following errors"
         }
       },
-      "assertionServices": {
+      "assertionService": {
         "enabled": "Assertions enabled"
       },
       "login": "Login",

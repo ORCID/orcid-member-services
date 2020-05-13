@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import * as moment from 'moment';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { IAssertion, Assertion } from 'app/shared/model/AssertionServices/assertion.model';
+import { IAssertion, Assertion } from 'app/shared/model/AssertionService/assertion.model';
 import { AssertionService } from './assertion.service';
 import { DateUtilService } from 'app/shared/util/date-util.service';
 import {

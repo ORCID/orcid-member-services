@@ -6,21 +6,21 @@ import io.micrometer.core.instrument.util.StringUtils;
 
 public class MemberValidator {
 
-	public static boolean validate(Member memberSettings) {
+	public static boolean validate(Member member) {
 		boolean isOk = true;
-		if (StringUtils.isBlank(memberSettings.getClientId())) {
+		if (StringUtils.isBlank(member.getClientId())) {
 			isOk = false;
-			memberSettings.setError("Client id should not be empty");
+			member.setError("Client id should not be empty");
 		}
 
-		if (StringUtils.isBlank(memberSettings.getSalesforceId())) {
+		if (StringUtils.isBlank(member.getSalesforceId())) {
 			isOk = false;
-			memberSettings.setError("Salesforce id should not be empty");
+			member.setError("Salesforce id should not be empty");
 		}
 		
-		if (StringUtils.isBlank(memberSettings.getParentSalesforceId()) && (memberSettings.getIsConsortiumLead() == null || !memberSettings.getIsConsortiumLead())) {
+		if (StringUtils.isBlank(member.getParentSalesforceId()) && (member.getIsConsortiumLead() == null || !member.getIsConsortiumLead())) {
 			isOk = false;
-			memberSettings.setError("Parent salesforce id should not be empty if it is not a consortium lead");
+			member.setError("Parent salesforce id should not be empty if it is not a consortium lead");
 		}
 		return isOk;
 	}

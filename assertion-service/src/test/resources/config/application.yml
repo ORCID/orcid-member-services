@@ -17,12 +17,12 @@ eureka:
   client:
     enabled: false
   instance:
-    appname: AssertionServices
-    instanceId: AssertionServices:${spring.application.instance-id:${random.value}}
+    appname: AssertionService
+    instanceId: AssertionService:${spring.application.instance-id:${random.value}}
 
 spring:
   application:
-    name: AssertionServices
+    name: AssertionService
   data:
     mongodb:
       host: localhost
@@ -63,7 +63,7 @@ server:
 
 jhipster:
   clientApp:
-    name: 'assertionServicesApp'
+    name: 'assertionServiceApp'
   logging:
     # To test json console appender
     use-json-format: true # By default, logs are in Json format

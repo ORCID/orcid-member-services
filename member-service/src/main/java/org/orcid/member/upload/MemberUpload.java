@@ -14,8 +14,8 @@ public class MemberUpload {
 
 	private List<Member> members = new ArrayList<>();
 
-	public void addMemberSettings(Member memberSettings) {
-		members.add(memberSettings);
+	public void addMember(Member member) {
+		members.add(member);
 	}
 
 	public void addError(long index, String message) {

@@ -9,7 +9,7 @@
     "baseName": "MemberService",
     "packageName": "org.orcid.member",
     "packageFolder": "org/orcid/member",
-    "serverPort": "8118",
+    "serverPort": "8094",
     "authenticationType": "uaa",
     "uaaBaseName": "UserService",
     "cacheProvider": "ehcache",

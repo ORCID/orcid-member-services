@@ -51,7 +51,7 @@ export class MSMemberImportDialogComponent {
         if (this.csvErrors.length == 0) {
           this.eventManager.broadcast({
             name: 'msMemberListModification',
-            content: 'New member settings uploaded'
+            content: 'New member uploaded'
           });
           this.activeModal.dismiss(true);
         }

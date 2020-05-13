@@ -1,6 +1,6 @@
 {
   "gatewayApp": {
-    "assertionServicesAssertion": {
+    "assertionServiceAssertion": {
       "home": {
         "title": "Assertions",
         "createLabel": "Crear nuevo Assertion",
@@ -53,8 +53,8 @@
       "adminId": "Admin Id"
     }
   },
-  "assertionServicesApp": {
-    "assertionServicesAssertion": {
+  "assertionServiceApp": {
+    "assertionServiceAssertion": {
       "created": "Un nuevo Assertion ha sido creado con el identificador {{ param }}",
       "updated": "Un Assertion ha sido actualizado con el identificador {{ param }}",
       "deleted": "Un Assertion ha sido eliminado con el identificador {{ param }}"

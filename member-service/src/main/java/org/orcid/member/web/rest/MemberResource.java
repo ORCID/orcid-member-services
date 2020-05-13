@@ -79,30 +79,31 @@ public class MemberResource {
 	private MemberService memberService;
 
 	/**
-	 * {@code POST  /member-settings} : Create a new memberSettings.
+	 * {@code POST  /member} : Create a new member.
 	 *
 	 * @param member the member to create.
 	 * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-	 *         body the new memberSettings, or with status {@code 400 (Bad Request)}
+	 *         body the new member, or with status {@code 400 (Bad Request)}
 	 *         if the member has already an ID.
 	 * @throws URISyntaxException if the Location URI syntax is incorrect.
 	 * @throws JSONException
 	 */
 	@PostMapping("/members")
+	@PreAuthorize("hasRole(\"ROLE_ADMIN\")")
 	public ResponseEntity<Member> createMember(@Valid @RequestBody Member member)
 			throws URISyntaxException, JSONException {
 		LOG.debug("REST request to save Member : {}", member);
 		Member created = memberService.createMember(member);
 		return ResponseEntity
-				.created(new URI("/api/member-settings/" + created.getId())).headers(HeaderUtil
+				.created(new URI("/api/member/" + created.getId())).headers(HeaderUtil
 						.createEntityCreationAlert(applicationName, true, "Member", created.getId().toString()))
 				.body(created);
 	}
 
 	/**
-	 * {@code POST  /member-settings/upload} : Create a list of member settings.
+	 * {@code POST  /members/upload} : Create a list of member settings.
 	 *
-	 * @param file: file containing the member-settings to create.
+	 * @param file: file containing the member to create.
 	 * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
 	 *         a map indicating if each user was created or not, or with status
 	 *         {@code 400 (Bad Request)} if the file cannot be parsed.
@@ -111,7 +112,7 @@ public class MemberResource {
 	@PostMapping("/members/upload")
 	@PreAuthorize("hasRole(\"ROLE_ADMIN\")")
 	public ResponseEntity<String> uploadMember(@RequestParam("file") MultipartFile file) throws Throwable {
-		LOG.debug("Uploading member settings CSV");
+		LOG.debug("Uploading member CSV");
 		MemberUpload upload = memberService.uploadMemberCSV(file.getInputStream());
 		return ResponseEntity.ok().body(upload.getErrors().toString());
 	}
@@ -129,6 +130,7 @@ public class MemberResource {
 	 * @throws JSONException
 	 */
 	@PutMapping("/members")
+	@PreAuthorize("hasRole(\"ROLE_ADMIN\")")
 	public ResponseEntity<Member> updateMember(@Valid @RequestBody Member member)
 			throws URISyntaxException, JSONException {
 		LOG.debug("REST request to update Member : {}", member);
@@ -139,13 +141,13 @@ public class MemberResource {
 	}
 		
 	/**
-	 * {@code GET  /member-settings} : get all the memberSettings.
+	 * {@code GET  /member} : get all the member.
 	 *
 	 *
 	 * @param pageable the pagination information.
 	 *
 	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
-	 *         of memberSettings in body.
+	 *         of member in body.
 	 */
 	@GetMapping("/members")
 	public ResponseEntity<List<Member>> getAllMembers(Pageable pageable) {
@@ -159,7 +161,7 @@ public class MemberResource {
 	/**
 	 * {@code GET  /members/:id} : get the "id" member.
 	 *
-	 * @param id - the id or salesforce id of the memberSettings to retrieve.
+	 * @param id - the id or salesforce id of the member to retrieve.
 	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
 	 *         the member, or with status {@code 404 (Not Found)}.
 	 */
@@ -177,6 +179,7 @@ public class MemberResource {
 	 * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
 	 */
 	@DeleteMapping("/members/{id}")
+	@PreAuthorize("hasRole(\"ROLE_ADMIN\")")
 	public ResponseEntity<Void> deleteMember(@PathVariable String id) {
 		LOG.debug("REST request to delete Member : {}", id);
 		memberService.deleteMember(id);

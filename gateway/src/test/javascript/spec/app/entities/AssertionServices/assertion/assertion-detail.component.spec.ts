@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { AssertionDetailComponent } from 'app/entities/AssertionServices/assertion/assertion-detail.component';
-import { Assertion } from 'app/shared/model/AssertionServices/assertion.model';
+import { AssertionDetailComponent } from 'app/entities/AssertionService/assertion/assertion-detail.component';
+import { Assertion } from 'app/shared/model/AssertionService/assertion.model';
 
 describe('Component Tests', () => {
   describe('Assertion Management Detail Component', () => {
