@@ -101,6 +101,8 @@ jhipster:
       max-entries: 1000 # Number of objects in each cache entry
   security:
     client-authorization:
+      access-token-uri: http://userservice/oauth/token
+      token-service-id: userservice
       client-id: internal
       client-secret: internal
     authentication:
