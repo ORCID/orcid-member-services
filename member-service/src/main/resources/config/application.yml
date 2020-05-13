@@ -116,13 +116,13 @@ spring:
       enabled: false
   task:
     execution:
-      thread-name-prefix: member-service-task-
+      thread-name-prefix: memberservice-task-
       pool:
         core-size: 2
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: member-service-scheduling-
+      thread-name-prefix: memberservice-scheduling-
       pool:
         size: 2
   thymeleaf:

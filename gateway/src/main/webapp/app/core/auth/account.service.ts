@@ -16,11 +16,11 @@ export class AccountService {
   constructor(private languageService: JhiLanguageService, private sessionStorage: SessionStorageService, private http: HttpClient) {}
 
   fetch(): Observable<HttpResponse<Account>> {
-    return this.http.get<Account>(SERVER_API_URL + 'services/user-service/api/account', { observe: 'response' });
+    return this.http.get<Account>(SERVER_API_URL + 'services/userservice/api/account', { observe: 'response' });
   }
 
   save(account: any): Observable<HttpResponse<any>> {
-    return this.http.post(SERVER_API_URL + 'services/user-service/api/account', account, { observe: 'response' });
+    return this.http.post(SERVER_API_URL + 'services/userservice/api/account', account, { observe: 'response' });
   }
 
   authenticate(identity) {

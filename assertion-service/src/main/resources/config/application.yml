@@ -116,13 +116,13 @@ spring:
       enabled: false
   task:
     execution:
-      thread-name-prefix: assertion-service-task-
+      thread-name-prefix: assertionservice-task-
       pool:
         core-size: 2
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: assertion-service-scheduling-
+      thread-name-prefix: assertionservice-scheduling-
       pool:
         size: 2
   thymeleaf:

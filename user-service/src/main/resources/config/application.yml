@@ -24,8 +24,8 @@ eureka:
     instance-info-replication-interval-seconds: 10
     registry-fetch-interval-seconds: 10
   instance:
-    appname: user-service
-    instanceId: user-service:${spring.application.instance-id:${random.value}}
+    appname: userservice
+    instanceId: userservice:${spring.application.instance-id:${random.value}}
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
     status-page-url-path: ${management.endpoints.web.base-path}/info
@@ -83,7 +83,7 @@ management:
 
 spring:
   application:
-    name: user-service
+    name: userservice
   jmx:
     enabled: false
   messages:
@@ -95,13 +95,13 @@ spring:
       enabled: false
   task:
     execution:
-      thread-name-prefix: user-service-task-
+      thread-name-prefix: userservice-task-
       pool:
         core-size: 2
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: user-service-scheduling-
+      thread-name-prefix: userservice-scheduling-
       pool:
         size: 2
   thymeleaf:
@@ -147,11 +147,11 @@ jhipster:
   #     allow-credentials: true
   #     max-age: 1800
   mail:
-    from: user-service@localhost
+    from: userservice@localhost
   swagger:
     default-include-pattern: /api/.*
-    title: user-service API
-    description: user-service API documentation
+    title: userservice API
+    description: userservice API documentation
     version: 0.0.1
     terms-of-service-url:
     contact-name:

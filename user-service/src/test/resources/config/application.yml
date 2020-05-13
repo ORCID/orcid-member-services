@@ -17,17 +17,17 @@ eureka:
   client:
     enabled: false
   instance:
-    appname: user-service
-    instanceId: user-service:${spring.application.instance-id:${random.value}}
+    appname: userservice
+    instanceId: userservice:${spring.application.instance-id:${random.value}}
 
 spring:
   application:
-    name: user-service
+    name: userservice
   data:
     mongodb:
       host: localhost
       port: 0
-      database: user-service
+      database: userservice
   mail:
     host: localhost
   main:
@@ -39,13 +39,13 @@ spring:
       enabled: false
   task:
     execution:
-      thread-name-prefix: user-service-task-
+      thread-name-prefix: userservice-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: user-service-scheduling-
+      thread-name-prefix: userservice-scheduling-
       pool:
         size: 1
   thymeleaf:

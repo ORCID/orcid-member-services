@@ -27,7 +27,7 @@ spring:
     mongodb:
       host: localhost
       port: 0
-      database: member-service
+      database: memberservice
   mail:
     host: localhost
   main:
@@ -39,13 +39,13 @@ spring:
       enabled: false
   task:
     execution:
-      thread-name-prefix: member-service-task-
+      thread-name-prefix: memberservice-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: member-service-scheduling-
+      thread-name-prefix: memberservice-scheduling-
       pool:
         size: 1
   thymeleaf:
