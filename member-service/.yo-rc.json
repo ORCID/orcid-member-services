@@ -6,7 +6,7 @@
     },
     "jhipsterVersion": "6.1.2",
     "applicationType": "microservice",
-    "baseName": "MemberService",
+    "baseName": "memberservice",
     "packageName": "org.orcid.member",
     "packageFolder": "org/orcid/member",
     "serverPort": "8094",
