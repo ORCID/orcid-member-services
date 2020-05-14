@@ -9,6 +9,6 @@ export class Register {
   constructor(private http: HttpClient) {}
 
   save(account: any): Observable<any> {
-    return this.http.post(SERVER_API_URL + 'services/user-service/api/register', account);
+    return this.http.post(SERVER_API_URL + 'services/userservice/api/register', account);
   }
 }

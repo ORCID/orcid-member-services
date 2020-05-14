@@ -24,8 +24,8 @@ eureka:
     instance-info-replication-interval-seconds: 10
     registry-fetch-interval-seconds: 10
   instance:
-    appname: assertionservices
-    instanceId: assertionservices:${spring.application.instance-id:${random.value}}
+    appname: assertionservice
+    instanceId: assertionservice:${spring.application.instance-id:${random.value}}
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
     status-page-url-path: ${management.endpoints.web.base-path}/info
@@ -104,7 +104,7 @@ management:
 
 spring:
   application:
-    name: AssertionServices
+    name: AssertionService
   jmx:
     enabled: false
   messages:
@@ -116,13 +116,13 @@ spring:
       enabled: false
   task:
     execution:
-      thread-name-prefix: assertion-service-task-
+      thread-name-prefix: assertionservice-task-
       pool:
         core-size: 2
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: assertion-service-scheduling-
+      thread-name-prefix: assertionservice-scheduling-
       pool:
         size: 2
   thymeleaf:
@@ -161,7 +161,7 @@ info:
 
 jhipster:
   clientApp:
-    name: 'assertionServicesApp'
+    name: 'assertionServiceApp'
   # By default CORS is disabled. Uncomment to enable.
   # cors:
   #     allowed-origins: "*"
@@ -171,11 +171,11 @@ jhipster:
   #     allow-credentials: true
   #     max-age: 1800
   mail:
-    from: AssertionServices@localhost
+    from: AssertionService@localhost
   swagger:
     default-include-pattern: /api/.*
-    title: AssertionServices API
-    description: AssertionServices API documentation
+    title: AssertionService API
+    description: AssertionService API documentation
     version: 0.0.1
     terms-of-service-url:
     contact-name:

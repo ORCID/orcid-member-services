@@ -26,3 +26,5 @@ jobs:
       run: mvn -B verify --file user-service/pom.xml
     - name: Build Assertion service
       run: mvn -B verify --file assertion-service/pom.xml
+    - name: Build Member service
+      run: mvn -B verify --file member-service/pom.xml
