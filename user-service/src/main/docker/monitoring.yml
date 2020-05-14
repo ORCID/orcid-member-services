@@ -1,6 +1,6 @@
 version: '3'
 services:
-  user-service-prometheus:
+  userservice-prometheus:
     image: prom/prometheus:v2.10.0
     volumes:
       - ./prometheus/:/etc/prometheus/
@@ -11,7 +11,7 @@ services:
     # On MacOS, remove next line and replace localhost by host.docker.internal in prometheus/prometheus.yml and
     # grafana/provisioning/datasources/datasource.yml
     network_mode: 'host' # to test locally running service
-  user-service-grafana:
+  userservice-grafana:
     image: grafana/grafana:6.2.2
     volumes:
       - ./grafana/provisioning/:/etc/grafana/provisioning/

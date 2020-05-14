@@ -33,7 +33,7 @@ public class UserServiceApp implements InitializingBean {
     }
 
     /**
-     * Initializes user-service.
+     * Initializes userservice.
      * <p>
      * Spring profiles can be configured with a program argument --spring.profiles.active=your-active-profile
      * <p>

@@ -1,7 +1,7 @@
 {
-  "name": "assertion-service",
+  "name": "assertionservice",
   "version": "0.0.0",
-  "description": "Description for AssertionServices",
+  "description": "Description for AssertionService",
   "private": true,
   "license": "UNLICENSED",
   "cacheDirectories": [

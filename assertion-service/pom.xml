@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.orcid</groupId>
-    <artifactId>assertion-service</artifactId>
+    <artifactId>assertionservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Assertion Service</name>
@@ -557,7 +557,7 @@
                             <image>adoptopenjdk:11-jre-hotspot</image>
                         </from>
                         <to>
-                            <image>assertionservices:${release.tag}</image>
+                            <image>assertionservice:${release.tag}</image>
                         </to>
                         <container>
                             <entrypoint>
