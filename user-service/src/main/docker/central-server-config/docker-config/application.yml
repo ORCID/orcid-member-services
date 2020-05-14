@@ -5,6 +5,11 @@ configserver:
 
 jhipster:
   security:
+    client-authorization:
+      access-token-uri: http://userservice/oauth/token
+      token-service-id: userservice
+      client-id: internal
+      client-secret: internal
     authentication:
       jwt:
         secret: my-secret-key-which-should-be-changed-in-production-and-be-base64-encoded

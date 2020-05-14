@@ -257,6 +257,7 @@ public class UserDTO {
 		user.setLangKey(this.getLangKey());
 		user.setActivated(this.isActivated());
 		user.setAuthorities(this.getAuthorities());
+		user.setId(this.getId());
 		
 		if (this.getAssertionServiceEnabled()
 				&& !user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
