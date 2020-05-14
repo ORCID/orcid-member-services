@@ -183,6 +183,7 @@ class MemberServiceTest {
 		member.setClientName("clientname");
 		member.setIsConsortiumLead(false);
 		member.setSalesforceId("salesforceId");
+		member.setParentSalesforceId("some parent");
 		return member;
 	}
 
