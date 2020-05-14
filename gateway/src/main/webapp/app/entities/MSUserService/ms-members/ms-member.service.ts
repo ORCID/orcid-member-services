@@ -15,7 +15,7 @@ type EntityArrayResponseType = HttpResponse<IMSMember[]>;
 
 @Injectable({ providedIn: 'root' })
 export class MSMemberService {
-  public resourceUrl = SERVER_API_URL + 'services/user-service/api/members';
+  public resourceUrl = SERVER_API_URL + 'services/memberservice/api/members';
   public allMembers$: Observable<EntityArrayResponseType>;
   public orgNameMap: any;
 
