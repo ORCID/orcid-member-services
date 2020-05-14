@@ -38,10 +38,10 @@ public class MemberService {
 
 	@Autowired
 	private MembersUploadReader memberUploadReader;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Value("${jhipster.clientApp.name}")
 	private String applicationName;
 
@@ -54,37 +54,23 @@ public class MemberService {
 			LOG.warn("Error reading member CSV upload");
 			throw new RuntimeException(e);
 		}
-		
-		Instant now = Instant.now();
-		String authenticatedUser = SecurityUtils.getCurrentUserLogin().get();
-		
+
 		for (Member member : upload.getMembers()) {
-			member.setCreatedBy(authenticatedUser);
-			member.setCreatedDate(now);
-			member.setLastModifiedBy(authenticatedUser);
-			member.setLastModifiedDate(now);
 			createOrUpdateMember(member);
 		}
 		return upload;
 	}
-			
+
 	public Member createOrUpdateMember(Member member) {
 		Optional<Member> optional = memberRepository.findBySalesforceId(member.getSalesforceId());
 
 		if (!optional.isPresent()) {
-			return memberRepository.save(member);
+			return createMember(member);
 		} else {
-			Member existingMember = optional.get();
-			existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
-			existingMember.setClientId(member.getClientId());
-			existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
-			existingMember.setParentSalesforceId(member.getParentSalesforceId());
-			existingMember.setLastModifiedBy(member.getLastModifiedBy());
-			existingMember.setLastModifiedDate(member.getLastModifiedDate());
-			return memberRepository.save(existingMember);
+			return updateMember(member);
 		}
 	}
-	
+
 	public Boolean memberExists(String salesforceId) {
 		Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
 		return existingMember.isPresent();
@@ -96,14 +82,12 @@ public class MemberService {
 		}
 		Optional<Member> optional = memberRepository.findBySalesforceId(member.getSalesforceId());
 		if (optional.isPresent()) {
-			throw new BadRequestAlertException("A member with that salesforce id already exists", "Member",
-					"idexists");
+			throw new BadRequestAlertException("A member with that salesforce id already exists", "Member", "idexists");
 		}
 		if (!MemberValidator.validate(member)) {
-			ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(applicationName, true, "Member",
-					"member.create.error", member.getError()));
+			throw new BadRequestAlertException("Member invalid", "Member", "invalid");
 		}
-		
+
 		if (member.getCreatedBy() == null) {
 			member.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
 			member.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
@@ -116,31 +100,41 @@ public class MemberService {
 		}
 		return memberRepository.save(member);
 	}
-	
+
 	public Member updateMember(Member member) {
 		if (member.getId() == null) {
 			throw new BadRequestAlertException("Invalid id", "Member", "idnull");
 		}
-		
+
 		Optional<Member> optional = memberRepository.findById(member.getId());
 		if (!optional.isPresent()) {
 			throw new BadRequestAlertException("Invalid id", "Member", "idunavailable");
 		}
-		
+
 		if (!MemberValidator.validate(member)) {
-			ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(applicationName, true, "Member",
-					"member.create.error", member.getError()));
+			// what to do here? return member object with errors for ui? something
+			// consistent
+			throw new BadRequestAlertException("Invalid member", "Member", null);
 		}
 
 		Instant now = Instant.now();
 		member.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
 		member.setLastModifiedDate(now);
-		
-		// Check if salesforceId changed
+
 		Member existingMember = optional.get();
+		existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
+		existingMember.setClientId(member.getClientId());
+		existingMember.setClientName(member.getClientName());
+		existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
+		existingMember.setParentSalesforceId(member.getParentSalesforceId());
+		existingMember.setLastModifiedBy(member.getLastModifiedBy());
+		existingMember.setLastModifiedDate(member.getLastModifiedDate());
+
+		// Check if salesforceId changed
 		if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
 			// update users associated with member
-			List<MemberServiceUser> usersBelongingToMember = userService.getUsersBySalesforceId(optional.get().getSalesforceId());
+			List<MemberServiceUser> usersBelongingToMember = userService
+					.getUsersBySalesforceId(optional.get().getSalesforceId());
 			for (MemberServiceUser user : usersBelongingToMember) {
 				user.setSalesforceId(member.getSalesforceId());
 				user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
@@ -149,7 +143,7 @@ public class MemberService {
 			}
 		}
 
-		return memberRepository.save(member);
+		return memberRepository.save(existingMember);
 	}
 
 	public Page<Member> getAllMembers(Pageable pageable) {
@@ -171,12 +165,13 @@ public class MemberService {
 			throw new BadRequestAlertException("Invalid id", "Member", "idunavailable");
 		}
 
-		List<MemberServiceUser> usersBelongingToMember = userService.getUsersBySalesforceId(optional.get().getSalesforceId());
+		List<MemberServiceUser> usersBelongingToMember = userService
+				.getUsersBySalesforceId(optional.get().getSalesforceId());
 		if (usersBelongingToMember != null && !usersBelongingToMember.isEmpty()) {
-			throw new BadRequestAlertException("Unable to delete Member, users still exist for member",
-					"Member", "idused");
+			throw new BadRequestAlertException("Unable to delete Member, users still exist for member", "Member",
+					"idused");
 		}
-		
+
 		memberRepository.deleteById(id);
 	}
 
