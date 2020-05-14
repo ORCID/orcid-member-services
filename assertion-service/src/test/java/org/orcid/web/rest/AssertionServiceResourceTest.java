@@ -28,7 +28,7 @@ import org.springframework.http.ResponseEntity;
 class AssertionServiceResourceTest {
 	
 	@Mock
-    private AssertionService assertionsService;
+    private AssertionService assertionService;
 	
 	@Mock
     private OrcidRecordService orcidRecordService;
@@ -37,7 +37,7 @@ class AssertionServiceResourceTest {
     private EncryptUtil encryptUtil;
 	
 	@InjectMocks
-	private AssertionServiceResource assertionServicesResource;
+	private AssertionServiceResource assertionServiceResource;
 	
 	@BeforeEach
 	public void setUp() {
@@ -46,17 +46,17 @@ class AssertionServiceResourceTest {
 
 	@Test
 	void testDeleteAssertionFromOrcidSuccessful() throws JSONException, JAXBException {
-		Mockito.when(assertionsService.deleteAssertionFromOrcid(Mockito.eq("assertionId"))).thenReturn(Boolean.TRUE);
-		ResponseEntity<String> response = assertionServicesResource.deleteAssertionFromOrcid("assertionId");
+		Mockito.when(assertionService.deleteAssertionFromOrcid(Mockito.eq("assertionId"))).thenReturn(Boolean.TRUE);
+		ResponseEntity<String> response = assertionServiceResource.deleteAssertionFromOrcid("assertionId");
 		String body = response.getBody();
 		assertEquals("{\"deleted\":true}", body);
 	}
 	
 	@Test
 	void testDeleteAssertionFromOrcidFailure() throws JSONException, JAXBException {
-		Mockito.when(assertionsService.deleteAssertionFromOrcid(Mockito.eq("assertionId"))).thenReturn(Boolean.FALSE);
-		Mockito.when(assertionsService.findById(Mockito.eq("assertionId"))).thenReturn(getAssertionWithError());
-		ResponseEntity<String> response = assertionServicesResource.deleteAssertionFromOrcid("assertionId");
+		Mockito.when(assertionService.deleteAssertionFromOrcid(Mockito.eq("assertionId"))).thenReturn(Boolean.FALSE);
+		Mockito.when(assertionService.findById(Mockito.eq("assertionId"))).thenReturn(getAssertionWithError());
+		ResponseEntity<String> response = assertionServiceResource.deleteAssertionFromOrcid("assertionId");
 		String body = response.getBody();
 		assertEquals("{\"deleted\":false,\"error\":\"not found\",\"statusCode\":404}", body);
 	}
@@ -73,14 +73,14 @@ class AssertionServiceResourceTest {
 		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq(email))).thenReturn(Optional.of(new OrcidRecord()));
 		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq(emailOther))).thenReturn(Optional.empty());
 		
-		ResponseEntity<OrcidRecord> response = assertionServicesResource.getOrcidRecord(encrypted);
+		ResponseEntity<OrcidRecord> response = assertionServiceResource.getOrcidRecord(encrypted);
 		assertTrue(response.getStatusCode().is2xxSuccessful());
 		assertNotNull(response.getBody());
 		
 		Mockito.verify(encryptUtil, Mockito.times(1)).decrypt(Mockito.eq(encrypted));
 		Mockito.verify(orcidRecordService, Mockito.times(1)).findOneByEmail(Mockito.eq(email));
 		
-		response = assertionServicesResource.getOrcidRecord(encryptedOther);
+		response = assertionServiceResource.getOrcidRecord(encryptedOther);
 		assertTrue(response.getStatusCode().is4xxClientError());
 		assertNull(response.getBody());
 		

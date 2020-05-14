@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.orcid</groupId>
-    <artifactId>user-service</artifactId>
+    <artifactId>userservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>User service</name>
@@ -323,6 +323,11 @@
             <artifactId>commons-csv</artifactId>
             <version>1.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.orcid</groupId>
+            <artifactId>orcid-model</artifactId>
+            <version>3.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -516,7 +521,7 @@
                             <image>adoptopenjdk:11-jre-hotspot</image>
                         </from>
                         <to>
-                            <image>user-service:${release.tag}</image>
+                            <image>userservice:${release.tag}</image>
                         </to>
                         <container>
                             <entrypoint>

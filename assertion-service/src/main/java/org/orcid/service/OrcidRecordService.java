@@ -28,7 +28,7 @@ public class OrcidRecordService {
     private ApplicationProperties applicationProperties;
     
     @Autowired
-    private AssertionsUserService assertionsUserService;
+    private UserService assertionsUserService;
     
     public Optional<OrcidRecord> findOneByEmail(String email) {
         return orcidRecordRepository.findOneByEmail(email);

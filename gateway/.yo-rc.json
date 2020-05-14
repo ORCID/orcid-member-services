@@ -2,8 +2,7 @@
   "generator-jhipster": {
     "promptValues": {
       "packageName": "org.orcid.gateway",
-      "nativeLanguage": "en",
-      "microservicePath": "../assertion-service"
+      "nativeLanguage": "en"
     },
     "jhipsterVersion": "6.1.2",
     "applicationType": "gateway",
