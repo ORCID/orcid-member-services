@@ -17,12 +17,16 @@ echo "gateway"
 cd gateway
 bash mvnw clean
 bash mvnw -ntp -Pdev verify jib:dockerBuild -Drelease.tag=$1
-echo "oauth2-service"
-cd ../oauth2-service
+echo "user-service"
+cd ../user-service
 bash mvnw clean
 bash mvnw -ntp -Pdev verify jib:dockerBuild -Drelease.tag=$1
-echo "assertion-services"
-cd ../assertion-services
+echo "assertion-service"
+cd ../assertion-service
+bash mvnw clean
+bash mvnw -ntp -Pdev verify jib:dockerBuild -Drelease.tag=$1
+echo "member-service"
+cd ../member-service
 bash mvnw clean
 bash mvnw -ntp -Pdev verify jib:dockerBuild -Drelease.tag=$1
 echo "Running docker compose"
