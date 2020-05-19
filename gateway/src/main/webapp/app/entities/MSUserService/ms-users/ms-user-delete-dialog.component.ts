@@ -47,11 +47,11 @@ export class MSUserDeletePopupComponent implements OnInit, OnDestroy {
         this.ngbModalRef.componentInstance.msUser = msUser;
         this.ngbModalRef.result.then(
           result => {
-            this.router.navigate(['/ms-users', { outlets: { popup: null } }]);
+            this.router.navigate(['/ms-user', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           },
           reason => {
-            this.router.navigate(['/ms-users', { outlets: { popup: null } }]);
+            this.router.navigate(['/ms-user', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           }
         );
