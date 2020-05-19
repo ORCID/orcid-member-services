@@ -10,6 +10,7 @@
     - [Yeoman](https://yeoman.io/learning/)
     - [Yarn](https://yarnpkg.com/lang/en/docs/install/#mac-stable)
     - [MongoDB](https://docs.mongodb.com/manual/installation/)
+    - [MongoDB compass](https://www.mongodb.com/products/compass) also recommended
 
 ## Install and start MongoDB
 
@@ -37,26 +38,21 @@ Edit bash profile to set JAVA_HOME to your OpenJDK 11 path, ex:
 
 **IMPORTANT!!!** You will need to set JAVA_HOME back to Java 8 in order to work on ORCID-Source  
 
-## Start the JHipster UAA services     
-
-[JHipster UAA](https://www.jhipster.tech/using-uaa/) is the service we use to secure our member services app. It serves as the base for user account management in our custom microservices and consists of 3 different applications:
-
-- The JHipster [registry](https://github.com/jhipster/jhipster-registry)
-- The JHipster [gateway](https://www.jhipster.tech/api-gateway/)
-- The JHipster [oauth2-service](https://www.jhipster.tech/using-uaa)
-    
-So, the first thing we should do is starting the different JHipster services as follows:   
-
-1. Start the JHipster registry:
+## Start the JHipster registry
 
     - Open a new terminal 
     - cd orcid-member-services/jhipster-registry/
     - Run `bash start.sh`
     - Wait for it to start
     - Go to [http://localhost:8761/#/](http://localhost:8761/#/) and sign in with the admin credentials `admin / admin`
-    
-2. Start the oauth2-services
-    
+
+
+## Start the other services  
+
+1. Start the user-service
+
+Our user service, based on [JHipster UAA](https://www.jhipster.tech/using-uaa/), is the service we use to secure our member services app. We also use it for all user based functionality. 
+
     - **IMPORTANT!** For running locally without an email server connected, disable mail health check for oauth2-services before starting. Edit [oauth2-service/src/main/resources/config/application.yml](https://github.com/ORCID/orcid-member-services/blob/master/oauth2-service/src/main/resources/config/application.yml#L60)
     - Set 
         ```
@@ -65,11 +61,11 @@ So, the first thing we should do is starting the different JHipster services as 
                enabled: false
         ```
     - Open a new terminal 
-    - cd orcid-member-services/oauth2-service/  
+    - cd orcid-member-services/user-service/  
     - Run `bash mvnw`
     - Wait for it to start
 
-3. Start the JHipster gateway:
+2. Start the JHipster gateway:
     
     - Start MongoDB
     - Open a new terminal 
@@ -78,17 +74,28 @@ So, the first thing we should do is starting the different JHipster services as 
     - Wait for it to start
     - Go to [http://localhost:8080/](http://localhost:8080/) and sign in with the admin credentials `admin / admin`
     
-4. Start the Angular frontend
+3. Start the Angular frontend (only required after making front end changes)
 
     - Open a new terminal 
     - cd orcid-member-services/gateway 
     - Run `npm install` then `npm start`
     - Wait for it to start
+    - Optionally kill it and start up again using bash mvnw (like the other services)
+    
+4. Start the assertion service
 
-## Start the custom microservices
-With UAA up and running, we can now start the custom microservices that depend on it:
+    - Open a new terminal 
+    - cd orcid-member-services/assertion-service
+    - Run `bash mvnw`
+    - Wait for it to start
 
-- [Assertion services](ASSERTION_SERVICES.md)
+5. Start the member service
+
+    - Open a new terminal 
+    - cd orcid-member-services/member-service
+    - Run `bash mvnw`
+    - Wait for it to start
+
 
 ## Deployment via Docker Compose
 Member services is deployed to AWS using Docker Compose.
