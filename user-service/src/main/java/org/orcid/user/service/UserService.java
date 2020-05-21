@@ -62,6 +62,9 @@ public class UserService {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private MailService mailService;
 
 	public Optional<User> activateRegistration(String key) {
 		LOG.debug("Activating user for activation key {}", key);
@@ -150,7 +153,11 @@ public class UserService {
 		user.setResetDate(Instant.now());
 		userRepository.save(user);
 		userCaches.evictEntryFromUserCaches(user.getEmail());
-		LOG.debug("Created Information for User: {}", user);
+		LOG.debug("Created User: {}", user);
+
+		LOG.debug("Sending email to user {}", user.getEmail());
+		mailService.sendCreationEmail(user);
+		
 		return user;
 	}
 
