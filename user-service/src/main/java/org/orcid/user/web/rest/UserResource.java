@@ -14,7 +14,6 @@ import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.security.SecurityUtils;
-import org.orcid.user.service.MailService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.upload.UserUpload;
@@ -92,9 +91,6 @@ public class UserResource {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private MailService mailService;
 
 	/**
 	 * {@code PUT /users} : Updates an existing User.
@@ -242,8 +238,6 @@ public class UserResource {
 		userDTO.setLastModifiedDate(now);
 
 		User newUser = userService.createUser(userDTO);
-
-		mailService.sendCreationEmail(newUser);
 		return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
 				.headers(HeaderUtil.createAlert(applicationName, "userManagement.created", newUser.getLogin()))
 				.body(UserDTO.valueOf(newUser));
