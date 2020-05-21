@@ -2,6 +2,7 @@ package org.orcid.user.client;
 
 import javax.ws.rs.core.MediaType;
 
+import org.orcid.user.service.member.MemberServiceMember;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,6 @@ public interface MemberServiceClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/members/{id}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "5000")
-    ResponseEntity<?> getMember(@PathVariable("id") String id);
+    ResponseEntity<MemberServiceMember> getMember(@PathVariable("id") String id);
     
 }
