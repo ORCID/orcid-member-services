@@ -67,8 +67,6 @@ public class UserDTO {
 
 	private Boolean mainContact;
 
-	private Boolean assertionServiceEnabled = Boolean.FALSE;
-
 	private Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
 
 	public UserDTO() {
@@ -196,14 +194,6 @@ public class UserDTO {
 		this.mainContact = mainContact;
 	}
 
-	public Boolean getAssertionServiceEnabled() {
-		return assertionServiceEnabled;
-	}
-
-	public void setAssertionServiceEnabled(Boolean assertionServiceEnabled) {
-		this.assertionServiceEnabled = assertionServiceEnabled;
-	}
-
 	public String getParentSalesforceId() {
 		return parentSalesforceId;
 	}
@@ -258,12 +248,6 @@ public class UserDTO {
 		user.setActivated(this.isActivated());
 		user.setAuthorities(this.getAuthorities());
 		user.setId(this.getId());
-		
-		if (this.getAssertionServiceEnabled()
-				&& !user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
-			user.getAuthorities().add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
-		}
-		
 		return user;
 	}
 
@@ -280,8 +264,6 @@ public class UserDTO {
 		userDTO.setCreatedDate(user.getCreatedDate());
 		userDTO.setLastModifiedBy(user.getLastModifiedBy());
 		userDTO.setLastModifiedDate(user.getLastModifiedDate());
-		userDTO.setAssertionServiceEnabled(
-				user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
 		userDTO.setAuthorities(user.getAuthorities());
 		userDTO.setSalesforceId(user.getSalesforceId());
 		userDTO.setId(user.getId());
@@ -292,7 +274,6 @@ public class UserDTO {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((assertionServiceEnabled == null) ? 0 : assertionServiceEnabled.hashCode());
 		result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
 		result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
@@ -316,11 +297,6 @@ public class UserDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		UserDTO other = (UserDTO) obj;
-		if (assertionServiceEnabled == null) {
-			if (other.assertionServiceEnabled != null)
-				return false;
-		} else if (!assertionServiceEnabled.equals(other.assertionServiceEnabled))
-			return false;
 		if (createdBy == null) {
 			if (other.createdBy != null)
 				return false;
