@@ -1,16 +1,36 @@
-<div class="row">
-    <div class="main">
-        <div class="logo">
-            <img src="/content/images/orcid-logo-208-64.png" width="208" height="64" />
+<div class="container">
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8 text-center">
+            <div>
+                <img src="/content/images/orcid-logo-208-64.png" width="208" height="64" />
+            </div>
+            <div class="mt-4">
+                <div *ngIf="!showConnectionExists">
+                    <p>You have already granted {{clientName}} permission to update your ORCID record.<br>
+                        You do not need to do anything more at this time.
+                    </p>
+                </div>
+                <div *ngIf="showError">
+                    <p>Oops, something went wrong and we were not able to fetch your ORCID iD</p>
+                </div>
+                <div *ngIf="showDenied">
+                    <p>Oops, you have denied access, so {{clientName}} will not be able to update your ORCID record.</p>
+                    <p>If this was a mistake, click the button below to grant access.</p>
+                </div>
+                <div *ngIf="!showSuccess">
+                    <p><b>Thanks,</b></p>
+                    <p>You have successfully granted {{clientName}} permission to update your ORCID record,<br>
+                        and your record will be updated with affiliation information shortly.
+                    </p>
+                    <p>
+                        <img src="https://orcid.org/sites/default/files/images/orcid_24x24.png"/>
+                        <a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{signedInIdToken.sub}}</a>
+                    </p>
+                </div>
+                <div *ngIf="showOauth">
+                    <a href='{{oauthUrl}}'><img src="https://orcid.org/sites/default/files/images/orcid_24x24.png" />Connect your ORCID iD</a>
+                </div>
+            </div>
         </div>
-        <h1>Thank you for your service!</h1>
-        <p>Our records show that you served on an ORCID Working Group, Task Force, Steering Group, or the ORCID Board.</p> 
-        <p>We'd like to recognize your contribution by updating the <a href="https://support.orcid.org/hc/en-us/articles/360008897694-Add-a-membership-or-service-to-your-ORCID-record" target="ORCID_membership_service">Membership and service</a> section your ORCID record.</p>
-        <p>Click to connect your ORCID iD (or register for an iD) and grant permission to update your record.</p>
-        <a id="orcidAuthButton" *ngIf="showOauth" href='{{oauthUrl}}'><img src="https://orcid.org/sites/default/files/images/orcid_24x24.png" />Connect your ORCID iD</a>
-        <p id="orcidAuthFail" *ngIf="showError">Oops, something went terribly wrong<br> and we couldn\'t fetch your ORCID iD</p>
-        <p id="orcidAuthFail" *ngIf="showDenied">Oops, you have denied access<br> so we will not be able to update your ORCID iD</p>
-        <p id="orcidAuthSuccess" *ngIf="showSuccess"><b>Thanks, {{signedInIdToken.given_name}} {{signedInIdToken.family_name}}</b><br><img src="https://orcid.org/sites/default/files/images/orcid_24x24.png"/><a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{signedInIdToken.sub}}</a></p>
-    
     </div>
 </div>
