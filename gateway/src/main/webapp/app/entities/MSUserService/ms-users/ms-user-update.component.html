@@ -34,14 +34,25 @@
                     <select  *ngIf="membersList" class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
                         <option *ngFor="let member of membersList | keyvalue" [ngValue]="member.key">{{member.value}}</option>
                     </select>
-
+                    <span class="errorMessage" *ngIf="editForm.get('salesforceId').touched && editForm.get('salesforceId').errors && editForm.get('salesforceId').errors.required">Member is necessary</span>
+                    <div class="alert alert-warning" *ngIf="!membersList">
+                        <span jhiTranslate="gatewayApp.msUserServiceMSMember.home.notFound">No members to show</span>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
-                <button type="button" id="cancel-save" class="btn btn-outline-primary"  (click)="previousState()">
+                <button
+                    type="button"
+                    id="cancel-save"
+                    class="btn btn-outline-primary"
+                    (click)="previousState()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
-                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                <button
+                    type="submit"
+                    id="save-entity"
+                    [disabled]="editForm.invalid || isSaving"
+                    class="btn btn-primary">
                     <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
                 </button>
             </div>
