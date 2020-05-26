@@ -25,11 +25,6 @@
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.mainContact" for="field_mainContact">Main Contact</label>
                 </div>
                 <div class="form-group">
-                    <input type="checkbox" class="form-control" name="assertionServiceEnabled" id="field_assertionServiceEnabled"
-                           formControlName="assertionServiceEnabled"/>
-                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.assertionService.enabled" for="field_assertionServiceEnabled">Assertions enabled</label>
-                </div>
-                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId" for="field_salesforceId">Salesforce Id</label>
                     <select  *ngIf="membersList" class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
                         <option *ngFor="let member of membersList | keyvalue" [ngValue]="member.key">{{member.value}}</option>

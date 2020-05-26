@@ -4,16 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.upload.UserUpload;
 import org.orcid.user.upload.UserUploadReader;
@@ -99,20 +94,6 @@ public class UserCsvReader implements UserUploadReader {
 		u.setLastModifiedDate(now);
 		u.setEmail(record.get("email"));
 		u.setLangKey("en");
-		List<String> authorities = new ArrayList<String>();
-		String grants = record.get("grant");
-		if (!StringUtils.isBlank(grants)) {
-			if (!(grants.startsWith("[") && grants.endsWith("]"))) {
-				throw new IllegalArgumentException("Grant list should start with '[' and ends with ']'");
-			}
-			authorities = Arrays.stream(grants.replace("[", "").replace("]", "").split(","))
-					.collect(Collectors.toList());
-		}
-		if (authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
-			u.setAssertionServiceEnabled(true);
-		} else {
-			u.setAssertionServiceEnabled(false);
-		}
 		return u;
 	}
 
