@@ -71,7 +71,6 @@ export class MSUserUpdateComponent implements OnInit {
       firstName: msUser.firstName,
       lastName: msUser.lastName,
       mainContact: msUser.mainContact,
-      assertionServiceEnabled: msUser.assertionServiceEnabled,
       salesforceId: msUser.salesforceId,
       createdBy: msUser.createdBy,
       createdDate: msUser.createdDate != null ? msUser.createdDate.format(DATE_TIME_FORMAT) : null,
@@ -104,7 +103,6 @@ export class MSUserUpdateComponent implements OnInit {
       firstName: this.editForm.get(['firstName']).value,
       lastName: this.editForm.get(['lastName']).value,
       mainContact: this.editForm.get(['mainContact']).value,
-      assertionServiceEnabled: this.editForm.get(['assertionServiceEnabled']).value,
       salesforceId: this.editForm.get(['salesforceId']).value,
       createdBy: this.editForm.get(['createdBy']).value,
       createdDate:

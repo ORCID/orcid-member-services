@@ -5,7 +5,8 @@
 /* ==============================================================
 Bootstrap tweaks
 ===============================================================*/
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -22,6 +23,7 @@ h4 {
 
 a {
   font-weight: $font-weight-bold;
+  cursor: pointer;
 }
 
 .container-fluid {
@@ -192,18 +194,18 @@ ui bootstrap tweaks
 
 .form-control-label {
   font-weight: bold;
-  margin-top: .5rem;
-  margin-bottom: .5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-input.form-control[type=checkbox] {
+input.form-control[type='checkbox'] {
   width: initial;
   float: left;
-  margin-right: .5rem;
-  margin-bottom: .5rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-input.form-control[type=file] {
+input.form-control[type='file'] {
   border: none;
 }
 
