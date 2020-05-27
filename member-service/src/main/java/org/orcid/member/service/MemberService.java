@@ -20,10 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import io.github.jhipster.web.util.HeaderUtil;
 
 /**
  * Service class for managing members.
@@ -41,6 +38,9 @@ public class MemberService {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private AssertionService assertionService;
 
 	@Value("${jhipster.clientApp.name}")
 	private String applicationName;
@@ -173,6 +173,18 @@ public class MemberService {
 		}
 
 		memberRepository.deleteById(id);
+	}
+
+	public Optional<Member> getAuthorizedMemberForUser(String encryptedEmail) {
+		// send encrypted email to assertion service for decryption and get owner of
+		// orcid user
+		String ownerId = assertionService.getOwnerIdForOrcidUser(encryptedEmail);
+		if (ownerId != null) {
+			String salesforceId = userService.getSalesforceIdForUser(ownerId);
+			return getMember(salesforceId);
+		} else {
+			return Optional.empty();
+		}
 	}
 
 }

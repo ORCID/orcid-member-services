@@ -189,12 +189,12 @@ public class AssertionServiceResource {
         return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
     }
 	
-    @GetMapping("/assertion/orcid/{state}")
-    public ResponseEntity<OrcidRecord> getOrcidRecord(@PathVariable String state) throws IOException, JSONException {
-    	String email = encryptUtil.decrypt(state);
+    @GetMapping("/assertion/owner/{encryptedEmail}")
+    public ResponseEntity<String> getOrcidRecordOwnerId(@PathVariable String encryptedEmail) throws IOException, JSONException {
+    	String email = encryptUtil.decrypt(encryptedEmail);
     	Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
     	if (record.isPresent()) {
-    		return ResponseEntity.ok().body(record.get());
+    		return ResponseEntity.ok().body(record.get().getOwnerId());
     	} else {
     		return ResponseEntity.notFound().build();
     	}
