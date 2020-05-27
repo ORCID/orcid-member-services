@@ -5,7 +5,6 @@ export interface IMemberServicesUser {
   parentSalesforceId?: string;
   disabled?: boolean;
   mainContact?: boolean;
-  assertionServiceEnabled?: boolean;
   oboClientId?: string;
 }
 
@@ -17,11 +16,9 @@ export class MemberServicesUser implements IMemberServicesUser {
     public parentSalesforceId?: string,
     public disabled?: boolean,
     public mainContact?: boolean,
-    public assertionServiceEnabled?: boolean,
     public oboClientId?: string
   ) {
     this.disabled = this.disabled || false;
     this.mainContact = this.mainContact || false;
-    this.assertionServiceEnabled = this.assertionServiceEnabled || false;
   }
 }
