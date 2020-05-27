@@ -138,7 +138,7 @@ public class UserResource {
 		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
 		return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * {@code GET /users/salesforce/:salesforceId} : get users by salesforce id.
 	 *
@@ -153,7 +153,7 @@ public class UserResource {
 		List<UserDTO> users = userService.getUsersBySalesforceId(salesforceId);
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Gets a list of all roles.
 	 * 
@@ -181,8 +181,6 @@ public class UserResource {
 		}
 		return ResponseUtil.wrapOrNotFound(user.map(UserDTO::valueOf));
 	}
-
-	/* FROM USER SETTINGS RESOURCE */
 
 	/**
 	 * {@code POST  /user/upload} : Create a list of users.
