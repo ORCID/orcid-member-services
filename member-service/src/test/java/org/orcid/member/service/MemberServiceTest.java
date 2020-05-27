@@ -24,6 +24,7 @@ import org.orcid.member.security.MockSecurityContext;
 import org.orcid.member.upload.MemberUpload;
 import org.orcid.member.upload.MembersUploadReader;
 import org.orcid.member.web.rest.errors.BadRequestAlertException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 class MemberServiceTest {
@@ -34,9 +35,15 @@ class MemberServiceTest {
 	@Mock
 	private MembersUploadReader membersUploadReader;
 
+	@Mock
+	private UserService userService;
+	
+	@Mock
+	private AssertionService assertionService;
+	
 	@InjectMocks
 	private MemberService memberService;
-
+	
 	@BeforeEach
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
@@ -151,6 +158,30 @@ class MemberServiceTest {
 		Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("three"))).thenReturn(Optional.empty());
 		memberService.uploadMemberCSV(null);
 		Mockito.verify(memberRepository, Mockito.times(3)).save(Mockito.any(Member.class));
+	}
+	
+	@Test
+	void testGetAuthorizedMemberForUser() {
+		Mockito.when(assertionService.getOwnerIdForOrcidUser(Mockito.eq("encrypted"))).thenReturn("ownerId");
+		Mockito.when(userService.getSalesforceIdForUser(Mockito.eq("ownerId"))).thenReturn("salesforceId");
+		Mockito.when(memberRepository.findById(Mockito.eq("salesforcedId"))).thenReturn(Optional.empty());
+		Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+		
+		Optional<Member> optional = memberService.getAuthorizedMemberForUser("encrypted");
+		
+		assertTrue(optional.isPresent());
+		
+		Member member = optional.get();
+		assertNotNull(member);
+		assertEquals(getMember().getClientId(), member.getClientId());
+		assertEquals(getMember().getClientName(), member.getClientName());
+	}
+	
+	@Test
+	void testGetAuthorizedMemberForUserBadEmail() {
+		Mockito.when(assertionService.getOwnerIdForOrcidUser(Mockito.eq("encrypted"))).thenReturn(null);
+		Optional<Member> optional = memberService.getAuthorizedMemberForUser("encrypted");
+		assertTrue(!optional.isPresent());
 	}
 
 	private MemberUpload getMemberUpload() {
