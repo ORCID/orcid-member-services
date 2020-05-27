@@ -1,8 +1,6 @@
 package org.orcid.user.upload.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,10 +38,6 @@ class UserCsvReaderTest {
 		assertEquals("sssalesforceid1", userDTO1.getSalesforceId());
 		assertEquals("salesforceid3", userDTO2.getSalesforceId());
 		assertEquals("salesforceid2", userDTO3.getSalesforceId());
-		
-		assertTrue(userDTO1.getAssertionServiceEnabled());
-		assertFalse(userDTO2.getAssertionServiceEnabled());
-		assertFalse(userDTO3.getAssertionServiceEnabled());
 		
 	}
 	
