@@ -189,12 +189,20 @@ public class AssertionServiceResource {
         return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
     }
 	
-    @GetMapping("/assertion/orcid/{state}")
-    public ResponseEntity<OrcidRecord> getOrcidRecord(@PathVariable String state) throws IOException, JSONException {
-    	String email = encryptUtil.decrypt(state);
+	/**
+	 * Returns owner id of an orcid record, if the user associated with that record has granted access.
+	 * 
+	 * @param encryptedEmail
+	 * @return ownerId of the orcid record
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+    @GetMapping("/assertion/owner/{encryptedEmail}")
+    public ResponseEntity<String> getOrcidRecordOwnerId(@PathVariable String encryptedEmail) throws IOException, JSONException {
+    	String email = encryptUtil.decrypt(encryptedEmail);
     	Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
-    	if (record.isPresent()) {
-    		return ResponseEntity.ok().body(record.get());
+    	if (record.isPresent() && record.get().getIdToken() != null) {
+    		return ResponseEntity.ok().body(record.get().getOwnerId());
     	} else {
     		return ResponseEntity.notFound().build();
     	}

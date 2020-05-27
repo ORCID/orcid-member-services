@@ -7,6 +7,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -129,7 +130,7 @@ public class UserService {
 		newUser.setActivated(false);
 		// new user gets registration key
 		newUser.setActivationKey(RandomUtil.generateActivationKey());
-		newUser.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+		newUser.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId()));
 		userRepository.save(newUser);
 		userCaches.evictEntryFromUserCaches(newUser.getEmail());
 		LOG.debug("Created Information for User: {}", newUser);
@@ -146,6 +147,8 @@ public class UserService {
 	}
 
 	public User createUser(UserDTO userDTO) {
+		userDTO.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId()));
+		
 		User user = userDTO.toUser();
 		user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
 		user.setPassword("placeholder");
@@ -178,6 +181,7 @@ public class UserService {
 			user.setEmail(email.toLowerCase());
 			user.setLangKey(langKey);
 			user.setImageUrl(imageUrl);
+			user.setAuthorities(getAuthoritiesForUser(user.getSalesforceId()));
 			userRepository.save(user);
 			userCaches.evictEntryFromUserCaches(user.getEmail());
 			LOG.debug("Changed Information for User: {}", user);
@@ -201,17 +205,7 @@ public class UserService {
 					user.setImageUrl(userDTO.getImageUrl());
 					user.setActivated(userDTO.isActivated());
 					user.setLangKey(userDTO.getLangKey());
-					if (userDTO.getAuthorities() != null) {
-						user.setAuthorities(userDTO.getAuthorities().stream()
-								.filter(s -> authorityRepository.findById(s).isPresent()).collect(Collectors.toSet()));
-					}
-					if (userDTO.getAssertionServiceEnabled()
-							&& !user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
-						user.getAuthorities().add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
-					} else if (!userDTO.getAssertionServiceEnabled()
-							&& user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)) {
-						user.getAuthorities().remove(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
-					}
+					user.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId()));
 					userRepository.save(user);
 					userCaches.evictEntryFromUserCaches(user.getEmail());
 					LOG.debug("Changed Information for User: {}", user);
@@ -360,6 +354,14 @@ public class UserService {
 	public List<UserDTO> getUsersBySalesforceId(String salesforceId) {
 		List<User> users = userRepository.findBySalesforceId(salesforceId);
 		return users.stream().map(UserDTO::valueOf).collect(Collectors.toList());
+	}
+	
+	private Set<String> getAuthoritiesForUser(String salesforceId) {
+		Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
+		if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(salesforceId)) {
+			authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
+		}
+		return authorities;
 	}
 
 }

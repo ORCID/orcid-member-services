@@ -83,8 +83,8 @@ public class MemberResource {
 	 *
 	 * @param member the member to create.
 	 * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-	 *         body the new member, or with status {@code 400 (Bad Request)}
-	 *         if the member has already an ID.
+	 *         body the new member, or with status {@code 400 (Bad Request)} if the
+	 *         member has already an ID.
 	 * @throws URISyntaxException if the Location URI syntax is incorrect.
 	 * @throws JSONException
 	 */
@@ -122,8 +122,8 @@ public class MemberResource {
 	 *
 	 * @param member the member to update.
 	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
-	 *         the updated member, or with status {@code 400 (Bad Request)}
-	 *         if the member is not valid, or with status
+	 *         the updated member, or with status {@code 400 (Bad Request)} if the
+	 *         member is not valid, or with status
 	 *         {@code 500 (Internal Server Error)} if the member couldn't be
 	 *         updated.
 	 * @throws URISyntaxException if the Location URI syntax is incorrect.
@@ -135,11 +135,11 @@ public class MemberResource {
 			throws URISyntaxException, JSONException {
 		LOG.debug("REST request to update Member : {}", member);
 		member = memberService.updateMember(member);
-		return ResponseEntity.ok().headers(
-				HeaderUtil.createEntityUpdateAlert(applicationName, true, "Member", member.getId().toString()))
+		return ResponseEntity.ok()
+				.headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "Member", member.getId().toString()))
 				.body(member);
 	}
-		
+
 	/**
 	 * {@code GET  /member} : get all the member.
 	 *
@@ -169,6 +169,22 @@ public class MemberResource {
 	public ResponseEntity<Member> getMember(@PathVariable String id) {
 		LOG.debug("REST request to get Member : {}", id);
 		Optional<Member> member = memberService.getMember(id);
+		return ResponseUtil.wrapOrNotFound(member);
+	}
+
+	/**
+	 * {@code GET  /members/authorized/:encryptedEmail} : get the authorized member
+	 * details for the specified encrypted email.
+	 *
+	 * @param encryptedEmail - the encrypted email of the user that has authorized
+	 *                       the member
+	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with the
+	 *         member details in the body, or status {@code 404 (Not Found)}.
+	 */
+	@GetMapping("/members/authorized/{encryptedEmail}")
+	public ResponseEntity<Member> getAuthorizedMember(@PathVariable String encryptedEmail) {
+		LOG.debug("REST request to get authorized Member details for encrypted email : {}", encryptedEmail);
+		Optional<Member> member = memberService.getAuthorizedMemberForUser(encryptedEmail);
 		return ResponseUtil.wrapOrNotFound(member);
 	}
 
