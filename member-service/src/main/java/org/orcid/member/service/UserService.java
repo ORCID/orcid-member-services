@@ -47,5 +47,14 @@ public class UserService {
 			throw new BadRequestAlertException("Unable to update user", "User", null);
 		}
 	}
+	
+	public String getSalesforceIdForUser(String userId) {
+		ResponseEntity<MemberServiceUser> response = userServiceClient.getUser(userId);
+		if (response.getStatusCode().is2xxSuccessful()) {
+			return response.getBody().getSalesforceId();
+		} else {
+			return null;
+		}
+	}
 
 }
