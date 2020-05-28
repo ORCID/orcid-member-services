@@ -61,7 +61,7 @@ import io.github.jhipster.web.util.PaginationUtil;
 @RestController
 @RequestMapping("/api")
 public class AssertionServiceResource {
-    
+
 	private static final Logger LOG = LoggerFactory.getLogger(AssertionServiceResource.class);
 
     private static final String ENTITY_NAME = "affiliation";
@@ -80,16 +80,16 @@ public class AssertionServiceResource {
 
     @Autowired
     private JWTUtil jwtUtil;
-    
+
     @Autowired
     private AssertionsCsvReader assertionsCsvReader;
-    
+
     String[] urlValschemes = { "http", "https", "ftp" }; // DEFAULT schemes =
     // "http", "https",
     // "ftp"
 
     UrlValidator urlValidator = new OrcidUrlValidator(urlValschemes);
-    
+
     @GetMapping("/assertions")
     public ResponseEntity<List<Assertion>> getAssertions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder)
             throws BadRequestAlertException, JSONException {
@@ -100,7 +100,7 @@ public class AssertionServiceResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
         return ResponseEntity.ok().headers(headers).body(affiliations.getContent());
     }
-    
+
     @GetMapping("/assertions/{email}")
     public ResponseEntity<List<Assertion>> getAssertionsByEmail(@PathVariable String email)
             throws BadRequestAlertException, JSONException {
@@ -110,15 +110,15 @@ public class AssertionServiceResource {
     }
 
     @GetMapping("/assertion/{id}")
-    public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {        
+    public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
         LOG.debug("REST request to fetch assertion {} from user {}", id, SecurityUtils.getCurrentUserLogin().get());
         return ResponseEntity.ok().body(assertionsService.findById(id));
     }
-    
+
     @GetMapping("/assertion/links")
     public void generateLinks(HttpServletResponse response) throws IOException, JSONException {
         String loggedInUserId = SecurityUtils.getCurrentUserLogin().get();
-        final String fileName = loggedInUserId + '_' +  System.currentTimeMillis() + "_report.csv";        
+        final String fileName = loggedInUserId + '_' +  System.currentTimeMillis() + "_report.csv";
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         response.setHeader("Content-Type", "text/csv");
         response.setHeader("filename", fileName);
@@ -126,19 +126,19 @@ public class AssertionServiceResource {
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
     }
-    
+
     @PutMapping("/assertion")
     public ResponseEntity<Assertion> updateAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
-        LOG.debug("REST request to update assertion : {}", assertion);        
+        LOG.debug("REST request to update assertion : {}", assertion);
         validateAssertion(assertion);
         Assertion existingAssertion = assertionsService.updateAssertion(assertion);
-        
+
         return ResponseEntity.ok().body(existingAssertion);
     }
 
     @PostMapping("/assertion")
     public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, URISyntaxException {
-        LOG.debug("REST request to create assertion : {}", assertion);        
+        LOG.debug("REST request to create assertion : {}", assertion);
         validateAssertion(assertion);
         assertion = assertionsService.createAssertion(assertion);
 
@@ -161,11 +161,11 @@ public class AssertionServiceResource {
 		} catch (IOException e) {
 			return ResponseEntity.badRequest().build();
 		}
-		
+
 		// add put codes for assertions that already exist
 		updateIdsForExistingAssertions(upload.getAssertions());
 		assertionsService.createOrUpdateAssertions(upload.getAssertions());
-        
+
         if (upload.getErrors().length() > 0) {
         	return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body(upload.getErrors().toString());
         } else {
@@ -188,10 +188,10 @@ public class AssertionServiceResource {
 
         return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
     }
-	
+
 	/**
-	 * Returns owner id of an orcid record, if the user associated with that record has granted access.
-	 * 
+	 * Returns owner id of an orcid record
+	 *
 	 * @param encryptedEmail
 	 * @return ownerId of the orcid record
 	 * @throws IOException
@@ -201,8 +201,27 @@ public class AssertionServiceResource {
     public ResponseEntity<String> getOrcidRecordOwnerId(@PathVariable String encryptedEmail) throws IOException, JSONException {
     	String email = encryptUtil.decrypt(encryptedEmail);
     	Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
-    	if (record.isPresent() && record.get().getIdToken() != null) {
+    	if (record.isPresent()) {
     		return ResponseEntity.ok().body(record.get().getOwnerId());
+    	} else {
+    		return ResponseEntity.notFound().build();
+    	}
+    }
+    
+    /**
+	 * Returns information about the ORCID record associated with a given user identified by encrypted email
+	 *
+	 * @param state encrypted email
+	 * @return record information associated with the user identified by state
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+    @GetMapping("/assertion/record/{state}")
+    public ResponseEntity<OrcidRecord> getOrcidRecord(@PathVariable String state) throws IOException, JSONException {
+    	String email = encryptUtil.decrypt(state);
+    	Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
+    	if (record.isPresent()) {
+    		return ResponseEntity.ok().body(record.get());
     	} else {
     		return ResponseEntity.notFound().build();
     	}
@@ -213,7 +232,7 @@ public class AssertionServiceResource {
         Boolean deleted = assertionsService.deleteAssertionFromOrcid(id);
         JSONObject responseData = new JSONObject();
         responseData.put("deleted", deleted);
-        
+
         if (!deleted) {
         	// fetch failure details
         	Assertion assertion = assertionsService.findById(id);
@@ -224,10 +243,10 @@ public class AssertionServiceResource {
     		responseData.put("statusCode", statusCode);
     		responseData.put("error", error);
         }
-        
+
         return ResponseEntity.ok().body(responseData.toString());
     }
-    
+
     @PostMapping("/id-token")
     public ResponseEntity<Void> storeIdToken(@RequestBody ObjectNode json) throws ParseException {
         String state = json.get("state").asText();
@@ -258,10 +277,10 @@ public class AssertionServiceResource {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(path = "/assertion/report")    
-    public void generateReport(HttpServletResponse response) throws IOException {        
+    @GetMapping(path = "/assertion/report")
+    public void generateReport(HttpServletResponse response) throws IOException {
         final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
-        final String fileName = userLogin + '_' +  System.currentTimeMillis() + "_report.csv";        
+        final String fileName = userLogin + '_' +  System.currentTimeMillis() + "_report.csv";
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         response.setHeader("Content-Type", "text/csv");
         response.setHeader("filename", fileName);
@@ -269,7 +288,7 @@ public class AssertionServiceResource {
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
     }
-    
+
     private void validateAssertion(Assertion assertion) {
         if (StringUtils.isBlank(assertion.getEmail())) {
             throw new IllegalArgumentException("email must not be null");
@@ -295,7 +314,7 @@ public class AssertionServiceResource {
         }
         assertion.setUrl(validateUrl(assertion.getUrl()));
     }
-    
+
     private String validateUrl(String url) {
         if (!StringUtils.isBlank(url)) {
             url = url.trim();
@@ -312,7 +331,7 @@ public class AssertionServiceResource {
         }
         return url;
     }
-    
+
     private String encodeUrl(String urlString) throws MalformedURLException, URISyntaxException {
     	URL url = null;
     	try {
@@ -349,5 +368,5 @@ public class AssertionServiceResource {
         }
         return null;
     }
-	
+
 }

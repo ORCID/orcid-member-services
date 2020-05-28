@@ -5,8 +5,8 @@
                 <img src="/content/images/orcid-logo-208-64.png" width="208" height="64" />
             </div>
             <div class="mt-4">
-                <div *ngIf="!showConnectionExists">
-                    <p>You have already granted {{clientName}} permission to update your ORCID record.<br>
+                <div *ngIf="showConnectionExists">
+                    <p>You have already granted {{clientName}} permission to update your ORCID record {{orcidRecord.orcid}}.<br>
                         You do not need to do anything more at this time.
                     </p>
                 </div>
@@ -16,9 +16,12 @@
                 <div *ngIf="showDenied">
                     <p>Oops, you have denied access, so {{clientName}} will not be able to update your ORCID record.</p>
                     <p>If this was a mistake, click the button below to grant access.</p>
+                    <div>
+                        <a href='{{oauthUrl}}'><img src="https://orcid.org/sites/default/files/images/orcid_24x24.png" />Connect your ORCID iD</a>
+                    </div>
                 </div>
-                <div *ngIf="!showSuccess">
-                    <p><b>Thanks,</b></p>
+                <div *ngIf="showSuccess">
+                    <p><b>Thanks, {{signedInIdToken.given_name}} {{signedInIdToken.family_name}}</b></p>
                     <p>You have successfully granted {{clientName}} permission to update your ORCID record,<br>
                         and your record will be updated with affiliation information shortly.
                     </p>
@@ -26,9 +29,6 @@
                         <img src="https://orcid.org/sites/default/files/images/orcid_24x24.png"/>
                         <a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{signedInIdToken.sub}}</a>
                     </p>
-                </div>
-                <div *ngIf="showOauth">
-                    <a href='{{oauthUrl}}'><img src="https://orcid.org/sites/default/files/images/orcid_24x24.png" />Connect your ORCID iD</a>
                 </div>
             </div>
         </div>
