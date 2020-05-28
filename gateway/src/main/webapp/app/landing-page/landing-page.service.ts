@@ -9,7 +9,8 @@ export class LandingPageService {
   // TODO: Define sandbox and prod submit uri, current endpoint is: https://assertionservice.orcid.org/api/id-token
   // const assertionServiceSubmitUri:string = 'https://en2t82yaxhwvz.x.pipedream.net/sample/post/request/';
   idTokenUri: string = SERVER_API_URL + 'services/assertionservice/api/id-token';
-  orcidConnectionRecordUri: string = SERVER_API_URL + 'services/assertionservice/api/assertion/orcid/';
+  recordConnectionUri: string = SERVER_API_URL + 'services/assertionservice/api/assertion/record/';
+  memberInfoUri: string = SERVER_API_URL + 'services/memberservice/api/members/authorized/';
 
   constructor(private http: HttpClient) {
     this.headers = new HttpHeaders({
@@ -23,7 +24,13 @@ export class LandingPageService {
   }
 
   getOrcidConnectionRecord(state: String): Observable<any> {
-    let requestUrl = this.orcidConnectionRecordUri + state;
+    let requestUrl = this.recordConnectionUri + state;
+    return this.http
+      .get(requestUrl, { observe: 'response' });
+  }
+
+  getMemberInfo(state: String): Observable<any> {
+    let requestUrl = this.memberInfoUri + state;
     return this.http
       .get(requestUrl, { observe: 'response' });
   }
