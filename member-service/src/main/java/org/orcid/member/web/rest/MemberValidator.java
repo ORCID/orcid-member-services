@@ -19,9 +19,9 @@ public class MemberValidator {
 		}
 		
 		if (StringUtils.isBlank(member.getClientName())) {
-                    isOk = false;
-                    member.setError("Member name should not be empty");
-                }
+            isOk = false;
+            member.setError("Member name should not be empty");
+        }
 		
 		if (StringUtils.isBlank(member.getParentSalesforceId()) && (member.getIsConsortiumLead() == null || !member.getIsConsortiumLead())) {
 			isOk = false;
