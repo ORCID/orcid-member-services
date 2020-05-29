@@ -48,7 +48,7 @@ export class LandingPageComponent implements OnInit {
     this.landingPageService.getOrcidConnectionRecord(state_param)
       .subscribe(
         (res: HttpResponse<any>) => {
-          this.orcidRecord = res;
+          this.orcidRecord = res.body;
           this.landingPageService.getMemberInfo(state_param).subscribe(
             (res: HttpResponse<IMSMember>) => {
               this.clientName = res.body.clientName;
@@ -56,9 +56,9 @@ export class LandingPageComponent implements OnInit {
               this.oauthUrl = this.oauthBaseUrl + '?response_type=token&redirect_uri=' + this.redirectUri + '&client_id=' + this.clientId + '&scope=/activities/update openid&state=' + state_param;
 
               //Check if id token already exists in DB (user previously granted permission)
-              /*if(this.orcidRecord.idToken != null && this.orcidRecord.idToken != ''){
+              if(this.orcidRecord.idToken != null && this.orcidRecord.idToken != ''){
                 this.showConnectionExistsElement();
-              } else {*/
+              } else {
                 //Check if id token exists in URL (user just granted permission)
                 if (id_token_fragment != null && id_token_fragment != '') {
                   //this.submitIdTokenData(id_token_fragment, state_param, access_token_fragment);
@@ -77,7 +77,7 @@ export class LandingPageComponent implements OnInit {
                   }
                 }
 
-              /*}*/
+              }
             },
             (res: HttpErrorResponse) => {
               console.log("error")
