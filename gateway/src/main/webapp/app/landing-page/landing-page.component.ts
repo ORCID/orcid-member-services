@@ -19,6 +19,7 @@ export class LandingPageComponent implements OnInit {
   const oauthBaseUrl: string = ORCID_BASE_URL + '/oauth/authorize';
   const redirectUri: string = BASE_URL + '/landing-page';
 
+  loading: Boolean = true;
   showConnectionExists: Boolean = false;
   showDenied: Boolean = false;
   showError: Boolean = false;
@@ -54,14 +55,12 @@ export class LandingPageComponent implements OnInit {
               this.clientName = res.body.clientName;
               this.clientId = res.body.clientId;
               this.oauthUrl = this.oauthBaseUrl + '?response_type=token&redirect_uri=' + this.redirectUri + '&client_id=' + this.clientId + '&scope=/activities/update openid&state=' + state_param;
-
               //Check if id token already exists in DB (user previously granted permission)
               if(this.orcidRecord.idToken != null && this.orcidRecord.idToken != ''){
                 this.showConnectionExistsElement();
               } else {
                 //Check if id token exists in URL (user just granted permission)
                 if (id_token_fragment != null && id_token_fragment != '') {
-                  //this.submitIdTokenData(id_token_fragment, state_param, access_token_fragment);
                     this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment);
                 } else {
                   let error = this.getFragmentParameterByName('error');
@@ -163,6 +162,7 @@ export class LandingPageComponent implements OnInit {
     this.landingPageService.submitUserResponse({ 'denied': true, 'state': state}).subscribe(
       () => {
         this.showDeniedElement();
+
       },
       () => {
         this.showErrorElement();
@@ -175,23 +175,27 @@ export class LandingPageComponent implements OnInit {
     this.showError = false;
     this.showSuccess = false;
     this.showConnectionExists = true;
+    this.loading = false;
   }
 
   showErrorElement(): void {
     this.showDenied = false;
     this.showError = true;
     this.showSuccess = false;
+    this.loading = false;
   }
 
   showDeniedElement(): void {
     this.showDenied = true;
     this.showError = false;
     this.showSuccess = false;
+    this.loading = false;
   }
 
   showSuccessElement(): void {
     this.showDenied = false;
     this.showError = false;
     this.showSuccess = true;
+    this.loading = false;
   }
 }
