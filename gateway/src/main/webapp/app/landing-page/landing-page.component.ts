@@ -5,10 +5,9 @@ import { JhiEventManager } from 'ng-jhipster';
 import { ActivatedRoute } from '@angular/router';
 import { KEYUTIL, KJUR } from 'jsrsasign';
 import { LandingPageService } from './landing-page.service';
-import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
-import { MSUserService } from 'app/entities/MSUserService/ms-users/ms-user.service';
 import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
 import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
+import { BASE_URL, ORCID_BASE_URL } from 'app/app.constants';
 
 @Component({
   selector: 'jhi-landing-page',
@@ -16,62 +15,54 @@ import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member
 })
 export class LandingPageComponent implements OnInit {
 
-  const sandboxIssuer: string = 'https://sandbox.orcid.org';
-  const sandboxOauthUrl: string = 'https://sandbox.orcid.org/oauth/authorize';
-  // TODO: should be configurable
-  const redirectUri: string = 'http://localhost:8080/landing-page';
-  const sandboxKey = {'kty': 'RSA', 'e': 'AQAB', 'use': 'sig', 'kid': 'sandbox-orcid-org-3hpgosl3b6lapenh1ewsgdob3fawepoj', 'n': 'pl-jp-kTAGf6BZUrWIYUJTvqqMVd4iAnoLS6vve-KNV0q8TxKvMre7oi9IulDcqTuJ1alHrZAIVlgrgFn88MKirZuTqHG6LCtEsr7qGD9XyVcz64oXrb9vx4FO9tLNQxvdnIWCIwyPAYWtPMHMSSD5oEVUtVL_5IaxfCJvU-FchdHiwfxvXMWmA-i3mcEEe9zggag2vUPPIqUwbPVUFNj2hE7UsZbasuIToEMFRZqSB6juc9zv6PEUueQ5hAJCEylTkzMwyBMibrt04TmtZk2w9DfKJR91555s2ZMstX4G_su1_FqQ6p9vgcuLQ6tCtrW77tta-Rw7McF_tyPmvnhQ'};
+  const issuer: string = ORCID_BASE_URL;
+  const oauthBaseUrl: string = ORCID_BASE_URL + '/oauth/authorize';
+  const redirectUri: string = BASE_URL + '/landing-page';
 
   showConnectionExists: Boolean = false;
   showDenied: Boolean = false;
   showError: Boolean = false;
   showSuccess: Boolean = false;
-  issuer: string;
   key: any;
-  oauthUrl: string;
   clientName: string;
   clientId: string;
   orcidId: string;
+  oauthUrl: string;
   orcidRecord: any;
+  signedInIdToken: any;
 
   constructor(
     private eventManager: JhiEventManager,
     private landingPageService: LandingPageService,
-    protected msUserService: MSUserService,
     protected msMemberService: MSMemberService,
     private route: ActivatedRoute
   ) {
-    // TODO: need to make this switch from sandbox to prod
-    this.issuer = this.sandboxIssuer;
-    this.key = this.sandboxKey;
+
   }
 
   ngOnInit() {
     let id_token_fragment = this.getFragmentParameterByName('id_token');
+    let access_token_fragment = this.getFragmentParameterByName('access_token');
     let state_param = this.getQueryParameterByName('state');
 
     this.landingPageService.getOrcidConnectionRecord(state_param)
       .subscribe(
         (res: HttpResponse<any>) => {
           this.orcidRecord = res;
-          console.log(res.body);
           this.landingPageService.getMemberInfo(state_param).subscribe(
             (res: HttpResponse<IMSMember>) => {
               this.clientName = res.body.clientName;
               this.clientId = res.body.clientId;
-              this.oauthUrl = this.sandboxOauthUrl + '?response_type=token&redirect_uri=' + this.redirectUri + '&client_id=' + this.clientId + '&scope=/activities/update openid&state=' + state_param;
+              this.oauthUrl = this.oauthBaseUrl + '?response_type=token&redirect_uri=' + this.redirectUri + '&client_id=' + this.clientId + '&scope=/activities/update openid&state=' + state_param;
 
               //Check if id token already exists in DB (user previously granted permission)
-              if(this.orcidRecord.idToken != null && this.orcidRecord.idToken != ''){
+              /*if(this.orcidRecord.idToken != null && this.orcidRecord.idToken != ''){
                 this.showConnectionExistsElement();
-              } else {
+              } else {*/
                 //Check if id token exists in URL (user just granted permission)
                 if (id_token_fragment != null && id_token_fragment != '') {
-                  if (this.checkSig(id_token_fragment)) {
-                    this.submitIdTokenData(id_token_fragment, state_param);
-                  } else {
-                    this.showErrorElement();
-                  }
+                  //this.submitIdTokenData(id_token_fragment, state_param, access_token_fragment);
+                    this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment);
                 } else {
                   let error = this.getFragmentParameterByName('error');
                   //Check if user denied permission
@@ -86,7 +77,7 @@ export class LandingPageComponent implements OnInit {
                   }
                 }
 
-              }
+              /*}*/
             },
             (res: HttpErrorResponse) => {
               console.log("error")
@@ -119,17 +110,49 @@ export class LandingPageComponent implements OnInit {
       return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 
-  checkSig(id_token: string) {
-    let pubKey = KEYUTIL.getKey(this.key);
-    return KJUR.jws.JWS.verifyJWT(id_token, pubKey, {
-      alg: ['RS256'], iss: [this.issuer], aud: this.clientId, gracePeriod: 15 * 60 // 15 mins skew allowed
-    });
+  checkSubmitToken(id_token: string, state: string, access_token: string) {
+    this.landingPageService.getPublicKey().subscribe(
+      (res) => {
+        let pubKey = KEYUTIL.getKey(res.keys[0]);
+        let response = KJUR.jws.JWS.verifyJWT(id_token, pubKey, {
+          alg: ['RS256'], iss: [this.issuer], aud: this.clientId, gracePeriod: 15 * 60 // 15 mins skew allowed
+        });
+        if(response === true){
+          this.landingPageService.submitUserResponse({ 'id_token': id_token, 'state': state}).subscribe(
+            () => {
+              this.landingPageService.getUserInfo(access_token).subscribe(
+                (res: HttpResponse<any>) => {
+                  this.signedInIdToken = res;
+                  this.showSuccessElement();
+                },
+                () => {
+                  this.showErrorElement();
+                });
+            },
+            () => {
+              this.showErrorElement();
+            });
+        } else {
+          this.showErrorElement();
+        }
+      },
+      () => {
+        this.showErrorElement();
+      });
+
   }
 
-  submitIdTokenData(id_token: string, state: string) {
+  submitIdTokenData(id_token: string, state: string, access_token: string) {
     this.landingPageService.submitUserResponse({ 'id_token': id_token, 'state': state}).subscribe(
       () => {
-        this.showSuccessElement();
+        this.landingPageService.getUserInfo(access_token).subscribe(
+          (res: HttpResponse<any>) => {
+            this.signedInIdToken = res;
+            this.showSuccessElement();
+          },
+          () => {
+            this.showErrorElement();
+          });
       },
       () => {
         this.showErrorElement();
@@ -143,19 +166,6 @@ export class LandingPageComponent implements OnInit {
       },
       () => {
         this.showErrorElement();
-      }
-    );
-  }
-
-  buildOauthUrl(state_param: string) {
-    this.landingPageService.getMemberInfo(state_param).subscribe(
-      (res: HttpResponse<IMSMember>) => {
-        this.clientName = res.body.clientName;
-        this.clientId = res.body.clientId;
-        this.oauthUrl = this.sandboxOauthUrl + '?response_type=token&redirect_uri=' + this.redirectUri + '&client_id=' + this.clientId + '&scope=/activities/update openid&state=' + state_param;;
-      },
-      () => {
-        console.log("error")
       }
     );
   }
