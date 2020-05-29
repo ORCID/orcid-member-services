@@ -6,27 +6,35 @@
             </div>
             <div class="mt-4">
                 <div *ngIf="showConnectionExists">
-                    <p>You have already granted {{clientName}} permission to update your ORCID record {{orcidRecord.orcid}}.<br>
+                    <p jhiTranslate="landingPage.connectionExists.youHaveAlready"
+                    [translateValues]="{clientName: clientName}">You have already granted {{clientName}} permission to update your ORCID record</p>
+                    <p><img class="id-icon" src="https://orcid.org/sites/default/files/images/orcid_16x16.png"/>
+                        <a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{orcidRecord.orcid}}</a>
+                    </p>
+                    <p jhiTranslate="landingPage.connectionExists.youDoNot">
                         You do not need to do anything more at this time.
                     </p>
                 </div>
                 <div *ngIf="showError">
-                    <p>Oops, something went wrong and we were not able to fetch your ORCID iD</p>
+                    <p jhiTranslate="landingPage.error.somethingWentWrong">Oops, something went wrong and we were not able to fetch your ORCID iD</p>
                 </div>
-                <div *ngIf="showDenied">
-                    <p>Oops, you have denied access, so {{clientName}} will not be able to update your ORCID record.</p>
-                    <p>If this was a mistake, click the button below to grant access.</p>
-                    <div>
-                        <a href='{{oauthUrl}}'><img src="https://orcid.org/sites/default/files/images/orcid_24x24.png" />Connect your ORCID iD</a>
-                    </div>
+                <div *ngIf="!showDenied">
+                    <p jhiTranslate="landingPage.denied.youHaveDenied"
+                    [translateValues]="{clientName: clientName}">Oops, you have denied access, so {{clientName}} will not be able to update your ORCID record.</p>
+                    <p jhiTranslate="landingPage.denied.ifThisWas">If this was a mistake, click the button below to grant access.</p>
+                    <a href='{{oauthUrl}}' class="btn btn-primary" jhiTranslate="landingPage.denied.grantAccess" [translateValues]="{clientName: clientName}">
+                        Allow {{ clientName }} to update my ORCID record"
+                    </a>
                 </div>
                 <div *ngIf="showSuccess">
-                    <p><b>Thanks, {{signedInIdToken.given_name}} {{signedInIdToken.family_name}}</b></p>
-                    <p>You have successfully granted {{clientName}} permission to update your ORCID record,<br>
+                    <p jhiTranslate="landingPage.success.thanks"
+                    [translateValues]="{given_name: signedInIdToken.given_name, family_name: signedInIdToken.family_name}"><b>Thanks, {{signedInIdToken.given_name}} {{signedInIdToken.family_name}}</b></p>
+                    <p jhiTranslate="landingPage.success.youHaveSuccessfully"
+                    [translateValues]="{clientName: clientName}">You have successfully granted {{clientName}} permission to update your ORCID record,
                         and your record will be updated with affiliation information shortly.
                     </p>
                     <p>
-                        <img src="https://orcid.org/sites/default/files/images/orcid_24x24.png"/>
+                        <img class="id-icon" src="https://orcid.org/sites/default/files/images/orcid_16x16.png"/>
                         <a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{signedInIdToken.sub}}</a>
                     </p>
                 </div>
