@@ -21,9 +21,16 @@
                            formControlName="parentSalesforceId"/>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.clientName" for="field_clientName">Client Name</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.clientName" for="field_clientName">Member Name</label>
                     <input type="text" class="form-control" name="clientName" id="field_clientName"
                            formControlName="clientName"/>
+                     <div *ngIf="editForm.get('clientName').invalid && (editForm.get('clientName').dirty || editForm.get('clientName').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('clientName').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                    
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.clientId" for="field_clientId">Client ID</label>
