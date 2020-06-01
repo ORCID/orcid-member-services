@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {HttpResponse} from '@angular/common/http';
+import {FormBuilder, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {Observable} from 'rxjs';
 import * as moment from 'moment';
-import { JhiAlertService } from 'ng-jhipster';
+import {JhiAlertService} from 'ng-jhipster';
 
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { IMSUser, MSUser } from 'app/shared/model/MSUserService/ms-user.model';
-import { MSUserService } from './ms-user.service';
+import {DATE_TIME_FORMAT} from 'app/shared/constants/input.constants';
+import {IMSUser, MSUser} from 'app/shared/model/MSUserService/ms-user.model';
+import {MSUserService} from './ms-user.service';
 
-import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
-import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
+import {IMSMember} from 'app/shared/model/MSUserService/ms-member.model';
+import {MSMemberService} from 'app/entities/MSUserService/ms-members/ms-member.service';
 
 @Component({
   selector: 'jhi-ms-user-update',
@@ -26,21 +26,23 @@ export class MSUserUpdateComponent implements OnInit {
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     mainContact: [],
-    salesforceId: [],
+    assertionServiceEnabled: [],
+    salesforceId: ['', Validators.required],
     createdBy: [],
     createdDate: [],
     lastModifiedBy: [],
     lastModifiedDate: []
   });
 
-  membersList: IMSMember;
+  membersList: IMSMember[];
 
   constructor(
     protected jhiAlertService: JhiAlertService,
     protected msUserService: MSUserService,
     protected msMemberService: MSMemberService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cdref: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -48,7 +50,18 @@ export class MSUserUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ msUser }) => {
       this.updateForm(msUser);
     });
-    this.membersList = this.msMemberService.getOrgNameMap();
+    this.editForm.disable();
+    this.msMemberService.allMembers$.subscribe(res => {
+      if (res.body) {
+        res.body.forEach((msMember: IMSMember) => {
+          this.membersList[msMember.salesforceId] = msMember.clientName;
+        });
+        if (this.membersList.length > 0) {
+          this.editForm.enable();
+          this.cdref.detectChanges();
+        }
+      }
+    });
   }
 
   updateForm(msUser: IMSUser) {
@@ -71,12 +84,14 @@ export class MSUserUpdateComponent implements OnInit {
   }
 
   save() {
-    this.isSaving = true;
-    const msUser = this.createFromForm();
-    if (msUser.id !== undefined) {
-      this.subscribeToSaveResponse(this.msUserService.update(msUser));
-    } else {
-      this.subscribeToSaveResponse(this.msUserService.create(msUser));
+    if (this.editForm.valid) {
+      this.isSaving = true;
+      const msUser = this.createFromForm();
+      if (msUser.id !== undefined) {
+        this.subscribeToSaveResponse(this.msUserService.update(msUser));
+      } else {
+        this.subscribeToSaveResponse(this.msUserService.create(msUser));
+      }
     }
   }
 
