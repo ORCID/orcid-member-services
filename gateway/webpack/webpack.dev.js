@@ -104,6 +104,12 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     },
     stats: process.env.JHI_DISABLE_WEBPACK_LOGS ? 'none' : options.stats,
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                BASE_URL: JSON.stringify('http://localhost:8080'),
+                ORCID_BASE_URL: JSON.stringify('https://sandbox.orcid.org')
+            }
+        }),
         process.env.JHI_DISABLE_WEBPACK_LOGS
             ? null
             : new SimpleProgressWebpackPlugin({
