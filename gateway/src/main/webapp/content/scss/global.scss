@@ -208,3 +208,9 @@ input.form-control[type='checkbox'] {
 input.form-control[type='file'] {
   border: none;
 }
+
+.errorMessage {
+  margin-top: 2em;
+  padding: 0.8em 1em;
+  color: #ab2222;
+}
