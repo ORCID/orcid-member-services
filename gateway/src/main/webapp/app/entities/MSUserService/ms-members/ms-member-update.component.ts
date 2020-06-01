@@ -19,7 +19,7 @@ export class MSMemberUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     clientId: [null, [Validators.required]],
-    clientName: [],
+    clientName: [null, [Validators.required]],
     salesforceId: [null, [Validators.required]],
     parentSalesforceId: [],
     isConsortiumLead: [null, [Validators.required]],
