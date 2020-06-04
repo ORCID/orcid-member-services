@@ -15,9 +15,9 @@ import { BASE_URL, ORCID_BASE_URL } from 'app/app.constants';
 })
 export class LandingPageComponent implements OnInit {
 
-  const issuer: string = ORCID_BASE_URL;
-  const oauthBaseUrl: string = ORCID_BASE_URL + '/oauth/authorize';
-  const redirectUri: string = BASE_URL + '/landing-page';
+  issuer: string = ORCID_BASE_URL;
+  oauthBaseUrl: string = ORCID_BASE_URL + '/oauth/authorize';
+  redirectUri: string = BASE_URL + '/landing-page';
 
   loading: Boolean = true;
   showConnectionExists: Boolean = false;
