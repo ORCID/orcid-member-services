@@ -2,18 +2,17 @@ package org.orcid.user.web.rest.errors;
 
 import io.github.jhipster.web.util.HeaderUtil;
 
+import org.orcid.user.config.Constants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.zalando.problem.DefaultProblem;
-import org.zalando.problem.Problem;
-import org.zalando.problem.ProblemBuilder;
-import org.zalando.problem.Status;
+import org.zalando.problem.*;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
@@ -21,7 +20,11 @@ import org.zalando.problem.violations.ConstraintViolationProblem;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -33,6 +36,7 @@ import java.util.stream.Collectors;
 public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
 
     private static final String FIELD_ERRORS_KEY = "fieldErrors";
+    private static final String PARAMS = "params";
     private static final String MESSAGE_KEY = "message";
     private static final String PATH_KEY = "path";
     private static final String VIOLATIONS_KEY = "violations";
@@ -114,4 +118,17 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
             .build();
         return create(ex, problem, request);
     }
+
+    @ExceptionHandler
+    ResponseEntity<Problem> handleMemberNotFoundException(MemberNotFoundException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
+            .withTitle("Member not found")
+            .withStatus(Status.BAD_REQUEST)
+            .with(MESSAGE_KEY, ErrorConstants.ERR_MEMBER_NOT_FOUND)
+            .with(PARAMS, ex.getParamMap().get("params"))
+            .build();
+        return create(ex, problem, request);
+    }
+
 }
