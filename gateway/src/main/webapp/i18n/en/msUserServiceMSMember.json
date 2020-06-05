@@ -15,7 +15,7 @@
         "title": "Member details"
       },
       "import": {
-        "title": "Member Settings",
+        "title": "Import members",
         "label": "Please select a CSV file to upload",
         "filePath": "File path",
         "errors": {
