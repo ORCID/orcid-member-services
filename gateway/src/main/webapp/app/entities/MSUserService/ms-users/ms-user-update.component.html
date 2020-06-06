@@ -26,11 +26,11 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId" for="field_salesforceId">Salesforce Id</label>
-                    <select  *ngIf="membersList" class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
+                    <select  *ngIf="membersList.length  > 0" class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
                         <option *ngFor="let member of membersList | keyvalue" [ngValue]="member.key">{{member.value}}</option>
                     </select>
                     <span class="errorMessage" *ngIf="editForm.get('salesforceId').touched && editForm.get('salesforceId').errors && editForm.get('salesforceId').errors.required">Member is necessary</span>
-                    <div class="alert alert-warning" *ngIf="!membersList">
+                    <div class="alert alert-warning" *ngIf="membersList.length === 0">
                         <span jhiTranslate="gatewayApp.msUserServiceMSMember.home.notFound">No members to show</span>
                     </div>
                 </div>
