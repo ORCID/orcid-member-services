@@ -1,17 +1,18 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {HttpResponse} from '@angular/common/http';
-import {FormBuilder, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {Observable} from 'rxjs';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 import * as moment from 'moment';
-import {JhiAlertService} from 'ng-jhipster';
+import { JhiAlertService } from 'ng-jhipster';
 
-import {DATE_TIME_FORMAT} from 'app/shared/constants/input.constants';
-import {IMSUser, MSUser} from 'app/shared/model/MSUserService/ms-user.model';
-import {MSUserService} from './ms-user.service';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+import { IMSUser, MSUser } from 'app/shared/model/MSUserService/ms-user.model';
+import { MSUserService } from './ms-user.service';
 
-import {IMSMember} from 'app/shared/model/MSUserService/ms-member.model';
-import {MSMemberService} from 'app/entities/MSUserService/ms-members/ms-member.service';
+import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
+import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
+import { emailValidator } from 'app/shared/util/app-validators';
 
 @Component({
   selector: 'jhi-ms-user-update',
@@ -22,7 +23,7 @@ export class MSUserUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    login: ['', Validators.required],
+    login: ['', [Validators.required, Validators.email, Validators.maxLength(50), emailValidator]],
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     mainContact: [],
@@ -42,7 +43,7 @@ export class MSUserUpdateComponent implements OnInit {
     protected msMemberService: MSMemberService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
-    private cdref: ChangeDetectorRef,
+    private cdref: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
