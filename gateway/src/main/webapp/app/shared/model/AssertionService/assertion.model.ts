@@ -11,65 +11,77 @@ export const enum AffiliationSection {
 }
 
 export interface IAssertion {
-  id?: string;
-  email?: string;
+  addedToORCID?: boolean;
   affiliationSection?: AffiliationSection;
+  created?: Moment;
+  deletedFromORCID?: Moment;
   departmentName?: string;
-  roleTitle?: string;
-  url?: string;
-  startYear?: string;
-  startMonth?: string;
-  startDay?: string;
-  endYear?: string;
-  endMonth?: string;
-  endDay?: string;
-  orgName?: string;
-  orgCountry?: string;
-  orgCity?: string;
-  orgRegion?: string;
   disambiguatedOrgId?: string;
   disambiguationSource?: string;
+  email?: string;
+  endDay?: string;
+  endMonth?: string;
+  endYear?: string;
   externalId?: string;
   externalIdType?: string;
   externalIdUrl?: string;
-  putCode?: string;
-  created?: Moment;
+  id?: string;
   modified?: Moment;
-  deletedFromORCID?: Moment;
-  sent?: boolean;
-  adminId?: string;
+  orcidError?: string;
+  orgCity?: string;
+  orgCountry?: string;
+  orgName?: string;
+  orgRegion?: string;
+  ownerId?: string;
+  putCode?: string;
+  roleTitle?: string;
+  salesforceId?: string;
+  startMonth?: string;
+  startDay?: string;
+  startYear?: string;
+  status?: string;
+  updated?: boolean;
+  updatedInORCID?: boolean;
+  url?: string;
 }
 
 export class Assertion implements IAssertion {
   constructor(
     public id?: string,
-    public email?: string,
+    public addedToORCID?: boolean,
     public affiliationSection?: AffiliationSection,
+    public created?: Moment,
+    public deletedFromORCID?: Moment,
     public departmentName?: string,
-    public roleTitle?: string,
-    public url?: string,
-    public startYear?: string,
-    public startMonth?: string,
-    public startDay?: string,
-    public endYear?: string,
-    public endMonth?: string,
-    public endDay?: string,
-    public orgName?: string,
-    public orgCountry?: string,
-    public orgCity?: string,
-    public orgRegion?: string,
     public disambiguatedOrgId?: string,
     public disambiguationSource?: string,
+    public email?: string,
+    public endDay?: string,
+    public endMonth?: string,
+    public endYear?: string,
     public externalId?: string,
     public externalIdType?: string,
     public externalIdUrl?: string,
-    public putCode?: string,
-    public created?: Moment,
     public modified?: Moment,
-    public deletedFromORCID?: Moment,
-    public sent?: boolean,
-    public adminId?: string
+    public orcidError?: string,
+    public orgCity?: string,
+    public orgCountry?: string,
+    public orgName?: string,
+    public orgRegion?: string,
+    public ownerId?: string,
+    public putCode?: string,
+    public roleTitle?: string,
+    public salesforceId?: string,
+    public startMonth?: string,
+    public startDay?: string,
+    public startYear?: string,
+    public status?: string,
+    public updated?: boolean,
+    public updatedInORCID?: boolean,
+    public url?: string
   ) {
-    this.sent = this.sent || false;
+    this.addedToORCID = this.addedToORCID || false;
+    this.updated = this.updated || false;
+    this.updatedInORCID = this.updatedInORCID || false;
   }
 }
