@@ -33,6 +33,11 @@
       "createdDate": "Created Date",
       "lastModifiedBy": "Last Modified By",
       "lastModifiedDate": "Last Modified Date"
+    },
+    "userDTO": {
+      "login": "email",
+      "firstName": "first name",
+      "lastName": "last name"
     }
   },
   "msUserServiceApp": {
