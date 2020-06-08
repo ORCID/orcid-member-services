@@ -11,7 +11,8 @@
       "entities": {
         "main": "Member Tools",
         "assertionServiceAssertions": "Assert affiliations",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "member": "Member"
       },
       "account": {
         "main": "Account",

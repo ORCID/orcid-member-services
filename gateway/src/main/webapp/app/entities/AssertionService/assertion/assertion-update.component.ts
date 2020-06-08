@@ -50,7 +50,7 @@ export class AssertionUpdateComponent implements OnInit {
     orgCity: [null, [Validators.required]],
     orgRegion: [],
     disambiguatedOrgId: [null, [Validators.required]],
-    disambiguationSource: [],
+    disambiguationSource: [null, [Validators.required]],
     externalId: [],
     externalIdType: [],
     externalIdUrl: [],
