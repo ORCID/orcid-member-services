@@ -42,6 +42,7 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
         .and()
             .authorizeRequests()
             .antMatchers("/api/id-token").permitAll()
+            .antMatchers("/api/assertion/record/**").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()

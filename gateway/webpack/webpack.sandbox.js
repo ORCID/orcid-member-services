@@ -12,7 +12,7 @@ const path = require('path');
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
-const ENV = 'production';
+const ENV = 'sandbox';
 const sass = require('sass');
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
@@ -125,8 +125,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                BASE_URL: JSON.stringify('https://member-services.orcid.org'),
-                ORCID_BASE_URL: JSON.stringify('https://orcid.org')
+                BASE_URL: JSON.stringify('http://member-services.orcid.org:8080'),
+                ORCID_BASE_URL: JSON.stringify('https://sandbox.orcid.org')
             }
         }),
         new MiniCssExtractPlugin({

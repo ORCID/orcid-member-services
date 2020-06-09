@@ -23,22 +23,22 @@ function parentSalesforceIdConditionallyRequiredValidator(formGroup: FormGroup) 
 })
 export class MSMemberUpdateComponent implements OnInit {
   isSaving: boolean;
-  editForm = this.fb.group(
-    {
-      id: [],
-      clientId: [null, [Validators.required]],
-      clientName: [],
-      salesforceId: [null, [Validators.required]],
-      parentSalesforceId: [[Validators.required]],
-      isConsortiumLead: [null, [Validators.required]],
-      assertionServiceEnabled: [],
-      createdBy: [],
-      createdDate: [],
-      lastModifiedBy: [],
-      lastModifiedDate: []
-    },
+  editForm = this.fb.group({
+    id: [],
+    clientId: [null, [Validators.required]],
+    clientName: [null, [Validators.required]],
+    salesforceId: [null, [Validators.required]],
+    parentSalesforceId: [],
+    isConsortiumLead: [null, [Validators.required]],
+    assertionServiceEnabled: [],
+    createdBy: [],
+    createdDate: [],
+    lastModifiedBy: [],
+    lastModifiedDate: [],
+    },                      ,
     { validators: [parentSalesforceIdConditionallyRequiredValidator] }
-  );
+   );
+
 
   constructor(
     private accountService: AccountService,
