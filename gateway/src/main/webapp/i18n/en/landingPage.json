@@ -1,5 +1,21 @@
 {
   "landingPage": {
-    "title": "Welcome to ORCID"
+    "title": "Welcome to ORCID",
+    "connectionExists": {
+      "youHaveAlready": "You have already granted {{ clientName}} permission to update your ORCID record",
+      "youDoNot": "You do not need to do anything more at this time."
+    },
+    "error": {
+      "somethingWentWrong": "Oops, something went wrong and we were not able to fetch your ORCID iD"
+    },
+    "denied": {
+      "youHaveDenied": "Oops, you have denied access, so {{ clientName }} will not be able to update your ORCID record.",
+      "ifThisWas": "If this was a mistake, click the button below to grant access.",
+      "grantAccess": "Allow {{ clientName }} to update my ORCID record"
+    },
+    "success": {
+      "thanks": "Thanks, {{ given_name }} {{ family_name }}",
+      "youHaveSuccessfully": "You have successfully granted {{ clientName }} permission to update your ORCID record, and your record will be updated with affiliation information shortly."
+    }
   }
 }
