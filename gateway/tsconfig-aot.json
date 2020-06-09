@@ -22,7 +22,7 @@
   "angularCompilerOptions": {
     "genDir": "target/classes/aot",
     "skipMetadataEmit": true,
-    "fullTemplateTypeCheck": true,
+    "fullTemplateTypeCheck": false,
     "preserveWhitespaces": true
   }
 }

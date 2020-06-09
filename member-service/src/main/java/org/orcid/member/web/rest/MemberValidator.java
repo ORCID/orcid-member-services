@@ -18,6 +18,11 @@ public class MemberValidator {
 			member.setError("Salesforce id should not be empty");
 		}
 		
+		if (StringUtils.isBlank(member.getClientName())) {
+            isOk = false;
+            member.setError("Member name should not be empty");
+        }
+		
 		if (StringUtils.isBlank(member.getParentSalesforceId()) && (member.getIsConsortiumLead() == null || !member.getIsConsortiumLead())) {
 			isOk = false;
 			member.setError("Parent salesforce id should not be empty if it is not a consortium lead");
