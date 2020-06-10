@@ -152,25 +152,22 @@ public class AssertionServiceResource {
     	try {
 			inputStream = file.getInputStream();
 		} catch (IOException e) {
-			LOG.warn("Error reading upload file", e);
-			return ResponseEntity.badRequest().build();
+            LOG.warn("Error reading user upload", e);
+            throw new RuntimeException(e);
 		}
         AssertionsUpload upload = null;
 		try {
 			upload = assertionsCsvReader.readAssertionsUpload(inputStream);
 		} catch (IOException e) {
-			return ResponseEntity.badRequest().build();
+            LOG.warn("Error reading user upload", e);
+            throw new RuntimeException(e);
 		}
 
 		// add put codes for assertions that already exist
 		updateIdsForExistingAssertions(upload.getAssertions());
 		assertionsService.createOrUpdateAssertions(upload.getAssertions());
 
-        if (upload.getErrors().length() > 0) {
-        	return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body(upload.getErrors().toString());
-        } else {
-        	return ResponseEntity.ok().build();
-        }
+        return ResponseEntity.ok().body(upload.getErrors().toString());
     }
 
     private void updateIdsForExistingAssertions(List<Assertion> assertions) {
@@ -207,7 +204,7 @@ public class AssertionServiceResource {
     		return ResponseEntity.notFound().build();
     	}
     }
-    
+
     /**
 	 * Returns information about the ORCID record associated with a given user identified by encrypted email
 	 *
