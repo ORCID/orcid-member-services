@@ -10,7 +10,7 @@
 
         <div class="form-group">
             <label class="form-control-label sr-only" jhiTranslate="gatewayApp.msUserServiceMSUser.import.filePath" for="field_filePath">File Path</label>
-            <input type="file" class="form-control" name="filePath" id="field_filePath"
+            <input type="file" class="form-control" name="filePath" id="field_filePath" accept=".csv"
                 (change)="selectFile($event)"/>
         </div>
     </div>
