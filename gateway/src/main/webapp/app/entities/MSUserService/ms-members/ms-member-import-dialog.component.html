@@ -9,7 +9,7 @@
         <p id="jhi-delete-msMember-heading" jhiTranslate="gatewayApp.msUserServiceMSMember.import.label">Please select a CSV file to upload</p>
         <div class="form-group">
             <label class="form-control-label sr-only" jhiTranslate="gatewayApp.msUserServiceMSMember.import.filePath" for="field_filePath">File Path</label>
-            <input type="file" class="form-control" name="filePath" id="field_filePath"
+            <input type="file" class="form-control" name="filePath" id="field_filePath" accept=".csv"
                 (change)="selectFile($event)"/>
         </div>
     </div>
