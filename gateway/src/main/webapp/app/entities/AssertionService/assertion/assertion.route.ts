@@ -39,7 +39,7 @@ export const assertionRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      defaultSort: 'id,asc',
+      defaultSort: 'email,asc',
       pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
     },
     canActivate: [UserRouteAccessService]
