@@ -12,6 +12,7 @@ import { MSUserService } from './ms-user.service';
 
 import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
 import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
+import { emailValidator } from 'app/shared/util/app-validators';
 
 @Component({
   selector: 'jhi-ms-user-update',
@@ -22,7 +23,7 @@ export class MSUserUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    login: ['', Validators.required],
+    login: ['', [Validators.required, Validators.email, Validators.maxLength(50), emailValidator]],
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     mainContact: [],
