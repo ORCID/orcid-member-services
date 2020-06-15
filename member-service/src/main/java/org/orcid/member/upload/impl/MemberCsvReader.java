@@ -36,21 +36,26 @@ public class MemberCsvReader implements MembersUploadReader {
 				LOG.error("Error closing csv assertions upload input stream", e);
 				throw new RuntimeException(io);
 			}
-			
+
 			LOG.error("Error reading CSV upload", e);
 			throw new RuntimeException(e);
 		}
 
 		try {
 			for (CSVRecord line : elements) {
-				long index = line.getRecordNumber();
-				Member member = parseLine(line, now);
-				
-				if (!MemberValidator.validate(member)) {
-					upload.addError(index, member.getError());
-				} else {
-					upload.addMember(member);
-				}
+			    try {
+                    long index = line.getRecordNumber();
+                    Member member = parseLine(line, now);
+
+                    if (!MemberValidator.validate(member)) {
+                        upload.addError(index, member.getError());
+                    } else {
+                        upload.addMember(member);
+                    }
+                } catch (Exception e) {
+                    LOG.info("CSV upload error found for record number {}", line.getRecordNumber());
+                    upload.addError(line.getRecordNumber(), e.getMessage());
+                }
 			}
 		} finally {
 			try {
