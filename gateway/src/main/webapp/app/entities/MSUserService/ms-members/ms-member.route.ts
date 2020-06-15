@@ -40,7 +40,7 @@ export const msMemberRoute: Routes = [
     data: {
       authorities: ['ROLE_ADMIN'],
       defaultSort: 'id,asc',
-      pageTitle: 'gatewayApp.mSUserServiceMSMember.home.title'
+      pageTitle: 'gatewayApp.msUserServiceMSMember.home.title'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -52,7 +52,7 @@ export const msMemberRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_ADMIN'],
-      pageTitle: 'gatewayApp.mSUserServiceMSMember.home.title'
+      pageTitle: 'gatewayApp.msUserServiceMSMember.home.title'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -64,7 +64,7 @@ export const msMemberRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_ADMIN'],
-      pageTitle: 'gatewayApp.mSUserServiceMSMember.home.title'
+      pageTitle: 'gatewayApp.msUserServiceMSMember.home.title'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -76,7 +76,7 @@ export const msMemberRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_ADMIN'],
-      pageTitle: 'gatewayApp.mSUserServiceMSMember.home.title'
+      pageTitle: 'gatewayApp.msUserServiceMSMember.home.title'
     },
     canActivate: [UserRouteAccessService]
   }
@@ -91,7 +91,7 @@ export const msMemberPopupRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_ADMIN'],
-      pageTitle: 'gatewayApp.mSUserServiceMSMember.home.title'
+      pageTitle: 'gatewayApp.msUserServiceMSMember.home.title'
     },
     canActivate: [UserRouteAccessService],
     outlet: 'popup'

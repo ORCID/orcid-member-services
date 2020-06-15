@@ -60,6 +60,18 @@ export class JhiAlertErrorComponent implements OnDestroy {
             }
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
             this.addErrorAlert(httpErrorResponse.error.message, httpErrorResponse.error.message, httpErrorResponse.error.params);
+          } else if (httpErrorResponse.error) {
+            if (httpErrorResponse.error.message === undefined) {
+              httpErrorResponse.error = JSON.parse(httpErrorResponse.error);
+            }
+
+            if (httpErrorResponse.error.message && httpErrorResponse.error.params) {
+              const params = httpErrorResponse.error.params;
+              this.addErrorAlert(httpErrorResponse.error.message, httpErrorResponse.error.message, { params });
+            } else {
+              this.addErrorAlert(httpErrorResponse.error.message);
+            }
+
           } else {
             this.addErrorAlert(httpErrorResponse.error);
           }
