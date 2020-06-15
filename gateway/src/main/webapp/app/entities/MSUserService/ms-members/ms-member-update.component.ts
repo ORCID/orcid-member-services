@@ -13,7 +13,6 @@ function parentSalesforceIdConditionallyRequiredValidator(formGroup: FormGroup) 
   if (!formGroup.value.isConsortiumLead) {
     return Validators.required(formGroup.get('parentSalesforceId')) ? { parentSalesforceIdConditionallyRequired: true } : null;
   }
-
   return null;
 }
 
@@ -34,11 +33,11 @@ export class MSMemberUpdateComponent implements OnInit {
     createdBy: [],
     createdDate: [],
     lastModifiedBy: [],
-    lastModifiedDate: [],
-    },                      ,
-    { validators: [parentSalesforceIdConditionallyRequiredValidator] }
+    lastModifiedDate: []
+    },
+    { validators: [parentSalesforceIdConditionallyRequiredValidator
+    ] }
    );
-
 
   constructor(
     private accountService: AccountService,
