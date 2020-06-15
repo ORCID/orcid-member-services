@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
@@ -9,13 +9,20 @@ import { IMSMember, MSMember } from 'app/shared/model/MSUserService/ms-member.mo
 import { MSMemberService } from './ms-member.service';
 import { AccountService, Account } from 'app/core';
 
+function parentSalesforceIdConditionallyRequiredValidator(formGroup: FormGroup) {
+  if (!formGroup.value.isConsortiumLead) {
+    return Validators.required(formGroup.get('parentSalesforceId')) ? { parentSalesforceIdConditionallyRequired: true } : null;
+  }
+
+  return null;
+}
+
 @Component({
   selector: 'jhi-ms-member-update',
   templateUrl: './ms-member-update.component.html'
 })
 export class MSMemberUpdateComponent implements OnInit {
   isSaving: boolean;
-
   editForm = this.fb.group({
     id: [],
     clientId: [null, [Validators.required]],
@@ -27,8 +34,11 @@ export class MSMemberUpdateComponent implements OnInit {
     createdBy: [],
     createdDate: [],
     lastModifiedBy: [],
-    lastModifiedDate: []
-  });
+    lastModifiedDate: [],
+    },                      ,
+    { validators: [parentSalesforceIdConditionallyRequiredValidator] }
+   );
+
 
   constructor(
     private accountService: AccountService,
