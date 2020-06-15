@@ -96,7 +96,7 @@ public class MemberResource {
 		Member created = memberService.createMember(member);
 		return ResponseEntity
 				.created(new URI("/api/member/" + created.getId())).headers(HeaderUtil
-						.createEntityCreationAlert(applicationName, true, "Member", created.getId().toString()))
+						.createEntityCreationAlert(applicationName, true, "member", created.getId().toString()))
 				.body(created);
 	}
 
@@ -136,7 +136,7 @@ public class MemberResource {
 		LOG.debug("REST request to update Member : {}", member);
 		member = memberService.updateMember(member);
 		return ResponseEntity.ok()
-				.headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "Member", member.getId().toString()))
+				.headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "member", member.getId().toString()))
 				.body(member);
 	}
 
@@ -200,7 +200,7 @@ public class MemberResource {
 		LOG.debug("REST request to delete Member : {}", id);
 		memberService.deleteMember(id);
 		return ResponseEntity.noContent()
-				.headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, "Member", id)).build();
+				.headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, "member", id)).build();
 	}
 
 }

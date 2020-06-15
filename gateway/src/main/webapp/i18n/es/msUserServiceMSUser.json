@@ -17,24 +17,24 @@
       "import": {
         "title": "User Settings",
         "label": "Please select the CSV file to upload",
-        "filePath": "File path",
+        "filePath": "Ruta del archivo",
         "errors": {
-          "label": "Please fix the following errors"
+          "label": "Por favor solucionar los siguientes errores"
         }
       },
-      "confirm_password": "Confirm password",
+      "confirm_password": "Confirmar contraseña",
       "login": "Login",
       "email": "Email",
-      "password": "Password",
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "mainContact": "Main Contact",
+      "password": "Contrasena",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "mainContact": "Contacto Principal",
       "salesforceId": "Salesforce Id",
       "parentSalesforceId": "Parent Salesforce Id",
-      "createdBy": "Created By",
-      "createdDate": "Created Date",
-      "lastModifiedBy": "Last Modified By",
-      "lastModifiedDate": "Last Modified Date"
+      "createdBy": "Creado por",
+      "createdDate": "Fecha de creacion",
+      "lastModifiedBy": "Ultima vez modificado por",
+      "lastModifiedDate": "Ultima fecha de modificacion"
     }
   },
   "msUserServiceApp": {

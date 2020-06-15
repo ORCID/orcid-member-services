@@ -9,6 +9,14 @@
       "500": "Error interno del servidor."
     },
     "concurrencyFailure": "Otro usuario ha modificado esta data al mismo tiempo que tú. Tus cambios fueron rechazados.",
-    "validation": "Error de validación en el servidor."
+    "validation": "Error de validación en el servidor.",
+    "email": "Email no es un valor valido ",
+    "size": "No cumple con los requisitos min/max size requerimientos!",
+    "idused": "No, puede ser eliminado!. Tiene relacion con otros elementos.",
+    "pattern": "Este campo solo puede contener letras, digitos y direcciones e-mail.",
+    "invalidUrl": "La url es invalida",
+    "disambiguationSource": "Fuente de organizacion no puede ir vacio.",
+    "emailUsed": "El email ya esta registrado",
+    "memberNotFound": "Miembro no encontrado con salesForceId: {{ params }} "
   }
 }
