@@ -119,8 +119,8 @@ export class AssertionUpdateComponent implements OnInit {
       created: assertion.created != null ? assertion.created.format(DATE_TIME_FORMAT) : null,
       modified: assertion.modified != null ? assertion.modified.format(DATE_TIME_FORMAT) : null,
       deletedFromORCID: assertion.deletedFromORCID != null ? assertion.deletedFromORCID.format(DATE_TIME_FORMAT) : null,
-      sent: assertion.sent,
-      adminId: assertion.adminId
+      status: assertion.status,
+      ownerId: assertion.ownerId
     });
   }
 
@@ -169,8 +169,8 @@ export class AssertionUpdateComponent implements OnInit {
         this.editForm.get(['deletedFromORCID']).value != null
           ? moment(this.editForm.get(['deletedFromORCID']).value, DATE_TIME_FORMAT)
           : undefined,
-      sent: this.editForm.get(['sent']).value,
-      adminId: this.editForm.get(['adminId']).value
+      status: this.editForm.get(['status']).value,
+      ownerId: this.editForm.get(['ownerId']).value
     };
   }
 
