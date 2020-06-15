@@ -60,10 +60,20 @@
       "year": "Year",
       "month": "Month",
       "day": "Day"
+    },
+    "assertion": {
+      "firstName": "first name",
+      "lastName": "last name",
+      "email": "email",
+      "affiliationSection": "affiliation type",
+      "orgCountry": "organization country",
+      "orgCity": "organization city",
+      "orgName": "organization name",
+      "disambiguatedOrgId": "organization id"
     }
   },
   "assertionServiceApp": {
-    "assertionServiceAssertion": {
+    "affiliation": {
       "created": "New affiliation {{ param }} was created",
       "updated": "Affiliation {{ param }} was updated",
       "deleted": "Affiliation {{ param }} was deleted"

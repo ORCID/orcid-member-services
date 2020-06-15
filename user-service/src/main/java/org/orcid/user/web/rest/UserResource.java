@@ -121,7 +121,7 @@ public class UserResource {
 		Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
 		return ResponseUtil.wrapOrNotFound(updatedUser,
-				HeaderUtil.createAlert(applicationName, "userManagement.updated", userDTO.getLogin()));
+				HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", userDTO.getLogin()));
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class UserResource {
 
 		User newUser = userService.createUser(userDTO);
 		return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-				.headers(HeaderUtil.createAlert(applicationName, "userManagement.created", newUser.getLogin()))
+				.headers(HeaderUtil.createEntityCreationAlert(applicationName, true, "user", newUser.getLogin()))
 				.body(UserDTO.valueOf(newUser));
 	}
 
@@ -257,12 +257,12 @@ public class UserResource {
 
 		Optional<User> existing = userRepository.findOneByLogin(user.getLogin().toLowerCase());
 		if (existing.isPresent() && !existing.get().getDeleted()) {
-			user.setLoginError("Login name already used!");
+            throw new BadRequestAlertException("Invalid email", "user", "emailUsed");
 		}
 
 		existing = userRepository.findOneByEmailIgnoreCase(user.getEmail());
 		if (existing.isPresent() && !existing.get().getDeleted()) {
-			user.setEmailError("Email is already in use!");
+            throw new BadRequestAlertException("Invalid email", "user", "emailUsed");
 		}
 
         if (new EmailValidator().isValid(user.getEmail(), null)) {
@@ -283,7 +283,7 @@ public class UserResource {
 	public ResponseEntity<Void> deleteUser(@PathVariable String jhiUserId) {
 		LOG.debug("REST request to delete user {}", jhiUserId);
 		userService.clearUser(jhiUserId);
-		return ResponseEntity.ok().headers(HeaderUtil.createAlert(applicationName, "userManagement.deleted", jhiUserId))
+		return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, "user", jhiUserId))
 				.build();
 	}
 

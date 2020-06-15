@@ -79,7 +79,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     public ResponseEntity<Problem> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @Nonnull NativeWebRequest request) {
         BindingResult result = ex.getBindingResult();
         List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
-            .map(f -> new FieldErrorVM(f.getObjectName(), f.getField(), f.getCode()))
+            .map(f -> new FieldErrorVM(f.getObjectName(), f.getField(), f.getCode() != null ? f.getCode().toLowerCase() : f.getCode()))
             .collect(Collectors.toList());
 
         Problem problem = Problem.builder()
