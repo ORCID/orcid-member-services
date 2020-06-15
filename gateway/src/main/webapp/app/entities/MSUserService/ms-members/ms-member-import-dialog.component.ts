@@ -46,9 +46,9 @@ export class MSMemberImportDialogComponent {
     var f = this.currentFile.item(0);
     this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
       if (event instanceof HttpResponse) {
-        var body = event.body;
+        const body = event.body;
         this.csvErrors = JSON.parse(body.toString());
-        if (this.csvErrors.length == 0) {
+        if (this.csvErrors.length === 0) {
           this.eventManager.broadcast({
             name: 'msMemberListModification',
             content: 'New member uploaded'
