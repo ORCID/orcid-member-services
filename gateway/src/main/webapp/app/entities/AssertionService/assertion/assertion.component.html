@@ -14,13 +14,13 @@
                 Generate report
                 </span>
             </button>
-            <button id="jh-upload-entities" class="btn btn-primary float-right jh-upload-entities upload-assertions ml-1" [routerLink]="['/', 'assertions', { outlets: { popup: 'import'} }]">
+            <button id="jh-upload-entities" class="btn btn-primary float-right jh-upload-entities upload-assertions ml-1" [routerLink]="['/', 'assertion', { outlets: { popup: 'import'} }]">
                 <fa-icon [icon]="faFileImport"></fa-icon>
                 <span  jhiTranslate="gatewayApp.assertionServiceAssertion.home.uploadLabel">
                 Import affiliations from CSV
                 </span>
             </button>
-            <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-assertion ml-1" [routerLink]="['/assertions/new']">
+            <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-assertion ml-1" [routerLink]="['/assertion/new']">
                 <fa-icon [icon]="'plus'"></fa-icon>
                 <span  jhiTranslate="gatewayApp.assertionServiceAssertion.home.createLabel">
                 Add affiliation
@@ -52,7 +52,7 @@
             <tr *ngFor="let assertion of assertions ;trackBy: trackId">
                 <td>{{assertion.email}}</td>
                 <td>
-                    <a [routerLink]="['/assertions', assertion.id, 'view' ]">{{assertion.orgName}}: <span *ngIf="assertion.orgCity">{{assertion.orgCity}}</span><span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCountry">, {{assertion.orgCountry}}</span></a><br>
+                    <a [routerLink]="['/assertion', assertion.id, 'view' ]">{{assertion.orgName}}: <span *ngIf="assertion.orgCity">{{assertion.orgCity}}</span><span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCountry">, {{assertion.orgCountry}}</span></a><br>
                     <span *ngIf="assertion.startYear">{{assertion.startYear}}</span><span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startDay">-{{assertion.startDay}}</span>
                     <span *ngIf="assertion.startYear">&nbsp;to&nbsp;</span>
                     <span *ngIf="assertion.endYear">{{assertion.endYear}}</span><span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endDay">-{{assertion.endDay}} </span>
@@ -66,13 +66,13 @@
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
-                                [routerLink]="['/assertions', assertion.id, 'edit']"
+                                [routerLink]="['/assertion', assertion.id, 'edit']"
                                 class="btn btn-primary btn-sm ml-1">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', 'assertions', { outlets: { popup: assertion.id + '/delete'} }]"
+                                [routerLink]="['/', 'assertion', { outlets: { popup: assertion.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm ml-1">

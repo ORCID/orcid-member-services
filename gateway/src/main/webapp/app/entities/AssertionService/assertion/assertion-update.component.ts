@@ -169,8 +169,8 @@ export class AssertionUpdateComponent implements OnInit {
         this.editForm.get(['deletedFromORCID']).value != null
           ? moment(this.editForm.get(['deletedFromORCID']).value, DATE_TIME_FORMAT)
           : undefined,
-      status: this.editForm.get(['status']).value,
-      ownerId: this.editForm.get(['ownerId']).value
+      status: this.editForm.get(['status']) ? this.editForm.get(['status']).value : '',
+      ownerId: this.editForm.get(['ownerId']) ? this.editForm.get(['ownerId']).value : ''
     };
   }
 
