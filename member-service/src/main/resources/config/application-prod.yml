@@ -15,9 +15,9 @@
 
 logging:
   level:
-    ROOT: INFO
-    org.orcid.member: INFO
-    io.github.jhipster: INFO
+    ROOT: DEBUG
+    org.orcid.member: DEBUG
+    io.github.jhipster: DEBUG
 
 eureka:
   instance:
