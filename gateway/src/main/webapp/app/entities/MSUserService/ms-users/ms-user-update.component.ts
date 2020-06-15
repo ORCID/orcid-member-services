@@ -35,7 +35,7 @@ export class MSUserUpdateComponent implements OnInit {
     lastModifiedDate: []
   });
 
-  membersList: IMSMember[];
+  membersList = [] as IMSMember[];
 
   constructor(
     protected jhiAlertService: JhiAlertService,
