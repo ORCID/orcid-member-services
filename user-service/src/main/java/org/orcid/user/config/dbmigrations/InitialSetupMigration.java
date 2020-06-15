@@ -37,15 +37,15 @@ public class InitialSetupMigration {
         userAuthority.setName(AuthoritiesConstants.USER);
 
         User adminUser = new User();
-        adminUser.setId("admin@localhost");
-        adminUser.setLogin("admin");
+        adminUser.setId("admin@orcid.org");
+        adminUser.setLogin("admin@orcid.org");
         adminUser.setPassword("$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC");
         adminUser.setFirstName("admin");
         adminUser.setLastName("Administrator");
-        adminUser.setEmail("admin@localhost");
+        adminUser.setEmail("admin@orcid.org");
         adminUser.setActivated(true);
         adminUser.setLangKey("en");
-        adminUser.setCreatedBy("admin@localhost");
+        adminUser.setCreatedBy("admin@orcid.org");
         adminUser.setCreatedDate(Instant.now());
         adminUser.getAuthorities().add(adminAuthority.getName());
         adminUser.getAuthorities().add(userAuthority.getName());
