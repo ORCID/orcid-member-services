@@ -10,6 +10,14 @@
     },
     "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
     "validation": "Validation error on the server.",
+    "email": "Email is not a valid format",
+    "size": "Does not meet min/max size requirements!",
+    "idused": "It cannot be eliminated!. It has relationship with other elements.",
+    "pattern": "This field can only contain letters, digits and e-mail addresses.",
+    "invalidUrl": "The url is invalid",
+    "disambiguationSource": "Organization source can not be empty.",
+    "emailUsed": "That email is already registered",
+    "validation": "Validation error on the server.",
     "memberNotFound": "Member not found with salesForceId: {{ params }} "
   }
 }

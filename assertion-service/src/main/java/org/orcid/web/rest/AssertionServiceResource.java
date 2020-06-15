@@ -306,8 +306,8 @@ public class AssertionServiceResource {
         if (StringUtils.isBlank(assertion.getDisambiguatedOrgId())) {
             throw new IllegalArgumentException("disambiguated-organization-identifier must not be null");
         }
-        if (StringUtils.isBlank(assertion.getDisambiguationSource())) {
-            throw new IllegalArgumentException("disambiguation-source must not be null");
+        if (assertion.getDisambiguationSource() == null || StringUtils.isBlank(assertion.getDisambiguationSource())) {
+           throw new BadRequestAlertException("disambiguation-source must not be null", "member", "disambiguationSource");
         }
         assertion.setUrl(validateUrl(assertion.getUrl()));
     }
@@ -323,7 +323,7 @@ public class AssertionServiceResource {
             }
 
             if (!valid) {
-            	throw new IllegalArgumentException("url is invalid");
+                throw new BadRequestAlertException("Url is invalid", "member", "invalidUrl");
             }
         }
         return url;

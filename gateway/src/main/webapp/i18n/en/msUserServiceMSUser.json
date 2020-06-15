@@ -38,10 +38,15 @@
       "createdDate": "Created",
       "lastModifiedBy": "Last Modified By",
       "lastModifiedDate": "Last Modified"
+    },
+    "userDTO": {
+      "login": "email",
+      "firstName": "first name",
+      "lastName": "last name"
     }
   },
-  "msUserServiceApp": {
-    "msUserServiceMSUser": {
+  "userServiceApp": {
+    "user": {
       "created": "A new user was created with ID {{ param }}",
       "updated": "User {{ param }} was updated successfully",
       "deleted": "User {{ param }} was deleted successfully"

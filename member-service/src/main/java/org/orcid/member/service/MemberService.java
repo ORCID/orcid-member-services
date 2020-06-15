@@ -78,14 +78,14 @@ public class MemberService {
 
 	public Member createMember(Member member) {
 		if (member.getId() != null) {
-			throw new BadRequestAlertException("A new member cannot already have an ID", "Member", "idexists");
+			throw new BadRequestAlertException("A new member cannot already have an ID", "member", "idexists");
 		}
 		Optional<Member> optional = memberRepository.findBySalesforceId(member.getSalesforceId());
 		if (optional.isPresent()) {
-			throw new BadRequestAlertException("A member with that salesforce id already exists", "Member", "idexists");
+			throw new BadRequestAlertException("A member with that salesforce id already exists", "member", "idexists");
 		}
 		if (!MemberValidator.validate(member)) {
-			throw new BadRequestAlertException("Member invalid", "Member", "invalid");
+			throw new BadRequestAlertException("Member invalid", "member", "invalid");
 		}
 
 		if (member.getCreatedBy() == null) {
@@ -103,18 +103,18 @@ public class MemberService {
 
 	public Member updateMember(Member member) {
 		if (member.getId() == null) {
-			throw new BadRequestAlertException("Invalid id", "Member", "idnull");
+			throw new BadRequestAlertException("Invalid id", "member", "idnull");
 		}
 
 		Optional<Member> optional = memberRepository.findById(member.getId());
 		if (!optional.isPresent()) {
-			throw new BadRequestAlertException("Invalid id", "Member", "idunavailable");
+			throw new BadRequestAlertException("Invalid id", "member", "idunavailable");
 		}
 
 		if (!MemberValidator.validate(member)) {
 			// what to do here? return member object with errors for ui? something
 			// consistent
-			throw new BadRequestAlertException("Invalid member", "Member", null);
+			throw new BadRequestAlertException("Invalid member", "member", null);
 		}
 
 		Instant now = Instant.now();
@@ -162,13 +162,13 @@ public class MemberService {
 	public void deleteMember(String id) {
 		Optional<Member> optional = memberRepository.findById(id);
 		if (!optional.isPresent()) {
-			throw new BadRequestAlertException("Invalid id", "Member", "idunavailable");
+			throw new BadRequestAlertException("Invalid id", "member", "idunavailable");
 		}
 
 		List<MemberServiceUser> usersBelongingToMember = userService
 				.getUsersBySalesforceId(optional.get().getSalesforceId());
 		if (usersBelongingToMember != null && !usersBelongingToMember.isEmpty()) {
-			throw new BadRequestAlertException("Unable to delete Member, users still exist for member", "Member",
+			throw new BadRequestAlertException("Unable to delete Member, users still exist for member", "member",
 					"idused");
 		}
 
