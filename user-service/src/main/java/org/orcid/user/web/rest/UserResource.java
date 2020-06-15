@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
@@ -30,6 +31,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -156,7 +158,7 @@ public class UserResource {
 
 	/**
 	 * Gets a list of all roles.
-	 * 
+	 *
 	 * @return a string list of all roles.
 	 */
 	@GetMapping("/users/authorities")
@@ -262,6 +264,11 @@ public class UserResource {
 		if (existing.isPresent() && !existing.get().getDeleted()) {
 			user.setEmailError("Email is already in use!");
 		}
+
+        if (new EmailValidator().isValid(user.getEmail(), null)) {
+            user.setEmailError("Email is invalid!");
+        }
+
 		return isOk;
 	}
 

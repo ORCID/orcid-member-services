@@ -8,6 +8,27 @@
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.email" for="field_login">Login</label>
                     <input type="text" class="form-control" name="login" id="field_login"
                            formControlName="login"/>
+
+                    <div *ngIf="(editForm.invalid && editForm.touched) || editForm.dirty">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('login').errors && editForm.get('login').errors.required" jhiTranslate="entity.validation.required">
+                            This field is required.
+                        </small>
+
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('login').errors && editForm.get('login').errors.maxlength" jhiTranslate="entity.validation.maxlength"
+                               [translateValues]="{max: 50}">
+                            This field cannot be longer than 50 characters.
+                        </small>
+
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('login').errors
+                               && (editForm.get('login').errors.email || editForm.get('login').errors.invalidEmail)"
+                               jhiTranslate="entity.validation.email">
+                            Please provide a valid email address.
+                        </small>
+                    </div>
+
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.firstName" for="field_firstName">First Name</label>
