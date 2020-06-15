@@ -16,7 +16,7 @@
     "pattern": "This field can only contain letters, digits and e-mail addresses.",
     "invalidUrl": "The url is invalid",
     "disambiguationSource": "Organization source can not be empty.",
-    "emailUsed": "That email is already registered"
+    "emailUsed": "That email is already registered",
     "validation": "Validation error on the server.",
     "memberNotFound": "Member not found with salesForceId: {{ params }} "
   }
