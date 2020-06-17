@@ -4,10 +4,15 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 import { faAddressCard, faUniversity } from '@fortawesome/free-solid-svg-icons';
-
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { VERSION } from 'app/app.constants';
-import { JhiLanguageHelper, AccountService, LoginModalService, LoginService } from 'app/core';
+import { JhiLanguageHelper, AccountService, LoginModalService, LoginService, Account } from 'app/core';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service.ts';
+import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
+
+type EntityResponseType = HttpResponse<IMSMember>;
 
 @Component({
   selector: 'jhi-navbar',
@@ -21,6 +26,11 @@ export class NavbarComponent implements OnInit {
   swaggerEnabled: boolean;
   modalRef: NgbModalRef;
   version: string;
+  member$: Observable<EntityResponseType>;
+  organizationName: string;
+  memberCallDone: boolean;
+  account: Account;
+  userName: string;
 
   faAddressCard = faAddressCard;
   faUniversity = faUniversity;
@@ -33,6 +43,7 @@ export class NavbarComponent implements OnInit {
     private accountService: AccountService,
     private loginModalService: LoginModalService,
     private profileService: ProfileService,
+    private memberService: MSMemberService,
     private router: Router
   ) {
     this.version = VERSION ? 'v' + VERSION : '';
@@ -63,12 +74,51 @@ export class NavbarComponent implements OnInit {
     return this.accountService.isAuthenticated();
   }
 
+  hasRoleUser() {
+    return this.accountService.hasAuthority('ROLE_USER');
+  }
+
+  getOrganizationName() {
+    if (!this.isAuthenticated()) {
+      return null;
+    } else if (!this.accountService.getSalesforceId()) {
+      return null;
+    }
+    if (!this.memberCallDone && this.isAuthenticated() && this.hasRoleUser()) {
+      this.memberCallDone = true;
+      this.memberService
+        .find(this.accountService.getSalesforceId())
+        .toPromise()
+        .then(
+          (res: HttpResponse<IMSMember>) => {
+            if (res.body) {
+              this.organizationName = ' | ' + res.body.clientName;
+            }
+            return this.organizationName;
+          },
+          (res: HttpErrorResponse) => {
+            console.error('Error when getting org name: ' + res.error);
+            return null;
+          }
+        );
+    }
+    return this.organizationName;
+  }
+
+  getUserName() {
+    // return this.isAuthenticated() ? this.userName : null;
+    return this.isAuthenticated() ? this.accountService.getUserName() : null;
+  }
+
   login() {
     this.modalRef = this.loginModalService.open();
   }
 
   logout() {
     this.collapseNavbar();
+    this.organizationName = null;
+    this.memberCallDone = false;
+    this.userName = null;
     this.loginService.logout();
     this.router.navigate(['']);
   }
