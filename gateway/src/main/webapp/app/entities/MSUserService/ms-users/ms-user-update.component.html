@@ -60,7 +60,7 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId" for="field_salesforceId">Salesforce Id</label>
                     <select  *ngIf="membersList.length  > 0" class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
-                        <option *ngFor="let member of membersList | keyvalue" [ngValue]="member.key">{{member.value}}</option>
+                      <option *ngFor="let member of membersList" [ngValue]="member.salesforceId">{{member.clientName}}</option>
                     </select>
                     <div *ngIf="(editForm.get('salesforceId').invalid && editForm.get('salesforceId').touched) || editForm.get('salesforceId').dirty">
                         <small class="form-text text-danger"
