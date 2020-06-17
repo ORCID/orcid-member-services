@@ -1,3 +1,11 @@
+ORCID Member Services is a new suite of tools intended to help organizations make the most of their ORCID membership. This application is currently under development and has not yet been released.
+
+The first phase of development includes features that simplify the process of posting affiliation information (employment, education, etc) to researchers’ ORCID records. 
+
+Project tasks are managed in Trello:
+- Current development tasks: https://trello.com/b/a8Cxpwqe/member-services-current-development
+- Release notes: https://trello.com/b/9Xugawlx/member-services-release-notes-2020
+
 # Development setup
 
 ## Prerequisites
