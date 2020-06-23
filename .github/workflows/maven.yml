@@ -35,5 +35,7 @@ jobs:
         node-version: 10.16.0
     - name: Install dependencies
       run: npm install
+      working-directory: ./gateway
     - name: Build
       run: npm run webpack:qa:main
+      working-directory: ./gateway
