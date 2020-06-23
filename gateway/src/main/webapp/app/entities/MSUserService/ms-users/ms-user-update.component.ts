@@ -52,10 +52,12 @@ export class MSUserUpdateComponent implements OnInit {
       this.updateForm(msUser);
     });
     this.editForm.disable();
+
     this.msMemberService.allMembers$.subscribe(res => {
       if (res.body) {
+        this.membersList = [];
         res.body.forEach((msMember: IMSMember) => {
-          this.membersList[msMember.salesforceId] = msMember.clientName;
+          this.membersList.push(msMember);
         });
         if (this.membersList.length > 0) {
           this.editForm.enable();
