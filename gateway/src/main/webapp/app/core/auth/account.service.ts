@@ -113,4 +113,29 @@ export class AccountService {
   getImageUrl(): string {
     return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
   }
+
+  getUserName(): string {
+    let userName: string;
+
+    if (this.isIdentityResolved()) {
+      if (this.userIdentity.firstName) {
+        userName = this.userIdentity.firstName;
+      }
+      if (this.userIdentity.lastName) {
+        if (userName) {
+          userName = userName + ' ' + this.userIdentity.lastName;
+        } else {
+          userName = this.userIdentity.lastName;
+        }
+      }
+      if (userName == null) {
+        userName = this.userIdentity.email;
+      }
+    }
+    return userName;
+  }
+
+  getSalesforceId(): string {
+    return this.isIdentityResolved() ? this.userIdentity.salesforceId : null;
+  }
 }
