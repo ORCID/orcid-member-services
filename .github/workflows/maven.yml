@@ -21,10 +21,19 @@ jobs:
       with:
         java-version: 11
     - name: Build Gateway service
-      run: mvn -B verify --file gateway/pom.xml -Dangular.env=qa -Pprod
+      run: mvn -B verify -Dangular.env=qa -Pprod --file gateway/pom.xml 
     - name: Build User service
-      run: mvn -B verify --file user-service/pom.xml -Pprod
+      run: mvn -B verify  -Pprod --file user-service/pom.xml
     - name: Build Assertion service
-      run: mvn -B verify --file assertion-service/pom.xml -Pprod
+      run: mvn -B verify -Pprod --file assertion-service/pom.xml
     - name: Build Member service
-      run: mvn -B verify --file member-service/pom.xml -Pprod
+      run: mvn -B verify -Pprod --file member-service/pom.xml
+    - uses: actions/checkout@v1
+    - name: Use Node.js 10.16.0
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.16.0
+    - name: Install dependencies
+      run: npm install
+    - name: Build
+      run: npm run webpack:qa:main
