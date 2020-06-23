@@ -21,10 +21,10 @@ jobs:
       with:
         java-version: 11
     - name: Build Gateway service
-      run: mvn -B verify --file gateway/pom.xml -Dangular.env=qa
+      run: mvn -B verify --file gateway/pom.xml -Dangular.env=qa -Pprod
     - name: Build User service
-      run: mvn -B verify --file user-service/pom.xml
+      run: mvn -B verify --file user-service/pom.xml -Pprod
     - name: Build Assertion service
-      run: mvn -B verify --file assertion-service/pom.xml
+      run: mvn -B verify --file assertion-service/pom.xml -Pprod
     - name: Build Member service
-      run: mvn -B verify --file member-service/pom.xml
+      run: mvn -B verify --file member-service/pom.xml -Pprod
