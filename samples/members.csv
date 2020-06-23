@@ -1,3 +1,1 @@
-salesforce_id,parent_salesforce_id,client_id,client_name,is_consortium_lead,assertion_services_enabled
-salesforceid1,parentsalesforceid1,APP-0000000000000001,Orcid One,false,false
-salesforceid2,parentsalesforceid2,APP-0000000000000002,Orcid Two,false,false
+salesforceId,parentSalesforceId,clientName,clientId,isConsortiumLead,assertionServiceEnabled0012i000002pwQ3AAI,0012i000002pwQ3AAI,Org 2 Consortium Member,APP-P0NH3953LOQ08TZ4,FALSE,TRUE0012i000002pwQ5AAI,0012i000002pwQ3AAI,Org 3 Consortium Member,APP-RYCDGU3WZY5ZSCI2,FALSE,TRUE
