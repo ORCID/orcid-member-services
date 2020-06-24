@@ -266,6 +266,7 @@ public class UserDTO {
 		userDTO.setLastModifiedDate(user.getLastModifiedDate());
 		userDTO.setAuthorities(user.getAuthorities());
 		userDTO.setSalesforceId(user.getSalesforceId());
+		userDTO.setMainContact(user.getMainContact());
 		userDTO.setId(user.getId());
 		return userDTO;
 	}
@@ -366,6 +367,6 @@ public class UserDTO {
 				+ '\'' + ", email='" + email + '\'' + ", imageUrl='" + imageUrl + '\'' + ", activated=" + activated
 				+ ", langKey='" + langKey + '\'' + ", createdBy=" + createdBy + ", createdDate=" + createdDate
 				+ ", lastModifiedBy='" + lastModifiedBy + '\'' + ", lastModifiedDate=" + lastModifiedDate
-				+ ", authorities=" + authorities + "}";
+				+ ", authorities=" + authorities + ", mainContact='" + mainContact + '\'' + "}";
 	}
 }
