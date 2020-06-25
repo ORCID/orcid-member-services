@@ -247,6 +247,7 @@ public class UserDTO {
 		user.setLangKey(this.getLangKey());
 		user.setActivated(this.isActivated());
 		user.setAuthorities(this.getAuthorities());
+		user.setMainContact(user.getMainContact());
 		user.setId(this.getId());
 		return user;
 	}
@@ -266,6 +267,7 @@ public class UserDTO {
 		userDTO.setLastModifiedDate(user.getLastModifiedDate());
 		userDTO.setAuthorities(user.getAuthorities());
 		userDTO.setSalesforceId(user.getSalesforceId());
+		userDTO.setMainContact(user.getMainContact());
 		userDTO.setId(user.getId());
 		return userDTO;
 	}
@@ -366,6 +368,6 @@ public class UserDTO {
 				+ '\'' + ", email='" + email + '\'' + ", imageUrl='" + imageUrl + '\'' + ", activated=" + activated
 				+ ", langKey='" + langKey + '\'' + ", createdBy=" + createdBy + ", createdDate=" + createdDate
 				+ ", lastModifiedBy='" + lastModifiedBy + '\'' + ", lastModifiedDate=" + lastModifiedDate
-				+ ", authorities=" + authorities + "}";
+				+ ", authorities=" + authorities + ", mainContact='" + mainContact + '\'' + "}";
 	}
 }
