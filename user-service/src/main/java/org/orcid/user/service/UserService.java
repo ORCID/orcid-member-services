@@ -203,7 +203,7 @@ public class UserService {
 					user.setLastName(userDTO.getLastName());
 					user.setEmail(userDTO.getEmail().toLowerCase());
 					user.setImageUrl(userDTO.getImageUrl());
-					//user.setActivated(userDTO.isActivated());  //commented out  because activated flag is set from a different method.
+					//user.setActivated(userDTO.isActivated());
 					user.setLangKey(userDTO.getLangKey());
 					user.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId()));
 					userRepository.save(user);
