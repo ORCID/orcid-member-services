@@ -100,6 +100,14 @@ public class AssertionService {
 		});
 		return assertions;
 	}
+	
+        public void deleteAllBySalesforceId(String salesforceId) {
+            List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, SORT);
+            assertions.forEach(a -> {
+                assertionsRepository.deleteById(a.getId());
+            });
+            return;
+       }	
 
 	public Assertion findById(String id) {
 	        AssertionServiceUser user = assertionsUserService.getLoggedInUser();

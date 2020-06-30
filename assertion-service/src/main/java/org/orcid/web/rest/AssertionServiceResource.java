@@ -243,6 +243,14 @@ public class AssertionServiceResource {
 
         return ResponseEntity.ok().body(responseData.toString());
     }
+    
+    @DeleteMapping("/assertion/delete/{salesforceId}")
+    public ResponseEntity<String> deleteAssertionsForSalesforceId(@PathVariable String salesforceId) throws JAXBException {
+        assertionsService.deleteAllBySalesforceId(salesforceId); 
+        JSONObject responseData = new JSONObject();
+        responseData.put("deleted", true);
+        return ResponseEntity.ok().body(responseData.toString());
+    }
 
     @PostMapping("/id-token")
     public ResponseEntity<Void> storeIdToken(@RequestBody ObjectNode json) throws ParseException {
