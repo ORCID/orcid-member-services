@@ -44,8 +44,8 @@
                 <td>{{msUser.lastName}}</td>
                 <td class="text-center">
                     <span class="sr-only">{{msUser.mainContact}}</span>
-                    <fa-icon aria-hidden="true" *ngIf="msUser.mainContact=='true'" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
-                    <fa-icon aria-hidden="true" *ngIf="msUser.mainContact!='true'" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                    <fa-icon aria-hidden="true" *ngIf="msUser.mainContact" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                    <fa-icon aria-hidden="true" *ngIf="!msUser.mainContact" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
                 </td>
                 <td>{{msMemberService.orgNameMap[msUser.salesforceId]}}</td>
                 <td>{{msUser.lastModifiedDate | date:'medium'}}</td>
