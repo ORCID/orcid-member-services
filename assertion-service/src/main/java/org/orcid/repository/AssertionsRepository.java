@@ -22,11 +22,14 @@ public interface AssertionsRepository extends MongoRepository<Assertion, String>
     @Query("{salesforceId: ?0}")    
     Page<Assertion> findBySalesforceId(String salesforceId, Pageable pageable);
     
+    @Query("{salesforceId: ?0}")    
+    List<Assertion> findBySalesforceId(String salesforceId, Sort sort);
+    
     @Query("{putCode: null}")
     List<Assertion> findAllToCreate();
 
     @Query("{updated: true, putCode: {$ne:null}}")
     List<Assertion> findAllToUpdate();
 
-	List<Assertion> findByEmail(String email);
+    List<Assertion> findByEmail(String email);
 }
