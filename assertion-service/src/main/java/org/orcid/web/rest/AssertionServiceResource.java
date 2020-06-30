@@ -7,6 +7,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,8 +63,7 @@ import io.github.jhipster.web.util.PaginationUtil;
 @RestController
 @RequestMapping("/api")
 public class AssertionServiceResource {
-
-	private static final Logger LOG = LoggerFactory.getLogger(AssertionServiceResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AssertionServiceResource.class);
 
     private static final String ENTITY_NAME = "affiliation";
 
@@ -89,6 +90,8 @@ public class AssertionServiceResource {
     // "ftp"
 
     UrlValidator urlValidator = new OrcidUrlValidator(urlValschemes);
+    
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY_MM_dd");
 
     @GetMapping("/assertions")
     public ResponseEntity<List<Assertion>> getAssertions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder)
@@ -117,8 +120,7 @@ public class AssertionServiceResource {
 
     @GetMapping("/assertion/links")
     public void generateLinks(HttpServletResponse response) throws IOException, JSONException {
-        String loggedInUserId = SecurityUtils.getCurrentUserLogin().get();
-        final String fileName = loggedInUserId + '_' +  System.currentTimeMillis() + "_report.csv";
+        final String fileName = dateFormat.format(new Date()) + "_orcid_permission_links.csv";
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         response.setHeader("Content-Type", "text/csv");
         response.setHeader("filename", fileName);
@@ -284,8 +286,7 @@ public class AssertionServiceResource {
 
     @GetMapping(path = "/assertion/report")
     public void generateReport(HttpServletResponse response) throws IOException {
-        final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
-        final String fileName = userLogin + '_' +  System.currentTimeMillis() + "_report.csv";
+        final String fileName = dateFormat.format(new Date()) + "_orcid_report.csv";
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         response.setHeader("Content-Type", "text/csv");
         response.setHeader("filename", fileName);
