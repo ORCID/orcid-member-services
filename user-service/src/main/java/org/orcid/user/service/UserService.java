@@ -203,7 +203,7 @@ public class UserService {
 					user.setLastName(userDTO.getLastName());
 					user.setEmail(userDTO.getEmail().toLowerCase());
 					user.setImageUrl(userDTO.getImageUrl());
-					user.setActivated(userDTO.isActivated());
+					//user.setActivated(userDTO.isActivated());  //commented out  because activated flag is set from a different method.
 					user.setLangKey(userDTO.getLangKey());
 					user.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId()));
 					userRepository.save(user);
@@ -285,7 +285,7 @@ public class UserService {
 	public void removeAuthorityFromUser(String id, String authority) {
 		Optional<User> existing = getUserWithAuthorities(id);
 		if (!existing.isPresent()) {
-			throw new BadRequestAlertException("User not present", "user", null);
+			throw new BadRequestAlertException("User not present " + id, "user", null);
 		}
 
 		User user = existing.get();
