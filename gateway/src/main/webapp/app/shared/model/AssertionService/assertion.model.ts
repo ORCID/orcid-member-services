@@ -80,8 +80,8 @@ export class Assertion implements IAssertion {
     public updatedInORCID?: boolean,
     public url?: string
   ) {
-    this.addedToORCID = this.addedToORCID || false;
-    this.updated = this.updated || false;
-    this.updatedInORCID = this.updatedInORCID || false;
+    this.addedToORCID = this.addedToORCID || null;
+    this.updated = this.updated || null;
+    this.updatedInORCID = this.updatedInORCID || null;
   }
 }
