@@ -23,15 +23,14 @@
     </div>
 </form>
 <div class="modal-body" *ngIf="csvErrors && csvErrors.length > 0">
-    <p jhiTranslate="gatewayApp.assertionServiceAssertion.import.errors.label">Please fix the following errors</p>
+    <p jhiTranslate="gatewayApp.assertionServiceAssertion.import.errors.label">Oops! There was a problem processing your data. Pleases fix the errors below and try again</p>
     <table>
     	<thead>
-    		<th>Index</th>
-    		<th>Error</th>
+    		<th>Errors</th>
     	</thead>
     	<tbody>
     		<tr *ngFor="let error of csvErrors">
-        		<td>{{error['index']}}</td>
+        		<td>Row {{error['index']}}</td>
         		<td>{{error['message']}}</td>
        		</tr>
     	</tbody>
