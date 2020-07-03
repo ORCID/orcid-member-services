@@ -20,6 +20,7 @@ import { emailValidator } from 'app/shared/util/app-validators';
 })
 export class MSUserUpdateComponent implements OnInit {
   isSaving: boolean;
+  isExistentMember: boolean;
 
   editForm = this.fb.group({
     id: [],
@@ -48,6 +49,7 @@ export class MSUserUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.isSaving = false;
+    this.isExistentMember = false;
     this.activatedRoute.data.subscribe(({ msUser }) => {
       this.updateForm(msUser);
     });
@@ -80,10 +82,18 @@ export class MSUserUpdateComponent implements OnInit {
       lastModifiedBy: msUser.lastModifiedBy,
       lastModifiedDate: msUser.lastModifiedDate != null ? msUser.lastModifiedDate.format(DATE_TIME_FORMAT) : null
     });
+    if (msUser.salesforceId) {
+      this.isExistentMember = true;
+    }
   }
 
   previousState() {
     window.history.back();
+  }
+
+  disableSalesForceIdDD() {
+    console.log('!!!!! existent member: ', this.isExistentMember);
+    return this.isExistentMember;
   }
 
   save() {
