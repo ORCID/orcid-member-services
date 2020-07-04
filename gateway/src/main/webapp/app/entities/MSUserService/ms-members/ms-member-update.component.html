@@ -49,6 +49,10 @@
                                *ngIf="editForm.get('clientId').errors.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
+                        <small class="form-text text-danger"
+                               *ngIf="!editForm.validClientId" >
+                        Client Id should be in the format XXXX-XXXX-XXXX-XXXX or APP-XXXXXXXXXXXXXXXX. X can be a digit or an uppercase character."
+                        </small>
                     </div>
                 </div>
                 <div class="form-group">
