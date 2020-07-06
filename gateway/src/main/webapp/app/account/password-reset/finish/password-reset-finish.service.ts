@@ -9,6 +9,6 @@ export class PasswordResetFinishService {
   constructor(private http: HttpClient) {}
 
   save(keyAndPassword: any): Observable<any> {
-    return this.http.post(SERVER_API_URL + 'services/oauth2service/api/account/reset-password/finish', keyAndPassword);
+    return this.http.post(SERVER_API_URL + 'services/userservice/api/account/reset-password/finish', keyAndPassword);
   }
 }

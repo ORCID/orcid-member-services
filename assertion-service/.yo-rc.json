@@ -1,0 +1,44 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "org.orcid",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "6.1.2",
+    "applicationType": "microservice",
+    "baseName": "assertionservice",
+    "packageName": "org.orcid",
+    "packageFolder": "org/orcid",
+    "serverPort": "8092",
+    "authenticationType": "uaa",
+    "uaaBaseName": "UserService",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": false,
+    "websocket": false,
+    "databaseType": "mongodb",
+    "devDatabaseType": "mongodb",
+    "prodDatabaseType": "mongodb",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "N2E3MjlhMTFhMmQ0ODFmMzlhZDIwMWNjMjVlYTQ3YmY3YjcyMDAyZWZjZmUzZGJmYzA5NWY5Mjk3NjQ2N2Q2NmRiNDhlYzMyNDA1ZjQyNmQ4NjIxMGM1MjQ2ODIxYjkyM2E2YWY0ZWViODg0Yzk2MmIxMDUxMTY0YjA2ZjdjYWM=",
+    "embeddableLaunchScript": false,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "clientPackageManager": "npm",
+    "nativeLanguage": "en",
+    "languages": [
+      "en",
+      "es"
+    ],
+    "blueprints": [],
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}

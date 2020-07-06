@@ -7,9 +7,9 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entidades",
-        "userSettingsServiceUserSettings": "User Settings",
-        "userSettingsServiceMemberSettings": "Member Settings",
-        "assertionServicesAssertion": "Assertion",
+        "msUserServiceMSUser": "User",
+        "msUserServiceMSMember": "Member",
+        "assertionServiceAssertion": "Assertion",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
@@ -124,16 +124,17 @@
       "maxbytes": "Este campo no puede tener más de {{max}} bytes.",
       "pattern": "Este campo debe seguir el patrón {{pattern}}.",
       "number": "Este campo debe ser un número.",
-      "datetimelocal": "Este campo debe ser una fecha y hora."
+      "datetimelocal": "Este campo debe ser una fecha y hora.",
+      "email": "Porfavor ingrese un email valido."
     }
   },
   "error": {
     "internalServerError": "Error interno en el servidor",
     "server.not.reachable": "Servidor no accesible",
     "url.not.found": "No existe",
-    "NotNull": "¡El campo {{fieldName}} no puede estar vacío!",
-    "Size": "¡El campo {{fieldName}} no cumple con los requisitos de tamaño mínimo/máximo!",
-    "userexists": "¡El nombre de usuario ya estiste!",
+    "notnull": "¡El campo {{fieldName}} no puede estar vacío!",
+    "size": "¡El campo {{fieldName}} no cumple con los requisitos de tamaño mínimo/máximo!",
+    "userexists": "¡El nombre de usuario ya existe!",
     "emailexists": "¡La cuenta de correo ya está en uso!",
     "idexists": "Un/a nuevo/a {{entityName}} no puede tener ID",
     "idnull": "ID inválido"

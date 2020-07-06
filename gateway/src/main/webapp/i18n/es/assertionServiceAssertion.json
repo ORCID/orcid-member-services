@@ -1,0 +1,73 @@
+{
+  "gatewayApp": {
+    "assertionServiceAssertion": {
+      "home": {
+        "title": "Assertions",
+        "createLabel": "Crear nuevo Assertion",
+        "createOrEditLabel": "Crear o editar Assertion",
+        "notFound": "Assertion no encontrada",
+        "uploadLabel": "Subir Assertions",
+        "getLinks": "Obtener links",
+        "generateReport": "Generar reporte"
+      },
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Assertion {{ id }}?",
+        "note": "Esto no borrara el elemento en ORCID, si quieres hacer eso, primero tienes que presionar el boton <b>Borrar de ORCID</b>"
+      },
+      "detail": {
+        "title": "Assertion"
+      },
+      "import": {
+        "title": "Importar Assertions",
+        "label": "Por favor selecciona el archivo CSV a subir",
+        "filePath": "Ruta del archivo",
+        "errors": {
+          "label": "Por favor solucione los siguientes errores"
+        }
+      },
+      "email": "Email",
+      "affiliationSection": "Affiliation Seccion",
+      "departmentName": "Nombre Departamento",
+      "roleTitle": "Rol",
+      "url": "Url",
+      "startYear": "Año de Inicio",
+      "startMonth": "Mes de Inicio",
+      "startDay": "Dia de Inicio",
+      "endYear": "Año Fin",
+      "endMonth": "Mes Fin",
+      "endDay": "Dia Fin",
+      "orgName": "Nombre Org",
+      "orgCountry": "Pais Org",
+      "orgCity": "Ciudad Org",
+      "orgRegion": "Region Org",
+      "disambiguatedOrgId": "Disambiguo Org Id",
+      "disambiguationSource": "Fuente Disambiguo",
+      "externalId": "Id Externo",
+      "externalIdType": "Tipo Id Externo",
+      "externalIdUrl": "Url Id Externo",
+      "putCode": "Put Code",
+      "created": "Creado",
+      "modified": "Modificado",
+      "deletedFromORCID": "Eliminado de ORCID",
+      "sent": "Enviado",
+      "adminId": "Admin Id"
+    },
+    "assertion": {
+      "firstName": "nombre",
+      "lastName": "apellido",
+      "email": "email",
+      "affiliationSection": "tipo de afiliacion",
+      "orgCountry": "pais organizacion",
+      "orgCity": "ciudad organizacion",
+      "orgName": "nombre organizacion",
+      "disambiguatedOrgId": "id organizacion"
+    }
+  },
+  "assertionServiceApp": {
+    "assertionServiceAssertion": {
+      "created": "Un nuevo Assertion ha sido creado con el identificador {{ param }}",
+      "updated": "Un Assertion ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Assertion ha sido eliminado con el identificador {{ param }}"
+    }
+  }
+}

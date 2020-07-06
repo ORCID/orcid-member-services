@@ -5,16 +5,16 @@ import { RouterModule } from '@angular/router';
   imports: [
     RouterModule.forChild([
       {
-        path: 'user-settings',
-        loadChildren: './UserSettingsService/user-settings/user-settings.module#UserSettingsServiceUserSettingsModule'
+        path: 'ms-user',
+        loadChildren: './MSUserService/ms-users/ms-user.module#MSUserServiceMSUserModule'
       },
       {
-        path: 'member-settings',
-        loadChildren: './UserSettingsService/member-settings/member-settings.module#UserSettingsServiceMemberSettingsModule'
+        path: 'ms-member',
+        loadChildren: './MSUserService/ms-members/ms-member.module#MSUserServiceMSMemberModule'
       },
       {
-        path: 'assertions',
-        loadChildren: './AssertionServices/assertion/assertion.module#AssertionServicesAssertionModule'
+        path: 'assertion',
+        loadChildren: './AssertionService/assertion/assertion.module#AssertionServiceAssertionModule'
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

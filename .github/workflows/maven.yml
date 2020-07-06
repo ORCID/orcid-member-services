@@ -21,10 +21,21 @@ jobs:
       with:
         java-version: 11
     - name: Build Gateway service
-      run: mvn -B package --file gateway/pom.xml
-    - name: Build OAuth2 service
-      run: mvn -B package --file oauth2-service/pom.xml
-    - name: Build User Settings service
-      run: mvn -B package --file user-settings-service/pom.xml
+      run: mvn -B verify -Dangular.env=qa -Pprod --file gateway/pom.xml 
+    - name: Build User service
+      run: mvn -B verify  -Pprod --file user-service/pom.xml
     - name: Build Assertion service
-      run: mvn -B package --file assertion-services/pom.xml
+      run: mvn -B verify -Pprod --file assertion-service/pom.xml
+    - name: Build Member service
+      run: mvn -B verify -Pprod --file member-service/pom.xml
+    - uses: actions/checkout@v1
+    - name: Use Node.js 10.16.0
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.16.0
+    - name: Install dependencies
+      run: npm install
+      working-directory: ./gateway
+    - name: Build
+      run: npm run webpack:qa:main
+      working-directory: ./gateway

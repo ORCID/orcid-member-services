@@ -1,0 +1,45 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSMember": {
+      "home": {
+        "title": "Manage members",
+        "createLabel": "Add member",
+        "createOrEditLabel": "Add or edit member",
+        "notFound": "No members to show",
+        "uploadLabel": "Import members from CSV"
+      },
+      "delete": {
+        "question": "Are you sure you want to delete member {{ clientName }}?"
+      },
+      "detail": {
+        "title": "Member details"
+      },
+      "import": {
+        "title": "Import members",
+        "label": "Please select a CSV file to upload",
+        "filePath": "File path",
+        "errors": {
+          "label": "Please fix the following errors"
+        }
+      },
+      "clientId": "Client Id",
+      "clientName": "Member Name",
+      "clientSecret": "Client Secret",
+      "salesforceId": "Salesforce Id",
+      "parentSalesforceId": "Parent Salesforce Id",
+      "isConsortiumLead": "Consortium Lead",
+      "assertionServiceEnabled": "Assertions Enabled",
+      "createdBy": "Created By",
+      "createdDate": "Created",
+      "lastModifiedBy": "Last Modified By",
+      "lastModifiedDate": "Last Modified"
+    }
+  },
+  "memberServiceApp": {
+    "member": {
+      "created": "A new member was created with ID {{ param }}",
+      "updated": "Member {{ param }} was updated successfully",
+      "deleted": "Member {{ param }} was deleted successfully"
+    }
+  }
+}

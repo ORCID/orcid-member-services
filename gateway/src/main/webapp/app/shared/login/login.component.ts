@@ -1,5 +1,5 @@
-import { Component, AfterViewInit, OnInit, Renderer, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { JhiEventManager } from 'ng-jhipster';
@@ -13,7 +13,7 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 })
 export class JhiLoginModalComponent implements AfterViewInit, OnInit {
   authenticationError: boolean;
-  isModal: boolean;
+  isModal = false;
 
   loginForm = this.fb.group({
     username: [''],
@@ -42,7 +42,7 @@ export class JhiLoginModalComponent implements AfterViewInit, OnInit {
       username: '',
       password: ''
     });
-    if (this.isModal) {
+    if (!this.isModal) {
       this.activeModal.dismiss('cancel');
     }
   }
@@ -56,8 +56,8 @@ export class JhiLoginModalComponent implements AfterViewInit, OnInit {
       })
       .then(() => {
         this.authenticationError = false;
-        if (this.isModal) {
-          this.activeModal.dismiss('login success');
+        if (!this.isModal) {
+          this.activeModal.close('login success');
         }
         if (this.router.url === '/register' || /^\/activate\//.test(this.router.url) || /^\/reset\//.test(this.router.url)) {
           this.router.navigate(['']);
@@ -98,6 +98,5 @@ export class JhiLoginModalComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     // We don't show signin in a modal currently
     // Add logic to change isModal here if needed
-    this.isModal = false;
   }
 }
