@@ -1,4 +1,4 @@
-<div>
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <h2 jhiTranslate="settings.title" [translateValues]="{username: settingsForm.get('login').value}" *ngIf="settingsForm.get('login').value">User settings for [<b>{{settingsForm.get('login').value}}</b>]</h2>
@@ -52,28 +52,11 @@
                 <div class="form-group">
                     <label class="form-control-label" for="email" jhiTranslate="global.form.email.label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
-                           formControlName="email">
-                    <div *ngIf="settingsForm.get('email').invalid && (settingsForm.get('email').dirty || settingsForm.get('email').touched)">
-                        <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('email').errors.required" jhiTranslate="global.messages.validate.email.required">
-                            Your email is required.
-                        </small>
-                        <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('email').errors.email" jhiTranslate="global.messages.validate.email.invalid">
-                            Your email is invalid.
-                        </small>
-                        <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('email').errors.minlength" jhiTranslate="global.messages.validate.email.minlength">
-                            Your email is required to be at least 5 characters.
-                        </small>
-                        <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('email').errors.maxlength" jhiTranslate="global.messages.validate.email.maxlength">
-                            Your email cannot be longer than 100 characters.
-                        </small>
-                    </div>
+                           formControlName="email" readonly>
+                    
                 </div>
                 <div class="form-group" *ngIf="languages && languages.length > 0">
-                    <label for="langKey" jhiTranslate="settings.form.language">Language</label>
+                    <label class="form-control-label" for="langKey" jhiTranslate="settings.form.language">Language</label>
                     <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
                         <option *ngFor="let language of languages" [value]="language">{{language | findLanguageFromKey}}</option>
                     </select>

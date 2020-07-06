@@ -10,8 +10,9 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Member Tools",
-        "assertionServicesAssertions": "Assert affiliations",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "assertionServiceAssertions": "Assert affiliations",
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "member": "Member"
       },
       "account": {
         "main": "Account",
@@ -24,8 +25,8 @@
       },
       "admin": {
         "main": "Administration",
-        "userSettingsServiceUserSettings": "Manage users",
-        "userSettingsServiceMemberSettings": "Manage members",
+        "msUserServiceMSUser": "Manage users",
+        "msUserServiceMSMember": "Manage members",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
       "dev": {
@@ -132,15 +133,16 @@
       "pattern": "This field should follow pattern for {{ pattern }}.",
       "number": "This field should be a number.",
       "datetimelocal": "This field should be a date and time.",
-      "patternLogin": "This field can only contain letters, digits and e-mail addresses."
+      "patternLogin": "This field can only contain letters, digits and e-mail addresses.",
+      "email": "Please provide a valid email address."
     }
   },
   "error": {
     "internalServerError": "Internal server error",
     "server.not.reachable": "Server not reachable",
     "url.not.found": "Not found",
-    "NotNull": "Field {{ fieldName }} cannot be empty!",
-    "Size": "Field {{ fieldName }} does not meet min/max size requirements!",
+    "notnull": "Field {{ fieldName }} cannot be empty!",
+    "size": "Field {{ fieldName }} does not meet min/max size requirements!",
     "userexists": "Login name already used!",
     "emailexists": "Email is already in use!",
     "idexists": "A new {{ entityName }} cannot already have an ID",

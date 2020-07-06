@@ -1,7 +1,0 @@
-version: '2'
-services:
-  assertionservices-sonar:
-    image: sonarqube:7.9.1-community
-    ports:
-      - 9001:9000
-      - 9092:9092

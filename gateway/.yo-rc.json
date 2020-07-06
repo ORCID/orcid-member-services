@@ -2,8 +2,7 @@
   "generator-jhipster": {
     "promptValues": {
       "packageName": "org.orcid.gateway",
-      "nativeLanguage": "en",
-      "microservicePath": "../assertion-services"
+      "nativeLanguage": "en"
     },
     "jhipsterVersion": "6.1.2",
     "applicationType": "gateway",
@@ -12,7 +11,7 @@
     "packageFolder": "org/orcid/gateway",
     "serverPort": "8080",
     "authenticationType": "uaa",
-    "uaaBaseName": "Oauth2Service",
+    "uaaBaseName": "UserService",
     "cacheProvider": "ehcache",
     "enableHibernateCache": false,
     "websocket": false,
@@ -36,9 +35,6 @@
     "otherModules": [],
     "enableTranslation": true,
     "nativeLanguage": "en",
-    "languages": [
-      "en",
-      "es"
-    ]
+    "languages": ["en", "es"]
   }
 }

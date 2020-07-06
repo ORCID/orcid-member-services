@@ -1,0 +1,16 @@
+{
+  "name": "assertionservice",
+  "version": "0.0.0",
+  "description": "Description for AssertionService",
+  "private": true,
+  "license": "UNLICENSED",
+  "cacheDirectories": [
+    "node_modules"
+  ],
+  "devDependencies": {
+    "generator-jhipster": "6.1.2"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  }
+}

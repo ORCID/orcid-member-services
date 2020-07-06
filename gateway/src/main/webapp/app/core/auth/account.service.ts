@@ -16,11 +16,11 @@ export class AccountService {
   constructor(private languageService: JhiLanguageService, private sessionStorage: SessionStorageService, private http: HttpClient) {}
 
   fetch(): Observable<HttpResponse<Account>> {
-    return this.http.get<Account>(SERVER_API_URL + 'services/oauth2service/api/account', { observe: 'response' });
+    return this.http.get<Account>(SERVER_API_URL + 'services/userservice/api/account', { observe: 'response' });
   }
 
   save(account: any): Observable<HttpResponse<any>> {
-    return this.http.post(SERVER_API_URL + 'services/oauth2service/api/account', account, { observe: 'response' });
+    return this.http.post(SERVER_API_URL + 'services/userservice/api/account', account, { observe: 'response' });
   }
 
   authenticate(identity) {
@@ -112,5 +112,30 @@ export class AccountService {
 
   getImageUrl(): string {
     return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
+  }
+
+  getUserName(): string {
+    let userName: string;
+
+    if (this.isIdentityResolved()) {
+      if (this.userIdentity.firstName) {
+        userName = this.userIdentity.firstName;
+      }
+      if (this.userIdentity.lastName) {
+        if (userName) {
+          userName = userName + ' ' + this.userIdentity.lastName;
+        } else {
+          userName = this.userIdentity.lastName;
+        }
+      }
+      if (userName == null) {
+        userName = this.userIdentity.email;
+      }
+    }
+    return userName;
+  }
+
+  getSalesforceId(): string {
+    return this.isIdentityResolved() ? this.userIdentity.salesforceId : null;
   }
 }

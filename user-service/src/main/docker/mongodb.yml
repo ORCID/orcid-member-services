@@ -1,0 +1,8 @@
+version: '2'
+services:
+  userservice-mongodb:
+    image: mongo:4.0.10
+    ports:
+      - '27017:27017'
+    # volumes:
+    #     - ~/volumes/jhipster/userservice/mongodb/:/data/db/
