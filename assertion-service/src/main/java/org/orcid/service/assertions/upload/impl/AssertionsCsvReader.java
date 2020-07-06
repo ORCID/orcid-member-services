@@ -7,6 +7,11 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -92,13 +97,17 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
             String startDate = line.get("start-date");
             if (!StringUtils.isBlank(startDate)) {
                 String[] startDateParts = startDate.split("-|/|\\s");
-                a.setStartYear(startDateParts[0]);
-                if (startDateParts.length > 1) {
-                    a.setStartMonth(startDateParts[1]);
-                }
+                if (validDate(startDate, startDateParts[0], line, assertionsUpload)) {
+                    a.setStartYear(startDateParts[0]);
+                    if (startDateParts.length > 1) {
+                        a.setStartMonth(startDateParts[1]);
+                    }
 
-                if (startDateParts.length > 2) {
-                    a.setStartDay(startDateParts[2]);
+                    if (startDateParts.length > 2) {
+                        a.setStartDay(startDateParts[2]);
+                    }
+                } else {
+                    return a;
                 }
             }
         }
@@ -108,13 +117,17 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
             String endDate = line.get("end-date");
             if (!StringUtils.isBlank(endDate)) {
                 String endDateParts[] = endDate.split("-|/|\\s");
-                a.setEndYear(endDateParts[0]);
-                if (endDateParts.length > 1) {
-                    a.setEndMonth(endDateParts[1]);
-                }
+                if (validDate(endDate, endDateParts[0], line, assertionsUpload)) {
+                    a.setEndYear(endDateParts[0]);
+                    if (endDateParts.length > 1) {
+                        a.setEndMonth(endDateParts[1]);
+                    }
 
-                if (endDateParts.length > 2) {
-                    a.setEndDay(endDateParts[2]);
+                    if (endDateParts.length > 2) {
+                        a.setEndDay(endDateParts[2]);
+                    }
+                } else {
+                    return a;
                 }
             }
         }
@@ -172,7 +185,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			String url = validateUrl(line.get("url"));
 			a.setUrl(url);
 		}
-
+		
 		return a;
 	}
 
@@ -223,4 +236,28 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		return encoded.toASCIIString();
 	}
 
+    protected boolean validDate(String date, String year, CSVRecord line, AssertionsUpload assertionsUpload) {
+        DateTimeFormatter[] formatters = {
+            new DateTimeFormatterBuilder().appendPattern("yyyy").parseDefaulting(ChronoField.MONTH_OF_YEAR, 1).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                .toFormatter(),
+            new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
+            new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd").parseStrict().toFormatter() };
+
+        for (DateTimeFormatter formatter : formatters) {
+            try {
+                LocalDate localDate = LocalDate.parse(date, formatter);
+                if (isEmpty(year) || localDate.getYear() == Integer.parseInt(year)) {
+                    return true;
+                }
+            } catch (DateTimeParseException e) {
+            }
+        }
+        assertionsUpload.addError(line.getRecordNumber(), "Invalid date Format. The accepted formats are 'yyyy', 'yyyy-MM' and 'yyyy-MM-dd'");
+        return false;
+    }
+
+    public static boolean isEmpty(String string) {
+        if (string == null || string.trim().isEmpty()) return true;
+        return false;
+    }
 }
