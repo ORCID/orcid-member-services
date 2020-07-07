@@ -28,8 +28,8 @@ class MemberCsvReaderTest {
 		assertTrue(one.getAssertionServiceEnabled());
 		assertFalse(two.getAssertionServiceEnabled());
 
-		assertEquals("client-id-1", one.getClientId());
-		assertEquals("client-id-2", two.getClientId());
+		assertEquals("XXXX-XXXX-XXXX-XXX1", one.getClientId());
+		assertEquals("XXXX-XXXX-XXXX-XXX2", two.getClientId());
 
 		assertFalse(one.getIsConsortiumLead());
 		assertFalse(two.getIsConsortiumLead());

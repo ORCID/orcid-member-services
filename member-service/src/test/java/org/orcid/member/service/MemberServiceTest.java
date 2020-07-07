@@ -210,7 +210,7 @@ class MemberServiceTest {
 	private Member getMember() {
 		Member member = new Member();
 		member.setAssertionServiceEnabled(true);
-		member.setClientId("clientid");
+		member.setClientId("XXXX-XXXX-XXXX-XXXX");
 		member.setClientName("clientname");
 		member.setIsConsortiumLead(false);
 		member.setSalesforceId("salesforceId");
