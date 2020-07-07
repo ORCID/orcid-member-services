@@ -164,14 +164,16 @@ public class MemberService {
 		if (!optional.isPresent()) {
 			throw new BadRequestAlertException("Invalid id", "member", "idunavailable");
 		}
-
 		List<MemberServiceUser> usersBelongingToMember = userService
 				.getUsersBySalesforceId(optional.get().getSalesforceId());
 		if (usersBelongingToMember != null && !usersBelongingToMember.isEmpty()) {
-			throw new BadRequestAlertException("Unable to delete Member, users still exist for member", "member",
-					"idused");
+		    assertionService.deleteAssertionsForSalesforceIn(optional.get().getSalesforceId());
+		    
+		    for (MemberServiceUser user : usersBelongingToMember) {
+		        LOG.warn("Deleting user: " + user.toString());
+		        userService.deleteUserById(user.getId());
+		    }
 		}
-
 		memberRepository.deleteById(id);
 	}
 

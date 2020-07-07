@@ -19,7 +19,7 @@
         "label": "Please select the CSV file to upload",
         "filePath": "File path",
         "errors": {
-          "label": "Please fix the following errors"
+          "label": "Oops! Ocurrio un error al procesar tu informacion. Por favor corrige los siguientes errores e intenta de nuevo"
         }
       },
       "clientId": "Client Id",

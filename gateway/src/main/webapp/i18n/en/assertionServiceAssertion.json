@@ -16,7 +16,7 @@
         "error": "Sorry, this affiliation could not be deleted. The user has either already deleted it from ORCID or has revoked access to their ORCID record."
       },
       "detail": {
-        "title": "Affiliation",
+        "title": "Affiliation details",
         "org": "Organization"
       },
       "import": {
@@ -24,7 +24,7 @@
         "label": "Please select a CSV file to upload",
         "filePath": "File path",
         "errors": {
-          "label": "Please fix the following errors"
+          "label": "Oops! There was a problem processing your data. Pleases fix the errors below and try again"
         }
       },
       "affiliationDetails": "Affiliation Details",

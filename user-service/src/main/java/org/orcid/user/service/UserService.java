@@ -285,7 +285,7 @@ public class UserService {
 	public void removeAuthorityFromUser(String id, String authority) {
 		Optional<User> existing = getUserWithAuthorities(id);
 		if (!existing.isPresent()) {
-			throw new BadRequestAlertException("User not present", "user", null);
+			throw new BadRequestAlertException("User not present " + id, "user", null);
 		}
 
 		User user = existing.get();

@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="assertion">
-            <h1 class="mt-5" jhiTranslate="gatewayApp.assertionServiceAssertion.detail.title">Affiliation</h1>
+            <h1 class="mt-5" jhiTranslate="gatewayApp.assertionServiceAssertion.detail.title">Affiliation details</h1>
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <div class="row">
@@ -74,7 +74,7 @@
                 </button>
 
                 <button type="button"
-                        [routerLink]="['/assertions', assertion.id, 'edit']"
+                        [routerLink]="['/assertion', assertion.id, 'edit']"
                         class="btn btn-primary">
                     <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
                 </button>

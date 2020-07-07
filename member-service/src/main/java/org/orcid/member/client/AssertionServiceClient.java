@@ -16,4 +16,8 @@ public interface AssertionServiceClient {
     @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "50000")
     ResponseEntity<String> getOwnerOfUser(@PathVariable("encryptedEmail") String encryptedEmail);
     
+    @RequestMapping(method = RequestMethod.DELETE, value = "/api/assertion/delete/{salesforceId}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
+    @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "50000")
+    ResponseEntity<String> deleteAssertionsForSalesforceId(@PathVariable("salesforceId") String salesforceId);
+
 }

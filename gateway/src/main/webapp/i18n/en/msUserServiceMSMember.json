@@ -19,10 +19,12 @@
         "label": "Please select a CSV file to upload",
         "filePath": "File path",
         "errors": {
-          "label": "Please fix the following errors"
+          "label": "Oops! There was a problem processing your data. Pleases fix the errors below and try again"
         }
       },
       "clientId": "Client Id",
+      "clientId.note": "Note: Client ID must have User OBO enabled AND",
+      "clientId.addedAsRedirect": "added as a Redirect URI in",
       "clientName": "Member Name",
       "clientSecret": "Client Secret",
       "salesforceId": "Salesforce Id",
