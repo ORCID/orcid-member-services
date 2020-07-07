@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2 jhiTranslate="settings.title" [translateValues]="{username: settingsForm.get('login').value}" *ngIf="settingsForm.get('login').value">User settings for [<b>{{settingsForm.get('login').value}}</b>]</h2>
+            <h1 class="mt-3" jhiTranslate="settings.title" [translateValues]="{username: accountService.getUserName()}" *ngIf="accountService.getUserName()">Settings for {{accountService.getUserName()}} (You)</h1>
 
             <div class="alert alert-success" *ngIf="success" jhiTranslate="settings.messages.success">
                 <strong>Settings saved!</strong>
@@ -53,7 +53,7 @@
                     <label class="form-control-label" for="email" jhiTranslate="global.form.email.label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
                            formControlName="email" readonly>
-                    
+
                 </div>
                 <div class="form-group" *ngIf="languages && languages.length > 0">
                     <label class="form-control-label" for="langKey" jhiTranslate="settings.form.language">Language</label>
