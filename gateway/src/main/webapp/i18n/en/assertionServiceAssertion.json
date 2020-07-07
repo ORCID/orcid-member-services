@@ -16,7 +16,7 @@
         "error": "Sorry, this affiliation could not be deleted. The user has either already deleted it from ORCID or has revoked access to their ORCID record."
       },
       "detail": {
-        "title": "Affiliation",
+        "title": "Affiliation details",
         "org": "Organization"
       },
       "import": {

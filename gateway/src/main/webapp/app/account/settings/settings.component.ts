@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { JhiLanguageService } from 'ng-jhipster';
-
 import { AccountService, JhiLanguageHelper } from 'app/core';
-import { Account } from 'app/core/user/account.model';
 
 @Component({
   selector: 'jhi-settings',
@@ -13,6 +11,7 @@ export class SettingsComponent implements OnInit {
   error: string;
   success: string;
   languages: any[];
+  userName: string;
   settingsForm = this.fb.group({
     firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
@@ -34,6 +33,7 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.accountService.identity().then(account => {
       this.updateForm(account);
+      this.userName = this.accountService.getUserName();
     });
     this.languageHelper.getAll().then(languages => {
       this.languages = languages;
