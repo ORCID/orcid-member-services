@@ -15,14 +15,12 @@ public class MemberValidator {
         private static final Pattern newPattern = Pattern.compile(NEW_CLIENT_ID_PATTERN);
         
 
-	public static boolean validate(Member member) {
-		boolean isOk = true;
-		if (StringUtils.isBlank(member.getClientId())) {
-			isOk = false;
-			member.setError("Client id should not be empty");
-		}
-		else {
-		    if(member.getClientId().startsWith(NEW_CLIENT_ID_PREFIX))
+    public static boolean validate(Member member) {
+		    boolean isOk = true;
+
+        validateField(member.getClientId(), "Client id should not be empty", member);
+        
+        if(member.getClientId().startsWith(NEW_CLIENT_ID_PREFIX))
 		    {
 		        Matcher newMatcher = newPattern.matcher(member.getClientId());
 		        isOk = newMatcher.matches();
@@ -36,23 +34,32 @@ public class MemberValidator {
 		        member.setError("Client id should be in the format XXXX-XXXX-XXXX-XXXX or"
 		                + " APP-XXXXXXXXXXXXXXXX. X can be a digit or an uppercase character.");
 		    }
-		}
 
-		if (StringUtils.isBlank(member.getSalesforceId())) {
-			isOk = false;
-			member.setError("Salesforce id should not be empty");
-		}
-		
-		if (StringUtils.isBlank(member.getClientName())) {
-                    isOk = false;
-                    member.setError("Member name should not be empty");
-                }
-		
-		if (StringUtils.isBlank(member.getParentSalesforceId()) && (member.getIsConsortiumLead() == null || !member.getIsConsortiumLead())) {
-			isOk = false;
-			member.setError("Parent salesforce id should not be empty if it is not a consortium lead");
-		}
+        validateField(member.getSalesforceId(), "Salesforce id should not be empty", member);
+
+        validateField(member.getClientName(), "Member name should not be empty", member);
+        try {
+            if (StringUtils.isBlank(member.getParentSalesforceId()) && (member.getIsConsortiumLead() == null || !member.getIsConsortiumLead())) {
+                member.setError("Parent salesforce id should not be empty if it is not a consortium lead");
+            }
+        } catch (IllegalArgumentException e) {
+            member.setError("Parent salesforce id should not be empty if it is not a consortium lead");
+        }
+
+        if (member.getError() != null) {
+            isOk = false;
+        }
 		return isOk;
 	}
+
+	private static void validateField(String value, String error, Member member) {
+        try {
+            if (StringUtils.isBlank(value)) {
+                member.setError(error);
+            }
+        } catch (IllegalArgumentException e) {
+            member.setError(error);
+        }
+    }
 
 }

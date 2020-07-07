@@ -1,5 +1,7 @@
 package org.orcid.service;
 
+import java.util.List;
+
 import org.orcid.client.UserServiceClient;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.security.SecurityUtils;
@@ -31,5 +33,10 @@ public class UserService {
 	public String getLoggedInUserId() {
 		return getLoggedInUser().getId();
 	}
+	
+        public List<AssertionServiceUser> getUsersBySalesforceId(String salesforceId) {
+            ResponseEntity<List<AssertionServiceUser>> response = userServiceClient.getUsersBySalesforceId(salesforceId);
+            return response.getBody();
+        }  
 	
 }
