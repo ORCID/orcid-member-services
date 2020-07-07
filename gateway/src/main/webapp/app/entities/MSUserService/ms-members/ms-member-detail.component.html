@@ -18,6 +18,10 @@
                     <dd class="col-md-9">
                         {{msMember.clientName}}
                     </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.clientId">Client ID</dt>
+                    <dd class="col-md-9">
+                        {{msMember.clientId}}
+                    </dd>
                     <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.isConsortiumLead">Is Consortium Lead</dt>
                     <dd class="col-md-9">
                         <span class="sr-only" *ngIf="msMember.isConsortiumLead=='true'" jhiTranslate="global.true">True</span>
