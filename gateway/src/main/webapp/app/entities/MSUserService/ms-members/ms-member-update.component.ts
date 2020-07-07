@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
@@ -17,6 +17,21 @@ function parentSalesforceIdConditionallyRequiredValidator(formGroup: FormGroup) 
   return null;
 }
 
+function clientIdValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: boolean } | null => {
+    if (control.value !== undefined && isNaN(control.value)) {
+      const clientIdValue = control.value;
+      if (clientIdValue.startsWith('APP-') && clientIdValue.match(/APP-[A-Z0-9]{16}$/)) {
+        return null;
+      } else if (clientIdValue.match(/[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
+        return null;
+      }
+      return { validClientId: false };
+    }
+    return null;
+  };
+}
+
 @Component({
   selector: 'jhi-ms-member-update',
   templateUrl: './ms-member-update.component.html'
@@ -25,22 +40,22 @@ export class MSMemberUpdateComponent implements OnInit {
   orcidBaseUrl: string = ORCID_BASE_URL;
   baseUrl: string = BASE_URL;
   isSaving: boolean;
-  editForm = this.fb.group({
-    id: [],
-    clientId: [null, [Validators.required]],
-    clientName: [null, [Validators.required]],
-    salesforceId: [null, [Validators.required]],
-    parentSalesforceId: [],
-    isConsortiumLead: [null, [Validators.required]],
-    assertionServiceEnabled: [],
-    createdBy: [],
-    createdDate: [],
-    lastModifiedBy: [],
-    lastModifiedDate: []
+  editForm = this.fb.group(
+    {
+      id: [],
+      clientId: new FormControl(null, [Validators.required, clientIdValidator()]),
+      clientName: [null, [Validators.required]],
+      salesforceId: [null, [Validators.required]],
+      parentSalesforceId: [],
+      isConsortiumLead: [null, [Validators.required]],
+      assertionServiceEnabled: [],
+      createdBy: [],
+      createdDate: [],
+      lastModifiedBy: [],
+      lastModifiedDate: []
     },
-    { validators: [parentSalesforceIdConditionallyRequiredValidator
-    ] }
-   );
+    { validators: [parentSalesforceIdConditionallyRequiredValidator] }
+  );
 
   constructor(
     private accountService: AccountService,
