@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 public class UserCsvReader implements UserUploadReader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserCsvReader.class);
+    private StringBuffer sb;
 
 	@Override
 	public UserUpload readUsersUpload(InputStream inputStream, String createdBy) {
@@ -27,7 +28,7 @@ public class UserCsvReader implements UserUploadReader {
 		UserUpload upload = new UserUpload();
 		Iterable<CSVRecord> elements = null;
 		Instant now = Instant.now();
-		
+
 		try {
 			elements = CSVFormat.DEFAULT.withHeader().parse(isr);
 		} catch (IOException e) {
@@ -37,7 +38,7 @@ public class UserCsvReader implements UserUploadReader {
 				LOG.error("Error closing csv assertions upload input stream", e);
 				throw new RuntimeException(io);
 			}
-			
+
 			LOG.error("Error reading CSV upload", e);
 			throw new RuntimeException(e);
 		}
@@ -64,11 +65,10 @@ public class UserCsvReader implements UserUploadReader {
 
 	private void addUsersToUpload(CSVRecord element, UserUpload upload, Instant now, String createdBy) {
 		long index = element.getRecordNumber();
-		String errorString = new String();
 		try {
 			// Validate for errors
-			if (!validate(element, errorString)) {
-				upload.addError(index, errorString);
+			if (!validate(element)) {
+				upload.addError(index, getError());
 			} else {
 				UserDTO userDTO = getUserDTO(element, now, createdBy);
 				upload.getUserDTOs().add(userDTO);
@@ -97,20 +97,38 @@ public class UserCsvReader implements UserUploadReader {
 		return u;
 	}
 
-	private boolean validate(CSVRecord record, String error) {
+	private boolean validate(CSVRecord record) {
 		boolean isOk = true;
-		if (StringUtils.isBlank(record.get("email"))) {
-			isOk = false;
-			error = "Login should not be empty";
-		}
-		if (StringUtils.isBlank(record.get("salesforceId"))) {
-			if (!isOk) {
-				error += ", ";
-			}
-			isOk = false;
-			error += "Salesforce Id should not be empty";
-		}
+		sb = new StringBuffer();
+        try {
+            if (StringUtils.isBlank(record.get("email"))) {
+                isOk = false;
+                sb.append("Login should not be empty");
+            }
+        } catch (IllegalArgumentException e) {
+            isOk = false;
+            sb.append("Login should not be empty");
+        }
+
+        try {
+            if (StringUtils.isBlank(record.get("salesforceId"))) {
+                if (!isOk) {
+                    sb.append(", ");
+                }
+                isOk = false;
+                sb.append("Salesforce Id should not be empty");
+		    }
+        } catch (IllegalArgumentException e) {
+            if (!isOk) {
+                sb.append(", ");
+            }
+            isOk = false;
+            sb.append("Salesforce Id should not be empty");
+        }
 		return isOk;
 	}
 
+    public String getError() {
+        return sb.toString();
+    }
 }

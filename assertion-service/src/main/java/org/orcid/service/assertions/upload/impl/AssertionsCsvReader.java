@@ -42,13 +42,15 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		try {
 			for (CSVRecord record : elements) {
 				try {
-					Assertion assertion = parseLine(record);
+					Assertion assertion = parseLine(record, upload);
 
-					// Create the userInfo if needed
-					if (!upload.getUsers().contains(assertion.getEmail())) {
-						upload.addUser(assertion.getEmail());
-					}
-					upload.addAssertion(assertion);
+					if (upload.getErrors().length() == 0) {
+                        // Create the userInfo if needed
+                        if (!upload.getUsers().contains(assertion.getEmail())) {
+                            upload.addUser(assertion.getEmail());
+                        }
+                        upload.addAssertion(assertion);
+                    }
 				} catch (Exception e) {
 					LOG.info("CSV upload error found for record number {}", record.getRecordNumber());
 					upload.addError(record.getRecordNumber(), e.getMessage());
@@ -66,84 +68,111 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		return upload;
 	}
 
-	private Assertion parseLine(CSVRecord line) {
+	private Assertion parseLine(CSVRecord line, AssertionsUpload assertionsUpload) {
 		Assertion a = new Assertion();
-		if (StringUtils.isBlank(line.get("email"))) {
-			throw new IllegalArgumentException("email must not be null");
-		}
-		a.setEmail(line.get("email"));
+        if (getOptionalMandatoryNullable(line, "email") == null) {
+            assertionsUpload.addError(line.getRecordNumber(), "email must not be null");
+            return a;
+		} else {
+            a.setEmail(line.get("email"));
+        }
 
-		if (StringUtils.isBlank(line.get("affiliation-section"))) {
-			throw new IllegalArgumentException("affiliation-section must not be null");
-		}
-		a.setAffiliationSection(AffiliationSection.valueOf(line.get("affiliation-section").toUpperCase()));
-		a.setDepartmentName(getMandatoryNullableValue(line, "department-name"));
-		a.setRoleTitle(getMandatoryNullableValue(line, "role-title"));
+        if (getOptionalMandatoryNullable(line, "affiliation-section") == null) {
+            assertionsUpload.addError(line.getRecordNumber(), "affiliation-section must not be null");
+            return a;
+		} else {
+            a.setAffiliationSection(AffiliationSection.valueOf(line.get("affiliation-section").toUpperCase()));
+        }
 
-		// Dates follows the format yyyy-MM-dd
-		String startDate = line.get("start-date");
-		if (!StringUtils.isBlank(startDate)) {
-			String[] startDateParts = startDate.split("-|/|\\s");
-			a.setStartYear(startDateParts[0]);
-			if (startDateParts.length > 1) {
-				a.setStartMonth(startDateParts[1]);
-			}
-
-			if (startDateParts.length > 2) {
-				a.setStartDay(startDateParts[2]);
-			}
-		}
+        a.setDepartmentName(getOptionalMandatoryNullable(line, "department-name"));
+        a.setRoleTitle(getOptionalMandatoryNullable(line, "role-title"));
 
 		// Dates follows the format yyyy-MM-dd
-		String endDate = line.get("end-date");
-		if (!StringUtils.isBlank(endDate)) {
-			String endDateParts[] = endDate.split("-|/|\\s");
-			a.setEndYear(endDateParts[0]);
-			if (endDateParts.length > 1) {
-				a.setEndMonth(endDateParts[1]);
-			}
+        if (getOptionalMandatoryNullable(line, "start-date") != null) {
+            String startDate = line.get("start-date");
+            if (!StringUtils.isBlank(startDate)) {
+                String[] startDateParts = startDate.split("-|/|\\s");
+                a.setStartYear(startDateParts[0]);
+                if (startDateParts.length > 1) {
+                    a.setStartMonth(startDateParts[1]);
+                }
 
-			if (endDateParts.length > 2) {
-				a.setEndDay(endDateParts[2]);
-			}
-		}
-		if (StringUtils.isBlank(line.get("org-name"))) {
-			throw new IllegalArgumentException("org-name must not be null");
-		}
-		a.setOrgName(line.get("org-name"));
-		if (StringUtils.isBlank(line.get("org-country"))) {
-			throw new IllegalArgumentException("org-country must not be null");
+                if (startDateParts.length > 2) {
+                    a.setStartDay(startDateParts[2]);
+                }
+            }
+        }
+
+		// Dates follows the format yyyy-MM-dd
+        if (getOptionalMandatoryNullable(line, "start-date") != null) {
+            String endDate = line.get("end-date");
+            if (!StringUtils.isBlank(endDate)) {
+                String endDateParts[] = endDate.split("-|/|\\s");
+                a.setEndYear(endDateParts[0]);
+                if (endDateParts.length > 1) {
+                    a.setEndMonth(endDateParts[1]);
+                }
+
+                if (endDateParts.length > 2) {
+                    a.setEndDay(endDateParts[2]);
+                }
+            }
+        }
+
+        if (getOptionalMandatoryNullable(line, "org-name") == null) {
+            assertionsUpload.addError(line.getRecordNumber(), "org-name must not be null");
+            return a;
+		} else {
+            a.setOrgName(line.get("org-name"));
+        }
+
+        if (getOptionalMandatoryNullable(line, "org-country") == null) {
+            assertionsUpload.addError(line.getRecordNumber(), "org-country must not be null");
+            return a;
 		} else {
 			try {
 				Iso3166Country.valueOf(line.get("org-country"));
-			} catch (Exception e) {
-				throw new IllegalArgumentException("Invalid org-country provided: " + line.get("org-country")
-						+ " it should be one from the Iso3166Country enum");
+                a.setOrgCountry(line.get("org-country"));
+            } catch (Exception e) {
+                assertionsUpload.addError(line.getRecordNumber(), "Invalid org-country provided: " + line.get("org-country")
+                    + " it should be one from the Iso3166Country enum");
+                return a;
 			}
 		}
-		a.setOrgCountry(line.get("org-country"));
-		if (StringUtils.isBlank(line.get("org-city"))) {
-			throw new IllegalArgumentException("org-city must not be null");
-		}
-		a.setOrgCity(line.get("org-city"));
-		a.setOrgRegion(line.get("org-region"));
-		if (StringUtils.isBlank(line.get("disambiguated-organization-identifier"))) {
-			throw new IllegalArgumentException("disambiguated-organization-identifier must not be null");
-		}
-		a.setDisambiguatedOrgId(line.get("disambiguated-organization-identifier"));
-		if (StringUtils.isBlank(line.get("disambiguation-source"))) {
-			throw new IllegalArgumentException("disambiguation-source must not be null");
-		}
-		a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source"));
+
+        if (getOptionalMandatoryNullable(line, "org-city") == null) {
+            assertionsUpload.addError(line.getRecordNumber(), "org-city must not be null");
+            return a;
+		} else {
+            a.setOrgCity(line.get("org-city"));
+        }
+
+        if (getOptionalMandatoryNullable(line, "org-region") != null) {
+            a.setOrgRegion(line.get("org-region"));
+        }
+
+        if (getOptionalMandatoryNullable(line, "disambiguated-organization-identifier") == null) {
+            assertionsUpload.addError(line.getRecordNumber(), "disambiguated-organization-identifier must not be null");
+            return a;
+		} else {
+            a.setDisambiguatedOrgId(line.get("disambiguated-organization-identifier"));
+        }
+
+		if (getOptionalMandatoryNullable(line, "disambiguation-source") == null) {
+		    assertionsUpload.addError(line.getRecordNumber(), "disambiguation-source-identifier must not be null");
+            return a;
+		} else {
+            a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source"));
+        }
 		a.setExternalId(getOptionalMandatoryNullable(line, "external-id"));
 		a.setExternalIdType(getOptionalMandatoryNullable(line, "external-id-type"));
 		a.setExternalIdUrl(getOptionalMandatoryNullable(line, "external-id-url"));
-		
-		if (!StringUtils.isBlank(line.get("url"))) {
+
+		if (getOptionalMandatoryNullable(line, "url") != null && !StringUtils.isBlank(line.get("url"))) {
 			String url = validateUrl(line.get("url"));
 			a.setUrl(url);
 		}
-		
+
 		return a;
 	}
 
