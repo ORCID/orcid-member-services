@@ -47,8 +47,9 @@ public class AssertionsCSVReportWriter implements AssertionsReportWriter {
 						"org-country", "org-city", "org-region", "disambiguated-organization-identifier",
 						"disambiguation-source", "external-id", "external-id-type", "external-id-url"));
 		Map<String, OrcidRecord> orcidRecordMap = new HashMap<>();
-		List<String> elements = new ArrayList<String>();
+		List<String> elements;
 		for (Assertion a : assertions) {
+		    elements = new ArrayList<String>();
 			elements.add(a.getEmail());
 
 			if (!orcidRecordMap.containsKey(a.getEmail())) {
@@ -101,9 +102,9 @@ public class AssertionsCSVReportWriter implements AssertionsReportWriter {
 			elements.add(StringUtils.isBlank(a.getExternalId()) ? "" : a.getExternalId());
 			elements.add(StringUtils.isBlank(a.getExternalIdType()) ? "" : a.getExternalIdType());
 			elements.add(StringUtils.isBlank(a.getExternalIdUrl()) ? "" : a.getExternalIdUrl());
-			csvPrinter.printRecord(elements);
-		}
-		csvPrinter.flush();
+            csvPrinter.printRecord(elements);
+            csvPrinter.flush();
+        }
 		csvPrinter.close();
 		return buffer.toString();
 	}
