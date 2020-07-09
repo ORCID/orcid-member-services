@@ -7,11 +7,13 @@
                   </div>
             </div>
             <div *ngIf="!loading">
-                <div class="mt-4">
+                <div class="mt-5">
                     <div *ngIf="showConnectionExists">
-                        <h1 jhiTranslate="landingPage.connectionExists.youHaveAlready"
-                        [translateValues]="{clientName: clientName}">You have already granted {{clientName}} permission to update your ORCID record</h1>
-                        <p><img class="id-icon" src="/content/images/orcid.logo.icon.svg" width="16" height="16"/>
+                        <h2 >
+                            <span jhiTranslate="landingPage.connectionExists.youHaveAlready">You have already granted</span><br/>
+                            {{clientName}}<br/>
+                            <span jhiTranslate="landingPage.connectionExists.permissionToUpdate">permission to update your ORCID record</span></h2>
+                        <p class="mt-4"><img class="id-icon" src="/content/images/orcid.logo.icon.svg" width="16" height="16"/>
                             <a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{orcidRecord.orcid}}</a>
                         </p>
                         <p jhiTranslate="landingPage.connectionExists.youDoNot">
@@ -19,19 +21,21 @@
                         </p>
                     </div>
                     <div *ngIf="showError">
-                        <h1 jhiTranslate="landingPage.error.somethingWentWrong">Oops, something went wrong and we were not able to fetch your ORCID iD</h1>
+                        <h2 jhiTranslate="landingPage.error.somethingWentWrong">Oops, something went wrong and we were not able to fetch your ORCID iD</h2>
                     </div>
                     <div *ngIf="showDenied">
-                        <h1 jhiTranslate="landingPage.denied.youHaveDenied"
-                        [translateValues]="{clientName: clientName}">Oops, you have denied access, so {{clientName}} will not be able to update your ORCID record.</h1>
+                        <h2>
+                        <span jhiTranslate="landingPage.denied.youHaveDenied">Oops, you have denied access.</span><br/>
+                        {{clientName}}<br/>
+                        <span jhiTranslate="landingPage.denied.willNotBeAble">will not be able to update your ORCID record.</span></h2>
                         <p jhiTranslate="landingPage.denied.ifThisWas">If this was a mistake, click the button below to grant access.</p>
                         <a href='{{oauthUrl}}' class="btn btn-primary" jhiTranslate="landingPage.denied.grantAccess" [translateValues]="{clientName: clientName}">
                             Allow {{ clientName }} to update my ORCID record"
                         </a>
                     </div>
                     <div *ngIf="showSuccess">
-                        <h1 jhiTranslate="landingPage.success.thanks"
-                        [translateValues]="{given_name: signedInIdToken.given_name, family_name: signedInIdToken.family_name}"><b>Thanks, {{signedInIdToken.given_name}} {{signedInIdToken.family_name}}</b></h1>
+                        <h2 jhiTranslate="landingPage.success.thanks"
+                        [translateValues]="{given_name: signedInIdToken.given_name, family_name: signedInIdToken.family_name}">Thanks, {{signedInIdToken.given_name}} {{signedInIdToken.family_name}}</h2>
                         <p jhiTranslate="landingPage.success.youHaveSuccessfully"
                         [translateValues]="{clientName: clientName}">You have successfully granted {{clientName}} permission to update your ORCID record,
                             and your record will be with affiliation information shortly.
@@ -39,6 +43,9 @@
                         <p>
                             <img class="id-icon" src="/content/images/orcid.logo.icon.svg" width="16" height="16"/>
                             <a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{signedInIdToken.sub}}</a>
+                        </p>
+                        <p>
+                            <em jhiTranslate="landingPage.success.ifYouFind" [translateValues]="{client_name: clientName}">If you find that data added to your ORCID record is incorrect, please contact {{clientName}}</em>
                         </p>
                     </div>
                 </div>
