@@ -42,8 +42,8 @@
             <thead>
                     <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
                     <th jhiSortBy="email"><span jhiTranslate="gatewayApp.assertionServiceAssertion.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-                    <th jhiSortBy="affiliationSection" width="30%" ><span jhiTranslate="gatewayApp.assertionServiceAssertion.affiliationDetails">Affiliation Details</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-                    <th jhiSortBy="modified"><span jhiTranslate="gatewayApp.assertionServiceAssertion.modified">Modified</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                    <th jhiSortBy="orcidId"><span jhiTranslate="gatewayApp.assertionServiceAssertion.orcidId">ORCID iD</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                    <th jhiSortBy="affiliationSection" width="30%" ><span jhiTranslate="gatewayApp.assertionServiceAssertion.affiliationData">Affiliation Data</span> <fa-icon [icon]="'sort'"></fa-icon></th>
                     <th jhiSortBy="status"><span jhiTranslate="gatewayApp.assertionServiceAssertion.status">Status</span> <fa-icon [icon]="'sort'"></fa-icon></th>
                     <th></th>
                 </tr>
@@ -51,17 +51,16 @@
             <tbody>
             <tr *ngFor="let assertion of assertions ;trackBy: trackId">
                 <td>{{assertion.email}}</td>
+                <td><span *ngIf="assertion.orcidId"><a href="{{orcidBaseUrl}}/{{assertion.orcidId}}">{{orcidBaseUrl}}/{{assertion.orcidId}}</a></span></td>
                 <td>
-                    <a [routerLink]="['/assertion', assertion.id, 'view' ]">{{assertion.orgName}}: <span *ngIf="assertion.orgCity">{{assertion.orgCity}}</span><span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCountry">, {{assertion.orgCountry}}</span></a><br>
-                    <span *ngIf="assertion.startYear">{{assertion.startYear}}</span><span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startDay">-{{assertion.startDay}}</span>
-                    <span *ngIf="assertion.startYear">&nbsp;to&nbsp;</span>
-                    <span *ngIf="assertion.endYear">{{assertion.endYear}}</span><span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endDay">-{{assertion.endDay}} </span>
-                    <span *ngIf="assertion.departmentName">{{assertion.departmentName}}</span><span *ngIf="assertion.departmentName"> ({{assertion.roleTitle}})<br></span>
-                    <span *ngIf="assertion.url"><a href="{{assertion.url}}">{{assertion.url}}</a><br></span>
                     <span jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.affiliationSection}}">{{assertion.affiliationSection}}</span><br>
-                    <span *ngIf="assertion.externalId">{{assertion.externalIdType}}: <a href="assertion.externalIdUrl">{{assertion.externalId}}</a></span>
+                    {{assertion.orgName}}: <span *ngIf="assertion.orgCity">{{assertion.orgCity}}</span><span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCountry">, {{assertion.orgCountry}}</span><br>
+                    <span *ngIf="assertion.departmentName">{{assertion.departmentName}}</span><span *ngIf="assertion.departmentName"> ({{assertion.roleTitle}})</span><br>
+                    <span *ngIf="assertion.startYear">{{assertion.startYear}}</span><span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startDay">-{{assertion.startDay}}</span>
+                    <span *ngIf="assertion.startYear && assertion.endYear">&nbsp;to&nbsp;</span>
+                    <span *ngIf="assertion.endYear">{{assertion.endYear}}</span><span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endDay">-{{assertion.endDay}} </span>
+                    <br><a jhiTranslate="gatewayApp.assertionServiceAssertion.details" [routerLink]="['/assertion', assertion.id, 'view' ]">View details</a>
                 </td>
-                <td>{{assertion.modified | date:'medium'}}</td>
                 <td>{{assertion.status}}</td>
                 <td class="text-right">
                     <div class="btn-group">
