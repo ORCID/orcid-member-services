@@ -29,7 +29,7 @@ describe('Service Tests', () => {
 
       elemDefault = new Assertion(
         'ID',
-        false,
+        null,
         AffiliationSection.EMPLOYMENT,
         currentDate,
         null,
@@ -57,8 +57,9 @@ describe('Service Tests', () => {
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
+        'AAAAAAA',
         false,
-        false,
+        null,
         'AAAAAAA'
       );
     });

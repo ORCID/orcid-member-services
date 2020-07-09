@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 import { ORCID_BASE_URL } from 'app/app.constants';
 
-
 @Component({
   selector: 'jhi-assertion-detail',
   templateUrl: './assertion-detail.component.html'
