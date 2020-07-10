@@ -100,7 +100,9 @@ export class AssertionService {
     if (res.body) {
       res.body.created = res.body.created != null ? moment(res.body.created) : null;
       res.body.modified = res.body.modified != null ? moment(res.body.modified) : null;
+      res.body.addedToORCID = res.body.addedToORCID != null ? moment(res.body.addedToORCID) : null;
       res.body.deletedFromORCID = res.body.deletedFromORCID != null ? moment(res.body.deletedFromORCID) : null;
+      res.body.updatedInORCID = res.body.updatedInORCID != null ? moment(res.body.updatedInORCID) : null;
     }
     return res;
   }
@@ -111,6 +113,8 @@ export class AssertionService {
         assertion.created = assertion.created != null ? moment(assertion.created) : null;
         assertion.modified = assertion.modified != null ? moment(assertion.modified) : null;
         assertion.deletedFromORCID = assertion.deletedFromORCID != null ? moment(assertion.deletedFromORCID) : null;
+        assertion.addedToORCID = assertion.addedToORCID != null ? moment(assertion.addedToORCID) : null;
+        assertion.updatedInORCID = assertion.updatedInORCID != null ? moment(assertion.updatedInORCID) : null;
       });
     }
     return res;

@@ -100,16 +100,24 @@ public class AssertionService {
 		});
 		return assertions;
 	}
+	
+        public void deleteAllBySalesforceId(String salesforceId) {
+            List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, SORT);
+            assertions.forEach(a -> {
+                assertionsRepository.deleteById(a.getId());
+            });
+            return;
+       }	
 
 	public Assertion findById(String id) {
-		String userId = assertionsUserService.getLoggedInUserId();
+	        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
 		Optional<Assertion> optional = assertionsRepository.findById(id);
 		if (!optional.isPresent()) {
 			throw new IllegalArgumentException("Invalid assertion id");
 		}
 		Assertion assertion = optional.get();
-		if (!assertion.getOwnerId().equals(userId)) {
-			throw new IllegalArgumentException(userId + " is not the owner of " + assertion.getId());
+		if (!user.getSalesforceId().equals(assertion.getSalesforceId())) {
+			throw new IllegalArgumentException(user.getId() + " doesn't belong to organization " + assertion.getSalesforceId());
 		}
 		assertion.setStatus(getAssertionStatus(assertion));
 		if (assertion.getOrcidId() == null) {
