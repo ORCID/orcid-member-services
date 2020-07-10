@@ -1,15 +1,17 @@
 {
   "landingPage": {
-    "title": "Welcome to ORCID",
+    "title": "ORCID Member Services",
     "connectionExists": {
-      "youHaveAlready": "You have already granted {{ clientName}} permission to update your ORCID record",
+      "youHaveAlready": "You have already granted",
+      "permissionToUpdate": "permission to update your ORCID record",
       "youDoNot": "You do not need to do anything more at this time."
     },
     "error": {
       "somethingWentWrong": "Oops, something went wrong and we were not able to fetch your ORCID iD"
     },
     "denied": {
-      "youHaveDenied": "Oops, you have denied access, so {{ clientName }} will not be able to update your ORCID record.",
+      "youHaveDenied": "Oops, you have denied access.",
+      "willNotBeAble": "will not be able to update your ORCID record.",
       "ifThisWas": "If this was a mistake, click the button below to grant access.",
       "grantAccess": "Allow {{ clientName }} to update my ORCID record"
     },
