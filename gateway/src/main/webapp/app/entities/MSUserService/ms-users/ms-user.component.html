@@ -44,8 +44,8 @@
                 <td>{{msUser.lastName}}</td>
                 <td class="text-center">
                     <span class="sr-only">{{msUser.mainContact}}</span>
-                    <fa-icon aria-hidden="true" *ngIf="msUser.mainContact=='true'" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
-                    <fa-icon aria-hidden="true" *ngIf="msUser.mainContact!='true'" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                    <fa-icon aria-hidden="true" *ngIf="msUser.mainContact" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                    <fa-icon aria-hidden="true" *ngIf="!msUser.mainContact" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
                 </td>
                 <td>{{msMemberService.orgNameMap[msUser.salesforceId]}}</td>
                 <td>{{msUser.lastModifiedDate | date:'medium'}}</td>
@@ -53,7 +53,9 @@
                     <div class="btn-group">
                         <button type="submit"
                                 [routerLink]="['/ms-user', msUser.id, 'edit']"
-                                class="btn btn-primary btn-sm ml-1">
+                                class="btn btn-primary btn-sm ml-1"
+                                [disabled]="msUser.authorities.includes('ROLE_ADMIN')"
+                        >
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
@@ -61,7 +63,9 @@
                                 [routerLink]="['/', 'ms-user', { outlets: { popup: msUser.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm ml-1">
+                                class="btn btn-danger btn-sm ml-1"
+                                [disabled]="msUser.authorities.includes('ROLE_ADMIN')"
+                            >
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>

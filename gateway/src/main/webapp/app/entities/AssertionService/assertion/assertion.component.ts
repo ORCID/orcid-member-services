@@ -11,6 +11,7 @@ import { AccountService } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { AssertionService } from './assertion.service';
+import { ORCID_BASE_URL } from 'app/app.constants';
 
 @Component({
   selector: 'jhi-assertion',
@@ -30,6 +31,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
   predicate: any;
   previousPage: any;
   reverse: any;
+  orcidBaseUrl: string = ORCID_BASE_URL;
   faChartBar = faChartBar;
   faFileDownload = faFileDownload;
   faFileImport = faFileImport;

@@ -2,6 +2,7 @@ package org.orcid.service;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -9,6 +10,7 @@ import java.util.Set;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.orcid.config.ApplicationProperties;
+import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.repository.OrcidRecordRepository;
 import org.orcid.security.EncryptUtil;
@@ -72,7 +74,19 @@ public class OrcidRecordService {
         StringBuffer buffer = new StringBuffer();
         CSVPrinter csvPrinter = new CSVPrinter(buffer, CSVFormat.DEFAULT
                 .withHeader("email", "link"));
-        List<OrcidRecord> records = orcidRecordRepository.findAllToInvite(assertionsUserService.getLoggedInUserId());
+        List<OrcidRecord> records = null;
+                
+        List<AssertionServiceUser> usersBelongingToSameMember = assertionsUserService.getUsersBySalesforceId(assertionsUserService.getLoggedInUser().getSalesforceId());
+        for (AssertionServiceUser user : usersBelongingToSameMember) {
+            if (records == null)
+            {
+                records = orcidRecordRepository.findAllToInvite(user.getId());
+            }
+            else
+            {
+                records.addAll(orcidRecordRepository.findAllToInvite(user.getId())); 
+            }
+        }       
         
         for(OrcidRecord record : records) {
             String email = record.getEmail();

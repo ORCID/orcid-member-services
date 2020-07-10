@@ -11,7 +11,7 @@ export const enum AffiliationSection {
 }
 
 export interface IAssertion {
-  addedToORCID?: boolean;
+  addedToORCID?: Moment;
   affiliationSection?: AffiliationSection;
   created?: Moment;
   deletedFromORCID?: Moment;
@@ -28,6 +28,7 @@ export interface IAssertion {
   id?: string;
   modified?: Moment;
   orcidError?: string;
+  orcidId?: string;
   orgCity?: string;
   orgCountry?: string;
   orgName?: string;
@@ -41,14 +42,14 @@ export interface IAssertion {
   startYear?: string;
   status?: string;
   updated?: boolean;
-  updatedInORCID?: boolean;
+  updatedInORCID?: Moment;
   url?: string;
 }
 
 export class Assertion implements IAssertion {
   constructor(
     public id?: string,
-    public addedToORCID?: boolean,
+    public addedToORCID?: Moment,
     public affiliationSection?: AffiliationSection,
     public created?: Moment,
     public deletedFromORCID?: Moment,
@@ -64,6 +65,7 @@ export class Assertion implements IAssertion {
     public externalIdUrl?: string,
     public modified?: Moment,
     public orcidError?: string,
+    public orcidId?: string,
     public orgCity?: string,
     public orgCountry?: string,
     public orgName?: string,
@@ -77,11 +79,11 @@ export class Assertion implements IAssertion {
     public startYear?: string,
     public status?: string,
     public updated?: boolean,
-    public updatedInORCID?: boolean,
+    public updatedInORCID?: Moment,
     public url?: string
   ) {
-    this.addedToORCID = this.addedToORCID || false;
-    this.updated = this.updated || false;
-    this.updatedInORCID = this.updatedInORCID || false;
+    this.addedToORCID = this.addedToORCID || null;
+    this.updated = this.updated || null;
+    this.updatedInORCID = this.updatedInORCID || null;
   }
 }

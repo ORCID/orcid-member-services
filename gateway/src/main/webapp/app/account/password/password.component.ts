@@ -13,6 +13,7 @@ export class PasswordComponent implements OnInit {
   error: string;
   success: string;
   account: any;
+  userName: string;
   passwordForm = this.fb.group({
     currentPassword: ['', [Validators.required]],
     newPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
@@ -24,6 +25,7 @@ export class PasswordComponent implements OnInit {
   ngOnInit() {
     this.accountService.identity().then(account => {
       this.account = account;
+      this.userName = this.accountService.getUserName();
     });
   }
 
