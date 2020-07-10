@@ -33,6 +33,6 @@ echo "Running docker compose"
 cd ../
 export TAG=$2
 docker-compose down
-docker system prune --all --force
+docker system prune -f
 docker-compose up -d
 echo "Done"
