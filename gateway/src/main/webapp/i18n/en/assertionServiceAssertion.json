@@ -27,7 +27,9 @@
           "label": "Oops! There was a problem processing your data. Pleases fix the errors below and try again"
         }
       },
-      "affiliationDetails": "Affiliation Details",
+      "addedToOrcid": "Added",
+      "updatedInOrcid": "Updated",
+      "affiliationData": "Affiliation Data",
       "affiliationSection": "Affiliation Type",
       "departmentName": "Department",
       "roleTitle": "Role/Title",
@@ -57,9 +59,11 @@
       "sent": "Sent",
       "adminId": "Admin Id",
       "email": "User Email",
+      "orcidId": "ORCID iD",
       "year": "Year",
       "month": "Month",
-      "day": "Day"
+      "day": "Day",
+      "details": "View Details"
     },
     "assertion": {
       "firstName": "first name",

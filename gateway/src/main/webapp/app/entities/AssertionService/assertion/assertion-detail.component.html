@@ -10,54 +10,54 @@
                     <dd class="col-md-9">
                         {{assertion.email}}
                     </dd>
-                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.detail.org">Organization</dt>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.status">Status</dt>
                     <dd class="col-md-9">
-                        {{assertion.orgName}}<br>
-                        {{assertion.orgCountry}}<span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCity">, {{assertion.orgCity}}</span><br>
-                        {{assertion.disambiguationSource}} {{assertion.disambiguatedOrgId}}
+                        {{assertion.status}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.orcidId">ORCID iD</dt>
+                    <dd *ngIf="assertion.orcidId" class="col-md-9">
+                        <a href="{{orcidBaseUrl}}/{{assertion.orcidId}}">{{orcidBaseUrl}}/{{assertion.orcidId}}</a>
                     </dd>
                     <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.affiliationSection">Affiliation Section</dt>
                     <dd class="col-md-9">
                         <span jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.affiliationSection}}">{{assertion.affiliationSection}}</span>
                     </dd>
-                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.departmentName">Department Name</dt>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.detail.org">Organization</dt>
                     <dd class="col-md-9">
+                        {{assertion.orgName}}: <span *ngIf="assertion.orgCity">{{assertion.orgCity}}</span><span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCountry">, {{assertion.orgCountry}}</span><br>
+                        {{assertion.disambiguationSource}} {{assertion.disambiguatedOrgId}}
+                    </dd>
+                    <dt *ngIf="assertion.departmentName" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.departmentName">Department Name</dt>
+                    <dd *ngIf="assertion.departmentName" class="col-md-9">
                         {{assertion.departmentName}}
                     </dd>
-                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.roleTitle">Role Title</dt>
-                    <dd class="col-md-9">
+                    <dt *ngIf="assertion.roleTitle" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.roleTitle">Role Title</dt>
+                    <dd *ngIf="assertion.roleTitle" class="col-md-9">
                         {{assertion.roleTitle}}
                     </dd>
-                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.url">Url</dt>
-                    <dd class="col-md-9">
-                        {{assertion.url}}
+                    <dt *ngIf="assertion.url" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.url">Url</dt>
+                    <dd *ngIf="assertion.url" class="col-md-9">
+                        <a href="{{assertion.url}}">{{assertion.url}}</a>
                     </dd>
-                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.startDate">Start Date</dt>
-                    <dd class="col-md-9">
-                        {{assertion.startYear}}<span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startMonth&&assertion.startDay"></span>-{{assertion.startDay}}</span>
+                    <dt *ngIf="assertion.startYear" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.startDate">Start Date</dt>
+                    <dd *ngIf="assertion.startYear" class="col-md-9">
+                        {{assertion.startYear}}<span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startMonth&&assertion.startDay">-{{assertion.startDay}}</span>
                     </dd>
-                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.endDate">End Date</dt>
-                    <dd class="col-md-9">
-                        {{assertion.endYear}}<span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endMonth&&assertion.endDay"></span>-{{assertion.endDay}}</span>
+                    <dt *ngIf="assertion.endYear" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.endDate">End Date</dt>
+                    <dd *ngIf="assertion.endYear" class="col-md-9">
+                        {{assertion.endYear}}<span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endMonth&&assertion.endDay">-{{assertion.endDay}}</span>
                     </dd>
-                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.externalId">External Id</dt>
-                    <dd class="col-md-9">
+                    <dt *ngIf="assertion.externalId" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.externalId">External Id</dt>
+                    <dd *ngIf="assertion.externalId" class="col-md-9">
                         {{assertion.externalIdType}} <a *ngIf="assertion.externalIdUrl" href="{{assertion.externalIdUrl}}">{{assertion.externalId}}</a> <span *ngIf="!assertion.externalIdUrl">{{assertion.externalId}}</span>
                     </dd>
                     <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.created">Created</dt>
                     <dd class="col-md-9">
-                        {{assertion.created}}
+                        {{assertion.created | date:'medium'}}
                     </dd>
                     <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.modified">Modified</dt>
                     <dd class="col-md-9">
-                        {{assertion.modified}}
-                    </dd>
-                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.status">Deleted From ORCID</dt>
-                    <dd class="col-md-9">
-                        <span *ngIf="assertion.putCode">In ORCID</span>
-                        <span *ngIf="assertion.deletedFromORCID">Deleted by admin</span>
-                        <span *ngIf="assertion.orcidError">Error</span>
-                        <span *ngIf="!assertion.putCode && !assertion.deletedFromORCID && !assertion.orcidError">Pending</span>
+                        {{assertion.modified | date:'medium'}}
                     </dd>
                     <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.adminId">Admin Id</dt>
                     <dd class="col-md-9">
