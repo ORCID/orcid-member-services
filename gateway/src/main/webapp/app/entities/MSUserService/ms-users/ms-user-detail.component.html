@@ -31,11 +31,11 @@
                     </dd>
                     <dt class="col-md-2" jhiTranslate="gatewayApp.msUserServiceMSUser.createdDate">Created Date</dt>
                     <dd class="col-md-10">
-                        {{msUser.createdDate}} <i><span jhiTranslate="global.by">by</span> {{msUser.createdBy}}</i>
+                        {{msUser.createdDate | date:'medium'}} <i><span jhiTranslate="global.by">by</span> {{msUser.createdBy}}</i>
                     </dd>
                     <dt class="col-md-2" jhiTranslate="gatewayApp.msUserServiceMSUser.lastModifiedDate">Last Modified Date</dt>
                     <dd class="col-md-10">
-                        <span>{{msUser.lastModifiedDate}} <i><span jhiTranslate="global.by">by</span> {{msUser.lastModifiedBy}}</i></span>
+                        <span>{{msUser.lastModifiedDate | date:'medium'}} <i><span jhiTranslate="global.by">by</span> {{msUser.lastModifiedBy}}</i></span>
                     </dd>
                 </dl>
             </div>
