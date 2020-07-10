@@ -14,6 +14,7 @@ export interface IMSUser {
   mainContact?: boolean;
   salesforceId?: string;
   parentSalesforceId?: string;
+  authorities?: [string];
   createdBy?: string;
   createdDate?: Moment;
   lastModifiedBy?: string;

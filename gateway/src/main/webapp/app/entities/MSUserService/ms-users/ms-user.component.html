@@ -53,7 +53,9 @@
                     <div class="btn-group">
                         <button type="submit"
                                 [routerLink]="['/ms-user', msUser.id, 'edit']"
-                                class="btn btn-primary btn-sm ml-1">
+                                class="btn btn-primary btn-sm ml-1"
+                                [disabled]="msUser.authorities.includes('ROLE_ADMIN')"
+                        >
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
@@ -61,7 +63,9 @@
                                 [routerLink]="['/', 'ms-user', { outlets: { popup: msUser.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm ml-1">
+                                class="btn btn-danger btn-sm ml-1"
+                                [disabled]="msUser.authorities.includes('ROLE_ADMIN')"
+                            >
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
