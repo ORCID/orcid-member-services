@@ -262,6 +262,17 @@ public class UserService {
 		});
 	}
 
+        public Optional<User> sendActivationEmail(String mail) {
+            return userRepository.findOneByEmailIgnoreCase(mail).map(user -> {
+                user.setActivationKey(RandomUtil.generateResetKey());
+                user.setActivationDate(Instant.now());
+                userRepository.save(user);
+                userCaches.evictEntryFromUserCaches(user.getEmail());
+                mailService.sendActivationEmail(user);
+                return user;
+            });
+        }
+
 	public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
 		return userRepository.findByDeletedFalse(pageable).map(UserDTO::valueOf);
 	}

@@ -51,6 +51,13 @@
                 <td>{{msUser.lastModifiedDate | date:'medium'}}</td>
                 <td class="text-right">
                     <div class="btn-group">
+                        <button *ngIf="!msUser.activated" type="button"
+                                (click)="sendActivate(msUser)"
+                                class="btn btn-primary btn-sm ml-1"
+                        >
+                            <fa-icon [icon]="faCheckCircle"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.activate">Activate</span>
+                        </button> 
                         <button type="submit"
                                 [routerLink]="['/ms-user', msUser.id, 'edit']"
                                 class="btn btn-primary btn-sm ml-1"

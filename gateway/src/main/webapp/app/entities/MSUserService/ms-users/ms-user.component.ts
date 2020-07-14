@@ -126,6 +126,16 @@ export class MSUserComponent implements OnInit, OnDestroy {
     return result;
   }
 
+  sendActivate(msUser: IMSUser) {
+    this.msUserService.sendActivate(msUser).subscribe(res => {
+      if (res.ok) {
+        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.success', null, null);
+      } else {
+        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.error', null, null);
+      }
+    });
+  }
+
   protected paginateMSUser(data: IMSUser[], headers: HttpHeaders) {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);

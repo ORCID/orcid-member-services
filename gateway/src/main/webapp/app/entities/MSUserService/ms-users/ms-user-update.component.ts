@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { JhiAlertService } from 'ng-jhipster';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { IMSUser, MSUser } from 'app/shared/model/MSUserService/ms-user.model';
@@ -21,6 +22,8 @@ import { emailValidator } from 'app/shared/util/app-validators';
 export class MSUserUpdateComponent implements OnInit {
   isSaving: boolean;
   isExistentMember: boolean;
+  existentMSUser: IMSUser;
+  faCheckCircle = faCheckCircle;
 
   editForm = this.fb.group({
     id: [],
@@ -30,6 +33,7 @@ export class MSUserUpdateComponent implements OnInit {
     mainContact: [],
     assertionServiceEnabled: [],
     salesforceId: ['', Validators.required],
+    activated: [],
     createdBy: [],
     createdDate: [],
     lastModifiedBy: [],
@@ -51,6 +55,7 @@ export class MSUserUpdateComponent implements OnInit {
     this.isSaving = false;
     this.isExistentMember = false;
     this.activatedRoute.data.subscribe(({ msUser }) => {
+      this.existentMSUser = msUser;
       this.updateForm(msUser);
     });
     this.editForm.disable();
@@ -77,6 +82,7 @@ export class MSUserUpdateComponent implements OnInit {
       lastName: msUser.lastName,
       mainContact: msUser.mainContact,
       salesforceId: msUser.salesforceId,
+      activated: msUser.activated,
       createdBy: msUser.createdBy,
       createdDate: msUser.createdDate != null ? msUser.createdDate.format(DATE_TIME_FORMAT) : null,
       lastModifiedBy: msUser.lastModifiedBy,
@@ -105,6 +111,17 @@ export class MSUserUpdateComponent implements OnInit {
         this.subscribeToSaveResponse(this.msUserService.create(msUser));
       }
     }
+  }
+
+  sendActivate() {
+    this.msUserService.sendActivate(this.existentMSUser).subscribe(res => {
+      if (res.ok) {
+        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.success', null, null);
+      } else {
+        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.error', null, null);
+      }
+      this.previousState();
+    });
   }
 
   private createFromForm(): IMSUser {
