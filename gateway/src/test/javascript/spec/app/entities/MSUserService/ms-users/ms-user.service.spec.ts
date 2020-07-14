@@ -38,6 +38,7 @@ describe('Service Tests', () => {
         'AAAAAAA',
         currentDate,
         'AAAAAAA',
+        false,
         currentDate
       );
     });
@@ -97,6 +98,7 @@ describe('Service Tests', () => {
             mainContact: true,
             salesforceId: 'BBBBBB',
             parentSalesforceId: 'BBBBBB',
+            activated: false,
             createdBy: 'BBBBBB',
             createdDate: currentDate.format(DATE_TIME_FORMAT),
             lastModifiedBy: 'BBBBBB',
@@ -132,6 +134,7 @@ describe('Service Tests', () => {
             mainContact: true,
             salesforceId: 'BBBBBB',
             parentSalesforceId: 'BBBBBB',
+            activated: false,
             createdBy: 'BBBBBB',
             createdDate: currentDate.format(DATE_TIME_FORMAT),
             lastModifiedBy: 'BBBBBB',
