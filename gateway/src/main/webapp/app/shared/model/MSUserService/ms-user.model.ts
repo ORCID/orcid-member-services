@@ -14,6 +14,7 @@ export interface IMSUser {
   mainContact?: boolean;
   salesforceId?: string;
   parentSalesforceId?: string;
+  activated?: boolean;
   authorities?: [string];
   createdBy?: string;
   createdDate?: Moment;
@@ -33,8 +34,10 @@ export class MSUser implements IMSUser {
     public createdBy?: string,
     public createdDate?: Moment,
     public lastModifiedBy?: string,
+    public activated?: boolean,
     public lastModifiedDate?: Moment
   ) {
     this.mainContact = this.mainContact || false;
+    this.activated = this.activated || false;
   }
 }
