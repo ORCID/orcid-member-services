@@ -104,6 +104,20 @@ Our user service, based on [JHipster UAA](https://www.jhipster.tech/using-uaa/),
     - Run `bash mvnw`
     - Wait for it to start
 
+## Start Jhipster Console
+
+[Jhipster Console](https://github.com/jhipster/jhipster-console) provides and ELK stack logging and metrics UI. To run Jhipster Console locally:
+    
+    - In each microservice, edit src/main/resources/config/application-dev.yml to set 
+            logstash:
+                enabled: true
+                
+    - Start Docker desktop
+    - Open a new terminal 
+    - cd orcid-member-services/jhipster-console/
+    - Run ```docker-compose up```
+    - Wait for it to start
+    - Go to [http://localhost:5601](http://localhost:5601) to see Kibana logging dashboard
 
 ## Deployment via Docker Compose
 Member services is deployed to AWS using Docker Compose.

@@ -108,17 +108,18 @@ jhipster:
       client-secret: internal
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://127.0.0.1:8092
-  metrics:
-    logs: # Reports metrics in the logs
-      enabled: false
-      report-frequency: 60 # in seconds
   logging:
-    use-json-format: false # By default, logs are not in Json format
-    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
-      enabled: false
-      host: localhost
+    logstash:
+      enabled: false # Set to true to use Jhipster console locally
+      host: localhost # If using a Virtual Machine on Mac OS X or Windows with docker-machine, use the Docker's host IP here
       port: 5000
-      queue-size: 512
+      queueSize: 512
+  metrics:
+    logs:
+      enabled: true
+      reportFrequency: 60 # seconds
+  audit-events:
+    retention-period: 30 # Number of days before audit events are deleted.
 oauth2:
   signature-verification:
     public-key-endpoint-uri: http://userservice/oauth/token_key

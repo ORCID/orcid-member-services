@@ -3,8 +3,7 @@
 
 <configuration scan="true">
     <property name="LOG_PATH" value="logs"/>
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
-
+    
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
     <logger name="javax.management.remote" level="WARN"/>

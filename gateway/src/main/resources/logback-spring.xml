@@ -2,8 +2,7 @@
 <!DOCTYPE configuration>
 
 <configuration scan="true">
-    <property name="LOG_PATH" value="gateway_logs"/>
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <property name="LOG_PATH" value="logs"/>
 
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>

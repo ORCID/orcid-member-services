@@ -1,4 +1,5 @@
 version: '2'
+
 services:
   assertionservice-app:
     image: assertionservice:${TAG}
@@ -24,6 +25,8 @@ services:
       - 'APPLICATION_CRON_POST_AFFILIATIONS=${CRON_POST_AFFILIATIONS}'
       - 'APPLICATION_CRON_PUT_AFFILIATIONS=${CRON_PUT_AFFILIATIONS}'
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
+    volumes:
+      - ./log-raw/:/logs
 
   gateway-app:
     image: gateway:${TAG}
@@ -38,6 +41,8 @@ services:
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
+    volumes:
+      - ./log-raw/:/logs
     ports:
       - '8080:8080'
 
@@ -58,6 +63,8 @@ services:
       - SPRING_MAIL_USERNAME=${MAIL_USER}
       - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
+    volumes:
+      - ./log-raw/:/logs
 
   memberservice-app:
     image: memberservice:${TAG}
@@ -76,8 +83,43 @@ services:
       - SPRING_MAIL_USERNAME=${MAIL_USER}
       - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
+    volumes:
+      - ./log-raw/:/logs
 
   jhipster-registry:
     extends:
       file: jhipster-registry.yml
       service: jhipster-registry
+
+  jhipster-elasticsearch:
+    extends:
+      file: jhipster-console.yml
+      service: jhipster-elasticsearch
+    volumes:
+      - ./log-data:/usr/share/elasticsearch/data
+  jhipster-logstash:
+    extends:
+      file: jhipster-console.yml
+      service: jhipster-logstash
+    depends_on:
+      - jhipster-elasticsearch
+    volumes:
+      - ./log-conf/:/usr/share/logstash/pipeline/
+  jhipster-console:
+    extends:
+      file: jhipster-console.yml
+      service: jhipster-console
+    depends_on:
+      - jhipster-elasticsearch
+  jhipster-import-dashboards:
+    extends:
+      file: jhipster-console.yml
+      service: jhipster-import-dashboards
+    depends_on:
+      - jhipster-elasticsearch
+  jhipster-zipkin:
+    extends:
+      file: jhipster-console.yml
+      service: jhipster-zipkin
+    depends_on:
+      - jhipster-elasticsearch
