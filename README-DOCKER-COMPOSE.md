@@ -12,13 +12,16 @@ Launch all your infrastructure by running: `docker-compose up -d`.
 
 ### Applications and dependencies:
 
-- AssertionServices (microservice application)
-- AssertionServices's mongodb database
+- assertionservice (microservice application)
+- assertionservice's mongodb database
 - gateway (gateway application)
 - gateway's mongodb database
-- Oauth2Service (uaa application)
-- Oauth2Service's mongodb database
-- UserSettingsService (microservice application)
-- UserSettingsService's mongodb database
+- memberservice (microservice application)
+- memberservice's mongodb database
+- userservice (uaa application)
+- userservice's mongodb database
 
 ### Additional Services:
+
+- [JHipster Console](http://localhost:5601)
+- [Zipkin](http://localhost:9411)
