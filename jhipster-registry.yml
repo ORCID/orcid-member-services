@@ -18,6 +18,10 @@ services:
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+      - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true
+      - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
+      - JHIPSTER_METRICS_LOGS_ENABLED=true
+      - JHIPSTER_METRICS_LOGS_REPORTFREQUENCY=60
       # change the name of UAA server here, if needed
       - JHIPSTER_SECURITY_CLIENT_AUTHORIZATION_TOKEN_SERVICE_ID=uaa
     ports:
