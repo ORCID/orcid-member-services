@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -334,7 +331,9 @@ public class UserService {
 			
 			if (!memberExists(salesforceId)) {
 				String errorMessage = String.format("Member not found with salesforceId %s", salesforceId);
-				throw new MemberNotFoundException(errorMessage);
+                Map<String, String> params = new HashMap<>();
+                params.put("params", salesforceId);
+				throw new MemberNotFoundException(errorMessage, params);
 			}
 
 			Optional<User> existing = getUserWithAuthoritiesByLogin(userDTO.getLogin());
