@@ -116,7 +116,7 @@ jhipster:
     base-url: http://127.0.0.1:8080
   logging:
       logstash:
-          enabled: false # Set to true to use Jhipster console locally
+          enabled: true # Set to true to use Jhipster console locally
           host: localhost # If using a Virtual Machine on Mac OS X or Windows with docker-machine, use the Docker's host IP here
           port: 5000
           queueSize: 512
