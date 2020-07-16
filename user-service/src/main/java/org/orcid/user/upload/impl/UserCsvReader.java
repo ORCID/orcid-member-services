@@ -4,16 +4,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.Instant;
+import java.util.Optional;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.orcid.user.domain.User;
+import org.orcid.user.repository.UserRepository;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.upload.UserUpload;
 import org.orcid.user.upload.UserUploadReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,6 +25,9 @@ public class UserCsvReader implements UserUploadReader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserCsvReader.class);
     private StringBuffer sb;
+
+    @Autowired
+    UserRepository userRepository;
 
 	@Override
 	public UserUpload readUsersUpload(InputStream inputStream, String createdBy) {
@@ -104,6 +111,11 @@ public class UserCsvReader implements UserUploadReader {
             if (StringUtils.isBlank(record.get("email"))) {
                 isOk = false;
                 sb.append("Login should not be empty");
+            } else {
+                if (userExists(record.get("email"))) {
+                    isOk = false;
+                    sb.append("User with email " + record.get("email") + " already exists");
+                }
             }
         } catch (IllegalArgumentException e) {
             isOk = false;
@@ -130,5 +142,10 @@ public class UserCsvReader implements UserUploadReader {
 
     public String getError() {
         return sb.toString();
+    }
+
+    public Boolean userExists(String email) {
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(email);
+        return existingUser.isPresent();
     }
 }
