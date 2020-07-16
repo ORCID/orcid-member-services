@@ -7,7 +7,7 @@ public class MemberNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-    private static final String PARAM = "param";
+    private static final String PARAM = "params";
 
     private String message = "";
 
