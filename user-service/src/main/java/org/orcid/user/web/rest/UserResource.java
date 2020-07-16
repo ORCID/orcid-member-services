@@ -301,5 +301,24 @@ public class UserResource {
 		userService.removeAuthorityFromUser(id, authority);
 		return ResponseEntity.accepted().build();
 	}
+	
+	 /**
+         * {@code PUT /users/:id/sendActivate} : send the activation email.
+         *
+         * @param login the login of the user to find.
+         * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+         *         the "login" user, or with status {@code 404 (Not Found)}.
+         */
+        @PutMapping("/users/{loginOrId}/sendActivate")
+        public ResponseEntity<UserDTO> sendActivate(@PathVariable String loginOrId) {
+                LOG.debug("REST request to get User : {}", loginOrId);
+                Optional<User> user = userService.getUserWithAuthoritiesByLogin(loginOrId);
+                if (!user.isPresent()) {
+                        user = userService.getUserWithAuthorities(loginOrId);
+                }
+                
+                userService.sendActivationEmail(user.get().getEmail());
+                return ResponseUtil.wrapOrNotFound(user.map(UserDTO::valueOf));
+        }
 
 }
