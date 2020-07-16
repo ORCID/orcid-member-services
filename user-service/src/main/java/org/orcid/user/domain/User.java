@@ -66,6 +66,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Field("activation_key")
     @JsonIgnore
     private String activationKey;
+    
+    @Field("activation_date")
+    private Instant activationDate = null;
 
     @Size(max = 20)
     @Field("reset_key")
@@ -158,6 +161,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setActivationKey(String activationKey) {
         this.activationKey = activationKey;
+    }
+    
+    public Instant getActivationDate() {
+        return activationDate;
+    }
+
+    public void setActivationDate(Instant activationDate) {
+        this.activationDate = activationDate;
     }
 
     public String getResetKey() {
