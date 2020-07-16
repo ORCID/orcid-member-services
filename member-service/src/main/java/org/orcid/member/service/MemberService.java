@@ -141,7 +141,8 @@ public class MemberService {
 				user.setLastModifiedDate(now);
 				userService.updateUser(user);
 			}
-		}
+            existingMember.setSalesforceId(member.getSalesforceId());
+        }
 
 		return memberRepository.save(existingMember);
 	}
@@ -168,7 +169,7 @@ public class MemberService {
 				.getUsersBySalesforceId(optional.get().getSalesforceId());
 		if (usersBelongingToMember != null && !usersBelongingToMember.isEmpty()) {
 		    assertionService.deleteAssertionsForSalesforceIn(optional.get().getSalesforceId());
-		    
+
 		    for (MemberServiceUser user : usersBelongingToMember) {
 		        LOG.warn("Deleting user: " + user.toString());
 		        userService.deleteUserById(user.getId());
