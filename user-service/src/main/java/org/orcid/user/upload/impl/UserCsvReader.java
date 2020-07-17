@@ -29,6 +29,10 @@ public class UserCsvReader implements UserUploadReader {
     @Autowired
     UserRepository userRepository;
 
+    UserCsvReader(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
 	@Override
 	public UserUpload readUsersUpload(InputStream inputStream, String createdBy) {
 		InputStreamReader isr = new InputStreamReader(inputStream);
