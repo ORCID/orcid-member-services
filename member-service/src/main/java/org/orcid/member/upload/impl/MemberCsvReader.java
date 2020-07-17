@@ -27,6 +27,10 @@ public class MemberCsvReader implements MembersUploadReader {
     @Autowired
     private MemberRepository memberRepository;
 
+    MemberCsvReader(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
 	@Override
 	public MemberUpload readMemberUpload(InputStream inputStream) {
 		Instant now = Instant.now();
