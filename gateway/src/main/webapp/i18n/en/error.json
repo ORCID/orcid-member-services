@@ -18,6 +18,7 @@
     "disambiguationSource": "Organization source can not be empty.",
     "emailUsed": "That email is already registered",
     "validation": "Validation error on the server.",
-    "memberNotFound": "Member not found with salesForceId: {{ params }} "
+    "memberNotFound": "Member not found with salesForceId: {{ params }} ",
+    "salesForceIdUsed": "A member with that salesforce id already exists"
   }
 }

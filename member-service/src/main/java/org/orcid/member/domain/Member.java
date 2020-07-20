@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -25,6 +26,7 @@ public class Member implements Serializable {
     private String clientId;
 
     @NotNull
+    @Indexed(unique=true)
     @Field("salesforce_id")
     private String salesforceId;
 
@@ -52,7 +54,7 @@ public class Member implements Serializable {
 
     @Field("last_modified_date")
     private Instant lastModifiedDate;
-    
+
     @Transient
     private String error;
 
