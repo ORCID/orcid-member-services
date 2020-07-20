@@ -96,19 +96,15 @@ jhipster:
   mail: # specific JHipster mail property, for standard properties see MailProperties
     from: MemberService@localhost
     base-url: http://127.0.0.1:8118
-  metrics:
-    logs: # Reports metrics in the logs
-      enabled: false
-      report-frequency: 60 # in seconds
   logging:
     logstash:
-      enabled: true # Set to true to use Jhipster console locally
+      enabled: false # Set to true to use Jhipster console locally
       host: localhost # If using a Virtual Machine on Mac OS X or Windows with docker-machine, use the Docker's host IP here
       port: 5000
       queueSize: 512
   metrics:
     logs:
-      enabled: true
+      enabled: false
       reportFrequency: 60 # seconds
 oauth2:
   signature-verification:
