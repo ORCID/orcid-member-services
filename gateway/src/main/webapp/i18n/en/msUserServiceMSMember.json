@@ -9,7 +9,8 @@
         "uploadLabel": "Import members from CSV"
       },
       "delete": {
-        "question": "Are you sure you want to delete member {{ clientName }}?"
+        "question": "Are you sure you want to delete {{ clientName }} from the Member Portal?",
+        "anyUsersAndAffiliations": "Any users and affiliations associated with this member will also be deleted from the Member Portal, however data added to the ORCID Registry will remain in ORCID."
       },
       "detail": {
         "title": "Member details"
