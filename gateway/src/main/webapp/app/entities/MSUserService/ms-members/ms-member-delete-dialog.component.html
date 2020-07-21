@@ -6,7 +6,12 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <p id="jhi-delete-msMember-heading" jhiTranslate="gatewayApp.msUserServiceMSMember.delete.question" [translateValues]="{clientName: msMember.clientName}">Are you sure you want to delete this Member Settings?</p>
+        <p id="jhi-delete-msMember-heading" jhiTranslate="gatewayApp.msUserServiceMSMember.delete.question" [translateValues]="{clientName: msMember.clientName}">Are you sure you want to delete {{ msMember.clientName }} from the Member Portal?</p>
+            </p>
+        <p jhiTranslate="gatewayApp.msUserServiceMSMember.delete.anyUsersAndAffiliations">
+            Any users and affiliations associated with this member will also be deleted from the Member Portal,
+            however, data added to the ORCID Registry will remain in ORCID.
+        </p>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">
