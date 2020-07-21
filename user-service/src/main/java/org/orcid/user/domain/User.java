@@ -56,7 +56,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Size(min = 2, max = 10)
     @Field("lang_key")
-    private String langKey;
+    private String langKey = Constants.DEFAULT_LANGUAGE;
 
     @Size(max = 256)
     @Field("image_url")
