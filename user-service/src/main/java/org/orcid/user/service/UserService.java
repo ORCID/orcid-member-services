@@ -202,7 +202,9 @@ public class UserService {
 					user.setImageUrl(userDTO.getImageUrl());
 					user.setMainContact(userDTO.getMainContact());
 					//user.setActivated(userDTO.isActivated());
-					user.setLangKey(userDTO.getLangKey());
+                    if (userDTO.getLangKey() != null) {
+                        user.setLangKey(userDTO.getLangKey());
+                    }
 					user.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId()));
 					userRepository.save(user);
 					userCaches.evictEntryFromUserCaches(user.getEmail());
