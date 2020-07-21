@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.orcid.user.config.Constants;
 import org.orcid.user.domain.Authority;
@@ -173,9 +174,15 @@ public class UserService {
 	 */
 	public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
 		SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(user -> {
-			user.setFirstName(firstName);
+    		        if(!StringUtils.equals(user.getEmail(),email.toLowerCase()) ){
+    		            user.setEmail(email.toLowerCase());
+                            user.setActivated(false);
+                            user.setActivationKey(RandomUtil.generateResetKey());
+                            user.setActivationDate(Instant.now());
+                            mailService.sendActivationEmail(user);
+                        }
+			user.setFirstName(firstName); 
 			user.setLastName(lastName);
-			user.setEmail(email.toLowerCase());
 			user.setLangKey(langKey);
 			user.setImageUrl(imageUrl);
 			user.setAuthorities(getAuthoritiesForUser(user.getSalesforceId()));
@@ -198,12 +205,18 @@ public class UserService {
 					user.setLogin(userDTO.getLogin().toLowerCase());
 					user.setFirstName(userDTO.getFirstName());
 					user.setLastName(userDTO.getLastName());
-					user.setEmail(userDTO.getEmail().toLowerCase());
 					user.setImageUrl(userDTO.getImageUrl());
 					user.setMainContact(userDTO.getMainContact());
 					//user.setActivated(userDTO.isActivated());
 					user.setLangKey(userDTO.getLangKey());
 					user.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId()));
+					if(!StringUtils.equals(user.getEmail(),userDTO.getEmail().toLowerCase()) ){
+					    user.setEmail(userDTO.getEmail().toLowerCase());
+					    user.setActivated(false);
+                                            user.setActivationKey(RandomUtil.generateResetKey());
+                                            user.setActivationDate(Instant.now());
+                                            mailService.sendActivationEmail(user);
+                                        }
 					userRepository.save(user);
 					userCaches.evictEntryFromUserCaches(user.getEmail());
 					LOG.debug("Changed Information for User: {}", user);
