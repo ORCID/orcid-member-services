@@ -174,6 +174,10 @@ public class AssertionService {
 			throw new IllegalArgumentException("Invalid assertion id");
 		}
 
+		if (assertion.getEmail() != null && existingAssertion.getEmail() != null
+            && !assertion.getEmail().equals(existingAssertion.getEmail())) {
+            updateEmailOrcidRecord(assertion.getEmail(), existingAssertion.getEmail());
+        }
 		copyFieldsToUpdate(assertion, existingAssertion);
 		existingAssertion.setUpdated(true);
 		existingAssertion.setModified(Instant.now());
@@ -191,7 +195,11 @@ public class AssertionService {
 	}
 
 	private void copyFieldsToUpdate(Assertion source, Assertion destination) {
-		destination.setStartYear(source.getStartYear());
+	    destination.setEmail(source.getEmail());
+        destination.setRoleTitle(source.getRoleTitle());
+        destination.setAffiliationSection(source.getAffiliationSection());
+
+        destination.setStartYear(source.getStartYear());
 		destination.setStartMonth(source.getStartMonth());
 		destination.setStartDay(source.getStartDay());
 
@@ -392,4 +400,13 @@ public class AssertionService {
 		return assertionsRepository.findByEmail(email);
 	}
 
+	private void updateEmailOrcidRecord(String newEmail, String oldEmail) {
+	    Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(oldEmail);
+	    if (orcidRecordOptional.isPresent()) {
+	        OrcidRecord orcidRecord = orcidRecordOptional.get();
+            orcidRecord.setEmail(newEmail);
+            orcidRecord.setModified(Instant.now());
+            orcidRecordService.updateOrcidRecord(orcidRecord);
+        }
+    }
 }
