@@ -133,7 +133,12 @@ public class MemberService {
 		// Check if salesforceId changed
 		if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
 			// update users associated with member
-			List<MemberServiceUser> usersBelongingToMember = userService
+            Optional<Member> optionalSalesForceId = memberRepository.findBySalesforceId(member.getSalesforceId());
+            if (optionalSalesForceId.isPresent() && !optionalSalesForceId.get().getId().equals(existingMember.getId())) {
+                throw new BadRequestAlertException("A member with that salesforce id already exists", "member", "salesForceIdUsed");
+            }
+
+            List<MemberServiceUser> usersBelongingToMember = userService
 					.getUsersBySalesforceId(optional.get().getSalesforceId());
 			for (MemberServiceUser user : usersBelongingToMember) {
 				user.setSalesforceId(member.getSalesforceId());
