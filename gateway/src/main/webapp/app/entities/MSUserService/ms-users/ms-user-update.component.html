@@ -70,6 +70,13 @@
                             This field is required.
                         </small>
                     </div>
+                    <fieldset [disabled]="true">
+                    <div class="form-group">
+                      <input type="checkbox" class="form-control" name="activated" id="field_activated"
+                           formControlName="activated"/>
+                      <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.activated" for="field_activated">Activated</label>
+                    </div>
+                    </fieldset>
                     <div class="alert alert-warning" *ngIf="membersList.length === 0">
                         <span jhiTranslate="gatewayApp.msUserServiceMSMember.home.notFound">No members to show</span>
                     </div>

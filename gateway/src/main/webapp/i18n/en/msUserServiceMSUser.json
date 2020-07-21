@@ -38,6 +38,7 @@
       "mainContact": "Main Contact",
       "salesforceId": "Organization",
       "parentSalesforceId": "Parent Salesforce Id",
+      "activated": "Activated",
       "createdBy": "Created By",
       "createdDate": "Created",
       "lastModifiedBy": "Last Modified By",
