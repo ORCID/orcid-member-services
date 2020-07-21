@@ -17,6 +17,7 @@
     "invalidUrl": "La url es invalida",
     "disambiguationSource": "Fuente de organizacion no puede ir vacio.",
     "emailUsed": "El email ya esta registrado",
-    "memberNotFound": "Miembro no encontrado con salesForceId: {{ params }} "
+    "memberNotFound": "Miembro no encontrado con salesForceId: {{ params }} ",
+    "salesForceIdUsed": "Un miembro con ese salesforce id ya existe"
   }
 }
