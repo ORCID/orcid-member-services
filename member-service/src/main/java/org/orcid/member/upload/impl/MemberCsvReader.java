@@ -4,22 +4,32 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.Instant;
+import java.util.Optional;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.orcid.member.domain.Member;
+import org.orcid.member.repository.MemberRepository;
 import org.orcid.member.upload.MemberUpload;
 import org.orcid.member.upload.MembersUploadReader;
 import org.orcid.member.web.rest.MemberValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MemberCsvReader implements MembersUploadReader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MemberCsvReader.class);
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    MemberCsvReader(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
 	@Override
 	public MemberUpload readMemberUpload(InputStream inputStream) {
@@ -88,7 +98,11 @@ public class MemberCsvReader implements MembersUploadReader {
 		member.setIsConsortiumLead(isConsortiumLead);
 
 		if (validateField(record, "salesforceId", "Salesforce id should not be empty", member)) {
-            member.setSalesforceId(record.get("salesforceId"));
+		    if (memberExists(record.get("salesforceId"))) {
+                member.setError("Member with salesForceId already exist: " + record.get("salesforceId"));
+            } else {
+                member.setSalesforceId(record.get("salesforceId"));
+            }
         }
 
 		if (!isConsortiumLead) {
@@ -115,6 +129,11 @@ public class MemberCsvReader implements MembersUploadReader {
             return false;
         }
         return true;
+    }
+
+    public Boolean memberExists(String salesforceId) {
+        Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
+        return existingMember.isPresent();
     }
 
 }

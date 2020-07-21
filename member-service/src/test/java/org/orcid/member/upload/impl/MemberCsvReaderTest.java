@@ -6,18 +6,36 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.orcid.member.repository.MemberRepository;
 import org.orcid.member.upload.MemberUpload;
 import org.orcid.member.domain.Member;
 
 class MemberCsvReaderTest {
 
-	private MemberCsvReader reader = new MemberCsvReader();
+    @Mock
+    MemberRepository memberRepository;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    private MemberCsvReader reader = null;
 
 	@Test
 	void testReadMembersUpload() throws IOException {
-		InputStream inputStream = getClass().getResourceAsStream("/members.csv");
+        reader = new MemberCsvReader(memberRepository);
+
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.empty());
+
+        InputStream inputStream = getClass().getResourceAsStream("/members.csv");
 		MemberUpload upload = reader.readMemberUpload(inputStream);
 
 		assertEquals(2, upload.getMembers().size());
