@@ -99,4 +99,8 @@ public class OrcidRecordService {
         csvPrinter.close();
         return buffer.toString();
     }
+
+    public void updateOrcidRecord(OrcidRecord orcidRecord) {
+        orcidRecordRepository.save(orcidRecord);
+    }
 }
