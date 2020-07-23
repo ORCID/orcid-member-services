@@ -19,6 +19,7 @@
     "emailUsed": "That email is already registered",
     "validation": "Validation error on the server.",
     "memberNotFound": "Member not found with salesForceId: {{ params }} ",
-    "salesForceIdUsed": "A member with that salesforce id already exists"
+    "salesForceIdUsed": "A member with that salesforce id already exists",
+    "affiliationOtherOrganization": "This affiliations doesnt belong to your organization"
   }
 }
