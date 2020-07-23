@@ -12,13 +12,18 @@ public class AssertionUtils {
 		if (assertion.getOrcidError() != null) {
 			JSONObject json = new JSONObject(assertion.getOrcidError());
 			int statusCode = json.getInt("statusCode");
+			String errorMessage = json.getString("error");
 			switch (statusCode) {
 			case 404:
 				return AssertionStatus.USER_DELETED_FROM_ORCID.value;
-			case 403:
-				return AssertionStatus.USER_REVOKED_ACCESS.value;
+			case 400:
+				if(errorMessage.contains("invalid_scope")) {
+					return AssertionStatus.USER_REVOKED_ACCESS.value;
+				} else {
+					return AssertionStatus.ERROR_ADDING_TO_ORCID.value;
+				}	
 			default:
-				return AssertionStatus.ERROR_ADDIN_TO_ORCID.value;
+				return AssertionStatus.ERROR_ADDING_TO_ORCID.value;
 			}
 
 		}
