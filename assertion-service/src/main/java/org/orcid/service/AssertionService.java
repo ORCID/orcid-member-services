@@ -19,6 +19,7 @@ import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
+import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.orcid.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -166,12 +167,12 @@ public class AssertionService {
 	}
 
 	public Assertion updateAssertion(Assertion assertion) {
-		String userId = assertionsUserService.getLoggedInUserId();
+		String salesforceId = assertionsUserService.getLoggedInUser().getSalesforceId();
 		Optional<Assertion> optional = assertionsRepository.findById(assertion.getId());
 		Assertion existingAssertion = optional.get();
 
-		if (!userId.equals(existingAssertion.getOwnerId())) {
-			throw new IllegalArgumentException("Invalid assertion id");
+		if (!salesforceId.equals(existingAssertion.getSalesforceId())) {
+            throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
 		}
 
 		if (assertion.getEmail() != null && existingAssertion.getEmail() != null
@@ -270,6 +271,9 @@ public class AssertionService {
 				assertionsRepository.save(assertion);
 			} catch (ORCIDAPIException oae) {
 				storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+				if(oae.getError().contains("invalid_scope")) {
+					removeIdTokenFromOrcidRecord(record.getIdToken());
+				}
 			} catch (Exception e) {
 				LOG.error("Error with assertion " + assertion.getId(), e);
 				storeError(assertion.getId(), 0, e.getMessage());
@@ -318,6 +322,9 @@ public class AssertionService {
 				assertionsRepository.save(assertion);
 			} catch (ORCIDAPIException oae) {
 				storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+				if(oae.getError().contains("invalid_scope")) {
+					removeIdTokenFromOrcidRecord(record.getIdToken());
+				}
 			} catch (Exception e) {
 				LOG.error("Error with assertion " + assertion.getId(), e);
 				storeError(assertion.getId(), 0, e.getMessage());
@@ -363,6 +370,9 @@ public class AssertionService {
 			return deleted;
 		} catch (ORCIDAPIException oae) {
 			storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+			if(oae.getError().contains("invalid_scope")) {
+				removeIdTokenFromOrcidRecord(record.getIdToken());
+			}
 		} catch (Exception e) {
 			LOG.error("Error with assertion " + assertion.getId(), e);
 			storeError(assertion.getId(), 0, e.getMessage());
@@ -421,12 +431,22 @@ public class AssertionService {
             orcidRecordService.updateOrcidRecord(orcidRecord);
         }
     }
-	
+
 	private void deleteOrcidRecordByEmail(String email) {
 	    Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(email);
 	    if (orcidRecordOptional.isPresent()) {
 	        OrcidRecord orcidRecord = orcidRecordOptional.get();
             orcidRecordService.deleteOrcidRecord(orcidRecord);
+	    }
+	}
+
+	private void removeIdTokenFromOrcidRecord(String idToken) {
+	    Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByIdToken(idToken);
+	    if (orcidRecordOptional.isPresent()) {
+	        OrcidRecord orcidRecord = orcidRecordOptional.get();
+            orcidRecord.setIdToken(null);
+            orcidRecord.setModified(Instant.now());
+            orcidRecordService.updateOrcidRecord(orcidRecord);
         }
     }
 }

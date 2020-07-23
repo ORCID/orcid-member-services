@@ -25,10 +25,15 @@ public class AssertionService {
 	}
 	
 	public void deleteAssertionsForSalesforceIn(String salesforceId) {
-	        ResponseEntity<String> response = assertionServiceClient.deleteAssertionsForSalesforceId(salesforceId);
-	        if (!response.getStatusCode().is2xxSuccessful()) {
-	            LOG.warn("Error deleting assertions for  salesforceId {}, response code {}", salesforceId, response.getStatusCodeValue());
-                    throw new BadRequestAlertException("Unable to delete assertions for salesforceId " + salesforceId, "User", null);
+	        try {
+	            ResponseEntity<String> response = assertionServiceClient.deleteAssertionsForSalesforceId(salesforceId);
+	            if (!response.getStatusCode().is2xxSuccessful()) {
+	                    LOG.warn("Error deleting assertions for  salesforceId {}, response code {}", salesforceId, response.getStatusCodeValue());
+	                    throw new BadRequestAlertException("Unable to delete assertions for salesforceId " + salesforceId, "member", "deleteAssertionsForSalesforceId");
+	            }
+	        } catch (Exception e) {
+	            LOG.error("Error when trying to delete assertions for salesforceId: " + salesforceId, e);
+                    throw new BadRequestAlertException("Unable to delete assertions for salesforceId " + salesforceId, "member", "deleteAssertionsForSalesforceId");
 	        }
 	}
 
