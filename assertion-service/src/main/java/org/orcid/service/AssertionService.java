@@ -191,7 +191,13 @@ public class AssertionService {
 	}
 
 	public void deleteById(String id) {
+		String assertionEmail = getAssertionEmail(id);
 		assertionsRepository.deleteById(id);
+		//Remove OrcidRecord if no other assertions exist for user
+		List<Assertion> assertions = assertionsRepository.findByEmail(assertionEmail);
+		if (assertions.isEmpty()) {
+			deleteOrcidRecordByEmail(assertionEmail);
+		}
 	}
 
 	private void copyFieldsToUpdate(Assertion source, Assertion destination) {
@@ -395,6 +401,12 @@ public class AssertionService {
 		}
 		return null;
 	}
+	
+	private String getAssertionEmail(String assertionId) {
+		Assertion assertion = assertionsRepository.findById(assertionId)
+				.orElseThrow(() -> new RuntimeException("Unable to find assertion with ID: " + assertionId));
+		return assertion.getEmail();
+	}
 
 	public List<Assertion> findByEmail(String email) {
 		return assertionsRepository.findByEmail(email);
@@ -407,6 +419,14 @@ public class AssertionService {
             orcidRecord.setEmail(newEmail);
             orcidRecord.setModified(Instant.now());
             orcidRecordService.updateOrcidRecord(orcidRecord);
+        }
+    }
+	
+	private void deleteOrcidRecordByEmail(String email) {
+	    Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(email);
+	    if (orcidRecordOptional.isPresent()) {
+	        OrcidRecord orcidRecord = orcidRecordOptional.get();
+            orcidRecordService.deleteOrcidRecord(orcidRecord);
         }
     }
 }
