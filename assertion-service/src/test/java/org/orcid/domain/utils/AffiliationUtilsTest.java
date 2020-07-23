@@ -67,7 +67,7 @@ class AffiliationUtilsTest {
 	private JSONObject getInvalidScopeError(int statusCode) {
 		JSONObject error = new JSONObject();
 		error.put("statusCode", statusCode);
-		error.put("error", "error: invalid_token");
+		error.put("error", "error: invalid_scope");
 		return error;
 	}
 
