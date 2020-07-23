@@ -264,8 +264,9 @@ public class UserService {
 
         public Optional<User> sendActivationEmail(String mail) {
             return userRepository.findOneByEmailIgnoreCase(mail).map(user -> {
-                user.setActivationKey(RandomUtil.generateResetKey());
-                user.setActivationDate(Instant.now());
+                user.setActivated(false);
+                user.setResetKey(RandomUtil.generateResetKey());
+                user.setResetDate(Instant.now());
                 userRepository.save(user);
                 userCaches.evictEntryFromUserCaches(user.getEmail());
                 mailService.sendActivationEmail(user);
