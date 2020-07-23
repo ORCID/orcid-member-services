@@ -59,6 +59,10 @@ public class OrcidRecordService {
         }
     }
     
+    public void deleteOrcidRecord(OrcidRecord orcidRecord) {
+    	orcidRecordRepository.delete(orcidRecord);
+    }
+    
     public void storeIdToken(String emailInStatus, String idToken, String orcidIdInJWT) {
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus).orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
         orcidRecord.setIdToken(idToken);
