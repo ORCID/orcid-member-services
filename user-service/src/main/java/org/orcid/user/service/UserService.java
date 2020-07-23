@@ -64,19 +64,6 @@ public class UserService {
 	@Autowired
 	private MailService mailService;
 
-	public Optional<User> activateRegistration(String key) {
-		LOG.debug("Activating user for activation key {}", key);
-		return userRepository.findOneByActivationKey(key).map(user -> {
-			// activate given user for the registration key.
-			user.setActivated(true);
-			user.setActivationKey(null);
-			userRepository.save(user);
-			userCaches.evictEntryFromUserCaches(user.getEmail());
-			LOG.debug("Activated user: {}", user);
-			return user;
-		});
-	}
-
 	public Optional<User> completePasswordReset(String newPassword, String key) {
 		LOG.debug("Reset user password for reset key {}", key);
 		return userRepository.findOneByResetKey(key)
