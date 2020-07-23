@@ -143,7 +143,7 @@ public class AccountResourceIT {
         user.setEmail("activate-account@example.com");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(false);
-        user.setActivationKey(activationKey);
+        user.setResetKey(activationKey);
 
         userRepository.save(user);
 
