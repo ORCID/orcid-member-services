@@ -9,13 +9,13 @@
 	style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
 	<div style="padding: 20px; padding-top: 10px; margin: auto;">
 		<div th:insert="~{mail/common :: emailHeader}"></div>
-		<p th:text="#{email.creation.text1}">An account on the ORCID
-			Member Portal site has been created for you. Please click on the URL
+		<p th:text="#{email.creation.text1}">Your account on the ORCID
+			Member Portal needs to be activated. Please click on the URL
 			below to activate your account and set a password:</p>
 		<p>
-			<a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}/activate?key=${user.activationKey}|})"
-				th:href="${url}" th:text="${url}">Activation link</a>
-		</p>
+      <a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}/reset/finish?key=${user.resetKey}|})"
+        th:href="${url}" th:text="${url}">Login link</a>
+    </p>
 		<p>
 			<span th:text="#{email.reset.text4}">If you have any questions
 				or need help, please contact us at</span> <a style="color: #2E7F9F;"
