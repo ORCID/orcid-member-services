@@ -147,7 +147,7 @@ public class AccountResourceIT {
 
         userRepository.save(user);
 
-        restMvc.perform(get("/api/activate?key={activationKey}", activationKey)).andExpect(status().isOk());
+        restMvc.perform(get("/api/reset/finish?key={activationKey}", activationKey)).andExpect(status().isOk());
 
         user = userRepository.findOneByLogin(user.getLogin()).orElse(null);
         assertThat(user.getActivated()).isTrue();
@@ -155,7 +155,7 @@ public class AccountResourceIT {
 
     @Test
     public void testActivateAccountWithWrongKey() throws Exception {
-        restMvc.perform(get("/api/activate?key=wrongActivationKey")).andExpect(status().isInternalServerError());
+        restMvc.perform(get("/api//reset/finish?key=wrongActivationKey")).andExpect(status().isInternalServerError());
     }
 
     @Test
