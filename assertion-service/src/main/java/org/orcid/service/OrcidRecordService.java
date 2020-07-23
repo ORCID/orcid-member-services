@@ -36,6 +36,10 @@ public class OrcidRecordService {
         return orcidRecordRepository.findOneByEmail(email);
     }
     
+    public Optional<OrcidRecord> findOneByIdToken(String idToken) {
+        return orcidRecordRepository.findOneByIdToken(idToken);
+    }
+    
     public void createOrcidRecord(String email, Instant now) {
         OrcidRecord or = new OrcidRecord();
         or.setEmail(email);
