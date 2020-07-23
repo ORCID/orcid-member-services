@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.orcid.user.config.Constants;
 import org.orcid.user.domain.Authority;
@@ -63,19 +64,6 @@ public class UserService {
 	
 	@Autowired
 	private MailService mailService;
-
-	public Optional<User> activateRegistration(String key) {
-		LOG.debug("Activating user for activation key {}", key);
-		return userRepository.findOneByActivationKey(key).map(user -> {
-			// activate given user for the registration key.
-			user.setActivated(true);
-			user.setActivationKey(null);
-			userRepository.save(user);
-			userCaches.evictEntryFromUserCaches(user.getEmail());
-			LOG.debug("Activated user: {}", user);
-			return user;
-		});
-	}
 
 	public Optional<User> completePasswordReset(String newPassword, String key) {
 		LOG.debug("Reset user password for reset key {}", key);
@@ -173,9 +161,15 @@ public class UserService {
 	 */
 	public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
 		SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(user -> {
-			user.setFirstName(firstName);
+    		        if(!StringUtils.equals(user.getEmail(),email.toLowerCase()) ){
+    		            user.setEmail(email.toLowerCase());
+                            user.setActivated(false);
+                            user.setActivationKey(RandomUtil.generateResetKey());
+                            user.setActivationDate(Instant.now());
+                            mailService.sendActivationEmail(user);
+                        }
+			user.setFirstName(firstName); 
 			user.setLastName(lastName);
-			user.setEmail(email.toLowerCase());
 			user.setLangKey(langKey);
 			user.setImageUrl(imageUrl);
 			user.setAuthorities(getAuthoritiesForUser(user.getSalesforceId()));
@@ -198,7 +192,6 @@ public class UserService {
 					user.setLogin(userDTO.getLogin().toLowerCase());
 					user.setFirstName(userDTO.getFirstName());
 					user.setLastName(userDTO.getLastName());
-					user.setEmail(userDTO.getEmail().toLowerCase());
 					user.setImageUrl(userDTO.getImageUrl());
 					user.setMainContact(userDTO.getMainContact());
 					//user.setActivated(userDTO.isActivated());
@@ -206,6 +199,13 @@ public class UserService {
                         user.setLangKey(userDTO.getLangKey());
                     }
 					user.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId()));
+					if(!StringUtils.equals(user.getEmail(),userDTO.getEmail().toLowerCase()) ){
+					    user.setEmail(userDTO.getEmail().toLowerCase());
+					    user.setActivated(false);
+                                            user.setActivationKey(RandomUtil.generateResetKey());
+                                            user.setActivationDate(Instant.now());
+                                            mailService.sendActivationEmail(user);
+                                        }
 					userRepository.save(user);
 					userCaches.evictEntryFromUserCaches(user.getEmail());
 					LOG.debug("Changed Information for User: {}", user);
@@ -264,8 +264,9 @@ public class UserService {
 
         public Optional<User> sendActivationEmail(String mail) {
             return userRepository.findOneByEmailIgnoreCase(mail).map(user -> {
-                user.setActivationKey(RandomUtil.generateResetKey());
-                user.setActivationDate(Instant.now());
+                user.setActivated(false);
+                user.setResetKey(RandomUtil.generateResetKey());
+                user.setResetDate(Instant.now());
                 userRepository.save(user);
                 userCaches.evictEntryFromUserCaches(user.getEmail());
                 mailService.sendActivationEmail(user);

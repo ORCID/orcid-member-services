@@ -22,14 +22,14 @@ class AffiliationUtilsTest {
 		assertEquals(AssertionStatus.USER_DELETED_FROM_ORCID.value,
 				AssertionUtils.getAssertionStatus(assertion, record));
 
-		error = getDummyError(403);
+		error = getInvalidScopeError(400);
 		assertion.setOrcidError(error.toString());
 		assertEquals(AssertionStatus.USER_REVOKED_ACCESS.value,
 				AssertionUtils.getAssertionStatus(assertion, record));
 
 		error = getDummyError(500);
 		assertion.setOrcidError(error.toString());
-		assertEquals(AssertionStatus.ERROR_ADDIN_TO_ORCID.value,
+		assertEquals(AssertionStatus.ERROR_ADDING_TO_ORCID.value,
 				AssertionUtils.getAssertionStatus(assertion, record));
 	}
 
@@ -61,6 +61,13 @@ class AffiliationUtilsTest {
 		JSONObject error = new JSONObject();
 		error.put("statusCode", statusCode);
 		error.put("error", "dummy");
+		return error;
+	}
+	
+	private JSONObject getInvalidScopeError(int statusCode) {
+		JSONObject error = new JSONObject();
+		error.put("statusCode", statusCode);
+		error.put("error", "error: invalid_scope");
 		return error;
 	}
 

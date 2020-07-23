@@ -29,6 +29,13 @@
                     <dd class="col-md-10">
                         {{msMemberService.orgNameMap[msUser.salesforceId]}}
                     </dd>
+                    <dt class="col-md-2" jhiTranslate="gatewayApp.msUserServiceMSUser.activated">Activated</dt>
+                    <dd class="col-md-10">
+                        <span class="sr-only" *ngIf="msUser.activated" jhiTranslate="global.true">True</span>
+                        <span class="sr-only" *ngIf="!msUser.activated" jhiTranslate="global.false">False</span>
+                        <fa-icon aria-hidden="true" *ngIf="msUser.activated" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                        <fa-icon aria-hidden="true" *ngIf="!msUser.activated" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                    </dd>
                     <dt class="col-md-2" jhiTranslate="gatewayApp.msUserServiceMSUser.createdDate">Created Date</dt>
                     <dd class="col-md-10">
                         {{msUser.createdDate | date:'medium'}} <i><span jhiTranslate="global.by">by</span> {{msUser.createdBy}}</i>

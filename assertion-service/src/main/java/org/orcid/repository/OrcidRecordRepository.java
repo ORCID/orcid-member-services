@@ -13,6 +13,9 @@ public interface OrcidRecordRepository extends MongoRepository<OrcidRecord, Stri
 
     Optional<OrcidRecord> findOneByEmail(String email);
     
+    @Query("{id_token: ?0}")
+    Optional<OrcidRecord> findOneByIdToken(String idToken);
+    
     @Query(value = "{owner_id: ?0, id_token: null}")
     List<OrcidRecord> findAllToInvite(String ownerId);
 }
