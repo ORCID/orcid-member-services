@@ -264,6 +264,9 @@ public class AssertionService {
 				assertionsRepository.save(assertion);
 			} catch (ORCIDAPIException oae) {
 				storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+				if(oae.getError().contains("invalid_scope")) {
+					removeIdTokenFromOrcidRecord(record.getIdToken());
+				}
 			} catch (Exception e) {
 				LOG.error("Error with assertion " + assertion.getId(), e);
 				storeError(assertion.getId(), 0, e.getMessage());
@@ -312,6 +315,9 @@ public class AssertionService {
 				assertionsRepository.save(assertion);
 			} catch (ORCIDAPIException oae) {
 				storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+				if(oae.getError().contains("invalid_scope")) {
+					removeIdTokenFromOrcidRecord(record.getIdToken());
+				}
 			} catch (Exception e) {
 				LOG.error("Error with assertion " + assertion.getId(), e);
 				storeError(assertion.getId(), 0, e.getMessage());
@@ -357,6 +363,9 @@ public class AssertionService {
 			return deleted;
 		} catch (ORCIDAPIException oae) {
 			storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+			if(oae.getError().contains("invalid_scope")) {
+				removeIdTokenFromOrcidRecord(record.getIdToken());
+			}
 		} catch (Exception e) {
 			LOG.error("Error with assertion " + assertion.getId(), e);
 			storeError(assertion.getId(), 0, e.getMessage());
@@ -405,6 +414,16 @@ public class AssertionService {
 	    if (orcidRecordOptional.isPresent()) {
 	        OrcidRecord orcidRecord = orcidRecordOptional.get();
             orcidRecord.setEmail(newEmail);
+            orcidRecord.setModified(Instant.now());
+            orcidRecordService.updateOrcidRecord(orcidRecord);
+        }
+    }
+	
+	private void removeIdTokenFromOrcidRecord(String idToken) {
+	    Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByIdToken(idToken);
+	    if (orcidRecordOptional.isPresent()) {
+	        OrcidRecord orcidRecord = orcidRecordOptional.get();
+            orcidRecord.setIdToken(null);
             orcidRecord.setModified(Instant.now());
             orcidRecordService.updateOrcidRecord(orcidRecord);
         }
