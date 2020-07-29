@@ -34,6 +34,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     private static final String FIELD_ERRORS_KEY = "fieldErrors";
     private static final String MESSAGE_KEY = "message";
+    private static final String PARAMS = "params";
     private static final String PATH_KEY = "path";
     private static final String VIOLATIONS_KEY = "violations";
 
@@ -111,6 +112,18 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         Problem problem = Problem.builder()
             .withStatus(Status.CONFLICT)
             .with(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE)
+            .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    ResponseEntity<Problem> handleEmailAlreadyUsedException(EmailAlreadyUsedException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
+            .withTitle("Assertion email already used")
+            .withStatus(Status.BAD_REQUEST)
+            .with(MESSAGE_KEY, ErrorConstants.ERR_EMAIL_AFFILIATION_USED)
+            .with(PARAMS, ex.getParamMap().get("params"))
             .build();
         return create(ex, problem, request);
     }
