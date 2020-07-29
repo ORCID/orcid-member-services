@@ -449,4 +449,8 @@ public class AssertionService {
             orcidRecordService.updateOrcidRecord(orcidRecord);
         }
     }
+
+    public Optional<Assertion> findOneByEmailIgnoreCase(String email) {
+        return assertionsRepository.findOneByEmailIgnoreCase(email.toLowerCase());
+    }
 }
