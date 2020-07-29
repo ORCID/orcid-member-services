@@ -1,4 +1,5 @@
 export const AFFILIATION_TYPES = [
+    'EDUCATION',
     'EMPLOYMENT',
     'QUALIFICATION',
     'INVITED_POSITION',
