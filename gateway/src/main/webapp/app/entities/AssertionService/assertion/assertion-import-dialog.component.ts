@@ -35,7 +35,7 @@ export class AssertionImportDialogComponent {
   }
 
   clear() {
-    this.activeModal.dismiss('cancel');
+    this.activeModal.dismiss(true);
   }
 
   selectFile(event) {
