@@ -32,10 +32,6 @@ export class AssertionDeleteDialogComponent {
     this.errorDeletingFromOrcid = false;
     if (this.assertion.putCode && this.assertion.status===ASSERTION_STATUS.IN_ORCID) {
       this.assertionService.deleteFromOrcid(this.assertion.id).subscribe(res => {
-        console.log(res);
-        // TODO: add response code to res.body
-        // if 404, delete from assertion service
-        // if 403, change assertion status to token revoked
         if (res.body.deleted === true || res.body.statusCode === 404) {
           this.assertionService.delete(this.assertion.id).subscribe(response => {
             this.activeModal.dismiss(true);
