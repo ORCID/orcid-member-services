@@ -8,7 +8,6 @@ import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 import { AssertionService } from './assertion.service';
 import { ASSERTION_STATUS } from 'app/shared/constants/orcid-api.constants';
 
-
 @Component({
   selector: 'jhi-assertion-delete-dialog',
   templateUrl: './assertion-delete-dialog.component.html'
@@ -18,7 +17,7 @@ export class AssertionDeleteDialogComponent {
   userRevokedAccess: string = ASSERTION_STATUS.USER_REVOKED_ACCESS;
   assertion: IAssertion;
   errorDeletingFromOrcid: boolean;
-  errorUserRevoked: boolean = false;
+  errorUserRevoked = false;
 
   constructor(protected assertionService: AssertionService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {
     this.errorDeletingFromOrcid = false;
@@ -30,7 +29,7 @@ export class AssertionDeleteDialogComponent {
 
   confirmDelete() {
     this.errorDeletingFromOrcid = false;
-    if (this.assertion.putCode && this.assertion.status===ASSERTION_STATUS.IN_ORCID) {
+    if (this.assertion.putCode && this.assertion.status === ASSERTION_STATUS.IN_ORCID) {
       this.assertionService.deleteFromOrcid(this.assertion.id).subscribe(res => {
         if (res.body.deleted === true || res.body.statusCode === 404) {
           this.assertionService.delete(this.assertion.id).subscribe(response => {
