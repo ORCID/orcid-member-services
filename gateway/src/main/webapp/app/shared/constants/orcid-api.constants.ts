@@ -7,6 +7,17 @@ export const AFFILIATION_TYPES = [
     'SERVICE'
 ];
 
+export const ASSERTION_STATUS = {
+    'USER_DENIED_ACCESS': 'User denied access',
+	'PENDING': 'Pending',
+	'DELETED_IN_ORCID': 'Deleted in ORCID',
+	'IN_ORCID': 'In ORCID',
+	'USER_GRANTED_ACCESS': 'User granted access',
+	'USER_DELETED_FROM_ORCID': 'User deleted from ORCID',
+	'USER_REVOKED_ACCESS': 'User revoked access',
+	'ERROR_ADDING_TO_ORCID': 'Error adding to ORCID';
+}
+
 export const COUNTRIES = {
     'Afghanistan' : 'AF',
     'Åland Islands' : 'AX',
