@@ -122,6 +122,7 @@ public class MemberService {
 		member.setLastModifiedDate(now);
 
 		Member existingMember = optional.get();
+		existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
 		existingMember.setClientId(member.getClientId());
 		existingMember.setClientName(member.getClientName());
 		existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
@@ -137,15 +138,15 @@ public class MemberService {
                 throw new BadRequestAlertException("A member with that salesforce id already exists", "member", "salesForceIdUsed");
             }
 
-            updateUserSalesForceIdOrAssertion(optional, member, true, now);
+            List<MemberServiceUser> usersBelongingToMember = userService
+					.getUsersBySalesforceId(optional.get().getSalesforceId());
+			for (MemberServiceUser user : usersBelongingToMember) {
+				user.setSalesforceId(member.getSalesforceId());
+				user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+				user.setLastModifiedDate(now);
+				userService.updateUser(user);
+			}
             existingMember.setSalesforceId(member.getSalesforceId());
-        }
-
-		if (!existingMember.getAssertionServiceEnabled().equals(member.getAssertionServiceEnabled())) {
-            existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
-            member = memberRepository.save(existingMember);
-            updateUserSalesForceIdOrAssertion(optional, member, false, now);
-            return member;
         }
 
 		return memberRepository.save(existingMember);
@@ -193,18 +194,5 @@ public class MemberService {
 			return Optional.empty();
 		}
 	}
-
-	private void updateUserSalesForceIdOrAssertion(Optional<Member> optional, Member member, boolean salesForce, Instant now) {
-        List<MemberServiceUser> usersBelongingToMember = userService
-            .getUsersBySalesforceId(optional.get().getSalesforceId());
-        for (MemberServiceUser user : usersBelongingToMember) {
-            if (salesForce) {
-                user.setSalesforceId(member.getSalesforceId());
-            }
-            user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-            user.setLastModifiedDate(now);
-            userService.updateUser(user);
-        }
-    }
 
 }
