@@ -113,7 +113,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         }
 
 		// Dates follows the format yyyy-MM-dd
-        if (getOptionalMandatoryNullable(line, "start-date") != null) {
+        if (getOptionalMandatoryNullable(line, "end-date") != null) {
             String endDate = line.get("end-date");
             if (!StringUtils.isBlank(endDate)) {
                 String endDateParts[] = endDate.split("-|/|\\s");
@@ -185,7 +185,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			String url = validateUrl(line.get("url"));
 			a.setUrl(url);
 		}
-		
+
 		return a;
 	}
 
