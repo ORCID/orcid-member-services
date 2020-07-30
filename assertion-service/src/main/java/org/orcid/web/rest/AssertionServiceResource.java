@@ -8,9 +8,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -32,6 +30,7 @@ import org.orcid.service.OrcidRecordService;
 import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.orcid.web.rest.errors.EmailAlreadyUsedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -296,6 +295,14 @@ public class AssertionServiceResource {
     }
 
     private void validateAssertion(Assertion assertion) {
+        Optional<Assertion> existing = assertionsService.findOneByEmailIgnoreCase(assertion.getEmail());
+        if (existing.isPresent()) {
+            String errorMessage = String.format("Unable to add affiliation. An affiliation for %s already exists and belongs to another organization.", assertion.getEmail());
+            Map<String, String> params = new HashMap<>();
+            params.put("params", assertion.getEmail());
+            throw new EmailAlreadyUsedException(errorMessage, params);
+        }
+
         if (StringUtils.isBlank(assertion.getEmail())) {
             throw new IllegalArgumentException("email must not be null");
         }

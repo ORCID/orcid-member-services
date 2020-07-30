@@ -21,6 +21,7 @@
     "validation": "Validation error on the server.",
     "memberNotFound": "Member not found with salesForceId: {{ params }} ",
     "salesForceIdUsed": "A member with that salesforce id already exists",
-    "affiliationOtherOrganization": "This affiliations doesnt belong to your organization"
+    "affiliationOtherOrganization": "This affiliations doesnt belong to your organization",
+    "emailAffiliationUsed": "Unable to add affiliation. An affiliation for {{ params }} already exists and belongs to another organization."
   }
 }
