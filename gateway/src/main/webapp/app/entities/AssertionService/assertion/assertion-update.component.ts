@@ -186,4 +186,9 @@ export class AssertionUpdateComponent implements OnInit {
   protected onSaveError() {
     this.isSaving = false;
   }
+
+  private onDateSelected() {
+    this.daysList = this.dateUtilService.getDaysList(this.editForm.get('startYear').value, this.editForm.get('startMonth').value);
+  }
+
 }

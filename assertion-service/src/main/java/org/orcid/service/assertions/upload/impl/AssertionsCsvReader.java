@@ -97,7 +97,8 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
             String startDate = line.get("start-date");
             if (!StringUtils.isBlank(startDate)) {
                 String[] startDateParts = startDate.split("-|/|\\s");
-                if (validDate(startDate, startDateParts[0], line, assertionsUpload)) {
+                String day = startDateParts.length > 2 ? startDateParts[2] : "0";
+                if (validDate(startDate, startDateParts[0], day, line, assertionsUpload)) {
                     a.setStartYear(startDateParts[0]);
                     if (startDateParts.length > 1) {
                         a.setStartMonth(startDateParts[1]);
@@ -117,7 +118,8 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
             String endDate = line.get("end-date");
             if (!StringUtils.isBlank(endDate)) {
                 String endDateParts[] = endDate.split("-|/|\\s");
-                if (validDate(endDate, endDateParts[0], line, assertionsUpload)) {
+                String day = endDateParts.length > 2 ? endDateParts[2] : "0";
+                if (validDate(endDate, endDateParts[0], day, line, assertionsUpload)) {
                     a.setEndYear(endDateParts[0]);
                     if (endDateParts.length > 1) {
                         a.setEndMonth(endDateParts[1]);
@@ -185,7 +187,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			String url = validateUrl(line.get("url"));
 			a.setUrl(url);
 		}
-		
+
 		return a;
 	}
 
@@ -236,7 +238,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		return encoded.toASCIIString();
 	}
 
-    protected boolean validDate(String date, String year, CSVRecord line, AssertionsUpload assertionsUpload) {
+    protected boolean validDate(String date, String year, String day, CSVRecord line, AssertionsUpload assertionsUpload) {
         DateTimeFormatter[] formatters = {
             new DateTimeFormatterBuilder().appendPattern("yyyy").parseDefaulting(ChronoField.MONTH_OF_YEAR, 1).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
                 .toFormatter(),
@@ -247,7 +249,16 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
             try {
                 LocalDate localDate = LocalDate.parse(date, formatter);
                 if (isEmpty(year) || localDate.getYear() == Integer.parseInt(year)) {
-                    return true;
+                    if (Integer.parseInt(day) > 0) {
+                        if (Integer.parseInt(day) == localDate.getDayOfMonth()) {
+                            return true;
+                        } else {
+                            assertionsUpload.addError(line.getRecordNumber(), "Invalid date.");
+                            return false;
+                        }
+                    } else {
+                        return true;
+                    }
                 }
             } catch (DateTimeParseException e) {
             }
