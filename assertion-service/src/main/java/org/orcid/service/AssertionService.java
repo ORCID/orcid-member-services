@@ -104,13 +104,22 @@ public class AssertionService {
 		return assertions;
 	}
 
-	public void deleteAllBySalesforceId(String salesforceId) {
-		List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, SORT);
-		assertions.forEach(a -> {
-			assertionsRepository.deleteById(a.getId());
-		});
-		return;
-	}
+  public void deleteAllBySalesforceId(String salesforceId) {
+            List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, SORT);
+            assertions.forEach(a -> {
+                assertionsRepository.deleteById(a.getId());
+            });
+            return;
+       }
+        
+        public void  updateAssertionsSalesforceId ( String salesforceId, String newSalesforceId) {
+            List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, SORT);
+            assertions.forEach(a -> {
+                a.setSalesforceId(newSalesforceId);
+                updateAssertionAsAdmin(a);
+            });
+            return;
+  }
 
 	public Assertion findById(String id) {
 		AssertionServiceUser user = assertionsUserService.getLoggedInUser();
@@ -170,30 +179,38 @@ public class AssertionService {
 	}
 
 	public Assertion updateAssertion(Assertion assertion) {
-		String salesforceId = assertionsUserService.getLoggedInUser().getSalesforceId();
-		Optional<Assertion> optional = assertionsRepository.findById(assertion.getId());
-		Assertion existingAssertion = optional.get();
-
-		if (!salesforceId.equals(existingAssertion.getSalesforceId())) {
-			throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation",
-					"affiliationOtherOrganization");
-		}
-
-		if (assertion.getEmail() != null && existingAssertion.getEmail() != null
-				&& !assertion.getEmail().equals(existingAssertion.getEmail())) {
-			updateEmailOrcidRecord(assertion.getEmail(), existingAssertion.getEmail());
-		}
-		copyFieldsToUpdate(assertion, existingAssertion);
-		existingAssertion.setUpdated(true);
-		existingAssertion.setModified(Instant.now());
-		assertion = assertionsRepository.save(existingAssertion);
-		assertion.setStatus(getAssertionStatus(assertion));
-
-		if (assertion.getOrcidId() == null) {
-			assertion.setOrcidId(getAssertionOrcidId(assertion));
-		}
-		return assertion;
+		return updateAssertionImpl(assertion, false);
 	}
+	
+	private Assertion updateAssertionAsAdmin(Assertion assertion) {
+            return updateAssertionImpl(assertion, true);
+        }
+	
+	private Assertion updateAssertionImpl(Assertion assertion, boolean updateAsAdmin) {
+      AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+      String salesforceId = user.getSalesforceId();
+      Optional<Assertion> optional = assertionsRepository.findById(assertion.getId());
+      Assertion existingAssertion = optional.get();
+
+      if (!salesforceId.equals(existingAssertion.getSalesforceId()) &&  !updateAsAdmin) {
+          throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
+      }
+
+      if (assertion.getEmail() != null && existingAssertion.getEmail() != null
+                        && !assertion.getEmail().equals(existingAssertion.getEmail())) {
+          updateEmailOrcidRecord(assertion.getEmail(), existingAssertion.getEmail());
+      }
+      copyFieldsToUpdate(assertion, existingAssertion);
+      existingAssertion.setUpdated(true);
+      existingAssertion.setModified(Instant.now());
+      assertion = assertionsRepository.save(existingAssertion);
+      assertion.setStatus(getAssertionStatus(assertion));
+            
+      if (assertion.getOrcidId() == null) {
+         assertion.setOrcidId(getAssertionOrcidId(assertion));
+      }
+      return assertion;
+  }
 
 	public void deleteById(String id) {
 		String assertionEmail = getAssertionEmail(id);

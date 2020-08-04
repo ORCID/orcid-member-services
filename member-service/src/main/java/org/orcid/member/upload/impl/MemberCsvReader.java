@@ -97,13 +97,10 @@ public class MemberCsvReader implements MembersUploadReader {
 		}
 		member.setIsConsortiumLead(isConsortiumLead);
 
-		if (validateField(record, "salesforceId", "Salesforce id should not be empty", member)) {
-		    if (memberExists(record.get("salesforceId"))) {
-                member.setError("Member with salesForceId already exist: " + record.get("salesforceId"));
-            } else {
+		
                 member.setSalesforceId(record.get("salesforceId"));
-            }
-        }
+            
+        
 
 		if (!isConsortiumLead) {
             if (validateField(record,"parentSalesforceId", "Parent salesforce id should not be empty if it is not a consortium lead", member)) {
