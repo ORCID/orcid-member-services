@@ -6,32 +6,33 @@ import { JhiEventManager } from 'ng-jhipster';
 
 import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 import { AssertionService } from './assertion.service';
+import { ASSERTION_STATUS } from 'app/shared/constants/orcid-api.constants';
 
 @Component({
   selector: 'jhi-assertion-delete-dialog',
   templateUrl: './assertion-delete-dialog.component.html'
 })
 export class AssertionDeleteDialogComponent {
+  inOrcid: string = ASSERTION_STATUS.IN_ORCID;
+  userRevokedAccess: string = ASSERTION_STATUS.USER_REVOKED_ACCESS;
   assertion: IAssertion;
   errorDeletingFromOrcid: boolean;
+  errorUserRevoked = false;
 
   constructor(protected assertionService: AssertionService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {
     this.errorDeletingFromOrcid = false;
   }
 
   clear() {
-    this.activeModal.dismiss('cancel');
+    this.activeModal.dismiss(true);
   }
 
-  confirmDelete(id: string, putCode?: string) {
+  confirmDelete() {
     this.errorDeletingFromOrcid = false;
-    if (putCode) {
-      this.assertionService.deleteFromOrcid(id).subscribe(res => {
-        // TODO: add response code to res.body
-        // if 404, delete from assertion service
-        // if 403, change assertion status to token revoked
-        if (res.body.deleted === 'true') {
-          this.assertionService.delete(id).subscribe(response => {
+    if (this.assertion.putCode && this.assertion.status === ASSERTION_STATUS.IN_ORCID) {
+      this.assertionService.deleteFromOrcid(this.assertion.id).subscribe(res => {
+        if (res.body.deleted === true || res.body.statusCode === 404) {
+          this.assertionService.delete(this.assertion.id).subscribe(response => {
             this.activeModal.dismiss(true);
             this.eventManager.broadcast({
               name: 'assertionListModification',
@@ -41,10 +42,15 @@ export class AssertionDeleteDialogComponent {
           });
         } else {
           this.errorDeletingFromOrcid = true;
+          // TODO: API returns incorrect status code
+          // Change to 401 when this problem is corrected
+          if (res.body.statusCode === 400) {
+            this.errorUserRevoked = true;
+          }
         }
       });
     } else {
-      this.assertionService.delete(id).subscribe(response => {
+      this.assertionService.delete(this.assertion.id).subscribe(response => {
         this.activeModal.dismiss(true);
         this.eventManager.broadcast({
           name: 'assertionListModification',

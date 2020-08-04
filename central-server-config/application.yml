@@ -28,3 +28,17 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 300000
+
+ribbon:
+  ReadTimeout: 300000
+  ConnectTimeout: 300000
+  eureka:
+    enabled: true
