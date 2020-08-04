@@ -188,15 +188,18 @@ class MemberServiceTest {
 		Member one = getMember();
 		one.setSalesforceId("one");
 		one.setClientName("one");
+		one.setClientId("XXXX-XXXX-XXXX-XXX8");
 		
 		Member two = getMember();
 		two.setId("two");
 		two.setSalesforceId("two");
 		two.setClientName("two");
+		two.setClientId("XXXX-XXXX-XXXX-XXX9");
 		
 		Member three = getMember();
 		three.setSalesforceId("three");
 		three.setClientName("three");
+		three.setClientId("XXXX-XXXX-XXXX-XXX7");
 		
 		
 		MemberUpload upload = new MemberUpload();
