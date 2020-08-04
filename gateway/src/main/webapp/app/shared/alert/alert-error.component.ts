@@ -59,18 +59,13 @@ export class JhiAlertErrorComponent implements OnDestroy {
               this.addErrorAlert('Error on field "' + fieldName + '"', 'error.' + fieldError.message, { fieldName });
             }
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.message, httpErrorResponse.error.message, httpErrorResponse.error.params);
+            this.addParameter(httpErrorResponse);
           } else if (httpErrorResponse.error) {
             if (httpErrorResponse.error.message === undefined) {
               httpErrorResponse.error = JSON.parse(httpErrorResponse.error);
             }
 
-            if (httpErrorResponse.error.message && httpErrorResponse.error.params) {
-              const params = httpErrorResponse.error.params;
-              this.addErrorAlert(httpErrorResponse.error.message, httpErrorResponse.error.message, { params });
-            } else {
-              this.addErrorAlert(httpErrorResponse.error.message);
-            }
+            this.addParameter(httpErrorResponse);
 
           } else {
             this.addErrorAlert(httpErrorResponse.error);
@@ -117,5 +112,14 @@ export class JhiAlertErrorComponent implements OnDestroy {
     };
 
     this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
+  }
+
+  addParameter(httpErrorResponse) {
+    if (httpErrorResponse.error.message && httpErrorResponse.error.params) {
+      const params = httpErrorResponse.error.params;
+      this.addErrorAlert(httpErrorResponse.error.message, httpErrorResponse.error.message, { params });
+    } else {
+      this.addErrorAlert(httpErrorResponse.error.message);
+    }
   }
 }

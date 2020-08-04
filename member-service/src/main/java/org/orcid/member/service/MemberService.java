@@ -122,7 +122,6 @@ public class MemberService {
 		member.setLastModifiedDate(now);
 
 		Member existingMember = optional.get();
-		existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
 		existingMember.setClientId(member.getClientId());
 		existingMember.setClientName(member.getClientName());
 		existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
@@ -132,21 +131,23 @@ public class MemberService {
 
 		// Check if salesforceId changed
 		if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
-		    // update users associated with member   
-                    List<MemberServiceUser> usersBelongingToMember = userService
+        List<MemberServiceUser> usersBelongingToMember = userService
 					.getUsersBySalesforceId(optional.get().getSalesforceId());
-			for (MemberServiceUser user : usersBelongingToMember) {
-				user.setSalesforceId(member.getSalesforceId());
-				user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-				user.setLastModifiedDate(now);
-				userService.updateUser(user);
+			  for (MemberServiceUser user : usersBelongingToMember) {
+				  user.setSalesforceId(member.getSalesforceId());
+				  user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+				  user.setLastModifiedDate(now);
+				  userService.updateUser(user);
 				
-			}
-                    existingMember.setSalesforceId(member.getSalesforceId());
-                    //update affiliations associated with the member
-                    assertionService.updateAssertionsSalesforceId(existingMember.getSalesforceId(), member.getSalesforceId());
-            }
-
+			  }
+        existingMember.setSalesforceId(member.getSalesforceId());
+        //update affiliations associated with the member
+        assertionService.updateAssertionsSalesforceId(existingMember.getSalesforceId(), member.getSalesforceId());
+    
+    if (!existingMember.getAssertionServiceEnabled().equals(member.getAssertionServiceEnabled())) {
+            existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
+    }
+  }
 	    return memberRepository.save(existingMember);
 	}
 
@@ -192,5 +193,18 @@ public class MemberService {
 			return Optional.empty();
 		}
 	}
+
+	private void updateUserSalesForceIdOrAssertion(Optional<Member> optional, Member member, boolean salesForce, Instant now) {
+        List<MemberServiceUser> usersBelongingToMember = userService
+            .getUsersBySalesforceId(optional.get().getSalesforceId());
+        for (MemberServiceUser user : usersBelongingToMember) {
+            if (salesForce) {
+                user.setSalesforceId(member.getSalesforceId());
+            }
+            user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+            user.setLastModifiedDate(now);
+            userService.updateUser(user);
+        }
+    }
 
 }

@@ -1,6 +1,7 @@
 package org.orcid.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.orcid.domain.Assertion;
 import org.springframework.data.domain.Page;
@@ -32,4 +33,7 @@ public interface AssertionsRepository extends MongoRepository<Assertion, String>
     List<Assertion> findAllToUpdate();
 
     List<Assertion> findByEmail(String email);
+
+    Optional<Assertion> findOneByEmailIgnoreCase(String email);
+
 }
