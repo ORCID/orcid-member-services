@@ -63,10 +63,10 @@ public class MemberService {
 
 	public Member createOrUpdateMember(Member member) {
 		Optional<Member> optional = memberRepository.findBySalesforceId(member.getSalesforceId());
-
 		if (!optional.isPresent()) {
 			return createMember(member);
 		} else {
+		        member.setId(optional.get().getId());
 			return updateMember(member);
 		}
 	}
@@ -101,7 +101,7 @@ public class MemberService {
 		return memberRepository.save(member);
 	}
 
-	public Member updateMember(Member member) {
+	public Member updateMember(Member member) {	        
 		if (member.getId() == null) {
 			throw new BadRequestAlertException("Invalid id", "member", "idnull");
 		}
@@ -132,24 +132,22 @@ public class MemberService {
 
 		// Check if salesforceId changed
 		if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
-			// update users associated with member
-            Optional<Member> optionalSalesForceId = memberRepository.findBySalesforceId(member.getSalesforceId());
-            if (optionalSalesForceId.isPresent() && !optionalSalesForceId.get().getId().equals(existingMember.getId())) {
-                throw new BadRequestAlertException("A member with that salesforce id already exists", "member", "salesForceIdUsed");
-            }
-
-            List<MemberServiceUser> usersBelongingToMember = userService
+		    // update users associated with member   
+                    List<MemberServiceUser> usersBelongingToMember = userService
 					.getUsersBySalesforceId(optional.get().getSalesforceId());
 			for (MemberServiceUser user : usersBelongingToMember) {
 				user.setSalesforceId(member.getSalesforceId());
 				user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
 				user.setLastModifiedDate(now);
 				userService.updateUser(user);
+				
 			}
-            existingMember.setSalesforceId(member.getSalesforceId());
-        }
+                    existingMember.setSalesforceId(member.getSalesforceId());
+                    //update affiliations associated with the member
+                    assertionService.updateAssertionsSalesforceId(existingMember.getSalesforceId(), member.getSalesforceId());
+            }
 
-		return memberRepository.save(existingMember);
+	    return memberRepository.save(existingMember);
 	}
 
 	public Page<Member> getAllMembers(Pageable pageable) {
