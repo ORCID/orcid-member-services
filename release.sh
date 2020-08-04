@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ "$2" != "current" ]
 then
     echo "Getting latest master"
@@ -12,6 +13,8 @@ then
         git checkout $2
     fi
 fi
+# Using perl due to sed -i incompatibility in GNU vs FreeBSD
+perl -i -pe "s/TAG=.*/TAG=$2/" .env
 echo "About to deploy release $2"
 echo "gateway"
 cd gateway
@@ -31,7 +34,6 @@ bash mvnw clean
 bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2
 echo "Running docker compose"
 cd ../
-export TAG=$2
 docker-compose down
 docker-compose up -d
 docker system prune -f
