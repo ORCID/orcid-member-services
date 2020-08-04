@@ -153,8 +153,8 @@ class MemberServiceTest {
 	void testUploadMemberCSV() throws IOException {
 		Mockito.when(membersUploadReader.readMemberUpload(Mockito.any())).thenReturn(getMemberUpload());
 		Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("one"))).thenReturn(Optional.empty());
-		Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("two"))).thenReturn(Optional.of(getMember()));
-		Mockito.when(memberRepository.findById(Mockito.eq("two"))).thenReturn(Optional.of(getMemberUpload().getMembers().get(1)));
+		//Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("two"))).thenReturn(Optional.of(getMember()));
+		//Mockito.when(memberRepository.findById(Mockito.eq("two"))).thenReturn(Optional.of(getMemberUpload().getMembers().get(1)));
 		Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("three"))).thenReturn(Optional.empty());
 		memberService.uploadMemberCSV(null);
 		Mockito.verify(memberRepository, Mockito.times(3)).save(Mockito.any(Member.class));
@@ -188,15 +188,18 @@ class MemberServiceTest {
 		Member one = getMember();
 		one.setSalesforceId("one");
 		one.setClientName("one");
+		one.setClientId("XXXX-XXXX-XXXX-XXX8");
 		
 		Member two = getMember();
-		two.setId("two");
+		//two.setId("two");
 		two.setSalesforceId("two");
 		two.setClientName("two");
+		two.setClientId("XXXX-XXXX-XXXX-XXX9");
 		
 		Member three = getMember();
 		three.setSalesforceId("three");
 		three.setClientName("three");
+		three.setClientId("XXXX-XXXX-XXXX-XXX7");
 		
 		
 		MemberUpload upload = new MemberUpload();
@@ -213,7 +216,7 @@ class MemberServiceTest {
 		member.setClientId("XXXX-XXXX-XXXX-XXXX");
 		member.setClientName("clientname");
 		member.setIsConsortiumLead(false);
-		member.setSalesforceId("salesforceId");
+		member.setSalesforceId("two");
 		member.setParentSalesforceId("some parent");
 		return member;
 	}

@@ -19,5 +19,9 @@ public interface AssertionServiceClient {
     @RequestMapping(method = RequestMethod.DELETE, value = "/api/assertion/delete/{salesforceId}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "50000")
     ResponseEntity<String> deleteAssertionsForSalesforceId(@PathVariable("salesforceId") String salesforceId);
+    
+    @RequestMapping(method = RequestMethod.PUT, value = "/api/assertion/update/{salesforceId}/{newSalesforceId}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
+    @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "50000")
+    ResponseEntity<String> updateAssertionsSalesforceId(@PathVariable("salesforceId") String salesforceId, @PathVariable("newSalesforceId") String newSalesforceId);
 
 }
