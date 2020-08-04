@@ -28,7 +28,8 @@ export class AssertionUpdateComponent implements OnInit {
   startYearsList: any;
   endYearsList: any;
   monthsList: any;
-  daysList: any;
+  startDaysList: any;
+  endDaysList: any;
   isSaving: boolean;
   ngbDate: any;
 
@@ -73,7 +74,8 @@ export class AssertionUpdateComponent implements OnInit {
     this.startYearsList = this.dateUtilService.getYearsList(0);
     this.endYearsList = this.dateUtilService.getYearsList(DEFAULT_LATEST_YEAR_INCREMENT);
     this.monthsList = this.dateUtilService.getMonthsList();
-    this.daysList = this.dateUtilService.getDaysList();
+    this.startDaysList = this.dateUtilService.getDaysList();
+    this.endDaysList = this.dateUtilService.getDaysList();
     this.isSaving = false;
 
     this.activatedRoute.data.subscribe(({ assertion }) => {
@@ -85,10 +87,10 @@ export class AssertionUpdateComponent implements OnInit {
 
   onChanges(): void {
     this.editForm.get('startMonth').valueChanges.subscribe(val => {
-      this.daysList = this.dateUtilService.getDaysList(this.editForm.get('startYear').value, this.editForm.get('startMonth').value);
+      this.startDaysList = this.dateUtilService.getDaysList(this.editForm.get('startYear').value, this.editForm.get('startMonth').value);
     });
     this.editForm.get('endMonth').valueChanges.subscribe(val => {
-      this.daysList = this.dateUtilService.getDaysList(this.editForm.get('endYear').value, this.editForm.get('endMonth').value);
+      this.endDaysList = this.dateUtilService.getDaysList(this.editForm.get('endYear').value, this.editForm.get('endMonth').value);
     });
   }
 
@@ -188,6 +190,7 @@ export class AssertionUpdateComponent implements OnInit {
   }
 
   public onDateSelected() {
-    this.daysList = this.dateUtilService.getDaysList(this.editForm.get('startYear').value, this.editForm.get('startMonth').value);
+    this.startDaysList = this.dateUtilService.getDaysList(this.editForm.get('startYear').value, this.editForm.get('startMonth').value);
+    this.endDaysList = this.dateUtilService.getDaysList(this.editForm.get('endYear').value, this.editForm.get('endMonth').value);
   }
 }
