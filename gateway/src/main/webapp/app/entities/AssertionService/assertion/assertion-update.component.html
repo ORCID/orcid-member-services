@@ -163,21 +163,29 @@
                                 name="startDay"
                                 id="field_startDay" formControlName="startDay">
                             <option jhiTranslate="gatewayApp.assertionServiceAssertion.day" [ngValue]="null">Day</option>
-                            <option *ngFor="let day of daysList" [ngValue]="day" >{{day}}</option>
+                            <option *ngFor="let day of startDaysList" [ngValue]="day" >{{day}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-md-4 float-left pl-0">
                         <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.endYear" for="field_endYear">End Year</label>
-                        <select class="form-control" name="endYear" id="field_endYear" formControlName="endYear">
+                        <select class="form-control"
+                                name="endYear"
+                                id="field_endYear"
+                                formControlName="endYear"
+                                (change)='onDateSelected()'>
                             <option jhiTranslate="gatewayApp.assertionServiceAssertion.year" [ngValue]="null">Year</option>
                             <option *ngFor="let year of endYearsList" [ngValue]="year" >{{year}}</option>
                         </select>
                     </div>
                     <div class="col-md-4 float-left">
                         <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.endMonth" for="field_endMonth">End Month</label>
-                        <select class="form-control" name="endMonth" id="field_endMonth" formControlName="endMonth">
+                        <select class="form-control"
+                                name="endMonth"
+                                id="field_endMonth"
+                                formControlName="endMonth"
+                                (change)='onDateSelected()'>
                             <option jhiTranslate="gatewayApp.assertionServiceAssertion.month" [ngValue]="null">Month</option>
                             <option *ngFor="let month of monthsList" [ngValue]="month[0]" >{{month[1]}}</option>
                         </select>
@@ -186,7 +194,7 @@
                         <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.endDay" for="field_endDay">End Day</label>
                         <select class="form-control" name="endDay" id="field_endDay" formControlName="endDay">
                             <option jhiTranslate="gatewayApp.assertionServiceAssertion.day" [ngValue]="null">Day</option>
-                            <option *ngFor="let day of daysList" [ngValue]="day" >{{day}}</option>
+                            <option *ngFor="let day of endDaysList" [ngValue]="day" >{{day}}</option>
                         </select>
                     </div>
                 </div>
