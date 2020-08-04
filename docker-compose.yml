@@ -2,6 +2,7 @@ version: '2'
 
 services:
   assertionservice-app:
+    restart: unless-stopped
     image: assertionservice:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
@@ -29,6 +30,7 @@ services:
       - ./log-raw/:/logs
 
   gateway-app:
+    restart: unless-stopped
     image: gateway:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
@@ -47,6 +49,7 @@ services:
       - '8080:8080'
 
   userservice-app:
+    restart: unless-stopped
     image: userservice:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
@@ -67,6 +70,7 @@ services:
       - ./log-raw/:/logs
 
   memberservice-app:
+    restart: unless-stopped
     image: memberservice:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
@@ -87,17 +91,20 @@ services:
       - ./log-raw/:/logs
 
   jhipster-registry:
+    restart: unless-stopped
     extends:
       file: jhipster-registry.yml
       service: jhipster-registry
 
   jhipster-elasticsearch:
+    restart: unless-stopped
     extends:
       file: jhipster-console.yml
       service: jhipster-elasticsearch
     volumes:
       - ./log-data:/usr/share/elasticsearch/data
   jhipster-logstash:
+    restart: unless-stopped
     extends:
       file: jhipster-console.yml
       service: jhipster-logstash
@@ -106,18 +113,21 @@ services:
     volumes:
       - ./log-conf/:/usr/share/logstash/pipeline/
   jhipster-console:
+    restart: unless-stopped
     extends:
       file: jhipster-console.yml
       service: jhipster-console
     depends_on:
       - jhipster-elasticsearch
   jhipster-import-dashboards:
+    restart: unless-stopped
     extends:
       file: jhipster-console.yml
       service: jhipster-import-dashboards
     depends_on:
       - jhipster-elasticsearch
   jhipster-zipkin:
+    restart: unless-stopped
     extends:
       file: jhipster-console.yml
       service: jhipster-zipkin
