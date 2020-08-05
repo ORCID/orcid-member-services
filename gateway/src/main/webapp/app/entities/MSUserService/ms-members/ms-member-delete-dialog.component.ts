@@ -13,6 +13,7 @@ import { MSMemberService } from './ms-member.service';
 })
 export class MSMemberDeleteDialogComponent {
   msMember: IMSMember;
+  loading = false;
 
   constructor(protected msMemberService: MSMemberService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
 
@@ -21,12 +22,16 @@ export class MSMemberDeleteDialogComponent {
   }
 
   confirmDelete(id: string) {
+    this.loading = true;
     this.msMemberService.delete(id).subscribe(response => {
+      this.loading = false;
       this.eventManager.broadcast({
         name: 'msMemberListModification',
         content: 'Deleted an msMember'
       });
       this.activeModal.dismiss(true);
+    }, error => {
+      this.loading = false;
     });
   }
 }
