@@ -298,7 +298,7 @@ public class AssertionService {
 				assertionsRepository.save(assertion);
 			} catch (ORCIDAPIException oae) {
 				storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
-				if (oae.getError().contains("invalid_scope")) {
+				if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401) {
 					removeIdTokenFromOrcidRecord(record.getIdToken());
 				}
 			} catch (Exception e) {
@@ -349,7 +349,7 @@ public class AssertionService {
 				assertionsRepository.save(assertion);
 			} catch (ORCIDAPIException oae) {
 				storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
-				if (oae.getError().contains("invalid_scope")) {
+				if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401 ) {
 					removeIdTokenFromOrcidRecord(record.getIdToken());
 				}
 			} catch (Exception e) {
@@ -398,7 +398,7 @@ public class AssertionService {
 			return deleted;
 		} catch (ORCIDAPIException oae) {
 			storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
-			if (oae.getError().contains("invalid_scope")) {
+			if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401) {
 				removeIdTokenFromOrcidRecord(record.getIdToken());
 			}
 		} catch (Exception e) {
