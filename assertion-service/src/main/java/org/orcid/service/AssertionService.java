@@ -107,7 +107,13 @@ public class AssertionService {
   public void deleteAllBySalesforceId(String salesforceId) {
             List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, SORT);
             assertions.forEach(a -> {
+            	String assertionEmail = getAssertionEmail(a.getId());
                 assertionsRepository.deleteById(a.getId());
+                // Remove OrcidRecord if it has not already been removed
+                Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(assertionEmail);
+        		if (orcidRecordOptional.isPresent()) {
+        			deleteOrcidRecordByEmail(assertionEmail);
+        		}  
             });
             return;
        }
