@@ -13,11 +13,14 @@
             however, data added to the ORCID Registry will remain in ORCID.
         </p>
     </div>
+    <div *ngIf="loading" class="progress progress-striped">
+        <div class="progress-bar indeterminate" role="progressbar" style="width: 100%"></div>
+    </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
-        <button id="jhi-confirm-delete-msMember" type="submit" class="btn btn-danger">
+        <button [disabled]="loading" id="jhi-confirm-delete-msMember" type="submit" class="btn btn-danger">
             <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Delete</span>
         </button>
     </div>
