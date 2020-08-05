@@ -16,6 +16,8 @@ public class AssertionUtils {
 			switch (statusCode) {
 			case 404:
 				return AssertionStatus.USER_DELETED_FROM_ORCID.value;
+			case 401:
+				return AssertionStatus.USER_REVOKED_ACCESS.value;
 			case 400:
 				if(errorMessage.contains("invalid_scope")) {
 					return AssertionStatus.USER_REVOKED_ACCESS.value;
