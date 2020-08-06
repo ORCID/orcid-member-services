@@ -44,7 +44,7 @@ export class AssertionDeleteDialogComponent {
           this.errorDeletingFromOrcid = true;
           // TODO: API returns incorrect status code
           // Change to 401 when this problem is corrected
-          if (res.body.statusCode === 400) {
+          if (res.body.statusCode === 400 || res.body.statusCode === 401) {
             this.errorUserRevoked = true;
           }
         }

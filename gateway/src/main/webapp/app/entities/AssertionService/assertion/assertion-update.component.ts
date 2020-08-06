@@ -124,6 +124,9 @@ export class AssertionUpdateComponent implements OnInit {
       status: assertion.status,
       ownerId: assertion.ownerId
     });
+
+    this.onStartDateSelected(false);
+    this.onEndDateSelected(false);
   }
 
   previousState() {
@@ -189,8 +192,21 @@ export class AssertionUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  public onDateSelected() {
+  public onStartDateSelected(resetValue) {
     this.startDaysList = this.dateUtilService.getDaysList(this.editForm.get('startYear').value, this.editForm.get('startMonth').value);
+    if (resetValue) {
+      this.editForm.patchValue({
+        startDay: null
+      });
+    }
+  }
+
+  public onEndDateSelected(resetValue) {
     this.endDaysList = this.dateUtilService.getDaysList(this.editForm.get('endYear').value, this.editForm.get('endMonth').value);
+    if (resetValue) {
+      this.editForm.patchValue({
+        endDay: null
+      });
+    }
   }
 }

@@ -107,7 +107,13 @@ public class AssertionService {
   public void deleteAllBySalesforceId(String salesforceId) {
             List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, SORT);
             assertions.forEach(a -> {
+            	String assertionEmail = getAssertionEmail(a.getId());
                 assertionsRepository.deleteById(a.getId());
+                // Remove OrcidRecord if it has not already been removed
+                Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(assertionEmail);
+        		if (orcidRecordOptional.isPresent()) {
+        			deleteOrcidRecordByEmail(assertionEmail);
+        		}  
             });
             return;
        }
@@ -292,7 +298,7 @@ public class AssertionService {
 				assertionsRepository.save(assertion);
 			} catch (ORCIDAPIException oae) {
 				storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
-				if (oae.getError().contains("invalid_scope")) {
+				if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401) {
 					removeIdTokenFromOrcidRecord(record.getIdToken());
 				}
 			} catch (Exception e) {
@@ -343,7 +349,7 @@ public class AssertionService {
 				assertionsRepository.save(assertion);
 			} catch (ORCIDAPIException oae) {
 				storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
-				if (oae.getError().contains("invalid_scope")) {
+				if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401 ) {
 					removeIdTokenFromOrcidRecord(record.getIdToken());
 				}
 			} catch (Exception e) {
@@ -392,7 +398,7 @@ public class AssertionService {
 			return deleted;
 		} catch (ORCIDAPIException oae) {
 			storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
-			if (oae.getError().contains("invalid_scope")) {
+			if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401) {
 				removeIdTokenFromOrcidRecord(record.getIdToken());
 			}
 		} catch (Exception e) {
