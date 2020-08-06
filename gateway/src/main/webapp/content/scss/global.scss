@@ -223,6 +223,7 @@ ORCID global styles
 }
 
 .progress-bar.indeterminate {
+  width: 100%;
   position: relative;
   animation: progress-indeterminate 3s linear infinite;
 }
