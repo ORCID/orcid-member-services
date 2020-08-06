@@ -20,6 +20,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.codehaus.jettison.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.domain.Assertion;
+import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.validation.OrcidUrlValidator;
 import org.orcid.security.EncryptUtil;
@@ -27,6 +28,7 @@ import org.orcid.security.JWTUtil;
 import org.orcid.security.SecurityUtils;
 import org.orcid.service.AssertionService;
 import org.orcid.service.OrcidRecordService;
+import org.orcid.service.UserService;
 import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
@@ -83,6 +85,9 @@ public class AssertionServiceResource {
 
     @Autowired
     private AssertionsCsvReader assertionsCsvReader;
+    
+    @Autowired
+    private UserService assertionsUserService;
 
     String[] urlValschemes = { "http", "https", "ftp" }; // DEFAULT schemes =
     // "http", "https",
@@ -295,8 +300,7 @@ public class AssertionServiceResource {
     }
 
     private void validateAssertion(Assertion assertion) {
-        Optional<Assertion> existing = assertionsService.findOneByEmailIgnoreCase(assertion.getEmail());
-        if (existing.isPresent()) {
+        if (existentAssertionForOtherOrganization(assertion)) {
             String errorMessage = String.format("Unable to add affiliation. An affiliation for %s already exists and belongs to another organization.", assertion.getEmail());
             Map<String, String> params = new HashMap<>();
             params.put("params", assertion.getEmail());
@@ -380,6 +384,20 @@ public class AssertionServiceResource {
             }
         }
         return null;
+    }
+	
+    private boolean existentAssertionForOtherOrganization(Assertion assertion) {
+        List<Assertion> assertions = assertionsService.findByEmail(assertion.getEmail());
+        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+        for (Assertion a: assertions) {
+            String salesforceId = assertion.getSalesforceId()!=null ? assertion.getSalesforceId():user.getSalesforceId();
+            if (!StringUtils.equals(a.getSalesforceId(), salesforceId)) {
+                LOG.error("!!! existent assertion for the member with the id " + salesforceId 
+                    + " that has the same email  " + assertion.getEmail());
+                return true;
+            }
+        } 
+        return false;
     }
 
 }
