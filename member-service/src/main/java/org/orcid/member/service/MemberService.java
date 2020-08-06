@@ -132,14 +132,7 @@ public class MemberService {
 
         // Check if salesforceId changed
         if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
-            List<MemberServiceUser> usersBelongingToMember = userService.getUsersBySalesforceId(optional.get().getSalesforceId());
-            for (MemberServiceUser user : usersBelongingToMember) {
-                user.setSalesforceId(member.getSalesforceId());
-                user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-                user.setLastModifiedDate(now);
-                userService.updateUser(user);
-
-            }
+            updateUserSalesForceIdOrAssertion(optional, member, true, now);
             existingMember.setSalesforceId(member.getSalesforceId());
             // update affiliations associated with the member
             assertionService.updateAssertionsSalesforceId(existingMember.getSalesforceId(), member.getSalesforceId());
@@ -147,6 +140,9 @@ public class MemberService {
         }
         if (!existingMember.getAssertionServiceEnabled().equals(member.getAssertionServiceEnabled())) {
             existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
+            member = memberRepository.save(existingMember);
+            updateUserSalesForceIdOrAssertion(optional, member, false, now);
+            return member;
         }
         return memberRepository.save(existingMember);
     }
