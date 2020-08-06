@@ -136,7 +136,7 @@ public class AssertionServiceResource {
     @PutMapping("/assertion")
     public ResponseEntity<Assertion> updateAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
         LOG.debug("REST request to update assertion : {}", assertion);
-        validateAssertion(assertion);
+        validateAssertion(assertion, true);
         Assertion existingAssertion = assertionsService.updateAssertion(assertion);
 
         return ResponseEntity.ok().body(existingAssertion);
@@ -145,7 +145,7 @@ public class AssertionServiceResource {
     @PostMapping("/assertion")
     public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, URISyntaxException {
         LOG.debug("REST request to create assertion : {}", assertion);
-        validateAssertion(assertion);
+        validateAssertion(assertion, false);
         assertion = assertionsService.createAssertion(assertion);
 
         return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId()))
@@ -252,7 +252,7 @@ public class AssertionServiceResource {
     
     @DeleteMapping("/assertion/delete/{salesforceId}")
     public ResponseEntity<String> deleteAssertionsForSalesforceId(@PathVariable String salesforceId) throws JAXBException {
-        assertionsService.deleteAllBySalesforceId(salesforceId); 
+        assertionsService.deleteAllBySalesforceId(salesforceId);
         JSONObject responseData = new JSONObject();
         responseData.put("deleted", true);
         return ResponseEntity.ok().body(responseData.toString());
