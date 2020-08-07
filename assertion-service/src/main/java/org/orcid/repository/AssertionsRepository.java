@@ -25,7 +25,9 @@ public interface AssertionsRepository extends MongoRepository<Assertion, String>
     
     @Query("{salesforceId: ?0}")    
     List<Assertion> findBySalesforceId(String salesforceId, Sort sort);
-    
+
+    List<Assertion> findBySalesforceId(String salesforceId);
+
     @Query("{putCode: null}")
     List<Assertion> findAllToCreate();
 

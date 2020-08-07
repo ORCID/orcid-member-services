@@ -47,7 +47,15 @@ public class UserService {
 			throw new BadRequestAlertException("Unable to update user", "User", null);
 		}
 	}
-	
+
+    public void updateUserSalesforceIdOrAssertion(String salesforceId, String newSalesforceId) {
+        ResponseEntity<String> response = userServiceClient.updateUserSalesforceIdOrAssertion(salesforceId, newSalesforceId);
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            LOG.warn("Error updating users {}, response code {}", salesforceId, response.getStatusCodeValue());
+            throw new BadRequestAlertException("Unable to update users", "User", null);
+        }
+    }
+
 	public String getSalesforceIdForUser(String userId) {
 		ResponseEntity<MemberServiceUser> response = userServiceClient.getUser(userId);
 		if (response.getStatusCode().is2xxSuccessful()) {
@@ -56,7 +64,7 @@ public class UserService {
 			return null;
 		}
 	}
-	
+
         public void deleteUserById(String loginOrId) {
             ResponseEntity<Void> response = userServiceClient.deleteUser(loginOrId);
             if (!response.getStatusCode().is2xxSuccessful()) {
