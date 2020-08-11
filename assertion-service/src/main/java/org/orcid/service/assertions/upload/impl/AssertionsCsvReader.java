@@ -31,6 +31,11 @@ import org.springframework.stereotype.Component;
 public class AssertionsCsvReader implements AssertionsUploadReader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AssertionsCsvReader.class);
+    private final DateTimeFormatter[] formatters = {
+        new DateTimeFormatterBuilder().appendPattern("yyyy").parseDefaulting(ChronoField.MONTH_OF_YEAR, 1).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+            .toFormatter(),
+        new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
+        new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd").parseStrict().toFormatter() };
 
 	String[] urlValschemes = { "http", "https", "ftp" }; // DEFAULT schemes =
 	// "http", "https",
@@ -92,20 +97,27 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         a.setDepartmentName(getOptionalMandatoryNullable(line, "department-name"));
         a.setRoleTitle(getOptionalMandatoryNullable(line, "role-title"));
 
-		// Dates follows the format yyyy-MM-dd
+        StringBuffer startDateBuffer = new StringBuffer();
+        StringBuffer endDateBuffer = new StringBuffer();
+        // Dates follows the format yyyy-MM-dd
         if (getOptionalMandatoryNullable(line, "start-date") != null) {
-            String startDate = line.get("start-date");
+            String startDate = line.get("start-date").trim();
             if (!StringUtils.isBlank(startDate)) {
                 String[] startDateParts = startDate.split("-|/|\\s");
                 String day = startDateParts.length > 2 ? startDateParts[2] : "0";
                 if (validDate(startDate, startDateParts[0], day, line, assertionsUpload)) {
                     a.setStartYear(startDateParts[0]);
+                    startDateBuffer.append(startDateParts[0]);
                     if (startDateParts.length > 1) {
                         a.setStartMonth(startDateParts[1]);
+                        startDateBuffer.append("-");
+                        startDateBuffer.append(startDateParts[1]);
                     }
 
                     if (startDateParts.length > 2) {
                         a.setStartDay(startDateParts[2]);
+                        startDateBuffer.append("-");
+                        startDateBuffer.append(startDateParts[2]);
                     }
                 } else {
                     return a;
@@ -113,20 +125,33 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
             }
         }
 
-		// Dates follows the format yyyy-MM-dd
+        // Dates follows the format yyyy-MM-dd
         if (getOptionalMandatoryNullable(line, "end-date") != null) {
-            String endDate = line.get("end-date");
+            String endDate = line.get("end-date").trim();
             if (!StringUtils.isBlank(endDate)) {
                 String endDateParts[] = endDate.split("-|/|\\s");
                 String day = endDateParts.length > 2 ? endDateParts[2] : "0";
                 if (validDate(endDate, endDateParts[0], day, line, assertionsUpload)) {
                     a.setEndYear(endDateParts[0]);
+                    endDateBuffer.append(endDateParts[0]);
+
                     if (endDateParts.length > 1) {
                         a.setEndMonth(endDateParts[1]);
+                        endDateBuffer.append("-");
+                        endDateBuffer.append(endDateParts[1]);
                     }
 
                     if (endDateParts.length > 2) {
                         a.setEndDay(endDateParts[2]);
+                        endDateBuffer.append("-");
+                        endDateBuffer.append(endDateParts[2]);
+                    }
+
+                    if (startDateBuffer.length() != 0 && endDateBuffer.length() != 0) {
+                        if (!validStartDateEndDate(startDateBuffer.toString(), endDateBuffer.toString())) {
+                            assertionsUpload.addError(line.getRecordNumber(), "The start date cannot be greater than the end date.");
+                            return a;
+                        }
                     }
                 } else {
                     return a;
@@ -239,11 +264,6 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 	}
 
     protected boolean validDate(String date, String year, String day, CSVRecord line, AssertionsUpload assertionsUpload) {
-        DateTimeFormatter[] formatters = {
-            new DateTimeFormatterBuilder().appendPattern("yyyy").parseDefaulting(ChronoField.MONTH_OF_YEAR, 1).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-                .toFormatter(),
-            new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
-            new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd").parseStrict().toFormatter() };
 
         for (DateTimeFormatter formatter : formatters) {
             try {
@@ -265,6 +285,23 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         }
         assertionsUpload.addError(line.getRecordNumber(), "Invalid date Format. The accepted formats are 'yyyy', 'yyyy-MM' and 'yyyy-MM-dd'");
         return false;
+    }
+
+    public boolean validStartDateEndDate(String startDate, String endDate) {
+
+        for (DateTimeFormatter formatter : formatters) {
+            try {
+                LocalDate localStartDate = LocalDate.parse(startDate, formatter);
+                LocalDate localEndDate = LocalDate.parse(endDate, formatter);
+                if (localStartDate.isAfter(localEndDate)) {
+                    return false;
+                }
+            } catch (DateTimeParseException e) {
+            }
+        }
+
+        return true;
+
     }
 
     public static boolean isEmpty(String string) {
