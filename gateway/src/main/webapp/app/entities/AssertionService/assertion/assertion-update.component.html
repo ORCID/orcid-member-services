@@ -197,6 +197,12 @@
                             <option *ngFor="let day of endDaysList" [ngValue]="day" >{{day}}</option>
                         </select>
                     </div>
+                    <br>
+                    <div *ngIf="(editForm.get('endYear').hasError('dateValidator') && (editForm.get('endYear').dirty || editForm.get('endYear').touched)) ">
+                        <small class="form-text text-danger" jhiTranslate="entity.validation.endDate">
+                            End date cannot be greater than the start date
+                        </small>
+                    </div>
                 </div>
                 <div class="form-group clearfix" *ngIf="editForm.value.externalId" >
                     <div class="col-md-4 float-left pl-0">
