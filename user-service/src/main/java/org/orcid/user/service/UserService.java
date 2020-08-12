@@ -207,12 +207,12 @@ public class UserService {
                                             user.setActivationDate(Instant.now());
                                             mailService.sendActivationEmail(user);
                                         }
-                    if (!user.getSalesforceId().equals(userDTO.getSalesforceId())) {
+                    if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null &&
+                        !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
                         user.setSalesforceId(userDTO.getSalesforceId());
                         user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
                         user.setLastModifiedDate(Instant.now());
                     }
-                    userRepository.save(user);
 
 					userRepository.save(user);
 					userCaches.evictEntryFromUserCaches(user.getEmail());
