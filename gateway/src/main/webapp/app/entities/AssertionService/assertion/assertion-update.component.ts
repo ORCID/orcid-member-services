@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import {Component, OnInit} from '@angular/core';
+import {HttpResponse} from '@angular/common/http';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {Observable} from 'rxjs';
 import * as moment from 'moment';
-import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { IAssertion, Assertion } from 'app/shared/model/AssertionService/assertion.model';
-import { AssertionService } from './assertion.service';
-import { DateUtilService } from 'app/shared/util/date-util.service';
+import {DATE_TIME_FORMAT} from 'app/shared/constants/input.constants';
+import {IAssertion, Assertion} from 'app/shared/model/AssertionService/assertion.model';
+import {AssertionService} from './assertion.service';
+import {DateUtilService} from 'app/shared/util/date-util.service';
 import {
   AFFILIATION_TYPES,
   COUNTRIES,
@@ -16,6 +15,37 @@ import {
   DEFAULT_EARLIEST_YEAR,
   DEFAULT_LATEST_YEAR_INCREMENT
 } from 'app/shared/constants/orcid-api.constants';
+
+function dateValidator() {
+  return (formGroup: FormGroup) => {
+    const startYearControl = formGroup.controls['startYear'];
+    const endYearControl = formGroup.controls['endYear'];
+    const startMonthControl = formGroup.controls['startMonth'];
+    const endMonthControl = formGroup.controls['endMonth'];
+    const startDayControl = formGroup.controls['startDay'];
+    const endDayControl = formGroup.controls['endDay'];
+
+    if (hasValue(startDayControl) && hasValue(endDayControl)
+      || hasValue(startMonthControl) && hasValue(endMonthControl)
+      || hasValue(startYearControl) && hasValue(endYearControl)) {
+
+      const startDate = new Date((hasValue(startYearControl) ? startYearControl.value + '-' : '') +
+        (hasValue(startMonthControl) ? startMonthControl.value + '-' : '') + (hasValue(startDayControl) ? startDayControl.value : ''));
+      const endDate = new Date((hasValue(endYearControl) ? endYearControl.value + '-' : '') +
+        (hasValue(endMonthControl) ? endMonthControl.value + '-' : '') + (hasValue(endDayControl) ? endDayControl.value : ''));
+
+      if (startDate > endDate) {
+        endYearControl.setErrors({dateValidator: true});
+      } else {
+        endYearControl.setErrors(null);
+      }
+    }
+  };
+}
+
+function hasValue(controls): boolean {
+  return controls && controls.value !== undefined && controls.value !== '' && controls.value !== null;
+}
 
 @Component({
   selector: 'jhi-assertion-update',
@@ -61,7 +91,7 @@ export class AssertionUpdateComponent implements OnInit {
     deletedFromORCID: [],
     sent: [],
     adminId: [null, [Validators.required]]
-  });
+  }, {validator: dateValidator()});
 
   constructor(
     protected assertionService: AssertionService,

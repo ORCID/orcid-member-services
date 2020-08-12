@@ -125,7 +125,8 @@
       "pattern": "Este campo debe seguir el patrón {{pattern}}.",
       "number": "Este campo debe ser un número.",
       "datetimelocal": "Este campo debe ser una fecha y hora.",
-      "email": "Porfavor ingrese un email valido."
+      "email": "Porfavor ingrese un email valido.",
+      "endDate": "La fecha de inicio no puede ser mayor que la fecha de fin."
     }
   },
   "error": {
