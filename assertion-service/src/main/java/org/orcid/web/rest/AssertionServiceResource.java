@@ -12,7 +12,6 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.ws.rs.InternalServerErrorException;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +22,7 @@ import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.validation.OrcidUrlValidator;
+import org.orcid.security.AuthoritiesConstants;
 import org.orcid.security.EncryptUtil;
 import org.orcid.security.JWTUtil;
 import org.orcid.security.SecurityUtils;
@@ -40,8 +40,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -398,6 +398,26 @@ public class AssertionServiceResource {
             }
         } 
         return false;
+    }
+
+    /**
+     * {@code PUT /assertion/update/:salesforceId/:newSalesforceId} : Updates salesForceId for existing Assertions.
+     *
+     * @param salesforceId the salesforceId to the find the assertions to update.
+     * @param newSalesforceId the new salesforceId to update.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
+     */
+    @PutMapping("/assertion/update/{salesforceId}/{newSalesforceId}")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<Void> updateUserSalesforceOrAssertion(@PathVariable String salesforceId, @PathVariable String newSalesforceId) {
+        LOG.debug("REST request to update Assertions by salesforce : {}", salesforceId);
+        List<Assertion> assertionsBySalesforceId = assertionsService.getAssertionsBySalesforceId(salesforceId);
+        for (Assertion assertion: assertionsBySalesforceId) {
+            assertionsService.updateAssertionSalesforceId(assertion, newSalesforceId);
+        }
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "assertion", salesforceId))
+            .build();
     }
 
 }

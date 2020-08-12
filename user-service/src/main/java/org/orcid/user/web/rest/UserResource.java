@@ -301,7 +301,7 @@ public class UserResource {
 		userService.removeAuthorityFromUser(id, authority);
 		return ResponseEntity.accepted().build();
 	}
-	
+
 	 /**
          * {@code PUT /users/:id/sendActivate} : send the activation email.
          *
@@ -316,9 +316,30 @@ public class UserResource {
                 if (!user.isPresent()) {
                         user = userService.getUserWithAuthorities(loginOrId);
                 }
-                
+
                 userService.sendActivationEmail(user.get().getEmail());
                 return ResponseUtil.wrapOrNotFound(user.map(UserDTO::valueOf));
         }
+
+    /**
+     * {@code PUT /users/:salesforceId/:newSalesforceId} : Updates salesForceId for existing Users.
+     *
+     * @param salesforceId the salesforceId to the find the users to update.
+     * @param newSalesforceId the new salesforceId to update.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
+     */
+    @PutMapping("/users/{salesforceId}/{newSalesforceId}")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<Void> updateUserSalesforceOrAssertion(@PathVariable String salesforceId, @PathVariable String newSalesforceId) {
+        LOG.debug("REST request to update Users by salesforce : {}", salesforceId);
+        List<UserDTO> usersBelongingToMember = userService.getUsersBySalesforceId(salesforceId);
+        for (UserDTO user : usersBelongingToMember) {
+            user.setSalesforceId(newSalesforceId);
+            userService.updateUser(user);
+        }
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", salesforceId))
+            .build();
+    }
 
 }

@@ -222,7 +222,14 @@ public class AssertionService {
       return assertion;
   }
 
-	public void deleteById(String id) {
+    public Assertion updateAssertionSalesforceId(Assertion assertion, String salesForceId) {
+	    assertion.setSalesforceId(salesForceId);
+        assertion.setUpdated(true);
+        assertion.setModified(Instant.now());
+        return assertionsRepository.save(assertion);
+    }
+
+        public void deleteById(String id) {
 		String assertionEmail = getAssertionEmail(id);
 		assertionsRepository.deleteById(id);
 		// Remove OrcidRecord if no other assertions exist for user
@@ -485,4 +492,8 @@ public class AssertionService {
 	public Optional<Assertion> findOneByEmailIgnoreCase(String email) {
 		return assertionsRepository.findOneByEmailIgnoreCase(email.toLowerCase());
 	}
+
+    public List<Assertion> getAssertionsBySalesforceId(String salesforceId) {
+        return assertionsRepository.findBySalesforceId(salesforceId);
+    }
 }
