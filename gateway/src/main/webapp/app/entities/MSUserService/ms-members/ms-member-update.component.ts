@@ -10,11 +10,20 @@ import { MSMemberService } from './ms-member.service';
 import { AccountService, Account } from 'app/core';
 import { BASE_URL, ORCID_BASE_URL } from 'app/app.constants';
 
-function parentSalesforceIdConditionallyRequiredValidator(formGroup: FormGroup) {
-  if (!formGroup.value.isConsortiumLead) {
-    return Validators.required(formGroup.get('parentSalesforceId')) ? { parentSalesforceIdConditionallyRequired: true } : null;
-  }
-  return null;
+function parentSalesforceIdConditionallyRequiredValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: boolean } | null => {
+    if (control.value !== undefined) {
+      const isConsortiumLead = control.value;
+      if (!isConsortiumLead && control.parent !== undefined) {
+        return Validators.required(control.parent.get('parentSalesforceId'));
+      }
+      if (isConsortiumLead) {
+        control.parent.get('parentSalesforceId').setValue(null);
+        return null;
+      }
+    }
+    return null;
+  };
 }
 
 function clientIdValidator(): ValidatorFn {
@@ -40,22 +49,19 @@ export class MSMemberUpdateComponent implements OnInit {
   orcidBaseUrl: string = ORCID_BASE_URL;
   baseUrl: string = BASE_URL;
   isSaving: boolean;
-  editForm = this.fb.group(
-    {
-      id: [],
-      clientId: new FormControl(null, [Validators.required, clientIdValidator()]),
-      clientName: [null, [Validators.required]],
-      salesforceId: [null, [Validators.required]],
-      parentSalesforceId: [],
-      isConsortiumLead: [null, [Validators.required]],
-      assertionServiceEnabled: [],
-      createdBy: [],
-      createdDate: [],
-      lastModifiedBy: [],
-      lastModifiedDate: []
-    },
-    { validators: [parentSalesforceIdConditionallyRequiredValidator] }
-  );
+  editForm = this.fb.group({
+    id: [],
+    clientId: new FormControl(null, [Validators.required, clientIdValidator()]),
+    clientName: [null, [Validators.required]],
+    salesforceId: [null, [Validators.required]],
+    parentSalesforceId: [],
+    isConsortiumLead: [null, [Validators.required, parentSalesforceIdConditionallyRequiredValidator()]],
+    assertionServiceEnabled: [],
+    createdBy: [],
+    createdDate: [],
+    lastModifiedBy: [],
+    lastModifiedDate: []
+  });
 
   constructor(
     private accountService: AccountService,

@@ -23,7 +23,7 @@
                         <small class="form-text text-danger" *ngIf="(editForm.get('parentSalesforceId').value == null && !editForm.get('isConsortiumLead').value)
                     	|| ((editForm.get('parentSalesforceId').value == null || editForm.get('parentSalesforceId').value == '') && !editForm.get('isConsortiumLead').value)">
                         This field is required.
-                        </small>
+                        </small>                    
                     </div>
 
 
@@ -37,6 +37,7 @@
                                *ngIf="editForm.get('clientName').errors.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
+                        
                     </div>
 
                 </div>
@@ -60,12 +61,6 @@
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.isConsortiumLead" for="field_isConsortiumLead">Is Consortium Lead</label>
                     <input type="checkbox" class="form-control" name="isConsortiumLead" id="field_isConsortiumLead"
                            formControlName="isConsortiumLead"/>
-                    <div *ngIf="editForm.get('isConsortiumLead').invalid && (editForm.get('isConsortiumLead').dirty || editForm.get('isConsortiumLead').touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('isConsortiumLead').errors.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.assertionServiceEnabled" for="field_assertionServiceEnabled">Assertion Service Enabled</label>
