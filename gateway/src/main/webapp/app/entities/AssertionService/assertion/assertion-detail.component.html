@@ -57,7 +57,7 @@
                     </dd>
                     <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.modified">Modified</dt>
                     <dd class="col-md-9">
-                        {{assertion.modified | date:'medium'}}
+                        {{assertion.modified | date:'medium'}} <i><span jhiTranslate="global.by">by</span> {{assertion.lastModifiedBy}}</i>
                     </dd>
                     <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.adminId">Admin Id</dt>
                     <dd class="col-md-9">

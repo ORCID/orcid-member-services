@@ -44,6 +44,7 @@ export interface IAssertion {
   updated?: boolean;
   updatedInORCID?: Moment;
   url?: string;
+  lastModifiedBy?: string;
 }
 
 export class Assertion implements IAssertion {
@@ -80,7 +81,8 @@ export class Assertion implements IAssertion {
     public status?: string,
     public updated?: boolean,
     public updatedInORCID?: Moment,
-    public url?: string
+    public url?: string,
+    public lastModifiedBy?: string,
   ) {
     this.addedToORCID = this.addedToORCID || null;
     this.updated = this.updated || null;
