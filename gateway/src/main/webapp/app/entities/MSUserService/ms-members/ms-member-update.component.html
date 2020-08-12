@@ -68,6 +68,10 @@
                            formControlName="assertionServiceEnabled"/>
                 </div>
             </div>
+            <div *ngIf="isSaving" class="progress progress-striped">
+                <div class="progress-bar indeterminate" role="progressbar"></div>
+            </div>
+            <br>
             <div class="form-group">
                 <button type="button" id="cancel-save" class="btn btn-outline-primary"  (click)="previousState()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>

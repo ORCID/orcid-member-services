@@ -58,10 +58,10 @@ public class UserService {
 
 	@Autowired
 	private UserUploadReader usersUploadReader;
-	
+
 	@Autowired
 	private MemberService memberService;
-	
+
 	@Autowired
 	private MailService mailService;
 
@@ -133,7 +133,7 @@ public class UserService {
 
 	public User createUser(UserDTO userDTO) {
 		userDTO.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId()));
-		
+
 		User user = userDTO.toUser();
 		user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
 		user.setPassword("placeholder");
@@ -145,7 +145,7 @@ public class UserService {
 
 		LOG.debug("Sending email to user {}", user.getEmail());
 		mailService.sendCreationEmail(user);
-		
+
 		return user;
 	}
 
@@ -168,7 +168,7 @@ public class UserService {
                             user.setActivationDate(Instant.now());
                             mailService.sendActivationEmail(user);
                         }
-			user.setFirstName(firstName); 
+			user.setFirstName(firstName);
 			user.setLastName(lastName);
 			user.setLangKey(langKey);
 			user.setImageUrl(imageUrl);
@@ -194,6 +194,7 @@ public class UserService {
 					user.setLastName(userDTO.getLastName());
 					user.setImageUrl(userDTO.getImageUrl());
 					user.setMainContact(userDTO.getMainContact());
+					user.setSalesforceId(userDTO.getSalesforceId());
 					//user.setActivated(userDTO.isActivated());
                     if (userDTO.getLangKey() != null) {
                         user.setLangKey(userDTO.getLangKey());
@@ -206,12 +207,30 @@ public class UserService {
                                             user.setActivationDate(Instant.now());
                                             mailService.sendActivationEmail(user);
                                         }
+                    if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null &&
+                        !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
+                        user.setSalesforceId(userDTO.getSalesforceId());
+                        user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+                        user.setLastModifiedDate(Instant.now());
+                    }
+
 					userRepository.save(user);
 					userCaches.evictEntryFromUserCaches(user.getEmail());
 					LOG.debug("Changed Information for User: {}", user);
 					return user;
 				}).map(UserDTO::valueOf);
 	}
+
+//    public Optional<UserDTO> updateUserSalesForceId(UserDTO userDTO, String newSalesforceId) {
+//        return Optional.of(userRepository.findById(userDTO.getId())).filter(Optional::isPresent).map(Optional::get)
+//            .map(user -> {
+//                user.setSalesforceId(newSalesforceId);
+//                user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+//                user.setLastModifiedDate(Instant.now());
+//                userRepository.save(user);
+//                return user;
+//            }).map(UserDTO::valueOf);
+//    }
 
 	public void deleteUser(String login) {
 		userRepository.findOneByLogin(login).ifPresent(user -> {
@@ -325,7 +344,7 @@ public class UserService {
 
 	/**
 	 * Gets a list of all the authorities.
-	 * 
+	 *
 	 * @return a list of all the authorities.
 	 */
 	public List<String> getAuthorities() {
@@ -343,7 +362,7 @@ public class UserService {
 
 		usersUpload.getUserDTOs().forEach(userDTO -> {
 			String salesforceId = userDTO.getSalesforceId();
-			
+
 			if (!memberExists(salesforceId)) {
 				String errorMessage = String.format("Member not found with salesforceId %s", salesforceId);
                 Map<String, String> params = new HashMap<>();
@@ -369,7 +388,7 @@ public class UserService {
 		List<User> users = userRepository.findBySalesforceId(salesforceId);
 		return users.stream().map(UserDTO::valueOf).collect(Collectors.toList());
 	}
-	
+
 	private Set<String> getAuthoritiesForUser(String salesforceId) {
 		Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
 		if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(salesforceId)) {
