@@ -18,6 +18,7 @@ import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
+import org.orcid.security.SecurityUtils;
 import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.orcid.web.rest.errors.ORCIDAPIException;
@@ -152,6 +153,7 @@ public class AssertionService {
 		assertion.setOwnerId(user.getId());
 		assertion.setCreated(now);
 		assertion.setModified(now);
+		assertion.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
 		assertion.setSalesforceId(user.getSalesforceId());
 
 		String email = assertion.getEmail();
@@ -179,6 +181,7 @@ public class AssertionService {
 			a.setOwnerId(ownerId);
 			a.setCreated(now);
 			a.setModified(now);
+			a.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
 			// Create the assertion
 			assertionsRepository.insert(a);
 		}
@@ -209,6 +212,7 @@ public class AssertionService {
       copyFieldsToUpdate(assertion, existingAssertion);
       existingAssertion.setUpdated(true);
       existingAssertion.setModified(Instant.now());
+      existingAssertion.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
       assertion = assertionsRepository.save(existingAssertion);
       assertion.setStatus(getAssertionStatus(assertion));
             

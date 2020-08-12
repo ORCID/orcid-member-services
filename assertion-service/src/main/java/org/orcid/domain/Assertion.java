@@ -93,6 +93,9 @@ public class Assertion implements Serializable {
     @Field("modified")
     private Instant modified;
 
+    @Field("last_modified_by")
+    private String lastModifiedBy;
+
     // jhi_user.id
     @Field("owner_id")
     private String ownerId;
@@ -417,6 +420,14 @@ public class Assertion implements Serializable {
 
     public void setModified(Instant modified) {
         this.modified = modified;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 
     public String getOwnerId() {
