@@ -258,7 +258,6 @@ public class AssertionService {
 
 	public void postAssertionsToOrcid() throws JAXBException {
 		List<Assertion> assertionsToAdd = assertionsRepository.findAllToCreate();
-		Map<String, String> accessTokens = new HashMap<String, String>();
 		for (Assertion assertion : assertionsToAdd) {
 			Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(assertion.getEmail());
 			if (!optional.isPresent()) {
@@ -278,14 +277,7 @@ public class AssertionService {
 			String orcid = record.getOrcid();
 			String idToken = record.getIdToken();
 			try {
-				String accessToken;
-				if (accessTokens.containsKey(orcid)) {
-					accessToken = accessTokens.get(orcid);
-				} else {
-					LOG.info("Exchanging id token for {}", orcid);
-					accessToken = orcidAPIClient.exchangeToken(idToken);
-					accessTokens.put(orcid, idToken);
-				}
+			        String accessToken = orcidAPIClient.exchangeToken(idToken);
 
 				LOG.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
 				String putCode = orcidAPIClient.postAffiliation(orcid, accessToken, assertion);
@@ -310,7 +302,6 @@ public class AssertionService {
 
 	public void putAssertionsToOrcid() throws JAXBException {
 		List<Assertion> assertionsToUpdate = assertionsRepository.findAllToUpdate();
-		Map<String, String> accessTokens = new HashMap<String, String>();
 		for (Assertion assertion : assertionsToUpdate) {
 			Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(assertion.getEmail());
 			if (!optional.isPresent()) {
@@ -330,14 +321,7 @@ public class AssertionService {
 			String orcid = record.getOrcid();
 			String idToken = record.getIdToken();
 			try {
-				String accessToken;
-				if (accessTokens.containsKey(orcid)) {
-					accessToken = accessTokens.get(orcid);
-				} else {
-					LOG.info("Exchanging id token for {}", orcid);
-					accessToken = orcidAPIClient.exchangeToken(idToken);
-					accessTokens.put(orcid, idToken);
-				}
+			        String accessToken = orcidAPIClient.exchangeToken(idToken);
 				LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid,
 						assertion.getId());
 				orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
