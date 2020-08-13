@@ -90,7 +90,6 @@ export class AssertionUpdateComponent implements OnInit {
     modified: [],
     deletedFromORCID: [],
     sent: [],
-    adminId: [null, [Validators.required]]
   }, {validator: dateValidator()});
 
   constructor(
