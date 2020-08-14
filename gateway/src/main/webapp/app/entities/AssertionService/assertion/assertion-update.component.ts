@@ -47,6 +47,16 @@ function hasValue(controls): boolean {
   return controls && controls.value !== undefined && controls.value !== '' && controls.value !== null;
 }
 
+function isValidDate(year, month, day) {
+  day = Number(day);
+  month = Number(month) - 1;
+  year = Number(year);
+
+  const d = new Date(year, month, day);
+
+  return d.getUTCFullYear() === year && d.getUTCMonth() === month && d.getUTCDate() === day;
+}
+
 @Component({
   selector: 'jhi-assertion-update',
   templateUrl: './assertion-update.component.html'
@@ -125,38 +135,40 @@ export class AssertionUpdateComponent implements OnInit {
   }
 
   updateForm(assertion: IAssertion) {
-    this.editForm.patchValue({
-      id: assertion.id,
-      email: assertion.email,
-      affiliationSection: assertion.affiliationSection,
-      departmentName: assertion.departmentName,
-      roleTitle: assertion.roleTitle,
-      url: assertion.url,
-      startYear: assertion.startYear,
-      startMonth: assertion.startMonth,
-      startDay: assertion.startDay,
-      endYear: assertion.endYear,
-      endMonth: assertion.endMonth,
-      endDay: assertion.endDay,
-      orgName: assertion.orgName,
-      orgCountry: assertion.orgCountry,
-      orgCity: assertion.orgCity,
-      orgRegion: assertion.orgRegion,
-      disambiguatedOrgId: assertion.disambiguatedOrgId,
-      disambiguationSource: assertion.disambiguationSource,
-      externalId: assertion.externalId,
-      externalIdType: assertion.externalIdType,
-      externalIdUrl: assertion.externalIdUrl,
-      putCode: assertion.putCode,
-      created: assertion.created != null ? assertion.created.format(DATE_TIME_FORMAT) : null,
-      modified: assertion.modified != null ? assertion.modified.format(DATE_TIME_FORMAT) : null,
-      deletedFromORCID: assertion.deletedFromORCID != null ? assertion.deletedFromORCID.format(DATE_TIME_FORMAT) : null,
-      status: assertion.status,
-      ownerId: assertion.ownerId
-    });
+    if (assertion.id) {
+      this.editForm.patchValue({
+        id: assertion.id,
+        email: assertion.email,
+        affiliationSection: assertion.affiliationSection,
+        departmentName: assertion.departmentName,
+        roleTitle: assertion.roleTitle,
+        url: assertion.url,
+        startYear: assertion.startYear,
+        startMonth: assertion.startMonth,
+        startDay: assertion.startDay,
+        endYear: assertion.endYear,
+        endMonth: assertion.endMonth,
+        endDay: assertion.endDay,
+        orgName: assertion.orgName,
+        orgCountry: assertion.orgCountry,
+        orgCity: assertion.orgCity,
+        orgRegion: assertion.orgRegion,
+        disambiguatedOrgId: assertion.disambiguatedOrgId,
+        disambiguationSource: assertion.disambiguationSource,
+        externalId: assertion.externalId,
+        externalIdType: assertion.externalIdType,
+        externalIdUrl: assertion.externalIdUrl,
+        putCode: assertion.putCode,
+        created: assertion.created != null ? assertion.created.format(DATE_TIME_FORMAT) : null,
+        modified: assertion.modified != null ? assertion.modified.format(DATE_TIME_FORMAT) : null,
+        deletedFromORCID: assertion.deletedFromORCID != null ? assertion.deletedFromORCID.format(DATE_TIME_FORMAT) : null,
+        status: assertion.status,
+        ownerId: assertion.ownerId
+      });
 
-    this.onStartDateSelected(false);
-    this.onEndDateSelected(false);
+      this.onStartDateSelected(false);
+      this.onEndDateSelected(false);
+    }
   }
 
   previousState() {
@@ -224,19 +236,28 @@ export class AssertionUpdateComponent implements OnInit {
 
   public onStartDateSelected(resetValue) {
     this.startDaysList = this.dateUtilService.getDaysList(this.editForm.get('startYear').value, this.editForm.get('startMonth').value);
-    if (resetValue) {
-      this.editForm.patchValue({
-        startDay: null
-      });
+    console.log(this.editForm.get('startYear').value + ' ' + this.editForm.get('startMonth').value + ' ' + this.editForm.get('startDay').value);
+    if (resetValue && this.editForm.get('startDay').value) {
+      if (this.editForm.get('startYear').value && this.editForm.get('startMonth').value) {
+        if (!isValidDate(this.editForm.get('startYear').value, this.editForm.get('startMonth').value, this.editForm.get('startDay').value)) {
+          this.editForm.patchValue({
+            startDay: null
+          });
+        }
+      }
     }
   }
 
   public onEndDateSelected(resetValue) {
     this.endDaysList = this.dateUtilService.getDaysList(this.editForm.get('endYear').value, this.editForm.get('endMonth').value);
-    if (resetValue) {
-      this.editForm.patchValue({
-        endDay: null
-      });
+    if (resetValue && this.editForm.get('endDay').value) {
+      if (this.editForm.get('endYear').value && this.editForm.get('endMonth').value) {
+        if (!isValidDate(this.editForm.get('endYear').value, this.editForm.get('endMonth').value, this.editForm.get('endDay').value)) {
+          this.editForm.patchValue({
+            endDay: null
+          });
+        }
+      }
     }
   }
 }
