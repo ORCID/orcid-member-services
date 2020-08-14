@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 public interface MemberRepository extends MongoRepository<Member, String> {
 	
     Optional<Member> findBySalesforceId(String salesforceId);
-    
+
+    Optional<Member> findByClientName(String salesforceId);
+
     Boolean existsBySalesforceId(String salesforceId);
 }

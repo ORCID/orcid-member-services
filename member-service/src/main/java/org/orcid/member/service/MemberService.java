@@ -82,7 +82,11 @@ public class MemberService {
         }
         Optional<Member> optional = memberRepository.findBySalesforceId(member.getSalesforceId());
         if (optional.isPresent()) {
-            throw new BadRequestAlertException("A member with that salesforce id already exists", "member", "idexists");
+            throw new BadRequestAlertException("A member with that salesforce id already exists", "member", "salesForceIdUsed");
+        }
+        Optional<Member> optionalMemberName = memberRepository.findByClientName(member.getClientName());
+        if (optionalMemberName.isPresent()) {
+            throw new BadRequestAlertException("A member with that name already exists", "member", "memberNameUsed");
         }
         if (!MemberValidator.validate(member)) {
             throw new BadRequestAlertException("Member invalid", "member", "invalid");
@@ -130,8 +134,20 @@ public class MemberService {
         existingMember.setLastModifiedBy(member.getLastModifiedBy());
         existingMember.setLastModifiedDate(member.getLastModifiedDate());
 
+        // Check if name changed
+        if (!existingMember.getClientName().equals(member.getClientName())) {
+            Optional<Member> optionalMember = memberRepository.findByClientName(member.getClientName());
+            if (optionalMember.isPresent()) {
+                throw new BadRequestAlertException("Invalid member name", "member", "memberNameUsed");
+            }
+        }
+
         // Check if salesforceId changed
         if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
+            Optional<Member> optionalSalesForceId = memberRepository.findBySalesforceId(member.getSalesforceId());
+            if (optionalSalesForceId.isPresent()) {
+                throw new BadRequestAlertException("Invalid salesForceId", "member", "salesForceIdUsed");
+            }
             // update affiliations associated with the member
             String oldSalesForceId = existingMember.getSalesforceId();
             existingMember.setSalesforceId(member.getSalesforceId());

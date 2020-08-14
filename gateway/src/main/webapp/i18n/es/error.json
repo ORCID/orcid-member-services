@@ -20,6 +20,7 @@
     "memberNotFound": "Miembro no encontrado con salesForceId: {{ params }} ",
     "salesForceIdUsed": "Un miembro con ese salesforce id ya existe",
     "affiliationOtherOrganization": "Esta afiliacion no pertenece a tu organizacion",
-    "emailAffiliationUsed": "No fue posible agregar la afiliacion. Una afiliacion con {{ params }} ya existe y pertenece a otra organizacion."
+    "emailAffiliationUsed": "No fue posible agregar la afiliacion. Una afiliacion con {{ params }} ya existe y pertenece a otra organizacion.",
+    "memberNameUsed": "Un miembro con ese nombre ya existe"
   }
 }
