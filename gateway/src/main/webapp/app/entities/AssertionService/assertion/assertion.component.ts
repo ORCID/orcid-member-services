@@ -12,12 +12,15 @@ import { AccountService } from 'app/core';
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { AssertionService } from './assertion.service';
 import { ORCID_BASE_URL } from 'app/app.constants';
+import { ASSERTION_STATUS } from 'app/shared/constants/orcid-api.constants';
 
 @Component({
   selector: 'jhi-assertion',
-  templateUrl: './assertion.component.html'
+  templateUrl: './assertion.component.html',
+  styleUrls: ['assertion.scss']
 })
 export class AssertionComponent implements OnInit, OnDestroy {
+  errorAddingToOrcid: string = ASSERTION_STATUS.ERROR_ADDING_TO_ORCID;
   currentAccount: any;
   assertions: IAssertion[];
   error: any;

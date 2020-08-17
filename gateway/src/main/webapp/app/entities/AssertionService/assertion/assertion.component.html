@@ -61,7 +61,14 @@
                     <span *ngIf="assertion.endYear">{{assertion.endYear}}</span><span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endDay">-{{assertion.endDay}} </span>
                     <br><a jhiTranslate="gatewayApp.assertionServiceAssertion.details" [routerLink]="['/assertion', assertion.id, 'view' ]">View details</a>
                 </td>
-                <td>{{assertion.status}}</td>
+                <td>{{assertion.status}}
+                    <div *ngIf="assertion.status==errorAddingToOrcid">
+                        <p class="note">For help troubleshooting, please contact ORCID Support and copy/paste or include a screenshot of the error message below.</p>
+                        <div  class="alert alert-warning">
+                            <pre><code>{{assertion.orcidError}}</code></pre>
+                        </div>
+                    </div>
+                </td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
