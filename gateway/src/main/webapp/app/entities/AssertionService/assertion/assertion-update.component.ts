@@ -177,7 +177,7 @@ export class AssertionUpdateComponent implements OnInit {
   save() {
     this.isSaving = true;
     const assertion = this.createFromForm();
-    if (assertion.id !== undefined) {
+    if (assertion.id !== undefined && assertion.id != null ) {
       this.subscribeToSaveResponse(this.assertionService.update(assertion));
     } else {
       this.subscribeToSaveResponse(this.assertionService.create(assertion));
