@@ -26,6 +26,14 @@ a {
   cursor: pointer;
 }
 
+pre {
+  white-space: pre-wrap;       /* css-3 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;
+}
+
 .container-fluid {
   min-height: calc(100% - 103px);
 }
@@ -212,6 +220,11 @@ input.form-control[type='file'] {
 /* ==========================================================================
 ORCID global styles
 ========================================================================== */
+.note {
+  font-size: .8em;
+  line-height: normal;
+  font-style: italic;
+}
 .id-icon {
   margin: 0 .1em .2em 0;
 }
