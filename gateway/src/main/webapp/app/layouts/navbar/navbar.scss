@@ -45,6 +45,13 @@ Logo styles
   font-weight: normal;
 }
 
+.navbar-beta {
+  vertical-align: bottom;
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
 @media screen and (max-width:767px) {
   .logo-img,
   .navbar-title {
