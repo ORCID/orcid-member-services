@@ -1,9 +1,67 @@
 <div class="row">
     <div class="col-md-12">
         <div [ngSwitch]="isAuthenticated()">
-            <div class="alert alert-success mt-3" *ngSwitchCase="true">
-                <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message"
-                    [translateValues]="{username: account.login}"> You are logged in as user "{{account.login}}". </span>
+            <div *ngSwitchCase="true">
+                <div class="alert alert-success mt-3">
+                    <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message"
+                        [translateValues]="{username: account.login}"> You are logged in as user "{{account.login}}". </span>
+                </div>
+                <!--This section is temporary for the pilot and will not be translated-->
+                <div class="article">
+                    <h1>Welcome pilot participants!</h1>
+                    <p>The ORCID Member Portal is a new suite of tools intended to help institutions make the most of their ORCID membership.
+                        To make sure that it functions properly and supports members’ needs, we’re running a pilot test program, and we’re thrilled that your organization is interested in participating.</p>
+                    <p> The Member Portal is under active development and will eventually include tools that allow you to:</p>
+                    <ul>
+                        <li>Add/update data on researchers' ORCID records</li>
+                        <li>Manage your organization's ORCID membership information</li>
+                        <li>Manage your organization's ORCID API credentials</li>
+                        <li>Access data and reports</li>
+                    </ul>
+                    <p><b>Tools currently available for testing:</b></p>
+                    <table class="table">
+                        <tr>
+                            <td><b>Add affiliations</b></Add> (working title! catchy name forthcoming)</td>
+                            <td>"Add affiliations" simplifies the process of adding affiliation information (employment, education, etc) to ORCID records by allowing you to add and update affiliation information on behalf of your researchers using a CSV file, without any need to integrate ORCID directly into your current systems or to acquire an ORCID-enabled vendor system.
+                            </td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <a name="resources"><h2>Resources</h2></a>
+                    <table class="table">
+                        <tr>
+                            <td><a href="https://docs.google.com/document/d/1X6ftW1CrvDFW-Ot4zgao2lC1bqbwoSr3lvcbNwabDlc">Member portal pilot program guide</a></td>
+                            <td><b>Start here!</b> This guide is a one-stop shop for information about the pilot program and the Member Portal tool.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://docs.google.com/document/d/1z7228Xx-_P-F5NkNpQWEoloRrmycxZmUgmmlnqBwjuA">Organization admin guide</a></td>
+                            <td>Guide for staff at your insitution who will be using the Member Portal</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://docs.google.com/document/d/1vEqvrfOjPFyysKMgNffj43g8ZffCmmvNPxLWYgVSCuM/">Email guide & example text</a></td>
+                            <td>Guide for creating the email that you will send to your researchers requesting permission to access their ORCID records</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://drive.google.com/file/d/1cwjI6LtIsXTtzn5frvScgl3_H613DrHk/view?usp=sharing">Example affiliations CSV file</a></td>
+                            <td>Sample file showing affiliation data formatted for use with the Add affiliations tool</td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <a name="contacts"><h2>Support contacts</h2></a>
+                    <p>We've set up dedicated support channels just for the Member Portal. For help or questions about the Member Portal, reach us at:</p>
+                    <ul>
+                        <li><b>Slack:</b> <a href="https://friends-of-orcid.slack.com/">friends-of-orcid.slack.com</a> #2020-member-portal-pilot channel</li>
+                        <li><b>Email:</b> <a href="mailto:2020-member-portal-pilot@orcid.org">2020-member-portal-pilot@orcid.org</a></li>
+                    </ul>
+                    <p><em><b>Note:</b> Our Support Team is not yet trained to support the Member Portal, so please use the dedicated channels above for a quick response from the Member Portal team.</em></p>
+                    <hr>
+                    <h2>Project technical info</h2>
+                    <p>The ORCID Member Portal is an open source project developed by the <a href="https://orcid.org/content/orcid-team">ORCID team</a> using Java, Angular and MongoDB.</p>
+                    <ul>
+                        <li><b>Project management Trello board:</b>  <a href="https://trello.com/b/a8Cxpwqe/member-services-current-development">https://trello.com/b/a8Cxpwqe/member-services-current-development</a></li>
+                        <li><b>Code:</b> <a href="https://github.com/ORCID/orcid-member-services">https://github.com/ORCID/orcid-member-services</a></li>
+                    </ul>
+                </div>
             </div>
             <div *ngSwitchCase="false">
                 <div class="alert alert-info mt-3 mb-5">
