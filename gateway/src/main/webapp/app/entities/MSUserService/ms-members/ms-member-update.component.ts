@@ -10,16 +10,27 @@ import { MSMemberService } from './ms-member.service';
 import { AccountService, Account } from 'app/core';
 import { BASE_URL, ORCID_BASE_URL } from 'app/app.constants';
 
+function consortiumLeadValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: boolean } | null => {
+    if (control.value !== undefined && control.parent !== undefined) {
+      const isConsortiumLead = control.value;
+      if (isConsortiumLead) {
+        control.parent.get('parentSalesforceId').disable();
+        control.parent.get('parentSalesforceId').setValue(null);
+      } else {
+        control.parent.get('parentSalesforceId').enable();
+      }
+    }
+    return null;
+  };
+}
+
 function parentSalesforceIdConditionallyRequiredValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
-    if (control.value !== undefined) {
-      const isConsortiumLead = control.value;
-      if (!isConsortiumLead && control.parent !== undefined) {
+    if (control.parent !== undefined) {
+      const isConsortiumLead = control.parent.get('isConsortiumLead').value;
+      if (!isConsortiumLead) {
         return Validators.required(control.parent.get('parentSalesforceId'));
-      }
-      if (isConsortiumLead) {
-        control.parent.get('parentSalesforceId').setValue(null);
-        return null;
       }
     }
     return null;
@@ -54,8 +65,8 @@ export class MSMemberUpdateComponent implements OnInit {
     clientId: new FormControl(null, [Validators.required, clientIdValidator()]),
     clientName: [null, [Validators.required]],
     salesforceId: [null, [Validators.required]],
-    parentSalesforceId: [],
-    isConsortiumLead: [null, [Validators.required, parentSalesforceIdConditionallyRequiredValidator()]],
+    parentSalesforceId: [null, [Validators.required, parentSalesforceIdConditionallyRequiredValidator()]],
+    isConsortiumLead: [null, [Validators.required, consortiumLeadValidator()]],
     assertionServiceEnabled: [],
     createdBy: [],
     createdDate: [],
@@ -75,6 +86,9 @@ export class MSMemberUpdateComponent implements OnInit {
     this.accountService.identity().then((account: Account) => {});
     this.activatedRoute.data.subscribe(({ msMember }) => {
       this.updateForm(msMember);
+    });
+    this.editForm.get('isConsortiumLead').valueChanges.subscribe(value => {
+      this.editForm.get('parentSalesforceId').updateValueAndValidity();
     });
   }
 
