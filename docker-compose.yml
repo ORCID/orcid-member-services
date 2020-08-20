@@ -42,6 +42,7 @@ services:
       - SPRING_DATA_MONGODB_DATABASE=gateway
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
+      - JHIPSTER_MAIL_FROM=${MAIL_FROM}
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
     volumes:
       - ./log-raw/:/logs
@@ -65,6 +66,7 @@ services:
       - SPRING_MAIL_PORT=${MAIL_PORT}
       - SPRING_MAIL_USERNAME=${MAIL_USER}
       - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
+      - JHIPSTER_MAIL_FROM=${MAIL_FROM}
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
     volumes:
       - ./log-raw/:/logs
