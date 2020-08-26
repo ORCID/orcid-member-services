@@ -2,9 +2,10 @@ JHIPSTER_URL=https://github.com/jhipster/jhipster-registry/releases/download/v6.
 JHIPSTER_JAR=`basename $JHIPSTER_URL`
 
 if [ ! -f $JHIPSTER_JAR ]; then
-    if ! curl -L $JHIPSTER_URL --output $JHIPSTER_JAR
+    if ! curl -f -L $JHIPSTER_URL --output $JHIPSTER_JAR
     then
         echo "Download $JHIPSTER_JAR - https://github.com/jhipster/jhipster-registry/releases - and place in this directory"
+        exit 1
     fi
 fi
 
