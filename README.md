@@ -32,11 +32,6 @@ Create a `git` directory in your home folder, and clone the orcid-member-service
 - cd ~/git
 - git clone git@github.com:ORCID/orcid-member-services.git
 
-## Download JHipster Registry
-
-- Download JAR file https://github.com/jhipster/jhipster-registry/releases/tag/v6.1.2
-- Place in orcid-member-services/jhipster-registry
-
 ## Set Java version to Open JDK 11
 
 Edit bash profile to set JAVA_HOME to your OpenJDK 11 path, ex:
