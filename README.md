@@ -47,7 +47,7 @@ Edit bash profile to set JAVA_HOME to your OpenJDK 11 path, ex:
     - cd orcid-member-services/jhipster-registry/
     - Run `bash start.sh`
     - Wait for it to start
-    - Go to [http://localhost:8761/#/](http://localhost:8761/#/) and sign in with the admin credentials `admin / admin`
+    - Go to [http://localhost:8761/#/](http://localhost:8761/#/) and sign in with the admin credentials `admin@orcid.org / admin`
 
 
 ## Start the other services  
