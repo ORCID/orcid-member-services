@@ -125,8 +125,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                BASE_URL: JSON.stringify('https://member-services.qa.orcid.org'),
-                ORCID_BASE_URL: JSON.stringify('https://sandbox.orcid.org')
+                BASE_URL: JSON.stringify('https://member-portal.qa.orcid.org'),
+                ORCID_BASE_URL: JSON.stringify('https://qa.orcid.org')
             }
         }),
         new MiniCssExtractPlugin({
