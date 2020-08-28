@@ -13,18 +13,17 @@
 			Member Portal needs to be activated. Please click on the URL
 			below to activate your account and set a password:</p>
 		<p>
-      <a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}/reset/finish?key=${user.resetKey}|})"
-        th:href="${url}" th:text="${url}">Login link</a>
-    </p>
-		<p>
-			<span th:text="#{email.reset.text4}">If you have any questions
-				or need help, please contact us at</span> <a style="color: #2E7F9F;"
-				href="https://orcid.org/help/contact-us">https://orcid.org/help/contact-us</a>
+      		<a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}/reset/finish?key=${user.resetKey}|})"
+        	th:href="${url}" th:text="${url}">Login link</a>
+    	</p>
+    	<p>
+			<span th:text="#{email.creation.text2}">This link will expire in 24 hours. If you need a new activation link or have any other questions, please contact us at</span> <a style="color: #2E7F9F;"
+				href="2020-member-portal-pilot@orcid.org">2020-member-portal-pilot@orcid.org</a> 
 		</p>
 		<p>
 			<span th:text="#{email.common.warmRegards}">Warm Regards,</span> <br />
-			<span th:text="#{email.common.signature}">The ORCID Team</span> <br />
-			<a style="color: #2E7F9F;" href="https://orcid.org/help/contact-us">https://orcid.org/help/contact-us</a>
+			<span th:text="#{email.common.signature}">The ORCID Member Portal Team/span> <br />
+			<a style="color: #2E7F9F;" href="2020-member-portal-pilot@orcid.org">2020-member-portal-pilot@orcid.org</a>
 		</p>
 		<p th:text="#{email.common.youHaveReceived}">You have received
 			this email as a service announcement related to your ORCID Member Portal account.</p>
