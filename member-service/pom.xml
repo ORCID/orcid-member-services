@@ -312,7 +312,7 @@
             <artifactId>metrics-core</artifactId>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
-        
+
         <dependency>
             <groupId>org.codehaus.jettison</groupId>
             <artifactId>jettison</artifactId>
@@ -521,7 +521,7 @@
                             <image>adoptopenjdk:11-jre-hotspot</image>
                         </from>
                         <to>
-                            <image>memberservice:${release.tag}</image>
+                            <image>dockerpush.int.orcid.org/memberservice:${release.tag}</image>
                         </to>
                         <container>
                             <entrypoint>
