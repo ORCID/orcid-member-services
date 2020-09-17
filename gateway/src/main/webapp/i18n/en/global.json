@@ -5,6 +5,8 @@
     "false": "false",
     "true": "true",
     "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
+    "warning": "Warning!",
+    "isATestEnvironment": "is a test environment for the ORCID Member Portal that connects to the ORICD Registry test environment",
     "menu": {
       "memberPortal": "Member Portal",
       "beta": "Beta",
