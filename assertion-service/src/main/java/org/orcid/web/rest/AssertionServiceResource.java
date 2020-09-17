@@ -168,7 +168,26 @@ public class AssertionServiceResource {
             LOG.warn("Error reading user upload", e);
             throw new RuntimeException(e);
 		}
-
+		
+		// temp fix to prevent multiple orgs from adding affiliations with the same email
+		// remove after adding support for storing multiple ID tokens
+		List<Assertion> assertionsToRemove = new ArrayList<Assertion>();
+		
+		for(int i = 0; i < upload.getAssertions().size(); i++) {
+			Assertion a = upload.getAssertions().get(i);
+			if (existentAssertionForOtherOrganization(a)){
+				assertionsToRemove.add(a);
+				String errorMessage = String.format("Unable to add affiliatioln for %s. An affiliation with that email already exists and belongs to another organization.", a.getEmail());
+	            upload.addError(i, errorMessage);
+			}
+		}
+		
+		if(!assertionsToRemove.isEmpty()) {
+			for(Assertion a : assertionsToRemove) {
+				upload.removeAssertion(a);
+			}
+		}
+		
 		// add put codes for assertions that already exist
 		updateIdsForExistingAssertions(upload.getAssertions());
 		assertionsService.createOrUpdateAssertions(upload.getAssertions());
