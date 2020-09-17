@@ -125,7 +125,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                BASE_URL: JSON.stringify('https://member-services.orcid.org'),
+                BASE_URL: JSON.stringify('https://member-portal.orcid.org'),
                 ORCID_BASE_URL: JSON.stringify('https://orcid.org')
             }
         }),
