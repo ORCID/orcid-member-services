@@ -22,6 +22,10 @@ public class AssertionsUpload {
 		assertions.add(assertion);
 	}
 	
+	public void removeAssertion(Assertion assertion) {
+		assertions.remove(assertion);
+	}
+	
 	public void addUser(String user) {
 		users.add(user);
 	}
