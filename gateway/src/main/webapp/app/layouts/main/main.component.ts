@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '@angular/router';
+import { BASE_URL, ORCID_BASE_URL } from 'app/app.constants';
 
 import { JhiLanguageHelper } from 'app/core';
 
@@ -8,6 +9,9 @@ import { JhiLanguageHelper } from 'app/core';
   templateUrl: './main.component.html'
 })
 export class JhiMainComponent implements OnInit {
+  PROD_BASE_URL: string = 'https://member-portal.orcid.org';
+  baseUrl: string = BASE_URL;
+  orcidBaseUrl: string = ORCID_BASE_URL;
   hideNav: Boolean = false;
   constructor(private jhiLanguageHelper: JhiLanguageHelper, private router: Router) {}
 
