@@ -312,7 +312,7 @@
             <artifactId>metrics-core</artifactId>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
-        <!-- https://mvnrepository.com/artifact/org.codehaus.jettison/jettison --> 
+        <!-- https://mvnrepository.com/artifact/org.codehaus.jettison/jettison -->
         <dependency>
             <groupId>org.codehaus.jettison</groupId>
             <artifactId>jettison</artifactId>
@@ -335,7 +335,7 @@
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>8.5.1</version>
-        </dependency>        
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>org.json</groupId>
@@ -363,7 +363,7 @@
             <groupId>dnsjava</groupId>
             <artifactId>dnsjava</artifactId>
             <version>2.1.6</version>
-        </dependency>	
+        </dependency>
     </dependencies>
 
     <build>
@@ -557,7 +557,7 @@
                             <image>adoptopenjdk:11-jre-hotspot</image>
                         </from>
                         <to>
-                            <image>assertionservice:${release.tag}</image>
+                            <image>dockerpush.int.orcid.org/assertionservice:${release.tag}</image>
                         </to>
                         <container>
                             <entrypoint>
