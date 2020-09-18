@@ -3,22 +3,44 @@ package org.orcid.service;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jettison.json.JSONException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.orcid.config.ApplicationProperties;
+import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
+import org.orcid.domain.OrcidToken;
 import org.orcid.repository.OrcidRecordRepository;
 import org.orcid.security.EncryptUtil;
+import org.orcid.security.SecurityUtils;
+import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import io.github.jhipster.web.util.PaginationUtil;
 
 @Service
 public class OrcidRecordService {
+    private static final Logger LOG = LoggerFactory.getLogger(OrcidRecordService.class);
 
     @Autowired
     private OrcidRecordRepository orcidRecordRepository;
@@ -36,25 +58,29 @@ public class OrcidRecordService {
         return orcidRecordRepository.findOneByEmail(email);
     }
     
-    public Optional<OrcidRecord> findOneByIdToken(String idToken) {
-        return orcidRecordRepository.findOneByIdToken(idToken);
-    }
-    
-    public void createOrcidRecord(String email, Instant now) {
+    public OrcidRecord createOrcidRecord(String email, Instant now, String salesForceId) {
+        Optional<OrcidRecord> optional = findOneByEmail(email);
+        if (optional.isPresent()) {
+            throw new BadRequestAlertException("An Orcid Record with the email: " + email + " already exists.", "orcidRecord", "orcidRecordEmailUsed");
+        }
+        
         OrcidRecord or = new OrcidRecord();
         or.setEmail(email);
-        or.setOwnerId(assertionsUserService.getLoggedInUserId());
+        List<OrcidToken> tokens = new ArrayList<OrcidToken>();
+        tokens.add( new OrcidToken(salesForceId, null));
+        or.setTokens(tokens);
         or.setCreated(now);
         or.setModified(now);
-        orcidRecordRepository.insert(or);
+
+        return orcidRecordRepository.insert(or);
     }
     
-    public void createOrcidRecords(Set<String> emails) {
+    public void createOrcidRecords(Set<String> emails, String salesForceId) {
         Instant now = Instant.now();
         // Create assertions
         for (String e : emails) {
             if (!findOneByEmail(e).isPresent()) {
-                createOrcidRecord(e, now);
+                createOrcidRecord(e, now, salesForceId);
             }
         }
     }
@@ -63,9 +89,30 @@ public class OrcidRecordService {
     	orcidRecordRepository.delete(orcidRecord);
     }
     
-    public void storeIdToken(String emailInStatus, String idToken, String orcidIdInJWT) {
+    public void storeIdToken(String state, String idToken, String orcidIdInJWT, String salesForceId) {
+        String[] stateTokens = state.split("&&");
+        String emailInStatus = stateTokens[1];
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus).orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
-        orcidRecord.setIdToken(idToken);
+        List<OrcidToken> tokens = orcidRecord.getTokens();
+        List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
+        OrcidToken newToken = new OrcidToken(salesForceId, idToken);
+        if(tokens == null || tokens.size() == 0)
+        {
+            updatedTokens.add(newToken);
+        }
+        else {
+            for(OrcidToken token: tokens)
+            {   
+                    if(StringUtils.equals(token.getSalesforce_id(), salesForceId)) {
+                        updatedTokens.add(newToken);
+                    }
+                    else {
+                        updatedTokens.add(token);
+                    }              
+            }     
+        } 
+        orcidRecord.setTokens(updatedTokens);
+        orcidRecord.setModified(Instant.now());
         orcidRecord.setOrcid(orcidIdInJWT);
         orcidRecord.setRevokeNotificationSentDate(null);
         orcidRecordRepository.save(orcidRecord);
@@ -82,23 +129,11 @@ public class OrcidRecordService {
         StringBuffer buffer = new StringBuffer();
         CSVPrinter csvPrinter = new CSVPrinter(buffer, CSVFormat.DEFAULT
                 .withHeader("email", "link"));
-        List<OrcidRecord> records = null;
-                
-        List<AssertionServiceUser> usersBelongingToSameMember = assertionsUserService.getUsersBySalesforceId(assertionsUserService.getLoggedInUser().getSalesforceId());
-        for (AssertionServiceUser user : usersBelongingToSameMember) {
-            if (records == null)
-            {
-                records = orcidRecordRepository.findAllToInvite(user.getId());
-            }
-            else
-            {
-                records.addAll(orcidRecordRepository.findAllToInvite(user.getId())); 
-            }
-        }       
+        List<OrcidRecord> records =  orcidRecordRepository.findAllToInvite(assertionsUserService.getLoggedInUser().getSalesforceId());      
         
         for(OrcidRecord record : records) {
             String email = record.getEmail();
-            String encrypted = encryptUtil.encrypt(email);
+            String encrypted = encryptUtil.encrypt(assertionsUserService.getLoggedInUser().getSalesforceId() + "&&" + email);
             String link = landingPageUrl + "?state=" + encrypted;
             csvPrinter.printRecord(email, link);
         }
@@ -108,7 +143,34 @@ public class OrcidRecordService {
         return buffer.toString();
     }
 
-    public void updateOrcidRecord(OrcidRecord orcidRecord) {
-        orcidRecordRepository.save(orcidRecord);
+    public OrcidRecord updateOrcidRecord(OrcidRecord orcidRecord) {
+        return orcidRecordRepository.save(orcidRecord);
     }
+    
+    public Page<OrcidRecord> findBySalesforceId(Pageable pageable) {
+        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+        Page<OrcidRecord> orcidRecords = orcidRecordRepository.findBySalesforceId(user.getSalesforceId(), pageable);
+        orcidRecords.forEach(a -> {
+            if(a.getToken(user.getSalesforceId()) == null) {
+                a.setOrcid(null);
+            }
+        });
+        return orcidRecords;
+    }
+    
+    
+    public OrcidRecord findById(String id) {
+        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+        Optional<OrcidRecord> optional = orcidRecordRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new IllegalArgumentException("Invalid assertion id");
+        }
+        OrcidRecord record = optional.get();
+        if (StringUtils.isBlank(record.getToken(user.getSalesforceId()))) {
+            record.setOrcid(null);
+            //cami permission field
+        }
+        return record;
+    }
+    
 }

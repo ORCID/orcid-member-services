@@ -16,6 +16,7 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.codehaus.jettison.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ import org.orcid.client.OrcidAPIClient;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
+import org.orcid.domain.OrcidToken;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
 
@@ -39,6 +41,7 @@ class AssertionsServiceTest {
 	private static final String DEFAULT_LOGIN = "user@orcid.org";
 
 	private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
+	
 
 	@Mock
 	private AssertionsCSVReportWriter assertionsReportWriter;
@@ -527,7 +530,11 @@ class AssertionsServiceTest {
 		if (i > 15 && i <= 20) {
 			OrcidRecord record = new OrcidRecord();
 			record.setOrcid("orcid" + i);
-			record.setIdToken("idToken" + i);
+			
+			List<OrcidToken> tokens = new ArrayList<OrcidToken>();
+	                OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken" + i);
+	                tokens.add(newToken);
+	                record.setTokens(tokens);
 			return Optional.of(record);
 		}
 
@@ -551,7 +558,10 @@ class AssertionsServiceTest {
 	private Optional<OrcidRecord> getOptionalOrcidRecordWithIdToken() {
 		OrcidRecord record = new OrcidRecord();
 		record.setEmail("email");
-		record.setIdToken("idToken");
+		List<OrcidToken> tokens = new ArrayList<OrcidToken>();
+                OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
+                tokens.add(newToken);
+                record.setTokens(tokens);
 		record.setOrcid("orcid");
 		return Optional.of(record);
 	}

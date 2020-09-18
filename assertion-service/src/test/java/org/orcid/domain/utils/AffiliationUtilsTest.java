@@ -3,11 +3,14 @@ package org.orcid.domain.utils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
+import org.orcid.domain.OrcidToken;
 import org.orcid.domain.enumeration.AssertionStatus;
 
 class AffiliationUtilsTest {
@@ -37,17 +40,24 @@ class AffiliationUtilsTest {
 	void testGetAffiliationStatusWhereNoErrorOccured() {
 		OrcidRecord record = new OrcidRecord();
 		Assertion assertion = new Assertion();
+		assertion.setSalesforceId("salesforceId");
 
 		record.setDeniedDate(Instant.now());
 		assertEquals(AssertionStatus.USER_DENIED_ACCESS.value,
 				AssertionUtils.getAssertionStatus(assertion, record));
 		record.setDeniedDate(null);
 
-		record.setIdToken("idToken");
+		List<OrcidToken> tokens = new ArrayList<OrcidToken>();
+		OrcidToken newToken = new OrcidToken(assertion.getSalesforceId(), "idToken");
+
+		tokens.add(newToken);
+		record.setTokens(tokens);
 		assertEquals(AssertionStatus.USER_GRANTED_ACCESS.value,
 				AssertionUtils.getAssertionStatus(assertion, record));
-		record.setIdToken(null);
-
+		tokens = new ArrayList<OrcidToken>();
+		newToken = new OrcidToken(assertion.getSalesforceId(), null);
+                tokens.add(newToken);
+                record.setTokens(tokens);
 		assertion.setPutCode("put-code");
 		assertion.setDeletedFromORCID(Instant.now());
 		assertEquals(AssertionStatus.DELETED_IN_ORCID.value,
