@@ -185,7 +185,7 @@ public class AssertionServiceResource {
 		});
 	}
 
-	@DeleteMapping("/assertion/{id}")
+    @DeleteMapping("/assertion/{id}")
     public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
         assertionsService.deleteById(id);
 
@@ -205,7 +205,7 @@ public class AssertionServiceResource {
     	String email = encryptUtil.decrypt(encryptedEmail);
     	Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
     	if (record.isPresent()) {
-    		return ResponseEntity.ok().body(record.get().getOwnerId());
+    		return ResponseEntity.ok().body(assertionsUserService.getLoggedInUserId());
     	} else {
     		return ResponseEntity.notFound().build();
     	}
@@ -221,8 +221,9 @@ public class AssertionServiceResource {
 	 */
     @GetMapping("/assertion/record/{state}")
     public ResponseEntity<OrcidRecord> getOrcidRecord(@PathVariable String state) throws IOException, JSONException {
-    	String email = encryptUtil.decrypt(state);
-    	Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
+    	String decryptState = encryptUtil.decrypt(state);
+    	String[] stateTokens = decryptState.split("&&");
+    	Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(stateTokens[1]);
     	if (record.isPresent()) {
     		return ResponseEntity.ok().body(record.get());
     	} else {
@@ -262,6 +263,7 @@ public class AssertionServiceResource {
     public ResponseEntity<Void> storeIdToken(@RequestBody ObjectNode json) throws ParseException {
         String state = json.get("state").asText();
         String idToken = json.has("id_token") ? json.get("id_token").asText() : null;
+        String salesForceId = json.has("salesforce_id") ? json.get("salesforce_id").asText() : null;
         Boolean denied = json.has("denied") ? json.get("denied").asBoolean() : false;
         String emailInStatus = encryptUtil.decrypt(state);
 
@@ -270,7 +272,7 @@ public class AssertionServiceResource {
             String orcidIdInJWT = String.valueOf(jwt.getJWTClaimsSet().getClaim("sub"));
 
             if (!StringUtils.isBlank(emailInStatus) && !StringUtils.isBlank(orcidIdInJWT)) {
-                orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT);
+                orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, salesForceId);
             } else {
                 if (StringUtils.isBlank(emailInStatus)) {
                     LOG.warn("emailInStatus is empty in the state key: " + state);
@@ -300,12 +302,6 @@ public class AssertionServiceResource {
     }
 
     private void validateAssertion(Assertion assertion) {
-        if (existentAssertionForOtherOrganization(assertion)) {
-            String errorMessage = String.format("Unable to add affiliation. An affiliation for %s already exists and belongs to another organization.", assertion.getEmail());
-            Map<String, String> params = new HashMap<>();
-            params.put("params", assertion.getEmail());
-            throw new EmailAlreadyUsedException(errorMessage, params);
-        }
 
         if (StringUtils.isBlank(assertion.getEmail())) {
             throw new IllegalArgumentException("email must not be null");
@@ -384,20 +380,6 @@ public class AssertionServiceResource {
             }
         }
         return null;
-    }
-	
-    private boolean existentAssertionForOtherOrganization(Assertion assertion) {
-        List<Assertion> assertions = assertionsService.findByEmail(assertion.getEmail());
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        for (Assertion a: assertions) {
-            String salesforceId = assertion.getSalesforceId()!=null ? assertion.getSalesforceId():user.getSalesforceId();
-            if (!StringUtils.equals(a.getSalesforceId(), salesforceId)) {
-                LOG.error("!!! existent assertion for the member with the id " + salesforceId 
-                    + " that has the same email  " + assertion.getEmail());
-                return true;
-            }
-        } 
-        return false;
     }
 
     /**

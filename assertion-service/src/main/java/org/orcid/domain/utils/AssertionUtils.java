@@ -33,7 +33,7 @@ public class AssertionUtils {
 			if (orcidRecord.getDeniedDate() != null) {
 				return AssertionStatus.USER_DENIED_ACCESS.value;
 			}
-			if (!StringUtils.isBlank(orcidRecord.getIdToken())) {
+			if (!StringUtils.isBlank(orcidRecord.getToken(assertion.getSalesforceId()))) {
 				return AssertionStatus.USER_GRANTED_ACCESS.value;
 			}
 			return AssertionStatus.PENDING.value;
