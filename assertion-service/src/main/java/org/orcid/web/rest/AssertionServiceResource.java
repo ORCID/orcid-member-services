@@ -401,5 +401,20 @@ public class AssertionServiceResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "assertion", salesforceId))
             .build();
     }
+    
+    
+    private boolean existentAssertionForOtherOrganization(Assertion assertion) {
+        List<Assertion> assertions = assertionsService.findByEmail(assertion.getEmail());
+        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+        for (Assertion a: assertions) {
+            String salesforceId = assertion.getSalesforceId()!=null ? assertion.getSalesforceId():user.getSalesforceId();
+            if (!StringUtils.equals(a.getSalesforceId(), salesforceId)) {
+                LOG.error("!!! existent assertion for the member with the id " + salesforceId 
+                    + " that has the same email  " + assertion.getEmail());
+                return true;
+            }
+        } 
+        return false;
+    }
 
 }
