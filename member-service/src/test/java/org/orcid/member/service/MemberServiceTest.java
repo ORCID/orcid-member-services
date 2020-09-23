@@ -24,7 +24,7 @@ import org.orcid.member.security.MockSecurityContext;
 import org.orcid.member.upload.MemberUpload;
 import org.orcid.member.upload.MembersUploadReader;
 import org.orcid.member.web.rest.errors.BadRequestAlertException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.orcid.member.security.EncryptUtil;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 class MemberServiceTest {
@@ -43,6 +43,9 @@ class MemberServiceTest {
 	
 	@InjectMocks
 	private MemberService memberService;
+	
+	@Mock
+	private EncryptUtil encryptUtil;
 	
 	@BeforeEach
 	public void setUp() {
@@ -162,12 +165,15 @@ class MemberServiceTest {
 	
 	@Test
 	void testGetAuthorizedMemberForUser() {
-		Mockito.when(assertionService.getOwnerIdForOrcidUser(Mockito.eq("encrypted"))).thenReturn("ownerId");
+	    String email = "email@email.com";
+            String encrypted = encryptUtil.encrypt("salesforceid" + "&&" + email);
+		Mockito.when(assertionService.getOwnerIdForOrcidUser(Mockito.eq(encrypted))).thenReturn("ownerId");
 		Mockito.when(userService.getSalesforceIdForUser(Mockito.eq("ownerId"))).thenReturn("salesforceId");
-		Mockito.when(memberRepository.findById(Mockito.eq("salesforcedId"))).thenReturn(Optional.empty());
-		Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
-		
-		Optional<Member> optional = memberService.getAuthorizedMemberForUser("encrypted");
+		Mockito.when(memberRepository.findById(Mockito.eq("salesforceid"))).thenReturn(Optional.empty());
+		Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceid"))).thenReturn(Optional.of(getMember()));
+	        Mockito.when(encryptUtil.decrypt(Mockito.eq(encrypted))).thenReturn("salesforceid" + "&&" + email);
+
+		Optional<Member> optional = memberService.getAuthorizedMemberForUser(encrypted);
 		
 		assertTrue(optional.isPresent());
 		
@@ -179,9 +185,12 @@ class MemberServiceTest {
 	
 	@Test
 	void testGetAuthorizedMemberForUserBadEmail() {
-		Mockito.when(assertionService.getOwnerIdForOrcidUser(Mockito.eq("encrypted"))).thenReturn(null);
-		Optional<Member> optional = memberService.getAuthorizedMemberForUser("encrypted");
-		assertTrue(!optional.isPresent());
+	    String email = "email@email.com";
+            String encrypted = encryptUtil.encrypt("salesforceid" + "&&" + email);
+            Mockito.when(assertionService.getOwnerIdForOrcidUser(encrypted)).thenReturn(null);
+	    Mockito.when(encryptUtil.decrypt(Mockito.eq(encrypted))).thenReturn("salesforceid" + "&&" + email);
+	    Optional<Member> optional = memberService.getAuthorizedMemberForUser(encrypted);
+	    assertTrue(!optional.isPresent());
 	}
 
 	private MemberUpload getMemberUpload() {
