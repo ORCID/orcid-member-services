@@ -32,6 +32,7 @@ import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.repository.AssertionsRepository;
+import org.orcid.security.SecurityUtils;
 import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
 
 class AssertionsServiceTest {
@@ -490,9 +491,8 @@ class AssertionsServiceTest {
 		assertionsService.putAssertionsToOrcid();
 
 		Mockito.verify(orcidRecordService, Mockito.times(20)).findOneByEmail(Mockito.anyString());
-		//Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
-		Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(),
-				Mockito.any(Assertion.class));
+		Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
+		Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(),Mockito.any(Assertion.class));
 	}
 
 	@Test
@@ -552,6 +552,7 @@ class AssertionsServiceTest {
 	private Assertion getAssertionWithEmail(String email) {
 		Assertion assertion = new Assertion();
 		assertion.setEmail(email);
+		assertion.setSalesforceId(DEFAULT_SALESFORCE_ID);
 		return assertion;
 	}
 

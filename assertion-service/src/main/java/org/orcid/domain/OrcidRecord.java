@@ -55,8 +55,6 @@ public class OrcidRecord {
 
     @Field("modified")
     private Instant modified;
-    
-    private boolean permission = false;
 
     public String getId() {
         return id;
