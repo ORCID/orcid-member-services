@@ -78,6 +78,12 @@ class OrcidRecordServiceTest {
                             return (OrcidRecord) invocation.getArgument(0);
                     }
             });
+            Mockito.when(orcidRecordRepository.insert(Mockito.any(OrcidRecord.class))).thenAnswer(new Answer<OrcidRecord>() {
+                @Override
+                public OrcidRecord answer(InvocationOnMock invocation) throws Throwable {
+                        return (OrcidRecord) invocation.getArgument(0);
+                }
+        });
 
             OrcidRecord created = orcidRecordService.createOrcidRecord(EMAIL_ONE, Instant.now(), DEFAULT_SALESFORCE_ID);
             assertNotNull(created.getCreated());
@@ -117,6 +123,7 @@ class OrcidRecordServiceTest {
             OrcidToken token2 = new OrcidToken(OTHER_SALESFORCE_ID, "tokenid2");
             tokens.add(token2);
             recordOne.setTokens(tokens);
+            recordOne.setModified(Instant.now());
 
             OrcidRecord updated = orcidRecordService.updateOrcidRecord(recordOne);
             assertNotNull(updated.getCreated());
