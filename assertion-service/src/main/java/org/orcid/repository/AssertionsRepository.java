@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AssertionsRepository extends MongoRepository<Assertion, String> {
+public interface AssertionsRepository extends MongoRepository<Assertion, String>, AssertionsRepositoryCustom {
     
     @Query("{ownerId: ?0}")    
     Page<Assertion> findByOwnerId(String ownerId, Pageable pageable);
@@ -30,9 +30,6 @@ public interface AssertionsRepository extends MongoRepository<Assertion, String>
 
     @Query("{putCode: null}")
     List<Assertion> findAllToCreate();
-
-    @Query("{updated: true, putCode: {$ne:null}}")
-    List<Assertion> findAllToUpdate();
 
     List<Assertion> findByEmail(String email);
 
