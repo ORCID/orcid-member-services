@@ -69,7 +69,7 @@ public class UserDTO {
 
 	private Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
 	
-	private Boolean isAdmin;
+	private boolean isAdmin = false;
 
 
 
@@ -238,11 +238,11 @@ public class UserDTO {
 		this.authorities = authorities;
 	}
 	
-	public Boolean getIsAdmin() {
+	public boolean getIsAdmin() {
 	        return isAdmin;
 	}
 
-	public void setIsAdmin(Boolean isAdmin) {
+	public void setIsAdmin(boolean isAdmin) {
 	        this.isAdmin = isAdmin;
 	}
 

@@ -389,7 +389,7 @@ public class UserService {
 		return users.stream().map(UserDTO::valueOf).collect(Collectors.toList());
 	}
 
-	private Set<String> getAuthoritiesForUser(String salesforceId, Boolean isAdmin) {
+	private Set<String> getAuthoritiesForUser(String salesforceId, boolean isAdmin) {
 		Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
 		if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(salesforceId)) {
 			authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
