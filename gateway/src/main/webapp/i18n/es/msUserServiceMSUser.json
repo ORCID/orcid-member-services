@@ -31,6 +31,7 @@
       "mainContact": "Contacto Principal",
       "salesforceId": "Salesforce Id",
       "parentSalesforceId": "Parent Salesforce Id",
+      "isAdmin": "Admin",
       "createdBy": "Creado por",
       "createdDate": "Fecha de creacion",
       "lastModifiedBy": "Ultima vez modificado por",

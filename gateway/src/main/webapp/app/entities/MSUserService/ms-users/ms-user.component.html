@@ -33,7 +33,8 @@
             <th jhiSortBy="lastName"><span jhiTranslate="gatewayApp.msUserServiceMSUser.lastName">Last Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="mainContact"><span jhiTranslate="gatewayApp.msUserServiceMSUser.mainContact">Main Contact</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="salesforceId"><span jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId">Organization</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="gatewayApp.msUserServiceMSUser.activated">Activated</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="activated"><span jhiTranslate="gatewayApp.msUserServiceMSUser.activated">Activated</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="isAdmin"><span jhiTranslate="gatewayApp.msUserServiceMSUser.isAdmin">Admin</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="lastModifiedDate"><span jhiTranslate="gatewayApp.msUserServiceMSUser.lastModifiedDate">Last Modified</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
@@ -53,6 +54,11 @@
                     <span class="sr-only">{{msUser.activated}}</span>
                     <fa-icon aria-hidden="true" *ngIf="msUser.activated" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
                     <fa-icon aria-hidden="true" *ngIf="!msUser.activated" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                </td>
+                <td class="text-center">
+                    <span class="sr-only">{{msUser.isAdmin}}</span>
+                    <fa-icon aria-hidden="true" *ngIf="msUser.isAdmin" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                    <fa-icon aria-hidden="true" *ngIf="!msUser.isAdmin" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
                 </td>
                 <td>{{msUser.lastModifiedDate | date:'medium'}}</td>
                 <td class="text-right">
