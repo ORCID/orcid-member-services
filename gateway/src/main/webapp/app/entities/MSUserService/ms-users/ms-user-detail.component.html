@@ -62,7 +62,9 @@
                 </button>
                 <button type="button"
                         [routerLink]="['/ms-user', msUser.id, 'edit']"
-                        class="btn btn-primary">
+                        class="btn btn-primary"
+                        [disabled]="isDefaultAdmin(msUser)"
+                        >
                     <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
                 </button>
                 <button *ngIf="!msUser.activated" type="button"
