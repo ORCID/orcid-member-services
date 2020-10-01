@@ -14,7 +14,6 @@ import { BASE_URL, ORCID_BASE_URL } from 'app/app.constants';
   templateUrl: './landing-page.component.html'
 })
 export class LandingPageComponent implements OnInit {
-
   issuer: string = ORCID_BASE_URL;
   oauthBaseUrl: string = ORCID_BASE_URL + '/oauth/authorize';
   redirectUri: string = BASE_URL + '/landing-page';
@@ -26,6 +25,7 @@ export class LandingPageComponent implements OnInit {
   showSuccess: Boolean = false;
   key: any;
   clientName: string;
+  salesforceId: string;
   clientId: string;
   orcidId: string;
   oauthUrl: string;
@@ -37,87 +37,94 @@ export class LandingPageComponent implements OnInit {
     private landingPageService: LandingPageService,
     protected msMemberService: MSMemberService,
     private route: ActivatedRoute
-  ) {
-
-  }
+  ) {}
 
   ngOnInit() {
     let id_token_fragment = this.getFragmentParameterByName('id_token');
     let access_token_fragment = this.getFragmentParameterByName('access_token');
     let state_param = this.getQueryParameterByName('state');
-
-    this.landingPageService.getOrcidConnectionRecord(state_param)
-      .subscribe(
-        (res: HttpResponse<any>) => {
-          this.orcidRecord = res.body;
-          this.landingPageService.getMemberInfo(state_param).subscribe(
-            (res: HttpResponse<IMSMember>) => {
-              this.clientName = res.body.clientName;
-              this.clientId = res.body.clientId;
-              this.oauthUrl = this.oauthBaseUrl + '?response_type=token&redirect_uri=' + this.redirectUri + '&client_id=' + this.clientId + '&scope=/activities/update openid&state=' + state_param;
-              //Check if id token already exists in DB (user previously granted permission)
-              if(this.orcidRecord.idToken != null && this.orcidRecord.idToken != ''){
-                this.showConnectionExistsElement();
+    this.landingPageService.getOrcidConnectionRecord(state_param).subscribe(
+      (res: HttpResponse<any>) => {
+        this.orcidRecord = res.body;
+        this.landingPageService.getMemberInfo(state_param).subscribe(
+          (res: HttpResponse<IMSMember>) => {
+            this.clientName = res.body.clientName;
+            this.clientId = res.body.clientId;
+            this.salesforceId = res.body.salesforceId;
+            this.oauthUrl =
+              this.oauthBaseUrl +
+              '?response_type=token&redirect_uri=' +
+              this.redirectUri +
+              '&client_id=' +
+              this.clientId +
+              '&scope=/activities/update openid&state=' +
+              state_param;
+            //Check if id token already exists in DB (user previously granted permission)
+            if (this.orcidRecord.idToken != null && this.orcidRecord.idToken != '') {
+              this.showConnectionExistsElement();
+            } else {
+              //Check if id token exists in URL (user just granted permission)
+              if (id_token_fragment != null && id_token_fragment != '') {
+                this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment);
               } else {
-                //Check if id token exists in URL (user just granted permission)
-                if (id_token_fragment != null && id_token_fragment != '') {
-                    this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment);
-                } else {
-                  let error = this.getFragmentParameterByName('error');
-                  //Check if user denied permission
-                  if (error != null && error != '') {
-                    if (error === 'access_denied') {
-                      this.submitUserDenied(state_param);
-                    } else {
-                      this.showErrorElement();
-                    }
+                let error = this.getFragmentParameterByName('error');
+                //Check if user denied permission
+                if (error != null && error != '') {
+                  if (error === 'access_denied') {
+                    this.submitUserDenied(state_param);
                   } else {
-                    window.location.replace(this.oauthUrl);
+                    this.showErrorElement();
                   }
+                } else {
+                  window.location.replace(this.oauthUrl);
                 }
-
               }
-            },
-            (res: HttpErrorResponse) => {
-              console.log("error")
             }
-          );
-        },
-        (res: HttpErrorResponse) => {
-          console.log('error');
-        }
+          },
+          (res: HttpErrorResponse) => {
+            console.log('error');
+          }
+        );
+      },
+      (res: HttpErrorResponse) => {
+        console.log('error');
+      }
     );
   }
 
   getFragmentParameterByName(name: string): string {
-      name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-      let regex = new RegExp('[\\#&]' + name + '=([^&#]*)'),
-          results = regex.exec(window.location.hash);
-      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    let regex = new RegExp('[\\#&]' + name + '=([^&#]*)'),
+      results = regex.exec(window.location.hash);
+    console.log('???????? getFragmentByName: ' + window.location.hash);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
   }
 
   getQueryParameterByName(name: string): string {
-      name = name.replace(/[\[\]]/g, '\\$&');
-      let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-          results = regex.exec(window.location.href);
-      if (!results) {
-        return null;
-      }
-      if (!results[2]) {
-        return '';
-      }
-      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    name = name.replace(/[\[\]]/g, '\\$&');
+    let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      results = regex.exec(window.location.href);
+    if (!results) {
+      return null;
+    }
+    if (!results[2]) {
+      return '';
+    }
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 
   checkSubmitToken(id_token: string, state: string, access_token: string) {
     this.landingPageService.getPublicKey().subscribe(
-      (res) => {
+      res => {
         let pubKey = KEYUTIL.getKey(res.keys[0]);
         let response = KJUR.jws.JWS.verifyJWT(id_token, pubKey, {
-          alg: ['RS256'], iss: [this.issuer], aud: this.clientId, gracePeriod: 15 * 60 // 15 mins skew allowed
+          alg: ['RS256'],
+          iss: [this.issuer],
+          aud: this.clientId,
+          gracePeriod: 15 * 60 // 15 mins skew allowed
         });
-        if(response === true){
-          this.landingPageService.submitUserResponse({ 'id_token': id_token, 'state': state}).subscribe(
+        if (response === true) {
+          this.landingPageService.submitUserResponse({ id_token: id_token, state: state, salesforce_id: this.salesforceId }).subscribe(
             () => {
               this.landingPageService.getUserInfo(access_token).subscribe(
                 (res: HttpResponse<any>) => {
@@ -126,23 +133,25 @@ export class LandingPageComponent implements OnInit {
                 },
                 () => {
                   this.showErrorElement();
-                });
+                }
+              );
             },
             () => {
               this.showErrorElement();
-            });
+            }
+          );
         } else {
           this.showErrorElement();
         }
       },
       () => {
         this.showErrorElement();
-      });
-
+      }
+    );
   }
 
   submitIdTokenData(id_token: string, state: string, access_token: string) {
-    this.landingPageService.submitUserResponse({ 'id_token': id_token, 'state': state}).subscribe(
+    this.landingPageService.submitUserResponse({ id_token: id_token, state: state }).subscribe(
       () => {
         this.landingPageService.getUserInfo(access_token).subscribe(
           (res: HttpResponse<any>) => {
@@ -151,18 +160,19 @@ export class LandingPageComponent implements OnInit {
           },
           () => {
             this.showErrorElement();
-          });
+          }
+        );
       },
       () => {
         this.showErrorElement();
-      });
+      }
+    );
   }
 
   submitUserDenied(state: string) {
-    this.landingPageService.submitUserResponse({ 'denied': true, 'state': state}).subscribe(
+    this.landingPageService.submitUserResponse({ denied: true, state: state }).subscribe(
       () => {
         this.showDeniedElement();
-
       },
       () => {
         this.showErrorElement();

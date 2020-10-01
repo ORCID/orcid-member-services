@@ -1,16 +1,28 @@
 package org.orcid.domain;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Document(collection = "orcid_record")
 public class OrcidRecord {
+    private static final Logger LOG = LoggerFactory.getLogger(OrcidRecord.class);
+    
+    public static String KEY_TOKEN_ID= "token_id";
+    public static String KEY_SALESFORCE_ID= "salesforce_id";
+    
     @Id
     private String id;
 
@@ -22,12 +34,9 @@ public class OrcidRecord {
     @Field("orcid")
     private String orcid;
 
-    @Field("id_token")
-    private String idToken;
-
-    @NotNull
-    @Field("owner_id")
-    private String ownerId;
+    @Field("tokens")
+    @JsonIgnore
+    private List<OrcidToken> tokens;
 
     @Field("last_notified")
     private Instant lastNotified;
@@ -71,20 +80,12 @@ public class OrcidRecord {
         this.orcid = orcid;
     }
 
-    public String getIdToken() {
-        return idToken;
+    public List<OrcidToken> getTokens() {
+        return tokens;
     }
 
-    public void setIdToken(String idToken) {
-        this.idToken = idToken;
-    }
-
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+    public void setTokens(List<OrcidToken> tokens) {
+        this.tokens = tokens;
     }
 
     public Instant getLastNotified() {
@@ -134,6 +135,20 @@ public class OrcidRecord {
     public void setModified(Instant modified) {
         this.modified = modified;
     }
+    
+    public String getToken(String salesforceId) {
+        List<OrcidToken> tokens = this.getTokens();
+        if(tokens != null) {
+            for(OrcidToken token: tokens)
+            {   
+                if(StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
+                    return token.getToken_id();
+                }
+            }
+        }
+        return null;  
+    }
+    
 
     @Override
     public int hashCode() {
@@ -143,11 +158,10 @@ public class OrcidRecord {
         result = prime * result + ((deniedDate == null) ? 0 : deniedDate.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((idToken == null) ? 0 : idToken.hashCode());
+        result = prime * result + ((tokens == null) ? 0 : tokens.hashCode());
         result = prime * result + ((lastNotified == null) ? 0 : lastNotified.hashCode());
         result = prime * result + ((modified == null) ? 0 : modified.hashCode());
         result = prime * result + ((orcid == null) ? 0 : orcid.hashCode());
-        result = prime * result + ((ownerId == null) ? 0 : ownerId.hashCode());
         result = prime * result + ((reminderNotificationSentDate == null) ? 0 : reminderNotificationSentDate.hashCode());
         result = prime * result + ((revokeNotificationSentDate == null) ? 0 : revokeNotificationSentDate.hashCode());
         return result;
@@ -182,10 +196,10 @@ public class OrcidRecord {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (idToken == null) {
-            if (other.idToken != null)
+        if (tokens == null) {
+            if (other.tokens != null)
                 return false;
-        } else if (!idToken.equals(other.idToken))
+        } else if (!tokens.equals(other.tokens))
             return false;
         if (lastNotified == null) {
             if (other.lastNotified != null)
@@ -201,11 +215,6 @@ public class OrcidRecord {
             if (other.orcid != null)
                 return false;
         } else if (!orcid.equals(other.orcid))
-            return false;
-        if (ownerId == null) {
-            if (other.ownerId != null)
-                return false;
-        } else if (!ownerId.equals(other.ownerId))
             return false;
         if (reminderNotificationSentDate == null) {
             if (other.reminderNotificationSentDate != null)

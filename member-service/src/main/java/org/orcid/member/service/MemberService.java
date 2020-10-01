@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.orcid.member.domain.Member;
 import org.orcid.member.repository.MemberRepository;
+import org.orcid.member.security.EncryptUtil;
 import org.orcid.member.security.SecurityUtils;
 import org.orcid.member.service.user.MemberServiceUser;
 import org.orcid.member.upload.MemberUpload;
@@ -41,6 +42,10 @@ public class MemberService {
 
     @Autowired
     private AssertionService assertionService;
+    
+    @Autowired
+    private EncryptUtil encryptUtil;
+    
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -195,17 +200,11 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
-    public Optional<Member> getAuthorizedMemberForUser(String encryptedEmail) {
-        // send encrypted email to assertion service for decryption and get
-        // owner of
-        // orcid user
-        String ownerId = assertionService.getOwnerIdForOrcidUser(encryptedEmail);
-        if (ownerId != null) {
-            String salesforceId = userService.getSalesforceIdForUser(ownerId);
-            return getMember(salesforceId);
-        } else {
-            return Optional.empty();
-        }
+    public Optional<Member> getAuthorizedMemberForUser(String state) { 
+        String decryptState = encryptUtil.decrypt(state);
+        String[] stateTokens = decryptState.split("&&");      
+        return getMember(stateTokens[0]);
+        
     }
 
 }
