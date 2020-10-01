@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.orcid.domain.OrcidRecord;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -12,10 +14,10 @@ import org.springframework.stereotype.Repository;
 public interface OrcidRecordRepository extends MongoRepository<OrcidRecord, String> {
 
     Optional<OrcidRecord> findOneByEmail(String email);
+
+    @Query(value = "{tokens: {salesforce_id: ?0}}")
+    List<OrcidRecord> findAllToInvite(String salesforceId);
     
-    @Query("{id_token: ?0}")
-    Optional<OrcidRecord> findOneByIdToken(String idToken);
-    
-    @Query(value = "{owner_id: ?0, id_token: null}")
-    List<OrcidRecord> findAllToInvite(String ownerId);
+    @Query("{tokens: {salesforce_id: ?0}}")    
+    Page<OrcidRecord> findBySalesforceId(String salesforceId, Pageable pageable);
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
+import org.orcid.domain.OrcidToken;
 import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.service.UserService;
@@ -112,11 +114,13 @@ public class AssertionsCSVReportWriterTest {
 		record.setCreated(Instant.now());
 		record.setEmail("test@test.com");
 		record.setId("id");
-		record.setIdToken("idToken");
+		List<OrcidToken> tokens = new ArrayList<OrcidToken>();
+                OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
+                tokens.add(newToken);
+                record.setTokens(tokens);
 		record.setLastNotified(Instant.now());
 		record.setModified(Instant.now());
 		record.setOrcid("orcid");
-		record.setOwnerId("ownerId");
 		return Optional.of(record);
 	}
 
