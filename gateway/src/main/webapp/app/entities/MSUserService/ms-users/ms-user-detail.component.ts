@@ -14,6 +14,7 @@ export class MSUserDetailComponent implements OnInit {
   msUser: IMSUser;
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
+  DEFAULT_ADMIN = 'admin';
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -38,6 +39,14 @@ export class MSUserDetailComponent implements OnInit {
       }
       this.previousState();
     });
+  }
+
+  isDefaultAdmin(msUser: IMSUser) {
+    console.log(msUser.login + ' ' + this.DEFAULT_ADMIN);
+    if (msUser.login == this.DEFAULT_ADMIN) {
+      return true;
+    }
+    return false;
   }
 
   previousState() {

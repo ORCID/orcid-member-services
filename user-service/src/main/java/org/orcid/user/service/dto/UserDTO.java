@@ -68,8 +68,12 @@ public class UserDTO {
 	private Boolean mainContact;
 
 	private Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
+	
+	private boolean isAdmin = false;
 
-	public UserDTO() {
+
+
+    public UserDTO() {
 		// Empty constructor needed for Jackson.
 	}
 
@@ -232,6 +236,14 @@ public class UserDTO {
 
 	public void setAuthorities(Set<String> authorities) {
 		this.authorities = authorities;
+	}
+	
+	public boolean getIsAdmin() {
+	        return isAdmin;
+	}
+
+	public void setIsAdmin(boolean isAdmin) {
+	        this.isAdmin = isAdmin;
 	}
 
 	public User toUser() {

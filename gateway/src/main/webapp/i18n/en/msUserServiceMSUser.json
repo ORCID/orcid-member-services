@@ -39,6 +39,7 @@
       "salesforceId": "Organization",
       "parentSalesforceId": "Parent Salesforce Id",
       "activated": "Activated",
+      "isAdmin": "Admin",
       "createdBy": "Created By",
       "createdDate": "Created",
       "lastModifiedBy": "Last Modified By",
