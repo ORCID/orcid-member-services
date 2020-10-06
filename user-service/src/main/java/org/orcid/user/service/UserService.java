@@ -115,7 +115,7 @@ public class UserService {
 		newUser.setActivated(false);
 		// new user gets registration key
 		newUser.setActivationKey(RandomUtil.generateActivationKey());
-		newUser.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId()));
+		newUser.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId(), userDTO.getIsAdmin()));
 		userRepository.save(newUser);
 		userCaches.evictEntryFromUserCaches(newUser.getEmail());
 		LOG.debug("Created Information for User: {}", newUser);
@@ -132,7 +132,7 @@ public class UserService {
 	}
 
 	public User createUser(UserDTO userDTO) {
-		userDTO.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId()));
+		userDTO.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId(),userDTO.getIsAdmin()));
 
 		User user = userDTO.toUser();
 		user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
@@ -172,7 +172,7 @@ public class UserService {
 			user.setLastName(lastName);
 			user.setLangKey(langKey);
 			user.setImageUrl(imageUrl);
-			user.setAuthorities(getAuthoritiesForUser(user.getSalesforceId()));
+			user.setAuthorities(getAuthoritiesForUser(user.getSalesforceId(),false));
 			userRepository.save(user);
 			userCaches.evictEntryFromUserCaches(user.getEmail());
 			LOG.debug("Changed Information for User: {}", user);
@@ -199,7 +199,7 @@ public class UserService {
                     if (userDTO.getLangKey() != null) {
                         user.setLangKey(userDTO.getLangKey());
                     }
-					user.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId()));
+					user.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId(), userDTO.getIsAdmin()));
 					if(!StringUtils.equals(user.getEmail(),userDTO.getEmail().toLowerCase()) ){
 					    user.setEmail(userDTO.getEmail().toLowerCase());
 					    user.setActivated(false);
@@ -389,10 +389,13 @@ public class UserService {
 		return users.stream().map(UserDTO::valueOf).collect(Collectors.toList());
 	}
 
-	private Set<String> getAuthoritiesForUser(String salesforceId) {
+	private Set<String> getAuthoritiesForUser(String salesforceId, boolean isAdmin) {
 		Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
 		if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(salesforceId)) {
 			authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
+		}
+		if(isAdmin) {
+		    authorities.add(AuthoritiesConstants.ADMIN);
 		}
 		return authorities;
 	}

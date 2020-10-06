@@ -34,6 +34,7 @@ export class MSUserComponent implements OnInit, OnDestroy {
 
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
+  DEFAULT_ADMIN = 'admin';
 
   constructor(
     protected msUserService: MSUserService,
@@ -134,6 +135,14 @@ export class MSUserComponent implements OnInit, OnDestroy {
         this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.error', null, null);
       }
     });
+  }
+
+  isDefaultAdmin(msUser: IMSUser) {
+    console.log(msUser.login + ' ' + this.DEFAULT_ADMIN);
+    if (msUser.login == this.DEFAULT_ADMIN) {
+      return true;
+    }
+    return false;
   }
 
   protected paginateMSUser(data: IMSUser[], headers: HttpHeaders) {

@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
-import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
+import { IMSUser, UserAuthorities } from 'app/shared/model/MSUserService/ms-user.model';
 
 type EntityResponseType = HttpResponse<IMSUser>;
 type EntityArrayResponseType = HttpResponse<IMSUser[]>;
@@ -22,21 +22,21 @@ export class MSUserService {
     const copy = this.convertDateFromClient(msUser);
     return this.http
       .post<IMSUser>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertFromServer(res)));
   }
 
   upload(msUser: IMSUser): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(msUser);
     return this.http
       .post<IMSUser>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertFromServer(res)));
   }
 
   update(msUser: IMSUser): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(msUser);
     return this.http
       .put<IMSUser>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertFromServer(res)));
   }
 
   sendActivate(msUser: IMSUser): Observable<EntityResponseType> {
@@ -48,14 +48,14 @@ export class MSUserService {
     console.log('login:' + login);
     return this.http
       .get<IMSUser>(`${this.resourceUrl}/${login}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
       .get<IMSUser[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .pipe(map((res: EntityArrayResponseType) => this.convertArrayFromServer(res)));
   }
 
   delete(id: string): Observable<HttpResponse<any>> {
@@ -70,19 +70,35 @@ export class MSUserService {
     return copy;
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+  protected convertFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
       res.body.createdDate = res.body.createdDate != null ? moment(res.body.createdDate) : null;
       res.body.lastModifiedDate = res.body.lastModifiedDate != null ? moment(res.body.lastModifiedDate) : null;
+      res.body.isAdmin = false;
+      if (res.body.authorities != null) {
+        res.body.authorities.forEach(function(userRole) {
+          if (userRole === UserAuthorities.ROLE_ADMIN) {
+            res.body.isAdmin = true;
+          }
+        });
+      }
     }
     return res;
   }
 
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+  protected convertArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
     if (res.body) {
       res.body.forEach((msUser: IMSUser) => {
         msUser.createdDate = msUser.createdDate != null ? moment(msUser.createdDate) : null;
         msUser.lastModifiedDate = msUser.lastModifiedDate != null ? moment(msUser.lastModifiedDate) : null;
+        msUser.isAdmin = false;
+        if (msUser.authorities != null) {
+          msUser.authorities.forEach(function(userRole) {
+            if (userRole === UserAuthorities.ROLE_ADMIN) {
+              msUser.isAdmin = true;
+            }
+          });
+        }
       });
     }
     return res;

@@ -2,6 +2,7 @@ import { Moment } from 'moment';
 
 export const enum UserAuthorities {
   ROLE_USER = 'ROLE_USER',
+  ROLE_ADMIN = 'ROLE_ADMIN',
   CONSORTIUM_LEAD = 'CONSORTIUM_LEAD',
   ASSERTION_SERVICE_ENABLED = 'ASSERTION_SERVICE_ENABLED'
 }
@@ -15,6 +16,7 @@ export interface IMSUser {
   salesforceId?: string;
   parentSalesforceId?: string;
   activated?: boolean;
+  isAdmin?: boolean;
   authorities?: [string];
   createdBy?: string;
   createdDate?: Moment;
@@ -35,8 +37,10 @@ export class MSUser implements IMSUser {
     public createdDate?: Moment,
     public lastModifiedBy?: string,
     public activated?: boolean,
+    public isAdmin?: boolean,
     public lastModifiedDate?: Moment
   ) {
+    this.isAdmin = this.isAdmin || false;
     this.mainContact = this.mainContact || false;
     this.activated = this.activated || false;
   }
