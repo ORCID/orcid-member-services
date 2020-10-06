@@ -169,25 +169,6 @@ public class AssertionServiceResource {
             throw new RuntimeException(e);
 		}
 		
-		// temp fix to prevent multiple orgs from adding affiliations with the same email
-		// remove after adding support for storing multiple ID tokens
-		List<Assertion> assertionsToRemove = new ArrayList<Assertion>();
-		
-		for(int i = 0; i < upload.getAssertions().size(); i++) {
-			Assertion a = upload.getAssertions().get(i);
-			if (existentAssertionForOtherOrganization(a)){
-				assertionsToRemove.add(a);
-				String errorMessage = String.format("Unable to add affiliatioln for %s. An affiliation with that email already exists and belongs to another organization.", a.getEmail());
-	            upload.addError(i, errorMessage);
-			}
-		}
-		
-		if(!assertionsToRemove.isEmpty()) {
-			for(Assertion a : assertionsToRemove) {
-				upload.removeAssertion(a);
-			}
-		}
-		
 		// add put codes for assertions that already exist
 		updateIdsForExistingAssertions(upload.getAssertions());
 		assertionsService.createOrUpdateAssertions(upload.getAssertions());
@@ -419,21 +400,6 @@ public class AssertionServiceResource {
         }
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "assertion", salesforceId))
             .build();
-    }
-    
-    
-    private boolean existentAssertionForOtherOrganization(Assertion assertion) {
-        List<Assertion> assertions = assertionsService.findByEmail(assertion.getEmail());
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        for (Assertion a: assertions) {
-            String salesforceId = assertion.getSalesforceId()!=null ? assertion.getSalesforceId():user.getSalesforceId();
-            if (!StringUtils.equals(a.getSalesforceId(), salesforceId)) {
-                LOG.error("!!! existent assertion for the member with the id " + salesforceId 
-                    + " that has the same email  " + assertion.getEmail());
-                return true;
-            }
-        } 
-        return false;
     }
 
 }
