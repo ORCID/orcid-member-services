@@ -3,10 +3,12 @@ package org.orcid.service.assertions.upload.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -14,7 +16,9 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.orcid.domain.Assertion;
@@ -31,11 +35,12 @@ import org.springframework.stereotype.Component;
 public class AssertionsCsvReader implements AssertionsUploadReader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AssertionsCsvReader.class);
-    private final DateTimeFormatter[] formatters = {
-        new DateTimeFormatterBuilder().appendPattern("yyyy").parseDefaulting(ChronoField.MONTH_OF_YEAR, 1).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-            .toFormatter(),
-        new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
-        new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd").parseStrict().toFormatter() };
+	private final DateTimeFormatter[] formatters = {
+			new DateTimeFormatterBuilder().appendPattern("yyyy").parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
+					.parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
+			new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+					.toFormatter(),
+			new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd").parseStrict().toFormatter() };
 
 	String[] urlValschemes = { "http", "https", "ftp" }; // DEFAULT schemes =
 	// "http", "https",
@@ -45,22 +50,24 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 
 	@Override
 	public AssertionsUpload readAssertionsUpload(InputStream inputStream) throws IOException {
-		InputStreamReader isr = new InputStreamReader(inputStream);
+		
+		final Reader reader = new InputStreamReader(new BOMInputStream(inputStream), StandardCharsets.UTF_8);
+		final CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());
+		
 		AssertionsUpload upload = new AssertionsUpload();
-		Iterable<CSVRecord> elements = CSVFormat.DEFAULT.withHeader().parse(isr);
 
 		try {
-			for (CSVRecord record : elements) {
+			for (CSVRecord record : parser) {
 				try {
 					Assertion assertion = parseLine(record, upload);
 
 					if (upload.getErrors().length() == 0) {
-                        // Create the userInfo if needed
-                        if (!upload.getUsers().contains(assertion.getEmail())) {
-                            upload.addUser(assertion.getEmail());
-                        }
-                        upload.addAssertion(assertion);
-                    }
+						// Create the userInfo if needed
+						if (!upload.getUsers().contains(assertion.getEmail())) {
+							upload.addUser(assertion.getEmail());
+						}
+						upload.addAssertion(assertion);
+					}
 				} catch (Exception e) {
 					LOG.info("CSV upload error found for record number {}", record.getRecordNumber());
 					upload.addError(record.getRecordNumber(), e.getMessage());
@@ -68,7 +75,8 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			}
 		} finally {
 			try {
-				isr.close();
+				reader.close();
+				parser.close();
 			} catch (IOException e) {
 				LOG.error("Error closing csv assertions upload input stream", e);
 				throw new RuntimeException(e);
@@ -80,130 +88,131 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 
 	private Assertion parseLine(CSVRecord line, AssertionsUpload assertionsUpload) {
 		Assertion a = new Assertion();
-        if (getOptionalMandatoryNullable(line, "email") == null) {
-            assertionsUpload.addError(line.getRecordNumber(), "email must not be null");
-            return a;
+		if (getOptionalMandatoryNullable(line, "email") == null) {
+			assertionsUpload.addError(line.getRecordNumber(), "email must not be null");
+			return a;
 		} else {
-            a.setEmail(line.get("email"));
-        }
+			a.setEmail(line.get("email"));
+		}
 
-        if (getOptionalMandatoryNullable(line, "affiliation-section") == null) {
-            assertionsUpload.addError(line.getRecordNumber(), "affiliation-section must not be null");
-            return a;
+		if (getOptionalMandatoryNullable(line, "affiliation-section") == null) {
+			assertionsUpload.addError(line.getRecordNumber(), "affiliation-section must not be null");
+			return a;
 		} else {
-            a.setAffiliationSection(AffiliationSection.valueOf(line.get("affiliation-section").toUpperCase()));
-        }
+			a.setAffiliationSection(AffiliationSection.valueOf(line.get("affiliation-section").toUpperCase()));
+		}
 
-        a.setDepartmentName(getOptionalMandatoryNullable(line, "department-name"));
-        a.setRoleTitle(getOptionalMandatoryNullable(line, "role-title"));
+		a.setDepartmentName(getOptionalMandatoryNullable(line, "department-name"));
+		a.setRoleTitle(getOptionalMandatoryNullable(line, "role-title"));
 
-        StringBuffer startDateBuffer = new StringBuffer();
-        StringBuffer endDateBuffer = new StringBuffer();
-        // Dates follows the format yyyy-MM-dd
-        if (getOptionalMandatoryNullable(line, "start-date") != null) {
-            String startDate = line.get("start-date").trim();
-            if (!StringUtils.isBlank(startDate)) {
-                String[] startDateParts = startDate.split("-|/|\\s");
-                String day = startDateParts.length > 2 ? startDateParts[2] : "0";
-                if (validDate(startDate, startDateParts[0], day, line, assertionsUpload)) {
-                    a.setStartYear(startDateParts[0]);
-                    startDateBuffer.append(startDateParts[0]);
-                    if (startDateParts.length > 1) {
-                        a.setStartMonth(startDateParts[1]);
-                        startDateBuffer.append("-");
-                        startDateBuffer.append(startDateParts[1]);
-                    }
+		StringBuffer startDateBuffer = new StringBuffer();
+		StringBuffer endDateBuffer = new StringBuffer();
+		// Dates follows the format yyyy-MM-dd
+		if (getOptionalMandatoryNullable(line, "start-date") != null) {
+			String startDate = line.get("start-date").trim();
+			if (!StringUtils.isBlank(startDate)) {
+				String[] startDateParts = startDate.split("-|/|\\s");
+				String day = startDateParts.length > 2 ? startDateParts[2] : "0";
+				if (validDate(startDate, startDateParts[0], day, line, assertionsUpload)) {
+					a.setStartYear(startDateParts[0]);
+					startDateBuffer.append(startDateParts[0]);
+					if (startDateParts.length > 1) {
+						a.setStartMonth(startDateParts[1]);
+						startDateBuffer.append("-");
+						startDateBuffer.append(startDateParts[1]);
+					}
 
-                    if (startDateParts.length > 2) {
-                        a.setStartDay(startDateParts[2]);
-                        startDateBuffer.append("-");
-                        startDateBuffer.append(startDateParts[2]);
-                    }
-                } else {
-                    return a;
-                }
-            }
-        }
-
-        // Dates follows the format yyyy-MM-dd
-        if (getOptionalMandatoryNullable(line, "end-date") != null) {
-            String endDate = line.get("end-date").trim();
-            if (!StringUtils.isBlank(endDate)) {
-                String endDateParts[] = endDate.split("-|/|\\s");
-                String day = endDateParts.length > 2 ? endDateParts[2] : "0";
-                if (validDate(endDate, endDateParts[0], day, line, assertionsUpload)) {
-                    a.setEndYear(endDateParts[0]);
-                    endDateBuffer.append(endDateParts[0]);
-
-                    if (endDateParts.length > 1) {
-                        a.setEndMonth(endDateParts[1]);
-                        endDateBuffer.append("-");
-                        endDateBuffer.append(endDateParts[1]);
-                    }
-
-                    if (endDateParts.length > 2) {
-                        a.setEndDay(endDateParts[2]);
-                        endDateBuffer.append("-");
-                        endDateBuffer.append(endDateParts[2]);
-                    }
-
-                    if (startDateBuffer.length() != 0 && endDateBuffer.length() != 0) {
-                        if (!validStartDateEndDate(startDateBuffer.toString(), endDateBuffer.toString())) {
-                            assertionsUpload.addError(line.getRecordNumber(), "The start date cannot be greater than the end date.");
-                            return a;
-                        }
-                    }
-                } else {
-                    return a;
-                }
-            }
-        }
-
-        if (getOptionalMandatoryNullable(line, "org-name") == null) {
-            assertionsUpload.addError(line.getRecordNumber(), "org-name must not be null");
-            return a;
-		} else {
-            a.setOrgName(line.get("org-name"));
-        }
-
-        if (getOptionalMandatoryNullable(line, "org-country") == null) {
-            assertionsUpload.addError(line.getRecordNumber(), "org-country must not be null");
-            return a;
-		} else {
-			try {
-				Iso3166Country.valueOf(line.get("org-country"));
-                a.setOrgCountry(line.get("org-country"));
-            } catch (Exception e) {
-                assertionsUpload.addError(line.getRecordNumber(), "Invalid org-country provided: " + line.get("org-country")
-                    + " it should be one from the Iso3166Country enum");
-                return a;
+					if (startDateParts.length > 2) {
+						a.setStartDay(startDateParts[2]);
+						startDateBuffer.append("-");
+						startDateBuffer.append(startDateParts[2]);
+					}
+				} else {
+					return a;
+				}
 			}
 		}
 
-        if (getOptionalMandatoryNullable(line, "org-city") == null) {
-            assertionsUpload.addError(line.getRecordNumber(), "org-city must not be null");
-            return a;
-		} else {
-            a.setOrgCity(line.get("org-city"));
-        }
+		// Dates follows the format yyyy-MM-dd
+		if (getOptionalMandatoryNullable(line, "end-date") != null) {
+			String endDate = line.get("end-date").trim();
+			if (!StringUtils.isBlank(endDate)) {
+				String endDateParts[] = endDate.split("-|/|\\s");
+				String day = endDateParts.length > 2 ? endDateParts[2] : "0";
+				if (validDate(endDate, endDateParts[0], day, line, assertionsUpload)) {
+					a.setEndYear(endDateParts[0]);
+					endDateBuffer.append(endDateParts[0]);
 
-        if (getOptionalMandatoryNullable(line, "org-region") != null) {
-            a.setOrgRegion(line.get("org-region"));
-        }
+					if (endDateParts.length > 1) {
+						a.setEndMonth(endDateParts[1]);
+						endDateBuffer.append("-");
+						endDateBuffer.append(endDateParts[1]);
+					}
 
-        if (getOptionalMandatoryNullable(line, "disambiguated-organization-identifier") == null) {
-            assertionsUpload.addError(line.getRecordNumber(), "disambiguated-organization-identifier must not be null");
-            return a;
+					if (endDateParts.length > 2) {
+						a.setEndDay(endDateParts[2]);
+						endDateBuffer.append("-");
+						endDateBuffer.append(endDateParts[2]);
+					}
+
+					if (startDateBuffer.length() != 0 && endDateBuffer.length() != 0) {
+						if (!validStartDateEndDate(startDateBuffer.toString(), endDateBuffer.toString())) {
+							assertionsUpload.addError(line.getRecordNumber(),
+									"The start date cannot be greater than the end date.");
+							return a;
+						}
+					}
+				} else {
+					return a;
+				}
+			}
+		}
+
+		if (getOptionalMandatoryNullable(line, "org-name") == null) {
+			assertionsUpload.addError(line.getRecordNumber(), "org-name must not be null");
+			return a;
 		} else {
-            a.setDisambiguatedOrgId(line.get("disambiguated-organization-identifier"));
-        }
+			a.setOrgName(line.get("org-name"));
+		}
+
+		if (getOptionalMandatoryNullable(line, "org-country") == null) {
+			assertionsUpload.addError(line.getRecordNumber(), "org-country must not be null");
+			return a;
+		} else {
+			try {
+				Iso3166Country.valueOf(line.get("org-country"));
+				a.setOrgCountry(line.get("org-country"));
+			} catch (Exception e) {
+				assertionsUpload.addError(line.getRecordNumber(), "Invalid org-country provided: "
+						+ line.get("org-country") + " it should be one from the Iso3166Country enum");
+				return a;
+			}
+		}
+
+		if (getOptionalMandatoryNullable(line, "org-city") == null) {
+			assertionsUpload.addError(line.getRecordNumber(), "org-city must not be null");
+			return a;
+		} else {
+			a.setOrgCity(line.get("org-city"));
+		}
+
+		if (getOptionalMandatoryNullable(line, "org-region") != null) {
+			a.setOrgRegion(line.get("org-region"));
+		}
+
+		if (getOptionalMandatoryNullable(line, "disambiguated-organization-identifier") == null) {
+			assertionsUpload.addError(line.getRecordNumber(), "disambiguated-organization-identifier must not be null");
+			return a;
+		} else {
+			a.setDisambiguatedOrgId(line.get("disambiguated-organization-identifier"));
+		}
 
 		if (getOptionalMandatoryNullable(line, "disambiguation-source") == null) {
-		    assertionsUpload.addError(line.getRecordNumber(), "disambiguation-source-identifier must not be null");
-            return a;
+			assertionsUpload.addError(line.getRecordNumber(), "disambiguation-source-identifier must not be null");
+			return a;
 		} else {
-            a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source"));
-        }
+			a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source"));
+		}
 		a.setExternalId(getOptionalMandatoryNullable(line, "external-id"));
 		a.setExternalIdType(getOptionalMandatoryNullable(line, "external-id-type"));
 		a.setExternalIdUrl(getOptionalMandatoryNullable(line, "external-id-url"));
@@ -263,49 +272,52 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		return encoded.toASCIIString();
 	}
 
-    protected boolean validDate(String date, String year, String day, CSVRecord line, AssertionsUpload assertionsUpload) {
+	protected boolean validDate(String date, String year, String day, CSVRecord line,
+			AssertionsUpload assertionsUpload) {
 
-        for (DateTimeFormatter formatter : formatters) {
-            try {
-                LocalDate localDate = LocalDate.parse(date, formatter);
-                if (isEmpty(year) || localDate.getYear() == Integer.parseInt(year)) {
-                    if (Integer.parseInt(day) > 0) {
-                        if (Integer.parseInt(day) == localDate.getDayOfMonth()) {
-                            return true;
-                        } else {
-                            assertionsUpload.addError(line.getRecordNumber(), "Invalid date.");
-                            return false;
-                        }
-                    } else {
-                        return true;
-                    }
-                }
-            } catch (DateTimeParseException e) {
-            }
-        }
-        assertionsUpload.addError(line.getRecordNumber(), "Invalid date Format. The accepted formats are 'yyyy', 'yyyy-MM' and 'yyyy-MM-dd'");
-        return false;
-    }
+		for (DateTimeFormatter formatter : formatters) {
+			try {
+				LocalDate localDate = LocalDate.parse(date, formatter);
+				if (isEmpty(year) || localDate.getYear() == Integer.parseInt(year)) {
+					if (Integer.parseInt(day) > 0) {
+						if (Integer.parseInt(day) == localDate.getDayOfMonth()) {
+							return true;
+						} else {
+							assertionsUpload.addError(line.getRecordNumber(), "Invalid date.");
+							return false;
+						}
+					} else {
+						return true;
+					}
+				}
+			} catch (DateTimeParseException e) {
+			}
+		}
+		assertionsUpload.addError(line.getRecordNumber(),
+				"Invalid date Format. The accepted formats are 'yyyy', 'yyyy-MM' and 'yyyy-MM-dd'");
+		return false;
+	}
 
-    public boolean validStartDateEndDate(String startDate, String endDate) {
+	public boolean validStartDateEndDate(String startDate, String endDate) {
 
-        for (DateTimeFormatter formatter : formatters) {
-            try {
-                LocalDate localStartDate = LocalDate.parse(startDate, formatter);
-                LocalDate localEndDate = LocalDate.parse(endDate, formatter);
-                if (localStartDate.isAfter(localEndDate)) {
-                    return false;
-                }
-            } catch (DateTimeParseException e) {
-            }
-        }
+		for (DateTimeFormatter formatter : formatters) {
+			try {
+				LocalDate localStartDate = LocalDate.parse(startDate, formatter);
+				LocalDate localEndDate = LocalDate.parse(endDate, formatter);
+				if (localStartDate.isAfter(localEndDate)) {
+					return false;
+				}
+			} catch (DateTimeParseException e) {
+			}
+		}
 
-        return true;
+		return true;
 
-    }
+	}
 
-    public static boolean isEmpty(String string) {
-        if (string == null || string.trim().isEmpty()) return true;
-        return false;
-    }
+	public static boolean isEmpty(String string) {
+		if (string == null || string.trim().isEmpty())
+			return true;
+		return false;
+	}
 }
