@@ -23,6 +23,7 @@ export class MSUserImportDialogComponent {
   isSaving: boolean;
   currentFile: FileList;
   csvErrors: any;
+  loading = false;
 
   constructor(
     protected msUserService: MSUserService,
@@ -43,12 +44,14 @@ export class MSUserImportDialogComponent {
   }
 
   upload() {
-    var f = this.currentFile.item(0);
+    this.loading = true;
+    const f = this.currentFile.item(0);
     this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
+      this.loading = false;
       if (event instanceof HttpResponse) {
-        var body = event.body;
+        const body = event.body;
         this.csvErrors = JSON.parse(body.toString());
-        if (this.csvErrors.length == 0) {
+        if (this.csvErrors.length === 0) {
           this.eventManager.broadcast({
             name: 'msUserListModification',
             content: 'New user settings uploaded'

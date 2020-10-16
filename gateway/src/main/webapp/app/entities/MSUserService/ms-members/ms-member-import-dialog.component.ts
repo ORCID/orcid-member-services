@@ -23,6 +23,7 @@ export class MSMemberImportDialogComponent {
   isSaving: boolean;
   currentFile: FileList;
   csvErrors: any;
+  loading = false;
 
   constructor(
     protected msMemberService: MSMemberService,
@@ -43,8 +44,10 @@ export class MSMemberImportDialogComponent {
   }
 
   upload() {
+    this.loading = true;
     var f = this.currentFile.item(0);
     this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
+      this.loading = false;
       if (event instanceof HttpResponse) {
         const body = event.body;
         this.csvErrors = JSON.parse(body.toString());
