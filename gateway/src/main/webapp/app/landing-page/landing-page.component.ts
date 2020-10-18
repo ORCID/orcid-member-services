@@ -57,7 +57,7 @@ export class LandingPageComponent implements OnInit {
               this.redirectUri +
               '&client_id=' +
               this.clientId +
-              '&scope=/activities/update openid&state=' +
+              '&scope=/activities/update openid&prompt=login&state=' +
               state_param;
             //Check if id token already exists in DB (user previously granted permission)
             if (this.orcidRecord.idToken != null && this.orcidRecord.idToken != '') {
