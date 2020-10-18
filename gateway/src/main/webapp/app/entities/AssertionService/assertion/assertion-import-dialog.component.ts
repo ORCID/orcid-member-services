@@ -23,6 +23,7 @@ export class AssertionImportDialogComponent {
   isSaving: boolean;
   currentFile: FileList;
   csvErrors: any;
+  loading = false;
 
   constructor(
     protected assertionService: AssertionService,
@@ -43,8 +44,10 @@ export class AssertionImportDialogComponent {
   }
 
   upload() {
+    this.loading = true;
     const f = this.currentFile.item(0);
     this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
+      this.loading = false;
       if (event instanceof HttpResponse) {
         const body = event.body;
         this.csvErrors = JSON.parse(body.toString());
