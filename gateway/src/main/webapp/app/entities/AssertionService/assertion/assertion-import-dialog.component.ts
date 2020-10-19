@@ -47,10 +47,10 @@ export class AssertionImportDialogComponent {
     this.loading = true;
     const f = this.currentFile.item(0);
     this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
-      this.loading = false;
       if (event instanceof HttpResponse) {
         const body = event.body;
         this.csvErrors = JSON.parse(body.toString());
+        this.loading = false;
         if (this.csvErrors.length === 0) {
           this.eventManager.broadcast({
             name: 'assertionListModification',
