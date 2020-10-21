@@ -96,10 +96,6 @@ export class LandingPageComponent implements OnInit {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
     let regex = new RegExp('[\\#&]' + name + '=([^&#]*)'),
       results = regex.exec(window.location.hash);
-    if (results != null) {
-      console.log(decodeURIComponent(results[1].replace(/\+/g, ' '));
-    }
-
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
   }
 
