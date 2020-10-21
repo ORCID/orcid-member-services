@@ -89,9 +89,7 @@ public class OrcidRecordService {
     	orcidRecordRepository.delete(orcidRecord);
     }
     
-    public void storeIdToken(String state, String idToken, String orcidIdInJWT, String salesForceId) {
-        String[] stateTokens = state.split("&&");
-        String emailInStatus = stateTokens[1];
+    public void storeIdToken(String emailInStatus, String idToken, String orcidIdInJWT, String salesForceId) {
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus).orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
         List<OrcidToken> tokens = orcidRecord.getTokens();
         List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
