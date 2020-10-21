@@ -68,9 +68,6 @@ export class LandingPageComponent implements OnInit {
                 this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment);
               } else {
                 let error = this.getFragmentParameterByName('error');
-                console.log('Error fragment: ');
-                console.log(error);
-                console.log(typeof error);
                 // Check if user denied permission
                 if (error != null && error != '') {
                   if (error == 'access_denied') {
@@ -99,8 +96,6 @@ export class LandingPageComponent implements OnInit {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
     let regex = new RegExp('[\\#&]' + name + '=([^&#]*)'),
       results = regex.exec(window.location.hash);
-    console.log('???????? getFragmentByName: ' + window.location.hash);
-
     if (results != null) {
       console.log(decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
@@ -136,7 +131,7 @@ export class LandingPageComponent implements OnInit {
             () => {
               this.landingPageService.getUserInfo(access_token).subscribe(
                 (res: HttpResponse<any>) => {
-                  this.f = res;
+                  this.signedInIdToken = res;
                   this.showSuccessElement();
                 },
                 () => {
