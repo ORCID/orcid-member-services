@@ -57,20 +57,23 @@ export class LandingPageComponent implements OnInit {
               this.redirectUri +
               '&client_id=' +
               this.clientId +
-              '&scope=/activities/update openid&prompt=login&state=' +
+              '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
               state_param;
-            //Check if id token already exists in DB (user previously granted permission)
+            // Check if id token already exists in DB (user previously granted permission)
             if (this.orcidRecord.idToken != null && this.orcidRecord.idToken != '') {
               this.showConnectionExistsElement();
             } else {
-              //Check if id token exists in URL (user just granted permission)
+              // Check if id token exists in URL (user just granted permission)
               if (id_token_fragment != null && id_token_fragment != '') {
                 this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment);
               } else {
                 let error = this.getFragmentParameterByName('error');
-                //Check if user denied permission
+                console.log('Error fragment: ');
+                console.log(error);
+                console.log(typeof error);
+                // Check if user denied permission
                 if (error != null && error != '') {
-                  if (error === 'access_denied') {
+                  if (error == 'access_denied') {
                     this.submitUserDenied(state_param);
                   } else {
                     this.showErrorElement();
@@ -97,6 +100,11 @@ export class LandingPageComponent implements OnInit {
     let regex = new RegExp('[\\#&]' + name + '=([^&#]*)'),
       results = regex.exec(window.location.hash);
     console.log('???????? getFragmentByName: ' + window.location.hash);
+
+    if (results != null) {
+      console.log(decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
   }
 
@@ -128,7 +136,7 @@ export class LandingPageComponent implements OnInit {
             () => {
               this.landingPageService.getUserInfo(access_token).subscribe(
                 (res: HttpResponse<any>) => {
-                  this.signedInIdToken = res;
+                  this.f = res;
                   this.showSuccessElement();
                 },
                 () => {
