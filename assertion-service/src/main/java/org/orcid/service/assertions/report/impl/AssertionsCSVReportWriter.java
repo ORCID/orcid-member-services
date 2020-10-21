@@ -10,6 +10,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.domain.Assertion;
+import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
@@ -37,8 +38,8 @@ public class AssertionsCSVReportWriter implements AssertionsReportWriter {
 
 	@Override
 	public String writeAssertionsReport() throws IOException {
-		String ownerId = assertionsUserService.getLoggedInUserId();
-		List<Assertion> assertions = assertionsRepository.findAllByOwnerId(ownerId, this.SORT);
+		String salesforceId = assertionsUserService.getLoggedInUser().getSalesforceId();
+		List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, this.SORT);
 
 		StringBuffer buffer = new StringBuffer();
 		CSVPrinter csvPrinter = new CSVPrinter(buffer,
