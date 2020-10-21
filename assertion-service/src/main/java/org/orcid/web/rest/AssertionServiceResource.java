@@ -265,7 +265,8 @@ public class AssertionServiceResource {
         String idToken = json.has("id_token") ? json.get("id_token").asText() : null;
         String salesForceId = json.has("salesforce_id") ? json.get("salesforce_id").asText() : null;
         Boolean denied = json.has("denied") ? json.get("denied").asBoolean() : false;
-        String emailInStatus = encryptUtil.decrypt(state);
+        String[] stateTokens = encryptUtil.decrypt(state).split("&&");
+        String emailInStatus = stateTokens[1];
 
         if (!denied) {
             SignedJWT jwt = jwtUtil.getSignedJWT(idToken);
