@@ -14,6 +14,7 @@ import { MSUserService } from './ms-user.service';
 import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
 import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
 import { emailValidator } from 'app/shared/util/app-validators';
+import { AccountService } from 'app/core';
 
 @Component({
   selector: 'jhi-ms-user-update',
@@ -48,6 +49,7 @@ export class MSUserUpdateComponent implements OnInit {
     protected msUserService: MSUserService,
     protected msMemberService: MSMemberService,
     protected activatedRoute: ActivatedRoute,
+    protected accountService: AccountService,
     private fb: FormBuilder,
     private cdref: ChangeDetectorRef
   ) {}
@@ -100,7 +102,21 @@ export class MSUserUpdateComponent implements OnInit {
   }
 
   disableSalesForceIdDD() {
+    if (this.isOrganizationOwner()) {
+      this.editForm.patchValue({
+        salesforceId: this.getSalesForceId()
+      });
+      return true;
+    }
     return this.isExistentMember;
+  }
+
+  getSalesForceId() {
+    return this.accountService.getSalesforceId();
+  }
+
+  isOrganizationOwner() {
+    return this.accountService.isOrganizationOwner();
   }
 
   save() {
