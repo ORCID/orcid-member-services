@@ -11,6 +11,9 @@
       "delete": {
         "question": "Are you sure you want to delete user {{ login }}?"
       },
+      "changeOwnership": {
+        "question": "Are you sure you want to transfer ownership? You are about to transfer ownership of this organization account to {{ login }}. After transferring ownership, you will no longer have access to administrative functions, such as managing users."
+      },
       "detail": {
         "title": "User details"
       },
@@ -35,7 +38,7 @@
       "confirm_password": "Confirm Password",
       "firstName": "First Name",
       "lastName": "Last Name",
-      "mainContact": "Main Contact",
+      "mainContact": "Organization Owner",
       "salesforceId": "Organization",
       "parentSalesforceId": "Parent Salesforce Id",
       "activated": "Activated",

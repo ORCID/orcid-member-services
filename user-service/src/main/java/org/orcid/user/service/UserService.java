@@ -384,10 +384,15 @@ public class UserService {
 		return memberService.memberExistsWithSalesforceId(salesforceId);
 	}
 
-	public List<UserDTO> getUsersBySalesforceId(String salesforceId) {
+	public List<UserDTO> getAllUsersBySalesforceId(String salesforceId) {
 		List<User> users = userRepository.findBySalesforceId(salesforceId);
 		return users.stream().map(UserDTO::valueOf).collect(Collectors.toList());
 	}
+	
+	public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable,String salesforceId) {
+            return userRepository.findBySalesforceId(pageable,salesforceId).map(UserDTO::valueOf);
+            
+        }
 
 	private Set<String> getAuthoritiesForUser(String salesforceId, boolean isAdmin) {
 		Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
