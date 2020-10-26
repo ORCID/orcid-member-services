@@ -8,6 +8,7 @@ export interface IMSMember {
   salesforceId?: string;
   parentSalesforceId?: string;
   isConsortiumLead?: boolean;
+  superadminEnabled?: boolean;
   assertionServiceEnabled?: boolean;
   createdBy?: string;
   createdDate?: Moment;
@@ -24,6 +25,7 @@ export class MSMember implements IMSMember {
     public salesforceId?: string,
     public parentSalesforceId?: string,
     public isConsortiumLead?: boolean,
+    public superadminEnabled?: boolean,
     public assertionServiceEnabled?: boolean,
     public createdBy?: string,
     public createdDate?: Moment,
@@ -31,6 +33,8 @@ export class MSMember implements IMSMember {
     public lastModifiedDate?: Moment
   ) {
     this.isConsortiumLead = this.isConsortiumLead || false;
+    this.superadminEnabled = this.superadminEnabled || false;
     this.assertionServiceEnabled = this.assertionServiceEnabled || false;
+
   }
 }

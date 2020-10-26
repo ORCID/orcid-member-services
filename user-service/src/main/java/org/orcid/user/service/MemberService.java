@@ -57,5 +57,21 @@ public class MemberService {
 		
 		throw new RuntimeException("Error contacting member service");
 	}
+
+	public Boolean memberExistsWithSalesforceIdAndSuperadminEnabled(String salesforceId) {
+		ResponseEntity<MemberServiceMember> response = memberServiceClient.getMember(salesforceId);
+		if (response.getStatusCode().is2xxSuccessful()) {
+			if(response.getBody().getSuperadminEnabled() == null){
+				return false;
+			} else {
+				return response.getBody().getSuperadminEnabled();
+			}
+		}
+		if (response.getStatusCodeValue() == 404) {
+			return false;
+		}
+		
+		throw new RuntimeException("Error contacting member service");
+	}
 	
 }

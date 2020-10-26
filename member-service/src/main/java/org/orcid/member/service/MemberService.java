@@ -80,6 +80,11 @@ public class MemberService {
         Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
         return existingMember.isPresent();
     }
+    
+    public Boolean memberSuperadminEnabled(String salesforceId) {
+        Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
+        return existingMember.get().getSuperadminEnabled();
+    }
 
     public Member createMember(Member member) {
         if (member.getId() != null) {
