@@ -139,7 +139,7 @@ export class MSUserComponent implements OnInit, OnDestroy {
 
   isDefaultAdmin(msUser: IMSUser) {
     console.log(msUser.login + ' ' + this.DEFAULT_ADMIN);
-    if (msUser.login == this.DEFAULT_ADMIN) {
+    if (msUser.login === this.DEFAULT_ADMIN) {
       return true;
     }
     return false;

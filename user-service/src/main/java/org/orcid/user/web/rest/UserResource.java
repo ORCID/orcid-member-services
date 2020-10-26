@@ -118,6 +118,9 @@ public class UserResource {
 		if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
 			throw new LoginAlreadyUsedException();
 		}
+		if (!validateExistingUser(userDTO)) {
+			return ResponseEntity.badRequest().body(userDTO);
+		}
 		Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
 		return ResponseUtil.wrapOrNotFound(updatedUser,
@@ -254,7 +257,12 @@ public class UserResource {
 			user.setSalesforceIdError("Salesforce Id should not be empty");
 			LOG.info("Salesforce id missing");
 		}
-
+		if (user.getIsAdmin() == true && !StringUtils.isBlank(user.getSalesforceId())) {
+			if(!userService.memberSuperadminEnabled(user.getSalesforceId())) {
+				isOk = false;
+				user.setSalesforceIdError("Admin users cannot be associated with this member");
+			}	
+		}
 		Optional<User> existing = userRepository.findOneByLogin(user.getLogin().toLowerCase());
 		if (existing.isPresent() && !existing.get().getDeleted()) {
             throw new BadRequestAlertException("Invalid email", "user", "emailUsed");
@@ -269,6 +277,17 @@ public class UserResource {
             user.setEmailError("Email is invalid!");
         }
 
+		return isOk;
+	}
+	
+	private boolean validateExistingUser(UserDTO user) {
+		boolean isOk = true;
+		if (user.getIsAdmin() == true && !StringUtils.isBlank(user.getSalesforceId())) {
+			if(!userService.memberSuperadminEnabled(user.getSalesforceId())) {
+				isOk = false;
+				user.setSalesforceIdError("Admin users cannot be associated with this member");
+			}	
+		}
 		return isOk;
 	}
 
