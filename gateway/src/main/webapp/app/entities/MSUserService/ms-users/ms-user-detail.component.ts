@@ -42,7 +42,6 @@ export class MSUserDetailComponent implements OnInit {
   }
 
   isDefaultAdmin(msUser: IMSUser) {
-    console.log(msUser.login + ' ' + this.DEFAULT_ADMIN);
     if (msUser.login == this.DEFAULT_ADMIN) {
       return true;
     }

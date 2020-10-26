@@ -56,9 +56,9 @@ export class MSUserComponent implements OnInit, OnDestroy {
   }
 
   loadAll() {
-    if (this.isOrganizationOwner) {
+    if (this.hasRoleAdmin()) {
       this.msUserService
-        .findBySalesForceId(this.accountService.getSalesforceId(), {
+        .query({
           page: this.page - 1,
           size: this.itemsPerPage,
           sort: this.sort()
@@ -69,7 +69,7 @@ export class MSUserComponent implements OnInit, OnDestroy {
         );
     } else {
       this.msUserService
-        .query({
+        .findBySalesForceId(this.accountService.getSalesforceId(), {
           page: this.page - 1,
           size: this.itemsPerPage,
           sort: this.sort()

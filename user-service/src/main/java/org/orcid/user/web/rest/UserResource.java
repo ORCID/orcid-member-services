@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -31,7 +32,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -118,6 +118,26 @@ public class UserResource {
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
+        //change the auth if the logged in user is org owner and this is set as mainContact
+        Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
+        if(userDTO.getMainContact()) 
+        {   
+
+            existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
+            
+            if(existingUser.isPresent()) {
+                if(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER) ){
+                    if(!StringUtils.equals(authUser.get().getId(), userDTO.getId())) {
+                        userService.removeOwnershipFromUser(authUser.get().getLogin());
+                    }
+                    userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
+                }
+                else if(!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
+                    throw new BadRequestAlertException("Owner already exists for organization " + userDTO.getSalesforceId(), "user", "ownerExists");
+                }
+            }
+        }
+        
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser, HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", userDTO.getLogin()));
@@ -258,8 +278,17 @@ public class UserResource {
             LOG.warn("Attempt to create user with non existent member {}", userDTO.getSalesforceId());
             return ResponseEntity.badRequest().body(userDTO);
         }
-
         String createdBy = SecurityUtils.getAuthenticatedUser();
+        //change the auth if the logged in user is org owner and this is set as mainContact
+        if(userDTO.getMainContact()) 
+        {
+            if(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER)) {
+                userService.removeOwnershipFromUser(createdBy);
+            }
+            userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
+        }
+
+        
         Instant now = Instant.now();
         userDTO.setCreatedBy(createdBy);
         userDTO.setCreatedDate(now);
@@ -269,7 +298,10 @@ public class UserResource {
         User newUser = userService.createUser(userDTO);
         return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, "user", newUser.getLogin())).body(UserDTO.valueOf(newUser));
+
     }
+    
+
 
     private boolean validate(UserDTO user) {
         boolean isOk = true;
@@ -295,6 +327,19 @@ public class UserResource {
 
         if (new EmailValidator().isValid(user.getEmail(), null)) {
             user.setEmailError("Email is invalid!");
+        }
+        
+      //change the auth if the logged in user is org owner and this is set as mainContact
+        Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
+        if(!StringUtils.equals(authUser.get().getId(), user.getId()) && user.getMainContact() && SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER) ) 
+        {
+            userService.removeAuthorityFromUser(authUser.get().getId(), AuthoritiesConstants.ORG_OWNER);
+        }
+        else {
+            existing = userRepository.findOneByMainContactIsTrueAndSalesforceId(user.getSalesforceId());
+            if(existing.isPresent()) {
+                throw new BadRequestAlertException("Owner already exists for organization " + user.getSalesforceId(), "user", "ownerExists");
+            }
         }
 
         return isOk;
@@ -347,7 +392,7 @@ public class UserResource {
         if (!user.isPresent()) {
             user = userService.getUserWithAuthorities(loginOrId);
         }
-
+    
         userService.sendActivationEmail(user.get().getEmail());
         return ResponseUtil.wrapOrNotFound(user.map(UserDTO::valueOf));
     }

@@ -115,7 +115,7 @@ public class UserService {
 		newUser.setActivated(false);
 		// new user gets registration key
 		newUser.setActivationKey(RandomUtil.generateActivationKey());
-		newUser.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId(), userDTO.getIsAdmin()));
+		newUser.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
 		userRepository.save(newUser);
 		userCaches.evictEntryFromUserCaches(newUser.getEmail());
 		LOG.debug("Created Information for User: {}", newUser);
@@ -132,7 +132,10 @@ public class UserService {
 	}
 
 	public User createUser(UserDTO userDTO) {
-		userDTO.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId(),userDTO.getIsAdmin()));
+	        if(userDTO.getMainContact()) {
+	            
+	        }
+		userDTO.setAuthorities(getAuthoritiesForUser(userDTO,userDTO.getIsAdmin()));
 
 		User user = userDTO.toUser();
 		user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
@@ -172,7 +175,7 @@ public class UserService {
 			user.setLastName(lastName);
 			user.setLangKey(langKey);
 			user.setImageUrl(imageUrl);
-			user.setAuthorities(getAuthoritiesForUser(user.getSalesforceId(),false));
+			user.setAuthorities(getAuthoritiesForUser(UserDTO.valueOf(user),false));
 			userRepository.save(user);
 			userCaches.evictEntryFromUserCaches(user.getEmail());
 			LOG.debug("Changed Information for User: {}", user);
@@ -199,7 +202,7 @@ public class UserService {
                     if (userDTO.getLangKey() != null) {
                         user.setLangKey(userDTO.getLangKey());
                     }
-					user.setAuthorities(getAuthoritiesForUser(userDTO.getSalesforceId(), userDTO.getIsAdmin()));
+					user.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
 					if(!StringUtils.equals(user.getEmail(),userDTO.getEmail().toLowerCase()) ){
 					    user.setEmail(userDTO.getEmail().toLowerCase());
 					    user.setActivated(false);
@@ -326,6 +329,21 @@ public class UserService {
 		}
 		userRepository.save(user);
 	}
+	
+	public void removeOwnershipFromUser(String id) {
+            Optional<User> existing = getUserWithAuthoritiesByLogin(id);
+            if (!existing.isPresent()) {
+                    throw new BadRequestAlertException("User not present " + id, "user", null);
+            }
+
+            User user = existing.get();
+            if (user.getAuthorities() != null && !user.getAuthorities().isEmpty()) {
+                    user.setAuthorities(
+                                    user.getAuthorities().stream().filter(a -> !a.equals(AuthoritiesConstants.ORG_OWNER)).collect(Collectors.toSet()));
+            }
+            user.setMainContact(false);
+            userRepository.save(user);
+        }
 
 	/**
 	 * Not activated users should be automatically deleted after 3 days.
@@ -394,15 +412,25 @@ public class UserService {
             
         }
 
-	private Set<String> getAuthoritiesForUser(String salesforceId, boolean isAdmin) {
+	private Set<String> getAuthoritiesForUser(UserDTO userDTO, boolean isAdmin) {
 		Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
-		if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(salesforceId)) {
+		if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(userDTO.getSalesforceId())) {
 			authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
 		}
+		
+		if(userDTO.getMainContact())
+		{
+		    authorities.add(AuthoritiesConstants.ORG_OWNER);
+		}
+		
 		if(isAdmin) {
 		    authorities.add(AuthoritiesConstants.ADMIN);
 		}
 		return authorities;
 	}
+	
+	public Optional<User> getOwnerBySalesforceId(String salesforceId) {
+            return userRepository.findOneByMainContactIsTrueAndSalesforceId(salesforceId);
+        }
 
 }

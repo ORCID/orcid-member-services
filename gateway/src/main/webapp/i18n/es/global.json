@@ -99,6 +99,7 @@
       "back": "Volver",
       "cancel": "Cancelar",
       "delete": "Eliminar",
+      "continue": "Continue",
       "delete-from-orcid": "Delete from orcid",
       "edit": "Editar",
       "import": "Import",
@@ -110,6 +111,10 @@
     "detail": {
       "field": "Campo",
       "value": "Valor"
+    },
+    "changeOwnership": {
+      "title": "Confirm change of ownership",
+      "error": "Oops, something went wrong!"
     },
     "delete": {
       "title": "Confirmar operación de borrado"
