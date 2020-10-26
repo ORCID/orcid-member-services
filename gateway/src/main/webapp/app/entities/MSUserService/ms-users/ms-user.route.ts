@@ -38,7 +38,7 @@ export const msUserRoute: Routes = [
       pagingParams: JhiResolvePagingParams
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER'],
       defaultSort: 'id,asc',
       pageTitle: 'gatewayApp.msUserServiceMSUser.home.title'
     },
@@ -51,7 +51,7 @@ export const msUserRoute: Routes = [
       msUser: MSUserResolve
     },
     data: {
-      authorities: ['ROLE_ADMIN', 'ROLE_USER'],
+      authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER'],
       pageTitle: 'gatewayApp.msUserServiceMSUser.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -63,7 +63,7 @@ export const msUserRoute: Routes = [
       msUser: MSUserResolve
     },
     data: {
-      authorities: ['ROLE_ADMIN', 'ROLE_USER'],
+      authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER'],
       pageTitle: 'gatewayApp.msUserServiceMSUser.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -75,7 +75,7 @@ export const msUserRoute: Routes = [
       msUser: MSUserResolve
     },
     data: {
-      authorities: ['ROLE_ADMIN', 'ROLE_USER'],
+      authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER'],
       pageTitle: 'gatewayApp.msUserServiceMSUser.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -90,7 +90,7 @@ export const msUserPopupRoute: Routes = [
       msUser: MSUserResolve
     },
     data: {
-      authorities: ['ROLE_ADMIN', 'ROLE_USER'],
+      authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER'],
       pageTitle: 'gatewayApp.msUserServiceMSUser.home.title'
     },
     canActivate: [UserRouteAccessService],

@@ -119,14 +119,26 @@ export class MSUserUpdateComponent implements OnInit {
     return this.accountService.isOrganizationOwner();
   }
 
+  hasRoleAdmin() {
+    return this.accountService.hasAnyAuthority(['ROLE_ADMIN']);
+  }
+
   save() {
     if (this.editForm.valid) {
       this.isSaving = true;
       const msUser = this.createFromForm();
       if (msUser.id !== undefined) {
-        this.subscribeToSaveResponse(this.msUserService.update(msUser));
+        if (msUser.mainContact && !this.hasRoleAdmin()) {
+          this.subscribeToSaveResponseWithOwnershipChange(this.msUserService.update(msUser));
+        } else {
+          this.subscribeToSaveResponse(this.msUserService.update(msUser));
+        }
       } else {
-        this.subscribeToSaveResponse(this.msUserService.create(msUser));
+        if (msUser.mainContact && !this.hasRoleAdmin()) {
+          this.subscribeToSaveResponseWithOwnershipChange(this.msUserService.create(msUser));
+        } else {
+          this.subscribeToSaveResponse(this.msUserService.create(msUser));
+        }
       }
     }
   }
@@ -167,9 +179,18 @@ export class MSUserUpdateComponent implements OnInit {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
+  protected subscribeToSaveResponseWithOwnershipChange(result: Observable<HttpResponse<IMSUser>>) {
+    result.subscribe(() => this.onSaveSuccessOwnershipChange(), () => this.onSaveError());
+  }
+
   protected onSaveSuccess() {
     this.isSaving = false;
     this.previousState();
+  }
+
+  protected onSaveSuccessOwnershipChange() {
+    this.isSaving = false;
+    window.location.href = '/';
   }
 
   protected onSaveError() {
