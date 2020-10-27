@@ -70,9 +70,9 @@ public final class SecurityUtils {
 
         String loggedInUser = getCurrentUserLogin().get();
 
-        if (!isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
-            throw new BadRequestAlertException("User does not have the required scope 'AuthoritiesConstants.ADMIN'", "login", loggedInUser);
-        }
+        /*if (!isCurrentUserInRole(AuthoritiesConstants.ADMIN ) || !isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER )) {
+            throw new BadRequestAlertException("User does not have the required scope 'AuthoritiesConstants.ADMIN or AuthoritiesConstants.ORG_OWNER'", "login", loggedInUser);
+        }*/
 
         return loggedInUser;
     }

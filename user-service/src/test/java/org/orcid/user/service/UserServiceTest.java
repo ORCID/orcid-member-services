@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,8 +71,7 @@ class UserServiceTest {
 			}
 		});
 		Mockito.doNothing().when(mailService).sendCreationEmail(Mockito.any(User.class));
-		Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString()))
-				.thenReturn(true);
+		Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString())).thenReturn(true);
 
 		UserDTO userDTO = getUserDTO();
 		userService.createUser(userDTO);
@@ -176,10 +178,13 @@ class UserServiceTest {
 		UserDTO user = new UserDTO();
 		user.setActivated(false);
 		user.setEmail("email@email.com");
+		user.setMainContact(false);
 		user.setFirstName("first");
 		user.setLastName("last");
 		user.setLogin("email@email.com");
 		user.setSalesforceId("member");
+		user.setIsAdmin(false);
+		user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
 		return user;
 
 	}

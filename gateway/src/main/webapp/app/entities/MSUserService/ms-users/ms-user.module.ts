@@ -16,6 +16,8 @@ import {
   msUserPopupRoute
 } from './';
 
+import { MSUserOwnershipChangeDirective } from './ms-user-ownership-change.directive';
+
 const ENTITY_STATES = [...msUserRoute, ...msUserPopupRoute];
 
 @NgModule({
@@ -26,6 +28,7 @@ const ENTITY_STATES = [...msUserRoute, ...msUserPopupRoute];
     MSUserUpdateComponent,
     MSUserDeleteDialogComponent,
     MSUserDeletePopupComponent,
+    MSUserOwnershipChangeDirective,
     MSUserImportDialogComponent,
     MSUserImportPopupComponent
   ],

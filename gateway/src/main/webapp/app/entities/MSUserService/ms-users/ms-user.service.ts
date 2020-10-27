@@ -51,6 +51,13 @@ export class MSUserService {
       .pipe(map((res: EntityResponseType) => this.convertFromServer(res)));
   }
 
+  findBySalesForceId(salesforceId: string, req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http
+      .get<IMSUser[]>(`${this.resourceUrl}/salesforce/${salesforceId}/p`, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertArrayFromServer(res)));
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
