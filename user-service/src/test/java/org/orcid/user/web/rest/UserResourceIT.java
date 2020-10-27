@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -131,6 +132,7 @@ public class UserResourceIT {
         user.setLastName(DEFAULT_LASTNAME);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
+        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         return user;
     }
 
@@ -141,7 +143,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "user")
     public void createUser() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
@@ -155,6 +157,7 @@ public class UserResourceIT {
         managedUserVM.setActivated(true);
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
         managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setMainContact(false);
         managedUserVM.setSalesforceId("salesforceId");
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
@@ -175,7 +178,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "user")
     public void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
@@ -202,7 +205,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "user")
     public void createUserWithExistingLogin() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -230,7 +233,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "user")
     public void createUserWithExistingEmail() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -243,6 +246,7 @@ public class UserResourceIT {
         managedUserVM.setLastName(DEFAULT_LASTNAME);
         managedUserVM.setEmail(DEFAULT_EMAIL);// this email should already be
                                               // used
+        managedUserVM.setMainContact(false);
         managedUserVM.setActivated(true);
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
         managedUserVM.setLangKey(DEFAULT_LANGKEY);
@@ -258,7 +262,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "user")
     public void getAllUsers() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -272,7 +276,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "user")
     public void getUser() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -295,7 +299,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "user")
     public void updateUser() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -314,6 +318,7 @@ public class UserResourceIT {
         managedUserVM.setActivated(updatedUser.getActivated());
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
         managedUserVM.setLangKey(UPDATED_LANGKEY);
+        managedUserVM.setMainContact(false);
         managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
         managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
         managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
@@ -335,7 +340,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "user")
     public void updateUserLogin() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -354,6 +359,7 @@ public class UserResourceIT {
         managedUserVM.setActivated(updatedUser.getActivated());
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
         managedUserVM.setLangKey(UPDATED_LANGKEY);
+        managedUserVM.setMainContact(false);
         managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
         managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
         managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
@@ -376,7 +382,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "user")
     public void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
         userRepository.save(user);
@@ -390,6 +396,7 @@ public class UserResourceIT {
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
+        anotherUser.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         userRepository.save(anotherUser);
 
         // Update the user
@@ -418,7 +425,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "user")
     public void updateUserExistingLogin() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -432,6 +439,7 @@ public class UserResourceIT {
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
+        anotherUser.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         userRepository.save(anotherUser);
 
         // Update the user
@@ -459,7 +467,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "user")
     public void getAllAuthorities() throws Exception {
         restUserMockMvc.perform(get("/api/users/authorities").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$").isArray())

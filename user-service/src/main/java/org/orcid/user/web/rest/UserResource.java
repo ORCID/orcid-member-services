@@ -269,11 +269,9 @@ public class UserResource {
         if (!StringUtils.isBlank(userDTO.getId())) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "User", "idexists");
         }
-
         if (!validate(userDTO)) {
             return ResponseEntity.badRequest().body(userDTO);
         }
-
         if (!userService.memberExists(userDTO.getSalesforceId())) {
             LOG.warn("Attempt to create user with non existent member {}", userDTO.getSalesforceId());
             return ResponseEntity.badRequest().body(userDTO);
@@ -287,7 +285,6 @@ public class UserResource {
             }
             userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
         }
-
         
         Instant now = Instant.now();
         userDTO.setCreatedBy(createdBy);
@@ -331,7 +328,7 @@ public class UserResource {
         
       //change the auth if the logged in user is org owner and this is set as mainContact
         Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
-        if(!StringUtils.equals(authUser.get().getId(), user.getId()) && user.getMainContact() && SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER) ) 
+        if(authUser.isPresent() && !StringUtils.equals(authUser.get().getId(), user.getId()) && user.getMainContact() && SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER) ) 
         {
             userService.removeAuthorityFromUser(authUser.get().getId(), AuthoritiesConstants.ORG_OWNER);
         }
@@ -341,7 +338,6 @@ public class UserResource {
                 throw new BadRequestAlertException("Owner already exists for organization " + user.getSalesforceId(), "user", "ownerExists");
             }
         }
-
         return isOk;
     }
 
