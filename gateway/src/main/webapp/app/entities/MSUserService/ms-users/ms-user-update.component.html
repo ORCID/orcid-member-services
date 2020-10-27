@@ -68,7 +68,7 @@
                       </select>
                     </fieldset>
                     <div *ngIf="editForm.get('salesforceId').errors && editForm.get('salesforceId').errors.superadminNotEnabled">
-                        <small class="form-text text-danger">
+                        <small class="form-text text-danger" jhiTranslate="gatewayApp.msUserServiceMSUser.error.adminNotAllowed">
                             Admin users are not allowed for this member.
                         </small>
                     </div>
@@ -76,10 +76,6 @@
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('salesforceId').errors && editForm.get('salesforceId').errors.required" jhiTranslate="entity.validation.required">
                             This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('salesforceId').errors && editForm.get('salesforceId').errors.superadminNotEnabled">
-                            Admin users are not allowed for this member.
                         </small>
                         <small class="form-text text-danger" *ngIf="editForm.get('salesforceId').errors">
                                {{salesforceId.errors| json}}
