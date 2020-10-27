@@ -1,6 +1,6 @@
 <div class="row justify-content-center">
     <div class="col-8">
-        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+        <form name="editForm" role="form" novalidate [formGroup]="editForm">
             <h1 id="jhi-ms-user-heading" class="mt-5" jhiTranslate="gatewayApp.msUserServiceMSUser.home.createOrEditLabel">Create or edit a User Settings</h1>
             <div>
                 <jhi-alert-error></jhi-alert-error>
@@ -95,17 +95,30 @@
                     (click)="previousState()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
-                <button
+                
+                <button *ngIf="isOrganizationOwner() && editForm.get('mainContact').value && (editForm.get('mainContact').touched || editForm.get('mainContact').dirty) else regular"
+                    jhi-ownershipChange
+                    (then)="save()"
+                    (else)="false"
                     type="submit"
                     id="save-entity"
                     [disabled]="editForm.invalid || isSaving || membersList.length === 0"
-                    class="btn btn-primary">
-                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-                </button>
+                    class="btn btn-primary">          
+                     <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>     
+                <ng-template #regular>
+                  <button 
+                    (click)="save()"
+                    type="submit"
+                    id="save-entity"
+                    [disabled]="editForm.invalid || isSaving || membersList.length === 0"
+                    class="btn btn-primary">          
+                     <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                  </button>
+                </ng-template>
                 <button *ngIf="!editForm.get('activated').value && editForm.get('login')" type="button"
                                 (click)="sendActivate()"
-                                class="btn btn-primary btn-sm ml-1"
-                        >
+                                class="btn btn-primary btn-sm ml-1">
                             <fa-icon [icon]="faCheckCircle"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.activate">Activate</span>
                 </button>

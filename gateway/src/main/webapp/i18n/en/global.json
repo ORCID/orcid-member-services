@@ -114,6 +114,7 @@
       "edit": "Edit",
       "open": "Open",
       "save": "Save",
+      "continue": "Continue",
       "upload": "Upload",
       "activate": "Activate",
       "view": "View"
@@ -124,6 +125,10 @@
     },
     "delete": {
       "title": "Confirm deletion",
+      "error": "Oops, something went wrong!"
+    },
+    "changeOwnership": {
+      "title": "Confirm change of ownership",
       "error": "Oops, something went wrong!"
     },
     "validation": {

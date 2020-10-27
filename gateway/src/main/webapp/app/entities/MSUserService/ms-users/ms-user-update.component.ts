@@ -14,6 +14,7 @@ import { MSUserService } from './ms-user.service';
 import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
 import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
 import { emailValidator } from 'app/shared/util/app-validators';
+import { AccountService } from 'app/core';
 
 @Component({
   selector: 'jhi-ms-user-update',
@@ -48,6 +49,7 @@ export class MSUserUpdateComponent implements OnInit {
     protected msUserService: MSUserService,
     protected msMemberService: MSMemberService,
     protected activatedRoute: ActivatedRoute,
+    protected accountService: AccountService,
     private fb: FormBuilder,
     private cdref: ChangeDetectorRef
   ) {}
@@ -100,7 +102,25 @@ export class MSUserUpdateComponent implements OnInit {
   }
 
   disableSalesForceIdDD() {
+    if (this.isOrganizationOwner()) {
+      this.editForm.patchValue({
+        salesforceId: this.getSalesForceId()
+      });
+      return true;
+    }
     return this.isExistentMember;
+  }
+
+  getSalesForceId() {
+    return this.accountService.getSalesforceId();
+  }
+
+  isOrganizationOwner() {
+    return this.accountService.isOrganizationOwner();
+  }
+
+  hasRoleAdmin() {
+    return this.accountService.hasAnyAuthority(['ROLE_ADMIN']);
   }
 
   save() {
@@ -108,9 +128,17 @@ export class MSUserUpdateComponent implements OnInit {
       this.isSaving = true;
       const msUser = this.createFromForm();
       if (msUser.id !== undefined) {
-        this.subscribeToSaveResponse(this.msUserService.update(msUser));
+        if (msUser.mainContact && !this.hasRoleAdmin()) {
+          this.subscribeToSaveResponseWithOwnershipChange(this.msUserService.update(msUser));
+        } else {
+          this.subscribeToSaveResponse(this.msUserService.update(msUser));
+        }
       } else {
-        this.subscribeToSaveResponse(this.msUserService.create(msUser));
+        if (msUser.mainContact && !this.hasRoleAdmin()) {
+          this.subscribeToSaveResponseWithOwnershipChange(this.msUserService.create(msUser));
+        } else {
+          this.subscribeToSaveResponse(this.msUserService.create(msUser));
+        }
       }
     }
   }
@@ -151,9 +179,18 @@ export class MSUserUpdateComponent implements OnInit {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
+  protected subscribeToSaveResponseWithOwnershipChange(result: Observable<HttpResponse<IMSUser>>) {
+    result.subscribe(() => this.onSaveSuccessOwnershipChange(), () => this.onSaveError());
+  }
+
   protected onSaveSuccess() {
     this.isSaving = false;
     this.previousState();
+  }
+
+  protected onSaveSuccessOwnershipChange() {
+    this.isSaving = false;
+    window.location.href = '/';
   }
 
   protected onSaveError() {
