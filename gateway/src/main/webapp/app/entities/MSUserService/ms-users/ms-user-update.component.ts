@@ -86,9 +86,8 @@ export class MSUserUpdateComponent implements OnInit {
     this.editForm.get('isAdmin').valueChanges.subscribe(val => {
       if (val === true) {
         if (this.isExistentMember) {
-          let currentMember = this.membersList.find(cm => cm.salesforceId === this.editForm.get(['salesforceId']).value);
+          const currentMember = this.membersList.find(cm => cm.salesforceId === this.editForm.get(['salesforceId']).value);
           if (currentMember.superadminEnabled === false) {
-            this.editForm.controls['salesforceId'].invalid;
             this.editForm.controls['salesforceId'].setErrors({'superadminNotEnabled': true});
           }
         } else {

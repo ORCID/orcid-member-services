@@ -111,6 +111,7 @@ public class UserResourceIT {
         // mock out calls to member service
         MemberService mockedMemberService = Mockito.mock(MemberService.class);
         Mockito.when(mockedMemberService.memberExistsWithSalesforceId(Mockito.anyString())).thenReturn(Boolean.TRUE);
+        Mockito.when(mockedMemberService.memberExistsWithSalesforceIdAndSuperadminEnabled(Mockito.anyString())).thenReturn(Boolean.FALSE);
         ReflectionTestUtils.setField(userService, "memberService", mockedMemberService);
     }
 
@@ -249,6 +250,35 @@ public class UserResourceIT {
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
+        restUserMockMvc.perform(post("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+                .andExpect(status().isBadRequest());
+
+        // Validate the User in the database
+        List<User> userList = userRepository.findAll();
+        assertThat(userList).hasSize(databaseSizeBeforeCreate);
+    }
+    
+    @Test
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    public void createUserWithRoleAdmin() throws Exception {
+        int databaseSizeBeforeCreate = userRepository.findAll().size();
+
+        // Create the User
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setLogin(DEFAULT_LOGIN);
+        managedUserVM.setPassword(DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DEFAULT_LASTNAME);
+        managedUserVM.setEmail(DEFAULT_EMAIL);
+        managedUserVM.setActivated(true);
+        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setSalesforceId("salesforceId");
+        managedUserVM.setIsAdmin(true);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+
+        // Mocked member does not have superadmin enabled so this request
+        // must fail
         restUserMockMvc.perform(post("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
                 .andExpect(status().isBadRequest());
 
@@ -456,6 +486,37 @@ public class UserResourceIT {
 
         restUserMockMvc.perform(put("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
                 .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    @WithMockUser(username = UPDATED_LAST_MODIFIED_BY, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = "user")
+    public void updateUserWithRoleAdmin() throws Exception {
+        // Initialize the database
+        userRepository.save(user);
+
+        // Update the user
+        User updatedUser = userRepository.findById(user.getId()).get();
+
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setId(updatedUser.getId());
+        managedUserVM.setLogin(updatedUser.getLogin());
+        managedUserVM.setPassword(UPDATED_PASSWORD);
+        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
+        managedUserVM.setLastName(UPDATED_LASTNAME);
+        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
+        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
+        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
+        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setSalesforceId("salesforceId");
+        managedUserVM.setIsAdmin(true);
+
+        restUserMockMvc.perform(put("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+        .andExpect(status().isBadRequest());
     }
 
     @Test
