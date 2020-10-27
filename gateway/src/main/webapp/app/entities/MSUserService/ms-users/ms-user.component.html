@@ -8,7 +8,7 @@
                 Add user
                 </span>
             </button>
-            <button id="jh-upload-entities" class="btn btn-primary float-right jh-create-entity create-ms-user ml-1" [routerLink]="['/', 'ms-user', { outlets: { popup: 'import'} }]">
+            <button *jhiHasAnyAuthority="'ROLE_ADMIN'" id="jh-upload-entities" class="btn btn-primary float-right jh-create-entity create-ms-user ml-1" [routerLink]="['/', 'ms-user', { outlets: { popup: 'import'} }]">
                 <fa-icon [icon]="'plus'"></fa-icon>
                 <span  jhiTranslate="gatewayApp.msUserServiceMSUser.home.uploadLabel">
                 Import users from CSV

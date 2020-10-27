@@ -56,16 +56,29 @@ export class MSUserComponent implements OnInit, OnDestroy {
   }
 
   loadAll() {
-    this.msUserService
-      .query({
-        page: this.page - 1,
-        size: this.itemsPerPage,
-        sort: this.sort()
-      })
-      .subscribe(
-        (res: HttpResponse<IMSUser[]>) => this.paginateMSUser(res.body, res.headers),
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+    if (this.hasRoleAdmin()) {
+      this.msUserService
+        .query({
+          page: this.page - 1,
+          size: this.itemsPerPage,
+          sort: this.sort()
+        })
+        .subscribe(
+          (res: HttpResponse<IMSUser[]>) => this.paginateMSUser(res.body, res.headers),
+          (res: HttpErrorResponse) => this.onError(res.message)
+        );
+    } else {
+      this.msUserService
+        .findBySalesForceId(this.accountService.getSalesforceId(), {
+          page: this.page - 1,
+          size: this.itemsPerPage,
+          sort: this.sort()
+        })
+        .subscribe(
+          (res: HttpResponse<IMSUser[]>) => this.paginateMSUser(res.body, res.headers),
+          (res: HttpErrorResponse) => this.onError(res.message)
+        );
+    }
   }
 
   loadPage(page: number) {
@@ -99,10 +112,10 @@ export class MSUserComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loadAll();
     this.accountService.identity().then(account => {
       this.currentAccount = account;
     });
+    this.loadAll();
     this.registerChangeInMSUser();
     this.msMemberService.getOrgNameMap();
   }
@@ -138,11 +151,18 @@ export class MSUserComponent implements OnInit, OnDestroy {
   }
 
   isDefaultAdmin(msUser: IMSUser) {
-    console.log(msUser.login + ' ' + this.DEFAULT_ADMIN);
     if (msUser.login == this.DEFAULT_ADMIN) {
       return true;
     }
     return false;
+  }
+
+  hasRoleAdmin() {
+    return this.accountService.hasAnyAuthority(['ROLE_ADMIN']);
+  }
+
+  isOrganizationOwner() {
+    return this.accountService.isOrganizationOwner();
   }
 
   protected paginateMSUser(data: IMSUser[], headers: HttpHeaders) {

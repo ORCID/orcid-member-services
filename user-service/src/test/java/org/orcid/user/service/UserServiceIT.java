@@ -6,6 +6,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +16,7 @@ import org.orcid.user.UserServiceApp;
 import org.orcid.user.config.Constants;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
+import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.service.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +62,8 @@ public class UserServiceIT {
         user.setLastName(DEFAULT_LASTNAME);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
+        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+
     }
 
     @Test
