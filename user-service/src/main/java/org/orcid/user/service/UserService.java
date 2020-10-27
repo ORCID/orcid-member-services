@@ -132,9 +132,6 @@ public class UserService {
 	}
 
 	public User createUser(UserDTO userDTO) {
-	        if(userDTO.getMainContact()) {
-	            
-	        }
 		userDTO.setAuthorities(getAuthoritiesForUser(userDTO,userDTO.getIsAdmin()));
 
 		User user = userDTO.toUser();
@@ -417,12 +414,10 @@ public class UserService {
 		if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(userDTO.getSalesforceId())) {
 			authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
 		}
-		
 		if(userDTO.getMainContact())
 		{
 		    authorities.add(AuthoritiesConstants.ORG_OWNER);
 		}
-		
 		if(isAdmin) {
 		    authorities.add(AuthoritiesConstants.ADMIN);
 		}
