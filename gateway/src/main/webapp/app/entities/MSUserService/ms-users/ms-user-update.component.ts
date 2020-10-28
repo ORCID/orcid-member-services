@@ -25,7 +25,7 @@ export class MSUserUpdateComponent implements OnInit {
   isExistentMember: boolean;
   existentMSUser: IMSUser;
   faCheckCircle = faCheckCircle;
-  memberListSuperadminEnabled = false;
+  showIsAdminCheckbox = false;
 
   editForm = this.fb.group({
     id: [],
@@ -44,7 +44,6 @@ export class MSUserUpdateComponent implements OnInit {
   });
 
   membersList = [] as IMSMember[];
-  membersListSuperadminEnabled = [] as IMSMember[];
 
   constructor(
     protected jhiAlertService: JhiAlertService,
@@ -70,9 +69,6 @@ export class MSUserUpdateComponent implements OnInit {
         this.membersList = [];
         res.body.forEach((msMember: IMSMember) => {
           this.membersList.push(msMember);
-          if (msMember.superadminEnabled === true) {
-            this.membersListSuperadminEnabled.push(msMember);
-          }
         });
         if (this.membersList.length > 0) {
           this.editForm.enable();
@@ -85,23 +81,20 @@ export class MSUserUpdateComponent implements OnInit {
   }
 
   onChanges(): void {
-    this.editForm.get('isAdmin').valueChanges.subscribe(val => {
-      if (val === true) {
-        if (this.isExistentMember) {
-          const currentMember = this.membersList.find(cm => cm.salesforceId === this.editForm.get(['salesforceId']).value);
-          if (currentMember.superadminEnabled === false) {
-            this.editForm.controls['salesforceId'].setErrors({'superadminNotEnabled': true});
+    this.editForm.get('salesforceId').valueChanges.subscribe(val => {
+      const selectedOrg = this.membersList.find(cm => cm.salesforceId === this.editForm.get(['salesforceId']).value);
+      if (this.hasRoleAdmin() === true) {
+        if (selectedOrg) {
+          if (selectedOrg.superadminEnabled === false) {
+            this.showIsAdminCheckbox = false;
+          } else {
+            this.showIsAdminCheckbox = true;
           }
         } else {
-          this.memberListSuperadminEnabled = true;
+          this.showIsAdminCheckbox = false;
         }
       } else {
-        if (this.isExistentMember) {
-          this.editForm.controls['salesforceId'].setErrors({'superadminNotEnabled': null});
-          this.editForm.controls['salesforceId'].updateValueAndValidity();
-        } else {
-          this.memberListSuperadminEnabled = false;
-        }
+        this.showIsAdminCheckbox = false;
       }
     });
   }
@@ -124,6 +117,7 @@ export class MSUserUpdateComponent implements OnInit {
     if (msUser.salesforceId) {
       this.isExistentMember = true;
     }
+
   }
 
   previousState() {
