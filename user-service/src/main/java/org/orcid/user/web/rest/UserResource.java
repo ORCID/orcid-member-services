@@ -123,23 +123,25 @@ public class UserResource {
 		}
         //change the auth if the logged in user is org owner and this is set as mainContact
         Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
-        if(userDTO.getMainContact()) 
-        {   
-
-            existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
-            
-            if(existingUser.isPresent()) {
-                if(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER) ){
-                    if(!StringUtils.equals(authUser.get().getId(), userDTO.getId())) {
-                        userService.removeOwnershipFromUser(authUser.get().getLogin());
-                    }
-                    userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
-                }
-                else if(!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
-                    throw new BadRequestAlertException("Owner already exists for organization " + userDTO.getSalesforceId(), "user", "ownerExists");
-                }
-            }
-        }
+		if (userDTO.getMainContact() != null) {
+        	if(userDTO.getMainContact()) 
+	        {   
+	
+	            existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
+	            
+	            if(existingUser.isPresent()) {
+	                if(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER) ){
+	                    if(!StringUtils.equals(authUser.get().getId(), userDTO.getId())) {
+	                        userService.removeOwnershipFromUser(authUser.get().getLogin());
+	                    }
+	                    userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
+	                }
+	                else if(!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
+	                    throw new BadRequestAlertException("Owner already exists for organization " + userDTO.getSalesforceId(), "user", "ownerExists");
+	                }
+	            }
+	        }
+	    }
         
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
         return ResponseUtil.wrapOrNotFound(updatedUser, HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", userDTO.getLogin()));
