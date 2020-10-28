@@ -60,14 +60,25 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId" for="field_salesforceId">Salesforce Id</label>
                     <fieldset [disabled]="disableSalesForceIdDD()">
-                    <select  *ngIf="membersList.length  > 0"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
+                    <select  *ngIf="membersList.length  > 0 && !memberListSuperadminEnabled"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
                       <option *ngFor="let member of membersList" [ngValue]="member.salesforceId">{{member.clientName}}</option>
                     </select>
+                    <select  *ngIf="membersList.length  > 0 && memberListSuperadminEnabled"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
+                        <option *ngFor="let member of membersListSuperadminEnabled" [ngValue]="member.salesforceId">{{member.clientName}}</option>
+                      </select>
                     </fieldset>
+                    <div *ngIf="editForm.get('salesforceId').errors && editForm.get('salesforceId').errors.superadminNotEnabled">
+                        <small class="form-text text-danger" jhiTranslate="gatewayApp.msUserServiceMSUser.error.adminNotAllowed">
+                            Admin users are not allowed for this member.
+                        </small>
+                    </div>
                     <div *ngIf="(editForm.get('salesforceId').invalid && editForm.get('salesforceId').touched) || editForm.get('salesforceId').dirty">
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('salesforceId').errors && editForm.get('salesforceId').errors.required" jhiTranslate="entity.validation.required">
                             This field is required.
+                        </small>
+                        <small class="form-text text-danger" *ngIf="editForm.get('salesforceId').errors">
+                               {{salesforceId.errors| json}}
                         </small>
                     </div>
                     <fieldset [disabled]="true">

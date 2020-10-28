@@ -118,6 +118,9 @@ public class UserResource {
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
+        if (!validateExistingUser(userDTO)) {
+			return ResponseEntity.badRequest().body(userDTO);
+		}
         //change the auth if the logged in user is org owner and this is set as mainContact
         Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
         if(userDTO.getMainContact()) 
@@ -139,7 +142,6 @@ public class UserResource {
         }
         
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
-
         return ResponseUtil.wrapOrNotFound(updatedUser, HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", userDTO.getLogin()));
     }
 
@@ -298,22 +300,25 @@ public class UserResource {
 
     }
     
-
-
-    private boolean validate(UserDTO user) {
-        boolean isOk = true;
-        if (StringUtils.isBlank(user.getLogin())) {
-            isOk = false;
-            user.setLoginError("Login should not be empty");
-        }
-        if (StringUtils.isBlank(user.getSalesforceId())) {
-            isOk = false;
-            user.setSalesforceIdError("Salesforce Id should not be empty");
-            LOG.info("Salesforce id missing");
-        }
-
-        Optional<User> existing = userRepository.findOneByLogin(user.getLogin().toLowerCase());
-        if (existing.isPresent() && !existing.get().getDeleted()) {
+	private boolean validate(UserDTO user) {
+		boolean isOk = true;
+		if (StringUtils.isBlank(user.getLogin())) {
+			isOk = false;
+			user.setLoginError("Login should not be empty");
+		}
+		if (StringUtils.isBlank(user.getSalesforceId())) {
+			isOk = false;
+			user.setSalesforceIdError("Salesforce Id should not be empty");
+			LOG.info("Salesforce id missing");
+		}
+		if (user.getIsAdmin() == true && !StringUtils.isBlank(user.getSalesforceId())) {
+			if(!userService.memberSuperadminEnabled(user.getSalesforceId())) {
+				isOk = false;
+				user.setSalesforceIdError("Admin users cannot be associated with this member");
+			}	
+		}
+		Optional<User> existing = userRepository.findOneByLogin(user.getLogin().toLowerCase());
+		if (existing.isPresent() && !existing.get().getDeleted()) {
             throw new BadRequestAlertException("Invalid email", "user", "emailUsed");
         }
 
@@ -326,7 +331,7 @@ public class UserResource {
             user.setEmailError("Email is invalid!");
         }
         
-      //change the auth if the logged in user is org owner and this is set as mainContact
+        //change the auth if the logged in user is org owner and this is set as mainContact
         Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
         if(authUser.isPresent() && !StringUtils.equals(authUser.get().getId(), user.getId()) && user.getMainContact() && SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER) ) 
         {
@@ -340,6 +345,17 @@ public class UserResource {
         }
         return isOk;
     }
+	
+	private boolean validateExistingUser(UserDTO user) {
+		boolean isOk = true;
+		if (user.getIsAdmin() == true && !StringUtils.isBlank(user.getSalesforceId())) {
+			if(!userService.memberSuperadminEnabled(user.getSalesforceId())) {
+				isOk = false;
+				user.setSalesforceIdError("Admin users cannot be associated with this member");
+			}	
+		}
+		return isOk;
+	}
 
     /**
      * {@code DELETE  /users/:login} : delete the 'login' user.
