@@ -60,18 +60,10 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId" for="field_salesforceId">Salesforce Id</label>
                     <fieldset [disabled]="disableSalesForceIdDD()">
-                    <select  *ngIf="membersList.length  > 0 && !memberListSuperadminEnabled"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
+                    <select  *ngIf="membersList.length  > 0"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
                       <option *ngFor="let member of membersList" [ngValue]="member.salesforceId">{{member.clientName}}</option>
                     </select>
-                    <select  *ngIf="membersList.length  > 0 && memberListSuperadminEnabled"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
-                        <option *ngFor="let member of membersListSuperadminEnabled" [ngValue]="member.salesforceId">{{member.clientName}}</option>
-                      </select>
                     </fieldset>
-                    <div *ngIf="editForm.get('salesforceId').errors && editForm.get('salesforceId').errors.superadminNotEnabled">
-                        <small class="form-text text-danger" jhiTranslate="gatewayApp.msUserServiceMSUser.error.adminNotAllowed">
-                            Admin users are not allowed for this member.
-                        </small>
-                    </div>
                     <div *ngIf="(editForm.get('salesforceId').invalid && editForm.get('salesforceId').touched) || editForm.get('salesforceId').dirty">
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('salesforceId').errors && editForm.get('salesforceId').errors.required" jhiTranslate="entity.validation.required">
@@ -88,7 +80,7 @@
                       <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.activated" for="field_activated">Activated</label>
                     </div>
                     </fieldset>
-                    <div class="form-group" *jhiHasAnyAuthority="'ROLE_ADMIN'">
+                    <div class="form-group" *ngIf="showIsAdminCheckbox">
                       <input type="checkbox" class="form-control" name="isAdmin" id="field_isAdmin"
                            formControlName="isAdmin"/>
                       <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.isAdmin" for="field_isAdmin">Admin</label>
@@ -106,7 +98,7 @@
                     (click)="previousState()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
-                
+
                 <button *ngIf="isOrganizationOwner() && editForm.get('mainContact').value && (editForm.get('mainContact').touched || editForm.get('mainContact').dirty) else regular"
                     jhi-ownershipChange
                     (then)="save()"
@@ -114,16 +106,16 @@
                     type="submit"
                     id="save-entity"
                     [disabled]="editForm.invalid || isSaving || membersList.length === 0"
-                    class="btn btn-primary">          
+                    class="btn btn-primary">
                      <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-                </button>     
+                </button>
                 <ng-template #regular>
-                  <button 
+                  <button
                     (click)="save()"
                     type="submit"
                     id="save-entity"
                     [disabled]="editForm.invalid || isSaving || membersList.length === 0"
-                    class="btn btn-primary">          
+                    class="btn btn-primary">
                      <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
                   </button>
                 </ng-template>

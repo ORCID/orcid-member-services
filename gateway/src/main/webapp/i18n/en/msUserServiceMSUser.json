@@ -46,10 +46,7 @@
       "createdBy": "Created By",
       "createdDate": "Created",
       "lastModifiedBy": "Last Modified By",
-      "lastModifiedDate": "Last Modified",
-      "error": {
-        "adminNotAllowed": "Admin users are not allowed for this member."
-      }
+      "lastModifiedDate": "Last Modified"
     },
     "userDTO": {
       "login": "email",
