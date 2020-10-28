@@ -18,6 +18,9 @@ public class MemberServiceMember {
 
 	    @Field("assertion_service_enabled")
 	    private Boolean assertionServiceEnabled;
+	    
+	    @Field("superadmin_enabled")
+	    private Boolean superadminEnabled;
 
 		public String getClientId() {
 			return clientId;
@@ -57,6 +60,10 @@ public class MemberServiceMember {
 
 		public void setAssertionServiceEnabled(Boolean assertionServiceEnabled) {
 			this.assertionServiceEnabled = assertionServiceEnabled;
+		}
+		
+		public Boolean getSuperadminEnabled() {
+			return superadminEnabled;
 		}
 	    
 }

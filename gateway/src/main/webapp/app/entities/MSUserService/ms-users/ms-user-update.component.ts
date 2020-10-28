@@ -25,6 +25,7 @@ export class MSUserUpdateComponent implements OnInit {
   isExistentMember: boolean;
   existentMSUser: IMSUser;
   faCheckCircle = faCheckCircle;
+  memberListSuperadminEnabled = false;
 
   editForm = this.fb.group({
     id: [],
@@ -43,6 +44,7 @@ export class MSUserUpdateComponent implements OnInit {
   });
 
   membersList = [] as IMSMember[];
+  membersListSuperadminEnabled = [] as IMSMember[];
 
   constructor(
     protected jhiAlertService: JhiAlertService,
@@ -68,10 +70,37 @@ export class MSUserUpdateComponent implements OnInit {
         this.membersList = [];
         res.body.forEach((msMember: IMSMember) => {
           this.membersList.push(msMember);
+          if (msMember.superadminEnabled === true) {
+            this.membersListSuperadminEnabled.push(msMember);
+          }
         });
         if (this.membersList.length > 0) {
           this.editForm.enable();
           this.cdref.detectChanges();
+        }
+      }
+    });
+
+    this.onChanges();
+  }
+
+  onChanges(): void {
+    this.editForm.get('isAdmin').valueChanges.subscribe(val => {
+      if (val === true) {
+        if (this.isExistentMember) {
+          const currentMember = this.membersList.find(cm => cm.salesforceId === this.editForm.get(['salesforceId']).value);
+          if (currentMember.superadminEnabled === false) {
+            this.editForm.controls['salesforceId'].setErrors({'superadminNotEnabled': true});
+          }
+        } else {
+          this.memberListSuperadminEnabled = true;
+        }
+      } else {
+        if (this.isExistentMember) {
+          this.editForm.controls['salesforceId'].setErrors({'superadminNotEnabled': null});
+          this.editForm.controls['salesforceId'].updateValueAndValidity();
+        } else {
+          this.memberListSuperadminEnabled = false;
         }
       }
     });

@@ -42,6 +42,9 @@ public class Member implements Serializable {
 
     @Field("assertion_service_enabled")
     private Boolean assertionServiceEnabled;
+    
+    @Field("superadmin_enabled")
+    private Boolean superadminEnabled;
 
     @Field("created_by")
     private String createdBy;
@@ -183,6 +186,14 @@ public class Member implements Serializable {
     public Boolean getAssertionServiceEnabled() {
         return assertionServiceEnabled;
     }
+    
+    public Boolean getSuperadminEnabled() {
+        return superadminEnabled;
+    }
+
+    public void setSuperadminEnabled(Boolean superadminEnabled) {
+        this.superadminEnabled = superadminEnabled;
+    }
 
     public String getError() {
         return error;
@@ -212,6 +223,7 @@ public class Member implements Serializable {
         result = prime * result + ((error == null) ? 0 : error.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((isConsortiumLead == null) ? 0 : isConsortiumLead.hashCode());
+        result = prime * result + ((superadminEnabled == null) ? 0 : superadminEnabled.hashCode());
         result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
         result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
         result = prime * result + ((parentSalesforceId == null) ? 0 : parentSalesforceId.hashCode());
@@ -268,6 +280,11 @@ public class Member implements Serializable {
                 return false;
         } else if (!isConsortiumLead.equals(other.isConsortiumLead))
             return false;
+        if (superadminEnabled == null) {
+            if (other.superadminEnabled != null)
+                return false;
+        } else if (!superadminEnabled.equals(other.superadminEnabled))
+            return false;
         if (lastModifiedBy == null) {
             if (other.lastModifiedBy != null)
                 return false;
@@ -294,7 +311,7 @@ public class Member implements Serializable {
     @Override
     public String toString() {
         return "Member [id=" + id + ", clientId=" + clientId + ", salesforceId=" + salesforceId + ", parentSalesforceId=" + parentSalesforceId + ", clientName="
-                + clientName + ", isConsortiumLead=" + isConsortiumLead + ", assertionServiceEnabled=" + assertionServiceEnabled + ", createdBy=" + createdBy
+                + clientName + ", isConsortiumLead=" + isConsortiumLead + ", assertionServiceEnabled=" + assertionServiceEnabled + ", superadminEnabled=" + superadminEnabled + ", createdBy=" + createdBy
                 + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + ", error=" + error + "]";
     }
 }

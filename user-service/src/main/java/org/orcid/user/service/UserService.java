@@ -398,6 +398,10 @@ public class UserService {
 	public Boolean memberExists(String salesforceId) {
 		return memberService.memberExistsWithSalesforceId(salesforceId);
 	}
+	
+	public Boolean memberSuperadminEnabled(String salesforceId) {
+		return memberService.memberExistsWithSalesforceIdAndSuperadminEnabled(salesforceId);
+	}
 
 	public List<UserDTO> getAllUsersBySalesforceId(String salesforceId) {
 		List<User> users = userRepository.findBySalesforceId(salesforceId);
