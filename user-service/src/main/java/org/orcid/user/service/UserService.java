@@ -418,9 +418,11 @@ public class UserService {
 		if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(userDTO.getSalesforceId())) {
 			authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
 		}
-		if(userDTO.getMainContact())
-		{
-		    authorities.add(AuthoritiesConstants.ORG_OWNER);
+		if (userDTO.getMainContact() != null) {
+			if(userDTO.getMainContact())
+			{
+			    authorities.add(AuthoritiesConstants.ORG_OWNER);
+			}
 		}
 		if(isAdmin) {
 		    authorities.add(AuthoritiesConstants.ADMIN);
