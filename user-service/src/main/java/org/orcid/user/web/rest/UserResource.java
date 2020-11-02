@@ -392,6 +392,7 @@ public class UserResource {
         userService.sendActivationEmail(user.get().getEmail());
         return ResponseUtil.wrapOrNotFound(user.map(UserDTO::valueOf));
     }
+    
 
     /**
      * {@code PUT /users/:salesforceId/:newSalesforceId} : Updates salesForceId
@@ -414,6 +415,20 @@ public class UserResource {
             userService.updateUser(user);
         }
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", salesforceId)).build();
+    }
+    
+    /**
+     * {@code POST /switch_user} : Switch user 
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
+     */
+    @PostMapping("/switch_user")
+    public ResponseEntity<Void> switchUser(@RequestParam(value = "username", required = true) String username) {
+        LOG.debug("!!!! REST switch User");
+        
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create("/"))
+                .build();
     }
 
 }

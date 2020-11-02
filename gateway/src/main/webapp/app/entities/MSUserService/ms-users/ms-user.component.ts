@@ -150,6 +150,13 @@ export class MSUserComponent implements OnInit, OnDestroy {
     });
   }
 
+  switchUser(msUser: IMSUser) {
+    this.msUserService.switchUser(msUser).subscribe(res => {
+      this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.success', null, null);
+      console.log('response', res);
+    });
+  }
+
   isDefaultAdmin(msUser: IMSUser) {
     if (msUser.login == this.DEFAULT_ADMIN) {
       return true;

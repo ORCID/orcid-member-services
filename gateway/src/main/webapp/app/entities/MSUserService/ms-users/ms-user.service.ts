@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
@@ -15,6 +15,7 @@ type EntityArrayResponseType = HttpResponse<IMSUser[]>;
 @Injectable({ providedIn: 'root' })
 export class MSUserService {
   public resourceUrl = SERVER_API_URL + 'services/userservice/api/users';
+  private switchResourceUrl = SERVER_API_URL + 'services/userservice/api';
 
   constructor(protected http: HttpClient) {}
 
@@ -37,6 +38,31 @@ export class MSUserService {
     return this.http
       .put<IMSUser>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertFromServer(res)));
+  }
+
+  switchUser(username: String) {
+    //const copy = this.convertDateFromClient(msUser);
+    var formData = new FormData();
+    formData.set('username', username);
+    const headers = new HttpHeaders().set('Accept', 'text/html');
+    //.set('content-type','application-x-www-form-urlencoded');
+    /*  setAccept:'text/html',
+      Content-Type: 'application-x-www-form-urlencoded'
+    });
+
+    /*const params = new HttpParams()
+      .set('response_type', 'code')
+      .set('redirect_uri', '/');   */
+
+    //return this.http.post(`${this.switchResourceUrl}/switch_user`, body, {headers : headers, withCredentials : true, params:params} );
+
+    return this.http
+      .post(`${this.switchResourceUrl}/switch_user`, formData, { headers: headers, withCredentials: true, responseType: 'text' })
+      .subscribe(res => {
+        console.log('post res');
+        console.log(res);
+        window.location.assign('/');
+      });
   }
 
   sendActivate(msUser: IMSUser): Observable<EntityResponseType> {
