@@ -130,15 +130,10 @@ public class UserResource {
 	            existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
 	            
 	            if(existingUser.isPresent()) {
-	                if(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER) ){
-	                    if(!StringUtils.equals(authUser.get().getId(), userDTO.getId())) {
-	                        userService.removeOwnershipFromUser(authUser.get().getLogin());
+	                    if(!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
+	                        userService.removeOwnershipFromUser(existingUser.get().getLogin());
 	                    }
 	                    userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
-	                }
-	                else if(!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
-	                    throw new BadRequestAlertException("Owner already exists for organization " + userDTO.getSalesforceId(), "user", "ownerExists");
-	                }
 	            }
 	        }
 	    }
@@ -284,8 +279,13 @@ public class UserResource {
         //change the auth if the logged in user is org owner and this is set as mainContact
         if(userDTO.getMainContact()) 
         {
-            if(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER)) {
-                userService.removeOwnershipFromUser(createdBy);
+            Optional<User> existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
+            
+            if(existingUser.isPresent()) {
+                if(!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
+                    userService.removeOwnershipFromUser(existingUser.get().getLogin());
+                }
+                userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
             }
             userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
         }
@@ -342,7 +342,7 @@ public class UserResource {
         else {
             existing = userRepository.findOneByMainContactIsTrueAndSalesforceId(user.getSalesforceId());
             if(existing.isPresent()) {
-                throw new BadRequestAlertException("Owner already exists for organization " + user.getSalesforceId(), "user", "ownerExists");
+                userService.removeAuthorityFromUser(existing.get().getId(), AuthoritiesConstants.ORG_OWNER);
             }
         }
         return isOk;
@@ -433,5 +433,21 @@ public class UserResource {
         }
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", salesforceId)).build();
     }
+    
+
+    /**
+     * {@code GET /users/:saleforceId}/owner : get the "login" user.
+     *
+     * @param login
+     *            the login of the user to find.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
+     *         body the "login" user, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/users/{salesforceId}/owner")
+    public boolean getOwner(@PathVariable String salesforceId) {
+        LOG.debug("REST request to get Owner for : {}", salesforceId);
+        Optional<User> user = userService.getOwnerBySalesforceId(salesforceId);
+        return user.isPresent();
+    }     
 
 }
