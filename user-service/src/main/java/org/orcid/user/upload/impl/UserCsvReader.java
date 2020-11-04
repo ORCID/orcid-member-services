@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -22,9 +26,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserCsvReader implements UserUploadReader {
-
-	private static final Logger LOG = LoggerFactory.getLogger(UserCsvReader.class);
+    
+    private static final Logger LOG = LoggerFactory.getLogger(UserCsvReader.class);
     private StringBuffer sb;
+    private Map<String,Boolean> orgWithOwner;
 
     @Autowired
     UserRepository userRepository;
@@ -35,10 +40,13 @@ public class UserCsvReader implements UserUploadReader {
 
 	@Override
 	public UserUpload readUsersUpload(InputStream inputStream, String createdBy) {
+	        
 		InputStreamReader isr = new InputStreamReader(inputStream);
 		UserUpload upload = new UserUpload();
 		Iterable<CSVRecord> elements = null;
 		Instant now = Instant.now();
+		
+		this.orgWithOwner = getOrganizationsWithOwner();
 
 		try {
 			elements = CSVFormat.DEFAULT.withHeader().parse(isr);
@@ -83,6 +91,9 @@ public class UserCsvReader implements UserUploadReader {
 			} else {
 				UserDTO userDTO = getUserDTO(element, now, createdBy);
 				upload.getUserDTOs().add(userDTO);
+				if(userDTO.getMainContact()) {
+				    this.orgWithOwner.put(userDTO.getSalesforceId(), true);
+				}
 			}
 		} catch (Exception e) {
 			Throwable t = e.getCause();
@@ -104,6 +115,7 @@ public class UserCsvReader implements UserUploadReader {
 		u.setLastModifiedBy(createdBy);
 		u.setLastModifiedDate(now);
 		u.setEmail(record.get("email"));
+		u.setMainContact( new Boolean(record.get("mainContact")));
 		u.setLangKey("en");
 		return u;
 	}
@@ -111,6 +123,7 @@ public class UserCsvReader implements UserUploadReader {
 	private boolean validate(CSVRecord record) {
 		boolean isOk = true;
 		sb = new StringBuffer();
+		String salesforceId = "";
         try {
             if (StringUtils.isBlank(record.get("email"))) {
                 isOk = false;
@@ -127,7 +140,8 @@ public class UserCsvReader implements UserUploadReader {
         }
 
         try {
-            if (StringUtils.isBlank(record.get("salesforceId"))) {
+            salesforceId = record.get("salesforceId");
+            if (StringUtils.isBlank(salesforceId)) {
                 if (!isOk) {
                     sb.append(", ");
                 }
@@ -141,6 +155,23 @@ public class UserCsvReader implements UserUploadReader {
             isOk = false;
             sb.append("Salesforce Id should not be empty");
         }
+        
+        try {
+            Boolean isMain = new Boolean(record.get("mainContact"));
+            if (isMain && !StringUtils.isBlank(salesforceId) && this.orgWithOwner.containsKey(salesforceId) && orgWithOwner.get(salesforceId)) {  
+                if (!isOk) {
+                    sb.append(", ");
+                }
+                isOk = false;
+                sb.append("The organization already has an owner and/or you added more then one record for the organization " + salesforceId + " with main contact true");
+                    }
+        } catch (IllegalArgumentException e) {
+            if (!isOk) {
+                sb.append(", ");
+            }
+            isOk = false;
+            sb.append("The organization already has an owner and/or you added more then one record for the organization  " + salesforceId + "  with main contact true");
+        }
 		return isOk;
 	}
 
@@ -152,4 +183,13 @@ public class UserCsvReader implements UserUploadReader {
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(email);
         return existingUser.isPresent();
     }
+    
+    public HashMap<String, Boolean> getOrganizationsWithOwner() {
+        List<User> users = userRepository.findAllByMainContactIsTrue();
+        HashMap<String, Boolean> withOwners = new HashMap<String, Boolean>();
+        for(User user:users) {
+            withOwners.put(user.getSalesforceId(), user.getMainContact());
+        }
+        return withOwners;
+}
 }

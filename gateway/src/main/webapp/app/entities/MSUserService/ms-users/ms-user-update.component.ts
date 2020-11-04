@@ -117,7 +117,6 @@ export class MSUserUpdateComponent implements OnInit {
     if (msUser.salesforceId) {
       this.isExistentMember = true;
     }
-
   }
 
   previousState() {
@@ -144,6 +143,10 @@ export class MSUserUpdateComponent implements OnInit {
 
   hasRoleAdmin() {
     return this.accountService.hasAnyAuthority(['ROLE_ADMIN']);
+  }
+
+  hasOwner(salesforceId: string) {
+    return this.msUserService.hasOwner(salesforceId);
   }
 
   save() {

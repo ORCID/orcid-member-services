@@ -51,6 +51,10 @@ export class MSUserService {
       .pipe(map((res: EntityResponseType) => this.convertFromServer(res)));
   }
 
+  hasOwner(salesforceId: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.resourceUrl}/${salesforceId}/owner`);
+  }
+
   findBySalesForceId(salesforceId: string, req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
