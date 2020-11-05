@@ -114,10 +114,6 @@ export class AssertionComponent implements OnInit, OnDestroy {
     return item.id;
   }
 
-  registerChangeInAssertions() {
-    this.eventSubscriber = this.eventManager.subscribe('assertionListModification', response => this.loadAll());
-  }
-
   sort() {
     const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {

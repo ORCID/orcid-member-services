@@ -126,10 +126,6 @@ export class MSUserComponent implements OnInit, OnDestroy {
     return item.id;
   }
 
-  registerChangeInMSUser() {
-    this.eventSubscriber = this.eventManager.subscribe('msUserListModification', response => this.loadAll());
-  }
-
   sort() {
     const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
