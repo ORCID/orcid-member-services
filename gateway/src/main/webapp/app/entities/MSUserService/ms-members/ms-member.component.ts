@@ -51,6 +51,16 @@ export class MSMemberComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngOnInit() {
+    this.loadAll();
+    this.accountService.identity().then(account => {
+      this.currentAccount = account;
+    });
+    this.eventSubscriber = this.eventManager.subscribe('msMemberListModification', () => {
+      this.loadAll();
+    });
+  }
+
   loadAll() {
     this.msMemberService
       .query({
@@ -94,24 +104,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
     this.loadAll();
   }
 
-  ngOnInit() {
-    this.loadAll();
-    this.accountService.identity().then(account => {
-      this.currentAccount = account;
-    });
-    this.registerChangeInMSMember();
-  }
-
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
-  }
-
   trackId(index: number, item: IMSMember) {
     return item.id;
-  }
-
-  registerChangeInMSMember() {
-    this.eventSubscriber = this.eventManager.subscribe('msMemberListModification', response => this.loadAll());
   }
 
   sort() {
@@ -130,5 +124,9 @@ export class MSMemberComponent implements OnInit, OnDestroy {
 
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
+  }
+
+  ngOnDestroy() {
+    this.eventManager.destroy(this.eventSubscriber);
   }
 }
