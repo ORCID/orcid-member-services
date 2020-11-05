@@ -55,6 +55,17 @@ export class MSUserComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngOnInit() {
+    this.msMemberService.getOrgNameMap();
+    this.accountService.identity().then(account => {
+      this.currentAccount = account;
+    });
+    this.loadAll();
+    this.eventSubscriber = this.eventManager.subscribe('msUserListModification', () => {
+      this.loadAll();
+    });
+  }
+
   loadAll() {
     if (this.hasRoleAdmin()) {
       this.msUserService
@@ -109,19 +120,6 @@ export class MSUserComponent implements OnInit, OnDestroy {
       }
     ]);
     this.loadAll();
-  }
-
-  ngOnInit() {
-    this.accountService.identity().then(account => {
-      this.currentAccount = account;
-    });
-    this.loadAll();
-    this.registerChangeInMSUser();
-    this.msMemberService.getOrgNameMap();
-  }
-
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
   }
 
   trackId(index: number, item: IMSUser) {
@@ -186,5 +184,9 @@ export class MSUserComponent implements OnInit, OnDestroy {
 
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
+  }
+
+  ngOnDestroy() {
+    this.eventManager.destroy(this.eventSubscriber);
   }
 }

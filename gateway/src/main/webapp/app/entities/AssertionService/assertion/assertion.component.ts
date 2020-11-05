@@ -57,6 +57,16 @@ export class AssertionComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngOnInit() {
+    this.loadAll();
+    this.accountService.identity().then(account => {
+      this.currentAccount = account;
+    });
+    this.eventSubscriber = this.eventManager.subscribe('assertionListModification', () => {
+      this.loadAll();
+    });
+  }
+
   loadAll() {
     this.assertionService
       .query({
@@ -100,18 +110,6 @@ export class AssertionComponent implements OnInit, OnDestroy {
     this.loadAll();
   }
 
-  ngOnInit() {
-    this.loadAll();
-    this.accountService.identity().then(account => {
-      this.currentAccount = account;
-    });
-    this.registerChangeInAssertions();
-  }
-
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
-  }
-
   trackId(index: number, item: IAssertion) {
     return item.id;
   }
@@ -145,4 +143,9 @@ export class AssertionComponent implements OnInit, OnDestroy {
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
   }
+
+  ngOnDestroy() {
+    this.eventManager.destroy(this.eventSubscriber);
+  }
+
 }
