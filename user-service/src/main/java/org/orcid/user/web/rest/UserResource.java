@@ -119,8 +119,10 @@ public class UserResource {
             throw new LoginAlreadyUsedException();
         }
         if (!validateExistingUser(userDTO)) {
-			return ResponseEntity.badRequest().body(userDTO);
-		}
+	    //return ResponseEntity.badRequest().body(userDTO);
+            throw new BadRequestAlertException("Admin users cannot be associated with this member", "user", "member.no.admin.allowed");
+	}
+        
         //change the auth if the logged in user is org owner and this is set as mainContact
         Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
 		if (userDTO.getMainContact() != null) {
@@ -370,6 +372,25 @@ public class UserResource {
     @DeleteMapping("/users/{jhiUserId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String jhiUserId) {
         LOG.debug("REST request to delete user {}", jhiUserId);
+        String authUserLogin = SecurityUtils.getAuthenticatedUser();
+        if (StringUtils.equalsIgnoreCase(authUserLogin, jhiUserId)) {
+            throw new BadRequestAlertException("Cannot delete current authenticated user", "User", "delete.auth.user");
+        }
+        Optional<User> user = userService.getUserWithAuthorities(jhiUserId);
+        if(user.isPresent()) {
+            //not main contact
+            if(user.get().getMainContact() ){
+                throw new BadRequestAlertException("Cannot delete main contact", "User", "delete.main.contact");
+            }
+            //not last admin
+            if(user.get().getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.equals(AuthoritiesConstants.ADMIN))) {
+                //check if it is last admin
+                if(userRepository.findAllByAuthorities(AuthoritiesConstants.ADMIN).size() <= 1 )  {
+                    throw new BadRequestAlertException("Cannot delete last admin", "User", "delete.last.admin");
+                }
+            }     
+        }
         userService.clearUser(jhiUserId);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, "user", jhiUserId)).build();
     }
