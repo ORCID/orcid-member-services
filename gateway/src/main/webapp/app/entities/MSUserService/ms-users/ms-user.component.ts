@@ -150,6 +150,19 @@ export class MSUserComponent implements OnInit, OnDestroy {
     });
   }
 
+  disableDelete(msUser: IMSUser) {
+    if (msUser.login == this.DEFAULT_ADMIN) {
+      return true;
+    }
+    if (msUser.mainContact) {
+      return true;
+    }
+    if (msUser.login == this.currentAccount.login) {
+      return true;
+    }
+    return false;
+  }
+
   isDefaultAdmin(msUser: IMSUser) {
     if (msUser.login == this.DEFAULT_ADMIN) {
       return true;
