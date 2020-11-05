@@ -352,7 +352,6 @@ public class UserResource {
 	
 	private boolean validateExistingUser(UserDTO user) {
 		boolean isOk = true;
-		LOG.debug("!!! is admin : " + user.getIsAdmin() + " and superadmin enabled" + userService.memberSuperadminEnabled(user.getSalesforceId()));
 		if (user.getIsAdmin() == true && !StringUtils.isBlank(user.getSalesforceId())) {
 			if(!userService.memberSuperadminEnabled(user.getSalesforceId())) {
 				isOk = false;
