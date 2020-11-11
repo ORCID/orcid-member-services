@@ -21,6 +21,7 @@ import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
+import org.orcid.domain.enumeration.AssertionStatus;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.security.SecurityUtils;
@@ -341,6 +342,10 @@ public class AssertionService {
                 LOG.error("Error with assertion " + assertion.getId(), e);
                 storeError(assertion.getId(), 0, e.getMessage());
             }
+
+            if (orcid != null && !getAssertionStatus(assertion).equals(AssertionStatus.IN_ORCID.value)) {
+                removeOrcidIdFromOrcidRecord(record);
+            }
         }
     }
 
@@ -528,5 +533,11 @@ public class AssertionService {
     public List<Assertion> getAssertionsBySalesforceId(String salesforceId) {
         return assertionsRepository.findBySalesforceId(salesforceId);
     }
-    
+
+    private void removeOrcidIdFromOrcidRecord(OrcidRecord orcidRecord) {
+        orcidRecord.setOrcid(null);
+        orcidRecord.setModified(Instant.now());
+        orcidRecordService.updateOrcidRecord(orcidRecord);
+    }
+
 }
