@@ -150,10 +150,10 @@ export class MSUserComponent implements OnInit, OnDestroy {
     });
   }
 
-  switchUser(msUser: IMSUser) {
-    this.msUserService.switchUser(msUser).subscribe(res => {
-      this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.success', null, null);
-      console.log('response', res);
+  switchUser(login: string) {
+    this.msUserService.switchUser(login).subscribe(res => {
+      console.log('!!!! Username after switching account: ' + this.accountService.getUserName());
+      this.router.navigate(['/']);
     });
   }
 

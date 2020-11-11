@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -21,6 +21,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerEndpointsConfiguration;
 import org.springframework.security.web.authentication.switchuser.SwitchUserFilter;
 import org.springframework.security.web.authentication.switchuser.SwitchUserGrantedAuthority;
 
@@ -31,6 +33,9 @@ public class MSSwitchUserFilter extends SwitchUserFilter {
     
     private final UserDetailsService userDetailsService;
     
+    @Autowired
+    private AuthorizationServerEndpointsConfiguration configuration;
+    
     public MSSwitchUserFilter(UserDetailsService userDetailsService ) {
         this.userDetailsService = userDetailsService;
         
@@ -38,6 +43,7 @@ public class MSSwitchUserFilter extends SwitchUserFilter {
     
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         LOGGER.debug("!!!!! inside MSSwitchUserFilter");
+        
         super.doFilter(req, res, chain);
     }
     
@@ -57,16 +63,16 @@ public class MSSwitchUserFilter extends SwitchUserFilter {
             username = "";
         }
         LOGGER.debug("!!!!! username from request: " + username );
-        LOGGER.debug("!!! Attempt to switch to user [" + username + "]");
+        LOGGER.debug("!!!!! Attempt to switch to user [" + username + "]");
 
         UserDetails targetUser = userDetailsService.loadUserByUsername(username);
-        
 
         // OK, create the switch user token
         UsernamePasswordAuthenticationToken targetUserRequest = createSwitchUserToken(request, targetUser);
 
-        LOGGER.debug("Switch User Token [" + targetUserRequest + "]");
-
+        LOGGER.debug("!!!!!Switch User Token [" + targetUserRequest + "]");
+        SecurityContextHolder.getContext().setAuthentication(targetUserRequest);
+        LOGGER.debug("!!! Get from context: " + SecurityContextHolder.getContext().getAuthentication().toString() );
         return targetUserRequest;
     }
     
@@ -76,7 +82,9 @@ public class MSSwitchUserFilter extends SwitchUserFilter {
         // Authentication object
         // which will be used to 'exit' from the current switched user.
 
-        /*Authentication currentAuth;
+        /* TODO Cami uncomment this part after testing context switching .... 
+         
+        Authentication currentAuth;
         
         try {
             // SEC-1763. Check first if we are already switched.
@@ -97,6 +105,7 @@ public class MSSwitchUserFilter extends SwitchUserFilter {
         // create the new authentication token
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(targetUser.getUsername(), null, newAuths);
         authentication.setDetails(targetUser);
+        
         return authentication;
     }
 

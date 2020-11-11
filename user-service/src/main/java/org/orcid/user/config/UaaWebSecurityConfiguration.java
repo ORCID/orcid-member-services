@@ -82,6 +82,7 @@ public class UaaWebSecurityConfiguration extends WebSecurityConfigurerAdapter im
         .antMatchers("/api/switch_user_exit").hasRole("PREVIOUS_ADMINISTRATOR")
         .antMatchers("/**").permitAll(); **/
         http.addFilterAfter(switchUserFilter(), FilterSecurityInterceptor.class);
+        super.configure(http);
     }
 
     @Bean

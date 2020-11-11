@@ -21,6 +21,8 @@ import org.orcid.user.web.rest.vm.KeyAndPasswordVM;
 import org.orcid.user.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -98,6 +100,9 @@ public class AccountResource {
      */
     @GetMapping("/account")
     public UserDTO getAccount() {
+        //check if switched account
+        
+        log.debug("AAAAAAA inside get Account " + SecurityUtils.getAuthenticatedUser());
         return userService.getUserWithAuthorities()
             .map(UserDTO::valueOf)
             .orElseThrow(() -> new AccountResourceException("User could not be found"));

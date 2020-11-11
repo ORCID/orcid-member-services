@@ -40,29 +40,15 @@ export class MSUserService {
       .pipe(map((res: EntityResponseType) => this.convertFromServer(res)));
   }
 
-  switchUser(username: String) {
-    //const copy = this.convertDateFromClient(msUser);
+  switchUser(username: string): Observable<any> {
     var formData = new FormData();
     formData.set('username', username);
     const headers = new HttpHeaders().set('Accept', 'text/html');
-    //.set('content-type','application-x-www-form-urlencoded');
-    /*  setAccept:'text/html',
-      Content-Type: 'application-x-www-form-urlencoded'
+    return this.http.post(`${this.switchResourceUrl}/switch_user`, formData, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'text'
     });
-
-    /*const params = new HttpParams()
-      .set('response_type', 'code')
-      .set('redirect_uri', '/');   */
-
-    //return this.http.post(`${this.switchResourceUrl}/switch_user`, body, {headers : headers, withCredentials : true, params:params} );
-
-    return this.http
-      .post(`${this.switchResourceUrl}/switch_user`, formData, { headers: headers, withCredentials: true, responseType: 'text' })
-      .subscribe(res => {
-        console.log('post res');
-        console.log(res);
-        window.location.assign('/');
-      });
   }
 
   sendActivate(msUser: IMSUser): Observable<EntityResponseType> {

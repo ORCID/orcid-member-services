@@ -24,6 +24,7 @@ export class AccountService {
   }
 
   authenticate(identity) {
+    console.log('authenticate account service');
     this.userIdentity = identity;
     this.authenticated = identity !== null;
     this.authenticationState.next(this.userIdentity);
@@ -59,6 +60,7 @@ export class AccountService {
   }
 
   identity(force?: boolean): Promise<Account> {
+    console.log('identity account ');
     if (force) {
       this.userIdentity = undefined;
     }
@@ -66,6 +68,7 @@ export class AccountService {
     // check and see if we have retrieved the userIdentity data from the server.
     // if we have, reuse it by immediately resolving
     if (this.userIdentity) {
+      console.log('identity account have it ');
       return Promise.resolve(this.userIdentity);
     }
 
