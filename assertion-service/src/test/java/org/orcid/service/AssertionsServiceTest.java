@@ -467,7 +467,7 @@ class AssertionsServiceTest {
 
 		assertionsService.postAssertionsToOrcid();
 
-		Mockito.verify(orcidRecordService, Mockito.times(20)).findOneByEmail(Mockito.anyString());
+		Mockito.verify(orcidRecordService, Mockito.times(25)).findOneByEmail(Mockito.anyString());
 		//Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
 		Mockito.verify(orcidAPIClient, Mockito.times(5)).postAffiliation(Mockito.anyString(), Mockito.anyString(),
 				Mockito.any(Assertion.class));
