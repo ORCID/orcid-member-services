@@ -27,7 +27,7 @@ services:
       - 'APPLICATION_CRON_PUT_AFFILIATIONS=${CRON_PUT_AFFILIATIONS}'
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
     volumes:
-      - ./log-raw/:/logs
+      - /mnt/efs/mserv-${ENV}/logs/:/logs
 
   gateway-app:
     restart: unless-stopped
@@ -45,7 +45,7 @@ services:
       - JHIPSTER_MAIL_FROM=${MAIL_FROM}
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
     volumes:
-      - ./log-raw/:/logs
+      - /mnt/efs/mserv-${ENV}/logs/:/logs
     ports:
       - '8080:8080'
 
@@ -69,7 +69,7 @@ services:
       - JHIPSTER_MAIL_FROM=${MAIL_FROM}
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
     volumes:
-      - ./log-raw/:/logs
+      - /mnt/efs/mserv-${ENV}/logs/:/logs
 
   memberservice-app:
     restart: unless-stopped
@@ -90,7 +90,7 @@ services:
       - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
     volumes:
-      - ./log-raw/:/logs
+      - /mnt/efs/mserv-${ENV}/logs/:/logs
 
   jhipster-registry:
     restart: unless-stopped

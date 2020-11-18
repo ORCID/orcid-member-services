@@ -21,7 +21,13 @@ bash mvnw clean
 if [ "$1" != "all" ]
 then
     echo "building gateway image for $1"
-    bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -Dangular.env=$1
+    if [ "$1" = "sbox" ]
+    then
+        bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -Dangular.env=sandbox
+    else
+        echo "building gateway image for $1"
+        bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -Dangular.env=$1
+    fi
     echo "pushing gateway image for $1 to nexus"
     docker push dockerpush.int.orcid.org/gateway:$2-$1
 else
@@ -32,7 +38,7 @@ else
     echo "building gateway image for sandbox"
     bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -Dangular.env=sandbox
     echo "pushing gateway image for sandbox to nexus"
-    docker push dockerpush.int.orcid.org/gateway:$2-sandbox
+    docker push dockerpush.int.orcid.org/gateway:$2-sbox
     echo "building gateway image for prod"
     bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -Dangular.env=prod
     echo "pushing gateway image for prod to nexus"
