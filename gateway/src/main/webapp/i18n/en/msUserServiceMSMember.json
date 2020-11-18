@@ -18,6 +18,7 @@
       "import": {
         "title": "Import members",
         "label": "Please select a CSV file to upload",
+        "emptyFile": "There is no file to upload. Please select one.",
         "filePath": "File path",
         "errors": {
           "label": "Oops! There was a problem processing your data. Pleases fix the errors below and try again"
