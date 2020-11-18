@@ -1,4 +1,4 @@
-<form name="uploadForm" (ngSubmit)="upload()">
+<form name="uploadForm" (ngSubmit)="upload()" >
     <div class="modal-header">
         <h4 class="modal-title" jhiTranslate="gatewayApp.msUserServiceMSUser.import.title">Import users</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -21,7 +21,7 @@
         <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
-        <button id="jhi-confirm-delete-msUser" type="submit" class="btn btn-primary">
+        <button id="jhi-confirm-delete-msUser" type="submit" class="btn btn-primary" >
             <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.upload">Upload</span>
         </button>
     </div>
