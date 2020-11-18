@@ -11,6 +11,7 @@ import { MSUserService } from './ms-user.service';
 import { FileUploadService } from '../../../shared/fileUpload/fileUpload.service';
 
 import { SERVER_API_URL } from 'app/app.constants';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'jhi-ms-user-import-dialog',
@@ -29,6 +30,7 @@ export class MSUserImportDialogComponent {
     protected msUserService: MSUserService,
     public activeModal: NgbActiveModal,
     protected eventManager: JhiEventManager,
+    protected translate: TranslateService,
     private uploadService: FileUploadService
   ) {
     this.isSaving = false;
@@ -44,22 +46,26 @@ export class MSUserImportDialogComponent {
   }
 
   upload() {
-    this.loading = true;
-    const f = this.currentFile.item(0);
-    this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
-      if (event instanceof HttpResponse) {
-        const body = event.body;
-        this.csvErrors = JSON.parse(body.toString());
-        this.loading = false;
-        if (this.csvErrors.length === 0) {
-          this.eventManager.broadcast({
-            name: 'msUserListModification',
-            content: 'New user settings uploaded'
-          });
-          this.activeModal.dismiss(true);
+    if (this.currentFile) {
+      this.loading = true;
+      const f = this.currentFile.item(0);
+      this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
+        if (event instanceof HttpResponse) {
+          const body = event.body;
+          this.csvErrors = JSON.parse(body.toString());
+          this.loading = false;
+          if (this.csvErrors.length === 0) {
+            this.eventManager.broadcast({
+              name: 'msUserListModification',
+              content: 'New user settings uploaded'
+            });
+            this.activeModal.dismiss(true);
+          }
         }
-      }
-    });
+      });
+    } else {
+      alert(this.translate.instant('gatewayApp.msUserServiceMSUser.import.emptyFile'));
+    }
   }
 }
 

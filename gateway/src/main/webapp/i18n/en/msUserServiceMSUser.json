@@ -25,6 +25,7 @@
         "title": "Import users",
         "label": "Please select the CSV file to upload",
         "filePath": "File path",
+        "emptyFile": "There is no file to upload. Please select one.",
         "errors": {
           "label": "Oops! There was a problem processing your data. Pleases fix the errors below and try again"
         }

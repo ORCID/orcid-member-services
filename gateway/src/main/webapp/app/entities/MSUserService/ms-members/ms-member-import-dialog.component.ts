@@ -11,6 +11,7 @@ import { MSMemberService } from './ms-member.service';
 import { FileUploadService } from '../../../shared/fileUpload/fileUpload.service';
 
 import { SERVER_API_URL } from 'app/app.constants';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'jhi-ms-member-import-dialog',
@@ -29,6 +30,7 @@ export class MSMemberImportDialogComponent {
     protected msMemberService: MSMemberService,
     public activeModal: NgbActiveModal,
     protected eventManager: JhiEventManager,
+    protected translate: TranslateService,
     private uploadService: FileUploadService
   ) {
     this.isSaving = false;
@@ -44,22 +46,26 @@ export class MSMemberImportDialogComponent {
   }
 
   upload() {
-    this.loading = true;
-    var f = this.currentFile.item(0);
-    this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
-      if (event instanceof HttpResponse) {
-        const body = event.body;
-        this.csvErrors = JSON.parse(body.toString());
-        this.loading = false;
-        if (this.csvErrors.length === 0) {
-          this.eventManager.broadcast({
-            name: 'msMemberListModification',
-            content: 'New member uploaded'
-          });
-          this.activeModal.dismiss(true);
+    if (this.currentFile) {
+      this.loading = true;
+      var f = this.currentFile.item(0);
+      this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
+        if (event instanceof HttpResponse) {
+          const body = event.body;
+          this.csvErrors = JSON.parse(body.toString());
+          this.loading = false;
+          if (this.csvErrors.length === 0) {
+            this.eventManager.broadcast({
+              name: 'msMemberListModification',
+              content: 'New member uploaded'
+            });
+            this.activeModal.dismiss(true);
+          }
         }
-      }
-    });
+      });
+    } else {
+      alert(this.translate.instant('gatewayApp.msUserServiceMSUser.import.emptyFile'));
+    }
   }
 }
 
