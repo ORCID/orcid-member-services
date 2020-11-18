@@ -65,8 +65,8 @@ public class UserService {
 		}
 	}
 
-        public void deleteUserById(String loginOrId) {
-            ResponseEntity<Void> response = userServiceClient.deleteUser(loginOrId);
+        public void deleteUserById(String loginOrId, boolean noMainContactCheck) {
+            ResponseEntity<Void> response = userServiceClient.deleteUser(loginOrId, noMainContactCheck);
             if (!response.getStatusCode().is2xxSuccessful()) {
                 throw new BadRequestAlertException("Unable to delete user", "User", null);
             }

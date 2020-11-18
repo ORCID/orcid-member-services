@@ -199,7 +199,7 @@ public class MemberService {
 
             for (MemberServiceUser user : usersBelongingToMember) {
                 LOG.warn("Deleting user: " + user.toString());
-                userService.deleteUserById(user.getId());
+                userService.deleteUserById(user.getId(), true);
             }
         }
         memberRepository.deleteById(id);

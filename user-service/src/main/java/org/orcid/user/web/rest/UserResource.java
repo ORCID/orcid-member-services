@@ -370,7 +370,7 @@ public class UserResource {
      * @throws JSONException
      */
     @DeleteMapping("/users/{jhiUserId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String jhiUserId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String jhiUserId, @RequestParam(value = "noMainContactCheck", required = false) boolean noMainContactCheck) {
         LOG.debug("REST request to delete user {}", jhiUserId);
         String authUserLogin = SecurityUtils.getAuthenticatedUser();
         if (StringUtils.equalsIgnoreCase(authUserLogin, jhiUserId)) {
@@ -379,7 +379,7 @@ public class UserResource {
         Optional<User> user = userService.getUserWithAuthorities(jhiUserId);
         if(user.isPresent()) {
             //not main contact
-            if(user.get().getMainContact() ){
+            if(user.get().getMainContact() && !noMainContactCheck){
                 throw new BadRequestAlertException("Cannot delete main contact", "User", "delete.main.contact");
             }
             //not last admin
