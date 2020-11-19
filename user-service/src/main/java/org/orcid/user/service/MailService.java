@@ -100,4 +100,10 @@ public class MailService {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
     }
+
+    @Async
+    public void sendOrganizationOwnerChangedMail(User user) {
+        log.debug("Sending organization owner changed email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/organizationOwnerChanged", "email.organization.title");
+    }
 }

@@ -201,6 +201,22 @@ public class MailServiceIT {
     }
 
     @Test
+    public void testOrganizationOwnerChangedMail() throws Exception {
+        User user = new User();
+        user.setLangKey(Constants.DEFAULT_LANGUAGE);
+        user.setLogin("john");
+        user.setEmail("john.doe@example.com");
+        mailService.sendOrganizationOwnerChangedMail(user);
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
+        assertThat(message.getAllRecipients()[0].toString()).isEqualTo(user.getEmail());
+        assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
+        assertThat(message.getContent().toString()).isNotEmpty();
+        assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
+    }
+
+
+    @Test
     public void testSendEmailWithException() throws Exception {
         doThrow(MailSendException.class).when(javaMailSender).send(any(MimeMessage.class));
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
