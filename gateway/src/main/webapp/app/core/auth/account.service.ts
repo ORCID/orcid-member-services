@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -12,6 +12,7 @@ export class AccountService {
   private userIdentity: any;
   private authenticated = false;
   private authenticationState = new Subject<any>();
+  private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
 
   constructor(private languageService: JhiLanguageService, private sessionStorage: SessionStorageService, private http: HttpClient) {}
 
@@ -141,5 +142,22 @@ export class AccountService {
 
   isOrganizationOwner(): string {
     return this.isIdentityResolved() && this.userIdentity ? this.userIdentity.mainContact : false;
+  }
+
+  isLoggedAs(): boolean {
+    if (this.isIdentityResolved() && this.userIdentity && this.userIdentity.loggedAs) {
+      return true;
+    }
+    return false;
+  }
+
+  logoutAs(): Observable<any> {
+    const formData = new FormData();
+    formData.set('username', this.userIdentity.loginAs);
+    return this.http.post(`${this.logoutAsResourceUrl}/logout_as`, formData, {
+      headers: new HttpHeaders().set('Accept', 'text/html'),
+      withCredentials: true,
+      responseType: 'text'
+    });
   }
 }

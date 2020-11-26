@@ -1,35 +1,45 @@
 package org.orcid.domain;
 
 public class AssertionServiceUser {
-	
-	private String login;
-	
-	private String id;
-	
-	private String salesforceId;
 
-	public String getLogin() {
-		return login;
-	}
+    private String login;
 
-	public void setLogin(String login) {
-		this.login = login;
-	}
+    private String id;
 
-	public String getId() {
-		return id;
-	}
+    private String salesforceId;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    private String loginAs;
 
-	public String getSalesforceId() {
-		return salesforceId;
-	}
+    public String getLoginAs() {
+        return loginAs;
+    }
 
-	public void setSalesforceId(String salesforceId) {
-		this.salesforceId = salesforceId;
-	}
-	
+    public void setLoginAs(String loginAs) {
+        this.loginAs = loginAs;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getSalesforceId() {
+        return salesforceId;
+    }
+
+    public void setSalesforceId(String salesforceId) {
+        this.salesforceId = salesforceId;
+    }
+
 }

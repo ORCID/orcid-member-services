@@ -24,6 +24,8 @@
         "sessions": "Sessions",
         "login": "Sign in",
         "logout": "Sign out",
+        "loggedInAs": "Logged in as",
+        "logoutAs": "Logout as",
         "register": "Register"
       },
       "admin": {

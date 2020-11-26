@@ -19,6 +19,8 @@
         "sessions": "Sesiones",
         "login": "Iniciar sesión",
         "logout": "Cerrar la sesión",
+        "loggedInAs": "Logged in as",
+        "logoutAs": "Logout as",
         "register": "Crear una cuenta"
       },
       "admin": {

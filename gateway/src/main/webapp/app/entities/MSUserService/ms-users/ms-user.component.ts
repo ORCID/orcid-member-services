@@ -9,7 +9,7 @@ import { faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
 import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
-
+import { SERVER_API_URL } from 'app/app.constants';
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { MSUserService } from './ms-user.service';
 
@@ -145,20 +145,20 @@ export class MSUserComponent implements OnInit, OnDestroy {
   }
 
   disableDelete(msUser: IMSUser) {
-    if (msUser.login == this.DEFAULT_ADMIN) {
+    if (msUser.login === this.DEFAULT_ADMIN) {
       return true;
     }
     if (msUser.mainContact) {
       return true;
     }
-    if (msUser.login == this.currentAccount.login) {
+    if (msUser.login === this.currentAccount.login) {
       return true;
     }
     return false;
   }
 
   isDefaultAdmin(msUser: IMSUser) {
-    if (msUser.login == this.DEFAULT_ADMIN) {
+    if (msUser.login === this.DEFAULT_ADMIN) {
       return true;
     }
     return false;
@@ -170,6 +170,12 @@ export class MSUserComponent implements OnInit, OnDestroy {
 
   isOrganizationOwner() {
     return this.accountService.isOrganizationOwner();
+  }
+
+  switchUser(login: string) {
+    this.msUserService.switchUser(login).subscribe(res => {
+      window.location.href = SERVER_API_URL;
+    });
   }
 
   protected paginateMSUser(data: IMSUser[], headers: HttpHeaders) {
