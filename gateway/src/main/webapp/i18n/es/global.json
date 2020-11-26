@@ -149,6 +149,7 @@
     "delete.main.contact": "Cannot delete the organization owner.",
     "delete.last.admin": "Cannot delete the last admin.",
     "member.no.admin.allowed": "Admin users cannot be associated with this member",
+    "clientidinvalid": "Invalid Client ID. Client ID should be in the format XXXX-XXXX-XXXX-XXXX or APP-XXXXXXXXXXXXXXXX. X can be a digit or an uppercase character",
     "idnull": "ID inválido"
   },
   "footer": "Pie de página"
