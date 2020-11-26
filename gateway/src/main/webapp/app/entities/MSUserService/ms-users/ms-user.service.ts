@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
@@ -15,6 +15,7 @@ type EntityArrayResponseType = HttpResponse<IMSUser[]>;
 @Injectable({ providedIn: 'root' })
 export class MSUserService {
   public resourceUrl = SERVER_API_URL + 'services/userservice/api/users';
+  private switchResourceUrl = SERVER_API_URL + 'services/userservice/api';
 
   constructor(protected http: HttpClient) {}
 
@@ -71,6 +72,16 @@ export class MSUserService {
 
   delete(id: string): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  switchUser(username: string): Observable<any> {
+    const formData = new FormData();
+    formData.set('username', username);
+    return this.http.post(`${this.switchResourceUrl}/switch_user`, formData, {
+      headers: new HttpHeaders().set('Accept', 'text/html'),
+      withCredentials: true,
+      responseType: 'text'
+    });
   }
 
   protected convertDateFromClient(msUser: IMSUser): IMSUser {
