@@ -99,5 +99,6 @@ export class MSUserImportPopupComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.ngbModalRef = null;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => this.router.navigate(['/ms-user']));
   }
 }
