@@ -116,10 +116,6 @@ public class AccountResource {
         else {
             throw new AccountResourceException("User could not be found");
         }
-        
-       /** return userService.getUserWithAuthorities()
-            .map(UserDTO::valueOf)
-            .orElseThrow(() -> new AccountResourceException("User could not be found")); */
     }
 
     /**

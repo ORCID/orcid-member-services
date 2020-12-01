@@ -478,6 +478,7 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
      */
     @PostMapping("/switch_user")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> switchUser(@RequestParam(value = "username", required = true) String username) {
         Optional<User> authUser = userService.getUserWithAuthorities();
 

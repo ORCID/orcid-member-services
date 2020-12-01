@@ -43,7 +43,7 @@ function clientIdValidator(): ValidatorFn {
       var clientIdValue = control.value;
       if (clientIdValue.startsWith('APP-') && clientIdValue.match(/APP-[A-Z0-9]{16}$/)) {
         return null;
-      } else if (clientIdValue.match(/[A-Z0-9]{4}-[A-Z0-9]{4}\-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
+      } else if (clientIdValue.match(/[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
         return null;
       }
       return { validClientId: false };

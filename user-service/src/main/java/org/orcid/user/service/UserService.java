@@ -227,19 +227,6 @@ public class UserService {
         }).map(UserDTO::valueOf);
     }
 
-    // public Optional<UserDTO> updateUserSalesForceId(UserDTO userDTO, String
-    // newSalesforceId) {
-    // return
-    // Optional.of(userRepository.findById(userDTO.getId())).filter(Optional::isPresent).map(Optional::get)
-    // .map(user -> {
-    // user.setSalesforceId(newSalesforceId);
-    // user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-    // user.setLastModifiedDate(Instant.now());
-    // userRepository.save(user);
-    // return user;
-    // }).map(UserDTO::valueOf);
-    // }
-
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
             userRepository.delete(user);
