@@ -40,7 +40,7 @@ function parentSalesforceIdConditionallyRequiredValidator(): ValidatorFn {
 function clientIdValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
     if (control.value !== undefined && isNaN(control.value)) {
-      const clientIdValue = control.value;
+      var clientIdValue = control.value;
       if (clientIdValue.startsWith('APP-') && clientIdValue.match(/APP-[A-Z0-9]{16}$/)) {
         return null;
       } else if (clientIdValue.match(/[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
@@ -48,7 +48,7 @@ function clientIdValidator(): ValidatorFn {
       }
       return { validClientId: false };
     }
-    return null;
+    return { validClientId: false };
   };
 }
 

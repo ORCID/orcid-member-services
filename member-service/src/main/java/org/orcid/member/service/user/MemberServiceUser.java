@@ -4,185 +4,195 @@ import java.time.Instant;
 import java.util.Set;
 
 public class MemberServiceUser {
-	
-private String login;
-	
-	private String id;
-	
-	private String salesforceId;
-	
-	private String createdBy;
 
-	private Instant createdDate;
+    private String login;
 
-	private String lastModifiedBy;
+    private String id;
 
-	private Instant lastModifiedDate;
+    private String salesforceId;
 
-	private String salesforceIdError;
+    private String createdBy;
 
-	private String parentSalesforceId;
+    private Instant createdDate;
 
-	private Boolean mainContact;
+    private String lastModifiedBy;
 
-	private Boolean assertionServiceEnabled;
-	
-	private String firstName;
+    private Instant lastModifiedDate;
 
-	private String lastName;
+    private String salesforceIdError;
 
-	private String email;
+    private String parentSalesforceId;
 
-	private String imageUrl;
+    private Boolean mainContact;
 
-	private boolean activated;
+    private Boolean assertionServiceEnabled;
 
-	private String langKey;
-	
-	private Set<String> authorities;
+    private String firstName;
 
-	public String getLogin() {
-		return login;
-	}
+    private String lastName;
 
-	public void setLogin(String login) {
-		this.login = login;
-	}
+    private String email;
 
-	public String getId() {
-		return id;
-	}
+    private String imageUrl;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    private boolean activated;
 
-	public String getSalesforceId() {
-		return salesforceId;
-	}
+    private String langKey;
 
-	public void setSalesforceId(String salesforceId) {
-		this.salesforceId = salesforceId;
-	}
+    private Set<String> authorities;
 
-	public String getCreatedBy() {
-		return createdBy;
-	}
+    public String getLoginAs() {
+        return loginAs;
+    }
 
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
+    public void setLoginAs(String loginAs) {
+        this.loginAs = loginAs;
+    }
 
-	public Instant getCreatedDate() {
-		return createdDate;
-	}
+    private String loginAs;
 
-	public void setCreatedDate(Instant createdDate) {
-		this.createdDate = createdDate;
-	}
+    public String getLogin() {
+        return login;
+    }
 
-	public String getLastModifiedBy() {
-		return lastModifiedBy;
-	}
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
-	public void setLastModifiedBy(String lastModifiedBy) {
-		this.lastModifiedBy = lastModifiedBy;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public Instant getLastModifiedDate() {
-		return lastModifiedDate;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setLastModifiedDate(Instant lastModifiedDate) {
-		this.lastModifiedDate = lastModifiedDate;
-	}
+    public String getSalesforceId() {
+        return salesforceId;
+    }
 
-	public String getSalesforceIdError() {
-		return salesforceIdError;
-	}
+    public void setSalesforceId(String salesforceId) {
+        this.salesforceId = salesforceId;
+    }
 
-	public void setSalesforceIdError(String salesforceIdError) {
-		this.salesforceIdError = salesforceIdError;
-	}
+    public String getCreatedBy() {
+        return createdBy;
+    }
 
-	public String getParentSalesforceId() {
-		return parentSalesforceId;
-	}
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
 
-	public void setParentSalesforceId(String parentSalesforceId) {
-		this.parentSalesforceId = parentSalesforceId;
-	}
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
 
-	public Boolean getMainContact() {
-		return mainContact;
-	}
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
 
-	public void setMainContact(Boolean mainContact) {
-		this.mainContact = mainContact;
-	}
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
 
-	public Boolean getAssertionServiceEnabled() {
-		return assertionServiceEnabled;
-	}
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
 
-	public void setAssertionServiceEnabled(Boolean assertionServiceEnabled) {
-		this.assertionServiceEnabled = assertionServiceEnabled;
-	}
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public String getSalesforceIdError() {
+        return salesforceIdError;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public void setSalesforceIdError(String salesforceIdError) {
+        this.salesforceIdError = salesforceIdError;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public String getParentSalesforceId() {
+        return parentSalesforceId;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public void setParentSalesforceId(String parentSalesforceId) {
+        this.parentSalesforceId = parentSalesforceId;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public Boolean getMainContact() {
+        return mainContact;
+    }
 
-	public String getImageUrl() {
-		return imageUrl;
-	}
+    public void setMainContact(Boolean mainContact) {
+        this.mainContact = mainContact;
+    }
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
+    public Boolean getAssertionServiceEnabled() {
+        return assertionServiceEnabled;
+    }
 
-	public boolean isActivated() {
-		return activated;
-	}
+    public void setAssertionServiceEnabled(Boolean assertionServiceEnabled) {
+        this.assertionServiceEnabled = assertionServiceEnabled;
+    }
 
-	public void setActivated(boolean activated) {
-		this.activated = activated;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public String getLangKey() {
-		return langKey;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public void setLangKey(String langKey) {
-		this.langKey = langKey;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public Set<String> getAuthorities() {
-		return authorities;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public void setAuthorities(Set<String> authorities) {
-		this.authorities = authorities;
-	}
-	
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
+    public String getLangKey() {
+        return langKey;
+    }
+
+    public void setLangKey(String langKey) {
+        this.langKey = langKey;
+    }
+
+    public Set<String> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<String> authorities) {
+        this.authorities = authorities;
+    }
+
 }

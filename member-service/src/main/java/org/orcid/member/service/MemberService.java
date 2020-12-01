@@ -129,7 +129,7 @@ public class MemberService {
             // what to do here? return member object with errors for ui?
             // something
             // consistent
-            throw new BadRequestAlertException("Invalid member", "member", null);
+            throw new BadRequestAlertException("Invalid member", "member", "clientidinvalid");
         }
 
         Instant now = Instant.now();

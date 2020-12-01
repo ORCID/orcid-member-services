@@ -11,6 +11,7 @@ import { JhiLanguageHelper, AccountService, LoginModalService, LoginService, Acc
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service.ts';
 import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
+import { SERVER_API_URL } from 'app/app.constants';
 
 type EntityResponseType = HttpResponse<IMSMember>;
 
@@ -86,6 +87,10 @@ export class NavbarComponent implements OnInit {
     return this.accountService.hasAnyAuthority(['ROLE_ADMIN']);
   }
 
+  isLoggedAs() {
+    return this.accountService.isLoggedAs();
+  }
+
   getOrganizationName() {
     if (!this.isAuthenticated()) {
       return null;
@@ -129,6 +134,16 @@ export class NavbarComponent implements OnInit {
     this.userName = null;
     this.loginService.logout();
     this.router.navigate(['']);
+  }
+
+  logoutAs() {
+    this.collapseNavbar();
+    this.organizationName = null;
+    this.memberCallDone = false;
+    this.userName = null;
+    this.accountService.logoutAs().subscribe(res => {
+      window.location.href = SERVER_API_URL;
+    });
   }
 
   toggleNavbar() {
