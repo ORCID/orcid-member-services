@@ -38,7 +38,7 @@ else
     echo "building gateway image for sandbox"
     bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -Dangular.env=sandbox
     echo "pushing gateway image for sandbox to nexus"
-    docker push dockerpush.int.orcid.org/gateway:$2-sbox
+    docker push dockerpush.int.orcid.org/gateway:$2-sandbox
     echo "building gateway image for prod"
     bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -Dangular.env=prod
     echo "pushing gateway image for prod to nexus"
