@@ -26,6 +26,8 @@
       "clientId": "Client Id",
       "clientName": "Client name",
       "clientSecret": "Client Secret",
+      "clientId.note": "Note: Client ID must have Member OBO enabled AND",
+      "clientId.addedAsRedirect": "added as a Redirect URI in",
       "salesforceId": "Salesforce Id",
       "parentSalesforceId": "Parent Salesforce Id",
       "isConsortiumLead": "Is Consortium Lead",

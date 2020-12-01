@@ -25,7 +25,7 @@
         }
       },
       "clientId": "Client Id",
-      "clientId.note": "Note: Client ID must have User OBO enabled AND",
+      "clientId.note": "Note: Client ID must have Member OBO enabled AND",
       "clientId.addedAsRedirect": "added as a Redirect URI in",
       "clientName": "Member Name",
       "clientSecret": "Client Secret",
