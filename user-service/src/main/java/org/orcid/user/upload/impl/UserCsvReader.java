@@ -26,10 +26,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserCsvReader implements UserUploadReader {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(UserCsvReader.class);
     private StringBuffer sb;
-    private Map<String,Boolean> orgWithOwner;
+    private Map<String, String> orgWithOwner;
 
     @Autowired
     UserRepository userRepository;
@@ -38,92 +38,92 @@ public class UserCsvReader implements UserUploadReader {
         this.userRepository = userRepository;
     }
 
-	@Override
-	public UserUpload readUsersUpload(InputStream inputStream, String createdBy) {
-	        
-		InputStreamReader isr = new InputStreamReader(inputStream);
-		UserUpload upload = new UserUpload();
-		Iterable<CSVRecord> elements = null;
-		Instant now = Instant.now();
-		
-		this.orgWithOwner = getOrganizationsWithOwner();
+    @Override
+    public UserUpload readUsersUpload(InputStream inputStream, String createdBy) {
 
-		try {
-			elements = CSVFormat.DEFAULT.withHeader().parse(isr);
-		} catch (IOException e) {
-			try {
-				isr.close();
-			} catch (IOException io) {
-				LOG.error("Error closing csv assertions upload input stream", e);
-				throw new RuntimeException(io);
-			}
+        InputStreamReader isr = new InputStreamReader(inputStream);
+        UserUpload upload = new UserUpload();
+        Iterable<CSVRecord> elements = null;
+        Instant now = Instant.now();
 
-			LOG.error("Error reading CSV upload", e);
-			throw new RuntimeException(e);
-		}
+        this.orgWithOwner = getOrganizationsWithOwner();
 
-		try {
-			for (CSVRecord record : elements) {
-				try {
-					addUsersToUpload(record, upload, now, createdBy);
-				} catch (Exception e) {
-					LOG.info("CSV upload error found for record number {}", record.getRecordNumber());
-					upload.addError(record.getRecordNumber(), e.getMessage());
-				}
-			}
-		} finally {
-			try {
-				isr.close();
-			} catch (IOException e) {
-				LOG.error("Error closing csv assertions upload input stream", e);
-				throw new RuntimeException(e);
-			}
-		}
-		return upload;
-	}
+        try {
+            elements = CSVFormat.DEFAULT.withHeader().parse(isr);
+        } catch (IOException e) {
+            try {
+                isr.close();
+            } catch (IOException io) {
+                LOG.error("Error closing csv assertions upload input stream", e);
+                throw new RuntimeException(io);
+            }
 
-	private void addUsersToUpload(CSVRecord element, UserUpload upload, Instant now, String createdBy) {
-		long index = element.getRecordNumber();
-		try {
-			// Validate for errors
-			if (!validate(element)) {
-				upload.addError(index, getError());
-			} else {
-				UserDTO userDTO = getUserDTO(element, now, createdBy);
-				upload.getUserDTOs().add(userDTO);
-				if(userDTO.getMainContact()) {
-				    this.orgWithOwner.put(userDTO.getSalesforceId(), true);
-				}
-			}
-		} catch (Exception e) {
-			Throwable t = e.getCause();
-			LOG.error("Error on line " + index, t != null ? t : e);
-			upload.addError(index, t != null ? t.getMessage() : e.getMessage());
-		}
-	}
+            LOG.error("Error reading CSV upload", e);
+            throw new RuntimeException(e);
+        }
 
-	private UserDTO getUserDTO(CSVRecord record, Instant now, String createdBy) {
-		UserDTO u = new UserDTO();
-		u.setLogin(record.get("email"));
-		u.setFirstName(record.get("firstName"));
-		u.setLastName(record.get("lastName"));
-		u.setSalesforceId(record.get("salesforceId"));
-		u.setPassword(RandomStringUtils.randomAlphanumeric(10));
-		u.setSalesforceId(record.get("salesforceId"));
-		u.setCreatedBy(createdBy);
-		u.setCreatedDate(now);
-		u.setLastModifiedBy(createdBy);
-		u.setLastModifiedDate(now);
-		u.setEmail(record.get("email"));
-		u.setMainContact( new Boolean(record.get("mainContact")));
-		u.setLangKey("en");
-		return u;
-	}
+        try {
+            for (CSVRecord record : elements) {
+                try {
+                    addUsersToUpload(record, upload, now, createdBy);
+                } catch (Exception e) {
+                    LOG.info("CSV upload error found for record number {}", record.getRecordNumber());
+                    upload.addError(record.getRecordNumber(), e.getMessage());
+                }
+            }
+        } finally {
+            try {
+                isr.close();
+            } catch (IOException e) {
+                LOG.error("Error closing csv assertions upload input stream", e);
+                throw new RuntimeException(e);
+            }
+        }
+        return upload;
+    }
 
-	private boolean validate(CSVRecord record) {
-		boolean isOk = true;
-		sb = new StringBuffer();
-		String salesforceId = "";
+    private void addUsersToUpload(CSVRecord element, UserUpload upload, Instant now, String createdBy) {
+        long index = element.getRecordNumber();
+        try {
+            // Validate for errors
+            if (!validate(element)) {
+                upload.addError(index, getError());
+            } else {
+                UserDTO userDTO = getUserDTO(element, now, createdBy);
+                upload.getUserDTOs().add(userDTO);
+                if (userDTO.getMainContact()) {
+                    this.orgWithOwner.put(userDTO.getSalesforceId(), userDTO.getEmail());
+                }
+            }
+        } catch (Exception e) {
+            Throwable t = e.getCause();
+            LOG.error("Error on line " + index, t != null ? t : e);
+            upload.addError(index, t != null ? t.getMessage() : e.getMessage());
+        }
+    }
+
+    private UserDTO getUserDTO(CSVRecord record, Instant now, String createdBy) {
+        UserDTO u = new UserDTO();
+        u.setLogin(record.get("email"));
+        u.setFirstName(record.get("firstName"));
+        u.setLastName(record.get("lastName"));
+        u.setSalesforceId(record.get("salesforceId"));
+        u.setPassword(RandomStringUtils.randomAlphanumeric(10));
+        u.setSalesforceId(record.get("salesforceId"));
+        u.setCreatedBy(createdBy);
+        u.setCreatedDate(now);
+        u.setLastModifiedBy(createdBy);
+        u.setLastModifiedDate(now);
+        u.setEmail(record.get("email"));
+        u.setMainContact(new Boolean(record.get("mainContact")));
+        u.setLangKey("en");
+        return u;
+    }
+
+    private boolean validate(CSVRecord record) {
+        boolean isOk = true;
+        sb = new StringBuffer();
+        String salesforceId = "";
         try {
             if (StringUtils.isBlank(record.get("email"))) {
                 isOk = false;
@@ -147,7 +147,7 @@ public class UserCsvReader implements UserUploadReader {
                 }
                 isOk = false;
                 sb.append("Salesforce Id should not be empty");
-		    }
+            }
         } catch (IllegalArgumentException e) {
             if (!isOk) {
                 sb.append(", ");
@@ -155,25 +155,29 @@ public class UserCsvReader implements UserUploadReader {
             isOk = false;
             sb.append("Salesforce Id should not be empty");
         }
-        
+
         try {
             Boolean isMain = new Boolean(record.get("mainContact"));
-            if (isMain && !StringUtils.isBlank(salesforceId) && this.orgWithOwner.containsKey(salesforceId) && orgWithOwner.get(salesforceId)) {  
-                if (!isOk) {
-                    sb.append(", ");
-                }
-                isOk = false;
-                sb.append("The organization already has an owner and/or you added more then one record for the organization " + salesforceId + " with main contact true");
+            if (isMain && !StringUtils.isBlank(salesforceId) && (this.orgWithOwner.containsKey(salesforceId))) {
+                if (!StringUtils.equalsAnyIgnoreCase(this.orgWithOwner.get(salesforceId), record.get("email"))) {
+                    if (!isOk) {
+                        sb.append(", ");
                     }
+                    isOk = false;
+                    sb.append("The organization already has an owner and/or you added more then one record for the organization " + salesforceId
+                            + " with main contact true");
+                }
+            }
         } catch (IllegalArgumentException e) {
+            LOG.error("Crappy stuff", e);
             if (!isOk) {
                 sb.append(", ");
             }
             isOk = false;
-            sb.append("The organization already has an owner and/or you added more then one record for the organization  " + salesforceId + "  with main contact true");
+            sb.append("The entry  " + record + "  is mal formatted most likely doesn´t contain the column for mainContact or is missing a comma.");
         }
-		return isOk;
-	}
+        return isOk;
+    }
 
     public String getError() {
         return sb.toString();
@@ -183,13 +187,15 @@ public class UserCsvReader implements UserUploadReader {
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(email);
         return existingUser.isPresent();
     }
-    
-    public HashMap<String, Boolean> getOrganizationsWithOwner() {
+
+    public HashMap<String, String> getOrganizationsWithOwner() {
         List<User> users = userRepository.findAllByMainContactIsTrue();
-        HashMap<String, Boolean> withOwners = new HashMap<String, Boolean>();
-        for(User user:users) {
-            withOwners.put(user.getSalesforceId(), user.getMainContact());
+        HashMap<String, String> withOwners = new HashMap<String, String>();
+        for (User user : users) {
+            if (user.getMainContact()) {
+                withOwners.put(user.getSalesforceId(), user.getEmail());
+            }
         }
         return withOwners;
-}
+    }
 }

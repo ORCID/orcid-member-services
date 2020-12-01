@@ -1,3 +1,10 @@
+<div class="text-center" *ngIf="this.isLoggedAs()">
+   <fa-icon icon="user"></fa-icon> <span jhiTranslate="global.menu.account.loggedInAs"></span> <b>{{ this.getUserName()}}</b> | 
+   <span jhiTranslate="global.menu.account.logoutAs"></span><a (click)="logoutAs()" id="logoutAs">
+                           {{ this.getUserName() }} <fa-icon icon="sign-out-alt" fixedWidth="true"></fa-icon>
+                        </a> 
+    
+</div>
 <nav class="navbar navbar-dark navbar-expand-md bg-dark">
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
         <span class="logo-img"><img src="/content/images/orcid-logo.svg" width="120px" alt="ORCID logo"></span>
