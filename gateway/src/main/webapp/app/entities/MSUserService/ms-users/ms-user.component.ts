@@ -34,7 +34,7 @@ export class MSUserComponent implements OnInit, OnDestroy {
 
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
-  DEFAULT_ADMIN = 'admin';
+  DEFAULT_ADMIN = 'admin@orcid.org';
 
   constructor(
     protected msUserService: MSUserService,
