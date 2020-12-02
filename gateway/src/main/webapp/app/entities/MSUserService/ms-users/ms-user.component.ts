@@ -164,6 +164,16 @@ export class MSUserComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  disableImpersonate(msUser: IMSUser) {
+    if (msUser.login === this.DEFAULT_ADMIN) {
+      return true;
+    }
+    if (msUser.login === this.currentAccount.login) {
+      return true;
+    }
+    return false;
+  }
+
   hasRoleAdmin() {
     return this.accountService.hasAnyAuthority(['ROLE_ADMIN']);
   }
