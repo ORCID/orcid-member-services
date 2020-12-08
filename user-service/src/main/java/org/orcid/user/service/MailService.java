@@ -31,6 +31,10 @@ public class MailService {
 
     private static final String BASE_URL = "baseUrl";
 
+    private static final String MEMBER = "member";
+
+    private static final String EMAIL = "email";
+
     private final JHipsterProperties jHipsterProperties;
 
     private final JavaMailSender javaMailSender;
@@ -84,6 +88,19 @@ public class MailService {
     }
 
     @Async
+    public void sendEmailFromTemplateMemberInfo(User user, String member, String templateName, String titleKey) {
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(MEMBER, member);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        context.setVariable(EMAIL, jHipsterProperties.getMail().getFrom());
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
@@ -99,5 +116,11 @@ public class MailService {
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    @Async
+    public void sendOrganizationOwnerChangedMail(User user, String member) {
+        log.debug("Sending organization owner changed email to '{}'", user.getEmail());
+        sendEmailFromTemplateMemberInfo(user, member,"mail/organizationOwnerChanged", "email.organization.title");
     }
 }

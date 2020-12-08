@@ -16,6 +16,8 @@ import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.security.SecurityUtils;
+import org.orcid.user.service.MailService;
+import org.orcid.user.service.MemberService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.upload.UserUpload;
@@ -94,6 +96,12 @@ public class UserResource {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private MemberService memberService;
+
+    @Autowired
+    private MailService mailService;
+
     /**
      * {@code PUT /users} : Updates an existing User.
      *
@@ -126,11 +134,11 @@ public class UserResource {
         //change the auth if the logged in user is org owner and this is set as mainContact
         Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
 		if (userDTO.getMainContact() != null) {
-        	if(userDTO.getMainContact()) 
-	        {   
-	
+        	if(userDTO.getMainContact())
+	        {
+
 	            existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
-	            
+
 	            if(existingUser.isPresent()) {
 	                    if(!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
 	                        userService.removeOwnershipFromUser(existingUser.get().getLogin());
@@ -279,8 +287,8 @@ public class UserResource {
         }
         String createdBy = SecurityUtils.getAuthenticatedUser();
         //change the auth if the logged in user is org owner and this is set as mainContact
-        if(userDTO.getMainContact()) 
-        {
+        boolean owner = userDTO.getMainContact();
+        if (owner) {
             Optional<User> existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
             
             if(existingUser.isPresent()) {
@@ -299,6 +307,12 @@ public class UserResource {
         userDTO.setLastModifiedDate(now);
 
         User newUser = userService.createUser(userDTO);
+
+        if (owner) {
+            String member = memberService.memberNameBySalesforce(newUser.getSalesforceId());
+            mailService.sendOrganizationOwnerChangedMail(newUser, member);
+        }
+
         return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, "user", newUser.getLogin())).body(UserDTO.valueOf(newUser));
 
