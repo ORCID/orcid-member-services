@@ -86,6 +86,17 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Field("deleted")
     private Boolean deleted = false;
+    
+    @Field("login_as")
+    private String loginAs;
+
+    public String getLoginAs() {
+        return loginAs;
+    }
+
+    public void setLoginAs(String loginAs) {
+        this.loginAs = loginAs;
+    }
 
     @JsonIgnore
     private Set<String> authorities = new HashSet<>();

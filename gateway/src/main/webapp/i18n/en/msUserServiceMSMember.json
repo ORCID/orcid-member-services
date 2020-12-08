@@ -18,13 +18,14 @@
       "import": {
         "title": "Import members",
         "label": "Please select a CSV file to upload",
+        "emptyFile": "There is no file to upload. Please select one.",
         "filePath": "File path",
         "errors": {
           "label": "Oops! There was a problem processing your data. Pleases fix the errors below and try again"
         }
       },
       "clientId": "Client Id",
-      "clientId.note": "Note: Client ID must have User OBO enabled AND",
+      "clientId.note": "Note: Client ID must have Member OBO enabled AND",
       "clientId.addedAsRedirect": "added as a Redirect URI in",
       "clientName": "Member Name",
       "clientSecret": "Client Secret",

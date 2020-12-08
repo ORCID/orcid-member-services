@@ -16,7 +16,7 @@
         "note": "This affiliation will also be deleted from the user's ORCID record.",
         "noteRevoked": "This affiliation will be deleted from the Member Portal but will remain in ORCID. The user has revoked access to their ORCID record and you no longer have permission to delete this item from their ORCID record.",
         "error": "Sorry, this affiliation could not be deleted.",
-        "userRevokedAccess":  "The user has revoked access to their ORCID record and you no longer have permission to edit or delete this item in ORCID."
+        "userRevokedAccess": "The user has revoked access to their ORCID record and you no longer have permission to edit or delete this item in ORCID."
       },
       "detail": {
         "title": "Affiliation details",
@@ -66,7 +66,9 @@
       "year": "Year",
       "month": "Month",
       "day": "Day",
-      "details": "View Details"
+      "details": "View Details",
+      "updateNote": "Note: Please do not forget to download and send permission links to your researcher once the assertion has been saved.",
+      "uploadNote": "Note: Please do not forget to download and send permission links to your researchers once the upload has completed."
     },
     "assertion": {
       "firstName": "first name",

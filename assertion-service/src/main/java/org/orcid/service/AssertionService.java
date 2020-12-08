@@ -21,6 +21,7 @@ import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
+import org.orcid.domain.enumeration.AssertionStatus;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.security.SecurityUtils;
@@ -96,7 +97,13 @@ public class AssertionService {
 
     public Page<Assertion> findBySalesforceId(Pageable pageable) {
         AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        Page<Assertion> assertions = assertionsRepository.findBySalesforceId(user.getSalesforceId(), pageable);
+        String salesForceId = user.getSalesforceId();
+        if(!StringUtils.isAllBlank(user.getLoginAs()))  {
+            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
+            salesForceId = loginAsUser.getSalesforceId();
+        }
+        
+        Page<Assertion> assertions = assertionsRepository.findBySalesforceId(salesForceId , pageable);
         assertions.forEach(a -> {
             a.setStatus(getAssertionStatus(a));
 
@@ -137,7 +144,12 @@ public class AssertionService {
             throw new IllegalArgumentException("Invalid assertion id");
         }
         Assertion assertion = optional.get();
-        if (!user.getSalesforceId().equals(assertion.getSalesforceId())) {
+        String salesforceId = user.getSalesforceId();
+        if(!StringUtils.isAllBlank(user.getLoginAs()))  {
+            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
+            salesforceId = loginAsUser.getSalesforceId();
+        }
+        if (!assertion.getSalesforceId().equals(salesforceId)) {
             throw new IllegalArgumentException(user.getId() + " doesn't belong to organization " + assertion.getSalesforceId());
         }
         assertion.setStatus(getAssertionStatus(assertion));
@@ -155,7 +167,14 @@ public class AssertionService {
         assertion.setCreated(now);
         assertion.setModified(now);
         assertion.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-        assertion.setSalesforceId(user.getSalesforceId());
+        if(!StringUtils.isAllBlank(user.getLoginAs()))  {
+            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
+            assertion.setSalesforceId(loginAsUser.getSalesforceId());
+        }
+        else
+        {
+            assertion.setSalesforceId(user.getSalesforceId());
+        }
 
         String email = assertion.getEmail();
 
@@ -201,7 +220,7 @@ public class AssertionService {
 
     public void createAssertions(List<Assertion> assertions) {
         Instant now = Instant.now();
-        String ownerId = assertionsUserService.getLoggedInUserId();
+        String ownerId = assertionsUserService.getLoggedInUserId();       
         // Create assertions
         for (Assertion a : assertions) {
             a.setOwnerId(ownerId);
@@ -224,6 +243,11 @@ public class AssertionService {
     private Assertion updateAssertionImpl(Assertion assertion, boolean updateAsAdmin) {
         AssertionServiceUser user = assertionsUserService.getLoggedInUser();
         String salesforceId = user.getSalesforceId();
+        if(!StringUtils.isAllBlank(user.getLoginAs()))  {
+            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
+            salesforceId = loginAsUser.getSalesforceId();
+        }
+        
         Optional<Assertion> optional = assertionsRepository.findById(assertion.getId());
         Assertion existingAssertion = optional.get();
 
@@ -340,6 +364,10 @@ public class AssertionService {
             } catch (Exception e) {
                 LOG.error("Error with assertion " + assertion.getId(), e);
                 storeError(assertion.getId(), 0, e.getMessage());
+            }
+
+            if (orcid != null && !getAssertionStatus(assertion).equals(AssertionStatus.IN_ORCID.value)) {
+                removeOrcidIdFromOrcidRecord(record);
             }
         }
     }
@@ -528,5 +556,11 @@ public class AssertionService {
     public List<Assertion> getAssertionsBySalesforceId(String salesforceId) {
         return assertionsRepository.findBySalesforceId(salesforceId);
     }
-    
+
+    private void removeOrcidIdFromOrcidRecord(OrcidRecord orcidRecord) {
+        orcidRecord.setOrcid(null);
+        orcidRecord.setModified(Instant.now());
+        orcidRecordService.updateOrcidRecord(orcidRecord);
+    }
+
 }

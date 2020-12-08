@@ -28,6 +28,7 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th></th>
             <th jhiSortBy="login"><span jhiTranslate="gatewayApp.msUserServiceMSUser.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="firstName"><span jhiTranslate="gatewayApp.msUserServiceMSUser.firstName">First Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="lastName"><span jhiTranslate="gatewayApp.msUserServiceMSUser.lastName">Last Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -41,6 +42,16 @@
             </thead>
             <tbody>
             <tr *ngFor="let msUser of msUser ;trackBy: trackId">
+                <td> 
+                <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit"
+                                (click) = "switchUser(msUser.login)"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm ml-1"
+                                [disabled]="disableImpersonate(msUser)"
+                            >
+                            <fa-icon [icon]="'sign-in-alt'"></fa-icon>             
+                        </button>
+                </td>
                 <td><a [routerLink]="['/ms-user', msUser.id, 'view' ]">{{msUser.login}}</a></td>
                 <td>{{msUser.firstName}}</td>
                 <td>{{msUser.lastName}}</td>
@@ -83,7 +94,7 @@
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm ml-1"
-                                [disabled]="disableDelete(msUser)"
+                                [disabled]="isDefaultAdmin(msUser)"
                             >
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>

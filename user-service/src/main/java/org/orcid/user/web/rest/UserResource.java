@@ -384,7 +384,7 @@ public class UserResource {
      * @throws JSONException
      */
     @DeleteMapping("/users/{jhiUserId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String jhiUserId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String jhiUserId, @RequestParam(value = "noMainContactCheck", required = false) boolean noMainContactCheck) {
         LOG.debug("REST request to delete user {}", jhiUserId);
         String authUserLogin = SecurityUtils.getAuthenticatedUser();
         if (StringUtils.equalsIgnoreCase(authUserLogin, jhiUserId)) {
@@ -393,7 +393,7 @@ public class UserResource {
         Optional<User> user = userService.getUserWithAuthorities(jhiUserId);
         if(user.isPresent()) {
             //not main contact
-            if(user.get().getMainContact() ){
+            if(user.get().getMainContact() && !noMainContactCheck){
                 throw new BadRequestAlertException("Cannot delete main contact", "User", "delete.main.contact");
             }
             //not last admin
@@ -483,6 +483,49 @@ public class UserResource {
         LOG.debug("REST request to get Owner for : {}", salesforceId);
         Optional<User> user = userService.getOwnerBySalesforceId(salesforceId);
         return user.isPresent();
-    }     
+    }
+    
+    
+    /**
+     * {@code POST /switch_user} : Switch user 
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
+     */
+    @PostMapping("/switch_user")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<Void> switchUser(@RequestParam(value = "username", required = true) String username) {
+        Optional<User> authUser = userService.getUserWithAuthorities();
+
+        if(authUser.isPresent()) {
+            UserDTO userDTO = UserDTO.valueOf(authUser.get());
+            userDTO.setLoginAs(username);
+            userDTO.setIsAdmin(true);
+            userService.updateUser(userDTO);
+        }
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create("/"))
+                .build();
+    }
+    
+    
+    /**
+     * {@code POST /logout_as} : Switch user 
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
+     */
+    @PostMapping("/logout_as")
+    public ResponseEntity<Void> logoutAsSwitchedUser(@RequestParam(value = "username", required = true) String username) {
+        Optional<User> authUser = userService.getUserWithAuthoritiesByLogin(SecurityUtils.getAuthenticatedUser());
+        if(authUser.isPresent()) {
+            UserDTO userDTO = UserDTO.valueOf(authUser.get());
+            userDTO.setIsAdmin(true);
+            userDTO.setLoginAs(null);
+            userService.updateUser(userDTO);
+        }
+        
+       return ResponseEntity.status(HttpStatus.FOUND)
+        .location(URI.create("/"))
+        .build();
+    }
 
 }

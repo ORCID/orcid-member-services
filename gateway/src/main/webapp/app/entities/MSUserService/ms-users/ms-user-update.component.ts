@@ -82,13 +82,14 @@ export class MSUserUpdateComponent implements OnInit {
 
   onChanges(): void {
     this.editForm.get('salesforceId').valueChanges.subscribe(val => {
+      console.log('on changing sales force id');
       const selectedOrg = this.membersList.find(cm => cm.salesforceId === this.editForm.get(['salesforceId']).value);
       if (this.hasRoleAdmin() === true) {
         if (selectedOrg) {
-          if (selectedOrg.superadminEnabled === false) {
-            this.showIsAdminCheckbox = false;
-          } else {
+          if (selectedOrg.superadminEnabled) {
             this.showIsAdminCheckbox = true;
+          } else {
+            this.showIsAdminCheckbox = false;
           }
         } else {
           this.showIsAdminCheckbox = false;
@@ -96,6 +97,7 @@ export class MSUserUpdateComponent implements OnInit {
       } else {
         this.showIsAdminCheckbox = false;
       }
+      console.log('this.showIsAdminCheckbox: ' + this.showIsAdminCheckbox);
     });
   }
 

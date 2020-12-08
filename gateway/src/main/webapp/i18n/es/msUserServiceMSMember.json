@@ -18,6 +18,7 @@
         "title": "Member Settings",
         "label": "Please select the CSV file to upload",
         "filePath": "File path",
+        "emptyFile": "There is no file to upload. Please select one.",
         "errors": {
           "label": "Oops! Ocurrio un error al procesar tu informacion. Por favor corrige los siguientes errores e intenta de nuevo"
         }
@@ -25,6 +26,8 @@
       "clientId": "Client Id",
       "clientName": "Client name",
       "clientSecret": "Client Secret",
+      "clientId.note": "Note: Client ID must have Member OBO enabled AND",
+      "clientId.addedAsRedirect": "added as a Redirect URI in",
       "salesforceId": "Salesforce Id",
       "parentSalesforceId": "Parent Salesforce Id",
       "isConsortiumLead": "Is Consortium Lead",
