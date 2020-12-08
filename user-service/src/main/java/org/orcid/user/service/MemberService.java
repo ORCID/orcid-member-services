@@ -73,5 +73,16 @@ public class MemberService {
 		
 		throw new RuntimeException("Error contacting member service");
 	}
-	
+
+    public String memberNameBySalesforce(String salesforceId) {
+        ResponseEntity<MemberServiceMember> response = memberServiceClient.getMember(salesforceId);
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return response.getBody().getClientName();
+        }
+        if (response.getStatusCodeValue() == 404) {
+            throw new RuntimeException("Member not found");
+        }
+
+        throw new RuntimeException("Error contacting member service");
+    }
 }

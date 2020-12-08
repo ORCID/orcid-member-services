@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.organization.title}">
+        ORCID Member Portal organization owner updated
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div style="padding: 20px; padding-top: 10px; margin: auto;">
+    <div th:insert="~{mail/common :: emailHeader}"></div>
+    <p>
+        <span th:text="#{email.organization.youAreOwner}">
+        You are now the organization owner of the ORCID Member Portal
+        </span>
+        <a th:with="url=(@{|${baseUrl}|})"
+           th:href="${url}" th:text="${url}">
+            Member portal
+        </a>
+        <span th:text="#{email.organization.accountFor}">
+        account for
+        </span>
+        <span th:text="(@{|${member}|})">
+            member
+        </span>
+    </p>
+
+    <p th:text="#{email.organization.asAnOrganization}">
+        As an organization owner, you can manage your organization's information and users.
+    </p>
+    <p>
+        <span th:text="#{email.organization.signInto}">
+            Sign into the ORCID Member Portal at
+        </span>
+        <a th:with="url=(@{|${baseUrl}|})"
+           th:href="${url}" th:text="${url}">
+            Member portal
+        </a>
+        <span th:text="#{email.organization.moreInformation}">
+            for more information on how to manage your organization's information. If you have not yet activated your ORCID Member Portal account, check your email inbox for a separate message from
+        </span>
+        <a th:with="mail=(@{|${email}|})"
+           th:href="'mailto:' + ${mail}">
+           info@member-portal.orcid.org
+        </a>
+        <span th:text="#{email.organization.activationLink}">
+            with an activation link.
+        </span>
+    </p>
+
+    <p>
+        <span th:text="#{email.common.warmRegards}">Warm Regards,</span> <br />
+        <span th:text="#{email.common.signature}">The ORCID Member Portal Team</span> <br />
+        <a href="mailto:member@orcid.org">member@orcid.org</a>
+    </p>
+    <div th:insert="~{mail/common :: emailFooter}"></div>
+</div>
+</body>
+</html>
