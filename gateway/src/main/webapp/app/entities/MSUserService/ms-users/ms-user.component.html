@@ -47,7 +47,7 @@
                                 (click) = "switchUser(msUser.login)"
                                 replaceUrl="true"
                                 class="btn btn-primary btn-sm ml-1"
-                                [disabled]="isDefaultAdmin(msUser)"
+                                [disabled]="disableImpersonate(msUser)"
                             >
                             <fa-icon [icon]="'sign-in-alt'"></fa-icon>             
                         </button>

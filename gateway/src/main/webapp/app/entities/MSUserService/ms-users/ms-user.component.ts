@@ -34,7 +34,7 @@ export class MSUserComponent implements OnInit, OnDestroy {
 
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
-  DEFAULT_ADMIN = 'admin';
+  DEFAULT_ADMIN = 'admin@orcid.org';
 
   constructor(
     protected msUserService: MSUserService,
@@ -159,6 +159,16 @@ export class MSUserComponent implements OnInit, OnDestroy {
 
   isDefaultAdmin(msUser: IMSUser) {
     if (msUser.login === this.DEFAULT_ADMIN) {
+      return true;
+    }
+    return false;
+  }
+
+  disableImpersonate(msUser: IMSUser) {
+    if (msUser.login === this.DEFAULT_ADMIN) {
+      return true;
+    }
+    if (msUser.login === this.currentAccount.login) {
       return true;
     }
     return false;
