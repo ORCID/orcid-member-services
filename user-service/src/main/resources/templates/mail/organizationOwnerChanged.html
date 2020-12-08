@@ -41,7 +41,10 @@
         <span th:text="#{email.organization.moreInformation}">
             for more information on how to manage your organization's information. If you have not yet activated your ORCID Member Portal account, check your email inbox for a separate message from
         </span>
-        <a href="mailto:info@member-portal.dev.orcid.org">info@member-portal.dev.orcid.org</a>
+        <a th:with="mail=(@{|${email}|})"
+           th:href="'mailto:' + ${mail}">
+           info@member-portal.orcid.org
+        </a>
         <span th:text="#{email.organization.activationLink}">
             with an activation link.
         </span>
@@ -50,7 +53,7 @@
     <p>
         <span th:text="#{email.common.warmRegards}">Warm Regards,</span> <br />
         <span th:text="#{email.common.signature}">The ORCID Member Portal Team</span> <br />
-        <a href="mailto:2020-member-portal-pilot@orcid.org">2020-member-portal-pilot@orcid.org</a>
+        <a href="mailto:member@orcid.org">member@orcid.org</a>
     </p>
     <div th:insert="~{mail/common :: emailFooter}"></div>
 </div>
