@@ -129,7 +129,7 @@ public class MemberService {
             // what to do here? return member object with errors for ui?
             // something
             // consistent
-            throw new BadRequestAlertException("Invalid member", "member", null);
+            throw new BadRequestAlertException("Invalid member", "member", "clientidinvalid");
         }
 
         Instant now = Instant.now();
@@ -199,7 +199,7 @@ public class MemberService {
 
             for (MemberServiceUser user : usersBelongingToMember) {
                 LOG.warn("Deleting user: " + user.toString());
-                userService.deleteUserById(user.getId());
+                userService.deleteUserById(user.getId(), true);
             }
         }
         memberRepository.deleteById(id);

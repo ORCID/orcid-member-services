@@ -1,7 +1,9 @@
 package org.orcid.user.web.rest;
 
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -10,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.SecurityUtils;
+import org.orcid.user.security.UserNotActivatedException;
 import org.orcid.user.service.MailService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.PasswordChangeDTO;
@@ -42,6 +45,8 @@ public class AccountResource {
     }
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
+    
+    public static final String ROLE_PREVIOUS_ADMINISTRATOR = "ROLE_PREVIOUS_ADMINISTRATOR";
 
     protected final UserRepository userRepository;
 
@@ -98,9 +103,19 @@ public class AccountResource {
      */
     @GetMapping("/account")
     public UserDTO getAccount() {
-        return userService.getUserWithAuthorities()
-            .map(UserDTO::valueOf)
-            .orElseThrow(() -> new AccountResourceException("User could not be found"));
+        Optional<User> user = userService.getUserWithAuthorities();
+         if(user.isPresent()) {
+            UserDTO userDTO = UserDTO.valueOf(user.get());
+            if(!StringUtils.isAllBlank(userDTO.getLoginAs())) {
+                Optional<User> loginAsUser = userService.getUserWithAuthoritiesByLogin(userDTO.getLoginAs());
+                userDTO = UserDTO.valueOf(loginAsUser.get());
+                userDTO.setLoggedAs(true);
+              }  
+            return userDTO;   
+        }
+        else {
+            throw new AccountResourceException("User could not be found");
+        }
     }
 
     /**
@@ -155,5 +170,5 @@ public class AccountResource {
         return !StringUtils.isEmpty(password) &&
             password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
             password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
-    }
+    }   
 }

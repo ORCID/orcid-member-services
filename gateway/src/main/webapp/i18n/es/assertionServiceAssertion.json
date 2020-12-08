@@ -50,7 +50,9 @@
       "modified": "Modificado",
       "deletedFromORCID": "Eliminado de ORCID",
       "sent": "Enviado",
-      "adminId": "Admin Id"
+      "adminId": "Admin Id",
+      "updateNote": "Note: Please do not forget to download and send permission links to your researcher once the assertion has been saved.",
+      "uploadNote": "Note: Please do not forget to download and send permission links to your researchers once the upload has completed."
     },
     "assertion": {
       "firstName": "nombre",
