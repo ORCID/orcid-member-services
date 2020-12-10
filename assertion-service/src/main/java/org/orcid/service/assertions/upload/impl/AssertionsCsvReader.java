@@ -50,10 +50,10 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 
 	@Override
 	public AssertionsUpload readAssertionsUpload(InputStream inputStream) throws IOException {
-		
+
 		final Reader reader = new InputStreamReader(new BOMInputStream(inputStream), StandardCharsets.UTF_8);
 		final CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());
-		
+
 		AssertionsUpload upload = new AssertionsUpload();
 
 		try {
@@ -99,7 +99,13 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			assertionsUpload.addError(line.getRecordNumber(), "affiliation-section must not be null");
 			return a;
 		} else {
-			a.setAffiliationSection(AffiliationSection.valueOf(line.get("affiliation-section").toUpperCase()));
+            AffiliationSection affiliationSection;
+		    if ("INVITED-POSITION".equals(line.get("affiliation-section").toUpperCase())) {
+                affiliationSection = AffiliationSection.INVITED_POSITION;
+            } else {
+                affiliationSection = AffiliationSection.valueOf(line.get("affiliation-section").toUpperCase());
+            }
+			a.setAffiliationSection(affiliationSection);
 		}
 
 		a.setDepartmentName(getOptionalMandatoryNullable(line, "department-name"));
