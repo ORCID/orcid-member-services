@@ -127,8 +127,20 @@ public class OrcidRecordService {
         StringBuffer buffer = new StringBuffer();
         CSVPrinter csvPrinter = new CSVPrinter(buffer, CSVFormat.DEFAULT
                 .withHeader("email", "link"));
-        List<OrcidRecord> records =  orcidRecordRepository.findAllToInvite(assertionsUserService.getLoggedInUser().getSalesforceId());      
-        
+
+        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+        String salesForceId;
+        if(!StringUtils.isAllBlank(user.getLoginAs())) {
+            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
+            salesForceId = loginAsUser.getSalesforceId();
+        } else {
+            salesForceId = user.getSalesforceId();
+        }
+
+        List<OrcidRecord> records =  orcidRecordRepository.findAllToInvite(salesForceId);
+
+
+
         for(OrcidRecord record : records) {
             String email = record.getEmail();
             String encrypted = encryptUtil.encrypt(assertionsUserService.getLoggedInUser().getSalesforceId() + "&&" + email);

@@ -170,9 +170,7 @@ public class AssertionService {
         if(!StringUtils.isAllBlank(user.getLoginAs()))  {
             AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
             assertion.setSalesforceId(loginAsUser.getSalesforceId());
-        }
-        else
-        {
+        } else {
             assertion.setSalesforceId(user.getSalesforceId());
         }
 
@@ -180,7 +178,7 @@ public class AssertionService {
 
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(email);
         if (!optionalRecord.isPresent()) {
-            orcidRecordService.createOrcidRecord(email, now, user.getSalesforceId());
+            orcidRecordService.createOrcidRecord(email, now, assertion.getSalesforceId());
         }
         else {
             OrcidRecord record = optionalRecord.get();
@@ -192,7 +190,7 @@ public class AssertionService {
             }
             else {
                 for(OrcidToken token: tokens) {
-                    if(StringUtils.equals(token.getSalesforce_id().trim(), user.getSalesforceId().trim())) {
+                    if(StringUtils.equals(token.getSalesforce_id().trim(), assertion.getSalesforceId().trim())) {
                         createToken = false;
                         break;
                     }
@@ -200,7 +198,7 @@ public class AssertionService {
             }
           
             if(createToken) {
-                tokens.add(new OrcidToken(user.getSalesforceId(), null));
+                tokens.add(new OrcidToken(assertion.getSalesforceId(), null));
                 record.setTokens(tokens);
                 record.setModified(Instant.now());
                 orcidRecordService.updateOrcidRecord(record);
