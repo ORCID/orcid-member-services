@@ -204,5 +204,5 @@ application:
         clientId: APP-SE9G7D0UTUCQ8CNT # To overwrite it, export it as an env variable before running gradlew: 'export APPLICATION_TOKENEXCHANGE_CLIENTID=<client id>'
         clientSecret: 01fce1c8-b1db-47d4-a4f2-97e3dfade9fa # Export it as an env variable before running gradlew: 'export APPLICATION_TOKENEXCHANGE_CLIENTSECRET=<client secret>'
     cron:        
-        postAffiliations: 180000
-        putAffiliations: 180000
+        postAffiliations: 60000
+        putAffiliations: 60000
