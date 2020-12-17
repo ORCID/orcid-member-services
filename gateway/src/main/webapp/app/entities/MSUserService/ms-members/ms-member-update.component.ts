@@ -39,14 +39,26 @@ function parentSalesforceIdConditionallyRequiredValidator(): ValidatorFn {
 
 function clientIdValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
-    if (control.value !== undefined && isNaN(control.value)) {
-      var clientIdValue = control.value;
+    if (control.parent !== undefined && control.value !== undefined && isNaN(control.value)) {
+      const clientIdValue = control.value;
+      const isConsortiumLead = control.parent.get('isConsortiumLead').value;
+      if (!isConsortiumLead && clientIdValue === '') {
+        return Validators.required(control.parent.get('clientId'));
+      }
+      if (isConsortiumLead && (!clientIdValue || clientIdValue === '')) {
+        return null;
+      }
       if (clientIdValue.startsWith('APP-') && clientIdValue.match(/APP-[A-Z0-9]{16}$/)) {
         return null;
       } else if (clientIdValue.match(/[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
         return null;
       }
       return { validClientId: false };
+    }
+    if (control.parent !== undefined) {
+      if (control.parent.get('isConsortiumLead').value) {
+        return null;
+      }
     }
     return { validClientId: false };
   };
@@ -62,7 +74,7 @@ export class MSMemberUpdateComponent implements OnInit {
   isSaving: boolean;
   editForm = this.fb.group({
     id: [],
-    clientId: new FormControl(null, [Validators.required, clientIdValidator()]),
+    clientId: new FormControl(null, [clientIdValidator()]),
     clientName: [null, [Validators.required]],
     salesforceId: [null, [Validators.required]],
     parentSalesforceId: [null, [Validators.required, parentSalesforceIdConditionallyRequiredValidator()]],
@@ -87,8 +99,24 @@ export class MSMemberUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ msMember }) => {
       this.updateForm(msMember);
     });
+
+    this.onChanges();
+  }
+
+  onChanges(): void {
     this.editForm.get('isConsortiumLead').valueChanges.subscribe(value => {
       this.editForm.get('parentSalesforceId').updateValueAndValidity();
+      this.editForm.get('clientId').markAsTouched();
+      this.editForm.get('clientId').updateValueAndValidity();
+    });
+
+    this.editForm.get('clientId').valueChanges.subscribe(value => {
+      if (!value || (value && value === '')) {
+        this.editForm.get('assertionServiceEnabled').reset();
+        this.editForm.get('assertionServiceEnabled').disable();
+      } else {
+        this.editForm.get('assertionServiceEnabled').enable();
+      }
     });
   }
 
