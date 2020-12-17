@@ -145,10 +145,7 @@ export class AccountService {
   }
 
   isLoggedAs(): boolean {
-    if (this.isIdentityResolved() && this.userIdentity && this.userIdentity.loggedAs) {
-      return true;
-    }
-    return false;
+    return !!(this.isIdentityResolved() && this.userIdentity && this.userIdentity.loggedAs);
   }
 
   logoutAs(): Observable<any> {
