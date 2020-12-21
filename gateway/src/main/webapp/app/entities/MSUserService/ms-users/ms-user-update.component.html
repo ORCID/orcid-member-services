@@ -53,14 +53,20 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="checkbox" class="form-control" name="mainContact" id="field_mainContact"
-                           formControlName="mainContact"/>
+                    <input
+                        type="checkbox"
+                        class="form-control"
+                        name="mainContact"
+                        id="field_mainContact"
+                        formControlName="mainContact"
+                        (change)="hasOwnerValidation()"
+                    />
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.mainContact" for="field_mainContact">Main Contact</label>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId" for="field_salesforceId">Salesforce Id</label>
                     <fieldset [disabled]="disableSalesForceIdDD()">
-                    <select  *ngIf="membersList.length  > 0"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId">
+                    <select  *ngIf="membersList.length  > 0"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId" (change)="hasOwnerValidation()">
                       <option *ngFor="let member of membersList" [ngValue]="member.salesforceId">{{member.clientName}}</option>
                     </select>
                     </fieldset>
@@ -99,7 +105,8 @@
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
 
-                <button *ngIf="(editForm.get('mainContact').touched && editForm.get('mainContact').value && hasOwner(editForm.get('salesforceId').value)) else regular"
+                <button
+                    *ngIf="hasOwner"
                     jhi-ownershipChange
                     (then)="save()"
                     (else)="false"
@@ -109,16 +116,15 @@
                     class="btn btn-primary">
                      <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
                 </button>
-                <ng-template #regular >
-                  <button
-                    (click)="save()"
-                    type="submit"
-                    id="save-entity"
-                    [disabled]="editForm.invalid || isSaving || membersList.length === 0"
-                    class="btn btn-primary">
-                     <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-                  </button>
-                </ng-template>
+                <button
+                  *ngIf="!hasOwner"
+                  (click)="save()"
+                  type="submit"
+                  id="save-entity2"
+                  [disabled]="editForm.invalid || isSaving || membersList.length === 0"
+                  class="btn btn-primary">
+                   <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
                 <button *ngIf="!editForm.get('activated').value && editForm.get('login')" type="button"
                                 (click)="sendActivate()"
                                 class="btn btn-primary btn-sm ml-1">
