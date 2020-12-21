@@ -189,7 +189,7 @@ public class UserCsvReader implements UserUploadReader {
     }
 
     public HashMap<String, String> getOrganizationsWithOwner() {
-        List<User> users = userRepository.findAllByMainContactIsTrue();
+        List<User> users = userRepository.findAllByMainContactIsTrueAndDeletedIsFalse();
         HashMap<String, String> withOwners = new HashMap<String, String>();
         for (User user : users) {
             if (user.getMainContact()) {
