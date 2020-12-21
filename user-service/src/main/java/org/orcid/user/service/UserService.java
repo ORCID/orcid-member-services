@@ -396,12 +396,12 @@ public class UserService {
     }
 
     public List<UserDTO> getAllUsersBySalesforceId(String salesforceId) {
-        List<User> users = userRepository.findBySalesforceId(salesforceId);
+        List<User> users = userRepository.findBySalesforceIdAndDeletedIsFalse(salesforceId);
         return users.stream().map(UserDTO::valueOf).collect(Collectors.toList());
     }
 
     public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId) {
-        return userRepository.findBySalesforceId(pageable, salesforceId).map(UserDTO::valueOf);
+        return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId).map(UserDTO::valueOf);
 
     }
 

@@ -400,7 +400,7 @@ public class UserResource {
             if(user.get().getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.equals(AuthoritiesConstants.ADMIN))) {
                 //check if it is last admin
-                if(userRepository.findAllByAuthorities(AuthoritiesConstants.ADMIN).size() <= 1 )  {
+                if(userRepository.findAllByAuthoritiesAndDeletedIsFalse(AuthoritiesConstants.ADMIN).size() <= 1 )  {
                     throw new BadRequestAlertException("Cannot delete last admin", "User", "delete.last.admin");
                 }
             }     
