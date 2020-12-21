@@ -36,15 +36,15 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);
     
-    List<User> findBySalesforceId(String salesforceId);
+    List<User> findBySalesforceIdAndDeletedIsFalse(String salesforceId);
     
-    Page<User> findBySalesforceId(Pageable pageable, String salesforceId);
+    Page<User> findBySalesforceIdAndDeletedIsFalse(Pageable pageable, String salesforceId);
     
     Page<User> findByDeletedFalse(Pageable pageable);
     
     Optional<User> findOneByMainContactIsTrueAndSalesforceId(String salesforceId);
     
-    List<User> findAllByMainContactIsTrue();
+    List<User> findAllByMainContactIsTrueAndDeletedIsFalse();
     
-    List<User> findAllByAuthorities(String role);
+    List<User> findAllByAuthoritiesAndDeletedIsFalse(String role);
 }
