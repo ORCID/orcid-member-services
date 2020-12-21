@@ -21,6 +21,17 @@ public class MemberServiceMember {
 	    
 	    @Field("superadmin_enabled")
 	    private Boolean superadminEnabled;
+	    
+	    @Field("is_consortium_lead")
+	    private Boolean isConsortiumLead;
+
+		public Boolean getIsConsortiumLead() {
+			return isConsortiumLead;
+		}
+
+		public void setIsConsortiumLead(Boolean isConsortiumLead) {
+			this.isConsortiumLead = isConsortiumLead;
+		}
 
 		public String getClientId() {
 			return clientId;
