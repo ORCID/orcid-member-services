@@ -11,6 +11,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.orcid.member.domain.Member;
 import org.orcid.member.service.MemberService;
 import org.orcid.member.upload.MemberUpload;
+import org.orcid.member.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,7 +135,12 @@ public class MemberResource {
 	public ResponseEntity<Member> updateMember(@Valid @RequestBody Member member)
 			throws URISyntaxException, JSONException {
 		LOG.debug("REST request to update Member : {}", member);
+		Optional<Member> existentMember = memberService.getMember(member.getId());
+		if (!existentMember.isPresent()) {
+			throw new BadRequestAlertException("Invalid id", "member", "idunavailable");
+		}
 		member = memberService.updateMember(member);
+		memberService.updateUsersOnConsortiumLeadChange(member, existentMember.get());
 		return ResponseEntity.ok()
 				.headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "member", member.getId().toString()))
 				.body(member);

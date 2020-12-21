@@ -407,10 +407,15 @@ public class UserService {
 
     private Set<String> getAuthoritiesForUser(UserDTO userDTO, boolean isAdmin) {
         Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
-        if (!org.apache.commons.lang3.StringUtils.isBlank(userDTO.getSalesforceId())
-                && memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(userDTO.getSalesforceId())) {
-            authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
+         if (!org.apache.commons.lang3.StringUtils.isBlank(userDTO.getSalesforceId())) {
+            if(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(userDTO.getSalesforceId())) {
+            	authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
+            }         
+            if(memberService.memberIsConsortiumLead (userDTO.getSalesforceId())) {
+              	authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
+            }
         }
+       
         if (userDTO.getMainContact() != null) {
             if (userDTO.getMainContact()) {
                 authorities.add(AuthoritiesConstants.ORG_OWNER);

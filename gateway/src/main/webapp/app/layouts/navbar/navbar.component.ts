@@ -79,6 +79,10 @@ export class NavbarComponent implements OnInit {
     return this.accountService.isOrganizationOwner();
   }
 
+  hasRoleConsortiumLead() {
+    return this.accountService.hasAuthority('ROLE_CONSORTIUM_LEAD');
+  }
+
   hasRoleUser() {
     return this.accountService.hasAuthority('ROLE_USER');
   }
