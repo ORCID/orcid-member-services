@@ -40,7 +40,10 @@
                         [translateValues]="{clientName: clientName}">You have successfully granted {{clientName}} permission to update your ORCID record,
                             and your record will be with affiliation information shortly.
                         </p>
-                        <p>
+                        
+                        <div id="hideMe"><div class="progress-line"></div></div>
+
+                        <p id="showMe">
                             <img class="id-icon" src="/content/images/orcid-icon.svg" width="16" height="16"/>
                             <a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{signedInIdToken.sub}}</a>
                         </p>

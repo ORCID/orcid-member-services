@@ -27,10 +27,10 @@ a {
 }
 
 pre {
-  white-space: pre-wrap;       /* css-3 */
-  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-  white-space: -pre-wrap;      /* Opera 4-6 */
-  white-space: -o-pre-wrap;    /* Opera 7 */
+  white-space: pre-wrap; /* css-3 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
   word-wrap: break-word;
 }
 
@@ -221,7 +221,7 @@ input.form-control[type='file'] {
 ORCID global styles
 ========================================================================== */
 .note {
-  font-size: .8em;
+  font-size: 0.8em;
   line-height: normal;
   font-style: italic;
 }
@@ -233,7 +233,7 @@ ORCID global styles
   padding: 2em;
 }
 .id-icon {
-  margin: 0 .1em .2em 0;
+  margin: 0 0.1em 0.2em 0;
 }
 
 .errorMessage {
@@ -249,6 +249,112 @@ ORCID global styles
 }
 
 @keyframes progress-indeterminate {
-  from { left: -25%; width: 25%; }
-  to { left: 100%; width: 25%;}
+  from {
+    left: -25%;
+    width: 25%;
+  }
+  to {
+    left: 100%;
+    width: 25%;
+  }
+}
+
+#hideMe {
+  -webkit-animation: cssAnimationHide 60s forwards;
+  animation: cssAnimationHide 60s forwards;
+}
+@keyframes cssAnimationHide {
+  0% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes cssAnimationHide {
+  0% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#showMe {
+  -webkit-animation: cssAnimationShow 60s forwards;
+  animation: cssAnimationShow 60s forwards;
+}
+@keyframes cssAnimationShow {
+  0% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes cssAnimationShow {
+  0% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.progress-line,
+.progress-line:before {
+  height: 3px;
+  width: 100%;
+  margin: 0;
+}
+.progress-line {
+  background-color: #2bbe18;
+  display: -webkit-flex;
+  display: flex;
+}
+.progress-line:before {
+  background-color: #1f7a14;
+  content: '';
+  -webkit-animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@-webkit-keyframes running-progress {
+  0% {
+    margin-left: 0px;
+    margin-right: 100%;
+  }
+  50% {
+    margin-left: 25%;
+    margin-right: 0%;
+  }
+  100% {
+    margin-left: 100%;
+    margin-right: 0;
+  }
+}
+@keyframes running-progress {
+  0% {
+    margin-left: 0px;
+    margin-right: 100%;
+  }
+  50% {
+    margin-left: 25%;
+    margin-right: 0%;
+  }
+  100% {
+    margin-left: 100%;
+    margin-right: 0;
+  }
 }
