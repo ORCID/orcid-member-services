@@ -44,6 +44,7 @@ export class MSUserUpdateComponent implements OnInit {
   });
 
   membersList = [] as IMSMember[];
+  hasOwner = false;
 
   constructor(
     protected jhiAlertService: JhiAlertService,
@@ -84,13 +85,9 @@ export class MSUserUpdateComponent implements OnInit {
     this.editForm.get('salesforceId').valueChanges.subscribe(val => {
       console.log('on changing sales force id');
       const selectedOrg = this.membersList.find(cm => cm.salesforceId === this.editForm.get(['salesforceId']).value);
-      if (this.hasRoleAdmin() === true) {
+      if (this.hasRoleAdmin()) {
         if (selectedOrg) {
-          if (selectedOrg.superadminEnabled) {
-            this.showIsAdminCheckbox = true;
-          } else {
-            this.showIsAdminCheckbox = false;
-          }
+          this.showIsAdminCheckbox = selectedOrg.superadminEnabled;
         } else {
           this.showIsAdminCheckbox = false;
         }
@@ -147,8 +144,16 @@ export class MSUserUpdateComponent implements OnInit {
     return this.accountService.hasAnyAuthority(['ROLE_ADMIN']);
   }
 
-  hasOwner(salesforceId: string) {
-    return this.msUserService.hasOwner(salesforceId);
+  hasOwnerValidation() {
+    this.isSaving = true;
+    this.msUserService.hasOwner(this.editForm.get('salesforceId').value).subscribe(value => {
+      this.isSaving = false;
+      if (!this.editForm.get('mainContact').value) {
+        this.hasOwner = false;
+      } else {
+        this.hasOwner = value;
+      }
+    });
   }
 
   save() {
