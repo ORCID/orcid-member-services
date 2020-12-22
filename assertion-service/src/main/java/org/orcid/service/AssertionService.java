@@ -363,10 +363,7 @@ public class AssertionService {
                 LOG.error("Error with assertion " + assertion.getId(), e);
                 storeError(assertion.getId(), 0, e.getMessage());
             }
-
-            if (orcid != null && !getAssertionStatus(assertion).equals(AssertionStatus.IN_ORCID.value)) {
-                removeOrcidIdFromOrcidRecord(record);
-            }
+             
         }
     }
 
