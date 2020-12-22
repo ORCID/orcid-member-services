@@ -79,6 +79,7 @@ public class UserCsvReader implements UserUploadReader {
                 throw new RuntimeException(e);
             }
         }
+        upload.setOrgWithOwner(this.orgWithOwner);
         return upload;
     }
 
@@ -91,6 +92,9 @@ public class UserCsvReader implements UserUploadReader {
             } else {
                 UserDTO userDTO = getUserDTO(element, now, createdBy);
                 upload.getUserDTOs().add(userDTO);
+                if (!this.orgWithOwner.containsKey(userDTO.getSalesforceId())) {
+                	userDTO.setMainContact(true);
+                }
                 if (userDTO.getMainContact()) {
                     this.orgWithOwner.put(userDTO.getSalesforceId(), userDTO.getEmail());
                 }
