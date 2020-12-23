@@ -80,11 +80,11 @@ export class NavbarComponent implements OnInit {
   }
 
   hasRoleConsortiumLead() {
-    return this.accountService.hasAuthority('ROLE_CONSORTIUM_LEAD');
+    return this.accountService.hasAnyAuthority(['ROLE_CONSORTIUM_LEAD']);
   }
 
   hasRoleUser() {
-    return this.accountService.hasAuthority('ROLE_USER');
+    return this.accountService.hasAnyAuthority(['ROLE_USER']);
   }
 
   hasRoleAdmin() {
