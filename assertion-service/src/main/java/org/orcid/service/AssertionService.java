@@ -364,9 +364,6 @@ public class AssertionService {
                 storeError(assertion.getId(), 0, e.getMessage());
             }
 
-            if (orcid != null && !getAssertionStatus(assertion).equals(AssertionStatus.IN_ORCID.value)) {
-                removeOrcidIdFromOrcidRecord(record);
-            }
         }
     }
 
@@ -496,7 +493,7 @@ public class AssertionService {
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(assertion.getEmail());
         if (optionalRecord.isPresent()) {
             OrcidRecord record = optionalRecord.get();
-            return !StringUtils.isBlank(record.getToken(assertion.getSalesforceId())) ? record.getOrcid() : null;
+            return record.getOrcid();
         }
         return null;
     }
@@ -553,12 +550,6 @@ public class AssertionService {
 
     public List<Assertion> getAssertionsBySalesforceId(String salesforceId) {
         return assertionsRepository.findBySalesforceId(salesforceId);
-    }
-
-    private void removeOrcidIdFromOrcidRecord(OrcidRecord orcidRecord) {
-        orcidRecord.setOrcid(null);
-        orcidRecord.setModified(Instant.now());
-        orcidRecordService.updateOrcidRecord(orcidRecord);
     }
 
 }
