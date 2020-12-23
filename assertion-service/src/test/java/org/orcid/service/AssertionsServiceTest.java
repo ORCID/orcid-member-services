@@ -171,7 +171,7 @@ class AssertionsServiceTest {
 		b = assertionsService.createOrUpdateAssertion(b);
 		assertNotNull(b.getStatus());
 		Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(b));
-		assertNull(b.getOrcidId());
+        assertNotNull(b.getOrcidId());
 	}
 
 	@Test
