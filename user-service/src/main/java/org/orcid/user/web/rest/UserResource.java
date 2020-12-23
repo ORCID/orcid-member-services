@@ -288,8 +288,8 @@ public class UserResource {
         String createdBy = SecurityUtils.getAuthenticatedUser();
         //change the auth if the logged in user is org owner and this is set as mainContact
         boolean owner = userDTO.getMainContact();
+        Optional<User> existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
         if (owner) {
-            Optional<User> existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
             
             if(existingUser.isPresent()) {
                 if(!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
@@ -297,7 +297,12 @@ public class UserResource {
                 }
                 userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
             }
-            userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
+        }
+        else {
+        	if(! existingUser.isPresent()) {
+        	userDTO.setMainContact(true);
+        	userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
+        	}
         }
         
         Instant now = Instant.now();

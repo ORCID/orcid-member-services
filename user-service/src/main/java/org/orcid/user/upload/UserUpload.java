@@ -1,7 +1,9 @@
 package org.orcid.user.upload;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -13,6 +15,7 @@ public class UserUpload {
 	List<UserDTO> userDTOs = new ArrayList<>();
 	
 	JSONArray errors = new JSONArray();
+	private Map<String, String> orgWithOwner = new HashMap<String, String>();
 	
 	public void addUserDTO(UserDTO userDTO) {
 		userDTOs.add(userDTO);
@@ -35,6 +38,14 @@ public class UserUpload {
 
 	public JSONArray getErrors() {
 		return errors;
+	}
+	
+	public void setOrgWithOwner(Map<String, String> orgWithOwner) {
+		this.orgWithOwner = orgWithOwner;
+	}
+	
+	public Map<String, String> getOrgWithOwner() {
+		return this.orgWithOwner;
 	}
 
 }
