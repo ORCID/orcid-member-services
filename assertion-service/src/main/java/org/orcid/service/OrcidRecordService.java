@@ -143,7 +143,7 @@ public class OrcidRecordService {
 
         for(OrcidRecord record : records) {
             String email = record.getEmail();
-            String encrypted = encryptUtil.encrypt(assertionsUserService.getLoggedInUser().getSalesforceId() + "&&" + email);
+            String encrypted = encryptUtil.encrypt(salesForceId + "&&" + email);
             String link = landingPageUrl + "?state=" + encrypted;
             csvPrinter.printRecord(email, link);
         }
