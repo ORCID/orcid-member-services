@@ -418,9 +418,17 @@ public class AssertionService {
 
     public boolean deleteAssertionFromOrcid(String assertionId) throws JSONException, JAXBException {
         Assertion assertion = assertionsRepository.findById(assertionId).orElseThrow(() -> new IllegalArgumentException("Invalid assertion id"));
-        String salesforceId = assertionsUserService.getLoggedInUser().getSalesforceId();
+        
+        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+        String salesForceId;
+        if(!StringUtils.isAllBlank(user.getLoginAs())) {
+            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
+            salesForceId = loginAsUser.getSalesforceId();
+        } else {
+            salesForceId = user.getSalesforceId();
+        }
 
-        if (!salesforceId.equals(assertion.getSalesforceId())) {
+        if (!salesForceId.equals(assertion.getSalesforceId())) {
             throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
         }
 
