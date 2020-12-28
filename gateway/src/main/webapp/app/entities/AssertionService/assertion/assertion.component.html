@@ -51,7 +51,7 @@
             <tbody>
             <tr *ngFor="let assertion of assertions ;trackBy: trackId">
                 <td>{{assertion.email}}</td>
-                <td><span *ngIf="assertion.orcidId"><a href="{{orcidBaseUrl}}/{{assertion.orcidId}}">{{orcidBaseUrl}}/{{assertion.orcidId}}</a></span></td>
+                <td><span *ngIf="assertion.orcidId"><a href="{{orcidBaseUrl}}/{{assertion.orcidId}}" target="_blank">{{orcidBaseUrl}}/{{assertion.orcidId}}</a></span></td>
                 <td>
                     <span jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.affiliationSection}}">{{assertion.affiliationSection}}</span><br>
                     {{assertion.orgName}}: <span *ngIf="assertion.orgCity">{{assertion.orgCity}}</span><span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCountry">, {{assertion.orgCountry}}</span><br>
