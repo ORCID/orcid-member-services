@@ -1,10 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
-import { faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
 import { AccountService } from 'app/core';
@@ -18,7 +17,7 @@ import { MSUserService } from './ms-user.service';
   templateUrl: './ms-user.component.html'
 })
 export class MSUserComponent implements OnInit, OnDestroy {
-  currentAccount: any;
+  currentAccount: IMSUser;
   msUser: IMSUser[];
   error: any;
   success: any;
@@ -151,27 +150,22 @@ export class MSUserComponent implements OnInit, OnDestroy {
     if (msUser.mainContact) {
       return true;
     }
-    if (msUser.login === this.currentAccount.login) {
-      return true;
-    }
-    return false;
+    return msUser.login === this.currentAccount.login;
   }
 
   isDefaultAdmin(msUser: IMSUser) {
-    if (msUser.login === this.DEFAULT_ADMIN) {
-      return true;
-    }
-    return false;
+    return msUser.login === this.DEFAULT_ADMIN;
+  }
+
+  isUserLoggedIn(msUser: IMSUser) {
+    return msUser.login === this.currentAccount.login;
   }
 
   disableImpersonate(msUser: IMSUser) {
     if (msUser.login === this.DEFAULT_ADMIN) {
       return true;
     }
-    if (msUser.login === this.currentAccount.login) {
-      return true;
-    }
-    return false;
+    return msUser.login === this.currentAccount.login;
   }
 
   hasRoleAdmin() {

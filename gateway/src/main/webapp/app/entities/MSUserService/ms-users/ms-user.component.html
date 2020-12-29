@@ -42,14 +42,14 @@
             </thead>
             <tbody>
             <tr *ngFor="let msUser of msUser ;trackBy: trackId">
-                <td> 
+                <td>
                 <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit"
                                 (click) = "switchUser(msUser.login)"
                                 replaceUrl="true"
                                 class="btn btn-primary btn-sm ml-1"
                                 [disabled]="disableImpersonate(msUser)"
                             >
-                            <fa-icon [icon]="'sign-in-alt'"></fa-icon>             
+                            <fa-icon [icon]="'sign-in-alt'"></fa-icon>
                         </button>
                 </td>
                 <td><a [routerLink]="['/ms-user', msUser.id, 'view' ]">{{msUser.login}}</a></td>
@@ -80,7 +80,7 @@
                         >
                             <fa-icon [icon]="faCheckCircle"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.activate">Activate</span>
-                        </button> 
+                        </button>
                         <button type="submit"
                                 [routerLink]="['/ms-user', msUser.id, 'edit']"
                                 class="btn btn-primary btn-sm ml-1"
@@ -94,7 +94,7 @@
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm ml-1"
-                                [disabled]="isDefaultAdmin(msUser)"
+                                [disabled]="isDefaultAdmin(msUser) || isUserLoggedIn(msUser)"
                             >
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>

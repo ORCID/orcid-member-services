@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, Validators, FormGroup, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
+import { HttpResponse } from '@angular/common/http';
+import { AbstractControl, FormBuilder, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { IMSMember, MSMember } from 'app/shared/model/MSUserService/ms-member.model';
 import { MSMemberService } from './ms-member.service';
-import { AccountService, Account } from 'app/core';
+import { AccountService } from 'app/core';
 import { BASE_URL, ORCID_BASE_URL } from 'app/app.constants';
+import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
 
 function consortiumLeadValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
@@ -95,7 +96,7 @@ export class MSMemberUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.isSaving = false;
-    this.accountService.identity().then((account: Account) => {});
+    this.accountService.identity().then((account: IMSUser) => {});
     this.activatedRoute.data.subscribe(({ msMember }) => {
       this.updateForm(msMember);
     });
