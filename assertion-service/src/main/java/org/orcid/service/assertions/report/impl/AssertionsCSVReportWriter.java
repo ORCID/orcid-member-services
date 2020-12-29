@@ -38,8 +38,16 @@ public class AssertionsCSVReportWriter implements AssertionsReportWriter {
 
 	@Override
 	public String writeAssertionsReport() throws IOException {
-		String salesforceId = assertionsUserService.getLoggedInUser().getSalesforceId();
-		List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, this.SORT);
+		String salesForceId;
+		
+		AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+        if(!StringUtils.isAllBlank(user.getLoginAs())) {
+            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
+            salesForceId = loginAsUser.getSalesforceId();
+        } else {
+            salesForceId = user.getSalesforceId();
+        }
+		List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesForceId, this.SORT);
 
 		StringBuffer buffer = new StringBuffer();
 		CSVPrinter csvPrinter = new CSVPrinter(buffer,
