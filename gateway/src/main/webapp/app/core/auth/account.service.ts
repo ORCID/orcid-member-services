@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
-import { HttpClient, HttpResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/user/account.model';
+import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -59,7 +60,7 @@ export class AccountService {
     );
   }
 
-  identity(force?: boolean): Promise<Account> {
+  identity(force?: boolean): Promise<IMSUser> {
     if (force) {
       this.userIdentity = undefined;
     }
