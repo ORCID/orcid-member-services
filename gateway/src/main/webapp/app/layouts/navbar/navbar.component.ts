@@ -136,8 +136,14 @@ export class NavbarComponent implements OnInit {
     this.organizationName = null;
     this.memberCallDone = false;
     this.userName = null;
-    this.loginService.logout();
-    this.router.navigate(['']);
+    if (this.isLoggedAs()) {
+      this.accountService.logoutAs().subscribe(() => {
+        window.location.href = SERVER_API_URL;
+      });
+    } else {
+      this.loginService.logout();
+      this.router.navigate(['']);
+    }
   }
 
   logoutAs() {
