@@ -130,25 +130,29 @@ public class UserResource {
 	    //return ResponseEntity.badRequest().body(userDTO);
             throw new BadRequestAlertException("Admin users cannot be associated with this member", "user", "member.no.admin.allowed");
 	}
-        
+
         //change the auth if the logged in user is org owner and this is set as mainContact
         Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
-		if (userDTO.getMainContact() != null) {
-        	if(userDTO.getMainContact())
-	        {
+        boolean owner = userDTO.getMainContact();
+        if (owner) {
 
-	            existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
+            existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
 
-	            if(existingUser.isPresent()) {
-	                    if(!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
-	                        userService.removeOwnershipFromUser(existingUser.get().getLogin());
-	                    }
-	                    userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
-	            }
-	        }
-	    }
-        
+            if (existingUser.isPresent()) {
+                if (!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
+                    userService.removeOwnershipFromUser(existingUser.get().getLogin());
+                }
+                userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
+            }
+        }
+
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
+
+        if (owner) {
+            String member = memberService.memberNameBySalesforce(updatedUser.get().getSalesforceId());
+            mailService.sendOrganizationOwnerChangedMail(updatedUser.get().toUser(), member);
+        }
+
         return ResponseUtil.wrapOrNotFound(updatedUser, HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", userDTO.getLogin()));
     }
 
@@ -192,7 +196,7 @@ public class UserResource {
     /**
      * {@code GET /users/salesforce/:salesforceId/p} : get users by salesforce
      * id.
-     * 
+     *
      * @param salesforceId
      *            the salesforce id for the organization.
      * @param queryParams
@@ -290,7 +294,7 @@ public class UserResource {
         boolean owner = userDTO.getMainContact();
         Optional<User> existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
         if (owner) {
-            
+
             if(existingUser.isPresent()) {
                 if(!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
                     userService.removeOwnershipFromUser(existingUser.get().getLogin());
@@ -304,7 +308,7 @@ public class UserResource {
         	userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
         	}
         }
-        
+
         Instant now = Instant.now();
         userDTO.setCreatedBy(createdBy);
         userDTO.setCreatedDate(now);
@@ -322,7 +326,7 @@ public class UserResource {
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, "user", newUser.getLogin())).body(UserDTO.valueOf(newUser));
 
     }
-    
+
 	private boolean validate(UserDTO user) {
 		boolean isOk = true;
 		if (StringUtils.isBlank(user.getLogin())) {
@@ -338,7 +342,7 @@ public class UserResource {
 			if(!userService.memberSuperadminEnabled(user.getSalesforceId())) {
 				isOk = false;
 				user.setSalesforceIdError("Admin users cannot be associated with this member");
-			}	
+			}
 		}
 		Optional<User> existing = userRepository.findOneByLogin(user.getLogin().toLowerCase());
 		if (existing.isPresent() && !existing.get().getDeleted()) {
@@ -353,10 +357,10 @@ public class UserResource {
         if (new EmailValidator().isValid(user.getEmail(), null)) {
             user.setEmailError("Email is invalid!");
         }
-        
+
         //change the auth if the logged in user is org owner and this is set as mainContact
         Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
-        if(authUser.isPresent() && !StringUtils.equals(authUser.get().getId(), user.getId()) && user.getMainContact() && SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER) ) 
+        if(authUser.isPresent() && !StringUtils.equals(authUser.get().getId(), user.getId()) && user.getMainContact() && SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER) )
         {
             userService.removeAuthorityFromUser(authUser.get().getId(), AuthoritiesConstants.ORG_OWNER);
         }
@@ -368,14 +372,14 @@ public class UserResource {
         }
         return isOk;
     }
-	
+
 	private boolean validateExistingUser(UserDTO user) {
 		boolean isOk = true;
 		if (user.getIsAdmin() == true && !StringUtils.isBlank(user.getSalesforceId())) {
 			if(!userService.memberSuperadminEnabled(user.getSalesforceId())) {
 				isOk = false;
 				user.setSalesforceIdError("Admin users cannot be associated with this member");
-			}	
+			}
 		}
 		return isOk;
 	}
@@ -408,7 +412,7 @@ public class UserResource {
                 if(userRepository.findAllByAuthoritiesAndDeletedIsFalse(AuthoritiesConstants.ADMIN).size() <= 1 )  {
                     throw new BadRequestAlertException("Cannot delete last admin", "User", "delete.last.admin");
                 }
-            }     
+            }
         }
         userService.clearUser(jhiUserId);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, "user", jhiUserId)).build();
@@ -446,7 +450,7 @@ public class UserResource {
         if (!user.isPresent()) {
             user = userService.getUserWithAuthorities(loginOrId);
         }
-    
+
         userService.sendActivationEmail(user.get().getEmail());
         return ResponseUtil.wrapOrNotFound(user.map(UserDTO::valueOf));
     }
@@ -473,7 +477,7 @@ public class UserResource {
         }
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", salesforceId)).build();
     }
-    
+
 
     /**
      * {@code GET /users/:saleforceId}/owner : get the "login" user.
@@ -489,10 +493,10 @@ public class UserResource {
         Optional<User> user = userService.getOwnerBySalesforceId(salesforceId);
         return user.isPresent();
     }
-    
-    
+
+
     /**
-     * {@code POST /switch_user} : Switch user 
+     * {@code POST /switch_user} : Switch user
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
      */
@@ -511,10 +515,10 @@ public class UserResource {
                 .location(URI.create("/"))
                 .build();
     }
-    
-    
+
+
     /**
-     * {@code POST /logout_as} : Switch user 
+     * {@code POST /logout_as} : Switch user
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
      */
@@ -527,7 +531,7 @@ public class UserResource {
             userDTO.setLoginAs(null);
             userService.updateUser(userDTO);
         }
-        
+
        return ResponseEntity.status(HttpStatus.FOUND)
         .location(URI.create("/"))
         .build();
