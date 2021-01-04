@@ -10,14 +10,14 @@
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.import.filePath" for="field_filePath">File Path</label>
             <input type="file" class="form-control" name="filePath" id="field_filePath" accept=".csv"
-                (change)="selectFile($event)"/>
+                   onclick="this.value=null" (change)="selectFile($event)"/>
         </div>
         <p><em><span jhiTranslate="gatewayApp.assertionServiceAssertion.uploadNote">Please do not forget to download and send permission links to your researchers once the upload has completed.</span></em></p>
     </div>
     <div *ngIf="loading" class="progress progress-striped">
         <div class="progress-bar indeterminate" role="progressbar"></div>
     </div>
-                         
+
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
