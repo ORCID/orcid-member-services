@@ -8,9 +8,9 @@ import { JhiEventManager } from 'ng-jhipster';
 import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 import { AssertionService } from './assertion.service';
 
-import { FileUploadService } from '../../../shared/fileUpload/fileUpload.service';
+import { FileUploadService } from 'app/shared/fileUpload/fileUpload.service';
 
-import { SERVER_API_URL } from 'app/app.constants';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'jhi-assertions-import-dialog',
@@ -29,7 +29,8 @@ export class AssertionImportDialogComponent {
     protected assertionService: AssertionService,
     public activeModal: NgbActiveModal,
     protected eventManager: JhiEventManager,
-    private uploadService: FileUploadService
+    private uploadService: FileUploadService,
+    protected translate: TranslateService
   ) {
     this.isSaving = false;
     this.resourceUrl = this.assertionService.resourceUrl + '/upload';
@@ -45,22 +46,26 @@ export class AssertionImportDialogComponent {
   }
 
   upload() {
-    this.loading = true;
-    const f = this.currentFile.item(0);
-    this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
-      if (event instanceof HttpResponse) {
-        const body = event.body;
-        this.csvErrors = JSON.parse(body.toString());
-        this.loading = false;
-        if (this.csvErrors.length === 0) {
-          this.eventManager.broadcast({
-            name: 'assertionListModification',
-            content: 'New assertions uploaded'
-          });
-          this.activeModal.dismiss(true);
+    if (this.currentFile) {
+      this.loading = true;
+      const f = this.currentFile.item(0);
+      this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
+        if (event instanceof HttpResponse) {
+          const body = event.body;
+          this.csvErrors = JSON.parse(body.toString());
+          this.loading = false;
+          if (this.csvErrors.length === 0) {
+            this.eventManager.broadcast({
+              name: 'assertionListModification',
+              content: 'New assertions uploaded'
+            });
+            this.activeModal.dismiss(true);
+          }
         }
-      }
-    });
+      });
+    } else {
+      alert(this.translate.instant('gatewayApp.msUserServiceMSUser.import.emptyFile'));
+    }
   }
 }
 
