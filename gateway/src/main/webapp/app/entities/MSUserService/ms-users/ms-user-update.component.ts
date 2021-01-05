@@ -15,6 +15,7 @@ import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
 import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
 import { emailValidator } from 'app/shared/util/app-validators';
 import { AccountService } from 'app/core';
+import { SERVER_API_URL } from 'app/app.constants';
 
 @Component({
   selector: 'jhi-ms-user-update',
@@ -26,6 +27,7 @@ export class MSUserUpdateComponent implements OnInit {
   existentMSUser: IMSUser;
   faCheckCircle = faCheckCircle;
   showIsAdminCheckbox = false;
+  currentAccount: any;
 
   editForm = this.fb.group({
     id: [],
@@ -59,6 +61,9 @@ export class MSUserUpdateComponent implements OnInit {
   ngOnInit() {
     this.isSaving = false;
     this.isExistentMember = false;
+    this.accountService.identity().then(account => {
+      this.currentAccount = account;
+    });
     this.activatedRoute.data.subscribe(({ msUser }) => {
       this.existentMSUser = msUser;
       this.updateForm(msUser);
@@ -83,7 +88,6 @@ export class MSUserUpdateComponent implements OnInit {
 
   onChanges(): void {
     this.editForm.get('salesforceId').valueChanges.subscribe(val => {
-      console.log('on changing sales force id');
       const selectedOrg = this.membersList.find(cm => cm.salesforceId === this.editForm.get(['salesforceId']).value);
       if (this.hasRoleAdmin()) {
         if (selectedOrg) {
@@ -94,7 +98,6 @@ export class MSUserUpdateComponent implements OnInit {
       } else {
         this.showIsAdminCheckbox = false;
       }
-      console.log('this.showIsAdminCheckbox: ' + this.showIsAdminCheckbox);
     });
   }
 
@@ -161,7 +164,13 @@ export class MSUserUpdateComponent implements OnInit {
       this.isSaving = true;
       const msUser = this.createFromForm();
       if (msUser.id !== undefined) {
-        if (msUser.mainContact && !this.hasRoleAdmin()) {
+        if (this.currentAccount.id === msUser.id) {
+          if (this.currentAccount.mainContact !== msUser.mainContact) {
+            this.subscribeToSaveResponseWithOwnershipChange(this.msUserService.update(msUser));
+          } else {
+            this.subscribeToSaveResponse(this.msUserService.update(msUser));
+          }
+        } else if (msUser.mainContact && !this.hasRoleAdmin()) {
           this.subscribeToSaveResponseWithOwnershipChange(this.msUserService.update(msUser));
         } else {
           this.subscribeToSaveResponse(this.msUserService.update(msUser));
@@ -223,7 +232,7 @@ export class MSUserUpdateComponent implements OnInit {
 
   protected onSaveSuccessOwnershipChange() {
     this.isSaving = false;
-    window.location.href = '/';
+    window.location.href = SERVER_API_URL;
   }
 
   protected onSaveError() {
