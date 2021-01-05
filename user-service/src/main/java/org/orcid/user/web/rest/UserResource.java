@@ -135,15 +135,16 @@ public class UserResource {
         Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
         boolean owner = userDTO.getMainContact();
         if (owner) {
-
-            existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
-
-            if (existingUser.isPresent()) {
-                if (!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
-                    userService.removeOwnershipFromUser(existingUser.get().getLogin());
+        	
+        	List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
+            for(User prevOwner: owners) {
+            	if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
+                    userService.removeOwnershipFromUser(prevOwner.getLogin());
                 }
-                userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
             }
+                
+            userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
+            
         }
 
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
@@ -292,18 +293,20 @@ public class UserResource {
         String createdBy = SecurityUtils.getAuthenticatedUser();
         //change the auth if the logged in user is org owner and this is set as mainContact
         boolean owner = userDTO.getMainContact();
-        Optional<User> existingUser = userRepository.findOneByMainContactIsTrueAndSalesforceId(userDTO.getSalesforceId());
+        List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
+        
         if (owner) {
 
-            if(existingUser.isPresent()) {
-                if(!StringUtils.equals(existingUser.get().getId(), userDTO.getId())) {
-                    userService.removeOwnershipFromUser(existingUser.get().getLogin());
+        	for(User prevOwner: owners) {
+            	if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
+                    userService.removeOwnershipFromUser(prevOwner.getLogin());
                 }
-                userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
             }
+            userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
+            
         }
         else {
-        	if(! existingUser.isPresent()) {
+        	if(owners.isEmpty()) {
         	userDTO.setMainContact(true);
         	userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
         	}
@@ -365,9 +368,13 @@ public class UserResource {
             userService.removeAuthorityFromUser(authUser.get().getId(), AuthoritiesConstants.ORG_OWNER);
         }
         else {
-            existing = userRepository.findOneByMainContactIsTrueAndSalesforceId(user.getSalesforceId());
-            if(existing.isPresent()) {
-                userService.removeAuthorityFromUser(existing.get().getId(), AuthoritiesConstants.ORG_OWNER);
+            List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(user.getSalesforceId());
+
+            for(User prevOwner: owners) {
+            	if (!StringUtils.equals(prevOwner.getId(), user.getId())) {
+            		
+                    userService.removeOwnershipFromUser(prevOwner.getLogin());
+                }
             }
         }
         return isOk;
@@ -490,8 +497,7 @@ public class UserResource {
     @GetMapping("/users/{salesforceId}/owner")
     public boolean getOwner(@PathVariable String salesforceId) {
         LOG.debug("REST request to get Owner for : {}", salesforceId);
-        Optional<User> user = userService.getOwnerBySalesforceId(salesforceId);
-        return user.isPresent();
+        return userService.hasOwnerForSalesforceId(salesforceId);
     }
 
 
