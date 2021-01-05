@@ -44,6 +44,8 @@ public interface UserRepository extends MongoRepository<User, String> {
     
     Optional<User> findOneByMainContactIsTrueAndSalesforceId(String salesforceId);
     
+    List<User> findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(String salesforceId);
+    
     List<User> findAllByMainContactIsTrueAndDeletedIsFalse();
     
     List<User> findAllByAuthoritiesAndDeletedIsFalse(String role);
