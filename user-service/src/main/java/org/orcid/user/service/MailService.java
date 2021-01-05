@@ -93,16 +93,17 @@ public class MailService {
     public void sendEmailFromTemplateMemberInfo(User user, String member, String templateName, String titleKey) {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
+        String baseUrl = jHipsterProperties.getMail().getBaseUrl();
         String infoEmail = "info@member-portal.orcid.org";
-        if (jHipsterProperties.getMail().getBaseUrl().contains("qa")) {
+        if ("https://member-portal.qa.orcid.org".equals(baseUrl)) {
             infoEmail = "info@member-portal.qa.orcid.org";
-        } else if (jHipsterProperties.getMail().getBaseUrl().contains("sandbox")) {
+        } else if ("https://member-portal.sandbox.orcid.org".equals(baseUrl)) {
             infoEmail = "info@member-portal.sandbox.orcid.org";
         }
 
         context.setVariable(MEMBER, member);
         context.setVariable(USER, user);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        context.setVariable(BASE_URL, baseUrl);
         context.setVariable(INFO_EMAIL, infoEmail);
         context.setVariable(EMAIL, jHipsterProperties.getMail().getFrom());
         String content = templateEngine.process(templateName, context);
