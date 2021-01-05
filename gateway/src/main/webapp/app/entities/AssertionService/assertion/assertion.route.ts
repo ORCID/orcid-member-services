@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
+import { JhiResolvePagingParams } from 'ng-jhipster';
 import { UserRouteAccessService } from 'app/core';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -38,7 +38,7 @@ export const assertionRoute: Routes = [
       pagingParams: JhiResolvePagingParams
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ASSERTION_SERVICE_ENABLED'],
       defaultSort: 'email,asc',
       pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
     },
@@ -51,7 +51,7 @@ export const assertionRoute: Routes = [
       assertion: AssertionResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ASSERTION_SERVICE_ENABLED'],
       pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -63,7 +63,7 @@ export const assertionRoute: Routes = [
       assertion: AssertionResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ASSERTION_SERVICE_ENABLED'],
       pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -75,7 +75,7 @@ export const assertionRoute: Routes = [
       assertion: AssertionResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ASSERTION_SERVICE_ENABLED'],
       pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -90,7 +90,7 @@ export const assertionPopupRoute: Routes = [
       assertion: AssertionResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ASSERTION_SERVICE_ENABLED'],
       pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
     },
     canActivate: [UserRouteAccessService],
