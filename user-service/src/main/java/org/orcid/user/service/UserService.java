@@ -432,8 +432,13 @@ public class UserService {
         return authorities;
     }
 
-    public Optional<User> getOwnerBySalesforceId(String salesforceId) {
-        return userRepository.findOneByMainContactIsTrueAndSalesforceId(salesforceId);
+    public boolean hasOwnerForSalesforceId(String salesforceId) {
+    	 List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(salesforceId);
+    	 if(owners.isEmpty()) {
+    		 return false;
+    	 }
+    	
+        return true;
     }
 
 }
