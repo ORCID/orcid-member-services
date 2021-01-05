@@ -135,6 +135,13 @@ export class MSMemberUpdateComponent implements OnInit {
       lastModifiedBy: msMember.lastModifiedBy,
       lastModifiedDate: msMember.lastModifiedDate != null ? msMember.lastModifiedDate.format(DATE_TIME_FORMAT) : null
     });
+    const clientId = this.editForm.get('clientId').value;
+    if (!clientId || (clientId && clientId === '')) {
+      this.editForm.get('assertionServiceEnabled').reset();
+      this.editForm.get('assertionServiceEnabled').disable();
+    } else {
+      this.editForm.get('assertionServiceEnabled').enable();
+    }
   }
 
   previousState() {
