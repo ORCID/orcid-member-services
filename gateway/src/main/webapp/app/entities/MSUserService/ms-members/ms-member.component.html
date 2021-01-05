@@ -65,7 +65,7 @@
                                 [routerLink]="['/', 'ms-member', { outlets: { popup: msMember.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm ml-1">
+                                class="btn btn-danger btn-sm ml-1" [disabled]=true>
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
