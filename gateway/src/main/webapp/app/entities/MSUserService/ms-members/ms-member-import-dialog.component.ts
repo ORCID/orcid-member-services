@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
@@ -8,9 +8,8 @@ import { JhiEventManager } from 'ng-jhipster';
 import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
 import { MSMemberService } from './ms-member.service';
 
-import { FileUploadService } from '../../../shared/fileUpload/fileUpload.service';
+import { FileUploadService } from 'app/shared/fileUpload/fileUpload.service';
 
-import { SERVER_API_URL } from 'app/app.constants';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -48,7 +47,7 @@ export class MSMemberImportDialogComponent {
   upload() {
     if (this.currentFile) {
       this.loading = true;
-      var f = this.currentFile.item(0);
+      const f = this.currentFile.item(0);
       this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
         if (event instanceof HttpResponse) {
           const body = event.body;
