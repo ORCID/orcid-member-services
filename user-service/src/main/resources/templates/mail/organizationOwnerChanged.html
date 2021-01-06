@@ -41,9 +41,9 @@
         <span th:text="#{email.organization.moreInformation}">
             for more information on how to manage your organization's information. If you have not yet activated your ORCID Member Portal account, check your email inbox for a separate message from
         </span>
-        <a th:with="mail=(@{|${infoEmail}|})"
-           th:href="'mailto:' + ${mail}">
-           info@member-portal.orcid.org
+        <a th:href="'mailto:' + ${infoEmail}"
+           th:text="${infoEmail}">
+            info@member-portal.orcid.org
         </a>
         <span th:text="#{email.organization.activationLink}">
             with an activation link.
