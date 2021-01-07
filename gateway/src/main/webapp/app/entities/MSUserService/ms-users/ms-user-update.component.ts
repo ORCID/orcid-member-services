@@ -98,6 +98,9 @@ export class MSUserUpdateComponent implements OnInit {
       } else {
         this.showIsAdminCheckbox = false;
       }
+      this.editForm.patchValue({
+        isAdmin: false
+      });
     });
   }
 
