@@ -278,6 +278,7 @@ public class UserResourceIT {
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
         managedUserVM.setLangKey(DEFAULT_LANGKEY);
         managedUserVM.setSalesforceId("salesforceId");
+        managedUserVM.setMainContact(true);
         managedUserVM.setIsAdmin(true);
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
