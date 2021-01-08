@@ -303,13 +303,12 @@ public class UserResource {
                 }
             }
             userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
-            
-        }
-        else {
-        	if(owners.isEmpty()) {
-        	userDTO.setMainContact(true);
-        	userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
-        	}
+
+        } else {
+            if (owners.isEmpty()) {
+                userDTO.setMainContact(true);
+                userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
+            }
         }
 
         Instant now = Instant.now();
@@ -341,7 +340,7 @@ public class UserResource {
 			user.setSalesforceIdError("Salesforce Id should not be empty");
 			LOG.info("Salesforce id missing");
 		}
-		if (user.getIsAdmin() == true && !StringUtils.isBlank(user.getSalesforceId())) {
+		if (user.getIsAdmin() && !StringUtils.isBlank(user.getSalesforceId())) {
 			if(!userService.memberSuperadminEnabled(user.getSalesforceId())) {
 				isOk = false;
 				user.setSalesforceIdError("Admin users cannot be associated with this member");
@@ -362,18 +361,17 @@ public class UserResource {
         }
 
         //change the auth if the logged in user is org owner and this is set as mainContact
-        Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
-        if(authUser.isPresent() && !StringUtils.equals(authUser.get().getId(), user.getId()) && user.getMainContact() && SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER) )
-        {
-            userService.removeAuthorityFromUser(authUser.get().getId(), AuthoritiesConstants.ORG_OWNER);
-        }
-        else {
-            List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(user.getSalesforceId());
+        if (user.getMainContact()) {
+            Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
+            if (authUser.isPresent() && !StringUtils.equals(authUser.get().getId(), user.getId()) && SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER)) {
+                userService.removeAuthorityFromUser(authUser.get().getId(), AuthoritiesConstants.ORG_OWNER);
+            } else {
+                List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(user.getSalesforceId());
 
-            for(User prevOwner: owners) {
-            	if (!StringUtils.equals(prevOwner.getId(), user.getId())) {
-            		
-                    userService.removeOwnershipFromUser(prevOwner.getLogin());
+                for (User prevOwner : owners) {
+                    if (!StringUtils.equals(prevOwner.getId(), user.getId())) {
+                        userService.removeOwnershipFromUser(prevOwner.getLogin());
+                    }
                 }
             }
         }
