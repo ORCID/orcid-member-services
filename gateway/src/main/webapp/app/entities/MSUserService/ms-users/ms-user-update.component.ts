@@ -129,10 +129,7 @@ export class MSUserUpdateComponent implements OnInit {
   }
 
   disableSalesForceIdDD() {
-    if (this.isOrganizationOwner()) {
-      this.editForm.patchValue({
-        salesforceId: this.getSalesForceId()
-      });
+    if (this.existentMSUser.mainContact) {
       return true;
     }
     return this.isExistentMember;
@@ -140,10 +137,6 @@ export class MSUserUpdateComponent implements OnInit {
 
   getSalesForceId() {
     return this.accountService.getSalesforceId();
-  }
-
-  isOrganizationOwner() {
-    return this.accountService.isOrganizationOwner();
   }
 
   hasRoleAdmin() {
