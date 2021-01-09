@@ -101,7 +101,7 @@ public class MailService {
             infoEmail = "info@member-portal.sandbox.orcid.org";
         }
 
-        context.setVariable(MEMBER, member);
+        context.setVariable(MEMBER, member + ".");
         context.setVariable(USER, user);
         context.setVariable(BASE_URL, baseUrl);
         context.setVariable(INFO_EMAIL, infoEmail);
