@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <link rel="stylesheet" href="css/style.css">
-</head>
 
 <body>
 	<!-- EMAIL HEADER -->
@@ -14,7 +11,7 @@
 	</div>
 	<!-- EMAIL FOOTER -->
 	<div th:fragment="emailFooter">
-		<small> <a th:with="url=(@{|${baseUrl}|})" th:href="${url}">
+		<small> <a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}|})" th:href="${url}">
 			<span th:text="#{email.common.orcidMemberTools}">ORCID Member Portal</span></a>
 			| <span th:text="#{email.common.orcidInc}">ORCID, Inc</span> | <span
 			th:text="#{email.common.orcidAddress}">10411 Motor City Drive,
