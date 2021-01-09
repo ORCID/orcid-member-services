@@ -6,16 +6,16 @@
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
-    <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body
+    style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
 <div style="padding: 20px; padding-top: 10px; margin: auto;">
     <div th:insert="~{mail/common :: emailHeader}"></div>
     <p>
         <span th:text="#{email.organization.youAreOwner}">
         You are now the organization owner of the ORCID Member Portal
         </span>
-        <a th:with="url=(@{|${baseUrl}|})"
+        <a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}|})"
            th:href="${url}" th:text="${url}">
             Member portal
         </a>
@@ -34,14 +34,14 @@
         <span th:text="#{email.organization.signInto}">
             Sign into the ORCID Member Portal at
         </span>
-        <a th:with="url=(@{|${baseUrl}|})"
+        <a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}|})"
            th:href="${url}" th:text="${url}">
             Member portal
         </a>
         <span th:text="#{email.organization.moreInformation}">
             for more information on how to manage your organization's information. If you have not yet activated your ORCID Member Portal account, check your email inbox for a separate message from
         </span>
-        <a th:href="'mailto:' + ${infoEmail}"
+        <a style="color: #2E7F9F;" th:href="'mailto:' + ${infoEmail}"
            th:text="${infoEmail}">
             info@member-portal.orcid.org
         </a>
