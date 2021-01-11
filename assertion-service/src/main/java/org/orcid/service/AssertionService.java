@@ -344,6 +344,7 @@ public class AssertionService {
                 Instant now = Instant.now();
                 assertion.setAddedToORCID(now);
                 assertion.setModified(now);
+                assertion.setUpdated(false);
                 // Remove error if any
                 assertion.setOrcidError(null);
                 assertionsRepository.save(assertion);
@@ -394,6 +395,7 @@ public class AssertionService {
                 Instant now = Instant.now();
                 assertion.setUpdatedInORCID(now);
                 assertion.setModified(now);
+                assertion.setUpdated(false);
                 // Remove error if any
                 assertion.setOrcidError(null);
                 assertionsRepository.save(assertion);
