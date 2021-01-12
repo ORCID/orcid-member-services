@@ -366,7 +366,7 @@ public class UserService {
             LOG.warn("Error reading user upload", e);
             throw new RuntimeException(e);
         }
-        
+
         Map<String, String> orgWithOwner = usersUpload.getOrgWithOwner();
         usersUpload.getUserDTOs().forEach(userDTO -> {
             String salesforceId = userDTO.getSalesforceId();
@@ -382,10 +382,6 @@ public class UserService {
             if (existing.isPresent()) {
                 updateUser(userDTO);
             } else {
-            	if(!orgWithOwner.containsKey(salesforceId)) 
-            	{
-            		userDTO.setMainContact(true);
-            	}
                 createUser(userDTO);
             }
         });
@@ -415,12 +411,12 @@ public class UserService {
          if (!org.apache.commons.lang3.StringUtils.isBlank(userDTO.getSalesforceId())) {
             if(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(userDTO.getSalesforceId())) {
             	authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
-            }         
+            }
             if(memberService.memberIsConsortiumLead (userDTO.getSalesforceId())) {
               	authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
             }
         }
-       
+
         if (userDTO.getMainContact() != null) {
             if (userDTO.getMainContact()) {
                 authorities.add(AuthoritiesConstants.ORG_OWNER);
@@ -437,7 +433,7 @@ public class UserService {
     	 if(owners.isEmpty()) {
     		 return false;
     	 }
-    	
+
         return true;
     }
 
