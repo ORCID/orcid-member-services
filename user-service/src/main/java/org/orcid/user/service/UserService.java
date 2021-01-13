@@ -382,6 +382,10 @@ public class UserService {
             if (existing.isPresent()) {
                 updateUser(userDTO);
             } else {
+                if(!orgWithOwner.containsKey(salesforceId)) {
+                    orgWithOwner.put(userDTO.getSalesforceId(), userDTO.getEmail());
+                    userDTO.setMainContact(true);
+                }
                 createUser(userDTO);
             }
         });
