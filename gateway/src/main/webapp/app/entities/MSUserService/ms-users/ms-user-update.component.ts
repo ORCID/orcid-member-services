@@ -92,11 +92,20 @@ export class MSUserUpdateComponent implements OnInit {
       if (this.hasRoleAdmin()) {
         if (selectedOrg) {
           this.showIsAdminCheckbox = selectedOrg.superadminEnabled;
+          this.editForm.patchValue({
+            isAdmin: false
+          });
         } else {
           this.showIsAdminCheckbox = false;
+          this.editForm.patchValue({
+            isAdmin: false
+          });
         }
       } else {
         this.showIsAdminCheckbox = false;
+        this.editForm.patchValue({
+          isAdmin: false
+        });
       }
     });
   }
@@ -126,7 +135,12 @@ export class MSUserUpdateComponent implements OnInit {
   }
 
   disableSalesForceIdDD() {
-    if (this.existentMSUser.mainContact) {
+    if (this.hasRoleAdmin()) {
+      return false;
+    } else if (this.hasRoleOrgOwner() || this.hasRoleConsortiumLead()) {
+      this.editForm.patchValue({
+        salesforceId: this.getSalesForceId()
+      });
       return true;
     }
     return this.isExistentMember;
@@ -138,6 +152,14 @@ export class MSUserUpdateComponent implements OnInit {
 
   hasRoleAdmin() {
     return this.accountService.hasAnyAuthority(['ROLE_ADMIN']);
+  }
+
+  hasRoleOrgOwner() {
+    return this.accountService.hasAnyAuthority(['ROLE_ORG_OWNER']);
+  }
+
+  hasRoleConsortiumLead() {
+    return this.accountService.hasAnyAuthority(['ROLE_CONSORTIUM_LEAD']);
   }
 
   hasOwnerValidation() {
