@@ -64,10 +64,6 @@ export class MSUserUpdateComponent implements OnInit {
     this.accountService.identity().then(account => {
       this.currentAccount = account;
     });
-    this.activatedRoute.data.subscribe(({ msUser }) => {
-      this.existentMSUser = msUser;
-      this.updateForm(msUser);
-    });
     this.editForm.disable();
 
     this.msMemberService.allMembers$.subscribe(res => {
@@ -78,6 +74,10 @@ export class MSUserUpdateComponent implements OnInit {
         });
         if (this.membersList.length > 0) {
           this.editForm.enable();
+          this.activatedRoute.data.subscribe(({ msUser }) => {
+            this.existentMSUser = msUser;
+            this.updateForm(msUser);
+          });
           this.cdref.detectChanges();
         }
       }
