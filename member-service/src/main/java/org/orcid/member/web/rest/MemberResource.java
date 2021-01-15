@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -158,10 +159,26 @@ public class MemberResource {
 	@GetMapping("/members")
 	public ResponseEntity<List<Member>> getAllMembers(Pageable pageable) {
 		LOG.debug("REST request to get a page of Member");
-		Page<Member> page = memberService.getAllMembers(pageable);
+		Page<Member> page = memberService.getMembers(pageable);
 		HttpHeaders headers = PaginationUtil
 				.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
 		return ResponseEntity.ok().headers(headers).body(page.getContent());
+	}
+	
+	/**
+	 * {@code GET  /member} : get all the member.
+	 *
+	 *
+	 * @param pageable the pagination information.
+	 *
+	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+	 *         of member in body.
+	 */
+	@GetMapping("/members/list/all")
+	public ResponseEntity<List<Member>> getMembersList() {
+		LOG.debug("REST request to get a page of Member");
+		List<Member> members = memberService.getAllMembers();
+		return new ResponseEntity<>(members, HttpStatus.OK);
 	}
 
 	/**

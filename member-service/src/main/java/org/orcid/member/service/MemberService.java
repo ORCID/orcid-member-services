@@ -177,8 +177,12 @@ public class MemberService {
 		return memberRepository.save(existingMember);
 	}
 
-	public Page<Member> getAllMembers(Pageable pageable) {
+	public Page<Member> getMembers(Pageable pageable) {
 		return memberRepository.findAll(pageable);
+	}
+	
+	public List<Member> getAllMembers() {
+		return memberRepository.findAll();
 	}
 
 	public Optional<Member> getMember(String id) {
