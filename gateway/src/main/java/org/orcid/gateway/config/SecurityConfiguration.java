@@ -45,7 +45,7 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
             .addFilterBefore(corsFilter, CsrfFilter.class)
             .headers()
             .frameOptions()
-            .disable()
+            .sameOrigin()
         .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
