@@ -1,5 +1,6 @@
 package org.orcid.member.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.orcid.member.domain.Member;
@@ -17,4 +18,6 @@ public interface MemberRepository extends MongoRepository<Member, String> {
     Optional<Member> findByClientName(String salesforceId);
 
     Boolean existsBySalesforceId(String salesforceId);
+    
+    List<Member> findAll();
 }

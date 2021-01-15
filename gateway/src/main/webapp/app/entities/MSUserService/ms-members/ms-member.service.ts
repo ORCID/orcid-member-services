@@ -53,7 +53,7 @@ export class MSMemberService {
 
   getAllMembers(): Observable<EntityArrayResponseType> {
     return this.http
-      .get<IMSMember[]>(this.resourceUrl, { observe: 'response' })
+      .get<IMSMember[]>(`${this.resourceUrl}/list/all`, { observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
