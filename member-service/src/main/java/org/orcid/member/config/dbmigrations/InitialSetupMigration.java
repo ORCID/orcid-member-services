@@ -22,10 +22,20 @@ public class InitialSetupMigration {
     @ChangeSet(order = "01", author = "initiator", id = "01-addMembers")
     public void addMembers(MongoTemplate mongoTemplate, Environment environment)  {    	
         Member orcidMember = new Member();
+        String salesForceId = "001G000001AP83e";
+        if (environment.getProperty("application.orcidOrgSalesForceId") != null) {
+        	salesForceId = environment.getProperty("application.orcidOrgSalesForceId");
+        	LOG.info("Provisioning member with sales force id from env: " + salesForceId);
+        }
+        String clientId= "APP-1ERTY7037V1I8FE5";
+        if (environment.getProperty("application.orcidOrgClientId") != null) {
+        	clientId = environment.getProperty("application.orcidOrgClientId");
+        	LOG.info("Provisioning member with client id from env: " + clientId);
+        }
         orcidMember.setId("ORCID, Inc");
         orcidMember.setClientName("ORCID, Inc");
-        orcidMember.setSalesforceId(environment.getProperty("application.orcidOrgSalesForceId"));    
-        orcidMember.setClientId(environment.getProperty("application.orcidOrgClientId"));
+        orcidMember.setSalesforceId(salesForceId);    
+        orcidMember.setClientId(clientId);
         orcidMember.setIsConsortiumLead(true);
         orcidMember.setAssertionServiceEnabled(true);
         orcidMember.setSuperadminEnabled(true);
