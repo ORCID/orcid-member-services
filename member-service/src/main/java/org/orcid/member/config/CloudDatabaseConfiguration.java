@@ -7,6 +7,7 @@ import io.github.jhipster.domain.util.JSR310DateConverters.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudException;
 import org.springframework.cloud.config.java.AbstractCloudConfig;
@@ -14,6 +15,7 @@ import org.springframework.cloud.service.ServiceInfo;
 import org.springframework.cloud.service.common.MongoServiceInfo;
 import org.springframework.context.annotation.*;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
@@ -56,8 +58,8 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
         return new MongoCustomConversions(converterList);
     }
 
-    @Bean
-    public Mongobee mongobee(MongoDbFactory mongoDbFactory, MongoTemplate mongoTemplate, Cloud cloud) {
+    @Bean @Autowired
+    public Mongobee mongobee(MongoDbFactory mongoDbFactory, MongoTemplate mongoTemplate, Cloud cloud, Environment environment) {
         log.debug("Configuring Cloud Mongobee");
         List<ServiceInfo> matchingServiceInfos = cloud.getServiceInfos(MongoDbFactory.class);
 
@@ -67,6 +69,7 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
         }
         MongoServiceInfo info = (MongoServiceInfo) matchingServiceInfos.get(0);
         Mongobee mongobee = new Mongobee(info.getUri());
+        mongobee.setSpringEnvironment(environment);
         mongobee.setDbName(mongoDbFactory.getDb().getName());
         mongobee.setMongoTemplate(mongoTemplate);
         // package to scan for migrations
