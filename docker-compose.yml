@@ -3,7 +3,7 @@ version: '2'
 services:
   assertionservice-app:
     restart: unless-stopped
-    image: dockerpush.int.orcid.org/assertionservice:${TAG}
+    image: ${DOCKER_HOST}/assertionservice:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - 'SPRING_PROFILES_ACTIVE=prod'
@@ -31,7 +31,7 @@ services:
 
   gateway-app:
     restart: unless-stopped
-    image: dockerpush.int.orcid.org/gateway:${TAG}-${ENV}
+    image: ${DOCKER_HOST}/gateway:${TAG}-${ENV}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - 'SPRING_PROFILES_ACTIVE=prod'
@@ -51,7 +51,7 @@ services:
 
   userservice-app:
     restart: unless-stopped
-    image: dockerpush.int.orcid.org/userservice:${TAG}
+    image: ${DOCKER_HOST}/userservice:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - 'SPRING_PROFILES_ACTIVE=prod'
@@ -73,7 +73,7 @@ services:
 
   memberservice-app:
     restart: unless-stopped
-    image: dockerpush.int.orcid.org/memberservice:${TAG}
+    image: ${DOCKER_HOST}/memberservice:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - 'SPRING_PROFILES_ACTIVE=prod'
