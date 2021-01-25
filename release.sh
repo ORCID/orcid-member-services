@@ -14,6 +14,11 @@ then
     fi
 fi
 
+if [[ -z "$DOCKER_HOST" ]];then
+  echo "please set DOCKER_HOST environment variable"
+  exit
+fi
+
 echo "about to build docker images with release $2"
 echo "gateway"
 cd gateway
@@ -23,43 +28,43 @@ then
     echo "building gateway image for $1"
     if [ "$1" = "sbox" ]
     then
-        bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -Dangular.env=sandbox
+        bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -DDOCKER_HOST=$DOCKER_HOST -Dangular.env=sandbox
     else
         echo "building gateway image for $1"
-        bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -Dangular.env=$1
+        bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -DDOCKER_HOST=$DOCKER_HOST -Dangular.env=$1
     fi
     echo "pushing gateway image for $1 to nexus"
-    docker push dockerpush.int.orcid.org/gateway:$2-$1
+    docker push ${DOCKER_HOST}/gateway:$2-$1
 else
     echo "building gateway image for qa"
-    bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -Dangular.env=qa
+    bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -DDOCKER_HOST=$DOCKER_HOST -Dangular.env=qa
     echo "pushing gateway image for qa to nexus"
-    docker push dockerpush.int.orcid.org/gateway:$2-qa
+    docker push ${DOCKER_HOST}/gateway:$2-qa
     echo "building gateway image for sandbox"
-    bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -Dangular.env=sandbox
+    bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -DDOCKER_HOST=$DOCKER_HOST -Dangular.env=sandbox
     echo "pushing gateway image for sandbox to nexus"
-    docker push dockerpush.int.orcid.org/gateway:$2-sandbox
+    docker push ${DOCKER_HOST}/gateway:$2-sandbox
     echo "building gateway image for prod"
-    bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -Dangular.env=prod
+    bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -DDOCKER_HOST=$DOCKER_HOST -Dangular.env=prod
     echo "pushing gateway image for prod to nexus"
-    docker push dockerpush.int.orcid.org/gateway:$2-prod
+    docker push ${DOCKER_HOST}/gateway:$2-prod
 fi
 echo "userservice"
 cd ../user-service
 bash mvnw clean
-bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2
+bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -DDOCKER_HOST=$DOCKER_HOST
 echo "pushing userservice image to nexus"
-docker push dockerpush.int.orcid.org/userservice:$2
+docker push ${DOCKER_HOST}/userservice:$2
 echo "assertionservice"
 cd ../assertion-service
 bash mvnw clean
-bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2
+bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -DDOCKER_HOST=$DOCKER_HOST
 echo "pushing assertionservice image to nexus"
-docker push dockerpush.int.orcid.org/assertionservice:$2
+docker push ${DOCKER_HOST}/assertionservice:$2
 echo "memberservice"
 cd ../member-service
 bash mvnw clean
-bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2
+bash mvnw -ntp -Pprod verify jib:dockerBuild -Drelease.tag=$2 -DDOCKER_HOST=$DOCKER_HOST
 echo "pushing memberservice image to nexus"
-docker push dockerpush.int.orcid.org/memberservice:$2
+docker push ${DOCKER_HOST}/memberservice:$2
 echo "Done"
