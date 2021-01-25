@@ -118,8 +118,6 @@ jhipster:
     logs:
       enabled: false
       reportFrequency: 60 # seconds
-  audit-events:
-    retention-period: 30 # Number of days before audit events are deleted.
 oauth2:
   signature-verification:
     public-key-endpoint-uri: http://userservice/oauth/token_key

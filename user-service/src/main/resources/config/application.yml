@@ -57,7 +57,7 @@ management:
       mode: full
   health:
     mail:
-      enabled: true # When using the MailService, configure an SMTP server and set this to true
+      enabled: false # When using the MailService, configure an SMTP server and set this to true
   metrics:
     export:
       # Prometheus is the default metrics backend
@@ -116,7 +116,6 @@ security:
       scope: openid profile email
     resource:
       filter-order: 3
-      user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
 
 server:
   servlet:
