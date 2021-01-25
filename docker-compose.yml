@@ -3,7 +3,7 @@ version: '2'
 services:
   assertionservice-app:
     restart: unless-stopped
-    image: ${DOCKER_HOST}/assertionservice:${TAG}
+    image: ${DOCKER_REG}/assertionservice:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - 'SPRING_PROFILES_ACTIVE=prod'
@@ -31,7 +31,7 @@ services:
 
   gateway-app:
     restart: unless-stopped
-    image: ${DOCKER_HOST}/gateway:${TAG}-${ENV}
+    image: ${DOCKER_REG}/gateway:${TAG}-${ENV}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - 'SPRING_PROFILES_ACTIVE=prod'
@@ -51,7 +51,7 @@ services:
 
   userservice-app:
     restart: unless-stopped
-    image: ${DOCKER_HOST}/userservice:${TAG}
+    image: ${DOCKER_REG}/userservice:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - 'SPRING_PROFILES_ACTIVE=prod'
@@ -73,7 +73,7 @@ services:
 
   memberservice-app:
     restart: unless-stopped
-    image: ${DOCKER_HOST}/memberservice:${TAG}
+    image: ${DOCKER_REG}/memberservice:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - 'SPRING_PROFILES_ACTIVE=prod'
