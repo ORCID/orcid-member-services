@@ -30,7 +30,7 @@
     "ngx-infinite-scroll": "7.2.0",
     "ngx-webstorage": "4.0.1",
     "rxjs": "6.5.2",
-    "swagger-ui": "3.23.11",
+    "swagger-ui": "^3.40.0",
     "tslib": "1.10.0",
     "zone.js": "0.9.1"
   },
@@ -44,7 +44,7 @@
     "angular2-template-loader": "0.6.2",
     "autoprefixer": "9.6.0",
     "base-href-webpack-plugin": "2.0.0",
-    "browser-sync": "2.26.7",
+    "browser-sync": "^2.26.14",
     "browser-sync-webpack-plugin": "2.2.2",
     "cache-loader": "4.0.0",
     "codelyzer": "5.1.0",
