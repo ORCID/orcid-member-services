@@ -126,5 +126,5 @@ oauth2:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 application:
-    orcidOrgClientId: APP-1ERTY7037V1I8FE5
-    orcidOrgSalesForceId: 001G000001AP83e
+    orcidOrgClientId: change-me
+    orcidOrgSalesForceId: change-me
