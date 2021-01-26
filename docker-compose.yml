@@ -28,7 +28,7 @@ services:
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
       - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
     volumes:
-      - /mnt/efs/mserv-${ENV}/logs/:/logs
+      - ${LOG_VOLUME:-/var/tmp/}:/logs
 
   gateway-app:
     restart: unless-stopped
@@ -47,7 +47,7 @@ services:
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
       - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
     volumes:
-      - /mnt/efs/mserv-${ENV}/logs/:/logs
+      - ${LOG_VOLUME:-/var/tmp/}:/logs
     ports:
       - '8080:8080'
 
@@ -72,7 +72,7 @@ services:
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
       - UAA_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
     volumes:
-      - /mnt/efs/mserv-${ENV}/logs/:/logs
+      - ${LOG_VOLUME:-/var/tmp/}:/logs
 
   memberservice-app:
     restart: unless-stopped
@@ -96,7 +96,7 @@ services:
       - 'APPLICATION_ORCIDORGCLIENTID=${ORCID_ORG_CLIENTID}'
       - 'APPLICATION_ORCIDORGSALESFORCEID=${ORCID_ORG_SALESFORCEID}'
     volumes:
-      - /mnt/efs/mserv-${ENV}/logs/:/logs
+      - ${LOG_VOLUME:-/var/tmp/}:/logs
 
   jhipster-registry:
     restart: unless-stopped
