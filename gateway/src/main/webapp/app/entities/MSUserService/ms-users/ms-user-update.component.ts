@@ -61,6 +61,7 @@ export class MSUserUpdateComponent implements OnInit {
   ngOnInit() {
     this.isSaving = false;
     this.isExistentMember = false;
+    this.existentMSUser = null;
     this.accountService.identity().then(account => {
       this.currentAccount = account;
     });
@@ -209,6 +210,15 @@ export class MSUserUpdateComponent implements OnInit {
       }
       this.previousState();
     });
+  }
+
+  displaySendActivate() {
+    if (this.existentMSUser && this.existentMSUser.login && !this.existentMSUser.activated) {
+      console.log('this.existentMSUser: ', this.existentMSUser);
+      console.log('this.existentMSUser.activated', this.existentMSUser.activated);
+      return true;
+    }
+    return false;
   }
 
   private createFromForm(): IMSUser {

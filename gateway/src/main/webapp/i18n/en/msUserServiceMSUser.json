@@ -18,8 +18,8 @@
         "title": "User details"
       },
       "sendActivate": {
-        "success": "Activation email sent succesfully.",
-        "error": "Activation email couldn´t be sent."
+        "success": "Invite sent.",
+        "error": "Invite email couldn´t be sent."
       },
       "import": {
         "title": "Import users",
@@ -57,7 +57,7 @@
   },
   "userServiceApp": {
     "user": {
-      "created": "A new user was created with ID {{ param }}",
+      "created": "A new user was created with ID {{ param }}. Invite sent.",
       "updated": "User {{ param }} was updated successfully",
       "deleted": "User {{ param }} was deleted successfully"
     }
