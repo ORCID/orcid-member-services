@@ -161,7 +161,7 @@ public class OrcidRecordService {
         AssertionServiceUser user = assertionsUserService.getLoggedInUser();
         Page<OrcidRecord> orcidRecords = orcidRecordRepository.findBySalesforceId(user.getSalesforceId(), pageable);
         orcidRecords.forEach(a -> {
-            if(a.getToken(user.getSalesforceId()) == null || StringUtils.isBlank(a.getToken(user.getSalesforceId()))) {
+            if(StringUtils.isBlank(a.getToken(user.getSalesforceId()))) {
                 a.setOrcid(null);
             }
         });

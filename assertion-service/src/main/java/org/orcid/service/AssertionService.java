@@ -502,6 +502,9 @@ public class AssertionService {
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(assertion.getEmail());
         if (optionalRecord.isPresent()) {
             OrcidRecord record = optionalRecord.get();
+            if(StringUtils.isBlank(record.getToken(assertion.getSalesforceId()))) {
+                return null;
+            }
             return record.getOrcid();
         }
         return null;
