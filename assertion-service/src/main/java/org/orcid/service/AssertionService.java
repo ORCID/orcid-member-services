@@ -343,7 +343,6 @@ public class AssertionService {
                 assertion.setPutCode(putCode);
                 Instant now = Instant.now();
                 assertion.setAddedToORCID(now);
-                assertion.setModified(now);
                 assertion.setUpdated(false);
                 // Remove error if any
                 assertion.setOrcidError(null);
@@ -394,7 +393,6 @@ public class AssertionService {
                 orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
                 Instant now = Instant.now();
                 assertion.setUpdatedInORCID(now);
-                assertion.setModified(now);
                 assertion.setUpdated(false);
                 // Remove error if any
                 assertion.setOrcidError(null);
@@ -461,7 +459,6 @@ public class AssertionService {
             if (deleted) {
                 Instant now = Instant.now();
                 assertion.setDeletedFromORCID(now);
-                assertion.setModified(now);
                 assertionsRepository.save(assertion);
             }
             return deleted;
