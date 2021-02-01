@@ -142,6 +142,9 @@ public class OrcidRecord {
             for(OrcidToken token: tokens)
             {   
                 if(StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
+                	if(StringUtils.isBlank(token.getToken_id())) {
+                		return null;
+                	}
                     return token.getToken_id();
                 }
             }

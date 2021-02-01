@@ -3,6 +3,8 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 import { ActivatedRoute } from '@angular/router';
+import { interval, Subscription } from 'rxjs';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { KEYUTIL, KJUR } from 'jsrsasign';
 import { LandingPageService } from './landing-page.service';
 import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
@@ -31,6 +33,10 @@ export class LandingPageComponent implements OnInit {
   oauthUrl: string;
   orcidRecord: any;
   signedInIdToken: any;
+  givenName: string;
+  familyName: string;
+  progressbarValue = 100;
+  curSec: number = 0;
 
   constructor(
     private eventManager: JhiEventManager,
@@ -43,6 +49,7 @@ export class LandingPageComponent implements OnInit {
     let id_token_fragment = this.getFragmentParameterByName('id_token');
     let access_token_fragment = this.getFragmentParameterByName('access_token');
     let state_param = this.getQueryParameterByName('state');
+
     this.landingPageService.getOrcidConnectionRecord(state_param).subscribe(
       (res: HttpResponse<any>) => {
         this.orcidRecord = res.body;
@@ -60,7 +67,8 @@ export class LandingPageComponent implements OnInit {
               '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
               state_param;
             // Check if id token already exists in DB (user previously granted permission)
-            if (this.orcidRecord.idToken != null && this.orcidRecord.idToken != '') {
+            console.log('!!!! orcid record', this.orcidRecord.orcid);
+            if (this.orcidRecord.orcid && this.orcidRecord.orcid != null) {
               this.showConnectionExistsElement();
             } else {
               // Check if id token exists in URL (user just granted permission)
@@ -80,6 +88,7 @@ export class LandingPageComponent implements OnInit {
                 }
               }
             }
+            this.startTimer(600);
           },
           (res: HttpErrorResponse) => {
             console.log('error');
@@ -128,6 +137,14 @@ export class LandingPageComponent implements OnInit {
               this.landingPageService.getUserInfo(access_token).subscribe(
                 (res: HttpResponse<any>) => {
                   this.signedInIdToken = res;
+                  this.givenName = '';
+                  if (this.signedInIdToken.given_name) {
+                    this.givenName = this.signedInIdToken.given_name;
+                  }
+                  if (this.signedInIdToken.family_name) {
+                    this.familyName = this.signedInIdToken.family_name;
+                  }
+
                   this.showSuccessElement();
                 },
                 () => {
@@ -177,6 +194,17 @@ export class LandingPageComponent implements OnInit {
         this.showErrorElement();
       }
     );
+  }
+
+  startTimer(seconds: number) {
+    const timer = interval(100);
+    const sub = timer.subscribe(sec => {
+      this.progressbarValue = (sec * 100) / seconds;
+      this.curSec = sec;
+      if (this.curSec === seconds) {
+        sub.unsubscribe();
+      }
+    });
   }
 
   showConnectionExistsElement(): void {

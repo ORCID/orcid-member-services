@@ -161,7 +161,7 @@ public class OrcidRecordService {
         AssertionServiceUser user = assertionsUserService.getLoggedInUser();
         Page<OrcidRecord> orcidRecords = orcidRecordRepository.findBySalesforceId(user.getSalesforceId(), pageable);
         orcidRecords.forEach(a -> {
-            if(a.getToken(user.getSalesforceId()) == null) {
+            if(a.getToken(user.getSalesforceId()) == null || StringUtils.isBlank(a.getToken(user.getSalesforceId()))) {
                 a.setOrcid(null);
             }
         });
@@ -178,9 +178,9 @@ public class OrcidRecordService {
         OrcidRecord record = optional.get();
         if (StringUtils.isBlank(record.getToken(user.getSalesforceId()))) {
             record.setOrcid(null);
-            //cami permission field
         }
         return record;
     }
+    
     
 }
