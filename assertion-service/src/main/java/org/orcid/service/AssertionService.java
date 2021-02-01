@@ -166,7 +166,7 @@ public class AssertionService {
         assertion.setOwnerId(user.getId());
         assertion.setCreated(now);
         assertion.setModified(now);
-        assertion.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+        assertion.setLastModifiedBy(user.getLogin());
         if(!StringUtils.isAllBlank(user.getLoginAs()))  {
             AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
             assertion.setSalesforceId(loginAsUser.getSalesforceId());
@@ -259,7 +259,7 @@ public class AssertionService {
         copyFieldsToUpdate(assertion, existingAssertion);
         existingAssertion.setUpdated(true);
         existingAssertion.setModified(Instant.now());
-        existingAssertion.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+        existingAssertion.setLastModifiedBy(user.getLogin());
         assertion = assertionsRepository.save(existingAssertion);
         assertion.setStatus(getAssertionStatus(assertion));
 
