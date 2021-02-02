@@ -26,9 +26,9 @@ services:
       - 'APPLICATION_CRON_POST_AFFILIATIONS=${CRON_POST_AFFILIATIONS}'
       - 'APPLICATION_CRON_PUT_AFFILIATIONS=${CRON_PUT_AFFILIATIONS}'
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
-      - OAUTH2_WEB-CLIENT-CONFIGURATION_SECRET=${WEB-CLIENT-CONFIGURATION_SECRET}
+      - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
     volumes:
-      - /mnt/efs/mserv-${ENV}/logs/:/logs
+      - ${LOG_VOLUME:-/var/tmp/}:/logs
 
   gateway-app:
     restart: unless-stopped
@@ -45,9 +45,9 @@ services:
       - JHIPSTER_REGISTRY_PASSWORD=admin
       - JHIPSTER_MAIL_FROM=${MAIL_FROM}
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
-      - OAUTH2_WEB-CLIENT-CONFIGURATION_SECRET=${WEB-CLIENT-CONFIGURATION_SECRET}
+      - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
     volumes:
-      - /mnt/efs/mserv-${ENV}/logs/:/logs
+      - ${LOG_VOLUME:-/var/tmp/}:/logs
     ports:
       - '8080:8080'
 
@@ -70,9 +70,9 @@ services:
       - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
       - JHIPSTER_MAIL_FROM=${MAIL_FROM}
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
-      - UAA_WEB-CLIENT-CONFIGURATION_SECRET=${WEB-CLIENT-CONFIGURATION_SECRET}
+      - UAA_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
     volumes:
-      - /mnt/efs/mserv-${ENV}/logs/:/logs
+      - ${LOG_VOLUME:-/var/tmp/}:/logs
 
   memberservice-app:
     restart: unless-stopped
@@ -92,11 +92,11 @@ services:
       - SPRING_MAIL_USERNAME=${MAIL_USER}
       - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
-      - OAUTH2_WEB-CLIENT-CONFIGURATION_SECRET=${WEB-CLIENT-CONFIGURATION_SECRET}
+      - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
       - 'APPLICATION_ORCIDORGCLIENTID=${ORCID_ORG_CLIENTID}'
       - 'APPLICATION_ORCIDORGSALESFORCEID=${ORCID_ORG_SALESFORCEID}'
     volumes:
-      - /mnt/efs/mserv-${ENV}/logs/:/logs
+      - ${LOG_VOLUME:-/var/tmp/}:/logs
 
   jhipster-registry:
     restart: unless-stopped
