@@ -99,6 +99,3 @@ Our user service, based on [JHipster UAA](https://www.jhipster.tech/using-uaa/),
     - Run `bash mvnw`
     - Wait for it to start
 
-## Deployment via Docker Compose
-Member services is deployed to AWS using Docker Compose.
-See [Member services wiki page](https://github.com/ORCID/ORCID-Internal/wiki/Member-services)
