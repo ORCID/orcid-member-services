@@ -26,6 +26,7 @@
         "title": "Import affiliations",
         "label": "Please select a CSV file to upload",
         "filePath": "File path",
+        "success": "The CSV import was successful.",
         "errors": {
           "label": "Oops! There was a problem processing your data. Pleases fix the errors below and try again"
         }

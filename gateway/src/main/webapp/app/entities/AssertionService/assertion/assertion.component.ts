@@ -64,6 +64,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
     });
     this.eventSubscriber = this.eventManager.subscribe('assertionListModification', () => {
       this.loadAll();
+      this.jhiAlertService.success('gatewayApp.assertionServiceAssertion.import.success', null, null);
     });
   }
 
@@ -143,5 +144,4 @@ export class AssertionComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.eventManager.destroy(this.eventSubscriber);
   }
-
 }
