@@ -359,7 +359,7 @@ public class AssertionServiceResource {
     }
 
 	private Assertion getExistingAssertion(Assertion a) {
-		List<Assertion> existing = assertionsService.findAllByOwnerId();
+		List<Assertion> existing = assertionsService.getAssertionsBySalesforceId(a.getSalesforceId());
         for (Assertion existingAAssertion : existing) {
             // If the email is the same
             if (a.getEmail().equals(existingAAssertion.getEmail())) {
