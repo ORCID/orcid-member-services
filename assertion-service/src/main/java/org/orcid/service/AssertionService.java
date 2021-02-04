@@ -487,6 +487,7 @@ public class AssertionService {
         obj.put("statusCode", statusCode);
         obj.put("error", error);
         assertion.setOrcidError(obj.toString());
+        assertion.setUpdated(false);
         assertionsRepository.save(assertion);
     }
 

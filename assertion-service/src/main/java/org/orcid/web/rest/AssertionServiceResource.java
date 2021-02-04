@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
+import org.orcid.domain.enumeration.AssertionStatus;
 import org.orcid.domain.validation.OrcidUrlValidator;
 import org.orcid.security.AuthoritiesConstants;
 import org.orcid.security.EncryptUtil;
@@ -138,7 +139,6 @@ public class AssertionServiceResource {
         LOG.debug("REST request to update assertion : {}", assertion);
         validateAssertion(assertion);
         Assertion existingAssertion = assertionsService.updateAssertion(assertion);
-
         return ResponseEntity.ok().body(existingAssertion);
     }
 
