@@ -156,6 +156,9 @@ public class AssertionService {
         if (assertion.getOrcidId() == null) {
             assertion.setOrcidId(getAssertionOrcidId(assertion));
         }
+        if(assertion.getOrcidId() == null && StringUtils.equals(assertion.getStatus(), AssertionStatus.PENDING.value)) {
+        	assertion.setPermissionLink(orcidRecordService.generateLinkForEmail(assertion.getEmail()));   	
+        }
         return assertion;
     }
 

@@ -66,6 +66,9 @@
       "year": "Year",
       "month": "Month",
       "day": "Day",
+      "permissionLink": "Permission Link",
+      "copyClipboard": "Copy to clipboard",
+      "copySuccess": "Copied to clipboard",
       "details": "View Details",
       "updateNote": "Note: Please do not forget to download and send permission links to your researcher once the assertion has been saved.",
       "uploadNote": "Note: Please do not forget to download and send permission links to your researchers once the upload has completed."

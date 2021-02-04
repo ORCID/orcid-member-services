@@ -125,8 +125,18 @@ public class Assertion implements Serializable {
     private String orcidId;
     
     private String status;
+    
+    private String permissionLink;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not
+    public String getPermissionLink() {
+		return permissionLink;
+	}
+
+	public void setPermissionLink(String permissionLink) {
+		this.permissionLink = permissionLink;
+	}
+
+	// jhipster-needle-entity-add-field - JHipster will add fields here, do not
     // remove
     public String getId() {
         return id;
