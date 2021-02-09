@@ -340,14 +340,17 @@ public class AssertionService {
 
                 LOG.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
                 String putCode = orcidAPIClient.postAffiliation(orcid, accessToken, assertion);
-                assertion.setPutCode(putCode);
-                Instant now = Instant.now();
-                assertion.setAddedToORCID(now);
-                assertion.setModified(now);
-                assertion.setUpdated(false);
-                // Remove error if any
-                assertion.setOrcidError(null);
-                assertionsRepository.save(assertion);
+                Optional<Assertion> existentAssertion = assertionsRepository.findById(assertion.getId());
+                if(existentAssertion.isPresent() && StringUtils.isBlank(existentAssertion.get().getPutCode())) {
+	                assertion.setPutCode(putCode);
+	                Instant now = Instant.now();
+	                assertion.setAddedToORCID(now);
+	                assertion.setModified(now);
+	                assertion.setUpdated(false);
+	                // Remove error if any
+	                assertion.setOrcidError(null);
+	                assertionsRepository.save(assertion);
+                }
             } catch (ORCIDAPIException oae) {
                 storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
                 if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401) {
