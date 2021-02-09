@@ -9,7 +9,9 @@ public enum AssertionStatus {
 	USER_GRANTED_ACCESS("User granted access"),
 	USER_DELETED_FROM_ORCID("User deleted from ORCID"),
 	USER_REVOKED_ACCESS("User revoked access"),
-	ERROR_ADDING_TO_ORCID("Error adding to ORCID");
+	ERROR_ADDING_TO_ORCID("Error adding to ORCID"),
+	ERROR_UPDATING_TO_ORCID("Error updating in ORCID"),
+	PENDING_RETRY("Pending retry in ORCID");
 	
 	public final String value;
 	
