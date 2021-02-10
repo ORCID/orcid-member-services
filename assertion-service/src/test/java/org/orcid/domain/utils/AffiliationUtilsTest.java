@@ -22,17 +22,17 @@ class AffiliationUtilsTest {
 
 		JSONObject error = getDummyError(404);
 		assertion.setOrcidError(error.toString());
-		assertEquals(AssertionStatus.USER_DELETED_FROM_ORCID.value,
+		assertEquals(AssertionStatus.USER_DELETED_FROM_ORCID.getValue(),
 				AssertionUtils.getAssertionStatus(assertion, record));
 
 		error = getInvalidScopeError(400);
 		assertion.setOrcidError(error.toString());
-		assertEquals(AssertionStatus.USER_REVOKED_ACCESS.value,
+		assertEquals(AssertionStatus.USER_REVOKED_ACCESS.getValue(),
 				AssertionUtils.getAssertionStatus(assertion, record));
 
 		error = getDummyError(500);
 		assertion.setOrcidError(error.toString());
-		assertEquals(AssertionStatus.ERROR_ADDING_TO_ORCID.value,
+		assertEquals(AssertionStatus.ERROR_ADDING_TO_ORCID.getValue(),
 				AssertionUtils.getAssertionStatus(assertion, record));
 	}
 
@@ -43,7 +43,7 @@ class AffiliationUtilsTest {
 		assertion.setSalesforceId("salesforceId");
 
 		record.setDeniedDate(Instant.now());
-		assertEquals(AssertionStatus.USER_DENIED_ACCESS.value,
+		assertEquals(AssertionStatus.USER_DENIED_ACCESS.getValue(),
 				AssertionUtils.getAssertionStatus(assertion, record));
 		record.setDeniedDate(null);
 
@@ -52,7 +52,7 @@ class AffiliationUtilsTest {
 
 		tokens.add(newToken);
 		record.setTokens(tokens);
-		assertEquals(AssertionStatus.USER_GRANTED_ACCESS.value,
+		assertEquals(AssertionStatus.USER_GRANTED_ACCESS.getValue(),
 				AssertionUtils.getAssertionStatus(assertion, record));
 		tokens = new ArrayList<OrcidToken>();
 		newToken = new OrcidToken(assertion.getSalesforceId(), null);
@@ -60,11 +60,11 @@ class AffiliationUtilsTest {
                 record.setTokens(tokens);
 		assertion.setPutCode("put-code");
 		assertion.setDeletedFromORCID(Instant.now());
-		assertEquals(AssertionStatus.DELETED_IN_ORCID.value,
+		assertEquals(AssertionStatus.DELETED_IN_ORCID.getValue(),
 				AssertionUtils.getAssertionStatus(assertion, record));
 		assertion.setDeletedFromORCID(null);
 
-		assertEquals(AssertionStatus.IN_ORCID.value, AssertionUtils.getAssertionStatus(assertion, record));
+		assertEquals(AssertionStatus.IN_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
 	}
 
 	private JSONObject getDummyError(int statusCode) {
