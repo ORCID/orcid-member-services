@@ -74,8 +74,10 @@ public class AssertionService {
     public Page<Assertion> findByOwnerId(Pageable pageable) {
         Page<Assertion> assertionsPage = assertionsRepository.findByOwnerId(assertionsUserService.getLoggedInUserId(), pageable);
         assertionsPage.forEach(a -> {
-            a.setStatus(getAssertionStatus(a));
-
+        	//set status as text to display in UI
+        	if(!StringUtils.isBlank(a.getStatus())) {
+        		a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
+        	}
             if (a.getOrcidId() == null) {
                 a.setOrcidId(getAssertionOrcidId(a));
             }
@@ -86,7 +88,10 @@ public class AssertionService {
     public List<Assertion> findAllByOwnerId() {
         List<Assertion> assertions = assertionsRepository.findAllByOwnerId(assertionsUserService.getLoggedInUserId(), SORT);
         assertions.forEach(a -> {
-            a.setStatus(getAssertionStatus(a));
+        	//set status as text to display in UI
+        	if(!StringUtils.isBlank(a.getStatus())) {
+        		a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
+        	}
 
             if (a.getOrcidId() == null) {
                 a.setOrcidId(getAssertionOrcidId(a));
@@ -105,7 +110,11 @@ public class AssertionService {
         
         Page<Assertion> assertions = assertionsRepository.findBySalesforceId(salesForceId , pageable);
         assertions.forEach(a -> {
-            a.setStatus(getAssertionStatus(a));
+        	//set status as text to display in UI
+        	if(!StringUtils.isBlank(a.getStatus())) {
+        		LOG.debug("assertion status is: " + a.getStatus());
+        		a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
+        	}
 
             if (a.getOrcidId() == null) {
                 a.setOrcidId(getAssertionOrcidId(a));
@@ -152,7 +161,11 @@ public class AssertionService {
         if (!assertion.getSalesforceId().equals(salesforceId)) {
             throw new IllegalArgumentException(user.getId() + " doesn't belong to organization " + assertion.getSalesforceId());
         }
-        assertion.setStatus(getAssertionStatus(assertion));
+       //set status as text to display in UI
+    	if(!StringUtils.isBlank(assertion.getStatus())) {
+    		LOG.debug("assertion status is: " + assertion.getStatus());
+    		assertion.setStatus(AssertionStatus.getStatus(assertion.getStatus()).getText());
+    	}
         if (assertion.getOrcidId() == null) {
             assertion.setOrcidId(getAssertionOrcidId(assertion));
         }
@@ -205,10 +218,10 @@ public class AssertionService {
             }
             
         }
-
-        assertion = assertionsRepository.insert(assertion);
         assertion.setStatus(getAssertionStatus(assertion));
-
+        assertion = assertionsRepository.insert(assertion);
+        //to display in UI
+        assertion.setStatus(AssertionStatus.getStatus(assertion.getStatus()).getText());
         if (assertion.getOrcidId() == null) {
             assertion.setOrcidId(getAssertionOrcidId(assertion));
         }
@@ -224,6 +237,7 @@ public class AssertionService {
             a.setOwnerId(ownerId);
             a.setCreated(now);
             a.setModified(now);
+            a.setStatus(getAssertionStatus(a));
             a.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
             // Create the assertion
             assertionsRepository.insert(a);
@@ -260,8 +274,10 @@ public class AssertionService {
         existingAssertion.setUpdated(true);
         existingAssertion.setModified(Instant.now());
         existingAssertion.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+        existingAssertion.setStatus(getAssertionStatus(existingAssertion));
         assertion = assertionsRepository.save(existingAssertion);
-        assertion.setStatus(getAssertionStatus(assertion));
+        //get status text
+        assertion.setStatus(AssertionStatus.getStatus(assertion.getStatus()).getText());
 
         if (assertion.getOrcidId() == null) {
             assertion.setOrcidId(getAssertionOrcidId(assertion));
@@ -349,6 +365,7 @@ public class AssertionService {
 	                assertion.setUpdated(false);
 	                // Remove error if any
 	                assertion.setOrcidError(null);
+	                assertion.setStatus(getAssertionStatus(assertion));
 	                assertionsRepository.save(assertion);
                 }
             } catch (ORCIDAPIException oae) {
@@ -399,6 +416,7 @@ public class AssertionService {
                 assertion.setUpdatedInORCID(now);
                 assertion.setModified(now);
                 assertion.setUpdated(false);
+                assertion.setStatus(getAssertionStatus(assertion));
                 // Remove error if any
                 assertion.setOrcidError(null);
                 assertionsRepository.save(assertion);
@@ -465,6 +483,7 @@ public class AssertionService {
                 Instant now = Instant.now();
                 assertion.setDeletedFromORCID(now);
                 assertion.setModified(now);
+                assertion.setStatus(getAssertionStatus(assertion));
                 assertionsRepository.save(assertion);
             }
             return deleted;
@@ -491,6 +510,7 @@ public class AssertionService {
         obj.put("error", error);
         assertion.setOrcidError(obj.toString());
         assertion.setUpdated(false);
+        assertion.setStatus(getAssertionStatus(assertion));
         assertionsRepository.save(assertion);
     }
 
@@ -564,5 +584,13 @@ public class AssertionService {
     public List<Assertion> getAssertionsBySalesforceId(String salesforceId) {
         return assertionsRepository.findBySalesforceId(salesforceId);
     }
-
+    
+    public void assertionStatusCleanup() {
+    	List<Assertion> statusesToClean = assertionsRepository.findByStatus("");
+    	LOG.info("Found " + statusesToClean.size() + " assertion statuses to cleanup.");
+    	for (Assertion assertion : statusesToClean ) {
+    		assertion.setStatus(getAssertionStatus(assertion));
+            assertionsRepository.save(assertion);
+    	}	
+    }
 }
