@@ -3,12 +3,14 @@ export const AFFILIATION_TYPES = ['EDUCATION', 'EMPLOYMENT', 'QUALIFICATION', 'I
 export const ASSERTION_STATUS = {
   USER_DENIED_ACCESS: 'User denied access',
   PENDING: 'Pending',
+  PENDING_RETRY: 'Pending retry in ORCID',
   DELETED_IN_ORCID: 'Deleted in ORCID',
   IN_ORCID: 'In ORCID',
   USER_GRANTED_ACCESS: 'User granted access',
   USER_DELETED_FROM_ORCID: 'User deleted from ORCID',
   USER_REVOKED_ACCESS: 'User revoked access',
-  ERROR_ADDING_TO_ORCID: 'Error adding to ORCID'
+  ERROR_ADDING_TO_ORCID: 'Error adding to ORCID',
+  ERROR_UPDATING_IN_ORCID: 'Error updating in ORCID'
 };
 
 export const COUNTRIES = {
