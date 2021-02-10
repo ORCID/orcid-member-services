@@ -9,6 +9,9 @@ import org.orcid.domain.enumeration.AssertionStatus;
 public class AssertionUtils {
 	
 	public static String getAssertionStatus(Assertion assertion, OrcidRecord orcidRecord) {
+		if(assertion.isUpdated() && !StringUtils.isBlank(assertion.getPutCode())) {
+			return AssertionStatus.PENDING_RETRY.value;
+		}
 		if (assertion.getOrcidError() != null) {
 			JSONObject json = new JSONObject(assertion.getOrcidError());
 			int statusCode = json.getInt("statusCode");
@@ -22,10 +25,18 @@ public class AssertionUtils {
 				if(errorMessage.contains("invalid_scope")) {
 					return AssertionStatus.USER_REVOKED_ACCESS.value;
 				} else {
-					return AssertionStatus.ERROR_ADDING_TO_ORCID.value;
+					if(!StringUtils.isBlank(assertion.getPutCode())) {
+							return AssertionStatus.ERROR_UPDATING_TO_ORCID.value;
+					}else {
+						return AssertionStatus.ERROR_ADDING_TO_ORCID.value;
+					}		
 				}	
 			default:
-				return AssertionStatus.ERROR_ADDING_TO_ORCID.value;
+				if(!StringUtils.isBlank(assertion.getPutCode())) {
+					return AssertionStatus.ERROR_UPDATING_TO_ORCID.value;
+				}else {
+					return AssertionStatus.ERROR_ADDING_TO_ORCID.value;
+				}
 			}
 
 		}

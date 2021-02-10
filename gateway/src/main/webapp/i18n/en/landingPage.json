@@ -17,7 +17,7 @@
     },
     "success": {
       "thanks": "Thanks, {{ given_name }} {{ family_name }}",
-      "youHaveSuccessfully": "You have successfully granted {{ clientName }} permission to update your ORCID record, and your record will be updated with affiliation information shortly.",
+      "youHaveSuccessfully": "You have successfully granted {{ clientName }} permission to update your ORCID record, and your record has been updated with the affiliation information.",
       "ifYouFind": "If you find that data added to your ORCID record is incorrect, please contact {{ clientName }}"
     }
   }
