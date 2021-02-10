@@ -217,7 +217,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			assertionsUpload.addError(line.getRecordNumber(), "disambiguation-source-identifier must not be null");
 			return a;
 		} else {
-			a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source"));
+			a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source").toUpperCase());
 		}
 		a.setExternalId(getOptionalMandatoryNullable(line, "external-id"));
 		a.setExternalIdType(getOptionalMandatoryNullable(line, "external-id-type"));

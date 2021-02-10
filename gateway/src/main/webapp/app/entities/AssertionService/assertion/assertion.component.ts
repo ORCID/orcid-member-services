@@ -21,6 +21,7 @@ import { ASSERTION_STATUS } from 'app/shared/constants/orcid-api.constants';
 })
 export class AssertionComponent implements OnInit, OnDestroy {
   errorAddingToOrcid: string = ASSERTION_STATUS.ERROR_ADDING_TO_ORCID;
+  errorUpdatingInOrcid: string = ASSERTION_STATUS.ERROR_UPDATING_IN_ORCID;
   currentAccount: any;
   assertions: IAssertion[];
   error: any;
@@ -64,6 +65,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
     });
     this.eventSubscriber = this.eventManager.subscribe('assertionListModification', () => {
       this.loadAll();
+      this.jhiAlertService.success('gatewayApp.assertionServiceAssertion.import.success', null, null);
     });
   }
 
@@ -143,5 +145,4 @@ export class AssertionComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.eventManager.destroy(this.eventSubscriber);
   }
-
 }
