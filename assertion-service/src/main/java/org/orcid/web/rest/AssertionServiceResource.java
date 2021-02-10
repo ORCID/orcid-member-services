@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +35,7 @@ import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.orcid.web.rest.errors.EmailAlreadyUsedException;
+import org.orcid.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -273,7 +275,21 @@ public class AssertionServiceResource {
             String orcidIdInJWT = String.valueOf(jwt.getJWTClaimsSet().getClaim("sub"));
 
             if (!StringUtils.isBlank(emailInStatus) && !StringUtils.isBlank(orcidIdInJWT)) {
-                orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, salesForceId);
+                orcidRecordService.storeIdToken(emailInStatus , idToken, orcidIdInJWT, salesForceId);
+                try {
+                	List<Assertion> assertions = assertionsService.findAssertionsByEmail(emailInStatus);
+                	for(Assertion a:assertions) {
+                		if(StringUtils.isBlank(a.getPutCode())) {
+                			assertionsService.putAssertionToOrcid(a);
+                		}
+                		else if(a.isUpdated()) { 			
+                			assertionsService.postAssertionToOrcid(a);
+                		}
+                	}
+                	
+                } catch (Exception ex) {
+                	LOG.error("Error when posting the affiliations for user " + emailInStatus + " after granting permission.", ex);
+                }
             } else {
                 if (StringUtils.isBlank(emailInStatus)) {
                     LOG.warn("emailInStatus is empty in the state key: " + state);
@@ -359,7 +375,7 @@ public class AssertionServiceResource {
     }
 
 	private Assertion getExistingAssertion(Assertion a) {
-		List<Assertion> existing = assertionsService.findAllByOwnerId();
+		List<Assertion> existing = assertionsService.getAssertionsBySalesforceId(a.getSalesforceId());
         for (Assertion existingAAssertion : existing) {
             // If the email is the same
             if (a.getEmail().equals(existingAAssertion.getEmail())) {

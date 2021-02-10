@@ -14,6 +14,10 @@
                     <dd class="col-md-9">
                         {{assertion.status}}
                     </dd>
+                    <dt *ngIf="assertion.permissionLink" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.permissionLink">Permission link</dt>
+                    <dd *ngIf="assertion.permissionLink" class="col-md-9">
+                        <button class="btn btn-outline-primary" type="button" [ngxClipboard] [cbContent]="assertion.permissionLink" (cbOnSuccess)="successMessage()" jhiTranslate="gatewayApp.assertionServiceAssertion.copyClipboard">Copy to clipboard</button>
+                    </dd>
                     <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.orcidId">ORCID iD</dt>
                     <dd *ngIf="assertion.orcidId" class="col-md-9">
                         <a href="{{orcidBaseUrl}}/{{assertion.orcidId}}" target="_blank">{{orcidBaseUrl}}/{{assertion.orcidId}}</a>
