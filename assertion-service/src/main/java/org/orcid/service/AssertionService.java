@@ -182,7 +182,7 @@ public class AssertionService {
         assertion.setOwnerId(user.getId());
         assertion.setCreated(now);
         assertion.setModified(now);
-        assertion.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+        assertion.setLastModifiedBy(user.getLogin());
         if(!StringUtils.isAllBlank(user.getLoginAs()))  {
             AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
             assertion.setSalesforceId(loginAsUser.getSalesforceId());
@@ -276,7 +276,7 @@ public class AssertionService {
         copyFieldsToUpdate(assertion, existingAssertion);
         existingAssertion.setUpdated(true);
         existingAssertion.setModified(Instant.now());
-        existingAssertion.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+        existingAssertion.setLastModifiedBy(user.getLogin());
         existingAssertion.setStatus(getAssertionStatus(existingAssertion));
         assertion = assertionsRepository.save(existingAssertion);
         //get status text
@@ -531,7 +531,7 @@ public class AssertionService {
         assertionsRepository.save(assertion);
     }
 
-    private String getAssertionStatus(Assertion assertion) {
+    public String getAssertionStatus(Assertion assertion) {
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(assertion.getEmail());
         if (!optionalRecord.isPresent()) {
             throw new IllegalArgumentException("Found assertion with no corresponding record email - " + assertion.getEmail() + " - " + assertion.getEmail());
