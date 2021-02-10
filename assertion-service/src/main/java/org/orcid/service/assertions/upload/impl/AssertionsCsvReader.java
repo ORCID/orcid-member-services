@@ -14,10 +14,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
+import java.util.regex.Pattern;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.orcid.config.Constants;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
@@ -35,6 +37,8 @@ import org.springframework.stereotype.Component;
 public class AssertionsCsvReader implements AssertionsUploadReader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AssertionsCsvReader.class);
+    private static final String GRID_BASE_URL = "https://grid.ac/";
+    private static final String GRID_STARTS_WITH = "grid.";
 	private final DateTimeFormatter[] formatters = {
 			new DateTimeFormatterBuilder().appendPattern("yyyy").parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
 					.parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
@@ -206,19 +210,33 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			a.setOrgRegion(line.get("org-region"));
 		}
 
-		if (getOptionalMandatoryNullable(line, "disambiguated-organization-identifier") == null) {
-			assertionsUpload.addError(line.getRecordNumber(), "disambiguated-organization-identifier must not be null");
-			return a;
-		} else {
-			a.setDisambiguatedOrgId(line.get("disambiguated-organization-identifier"));
-		}
-
 		if (getOptionalMandatoryNullable(line, "disambiguation-source") == null) {
 			assertionsUpload.addError(line.getRecordNumber(), "disambiguation-source-identifier must not be null");
 			return a;
 		} else {
 			a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source").toUpperCase());
 		}
+		
+		if (getOptionalMandatoryNullable(line, "disambiguated-organization-identifier") == null) {
+			assertionsUpload.addError(line.getRecordNumber(), "disambiguated-organization-identifier must not be null");
+			return a;
+		} else {
+			String orgId = line.get("disambiguated-organization-identifier");
+			if(orgId.startsWith(GRID_BASE_URL)) {
+				LOG.debug("Grid base found ... " + orgId );
+				orgId = orgId.substring(GRID_BASE_URL.length());
+				LOG.debug("Grid base found org ID after... " + orgId );
+			} 
+			
+			if(validateDisambiguatedOrganizationId( orgId, line.get("disambiguation-source"))) {
+				a.setDisambiguatedOrgId(orgId);
+			}
+			else {
+				assertionsUpload.addError(line.getRecordNumber(), "disambiguated-organization-identifier not valid. If the source is GRID must start with \"grid.\", if the source is RINGGOLD has to be a number. ");
+				return a;
+			}
+		}
+		
 		a.setExternalId(getOptionalMandatoryNullable(line, "external-id"));
 		a.setExternalIdType(getOptionalMandatoryNullable(line, "external-id-type"));
 		a.setExternalIdUrl(getOptionalMandatoryNullable(line, "external-id-url"));
@@ -264,6 +282,15 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			}
 		}
 		return url;
+	}
+	
+	private boolean validateDisambiguatedOrganizationId(String orgId, String orgSource) {
+		if(StringUtils.equalsIgnoreCase(orgSource, Constants.GRID_ORG_SOURCE)) {
+			return orgId.length() > (GRID_STARTS_WITH.length()+1) && StringUtils.equals(orgId.substring(0, GRID_STARTS_WITH.length()), GRID_STARTS_WITH) ;
+		} else if(StringUtils.equalsIgnoreCase(orgSource, Constants.RINGGOLD_ORG_SOURCE)) {
+			return  orgId.chars().allMatch(x -> Character.isDigit(x)); 
+		}
+		return false;
 	}
 
 	private String encodeUrl(String urlString) throws MalformedURLException, URISyntaxException {

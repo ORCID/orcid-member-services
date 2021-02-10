@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpResponse} from '@angular/common/http';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {Observable} from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 import * as moment from 'moment';
-import {DATE_TIME_FORMAT} from 'app/shared/constants/input.constants';
-import {IAssertion, Assertion} from 'app/shared/model/AssertionService/assertion.model';
-import {AssertionService} from './assertion.service';
-import {DateUtilService} from 'app/shared/util/date-util.service';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+import { IAssertion, Assertion } from 'app/shared/model/AssertionService/assertion.model';
+import { AssertionService } from './assertion.service';
+import { DateUtilService } from 'app/shared/util/date-util.service';
 import {
   AFFILIATION_TYPES,
   COUNTRIES,
@@ -25,21 +25,48 @@ function dateValidator() {
     const startDayControl = formGroup.controls['startDay'];
     const endDayControl = formGroup.controls['endDay'];
 
-    if (hasValue(startDayControl) && hasValue(endDayControl)
-      || hasValue(startMonthControl) && hasValue(endMonthControl)
-      || hasValue(startYearControl) && hasValue(endYearControl)) {
-
-      const startDate = new Date((hasValue(startYearControl) ? startYearControl.value + '-' : '') +
-        (hasValue(startMonthControl) ? startMonthControl.value + '-' : '') + (hasValue(startDayControl) ? startDayControl.value : ''));
-      const endDate = new Date((hasValue(endYearControl) ? endYearControl.value + '-' : '') +
-        (hasValue(endMonthControl) ? endMonthControl.value + '-' : '') + (hasValue(endDayControl) ? endDayControl.value : ''));
+    if (
+      (hasValue(startDayControl) && hasValue(endDayControl)) ||
+      (hasValue(startMonthControl) && hasValue(endMonthControl)) ||
+      (hasValue(startYearControl) && hasValue(endYearControl))
+    ) {
+      const startDate = new Date(
+        (hasValue(startYearControl) ? startYearControl.value + '-' : '') +
+          (hasValue(startMonthControl) ? startMonthControl.value + '-' : '') +
+          (hasValue(startDayControl) ? startDayControl.value : '')
+      );
+      const endDate = new Date(
+        (hasValue(endYearControl) ? endYearControl.value + '-' : '') +
+          (hasValue(endMonthControl) ? endMonthControl.value + '-' : '') +
+          (hasValue(endDayControl) ? endDayControl.value : '')
+      );
 
       if (startDate > endDate) {
-        endYearControl.setErrors({dateValidator: true});
+        endYearControl.setErrors({ dateValidator: true });
       } else {
         endYearControl.setErrors(null);
       }
     }
+  };
+}
+
+function disambiguatedOrgIdValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: boolean } | null => {
+    if (control.parent !== undefined) {
+      const disambiguationSourceValue = control.parent.get('disambiguationSource').value;
+      if (disambiguationSourceValue == 'RINGGOLD') {
+        var reg = new RegExp('^\\d+$');
+        if (control.value && !reg.test(control.value)) {
+          return { validDisambiguatedOrgId: false };
+        }
+      } else if (disambiguationSourceValue == 'GRID') {
+        const gridStartsWith = 'grid.';
+        if (control.value && !(control.value.substr(0, gridStartsWith.length) == gridStartsWith)) {
+          return { validDisambiguatedOrgId: false };
+        }
+      }
+    }
+    return null;
   };
 }
 
@@ -73,34 +100,37 @@ export class AssertionUpdateComponent implements OnInit {
   isSaving: boolean;
   ngbDate: any;
 
-  editForm = this.fb.group({
-    id: [],
-    email: [null, [Validators.pattern('.*@.*..*'), Validators.required]],
-    affiliationSection: [null, [Validators.required]],
-    departmentName: [null, [Validators.maxLength(4000)]],
-    roleTitle: [null, [Validators.maxLength(4000)]],
-    url: [null, [Validators.maxLength(8000)]],
-    startYear: [null],
-    startMonth: [null],
-    startDay: [null],
-    endYear: [null],
-    endMonth: [null],
-    endDay: [null],
-    orgName: [null, [Validators.required]],
-    orgCountry: [null, [Validators.required]],
-    orgCity: [null, [Validators.required]],
-    orgRegion: [],
-    disambiguatedOrgId: [null, [Validators.required]],
-    disambiguationSource: [null, [Validators.required]],
-    externalId: [],
-    externalIdType: [],
-    externalIdUrl: [],
-    putCode: [],
-    created: [],
-    modified: [],
-    deletedFromORCID: [],
-    sent: [],
-  }, {validator: dateValidator()});
+  editForm = this.fb.group(
+    {
+      id: [],
+      email: [null, [Validators.pattern('.*@.*..*'), Validators.required]],
+      affiliationSection: [null, [Validators.required]],
+      departmentName: [null, [Validators.maxLength(4000)]],
+      roleTitle: [null, [Validators.maxLength(4000)]],
+      url: [null, [Validators.maxLength(8000)]],
+      startYear: [null],
+      startMonth: [null],
+      startDay: [null],
+      endYear: [null],
+      endMonth: [null],
+      endDay: [null],
+      orgName: [null, [Validators.required]],
+      orgCountry: [null, [Validators.required]],
+      orgCity: [null, [Validators.required]],
+      orgRegion: [],
+      disambiguatedOrgId: [null, [Validators.required, disambiguatedOrgIdValidator()]],
+      disambiguationSource: [null, [Validators.required]],
+      externalId: [],
+      externalIdType: [],
+      externalIdUrl: [],
+      putCode: [],
+      created: [],
+      modified: [],
+      deletedFromORCID: [],
+      sent: []
+    },
+    { validator: dateValidator() }
+  );
 
   constructor(
     protected assertionService: AssertionService,
@@ -130,6 +160,10 @@ export class AssertionUpdateComponent implements OnInit {
     });
     this.editForm.get('endMonth').valueChanges.subscribe(val => {
       this.endDaysList = this.dateUtilService.getDaysList(this.editForm.get('endYear').value, this.editForm.get('endMonth').value);
+    });
+    this.editForm.get('disambiguationSource').valueChanges.subscribe(value => {
+      this.editForm.get('disambiguatedOrgId').markAsTouched();
+      this.editForm.get('disambiguatedOrgId').updateValueAndValidity();
     });
   }
 
@@ -177,7 +211,7 @@ export class AssertionUpdateComponent implements OnInit {
   save() {
     this.isSaving = true;
     const assertion = this.createFromForm();
-    if (assertion.id !== undefined && assertion.id != null ) {
+    if (assertion.id !== undefined && assertion.id != null) {
       this.subscribeToSaveResponse(this.assertionService.update(assertion));
     } else {
       this.subscribeToSaveResponse(this.assertionService.create(assertion));
@@ -235,10 +269,14 @@ export class AssertionUpdateComponent implements OnInit {
 
   public onStartDateSelected(resetValue) {
     this.startDaysList = this.dateUtilService.getDaysList(this.editForm.get('startYear').value, this.editForm.get('startMonth').value);
-    console.log(this.editForm.get('startYear').value + ' ' + this.editForm.get('startMonth').value + ' ' + this.editForm.get('startDay').value);
+    console.log(
+      this.editForm.get('startYear').value + ' ' + this.editForm.get('startMonth').value + ' ' + this.editForm.get('startDay').value
+    );
     if (resetValue && this.editForm.get('startDay').value) {
       if (this.editForm.get('startYear').value && this.editForm.get('startMonth').value) {
-        if (!isValidDate(this.editForm.get('startYear').value, this.editForm.get('startMonth').value, this.editForm.get('startDay').value)) {
+        if (
+          !isValidDate(this.editForm.get('startYear').value, this.editForm.get('startMonth').value, this.editForm.get('startDay').value)
+        ) {
           this.editForm.patchValue({
             startDay: null
           });
