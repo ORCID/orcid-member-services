@@ -169,7 +169,7 @@ public class AssertionService {
         if (assertion.getOrcidId() == null) {
             assertion.setOrcidId(getAssertionOrcidId(assertion));
         }
-        if(assertion.getOrcidId() == null && StringUtils.equals(assertion.getStatus(), AssertionStatus.PENDING.value)) {
+        if(assertion.getOrcidId() == null && StringUtils.equals(assertion.getStatus(), AssertionStatus.PENDING.getValue())) {
         	assertion.setPermissionLink(orcidRecordService.generateLinkForEmail(assertion.getEmail()));   	
         }
         return assertion;
@@ -423,39 +423,38 @@ public class AssertionService {
             LOG.warn("Id token still not available for {}", assertion.getEmail());
             return;
         }
-            String orcid = record.getOrcid();
-            String accessToken = null;
-            try {
-                accessToken = orcidAPIClient.exchangeToken(idToken);
-                LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
-                orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
-                Instant now = Instant.now();
-                assertion.setUpdatedInORCID(now);
-                assertion.setModified(now);
-                assertion.setUpdated(false);
+        String orcid = record.getOrcid();
+        String accessToken = null;
+        try {
+            accessToken = orcidAPIClient.exchangeToken(idToken);
+            LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
+            orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
+            Instant now = Instant.now();
+            assertion.setUpdatedInORCID(now);
+            assertion.setModified(now);
+            assertion.setUpdated(false);
                 
-                // Remove error if any
-                assertion.setOrcidError(null);
-                assertion.setStatus(getAssertionStatus(assertion));
-                assertionsRepository.save(assertion);
-            } catch (ORCIDAPIException oae) {
-                storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
-                if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401) {
-                    try
-                    {
-                      if(idToken !=null) {
-                          removeIdTokenFromOrcidRecord(record, idToken);
-                      }
-                    } catch (Exception ex){
-                      LOG.error("Error with assertion when trying to remove token" + assertion.getId(), ex);
-                    }
+            // Remove error if any
+            assertion.setOrcidError(null);
+            assertion.setStatus(getAssertionStatus(assertion));
+            assertionsRepository.save(assertion);
+        } catch (ORCIDAPIException oae) {
+            storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+            if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401) {
+                try
+                {
+                  if(idToken !=null) {
+                      removeIdTokenFromOrcidRecord(record, idToken);
+                  }
+                } catch (Exception ex){
+                  LOG.error("Error with assertion when trying to remove token" + assertion.getId(), ex);
                 }
-            }
+            }      
         } catch (Exception e) {
             LOG.error("Error with assertion " + assertion.getId(), e);
             storeError(assertion.getId(), 0, e.getMessage());
         }
-}
+   }
 
     public boolean deleteAssertionFromOrcid(String assertionId) throws JSONException, JAXBException {
         Assertion assertion = assertionsRepository.findById(assertionId).orElseThrow(() -> new IllegalArgumentException("Invalid assertion id"));
