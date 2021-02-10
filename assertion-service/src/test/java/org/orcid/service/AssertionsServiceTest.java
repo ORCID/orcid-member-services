@@ -114,6 +114,7 @@ class AssertionsServiceTest {
 				Object[] args = invocation.getArguments();
 				Assertion assertion = (Assertion) args[0];
 				assertion.setId("12345");
+				assertion.setStatus("PENDING");
 				return assertion;
 			}
 		});
@@ -159,6 +160,7 @@ class AssertionsServiceTest {
 				Object[] args = invocation.getArguments();
 				Assertion assertion = (Assertion) args[0];
 				assertion.setId("12345");
+				assertion.setStatus("PENDING");
 				return assertion;
 			}
 		});
@@ -223,6 +225,7 @@ class AssertionsServiceTest {
 				Object[] args = invocation.getArguments();
 				Assertion assertion = (Assertion) args[0];
 				assertion.setId("12345");
+				assertion.setStatus("PENDING");
 				return assertion;
 			}
 		});
@@ -288,6 +291,7 @@ class AssertionsServiceTest {
 				Object[] args = invocation.getArguments();
 				Assertion assertion = (Assertion) args[0];
 				assertion.setId("12345");
+				assertion.setStatus("PENDING");
 				return assertion;
 			}
 		});
@@ -314,6 +318,7 @@ class AssertionsServiceTest {
 				Object[] args = invocation.getArguments();
 				Assertion assertion = (Assertion) args[0];
 				assertion.setId("12345");
+				assertion.setStatus("PENDING");
 				return assertion;
 			}
 		});
@@ -339,6 +344,7 @@ class AssertionsServiceTest {
 				Object[] args = invocation.getArguments();
 				Assertion assertion = (Assertion) args[0];
 				assertion.setId("12345");
+				assertion.setStatus("PENDING");
 				return assertion;
 			}
 		});
@@ -362,6 +368,7 @@ class AssertionsServiceTest {
 				Object[] args = invocation.getArguments();
 				Assertion assertion = (Assertion) args[0];
 				assertion.setId("12345");
+				assertion.setStatus("PENDING");
 				return assertion;
 			}
 		});
@@ -386,6 +393,7 @@ class AssertionsServiceTest {
 			public Assertion answer(InvocationOnMock invocation) throws Throwable {
 				Object[] args = invocation.getArguments();
 				Assertion assertion = (Assertion) args[0];
+				assertion.setStatus("PENDING");
 				assertion.setId("12345");
 				return assertion;
 			}
@@ -411,6 +419,7 @@ class AssertionsServiceTest {
 				Object[] args = invocation.getArguments();
 				Assertion assertion = (Assertion) args[0];
 				assertion.setId("12345");
+				assertion.setStatus("PENDING");
 				return assertion;
 			}
 		});
@@ -484,7 +493,7 @@ class AssertionsServiceTest {
 
 		assertionsService.putAssertionsToOrcid();
 
-		Mockito.verify(orcidRecordService, Mockito.times(20)).findOneByEmail(Mockito.anyString());
+		Mockito.verify(orcidRecordService, Mockito.times(25)).findOneByEmail(Mockito.anyString());
 		Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
 		Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(),Mockito.any(Assertion.class));
 	}

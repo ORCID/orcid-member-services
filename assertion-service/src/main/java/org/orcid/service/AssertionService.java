@@ -74,8 +74,10 @@ public class AssertionService {
     public Page<Assertion> findByOwnerId(Pageable pageable) {
         Page<Assertion> assertionsPage = assertionsRepository.findByOwnerId(assertionsUserService.getLoggedInUserId(), pageable);
         assertionsPage.forEach(a -> {
-            a.setStatus(getAssertionStatus(a));
-
+        	//set status as text to display in UI
+        	if(!StringUtils.isBlank(a.getStatus())) {
+        		a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
+        	}
             if (a.getOrcidId() == null) {
                 a.setOrcidId(getAssertionOrcidId(a));
             }
@@ -86,7 +88,10 @@ public class AssertionService {
     public List<Assertion> findAllByOwnerId() {
         List<Assertion> assertions = assertionsRepository.findAllByOwnerId(assertionsUserService.getLoggedInUserId(), SORT);
         assertions.forEach(a -> {
-            a.setStatus(getAssertionStatus(a));
+        	//set status as text to display in UI
+        	if(!StringUtils.isBlank(a.getStatus())) {
+        		a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
+        	}
 
             if (a.getOrcidId() == null) {
                 a.setOrcidId(getAssertionOrcidId(a));
@@ -105,7 +110,11 @@ public class AssertionService {
         
         Page<Assertion> assertions = assertionsRepository.findBySalesforceId(salesForceId , pageable);
         assertions.forEach(a -> {
-            a.setStatus(getAssertionStatus(a));
+        	//set status as text to display in UI
+        	if(!StringUtils.isBlank(a.getStatus())) {
+        		LOG.debug("assertion status is: " + a.getStatus());
+        		a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
+        	}
 
             if (a.getOrcidId() == null) {
                 a.setOrcidId(getAssertionOrcidId(a));
@@ -152,11 +161,15 @@ public class AssertionService {
         if (!assertion.getSalesforceId().equals(salesforceId)) {
             throw new IllegalArgumentException(user.getId() + " doesn't belong to organization " + assertion.getSalesforceId());
         }
-        assertion.setStatus(getAssertionStatus(assertion));
+       //set status as text to display in UI
+    	if(!StringUtils.isBlank(assertion.getStatus())) {
+    		LOG.debug("assertion status is: " + assertion.getStatus());
+    		assertion.setStatus(AssertionStatus.getStatus(assertion.getStatus()).getText());
+    	}
         if (assertion.getOrcidId() == null) {
             assertion.setOrcidId(getAssertionOrcidId(assertion));
         }
-        if(assertion.getOrcidId() == null && StringUtils.equals(assertion.getStatus(), AssertionStatus.PENDING.value)) {
+        if(assertion.getOrcidId() == null && StringUtils.equals(assertion.getStatus(), AssertionStatus.PENDING.getValue())) {
         	assertion.setPermissionLink(orcidRecordService.generateLinkForEmail(assertion.getEmail()));   	
         }
         return assertion;
@@ -208,10 +221,10 @@ public class AssertionService {
             }
             
         }
-
-        assertion = assertionsRepository.insert(assertion);
         assertion.setStatus(getAssertionStatus(assertion));
-
+        assertion = assertionsRepository.insert(assertion);
+        //to display in UI
+        assertion.setStatus(AssertionStatus.getStatus(assertion.getStatus()).getText());
         if (assertion.getOrcidId() == null) {
             assertion.setOrcidId(getAssertionOrcidId(assertion));
         }
@@ -227,6 +240,7 @@ public class AssertionService {
             a.setOwnerId(ownerId);
             a.setCreated(now);
             a.setModified(now);
+            a.setStatus(getAssertionStatus(a));
             a.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
             // Create the assertion
             assertionsRepository.insert(a);
@@ -263,8 +277,10 @@ public class AssertionService {
         existingAssertion.setUpdated(true);
         existingAssertion.setModified(Instant.now());
         existingAssertion.setLastModifiedBy(user.getLogin());
+        existingAssertion.setStatus(getAssertionStatus(existingAssertion));
         assertion = assertionsRepository.save(existingAssertion);
-        assertion.setStatus(getAssertionStatus(assertion));
+        //get status text
+        assertion.setStatus(AssertionStatus.getStatus(assertion.getStatus()).getText());
 
         if (assertion.getOrcidId() == null) {
             assertion.setOrcidId(getAssertionOrcidId(assertion));
@@ -361,6 +377,7 @@ public class AssertionService {
 	                assertion.setUpdated(false);
 	                // Remove error if any
 	                assertion.setOrcidError(null);
+	                assertion.setStatus(getAssertionStatus(assertion));
 	                assertionsRepository.save(assertion);
                 }
             } catch (ORCIDAPIException oae) {
@@ -406,7 +423,6 @@ public class AssertionService {
             LOG.warn("Id token still not available for {}", assertion.getEmail());
             return;
         }
-
         String orcid = record.getOrcid();
         String accessToken = null;
         try {
@@ -417,8 +433,10 @@ public class AssertionService {
             assertion.setUpdatedInORCID(now);
             assertion.setModified(now);
             assertion.setUpdated(false);
+                
             // Remove error if any
             assertion.setOrcidError(null);
+            assertion.setStatus(getAssertionStatus(assertion));
             assertionsRepository.save(assertion);
         } catch (ORCIDAPIException oae) {
             storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
@@ -431,12 +449,12 @@ public class AssertionService {
                 } catch (Exception ex){
                   LOG.error("Error with assertion when trying to remove token" + assertion.getId(), ex);
                 }
-            }
+            }      
         } catch (Exception e) {
             LOG.error("Error with assertion " + assertion.getId(), e);
             storeError(assertion.getId(), 0, e.getMessage());
         }
-}
+   }
 
     public boolean deleteAssertionFromOrcid(String assertionId) throws JSONException, JAXBException {
         Assertion assertion = assertionsRepository.findById(assertionId).orElseThrow(() -> new IllegalArgumentException("Invalid assertion id"));
@@ -481,6 +499,8 @@ public class AssertionService {
             if (deleted) {
                 Instant now = Instant.now();
                 assertion.setDeletedFromORCID(now);
+                assertion.setModified(now);
+                assertion.setStatus(getAssertionStatus(assertion));
                 assertionsRepository.save(assertion);
             }
             return deleted;
@@ -507,10 +527,11 @@ public class AssertionService {
         obj.put("error", error);
         assertion.setOrcidError(obj.toString());
         assertion.setUpdated(false);
+        assertion.setStatus(getAssertionStatus(assertion));
         assertionsRepository.save(assertion);
     }
 
-    private String getAssertionStatus(Assertion assertion) {
+    public String getAssertionStatus(Assertion assertion) {
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(assertion.getEmail());
         if (!optionalRecord.isPresent()) {
             throw new IllegalArgumentException("Found assertion with no corresponding record email - " + assertion.getEmail() + " - " + assertion.getEmail());
@@ -583,5 +604,13 @@ public class AssertionService {
     public List<Assertion> getAssertionsBySalesforceId(String salesforceId) {
         return assertionsRepository.findBySalesforceId(salesforceId);
     }
-
+    
+    public void assertionStatusCleanup() {
+    	List<Assertion> statusesToClean = assertionsRepository.findByStatus("");
+    	LOG.info("Found " + statusesToClean.size() + " assertion statuses to cleanup.");
+    	for (Assertion assertion : statusesToClean ) {
+    		assertion.setStatus(getAssertionStatus(assertion));
+            assertionsRepository.save(assertion);
+    	}	
+    }
 }
