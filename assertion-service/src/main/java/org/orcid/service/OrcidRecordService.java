@@ -152,6 +152,25 @@ public class OrcidRecordService {
         csvPrinter.close();
         return buffer.toString();
     }
+    
+    public String generateLinkForEmail(String email) {
+        String landingPageUrl = applicationProperties.getLandingPageUrl();
+
+        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+        String salesForceId;
+        if(!StringUtils.isAllBlank(user.getLoginAs())) {
+            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
+            salesForceId = loginAsUser.getSalesforceId();
+        } else {
+            salesForceId = user.getSalesforceId();
+        }
+        Optional<OrcidRecord> record =  orcidRecordRepository.findOneByEmail(email);
+        if(!record.isPresent()) {
+        	createOrcidRecord(email, Instant.now(), salesForceId);
+        }
+
+        return landingPageUrl + "?state=" + encryptUtil.encrypt(salesForceId + "&&" + email);    
+    }
 
     public OrcidRecord updateOrcidRecord(OrcidRecord orcidRecord) {
         return orcidRecordRepository.save(orcidRecord);

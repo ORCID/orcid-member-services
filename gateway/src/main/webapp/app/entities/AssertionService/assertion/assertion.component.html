@@ -62,7 +62,7 @@
                     <br><a jhiTranslate="gatewayApp.assertionServiceAssertion.details" [routerLink]="['/assertion', assertion.id, 'view' ]">View details</a>
                 </td>
                 <td>{{assertion.status}}
-                    <div *ngIf="assertion.status==errorAddingToOrcid">
+                    <div *ngIf="assertion.status==errorAddingToOrcid || assertion.status== errorUpdatingInOrcid">
                         <p class="note" jhiTranslate="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting">For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below.</p>
                         <div  class="alert alert-warning">
                             <pre><code>{{assertion.orcidError}}</code></pre>
