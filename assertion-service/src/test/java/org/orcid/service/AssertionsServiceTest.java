@@ -168,12 +168,12 @@ class AssertionsServiceTest {
 		a = assertionsService.createOrUpdateAssertion(a);
 		assertNotNull(a.getStatus());
 		Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
-		assertNotNull(a.getOrcidId());
+		
 
 		b = assertionsService.createOrUpdateAssertion(b);
 		assertNotNull(b.getStatus());
 		Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(b));
-        assertNotNull(b.getOrcidId());
+        
 	}
 
 	@Test
@@ -301,11 +301,6 @@ class AssertionsServiceTest {
 		Mockito.verify(assertionsRepository, Mockito.times(3)).save(Mockito.any(Assertion.class));
 		Mockito.verify(assertionsRepository, Mockito.times(2)).insert(Mockito.any(Assertion.class));
 
-		assertNotNull(a.getOrcidId());
-        assertNotNull(b.getOrcidId());
-        assertNotNull(c.getOrcidId());
-        assertNotNull(d.getOrcidId());
-        assertNotNull(e.getOrcidId());
 	}
 
 	@Test
@@ -356,7 +351,7 @@ class AssertionsServiceTest {
 
 		assertionsService.createAssertion(a);
 		Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(a));
-		assertNotNull(a.getOrcidId());
+		
 	}
 
 	@Test
@@ -406,7 +401,6 @@ class AssertionsServiceTest {
 		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithoutIdToken());
 		a = assertionsService.createOrUpdateAssertion(a);
 		assertNotNull(a.getStatus());
-		assertNotNull(a.getOrcidId());
 		Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
 	}
 

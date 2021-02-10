@@ -141,6 +141,7 @@ export class LandingPageComponent implements OnInit {
                   if (this.signedInIdToken.given_name) {
                     this.givenName = this.signedInIdToken.given_name;
                   }
+                  this.familyName = '';
                   if (this.signedInIdToken.family_name) {
                     this.familyName = this.signedInIdToken.family_name;
                   }
