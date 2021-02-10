@@ -481,7 +481,6 @@ public class AssertionService {
             if (deleted) {
                 Instant now = Instant.now();
                 assertion.setDeletedFromORCID(now);
-                assertion.setModified(now);
                 assertionsRepository.save(assertion);
             }
             return deleted;
