@@ -16,8 +16,8 @@
                         <p class="mt-4"><img class="id-icon" src="/content/images/orcid-icon.svg" width="16" height="16"/>
                             <a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{orcidRecord.orcid}}</a>
                         </p>
-                        <p jhiTranslate="landingPage.connectionExists.youDoNot">
-                            You do not need to do anything more at this time.
+                        <p jhiTranslate="landingPage.success.ifYouFind" [translateValues]="{clientName: clientName}">
+                            If you find that data added to your ORCID record is incorrect, please contact {{ clientName }}
                         </p>
                     </div>
                     <div *ngIf="showError">

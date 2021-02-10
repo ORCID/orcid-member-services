@@ -225,9 +225,13 @@ public class AssertionServiceResource {
     public ResponseEntity<OrcidRecord> getOrcidRecord(@PathVariable String state) throws IOException, JSONException {
     	String decryptState = encryptUtil.decrypt(state);
     	String[] stateTokens = decryptState.split("&&");
-    	Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(stateTokens[1]);
-    	if (record.isPresent()) {
-    		return ResponseEntity.ok().body(record.get());
+    	Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(stateTokens[1]);
+    	if (optional.isPresent()) {
+    		OrcidRecord record = optional.get();
+            if (StringUtils.isBlank(record.getToken(stateTokens[0]))) {
+                record.setOrcid(null);
+            }
+    		return ResponseEntity.ok().body(record);
     	} else {
     		return ResponseEntity.notFound().build();
     	}
