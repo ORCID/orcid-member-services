@@ -284,10 +284,10 @@ public class AssertionServiceResource {
                 	List<Assertion> assertions = assertionsService.findAssertionsByEmail(emailInStatus);
                 	for(Assertion a:assertions) {
                 		if(StringUtils.isBlank(a.getPutCode())) {
-                			assertionsService.putAssertionToOrcid(a);
+                			assertionsService.postAssertionToOrcid(a);
                 		}
                 		else if(a.isUpdated()) { 			
-                			assertionsService.postAssertionToOrcid(a);
+                			assertionsService.putAssertionToOrcid(a);
                 		}
                 	}
                 	
