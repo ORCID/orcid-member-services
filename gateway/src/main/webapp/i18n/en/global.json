@@ -146,7 +146,8 @@
       "datetimelocal": "This field should be a date and time.",
       "patternLogin": "This field can only contain letters, digits and e-mail addresses.",
       "email": "Please provide a valid email address.",
-      "endDate": "The start date cannot be greater than the end date."
+      "endDate": "The start date cannot be greater than the end date.",
+      "disambiguatedOrgId": "This field is required. GRID Organization ID should start with grid. e.g. grid.12344, RINGGOLD Organization ID should be a number."
     }
   },
   "error": {

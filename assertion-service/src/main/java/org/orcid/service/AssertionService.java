@@ -426,11 +426,6 @@ public class AssertionService {
         String orcid = record.getOrcid();
         String accessToken = null;
         try {
-        	if(StringUtils.isBlank(assertion.getPutCode())) {
-            	postAssertionToOrcid(assertion);
-            	return;
-            }
-        	
             accessToken = orcidAPIClient.exchangeToken(idToken);
             LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
             orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
