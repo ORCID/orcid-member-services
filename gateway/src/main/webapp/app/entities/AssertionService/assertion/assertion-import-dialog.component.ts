@@ -56,7 +56,7 @@ export class AssertionImportDialogComponent {
           this.loading = false;
           if (this.csvErrors.length === 0) {
             this.eventManager.broadcast({
-              name: 'assertionListModification',
+              name: 'importAssertions',
               content: 'New assertions uploaded'
             });
             this.activeModal.dismiss(true);

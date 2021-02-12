@@ -27,6 +27,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
   error: any;
   success: any;
   eventSubscriber: Subscription;
+  importEventSubscriber: Subscription;
   routeData: any;
   links: any;
   totalItems: any;
@@ -64,6 +65,10 @@ export class AssertionComponent implements OnInit, OnDestroy {
       this.currentAccount = account;
     });
     this.eventSubscriber = this.eventManager.subscribe('assertionListModification', () => {
+      this.loadAll();
+      //this.jhiAlertService.success('gatewayApp.assertionServiceAssertion.import.success', null, null);
+    });
+    this.importEventSubscriber = this.eventManager.subscribe('importAssertions', () => {
       this.loadAll();
       this.jhiAlertService.success('gatewayApp.assertionServiceAssertion.import.success', null, null);
     });
