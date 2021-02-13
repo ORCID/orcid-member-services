@@ -480,7 +480,7 @@ class AssertionsServiceTest {
 	@Test
 	void testPutAssertionsToOrcid()
 			throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
-		Mockito.when(assertionsRepository.findAllToUpdate()).thenReturn(getAssertionsForCreatingInOrcid());
+		Mockito.when(assertionsRepository.findAllToUpdate()).thenReturn(getAssertionsForUpdateInOrcid());
 		for (int i = 1; i <= 20; i++) {
 			Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(getOptionalOrcidRecord(i));
 		}
@@ -551,10 +551,26 @@ class AssertionsServiceTest {
 		}
 		return assertions;
 	}
+	
+	private List<Assertion> getAssertionsForUpdateInOrcid() {
+		List<Assertion> assertions = new ArrayList<>();
+		for (int i = 1; i <= 20; i++) {
+			assertions.add(getAssertionWithEmailAndPutCode(i + "@email.com"));
+		}
+		return assertions;
+	}
 
 	private Assertion getAssertionWithEmail(String email) {
 		Assertion assertion = new Assertion();
 		assertion.setEmail(email);
+		assertion.setSalesforceId(DEFAULT_SALESFORCE_ID);
+		return assertion;
+	}
+	
+	private Assertion getAssertionWithEmailAndPutCode(String email) {
+		Assertion assertion = new Assertion();
+		assertion.setEmail(email);
+		assertion.setPutCode("1234");
 		assertion.setSalesforceId(DEFAULT_SALESFORCE_ID);
 		return assertion;
 	}
