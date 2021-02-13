@@ -35,7 +35,7 @@
                     </div>
                     <div *ngIf="showSuccess">
                         <h2 jhiTranslate="landingPage.success.thanks"
-                        [translateValues]="{given_name: signedInIdToken.given_name, family_name: signedInIdToken.family_name}">Thanks, {{signedInIdToken.given_name}} {{signedInIdToken.family_name}}</h2>
+                        [translateValues]="{given_name: givenName, family_name: familyName}">Thanks, {{givenName}} {{familyName}}</h2>
                         <p jhiTranslate="landingPage.success.youHaveSuccessfully"
                         [translateValues]="{clientName: clientName}">You have successfully granted {{clientName}} permission to update your ORCID record,
                             and your record has been updated with affiliation information .
