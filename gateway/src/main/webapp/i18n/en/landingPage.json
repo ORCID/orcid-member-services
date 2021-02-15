@@ -4,7 +4,8 @@
     "connectionExists": {
       "youHaveAlready": "You have already granted",
       "permissionToUpdate": "permission to update your ORCID record",
-      "youDoNot": "You do not need to do anything more at this time."
+      "youDoNot": "You do not need to do anything more at this time.",
+      "differentUser": "This authorization link has already been used. Please contact {{ clientName }} for a new authorization link."
     },
     "error": {
       "somethingWentWrong": "Oops, something went wrong and we were not able to fetch your ORCID iD"

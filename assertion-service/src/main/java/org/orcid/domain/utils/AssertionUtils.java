@@ -9,7 +9,7 @@ import org.orcid.domain.enumeration.AssertionStatus;
 public class AssertionUtils {
 	
 	public static String getAssertionStatus(Assertion assertion, OrcidRecord orcidRecord) {
-		if(assertion.isUpdated() && !StringUtils.isBlank(assertion.getPutCode())) {
+		if(assertion.isUpdated()) {
 			return AssertionStatus.PENDING_RETRY.getValue();
 		}
 		if (assertion.getOrcidError() != null) {
@@ -43,9 +43,6 @@ public class AssertionUtils {
 		if (StringUtils.isBlank(assertion.getPutCode())) {
 			if (orcidRecord.getDeniedDate() != null) {
 				return AssertionStatus.USER_DENIED_ACCESS.getValue();
-			}
-			if (!StringUtils.isBlank(orcidRecord.getToken(assertion.getSalesforceId()))) {
-				return AssertionStatus.USER_GRANTED_ACCESS.getValue();
 			}
 			return AssertionStatus.PENDING.getValue();
 		} else {

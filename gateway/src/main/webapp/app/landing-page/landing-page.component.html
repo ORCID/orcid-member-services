@@ -20,6 +20,12 @@
                             If you find that data added to your ORCID record is incorrect, please contact {{ clientName }}
                         </p>
                     </div>
+                    <div *ngIf="showConnectionExistsDifferentUser">
+                    
+                        <h2 jhiTranslate="landingPage.connectionExists.differentUser" [translateValues]="{clientName: clientName}">
+                            This authorization link has already been used. Please contact {{ clientName }} for a new authorization link.
+                        </h2>
+                    </div>
                     <div *ngIf="showError">
                         <h2 jhiTranslate="landingPage.error.somethingWentWrong">Oops, something went wrong and we were not able to fetch your ORCID iD</h2>
                     </div>
@@ -35,7 +41,7 @@
                     </div>
                     <div *ngIf="showSuccess">
                         <h2 jhiTranslate="landingPage.success.thanks"
-                        [translateValues]="{given_name: signedInIdToken.given_name, family_name: signedInIdToken.family_name}">Thanks, {{signedInIdToken.given_name}} {{signedInIdToken.family_name}}</h2>
+                        [translateValues]="{given_name: givenName, family_name: familyName}">Thanks, {{givenName}} {{familyName}}</h2>
                         <p jhiTranslate="landingPage.success.youHaveSuccessfully"
                         [translateValues]="{clientName: clientName}">You have successfully granted {{clientName}} permission to update your ORCID record,
                             and your record has been updated with affiliation information .

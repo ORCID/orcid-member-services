@@ -168,9 +168,7 @@ public class AssertionService {
     	}
         if (assertion.getOrcidId() == null) {
             assertion.setOrcidId(getAssertionOrcidId(assertion));
-        }
-        if(assertion.getOrcidId() == null && StringUtils.equals(assertion.getStatus(), AssertionStatus.PENDING.getValue())) {
-        	assertion.setPermissionLink(orcidRecordService.generateLinkForEmail(assertion.getEmail()));   	
+            assertion.setPermissionLink(orcidRecordService.generateLinkForEmail(assertion.getEmail())); 
         }
         return assertion;
     }
@@ -426,18 +424,22 @@ public class AssertionService {
         String orcid = record.getOrcid();
         String accessToken = null;
         try {
-            accessToken = orcidAPIClient.exchangeToken(idToken);
-            LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
-            orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
-            Instant now = Instant.now();
-            assertion.setUpdatedInORCID(now);
-            assertion.setModified(now);
-            assertion.setUpdated(false);
-                
-            // Remove error if any
-            assertion.setOrcidError(null);
-            assertion.setStatus(getAssertionStatus(assertion));
-            assertionsRepository.save(assertion);
+        	if (!StringUtils.isBlank(assertion.getPutCode())) {
+	            accessToken = orcidAPIClient.exchangeToken(idToken);
+	            LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
+	            orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
+	            Instant now = Instant.now();
+	            assertion.setUpdatedInORCID(now);
+	            assertion.setModified(now);
+	            assertion.setUpdated(false); 
+	            // Remove error if any
+	            assertion.setOrcidError(null);
+	            assertion.setStatus(getAssertionStatus(assertion));
+	            assertionsRepository.save(assertion);
+        	}
+        	else {
+        		LOG.error("Error with assertion " + assertion.getId() + " cannot update it with putcode empty.");
+        	}
         } catch (ORCIDAPIException oae) {
             storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
             if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401) {

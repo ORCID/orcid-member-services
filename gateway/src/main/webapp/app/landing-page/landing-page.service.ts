@@ -10,8 +10,8 @@ export class LandingPageService {
   idTokenUri: string = SERVER_API_URL + 'services/assertionservice/api/id-token';
   recordConnectionUri: string = SERVER_API_URL + 'services/assertionservice/api/assertion/record/';
   memberInfoUri: string = SERVER_API_URL + 'services/memberservice/api/members/authorized/';
-  userInfoUri: string  = ORCID_BASE_URL + '/oauth/userinfo'
-  publicKeyUri: string  = ORCID_BASE_URL + '/oauth/jwks'
+  userInfoUri: string = ORCID_BASE_URL + '/oauth/userinfo';
+  publicKeyUri: string = ORCID_BASE_URL + '/oauth/jwks';
 
   constructor(private http: HttpClient) {
     this.headers = new HttpHeaders({
@@ -20,25 +20,23 @@ export class LandingPageService {
     });
   }
 
-  submitUserResponse(data) {
+  submitUserResponse(data): Observable<any> {
     return this.http.post(this.idTokenUri, JSON.stringify(data), { headers: this.headers });
   }
 
   getOrcidConnectionRecord(state: String): Observable<any> {
     let requestUrl = this.recordConnectionUri + state;
-    return this.http
-      .get(requestUrl, { observe: 'response' });
+    return this.http.get(requestUrl, { observe: 'response' });
   }
 
   getMemberInfo(state: String): Observable<any> {
     let requestUrl = this.memberInfoUri + state;
-    return this.http
-      .get(requestUrl, { observe: 'response' });
+    return this.http.get(requestUrl, { observe: 'response' });
   }
 
   getUserInfo(access_token: String): Observable<any> {
-    const headers =  new HttpHeaders({
-      'Authorization': 'Bearer ' + access_token,
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + access_token,
       'Content-Type': 'application/json'
     });
     return this.http.post(this.userInfoUri, {}, { headers: headers });

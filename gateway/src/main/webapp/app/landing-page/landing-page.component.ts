@@ -22,6 +22,7 @@ export class LandingPageComponent implements OnInit {
 
   loading: Boolean = true;
   showConnectionExists: Boolean = false;
+  showConnectionExistsDifferentUser: Boolean = false;
   showDenied: Boolean = false;
   showError: Boolean = false;
   showSuccess: Boolean = false;
@@ -66,28 +67,23 @@ export class LandingPageComponent implements OnInit {
               this.clientId +
               '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
               state_param;
-            // Check if id token already exists in DB (user previously granted permission)
-            console.log('!!!! orcid record', this.orcidRecord.orcid);
-            if (this.orcidRecord.orcid && this.orcidRecord.orcid != null) {
-              this.showConnectionExistsElement();
+            // Check if id token exists in URL (user just granted permission)
+            if (id_token_fragment != null && id_token_fragment != '') {
+              this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment);
             } else {
-              // Check if id token exists in URL (user just granted permission)
-              if (id_token_fragment != null && id_token_fragment != '') {
-                this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment);
-              } else {
-                let error = this.getFragmentParameterByName('error');
-                // Check if user denied permission
-                if (error != null && error != '') {
-                  if (error == 'access_denied') {
-                    this.submitUserDenied(state_param);
-                  } else {
-                    this.showErrorElement();
-                  }
+              let error = this.getFragmentParameterByName('error');
+              // Check if user denied permission
+              if (error != null && error != '') {
+                if (error == 'access_denied') {
+                  this.submitUserDenied(state_param);
                 } else {
-                  window.location.replace(this.oauthUrl);
+                  this.showErrorElement();
                 }
+              } else {
+                window.location.replace(this.oauthUrl);
               }
             }
+
             this.startTimer(600);
           },
           (res: HttpErrorResponse) => {
@@ -132,8 +128,21 @@ export class LandingPageComponent implements OnInit {
           gracePeriod: 15 * 60 // 15 mins skew allowed
         });
         if (response === true) {
+          //check if existing token belongs to a different user
+
           this.landingPageService.submitUserResponse({ id_token: id_token, state: state, salesforce_id: this.salesforceId }).subscribe(
-            () => {
+            res => {
+              var data = res;
+              if (data) {
+                if (data.isDifferentUser) {
+                  this.showConnectionExistsDifferentUserElement();
+                  return;
+                }
+                if (data.isSameUserThatAlreadyGranted) {
+                  this.showConnectionExistsElement();
+                  return;
+                }
+              }
               this.landingPageService.getUserInfo(access_token).subscribe(
                 (res: HttpResponse<any>) => {
                   this.signedInIdToken = res;
@@ -214,6 +223,16 @@ export class LandingPageComponent implements OnInit {
     this.showSuccess = false;
     this.showConnectionExists = true;
     this.loading = false;
+    this.showConnectionExistsDifferentUser = false;
+  }
+
+  showConnectionExistsDifferentUserElement(): void {
+    this.showDenied = false;
+    this.showError = false;
+    this.showSuccess = false;
+    this.showConnectionExists = false;
+    this.loading = false;
+    this.showConnectionExistsDifferentUser = true;
   }
 
   showErrorElement(): void {
@@ -221,6 +240,7 @@ export class LandingPageComponent implements OnInit {
     this.showError = true;
     this.showSuccess = false;
     this.loading = false;
+    this.showConnectionExistsDifferentUser = false;
   }
 
   showDeniedElement(): void {
@@ -228,6 +248,7 @@ export class LandingPageComponent implements OnInit {
     this.showError = false;
     this.showSuccess = false;
     this.loading = false;
+    this.showConnectionExistsDifferentUser = false;
   }
 
   showSuccessElement(): void {
@@ -235,5 +256,6 @@ export class LandingPageComponent implements OnInit {
     this.showError = false;
     this.showSuccess = true;
     this.loading = false;
+    this.showConnectionExistsDifferentUser = false;
   }
 }

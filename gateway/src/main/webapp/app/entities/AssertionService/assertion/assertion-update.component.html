@@ -91,14 +91,10 @@
                         <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.disambiguatedOrgId" for="field_disambiguatedOrgId">Disambiguated Org Id</label>
                         <input type="text" class="form-control" name="disambiguatedOrgId" id="field_disambiguatedOrgId"
                             formControlName="disambiguatedOrgId"/>
-                        <div *ngIf="editForm.get('disambiguatedOrgId').invalid && (editForm.get('disambiguatedOrgId').dirty || editForm.get('disambiguatedOrgId').touched)">
+                        <div *ngIf="editForm.get('disambiguatedOrgId').invalid && (editForm.get('disambiguatedOrgId').dirty || editForm.get('disambiguatedOrgId').touched)"> 
                             <small class="form-text text-danger"
-                                *ngIf="editForm.get('disambiguatedOrgId').errors.required" jhiTranslate="entity.validation.required">
-                            This field is required.
-                            </small>
-                            <small class="form-text text-danger"
-                               *ngIf="!editForm.validDisambiguatedOrgId" jhiTranslate="entity.validation.disambiguatedOrgId">
-                            GRID Organization ID should start with "grid.", RINGGOLD Organization ID should be a number.
+                               *ngIf="!editForm.validDisambiguatedOrgId || editForm.get('disambiguatedOrgId').errors.required" jhiTranslate="entity.validation.disambiguatedOrgId">
+                            This field is required. GRID Organization ID should start with "grid.", RINGGOLD Organization ID should be a number.
                         	</small>
                         </div>
                     </div>
