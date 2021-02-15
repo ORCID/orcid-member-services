@@ -266,17 +266,41 @@ public class AssertionServiceResource {
     }
 
     @PostMapping("/id-token")
-    public ResponseEntity<Void> storeIdToken(@RequestBody ObjectNode json) throws ParseException {
+    public ResponseEntity<String> storeIdToken(@RequestBody ObjectNode json) throws ParseException, JAXBException {
         String state = json.get("state").asText();
         String idToken = json.has("id_token") ? json.get("id_token").asText() : null;
         String salesForceId = json.has("salesforce_id") ? json.get("salesforce_id").asText() : null;
         Boolean denied = json.has("denied") ? json.get("denied").asBoolean() : false;
         String[] stateTokens = encryptUtil.decrypt(state).split("&&");
         String emailInStatus = stateTokens[1];
+        JSONObject responseData = new JSONObject();
 
         if (!denied) {
             SignedJWT jwt = jwtUtil.getSignedJWT(idToken);
             String orcidIdInJWT = String.valueOf(jwt.getJWTClaimsSet().getClaim("sub"));
+            //check it orcidid from jwt is the same as the one in record if exists
+            Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(stateTokens[1]);
+        	if (optional.isPresent()) {
+        		OrcidRecord record = optional.get();
+                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0])) && !StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
+                	responseData.put("isDifferentUser", true);
+                	responseData.put("isSameUserThatAlreadyGranted", false);
+                    return ResponseEntity.ok().body(responseData.toString());
+                }
+                //still need to store the token in case the used had denied access before
+                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0])) && StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
+                	responseData.put("isDifferentUser", false);
+                	responseData.put("isSameUserThatAlreadyGranted", true);
+                }
+                else {
+                	responseData.put("isDifferentUser", false);
+                	responseData.put("isSameUserThatAlreadyGranted", false);
+                }
+        	}
+        	else {
+        		responseData.put("isDifferentUser", false);
+            	responseData.put("isSameUserThatAlreadyGranted", false);
+        	}
 
             if (!StringUtils.isBlank(emailInStatus) && !StringUtils.isBlank(orcidIdInJWT)) {
                 orcidRecordService.storeIdToken(emailInStatus , idToken, orcidIdInJWT, salesForceId);
@@ -307,8 +331,7 @@ public class AssertionServiceResource {
             LOG.warn("User {} have denied access", emailInStatus);
             orcidRecordService.storeUserDeniedAccess(emailInStatus);
         }
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(responseData.toString());
     }
 
     @GetMapping(path = "/assertion/report")
