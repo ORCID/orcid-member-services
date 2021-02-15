@@ -52,7 +52,7 @@ class AffiliationUtilsTest {
 
 		tokens.add(newToken);
 		record.setTokens(tokens);
-		assertEquals(AssertionStatus.USER_GRANTED_ACCESS.getValue(),
+		assertEquals(AssertionStatus.PENDING.getValue(),
 				AssertionUtils.getAssertionStatus(assertion, record));
 		tokens = new ArrayList<OrcidToken>();
 		newToken = new OrcidToken(assertion.getSalesforceId(), null);
