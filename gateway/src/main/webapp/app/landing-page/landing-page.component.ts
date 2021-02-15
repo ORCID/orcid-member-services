@@ -131,9 +131,9 @@ export class LandingPageComponent implements OnInit {
           //check if existing token belongs to a different user
 
           this.landingPageService.submitUserResponse({ id_token: id_token, state: state, salesforce_id: this.salesforceId }).subscribe(
-            (sRes: HttpResponse<any>) => {
-              var data = sRes;
-              if (sRes) {
+            res => {
+              var data = res;
+              if (data) {
                 if (data.isDifferentUser) {
                   this.showConnectionExistsDifferentUserElement();
                   return;
