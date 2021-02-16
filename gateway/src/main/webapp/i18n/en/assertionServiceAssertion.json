@@ -31,8 +31,8 @@
           "label": "Oops! There was a problem processing your data. Pleases fix the errors below and try again"
         }
       },
-      "addedToOrcid": "Added",
-      "updatedInOrcid": "Updated",
+      "addedToOrcid": "Added To ORCID",
+      "updatedInOrcid": "Updated In ORCID",
       "affiliationData": "Affiliation Data",
       "affiliationSection": "Affiliation Type",
       "departmentName": "Department",
