@@ -191,7 +191,7 @@ public class AssertionServiceResource {
     public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
         assertionsService.deleteById(id);
 
-        return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).body("{\"id\":\"" + id + "\"}");
     }
 
 	/**
