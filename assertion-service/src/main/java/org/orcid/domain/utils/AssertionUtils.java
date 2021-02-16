@@ -9,7 +9,7 @@ import org.orcid.domain.enumeration.AssertionStatus;
 public class AssertionUtils {
 	
 	public static String getAssertionStatus(Assertion assertion, OrcidRecord orcidRecord) {
-		if(assertion.isUpdated()) {
+		if(assertion.isUpdated() && assertion.getAddedToORCID()!= null) {
 			return AssertionStatus.PENDING_RETRY.getValue();
 		}
 		if (assertion.getOrcidError() != null) {
