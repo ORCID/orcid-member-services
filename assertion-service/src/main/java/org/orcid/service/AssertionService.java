@@ -615,4 +615,9 @@ public class AssertionService {
             assertionsRepository.save(assertion);
     	}	
     }
+    
+    public void updateAssertionStatus(AssertionStatus status, Assertion assertion) {
+    	assertion.setStatus(status.getValue());
+    	 assertionsRepository.save(assertion);	
+    }
 }

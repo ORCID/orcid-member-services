@@ -330,6 +330,15 @@ public class AssertionServiceResource {
         } else {
             LOG.warn("User {} have denied access", emailInStatus);
             orcidRecordService.storeUserDeniedAccess(emailInStatus);
+            try {
+            	List<Assertion> assertions = assertionsService.findAssertionsByEmail(emailInStatus);
+            	for(Assertion a:assertions) {
+            		assertionsService.updateAssertionStatus(AssertionStatus.USER_DENIED_ACCESS,a);
+            	}
+            	
+            } catch (Exception ex) {
+            	LOG.error("Error when updating status to denied access for  the affiliations of the user " + emailInStatus + " after denying permission.", ex);
+            }
         }
         return ResponseEntity.ok().body(responseData.toString());
     }
