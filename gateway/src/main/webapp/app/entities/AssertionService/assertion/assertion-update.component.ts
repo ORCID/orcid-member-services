@@ -61,7 +61,26 @@ function disambiguatedOrgIdValidator(): ValidatorFn {
         }
       } else if (disambiguationSourceValue == 'GRID') {
         const gridStartsWith = 'grid.';
-        if (control.value && !(control.value.substr(0, gridStartsWith.length) == gridStartsWith)) {
+        const gridBaseUrl = 'https://www.grid.ac/';
+        const gridBaseUrlInstitutes = 'https://www.grid.ac/institutes/';
+        const gridBaseUrlAlt = 'https://grid.ac/';
+        const gridBaseUrlInstitutesAlt = 'https://grid.ac/institutes/';
+        var gridId = control.value;
+        console.log('gridID to start: ' + gridId + ' ' + gridId.substr(0, gridBaseUrlInstitutes.length));
+        //strip the url and see if is a valid grid id
+        if (gridId && gridId.substr(0, gridBaseUrlInstitutes.length) == gridBaseUrlInstitutes) {
+          gridId = gridId.substr(gridBaseUrlInstitutes.length, gridId.length);
+          console.log('!!!!' + gridId);
+        } else if (gridId && gridId.substr(0, gridBaseUrl.length) == gridBaseUrl) {
+          gridId = gridId.substr(gridBaseUrl.length);
+        } else if (gridId && gridId.substr(0, gridBaseUrlInstitutesAlt.length) == gridBaseUrlInstitutesAlt) {
+          gridId = gridId.substr(gridBaseUrlInstitutesAlt.length);
+        } else if (gridId && gridId.substr(0, gridBaseUrlAlt.length) == gridBaseUrlAlt) {
+          gridId = gridId.substr(gridBaseUrlAlt.length);
+        }
+
+        console.log('gridID: ' + gridId);
+        if (gridId && !(gridId.substr(0, gridStartsWith.length) == gridStartsWith)) {
           return { validDisambiguatedOrgId: false };
         }
       }

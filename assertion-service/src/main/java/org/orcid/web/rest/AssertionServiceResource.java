@@ -23,6 +23,7 @@ import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.enumeration.AssertionStatus;
+import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.domain.validation.OrcidUrlValidator;
 import org.orcid.security.AuthoritiesConstants;
 import org.orcid.security.EncryptUtil;
@@ -70,6 +71,8 @@ public class AssertionServiceResource {
     private static final Logger LOG = LoggerFactory.getLogger(AssertionServiceResource.class);
 
     private static final String ENTITY_NAME = "affiliation";
+    
+    private final String GRID_SOURCE_ID = "GRID";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -377,6 +380,10 @@ public class AssertionServiceResource {
         }
         if (assertion.getDisambiguationSource() == null || StringUtils.isBlank(assertion.getDisambiguationSource())) {
            throw new BadRequestAlertException("disambiguation-source must not be null", "member", "disambiguationSource");
+        }
+        
+        if(StringUtils.equals(assertion.getDisambiguationSource(), GRID_SOURCE_ID)) {
+        	assertion.setDisambiguatedOrgId(AssertionUtils.stripGridURL(assertion.getDisambiguatedOrgId()));
         }
         assertion.setUrl(validateUrl(assertion.getUrl()));
     }

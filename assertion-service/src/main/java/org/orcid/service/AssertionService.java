@@ -40,6 +40,7 @@ import org.springframework.stereotype.Service;
 public class AssertionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AssertionService.class);
+    
 
     private final Sort SORT = new Sort(Sort.Direction.ASC, "email", "status", "created", "modified", "deletedFromORCID");
 
@@ -187,6 +188,7 @@ public class AssertionService {
         } else {
             assertion.setSalesforceId(user.getSalesforceId());
         }
+        
 
         String email = assertion.getEmail();
 

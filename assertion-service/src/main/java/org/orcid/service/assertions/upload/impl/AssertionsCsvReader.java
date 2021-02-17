@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.enumeration.AffiliationSection;
+import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.domain.validation.OrcidUrlValidator;
 import org.orcid.jaxb.model.common.Iso3166Country;
 import org.orcid.service.assertions.upload.AssertionsUpload;
@@ -37,7 +38,6 @@ import org.springframework.stereotype.Component;
 public class AssertionsCsvReader implements AssertionsUploadReader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AssertionsCsvReader.class);
-    private static final String GRID_BASE_URL = "https://grid.ac/";
     private static final String GRID_STARTS_WITH = "grid.";
 	private final DateTimeFormatter[] formatters = {
 			new DateTimeFormatterBuilder().appendPattern("yyyy").parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
@@ -221,13 +221,8 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			assertionsUpload.addError(line.getRecordNumber(), "disambiguated-organization-identifier must not be null");
 			return a;
 		} else {
-			String orgId = line.get("disambiguated-organization-identifier");
-			if(orgId.startsWith(GRID_BASE_URL)) {
-				LOG.debug("Grid base found ... " + orgId );
-				orgId = orgId.substring(GRID_BASE_URL.length());
-				LOG.debug("Grid base found org ID after... " + orgId );
-			} 
-			
+			String orgId = AssertionUtils.stripGridURL(line.get("disambiguated-organization-identifier"));
+
 			if(validateDisambiguatedOrganizationId( orgId, line.get("disambiguation-source"))) {
 				a.setDisambiguatedOrgId(orgId);
 			}
