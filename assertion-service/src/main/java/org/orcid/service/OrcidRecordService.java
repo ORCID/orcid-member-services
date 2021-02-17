@@ -202,4 +202,30 @@ public class OrcidRecordService {
     }
     
     
+    public void deleteIdToken(String emailInStatus, String salesForceId) {
+        OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus).orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
+        List<OrcidToken> tokens = orcidRecord.getTokens();
+        List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
+        OrcidToken newToken = new OrcidToken(salesForceId, null);
+        if(tokens == null || tokens.size() == 0)
+        {
+            updatedTokens.add(newToken);
+        }
+        else {
+            for(OrcidToken token: tokens)
+            {   
+                    if(StringUtils.equals(token.getSalesforce_id(), salesForceId)) {
+                        updatedTokens.add(newToken);
+                    }
+                    else {
+                        updatedTokens.add(token);
+                    }              
+            }     
+        } 
+        orcidRecord.setTokens(updatedTokens);
+        orcidRecord.setModified(Instant.now());
+        orcidRecordRepository.save(orcidRecord);
+    }
+    
+    
 }

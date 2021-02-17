@@ -23,6 +23,7 @@ import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.enumeration.AssertionStatus;
+import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.domain.validation.OrcidUrlValidator;
 import org.orcid.security.AuthoritiesConstants;
 import org.orcid.security.EncryptUtil;
@@ -70,6 +71,8 @@ public class AssertionServiceResource {
     private static final Logger LOG = LoggerFactory.getLogger(AssertionServiceResource.class);
 
     private static final String ENTITY_NAME = "affiliation";
+    
+    private final String GRID_SOURCE_ID = "GRID";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -191,7 +194,7 @@ public class AssertionServiceResource {
     public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
         assertionsService.deleteById(id);
 
-        return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).body("{\"id\":\"" + id + "\"}");
     }
 
 	/**
@@ -330,6 +333,15 @@ public class AssertionServiceResource {
         } else {
             LOG.warn("User {} have denied access", emailInStatus);
             orcidRecordService.storeUserDeniedAccess(emailInStatus);
+            try {
+            	List<Assertion> assertions = assertionsService.findAssertionsByEmail(emailInStatus);
+            	for(Assertion a:assertions) {
+            		assertionsService.updateAssertionStatus(AssertionStatus.USER_DENIED_ACCESS,a);
+            	}
+            	
+            } catch (Exception ex) {
+            	LOG.error("Error when updating status to denied access for  the affiliations of the user " + emailInStatus + " after denying permission.", ex);
+            }
         }
         return ResponseEntity.ok().body(responseData.toString());
     }
@@ -368,6 +380,10 @@ public class AssertionServiceResource {
         }
         if (assertion.getDisambiguationSource() == null || StringUtils.isBlank(assertion.getDisambiguationSource())) {
            throw new BadRequestAlertException("disambiguation-source must not be null", "member", "disambiguationSource");
+        }
+        
+        if(StringUtils.equals(assertion.getDisambiguationSource(), GRID_SOURCE_ID)) {
+        	assertion.setDisambiguatedOrgId(AssertionUtils.stripGridURL(assertion.getDisambiguatedOrgId()));
         }
         assertion.setUrl(validateUrl(assertion.getUrl()));
     }

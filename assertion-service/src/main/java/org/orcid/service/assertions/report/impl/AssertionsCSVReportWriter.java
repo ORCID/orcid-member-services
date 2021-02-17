@@ -66,8 +66,11 @@ public class AssertionsCSVReportWriter implements AssertionsReportWriter {
 						.orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for " + a.getEmail()));
 				orcidRecordMap.put(a.getEmail(), orcidRecord);
 			}
-			elements.add((orcidRecordMap.get(a.getEmail()).getOrcid() == null) ? ""
-					: (orcidRecordMap.get(a.getEmail()).getOrcid()));
+			String orcidId = null;
+			if(!StringUtils.isBlank(orcidRecordMap.get(a.getEmail()).getToken(salesForceId))) {
+				orcidId = orcidRecordMap.get(a.getEmail()).getOrcid();
+			}
+			elements.add(orcidId == null ? "" : orcidId);
 			elements.add(AssertionUtils.getAssertionStatus(a, orcidRecordMap.get(a.getEmail())));
 			elements.add(a.getPutCode() == null ? "" : a.getPutCode());
 			elements.add(a.getCreated() == null ? "" : a.getCreated().toString());
