@@ -16,6 +16,11 @@ public class AssertionUtils {
 		if(assertion.isUpdated() && assertion.getAddedToORCID()!= null) {
 			return AssertionStatus.PENDING_RETRY.getValue();
 		}
+		
+		if(assertion.isUpdated() && assertion.getAddedToORCID()== null) {
+			return AssertionStatus.PENDING.getValue();
+		}
+		
 		if (assertion.getOrcidError() != null) {
 			JSONObject json = new JSONObject(assertion.getOrcidError());
 			int statusCode = json.getInt("statusCode");
