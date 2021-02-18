@@ -45,7 +45,7 @@ public class AssertionUtils {
 
 		}
 		if (StringUtils.isBlank(assertion.getPutCode())) {
-			if (orcidRecord.getDeniedDate() != null) {
+			if (orcidRecord.getDeniedDate(assertion.getSalesforceId()) != null) {
 				return AssertionStatus.USER_DENIED_ACCESS.getValue();
 			}
 			return AssertionStatus.PENDING.getValue();

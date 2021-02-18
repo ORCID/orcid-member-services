@@ -67,7 +67,7 @@ public class OrcidRecordService {
         OrcidRecord or = new OrcidRecord();
         or.setEmail(email);
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-        tokens.add( new OrcidToken(salesForceId, null));
+        tokens.add( new OrcidToken(salesForceId, null, null));
         or.setTokens(tokens);
         or.setCreated(now);
         or.setModified(now);
@@ -93,7 +93,7 @@ public class OrcidRecordService {
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus).orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
         List<OrcidToken> tokens = orcidRecord.getTokens();
         List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(salesForceId, idToken);
+        OrcidToken newToken = new OrcidToken(salesForceId, idToken, null);
         if(tokens == null || tokens.size() == 0)
         {
             updatedTokens.add(newToken);
@@ -116,9 +116,31 @@ public class OrcidRecordService {
         orcidRecordRepository.save(orcidRecord);
     }
     
-    public void storeUserDeniedAccess(String emailInStatus) {
+    public void storeUserDeniedAccess(String emailInStatus, String salesForceId) {
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus).orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
-        orcidRecord.setDeniedDate(Instant.now());
+        List<OrcidToken> tokens = orcidRecord.getTokens();
+        List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
+        OrcidToken newToken = new OrcidToken(salesForceId, null, Instant.now());
+        if(tokens == null || tokens.size() == 0)
+        {
+            updatedTokens.add(newToken);
+        }
+        else {
+            for(OrcidToken token: tokens)
+            {   
+            	    LOG.debug("token SF " + token.getSalesforce_id() + " other " +  salesForceId);
+                    if(StringUtils.equals(token.getSalesforce_id(), salesForceId)) {
+                    	LOG.debug("!!!! 1");
+                        updatedTokens.add(newToken);
+                    }
+                    else {
+                    	LOG.debug("!!!! 2");
+                        updatedTokens.add(token);
+                    }              
+            }     
+        } 
+        orcidRecord.setTokens(updatedTokens);
+        orcidRecord.setModified(Instant.now());
         orcidRecordRepository.save(orcidRecord);
     }
     
@@ -180,7 +202,7 @@ public class OrcidRecordService {
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus).orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
         List<OrcidToken> tokens = orcidRecord.getTokens();
         List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(salesForceId, null);
+        OrcidToken newToken = new OrcidToken(salesForceId, null, null);
         if(tokens == null || tokens.size() == 0)
         {
             updatedTokens.add(newToken);

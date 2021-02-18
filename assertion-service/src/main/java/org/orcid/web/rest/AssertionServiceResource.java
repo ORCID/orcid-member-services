@@ -332,7 +332,7 @@ public class AssertionServiceResource {
             }
         } else {
             LOG.warn("User {} have denied access", emailInStatus);
-            orcidRecordService.storeUserDeniedAccess(emailInStatus);
+            orcidRecordService.storeUserDeniedAccess(emailInStatus, stateTokens[0]);
             try {
             	List<Assertion> assertions = assertionsService.findByEmailAndSalesForceId(emailInStatus, salesForceId );
             	for(Assertion a:assertions) {
