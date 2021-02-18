@@ -278,10 +278,6 @@ public class AssertionService {
         if (!salesforceId.equals(existingAssertion.getSalesforceId()) && !updateAsAdmin) {
             throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
         }
-
-        /* if (assertion.getEmail() != null && existingAssertion.getEmail() != null && !assertion.getEmail().equals(existingAssertion.getEmail())) {
-            updateEmailOrcidRecord(assertion.getEmail(), existingAssertion.getEmail());
-        }*/
         
         copyFieldsToUpdate(assertion, existingAssertion);
         existingAssertion.setUpdated(true);
@@ -391,16 +387,6 @@ public class AssertionService {
                 }
             } catch (ORCIDAPIException oae) {
                 storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
-                /*if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401) {
-                    try
-                    {
-                      if(idToken !=null) {
-                          removeIdTokenFromOrcidRecord(record, accessToken);
-                      }
-                    } catch (Exception ex){
-                      LOG.error("Error with assertion when trying to remove token" + assertion.getId(), ex);
-                    }
-                }*/
             } catch (Exception e) {
                 LOG.error("Error with assertion " + assertion.getId(), e);
                 storeError(assertion.getId(), 0, e.getMessage());
@@ -452,17 +438,7 @@ public class AssertionService {
         		LOG.error("Error with assertion " + assertion.getId() + " cannot update it with putcode empty.");
         	}
         } catch (ORCIDAPIException oae) {
-            storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
-            /*if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401) {
-                try
-                {
-                  if(idToken !=null) {
-                      removeIdTokenFromOrcidRecord(record, idToken);
-                  }
-                } catch (Exception ex){
-                  LOG.error("Error with assertion when trying to remove token" + assertion.getId(), ex);
-                }
-            }  */    
+            storeError(assertion.getId(), oae.getStatusCode(), oae.getError());  
         } catch (Exception e) {
             LOG.error("Error with assertion " + assertion.getId(), e);
             storeError(assertion.getId(), 0, e.getMessage());
@@ -595,25 +571,6 @@ public class AssertionService {
             orcidRecordService.deleteOrcidRecord(orcidRecord);
         }
     }
-
-   /* private void removeIdTokenFromOrcidRecord(OrcidRecord orcidRecord, String idToken) {
-        if (orcidRecord != null && idToken!=null ) {
-            List<OrcidToken> tokens = orcidRecord.getTokens();
-            if(tokens !=null  && tokens.size() > 0) {
-                List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
-                for(OrcidToken token: tokens)
-                {   
-                        if(!StringUtils.equals(token.getToken_id(), idToken)) {
-                            updatedTokens.add(token);
-                        }
-                    
-                }
-                orcidRecord.setTokens(updatedTokens);
-                orcidRecord.setModified(Instant.now());
-                orcidRecordService.updateOrcidRecord(orcidRecord);
-            }
-        }
-    }*/
 
     public Optional<Assertion> findOneByEmailIgnoreCase(String email) {
         return assertionsRepository.findOneByEmailIgnoreCase(email.toLowerCase());
