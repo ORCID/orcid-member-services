@@ -47,9 +47,6 @@ public class OrcidRecord {
     @Field("reminder_notification_sent_date")
     private Instant reminderNotificationSentDate;
 
-    /*@Field("denied_date")
-    private Instant deniedDate;*/
-
     @Field("created")
     private Instant created;
 
@@ -112,14 +109,6 @@ public class OrcidRecord {
         this.reminderNotificationSentDate = reminderNotificationSentDate;
     }
 
-    /*public Instant getDeniedDate() {
-        return deniedDate;
-    }
-
-    public void setDeniedDate(Instant deniedDate) {
-        this.deniedDate = deniedDate;
-    }*/
-
     public Instant getCreated() {
         return created;
     }
@@ -174,7 +163,6 @@ public class OrcidRecord {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((created == null) ? 0 : created.hashCode());
-        //result = prime * result + ((deniedDate == null) ? 0 : deniedDate.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((tokens == null) ? 0 : tokens.hashCode());
@@ -200,11 +188,6 @@ public class OrcidRecord {
                 return false;
         } else if (!created.equals(other.created))
             return false;
-       /* if (deniedDate == null) {
-            if (other.deniedDate != null)
-                return false;
-        } else if (!deniedDate.equals(other.deniedDate))
-            return false;*/
         if (email == null) {
             if (other.email != null)
                 return false;
