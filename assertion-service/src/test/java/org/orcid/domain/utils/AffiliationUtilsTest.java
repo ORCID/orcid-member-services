@@ -51,6 +51,7 @@ class AffiliationUtilsTest {
 
 		newToken = new OrcidToken(assertion.getSalesforceId(), "idToken", null);
 
+		tokens = new ArrayList<OrcidToken>();
 		tokens.add(newToken);
 		record.setTokens(tokens);
 		assertEquals(AssertionStatus.PENDING.getValue(),
