@@ -573,6 +573,10 @@ public class AssertionService {
     public List<Assertion> findByEmail(String email) {
         return assertionsRepository.findByEmail(email);
     }
+    
+    public List<Assertion> findByEmailAndSalesForceId(String email, String salesForceId) {
+        return assertionsRepository.findByEmailAndSalesforceId(email, salesForceId);
+    }
 
     private void updateEmailOrcidRecord(String newEmail, String oldEmail) {
         Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(oldEmail);
