@@ -115,9 +115,9 @@ public class AssertionsCSVReportWriterTest {
 		record.setEmail("test@test.com");
 		record.setId("id");
 		List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-                OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
-                tokens.add(newToken);
-                record.setTokens(tokens);
+        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken", null);
+        tokens.add(newToken);
+        record.setTokens(tokens);
 		record.setLastNotified(Instant.now());
 		record.setModified(Instant.now());
 		record.setOrcid("orcid");

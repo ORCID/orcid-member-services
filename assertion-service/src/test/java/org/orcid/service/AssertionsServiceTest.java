@@ -535,7 +535,7 @@ class AssertionsServiceTest {
 			record.setOrcid("orcid" + i);
 			
 			List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-	                OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken" + i);
+	                OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken" + i, null);
 	                tokens.add(newToken);
 	                record.setTokens(tokens);
 			return Optional.of(record);
@@ -579,7 +579,7 @@ class AssertionsServiceTest {
 		OrcidRecord record = new OrcidRecord();
 		record.setEmail("email");
 		List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-                OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
+                OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken", null);
                 tokens.add(newToken);
                 record.setTokens(tokens);
 		record.setOrcid("orcid");

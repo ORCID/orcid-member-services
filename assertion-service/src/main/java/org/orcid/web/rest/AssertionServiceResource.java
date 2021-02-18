@@ -134,7 +134,7 @@ public class AssertionServiceResource {
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         response.setHeader("Content-Type", "text/csv");
         response.setHeader("filename", fileName);
-        String csvReport = orcidRecordService.generateLinks();
+        String csvReport = assertionsService.generateLinks();
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
     }
@@ -332,9 +332,9 @@ public class AssertionServiceResource {
             }
         } else {
             LOG.warn("User {} have denied access", emailInStatus);
-            orcidRecordService.storeUserDeniedAccess(emailInStatus);
+            orcidRecordService.storeUserDeniedAccess(emailInStatus, stateTokens[0]);
             try {
-            	List<Assertion> assertions = assertionsService.findAssertionsByEmail(emailInStatus);
+            	List<Assertion> assertions = assertionsService.findByEmailAndSalesForceId(emailInStatus, salesForceId );
             	for(Assertion a:assertions) {
             		assertionsService.updateAssertionStatus(AssertionStatus.USER_DENIED_ACCESS,a);
             	}

@@ -73,7 +73,7 @@ class AssertionServiceResourceTest {
 	        
 		OrcidRecord record = new OrcidRecord();
 		List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-                OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
+                OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken", null);
                 tokens.add(newToken);
                 record.setTokens(tokens);
 		

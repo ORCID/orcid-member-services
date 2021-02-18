@@ -16,6 +16,11 @@ public class AssertionUtils {
 		if(assertion.isUpdated() && assertion.getAddedToORCID()!= null) {
 			return AssertionStatus.PENDING_RETRY.getValue();
 		}
+		
+		if(assertion.isUpdated() && assertion.getAddedToORCID()== null) {
+			return AssertionStatus.PENDING.getValue();
+		}
+		
 		if (assertion.getOrcidError() != null) {
 			JSONObject json = new JSONObject(assertion.getOrcidError());
 			int statusCode = json.getInt("statusCode");
@@ -45,7 +50,7 @@ public class AssertionUtils {
 
 		}
 		if (StringUtils.isBlank(assertion.getPutCode())) {
-			if (orcidRecord.getDeniedDate() != null) {
+			if (orcidRecord.getDeniedDate(assertion.getSalesforceId()) != null) {
 				return AssertionStatus.USER_DENIED_ACCESS.getValue();
 			}
 			return AssertionStatus.PENDING.getValue();
