@@ -128,13 +128,10 @@ public class OrcidRecordService {
         else {
             for(OrcidToken token: tokens)
             {   
-            	    LOG.debug("token SF " + token.getSalesforce_id() + " other " +  salesForceId);
                     if(StringUtils.equals(token.getSalesforce_id(), salesForceId)) {
-                    	LOG.debug("!!!! 1");
                         updatedTokens.add(newToken);
                     }
                     else {
-                    	LOG.debug("!!!! 2");
                         updatedTokens.add(token);
                     }              
             }     
