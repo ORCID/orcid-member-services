@@ -122,36 +122,10 @@ public class OrcidRecordService {
         orcidRecordRepository.save(orcidRecord);
     }
     
-    public String generateLinks() throws IOException {
-        String landingPageUrl = applicationProperties.getLandingPageUrl();
-        StringBuffer buffer = new StringBuffer();
-        CSVPrinter csvPrinter = new CSVPrinter(buffer, CSVFormat.DEFAULT
-                .withHeader("email", "link"));
-
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        String salesForceId;
-        if(!StringUtils.isAllBlank(user.getLoginAs())) {
-            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
-            salesForceId = loginAsUser.getSalesforceId();
-        } else {
-            salesForceId = user.getSalesforceId();
-        }
-
-        List<OrcidRecord> records =  orcidRecordRepository.findAllToInvite(salesForceId);
-
-
-
-        for(OrcidRecord record : records) {
-            String email = record.getEmail();
-            String encrypted = encryptUtil.encrypt(salesForceId + "&&" + email);
-            String link = landingPageUrl + "?state=" + encrypted;
-            csvPrinter.printRecord(email, link);
-        }
-        
-        csvPrinter.flush();
-        csvPrinter.close();
-        return buffer.toString();
+    public List<OrcidRecord> recordsWithoutTokens(String salesForceId){
+    	return orcidRecordRepository.findAllToInvite(salesForceId);
     }
+     
     
     public String generateLinkForEmail(String email) {
         String landingPageUrl = applicationProperties.getLandingPageUrl();

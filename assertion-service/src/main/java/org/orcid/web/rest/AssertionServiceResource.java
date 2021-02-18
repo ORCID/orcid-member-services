@@ -134,7 +134,7 @@ public class AssertionServiceResource {
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         response.setHeader("Content-Type", "text/csv");
         response.setHeader("filename", fileName);
-        String csvReport = orcidRecordService.generateLinks();
+        String csvReport = assertionsService.generateLinks();
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
     }

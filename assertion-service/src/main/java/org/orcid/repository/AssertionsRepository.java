@@ -35,6 +35,8 @@ public interface AssertionsRepository extends MongoRepository<Assertion, String>
     List<Assertion> findAllToUpdate();
 
     List<Assertion> findByEmail(String email);
+    
+    List<Assertion> findByEmailAndSalesforceId(String email, String salesforceId);
 
     Optional<Assertion> findOneByEmailIgnoreCase(String email);
     

@@ -12,11 +12,14 @@ import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.client.OrcidAPIClient;
+import org.orcid.config.ApplicationProperties;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
@@ -24,6 +27,7 @@ import org.orcid.domain.OrcidToken;
 import org.orcid.domain.enumeration.AssertionStatus;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
+import org.orcid.security.EncryptUtil;
 import org.orcid.security.SecurityUtils;
 import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
 import org.orcid.web.rest.errors.BadRequestAlertException;
@@ -41,7 +45,12 @@ public class AssertionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AssertionService.class);
     
-
+    @Autowired
+    private EncryptUtil encryptUtil;
+    
+    @Autowired
+    private ApplicationProperties applicationProperties;
+    
     private final Sort SORT = new Sort(Sort.Direction.ASC, "email", "status", "created", "modified", "deletedFromORCID");
 
     @Autowired
@@ -382,6 +391,16 @@ public class AssertionService {
                 }
             } catch (ORCIDAPIException oae) {
                 storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+                /*if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401) {
+                    try
+                    {
+                      if(idToken !=null) {
+                          removeIdTokenFromOrcidRecord(record, accessToken);
+                      }
+                    } catch (Exception ex){
+                      LOG.error("Error with assertion when trying to remove token" + assertion.getId(), ex);
+                    }
+                }*/
             } catch (Exception e) {
                 LOG.error("Error with assertion " + assertion.getId(), e);
                 storeError(assertion.getId(), 0, e.getMessage());
@@ -433,7 +452,17 @@ public class AssertionService {
         		LOG.error("Error with assertion " + assertion.getId() + " cannot update it with putcode empty.");
         	}
         } catch (ORCIDAPIException oae) {
-            storeError(assertion.getId(), oae.getStatusCode(), oae.getError());    
+            storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+            /*if (oae.getError().contains("invalid_scope") || oae.getStatusCode() == 401) {
+                try
+                {
+                  if(idToken !=null) {
+                      removeIdTokenFromOrcidRecord(record, idToken);
+                  }
+                } catch (Exception ex){
+                  LOG.error("Error with assertion when trying to remove token" + assertion.getId(), ex);
+                }
+            }  */    
         } catch (Exception e) {
             LOG.error("Error with assertion " + assertion.getId(), e);
             storeError(assertion.getId(), 0, e.getMessage());
@@ -563,6 +592,25 @@ public class AssertionService {
         }
     }
 
+   /* private void removeIdTokenFromOrcidRecord(OrcidRecord orcidRecord, String idToken) {
+        if (orcidRecord != null && idToken!=null ) {
+            List<OrcidToken> tokens = orcidRecord.getTokens();
+            if(tokens !=null  && tokens.size() > 0) {
+                List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
+                for(OrcidToken token: tokens)
+                {   
+                        if(!StringUtils.equals(token.getToken_id(), idToken)) {
+                            updatedTokens.add(token);
+                        }
+                    
+                }
+                orcidRecord.setTokens(updatedTokens);
+                orcidRecord.setModified(Instant.now());
+                orcidRecordService.updateOrcidRecord(orcidRecord);
+            }
+        }
+    }*/
+
     public Optional<Assertion> findOneByEmailIgnoreCase(String email) {
         return assertionsRepository.findOneByEmailIgnoreCase(email.toLowerCase());
     }
@@ -583,5 +631,41 @@ public class AssertionService {
     public void updateAssertionStatus(AssertionStatus status, Assertion assertion) {
     	assertion.setStatus(status.getValue());
     	 assertionsRepository.save(assertion);	
+    }
+    
+    
+    public String generateLinks() throws IOException {
+        String landingPageUrl = applicationProperties.getLandingPageUrl();
+        StringBuffer buffer = new StringBuffer();
+        CSVPrinter csvPrinter = new CSVPrinter(buffer, CSVFormat.DEFAULT
+                .withHeader("email", "link"));
+
+        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+        String salesForceId;
+        if(!StringUtils.isAllBlank(user.getLoginAs())) {
+            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
+            salesForceId = loginAsUser.getSalesforceId();
+        } else {
+            salesForceId = user.getSalesforceId();
+        }
+
+        List<OrcidRecord> records =  orcidRecordService.recordsWithoutTokens(salesForceId);
+
+
+
+        for(OrcidRecord record : records) {
+        	//check if it has affiliations
+            String email = record.getEmail();
+            List<Assertion> assertions = assertionsRepository.findByEmailAndSalesforceId(email, salesForceId);
+            if(assertions.size() > 0) {
+            	String encrypted = encryptUtil.encrypt(salesForceId + "&&" + email);
+            	String link = landingPageUrl + "?state=" + encrypted;
+            	csvPrinter.printRecord(email, link);
+            }
+        }
+        
+        csvPrinter.flush();
+        csvPrinter.close();
+        return buffer.toString();
     }
 }
