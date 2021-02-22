@@ -276,6 +276,9 @@ public class AssertionServiceResource {
         Boolean denied = json.has("denied") ? json.get("denied").asBoolean() : false;
         String[] stateTokens = encryptUtil.decrypt(state).split("&&");
         String emailInStatus = stateTokens[1];
+        if(salesForceId == null) {
+        	salesForceId = stateTokens[0];
+        }
         JSONObject responseData = new JSONObject();
 
         if (!denied) {
@@ -332,11 +335,11 @@ public class AssertionServiceResource {
             }
         } else {
             LOG.warn("User {} have denied access", emailInStatus);
-            orcidRecordService.storeUserDeniedAccess(emailInStatus, stateTokens[0]);
+            orcidRecordService.storeUserDeniedAccess(emailInStatus, salesForceId);
             try {
             	List<Assertion> assertions = assertionsService.findByEmailAndSalesForceId(emailInStatus, salesForceId );
             	for(Assertion a:assertions) {
-            		assertionsService.updateAssertionStatus(AssertionStatus.USER_DENIED_ACCESS,a);
+             		assertionsService.updateAssertionStatus(AssertionStatus.USER_DENIED_ACCESS,a);
             	}
             	
             } catch (Exception ex) {

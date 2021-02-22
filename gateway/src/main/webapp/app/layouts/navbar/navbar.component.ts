@@ -60,6 +60,32 @@ export class NavbarComponent implements OnInit {
       this.inProduction = profileInfo.inProduction;
       this.swaggerEnabled = profileInfo.swaggerEnabled;
     });
+
+    this.accountService.getAuthenticationState().subscribe(() => {
+      if (!this.isAuthenticated()) {
+        return null;
+      } else if (!this.accountService.getSalesforceId()) {
+        return null;
+      }
+      if (!this.memberCallDone && this.isAuthenticated() && this.hasRoleUser()) {
+        this.memberCallDone = true;
+        this.memberService
+          .find(this.accountService.getSalesforceId())
+          .toPromise()
+          .then(
+            (res: HttpResponse<IMSMember>) => {
+              if (res.body) {
+                this.organizationName = ' | ' + res.body.clientName;
+              }
+              return this.organizationName;
+            },
+            (res: HttpErrorResponse) => {
+              console.error('Error when getting org name: ' + res.error);
+              return null;
+            }
+          );
+      }
+    });
   }
 
   changeLanguage(languageKey: string) {
@@ -95,33 +121,6 @@ export class NavbarComponent implements OnInit {
     return this.accountService.isLoggedAs();
   }
 
-  getOrganizationName() {
-    if (!this.isAuthenticated()) {
-      return null;
-    } else if (!this.accountService.getSalesforceId()) {
-      return null;
-    }
-    if (!this.memberCallDone && this.isAuthenticated() && this.hasRoleUser()) {
-      this.memberCallDone = true;
-      this.memberService
-        .find(this.accountService.getSalesforceId())
-        .toPromise()
-        .then(
-          (res: HttpResponse<IMSMember>) => {
-            if (res.body) {
-              this.organizationName = ' | ' + res.body.clientName;
-            }
-            return this.organizationName;
-          },
-          (res: HttpErrorResponse) => {
-            console.error('Error when getting org name: ' + res.error);
-            return null;
-          }
-        );
-    }
-    return this.organizationName;
-  }
-
   getUserName() {
     // return this.isAuthenticated() ? this.userName : null;
     return this.isAuthenticated() ? this.accountService.getUserName() : null;
@@ -142,7 +141,7 @@ export class NavbarComponent implements OnInit {
       });
     } else {
       this.loginService.logout();
-      window.location.href = SERVER_API_URL;
+      this.router.navigate(['']);
     }
   }
 
