@@ -66,7 +66,6 @@ function disambiguatedOrgIdValidator(): ValidatorFn {
         const gridBaseUrlAlt = 'https://grid.ac/';
         const gridBaseUrlInstitutesAlt = 'https://grid.ac/institutes/';
         var gridId = control.value;
-        console.log('gridID to start: ' + gridId + ' ' + gridId.substr(0, gridBaseUrlInstitutes.length));
         //strip the url and see if is a valid grid id
         if (gridId && gridId.substr(0, gridBaseUrlInstitutes.length) == gridBaseUrlInstitutes) {
           gridId = gridId.substr(gridBaseUrlInstitutes.length, gridId.length);
