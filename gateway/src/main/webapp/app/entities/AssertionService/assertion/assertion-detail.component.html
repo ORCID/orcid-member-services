@@ -60,11 +60,11 @@
                         {{assertion.created | date:'medium'}}
                     </dd>
                     <dt *ngIf="assertion.addedToORCID" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.addedToOrcid">Added To ORCID</dt>
-                    <dd class="col-md-9">
+                    <dd *ngIf="assertion.addedToORCID" class="col-md-9">
                         {{assertion.addedToORCID | date:'medium'}}
                     </dd>
                     <dt *ngIf="assertion.updatedInORCID" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.updatedInOrcid">Updated In ORCID</dt>
-                    <dd class="col-md-9">
+                    <dd *ngIf="assertion.updatedInORCID" class="col-md-9">
                         {{assertion.updatedInORCID | date:'medium'}}
                     </dd>
                     <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.modified">Modified</dt>
