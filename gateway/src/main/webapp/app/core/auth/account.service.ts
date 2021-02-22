@@ -138,7 +138,7 @@ export class AccountService {
   }
 
   getSalesforceId(): string {
-    return this.isIdentityResolved() ? this.userIdentity.salesforceId : null;
+    return this.isAuthenticated() && this.userIdentity ? this.userIdentity.salesforceId : null;
   }
 
   isOrganizationOwner(): string {
