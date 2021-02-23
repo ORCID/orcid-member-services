@@ -42,14 +42,14 @@ class AffiliationUtilsTest {
 		Assertion assertion = new Assertion();
 		assertion.setSalesforceId("salesforceId");
 		List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-		OrcidToken newToken = new OrcidToken(assertion.getSalesforceId(), "idToken", Instant.now());
+		OrcidToken newToken = new OrcidToken(assertion.getSalesforceId(), "idToken", Instant.now(),null);
 
 		tokens.add(newToken);
 		record.setTokens(tokens);
 		assertEquals(AssertionStatus.USER_DENIED_ACCESS.getValue(),
 		AssertionUtils.getAssertionStatus(assertion, record));
 
-		newToken = new OrcidToken(assertion.getSalesforceId(), "idToken", null);
+		newToken = new OrcidToken(assertion.getSalesforceId(), "idToken", null, null);
 
 		tokens = new ArrayList<OrcidToken>();
 		tokens.add(newToken);
@@ -57,7 +57,7 @@ class AffiliationUtilsTest {
 		assertEquals(AssertionStatus.PENDING.getValue(),
 				AssertionUtils.getAssertionStatus(assertion, record));
 		tokens = new ArrayList<OrcidToken>();
-		newToken = new OrcidToken(assertion.getSalesforceId(), null, null);
+		newToken = new OrcidToken(assertion.getSalesforceId(), null, null, null);
                 tokens.add(newToken);
                 record.setTokens(tokens);
 		assertion.setPutCode("put-code");

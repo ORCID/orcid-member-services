@@ -147,10 +147,27 @@ public class OrcidRecord {
             for(OrcidToken token: tokens)
             {   
                 if(StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
-                	if(token.getDeniedDate() == null) {
+                	if(token.getDenied_date() == null) {
                 		return null;
                 	}
-                    return token.getDeniedDate();
+                    return token.getDenied_date();
+                }
+            }
+        }
+        return null;  
+    }
+    
+    
+    public Instant getRevokedDate(String salesforceId) {
+        List<OrcidToken> tokens = this.getTokens();
+        if(tokens != null) {
+            for(OrcidToken token: tokens)
+            {   
+                if(StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
+                	if(token.getRevoked_date() == null) {
+                		return null;
+                	}
+                    return token.getRevoked_date();
                 }
             }
         }

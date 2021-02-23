@@ -50,6 +50,9 @@ public class AssertionUtils {
 
 		}
 		if (StringUtils.isBlank(assertion.getPutCode())) {
+			if (orcidRecord.getRevokedDate(assertion.getSalesforceId()) != null) {
+				return AssertionStatus.USER_REVOKED_ACCESS.getValue();
+			}
 			if (orcidRecord.getDeniedDate(assertion.getSalesforceId()) != null) {
 				return AssertionStatus.USER_DENIED_ACCESS.getValue();
 			}

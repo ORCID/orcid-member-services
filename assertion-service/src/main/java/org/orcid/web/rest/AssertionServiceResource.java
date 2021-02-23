@@ -339,7 +339,9 @@ public class AssertionServiceResource {
             try {
             	List<Assertion> assertions = assertionsService.findByEmailAndSalesForceId(emailInStatus, salesForceId );
             	for(Assertion a:assertions) {
-             		assertionsService.updateAssertionStatus(AssertionStatus.USER_DENIED_ACCESS,a);
+            		if(!StringUtils.equals(a.getStatus(), AssertionStatus.IN_ORCID.getValue())) {
+            			assertionsService.updateAssertionStatus(AssertionStatus.USER_DENIED_ACCESS,a);
+            		}
             	}
             	
             } catch (Exception ex) {
