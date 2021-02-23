@@ -223,7 +223,7 @@ public class AssertionService {
             }
           
             if(createToken) {
-                tokens.add(new OrcidToken(assertion.getSalesforceId(), null, null));
+                tokens.add(new OrcidToken(assertion.getSalesforceId(), null, null, null));
                 record.setTokens(tokens);
                 record.setModified(Instant.now());
                 orcidRecordService.updateOrcidRecord(record);
@@ -378,6 +378,7 @@ public class AssertionService {
 	                assertion.setPutCode(putCode);
 	                Instant now = Instant.now();
 	                assertion.setAddedToORCID(now);
+	                assertion.setUpdatedInORCID(now);
 	                //assertion.setModified(now);
 	                assertion.setUpdated(false);
 	                // Remove error if any

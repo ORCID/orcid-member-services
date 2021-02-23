@@ -120,7 +120,7 @@ class OrcidRecordServiceTest {
             recordOne.setId("xyz");
             List<OrcidToken> tokens = recordOne.getTokens();
             OrcidToken token = tokens.get(0);
-            OrcidToken token2 = new OrcidToken(OTHER_SALESFORCE_ID, "tokenid2", null);
+            OrcidToken token2 = new OrcidToken(OTHER_SALESFORCE_ID, "tokenid2", null, null);
             tokens.add(token2);
             recordOne.setTokens(tokens);
             recordOne.setModified(Instant.now());
@@ -157,7 +157,7 @@ class OrcidRecordServiceTest {
 		record.setCreated(Instant.now());
 		record.setEmail(email);
 		List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-                OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken", null);
+                OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken", null, null);
                 tokens.add(newToken);
                 record.setTokens(tokens);
                 record.setId("xyz");
