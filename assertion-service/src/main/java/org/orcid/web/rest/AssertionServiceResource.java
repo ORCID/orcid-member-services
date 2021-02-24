@@ -316,7 +316,7 @@ public class AssertionServiceResource {
                 		if(StringUtils.isBlank(a.getPutCode())) {
                 			assertionsService.postAssertionToOrcid(a);
                 		}
-                		else if(a.isUpdated() && !StringUtils.equals(a.getStatus(), AssertionStatus.IN_ORCID.getValue())) { 			
+                		else if(!StringUtils.equals(a.getStatus(), AssertionStatus.IN_ORCID.getValue())) { 			
                 			assertionsService.putAssertionToOrcid(a);
                 		}
                 	}
