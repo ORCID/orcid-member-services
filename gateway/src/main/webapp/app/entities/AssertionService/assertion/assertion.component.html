@@ -41,6 +41,7 @@
         <table class="table table-striped">
             <thead>
                     <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+                    <th><span jhiTranslate="gatewayApp.assertionServiceAssertion.id">ID</span></th>
                     <th jhiSortBy="email"><span jhiTranslate="gatewayApp.assertionServiceAssertion.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
                     <th jhiSortBy="orcidId"><span jhiTranslate="gatewayApp.assertionServiceAssertion.orcidId">ORCID iD</span> <fa-icon [icon]="'sort'"></fa-icon></th>
                     <th jhiSortBy="affiliationSection" width="30%" ><span jhiTranslate="gatewayApp.assertionServiceAssertion.affiliationData">Affiliation Data</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -50,6 +51,7 @@
             </thead>
             <tbody>
             <tr *ngFor="let assertion of assertions ;trackBy: trackId">
+            	<td>{{assertion.id}}</td>
                 <td>{{assertion.email}}</td>
                 <td><span *ngIf="assertion.orcidId"><a href="{{orcidBaseUrl}}/{{assertion.orcidId}}" target="_blank">{{orcidBaseUrl}}/{{assertion.orcidId}}</a></span></td>
                 <td>
