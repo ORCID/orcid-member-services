@@ -1,4 +1,4 @@
-package org.orcid.service.assertions.report.impl;
+package org.orcid.service.assertions.download.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,14 +15,14 @@ import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.service.UserService;
+import org.orcid.service.assertions.download.CsvWriter;
 import org.orcid.service.OrcidRecordService;
-import org.orcid.service.assertions.report.AssertionsReportWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AssertionsCSVReportWriter implements AssertionsReportWriter {
+public class AssertionsReportCsvWriter implements CsvWriter {
 
 	private final Sort SORT = new Sort(Sort.Direction.ASC, "email", "status", "created", "modified",
 			"deletedFromORCID");
@@ -37,7 +37,7 @@ public class AssertionsCSVReportWriter implements AssertionsReportWriter {
 	private OrcidRecordService orcidRecordService;
 
 	@Override
-	public String writeAssertionsReport() throws IOException {
+	public String writeCsv() throws IOException {
 		String salesForceId;
 		
 		AssertionServiceUser user = assertionsUserService.getLoggedInUser();

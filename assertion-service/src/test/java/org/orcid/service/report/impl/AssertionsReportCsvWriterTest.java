@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,12 +22,12 @@ import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.repository.AssertionsRepository;
-import org.orcid.service.UserService;
 import org.orcid.service.OrcidRecordService;
-import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
+import org.orcid.service.UserService;
+import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;
 import org.springframework.data.domain.Sort;
 
-public class AssertionsCSVReportWriterTest {
+public class AssertionsReportCsvWriterTest {
 	
 	private static final String DEFAULT_JHI_USER_ID = "user-id";
 
@@ -46,7 +45,7 @@ public class AssertionsCSVReportWriterTest {
 	private OrcidRecordService orcidRecordService;
 	
 	@InjectMocks
-	private AssertionsCSVReportWriter reportWriter;
+	private AssertionsReportCsvWriter reportWriter;
 	
 	@BeforeEach
 	public void setUp() {
@@ -67,7 +66,7 @@ public class AssertionsCSVReportWriterTest {
 	
 	@Test
 	public void testWriteAssertionsReport() throws IOException {
-		String test = reportWriter.writeAssertionsReport();
+		String test = reportWriter.writeCsv();
 		assertNotNull(test);
 		assertTrue(test.length() > 0);
 	}
