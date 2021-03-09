@@ -1,12 +1,12 @@
 package org.orcid.service.assertions.upload.impl;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.orcid.service.assertions.upload.AssertionsUpload;
 
@@ -49,5 +49,23 @@ class AssertionsCsvReaderTest {
         assertEquals(2, upload.getUsers().size());
 	}
 
+	@Test
+	void testReadAssertionsUploadWithDbIds() throws IOException {
+		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-db-id-column.csv");
+		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
+		assertEquals(2, upload.getAssertions().size());
+		assertEquals("ORCID", upload.getAssertions().get(0).getOrgName());
+		assertEquals("ext-id", upload.getAssertions().get(0).getExternalId());
+		assertEquals("a-database-id", upload.getAssertions().get(0).getId());
+		
+		assertEquals(2, upload.getAssertions().size());
+		assertEquals("ORCID-2", upload.getAssertions().get(1).getOrgName());
+		assertEquals("ext-id-2", upload.getAssertions().get(1).getExternalId());
+		assertNull(upload.getAssertions().get(1).getId());
+
+		// check http:// protocol has been added to url
+		assertEquals("http://bbc.co.uk", upload.getAssertions().get(0).getUrl());
+		assertEquals(1, upload.getUsers().size());
+	}
 
 }

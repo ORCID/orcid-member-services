@@ -3,19 +3,14 @@ package org.orcid.service;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.client.OrcidAPIClient;
@@ -67,6 +62,10 @@ public class AssertionService {
 
     @Autowired
     private UserService assertionsUserService;
+    
+    public boolean assertionExists(String id) {
+    	return assertionsRepository.existsById(id);
+    }
 
     public Assertion createOrUpdateAssertion(Assertion assertion) {
         if (assertion.getId() != null) {
@@ -197,7 +196,6 @@ public class AssertionService {
         } else {
             assertion.setSalesforceId(user.getSalesforceId());
         }
-        
 
         String email = assertion.getEmail();
 
@@ -232,8 +230,8 @@ public class AssertionService {
         }
         assertion.setStatus(getAssertionStatus(assertion));
         assertion = assertionsRepository.insert(assertion);
-        //to display in UI
         assertion.setStatus(AssertionStatus.getStatus(assertion.getStatus()).getText());
+        
         if (assertion.getOrcidId() == null) {
             assertion.setOrcidId(getAssertionOrcidId(assertion));
         }
@@ -244,27 +242,26 @@ public class AssertionService {
     public void createAssertions(List<Assertion> assertions) {
         Instant now = Instant.now();
         String ownerId = assertionsUserService.getLoggedInUserId();       
-        // Create assertions
+
         for (Assertion a : assertions) {
             a.setOwnerId(ownerId);
             a.setCreated(now);
             a.setModified(now);
             a.setStatus(getAssertionStatus(a));
             a.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-            // Create the assertion
             assertionsRepository.insert(a);
         }
     }
 
     public Assertion updateAssertion(Assertion assertion) {
-        return updateAssertionImpl(assertion, false);
+        return updateAssertion(assertion, false);
     }
 
     private Assertion updateAssertionAsAdmin(Assertion assertion) {
-        return updateAssertionImpl(assertion, true);
+        return updateAssertion(assertion, true);
     }
 
-    private Assertion updateAssertionImpl(Assertion assertion, boolean updateAsAdmin) {
+    private Assertion updateAssertion(Assertion assertion, boolean updateAsAdmin) {
         AssertionServiceUser user = assertionsUserService.getLoggedInUser();
         String salesforceId = user.getSalesforceId();
         if(!StringUtils.isAllBlank(user.getLoginAs()))  {

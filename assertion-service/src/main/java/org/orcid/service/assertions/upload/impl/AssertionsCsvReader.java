@@ -14,31 +14,32 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
-import java.util.regex.Pattern;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.orcid.config.Constants;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
+import org.orcid.config.Constants;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.domain.validation.OrcidUrlValidator;
 import org.orcid.jaxb.model.common.Iso3166Country;
+import org.orcid.service.AssertionService;
 import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.AssertionsUploadReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AssertionsCsvReader implements AssertionsUploadReader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AssertionsCsvReader.class);
-    private static final String GRID_STARTS_WITH = "grid.";
+	private static final String GRID_STARTS_WITH = "grid.";
 	private final DateTimeFormatter[] formatters = {
 			new DateTimeFormatterBuilder().appendPattern("yyyy").parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
 					.parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
@@ -51,22 +52,21 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 	// "ftp"
 
 	UrlValidator urlValidator = new OrcidUrlValidator(urlValschemes);
+	
+	@Autowired
+    private AssertionService assertionsService;
 
 	@Override
 	public AssertionsUpload readAssertionsUpload(InputStream inputStream) throws IOException {
-
-		final Reader reader = new InputStreamReader(new BOMInputStream(inputStream), StandardCharsets.UTF_8);
-		final CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());
-
 		AssertionsUpload upload = new AssertionsUpload();
-
-		try {
+		
+		try (final Reader reader = new InputStreamReader(new BOMInputStream(inputStream), StandardCharsets.UTF_8);
+				final CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader())) {
+			
 			for (CSVRecord record : parser) {
 				try {
 					Assertion assertion = parseLine(record, upload);
-
 					if (upload.getErrors().length() == 0) {
-						// Create the userInfo if needed
 						if (!upload.getUsers().contains(assertion.getEmail())) {
 							upload.addUser(assertion.getEmail());
 						}
@@ -77,21 +77,22 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 					upload.addError(record.getRecordNumber(), e.getMessage());
 				}
 			}
-		} finally {
-			try {
-				reader.close();
-				parser.close();
-			} catch (IOException e) {
-				LOG.error("Error closing csv assertions upload input stream", e);
-				throw new RuntimeException(e);
-			}
 		}
-
 		return upload;
 	}
 
 	private Assertion parseLine(CSVRecord line, AssertionsUpload assertionsUpload) {
 		Assertion a = new Assertion();
+		String id = getOptionalMandatoryNullable(line, "id");
+		if (id != null) {
+			if (!assertionsService.assertionExists(id)) {
+				assertionsUpload.addError(line.getRecordNumber(), "id does not exist");
+				return a;
+			} else {
+				a.setId(id);
+			}
+		}
+		
 		if (getOptionalMandatoryNullable(line, "email") == null) {
 			assertionsUpload.addError(line.getRecordNumber(), "email must not be null");
 			return a;
@@ -103,12 +104,12 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			assertionsUpload.addError(line.getRecordNumber(), "affiliation-section must not be null");
 			return a;
 		} else {
-            AffiliationSection affiliationSection;
-		    if ("INVITED-POSITION".equals(line.get("affiliation-section").toUpperCase())) {
-                affiliationSection = AffiliationSection.INVITED_POSITION;
-            } else {
-                affiliationSection = AffiliationSection.valueOf(line.get("affiliation-section").toUpperCase());
-            }
+			AffiliationSection affiliationSection;
+			if ("INVITED-POSITION".equals(line.get("affiliation-section").toUpperCase())) {
+				affiliationSection = AffiliationSection.INVITED_POSITION;
+			} else {
+				affiliationSection = AffiliationSection.valueOf(line.get("affiliation-section").toUpperCase());
+			}
 			a.setAffiliationSection(affiliationSection);
 		}
 
@@ -216,22 +217,22 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		} else {
 			a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source").toUpperCase());
 		}
-		
+
 		if (getOptionalMandatoryNullable(line, "disambiguated-organization-identifier") == null) {
 			assertionsUpload.addError(line.getRecordNumber(), "disambiguated-organization-identifier must not be null");
 			return a;
 		} else {
 			String orgId = AssertionUtils.stripGridURL(line.get("disambiguated-organization-identifier"));
 
-			if(validateDisambiguatedOrganizationId( orgId, line.get("disambiguation-source"))) {
+			if (validateDisambiguatedOrganizationId(orgId, line.get("disambiguation-source"))) {
 				a.setDisambiguatedOrgId(orgId);
-			}
-			else {
-				assertionsUpload.addError(line.getRecordNumber(), "disambiguated-organization-identifier not valid. If the source is GRID must start with \"grid.\", if the source is RINGGOLD has to be a number. ");
+			} else {
+				assertionsUpload.addError(line.getRecordNumber(),
+						"disambiguated-organization-identifier not valid. If the source is GRID must start with \"grid.\", if the source is RINGGOLD has to be a number. ");
 				return a;
 			}
 		}
-		
+
 		a.setExternalId(getOptionalMandatoryNullable(line, "external-id"));
 		a.setExternalIdType(getOptionalMandatoryNullable(line, "external-id-type"));
 		a.setExternalIdUrl(getOptionalMandatoryNullable(line, "external-id-url"));
@@ -278,12 +279,13 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		}
 		return url;
 	}
-	
+
 	private boolean validateDisambiguatedOrganizationId(String orgId, String orgSource) {
-		if(StringUtils.equalsIgnoreCase(orgSource, Constants.GRID_ORG_SOURCE)) {
-			return orgId.length() > (GRID_STARTS_WITH.length()+1) && StringUtils.equals(orgId.substring(0, GRID_STARTS_WITH.length()), GRID_STARTS_WITH) ;
-		} else if(StringUtils.equalsIgnoreCase(orgSource, Constants.RINGGOLD_ORG_SOURCE)) {
-			return  orgId.chars().allMatch(x -> Character.isDigit(x)); 
+		if (StringUtils.equalsIgnoreCase(orgSource, Constants.GRID_ORG_SOURCE)) {
+			return orgId.length() > (GRID_STARTS_WITH.length() + 1)
+					&& StringUtils.equals(orgId.substring(0, GRID_STARTS_WITH.length()), GRID_STARTS_WITH);
+		} else if (StringUtils.equalsIgnoreCase(orgSource, Constants.RINGGOLD_ORG_SOURCE)) {
+			return orgId.chars().allMatch(x -> Character.isDigit(x));
 		}
 		return false;
 	}
