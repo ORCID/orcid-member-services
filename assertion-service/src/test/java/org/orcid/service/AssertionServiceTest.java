@@ -3,8 +3,9 @@ package org.orcid.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.codehaus.jettison.json.JSONException;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,17 +32,15 @@ import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.repository.AssertionsRepository;
-import org.orcid.security.SecurityUtils;
 import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
 
-class AssertionsServiceTest {
+class AssertionServiceTest {
 
 	private static final String DEFAULT_JHI_USER_ID = "user-id";
 
 	private static final String DEFAULT_LOGIN = "user@orcid.org";
 
 	private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
-	
 
 	@Mock
 	private AssertionsCSVReportWriter assertionsReportWriter;
@@ -60,7 +58,7 @@ class AssertionsServiceTest {
 	private UserService assertionsUserService;
 
 	@InjectMocks
-	private AssertionService assertionsService;
+	private AssertionService assertionService;
 
 	@BeforeEach
 	public void setUp() throws JSONException {
@@ -76,11 +74,23 @@ class AssertionsServiceTest {
 		user.setSalesforceId(DEFAULT_SALESFORCE_ID);
 		return user;
 	}
+	
+	@Test
+	void testAssertionExists() {
+		when(assertionsRepository.existsById(Mockito.eq("exists"))).thenReturn(true);
+		when(assertionsRepository.existsById(Mockito.eq("doesn't exist"))).thenReturn(false);
+		
+		assertTrue(assertionService.assertionExists("exists"));
+		verify(assertionsRepository).existsById(Mockito.eq("exists"));
+		
+		assertFalse(assertionService.assertionExists("doesn't exist"));
+		verify(assertionsRepository).existsById(Mockito.eq("doesn't exist"));
+	}
 
 	@Test
 	void testGenerateAssertionsReport() throws IOException {
 		Mockito.when(assertionsReportWriter.writeAssertionsReport()).thenReturn("test");
-		assertNotNull(assertionsService.generateAssertionsReport());
+		assertNotNull(assertionService.generateAssertionsReport());
 		Mockito.verify(assertionsReportWriter, Mockito.times(1)).writeAssertionsReport();
 	}
 
@@ -119,12 +129,12 @@ class AssertionsServiceTest {
 			}
 		});
 
-		a = assertionsService.createOrUpdateAssertion(a);
+		a = assertionService.createOrUpdateAssertion(a);
 		assertNotNull(a.getStatus());
 		Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
 		assertEquals("orcid", a.getOrcidId());
 
-		b = assertionsService.createOrUpdateAssertion(b);
+		b = assertionService.createOrUpdateAssertion(b);
 		assertNotNull(b.getStatus());
 		Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(b));
 		assertEquals("orcid", b.getOrcidId());
@@ -165,12 +175,12 @@ class AssertionsServiceTest {
 			}
 		});
 
-		a = assertionsService.createOrUpdateAssertion(a);
+		a = assertionService.createOrUpdateAssertion(a);
 		assertNotNull(a.getStatus());
 		Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
 		
 
-		b = assertionsService.createOrUpdateAssertion(b);
+		b = assertionService.createOrUpdateAssertion(b);
 		assertNotNull(b.getStatus());
 		Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(b));
         
@@ -230,7 +240,7 @@ class AssertionsServiceTest {
 			}
 		});
 
-		assertionsService.createOrUpdateAssertions(Arrays.asList(a, b, c, d, e));
+		assertionService.createOrUpdateAssertions(Arrays.asList(a, b, c, d, e));
 
 		Mockito.verify(assertionsRepository, Mockito.times(3)).save(Mockito.any(Assertion.class));
 		Mockito.verify(assertionsRepository, Mockito.times(2)).insert(Mockito.any(Assertion.class));
@@ -296,7 +306,7 @@ class AssertionsServiceTest {
 			}
 		});
 
-		assertionsService.createOrUpdateAssertions(Arrays.asList(a, b, c, d, e));
+		assertionService.createOrUpdateAssertions(Arrays.asList(a, b, c, d, e));
 
 		Mockito.verify(assertionsRepository, Mockito.times(3)).save(Mockito.any(Assertion.class));
 		Mockito.verify(assertionsRepository, Mockito.times(2)).insert(Mockito.any(Assertion.class));
@@ -323,7 +333,7 @@ class AssertionsServiceTest {
 			}
 		});
 
-		assertionsService.createAssertion(a);
+		assertionService.createAssertion(a);
 		Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(a));
 
 		assertEquals("orcid", a.getOrcidId());
@@ -349,7 +359,7 @@ class AssertionsServiceTest {
 			}
 		});
 
-		assertionsService.createAssertion(a);
+		assertionService.createAssertion(a);
 		Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(a));
 		
 	}
@@ -373,7 +383,7 @@ class AssertionsServiceTest {
 			}
 		});
 		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-		a = assertionsService.createOrUpdateAssertion(a);
+		a = assertionService.createOrUpdateAssertion(a);
 		assertNotNull(a.getStatus());
 		assertEquals("orcid", a.getOrcidId());
 		Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
@@ -399,7 +409,7 @@ class AssertionsServiceTest {
 			}
 		});
 		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithoutIdToken());
-		a = assertionsService.createOrUpdateAssertion(a);
+		a = assertionService.createOrUpdateAssertion(a);
 		assertNotNull(a.getStatus());
 		Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
 	}
@@ -424,7 +434,7 @@ class AssertionsServiceTest {
 			}
 		});
 		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-		a = assertionsService.createOrUpdateAssertion(a);
+		a = assertionService.createOrUpdateAssertion(a);
 		assertNotNull(a.getStatus());
 		assertEquals("orcid-already-present", a.getOrcidId());
 		Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
@@ -450,7 +460,7 @@ class AssertionsServiceTest {
 		});
 
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			assertionsService.createOrUpdateAssertion(a);
+			assertionService.createOrUpdateAssertion(a);
 		});
 	}
 
@@ -468,7 +478,7 @@ class AssertionsServiceTest {
 					Mockito.any(Assertion.class))).thenReturn("putCode" + i);
 		}
 
-		assertionsService.postAssertionsToOrcid();
+		assertionService.postAssertionsToOrcid();
 
 		Mockito.verify(orcidRecordService, Mockito.times(20)).findOneByEmail(Mockito.anyString());
 		//Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
@@ -491,7 +501,7 @@ class AssertionsServiceTest {
 					Mockito.any(Assertion.class))).thenReturn("putCode" + i);
 		}
 
-		assertionsService.putAssertionsToOrcid();
+		assertionService.putAssertionsToOrcid();
 
 		Mockito.verify(orcidRecordService, Mockito.times(25)).findOneByEmail(Mockito.anyString());
 		Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
@@ -504,7 +514,7 @@ class AssertionsServiceTest {
 		Assertion assertion = getAssertionWithEmail(email);
 		Mockito.when(assertionsRepository.findByEmail(Mockito.eq(email))).thenReturn(Arrays.asList(assertion));
 
-		List<Assertion> assertions = assertionsService.findByEmail(email);
+		List<Assertion> assertions = assertionService.findByEmail(email);
 		assertFalse(assertions.isEmpty());
 		assertEquals(1, assertions.size());
 
