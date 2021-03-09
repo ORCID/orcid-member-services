@@ -7,12 +7,27 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.codehaus.jettison.json.JSONException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.orcid.service.AssertionService;
 import org.orcid.service.assertions.upload.AssertionsUpload;
 
 class AssertionsCsvReaderTest {
 
-	private AssertionsCsvReader reader = new AssertionsCsvReader();
+	@Mock
+	private AssertionService mockAssertionService;
+	
+	@InjectMocks
+	private AssertionsCsvReader reader;
+	
+	@BeforeEach
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+	}
 
 	@Test
 	void testReadAssertionsUploadWithExternalIds() throws IOException {
@@ -51,6 +66,8 @@ class AssertionsCsvReaderTest {
 
 	@Test
 	void testReadAssertionsUploadWithDbIds() throws IOException {
+		Mockito.when(mockAssertionService.assertionExists(Mockito.anyString())).thenReturn(true);
+		
 		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-db-id-column.csv");
 		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
 		assertEquals(2, upload.getAssertions().size());
