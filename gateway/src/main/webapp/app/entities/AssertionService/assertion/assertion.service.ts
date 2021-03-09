@@ -73,6 +73,19 @@ export class AssertionService {
     });
   }
 
+  getCSV() {
+    this.http.get(`${this.resourceUrl}/csv`, { observe: 'response', responseType: 'blob' }).subscribe(response => {
+      const filename = response.headers.get('filename') != null ? response.headers.get('filename') : 'affiliations.csv';
+      const blob = new Blob([response.body], { type: 'text/csv' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
+
   generateReport() {
     this.http.get(`${this.resourceUrl}/report`, { observe: 'response', responseType: 'blob' }).subscribe(response => {
       const filename = response.headers.get('filename') != null ? response.headers.get('filename') : 'report.csv';

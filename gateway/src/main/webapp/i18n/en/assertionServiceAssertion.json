@@ -6,9 +6,10 @@
         "createLabel": "Add affiliation",
         "createOrEditLabel": "Add or edit affiliation",
         "notFound": "No affiliations found",
-        "uploadLabel": "Import affiliations from CSV",
+        "uploadLabel": "Add or edit by CSV",
         "getLinks": "Download permission links",
         "generateReport": "Generate report",
+        "exportForEdit": "Export CSV",
         "forHelpTroubleshooting": "For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below."
       },
       "delete": {
