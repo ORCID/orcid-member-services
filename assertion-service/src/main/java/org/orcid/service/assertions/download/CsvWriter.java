@@ -1,9 +1,9 @@
-package org.orcid.service.assertions.report;
+package org.orcid.service.assertions.download;
 
 import java.io.IOException;
 
-public interface AssertionsReportWriter {
+public interface CsvWriter {
 	
-	public String writeAssertionsReport() throws IOException;
+	public String writeCsv() throws IOException;
 
 }
