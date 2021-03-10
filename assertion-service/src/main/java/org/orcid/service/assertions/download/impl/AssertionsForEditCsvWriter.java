@@ -16,7 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AssertionsForEditCsvWriter implements CsvWriter {
+public class AssertionsForEditCsvWriter extends CsvWriter {
 
 	private final Sort SORT = new Sort(Sort.Direction.ASC, "email", "status", "created", "modified",
 			"deletedFromORCID");
@@ -66,21 +66,6 @@ public class AssertionsForEditCsvWriter implements CsvWriter {
 		return values;
 	}
 	
-	private String getDateString(String year, String month, String day) {
-		if (!StringUtils.isBlank(year)) {
-			String endDate = year;
-			if (!StringUtils.isBlank(month)) {
-				endDate += '-' + month;
-				if (!StringUtils.isBlank(day)) {
-					endDate += '-' + day;
-				}
-			}
-			return endDate;
-		} else {
-			return StringUtils.EMPTY;
-		}
-	}
-
 	private CSVPrinter getCSVPrinterWithHeaders(StringBuffer buffer) throws IOException {
 		return new CSVPrinter(buffer,
 				CSVFormat.DEFAULT.withHeader("email", "affiliation-section", "department-name", "role-title",
