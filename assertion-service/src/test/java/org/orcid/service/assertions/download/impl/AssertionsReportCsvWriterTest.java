@@ -1,4 +1,4 @@
-package org.orcid.service.report.impl;
+package org.orcid.service.assertions.download.impl;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
