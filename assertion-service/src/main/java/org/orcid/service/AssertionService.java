@@ -114,16 +114,9 @@ public class AssertionService {
     }
 
     public Page<Assertion> findBySalesforceId(Pageable pageable) {
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        String salesForceId = user.getSalesforceId();
-        if(!StringUtils.isAllBlank(user.getLoginAs()))  {
-            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
-            salesForceId = loginAsUser.getSalesforceId();
-        }
-        
+        String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
         Page<Assertion> assertions = assertionsRepository.findBySalesforceId(salesForceId , pageable);
         assertions.forEach(a -> {
-        	//set status as text to display in UI
         	if(!StringUtils.isBlank(a.getStatus())) {
         		LOG.debug("assertion status is: " + a.getStatus());
         		a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
@@ -160,22 +153,18 @@ public class AssertionService {
     }
 
     public Assertion findById(String id) {
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
         Optional<Assertion> optional = assertionsRepository.findById(id);
         if (!optional.isPresent()) {
             throw new IllegalArgumentException("Invalid assertion id");
         }
         Assertion assertion = optional.get();
-        String salesforceId = user.getSalesforceId();
-        if(!StringUtils.isAllBlank(user.getLoginAs()))  {
-            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
-            salesforceId = loginAsUser.getSalesforceId();
-        }
+        String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
+       
         if (!assertion.getSalesforceId().equals(salesforceId)) {
-            throw new IllegalArgumentException(user.getId() + " doesn't belong to organization " + assertion.getSalesforceId());
+            throw new IllegalArgumentException("Illegal attempt to access assertion of org " + assertion.getSalesforceId());
         }
-       //set status as text to display in UI
-    	if(!StringUtils.isBlank(assertion.getStatus())) {
+
+        if(!StringUtils.isBlank(assertion.getStatus())) {
     		LOG.debug("assertion status is: " + assertion.getStatus());
     		assertion.setStatus(AssertionStatus.getStatus(assertion.getStatus()).getText());
     	}
@@ -194,12 +183,7 @@ public class AssertionService {
         assertion.setCreated(now);
         assertion.setModified(now);
         assertion.setLastModifiedBy(user.getLogin());
-        if(!StringUtils.isAllBlank(user.getLoginAs()))  {
-            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
-            assertion.setSalesforceId(loginAsUser.getSalesforceId());
-        } else {
-            assertion.setSalesforceId(user.getSalesforceId());
-        }
+        assertion.setSalesforceId(assertionsUserService.getLoggedInUserSalesforceId());
 
         String email = assertion.getEmail();
 
@@ -267,11 +251,7 @@ public class AssertionService {
 
     private Assertion updateAssertion(Assertion assertion, boolean updateAsAdmin) {
         AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        String salesforceId = user.getSalesforceId();
-        if(!StringUtils.isAllBlank(user.getLoginAs()))  {
-            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
-            salesforceId = loginAsUser.getSalesforceId();
-        }
+        String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
         
         Optional<Assertion> optional = assertionsRepository.findById(assertion.getId());
         Assertion existingAssertion = optional.get();
@@ -449,15 +429,7 @@ public class AssertionService {
 
     public boolean deleteAssertionFromOrcid(String assertionId) throws JSONException, JAXBException {
         Assertion assertion = assertionsRepository.findById(assertionId).orElseThrow(() -> new IllegalArgumentException("Invalid assertion id"));
-        
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        String salesForceId;
-        if(!StringUtils.isAllBlank(user.getLoginAs())) {
-            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
-            salesForceId = loginAsUser.getSalesforceId();
-        } else {
-            salesForceId = user.getSalesforceId();
-        }
+        String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
 
         if (!salesForceId.equals(assertion.getSalesforceId())) {
             throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
@@ -592,19 +564,8 @@ public class AssertionService {
         StringBuffer buffer = new StringBuffer();
         CSVPrinter csvPrinter = new CSVPrinter(buffer, CSVFormat.DEFAULT
                 .withHeader("email", "link"));
-
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        String salesForceId;
-        if(!StringUtils.isAllBlank(user.getLoginAs())) {
-            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
-            salesForceId = loginAsUser.getSalesforceId();
-        } else {
-            salesForceId = user.getSalesforceId();
-        }
-
+        String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
         List<OrcidRecord> records =  orcidRecordService.recordsWithoutTokens(salesForceId);
-
-
 
         for(OrcidRecord record : records) {
         	//check if it has affiliations

@@ -10,13 +10,12 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.domain.Assertion;
-import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
+import org.orcid.service.OrcidRecordService;
 import org.orcid.service.UserService;
 import org.orcid.service.assertions.download.CsvWriter;
-import org.orcid.service.OrcidRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -38,17 +37,8 @@ public class AssertionsReportCsvWriter implements CsvWriter {
 
 	@Override
 	public String writeCsv() throws IOException {
-		String salesForceId;
-		
-		AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        if(!StringUtils.isAllBlank(user.getLoginAs())) {
-            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
-            salesForceId = loginAsUser.getSalesforceId();
-        } else {
-            salesForceId = user.getSalesforceId();
-        }
+		String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
 		List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesForceId, this.SORT);
-
 		StringBuffer buffer = new StringBuffer();
 		CSVPrinter csvPrinter = new CSVPrinter(buffer,
 				CSVFormat.DEFAULT.withHeader("email", "orcid", "status", "putCode", "created", "modified",

@@ -11,7 +11,6 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
-import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.UserService;
