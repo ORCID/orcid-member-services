@@ -129,8 +129,12 @@ export class AssertionComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  getLinks() {
-    this.assertionService.getLinks();
+  generatePermissionLinks() {
+    this.assertionService.generatePermissionLinks();
+  }
+
+  generateCSV() {
+    this.assertionService.generateCSV();
   }
 
   generateReport() {

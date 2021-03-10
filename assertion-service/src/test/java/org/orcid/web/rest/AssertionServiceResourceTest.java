@@ -10,12 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -99,7 +102,92 @@ class AssertionServiceResourceTest {
 		
 	}
 	
-
+	@Test
+	void testGenerateCsv() throws IOException {
+		Mockito.when(assertionService.generateAssertionsCSV()).thenReturn("test");
+		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+		ServletOutputStream outputStream = Mockito.mock(ServletOutputStream.class);
+		Mockito.when(response.getOutputStream()).thenReturn(outputStream);
+		
+		assertionServiceResource.generateCsv(response);
+		
+		ArgumentCaptor<byte[]> bodyCaptor = ArgumentCaptor.forClass(byte[].class);
+		Mockito.verify(outputStream, Mockito.times(1)).write(bodyCaptor.capture());
+		String body = new String(bodyCaptor.getValue(), "UTF-8");
+		assertEquals("test", body);
+		
+		ArgumentCaptor<String> headerNameCaptor = ArgumentCaptor.forClass(String.class);
+		ArgumentCaptor<String> headerValueCaptor = ArgumentCaptor.forClass(String.class);
+		Mockito.verify(response, Mockito.times(3)).setHeader(headerNameCaptor.capture(), headerValueCaptor.capture());
+		
+		List<String> headerNames = headerNameCaptor.getAllValues();
+		assertEquals("Content-Disposition", headerNames.get(0));
+		assertEquals("Content-Type", headerNames.get(1));
+		assertEquals("filename", headerNames.get(2));
+		
+		List<String> headerValues = headerValueCaptor.getAllValues();
+		assertTrue(headerValues.get(0).startsWith("attachment; filename="));
+		assertEquals("text/csv", headerValues.get(1));
+		assertTrue(headerValues.get(2).endsWith("affiliations.csv"));
+	}
+	
+	@Test
+	void testGenerateReport() throws IOException {
+		Mockito.when(assertionService.generateAssertionsReport()).thenReturn("test");
+		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+		ServletOutputStream outputStream = Mockito.mock(ServletOutputStream.class);
+		Mockito.when(response.getOutputStream()).thenReturn(outputStream);
+		
+		assertionServiceResource.generateReport(response);
+		
+		ArgumentCaptor<byte[]> bodyCaptor = ArgumentCaptor.forClass(byte[].class);
+		Mockito.verify(outputStream, Mockito.times(1)).write(bodyCaptor.capture());
+		String body = new String(bodyCaptor.getValue(), "UTF-8");
+		assertEquals("test", body);
+		
+		ArgumentCaptor<String> headerNameCaptor = ArgumentCaptor.forClass(String.class);
+		ArgumentCaptor<String> headerValueCaptor = ArgumentCaptor.forClass(String.class);
+		Mockito.verify(response, Mockito.times(3)).setHeader(headerNameCaptor.capture(), headerValueCaptor.capture());
+		
+		List<String> headerNames = headerNameCaptor.getAllValues();
+		assertEquals("Content-Disposition", headerNames.get(0));
+		assertEquals("Content-Type", headerNames.get(1));
+		assertEquals("filename", headerNames.get(2));
+		
+		List<String> headerValues = headerValueCaptor.getAllValues();
+		assertTrue(headerValues.get(0).startsWith("attachment; filename="));
+		assertEquals("text/csv", headerValues.get(1));
+		assertTrue(headerValues.get(2).endsWith("orcid_report.csv"));
+	}
+	
+	@Test
+	void testGenerateLinks() throws Exception {
+		Mockito.when(assertionService.generatePermissionLinks()).thenReturn("test");
+		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+		ServletOutputStream outputStream = Mockito.mock(ServletOutputStream.class);
+		Mockito.when(response.getOutputStream()).thenReturn(outputStream);
+		
+		assertionServiceResource.generatePermissionLinks(response);
+		
+		ArgumentCaptor<byte[]> bodyCaptor = ArgumentCaptor.forClass(byte[].class);
+		Mockito.verify(outputStream, Mockito.times(1)).write(bodyCaptor.capture());
+		String body = new String(bodyCaptor.getValue(), "UTF-8");
+		assertEquals("test", body);
+		
+		ArgumentCaptor<String> headerNameCaptor = ArgumentCaptor.forClass(String.class);
+		ArgumentCaptor<String> headerValueCaptor = ArgumentCaptor.forClass(String.class);
+		Mockito.verify(response, Mockito.times(3)).setHeader(headerNameCaptor.capture(), headerValueCaptor.capture());
+		
+		List<String> headerNames = headerNameCaptor.getAllValues();
+		assertEquals("Content-Disposition", headerNames.get(0));
+		assertEquals("Content-Type", headerNames.get(1));
+		assertEquals("filename", headerNames.get(2));
+		
+		List<String> headerValues = headerValueCaptor.getAllValues();
+		assertTrue(headerValues.get(0).startsWith("attachment; filename="));
+		assertEquals("text/csv", headerValues.get(1));
+		assertTrue(headerValues.get(2).endsWith("orcid_permission_links.csv"));
+	}
 	
 	private Assertion getAssertionWithError() {
 		Assertion assertion = new Assertion();

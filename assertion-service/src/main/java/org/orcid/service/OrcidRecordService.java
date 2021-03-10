@@ -1,46 +1,26 @@
 package org.orcid.service;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jettison.json.JSONException;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.orcid.config.ApplicationProperties;
-import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.repository.OrcidRecordRepository;
 import org.orcid.security.EncryptUtil;
-import org.orcid.security.SecurityUtils;
 import org.orcid.web.rest.errors.BadRequestAlertException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import io.github.jhipster.web.util.PaginationUtil;
 
 @Service
 public class OrcidRecordService {
-    private static final Logger LOG = LoggerFactory.getLogger(OrcidRecordService.class);
 
     @Autowired
     private OrcidRecordRepository orcidRecordRepository;
@@ -167,27 +147,18 @@ public class OrcidRecordService {
         orcidRecordRepository.save(orcidRecord);
     }
     
-    public List<OrcidRecord> recordsWithoutTokens(String salesForceId){
+    public List<OrcidRecord> getRecordsWithoutTokens(String salesForceId){
     	return orcidRecordRepository.findAllToInvite(salesForceId);
     }
      
     
     public String generateLinkForEmail(String email) {
         String landingPageUrl = applicationProperties.getLandingPageUrl();
-
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        String salesForceId;
-        if(!StringUtils.isAllBlank(user.getLoginAs())) {
-            AssertionServiceUser loginAsUser = assertionsUserService.getLoginAsUser(user);
-            salesForceId = loginAsUser.getSalesforceId();
-        } else {
-            salesForceId = user.getSalesforceId();
-        }
+        String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
         Optional<OrcidRecord> record =  orcidRecordRepository.findOneByEmail(email);
         if(!record.isPresent()) {
         	createOrcidRecord(email, Instant.now(), salesForceId);
         }
-
         return landingPageUrl + "?state=" + encryptUtil.encrypt(salesForceId + "&&" + email);    
     }
 

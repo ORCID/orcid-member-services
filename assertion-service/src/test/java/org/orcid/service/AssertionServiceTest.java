@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +33,9 @@ import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.repository.AssertionsRepository;
-import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
+import org.orcid.service.assertions.download.impl.AssertionsForEditCsvWriter;
+import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;
+import org.orcid.service.assertions.download.impl.PermissionLinksCsvWriter;
 
 class AssertionServiceTest {
 
@@ -43,7 +46,13 @@ class AssertionServiceTest {
 	private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
 
 	@Mock
-	private AssertionsCSVReportWriter assertionsReportWriter;
+	private AssertionsReportCsvWriter assertionsReportWriter;
+	
+	@Mock
+	private AssertionsForEditCsvWriter assertionsForEditCsvWriter;
+	
+	@Mock
+	private PermissionLinksCsvWriter permissionLinksCsvWriter;
 
 	@Mock
 	private AssertionsRepository assertionsRepository;
@@ -63,8 +72,8 @@ class AssertionServiceTest {
 	@BeforeEach
 	public void setUp() throws JSONException {
 		MockitoAnnotations.initMocks(this);
+		when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
 		when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
-		when(assertionsUserService.getLoggedInUserId()).thenReturn(getUser().getId());
 	}
 
 	private AssertionServiceUser getUser() {
@@ -85,13 +94,6 @@ class AssertionServiceTest {
 		
 		assertFalse(assertionService.assertionExists("doesn't exist"));
 		verify(assertionsRepository).existsById(Mockito.eq("doesn't exist"));
-	}
-
-	@Test
-	void testGenerateAssertionsReport() throws IOException {
-		Mockito.when(assertionsReportWriter.writeAssertionsReport()).thenReturn("test");
-		assertNotNull(assertionService.generateAssertionsReport());
-		Mockito.verify(assertionsReportWriter, Mockito.times(1)).writeAssertionsReport();
 	}
 
 	@Test
@@ -519,6 +521,30 @@ class AssertionServiceTest {
 		assertEquals(1, assertions.size());
 
 		Mockito.verify(assertionsRepository, Mockito.times(1)).findByEmail(Mockito.eq(email));
+	}
+	
+	@Test
+	void testGenerateAssertionsCSV() throws IOException {
+		when(assertionsForEditCsvWriter.writeCsv()).thenReturn("test");
+		String csv = assertionService.generateAssertionsCSV();
+		assertEquals("test", csv);
+		verify(assertionsForEditCsvWriter, times(1)).writeCsv();
+	}
+	
+	@Test
+	void testGenerateAssertionsReport() throws IOException {
+		Mockito.when(assertionsReportWriter.writeCsv()).thenReturn("test");
+		String csv = assertionService.generateAssertionsReport();
+		assertEquals("test", csv);
+		Mockito.verify(assertionsReportWriter, Mockito.times(1)).writeCsv();
+	}
+	
+	@Test
+	void testGenerateLinks() throws IOException {
+		Mockito.when(permissionLinksCsvWriter.writeCsv()).thenReturn("test");
+		String csv = assertionService.generatePermissionLinks();
+		assertEquals("test", csv);
+		Mockito.verify(permissionLinksCsvWriter, Mockito.times(1)).writeCsv();
 	}
 
 	private Optional<OrcidRecord> getOptionalOrcidRecord(int i) {
