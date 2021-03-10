@@ -45,10 +45,10 @@ public class AssertionsReportCsvWriter implements CsvWriter {
 						"affiliation-section", "department-name", "role-title", "start-date", "end-date", "org-name",
 						"org-country", "org-city", "org-region", "disambiguated-organization-identifier",
 						"disambiguation-source", "external-id", "external-id-type", "external-id-url"));
+
 		Map<String, OrcidRecord> orcidRecordMap = new HashMap<>();
-		List<String> elements;
 		for (Assertion a : assertions) {
-		    elements = new ArrayList<String>();
+			List<String> elements = new ArrayList<String>();
 			elements.add(a.getEmail());
 
 			if (!orcidRecordMap.containsKey(a.getEmail())) {

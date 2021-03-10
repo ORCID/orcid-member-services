@@ -93,13 +93,6 @@ class AssertionServiceTest {
 	}
 
 	@Test
-	void testGenerateAssertionsReport() throws IOException {
-		Mockito.when(assertionsReportWriter.writeCsv()).thenReturn("test");
-		assertNotNull(assertionService.generateAssertionsReport());
-		Mockito.verify(assertionsReportWriter, Mockito.times(1)).writeCsv();
-	}
-
-	@Test
 	void testCreateOrUpdateAssertion() {
 		Assertion a = new Assertion();
 		a.setId("1");
@@ -532,6 +525,14 @@ class AssertionServiceTest {
 		String csv = assertionService.generateAssertionsCSV();
 		assertEquals("test", csv);
 		verify(assertionsForEditCsvWriter, times(1)).writeCsv();
+	}
+	
+	@Test
+	void testGenerateAssertionsReport() throws IOException {
+		Mockito.when(assertionsReportWriter.writeCsv()).thenReturn("test");
+		String csv = assertionService.generateAssertionsReport();
+		assertEquals("test", csv);
+		Mockito.verify(assertionsReportWriter, Mockito.times(1)).writeCsv();
 	}
 
 	private Optional<OrcidRecord> getOptionalOrcidRecord(int i) {
