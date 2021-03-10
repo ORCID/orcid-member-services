@@ -8,8 +8,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -20,7 +21,6 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.codehaus.jettison.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.domain.Assertion;
-import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.enumeration.AssertionStatus;
 import org.orcid.domain.utils.AssertionUtils;
@@ -35,8 +35,6 @@ import org.orcid.service.UserService;
 import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
-import org.orcid.web.rest.errors.EmailAlreadyUsedException;
-import org.orcid.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,7 +136,7 @@ public class AssertionServiceResource {
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
     }
-
+    
     @PutMapping("/assertion")
     public ResponseEntity<Assertion> updateAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
         LOG.debug("REST request to update assertion : {}", assertion);
@@ -358,6 +356,17 @@ public class AssertionServiceResource {
         response.setHeader("Content-Type", "text/csv");
         response.setHeader("filename", fileName);
         String csvReport = assertionsService.generateAssertionsReport();
+        response.getOutputStream().write(csvReport.getBytes());
+        response.flushBuffer();
+    }
+    
+    @GetMapping(path = "/assertion/csv")
+    public void generateCsv(HttpServletResponse response) throws IOException {
+        final String fileName = dateFormat.format(new Date()) + "_affiliations.csv";
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+        response.setHeader("Content-Type", "text/csv");
+        response.setHeader("filename", fileName);
+        String csvReport = assertionsService.generateAssertionsCSV();
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
     }

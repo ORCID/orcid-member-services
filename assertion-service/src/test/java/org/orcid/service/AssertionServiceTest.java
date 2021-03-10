@@ -32,7 +32,7 @@ import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.repository.AssertionsRepository;
-import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
+import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;
 
 class AssertionServiceTest {
 
@@ -43,7 +43,7 @@ class AssertionServiceTest {
 	private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
 
 	@Mock
-	private AssertionsCSVReportWriter assertionsReportWriter;
+	private AssertionsReportCsvWriter assertionsReportWriter;
 
 	@Mock
 	private AssertionsRepository assertionsRepository;
@@ -89,9 +89,9 @@ class AssertionServiceTest {
 
 	@Test
 	void testGenerateAssertionsReport() throws IOException {
-		Mockito.when(assertionsReportWriter.writeAssertionsReport()).thenReturn("test");
+		Mockito.when(assertionsReportWriter.writeCsv()).thenReturn("test");
 		assertNotNull(assertionService.generateAssertionsReport());
-		Mockito.verify(assertionsReportWriter, Mockito.times(1)).writeAssertionsReport();
+		Mockito.verify(assertionsReportWriter, Mockito.times(1)).writeCsv();
 	}
 
 	@Test

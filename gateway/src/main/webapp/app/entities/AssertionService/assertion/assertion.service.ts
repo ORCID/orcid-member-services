@@ -73,7 +73,7 @@ export class AssertionService {
     });
   }
 
-  getCSV() {
+  generateCSV() {
     this.http.get(`${this.resourceUrl}/csv`, { observe: 'response', responseType: 'blob' }).subscribe(response => {
       const filename = response.headers.get('filename') != null ? response.headers.get('filename') : 'affiliations.csv';
       const blob = new Blob([response.body], { type: 'text/csv' });

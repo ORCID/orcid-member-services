@@ -24,7 +24,8 @@ import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.security.EncryptUtil;
 import org.orcid.security.SecurityUtils;
-import org.orcid.service.assertions.report.impl.AssertionsCSVReportWriter;
+import org.orcid.service.assertions.download.impl.AssertionsForEditCsvWriter;
+import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.orcid.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
@@ -58,7 +59,10 @@ public class AssertionService {
     private OrcidAPIClient orcidAPIClient;
 
     @Autowired
-    private AssertionsCSVReportWriter assertionsReportWriter;
+    private AssertionsReportCsvWriter assertionsReportCsvWriter;
+    
+    @Autowired
+    private AssertionsForEditCsvWriter assertionsForEditCsvWriter;
 
     @Autowired
     private UserService assertionsUserService;
@@ -501,7 +505,7 @@ public class AssertionService {
     }
 
     public String generateAssertionsReport() throws IOException {
-        return assertionsReportWriter.writeAssertionsReport();
+        return assertionsReportCsvWriter.writeCsv();
     }
 
     private void storeError(String assertionId, int statusCode, String error) {
@@ -550,16 +554,6 @@ public class AssertionService {
     
     public List<Assertion> findByEmailAndSalesForceId(String email, String salesForceId) {
         return assertionsRepository.findByEmailAndSalesforceId(email, salesForceId);
-    }
-
-    private void updateEmailOrcidRecord(String newEmail, String oldEmail) {
-        Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(oldEmail);
-        if (orcidRecordOptional.isPresent()) {
-            OrcidRecord orcidRecord = orcidRecordOptional.get();
-            orcidRecord.setEmail(newEmail);
-            orcidRecord.setModified(Instant.now());
-            orcidRecordService.updateOrcidRecord(orcidRecord);
-        }
     }
 
     private void deleteOrcidRecordByEmail(String email) {
@@ -626,5 +620,9 @@ public class AssertionService {
         csvPrinter.flush();
         csvPrinter.close();
         return buffer.toString();
+    }
+    
+    public String generateAssertionsCSV() throws IOException {
+    	return assertionsForEditCsvWriter.writeCsv();
     }
 }
