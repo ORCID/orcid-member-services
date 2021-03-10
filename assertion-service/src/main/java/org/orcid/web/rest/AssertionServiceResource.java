@@ -126,13 +126,13 @@ public class AssertionServiceResource {
         return ResponseEntity.ok().body(assertionsService.findById(id));
     }
 
-    @GetMapping("/assertion/links")
-    public void generateLinks(HttpServletResponse response) throws IOException, JSONException {
+    @GetMapping("/assertion/permission-links")
+    public void generatePermissionLinks(HttpServletResponse response) throws IOException, JSONException {
         final String fileName = dateFormat.format(new Date()) + "_orcid_permission_links.csv";
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         response.setHeader("Content-Type", "text/csv");
         response.setHeader("filename", fileName);
-        String csvReport = assertionsService.generateLinks();
+        String csvReport = assertionsService.generatePermissionLinks();
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
     }

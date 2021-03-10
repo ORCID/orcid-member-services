@@ -162,12 +162,12 @@ class AssertionServiceResourceTest {
 	
 	@Test
 	void testGenerateLinks() throws Exception {
-		Mockito.when(assertionService.generateLinks()).thenReturn("test");
+		Mockito.when(assertionService.generatePermissionLinks()).thenReturn("test");
 		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 		ServletOutputStream outputStream = Mockito.mock(ServletOutputStream.class);
 		Mockito.when(response.getOutputStream()).thenReturn(outputStream);
 		
-		assertionServiceResource.generateLinks(response);
+		assertionServiceResource.generatePermissionLinks(response);
 		
 		ArgumentCaptor<byte[]> bodyCaptor = ArgumentCaptor.forClass(byte[].class);
 		Mockito.verify(outputStream, Mockito.times(1)).write(bodyCaptor.capture());

@@ -542,7 +542,7 @@ class AssertionServiceTest {
 	@Test
 	void testGenerateLinks() throws IOException {
 		Mockito.when(permissionLinksCsvWriter.writeCsv()).thenReturn("test");
-		String csv = assertionService.generateLinks();
+		String csv = assertionService.generatePermissionLinks();
 		assertEquals("test", csv);
 		Mockito.verify(permissionLinksCsvWriter, Mockito.times(1)).writeCsv();
 	}

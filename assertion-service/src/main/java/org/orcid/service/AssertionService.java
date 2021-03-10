@@ -558,7 +558,7 @@ public class AssertionService {
 		assertionsRepository.save(assertion);
 	}
 
-	public String generateLinks() throws IOException {
+	public String generatePermissionLinks() throws IOException {
 		return permissionLinksCsvWriter.writeCsv();
 	}
 
