@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.repository.AssertionsRepository;
+import org.orcid.service.assertions.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;
 
 class AssertionServiceTest {
@@ -44,6 +46,9 @@ class AssertionServiceTest {
 
 	@Mock
 	private AssertionsReportCsvWriter assertionsReportWriter;
+	
+	@Mock
+	private AssertionsForEditCsvWriter assertionsForEditCsvWriter;
 
 	@Mock
 	private AssertionsRepository assertionsRepository;
@@ -519,6 +524,14 @@ class AssertionServiceTest {
 		assertEquals(1, assertions.size());
 
 		Mockito.verify(assertionsRepository, Mockito.times(1)).findByEmail(Mockito.eq(email));
+	}
+	
+	@Test
+	void testGenerateAssertionsCSV() throws IOException {
+		when(assertionsForEditCsvWriter.writeCsv()).thenReturn("test");
+		String csv = assertionService.generateAssertionsCSV();
+		assertEquals("test", csv);
+		verify(assertionsForEditCsvWriter, times(1)).writeCsv();
 	}
 
 	private Optional<OrcidRecord> getOptionalOrcidRecord(int i) {
