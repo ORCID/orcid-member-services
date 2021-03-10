@@ -35,6 +35,7 @@ import org.orcid.domain.OrcidToken;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.service.assertions.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;
+import org.orcid.service.assertions.download.impl.PermissionLinksCsvWriter;
 
 class AssertionServiceTest {
 
@@ -49,6 +50,9 @@ class AssertionServiceTest {
 	
 	@Mock
 	private AssertionsForEditCsvWriter assertionsForEditCsvWriter;
+	
+	@Mock
+	private PermissionLinksCsvWriter permissionLinksCsvWriter;
 
 	@Mock
 	private AssertionsRepository assertionsRepository;
@@ -533,6 +537,14 @@ class AssertionServiceTest {
 		String csv = assertionService.generateAssertionsReport();
 		assertEquals("test", csv);
 		Mockito.verify(assertionsReportWriter, Mockito.times(1)).writeCsv();
+	}
+	
+	@Test
+	void testGenerateLinks() throws IOException {
+		Mockito.when(permissionLinksCsvWriter.writeCsv()).thenReturn("test");
+		String csv = assertionService.generateLinks();
+		assertEquals("test", csv);
+		Mockito.verify(permissionLinksCsvWriter, Mockito.times(1)).writeCsv();
 	}
 
 	private Optional<OrcidRecord> getOptionalOrcidRecord(int i) {

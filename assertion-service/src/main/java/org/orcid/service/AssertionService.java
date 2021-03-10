@@ -8,13 +8,10 @@ import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.client.OrcidAPIClient;
-import org.orcid.config.ApplicationProperties;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
@@ -22,10 +19,10 @@ import org.orcid.domain.OrcidToken;
 import org.orcid.domain.enumeration.AssertionStatus;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
-import org.orcid.security.EncryptUtil;
 import org.orcid.security.SecurityUtils;
 import org.orcid.service.assertions.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;
+import org.orcid.service.assertions.download.impl.PermissionLinksCsvWriter;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.orcid.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
@@ -40,12 +37,6 @@ import org.springframework.stereotype.Service;
 public class AssertionService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AssertionService.class);
-
-	@Autowired
-	private EncryptUtil encryptUtil;
-
-	@Autowired
-	private ApplicationProperties applicationProperties;
 
 	private final Sort SORT = new Sort(Sort.Direction.ASC, "email", "status", "created", "modified",
 			"deletedFromORCID");
@@ -64,6 +55,9 @@ public class AssertionService {
 
 	@Autowired
 	private AssertionsForEditCsvWriter assertionsForEditCsvWriter;
+	
+	@Autowired
+	private PermissionLinksCsvWriter permissionLinksCsvWriter;
 
 	@Autowired
 	private UserService assertionsUserService;
@@ -565,26 +559,7 @@ public class AssertionService {
 	}
 
 	public String generateLinks() throws IOException {
-		String landingPageUrl = applicationProperties.getLandingPageUrl();
-		StringBuffer buffer = new StringBuffer();
-		CSVPrinter csvPrinter = new CSVPrinter(buffer, CSVFormat.DEFAULT.withHeader("email", "link"));
-		String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
-		List<OrcidRecord> records = orcidRecordService.recordsWithoutTokens(salesForceId);
-
-		for (OrcidRecord record : records) {
-			// check if it has affiliations
-			String email = record.getEmail();
-			List<Assertion> assertions = assertionsRepository.findByEmailAndSalesforceId(email, salesForceId);
-			if (assertions.size() > 0) {
-				String encrypted = encryptUtil.encrypt(salesForceId + "&&" + email);
-				String link = landingPageUrl + "?state=" + encrypted;
-				csvPrinter.printRecord(email, link);
-			}
-		}
-
-		csvPrinter.flush();
-		csvPrinter.close();
-		return buffer.toString();
+		return permissionLinksCsvWriter.writeCsv();
 	}
 
 	public String generateAssertionsCSV() throws IOException {

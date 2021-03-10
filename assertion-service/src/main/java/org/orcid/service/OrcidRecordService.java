@@ -147,7 +147,7 @@ public class OrcidRecordService {
         orcidRecordRepository.save(orcidRecord);
     }
     
-    public List<OrcidRecord> recordsWithoutTokens(String salesForceId){
+    public List<OrcidRecord> getRecordsWithoutTokens(String salesForceId){
     	return orcidRecordRepository.findAllToInvite(salesForceId);
     }
      
