@@ -68,8 +68,8 @@ class AssertionServiceTest {
 	@BeforeEach
 	public void setUp() throws JSONException {
 		MockitoAnnotations.initMocks(this);
+		when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
 		when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
-		when(assertionsUserService.getLoggedInUserId()).thenReturn(getUser().getId());
 	}
 
 	private AssertionServiceUser getUser() {
