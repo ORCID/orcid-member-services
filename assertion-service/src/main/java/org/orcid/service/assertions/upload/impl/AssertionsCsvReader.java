@@ -52,26 +52,24 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 	// "ftp"
 
 	UrlValidator urlValidator = new OrcidUrlValidator(urlValschemes);
-	
+
 	@Autowired
-    private AssertionService assertionsService;
+	private AssertionService assertionsService;
 
 	@Override
 	public AssertionsUpload readAssertionsUpload(InputStream inputStream) throws IOException {
 		AssertionsUpload upload = new AssertionsUpload();
-		
+
 		try (final Reader reader = new InputStreamReader(new BOMInputStream(inputStream), StandardCharsets.UTF_8);
 				final CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader())) {
-			
+
 			for (CSVRecord record : parser) {
 				try {
 					Assertion assertion = parseLine(record, upload);
-					if (upload.getErrors().length() == 0) {
-						if (!upload.getUsers().contains(assertion.getEmail())) {
-							upload.addUser(assertion.getEmail());
-						}
-						upload.addAssertion(assertion);
+					if (assertion.getEmail() != null && !upload.getUsers().contains(assertion.getEmail())) {
+						upload.addUser(assertion.getEmail());
 					}
+					upload.addAssertion(assertion);
 				} catch (Exception e) {
 					LOG.info("CSV upload error found for record number {}", record.getRecordNumber());
 					upload.addError(record.getRecordNumber(), e.getMessage());
@@ -92,7 +90,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 				a.setId(id);
 			}
 		}
-		
+
 		if (getOptionalMandatoryNullable(line, "email") == null) {
 			assertionsUpload.addError(line.getRecordNumber(), "email must not be null");
 			return a;
