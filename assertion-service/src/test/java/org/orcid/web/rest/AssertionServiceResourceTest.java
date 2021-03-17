@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +31,11 @@ import org.orcid.domain.OrcidToken;
 import org.orcid.security.EncryptUtil;
 import org.orcid.service.AssertionService;
 import org.orcid.service.OrcidRecordService;
+import org.orcid.service.assertions.upload.AssertionsUpload;
+import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 class AssertionServiceResourceTest {
     
@@ -43,6 +49,9 @@ class AssertionServiceResourceTest {
 
 	@Mock
     private EncryptUtil encryptUtil;
+	
+	@Mock
+    private AssertionsCsvReader assertionsCsvReader;
 	
 	@InjectMocks
 	private AssertionServiceResource assertionServiceResource;
@@ -189,8 +198,49 @@ class AssertionServiceResourceTest {
 		assertTrue(headerValues.get(2).endsWith("orcid_permission_links.csv"));
 	}
 	
-	private Assertion getAssertionWithError() {
+	@Test
+	void testUploadAssertionsNoProcessingIfErrorsPresent() throws IOException {
+		MultipartFile file = Mockito.mock(MultipartFile.class);
+		Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
+		
+		AssertionsUpload upload = new AssertionsUpload();
+		upload.addAssertion(getAssertion("1@email.com"));
+		upload.addAssertion(getAssertion("2@email.com"));
+		upload.addAssertion(getAssertion("3@email.com"));
+		upload.addError(1, "test error");
+		
+		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class))).thenReturn(upload);
+		
+		assertionServiceResource.uploadAssertions(file);
+		
+		Mockito.verify(assertionService, Mockito.never()).createOrUpdateAssertions(Mockito.any());
+	}
+	
+	@Test
+	void testUploadAssertions() throws IOException {
+		MultipartFile file = Mockito.mock(MultipartFile.class);
+		Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
+		
+		AssertionsUpload upload = new AssertionsUpload();
+		upload.addAssertion(getAssertion("1@email.com"));
+		upload.addAssertion(getAssertion("2@email.com"));
+		upload.addAssertion(getAssertion("3@email.com"));
+		
+		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class))).thenReturn(upload);
+		
+		assertionServiceResource.uploadAssertions(file);
+		
+		Mockito.verify(assertionService, Mockito.times(1)).createOrUpdateAssertions(Mockito.any());
+	}
+	
+	private Assertion getAssertion(String email) {
 		Assertion assertion = new Assertion();
+		assertion.setEmail(email);
+		return assertion;
+	}
+	
+	private Assertion getAssertionWithError() {
+		Assertion assertion = getAssertion("error@error.com");
 		assertion.setId("assertionId");
 		JSONObject error = new JSONObject();
 		error.put("statusCode", 404);

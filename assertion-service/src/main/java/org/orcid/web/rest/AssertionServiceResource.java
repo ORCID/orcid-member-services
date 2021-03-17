@@ -172,11 +172,14 @@ public class AssertionServiceResource {
             throw new RuntimeException(e);
 		}
 		
+		if (upload.getErrors().length() > 0) {
+			return ResponseEntity.ok().body(upload.getErrors().toString());
+		}
+		
 		// add put codes for assertions that already exist
 		updateIdsForExistingAssertions(upload.getAssertions());
 		assertionsService.createOrUpdateAssertions(upload.getAssertions());
-
-        return ResponseEntity.ok().body(upload.getErrors().toString());
+        return ResponseEntity.ok().body("");
     }
 
     private void updateIdsForExistingAssertions(List<Assertion> assertions) {
