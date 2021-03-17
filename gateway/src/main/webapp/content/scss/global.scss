@@ -359,3 +359,12 @@ ORCID global styles
     margin-right: 0;
   }
 }
+
+.navbar-brand {
+  overflow: hidden;
+}
+
+.navbar-collapse {
+  width: 500px;
+  flex-shrink: 0;
+}
