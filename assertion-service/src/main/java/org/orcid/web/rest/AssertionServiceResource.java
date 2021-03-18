@@ -158,14 +158,10 @@ public class AssertionServiceResource {
     @PostMapping("/assertion/upload")
     public ResponseEntity<String> uploadAssertions(@RequestParam("file") MultipartFile file) {
     	InputStream inputStream = null;
+    	AssertionsUpload upload = null;
+    	
     	try {
 			inputStream = file.getInputStream();
-		} catch (IOException e) {
-            LOG.warn("Error reading user upload", e);
-            throw new RuntimeException(e);
-		}
-        AssertionsUpload upload = null;
-		try {
 			upload = assertionsCsvReader.readAssertionsUpload(inputStream);
 		} catch (IOException e) {
             LOG.warn("Error reading user upload", e);
@@ -179,7 +175,7 @@ public class AssertionServiceResource {
 		// add put codes for assertions that already exist
 		updateIdsForExistingAssertions(upload.getAssertions());
 		assertionsService.createOrUpdateAssertions(upload.getAssertions());
-        return ResponseEntity.ok().body("");
+        return ResponseEntity.ok().body(upload.getErrors().toString());
     }
 
     private void updateIdsForExistingAssertions(List<Assertion> assertions) {
