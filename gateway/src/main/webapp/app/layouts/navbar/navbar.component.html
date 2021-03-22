@@ -125,7 +125,7 @@
                     </li>
                 </ul>
             </li>-->
-            <li *ngIf="isAuthenticated()" ngbDropdown class="nav-item dropdown pointer" placement="bottom-left" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *ngIf="isAuthenticated()" ngbDropdown class="nav-item dropdown pointer" placement="bottom-right" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
                   <span *ngIf="!getImageUrl()">
                     <fa-icon icon="user"></fa-icon>
