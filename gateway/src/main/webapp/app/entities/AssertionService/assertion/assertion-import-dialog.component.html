@@ -14,9 +14,12 @@
 			    		<th>Errors</th>
 			    	</thead>
 			    	<tbody>
-			    		<tr *ngFor="let error of csvErrors">
+			    		<tr *ngFor="let error of csvErrors | slice:0:10;">
 			        		<td>Row {{error['index']}}</td>
 			        		<td>{{error['message']}}</td>
+			       		</tr>
+			       		<tr *ngIf="csvErrors.length > 10">
+			       			<td>and {{ csvErrors.length - 10 }} more errors</td>
 			       		</tr>
 			    	</tbody>
 			    </table>
