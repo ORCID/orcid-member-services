@@ -29,6 +29,8 @@ services:
       - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
+    depends_on:
+      - "jhipster-registry"
 
   gateway-app:
     restart: unless-stopped
@@ -51,6 +53,8 @@ services:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     ports:
       - '8080:8080'
+    depends_on:
+      - "jhipster-registry"
 
   userservice-app:
     restart: unless-stopped
@@ -74,6 +78,8 @@ services:
       - UAA_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
+    depends_on:
+      - "jhipster-registry"
 
   memberservice-app:
     restart: unless-stopped
@@ -98,6 +104,8 @@ services:
       - 'APPLICATION_ORCIDORGSALESFORCEID=${ORCID_ORG_SALESFORCEID}'
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
+    depends_on:
+      - "jhipster-registry"
 
   jhipster-registry:
     restart: unless-stopped
