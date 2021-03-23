@@ -63,7 +63,7 @@ class AssertionServiceResourceTest {
 
 	@Test
 	void testDeleteAssertionFromOrcidSuccessful() throws JSONException, JAXBException {
-		Mockito.when(assertionService.deleteAssertionFromOrcid(Mockito.eq("assertionId"))).thenReturn(Boolean.TRUE);
+		Mockito.when(assertionService.deleteAssertionFromOrcidRegistry(Mockito.eq("assertionId"))).thenReturn(Boolean.TRUE);
 		ResponseEntity<String> response = assertionServiceResource.deleteAssertionFromOrcid("assertionId");
 		String body = response.getBody();
 		assertEquals("{\"deleted\":true}", body);
@@ -71,7 +71,7 @@ class AssertionServiceResourceTest {
 	
 	@Test
 	void testDeleteAssertionFromOrcidFailure() throws JSONException, JAXBException {
-		Mockito.when(assertionService.deleteAssertionFromOrcid(Mockito.eq("assertionId"))).thenReturn(Boolean.FALSE);
+		Mockito.when(assertionService.deleteAssertionFromOrcidRegistry(Mockito.eq("assertionId"))).thenReturn(Boolean.FALSE);
 		Mockito.when(assertionService.findById(Mockito.eq("assertionId"))).thenReturn(getAssertionWithError());
 		ResponseEntity<String> response = assertionServiceResource.deleteAssertionFromOrcid("assertionId");
 		String body = response.getBody();

@@ -55,7 +55,7 @@ public class AssertionService {
 
 	@Autowired
 	private AssertionsForEditCsvWriter assertionsForEditCsvWriter;
-	
+
 	@Autowired
 	private PermissionLinksCsvWriter permissionLinksCsvWriter;
 
@@ -129,8 +129,9 @@ public class AssertionService {
 	public void deleteAllBySalesforceId(String salesforceId) {
 		List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, SORT);
 		assertions.forEach(a -> {
-			String assertionEmail = getAssertionEmail(a.getId());
+			String assertionEmail = a.getEmail();
 			assertionsRepository.deleteById(a.getId());
+			
 			// Remove OrcidRecord if it has not already been removed
 			Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(assertionEmail);
 			if (orcidRecordOptional.isPresent()) {
@@ -279,8 +280,11 @@ public class AssertionService {
 	}
 
 	public void deleteById(String id) {
-		String assertionEmail = getAssertionEmail(id);
+		Assertion assertion = findById(id);
+		String assertionEmail = assertion.getEmail();
+		
 		assertionsRepository.deleteById(id);
+		
 		// Remove OrcidRecord if no other assertions exist for user
 		List<Assertion> assertions = assertionsRepository.findByEmail(assertionEmail);
 		if (assertions.isEmpty()) {
@@ -423,7 +427,7 @@ public class AssertionService {
 		}
 	}
 
-	public boolean deleteAssertionFromOrcid(String assertionId) throws JSONException, JAXBException {
+	public boolean deleteAssertionFromOrcidRegistry(String assertionId) throws JSONException, JAXBException {
 		Assertion assertion = assertionsRepository.findById(assertionId)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid assertion id"));
 		String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
@@ -433,48 +437,48 @@ public class AssertionService {
 					"affiliationOtherOrganization");
 		}
 
-		Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(assertion.getEmail());
-		if (!optional.isPresent()) {
-			LOG.error("OrcidRecord not available for email {}", assertion.getEmail());
-			return false;
-		}
-		OrcidRecord record = optional.get();
-		if (StringUtils.isBlank(record.getOrcid())) {
-			LOG.warn("Orcid id still not available for {}", assertion.getEmail());
-			return false;
-		}
-		if (record.getTokens() == null) {
-			LOG.warn("Tokens still not available for {}", assertion.getEmail());
-			return false;
-		} else {
-
-		}
-
-		LOG.info("Exchanging id token for {}", record.getOrcid());
-		String accessToken = null;
-		try {
-			accessToken = orcidAPIClient.exchangeToken(record.getToken(assertion.getSalesforceId()));
-
-			Boolean deleted = orcidAPIClient.deleteAffiliation(record.getOrcid(), accessToken, assertion);
-			if (deleted) {
-				Instant now = Instant.now();
-				assertion.setDeletedFromORCID(now);
-				assertion.setModified(now);
-				assertion.setStatus(getAssertionStatus(assertion));
-				assertionsRepository.save(assertion);
+		Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
+		if (canDeleteAssertionFromOrcidRegistry(record, assertion)) {
+			LOG.info("Exchanging id token for {}", record.get().getOrcid());
+			try {
+				String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId()));
+				Boolean deleted = orcidAPIClient.deleteAffiliation(record.get().getOrcid(), accessToken, assertion);
+				if (deleted) {
+					Instant now = Instant.now();
+					assertion.setDeletedFromORCID(now);
+					assertion.setModified(now);
+					assertion.setStatus(getAssertionStatus(assertion));
+					assertionsRepository.save(assertion);
+				}
+				return deleted;
+			} catch (ORCIDAPIException oae) {
+				storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+			} catch (Exception e) {
+				LOG.error("Error with assertion " + assertion.getId(), e);
+				storeError(assertion.getId(), 0, e.getMessage());
 			}
-			return deleted;
-		} catch (ORCIDAPIException oae) {
-			storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
-		} catch (Exception e) {
-			LOG.error("Error with assertion " + assertion.getId(), e);
-			storeError(assertion.getId(), 0, e.getMessage());
 		}
 		return false;
 	}
 
 	public String generateAssertionsReport() throws IOException {
 		return assertionsReportCsvWriter.writeCsv();
+	}
+
+	private boolean canDeleteAssertionFromOrcidRegistry(Optional<OrcidRecord> record, Assertion assertion) {
+		if (!record.isPresent()) {
+			LOG.error("OrcidRecord not available for email {}", assertion.getEmail());
+			return false;
+		}
+		if (StringUtils.isBlank(record.get().getOrcid())) {
+			LOG.warn("Orcid ID not available for {}", assertion.getEmail());
+			return false;
+		}
+		if (record.get().getTokens() == null) {
+			LOG.warn("Tokens not available for {}", assertion.getEmail());
+			return false;
+		}
+		return true;
 	}
 
 	private void storeError(String assertionId, int statusCode, String error) {
@@ -512,12 +516,6 @@ public class AssertionService {
 			return record.getOrcid();
 		}
 		return null;
-	}
-
-	private String getAssertionEmail(String assertionId) {
-		Assertion assertion = assertionsRepository.findById(assertionId)
-				.orElseThrow(() -> new RuntimeException("Unable to find assertion with ID: " + assertionId));
-		return assertion.getEmail();
 	}
 
 	public List<Assertion> findByEmail(String email) {

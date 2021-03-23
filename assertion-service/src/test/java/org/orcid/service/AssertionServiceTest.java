@@ -546,6 +546,17 @@ class AssertionServiceTest {
 		assertEquals("test", csv);
 		Mockito.verify(permissionLinksCsvWriter, Mockito.times(1)).writeCsv();
 	}
+	
+	@Test
+	void testDeleteById() {
+//		Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(value)
+//		Mockito.doNothing().when(assertionsRepository).deleteById(Mockito.eq("id"));
+	}
+	
+	@Test
+	void testDeleteAssertionFromOrcidRegistry() {
+		
+	}
 
 	private Optional<OrcidRecord> getOptionalOrcidRecord(int i) {
 		// quarter without orcid record
