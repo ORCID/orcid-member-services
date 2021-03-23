@@ -113,5 +113,28 @@ class AssertionsCsvReaderTest {
 		assertEquals("http://bbc.co.uk", upload.getAssertions().get(1).getUrl());
 		assertEquals(1, upload.getUsers().size());
 	}
+	
+	@Test
+	void testReadAssertionsUploadWithDeleteRow() throws IOException {
+		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("a-database-id"))).thenReturn(true);
+		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("another-database-id"))).thenReturn(true);
+		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("id-to-delete"))).thenReturn(true);
+		
+		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-delete-row.csv");
+		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
+		
+		assertEquals(0, upload.getErrors().length()); // id doesn't exist
+		
+		assertEquals(4, upload.getAssertions().size());  // including erroneous
+		
+		// check fields of valid assertions
+		assertEquals("id-to-delete", upload.getAssertions().get(3).getId());
+		
+		assertNull(upload.getAssertions().get(3).getExternalId());
+		assertNull(upload.getAssertions().get(3).getAddedToORCID());
+		assertNull(upload.getAssertions().get(3).getAffiliationSection());
+		assertNull(upload.getAssertions().get(3).getCreated());
+		assertNull(upload.getAssertions().get(3).getDeletedFromORCID());
+	}
 
 }

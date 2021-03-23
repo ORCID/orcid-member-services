@@ -81,7 +81,8 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 
 	private Assertion parseLine(CSVRecord line, AssertionsUpload assertionsUpload) {
 		Assertion a = new Assertion();
-		String id = getOptionalMandatoryNullable(line, "id");
+		String id = getOptionalNullable(line, "id");
+
 		if (id != null) {
 			if (!assertionsService.assertionExists(id)) {
 				assertionsUpload.addError(line.getRecordNumber(), "id does not exist");
@@ -91,14 +92,18 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			}
 		}
 
-		if (getOptionalMandatoryNullable(line, "email") == null) {
+		if (deletionLine(line)) {
+			return a;
+		}
+
+		if (getOptionalNullable(line, "email") == null) {
 			assertionsUpload.addError(line.getRecordNumber(), "email must not be null");
 			return a;
 		} else {
 			a.setEmail(line.get("email"));
 		}
 
-		if (getOptionalMandatoryNullable(line, "affiliation-section") == null) {
+		if (getOptionalNullable(line, "affiliation-section") == null) {
 			assertionsUpload.addError(line.getRecordNumber(), "affiliation-section must not be null");
 			return a;
 		} else {
@@ -111,13 +116,13 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			a.setAffiliationSection(affiliationSection);
 		}
 
-		a.setDepartmentName(getOptionalMandatoryNullable(line, "department-name"));
-		a.setRoleTitle(getOptionalMandatoryNullable(line, "role-title"));
+		a.setDepartmentName(getOptionalNullable(line, "department-name"));
+		a.setRoleTitle(getOptionalNullable(line, "role-title"));
 
 		StringBuffer startDateBuffer = new StringBuffer();
 		StringBuffer endDateBuffer = new StringBuffer();
 		// Dates follows the format yyyy-MM-dd
-		if (getOptionalMandatoryNullable(line, "start-date") != null) {
+		if (getOptionalNullable(line, "start-date") != null) {
 			String startDate = line.get("start-date").trim();
 			if (!StringUtils.isBlank(startDate)) {
 				String[] startDateParts = startDate.split("-|/|\\s");
@@ -143,7 +148,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		}
 
 		// Dates follows the format yyyy-MM-dd
-		if (getOptionalMandatoryNullable(line, "end-date") != null) {
+		if (getOptionalNullable(line, "end-date") != null) {
 			String endDate = line.get("end-date").trim();
 			if (!StringUtils.isBlank(endDate)) {
 				String endDateParts[] = endDate.split("-|/|\\s");
@@ -177,14 +182,14 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			}
 		}
 
-		if (getOptionalMandatoryNullable(line, "org-name") == null) {
+		if (getOptionalNullable(line, "org-name") == null) {
 			assertionsUpload.addError(line.getRecordNumber(), "org-name must not be null");
 			return a;
 		} else {
 			a.setOrgName(line.get("org-name"));
 		}
 
-		if (getOptionalMandatoryNullable(line, "org-country") == null) {
+		if (getOptionalNullable(line, "org-country") == null) {
 			assertionsUpload.addError(line.getRecordNumber(), "org-country must not be null");
 			return a;
 		} else {
@@ -198,25 +203,25 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			}
 		}
 
-		if (getOptionalMandatoryNullable(line, "org-city") == null) {
+		if (getOptionalNullable(line, "org-city") == null) {
 			assertionsUpload.addError(line.getRecordNumber(), "org-city must not be null");
 			return a;
 		} else {
 			a.setOrgCity(line.get("org-city"));
 		}
 
-		if (getOptionalMandatoryNullable(line, "org-region") != null) {
+		if (getOptionalNullable(line, "org-region") != null) {
 			a.setOrgRegion(line.get("org-region"));
 		}
 
-		if (getOptionalMandatoryNullable(line, "disambiguation-source") == null) {
+		if (getOptionalNullable(line, "disambiguation-source") == null) {
 			assertionsUpload.addError(line.getRecordNumber(), "disambiguation-source-identifier must not be null");
 			return a;
 		} else {
 			a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source").toUpperCase());
 		}
 
-		if (getOptionalMandatoryNullable(line, "disambiguated-organization-identifier") == null) {
+		if (getOptionalNullable(line, "disambiguated-organization-identifier") == null) {
 			assertionsUpload.addError(line.getRecordNumber(), "disambiguated-organization-identifier must not be null");
 			return a;
 		} else {
@@ -231,16 +236,33 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			}
 		}
 
-		a.setExternalId(getOptionalMandatoryNullable(line, "external-id"));
-		a.setExternalIdType(getOptionalMandatoryNullable(line, "external-id-type"));
-		a.setExternalIdUrl(getOptionalMandatoryNullable(line, "external-id-url"));
+		a.setExternalId(getOptionalNullable(line, "external-id"));
+		a.setExternalIdType(getOptionalNullable(line, "external-id-type"));
+		a.setExternalIdUrl(getOptionalNullable(line, "external-id-url"));
 
-		if (getOptionalMandatoryNullable(line, "url") != null && !StringUtils.isBlank(line.get("url"))) {
+		if (getOptionalNullable(line, "url") != null && !StringUtils.isBlank(line.get("url"))) {
 			String url = validateUrl(line.get("url"));
 			a.setUrl(url);
 		}
 
 		return a;
+	}
+
+	private boolean deletionLine(CSVRecord line) {
+		if (getOptionalNullable(line, "id") == null) {
+			return false;
+		}
+		return empty(line, "email") && empty(line, "affiliation-section") && empty(line, "department-name")
+				&& empty(line, "role-title") && empty(line, "start-date") && empty(line, "end-date")
+				&& empty(line, "org-name") && empty(line, "org-country") && empty(line, "org-city")
+				&& empty(line, "org-region") && empty(line, "disambiguation-source")
+				&& empty(line, "disambiguated-organization-identifier") && empty(line, "external-id")
+				&& empty(line, "external-id-type") && empty(line, "external-id-url") && empty(line, "url");
+	}
+
+	private boolean empty(CSVRecord line, String columnName) {
+		return !line.isSet(columnName) || getOptionalNullable(line, columnName) == null
+				|| getOptionalNullable(line, columnName).isEmpty();
 	}
 
 	private String getMandatoryNullableValue(CSVRecord line, String name) {
@@ -250,7 +272,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		return line.get(name);
 	}
 
-	private String getOptionalMandatoryNullable(CSVRecord line, String name) {
+	private String getOptionalNullable(CSVRecord line, String name) {
 		try {
 			if (StringUtils.isBlank(line.get(name))) {
 				return null;
