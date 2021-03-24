@@ -2,6 +2,7 @@ package org.orcid.service.assertions.upload.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.orcid.domain.Assertion;
 import org.orcid.service.AssertionService;
 import org.orcid.service.assertions.upload.AssertionsUpload;
 
@@ -67,6 +69,7 @@ class AssertionsCsvReaderTest {
 	@Test
 	void testReadAssertionsUploadWithDbIds() throws IOException {
 		Mockito.when(mockAssertionService.assertionExists(Mockito.anyString())).thenReturn(true);
+		Mockito.when(mockAssertionService.findById(Mockito.anyString())).thenReturn(getDummyAssertionWithEmail());
 		
 		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-db-id-column.csv");
 		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
@@ -92,6 +95,7 @@ class AssertionsCsvReaderTest {
 	void testReadAssertionsUploadWithError() throws IOException {
 		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("a-database-id"))).thenReturn(false);
 		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("another-database-id"))).thenReturn(true);
+		Mockito.when(mockAssertionService.findById(Mockito.anyString())).thenReturn(getDummyAssertionWithEmail());
 		
 		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-db-id-column.csv");
 		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
@@ -119,6 +123,7 @@ class AssertionsCsvReaderTest {
 		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("a-database-id"))).thenReturn(true);
 		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("another-database-id"))).thenReturn(true);
 		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("id-to-delete"))).thenReturn(true);
+		Mockito.when(mockAssertionService.findById(Mockito.anyString())).thenReturn(getDummyAssertionWithEmail());
 		
 		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-delete-row.csv");
 		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
@@ -135,6 +140,32 @@ class AssertionsCsvReaderTest {
 		assertNull(upload.getAssertions().get(3).getAffiliationSection());
 		assertNull(upload.getAssertions().get(3).getCreated());
 		assertNull(upload.getAssertions().get(3).getDeletedFromORCID());
+	}
+	
+	@Test
+	void testReadAssertionsUploadWithUpdatedEmail() throws IOException, JSONException {
+		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("a-database-id"))).thenReturn(true);
+		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("another-database-id"))).thenReturn(true);
+		
+		Assertion existingAssertionWithDifferentEmail = new Assertion();
+		existingAssertionWithDifferentEmail.setEmail("different@email.com");
+		existingAssertionWithDifferentEmail.setId("another-database-id");
+		
+		Mockito.when(mockAssertionService.findById(Mockito.eq("a-database-id"))).thenReturn(getDummyAssertionWithEmail());
+		Mockito.when(mockAssertionService.findById(Mockito.eq("another-database-id"))).thenReturn(existingAssertionWithDifferentEmail);
+		
+		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-db-id-column.csv");
+		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
+		
+		assertEquals(1, upload.getErrors().length()); // email can't be changed
+		assertTrue(upload.getErrors().get(0).toString().contains("email"));
+		assertEquals(3, upload.getAssertions().size());  // including erroneous
+	}
+	
+	private Assertion getDummyAssertionWithEmail() {
+		Assertion dummy = new Assertion();
+		dummy.setEmail("email@orcid.org");
+		return dummy;
 	}
 
 }
