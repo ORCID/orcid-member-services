@@ -62,7 +62,7 @@ public class OrcidAPIClient {
         this.jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);                       
     }
 
-    public String exchangeToken(String idToken) throws JSONException, ClientProtocolException, IOException, JAXBException {
+    public String exchangeToken(String idToken) throws JSONException, ClientProtocolException, IOException {
         HttpClient client = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(applicationProperties.getTokenExchange().getEndpoint());
 
@@ -162,7 +162,7 @@ public class OrcidAPIClient {
         return false;
     }
 
-    public boolean deleteAffiliation(String orcid, String accessToken, Assertion assertion) throws JSONException, JAXBException {
+    public boolean deleteAffiliation(String orcid, String accessToken, Assertion assertion)  {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
         log.info("Deleting affiliation with putcode {} for {}", assertion.getPutCode(), orcid);
 

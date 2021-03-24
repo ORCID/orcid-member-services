@@ -9,7 +9,6 @@ import java.util.Optional;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.client.OrcidAPIClient;
 import org.orcid.domain.Assertion;
@@ -74,11 +73,6 @@ public class AssertionService {
 		}
 	}
 
-	public List<Assertion> createOrUpdateAssertions(List<Assertion> assertions) {
-		assertions.forEach(this::createOrUpdateAssertion);
-		return assertions;
-	}
-
 	public Page<Assertion> findByOwnerId(Pageable pageable) {
 		Page<Assertion> assertionsPage = assertionsRepository.findByOwnerId(assertionsUserService.getLoggedInUserId(),
 				pageable);
@@ -131,7 +125,7 @@ public class AssertionService {
 		assertions.forEach(a -> {
 			String assertionEmail = a.getEmail();
 			assertionsRepository.deleteById(a.getId());
-			
+
 			// Remove OrcidRecord if it has not already been removed
 			Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(assertionEmail);
 			if (orcidRecordOptional.isPresent()) {
@@ -279,12 +273,21 @@ public class AssertionService {
 		return assertionsRepository.save(assertion);
 	}
 
+	public void createUpdateOrDeleteAssertion(Assertion a) {
+		if (assertionToDelete(a)) {
+			deleteAssertionFromOrcidRegistry(a.getId());
+			deleteById(a.getId());
+		} else {
+			createOrUpdateAssertion(a);
+		}
+	}
+
 	public void deleteById(String id) {
 		Assertion assertion = findById(id);
 		String assertionEmail = assertion.getEmail();
-		
+
 		assertionsRepository.deleteById(id);
-		
+
 		// Remove OrcidRecord if no other assertions exist for user
 		List<Assertion> assertions = assertionsRepository.findByEmail(assertionEmail);
 		if (assertions.isEmpty()) {
@@ -296,8 +299,24 @@ public class AssertionService {
 		return assertionsRepository.findByEmail(email);
 	}
 
+	private boolean assertionToDelete(Assertion assertion) {
+		return assertion.getId() != null && assertion.getAddedToORCID() == null
+				&& assertion.getAffiliationSection() == null && assertion.getCreated() == null
+				&& assertion.getDeletedFromORCID() == null && assertion.getDepartmentName() == null
+				&& assertion.getDisambiguatedOrgId() == null && assertion.getDisambiguationSource() == null
+				&& assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null
+				&& assertion.getEndYear() == null && assertion.getExternalId() == null
+				&& assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null
+				&& assertion.getLastModifiedBy() == null && assertion.getModified() == null
+				&& assertion.getOrcidError() == null && assertion.getOrcidId() == null && assertion.getOrgCity() == null
+				&& assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null
+				&& assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null
+				&& assertion.getRoleTitle() == null && assertion.getSalesforceId() == null
+				&& assertion.getStartDay() == null && assertion.getStartMonth() == null
+				&& assertion.getStartYear() == null;
+	}
+
 	private void copyFieldsToUpdate(Assertion source, Assertion destination) {
-		destination.setEmail(source.getEmail());
 		destination.setRoleTitle(source.getRoleTitle());
 		destination.setAffiliationSection(source.getAffiliationSection());
 
@@ -427,7 +446,7 @@ public class AssertionService {
 		}
 	}
 
-	public boolean deleteAssertionFromOrcidRegistry(String assertionId) throws JSONException, JAXBException {
+	public boolean deleteAssertionFromOrcidRegistry(String assertionId) {
 		Assertion assertion = assertionsRepository.findById(assertionId)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid assertion id"));
 		String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();

@@ -33,7 +33,6 @@ import org.orcid.service.AssertionService;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -213,7 +212,7 @@ class AssertionServiceResourceTest {
 		
 		assertionServiceResource.uploadAssertions(file);
 		
-		Mockito.verify(assertionService, Mockito.never()).createOrUpdateAssertions(Mockito.any());
+		Mockito.verify(assertionService, Mockito.never()).createOrUpdateAssertion(Mockito.any());
 	}
 	
 	@Test
@@ -230,7 +229,7 @@ class AssertionServiceResourceTest {
 		
 		assertionServiceResource.uploadAssertions(file);
 		
-		Mockito.verify(assertionService, Mockito.times(1)).createOrUpdateAssertions(Mockito.any());
+		Mockito.verify(assertionService, Mockito.times(3)).createUpdateOrDeleteAssertion(Mockito.any());
 	}
 	
 	private Assertion getAssertion(String email) {
