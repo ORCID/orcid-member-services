@@ -212,7 +212,7 @@ class AssertionServiceResourceTest {
 		
 		assertionServiceResource.uploadAssertions(file);
 		
-		Mockito.verify(assertionService, Mockito.never()).createOrUpdateAssertion(Mockito.any());
+		Mockito.verify(assertionService, Mockito.never()).createUpdateOrDeleteAssertion(Mockito.any());
 	}
 	
 	@Test

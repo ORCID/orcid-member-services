@@ -65,14 +65,6 @@ public class AssertionService {
 		return assertionsRepository.existsById(id);
 	}
 
-	public Assertion createOrUpdateAssertion(Assertion assertion) {
-		if (assertion.getId() != null) {
-			return updateAssertion(assertion);
-		} else {
-			return createAssertion(assertion);
-		}
-	}
-
 	public Page<Assertion> findByOwnerId(Pageable pageable) {
 		Page<Assertion> assertionsPage = assertionsRepository.findByOwnerId(assertionsUserService.getLoggedInUserId(),
 				pageable);
@@ -131,15 +123,6 @@ public class AssertionService {
 			if (orcidRecordOptional.isPresent()) {
 				deleteOrcidRecordByEmail(assertionEmail);
 			}
-		});
-		return;
-	}
-
-	public void updateAssertionsSalesforceId(String salesforceId, String newSalesforceId) {
-		List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, SORT);
-		assertions.forEach(a -> {
-			a.setSalesforceId(newSalesforceId);
-			updateAssertionAsAdmin(a);
 		});
 		return;
 	}
@@ -232,25 +215,20 @@ public class AssertionService {
 		}
 	}
 
-	public Assertion updateAssertion(Assertion assertion) {
-		return updateAssertion(assertion, false);
-	}
-
-	private Assertion updateAssertionAsAdmin(Assertion assertion) {
-		return updateAssertion(assertion, true);
-	}
-
-	private Assertion updateAssertion(Assertion assertion, boolean updateAsAdmin) {
-		AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+	private void checkAssertionAccess(Assertion existingAssertion) {
 		String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
-
-		Optional<Assertion> optional = assertionsRepository.findById(assertion.getId());
-		Assertion existingAssertion = optional.get();
-
-		if (!salesforceId.equals(existingAssertion.getSalesforceId()) && !updateAsAdmin) {
+		if (!salesforceId.equals(existingAssertion.getSalesforceId())) {
 			throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation",
 					"affiliationOtherOrganization");
 		}
+	}
+
+	public Assertion updateAssertion(Assertion assertion) {
+		Optional<Assertion> optional = assertionsRepository.findById(assertion.getId());
+		Assertion existingAssertion = optional.get();
+		checkAssertionAccess(existingAssertion);
+
+		AssertionServiceUser user = assertionsUserService.getLoggedInUser();
 
 		copyFieldsToUpdate(assertion, existingAssertion);
 		existingAssertion.setUpdated(true);
@@ -274,11 +252,18 @@ public class AssertionService {
 	}
 
 	public void createUpdateOrDeleteAssertion(Assertion a) {
-		if (assertionToDelete(a)) {
-			deleteAssertionFromOrcidRegistry(a.getId());
-			deleteById(a.getId());
+		if (a.getId() == null || a.getId().isEmpty()) {
+			createAssertion(a);
 		} else {
-			createOrUpdateAssertion(a);
+			Assertion existingAssertion = findById(a.getId());
+			checkAssertionAccess(existingAssertion);
+			
+			if (assertionToDelete(a)) {
+				deleteAssertionFromOrcidRegistry(a.getId());
+				deleteById(a.getId());
+			} else {
+				updateAssertion(a);
+			}
 		}
 	}
 
