@@ -368,3 +368,14 @@ ORCID global styles
   width: 500px;
   flex-shrink: 0;
 }
+
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+div.org-name {
+  display: inline-block;
+  max-width: calc(100% - 350px);
+}
