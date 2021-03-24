@@ -79,27 +79,177 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		return upload;
 	}
 
-	private Assertion parseLine(CSVRecord line, AssertionsUpload assertionsUpload) {
+	private Assertion parseLine(CSVRecord line, AssertionsUpload upload) {
 		Assertion a = new Assertion();
-		String id = getOptionalMandatoryNullable(line, "id");
-		if (id != null) {
-			if (!assertionsService.assertionExists(id)) {
-				assertionsUpload.addError(line.getRecordNumber(), "id does not exist");
-				return a;
+		a = processId(line, a, upload);
+
+		if (deletionLine(line)) {
+			return a;
+		}
+
+		a = processEmail(line, a, upload);
+		a = processAffiliationSection(line, a, upload);
+		a = processDepartmentName(line, a);
+		a = processRoleTitle(line, a);
+		a = processStartDate(line, a, upload);
+		a = processEndDate(line, a, upload);
+		a = processOrgName(line, a, upload);
+		a = processOrgCountry(line, a, upload);
+		a = processOrgCity(line, a, upload);
+		a = processOrgRegion(line, a);
+		a = processDisambiguationSource(line, a, upload);
+		a = processDisambiguatedOrgId(line, a, upload);
+		a = processExternalId(line, a);
+		a = processUrl(line, a, upload);
+		return a;
+	}
+
+	private Assertion processUrl(CSVRecord line, Assertion a, AssertionsUpload upload) {
+		String url = getOptionalNullableValue(line, "url");
+		if (url != null && !StringUtils.isBlank(url)) {
+			url = url.trim();
+			try {
+				url = encodeUrl(url);
+			} catch (MalformedURLException | URISyntaxException e) {
+			}
+			if (!urlValidator.isValid(url)) {
+				upload.addError(line.getRecordNumber(), "url is invalid");
 			} else {
-				a.setId(id);
+				a.setUrl(url);
 			}
 		}
+		return a;
+	}
 
-		if (getOptionalMandatoryNullable(line, "email") == null) {
-			assertionsUpload.addError(line.getRecordNumber(), "email must not be null");
+	private Assertion processExternalId(CSVRecord line, Assertion a) {
+		a.setExternalId(getOptionalNullableValue(line, "external-id"));
+		a.setExternalIdType(getOptionalNullableValue(line, "external-id-type"));
+		a.setExternalIdUrl(getOptionalNullableValue(line, "external-id-url"));
+		return a;
+	}
+
+	private Assertion processDisambiguatedOrgId(CSVRecord line, Assertion a, AssertionsUpload upload) {
+		if (getOptionalNullableValue(line, "disambiguated-organization-identifier") == null) {
+			upload.addError(line.getRecordNumber(), "disambiguated-organization-identifier must not be null");
 			return a;
 		} else {
-			a.setEmail(line.get("email"));
-		}
+			String orgId = AssertionUtils.stripGridURL(line.get("disambiguated-organization-identifier"));
 
-		if (getOptionalMandatoryNullable(line, "affiliation-section") == null) {
-			assertionsUpload.addError(line.getRecordNumber(), "affiliation-section must not be null");
+			if (validateDisambiguatedOrganizationId(orgId, line.get("disambiguation-source"))) {
+				a.setDisambiguatedOrgId(orgId);
+			} else {
+				upload.addError(line.getRecordNumber(),
+						"disambiguated-organization-identifier not valid. If the source is GRID must start with \"grid.\", if the source is RINGGOLD has to be a number. ");
+				return a;
+			}
+		}
+		return a;
+	}
+
+	private Assertion processDisambiguationSource(CSVRecord line, Assertion a, AssertionsUpload upload) {
+		if (getOptionalNullableValue(line, "disambiguation-source") == null) {
+			upload.addError(line.getRecordNumber(), "disambiguation-source-identifier must not be null");
+			return a;
+		} else {
+			a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source").toUpperCase());
+		}
+		return a;
+	}
+
+	private Assertion processOrgRegion(CSVRecord line, Assertion a) {
+		a.setOrgRegion(getOptionalNullableValue(line, "org-region"));
+		return a;
+	}
+
+	private Assertion processOrgCity(CSVRecord line, Assertion a, AssertionsUpload upload) {
+		if (getOptionalNullableValue(line, "org-city") == null) {
+			upload.addError(line.getRecordNumber(), "org-city must not be null");
+			return a;
+		} else {
+			a.setOrgCity(line.get("org-city"));
+		}
+		return a;
+	}
+
+	private Assertion processOrgCountry(CSVRecord line, Assertion a, AssertionsUpload upload) {
+		if (getOptionalNullableValue(line, "org-country") == null) {
+			upload.addError(line.getRecordNumber(), "org-country must not be null");
+			return a;
+		} else {
+			try {
+				Iso3166Country.valueOf(line.get("org-country"));
+				a.setOrgCountry(line.get("org-country"));
+			} catch (Exception e) {
+				upload.addError(line.getRecordNumber(), "Invalid org-country provided: " + line.get("org-country")
+						+ " it should be one from the Iso3166Country enum");
+				return a;
+			}
+		}
+		return a;
+	}
+
+	private Assertion processOrgName(CSVRecord line, Assertion a, AssertionsUpload upload) {
+		if (getOptionalNullableValue(line, "org-name") == null) {
+			upload.addError(line.getRecordNumber(), "org-name must not be null");
+			return a;
+		} else {
+			a.setOrgName(line.get("org-name"));
+		}
+		return a;
+	}
+
+	private Assertion processEndDate(CSVRecord line, Assertion a, AssertionsUpload upload) {
+		return processDate(line, a, upload, "end-date");
+	}
+
+	private Assertion processStartDate(CSVRecord line, Assertion a, AssertionsUpload upload) {
+		return processDate(line, a, upload, "start-date");
+	}
+
+	private Assertion processDate(CSVRecord line, Assertion a, AssertionsUpload upload, String elementName) {
+		StringBuffer dateBuffer = new StringBuffer();
+
+		// Dates follows the format yyyy-MM-dd
+		if (getOptionalNullableValue(line, elementName) != null) {
+			String date = line.get(elementName).trim();
+			if (!StringUtils.isBlank(date)) {
+				String[] dateParts = date.split("-|/|\\s");
+				String day = dateParts.length > 2 ? dateParts[2] : "0";
+				if (validDate(date, dateParts[0], day, line, upload)) {
+					a.setStartYear(dateParts[0]);
+					dateBuffer.append(dateParts[0]);
+					if (dateParts.length > 1) {
+						a.setStartMonth(dateParts[1]);
+						dateBuffer.append("-");
+						dateBuffer.append(dateParts[1]);
+					}
+
+					if (dateParts.length > 2) {
+						a.setStartDay(dateParts[2]);
+						dateBuffer.append("-");
+						dateBuffer.append(dateParts[2]);
+					}
+				} else {
+					return a;
+				}
+			}
+		}
+		return a;
+	}
+
+	private Assertion processRoleTitle(CSVRecord line, Assertion a) {
+		a.setRoleTitle(getOptionalNullableValue(line, "role-title"));
+		return a;
+	}
+
+	private Assertion processDepartmentName(CSVRecord line, Assertion a) {
+		a.setDepartmentName(getOptionalNullableValue(line, "department-name"));
+		return a;
+	}
+
+	private Assertion processAffiliationSection(CSVRecord line, Assertion a, AssertionsUpload upload) {
+		if (getOptionalNullableValue(line, "affiliation-section") == null) {
+			upload.addError(line.getRecordNumber(), "affiliation-section must not be null");
 			return a;
 		} else {
 			AffiliationSection affiliationSection;
@@ -110,137 +260,56 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			}
 			a.setAffiliationSection(affiliationSection);
 		}
-
-		a.setDepartmentName(getOptionalMandatoryNullable(line, "department-name"));
-		a.setRoleTitle(getOptionalMandatoryNullable(line, "role-title"));
-
-		StringBuffer startDateBuffer = new StringBuffer();
-		StringBuffer endDateBuffer = new StringBuffer();
-		// Dates follows the format yyyy-MM-dd
-		if (getOptionalMandatoryNullable(line, "start-date") != null) {
-			String startDate = line.get("start-date").trim();
-			if (!StringUtils.isBlank(startDate)) {
-				String[] startDateParts = startDate.split("-|/|\\s");
-				String day = startDateParts.length > 2 ? startDateParts[2] : "0";
-				if (validDate(startDate, startDateParts[0], day, line, assertionsUpload)) {
-					a.setStartYear(startDateParts[0]);
-					startDateBuffer.append(startDateParts[0]);
-					if (startDateParts.length > 1) {
-						a.setStartMonth(startDateParts[1]);
-						startDateBuffer.append("-");
-						startDateBuffer.append(startDateParts[1]);
-					}
-
-					if (startDateParts.length > 2) {
-						a.setStartDay(startDateParts[2]);
-						startDateBuffer.append("-");
-						startDateBuffer.append(startDateParts[2]);
-					}
-				} else {
-					return a;
-				}
-			}
-		}
-
-		// Dates follows the format yyyy-MM-dd
-		if (getOptionalMandatoryNullable(line, "end-date") != null) {
-			String endDate = line.get("end-date").trim();
-			if (!StringUtils.isBlank(endDate)) {
-				String endDateParts[] = endDate.split("-|/|\\s");
-				String day = endDateParts.length > 2 ? endDateParts[2] : "0";
-				if (validDate(endDate, endDateParts[0], day, line, assertionsUpload)) {
-					a.setEndYear(endDateParts[0]);
-					endDateBuffer.append(endDateParts[0]);
-
-					if (endDateParts.length > 1) {
-						a.setEndMonth(endDateParts[1]);
-						endDateBuffer.append("-");
-						endDateBuffer.append(endDateParts[1]);
-					}
-
-					if (endDateParts.length > 2) {
-						a.setEndDay(endDateParts[2]);
-						endDateBuffer.append("-");
-						endDateBuffer.append(endDateParts[2]);
-					}
-
-					if (startDateBuffer.length() != 0 && endDateBuffer.length() != 0) {
-						if (!validStartDateEndDate(startDateBuffer.toString(), endDateBuffer.toString())) {
-							assertionsUpload.addError(line.getRecordNumber(),
-									"The start date cannot be greater than the end date.");
-							return a;
-						}
-					}
-				} else {
-					return a;
-				}
-			}
-		}
-
-		if (getOptionalMandatoryNullable(line, "org-name") == null) {
-			assertionsUpload.addError(line.getRecordNumber(), "org-name must not be null");
-			return a;
-		} else {
-			a.setOrgName(line.get("org-name"));
-		}
-
-		if (getOptionalMandatoryNullable(line, "org-country") == null) {
-			assertionsUpload.addError(line.getRecordNumber(), "org-country must not be null");
-			return a;
-		} else {
-			try {
-				Iso3166Country.valueOf(line.get("org-country"));
-				a.setOrgCountry(line.get("org-country"));
-			} catch (Exception e) {
-				assertionsUpload.addError(line.getRecordNumber(), "Invalid org-country provided: "
-						+ line.get("org-country") + " it should be one from the Iso3166Country enum");
-				return a;
-			}
-		}
-
-		if (getOptionalMandatoryNullable(line, "org-city") == null) {
-			assertionsUpload.addError(line.getRecordNumber(), "org-city must not be null");
-			return a;
-		} else {
-			a.setOrgCity(line.get("org-city"));
-		}
-
-		if (getOptionalMandatoryNullable(line, "org-region") != null) {
-			a.setOrgRegion(line.get("org-region"));
-		}
-
-		if (getOptionalMandatoryNullable(line, "disambiguation-source") == null) {
-			assertionsUpload.addError(line.getRecordNumber(), "disambiguation-source-identifier must not be null");
-			return a;
-		} else {
-			a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source").toUpperCase());
-		}
-
-		if (getOptionalMandatoryNullable(line, "disambiguated-organization-identifier") == null) {
-			assertionsUpload.addError(line.getRecordNumber(), "disambiguated-organization-identifier must not be null");
-			return a;
-		} else {
-			String orgId = AssertionUtils.stripGridURL(line.get("disambiguated-organization-identifier"));
-
-			if (validateDisambiguatedOrganizationId(orgId, line.get("disambiguation-source"))) {
-				a.setDisambiguatedOrgId(orgId);
-			} else {
-				assertionsUpload.addError(line.getRecordNumber(),
-						"disambiguated-organization-identifier not valid. If the source is GRID must start with \"grid.\", if the source is RINGGOLD has to be a number. ");
-				return a;
-			}
-		}
-
-		a.setExternalId(getOptionalMandatoryNullable(line, "external-id"));
-		a.setExternalIdType(getOptionalMandatoryNullable(line, "external-id-type"));
-		a.setExternalIdUrl(getOptionalMandatoryNullable(line, "external-id-url"));
-
-		if (getOptionalMandatoryNullable(line, "url") != null && !StringUtils.isBlank(line.get("url"))) {
-			String url = validateUrl(line.get("url"));
-			a.setUrl(url);
-		}
-
 		return a;
+	}
+
+	private Assertion processId(CSVRecord line, Assertion a, AssertionsUpload upload) {
+		String id = getOptionalNullableValue(line, "id");
+		if (id != null) {
+			if (!assertionsService.assertionExists(id)) {
+				upload.addError(line.getRecordNumber(), "id does not exist");
+				return a;
+			} else {
+				a.setId(id);
+			}
+		}
+		return a;
+	}
+
+	private Assertion processEmail(CSVRecord line, Assertion a, AssertionsUpload upload) {
+		String id = getOptionalNullableValue(line, "id");
+		String email = getOptionalNullableValue(line, "email");
+		if (email == null) {
+			upload.addError(line.getRecordNumber(), "email must not be null");
+			return a;
+		} else {
+			// attempt to change email?
+			if (id != null && assertionsService.assertionExists(id)) {
+				Assertion existingAssertion = assertionsService.findById(id);
+				if (!email.equals(existingAssertion.getEmail())) {
+					upload.addError(line.getRecordNumber(), "email cannot be changed");
+				}
+			}
+			a.setEmail(email);
+		}
+		return a;
+	}
+
+	private boolean deletionLine(CSVRecord line) {
+		if (getOptionalNullableValue(line, "id") == null) {
+			return false;
+		}
+		return empty(line, "email") && empty(line, "affiliation-section") && empty(line, "department-name")
+				&& empty(line, "role-title") && empty(line, "start-date") && empty(line, "end-date")
+				&& empty(line, "org-name") && empty(line, "org-country") && empty(line, "org-city")
+				&& empty(line, "org-region") && empty(line, "disambiguation-source")
+				&& empty(line, "disambiguated-organization-identifier") && empty(line, "external-id")
+				&& empty(line, "external-id-type") && empty(line, "external-id-url") && empty(line, "url");
+	}
+
+	private boolean empty(CSVRecord line, String columnName) {
+		return !line.isSet(columnName) || getOptionalNullableValue(line, columnName) == null
+				|| getOptionalNullableValue(line, columnName).isEmpty();
 	}
 
 	private String getMandatoryNullableValue(CSVRecord line, String name) {
@@ -250,7 +319,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		return line.get(name);
 	}
 
-	private String getOptionalMandatoryNullable(CSVRecord line, String name) {
+	private String getOptionalNullableValue(CSVRecord line, String name) {
 		try {
 			if (StringUtils.isBlank(line.get(name))) {
 				return null;
@@ -259,23 +328,6 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		} catch (IllegalArgumentException e) {
 			return null;
 		}
-	}
-
-	private String validateUrl(String url) {
-		if (!StringUtils.isBlank(url)) {
-			url = url.trim();
-			boolean valid = false;
-			try {
-				url = encodeUrl(url);
-				valid = urlValidator.isValid(url);
-			} catch (Exception e) {
-			}
-
-			if (!valid) {
-				throw new IllegalArgumentException("url is invalid");
-			}
-		}
-		return url;
 	}
 
 	private boolean validateDisambiguatedOrganizationId(String orgId, String orgSource) {
@@ -300,8 +352,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		return encoded.toASCIIString();
 	}
 
-	protected boolean validDate(String date, String year, String day, CSVRecord line,
-			AssertionsUpload assertionsUpload) {
+	protected boolean validDate(String date, String year, String day, CSVRecord line, AssertionsUpload upload) {
 
 		for (DateTimeFormatter formatter : formatters) {
 			try {
@@ -311,7 +362,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 						if (Integer.parseInt(day) == localDate.getDayOfMonth()) {
 							return true;
 						} else {
-							assertionsUpload.addError(line.getRecordNumber(), "Invalid date.");
+							upload.addError(line.getRecordNumber(), "Invalid date.");
 							return false;
 						}
 					} else {
@@ -321,7 +372,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			} catch (DateTimeParseException e) {
 			}
 		}
-		assertionsUpload.addError(line.getRecordNumber(),
+		upload.addError(line.getRecordNumber(),
 				"Invalid date Format. The accepted formats are 'yyyy', 'yyyy-MM' and 'yyyy-MM-dd'");
 		return false;
 	}
