@@ -287,7 +287,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			if (id != null && assertionsService.assertionExists(id)) {
 				Assertion existingAssertion = assertionsService.findById(id);
 				if (!email.equals(existingAssertion.getEmail())) {
-					upload.addError(line.getRecordNumber(), "affiliation email cannot be changed");
+					upload.addError(line.getRecordNumber(), "email cannot be changed");
 				}
 			}
 			a.setEmail(email);
