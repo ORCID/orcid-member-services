@@ -170,6 +170,41 @@ class AssertionsCsvReaderTest {
 		assertEquals(3, upload.getAssertions().size());  // including erroneous
 	}
 	
+	@Test
+	void testReadAssertionsWithInterestingDates() throws IOException {
+		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("a-database-id"))).thenReturn(true);
+		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("another-database-id"))).thenReturn(true);
+		Mockito.when(mockAssertionService.findById(Mockito.anyString())).thenReturn(getDummyAssertionWithEmail());
+		
+		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-interesting-dates.csv");
+		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
+		
+		assertEquals(0, upload.getErrors().length()); // id doesn't exist
+		
+		assertEquals(3, upload.getAssertions().size());  // including erroneous
+		
+		assertEquals("2020", upload.getAssertions().get(0).getStartYear());
+		assertEquals("01", upload.getAssertions().get(0).getStartMonth());
+		assertEquals("01", upload.getAssertions().get(0).getStartDay());
+		assertEquals("2021", upload.getAssertions().get(0).getEndYear());
+		assertEquals("03", upload.getAssertions().get(0).getEndMonth());
+		assertEquals("05", upload.getAssertions().get(0).getEndDay());
+		
+		assertEquals("2020", upload.getAssertions().get(1).getStartYear());
+		assertEquals("02", upload.getAssertions().get(1).getStartMonth());
+		assertEquals("03", upload.getAssertions().get(1).getStartDay());
+		assertNull(upload.getAssertions().get(1).getEndYear());
+		assertNull(upload.getAssertions().get(1).getEndMonth());
+		assertNull(upload.getAssertions().get(1).getEndDay());
+		
+		assertNull(upload.getAssertions().get(2).getStartYear());
+		assertNull(upload.getAssertions().get(2).getStartMonth());
+		assertNull(upload.getAssertions().get(2).getStartDay());
+		assertNull(upload.getAssertions().get(2).getEndYear());
+		assertNull(upload.getAssertions().get(2).getEndMonth());
+		assertNull(upload.getAssertions().get(2).getEndDay());
+	}
+	
 	private Assertion getDummyAssertionWithEmail() {
 		Assertion dummy = new Assertion();
 		dummy.setEmail("email@orcid.org");
