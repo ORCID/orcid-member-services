@@ -1,0 +1,4 @@
+email,affiliation-section,department-name,role-title,url,start-date,end-date,org-name,org-country,org-city,org-region,disambiguated-organization-identifier,disambiguation-source,external-id,external-id-type,external-id-url,id
+email@orcid.org,service,dept,role,bbc.co.uk,2020-01-01,2021-03-05,ORCID,US,Bethesda,Region,grid.132412,grid,ext-id,ext-id-type,https://test.orcid.org/0000-0000-0000-0000,a-database-id
+email@orcid.org,service,dept,role,bbc.co.uk,2020-02-03,,ORCID,US,Bethesda,Region,grid.132412,grid,ext-id,ext-id-type,https://test.orcid.org/0000-0000-0000-0000,another-database-id
+email@orcid.org,service,dept,role,bbc.co.uk,,,ORCID-2,US,Bethesda,Region,grid.132412,grid,ext-id-2,ext-id-type,https://test.orcid.org/0000-0000-0000-0000,

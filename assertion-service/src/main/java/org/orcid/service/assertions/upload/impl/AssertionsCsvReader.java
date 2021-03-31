@@ -199,42 +199,51 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 	}
 
 	private Assertion processEndDate(CSVRecord line, Assertion a, AssertionsUpload upload) {
-		return processDate(line, a, upload, "end-date");
+		AssertionsUpload.AssertionsUploadDate endDate = getDate(line, upload, "end-date");
+		if (endDate != null) {
+			a.setEndDay(endDate.getDay());
+			a.setEndMonth(endDate.getMonth());
+			a.setEndYear(endDate.getYear());
+		}
+		return a;
 	}
 
 	private Assertion processStartDate(CSVRecord line, Assertion a, AssertionsUpload upload) {
-		return processDate(line, a, upload, "start-date");
+		AssertionsUpload.AssertionsUploadDate startDate = getDate(line, upload, "start-date");
+		if (startDate != null) {
+			a.setStartDay(startDate.getDay());
+			a.setStartMonth(startDate.getMonth());
+			a.setStartYear(startDate.getYear());
+		}
+		return a;
 	}
 
-	private Assertion processDate(CSVRecord line, Assertion a, AssertionsUpload upload, String elementName) {
-		StringBuffer dateBuffer = new StringBuffer();
-
+	private AssertionsUpload.AssertionsUploadDate getDate(CSVRecord line, AssertionsUpload upload, String elementName) {
+		String year = null;
+		String month = null;
+		String day = null;
+		
 		// Dates follows the format yyyy-MM-dd
 		if (getOptionalNullableValue(line, elementName) != null) {
 			String date = line.get(elementName).trim();
 			if (!StringUtils.isBlank(date)) {
 				String[] dateParts = date.split("-|/|\\s");
-				String day = dateParts.length > 2 ? dateParts[2] : "0";
-				if (validDate(date, dateParts[0], day, line, upload)) {
-					a.setStartYear(dateParts[0]);
-					dateBuffer.append(dateParts[0]);
+				String yearToValidate = dateParts[0];
+				String dayToValidate = dateParts.length > 2 ? dateParts[2] : "0";
+				if (validDate(date, yearToValidate, dayToValidate, line, upload)) {
+					year = dateParts[0];
 					if (dateParts.length > 1) {
-						a.setStartMonth(dateParts[1]);
-						dateBuffer.append("-");
-						dateBuffer.append(dateParts[1]);
+						month = dateParts[1];
 					}
 
 					if (dateParts.length > 2) {
-						a.setStartDay(dateParts[2]);
-						dateBuffer.append("-");
-						dateBuffer.append(dateParts[2]);
+						day = dateParts[2];
 					}
-				} else {
-					return a;
+					return new AssertionsUpload.AssertionsUploadDate(year, month, day);
 				}
 			}
 		}
-		return a;
+		return null;
 	}
 
 	private Assertion processRoleTitle(CSVRecord line, Assertion a) {
@@ -353,7 +362,6 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 	}
 
 	protected boolean validDate(String date, String year, String day, CSVRecord line, AssertionsUpload upload) {
-
 		for (DateTimeFormatter formatter : formatters) {
 			try {
 				LocalDate localDate = LocalDate.parse(date, formatter);
@@ -399,4 +407,6 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 			return true;
 		return false;
 	}
+	
+
 }
