@@ -29,7 +29,10 @@ export class AssertionDeleteDialogComponent {
 
   confirmDelete() {
     this.errorDeletingFromOrcid = false;
-    if (this.assertion.putCode && this.assertion.status === ASSERTION_STATUS.IN_ORCID) {
+    if (
+      this.assertion.putCode &&
+      (this.assertion.status === ASSERTION_STATUS.IN_ORCID || this.assertion.status === ASSERTION_STATUS.ERROR_UPDATING_IN_ORCID)
+    ) {
       this.assertionService.deleteFromOrcid(this.assertion.id).subscribe(res => {
         if (res.body.deleted === true || res.body.statusCode === 404) {
           this.assertionService.delete(this.assertion.id).subscribe(response => {
