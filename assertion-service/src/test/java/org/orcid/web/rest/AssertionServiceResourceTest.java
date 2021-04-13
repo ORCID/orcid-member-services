@@ -232,6 +232,25 @@ class AssertionServiceResourceTest {
 		Mockito.verify(assertionService, Mockito.times(3)).createUpdateOrDeleteAssertion(Mockito.any());
 	}
 	
+	@Test
+	void testUploadAssertionsWithDuplicates() throws IOException {
+		MultipartFile file = Mockito.mock(MultipartFile.class);
+		Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
+		Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(false).thenReturn(true).thenReturn(true);
+		
+		AssertionsUpload upload = new AssertionsUpload();
+		upload.addAssertion(getAssertion("1@email.com"));
+		upload.addAssertion(getAssertion("1@email.com"));
+		upload.addAssertion(getAssertion("1@email.com"));
+		
+		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class))).thenReturn(upload);
+		
+		assertionServiceResource.uploadAssertions(file);
+		
+		Mockito.verify(assertionService, Mockito.times(3)).isDuplicate(Mockito.any(Assertion.class));
+		Mockito.verify(assertionService, Mockito.times(1)).createUpdateOrDeleteAssertion(Mockito.any());
+	}
+	
 	private Assertion getAssertion(String email) {
 		Assertion assertion = new Assertion();
 		assertion.setEmail(email);
