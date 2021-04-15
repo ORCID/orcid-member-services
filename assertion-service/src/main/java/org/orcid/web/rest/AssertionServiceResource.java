@@ -378,30 +378,41 @@ public class AssertionServiceResource {
 		if (StringUtils.isBlank(assertion.getEmail())) {
 			throw new IllegalArgumentException("email must not be null");
 		}
-
+		
 		if (assertion.getAffiliationSection() == null) {
 			throw new IllegalArgumentException("affiliation-section must not be null");
 		}
+		
 		if (StringUtils.isBlank(assertion.getOrgName())) {
 			throw new IllegalArgumentException("org-name must not be null");
 		}
+		
 		if (StringUtils.isBlank(assertion.getOrgCountry())) {
 			throw new IllegalArgumentException("org-country must not be null");
 		}
+		
 		if (StringUtils.isBlank(assertion.getOrgCity())) {
 			throw new IllegalArgumentException("org-city must not be null");
 		}
+		
 		if (StringUtils.isBlank(assertion.getDisambiguatedOrgId())) {
 			throw new IllegalArgumentException("disambiguated-organization-identifier must not be null");
 		}
+		
 		if (assertion.getDisambiguationSource() == null || StringUtils.isBlank(assertion.getDisambiguationSource())) {
 			throw new BadRequestAlertException("disambiguation-source must not be null", "member",
 					"disambiguationSource");
 		}
+		
+		if (assertionService.isDuplicate(assertion)) {
+			throw new IllegalArgumentException("This assertion already exists");
+		}
 
+		// XXX this isn't validating
 		if (StringUtils.equals(assertion.getDisambiguationSource(), GRID_SOURCE_ID)) {
 			assertion.setDisambiguatedOrgId(AssertionUtils.stripGridURL(assertion.getDisambiguatedOrgId()));
 		}
+		
 		assertion.setUrl(validateUrl(assertion.getUrl()));
 	}
 

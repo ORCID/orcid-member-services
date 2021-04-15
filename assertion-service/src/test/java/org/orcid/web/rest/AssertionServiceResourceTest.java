@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import javax.xml.bind.JAXBException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -28,11 +30,14 @@ import org.mockito.MockitoAnnotations;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
+import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.security.EncryptUtil;
 import org.orcid.service.AssertionService;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
+import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -251,8 +256,40 @@ class AssertionServiceResourceTest {
 		Mockito.verify(assertionService, Mockito.times(1)).createUpdateOrDeleteAssertion(Mockito.any());
 	}
 	
+	@Test
+	void testCreateAssertion() throws BadRequestAlertException, URISyntaxException {
+		Assertion creatingAssertion = getAssertion("test create assertion");
+		Assertion createdAssertion = getAssertion("test create assertion");
+		createdAssertion.setId("id");
+		Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(false);
+		Mockito.when(assertionService.createAssertion(Mockito.any(Assertion.class))).thenReturn(createdAssertion);
+		ResponseEntity<Assertion> response = assertionServiceResource.createAssertion(creatingAssertion);
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		Mockito.verify(assertionService, Mockito.times(1)).createAssertion(Mockito.any(Assertion.class));
+		Mockito.verify(assertionService, Mockito.times(1)).isDuplicate(Mockito.any(Assertion.class));
+	}
+	
+	@Test
+	void testCreateDuplicateAssertion() throws BadRequestAlertException, URISyntaxException {
+		Assertion creatingAssertion = getAssertion("test create assertion");
+		Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(true);
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			assertionServiceResource.createAssertion(creatingAssertion);
+		});
+		
+		Mockito.verify(assertionService, Mockito.never()).createAssertion(Mockito.any(Assertion.class));
+		Mockito.verify(assertionService, Mockito.times(1)).isDuplicate(Mockito.any(Assertion.class));
+	}
+	
 	private Assertion getAssertion(String email) {
 		Assertion assertion = new Assertion();
+		assertion.setAffiliationSection(AffiliationSection.DISTINCTION);
+		assertion.setOrgName("org");
+		assertion.setOrgCountry("US");
+		assertion.setOrgCity("city");
+		assertion.setDisambiguatedOrgId("something");
+		assertion.setDisambiguationSource("some source");
 		assertion.setEmail(email);
 		return assertion;
 	}
