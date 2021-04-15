@@ -35,6 +35,7 @@ import org.orcid.service.UserService;
 import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.orcid.web.rest.errors.DuplicateAssertionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,6 +154,7 @@ public class AssertionServiceResource {
 	public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion)
 			throws BadRequestAlertException, URISyntaxException {
 		LOG.debug("REST request to create assertion : {}", assertion);
+
 		validateAssertion(assertion);
 		assertion = assertionService.createAssertion(assertion);
 
@@ -378,41 +380,42 @@ public class AssertionServiceResource {
 		if (StringUtils.isBlank(assertion.getEmail())) {
 			throw new IllegalArgumentException("email must not be null");
 		}
-		
+
 		if (assertion.getAffiliationSection() == null) {
 			throw new IllegalArgumentException("affiliation-section must not be null");
 		}
-		
+
 		if (StringUtils.isBlank(assertion.getOrgName())) {
 			throw new IllegalArgumentException("org-name must not be null");
 		}
-		
+
 		if (StringUtils.isBlank(assertion.getOrgCountry())) {
 			throw new IllegalArgumentException("org-country must not be null");
 		}
-		
+
 		if (StringUtils.isBlank(assertion.getOrgCity())) {
 			throw new IllegalArgumentException("org-city must not be null");
 		}
-		
+
 		if (StringUtils.isBlank(assertion.getDisambiguatedOrgId())) {
 			throw new IllegalArgumentException("disambiguated-organization-identifier must not be null");
 		}
-		
+
 		if (assertion.getDisambiguationSource() == null || StringUtils.isBlank(assertion.getDisambiguationSource())) {
 			throw new BadRequestAlertException("disambiguation-source must not be null", "member",
 					"disambiguationSource");
 		}
-		
+
 		if (assertionService.isDuplicate(assertion)) {
-			throw new IllegalArgumentException("This assertion already exists");
+			throw new BadRequestAlertException("This assertion already exists", "assertion",
+					"assertion.validation.duplicate");
 		}
 
 		// XXX this isn't validating
 		if (StringUtils.equals(assertion.getDisambiguationSource(), GRID_SOURCE_ID)) {
 			assertion.setDisambiguatedOrgId(AssertionUtils.stripGridURL(assertion.getDisambiguatedOrgId()));
 		}
-		
+
 		assertion.setUrl(validateUrl(assertion.getUrl()));
 	}
 

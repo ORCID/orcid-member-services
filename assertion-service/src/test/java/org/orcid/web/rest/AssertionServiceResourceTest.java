@@ -274,7 +274,7 @@ class AssertionServiceResourceTest {
 		Assertion creatingAssertion = getAssertion("test create assertion");
 		Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(true);
 		
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+		Assertions.assertThrows(BadRequestAlertException.class, () -> {
 			assertionServiceResource.createAssertion(creatingAssertion);
 		});
 		
