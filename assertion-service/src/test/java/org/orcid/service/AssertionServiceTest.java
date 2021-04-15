@@ -32,6 +32,7 @@ import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
+import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.repository.AssertionsRepository;
 import org.orcid.service.assertions.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;
@@ -542,6 +543,177 @@ class AssertionServiceTest {
 		Mockito.verify(orcidAPIClient, Mockito.never()).exchangeToken(Mockito.anyString());
 		Mockito.verify(orcidAPIClient, Mockito.never()).deleteAffiliation(Mockito.anyString(),
 				Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
+	}
+	
+	@Test
+	void testIsDuplicate() {
+		Assertion a = getAssertionWithoutIdForEmail("email");
+		Assertion b = getAssertionWithoutIdForEmail("email");
+		b.setRoleTitle("something different");
+		Assertion c = getAssertionWithoutIdForEmail("email");
+		c.setEndDay("09");
+		Assertion d = getAssertionWithoutIdForEmail("email");
+		d.setAffiliationSection(AffiliationSection.EMPLOYMENT);
+		
+		Assertion comparison = getAssertionWithoutIdForEmail("email"); // duplicate of assertion a
+		Mockito.when(assertionsRepository.findByEmail(Mockito.eq("email"))).thenReturn(Arrays.asList(b, c, a, d));
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setUrl("something-different");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setUrl(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setUrl("url");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		comparison.setUrl(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		comparison.setUrl("url");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setStartMonth("08");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setStartMonth(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setStartMonth("01");
+		assertTrue(assertionService.isDuplicate(comparison));
+
+		comparison.setStartMonth(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		comparison.setStartMonth("01");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setStartYear("1981");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setStartYear(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setStartYear("2020");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setEndDay("02");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setEndDay(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setEndDay("01");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setEndMonth("06");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setEndMonth(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setEndMonth("01");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setEndYear("1981");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setEndYear(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setEndYear("2021");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setOrgName("something-different");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setOrgName(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setOrgName("org");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setOrgCity("something-different");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setOrgCity(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setOrgCity("city");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setDisambiguationSource("something-different");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setDisambiguationSource(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setDisambiguationSource("RINGGOLD");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setDisambiguatedOrgId("something-different");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setDisambiguatedOrgId(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setDisambiguatedOrgId("id");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setExternalId("something-different");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setExternalId(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setExternalId("extId");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setExternalIdType("something-different");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setExternalIdType(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setExternalIdType("extIdType");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		a.setExternalIdUrl("something-different");
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setExternalIdUrl(null);
+		assertFalse(assertionService.isDuplicate(comparison));
+		
+		a.setExternalIdUrl("extIdUrl");
+		assertTrue(assertionService.isDuplicate(comparison));
+
+		comparison.setId("not-null");
+		assertFalse(assertionService.isDuplicate(comparison));
+	}
+	
+	private Assertion getAssertionWithoutIdForEmail(String email) {
+		Assertion a = new Assertion();
+		a.setEmail(email);
+		a.setAffiliationSection(AffiliationSection.DISTINCTION);
+		a.setDepartmentName("department");
+		a.setRoleTitle("role");
+		a.setStartDay("01");
+		a.setStartMonth("01");
+		a.setStartYear("2020");
+		a.setEndDay("01");
+		a.setEndMonth("01");
+		a.setEndYear("2021");
+		a.setOrgName("org");
+		a.setOrgCountry("US");
+		a.setOrgCity("city");
+		a.setDisambiguationSource("RINGGOLD");
+		a.setDisambiguatedOrgId("id");
+		a.setExternalId("extId");
+		a.setExternalIdType("extIdType");
+		a.setExternalIdUrl("extIdUrl");
+		a.setUrl("url");
+		return a;
 	}
 
 	private Optional<OrcidRecord> getOptionalOrcidRecord(int i) {

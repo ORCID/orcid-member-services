@@ -32,6 +32,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Objects;
+
 @Service
 public class AssertionService {
 
@@ -284,6 +286,42 @@ public class AssertionService {
 		return assertionsRepository.findByEmail(email);
 	}
 
+	public boolean isDuplicate(Assertion assertion) {
+		if (assertion.getId() != null && !assertion.getId().isEmpty()) {
+			return false;
+		}
+		
+		List<Assertion> assertions = assertionsRepository.findByEmail(assertion.getEmail());
+		for (Assertion a : assertions) {
+			if (duplicates(a, assertion)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean duplicates(Assertion a, Assertion b) {
+		return Objects.equal(a.getAffiliationSection(), b.getAffiliationSection()) && 
+				Objects.equal(a.getDepartmentName(), b.getDepartmentName()) && 
+				Objects.equal(a.getRoleTitle(), b.getRoleTitle()) && 
+				Objects.equal(a.getStartDay(), b.getStartDay()) &&
+				Objects.equal(a.getStartMonth(), b.getStartMonth()) &&
+				Objects.equal(a.getStartYear(), b.getStartYear()) && 
+				Objects.equal(a.getEndDay(), b.getEndDay()) &&
+				Objects.equal(a.getEndMonth(), b.getEndMonth()) &&
+				Objects.equal(a.getEndYear(), b.getEndYear()) && 
+				Objects.equal(a.getOrgName(), b.getOrgName()) && 
+				Objects.equal(a.getOrgCountry(), b.getOrgCountry()) && 
+				Objects.equal(a.getOrgCity(), b.getOrgCity()) && 
+				Objects.equal(a.getOrgRegion(), b.getOrgRegion()) &&
+				Objects.equal(a.getDisambiguationSource(), b.getDisambiguationSource()) &&
+				Objects.equal(a.getDisambiguatedOrgId(), b.getDisambiguatedOrgId()) &&
+				Objects.equal(a.getExternalId(), b.getExternalId()) &&
+				Objects.equal(a.getExternalIdType(), b.getExternalIdType()) &&
+				Objects.equal(a.getExternalIdUrl(), b.getExternalIdUrl()) &&
+				Objects.equal(a.getUrl(), b.getUrl());
+	}
+	
 	private boolean assertionToDelete(Assertion assertion) {
 		return assertion.getId() != null && assertion.getAddedToORCID() == null
 				&& assertion.getAffiliationSection() == null && assertion.getCreated() == null

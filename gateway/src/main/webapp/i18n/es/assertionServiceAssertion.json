@@ -1,4 +1,11 @@
 {
+  "error": {
+    "assertion": {
+      "validation": {
+        "duplicate": "Afiliación duplicada. Esta afiliación ya ha sido creada."
+      }
+    }
+  },
   "gatewayApp": {
     "assertionServiceAssertion": {
       "home": {

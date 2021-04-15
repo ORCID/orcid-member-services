@@ -35,6 +35,7 @@ import org.orcid.service.UserService;
 import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.orcid.web.rest.errors.DuplicateAssertionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +77,7 @@ public class AssertionServiceResource {
 	private String applicationName;
 
 	@Autowired
-	private AssertionService assertionsService;
+	private AssertionService assertionService;
 
 	@Autowired
 	private OrcidRecordService orcidRecordService;
@@ -107,7 +108,7 @@ public class AssertionServiceResource {
 			throws BadRequestAlertException, JSONException {
 		LOG.debug("REST request to fetch assertions from user {}", SecurityUtils.getCurrentUserLogin().get());
 
-		Page<Assertion> affiliations = assertionsService.findBySalesforceId(pageable);
+		Page<Assertion> affiliations = assertionService.findBySalesforceId(pageable);
 
 		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams),
 				affiliations);
@@ -118,7 +119,7 @@ public class AssertionServiceResource {
 	public ResponseEntity<List<Assertion>> getAssertionsByEmail(@PathVariable String email)
 			throws BadRequestAlertException, JSONException {
 		LOG.debug("REST request to fetch assertions for email {}", email);
-		List<Assertion> assertions = assertionsService.findByEmail(email);
+		List<Assertion> assertions = assertionService.findByEmail(email);
 		return ResponseEntity.ok().body(assertions);
 	}
 
@@ -126,7 +127,7 @@ public class AssertionServiceResource {
 	public ResponseEntity<Assertion> getAssertion(@PathVariable String id)
 			throws BadRequestAlertException, JSONException {
 		LOG.debug("REST request to fetch assertion {} from user {}", id, SecurityUtils.getCurrentUserLogin().get());
-		return ResponseEntity.ok().body(assertionsService.findById(id));
+		return ResponseEntity.ok().body(assertionService.findById(id));
 	}
 
 	@GetMapping("/assertion/permission-links")
@@ -135,7 +136,7 @@ public class AssertionServiceResource {
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 		response.setHeader("Content-Type", "text/csv");
 		response.setHeader("filename", fileName);
-		String csvReport = assertionsService.generatePermissionLinks();
+		String csvReport = assertionService.generatePermissionLinks();
 		response.getOutputStream().write(csvReport.getBytes());
 		response.flushBuffer();
 	}
@@ -145,7 +146,7 @@ public class AssertionServiceResource {
 			throws BadRequestAlertException, JSONException {
 		LOG.debug("REST request to update assertion : {}", assertion);
 		validateAssertion(assertion);
-		Assertion existingAssertion = assertionsService.updateAssertion(assertion);
+		Assertion existingAssertion = assertionService.updateAssertion(assertion);
 		return ResponseEntity.ok().body(existingAssertion);
 	}
 
@@ -153,8 +154,9 @@ public class AssertionServiceResource {
 	public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion)
 			throws BadRequestAlertException, URISyntaxException {
 		LOG.debug("REST request to create assertion : {}", assertion);
+
 		validateAssertion(assertion);
-		assertion = assertionsService.createAssertion(assertion);
+		assertion = assertionService.createAssertion(assertion);
 
 		return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId()))
 				.headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, assertion.getId()))
@@ -178,13 +180,17 @@ public class AssertionServiceResource {
 			return ResponseEntity.ok().body(upload.getErrors().toString());
 		}
 
-		upload.getAssertions().forEach(assertionsService::createUpdateOrDeleteAssertion);
+		upload.getAssertions().forEach(a -> {
+			if (!assertionService.isDuplicate(a)) {
+				assertionService.createUpdateOrDeleteAssertion(a);
+			}
+		});
 		return ResponseEntity.ok().body(upload.getErrors().toString());
 	}
 
 	@DeleteMapping("/assertion/{id}")
 	public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
-		assertionsService.deleteById(id);
+		assertionService.deleteById(id);
 		return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id))
 				.body("{\"id\":\"" + id + "\"}");
 	}
@@ -236,13 +242,13 @@ public class AssertionServiceResource {
 
 	@DeleteMapping("/assertion/orcid/{id}")
 	public ResponseEntity<String> deleteAssertionFromOrcid(@PathVariable String id) throws JAXBException {
-		Boolean deleted = assertionsService.deleteAssertionFromOrcidRegistry(id);
+		Boolean deleted = assertionService.deleteAssertionFromOrcidRegistry(id);
 		JSONObject responseData = new JSONObject();
 		responseData.put("deleted", deleted);
 
 		if (!deleted) {
 			// fetch failure details
-			Assertion assertion = assertionsService.findById(id);
+			Assertion assertion = assertionService.findById(id);
 			String errorJson = assertion.getOrcidError();
 			JSONObject obj = new JSONObject(errorJson);
 			int statusCode = (int) obj.get("statusCode");
@@ -257,7 +263,7 @@ public class AssertionServiceResource {
 	@DeleteMapping("/assertion/delete/{salesforceId}")
 	public ResponseEntity<String> deleteAssertionsForSalesforceId(@PathVariable String salesforceId)
 			throws JAXBException {
-		assertionsService.deleteAllBySalesforceId(salesforceId);
+		assertionService.deleteAllBySalesforceId(salesforceId);
 		JSONObject responseData = new JSONObject();
 		responseData.put("deleted", true);
 		return ResponseEntity.ok().body(responseData.toString());
@@ -306,12 +312,12 @@ public class AssertionServiceResource {
 			if (!StringUtils.isBlank(emailInStatus) && !StringUtils.isBlank(orcidIdInJWT)) {
 				orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, salesForceId);
 				try {
-					List<Assertion> assertions = assertionsService.findAssertionsByEmail(emailInStatus);
+					List<Assertion> assertions = assertionService.findAssertionsByEmail(emailInStatus);
 					for (Assertion a : assertions) {
 						if (StringUtils.isBlank(a.getPutCode())) {
-							assertionsService.postAssertionToOrcid(a);
+							assertionService.postAssertionToOrcid(a);
 						} else if (!StringUtils.equals(a.getStatus(), AssertionStatus.IN_ORCID.getValue())) {
-							assertionsService.putAssertionToOrcid(a);
+							assertionService.putAssertionToOrcid(a);
 						}
 					}
 
@@ -332,10 +338,10 @@ public class AssertionServiceResource {
 			LOG.warn("User {} have denied access", emailInStatus);
 			orcidRecordService.storeUserDeniedAccess(emailInStatus, salesForceId);
 			try {
-				List<Assertion> assertions = assertionsService.findByEmailAndSalesForceId(emailInStatus, salesForceId);
+				List<Assertion> assertions = assertionService.findByEmailAndSalesForceId(emailInStatus, salesForceId);
 				for (Assertion a : assertions) {
 					if (!StringUtils.equals(a.getStatus(), AssertionStatus.IN_ORCID.getValue())) {
-						assertionsService.updateAssertionStatus(AssertionStatus.USER_DENIED_ACCESS, a);
+						assertionService.updateAssertionStatus(AssertionStatus.USER_DENIED_ACCESS, a);
 					}
 				}
 
@@ -353,7 +359,7 @@ public class AssertionServiceResource {
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 		response.setHeader("Content-Type", "text/csv");
 		response.setHeader("filename", fileName);
-		String csvReport = assertionsService.generateAssertionsReport();
+		String csvReport = assertionService.generateAssertionsReport();
 		response.getOutputStream().write(csvReport.getBytes());
 		response.flushBuffer();
 	}
@@ -364,7 +370,7 @@ public class AssertionServiceResource {
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 		response.setHeader("Content-Type", "text/csv");
 		response.setHeader("filename", fileName);
-		String csvReport = assertionsService.generateAssertionsCSV();
+		String csvReport = assertionService.generateAssertionsCSV();
 		response.getOutputStream().write(csvReport.getBytes());
 		response.flushBuffer();
 	}
@@ -378,26 +384,38 @@ public class AssertionServiceResource {
 		if (assertion.getAffiliationSection() == null) {
 			throw new IllegalArgumentException("affiliation-section must not be null");
 		}
+
 		if (StringUtils.isBlank(assertion.getOrgName())) {
 			throw new IllegalArgumentException("org-name must not be null");
 		}
+
 		if (StringUtils.isBlank(assertion.getOrgCountry())) {
 			throw new IllegalArgumentException("org-country must not be null");
 		}
+
 		if (StringUtils.isBlank(assertion.getOrgCity())) {
 			throw new IllegalArgumentException("org-city must not be null");
 		}
+
 		if (StringUtils.isBlank(assertion.getDisambiguatedOrgId())) {
 			throw new IllegalArgumentException("disambiguated-organization-identifier must not be null");
 		}
+
 		if (assertion.getDisambiguationSource() == null || StringUtils.isBlank(assertion.getDisambiguationSource())) {
 			throw new BadRequestAlertException("disambiguation-source must not be null", "member",
 					"disambiguationSource");
 		}
 
+		if (assertionService.isDuplicate(assertion)) {
+			throw new BadRequestAlertException("This assertion already exists", "assertion",
+					"assertion.validation.duplicate");
+		}
+
+		// XXX this isn't validating
 		if (StringUtils.equals(assertion.getDisambiguationSource(), GRID_SOURCE_ID)) {
 			assertion.setDisambiguatedOrgId(AssertionUtils.stripGridURL(assertion.getDisambiguatedOrgId()));
 		}
+
 		assertion.setUrl(validateUrl(assertion.getUrl()));
 	}
 
@@ -444,9 +462,9 @@ public class AssertionServiceResource {
 	public ResponseEntity<Void> updateUserSalesforceOrAssertion(@PathVariable String salesforceId,
 			@PathVariable String newSalesforceId) {
 		LOG.debug("REST request to update Assertions by salesforce : {}", salesforceId);
-		List<Assertion> assertionsBySalesforceId = assertionsService.getAssertionsBySalesforceId(salesforceId);
+		List<Assertion> assertionsBySalesforceId = assertionService.getAssertionsBySalesforceId(salesforceId);
 		for (Assertion assertion : assertionsBySalesforceId) {
-			assertionsService.updateAssertionSalesforceId(assertion, newSalesforceId);
+			assertionService.updateAssertionSalesforceId(assertion, newSalesforceId);
 		}
 		return ResponseEntity.ok()
 				.headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "assertion", salesforceId)).build();
