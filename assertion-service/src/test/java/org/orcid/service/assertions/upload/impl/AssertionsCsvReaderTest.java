@@ -100,6 +100,31 @@ class AssertionsCsvReaderTest {
 	}
 	
 	@Test
+	void testReadAssertionsUploadWithAddedWhitespace() throws IOException {
+		Mockito.when(mockAssertionService.assertionExists(Mockito.anyString())).thenReturn(true);
+		Mockito.when(mockAssertionService.findById(Mockito.anyString())).thenReturn(getDummyAssertionWithEmail());
+		
+		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-whitespace.csv");
+		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
+		assertEquals(3, upload.getAssertions().size());
+		assertEquals("ORCID", upload.getAssertions().get(0).getOrgName());
+		assertEquals("ext-id", upload.getAssertions().get(0).getExternalId());
+		assertEquals("a-database-id", upload.getAssertions().get(0).getId());
+		
+		assertEquals("ORCID", upload.getAssertions().get(1).getOrgName());
+		assertEquals("ext-id", upload.getAssertions().get(1).getExternalId());
+		assertEquals("another-database-id", upload.getAssertions().get(1).getId());
+		
+		assertEquals("ORCID-2", upload.getAssertions().get(2).getOrgName());
+		assertEquals("ext-id-2", upload.getAssertions().get(2).getExternalId());
+		assertNull(upload.getAssertions().get(2).getId());
+
+		// check http:// protocol has been added to url
+		assertEquals("http://bbc.co.uk", upload.getAssertions().get(0).getUrl());
+		assertEquals(1, upload.getUsers().size());
+	}
+	
+	@Test
 	void testReadAssertionsUploadWithError() throws IOException {
 		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("a-database-id"))).thenReturn(false);
 		Mockito.when(mockAssertionService.assertionExists(Mockito.eq("another-database-id"))).thenReturn(true);
