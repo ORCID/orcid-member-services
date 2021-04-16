@@ -29,6 +29,7 @@ import org.orcid.domain.validation.OrcidUrlValidator;
 import org.orcid.jaxb.model.common.Iso3166Country;
 import org.orcid.service.AssertionService;
 import org.orcid.service.assertions.upload.AssertionsUpload;
+import org.orcid.service.assertions.upload.AssertionsUpload.AssertionsUploadDate;
 import org.orcid.service.assertions.upload.AssertionsUploadReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,8 +92,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		a = processAffiliationSection(line, a, upload);
 		a = processDepartmentName(line, a);
 		a = processRoleTitle(line, a);
-		a = processStartDate(line, a, upload);
-		a = processEndDate(line, a, upload);
+		a = processDates(line, upload, a);
 		a = processOrgName(line, a, upload);
 		a = processOrgCountry(line, a, upload);
 		a = processOrgCity(line, a, upload);
@@ -104,6 +104,13 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		return a;
 	}
 
+	private Assertion processDates(CSVRecord line, AssertionsUpload upload, Assertion a) {
+		a = processStartDate(line, a, upload);
+		a = processEndDate(line, a, upload);
+		checkStartDateBeforeEndDate(line, a, upload);
+		return a;
+	}
+	
 	private Assertion processUrl(CSVRecord line, Assertion a, AssertionsUpload upload) {
 		String url = getOptionalNullableValue(line, "url");
 		if (url != null && !StringUtils.isBlank(url)) {
@@ -389,21 +396,33 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		return false;
 	}
 
-	public boolean validStartDateEndDate(String startDate, String endDate) {
-
-		for (DateTimeFormatter formatter : formatters) {
-			try {
-				LocalDate localStartDate = LocalDate.parse(startDate, formatter);
-				LocalDate localEndDate = LocalDate.parse(endDate, formatter);
-				if (localStartDate.isAfter(localEndDate)) {
-					return false;
+	private void checkStartDateBeforeEndDate(CSVRecord line, Assertion a, AssertionsUpload upload) {
+		AssertionsUploadDate startDate = getDate(line, upload, "start-date");
+		AssertionsUploadDate endDate = getDate(line, upload, "end-date");
+		
+		if (startDate != null && endDate != null) {
+			String startDateString = startDate.toString();
+			String endDateString = endDate.toString();
+			LocalDate localStartDate = null;
+			LocalDate localEndDate = null;
+			
+			// initialise dates, which could be of different formats
+			for (DateTimeFormatter formatter : formatters) {
+				try {
+					localStartDate = LocalDate.parse(startDateString, formatter);
+				} catch (DateTimeParseException e) {
 				}
-			} catch (DateTimeParseException e) {
+				try {
+					localEndDate = LocalDate.parse(endDateString, formatter);
+				} catch (DateTimeParseException e) {
+				}
+			}
+
+			if (localStartDate.isAfter(localEndDate)) {
+				upload.addError(line.getRecordNumber(),
+						"Start date cannot be after the end date.");
 			}
 		}
-
-		return true;
-
 	}
 
 	public static boolean isEmpty(String string) {
