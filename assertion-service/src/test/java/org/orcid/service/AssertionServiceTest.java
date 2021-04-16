@@ -8,7 +8,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,8 +39,12 @@ import org.orcid.repository.AssertionsRepository;
 import org.orcid.service.assertions.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;
 import org.orcid.service.assertions.download.impl.PermissionLinksCsvWriter;
+import org.orcid.service.assertions.upload.AssertionsUpload;
+import org.orcid.service.assertions.upload.AssertionsUploadSummary;
+import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.springframework.data.domain.Sort;
+import org.springframework.web.multipart.MultipartFile;
 
 class AssertionServiceTest {
 
@@ -68,6 +74,9 @@ class AssertionServiceTest {
 
 	@Mock
 	private UserService assertionsUserService;
+	
+	@Mock
+    private AssertionsCsvReader assertionsCsvReader;
 
 	@InjectMocks
 	private AssertionService assertionService;
@@ -97,90 +106,6 @@ class AssertionServiceTest {
 
 		assertFalse(assertionService.assertionExists("doesn't exist"));
 		verify(assertionsRepository).existsById(Mockito.eq("doesn't exist"));
-	}
-
-	@Test
-	void testCreateUpdateOrDelete() throws JSONException, ClientProtocolException, IOException {
-		Assertion a = new Assertion();
-		a.setId("1");
-		a.setEmail("email");
-		a.setOwnerId(DEFAULT_JHI_USER_ID);
-		a.setSalesforceId(DEFAULT_SALESFORCE_ID);
-
-		Assertion b = new Assertion();
-		b.setOwnerId(DEFAULT_JHI_USER_ID);
-		b.setEmail("email");
-		a.setSalesforceId(DEFAULT_SALESFORCE_ID);
-		
-		Mockito.when(assertionsRepository.findById("1")).thenReturn(Optional.of(a));
-		Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
-			@Override
-			public Assertion answer(InvocationOnMock invocation) throws Throwable {
-				Object[] args = invocation.getArguments();
-				Assertion assertion = (Assertion) args[0];
-				assertion.setId("12345");
-				return assertion;
-			}
-		});
-		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email")))
-				.thenReturn(getOptionalOrcidRecordWithIdToken());
-		Mockito.when(assertionsRepository.insert(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
-			@Override
-			public Assertion answer(InvocationOnMock invocation) throws Throwable {
-				Object[] args = invocation.getArguments();
-				Assertion assertion = (Assertion) args[0];
-				assertion.setId("12345");
-				assertion.setStatus("PENDING");
-				return assertion;
-			}
-		});
-
-		assertionService.createUpdateOrDeleteAssertion(a);
-		assertNotNull(a.getStatus());
-		Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
-
-		assertionService.createUpdateOrDeleteAssertion(b);
-		assertNotNull(b.getStatus());
-		Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(b));
-	}	
-	
-	@Test
-	void testCreateUpdateOrDelete_successfulDelete() throws JSONException, ClientProtocolException, IOException {
-		Assertion c = new Assertion();
-		c.setId("id-to-delete");
-		
-		Assertion cWithMoreInfo = new Assertion();
-		cWithMoreInfo.setId("id-to-delete");
-		cWithMoreInfo.setSalesforceId("salesforce-id");
-		cWithMoreInfo.setEmail("test@orcid.org");
-		
-		Mockito.when(assertionsRepository.findById("id-to-delete")).thenReturn(Optional.of(cWithMoreInfo));
-		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-		Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("access-token");
-		
-		assertionService.createUpdateOrDeleteAssertion(c);
-		assertNotNull(c.getDeletedFromORCID() != null);
-		Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id-to-delete"));
-		Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.eq("orcid"), Mockito.eq("access-token"), Mockito.any(Assertion.class));
-	}
-	
-	@Test
-	void testCreateUpdateOrDelete_unsuccessfulDelete() throws JSONException, ClientProtocolException, IOException {
-		Assertion c = new Assertion();
-		c.setId("id-to-delete");
-		
-		Assertion cWithMoreInfo = new Assertion();
-		cWithMoreInfo.setId("id-to-delete");
-		cWithMoreInfo.setSalesforceId("salesforce-id");
-		cWithMoreInfo.setEmail("test@orcid.org");
-		
-		Mockito.when(assertionsRepository.findById("id-to-delete")).thenReturn(Optional.of(cWithMoreInfo));
-		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(getOptionalOrcidRecordWithoutIdToken());
-		
-		assertionService.createUpdateOrDeleteAssertion(c);
-		assertNotNull(c.getDeletedFromORCID() != null);
-		Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id-to-delete"));
-		Mockito.verify(orcidAPIClient, Mockito.never()).deleteAffiliation(Mockito.eq("orcid"), Mockito.eq("access-token"), Mockito.any(Assertion.class));
 	}
 
 	@Test
@@ -692,6 +617,98 @@ class AssertionServiceTest {
 		assertFalse(assertionService.isDuplicate(comparison));
 	}
 	
+	@Test
+	void testUploadAssertionsNoProcessingIfErrorsPresent() throws IOException {
+		MultipartFile file = Mockito.mock(MultipartFile.class);
+		Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
+		
+		AssertionsUpload upload = new AssertionsUpload();
+		upload.addAssertion(getAssertionWithEmail("1@email.com"));
+		upload.addAssertion(getAssertionWithEmail("2@email.com"));
+		upload.addAssertion(getAssertionWithEmail("3@email.com"));
+		upload.addError(1, "test error");
+		
+		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class))).thenReturn(upload);
+		
+		assertionService.uploadAssertions(file);
+		
+		Mockito.verify(assertionsRepository, Mockito.never()).insert(Mockito.any(Assertion.class));
+		Mockito.verify(assertionsRepository, Mockito.never()).save(Mockito.any(Assertion.class));
+		Mockito.verify(assertionsRepository, Mockito.never()).delete(Mockito.any(Assertion.class));
+	}
+	
+	@Test
+	void testUploadAssertions() throws IOException {
+		MultipartFile file = Mockito.mock(MultipartFile.class);
+		Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
+		
+		AssertionsUpload upload = new AssertionsUpload();
+		upload.addAssertion(getAssertionWithEmail("1@email.com"));
+		upload.addAssertion(getAssertionWithEmail("2@email.com"));
+		upload.addAssertion(getAssertionWithEmail("3@email.com"));
+		
+		Assertion toUpdate = getAssertionWithEmail("4@email.com");
+		toUpdate.setId("12346");
+		upload.addAssertion(toUpdate);
+		
+		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("1@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
+		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("2@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
+		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("3@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
+		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("4@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
+		Mockito.when(assertionsRepository.insert(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
+			@Override
+			public Assertion answer(InvocationOnMock invocation) throws Throwable {
+				Object[] args = invocation.getArguments();
+				Assertion assertion = (Assertion) args[0];
+				assertion.setId("12345");
+				return assertion;
+			}
+		});
+		Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
+			@Override
+			public Assertion answer(InvocationOnMock invocation) throws Throwable {
+				Object[] args = invocation.getArguments();
+				Assertion assertion = (Assertion) args[0];
+				assertion.setId("12346");
+				return assertion;
+			}
+		});
+		Mockito.when(assertionsRepository.findById(Mockito.eq("12346"))).thenReturn(Optional.of(toUpdate));
+		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class))).thenReturn(upload);
+		
+		AssertionsUploadSummary summary = assertionService.uploadAssertions(file);
+		assertEquals(3, summary.getNumAdded());
+		assertEquals(0, summary.getNumDuplicates());
+		assertEquals(0, summary.getNumDeleted());
+		assertEquals(1, summary.getNumUpdated());
+		
+		Mockito.verify(assertionsRepository, Mockito.times(3)).insert(Mockito.any(Assertion.class));
+		Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.any(Assertion.class));
+	}
+	
+	@Test
+	void testUploadAssertionsWithDuplicates() throws IOException {
+		MultipartFile file = Mockito.mock(MultipartFile.class);
+		Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
+		
+		Assertion alreadyPersisted1 = getAssertionWithEmail("1@email.com");
+		alreadyPersisted1.setDepartmentName("not a duplicate");
+		Assertion alreadyPersisted2 = getAssertionWithEmail("1@email.com");
+		Mockito.when(assertionsRepository.findByEmail(Mockito.eq("1@email.com"))).thenReturn(Arrays.asList(alreadyPersisted1, alreadyPersisted2));
+		
+		AssertionsUpload upload = new AssertionsUpload();
+		upload.addAssertion(getAssertionWithEmail("1@email.com"));
+		upload.addAssertion(getAssertionWithEmail("1@email.com"));
+		upload.addAssertion(getAssertionWithEmail("1@email.com"));
+		
+		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class))).thenReturn(upload);
+		
+		AssertionsUploadSummary summary = assertionService.uploadAssertions(file);
+		assertEquals(3, summary.getNumDuplicates());
+		
+		Mockito.verify(assertionsRepository, Mockito.never()).insert(Mockito.any(Assertion.class));
+	}
+	
 	private Assertion getAssertionWithoutIdForEmail(String email) {
 		Assertion a = new Assertion();
 		a.setEmail(email);
@@ -768,9 +785,16 @@ class AssertionServiceTest {
 
 	private Assertion getAssertionWithEmail(String email) {
 		Assertion assertion = new Assertion();
-		assertion.setId("id");
 		assertion.setEmail(email);
 		assertion.setSalesforceId(DEFAULT_SALESFORCE_ID);
+		assertion.setAffiliationSection(AffiliationSection.EMPLOYMENT);
+		assertion.setDepartmentName("department");
+		assertion.setOrgCity("city");
+		assertion.setOrgName("org");
+		assertion.setOrgRegion("region");
+		assertion.setOrgCountry("us");
+		assertion.setDisambiguatedOrgId("id");
+		assertion.setDisambiguationSource("source");
 		return assertion;
 	}
 

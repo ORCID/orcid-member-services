@@ -35,6 +35,10 @@
         "label": "Please select a CSV file to upload",
         "filePath": "File path",
         "success": "The CSV import was successful.",
+        "added": "added",
+        "updated": "updated",
+        "deleted": "deleted",
+        "duplicates": "duplicate(s) ignored",
         "errors": {
           "label": "Oops! There was a problem processing your data. Pleases fix the errors below and try again"
         }

@@ -48,7 +48,7 @@ export class MSUserImportDialogComponent {
     if (this.currentFile) {
       this.loading = true;
       const f = this.currentFile.item(0);
-      this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
+      this.uploadService.uploadFile(this.resourceUrl, f, 'text').subscribe(event => {
         if (event instanceof HttpResponse) {
           const body = event.body;
           this.csvErrors = JSON.parse(body.toString());

@@ -69,8 +69,6 @@ export class AssertionComponent implements OnInit, OnDestroy {
     });
     this.importEventSubscriber = this.eventManager.subscribe('importAssertions', () => {
       this.loadAll();
-      this.jhiAlertService.clear();
-      this.jhiAlertService.success('gatewayApp.assertionServiceAssertion.import.success', null, null);
     });
   }
 

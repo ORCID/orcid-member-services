@@ -22,7 +22,7 @@ export class AssertionImportDialogComponent {
   assertion: IAssertion;
   isSaving: boolean;
   currentFile: FileList;
-  csvErrors: any;
+  summary: any;
   loading = false;
 
   constructor(
@@ -34,6 +34,7 @@ export class AssertionImportDialogComponent {
   ) {
     this.isSaving = false;
     this.resourceUrl = this.assertionService.resourceUrl + '/upload';
+    this.summary = {};
   }
 
   clear() {
@@ -49,23 +50,22 @@ export class AssertionImportDialogComponent {
     if (this.currentFile) {
       this.loading = true;
       const f = this.currentFile.item(0);
-      this.uploadService.uploadFile(this.resourceUrl, f).subscribe(event => {
+      this.uploadService.uploadFile(this.resourceUrl, f, 'json').subscribe(event => {
         if (event instanceof HttpResponse) {
-          const body = event.body;
-          this.csvErrors = JSON.parse(body.toString());
+          this.summary = event.body;
           this.loading = false;
-          if (this.csvErrors.length === 0) {
-            this.eventManager.broadcast({
-              name: 'importAssertions',
-              content: 'New assertions uploaded'
-            });
-            this.activeModal.dismiss(true);
-          }
         }
       });
     } else {
       alert(this.translate.instant('gatewayApp.msUserServiceMSUser.import.emptyFile'));
     }
+  }
+
+  close() {
+    this.eventManager.broadcast({
+      name: 'importAssertions'
+    });
+    this.activeModal.dismiss(true);
   }
 }
 
