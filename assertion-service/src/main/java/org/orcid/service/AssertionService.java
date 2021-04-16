@@ -1,6 +1,7 @@
 package org.orcid.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,9 @@ import org.orcid.security.SecurityUtils;
 import org.orcid.service.assertions.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;
 import org.orcid.service.assertions.download.impl.PermissionLinksCsvWriter;
+import org.orcid.service.assertions.upload.AssertionsUpload;
+import org.orcid.service.assertions.upload.AssertionsUploadSummary;
+import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.orcid.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
@@ -31,6 +35,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.Objects;
 
@@ -62,6 +67,9 @@ public class AssertionService {
 
 	@Autowired
 	private UserService assertionsUserService;
+	
+	@Autowired
+	private AssertionsCsvReader assertionsCsvReader;
 
 	public boolean assertionExists(String id) {
 		return assertionsRepository.existsById(id);
@@ -251,22 +259,6 @@ public class AssertionService {
 		assertion.setUpdated(true);
 		assertion.setModified(Instant.now());
 		return assertionsRepository.save(assertion);
-	}
-
-	public void createUpdateOrDeleteAssertion(Assertion a) {
-		if (a.getId() == null || a.getId().isEmpty()) {
-			createAssertion(a);
-		} else {
-			Assertion existingAssertion = findById(a.getId());
-			checkAssertionAccess(existingAssertion);
-			
-			if (assertionToDelete(a)) {
-				deleteAssertionFromOrcidRegistry(a.getId());
-				deleteById(a.getId());
-			} else {
-				updateAssertion(a);
-			}
-		}
 	}
 
 	public void deleteById(String id) {
@@ -604,5 +596,69 @@ public class AssertionService {
 
 	public String generateAssertionsCSV() throws IOException {
 		return assertionsForEditCsvWriter.writeCsv();
+	}
+
+	public AssertionsUploadSummary uploadAssertions(MultipartFile file) {
+		AssertionsUpload upload = readUpload(file);
+		AssertionsUploadSummary summary = processUpload(upload);
+		return summary;
+	}
+
+	private AssertionsUploadSummary processUpload(AssertionsUpload upload) {
+		AssertionsUploadSummary summary = new AssertionsUploadSummary();
+		
+		if (upload.getErrors().length() > 0) {
+			summary.setErrors(upload.getErrors());
+			return summary;
+		}
+
+		int duplicates = 0;
+		int created = 0;
+		int updated = 0;
+		int deleted = 0;
+
+		for (Assertion a : upload.getAssertions()) {
+			if (!isDuplicate(a)) {
+				if (a.getId() == null || a.getId().isEmpty()) {
+					createAssertion(a);
+					created++;
+				} else {
+					Assertion existingAssertion = findById(a.getId());
+					checkAssertionAccess(existingAssertion);
+					
+					if (assertionToDelete(a)) {
+						deleteAssertionFromOrcidRegistry(a.getId());
+						deleteById(a.getId());
+						deleted++;
+					} else {
+						updateAssertion(a);
+						updated++;
+					}
+				}
+			} else {
+				duplicates++;
+			}
+		}
+		
+		summary.setNumAdded(created);
+		summary.setNumUpdated(updated);
+		summary.setNumDuplicates(duplicates);
+		summary.setNumDeleted(deleted);
+		
+		return summary;
+	}
+
+	private AssertionsUpload readUpload(MultipartFile file) {
+		InputStream inputStream = null;
+		AssertionsUpload upload = null;
+		
+		try {
+			inputStream = file.getInputStream();
+			upload = assertionsCsvReader.readAssertionsUpload(inputStream);
+		} catch (IOException e) {
+			LOG.warn("Error reading user upload", e);
+			throw new RuntimeException(e);
+		}
+		return upload;
 	}
 }

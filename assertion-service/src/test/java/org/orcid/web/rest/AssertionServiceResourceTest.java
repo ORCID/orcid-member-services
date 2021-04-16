@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +32,7 @@ import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.security.EncryptUtil;
 import org.orcid.service.AssertionService;
 import org.orcid.service.OrcidRecordService;
-import org.orcid.service.assertions.upload.AssertionsUpload;
-import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
+import org.orcid.service.assertions.upload.AssertionsUploadSummary;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,9 +50,6 @@ class AssertionServiceResourceTest {
 
 	@Mock
     private EncryptUtil encryptUtil;
-	
-	@Mock
-    private AssertionsCsvReader assertionsCsvReader;
 	
 	@InjectMocks
 	private AssertionServiceResource assertionServiceResource;
@@ -203,60 +197,6 @@ class AssertionServiceResourceTest {
 	}
 	
 	@Test
-	void testUploadAssertionsNoProcessingIfErrorsPresent() throws IOException {
-		MultipartFile file = Mockito.mock(MultipartFile.class);
-		Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
-		
-		AssertionsUpload upload = new AssertionsUpload();
-		upload.addAssertion(getAssertion("1@email.com"));
-		upload.addAssertion(getAssertion("2@email.com"));
-		upload.addAssertion(getAssertion("3@email.com"));
-		upload.addError(1, "test error");
-		
-		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class))).thenReturn(upload);
-		
-		assertionServiceResource.uploadAssertions(file);
-		
-		Mockito.verify(assertionService, Mockito.never()).createUpdateOrDeleteAssertion(Mockito.any());
-	}
-	
-	@Test
-	void testUploadAssertions() throws IOException {
-		MultipartFile file = Mockito.mock(MultipartFile.class);
-		Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
-		
-		AssertionsUpload upload = new AssertionsUpload();
-		upload.addAssertion(getAssertion("1@email.com"));
-		upload.addAssertion(getAssertion("2@email.com"));
-		upload.addAssertion(getAssertion("3@email.com"));
-		
-		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class))).thenReturn(upload);
-		
-		assertionServiceResource.uploadAssertions(file);
-		
-		Mockito.verify(assertionService, Mockito.times(3)).createUpdateOrDeleteAssertion(Mockito.any());
-	}
-	
-	@Test
-	void testUploadAssertionsWithDuplicates() throws IOException {
-		MultipartFile file = Mockito.mock(MultipartFile.class);
-		Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
-		Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(false).thenReturn(true).thenReturn(true);
-		
-		AssertionsUpload upload = new AssertionsUpload();
-		upload.addAssertion(getAssertion("1@email.com"));
-		upload.addAssertion(getAssertion("1@email.com"));
-		upload.addAssertion(getAssertion("1@email.com"));
-		
-		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class))).thenReturn(upload);
-		
-		assertionServiceResource.uploadAssertions(file);
-		
-		Mockito.verify(assertionService, Mockito.times(3)).isDuplicate(Mockito.any(Assertion.class));
-		Mockito.verify(assertionService, Mockito.times(1)).createUpdateOrDeleteAssertion(Mockito.any());
-	}
-	
-	@Test
 	void testCreateAssertion() throws BadRequestAlertException, URISyntaxException {
 		Assertion creatingAssertion = getAssertion("test create assertion");
 		Assertion createdAssertion = getAssertion("test create assertion");
@@ -280,6 +220,14 @@ class AssertionServiceResourceTest {
 		
 		Mockito.verify(assertionService, Mockito.never()).createAssertion(Mockito.any(Assertion.class));
 		Mockito.verify(assertionService, Mockito.times(1)).isDuplicate(Mockito.any(Assertion.class));
+	}
+	
+	@Test
+	void testUploadAssertions() {
+		MultipartFile file = Mockito.mock(MultipartFile.class);
+		Mockito.when(assertionService.uploadAssertions(Mockito.any())).thenReturn(new AssertionsUploadSummary());
+		assertionServiceResource.uploadAssertions(file);
+		Mockito.verify(assertionService, Mockito.times(1)).uploadAssertions(Mockito.any());
 	}
 	
 	private Assertion getAssertion(String email) {

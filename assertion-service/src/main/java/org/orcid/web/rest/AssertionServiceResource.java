@@ -33,6 +33,7 @@ import org.orcid.service.AssertionService;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.UserService;
 import org.orcid.service.assertions.upload.AssertionsUpload;
+import org.orcid.service.assertions.upload.AssertionsUploadSummary;
 import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.orcid.web.rest.errors.DuplicateAssertionException;
@@ -87,9 +88,6 @@ public class AssertionServiceResource {
 
 	@Autowired
 	private JWTUtil jwtUtil;
-
-	@Autowired
-	private AssertionsCsvReader assertionsCsvReader;
 
 	@Autowired
 	private UserService assertionsUserService;
@@ -164,28 +162,9 @@ public class AssertionServiceResource {
 	}
 
 	@PostMapping("/assertion/upload")
-	public ResponseEntity<String> uploadAssertions(@RequestParam("file") MultipartFile file) {
-		InputStream inputStream = null;
-		AssertionsUpload upload = null;
-
-		try {
-			inputStream = file.getInputStream();
-			upload = assertionsCsvReader.readAssertionsUpload(inputStream);
-		} catch (IOException e) {
-			LOG.warn("Error reading user upload", e);
-			throw new RuntimeException(e);
-		}
-
-		if (upload.getErrors().length() > 0) {
-			return ResponseEntity.ok().body(upload.getErrors().toString());
-		}
-
-		upload.getAssertions().forEach(a -> {
-			if (!assertionService.isDuplicate(a)) {
-				assertionService.createUpdateOrDeleteAssertion(a);
-			}
-		});
-		return ResponseEntity.ok().body(upload.getErrors().toString());
+	public ResponseEntity<AssertionsUploadSummary> uploadAssertions(@RequestParam("file") MultipartFile file) {
+		AssertionsUploadSummary summary = assertionService.uploadAssertions(file);
+		return ResponseEntity.ok().body(summary);
 	}
 
 	@DeleteMapping("/assertion/{id}")
