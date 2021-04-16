@@ -1,12 +1,11 @@
 <form name="uploadForm" (ngSubmit)="upload()">
     <div class="modal-header">
         <h4 class="modal-title" jhiTranslate="gatewayApp.assertionServiceAssertion.import.title">Import users</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                (click)="clear()">&times;</button>
+        <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <div class="alerts top right" role="alert" *ngIf="csvErrors && csvErrors.length > 0">
+        <div class="alerts top right" role="alert" *ngIf="summary.errors && summary.errors.length > 0">
 			<ngb-alert class="alert alert-danger alert-dismissible" role="alert" ng-reflect-type="danger" (close)="csvErrors = null">
 			    <p jhiTranslate="gatewayApp.assertionServiceAssertion.import.errors.label">Oops! There was a problem processing your data. Pleases fix the errors below and try again</p>
 			    <table>
@@ -14,12 +13,12 @@
 			    		<th>Errors</th>
 			    	</thead>
 			    	<tbody>
-			    		<tr *ngFor="let error of csvErrors | slice:0:10;">
+			    		<tr *ngFor="let error of summary.errors | slice:0:10;">
 			        		<td>Row {{error['index']}}</td>
 			        		<td>{{error['message']}}</td>
 			       		</tr>
-			       		<tr *ngIf="csvErrors.length > 10">
-			       			<td>and {{ csvErrors.length - 10 }} more errors</td>
+			       		<tr *ngIf="summary.errors.length > 10">
+			       			<td>and {{ summary.errors.length - 10 }} more errors</td>
 			       		</tr>
 			    	</tbody>
 			    </table>
@@ -33,16 +32,41 @@
         </div>
         <p><em><span jhiTranslate="gatewayApp.assertionServiceAssertion.uploadNote">Please do not forget to download and send permission links to your researchers once the upload has completed.</span></em></p>
     </div>
+    <div class="modal-body" *ngIf="summary && (summary.numAdded > 0 || summary.numUpdated > 0 || summary.numDeleted > 0 || summary.numAdded > 0)">
+		<div class="row" *ngIf="summary.numAdded > 0">
+			<div class="col-md-12">
+            	<p>{{ summary.numAdded }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.added">added</span></p>
+            </div>
+        </div>
+		<div class="row" *ngIf="summary.numUpdated > 0">
+			<div class="col-md-12">
+            	<p>{{ summary.numUpdated }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.updated">updated</span></p>
+            </div>
+		</div>
+		<div class="row" *ngIf="summary.numDeleted > 0">
+			<div class="col-md-12">
+            	<p>{{ summary.numDeleted }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.deleted">deleted</span></p>
+            </div>
+		</div>
+		<div class="row" *ngIf="summary.numDuplicates > 0">
+			<div class="col-md-12">
+            	<p>{{ summary.numDuplicates }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.duplicates">duplicate(s) detected</span></p>
+            </div>
+		</div>
+	</div>
     <div *ngIf="loading" class="progress progress-striped">
         <div class="progress-bar indeterminate" role="progressbar"></div>
     </div>
 
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">
+        <button type="button" class="btn btn-outline-primary" (click)="close()">
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
-        <button id="jhi-confirm-delete-msUser" type="submit" class="btn btn-primary">
+        <button id="jhi-confirm-csv-upload" type="submit" class="btn btn-primary" *ngIf="!summary || (!summary.numAdded && !summary.numUpdated && !summary.numDeleted && !summary.numAdded)">
             <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.upload">Upload</span>
+        </button>
+        <button id="close-dialog" class="btn btn-primary" (click)="close()" *ngIf="summary && (summary.numAdded > 0 || summary.numUpdated > 0 || summary.numDeleted > 0 || summary.numAdded > 0)">
+            <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.close">Close</span>
         </button>
     </div>
 </form>
