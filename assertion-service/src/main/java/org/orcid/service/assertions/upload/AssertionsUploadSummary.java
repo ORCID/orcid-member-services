@@ -1,8 +1,8 @@
 package org.orcid.service.assertions.upload;
 
 import java.io.Serializable;
-
-import org.codehaus.jettison.json.JSONArray;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AssertionsUploadSummary implements Serializable {
 
@@ -16,7 +16,7 @@ public class AssertionsUploadSummary implements Serializable {
 	
 	private int numDuplicates;
 	
-	private JSONArray errors = new JSONArray();
+	List<AssertionsUploadError> errors = new ArrayList<>();
 
 	public int getNumAdded() {
 		return numAdded;
@@ -50,12 +50,12 @@ public class AssertionsUploadSummary implements Serializable {
 		this.numDuplicates = numDuplicates;
 	}
 
-	public JSONArray getErrors() {
+	public List<AssertionsUploadError> getErrors() {
 		return errors;
 	}
 
-	public void setErrors(JSONArray errors) {
+	public void setErrors(List<AssertionsUploadError> errors) {
 		this.errors = errors;
 	}
-	
+
 }

@@ -5,9 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.orcid.domain.Assertion;
 
 public class AssertionsUpload {
@@ -16,7 +13,7 @@ public class AssertionsUpload {
 	
 	Set<String> users = new HashSet<>();
 	
-	JSONArray errors = new JSONArray();
+	List<AssertionsUploadError> errors = new ArrayList<>();
 	
 	public void addAssertion(Assertion assertion) {
 		assertions.add(assertion);
@@ -31,14 +28,7 @@ public class AssertionsUpload {
 	}
 	
 	public void addError(long index, String message) {
-		JSONObject error = new JSONObject();
-		try {
-			error.put("index", index);
-			error.put("message", message);
-		} catch (JSONException e) {
-			throw new RuntimeException(e);
-		}
-		errors.put(error);
+		errors.add(new AssertionsUploadError(index, message));
 	}
 
 	public List<Assertion> getAssertions() {
@@ -49,7 +39,7 @@ public class AssertionsUpload {
 		return users;
 	}
 	
-	public JSONArray getErrors() {
+	public List<AssertionsUploadError> getErrors() {
 		return errors;
 	}
 	

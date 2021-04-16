@@ -70,8 +70,8 @@ class AssertionsCsvReaderTest {
 	void testReadAssertionsUploadWithBadUrl() throws IOException, JSONException {
 		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-bad-url.csv");
 		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
-        assertEquals(1, upload.getErrors().length());
-        assertTrue(upload.getErrors().get(0).toString().contains("url"));
+        assertEquals(1, upload.getErrors().size());
+        assertTrue(upload.getErrors().get(0).getMessage().contains("url"));
 	}
 	
 	@Test
@@ -108,7 +108,7 @@ class AssertionsCsvReaderTest {
 		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-db-id-column.csv");
 		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
 		
-		assertEquals(1, upload.getErrors().length()); // id doesn't exist
+		assertEquals(1, upload.getErrors().size()); // id doesn't exist
 		
 		assertEquals(3, upload.getAssertions().size());  // including erroneous
 		
@@ -136,7 +136,7 @@ class AssertionsCsvReaderTest {
 		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-delete-row.csv");
 		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
 		
-		assertEquals(0, upload.getErrors().length()); // id doesn't exist
+		assertEquals(0, upload.getErrors().size()); // id doesn't exist
 		
 		assertEquals(4, upload.getAssertions().size());  // including erroneous
 		
@@ -165,8 +165,8 @@ class AssertionsCsvReaderTest {
 		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-db-id-column.csv");
 		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
 		
-		assertEquals(1, upload.getErrors().length()); // email can't be changed
-		assertTrue(upload.getErrors().get(0).toString().contains("email"));
+		assertEquals(1, upload.getErrors().size()); // email can't be changed
+		assertTrue(upload.getErrors().get(0).getMessage().contains("email"));
 		assertEquals(3, upload.getAssertions().size());  // including erroneous
 	}
 	
@@ -179,7 +179,7 @@ class AssertionsCsvReaderTest {
 		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-interesting-dates.csv");
 		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
 		
-		assertEquals(0, upload.getErrors().length()); // id doesn't exist
+		assertEquals(0, upload.getErrors().size()); // id doesn't exist
 		
 		assertEquals(3, upload.getAssertions().size());  // including erroneous
 		

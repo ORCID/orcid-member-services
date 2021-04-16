@@ -1,7 +1,6 @@
 package org.orcid.web.rest;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -32,11 +31,8 @@ import org.orcid.security.SecurityUtils;
 import org.orcid.service.AssertionService;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.UserService;
-import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.AssertionsUploadSummary;
-import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
-import org.orcid.web.rest.errors.DuplicateAssertionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

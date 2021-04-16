@@ -607,7 +607,7 @@ public class AssertionService {
 	private AssertionsUploadSummary processUpload(AssertionsUpload upload) {
 		AssertionsUploadSummary summary = new AssertionsUploadSummary();
 		
-		if (upload.getErrors().length() > 0) {
+		if (upload.getErrors().size() > 0) {
 			summary.setErrors(upload.getErrors());
 			return summary;
 		}
