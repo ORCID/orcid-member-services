@@ -67,6 +67,17 @@ public class AssertionsUpload {
 			return day;
 		}
 		
+		public String toString() {
+			StringBuilder builder = new StringBuilder(year);
+			if (month != null) {
+				builder.append("-").append(month);
+				if (day != null) {
+					builder.append("-").append(day);
+				}
+			}
+			return builder.toString();
+		}
+		
 	}
 	
 }

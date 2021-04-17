@@ -54,6 +54,22 @@ class AssertionsCsvReaderTest {
 		assertEquals("TEST-3", upload.getAssertions().get(2).getOrgName());
 		assertEquals(2, upload.getUsers().size());
 	}
+	
+	@Test
+	void testReadAssertionsUploadWithStartDateAfterEndDate() throws IOException {
+		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-start-date-after-end-date.csv");
+		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
+		assertEquals(6, upload.getAssertions().size());
+		assertEquals("TEST", upload.getAssertions().get(0).getOrgName());
+		assertEquals("TEST-2", upload.getAssertions().get(1).getOrgName());
+		assertEquals("TEST-3", upload.getAssertions().get(2).getOrgName());
+		
+		assertEquals(4, upload.getErrors().size());
+		assertTrue(upload.getErrors().get(0).getMessage().contains("Start date cannot be after the end date"));
+		assertTrue(upload.getErrors().get(1).getMessage().contains("Start date cannot be after the end date"));
+		assertTrue(upload.getErrors().get(2).getMessage().contains("Start date cannot be after the end date"));
+		assertTrue(upload.getErrors().get(3).getMessage().contains("Start date cannot be after the end date"));
+	}
 
 	@Test
 	void testReadAssertionsUploadWithoutUrl() throws IOException, JSONException {
