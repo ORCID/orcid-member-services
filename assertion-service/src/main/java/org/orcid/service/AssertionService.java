@@ -16,6 +16,7 @@ import org.orcid.domain.Assertion;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
+import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.domain.enumeration.AssertionStatus;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.repository.AssertionsRepository;
@@ -279,10 +280,6 @@ public class AssertionService {
 	}
 
 	public boolean isDuplicate(Assertion assertion) {
-		if (assertion.getId() != null && !assertion.getId().isEmpty()) {
-			return false;
-		}
-		
 		List<Assertion> assertions = assertionsRepository.findByEmail(assertion.getEmail());
 		for (Assertion a : assertions) {
 			if (duplicates(a, assertion)) {
@@ -293,25 +290,43 @@ public class AssertionService {
 	}
 
 	private boolean duplicates(Assertion a, Assertion b) {
-		return Objects.equal(a.getAffiliationSection(), b.getAffiliationSection()) && 
-				Objects.equal(a.getDepartmentName(), b.getDepartmentName()) && 
-				Objects.equal(a.getRoleTitle(), b.getRoleTitle()) && 
-				Objects.equal(a.getStartDay(), b.getStartDay()) &&
-				Objects.equal(a.getStartMonth(), b.getStartMonth()) &&
-				Objects.equal(a.getStartYear(), b.getStartYear()) && 
-				Objects.equal(a.getEndDay(), b.getEndDay()) &&
-				Objects.equal(a.getEndMonth(), b.getEndMonth()) &&
-				Objects.equal(a.getEndYear(), b.getEndYear()) && 
-				Objects.equal(a.getOrgName(), b.getOrgName()) && 
-				Objects.equal(a.getOrgCountry(), b.getOrgCountry()) && 
-				Objects.equal(a.getOrgCity(), b.getOrgCity()) && 
-				Objects.equal(a.getOrgRegion(), b.getOrgRegion()) &&
-				Objects.equal(a.getDisambiguationSource(), b.getDisambiguationSource()) &&
-				Objects.equal(a.getDisambiguatedOrgId(), b.getDisambiguatedOrgId()) &&
-				Objects.equal(a.getExternalId(), b.getExternalId()) &&
-				Objects.equal(a.getExternalIdType(), b.getExternalIdType()) &&
-				Objects.equal(a.getExternalIdUrl(), b.getExternalIdUrl()) &&
-				Objects.equal(a.getUrl(), b.getUrl());
+		if (a.getId() != null && a.getId().equals(b.getId())) {
+			return false; // both the same record, not two duplicates 
+		}
+		
+		return !different(a.getAffiliationSection(), b.getAffiliationSection()) && 
+				!different(a.getDepartmentName(), b.getDepartmentName()) && 
+				!different(a.getRoleTitle(), b.getRoleTitle()) && 
+				!different(a.getStartDay(), b.getStartDay()) &&
+				!different(a.getStartMonth(), b.getStartMonth()) &&
+				!different(a.getStartYear(), b.getStartYear()) && 
+				!different(a.getEndDay(), b.getEndDay()) &&
+				!different(a.getEndMonth(), b.getEndMonth()) &&
+				!different(a.getEndYear(), b.getEndYear()) && 
+				!different(a.getOrgName(), b.getOrgName()) && 
+				!different(a.getOrgCountry(), b.getOrgCountry()) && 
+				!different(a.getOrgCity(), b.getOrgCity()) && 
+				!different(a.getOrgRegion(), b.getOrgRegion()) &&
+				!different(a.getDisambiguationSource(), b.getDisambiguationSource()) &&
+				!different(a.getDisambiguatedOrgId(), b.getDisambiguatedOrgId()) &&
+				!different(a.getExternalId(), b.getExternalId()) &&
+				!different(a.getExternalIdType(), b.getExternalIdType()) &&
+				!different(a.getExternalIdUrl(), b.getExternalIdUrl()) &&
+				!different(a.getUrl(), b.getUrl());
+	}
+	
+	private boolean different(AffiliationSection affiliationSectionA, AffiliationSection affiliationSectionB) {
+		if (affiliationSectionA == null && affiliationSectionB == null) {
+			return false;
+		}
+		return !Objects.equal(affiliationSectionA, affiliationSectionB);
+	}
+
+	private boolean different(String fieldA, String fieldB) {
+		if ((fieldA == null || fieldA.isEmpty()) && (fieldB == null || fieldB.isEmpty())) {
+			return false;
+		}
+		return !Objects.equal(fieldA, fieldB);
 	}
 	
 	private boolean assertionToDelete(Assertion assertion) {
