@@ -120,8 +120,8 @@ jhipster:
 uaa:
   key-store:
     name: config/tls/keystore.p12
-    password: password
-    alias: selfsigned
+    password: ${uaa.keystore.password}
+    alias: userservice
   web-client-configuration:
     # Access Token is valid for 7 days
     access-token-validity-in-seconds: 604800
