@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 import { faChartBar, faFileDownload, faFileImport } from '@fortawesome/free-solid-svg-icons';
 
@@ -28,13 +27,12 @@ export class AssertionComponent implements OnInit, OnDestroy {
   success: any;
   eventSubscriber: Subscription;
   importEventSubscriber: Subscription;
-  routeData: any;
+  routeData: Subscription;
   links: any;
   totalItems: any;
   itemsPerPage: any;
   page: any;
   predicate: any;
-  previousPage: any;
   reverse: any;
   orcidBaseUrl: string = ORCID_BASE_URL;
   faChartBar = faChartBar;
@@ -51,16 +49,9 @@ export class AssertionComponent implements OnInit, OnDestroy {
     protected eventManager: JhiEventManager
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE;
-    this.routeData = this.activatedRoute.data.subscribe(data => {
-      this.page = data.pagingParams.page;
-      this.previousPage = data.pagingParams.page;
-      this.reverse = data.pagingParams.ascending;
-      this.predicate = data.pagingParams.predicate;
-    });
   }
 
   ngOnInit() {
-    this.loadAll();
     this.accountService.identity().then(account => {
       this.currentAccount = account;
     });
@@ -68,6 +59,12 @@ export class AssertionComponent implements OnInit, OnDestroy {
       this.loadAll();
     });
     this.importEventSubscriber = this.eventManager.subscribe('importAssertions', () => {
+      this.loadAll();
+    });
+    this.routeData = this.activatedRoute.data.subscribe(data => {
+      this.page = data.pagingParams.page;
+      this.reverse = data.pagingParams.ascending;
+      this.predicate = data.pagingParams.predicate;
       this.loadAll();
     });
   }
@@ -83,13 +80,6 @@ export class AssertionComponent implements OnInit, OnDestroy {
         (res: HttpResponse<IAssertion[]>) => this.paginateAssertions(res.body, res.headers),
         (res: HttpErrorResponse) => this.onError(res.message)
       );
-  }
-
-  loadPage(page: number) {
-    if (page !== this.previousPage) {
-      this.previousPage = page;
-      this.transition();
-    }
   }
 
   transition() {
@@ -151,5 +141,6 @@ export class AssertionComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.eventManager.destroy(this.eventSubscriber);
+    this.routeData.unsubscribe();
   }
 }
