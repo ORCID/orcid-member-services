@@ -498,7 +498,21 @@ class AssertionServiceTest {
 		
 		comparison.setUrl("url");
 		assertTrue(assertionService.isDuplicate(comparison));
+
+		a.setUrl(null);
+		assertFalse(assertionService.isDuplicate(comparison));
 		
+		a.setUrl("url");
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		comparison.setUrl("");
+		a.setUrl(null);
+		assertTrue(assertionService.isDuplicate(comparison));
+		
+		comparison.setUrl("url");
+		a.setUrl("url");
+		assertTrue(assertionService.isDuplicate(comparison));
+
 		a.setStartMonth("08");
 		assertFalse(assertionService.isDuplicate(comparison));
 		
@@ -613,8 +627,8 @@ class AssertionServiceTest {
 		a.setExternalIdUrl("extIdUrl");
 		assertTrue(assertionService.isDuplicate(comparison));
 
-		comparison.setId("not-null");
-		assertFalse(assertionService.isDuplicate(comparison));
+		comparison.setId("not-null"); // id should be ignored
+		assertTrue(assertionService.isDuplicate(comparison));
 	}
 	
 	@Test
