@@ -76,23 +76,6 @@ describe('Component Tests', () => {
           })
         )
       );
-
-      // WHEN
-      comp.loadPage(1);
-
-      // THEN
-      expect(service.query).toHaveBeenCalled();
-      expect(comp.assertions[0]).toEqual(jasmine.objectContaining({ id: '123' }));
-    });
-
-    it('should not load a page is the page is the same as the previous page', () => {
-      spyOn(service, 'query').and.callThrough();
-
-      // WHEN
-      comp.loadPage(0);
-
-      // THEN
-      expect(service.query).toHaveBeenCalledTimes(0);
     });
 
     it('should re-initialize the page', () => {
@@ -107,8 +90,6 @@ describe('Component Tests', () => {
         )
       );
 
-      // WHEN
-      comp.loadPage(1);
       comp.clear();
 
       // THEN
