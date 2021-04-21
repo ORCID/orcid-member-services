@@ -30,7 +30,7 @@ public class UaaProperties {
         //password used to access the key
         private String password = "password";
         //name of the alias to fetch
-        private String alias = "selfsigned";
+        private String alias = "userservice";
 
         public String getName() {
             return name;
