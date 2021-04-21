@@ -4,6 +4,28 @@
         <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
     </div>
     <div class="modal-body">
+    	<div class="alert alert-success" *ngIf="summary && (summary.numAdded > 0 || summary.numUpdated > 0 || summary.numDeleted > 0 || summary.numAdded > 0)">
+			<div class="row" *ngIf="summary.numAdded > 0">
+				<div class="col-md-12">
+	            	<p>{{ summary.numAdded }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.added">added</span></p>
+	            </div>
+	        </div>
+			<div class="row" *ngIf="summary.numUpdated > 0">
+				<div class="col-md-12">
+	            	<p>{{ summary.numUpdated }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.updated">updated</span></p>
+	            </div>
+			</div>
+			<div class="row" *ngIf="summary.numDeleted > 0">
+				<div class="col-md-12">
+	            	<p>{{ summary.numDeleted }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.deleted">deleted</span></p>
+	            </div>
+			</div>
+			<div class="row" *ngIf="summary.numDuplicates > 0">
+				<div class="col-md-12">
+	            	<p>{{ summary.numDuplicates }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.duplicates">duplicate(s) detected</span></p>
+	            </div>
+			</div>
+		</div>
         <jhi-alert-error></jhi-alert-error>
         <div class="alerts top right" role="alert" *ngIf="summary.errors && summary.errors.length > 0">
 			<ngb-alert class="alert alert-danger alert-dismissible" role="alert" ng-reflect-type="danger" (close)="csvErrors = null">
@@ -32,28 +54,6 @@
         </div>
         <p><em><span jhiTranslate="gatewayApp.assertionServiceAssertion.uploadNote">Please do not forget to download and send permission links to your researchers once the upload has completed.</span></em></p>
     </div>
-    <div class="modal-body" *ngIf="summary && (summary.numAdded > 0 || summary.numUpdated > 0 || summary.numDeleted > 0 || summary.numAdded > 0)">
-		<div class="row" *ngIf="summary.numAdded > 0">
-			<div class="col-md-12">
-            	<p>{{ summary.numAdded }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.added">added</span></p>
-            </div>
-        </div>
-		<div class="row" *ngIf="summary.numUpdated > 0">
-			<div class="col-md-12">
-            	<p>{{ summary.numUpdated }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.updated">updated</span></p>
-            </div>
-		</div>
-		<div class="row" *ngIf="summary.numDeleted > 0">
-			<div class="col-md-12">
-            	<p>{{ summary.numDeleted }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.deleted">deleted</span></p>
-            </div>
-		</div>
-		<div class="row" *ngIf="summary.numDuplicates > 0">
-			<div class="col-md-12">
-            	<p>{{ summary.numDuplicates }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.duplicates">duplicate(s) detected</span></p>
-            </div>
-		</div>
-	</div>
     <div *ngIf="loading" class="progress progress-striped">
         <div class="progress-bar indeterminate" role="progressbar"></div>
     </div>
