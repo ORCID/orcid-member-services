@@ -119,7 +119,7 @@ jhipster:
       reportFrequency: 60 # seconds
 uaa:
   key-store:
-    name: config/tls/keystore.p12
+    name: ${uaa.keystore.name}
     password: ${uaa.keystore.password}
     alias: userservice
   web-client-configuration:
