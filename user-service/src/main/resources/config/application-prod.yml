@@ -98,7 +98,7 @@ uaa:
   #be sure to to change to a different keystore in production!
   #create one using: keytool -genkey -alias userservice -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
   key-store:
-    name: config/tls/keystore.p12
+    name: ${uaa.keystore.name}
     password: ${uaa.keystore.password}
     alias: userservice
   web-client-configuration:
