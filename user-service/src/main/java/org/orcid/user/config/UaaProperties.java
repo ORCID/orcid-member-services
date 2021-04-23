@@ -26,11 +26,11 @@ public class UaaProperties {
      */
     public static class KeyStore {
         //name of the keystore in the classpath
-        private String name = "config/tls/keystore.p12";
+        private String name;
         //password used to access the key
-        private String password = "password";
+        private String password;
         //name of the alias to fetch
-        private String alias = "userservice";
+        private String alias;
 
         public String getName() {
             return name;
