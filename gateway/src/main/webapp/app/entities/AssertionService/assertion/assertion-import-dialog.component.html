@@ -4,20 +4,20 @@
         <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
     </div>
     <div class="modal-body">
-    	<div class="alert alert-success" *ngIf="summary && (summary.numAdded > 0 || summary.numUpdated > 0 || summary.numDeleted > 0 || summary.numAdded > 0)">
+    	<div class="alert alert-success" *ngIf="summary && (summary.numAdded > 0 || summary.numUpdated > 0 || summary.numDeleted > 0 || summary.numDuplicates > 0)">
 			<div class="row" *ngIf="summary.numAdded > 0">
 				<div class="col-md-12">
-	            	<p>{{ summary.numAdded }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.added">added</span></p>
+	            	<p>{{ summary.numAdded }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.added">affiliations added</span></p>
 	            </div>
 	        </div>
 			<div class="row" *ngIf="summary.numUpdated > 0">
 				<div class="col-md-12">
-	            	<p>{{ summary.numUpdated }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.updated">updated</span></p>
+	            	<p>{{ summary.numUpdated }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.updated">affiliations updated</span></p>
 	            </div>
 			</div>
 			<div class="row" *ngIf="summary.numDeleted > 0">
 				<div class="col-md-12">
-	            	<p>{{ summary.numDeleted }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.deleted">deleted</span></p>
+	            	<p>{{ summary.numDeleted }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.deleted">affiliations deleted</span></p>
 	            </div>
 			</div>
 			<div class="row" *ngIf="summary.numDuplicates > 0">
