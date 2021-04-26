@@ -80,6 +80,7 @@ services:
       - UAA_KEYSTORE_NAME=${KEYSTORE_LOCATION}
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
+      - ${HOST_KEYSTORE_DIR}:/keystores
     depends_on:
       - "jhipster-registry"
 
