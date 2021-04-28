@@ -103,6 +103,7 @@ oauth2:
     # Controls session expiration due to inactivity (ignored for remember-me).
     # Negative values disable session inactivity expiration.
     session-timeout-in-seconds: 1800
+    cookie-domain: ${gateway.cookie.domain}
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
