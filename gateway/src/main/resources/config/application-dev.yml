@@ -115,15 +115,15 @@ jhipster:
     from: gateway@localhost
     base-url: http://127.0.0.1:8080
   logging:
-      logstash:
-          enabled: false # Set to true to use Jhipster console locally
-          host: localhost # If using a Virtual Machine on Mac OS X or Windows with docker-machine, use the Docker's host IP here
-          port: 5000
-          queueSize: 512
+    logstash:
+      enabled: false # Set to true to use Jhipster console locally
+      host: localhost # If using a Virtual Machine on Mac OS X or Windows with docker-machine, use the Docker's host IP here
+      port: 5000
+      queueSize: 512
   metrics:
-      logs:
-          enabled: false
-          reportFrequency: 60 # seconds
+    logs:
+      enabled: false
+      reportFrequency: 60 # seconds
 oauth2:
   signature-verification:
     public-key-endpoint-uri: http://userservice/oauth/token_key
@@ -138,6 +138,7 @@ oauth2:
     # Controls session expiration due to inactivity (ignored for remember-me).
     # Negative values disable session inactivity expiration.
     session-timeout-in-seconds: 1800
+    cookie-domain: ${gateway.cookie.domain}
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

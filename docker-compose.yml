@@ -49,6 +49,7 @@ services:
       - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
       - BASE_URL=${BASE_URL}
       - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
+      - GATEWAY_COOKIE_DOMAIN=${COOKIE_DOMAIN}
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     ports:
