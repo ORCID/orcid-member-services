@@ -1,177 +1,187 @@
 {
   "global": {
-    "title": "ORCID Member Portal",
-    "by": "by",
-    "false": "false",
-    "true": "true",
-    "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
-    "warning": "Warning!",
-    "isATestEnvironment": "is a test environment for the ORCID Member Portal that connects to the ORCID Registry test environment",
+    "title": { "string": "ORCID Member Portal" },
+    "by": { "string": "by" },
+    "false": { "string": "false" },
+    "true": { "string": "true" },
+    "browsehappy": {
+      "string": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience."
+    },
+    "warning": { "string": "Warning!" },
+    "isATestEnvironment": {
+      "string": "is a test environment for the ORCID Member Portal that connects to the ORCID Registry test environment"
+    },
     "menu": {
-      "memberPortal": "Member Portal",
-      "beta": "Beta",
-      "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+      "memberPortal": { "string": "Member Portal" },
+      "beta": { "string": "Beta" },
+      "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
       "entities": {
-        "main": "Member Tools",
-        "assertionServiceAffiliationManager": "Affiliation Manager",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "member": "Member"
+        "main": { "string": "Member Tools" },
+        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "member": { "string": "Member" }
       },
       "account": {
-        "main": "Account",
-        "settings": "Settings",
-        "password": "Password",
-        "sessions": "Sessions",
-        "login": "Sign in",
-        "logout": "Sign out",
-        "loggedInAs": "Logged in as",
-        "logoutAs": "Logout as",
-        "register": "Register"
+        "main": { "string": "Account" },
+        "settings": { "string": "Settings" },
+        "password": { "string": "Password" },
+        "sessions": { "string": "Sessions" },
+        "login": { "string": "Sign in" },
+        "logout": { "string": "Sign out" },
+        "loggedInAs": { "string": "Logged in as" },
+        "logoutAs": { "string": "Logout as" },
+        "register": { "string": "Register" }
       },
       "admin": {
-        "main": "Administration",
-        "msUserServiceMSUser": "Manage users",
-        "msUserServiceMSMember": "Manage members",
-        "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+        "main": { "string": "Administration" },
+        "msUserServiceMSUser": { "string": "Manage users" },
+        "msUserServiceMSMember": { "string": "Manage members" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
       },
       "dev": {
-        "main": "System monitoring",
-        "gateway": "Gateway",
-        "tracker": "User tracker",
-        "metrics": "Metrics",
-        "health": "Health",
-        "configuration": "Configuration",
-        "logs": "Logs",
-        "audits": "Audits",
-        "apidocs": "API",
-        "database": "Database",
-        "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+        "main": { "string": "System monitoring" },
+        "gateway": { "string": "Gateway" },
+        "tracker": { "string": "User tracker" },
+        "metrics": { "string": "Metrics" },
+        "health": { "string": "Health" },
+        "configuration": { "string": "Configuration" },
+        "logs": { "string": "Logs" },
+        "audits": { "string": "Audits" },
+        "apidocs": { "string": "API" },
+        "database": { "string": "Database" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
       },
-      "language": "Language"
+      "language": { "string": "Language" }
     },
     "form": {
-      "username.label": "Username",
-      "username.placeholder": "Your username",
-      "currentpassword.label": "Current password",
-      "currentpassword.placeholder": "Current password",
-      "newpassword.label": "New password",
-      "newpassword.placeholder": "New password",
-      "confirmpassword.label": "New password confirmation",
-      "confirmpassword.placeholder": "Confirm the new password",
-      "email.label": "Email",
-      "email.placeholder": "Your email"
+      "username.label": { "string": "Username" },
+      "username.placeholder": { "string": "Your username" },
+      "currentpassword.label": { "string": "Current password" },
+      "currentpassword.placeholder": { "string": "Current password" },
+      "newpassword.label": { "string": "New password" },
+      "newpassword.placeholder": { "string": "New password" },
+      "confirmpassword.label": { "string": "New password confirmation" },
+      "confirmpassword.placeholder": { "string": "Confirm the new password" },
+      "email.label": { "string": "Email" },
+      "email.placeholder": { "string": "Your email" }
     },
     "messages": {
       "info": {
         "authenticated": {
-          "prefix": "If you want to ",
-          "link": "sign in",
-          "suffix": ", you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+          "prefix": { "string": "If you want to " },
+          "link": { "string": "sign in" },
+          "suffix": {
+            "string": ", you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+          }
         },
         "register": {
-          "noaccount": "You don't have an account yet?",
-          "link": "Register a new account"
+          "noaccount": { "string": "You don't have an account yet?" },
+          "link": { "string": "Register a new account" }
         }
       },
       "error": {
-        "dontmatch": "The password and its confirmation do not match!"
+        "dontmatch": { "string": "The password and its confirmation do not match!" }
       },
       "validate": {
         "newpassword": {
-          "required": "Your password is required.",
-          "minlength": "Your password is required to be at least 4 characters.",
-          "maxlength": "Your password cannot be longer than 50 characters.",
-          "strength": "Password strength:"
+          "required": { "string": "Your password is required." },
+          "minlength": { "string": "Your password is required to be at least 4 characters." },
+          "maxlength": { "string": "Your password cannot be longer than 50 characters." },
+          "strength": { "string": "Password strength:" }
         },
         "confirmpassword": {
-          "required": "Your confirmation password is required.",
-          "minlength": "Your confirmation password is required to be at least 4 characters.",
-          "maxlength": "Your confirmation password cannot be longer than 50 characters."
+          "required": { "string": "Your confirmation password is required." },
+          "minlength": { "string": "Your confirmation password is required to be at least 4 characters." },
+          "maxlength": { "string": "Your confirmation password cannot be longer than 50 characters." }
         },
         "email": {
-          "required": "Your email is required.",
-          "invalid": "Your email is invalid.",
-          "minlength": "Your email is required to be at least 5 characters.",
-          "maxlength": "Your email cannot be longer than 50 characters."
+          "required": { "string": "Your email is required." },
+          "invalid": { "string": "Your email is invalid." },
+          "minlength": { "string": "Your email is required to be at least 5 characters." },
+          "maxlength": { "string": "Your email cannot be longer than 50 characters." }
         }
       }
     },
     "field": {
-      "id": "ID"
+      "id": { "string": "ID" }
     },
     "ribbon": {
-      "dev": "Development"
+      "dev": { "string": "Development" }
     },
-    "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+    "item-count": { "string": "Showing {{first}} - {{second}} of {{total}} items." }
   },
   "entity": {
     "action": {
-      "addblob": "Add blob",
-      "addimage": "Add image",
-      "back": "Back",
-      "cancel": "Cancel",
-      "close": "Close",
-      "delete": "Delete",
-      "delete-from-orcid": "Delete from orcid",
-      "edit": "Edit",
-      "open": "Open",
-      "save": "Save",
-      "continue": "Continue",
-      "upload": "Upload",
-      "activate": "Resend Activation Email",
-      "view": "View"
+      "addblob": { "string": "Add blob" },
+      "addimage": { "string": "Add image" },
+      "back": { "string": "Back" },
+      "cancel": { "string": "Cancel" },
+      "close": { "string": "Close" },
+      "delete": { "string": "Delete" },
+      "delete-from-orcid": { "string": "Delete from orcid" },
+      "edit": { "string": "Edit" },
+      "open": { "string": "Open" },
+      "save": { "string": "Save" },
+      "continue": { "string": "Continue" },
+      "upload": { "string": "Upload" },
+      "activate": { "string": "Resend Activation Email" },
+      "view": { "string": "View" }
     },
     "detail": {
-      "field": "Field",
-      "value": "Value"
+      "field": { "string": "Field" },
+      "value": { "string": "Value" }
     },
     "delete": {
-      "title": "Confirm deletion",
-      "error": "Oops, something went wrong!"
+      "title": { "string": "Confirm deletion" },
+      "error": { "string": "Oops, something went wrong!" }
     },
     "changeOwnership": {
-      "title": "Confirm change of ownership",
-      "error": "Oops, something went wrong!"
+      "title": { "string": "Confirm change of ownership" },
+      "error": { "string": "Oops, something went wrong!" }
     },
     "validation": {
-      "required": "This field is required.",
-      "minlength": "This field is required to be at least {{ min }} characters.",
-      "maxlength": "This field cannot be longer than {{ max }} characters.",
-      "min": "This field should be at least {{ min }}.",
-      "max": "This field cannot be more than {{ max }}.",
-      "minbytes": "This field should be at least {{ min }} bytes.",
-      "maxbytes": "This field cannot be more than {{ max }} bytes.",
-      "pattern": "This field should follow pattern for {{ pattern }}.",
-      "number": "This field should be a number.",
-      "datetimelocal": "This field should be a date and time.",
-      "patternLogin": "This field can only contain letters, digits and e-mail addresses.",
-      "email": "Please provide a valid email address.",
-      "endDate": "The start date cannot be greater than the end date.",
-      "disambiguatedOrgId": "This field is required. GRID Organization ID should start with grid. e.g. grid.12344 or should be a valid grid URL, RINGGOLD Organization ID should be a number."
+      "required": { "string": "This field is required." },
+      "minlength": { "string": "This field is required to be at least {{ min }} characters." },
+      "maxlength": { "string": "This field cannot be longer than {{ max }} characters." },
+      "min": { "string": "This field should be at least {{ min }}." },
+      "max": { "string": "This field cannot be more than {{ max }}." },
+      "minbytes": { "string": "This field should be at least {{ min }} bytes." },
+      "maxbytes": { "string": "This field cannot be more than {{ max }} bytes." },
+      "pattern": { "string": "This field should follow pattern for {{ pattern }}." },
+      "number": { "string": "This field should be a number." },
+      "datetimelocal": { "string": "This field should be a date and time." },
+      "patternLogin": { "string": "This field can only contain letters, digits and e-mail addresses." },
+      "email": { "string": "Please provide a valid email address." },
+      "endDate": { "string": "The start date cannot be greater than the end date." },
+      "disambiguatedOrgId": {
+        "string": "This field is required. GRID Organization ID should start with grid. e.g. grid.12344 or should be a valid grid URL, RINGGOLD Organization ID should be a number."
+      }
     }
   },
   "error": {
-    "internalServerError": "Internal server error",
-    "server.not.reachable": "Server not reachable",
-    "url.not.found": "Not found",
-    "notnull": "Field {{ fieldName }} cannot be empty!",
-    "size": "Field {{ fieldName }} does not meet min/max size requirements!",
-    "userexists": "Login name already used!",
-    "emailexists": "Email is already in use!",
-    "idexists": "A new {{ entityName }} cannot already have an ID",
-    "delete.auth.user": "Cannot delete current user.",
-    "delete.main.contact": "Cannot delete the organization owner.",
-    "delete.last.admin": "Cannot delete the last admin.",
-    "member.no.admin.allowed": "Admin users cannot be associated with this member",
-    "clientidinvalid": "Invalid Client ID. Client ID should be in the format XXXX-XXXX-XXXX-XXXX or APP-XXXXXXXXXXXXXXXX. X can be a digit or an uppercase character",
-    "idnull": "Invalid ID"
+    "internalServerError": { "string": "Internal server error" },
+    "server.not.reachable": { "string": "Server not reachable" },
+    "url.not.found": { "string": "Not found" },
+    "notnull": { "string": "Field {{ fieldName }} cannot be empty!" },
+    "size": { "string": "Field {{ fieldName }} does not meet min/max size requirements!" },
+    "userexists": { "string": "Login name already used!" },
+    "emailexists": { "string": "Email is already in use!" },
+    "idexists": { "string": "A new {{ entityName }} cannot already have an ID" },
+    "delete.auth.user": { "string": "Cannot delete current user." },
+    "delete.main.contact": { "string": "Cannot delete the organization owner." },
+    "delete.last.admin": { "string": "Cannot delete the last admin." },
+    "member.no.admin.allowed": { "string": "Admin users cannot be associated with this member" },
+    "clientidinvalid": {
+      "string": "Invalid Client ID. Client ID should be in the format XXXX-XXXX-XXXX-XXXX or APP-XXXXXXXXXXXXXXXX. X can be a digit or an uppercase character"
+    },
+    "idnull": { "string": "Invalid ID" }
   },
   "footer": {
-    "footerLabel": "footer",
-    "privacyPolicy": "Privacy Policy",
-    "termsOfUse": "Terms of Use",
-    "contactUs": "Contact Us",
-    "orcidRegistry": "ORCID Registry",
-    "help": "Help"
+    "footerLabel": { "string": "footer" },
+    "privacyPolicy": { "string": "Privacy Policy" },
+    "termsOfUse": { "string": "Terms of Use" },
+    "contactUs": { "string": "Contact Us" },
+    "orcidRegistry": { "string": "ORCID Registry" },
+    "help": { "string": "Help" }
   }
 }

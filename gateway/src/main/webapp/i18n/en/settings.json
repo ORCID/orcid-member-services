@@ -1,30 +1,30 @@
 {
   "settings": {
-    "title": "Settings for {{username}} (You)",
+    "title": { "string": "Settings for {{username}} (You)" },
     "form": {
-      "firstname": "First Name",
-      "firstname.placeholder": "Your first name",
-      "lastname": "Last Name",
-      "lastname.placeholder": "Your last name",
-      "language": "Language",
-      "button": "Save"
+      "firstname": { "string": "First Name" },
+      "firstname.placeholder": { "string": "Your first name" },
+      "lastname": { "string": "Last Name" },
+      "lastname.placeholder": { "string": "Your last name" },
+      "language": { "string": "Language" },
+      "button": { "string": "Save" }
     },
     "messages": {
       "error": {
-        "fail": "<strong>An error has occurred!</strong> Settings could not be saved.",
-        "emailexists": "<strong>Email is already in use!</strong> Please choose another one."
+        "fail": { "string": "<strong>An error has occurred!</strong> Settings could not be saved." },
+        "emailexists": { "string": "<strong>Email is already in use!</strong> Please choose another one." }
       },
-      "success": "<strong>Settings saved!</strong>",
+      "success": { "string": "<strong>Settings saved!</strong>" },
       "validate": {
         "firstname": {
-          "required": "Your first name is required.",
-          "minlength": "Your first name is required to be at least 1 character",
-          "maxlength": "Your first name cannot be longer than 50 characters"
+          "required": { "string": "Your first name is required." },
+          "minlength": { "string": "Your first name is required to be at least 1 character" },
+          "maxlength": { "string": "Your first name cannot be longer than 50 characters" }
         },
         "lastname": {
-          "required": "Your last name is required.",
-          "minlength": "Your last name is required to be at least 1 character",
-          "maxlength": "Your last name cannot be longer than 50 characters"
+          "required": { "string": "Your last name is required." },
+          "minlength": { "string": "Your last name is required to be at least 1 character" },
+          "maxlength": { "string": "Your last name cannot be longer than 50 characters" }
         }
       }
     }

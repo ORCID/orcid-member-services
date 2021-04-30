@@ -1,27 +1,29 @@
 {
   "error": {
-    "title": "¡Página de error!",
+    "title": { "string": "¡Página de error!" },
     "http": {
-      "400": "Bad request.",
-      "403": "No tiene permisos para acceder a la página.",
-      "404": "La página no existe.",
-      "405": "El verbo HTTP utilizado no tiene soporte para este URL.",
-      "500": "Error interno del servidor."
+      "400": { "string": "Bad request." },
+      "403": { "string": "No tiene permisos para acceder a la página." },
+      "404": { "string": "La página no existe." },
+      "405": { "string": "El verbo HTTP utilizado no tiene soporte para este URL." },
+      "500": { "string": "Error interno del servidor." }
     },
-    "concurrencyFailure": "Otro usuario ha modificado esta data al mismo tiempo que tú. Tus cambios fueron rechazados.",
-    "validation": "Error de validación en el servidor.",
-    "email": "Email no es un valor valido ",
-    "size": "No cumple con los requisitos min/max size requerimientos!",
-    "idused": "No, puede ser eliminado!. Tiene relacion con otros elementos.",
-    "pattern": "Este campo solo puede contener letras, digitos y direcciones e-mail.",
-    "invalidUrl": "La url es invalida",
-    "disambiguationSource": "Fuente de organizacion no puede ir vacio.",
-    "emailUsed": "El email ya esta registrado",
-    "ownerExists": "Organization already has an owner.",
-    "memberNotFound": "Miembro no encontrado con salesForceId: {{ params }} ",
-    "salesForceIdUsed": "Un miembro con ese salesforce id ya existe",
-    "affiliationOtherOrganization": "Esta afiliacion no pertenece a tu organizacion",
-    "emailAffiliationUsed": "No fue posible agregar la afiliacion. Una afiliacion con {{ params }} ya existe y pertenece a otra organizacion.",
-    "memberNameUsed": "Un miembro con ese nombre ya existe"
+    "concurrencyFailure": { "string": "Otro usuario ha modificado esta data al mismo tiempo que tú. Tus cambios fueron rechazados." },
+    "validation": { "string": "Error de validación en el servidor." },
+    "email": { "string": "Email no es un valor valido " },
+    "size": { "string": "No cumple con los requisitos min/max size requerimientos!" },
+    "idused": { "string": "No, puede ser eliminado!. Tiene relacion con otros elementos." },
+    "pattern": { "string": "Este campo solo puede contener letras, digitos y direcciones e-mail." },
+    "invalidUrl": { "string": "La url es invalida" },
+    "disambiguationSource": { "string": "Fuente de organizacion no puede ir vacio." },
+    "emailUsed": { "string": "El email ya esta registrado" },
+    "ownerExists": { "string": "Organization already has an owner." },
+    "memberNotFound": { "string": "Miembro no encontrado con salesForceId: {{ params }} " },
+    "salesForceIdUsed": { "string": "Un miembro con ese salesforce id ya existe" },
+    "affiliationOtherOrganization": { "string": "Esta afiliacion no pertenece a tu organizacion" },
+    "emailAffiliationUsed": {
+      "string": "No fue posible agregar la afiliacion. Una afiliacion con {{ params }} ya existe y pertenece a otra organizacion."
+    },
+    "memberNameUsed": { "string": "Un miembro con ese nombre ya existe" }
   }
 }
