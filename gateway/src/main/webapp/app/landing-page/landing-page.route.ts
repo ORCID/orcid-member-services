@@ -7,6 +7,6 @@ export const LANDING_PAGE_ROUTE: Route = {
   component: LandingPageComponent,
   data: {
     authorities: [],
-    pageTitle: 'landingPage.title'
+    pageTitle: 'landingPage.title.string'
   }
 };

@@ -383,7 +383,7 @@ public class AssertionServiceResource {
 
 		if (assertionService.isDuplicate(assertion)) {
 			throw new BadRequestAlertException("This assertion already exists", "assertion",
-					"assertion.validation.duplicate");
+					"assertion.validation.duplicate.string");
 		}
 
 		// XXX this isn't validating
