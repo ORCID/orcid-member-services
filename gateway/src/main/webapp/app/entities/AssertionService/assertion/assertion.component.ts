@@ -13,6 +13,8 @@ import { AssertionService } from './assertion.service';
 import { ORCID_BASE_URL } from 'app/app.constants';
 import { ASSERTION_STATUS } from 'app/shared/constants/orcid-api.constants';
 
+import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'jhi-assertion',
   templateUrl: './assertion.component.html',
@@ -35,6 +37,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
   predicate: any;
   reverse: any;
   orcidBaseUrl: string = ORCID_BASE_URL;
+  itemCount: string;
   faChartBar = faChartBar;
   faFileDownload = faFileDownload;
   faFileImport = faFileImport;
@@ -46,7 +49,8 @@ export class AssertionComponent implements OnInit, OnDestroy {
     protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected eventManager: JhiEventManager
+    protected eventManager: JhiEventManager,
+    protected translate: TranslateService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE;
   }
@@ -80,6 +84,12 @@ export class AssertionComponent implements OnInit, OnDestroy {
         (res: HttpResponse<IAssertion[]>) => this.paginateAssertions(res.body, res.headers),
         (res: HttpErrorResponse) => this.onError(res.message)
       );
+  }
+
+  generateItemCountString() {
+    const first = (this.page - 1) * this.itemsPerPage == 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1;
+    const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems;
+    return this.translate.instant('global.item-count.string', { first: first, second: second, total: this.totalItems });
   }
 
   transition() {
@@ -133,6 +143,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
     this.assertions = data;
+    this.itemCount = this.generateItemCountString();
   }
 
   protected onError(errorMessage: string) {

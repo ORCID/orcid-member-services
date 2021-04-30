@@ -1,22 +1,22 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate [formGroup]="editForm">
-            <h1 id="jhi-ms-user-heading" class="mt-5" jhiTranslate="gatewayApp.msUserServiceMSUser.home.createOrEditLabel">Create or edit a User Settings</h1>
+            <h1 id="jhi-ms-user-heading" class="mt-5" jhiTranslate="gatewayApp.msUserServiceMSUser.home.createOrEditLabel.string">Create or edit a User Settings</h1>
             <div>
                 <jhi-alert-error></jhi-alert-error>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.email" for="field_login">Login</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.email.string" for="field_login.string">Login</label>
                     <input type="text" class="form-control" name="login" id="field_login"
                            formControlName="login"/>
 
                     <div *ngIf="(editForm.get('login').invalid && editForm.get('login').touched) || editForm.get('login').dirty">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('login').errors && editForm.get('login').errors.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('login').errors && editForm.get('login').errors.required" jhiTranslate="entity.validation.required.string">
                             This field is required.
                         </small>
 
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('login').errors && editForm.get('login').errors.maxlength" jhiTranslate="entity.validation.maxlength"
+                               *ngIf="editForm.get('login').errors && editForm.get('login').errors.maxlength" jhiTranslate="entity.validation.maxlength.string"
                                [translateValues]="{max: 50}">
                             This field cannot be longer than 50 characters.
                         </small>
@@ -24,30 +24,30 @@
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('login').errors
                                && (editForm.get('login').errors.email || editForm.get('login').errors.invalidEmail)"
-                               jhiTranslate="entity.validation.email">
+                               jhiTranslate="entity.validation.email.string">
                             Please provide a valid email address.
                         </small>
                     </div>
 
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.firstName" for="field_firstName">First Name</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.firstName.string" for="field_firstName.string">First Name</label>
                     <input type="text" class="form-control" name="firstName" id="field_firstName"
                            formControlName="firstName"/>
                     <div *ngIf="(editForm.get('firstName').invalid && editForm.get('firstName').touched) || editForm.get('firstName').dirty">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('firstName').errors && editForm.get('firstName').errors.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('firstName').errors && editForm.get('firstName').errors.required" jhiTranslate="entity.validation.required.string">
                             This field is required.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.lastName" for="field_lastName">Last Name</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.lastName.string" for="field_lastName.string">Last Name</label>
                     <input type="text" class="form-control" name="lastName" id="field_lastName"
                            formControlName="lastName"/>
                     <div *ngIf="(editForm.get('lastName').invalid && editForm.get('lastName').touched) || editForm.get('lastName').dirty">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('lastName').errors && editForm.get('lastName').errors.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('lastName').errors && editForm.get('lastName').errors.required" jhiTranslate="entity.validation.required.string">
                             This field is required.
                         </small>
                     </div>
@@ -61,10 +61,10 @@
                         formControlName="mainContact"
                         (change)="hasOwnerValidation()"
                     />
-                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.mainContact" for="field_mainContact">Main Contact</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.mainContact.string" for="field_mainContact.string">Main Contact</label>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId" for="field_salesforceId">Salesforce Id</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId.string" for="field_salesforceId.string">Salesforce Id</label>
                     <fieldset [disabled]="disableSalesForceIdDD()">
                     <select  *ngIf="membersList.length  > 0"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId" (change)="hasOwnerValidation()">
                       <option *ngFor="let member of membersList" [ngValue]="member.salesforceId">{{member.clientName}}</option>
@@ -72,7 +72,7 @@
                     </fieldset>
                     <div *ngIf="(editForm.get('salesforceId').invalid && editForm.get('salesforceId').touched) || editForm.get('salesforceId').dirty">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('salesforceId').errors && editForm.get('salesforceId').errors.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('salesforceId').errors && editForm.get('salesforceId').errors.required" jhiTranslate="entity.validation.required.string">
                             This field is required.
                         </small>
                         <small class="form-text text-danger" *ngIf="editForm.get('salesforceId').errors">
@@ -83,16 +83,16 @@
                     <div class="form-group">
                       <input type="checkbox" class="form-control" name="activated" id="field_activated"
                            formControlName="activated"/>
-                      <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.activated" for="field_activated">Activated</label>
+                      <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.activated.string" for="field_activated.string">Activated</label>
                     </div>
                     </fieldset>
                     <div class="form-group" *ngIf="showIsAdminCheckbox">
                       <input type="checkbox" class="form-control" name="isAdmin" id="field_isAdmin"
                            formControlName="isAdmin"/>
-                      <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.isAdmin" for="field_isAdmin">Admin</label>
+                      <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.isAdmin.string" for="field_isAdmin.string">Admin</label>
                     </div>
                     <div class="alert alert-warning" *ngIf="membersList.length === 0">
-                        <span jhiTranslate="gatewayApp.msUserServiceMSMember.home.notFound">No members to show</span>
+                        <span jhiTranslate="gatewayApp.msUserServiceMSMember.home.notFound.string">No members to show</span>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
                     id="cancel-save"
                     class="btn btn-outline-primary"
                     (click)="previousState()">
-                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
                 </button>
 
                 <button
@@ -114,7 +114,7 @@
                     id="save-entity"
                     [disabled]="editForm.invalid || isSaving || membersList.length === 0"
                     class="btn btn-primary">
-                     <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                     <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save.string">Save</span>
                 </button>
                 <button
                   *ngIf="!hasOwner"
@@ -123,13 +123,13 @@
                   id="save-entity2"
                   [disabled]="editForm.invalid || isSaving || membersList.length === 0"
                   class="btn btn-primary">
-                   <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                   <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save.string">Save</span>
                 </button>
                 <button *ngIf="displaySendActivate()" type="button"
                                 (click)="sendActivate()"
                                 class="btn btn-primary btn-sm ml-1">
                             <fa-icon [icon]="faCheckCircle"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.activate">Activate</span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.activate.string">Activate</span>
                 </button>
             </div>
         </form>

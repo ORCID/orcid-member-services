@@ -32,6 +32,6 @@ export class AssertionDetailComponent implements OnInit {
   }
 
   successMessage() {
-    alert(this.translate.instant('gatewayApp.assertionServiceAssertion.copySuccess'));
+    alert(this.translate.instant('gatewayApp.assertionServiceAssertion.copySuccess.string'));
   }
 }

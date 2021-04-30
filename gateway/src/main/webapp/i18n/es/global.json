@@ -1,156 +1,162 @@
 {
   "global": {
-    "title": "Gateway",
-    "browsehappy": "Está usando un navegador <strong>no actualizado</strong>. Por favor, <a href=\"http://browsehappy.com/?locale=es\">actualice su navegador</a> para mejorar su experiencia.",
+    "title": { "string": "Gateway" },
+    "browsehappy": {
+      "string": "Está usando un navegador <strong>no actualizado</strong>. Por favor, <a href=\"http://browsehappy.com/?locale=es\">actualice su navegador</a> para mejorar su experiencia."
+    },
     "menu": {
-      "home": "Inicio",
-      "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+      "home": { "string": "Inicio" },
+      "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
       "entities": {
-        "main": "Entidades",
-        "msUserServiceMSUser": "User",
-        "msUserServiceMSMember": "Member",
-        "assertionServiceAssertion": "Assertion",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "main": { "string": "Entidades" },
+        "msUserServiceMSUser": { "string": "User" },
+        "msUserServiceMSMember": { "string": "Member" },
+        "assertionServiceAssertion": { "string": "Assertion" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" }
       },
       "account": {
-        "main": "Cuenta",
-        "settings": "Ajustes",
-        "password": "Contraseña",
-        "sessions": "Sesiones",
-        "login": "Iniciar sesión",
-        "logout": "Cerrar la sesión",
-        "loggedInAs": "Logged in as",
-        "logoutAs": "Logout as",
-        "register": "Crear una cuenta"
+        "main": { "string": "Cuenta" },
+        "settings": { "string": "Ajustes" },
+        "password": { "string": "Contraseña" },
+        "sessions": { "string": "Sesiones" },
+        "login": { "string": "Iniciar sesión" },
+        "logout": { "string": "Cerrar la sesión" },
+        "loggedInAs": { "string": "Logged in as" },
+        "logoutAs": { "string": "Logout as" },
+        "register": { "string": "Crear una cuenta" }
       },
       "admin": {
-        "main": "Administración",
-        "gateway": "Gateway",
-        "userManagement": "Gestión de usuarios",
-        "tracker": "Registro de usuarios",
-        "metrics": "Métricas",
-        "health": "Salud",
-        "configuration": "Configuración",
-        "logs": "Logs",
-        "audits": "Auditorías",
-        "apidocs": "API",
-        "database": "Base de datos",
-        "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+        "main": { "string": "Administración" },
+        "gateway": { "string": "Gateway" },
+        "userManagement": { "string": "Gestión de usuarios" },
+        "tracker": { "string": "Registro de usuarios" },
+        "metrics": { "string": "Métricas" },
+        "health": { "string": "Salud" },
+        "configuration": { "string": "Configuración" },
+        "logs": { "string": "Logs" },
+        "audits": { "string": "Auditorías" },
+        "apidocs": { "string": "API" },
+        "database": { "string": "Base de datos" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
       },
-      "language": "Idioma"
+      "language": { "string": "Idioma" }
     },
     "form": {
-      "username.label": "Usuario",
-      "username.placeholder": "Nombre de usuario",
-      "currentpassword.label": "Contraseña actual",
-      "currentpassword.placeholder": "Contraseña actual",
-      "newpassword.label": "Nueva contraseña",
-      "newpassword.placeholder": "Nueva contraseña",
-      "confirmpassword.label": "Confirmación de la nueva contraseña",
-      "confirmpassword.placeholder": "Confirmación de la nueva contraseña",
-      "email.label": "Correo electrónico",
-      "email.placeholder": "Su correo electrónico"
+      "username.label": { "string": "Usuario" },
+      "username.placeholder": { "string": "Nombre de usuario" },
+      "currentpassword.label": { "string": "Contraseña actual" },
+      "currentpassword.placeholder": { "string": "Contraseña actual" },
+      "newpassword.label": { "string": "Nueva contraseña" },
+      "newpassword.placeholder": { "string": "Nueva contraseña" },
+      "confirmpassword.label": { "string": "Confirmación de la nueva contraseña" },
+      "confirmpassword.placeholder": { "string": "Confirmación de la nueva contraseña" },
+      "email.label": { "string": "Correo electrónico" },
+      "email.placeholder": { "string": "Su correo electrónico" }
     },
     "messages": {
       "info": {
         "authenticated": {
-          "prefix": "Si desea ",
-          "link": "iniciar sesión",
-          "suffix": ", puede intentar con las cuentas predeterminadas:<br/>- Administrador (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\")."
+          "prefix": { "string": "Si desea " },
+          "link": { "string": "iniciar sesión" },
+          "suffix": {
+            "string": " }, puede intentar con las cuentas predeterminadas:<br/>- Administrador (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\")."
+          }
         },
         "register": {
-          "noaccount": "¿Aún no tienes una cuenta?",
-          "link": "Crea una cuenta"
+          "noaccount": { "string": "¿Aún no tienes una cuenta?" },
+          "link": { "string": "Crea una cuenta" }
         }
       },
       "error": {
-        "dontmatch": "¡La contraseña y la confirmación de contraseña no coinciden!"
+        "dontmatch": { "string": "¡La contraseña y la confirmación de contraseña no coinciden!" }
       },
       "validate": {
         "newpassword": {
-          "required": "Se requiere que ingrese una contraseña.",
-          "minlength": "Se requiere que su contraseña tenga por lo menos 5 caracteres",
-          "maxlength": "Su contraseña no puede tener más de 50 caracteres",
-          "strength": "Seguridad de la contraseña:"
+          "required": { "string": "Se requiere que ingrese una contraseña." },
+          "minlength": { "string": "Se requiere que su contraseña tenga por lo menos 5 caracteres" },
+          "maxlength": { "string": "Su contraseña no puede tener más de 50 caracteres" },
+          "strength": { "string": "Seguridad de la contraseña:" }
         },
         "confirmpassword": {
-          "required": "Se requiere que confirme la contraseña.",
-          "minlength": "Se requiere que su contraseña de confirmación tenga por lo menos 5 caracteres",
-          "maxlength": "Su contraseña de confirmación no puede tener más de 50 caracteres"
+          "required": { "string": "Se requiere que confirme la contraseña." },
+          "minlength": { "string": "Se requiere que su contraseña de confirmación tenga por lo menos 5 caracteres" },
+          "maxlength": { "string": "Su contraseña de confirmación no puede tener más de 50 caracteres" }
         },
         "email": {
-          "required": "Se requiere un correo electrónico.",
-          "invalid": "Su correo electrónico no es válido.",
-          "minlength": "Se requiere que su correo electrónico tenga por lo menos 5 caracteres",
-          "maxlength": "Su correo electrónico no puede tener más de 50 caracteres"
+          "required": { "string": "Se requiere un correo electrónico." },
+          "invalid": { "string": "Su correo electrónico no es válido." },
+          "minlength": { "string": "Se requiere que su correo electrónico tenga por lo menos 5 caracteres" },
+          "maxlength": { "string": "Su correo electrónico no puede tener más de 50 caracteres" }
         }
       }
     },
     "field": {
-      "id": "ID"
+      "id": { "string": "ID" }
     },
     "ribbon": {
-      "dev": "Development"
+      "dev": { "string": "Development" }
     },
-    "item-count": "Monstrando {{first}} - {{second}} de {{total}} elementos."
+    "item-count": { "string": "Monstrando {{first}} - {{second}} de {{total}} elementos." }
   },
   "entity": {
     "action": {
-      "addblob": "Añadir fichero",
-      "addimage": "Añadir imagen",
-      "back": "Volver",
-      "cancel": "Cancelar",
-      "delete": "Eliminar",
-      "continue": "Continue",
-      "delete-from-orcid": "Delete from orcid",
-      "edit": "Editar",
-      "import": "Import",
-      "open": "Abrir",
-      "save": "Guardar",
-      "upload": "Subir",
-      "view": "Vista"
+      "addblob": { "string": "Añadir fichero" },
+      "addimage": { "string": "Añadir imagen" },
+      "back": { "string": "Volver" },
+      "cancel": { "string": "Cancelar" },
+      "delete": { "string": "Eliminar" },
+      "continue": { "string": "Continue" },
+      "delete-from-orcid": { "string": "Delete from orcid" },
+      "edit": { "string": "Editar" },
+      "import": { "string": "Import" },
+      "open": { "string": "Abrir" },
+      "save": { "string": "Guardar" },
+      "upload": { "string": "Subir" },
+      "view": { "string": "Vista" }
     },
     "detail": {
-      "field": "Campo",
-      "value": "Valor"
+      "field": { "string": "Campo" },
+      "value": { "string": "Valor" }
     },
     "changeOwnership": {
-      "title": "Confirm change of ownership",
-      "error": "Oops, something went wrong!"
+      "title": { "string": "Confirm change of ownership" },
+      "error": { "string": "Oops, something went wrong!" }
     },
     "delete": {
-      "title": "Confirmar operación de borrado"
+      "title": { "string": "Confirmar operación de borrado" }
     },
     "validation": {
-      "required": "Este campo es obligatorio.",
-      "minlength": "Este campo requiere al menos {{min}} caracteres.",
-      "maxlength": "Este campo no puede superar más de {{max}} caracteres.",
-      "min": "Este campo debe ser mayor que {{min}}.",
-      "max": "Este campo no puede ser mayor que {{max}}.",
-      "minbytes": "Este campo debe tener como mínimo {{min}} bytes.",
-      "maxbytes": "Este campo no puede tener más de {{max}} bytes.",
-      "pattern": "Este campo debe seguir el patrón {{pattern}}.",
-      "number": "Este campo debe ser un número.",
-      "datetimelocal": "Este campo debe ser una fecha y hora.",
-      "email": "Porfavor ingrese un email valido.",
-      "endDate": "La fecha de inicio no puede ser mayor que la fecha de fin."
+      "required": { "string": "Este campo es obligatorio." },
+      "minlength": { "string": "Este campo requiere al menos {{min}} caracteres." },
+      "maxlength": { "string": "Este campo no puede superar más de {{max}} caracteres." },
+      "min": { "string": "Este campo debe ser mayor que {{min}}." },
+      "max": { "string": "Este campo no puede ser mayor que {{max}}." },
+      "minbytes": { "string": "Este campo debe tener como mínimo {{min}} bytes." },
+      "maxbytes": { "string": "Este campo no puede tener más de {{max}} bytes." },
+      "pattern": { "string": "Este campo debe seguir el patrón {{pattern}}." },
+      "number": { "string": "Este campo debe ser un número." },
+      "datetimelocal": { "string": "Este campo debe ser una fecha y hora." },
+      "email": { "string": "Porfavor ingrese un email valido." },
+      "endDate": { "string": "La fecha de inicio no puede ser mayor que la fecha de fin." }
     }
   },
   "error": {
-    "internalServerError": "Error interno en el servidor",
-    "server.not.reachable": "Servidor no accesible",
-    "url.not.found": "No existe",
-    "notnull": "¡El campo {{fieldName}} no puede estar vacío!",
-    "size": "¡El campo {{fieldName}} no cumple con los requisitos de tamaño mínimo/máximo!",
-    "userexists": "¡El nombre de usuario ya existe!",
-    "emailexists": "¡La cuenta de correo ya está en uso!",
-    "idexists": "Un/a nuevo/a {{entityName}} no puede tener ID",
-    "delete.auth.user": "Cannot delete current user.",
-    "delete.main.contact": "Cannot delete the organization owner.",
-    "delete.last.admin": "Cannot delete the last admin.",
-    "member.no.admin.allowed": "Admin users cannot be associated with this member",
-    "clientidinvalid": "Invalid Client ID. Client ID should be in the format XXXX-XXXX-XXXX-XXXX or APP-XXXXXXXXXXXXXXXX. X can be a digit or an uppercase character",
-    "idnull": "ID inválido"
+    "internalServerError": { "string": "Error interno en el servidor" },
+    "server.not.reachable": { "string": "Servidor no accesible" },
+    "url.not.found": { "string": "No existe" },
+    "notnull": { "string": "¡El campo {{fieldName}} no puede estar vacío!" },
+    "size": { "string": "¡El campo {{fieldName}} no cumple con los requisitos de tamaño mínimo/máximo!" },
+    "userexists": { "string": "¡El nombre de usuario ya existe!" },
+    "emailexists": { "string": "¡La cuenta de correo ya está en uso!" },
+    "idexists": { "string": "Un/a nuevo/a {{entityName}} no puede tener ID" },
+    "delete.auth.user": { "string": "Cannot delete current user." },
+    "delete.main.contact": { "string": "Cannot delete the organization owner." },
+    "delete.last.admin": { "string": "Cannot delete the last admin." },
+    "member.no.admin.allowed": { "string": "Admin users cannot be associated with this member" },
+    "clientidinvalid": {
+      "string": "Invalid Client ID. Client ID should be in the format XXXX-XXXX-XXXX-XXXX or APP-XXXXXXXXXXXXXXXX. X can be a digit or an uppercase character"
+    },
+    "idnull": { "string": "ID inválido" }
   },
-  "footer": "Pie de página"
+  "footer": { "string": "Pie de página" }
 }

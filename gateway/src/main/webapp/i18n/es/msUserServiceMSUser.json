@@ -2,51 +2,55 @@
   "gatewayApp": {
     "msUserServiceMSUser": {
       "home": {
-        "title": "User Settings",
-        "createLabel": "Crear nuevo User Settings",
-        "createOrEditLabel": "Crear o editar User Settings",
-        "notFound": "No User Settings found",
-        "uploadLabel": "Upload User Settings"
+        "title": { "string": "User Settings" },
+        "createLabel": { "string": "Crear nuevo User Settings" },
+        "createOrEditLabel": { "string": "Crear o editar User Settings" },
+        "notFound": { "string": "No User Settings found" },
+        "uploadLabel": { "string": "Upload User Settings" }
       },
       "delete": {
-        "question": "¿Seguro que quiere eliminar User Settings {{ id }}?"
+        "question": { "string": "¿Seguro que quiere eliminar User Settings {{ id }}?" }
       },
       "changeOwnership": {
-        "question": "Are you sure you want to transfer ownership? You are about to transfer ownership of this organization account. If you are the organization owner after transferring ownership, you will no longer have access to administrative functions, such as managing users."
-      },
-      "detail": {
-        "title": "User Settings"
-      },
-      "import": {
-        "title": "User Settings",
-        "label": "Please select the CSV file to upload",
-        "filePath": "Ruta del archivo",
-        "emptyFile": "There is no file to upload. Please select one.",
-        "errors": {
-          "label": "Oops! Ocurrio un error al procesar tu informacion. Por favor corrige los siguientes errores e intenta de nuevo"
+        "question": {
+          "string": "Are you sure you want to transfer ownership? You are about to transfer ownership of this organization account. If you are the organization owner after transferring ownership, you will no longer have access to administrative functions, such as managing users."
         }
       },
-      "confirm_password": "Confirmar contraseña",
-      "login": "Login",
-      "email": "Email",
-      "password": "Contrasena",
-      "firstName": "Nombre",
-      "lastName": "Apellido",
-      "mainContact": "Proprietario de la organización",
-      "salesforceId": "Salesforce Id",
-      "parentSalesforceId": "Parent Salesforce Id",
-      "isAdmin": "Admin",
-      "createdBy": "Creado por",
-      "createdDate": "Fecha de creacion",
-      "lastModifiedBy": "Ultima vez modificado por",
-      "lastModifiedDate": "Ultima fecha de modificacion"
+      "detail": {
+        "title": { "string": "User Settings" }
+      },
+      "import": {
+        "title": { "string": "User Settings" },
+        "label": { "string": "Please select the CSV file to upload" },
+        "filePath": { "string": "Ruta del archivo" },
+        "emptyFile": { "string": "There is no file to upload. Please select one." },
+        "errors": {
+          "label": {
+            "string": "Oops! Ocurrio un error al procesar tu informacion. Por favor corrige los siguientes errores e intenta de nuevo"
+          }
+        }
+      },
+      "confirm_password": { "string": "Confirmar contraseña" },
+      "login": { "string": "Login" },
+      "email": { "string": "Email" },
+      "password": { "string": "Contrasena" },
+      "firstName": { "string": "Nombre" },
+      "lastName": { "string": "Apellido" },
+      "mainContact": { "string": "Proprietario de la organización" },
+      "salesforceId": { "string": "Salesforce Id" },
+      "parentSalesforceId": { "string": "Parent Salesforce Id" },
+      "isAdmin": { "string": "Admin" },
+      "createdBy": { "string": "Creado por" },
+      "createdDate": { "string": "Fecha de creacion" },
+      "lastModifiedBy": { "string": "Ultima vez modificado por" },
+      "lastModifiedDate": { "string": "Ultima fecha de modificacion" }
     }
   },
   "msUserServiceApp": {
     "msUserServiceMSUser": {
-      "created": "Un nuevo User Settings ha sido creado con el identificador {{ param }}",
-      "updated": "Un User Settings ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un User Settings ha sido eliminado con el identificador {{ param }}"
+      "created": { "string": "Un nuevo User Settings ha sido creado con el identificador {{ param }}" },
+      "updated": { "string": "Un User Settings ha sido actualizado con el identificador {{ param }}" },
+      "deleted": { "string": "Un User Settings ha sido eliminado con el identificador {{ param }}" }
     }
   }
 }

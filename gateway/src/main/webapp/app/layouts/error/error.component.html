@@ -1,15 +1,15 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 mt-4">
-            <h1 jhiTranslate="error.title" class="mb-3">Error Page!</h1>
+            <h1 jhiTranslate="error.title" class="mb-3.string">Error Page!</h1>
 
             <div [hidden]="!errorMessage">
                 <div class="alert alert-danger">{{errorMessage}}
                 </div>
             </div>
-            <div [hidden]="!error403" class="alert alert-danger" jhiTranslate="error.http.403">You are not authorized to access this page.
+            <div [hidden]="!error403" class="alert alert-danger" jhiTranslate="error.http.403.string">You are not authorized to access this page.
             </div>
-            <div [hidden]="!error404" class="alert alert-danger" jhiTranslate="error.http.404">The page does not exist.
+            <div [hidden]="!error404" class="alert alert-danger" jhiTranslate="error.http.404.string">The page does not exist.
             </div>
         </div>
     </div>

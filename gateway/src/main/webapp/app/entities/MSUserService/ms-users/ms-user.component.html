@@ -1,16 +1,16 @@
 <div>
-    <h1 id="page-heading" class="mt-3" jhiTranslate="gatewayApp.msUserServiceMSUser.home.title">Manage users</h1>
+    <h1 id="page-heading" class="mt-3" jhiTranslate="gatewayApp.msUserServiceMSUser.home.title.string">Manage users</h1>
     <div class="row justify-content-end">
         <div class="col-md-12 mb-2">
             <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity ml-1" [routerLink]="['/ms-user/new']">
                 <fa-icon [icon]="'plus'"></fa-icon>
-                <span  jhiTranslate="gatewayApp.msUserServiceMSUser.home.createLabel">
+                <span  jhiTranslate="gatewayApp.msUserServiceMSUser.home.createLabel.string">
                 Add user
                 </span>
             </button>
             <button *jhiHasAnyAuthority="'ROLE_ADMIN'" id="jh-upload-entities" class="btn btn-primary float-right jh-create-entity create-ms-user ml-1" [routerLink]="['/', 'ms-user', { outlets: { popup: 'import'} }]">
                 <fa-icon [icon]="'plus'"></fa-icon>
-                <span  jhiTranslate="gatewayApp.msUserServiceMSUser.home.uploadLabel">
+                <span  jhiTranslate="gatewayApp.msUserServiceMSUser.home.uploadLabel.string">
                 Import users from CSV
                 </span>
             </button>
@@ -20,7 +20,7 @@
         <div class="col-md-12">
             <jhi-alert></jhi-alert>
             <div class="alert alert-warning" *ngIf="msUser?.length === 0">
-                <span jhiTranslate="gatewayApp.msUserServiceMSUser.home.notFound">No users to show</span>
+                <span jhiTranslate="gatewayApp.msUserServiceMSUser.home.notFound.string">No users to show</span>
             </div>
         </div>
     </div>
@@ -29,14 +29,14 @@
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th></th>
-            <th jhiSortBy="login"><span jhiTranslate="gatewayApp.msUserServiceMSUser.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="firstName"><span jhiTranslate="gatewayApp.msUserServiceMSUser.firstName">First Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastName"><span jhiTranslate="gatewayApp.msUserServiceMSUser.lastName">Last Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="mainContact"><span jhiTranslate="gatewayApp.msUserServiceMSUser.mainContact">Main Contact</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="salesforceId"><span jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId">Organization</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="activated"><span jhiTranslate="gatewayApp.msUserServiceMSUser.activated">Activated</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="isAdmin"><span jhiTranslate="gatewayApp.msUserServiceMSUser.isAdmin">Admin</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="gatewayApp.msUserServiceMSUser.lastModifiedDate">Last Modified</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="login"><span jhiTranslate="gatewayApp.msUserServiceMSUser.email.string">Email</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="firstName"><span jhiTranslate="gatewayApp.msUserServiceMSUser.firstName.string">First Name</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="lastName"><span jhiTranslate="gatewayApp.msUserServiceMSUser.lastName.string">Last Name</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="mainContact"><span jhiTranslate="gatewayApp.msUserServiceMSUser.mainContact.string">Main Contact</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="salesforceId"><span jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId.string">Organization</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="activated"><span jhiTranslate="gatewayApp.msUserServiceMSUser.activated.string">Activated</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="isAdmin"><span jhiTranslate="gatewayApp.msUserServiceMSUser.isAdmin.string">Admin</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="gatewayApp.msUserServiceMSUser.lastModifiedDate.string">Last Modified</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -79,7 +79,7 @@
                                 class="btn btn-primary btn-sm ml-1"
                         >
                             <fa-icon [icon]="faCheckCircle"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.activate">Activate</span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.activate.string">Activate</span>
                         </button>
                         <button type="submit"
                                 [routerLink]="['/ms-user', msUser.id, 'edit']"
@@ -87,7 +87,7 @@
                                 [disabled]="isDefaultAdmin(msUser)"
                         >
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit.string">Edit</span>
                         </button>
                         <button type="submit"
                                 [routerLink]="['/', 'ms-user', { outlets: { popup: msUser.id + '/delete'} }]"
@@ -97,7 +97,7 @@
                                 [disabled]="isDefaultAdmin(msUser) || isUserLoggedIn(msUser)"
                             >
                             <fa-icon [icon]="'times'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete.string">Delete</span>
                         </button>
                     </div>
                 </td>

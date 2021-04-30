@@ -2,82 +2,90 @@
   "error": {
     "assertion": {
       "validation": {
-        "duplicate": "Afiliación duplicada. Esta afiliación ya ha sido creada."
+        "duplicate": { "string": "Afiliación duplicada. Esta afiliación ya ha sido creada." }
       }
     }
   },
   "gatewayApp": {
     "assertionServiceAssertion": {
       "home": {
-        "title": "Assertions",
-        "createLabel": "Crear nuevo Assertion",
-        "createOrEditLabel": "Crear o editar Assertion",
-        "notFound": "Assertion no encontrada",
-        "uploadLabel": "Subir Assertions",
-        "getLinks": "Obtener links",
-        "generateReport": "Generar reporte"
+        "title": { "string": "Assertions" },
+        "createLabel": { "string": "Crear nuevo Assertion" },
+        "createOrEditLabel": { "string": "Crear o editar Assertion" },
+        "notFound": { "string": "Assertion no encontrada" },
+        "uploadLabel": { "string": "Subir Assertions" },
+        "getLinks": { "string": "Obtener links" },
+        "generateReport": { "string": "Generar reporte" }
       },
       "delete": {
-        "question": "¿Seguro que quiere eliminar Assertion {{ id }}?",
-        "note": "Esto no borrara el elemento en ORCID, si quieres hacer eso, primero tienes que presionar el boton <b>Borrar de ORCID</b>"
-      },
-      "detail": {
-        "title": "Assertion"
-      },
-      "import": {
-        "title": "Importar Assertions",
-        "label": "Por favor selecciona el archivo CSV a subir",
-        "filePath": "Ruta del archivo",
-        "errors": {
-          "label": "Oops! Ocurrio un error al procesar tu informacion. Por favor corrige los siguientes errores e intenta de nuevo"
+        "question": { "string": "¿Seguro que quiere eliminar Assertion {{ id }}?" },
+        "note": {
+          "string": "Esto no borrara el elemento en ORCID, si quieres hacer eso, primero tienes que presionar el boton <b>Borrar de ORCID</b>"
         }
       },
-      "email": "Email",
-      "affiliationSection": "Affiliation Seccion",
-      "departmentName": "Nombre Departamento",
-      "id": "ID",
-      "roleTitle": "Rol",
-      "url": "Url",
-      "startYear": "Año de Inicio",
-      "startMonth": "Mes de Inicio",
-      "startDay": "Dia de Inicio",
-      "endYear": "Año Fin",
-      "endMonth": "Mes Fin",
-      "endDay": "Dia Fin",
-      "orgName": "Nombre Org",
-      "orgCountry": "Pais Org",
-      "orgCity": "Ciudad Org",
-      "orgRegion": "Region Org",
-      "disambiguatedOrgId": "Disambiguo Org Id",
-      "disambiguationSource": "Fuente Disambiguo",
-      "externalId": "Id Externo",
-      "externalIdType": "Tipo Id Externo",
-      "externalIdUrl": "Url Id Externo",
-      "putCode": "Put Code",
-      "created": "Creado",
-      "modified": "Modificado",
-      "deletedFromORCID": "Eliminado de ORCID",
-      "sent": "Enviado",
-      "adminId": "Admin Id",
-      "updateNote": "Note: Please do not forget to download and send permission links to your researcher once the assertion has been saved.",
-      "uploadNote": "Note: Please do not forget to download and send permission links to your researchers once the upload has completed."
+      "detail": {
+        "title": { "string": "Assertion" }
+      },
+      "import": {
+        "title": { "string": "Importar Assertions" },
+        "label": { "string": "Por favor selecciona el archivo CSV a subir" },
+        "filePath": { "string": "Ruta del archivo" },
+        "errors": {
+          "label": {
+            "string": "Oops! Ocurrio un error al procesar tu informacion. Por favor corrige los siguientes errores e intenta de nuevo"
+          }
+        }
+      },
+      "email": { "string": "Email" },
+      "affiliationSection": { "string": "Affiliation Seccion" },
+      "departmentName": { "string": "Nombre Departamento" },
+      "id": { "string": "ID" },
+      "roleTitle": { "string": "Rol" },
+      "url": { "string": "Url" },
+      "startYear": { "string": "Año de Inicio" },
+      "startMonth": { "string": "Mes de Inicio" },
+      "startDay": { "string": "Dia de Inicio" },
+      "endYear": { "string": "Año Fin" },
+      "endMonth": { "string": "Mes Fin" },
+      "endDay": { "string": "Dia Fin" },
+      "orgName": { "string": "Nombre Org" },
+      "orgCountry": { "string": "Pais Org" },
+      "orgCity": { "string": "Ciudad Org" },
+      "orgRegion": { "string": "Region Org" },
+      "disambiguatedOrgId": { "string": "Disambiguo Org Id" },
+      "disambiguationSource": { "string": "Fuente Disambiguo" },
+      "externalId": { "string": "Id Externo" },
+      "externalIdType": { "string": "Tipo Id Externo" },
+      "externalIdUrl": { "string": "Url Id Externo" },
+      "putCode": { "string": "Put Code" },
+      "created": { "string": "Creado" },
+      "modified": { "string": "Modificado" },
+      "deletedFromORCID": { "string": "Eliminado de ORCID" },
+      "sent": { "string": "Enviado" },
+      "adminId": { "string": "Admin Id" },
+      "updateNote": {
+        "string": "Note: Please do not forget to download and send permission links to your researcher once the assertion has been saved."
+      },
+      "uploadNote": {
+        "string": "Note: Please do not forget to download and send permission links to your researchers once the upload has completed."
+      }
     },
     "assertion": {
-      "firstName": "nombre",
-      "lastName": "apellido",
-      "email": "email",
-      "affiliationSection": "tipo de afiliacion",
-      "orgCountry": "pais organizacion",
-      "orgCity": "ciudad organizacion",
-      "orgName": "nombre organizacion",
-      "disambiguatedOrgId": "id organizacion"
+      "firstName": { "string": "nombre" },
+      "lastName": { "string": "apellido" },
+      "email": { "string": "email" },
+      "affiliationSection": { "string": "tipo de afiliacion" },
+      "orgCountry": { "string": "pais organizacion" },
+      "orgCity": { "string": "ciudad organizacion" },
+      "orgName": { "string": "nombre organizacion" },
+      "disambiguatedOrgId": { "string": "id organizacion" }
     }
   },
   "assertionServiceApp": {
     "assertionServiceAssertion": {
-      "created": "Un nuevo Assertion ha sido creado con el identificador {{ param }}",
-      "updated": "Un Assertion ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Assertion ha sido eliminado con el identificador {{ param }}"
+      "created": { "string": "Un nuevo Assertion ha sido creado con el identificador {{ param }}" },
+      "updated": { "string": "Un Assertion ha sido actualizado con el identificador {{ param }}" },
+      "deleted": { "string": "Un Assertion ha sido eliminado con el identificador {{ param }}" }
     }
   }
 }

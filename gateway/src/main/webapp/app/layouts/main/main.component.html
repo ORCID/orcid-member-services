@@ -1,7 +1,7 @@
 <jhi-page-ribbon></jhi-page-ribbon>
 <div *ngIf="baseUrl != PROD_BASE_URL" class="alert alert-warning mb-0">
-    <span jhiTranslate="global.warning">Warning!</span>&nbsp;<a class="alert-link" href={{baseUrl}}>{{baseUrl}}</a>
-    <span jhiTranslate="global.isATestEnvironment">is a test environment for the ORCID Member Portal that connects to the ORICD Registry test environment</span>
+    <span jhiTranslate="global.warning">Warning!</span>&nbsp;<a class="alert-link.string" href={{baseUrl}}>{{baseUrl}}</a>
+    <span jhiTranslate="global.isATestEnvironment.string">is a test environment for the ORCID Member Portal that connects to the ORICD Registry test environment</span>
     <a class="alert-link" href={{orcidBaseUrl}}>{{orcidBaseUrl}}</a>
 </div>
 <div *ngIf="!hideNav">

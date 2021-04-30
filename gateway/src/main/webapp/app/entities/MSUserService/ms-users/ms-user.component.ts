@@ -136,9 +136,9 @@ export class MSUserComponent implements OnInit, OnDestroy {
   sendActivate(msUser: IMSUser) {
     this.msUserService.sendActivate(msUser).subscribe(res => {
       if (res.ok) {
-        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.success', null, null);
+        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.success.string', null, null);
       } else {
-        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.error', null, null);
+        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.error.string', null, null);
       }
     });
   }

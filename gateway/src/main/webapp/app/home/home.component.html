@@ -3,7 +3,7 @@
         <div [ngSwitch]="isAuthenticated()">
             <div *ngSwitchCase="true">
                 <div class="alert alert-success mt-3">
-                    <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message"
+                    <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message.string"
                         [translateValues]="{username: account.login}"> You are logged in as user "{{account.login}}". </span>
                 </div>
                 <!--This section is temporary for the pilot and will not be translated-->
@@ -64,8 +64,8 @@
             </div>
             <div *ngSwitchCase="false">
                 <div class="alert alert-info mt-3 mb-5">
-                    <span jhiTranslate="home.alert.thisSiteIsFor">This site is for administrators of ORCID member organizations and is separate from the ORCID registry. Go to the ORCID Registry to</span>&nbsp;
-                    <a jhiTranslate="home.alert.signIntoOrcid" class="alert-link" href="https://orcid.org/signin">sign into your ORCID record</a>
+                    <span jhiTranslate="home.alert.thisSiteIsFor.string">This site is for administrators of ORCID member organizations and is separate from the ORCID registry. Go to the ORCID Registry to</span>&nbsp;
+                    <a jhiTranslate="home.alert.signIntoOrcid" class="alert-link" href="https://orcid.org/signin.string">sign into your ORCID record</a>
                 </div>
                 <jhi-login-modal></jhi-login-modal>
             </div>

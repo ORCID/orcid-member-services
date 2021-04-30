@@ -63,7 +63,7 @@ export class MSUserImportDialogComponent {
         }
       });
     } else {
-      alert(this.translate.instant('gatewayApp.msUserServiceMSUser.import.emptyFile'));
+      alert(this.translate.instant('gatewayApp.msUserServiceMSUser.import.emptyFile.string'));
     }
   }
 }

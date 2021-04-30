@@ -40,7 +40,7 @@ export const msUserRoute: Routes = [
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER', 'ROLE_CONSORTIUM_LEAD'],
       defaultSort: 'id,asc',
-      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title'
+      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -52,7 +52,7 @@ export const msUserRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER', 'ROLE_CONSORTIUM_LEAD'],
-      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title'
+      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -64,7 +64,7 @@ export const msUserRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER', 'ROLE_CONSORTIUM_LEAD'],
-      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title'
+      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -76,7 +76,7 @@ export const msUserRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER', 'ROLE_CONSORTIUM_LEAD'],
-      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title'
+      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string'
     },
     canActivate: [UserRouteAccessService]
   }
@@ -91,7 +91,7 @@ export const msUserPopupRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER', 'ROLE_CONSORTIUM_LEAD'],
-      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title'
+      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string'
     },
     canActivate: [UserRouteAccessService],
     outlet: 'popup'
@@ -104,7 +104,7 @@ export const msUserPopupRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_ADMIN'],
-      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title'
+      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string'
     },
     canActivate: [UserRouteAccessService],
     outlet: 'popup'

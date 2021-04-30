@@ -1,29 +1,29 @@
 <form name="deleteForm" (ngSubmit)="confirmDelete()">
     <div class="modal-header">
-        <h4 *ngIf="!errorDeletingFromOrcid" class="modal-title" jhiTranslate="entity.delete.title">Confirm deletion</h4>
-        <h4 *ngIf="errorDeletingFromOrcid" class="modal-title" jhiTranslate="entity.delete.error">Oops, something went wrong!</h4>
+        <h4 *ngIf="!errorDeletingFromOrcid" class="modal-title" jhiTranslate="entity.delete.title.string">Confirm deletion</h4>
+        <h4 *ngIf="errorDeletingFromOrcid" class="modal-title" jhiTranslate="entity.delete.error.string">Oops, something went wrong!</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 (click)="clear()">&times;</button>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
         <p *ngIf="!errorDeletingFromOrcid" id="jhi-delete-assertion-heading" jhiTranslate="gatewayApp.assertionServiceAssertion.delete.question" [translateValues]="{email: assertion.email}">Are you sure you want to delete this affiliation for [email]?</p>
-        <p *ngIf="assertion.status==inOrcid && !errorDeletingFromOrcid" jhiTranslate="gatewayApp.assertionServiceAssertion.delete.note">This affiliation will also be deleted from the user's ORCID record.</p>
-        <p *ngIf="assertion.status==userRevokedAccess && !errorDeletingFromOrcid" jhiTranslate="gatewayApp.assertionServiceAssertion.delete.noteRevoked">This affiliation will be deleted from the Member Portal but will remain in ORCID. The user has revoked access to their ORCID record and you no longer have permission to delete this item from their ORCID record</p>
+        <p *ngIf="assertion.status==inOrcid && !errorDeletingFromOrcid" jhiTranslate="gatewayApp.assertionServiceAssertion.delete.note.string">This affiliation will also be deleted from the user's ORCID record.</p>
+        <p *ngIf="assertion.status==userRevokedAccess && !errorDeletingFromOrcid" jhiTranslate="gatewayApp.assertionServiceAssertion.delete.noteRevoked.string">This affiliation will be deleted from the Member Portal but will remain in ORCID. The user has revoked access to their ORCID record and you no longer have permission to delete this item from their ORCID record</p>
         <p *ngIf="errorDeletingFromOrcid">
-            <span  jhiTranslate="gatewayApp.assertionServiceAssertion.delete.error">Sorry, this affiliation could not be deleted from ORCID.</span>
-            <span *ngIf="errorUserRevoked" jhiTranslate="gatewayApp.assertionServiceAssertion.delete.userRevokedAccess">The has revoked access to their ORCID record and you no longer have permission to edit or delete this item in ORCID.</span>
+            <span  jhiTranslate="gatewayApp.assertionServiceAssertion.delete.error.string">Sorry, this affiliation could not be deleted from ORCID.</span>
+            <span *ngIf="errorUserRevoked" jhiTranslate="gatewayApp.assertionServiceAssertion.delete.userRevokedAccess.string">The has revoked access to their ORCID record and you no longer have permission to edit or delete this item in ORCID.</span>
         </p>
     </div>
     <div class="modal-footer">
         <button *ngIf="!errorDeletingFromOrcid" type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">
-            <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+            <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
         </button>
         <button *ngIf="!errorDeletingFromOrcid"  id="jhi-confirm-delete-assertion" type="submit" class="btn btn-danger">
-            <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Delete</span>
+            <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete.string">Delete</span>
         </button>
         <button *ngIf="errorDeletingFromOrcid" type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">
-            <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.close">Close</span>
+            <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.close.string">Close</span>
         </button>
     </div>
 </form>
