@@ -10,7 +10,7 @@
                            formControlName="email"/>
                     <div *ngIf="editForm.get('email').invalid && (editForm.get('email').dirty || editForm.get('email').touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('email').errors.pattern" jhiTranslate="entity.validation.pattern.string" [translateValues]="{ pattern: 'Email' }.string">
+                               *ngIf="editForm.get('email').errors.pattern" jhiTranslate="entity.validation.pattern.string" [translateValues]="{ pattern: 'Email' }">
                             This field should follow pattern for "Email".
                         </small>
                         <small class="form-text text-danger"
@@ -106,7 +106,7 @@
                             formControlName="departmentName"/>
                         <div *ngIf="editForm.get('departmentName').invalid && (editForm.get('departmentName').dirty || editForm.get('departmentName').touched)">
                             <small class="form-text text-danger"
-                                *ngIf="editForm.get('departmentName').errors.maxlength" jhiTranslate="entity.validation.maxlength.string" [translateValues]="{ max: 4000 }.string">
+                                *ngIf="editForm.get('departmentName').errors.maxlength" jhiTranslate="entity.validation.maxlength.string" [translateValues]="{ max: 4000 }">
                             This field cannot be longer than 4000 characters.
                             </small>
                         </div>
@@ -117,7 +117,7 @@
                                formControlName="roleTitle"/>
                         <div *ngIf="editForm.get('roleTitle').invalid && (editForm.get('roleTitle').dirty || editForm.get('roleTitle').touched)">
                             <small class="form-text text-danger"
-                                   *ngIf="editForm.get('roleTitle').errors.maxlength" jhiTranslate="entity.validation.maxlength.string" [translateValues]="{ max: 4000 }.string">
+                                   *ngIf="editForm.get('roleTitle').errors.maxlength" jhiTranslate="entity.validation.maxlength.string" [translateValues]="{ max: 4000 }">
                             This field cannot be longer than 4000 characters.
                             </small>
                         </div>
@@ -128,7 +128,7 @@
                                formControlName="url"/>
                         <div *ngIf="editForm.get('url').invalid && (editForm.get('url').dirty || editForm.get('url').touched)">
                             <small class="form-text text-danger"
-                                   *ngIf="editForm.get('url').errors.maxlength" jhiTranslate="entity.validation.maxlength.string" [translateValues]="{ max: 8000 }.string">
+                                   *ngIf="editForm.get('url').errors.maxlength" jhiTranslate="entity.validation.maxlength.string" [translateValues]="{ max: 8000 }">
                             This field cannot be longer than 8000 characters.
                             </small>
                         </div>

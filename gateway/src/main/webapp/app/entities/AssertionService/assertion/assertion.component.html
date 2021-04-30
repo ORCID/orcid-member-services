@@ -61,7 +61,7 @@
                 <td>{{assertion.email}}</td>
                 <td><span *ngIf="assertion.orcidId"><a href="{{orcidBaseUrl}}/{{assertion.orcidId}}" target="_blank">{{orcidBaseUrl}}/{{assertion.orcidId}}</a></span></td>
                 <td>
-                    <span jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.affiliationSection}}.string">{{assertion.affiliationSection}}</span><br>
+                    <span jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.affiliationSection}}">{{assertion.affiliationSection}}</span><br>
                     {{assertion.orgName}}: <span *ngIf="assertion.orgCity">{{assertion.orgCity}}</span><span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCountry">, {{assertion.orgCountry}}</span><br>
                     <span *ngIf="assertion.departmentName">{{assertion.departmentName}}</span><span *ngIf="assertion.roleTitle"> ({{assertion.roleTitle}})</span><br>
                     <span *ngIf="assertion.startYear">{{assertion.startYear}}</span><span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startDay">-{{assertion.startDay}}</span>
