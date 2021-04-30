@@ -11,7 +11,7 @@ export class MSUserOwnershipChangeDirective implements OnInit {
   question: String;
 
   constructor(@Inject(ElementRef) private element: ElementRef, translate: TranslateService) {
-    this.question = translate.instant('gatewayApp.msUserServiceMSUser.changeOwnership.question');
+    this.question = translate.instant('gatewayApp.msUserServiceMSUser.changeOwnership.question.string');
   }
 
   ngOnInit(): void {

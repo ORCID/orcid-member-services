@@ -1,76 +1,76 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h1 id="jhi-assertion-heading" class="mt-5" jhiTranslate="gatewayApp.assertionServiceAssertion.home.createOrEditLabel">Add or edit affiliation</h1>
+            <h1 id="jhi-assertion-heading" class="mt-5" jhiTranslate="gatewayApp.assertionServiceAssertion.home.createOrEditLabel.string">Add or edit affiliation</h1>
             <div>
                 <jhi-alert-error></jhi-alert-error>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.email" for="field_email">Email</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.email.string" for="field_email.string">Email</label>
                     <input type="text" class="form-control" name="email" id="field_email"
                            formControlName="email"/>
                     <div *ngIf="editForm.get('email').invalid && (editForm.get('email').dirty || editForm.get('email').touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('email').errors.pattern" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: 'Email' }">
+                               *ngIf="editForm.get('email').errors.pattern" jhiTranslate="entity.validation.pattern.string" [translateValues]="{ pattern: 'Email' }.string">
                             This field should follow pattern for "Email".
                         </small>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('email').errors.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('email').errors.required" jhiTranslate="entity.validation.required.string">
                             This field is required.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.affiliationSection" for="field_affiliationSection">Assertion Section</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.affiliationSection.string" for="field_affiliationSection.string">Assertion Section</label>
                     <select class="form-control" name="affiliationSection" formControlName="affiliationSection" id="field_affiliationSection">
-                        <option *ngFor="let type of AFFILIATION_TYPES" [ngValue]="type" >{{('gatewayApp.AffiliationSection.' + type) | translate}}</option>
+                        <option *ngFor="let type of AFFILIATION_TYPES" [ngValue]="type" >{{('gatewayApp.AffiliationSection.' + type + '.string') | translate}}</option>
                     </select>
                     <small class="form-text text-danger" *ngIf="editForm.get('affiliationSection').touched && editForm.get('affiliationSection').errors && editForm.get('affiliationSection').errors.required">This field is required.</small>
                     <div class="alert alert-warning" *ngIf="AFFILIATION_TYPES.length === 0">
-                        <span jhiTranslate="gatewayApp.assertionServiceAssertion.home.notFound">No affiliations to show</span>
+                        <span jhiTranslate="gatewayApp.assertionServiceAssertion.home.notFound.string">No affiliations to show</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgName" for="field_orgName">Org Name</label>
+                    <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgName.string" for="field_orgName.string">Org Name</label>
                     <input type="text" class="form-control" name="orgName" id="field_orgName"
                            formControlName="orgName"/>
                     <div *ngIf="editForm.get('orgName').invalid && (editForm.get('orgName').dirty || editForm.get('orgName').touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('orgName').errors.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('orgName').errors.required" jhiTranslate="entity.validation.required.string">
                         This field is required.
                         </small>
                     </div>
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-md-4 float-left pl-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgCity" for="field_orgCity">Org City</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgCity.string" for="field_orgCity.string">Org City</label>
                         <input type="text" class="form-control" name="orgCity" id="field_orgCity"
                             formControlName="orgCity"/>
                         <div *ngIf="editForm.get('orgCity').invalid && (editForm.get('orgCity').dirty || editForm.get('orgCity').touched)">
                             <small class="form-text text-danger"
-                                *ngIf="editForm.get('orgCity').errors.required" jhiTranslate="entity.validation.required">
+                                *ngIf="editForm.get('orgCity').errors.required" jhiTranslate="entity.validation.required.string">
                             This field is required.
                             </small>
                         </div>
                     </div>
                     <div class="col-md-4 float-left">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgRegion" for="field_orgRegion">Org Region</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgRegion.string" for="field_orgRegion.string">Org Region</label>
                         <input type="text" class="form-control" name="orgRegion" id="field_orgRegion"
                                formControlName="orgRegion"/>
                         <div *ngIf="editForm.get('orgRegion').invalid && (editForm.get('orgRegion').dirty || editForm.get('orgRegion').touched)">
                             <small class="form-text text-danger"
-                                   *ngIf="editForm.get('orgRegion').errors.required" jhiTranslate="entity.validation.required">
+                                   *ngIf="editForm.get('orgRegion').errors.required" jhiTranslate="entity.validation.required.string">
                                 This field is required.
                             </small>
                         </div>
                     </div>
                     <div class="col-md-4 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgCountry" for="field_orgCountry">Org Country</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgCountry.string" for="field_orgCountry.string">Org Country</label>
                         <select class="form-control" name="orgCountry" id="field_orgCountry" formControlName="orgCountry">
                                <option *ngFor="let country of COUNTRIES | keyvalue" [ngValue]="country.value" >{{country.key}}</option>
                         </select>
                         <div *ngIf="editForm.get('orgCountry').invalid && (editForm.get('orgCountry').dirty || editForm.get('orgCountry').touched)">
                             <small class="form-text text-danger"
-                                   *ngIf="editForm.get('orgCountry').errors.required" jhiTranslate="entity.validation.required">
+                                   *ngIf="editForm.get('orgCountry').errors.required" jhiTranslate="entity.validation.required.string">
                             This field is required.
                             </small>
                         </div>
@@ -78,22 +78,22 @@
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-md-6 float-left pl-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.disambiguationSource" for="field_disambiguationSource">Disambiguation Source</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.disambiguationSource.string" for="field_disambiguationSource.string">Disambiguation Source</label>
                         <select class="form-control" name="disambiguationSource" id="field_disambiguationSource" formControlName="disambiguationSource">
                             <option *ngFor="let type of ORG_ID_TYPES" [ngValue]="type" >{{type}}</option>
                         </select>
                         <small class="form-text text-danger" *ngIf="editForm.get('disambiguationSource').touched && editForm.get('disambiguationSource').errors && editForm.get('disambiguationSource').errors.required">This field is required.</small>
                         <div class="alert alert-warning" *ngIf="ORG_ID_TYPES.length === 0">
-                            <span jhiTranslate="gatewayApp.assertionServiceAssertion.home.notFound">No disambiguation sources to show</span>
+                            <span jhiTranslate="gatewayApp.assertionServiceAssertion.home.notFound.string">No disambiguation sources to show</span>
                         </div>
                     </div>
                     <div class="col-md-6 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.disambiguatedOrgId" for="field_disambiguatedOrgId">Disambiguated Org Id</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.disambiguatedOrgId.string" for="field_disambiguatedOrgId.string">Disambiguated Org Id</label>
                         <input type="text" class="form-control" name="disambiguatedOrgId" id="field_disambiguatedOrgId"
                             formControlName="disambiguatedOrgId"/>
                         <div *ngIf="editForm.get('disambiguatedOrgId').invalid && (editForm.get('disambiguatedOrgId').dirty || editForm.get('disambiguatedOrgId').touched)"> 
                             <small class="form-text text-danger"
-                               *ngIf="!editForm.validDisambiguatedOrgId || editForm.get('disambiguatedOrgId').errors.required" jhiTranslate="entity.validation.disambiguatedOrgId">
+                               *ngIf="!editForm.validDisambiguatedOrgId || editForm.get('disambiguatedOrgId').errors.required" jhiTranslate="entity.validation.disambiguatedOrgId.string">
                             This field is required. GRID Organization ID should start with "grid.", RINGGOLD Organization ID should be a number.
                         	</small>
                         </div>
@@ -101,34 +101,34 @@
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-md-4 float-left pl-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.departmentName" for="field_departmentName">Department Name</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.departmentName.string" for="field_departmentName.string">Department Name</label>
                         <input type="text" class="form-control" name="departmentName" id="field_departmentName"
                             formControlName="departmentName"/>
                         <div *ngIf="editForm.get('departmentName').invalid && (editForm.get('departmentName').dirty || editForm.get('departmentName').touched)">
                             <small class="form-text text-danger"
-                                *ngIf="editForm.get('departmentName').errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 4000 }">
+                                *ngIf="editForm.get('departmentName').errors.maxlength" jhiTranslate="entity.validation.maxlength.string" [translateValues]="{ max: 4000 }.string">
                             This field cannot be longer than 4000 characters.
                             </small>
                         </div>
                     </div>
                     <div class="col-md-4 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.roleTitle" for="field_roleTitle">Role Title</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.roleTitle.string" for="field_roleTitle.string">Role Title</label>
                         <input type="text" class="form-control" name="roleTitle" id="field_roleTitle"
                                formControlName="roleTitle"/>
                         <div *ngIf="editForm.get('roleTitle').invalid && (editForm.get('roleTitle').dirty || editForm.get('roleTitle').touched)">
                             <small class="form-text text-danger"
-                                   *ngIf="editForm.get('roleTitle').errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 4000 }">
+                                   *ngIf="editForm.get('roleTitle').errors.maxlength" jhiTranslate="entity.validation.maxlength.string" [translateValues]="{ max: 4000 }.string">
                             This field cannot be longer than 4000 characters.
                             </small>
                         </div>
                     </div>
                     <div class="col-md-4 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.url" for="field_url">Url</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.url.string" for="field_url.string">Url</label>
                         <input type="text" class="form-control" name="url" id="field_url"
                                formControlName="url"/>
                         <div *ngIf="editForm.get('url').invalid && (editForm.get('url').dirty || editForm.get('url').touched)">
                             <small class="form-text text-danger"
-                                   *ngIf="editForm.get('url').errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 8000 }">
+                                   *ngIf="editForm.get('url').errors.maxlength" jhiTranslate="entity.validation.maxlength.string" [translateValues]="{ max: 8000 }.string">
                             This field cannot be longer than 8000 characters.
                             </small>
                         </div>
@@ -136,104 +136,104 @@
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-md-4 float-left pl-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.startYear" for="field_startYear">Start Year</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.startYear.string" for="field_startYear.string">Start Year</label>
                         <select class="form-control"
                                 name="startYear"
                                 id="field_startYear"
                                 formControlName="startYear"
                                 (change)='onStartDateSelected(true)'>
-                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.year" [ngValue]="null">Year</option>
+                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.year.string" [ngValue]="null.string">Year</option>
                             <option *ngFor="let year of startYearsList" [ngValue]="year" >{{year}}</option>
                         </select>
                     </div>
                     <div class="col-md-4 float-left">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.startMonth" for="field_startMonth">Start Month</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.startMonth.string" for="field_startMonth.string">Start Month</label>
                         <select class="form-control"
                                 name="startMonth"
                                 id="field_startMonth"
                                 formControlName="startMonth"
                                 (change)='onStartDateSelected(true)'>
-                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.month" [ngValue]="null">Month</option>
+                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.month.string" [ngValue]="null.string">Month</option>
                             <option *ngFor="let month of monthsList" [ngValue]="month[0]" >{{month[1]}}</option>
                         </select>
                     </div>
                     <div class="col-md-4 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.startDay" for="field_startDay">Start Day</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.startDay.string" for="field_startDay.string">Start Day</label>
                         <select class="form-control"
                                 name="startDay"
                                 id="field_startDay" formControlName="startDay">
-                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.day" [ngValue]="null">Day</option>
+                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.day.string" [ngValue]="null.string">Day</option>
                             <option *ngFor="let day of startDaysList" [ngValue]="day" >{{day}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-md-4 float-left pl-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.endYear" for="field_endYear">End Year</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.endYear.string" for="field_endYear.string">End Year</label>
                         <select class="form-control"
                                 name="endYear"
                                 id="field_endYear"
                                 formControlName="endYear"
                                 (change)='onEndDateSelected(true)'>
-                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.year" [ngValue]="null">Year</option>
+                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.year.string" [ngValue]="null.string">Year</option>
                             <option *ngFor="let year of endYearsList" [ngValue]="year" >{{year}}</option>
                         </select>
                     </div>
                     <div class="col-md-4 float-left">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.endMonth" for="field_endMonth">End Month</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.endMonth.string" for="field_endMonth.string">End Month</label>
                         <select class="form-control"
                                 name="endMonth"
                                 id="field_endMonth"
                                 formControlName="endMonth"
                                 (change)='onEndDateSelected(true)'>
-                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.month" [ngValue]="null">Month</option>
+                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.month.string" [ngValue]="null.string">Month</option>
                             <option *ngFor="let month of monthsList" [ngValue]="month[0]" >{{month[1]}}</option>
                         </select>
                     </div>
                     <div class="col-md-4 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.endDay" for="field_endDay">End Day</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.endDay.string" for="field_endDay.string">End Day</label>
                         <select class="form-control" name="endDay" id="field_endDay" formControlName="endDay">
-                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.day" [ngValue]="null">Day</option>
+                            <option jhiTranslate="gatewayApp.assertionServiceAssertion.day.string" [ngValue]="null.string">Day</option>
                             <option *ngFor="let day of endDaysList" [ngValue]="day" >{{day}}</option>
                         </select>
                     </div>
                     <br>
                     <div *ngIf="(editForm.get('endYear').hasError('dateValidator') && (editForm.get('endYear').dirty || editForm.get('endYear').touched)) ">
-                        <small class="form-text text-danger" jhiTranslate="entity.validation.endDate">
+                        <small class="form-text text-danger" jhiTranslate="entity.validation.endDate.string">
                             End date cannot be greater than the start date
                         </small>
                     </div>
                 </div>
                 <div class="form-group clearfix" *ngIf="editForm.value.externalId" >
                     <div class="col-md-4 float-left pl-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.externalIdType" for="field_externalIdType">External Id Type</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.externalIdType.string" for="field_externalIdType.string">External Id Type</label>
                         <input type="text" class="form-control" name="externalIdType" id="field_externalIdType"
                                formControlName="externalIdType"/>
                     </div>
                     <div class="col-md-4 float-left">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.externalId" for="field_externalId">External Id</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.externalId.string" for="field_externalId.string">External Id</label>
                         <input type="text" class="form-control" name="externalId" id="field_externalId"
                             formControlName="externalId"/>
                     </div>
                     <div class="col-md-4 float-left pr-0">
-                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.externalIdUrl" for="field_externalIdUrl">External Id Url</label>
+                        <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.externalIdUrl.string" for="field_externalIdUrl.string">External Id Url</label>
                         <input type="text" class="form-control" name="externalIdUrl" id="field_externalIdUrl"
                                formControlName="externalIdUrl"/>
                     </div>
                 </div>
             </div>
             <div class="form-group clearfix">
-                 <p><em><span jhiTranslate="gatewayApp.assertionServiceAssertion.updateNote">Please do not forget to download and send permission links to your researcher once the assertion has been saved.</span></em></p>
+                 <p><em><span jhiTranslate="gatewayApp.assertionServiceAssertion.updateNote.string">Please do not forget to download and send permission links to your researcher once the assertion has been saved.</span></em></p>
             </div>
             <div class="form-group">
                 <button type="button" id="cancel-save" class="btn btn-outline-primary"  (click)="previousState()">
-                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
                 </button>
                 <button type="submit"
                         id="save-entity"
                         [disabled]="editForm.invalid || isSaving"
                         class="btn btn-primary">
-                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save.string">Save</span>
                 </button>
             </div>
         </form>

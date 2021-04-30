@@ -204,9 +204,9 @@ export class MSUserUpdateComponent implements OnInit {
   sendActivate() {
     this.msUserService.sendActivate(this.existentMSUser).subscribe(res => {
       if (res.ok) {
-        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.success', null, null);
+        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.success.string', null, null);
       } else {
-        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.error', null, null);
+        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.error.string', null, null);
       }
       this.previousState();
     });

@@ -10,39 +10,39 @@
                 <div class="mt-5">
                     <div *ngIf="showConnectionExists">
                         <h2 >
-                            <span jhiTranslate="landingPage.connectionExists.youHaveAlready">You have already granted</span><br/>
+                            <span jhiTranslate="landingPage.connectionExists.youHaveAlready.string">You have already granted</span><br/>
                             {{clientName}}<br/>
-                            <span jhiTranslate="landingPage.connectionExists.permissionToUpdate">permission to update your ORCID record</span></h2>
+                            <span jhiTranslate="landingPage.connectionExists.permissionToUpdate.string">permission to update your ORCID record</span></h2>
                         <p class="mt-4"><img class="id-icon" src="/content/images/orcid-icon.svg" width="16" height="16"/>
                             <a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{orcidRecord.orcid}}</a>
                         </p>
-                        <p jhiTranslate="landingPage.success.ifYouFind" [translateValues]="{clientName: clientName}">
+                        <p jhiTranslate="landingPage.success.ifYouFind" [translateValues]="{clientName: clientName}.string">
                             If you find that data added to your ORCID record is incorrect, please contact {{ clientName }}
                         </p>
                     </div>
                     <div *ngIf="showConnectionExistsDifferentUser">
                     
-                        <h2 jhiTranslate="landingPage.connectionExists.differentUser" [translateValues]="{clientName: clientName}">
+                        <h2 jhiTranslate="landingPage.connectionExists.differentUser" [translateValues]="{clientName: clientName}.string">
                             This authorization link has already been used. Please contact {{ clientName }} for a new authorization link.
                         </h2>
                     </div>
                     <div *ngIf="showError">
-                        <h2 jhiTranslate="landingPage.error.somethingWentWrong">Oops, something went wrong and we were not able to fetch your ORCID iD</h2>
+                        <h2 jhiTranslate="landingPage.error.somethingWentWrong.string">Oops, something went wrong and we were not able to fetch your ORCID iD</h2>
                     </div>
                     <div *ngIf="showDenied">
                         <h2>
-                        <span jhiTranslate="landingPage.denied.youHaveDenied">Oops, you have denied access.</span><br/>
+                        <span jhiTranslate="landingPage.denied.youHaveDenied.string">Oops, you have denied access.</span><br/>
                         {{clientName}}<br/>
-                        <span jhiTranslate="landingPage.denied.willNotBeAble">will not be able to update your ORCID record.</span></h2>
-                        <p jhiTranslate="landingPage.denied.ifThisWas">If this was a mistake, click the button below to grant access.</p>
-                        <a href='{{oauthUrl}}' class="btn btn-primary" jhiTranslate="landingPage.denied.grantAccess" [translateValues]="{clientName: clientName}">
+                        <span jhiTranslate="landingPage.denied.willNotBeAble.string">will not be able to update your ORCID record.</span></h2>
+                        <p jhiTranslate="landingPage.denied.ifThisWas.string">If this was a mistake, click the button below to grant access.</p>
+                        <a href='{{oauthUrl}}' class="btn btn-primary" jhiTranslate="landingPage.denied.grantAccess" [translateValues]="{clientName: clientName}.string">
                             Allow {{ clientName }} to update my ORCID record"
                         </a>
                     </div>
                     <div *ngIf="showSuccess">
-                        <h2 jhiTranslate="landingPage.success.thanks"
+                        <h2 jhiTranslate="landingPage.success.thanks.string"
                         [translateValues]="{given_name: givenName, family_name: familyName}">Thanks, {{givenName}} {{familyName}}</h2>
-                        <p jhiTranslate="landingPage.success.youHaveSuccessfully"
+                        <p jhiTranslate="landingPage.success.youHaveSuccessfully.string"
                         [translateValues]="{clientName: clientName}">You have successfully granted {{clientName}} permission to update your ORCID record,
                             and your record has been updated with affiliation information .
                         </p>
@@ -51,7 +51,7 @@
                             <a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{signedInIdToken.sub}}</a>
                         </p>
                         <p>
-                            <em jhiTranslate="landingPage.success.ifYouFind" [translateValues]="{clientName: clientName}">If you find that data added to your ORCID record is incorrect, please contact {{clientName}}</em>
+                            <em jhiTranslate="landingPage.success.ifYouFind" [translateValues]="{clientName: clientName}.string">If you find that data added to your ORCID record is incorrect, please contact {{clientName}}</em>
                         </p>
                     </div>
                 </div>

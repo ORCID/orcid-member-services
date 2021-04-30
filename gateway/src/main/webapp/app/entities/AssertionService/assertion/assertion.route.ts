@@ -40,7 +40,7 @@ export const assertionRoute: Routes = [
     data: {
       authorities: ['ASSERTION_SERVICE_ENABLED'],
       defaultSort: 'email,asc',
-      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -52,7 +52,7 @@ export const assertionRoute: Routes = [
     },
     data: {
       authorities: ['ASSERTION_SERVICE_ENABLED'],
-      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -64,7 +64,7 @@ export const assertionRoute: Routes = [
     },
     data: {
       authorities: ['ASSERTION_SERVICE_ENABLED'],
-      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -76,7 +76,7 @@ export const assertionRoute: Routes = [
     },
     data: {
       authorities: ['ASSERTION_SERVICE_ENABLED'],
-      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string'
     },
     canActivate: [UserRouteAccessService]
   }
@@ -91,7 +91,7 @@ export const assertionPopupRoute: Routes = [
     },
     data: {
       authorities: ['ASSERTION_SERVICE_ENABLED'],
-      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string'
     },
     canActivate: [UserRouteAccessService],
     outlet: 'popup'
@@ -104,7 +104,7 @@ export const assertionPopupRoute: Routes = [
     },
     data: {
       authorities: ['ASSERTION_SERVICE_ENABLED'],
-      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title'
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string'
     },
     canActivate: [UserRouteAccessService],
     outlet: 'popup'

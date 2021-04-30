@@ -1,5 +1,5 @@
 <div *ngIf="isModal" class="modal-header">
-    <h4 class="modal-title" jhiTranslate="login.title">Sign in</h4>
+    <h4 class="modal-title" jhiTranslate="login.title.string">Sign in</h4>
     <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')"><span aria-hidden="true">x</span>
     </button>
 </div>
@@ -7,31 +7,31 @@
     <div class="container">
         <div class="row justify-content-center">
             <div [ngClass]="{'col-md-8': isModal === false, 'col-md-4':  isModal === true}">
-                <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication">
+                <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication.string">
                     <strong>Failed to sign in!</strong> Please check your credentials and try again.
                 </div>
                 <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
                     <div class="form-group">
-                        <label class="username-label" for="username" jhiTranslate="global.form.username.label">Login</label>
-                        <input type="text" class="form-control" name="username" id="username" placeholder="{{'global.form.username.placeholder' | translate}}"
+                        <label class="username-label" for="username" jhiTranslate="global.form.username.label.string">Login</label>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="{{'global.form.username.placeholder.string' | translate}}"
                                formControlName="username">
                     </div>
                     <div class="form-group">
-                        <label for="password" jhiTranslate="login.form.password">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" placeholder="{{'login.form.password.placeholder' | translate}}"
+                        <label for="password" jhiTranslate="login.form.password.string">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="{{'login.form.password.placeholder.string' | translate}}"
                                formControlName="password">
                     </div>
                     <div class="form-check">
                         <label class="form-check-label" for="rememberMe">
                             <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" checked>
-                            <span jhiTranslate="login.form.rememberme">Remember me</span>
+                            <span jhiTranslate="login.form.rememberme.string">Remember me</span>
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary" jhiTranslate="login.form.button">Sign in</button>
+                    <button type="submit" class="btn btn-primary" jhiTranslate="login.form.button.string">Sign in</button>
                 </form>
                 <p></p>
                 <div class="alert alert-warning">
-                    <a class="alert-link" (click)="requestResetPassword()" jhiTranslate="login.password.forgot">Did you forget your password?</a>
+                    <a class="alert-link" (click)="requestResetPassword()" jhiTranslate="login.password.forgot.string">Did you forget your password?</a>
                 </div>
             </div>
         </div>

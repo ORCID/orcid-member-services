@@ -57,7 +57,7 @@ export class AssertionImportDialogComponent {
         }
       });
     } else {
-      alert(this.translate.instant('gatewayApp.msUserServiceMSUser.import.emptyFile'));
+      alert(this.translate.instant('gatewayApp.msUserServiceMSUser.import.emptyFile.string'));
     }
   }
 
