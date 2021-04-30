@@ -8,7 +8,7 @@
 <nav class="navbar navbar-dark navbar-expand-md bg-dark">
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
         <span class="logo-img"><img src="/content/images/orcid-logo.svg" width="120px" alt="ORCID logo"></span>
-        	<span jhiTranslate="global.menu.memberPortal.string" class="navbar-title">Member Portal</span>&nbsp;<span jhiTranslate="global.menu.beta.string" class="navbar-beta.string">Beta</span>
+        	<span jhiTranslate="global.menu.memberPortal.string" class="navbar-title">Member Portal</span>&nbsp;<span jhiTranslate="global.menu.beta.string" class="navbar-beta">Beta</span>
         <span *ngIf="isAuthenticated()" class="navbar-title"><div class="org-name truncate-text">{{ this.organizationName }}</div></span>
     </a>
     <a class="navbar-toggler d-lg-none" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
