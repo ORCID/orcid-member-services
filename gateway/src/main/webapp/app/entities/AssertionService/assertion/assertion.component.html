@@ -67,7 +67,7 @@
                     <span *ngIf="assertion.startYear">{{assertion.startYear}}</span><span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startDay">-{{assertion.startDay}}</span>
                     <span *ngIf="assertion.startYear && assertion.endYear">&nbsp;to&nbsp;</span>
                     <span *ngIf="assertion.endYear">{{assertion.endYear}}</span><span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endDay">-{{assertion.endDay}} </span>
-                    <br><a jhiTranslate="gatewayApp.assertionServiceAssertion.details.string" [routerLink]="['/assertion', assertion.id, 'view' ].string">View details</a>
+                    <br><a jhiTranslate="gatewayApp.assertionServiceAssertion.details.string" [routerLink]="['/assertion', assertion.id, 'view' ]">View details</a>
                 </td>
                 <td>{{assertion.status}}
                     <div *ngIf="assertion.status==errorAddingToOrcid || assertion.status== errorUpdatingInOrcid">
