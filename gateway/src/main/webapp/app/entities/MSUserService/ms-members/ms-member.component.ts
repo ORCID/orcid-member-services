@@ -12,6 +12,8 @@ import { AccountService } from 'app/core';
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { MSMemberService } from './ms-member.service';
 
+import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'jhi-ms-member',
   templateUrl: './ms-member.component.html'
@@ -32,6 +34,7 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   reverse: any;
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
+  itemCount: string;
 
   constructor(
     protected msMemberService: MSMemberService,
@@ -40,7 +43,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
     protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected eventManager: JhiEventManager
+    protected eventManager: JhiEventManager,
+    protected translate: TranslateService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.routeData = this.activatedRoute.data.subscribe(data => {
@@ -59,6 +63,12 @@ export class MSMemberComponent implements OnInit, OnDestroy {
     this.eventSubscriber = this.eventManager.subscribe('msMemberListModification', () => {
       this.loadAll();
     });
+  }
+
+  generateItemCountString() {
+    const first = (this.page - 1) * this.itemsPerPage == 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1;
+    const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems;
+    return this.translate.instant('global.item-count.string', { first: first, second: second, total: this.totalItems });
   }
 
   loadAll() {
@@ -120,6 +130,7 @@ export class MSMemberComponent implements OnInit, OnDestroy {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
     this.msMember = data;
+    this.itemCount = this.generateItemCountString();
   }
 
   protected onError(errorMessage: string) {

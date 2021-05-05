@@ -5,13 +5,12 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.codehaus.jettison.json.JSONException;
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
@@ -101,6 +100,8 @@ public class UserResource {
 
     @Autowired
     private MailService mailService;
+    
+    private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
     /**
      * {@code PUT /users} : Updates an existing User.
@@ -132,7 +133,6 @@ public class UserResource {
 	}
 
         //change the auth if the logged in user is org owner and this is set as mainContact
-        Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
         boolean owner = userDTO.getMainContact();
         if (owner) {
         	
@@ -154,7 +154,7 @@ public class UserResource {
             mailService.sendOrganizationOwnerChangedMail(updatedUser.get().toUser(), member);
         }
 
-        return ResponseUtil.wrapOrNotFound(updatedUser, HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", userDTO.getLogin()));
+        return ResponseUtil.wrapOrNotFound(updatedUser);
     }
 
     /**
@@ -278,7 +278,7 @@ public class UserResource {
      * @throws Throwable
      */
     @PostMapping("/users")
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
         LOG.debug("REST request to save UserDTO : {}", userDTO);
         if (!StringUtils.isBlank(userDTO.getId())) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "User", "idexists");
@@ -324,9 +324,7 @@ public class UserResource {
             mailService.sendOrganizationOwnerChangedMail(newUser, member);
         }
 
-        return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, "user", newUser.getLogin())).body(UserDTO.valueOf(newUser));
-
+        return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin())).body(UserDTO.valueOf(newUser));
     }
 
 	private boolean validate(UserDTO user) {
@@ -348,16 +346,16 @@ public class UserResource {
 		}
 		Optional<User> existing = userRepository.findOneByLogin(user.getLogin().toLowerCase());
 		if (existing.isPresent() && !existing.get().getDeleted()) {
-            throw new BadRequestAlertException("Invalid email", "user", "emailUsed");
+            throw new BadRequestAlertException("Invalid email", "user", "emailUsed.string");
         }
 
         existing = userRepository.findOneByEmailIgnoreCase(user.getEmail());
         if (existing.isPresent() && !existing.get().getDeleted()) {
-            throw new BadRequestAlertException("Invalid email", "user", "emailUsed");
+            throw new BadRequestAlertException("Invalid email", "user", "emailUsed.string");
         }
 
-        if (new EmailValidator().isValid(user.getEmail(), null)) {
-            user.setEmailError("Email is invalid!");
+        if (!emailValidator.isValid(user.getEmail())) {
+        	throw new BadRequestAlertException("Invalid email", "user", "email.string");
         }
 
         //change the auth if the logged in user is org owner and this is set as mainContact
@@ -402,25 +400,25 @@ public class UserResource {
         LOG.debug("REST request to delete user {}", jhiUserId);
         String authUserLogin = SecurityUtils.getAuthenticatedUser();
         if (StringUtils.equalsIgnoreCase(authUserLogin, jhiUserId)) {
-            throw new BadRequestAlertException("Cannot delete current authenticated user", "User", "delete.auth.user");
+            throw new BadRequestAlertException("Cannot delete current authenticated user", "User", "delete.auth.user.string");
         }
         Optional<User> user = userService.getUserWithAuthorities(jhiUserId);
         if(user.isPresent()) {
             //not main contact
             if(user.get().getMainContact() && !noMainContactCheck){
-                throw new BadRequestAlertException("Cannot delete main contact", "User", "delete.main.contact");
+                throw new BadRequestAlertException("Cannot delete main contact", "User", "delete.main.contact.string");
             }
             //not last admin
             if(user.get().getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.equals(AuthoritiesConstants.ADMIN))) {
                 //check if it is last admin
                 if(userRepository.findAllByAuthoritiesAndDeletedIsFalse(AuthoritiesConstants.ADMIN).size() <= 1 )  {
-                    throw new BadRequestAlertException("Cannot delete last admin", "User", "delete.last.admin");
+                    throw new BadRequestAlertException("Cannot delete last admin", "User", "delete.last.admin.string");
                 }
             }
         }
         userService.clearUser(jhiUserId);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, "user", jhiUserId)).build();
+        return ResponseEntity.ok().build();
     }
 
     /**

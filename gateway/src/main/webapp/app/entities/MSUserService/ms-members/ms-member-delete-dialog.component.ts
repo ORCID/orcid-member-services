@@ -7,6 +7,8 @@ import { JhiEventManager } from 'ng-jhipster';
 import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
 import { MSMemberService } from './ms-member.service';
 
+import { JhiAlertService } from 'ng-jhipster';
+
 @Component({
   selector: 'jhi-ms-member-delete-dialog',
   templateUrl: './ms-member-delete-dialog.component.html'
@@ -15,7 +17,12 @@ export class MSMemberDeleteDialogComponent {
   msMember: IMSMember;
   loading = false;
 
-  constructor(protected msMemberService: MSMemberService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
+  constructor(
+    protected msMemberService: MSMemberService,
+    public activeModal: NgbActiveModal,
+    protected eventManager: JhiEventManager,
+    private alertService: JhiAlertService
+  ) {}
 
   clear() {
     this.activeModal.dismiss('cancel');
@@ -23,16 +30,20 @@ export class MSMemberDeleteDialogComponent {
 
   confirmDelete(id: string) {
     this.loading = true;
-    this.msMemberService.delete(id).subscribe(response => {
-      this.loading = false;
-      this.eventManager.broadcast({
-        name: 'msMemberListModification',
-        content: 'Deleted an msMember'
-      });
-      this.activeModal.dismiss(true);
-    }, error => {
-      this.loading = false;
-    });
+    this.msMemberService.delete(id).subscribe(
+      response => {
+        this.loading = false;
+        this.eventManager.broadcast({
+          name: 'msMemberListModification',
+          content: 'Deleted an msMember'
+        });
+        this.activeModal.dismiss(true);
+        this.alertService.success('memberServiceApp.member.deleted.string');
+      },
+      error => {
+        this.loading = false;
+      }
+    );
   }
 }
 

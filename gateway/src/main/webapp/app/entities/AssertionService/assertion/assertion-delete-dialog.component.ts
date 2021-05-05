@@ -50,7 +50,7 @@ export class AssertionDeleteDialogComponent {
               content: 'Deleted an assertion'
             });
             this.activeModal.dismiss(true);
-            this.alertService.success('assertionServiceApp.affiliation.deleted');
+            this.alertService.success('assertionServiceApp.affiliation.deleted.string');
           });
         } else {
           this.errorDeletingFromOrcid = true;

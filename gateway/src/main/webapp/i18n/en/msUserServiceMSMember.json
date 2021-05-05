@@ -45,9 +45,9 @@
   },
   "memberServiceApp": {
     "member": {
-      "created": { "string": "A new member was created with ID {{ param }}" },
-      "updated": { "string": "Member {{ param }} was updated successfully" },
-      "deleted": { "string": "Member {{ param }} was deleted successfully" }
+      "created": { "string": "Member created" },
+      "updated": { "string": "Member updated successfully" },
+      "deleted": { "string": "Member deleted successfully" }
     }
   }
 }

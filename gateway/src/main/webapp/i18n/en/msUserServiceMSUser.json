@@ -59,9 +59,9 @@
   },
   "userServiceApp": {
     "user": {
-      "created": { "string": "A new user was created with ID {{ param }}. Invite sent." },
-      "updated": { "string": "User {{ param }} was updated successfully" },
-      "deleted": { "string": "User {{ param }} was deleted successfully" }
+      "created": { "string": "User created. Invite sent." },
+      "updated": { "string": "User updated successfully" },
+      "deleted": { "string": "User deleted successfully" }
     }
   }
 }

@@ -91,6 +91,14 @@ class AssertionsCsvReaderTest {
 	}
 	
 	@Test
+	void testReadAssertionsUploadWithBadEmail() throws IOException, JSONException {
+		InputStream inputStream = getClass().getResourceAsStream("/assertions-with-bad-email.csv");
+		AssertionsUpload upload = reader.readAssertionsUpload(inputStream);
+        assertEquals(1, upload.getErrors().size());
+        assertTrue(upload.getErrors().get(0).getMessage().contains("email"));
+	}
+	
+	@Test
 	void testReadAssertionsUploadWithDbIds() throws IOException {
 		Mockito.when(mockAssertionService.assertionExists(Mockito.anyString())).thenReturn(true);
 		Mockito.when(mockAssertionService.findById(Mockito.anyString())).thenReturn(getDummyAssertionWithEmail());

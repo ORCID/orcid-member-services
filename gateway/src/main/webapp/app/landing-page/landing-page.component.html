@@ -35,7 +35,7 @@
                         {{clientName}}<br/>
                         <span jhiTranslate="landingPage.denied.willNotBeAble.string">will not be able to update your ORCID record.</span></h2>
                         <p jhiTranslate="landingPage.denied.ifThisWas.string">If this was a mistake, click the button below to grant access.</p>
-                        <a href='{{oauthUrl}}' class="btn btn-primary" jhiTranslate="landingPage.denied.grantAccess" [translateValues]="{clientName: clientName}">
+                        <a href='{{oauthUrl}}' class="btn btn-primary" jhiTranslate="landingPage.denied.grantAccess.string" [translateValues]="{clientName: clientName}">
                             Allow {{ clientName }} to update my ORCID record"
                         </a>
                     </div>
@@ -51,7 +51,7 @@
                             <a target="_orcidRecord" href="{{issuer}}/my-orcid">{{issuer}}/{{signedInIdToken.sub}}</a>
                         </p>
                         <p>
-                            <em jhiTranslate="landingPage.success.ifYouFind" [translateValues]="{clientName: clientName}">If you find that data added to your ORCID record is incorrect, please contact {{clientName}}</em>
+                            <em jhiTranslate="landingPage.success.ifYouFind.string" [translateValues]="{clientName: clientName}">If you find that data added to your ORCID record is incorrect, please contact {{clientName}}</em>
                         </p>
                     </div>
                 </div>

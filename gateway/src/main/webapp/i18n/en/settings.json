@@ -2,10 +2,14 @@
   "settings": {
     "title": { "string": "Settings for {{username}} (You)" },
     "form": {
-      "firstname": { "string": "First Name" },
-      "firstname.placeholder": { "string": "Your first name" },
-      "lastname": { "string": "Last Name" },
-      "lastname.placeholder": { "string": "Your last name" },
+      "firstname": {
+        "string": "First Name",
+        "placeholder": { "string": "Your first name" }
+      },
+      "lastname": {
+        "string": "Last Name",
+        "placeholder": { "string": "Your last name" }
+      },
       "language": { "string": "Language" },
       "button": { "string": "Save" }
     },

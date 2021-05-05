@@ -89,19 +89,19 @@ public class MemberService {
 
 	public Member createMember(Member member) {
 		if (member.getId() != null) {
-			throw new BadRequestAlertException("A new member cannot already have an ID", "member", "idexists");
+			throw new BadRequestAlertException("A new member cannot already have an ID", "member", "idexists.string");
 		}
 		Optional<Member> optional = memberRepository.findBySalesforceId(member.getSalesforceId());
 		if (optional.isPresent()) {
 			throw new BadRequestAlertException("A member with that salesforce id already exists", "member",
-					"salesForceIdUsed");
+					"salesForceIdUsed.string");
 		}
 		Optional<Member> optionalMemberName = memberRepository.findByClientName(member.getClientName());
 		if (optionalMemberName.isPresent()) {
-			throw new BadRequestAlertException("A member with that name already exists", "member", "memberNameUsed");
+			throw new BadRequestAlertException("A member with that name already exists", "member", "memberNameUsed.string");
 		}
 		if (!MemberValidator.validate(member)) {
-			throw new BadRequestAlertException("Member invalid", "member", "invalid");
+			throw new BadRequestAlertException("Member invalid", "member", "invalid.string");
 		}
 
 		if (member.getCreatedBy() == null) {
@@ -119,19 +119,19 @@ public class MemberService {
 
 	public Member updateMember(Member member) {
 		if (member.getId() == null) {
-			throw new BadRequestAlertException("Invalid id", "member", "idnull");
+			throw new BadRequestAlertException("Invalid id", "member", "idnull.string");
 		}
 
 		Optional<Member> optional = memberRepository.findById(member.getId());
 		if (!optional.isPresent()) {
-			throw new BadRequestAlertException("Invalid id", "member", "idunavailable");
+			throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
 		}
 
 		if (!MemberValidator.validate(member)) {
 			// what to do here? return member object with errors for ui?
 			// something
 			// consistent
-			throw new BadRequestAlertException("Invalid member", "member", "clientidinvalid");
+			throw new BadRequestAlertException("Invalid member", "member", "clientidinvalid.string");
 		}
 
 		Instant now = Instant.now();
@@ -150,7 +150,7 @@ public class MemberService {
 		if (!existingMember.getClientName().equals(member.getClientName())) {
 			Optional<Member> optionalMember = memberRepository.findByClientName(member.getClientName());
 			if (optionalMember.isPresent()) {
-				throw new BadRequestAlertException("Invalid member name", "member", "memberNameUsed");
+				throw new BadRequestAlertException("Invalid member name", "member", "memberNameUsed.string");
 			}
 		}
 
@@ -158,7 +158,7 @@ public class MemberService {
 		if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
 			Optional<Member> optionalSalesForceId = memberRepository.findBySalesforceId(member.getSalesforceId());
 			if (optionalSalesForceId.isPresent()) {
-				throw new BadRequestAlertException("Invalid salesForceId", "member", "salesForceIdUsed");
+				throw new BadRequestAlertException("Invalid salesForceId", "member", "salesForceIdUsed.string");
 			}
 			// update affiliations associated with the member
 			String oldSalesForceId = existingMember.getSalesforceId();
@@ -197,7 +197,7 @@ public class MemberService {
 	public void deleteMember(String id) {
 		Optional<Member> optional = memberRepository.findById(id);
 		if (!optional.isPresent()) {
-			throw new BadRequestAlertException("Invalid id", "member", "idunavailable");
+			throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
 		}
 		List<MemberServiceUser> usersBelongingToMember = userService
 				.getUsersBySalesforceId(optional.get().getSalesforceId());
@@ -214,7 +214,7 @@ public class MemberService {
 
 	public void updateUsersOnConsortiumLeadChange(Member member, Member existentMember) {
 		if (existentMember == null) {
-			throw new BadRequestAlertException("Invalid id", "member", "idunavailable");
+			throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
 		}
 		if (Boolean.compare(existentMember.getIsConsortiumLead(), member.getIsConsortiumLead()) != 0) {
 			List<MemberServiceUser> usersBelongingToMember = userService

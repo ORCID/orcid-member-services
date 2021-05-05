@@ -10,6 +10,7 @@ import { MSMemberService } from './ms-member.service';
 import { AccountService } from 'app/core';
 import { BASE_URL, ORCID_BASE_URL } from 'app/app.constants';
 import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
+import { JhiAlertService } from 'ng-jhipster';
 
 function consortiumLeadValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
@@ -91,7 +92,8 @@ export class MSMemberUpdateComponent implements OnInit {
     private accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected msMemberService: MSMemberService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private alertService: JhiAlertService
   ) {}
 
   ngOnInit() {
@@ -152,7 +154,7 @@ export class MSMemberUpdateComponent implements OnInit {
     this.isSaving = true;
     const msMember = this.createFromForm();
     if (msMember.id !== undefined) {
-      this.subscribeToSaveResponse(this.msMemberService.update(msMember));
+      this.subscribeToUpdateResponse(this.msMemberService.update(msMember));
     } else {
       this.subscribeToSaveResponse(this.msMemberService.create(msMember));
     }
@@ -186,6 +188,17 @@ export class MSMemberUpdateComponent implements OnInit {
   protected onSaveSuccess() {
     this.isSaving = false;
     this.previousState();
+    this.alertService.success('memberServiceApp.member.created.string');
+  }
+
+  protected subscribeToUpdateResponse(result: Observable<HttpResponse<IMSMember>>) {
+    result.subscribe(() => this.onUpdateSuccess(), () => this.onSaveError());
+  }
+
+  protected onUpdateSuccess() {
+    this.isSaving = false;
+    this.previousState();
+    this.alertService.success('memberServiceApp.member.updated.string');
   }
 
   protected onSaveError() {

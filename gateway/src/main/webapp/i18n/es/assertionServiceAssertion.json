@@ -83,9 +83,9 @@
   },
   "assertionServiceApp": {
     "assertionServiceAssertion": {
-      "created": { "string": "Un nuevo Assertion ha sido creado con el identificador {{ param }}" },
-      "updated": { "string": "Un Assertion ha sido actualizado con el identificador {{ param }}" },
-      "deleted": { "string": "Un Assertion ha sido eliminado con el identificador {{ param }}" }
+      "created": { "string": "Un nuevo Assertion ha sido creado" },
+      "updated": { "string": "Un Assertion ha sido actualizado" },
+      "deleted": { "string": "Un Assertion ha sido eliminado" }
     }
   }
 }
