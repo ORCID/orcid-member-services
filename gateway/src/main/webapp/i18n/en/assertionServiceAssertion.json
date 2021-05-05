@@ -112,7 +112,7 @@
     "affiliation": {
       "created": { "string": "New affiliation {{ param }} was created" },
       "updated": { "string": "Affiliation {{ param }} was updated" },
-      "deleted": { "string": "Affiliation {{ param }} was deleted" }
+      "deleted": { "string": "Affiliation deleted" }
     }
   }
 }
