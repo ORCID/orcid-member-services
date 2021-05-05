@@ -40,13 +40,8 @@ public class UserCsvReader implements UserUploadReader {
     
     private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
-    public UserCsvReader(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Override
     public UserUpload readUsersUpload(InputStream inputStream, String createdBy) {
-
         InputStreamReader isr = new InputStreamReader(inputStream);
         UserUpload upload = new UserUpload();
         Iterable<CSVRecord> elements = null;
