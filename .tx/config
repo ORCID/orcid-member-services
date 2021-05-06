@@ -1,0 +1,106 @@
+[main]
+host = https://www.transifex.com
+
+[member-portal.assertion]
+file_filter = gateway/src/main/webapp/i18n/<lang>/assertionServiceAssertion.json
+source_file = gateway/src/main/webapp/i18n/en/assertionServiceAssertion.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.activate]
+file_filter = gateway/src/main/webapp/i18n/<lang>/activate.json
+source_file = gateway/src/main/webapp/i18n/en/activate.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.affiliation-section]
+file_filter = gateway/src/main/webapp/i18n/<lang>/AssertionService-affiliationSection.json
+source_file = gateway/src/main/webapp/i18n/en/AssertionService-affiliationSection.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.error]
+file_filter = gateway/src/main/webapp/i18n/<lang>/error.json
+source_file = gateway/src/main/webapp/i18n/en/error.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.gateway]
+file_filter = gateway/src/main/webapp/i18n/<lang>/gateway.json
+source_file = gateway/src/main/webapp/i18n/en/gateway.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.global]
+file_filter = gateway/src/main/webapp/i18n/<lang>/global.json
+source_file = gateway/src/main/webapp/i18n/en/global.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.home]
+file_filter = gateway/src/main/webapp/i18n/<lang>/home.json
+source_file = gateway/src/main/webapp/i18n/en/home.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.landing-page]
+file_filter = gateway/src/main/webapp/i18n/<lang>/landingPage.json
+source_file = gateway/src/main/webapp/i18n/en/landingPage.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.login]
+file_filter = gateway/src/main/webapp/i18n/<lang>/login.json
+source_file = gateway/src/main/webapp/i18n/en/login.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.member]
+file_filter = gateway/src/main/webapp/i18n/<lang>/msUserServiceMSMember.json
+source_file = gateway/src/main/webapp/i18n/en/msUserServiceMSMember.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.user]
+file_filter = gateway/src/main/webapp/i18n/<lang>/msUserServiceMSUser.json
+source_file = gateway/src/main/webapp/i18n/en/msUserServiceMSUser.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.password]
+file_filter = gateway/src/main/webapp/i18n/<lang>/password.json
+source_file = gateway/src/main/webapp/i18n/en/password.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.register]
+file_filter = gateway/src/main/webapp/i18n/<lang>/register.json
+source_file = gateway/src/main/webapp/i18n/en/register.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.reset]
+file_filter = gateway/src/main/webapp/i18n/<lang>/reset.json
+source_file = gateway/src/main/webapp/i18n/en/reset.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.sessions]
+file_filter = gateway/src/main/webapp/i18n/<lang>/sessions.json
+source_file = gateway/src/main/webapp/i18n/en/sessions.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.settings]
+file_filter = gateway/src/main/webapp/i18n/<lang>/settings.json
+source_file = gateway/src/main/webapp/i18n/en/settings.json
+source_lang = en
+type = STRUCTURED_JSON
+
+[member-portal.user-management]
+file_filter = gateway/src/main/webapp/i18n/<lang>/user-management.json
+source_file = gateway/src/main/webapp/i18n/en/user-management.json
+source_lang = en
+type = STRUCTURED_JSON
+
+
