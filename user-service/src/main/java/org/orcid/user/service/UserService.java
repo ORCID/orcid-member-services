@@ -166,20 +166,12 @@ public class UserService {
      * @param imageUrl
      *            image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateAccount(String firstName, String lastName, String email, String langKey, String imageUrl) {
         SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(user -> {
-            if (!StringUtils.equals(user.getEmail(), email.toLowerCase())) {
-                user.setEmail(email.toLowerCase());
-                user.setActivated(false);
-                user.setActivationKey(RandomUtil.generateResetKey());
-                user.setActivationDate(Instant.now());
-                mailService.sendActivationEmail(user);
-            }
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setLangKey(langKey);
             user.setImageUrl(imageUrl);
-            user.setAuthorities(getAuthoritiesForUser(UserDTO.valueOf(user), false));
             userRepository.save(user);
             userCaches.evictEntryFromUserCaches(user.getEmail());
             LOG.debug("Changed Information for User: {}", user);
