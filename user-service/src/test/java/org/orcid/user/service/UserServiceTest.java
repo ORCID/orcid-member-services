@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,6 +27,9 @@ import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.upload.UserUploadReader;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceTest {
@@ -173,6 +177,38 @@ class UserServiceTest {
 		assertTrue(user.getAuthorities().contains(AuthoritiesConstants.USER));
 		assertFalse(user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
 	}
+	
+	@Test
+	public void testUpdateAccount() {
+        Authentication authentication = Mockito.mock(Authentication.class);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn("some@email.com");
+		
+		User user = new User();
+		user.setFirstName("old first name");
+		user.setLastName("old last name");
+		user.setEmail("some@email.com");
+		user.setAuthorities(new HashSet<>(Arrays.asList("ROLE_USER", "ROLE_ADMIN")));
+		Mockito.when(userRepository.findOneByLogin(Mockito.anyString())).thenReturn(Optional.of(user));
+		
+		userService.updateAccount("new first name", "new last name", "no@change.com", "en", "hmmmm");
+		
+		ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+		Mockito.verify(userRepository).save(userCaptor.capture());
+		User updatedUser = userCaptor.getValue();
+		assertEquals("new first name", updatedUser.getFirstName());
+		assertEquals("new last name", updatedUser.getLastName());
+		assertEquals("en", updatedUser.getLangKey());
+		assertEquals("hmmmm", updatedUser.getImageUrl());
+		assertEquals("some@email.com", updatedUser.getEmail());
+
+		String[] authorities = updatedUser.getAuthorities().toArray(new String[0]);
+		assertEquals(2, authorities.length); // no change to authorities
+		assertTrue(AuthoritiesConstants.ADMIN.equals(authorities[0]) || AuthoritiesConstants.ADMIN.equals(authorities[1]));
+		assertTrue(AuthoritiesConstants.USER.equals(authorities[0]) || AuthoritiesConstants.USER.equals(authorities[1]));
+	}
 
 	private UserDTO getUserDTO() {
 		UserDTO user = new UserDTO();
@@ -186,7 +222,6 @@ class UserServiceTest {
 		user.setIsAdmin(false);
 		user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
 		return user;
-
 	}
 
 }

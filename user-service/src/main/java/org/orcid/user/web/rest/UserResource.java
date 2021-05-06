@@ -129,7 +129,7 @@ public class UserResource {
         }
         if (!validateExistingUser(userDTO)) {
 	    //return ResponseEntity.badRequest().body(userDTO);
-            throw new BadRequestAlertException("Admin users cannot be associated with this member", "user", "member.no.admin.allowed");
+            throw new BadRequestAlertException("Admin users cannot be associated with this member", "user", "member.no.admin.allowed.string");
 	}
 
         //change the auth if the logged in user is org owner and this is set as mainContact
