@@ -8,14 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
+import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.upload.UserUpload;
 import org.orcid.user.upload.UserUploadReader;
@@ -32,15 +33,15 @@ public class UserCsvReader implements UserUploadReader {
     private Map<String, String> orgWithOwner;
 
     @Autowired
-    UserRepository userRepository;
-
-    UserCsvReader(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
+    
+    @Autowired
+    private UserService userService;
+    
+    private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
     @Override
     public UserUpload readUsersUpload(InputStream inputStream, String createdBy) {
-
         InputStreamReader isr = new InputStreamReader(inputStream);
         UserUpload upload = new UserUpload();
         Iterable<CSVRecord> elements = null;
@@ -130,7 +131,10 @@ public class UserCsvReader implements UserUploadReader {
             if (StringUtils.isBlank(record.get("email"))) {
                 isOk = false;
                 sb.append("Login should not be empty");
-            } else {
+            } else if (!emailValidator.isValid(record.get("email"))) {
+    			sb.append("Invalid email: " + record.get("email"));
+    			isOk = false;
+    		} else {
                 if (userExists(record.get("email"))) {
                     isOk = false;
                     sb.append("User with email " + record.get("email") + " already exists");
@@ -149,6 +153,9 @@ public class UserCsvReader implements UserUploadReader {
                 }
                 isOk = false;
                 sb.append("Salesforce Id should not be empty");
+            } else if (!userService.memberExists(salesforceId)) {
+            	isOk = false;
+                sb.append("Member not found with salesforceId " + salesforceId);
             }
         } catch (IllegalArgumentException e) {
             if (!isOk) {

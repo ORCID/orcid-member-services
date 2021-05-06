@@ -12,6 +12,8 @@ import { SERVER_API_URL } from 'app/app.constants';
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { MSUserService } from './ms-user.service';
 
+import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'jhi-ms-user',
   templateUrl: './ms-user.component.html'
@@ -30,6 +32,7 @@ export class MSUserComponent implements OnInit, OnDestroy {
   predicate: any;
   previousPage: any;
   reverse: any;
+  itemCount: string;
 
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
@@ -43,7 +46,8 @@ export class MSUserComponent implements OnInit, OnDestroy {
     protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected eventManager: JhiEventManager
+    protected eventManager: JhiEventManager,
+    protected translate: TranslateService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.routeData = this.activatedRoute.data.subscribe(data => {
@@ -63,6 +67,12 @@ export class MSUserComponent implements OnInit, OnDestroy {
     this.eventSubscriber = this.eventManager.subscribe('msUserListModification', () => {
       this.loadAll();
     });
+  }
+
+  generateItemCountString() {
+    const first = (this.page - 1) * this.itemsPerPage == 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1;
+    const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems;
+    return this.translate.instant('global.item-count.string', { first: first, second: second, total: this.totalItems });
   }
 
   loadAll() {
@@ -186,6 +196,7 @@ export class MSUserComponent implements OnInit, OnDestroy {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
     this.msUser = data;
+    this.itemCount = this.generateItemCountString();
   }
 
   protected onError(errorMessage: string) {

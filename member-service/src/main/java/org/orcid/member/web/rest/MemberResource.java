@@ -34,7 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 
@@ -97,9 +96,7 @@ public class MemberResource {
 		LOG.debug("REST request to save Member : {}", member);
 		Member created = memberService.createMember(member);
 		return ResponseEntity
-				.created(new URI("/api/member/" + created.getId())).headers(HeaderUtil
-						.createEntityCreationAlert(applicationName, true, "member", created.getId().toString()))
-				.body(created);
+				.created(new URI("/api/member/" + created.getId())).body(created);
 	}
 
 	/**
@@ -138,13 +135,11 @@ public class MemberResource {
 		LOG.debug("REST request to update Member : {}", member);
 		Optional<Member> existentMember = memberService.getMember(member.getId());
 		if (!existentMember.isPresent()) {
-			throw new BadRequestAlertException("Invalid id", "member", "idunavailable");
+			throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
 		}
 		member = memberService.updateMember(member);
 		memberService.updateUsersOnConsortiumLeadChange(member, existentMember.get());
-		return ResponseEntity.ok()
-				.headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "member", member.getId().toString()))
-				.body(member);
+		return ResponseEntity.ok().body(member);
 	}
 
 	/**
@@ -222,8 +217,7 @@ public class MemberResource {
 	public ResponseEntity<Void> deleteMember(@PathVariable String id) {
 		LOG.debug("REST request to delete Member : {}", id);
 		memberService.deleteMember(id);
-		return ResponseEntity.noContent()
-				.headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, "member", id)).build();
+		return ResponseEntity.noContent().build();
 	}
 
 }

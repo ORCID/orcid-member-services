@@ -8,10 +8,12 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.user.repository.UserRepository;
+import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.upload.UserUpload;
 
@@ -19,19 +21,22 @@ class UserCsvReaderTest {
 
     @Mock
     private UserRepository userRepository;
+    
+    @Mock
+    private UserService userService;
+
+    @InjectMocks
+    private UserCsvReader reader;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
-	private UserCsvReader reader = null;
-
 	@Test
 	void testReadUsersUpload() throws IOException {
-	    reader = new UserCsvReader(userRepository);
-
         Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.empty());
+        Mockito.when(userService.memberExists(Mockito.anyString())).thenReturn(true);
 
         InputStream inputStream = getClass().getResourceAsStream("/users.csv");
 		UserUpload upload = reader.readUsersUpload(inputStream, "some-user");

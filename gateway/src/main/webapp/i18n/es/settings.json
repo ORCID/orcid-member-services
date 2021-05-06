@@ -2,10 +2,14 @@
   "settings": {
     "title": { "string": "Ajustes del usuario [<strong>{{username}}</strong>]" },
     "form": {
-      "firstname": { "string": "Nombre" },
-      "firstname.placeholder": { "string": "Su nombre" },
-      "lastname": { "string": "Apellidos" },
-      "lastname.placeholder": { "string": "Sus apellidos" },
+      "firstname": {
+        "string": "Nombre",
+        "placeholder": { "string": "Su nombre" }
+      },
+      "lastname": {
+        "string": "Apellidos",
+        "placeholder": { "string": "Sus apellidos" }
+      },
       "language": { "string": "Idioma" },
       "button": { "string": "Guardar" }
     },

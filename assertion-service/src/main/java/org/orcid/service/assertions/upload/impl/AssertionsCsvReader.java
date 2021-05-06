@@ -20,6 +20,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.orcid.config.Constants;
 import org.orcid.domain.Assertion;
@@ -53,6 +54,8 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 	// "ftp"
 
 	UrlValidator urlValidator = new OrcidUrlValidator(urlValschemes);
+	
+	private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
 	@Autowired
 	private AssertionService assertionsService;
@@ -302,6 +305,8 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 		if (email == null) {
 			upload.addError(line.getRecordNumber(), "email must be specified");
 			return a;
+		} else if (!emailValidator.isValid(email)) {
+			upload.addError(line.getRecordNumber(), "invalid email");
 		} else {
 			// attempt to change email?
 			if (id != null && assertionsService.assertionExists(id)) {

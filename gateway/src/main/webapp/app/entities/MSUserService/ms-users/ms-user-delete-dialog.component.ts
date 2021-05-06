@@ -7,6 +7,8 @@ import { JhiEventManager } from 'ng-jhipster';
 import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
 import { MSUserService } from './ms-user.service';
 
+import { JhiAlertService } from 'ng-jhipster';
+
 @Component({
   selector: 'jhi-ms-user-delete-dialog',
   templateUrl: './ms-user-delete-dialog.component.html'
@@ -14,7 +16,12 @@ import { MSUserService } from './ms-user.service';
 export class MSUserDeleteDialogComponent {
   msUser: IMSUser;
 
-  constructor(protected msUserService: MSUserService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
+  constructor(
+    protected msUserService: MSUserService,
+    public activeModal: NgbActiveModal,
+    protected eventManager: JhiEventManager,
+    private alertService: JhiAlertService
+  ) {}
 
   clear() {
     this.activeModal.dismiss('cancel');
@@ -27,6 +34,7 @@ export class MSUserDeleteDialogComponent {
         content: 'Deleted an msUser'
       });
       this.activeModal.dismiss(true);
+      this.alertService.success('userServiceApp.user.deleted.string');
     });
   }
 }

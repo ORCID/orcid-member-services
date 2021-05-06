@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,7 +30,6 @@ import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.user.web.rest.errors.InvalidPasswordException;
 import org.orcid.user.web.rest.errors.LoginAlreadyUsedException;
-import org.orcid.user.web.rest.errors.MemberNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -370,14 +373,6 @@ public class UserService {
         Map<String, String> orgWithOwner = usersUpload.getOrgWithOwner();
         usersUpload.getUserDTOs().forEach(userDTO -> {
             String salesforceId = userDTO.getSalesforceId();
-
-            if (!memberExists(salesforceId)) {
-                String errorMessage = String.format("Member not found with salesforceId %s", salesforceId);
-                Map<String, String> params = new HashMap<>();
-                params.put("params", salesforceId);
-                throw new MemberNotFoundException(errorMessage, params);
-            }
-
             Optional<User> existing = getUserWithAuthoritiesByLogin(userDTO.getLogin());
             if (existing.isPresent()) {
                 updateUser(userDTO);

@@ -49,9 +49,9 @@
   },
   "msUserServiceApp": {
     "msUserServiceMSMember": {
-      "created": { "string": "Un nuevo Member Settings ha sido creado con el identificador {{ param }}" },
-      "updated": { "string": "Un Member Settings ha sido actualizado con el identificador {{ param }}" },
-      "deleted": { "string": "Un Member Settings ha sido eliminado con el identificador {{ param }}" }
+      "created": { "string": "Member ha sido creado" },
+      "updated": { "string": "Member ha sido actualizado" },
+      "deleted": { "string": "Member ha sido eliminado" }
     }
   }
 }

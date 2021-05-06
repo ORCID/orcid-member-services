@@ -41,8 +41,6 @@ public class UserDTO {
     @Size(min = 5, max = 254)
     private String email;
 
-    private String emailError;
-
     @Size(max = 256)
     private String imageUrl;
 
@@ -214,14 +212,6 @@ public class UserDTO {
 
     public void setLoginError(String loginError) {
         this.loginError = loginError;
-    }
-
-    public String getEmailError() {
-        return emailError;
-    }
-
-    public void setEmailError(String emailError) {
-        this.emailError = emailError;
     }
 
     public String getSalesforceIdError() {

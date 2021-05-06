@@ -110,9 +110,9 @@
   },
   "assertionServiceApp": {
     "affiliation": {
-      "created": { "string": "New affiliation {{ param }} was created" },
-      "updated": { "string": "Affiliation {{ param }} was updated" },
-      "deleted": { "string": "Affiliation {{ param }} was deleted" }
+      "created": { "string": "Affiliation created" },
+      "updated": { "string": "Affiliation updated" },
+      "deleted": { "string": "Affiliation deleted" }
     }
   }
 }

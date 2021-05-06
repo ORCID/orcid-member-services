@@ -46,11 +46,11 @@
       "lastModifiedDate": { "string": "Ultima fecha de modificacion" }
     }
   },
-  "msUserServiceApp": {
-    "msUserServiceMSUser": {
-      "created": { "string": "Un nuevo User Settings ha sido creado con el identificador {{ param }}" },
-      "updated": { "string": "Un User Settings ha sido actualizado con el identificador {{ param }}" },
-      "deleted": { "string": "Un User Settings ha sido eliminado con el identificador {{ param }}" }
+  "userServiceApp": {
+    "user": {
+      "created": { "string": "Nuevo user ha sido creado." },
+      "updated": { "string": "User ha sido actualizado." },
+      "deleted": { "string": "User ha sido eliminado." }
     }
   }
 }

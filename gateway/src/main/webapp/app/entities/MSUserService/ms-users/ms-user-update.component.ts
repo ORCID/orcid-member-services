@@ -49,7 +49,7 @@ export class MSUserUpdateComponent implements OnInit {
   hasOwner = false;
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
+    protected alertService: JhiAlertService,
     protected msUserService: MSUserService,
     protected msMemberService: MSMemberService,
     protected activatedRoute: ActivatedRoute,
@@ -182,14 +182,14 @@ export class MSUserUpdateComponent implements OnInit {
       if (msUser.id !== undefined) {
         if (this.currentAccount.id === msUser.id) {
           if (this.currentAccount.mainContact !== msUser.mainContact) {
-            this.subscribeToSaveResponseWithOwnershipChange(this.msUserService.update(msUser));
+            this.subscribeToUpdateResponseWithOwnershipChange(this.msUserService.update(msUser));
           } else {
-            this.subscribeToSaveResponse(this.msUserService.update(msUser));
+            this.subscribeToUpdateResponse(this.msUserService.update(msUser));
           }
         } else if (msUser.mainContact && !this.hasRoleAdmin()) {
-          this.subscribeToSaveResponseWithOwnershipChange(this.msUserService.update(msUser));
+          this.subscribeToUpdateResponseWithOwnershipChange(this.msUserService.update(msUser));
         } else {
-          this.subscribeToSaveResponse(this.msUserService.update(msUser));
+          this.subscribeToUpdateResponse(this.msUserService.update(msUser));
         }
       } else {
         if (msUser.mainContact && !this.hasRoleAdmin()) {
@@ -204,9 +204,9 @@ export class MSUserUpdateComponent implements OnInit {
   sendActivate() {
     this.msUserService.sendActivate(this.existentMSUser).subscribe(res => {
       if (res.ok) {
-        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.success.string', null, null);
+        this.alertService.success('gatewayApp.msUserServiceMSUser.sendActivate.success.string', null, null);
       } else {
-        this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.error.string', null, null);
+        this.alertService.success('gatewayApp.msUserServiceMSUser.sendActivate.error.string', null, null);
       }
       this.previousState();
     });
@@ -246,18 +246,40 @@ export class MSUserUpdateComponent implements OnInit {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
+  protected subscribeToUpdateResponse(result: Observable<HttpResponse<IMSUser>>) {
+    result.subscribe(() => this.onUpdateSuccess(), () => this.onSaveError());
+  }
+
   protected subscribeToSaveResponseWithOwnershipChange(result: Observable<HttpResponse<IMSUser>>) {
     result.subscribe(() => this.onSaveSuccessOwnershipChange(), () => this.onSaveError());
+  }
+
+  protected subscribeToUpdateResponseWithOwnershipChange(result: Observable<HttpResponse<IMSUser>>) {
+    result.subscribe(() => this.onUpdateSuccessOwnershipChange(), () => this.onSaveError());
   }
 
   protected onSaveSuccess() {
     this.isSaving = false;
     this.previousState();
+    this.alertService.success('userServiceApp.user.created.string');
+  }
+
+  protected onUpdateSuccess() {
+    this.isSaving = false;
+    this.previousState();
+    this.alertService.success('userServiceApp.user.updated.string');
   }
 
   protected onSaveSuccessOwnershipChange() {
     this.isSaving = false;
     window.location.href = SERVER_API_URL;
+    this.alertService.success('userServiceApp.user.created.string');
+  }
+
+  protected onUpdateSuccessOwnershipChange() {
+    this.isSaving = false;
+    window.location.href = SERVER_API_URL;
+    this.alertService.success('userServiceApp.user.updated.string');
   }
 
   protected onSaveError() {
@@ -265,6 +287,6 @@ export class MSUserUpdateComponent implements OnInit {
   }
 
   protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
+    this.alertService.error(errorMessage, null, null);
   }
 }

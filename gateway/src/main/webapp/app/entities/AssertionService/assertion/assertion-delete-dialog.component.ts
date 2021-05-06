@@ -8,6 +8,8 @@ import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 import { AssertionService } from './assertion.service';
 import { ASSERTION_STATUS } from 'app/shared/constants/orcid-api.constants';
 
+import { JhiAlertService } from 'ng-jhipster';
+
 @Component({
   selector: 'jhi-assertion-delete-dialog',
   templateUrl: './assertion-delete-dialog.component.html'
@@ -19,7 +21,12 @@ export class AssertionDeleteDialogComponent {
   errorDeletingFromOrcid: boolean;
   errorUserRevoked = false;
 
-  constructor(protected assertionService: AssertionService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {
+  constructor(
+    protected assertionService: AssertionService,
+    public activeModal: NgbActiveModal,
+    protected eventManager: JhiEventManager,
+    private alertService: JhiAlertService
+  ) {
     this.errorDeletingFromOrcid = false;
   }
 
@@ -38,12 +45,12 @@ export class AssertionDeleteDialogComponent {
       this.assertionService.deleteFromOrcid(this.assertion.id).subscribe(res => {
         if (res.body.deleted === true || res.body.statusCode === 404) {
           this.assertionService.delete(this.assertion.id).subscribe(response => {
-            this.activeModal.dismiss(true);
             this.eventManager.broadcast({
               name: 'assertionListModification',
               content: 'Deleted an assertion'
             });
             this.activeModal.dismiss(true);
+            this.alertService.success('assertionServiceApp.affiliation.deleted.string');
           });
         } else {
           this.errorDeletingFromOrcid = true;
@@ -56,12 +63,12 @@ export class AssertionDeleteDialogComponent {
       });
     } else {
       this.assertionService.delete(this.assertion.id).subscribe(response => {
-        this.activeModal.dismiss(true);
         this.eventManager.broadcast({
           name: 'assertionListModification',
           content: 'Deleted an assertion'
         });
         this.activeModal.dismiss(true);
+        this.alertService.success('assertionServiceApp.affiliation.deleted.string');
       });
     }
   }

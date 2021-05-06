@@ -66,8 +66,6 @@ import io.github.jhipster.web.util.PaginationUtil;
 public class AssertionServiceResource {
 	private static final Logger LOG = LoggerFactory.getLogger(AssertionServiceResource.class);
 
-	private static final String ENTITY_NAME = "affiliation";
-
 	private final String GRID_SOURCE_ID = "GRID";
 
 	@Value("${jhipster.clientApp.name}")
@@ -152,9 +150,7 @@ public class AssertionServiceResource {
 		validateAssertion(assertion);
 		assertion = assertionService.createAssertion(assertion);
 
-		return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId()))
-				.headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, assertion.getId()))
-				.body(assertion);
+		return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId())).body(assertion);
 	}
 
 	@PostMapping("/assertion/upload")
@@ -166,8 +162,7 @@ public class AssertionServiceResource {
 	@DeleteMapping("/assertion/{id}")
 	public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
 		assertionService.deleteById(id);
-		return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id))
-				.body("{\"id\":\"" + id + "\"}");
+		return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
 	}
 
 	/**
@@ -405,7 +400,7 @@ public class AssertionServiceResource {
 			}
 
 			if (!valid) {
-				throw new BadRequestAlertException("Url is invalid", "member", "invalidUrl");
+				throw new BadRequestAlertException("Url is invalid", "assertion", "invalidUrl.string");
 			}
 		}
 		return url;

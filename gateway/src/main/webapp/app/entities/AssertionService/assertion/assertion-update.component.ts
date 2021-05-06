@@ -8,6 +8,7 @@ import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { IAssertion, Assertion } from 'app/shared/model/AssertionService/assertion.model';
 import { AssertionService } from './assertion.service';
 import { DateUtilService } from 'app/shared/util/date-util.service';
+import { JhiAlertService } from 'ng-jhipster';
 import {
   AFFILIATION_TYPES,
   COUNTRIES,
@@ -154,6 +155,7 @@ export class AssertionUpdateComponent implements OnInit {
     protected assertionService: AssertionService,
     protected dateUtilService: DateUtilService,
     protected activatedRoute: ActivatedRoute,
+    private alertService: JhiAlertService,
     private fb: FormBuilder
   ) {}
 
@@ -230,9 +232,21 @@ export class AssertionUpdateComponent implements OnInit {
     this.isSaving = true;
     const assertion = this.createFromForm();
     if (assertion.id !== undefined && assertion.id != null) {
-      this.subscribeToSaveResponse(this.assertionService.update(assertion));
+      this.assertionService.update(assertion).subscribe(
+        () => {
+          this.onSaveSuccess();
+          this.alertService.success('assertionServiceApp.affiliation.updated.string');
+        },
+        () => this.onSaveError()
+      );
     } else {
-      this.subscribeToSaveResponse(this.assertionService.create(assertion));
+      this.assertionService.create(assertion).subscribe(
+        () => {
+          this.onSaveSuccess();
+          this.alertService.success('assertionServiceApp.affiliation.created.string');
+        },
+        () => this.onSaveError()
+      );
     }
   }
 
@@ -270,10 +284,6 @@ export class AssertionUpdateComponent implements OnInit {
       status: this.editForm.get(['status']) ? this.editForm.get(['status']).value : '',
       ownerId: this.editForm.get(['ownerId']) ? this.editForm.get(['ownerId']).value : ''
     };
-  }
-
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IAssertion>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
   protected onSaveSuccess() {
