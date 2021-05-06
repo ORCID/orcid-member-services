@@ -85,7 +85,7 @@ public class AccountResource {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && !existingUser.get().getLogin().equalsIgnoreCase(userLogin)) {
-            throw new AccountResourceException("Attempt to update a different user");
+            throw new EmailAlreadyUsedException();
         }
         Optional<User> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
