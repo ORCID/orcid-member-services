@@ -1,0 +1,107 @@
+## This file is a backup copy of the configuration file of transifex. 
+## it does not affect the functionality of the integration here in any way. 
+
+filters:
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/assertionServiceAssertion.json
+    source_file: gateway/src/main/webapp/i18n/en/assertionServiceAssertion.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/activate.json
+    source_file: gateway/src/main/webapp/i18n/en/activate.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/AssertionService-affiliationSection.json
+    source_file: gateway/src/main/webapp/i18n/en/AssertionService-affiliationSection.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/error.json
+    source_file: gateway/src/main/webapp/i18n/en/error.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/gateway.json
+    source_file: gateway/src/main/webapp/i18n/en/gateway.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/global.json
+    source_file: gateway/src/main/webapp/i18n/en/global.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/home.json
+    source_file: gateway/src/main/webapp/i18n/en/home.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/landingPage.json
+    source_file: gateway/src/main/webapp/i18n/en/landingPage.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/login.json
+    source_file: gateway/src/main/webapp/i18n/en/login.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/msUserServiceMSMember.json
+    source_file: gateway/src/main/webapp/i18n/en/msUserServiceMSMember.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/msUserServiceMSUser.json
+    source_file: gateway/src/main/webapp/i18n/en/msUserServiceMSUser.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/password.json
+    source_file: gateway/src/main/webapp/i18n/en/password.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/register.json
+    source_file: gateway/src/main/webapp/i18n/en/register.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/reset.json
+    source_file: gateway/src/main/webapp/i18n/en/reset.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/sessions.json
+    source_file: gateway/src/main/webapp/i18n/en/sessions.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/settings.json
+    source_file: gateway/src/main/webapp/i18n/en/settings.json
+
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/user-management.json
+    source_file: gateway/src/main/webapp/i18n/en/user-management.json
+
+
