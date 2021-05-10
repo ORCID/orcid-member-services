@@ -27,7 +27,6 @@ import org.orcid.user.domain.Authority;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
-import org.orcid.user.service.MailService;
 import org.orcid.user.service.MemberService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.cache.UserCaches;
@@ -51,21 +50,21 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @SpringBootTest(classes = UserServiceApp.class)
 public class UserResourceIT {
 
-    private static final String DEFAULT_LOGIN = "johndoe";
-    private static final String UPDATED_LOGIN = "jhipster";
+    private static final String DEFAULT_LOGIN = "user@orcid.org";
+    private static final String UPDATED_LOGIN = "jhipster@orcid.org";
 
     private static final String DEFAULT_ID = "id1";
 
-    private static final String DEFAULT_PASSWORD = "passjohndoe";
-    private static final String UPDATED_PASSWORD = "passjhipster";
+    private static final String DEFAULT_PASSWORD = "password";
+    private static final String UPDATED_PASSWORD = "new-password";
 
-    private static final String DEFAULT_EMAIL = "johndoe@orcid.org";
-    private static final String UPDATED_EMAIL = "jhipster@orcid.org";
+    private static final String DEFAULT_EMAIL = "user@orcid.org";
+    private static final String UPDATED_EMAIL = "user@something.com";
 
-    private static final String DEFAULT_FIRSTNAME = "john";
+    private static final String DEFAULT_FIRSTNAME = "user";
     private static final String UPDATED_FIRSTNAME = "jhipsterFirstName";
 
-    private static final String DEFAULT_LASTNAME = "doe";
+    private static final String DEFAULT_LASTNAME = "last-name";
     private static final String UPDATED_LASTNAME = "jhipsterLastName";
 
     private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
@@ -105,6 +104,8 @@ public class UserResourceIT {
     public void setup() {
         cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).clear();
+        userRepository.deleteAll();
+        user = createEntity();
 
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource).setCustomArgumentResolvers(pageableArgumentResolver).setControllerAdvice(exceptionTranslator)
                 .setMessageConverters(jacksonMessageConverter).build();
@@ -116,14 +117,7 @@ public class UserResourceIT {
         ReflectionTestUtils.setField(userService, "memberService", mockedMemberService);
     }
 
-    /**
-     * Create a User.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which has a required relationship to the User
-     * entity.
-     */
-    public static User createEntity() {
+    private User createEntity() {
         User user = new User();
         user.setLogin(DEFAULT_LOGIN);
         user.setPassword(RandomStringUtils.random(60));
@@ -135,12 +129,6 @@ public class UserResourceIT {
         user.setLangKey(DEFAULT_LANGKEY);
         user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         return user;
-    }
-
-    @BeforeEach
-    public void initTest() {
-        userRepository.deleteAll();
-        user = createEntity();
     }
 
     @Test
@@ -315,7 +303,7 @@ public class UserResourceIT {
         assertThat(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
 
         // Get the user
-        restUserMockMvc.perform(get("/api/users/{login}", user.getLogin())).andExpect(status().isOk())
+        restUserMockMvc.perform(get("/api/users/{login}/", user.getLogin())).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$.login").value(user.getLogin()))
                 .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME)).andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
                 .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL)).andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL))
@@ -419,10 +407,10 @@ public class UserResourceIT {
         userRepository.save(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster");
+        anotherUser.setLogin("jhipster@orcid.org");
         anotherUser.setPassword(RandomStringUtils.random(60));
         anotherUser.setActivated(true);
-        anotherUser.setEmail("jhipster@localhost");
+        anotherUser.setEmail("jhipster@orcid.org");
         anotherUser.setFirstName("java");
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
@@ -439,7 +427,7 @@ public class UserResourceIT {
         managedUserVM.setPassword(updatedUser.getPassword());
         managedUserVM.setFirstName(updatedUser.getFirstName());
         managedUserVM.setLastName(updatedUser.getLastName());
-        managedUserVM.setEmail("jhipster@localhost");// this email should
+        managedUserVM.setEmail("jhipster@@orcid.org");// this email should
                                                      // already be used by
                                                      // anotherUser
         managedUserVM.setActivated(updatedUser.getActivated());
@@ -462,10 +450,10 @@ public class UserResourceIT {
         userRepository.save(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster");
+        anotherUser.setLogin("jhipster@orcid.org");
         anotherUser.setPassword(RandomStringUtils.random(60));
         anotherUser.setActivated(true);
-        anotherUser.setEmail("jhipster@localhost");
+        anotherUser.setEmail("jhipster@orcid.org");
         anotherUser.setFirstName("java");
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");

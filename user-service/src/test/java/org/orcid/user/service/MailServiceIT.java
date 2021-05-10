@@ -174,7 +174,7 @@ public class MailServiceIT {
     public void testCreationEmail() throws Exception {
         User user = new User();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
-        user.setLogin("john");
+        user.setLogin("john.doe@example.com");
         user.setEmail("john.doe@example.com");
         mailService.sendCreationEmail(user);
         verify(javaMailSender).send(messageCaptor.capture());
@@ -204,7 +204,7 @@ public class MailServiceIT {
     public void testOrganizationOwnerChangedMail() throws Exception {
         User user = new User();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
-        user.setLogin("john");
+        user.setLogin("john.doe@example.com");
         user.setEmail("john.doe@example.com");
         mailService.sendOrganizationOwnerChangedMail(user, "Member 1");
         verify(javaMailSender).send(messageCaptor.capture());

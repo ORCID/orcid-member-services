@@ -1,9 +1,7 @@
 package org.orcid.user.web.rest;
 
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -12,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.SecurityUtils;
-import org.orcid.user.security.UserNotActivatedException;
 import org.orcid.user.service.MailService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.PasswordChangeDTO;
@@ -28,7 +25,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
