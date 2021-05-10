@@ -13,16 +13,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.orcid.user.UserServiceApp;
-import org.orcid.user.config.Constants;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
-import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.service.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 
 /**
  * Integration tests for {@link UserService}.
@@ -30,9 +26,9 @@ import org.springframework.data.domain.PageRequest;
 @SpringBootTest(classes = UserServiceApp.class)
 public class UserServiceIT {
 
-    private static final String DEFAULT_LOGIN = "johndoe";
+    private static final String DEFAULT_LOGIN = "johndoe@orcid.org";
 
-    private static final String DEFAULT_EMAIL = "johndoe@localhost";
+    private static final String DEFAULT_EMAIL = "johndoe@orcid.org";
 
     private static final String DEFAULT_FIRSTNAME = "john";
 
@@ -69,7 +65,7 @@ public class UserServiceIT {
     @Test
     public void assertThatUserMustExistToResetPassword() {
         userRepository.save(user);
-        Optional<User> maybeUser = userService.requestPasswordReset("invalid.login@localhost");
+        Optional<User> maybeUser = userService.requestPasswordReset("invalid.login@orcid.org");
         assertThat(maybeUser).isNotPresent();
 
         maybeUser = userService.requestPasswordReset(user.getEmail());

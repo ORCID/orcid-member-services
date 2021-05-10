@@ -236,8 +236,8 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      *         body the "login" user, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/users/{loginOrId}")
-    public ResponseEntity<UserDTO> getUserLogin(@PathVariable String login) {
+    @GetMapping("/users/{login}")
+    public ResponseEntity<UserDTO> getUserByLogin(@PathVariable String login) {
         LOG.debug("REST request to get User : {}", login);
         Optional<User> user = userService.getUserWithAuthoritiesByLogin(login);
         if (!user.isPresent()) {
