@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.orcid.user.UserServiceApp;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
+import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,27 +43,14 @@ public class UserServiceIT {
 
     @Autowired
     private UserService userService;
-
-    private User user;
-
-    @BeforeEach
-    public void init() {
-        userRepository.deleteAll();
-        user = new User();
-        user.setLogin(DEFAULT_LOGIN);
-        user.setPassword(RandomStringUtils.random(60));
-        user.setActivated(true);
-        user.setEmail(DEFAULT_EMAIL);
-        user.setFirstName(DEFAULT_FIRSTNAME);
-        user.setLastName(DEFAULT_LASTNAME);
-        user.setImageUrl(DEFAULT_IMAGEURL);
-        user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
-
-    }
-
+    
+    @Autowired
+    private UserCaches userCaches;
+    
     @Test
     public void assertThatUserMustExistToResetPassword() {
+    	User user = getUser();
+    	user.setActivated(true);
         userRepository.save(user);
         Optional<User> maybeUser = userService.requestPasswordReset("invalid.login@orcid.org");
         assertThat(maybeUser).isNotPresent();
@@ -73,20 +60,24 @@ public class UserServiceIT {
         assertThat(maybeUser.orElse(null).getEmail()).isEqualTo(user.getEmail());
         assertThat(maybeUser.orElse(null).getResetDate()).isNotNull();
         assertThat(maybeUser.orElse(null).getResetKey()).isNotNull();
+        
+        removeUser(user);
     }
 
     @Test
     public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
+    	User user = getUser();
         user.setActivated(false);
         userRepository.save(user);
 
         Optional<User> maybeUser = userService.requestPasswordReset(user.getLogin());
         assertThat(maybeUser).isNotPresent();
-        userRepository.delete(user);
+        removeUser(user);
     }
 
     @Test
     public void assertThatResetKeyMustNotBeOlderThan24Hours() {
+    	User user = getUser();
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
@@ -96,11 +87,12 @@ public class UserServiceIT {
 
         Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
         assertThat(maybeUser).isNotPresent();
-        userRepository.delete(user);
+        removeUser(user);
     }
 
     @Test
     public void assertThatResetKeyMustBeValid() {
+    	User user = getUser();
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         user.setActivated(true);
         user.setResetDate(daysAgo);
@@ -109,11 +101,12 @@ public class UserServiceIT {
 
         Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
         assertThat(maybeUser).isNotPresent();
-        userRepository.delete(user);
+        removeUser(user);
     }
 
     @Test
     public void assertThatUserCanResetPassword() {
+    	User user = getUser();
         String oldPassword = user.getPassword();
         Instant daysAgo = Instant.now().minus(2, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
@@ -128,11 +121,12 @@ public class UserServiceIT {
         assertThat(maybeUser.orElse(null).getResetKey()).isNull();
         assertThat(maybeUser.orElse(null).getPassword()).isNotEqualTo(oldPassword);
 
-        userRepository.delete(user);
+        removeUser(user);
     }
 
     @Test
     public void assertThatNotActivatedUsersWithNotNullActivationKeyCreatedBefore3DaysAreDeleted() {
+    	User user = getUser();
         Instant now = Instant.now();
         user.setActivated(false);
         user.setActivationKey(RandomStringUtils.random(20));
@@ -144,10 +138,12 @@ public class UserServiceIT {
         userService.removeNotActivatedUsers();
         users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isEmpty();
+        removeUser(user);
     }
 
     @Test
     public void assertThatNotActivatedUsersWithNullActivationKeyCreatedBefore3DaysAreNotDeleted() {
+    	User user = getUser();
         Instant now = Instant.now();
         user.setActivated(false);
         User dbUser = userRepository.save(user);
@@ -158,6 +154,27 @@ public class UserServiceIT {
         userService.removeNotActivatedUsers();
         Optional<User> maybeDbUser = userRepository.findById(dbUser.getId());
         assertThat(maybeDbUser).contains(dbUser);
+        removeUser(user);
+    }
+    
+    private User getUser() {
+    	User user = new User();
+        user.setLogin(DEFAULT_LOGIN);
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+        user.setEmail(DEFAULT_EMAIL);
+        user.setFirstName(DEFAULT_FIRSTNAME);
+        user.setLastName(DEFAULT_LASTNAME);
+        user.setImageUrl(DEFAULT_IMAGEURL);
+        user.setLangKey(DEFAULT_LANGKEY);
+        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+        return user;
+    }
+    
+    private void removeUser(User user) {
+    	userRepository.delete(user);
+        userCaches.evictEntryFromLoginCache(user.getLogin());
+        userCaches.evictEntryFromEmailCache(user.getEmail());
     }
 
 }

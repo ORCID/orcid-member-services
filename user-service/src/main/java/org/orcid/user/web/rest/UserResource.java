@@ -236,12 +236,12 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      *         body the "login" user, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/users/{login}")
-    public ResponseEntity<UserDTO> getUserByLogin(@PathVariable String login) {
-        LOG.debug("REST request to get User : {}", login);
-        Optional<User> user = userService.getUserWithAuthoritiesByLogin(login);
+    @GetMapping("/users/{loginOrId}")
+    public ResponseEntity<UserDTO> getUserByLogin(@PathVariable String loginOrId) {
+        LOG.debug("REST request to get User : {}", loginOrId);
+        Optional<User> user = userService.getUserWithAuthoritiesByLogin(loginOrId);
         if (!user.isPresent()) {
-            user = userService.getUserWithAuthorities(login);
+            user = userService.getUserWithAuthorities(loginOrId);
         }
         return ResponseUtil.wrapOrNotFound(user.map(UserDTO::valueOf));
     }
