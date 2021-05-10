@@ -237,11 +237,11 @@ public class UserResource {
      *         body the "login" user, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/users/{loginOrId}")
-    public ResponseEntity<UserDTO> getUserByIdOrLogin(@PathVariable String loginOrId) {
-        LOG.debug("REST request to get User : {}", loginOrId);
-        Optional<User> user = userService.getUserWithAuthoritiesByLogin(loginOrId);
+    public ResponseEntity<UserDTO> getUserLogin(@PathVariable String login) {
+        LOG.debug("REST request to get User : {}", login);
+        Optional<User> user = userService.getUserWithAuthoritiesByLogin(login);
         if (!user.isPresent()) {
-            user = userService.getUserWithAuthorities(loginOrId);
+            user = userService.getUserWithAuthorities(login);
         }
         return ResponseUtil.wrapOrNotFound(user.map(UserDTO::valueOf));
     }

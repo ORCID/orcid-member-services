@@ -27,7 +27,6 @@ import org.orcid.user.domain.Authority;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
-import org.orcid.user.service.MailService;
 import org.orcid.user.service.MemberService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.cache.UserCaches;
@@ -51,8 +50,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @SpringBootTest(classes = UserServiceApp.class)
 public class UserResourceIT {
 
-    private static final String DEFAULT_LOGIN = "johndoe";
-    private static final String UPDATED_LOGIN = "jhipster";
+    private static final String DEFAULT_LOGIN = "johndoe@orcid.org";
+    private static final String UPDATED_LOGIN = "jhipster@orcid.org";
 
     private static final String DEFAULT_ID = "id1";
 
@@ -419,10 +418,10 @@ public class UserResourceIT {
         userRepository.save(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster");
+        anotherUser.setLogin("jhipster@orcid.org");
         anotherUser.setPassword(RandomStringUtils.random(60));
         anotherUser.setActivated(true);
-        anotherUser.setEmail("jhipster@localhost");
+        anotherUser.setEmail("jhipster@orcid.org");
         anotherUser.setFirstName("java");
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
@@ -439,7 +438,7 @@ public class UserResourceIT {
         managedUserVM.setPassword(updatedUser.getPassword());
         managedUserVM.setFirstName(updatedUser.getFirstName());
         managedUserVM.setLastName(updatedUser.getLastName());
-        managedUserVM.setEmail("jhipster@localhost");// this email should
+        managedUserVM.setEmail("jhipster@@orcid.org");// this email should
                                                      // already be used by
                                                      // anotherUser
         managedUserVM.setActivated(updatedUser.getActivated());
@@ -462,10 +461,10 @@ public class UserResourceIT {
         userRepository.save(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster");
+        anotherUser.setLogin("jhipster@orcid.org");
         anotherUser.setPassword(RandomStringUtils.random(60));
         anotherUser.setActivated(true);
-        anotherUser.setEmail("jhipster@localhost");
+        anotherUser.setEmail("jhipster@orcid.org");
         anotherUser.setFirstName("java");
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
