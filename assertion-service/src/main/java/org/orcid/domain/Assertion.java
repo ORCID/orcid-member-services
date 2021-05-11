@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 
 import org.orcid.domain.enumeration.AffiliationSection;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -84,6 +85,7 @@ public class Assertion implements Serializable {
     @Field("external_id_url")
     private String externalIdUrl;
 
+    @Indexed
     @Field("put_code")
     private String putCode;
 
@@ -100,6 +102,7 @@ public class Assertion implements Serializable {
     @Field("owner_id")
     private String ownerId;
     
+    @Indexed
     @Field("salesforce_id")
     private String salesforceId;
     
