@@ -2,15 +2,13 @@ package org.orcid.domain;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -18,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Document(collection = "orcid_record")
 public class OrcidRecord {
-    private static final Logger LOG = LoggerFactory.getLogger(OrcidRecord.class);
     
     public static String KEY_TOKEN_ID= "token_id";
+    
     public static String KEY_SALESFORCE_ID= "salesforce_id";
     
     @Id
@@ -29,6 +27,7 @@ public class OrcidRecord {
     @NotNull
     @Pattern(regexp = ".*@.*\\..*")
     @Field("email")
+    @Indexed
     private String email;
 
     @Field("orcid")
