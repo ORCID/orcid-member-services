@@ -2,6 +2,7 @@ package org.orcid.user.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -64,6 +65,29 @@ class UserServiceTest {
 	@BeforeEach
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+	}
+	
+	@Test
+	void testClearUser() {
+		User userToBeCleared = new User();
+		userToBeCleared.setId("some-id");
+		userToBeCleared.setFirstName("first name");
+		userToBeCleared.setLastName("last name");
+		userToBeCleared.setEmail("something@somewhere.com");
+		userToBeCleared.setLogin("something@somewhere.com");
+		
+		Mockito.when(userRepository.findOneById(Mockito.eq("some-id"))).thenReturn(Optional.of(userToBeCleared));
+		Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(null);
+		
+		userService.clearUser("some-id");
+		
+		ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+		Mockito.verify(userRepository).save(captor.capture());
+		User cleared = captor.getValue();
+		assertNull(cleared.getFirstName());
+		assertNull(cleared.getLastName());
+		assertEquals("some-id@deleted.orcid.org", cleared.getEmail());
+		assertEquals("some-id@deleted.orcid.org", cleared.getLogin());
 	}
 
 	@Test

@@ -246,7 +246,7 @@ public class UserService {
             user.setImageUrl(null);
             user.setLangKey(null);
             user.setLastName(null);
-            user.setLogin(id);
+            user.setLogin(user.getEmail());
             user.setPassword(RandomStringUtils.randomAlphanumeric(60));
             user.setResetDate(null);
             user.setResetKey(null);
