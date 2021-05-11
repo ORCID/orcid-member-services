@@ -9,6 +9,7 @@
     },
     "logged": {
       "message": { "string": "You are logged in as user \"{{username}}\"." }
-    }
+    },
+    "test": { "string": "this is a test" }
   }
 }
