@@ -1,0 +1,36 @@
+{
+  "settings": {
+    "title": { "string": "[Şḗŧŧīƞɠş ƒǿř {{username}} (Ẏǿŭ) ẛǈϑΰǋΰǈ靐 ϐς]" },
+    "form": {
+      "firstname": {
+        "string": "[Ƒīřşŧ Ƞȧḿḗ ϱϕς鶱ı ǅııſ]",
+        "placeholder": { "string": "Your first name" }
+      },
+      "lastname": {
+        "string": "[Ŀȧşŧ Ƞȧḿḗ ǈϵΰẛ ϱǋϖǲ]",
+        "placeholder": { "string": "Your last name" }
+      },
+      "language": { "string": "[Ŀȧƞɠŭȧɠḗ ςııẛϑ鶱ϖẛ]" },
+      "button": { "string": "[Şȧṽḗ ıΰϰǲ]" }
+    },
+    "messages": {
+      "error": {
+        "fail": { "string": "[<strong>Ȧƞ ḗřřǿř ħȧş ǿƈƈŭřřḗḓ!</strong> Şḗŧŧīƞɠş ƈǿŭŀḓ ƞǿŧ ƀḗ şȧṽḗḓ. ǈΐϐςǈǋǋǋſϵ]" },
+        "emailexists": { "string": "[<strong>Ḗḿȧīŀ īş ȧŀřḗȧḓẏ īƞ ŭşḗ!</strong> Ƥŀḗȧşḗ ƈħǿǿşḗ ȧƞǿŧħḗř ǿƞḗ. ϕϰϑΰϵςǋẛϑϖ]" }
+      },
+      "success": { "string": "[<strong>Şḗŧŧīƞɠş şȧṽḗḓ!</strong> ΰϰẛΐϑϱΰǅϱςǋ]" },
+      "validate": {
+        "firstname": {
+          "required": { "string": "[Ẏǿŭř ƒīřşŧ ƞȧḿḗ īş řḗɋŭīřḗḓ. ςϖſǋ ϵΐϰǋϰ]" },
+          "minlength": { "string": "[Ẏǿŭř ƒīřşŧ ƞȧḿḗ īş řḗɋŭīřḗḓ ŧǿ ƀḗ ȧŧ ŀḗȧşŧ 1 ƈħȧřȧƈŧḗř 鶱衋ϵ鶱 ϑǈ]" },
+          "maxlength": { "string": "[Ẏǿŭř ƒīřşŧ ƞȧḿḗ ƈȧƞƞǿŧ ƀḗ ŀǿƞɠḗř ŧħȧƞ 50 ƈħȧřȧƈŧḗřş ΰϕǈ衋 ǅẛ]" }
+        },
+        "lastname": {
+          "required": { "string": "[Ẏǿŭř ŀȧşŧ ƞȧḿḗ īş řḗɋŭīřḗḓ. ϐǈ靐ϖ ǈϱſǅ]" },
+          "minlength": { "string": "[Ẏǿŭř ŀȧşŧ ƞȧḿḗ īş řḗɋŭīřḗḓ ŧǿ ƀḗ ȧŧ ŀḗȧşŧ 1 ƈħȧřȧƈŧḗř ǈẛıẛ ϐı]" },
+          "maxlength": { "string": "[Ẏǿŭř ŀȧşŧ ƞȧḿḗ ƈȧƞƞǿŧ ƀḗ ŀǿƞɠḗř ŧħȧƞ 50 ƈħȧřȧƈŧḗřş 衋ϐ鶱ǅ 靐ϰ]" }
+        }
+      }
+    }
+  }
+}

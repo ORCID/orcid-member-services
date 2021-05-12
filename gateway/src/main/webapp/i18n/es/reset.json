@@ -20,9 +20,7 @@
         "info": { "string": "Elija una contraseña nueva" },
         "success": { "string": "<strong>Su contraseña ha sido restablecida.</strong> Por favor, " },
         "keymissing": { "string": "Falta la clave de reinicio." },
-        "error": {
-          "string": "Su contraseña no puede ser restablecida. Recuerde que una solicitud de reinicio de contraseña sólo es válida durante 24 horas."
-        }
+        "error": { "string": "Su contraseña no puede ser restablecida. Recuerde que una solicitud de reinicio de contraseña sólo es válida durante 24 horas." }
       }
     }
   }

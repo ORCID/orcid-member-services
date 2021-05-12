@@ -3,9 +3,7 @@
     "title": { "string": "Activación" },
     "messages": {
       "success": { "string": "<strong>Su cuenta ha sido activada.</strong> Por favor, " },
-      "error": {
-        "string": "<strong>Su cuenta no pudo ser activada.</strong> Por favor, utilice el formulario de inscripción para registrarse."
-      }
+      "error": { "string": "<strong>Su cuenta no pudo ser activada.</strong> Por favor, utilice el formulario de inscripción para registrarse." }
     }
   }
 }

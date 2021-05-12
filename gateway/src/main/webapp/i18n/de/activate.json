@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": { "string": "Activation" },
+    "messages": {
+      "success": { "string": "<strong>Your user account has been activated.</strong> Please " },
+      "error": { "string": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up." }
+    }
+  }
+}

@@ -4,11 +4,11 @@
     "form": {
       "firstname": {
         "string": "Nombre",
-        "placeholder": { "string": "Su nombre" }
+        "placeholder": { "string": "Your first name" }
       },
       "lastname": {
         "string": "Apellidos",
-        "placeholder": { "string": "Sus apellidos" }
+        "placeholder": { "string": "Your last name" }
       },
       "language": { "string": "Idioma" },
       "button": { "string": "Guardar" }

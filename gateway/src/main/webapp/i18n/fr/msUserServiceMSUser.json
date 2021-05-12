@@ -1,0 +1,67 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSUser": {
+      "home": {
+        "title": { "string": "Manage users" },
+        "createLabel": { "string": "Add user" },
+        "createOrEditLabel": { "string": "Add or edit user" },
+        "notFound": { "string": "No users to show" },
+        "uploadLabel": { "string": "Import users from CSV" }
+      },
+      "delete": {
+        "question": { "string": "Are you sure you want to delete user {{ login }}?" }
+      },
+      "changeOwnership": {
+        "question": {
+          "string": "Are you sure you want to transfer ownership? You are about to transfer ownership of this organization account. If you are the organization owner after transferring ownership, you will no longer have access to administrative functions, such as managing users."
+        }
+      },
+      "detail": {
+        "title": { "string": "User details" }
+      },
+      "sendActivate": {
+        "success": { "string": "Invite sent." },
+        "error": { "string": "Invite email couldn´t be sent." }
+      },
+      "import": {
+        "title": { "string": "Import users" },
+        "label": { "string": "Please select the CSV file to upload" },
+        "filePath": { "string": "File path" },
+        "emptyFile": { "string": "There is no file to upload. Please select one." },
+        "errors": {
+          "label": { "string": "Oops! There was a problem processing your data. Pleases fix the errors below and try again" }
+        }
+      },
+      "assertionService": {
+        "enabled": { "string": "Assertions enabled" }
+      },
+      "login": { "string": "Login" },
+      "email": { "string": "Email" },
+      "password": { "string": "Password" },
+      "confirm_password": { "string": "Confirm Password" },
+      "firstName": { "string": "First Name" },
+      "lastName": { "string": "Last Name" },
+      "mainContact": { "string": "Organization Owner" },
+      "salesforceId": { "string": "Organization" },
+      "parentSalesforceId": { "string": "Parent Salesforce Id" },
+      "activated": { "string": "Activated" },
+      "isAdmin": { "string": "Admin" },
+      "createdBy": { "string": "Created By" },
+      "createdDate": { "string": "Created" },
+      "lastModifiedBy": { "string": "Last Modified By" },
+      "lastModifiedDate": { "string": "Last Modified" }
+    },
+    "userDTO": {
+      "login": { "string": "email" },
+      "firstName": { "string": "first name" },
+      "lastName": { "string": "last name" }
+    }
+  },
+  "userServiceApp": {
+    "user": {
+      "created": { "string": "User created. Invite sent." },
+      "updated": { "string": "User updated successfully" },
+      "deleted": { "string": "User deleted successfully" }
+    }
+  }
+}

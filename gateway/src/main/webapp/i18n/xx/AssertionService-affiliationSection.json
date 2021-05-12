@@ -1,0 +1,14 @@
+{
+  "gatewayApp": {
+    "AffiliationSection": {
+      "null": { "string": "" },
+      "EMPLOYMENT": { "string": "[ḖḾƤĿǾẎḾḖȠŦ ſ衋ΐςǲϵϕǲǋſ]" },
+      "EDUCATION": { "string": "[ḖḒŬƇȦŦĪǾȠ ıϖϰ靐ϱẛϕϖΰ]" },
+      "QUALIFICATION": { "string": "[ɊŬȦĿĪƑĪƇȦŦĪǾȠ ΐϐǋςΐǋǋǋ衋鶱ϑ]" },
+      "INVITED_POSITION": { "string": "[ĪȠṼĪŦḖḒ_ƤǾŞĪŦĪǾȠ 鶱ϖΰſǅ衋ϰϵǅΐǲ]" },
+      "DISTINCTION": { "string": "[ḒĪŞŦĪȠƇŦĪǾȠ ΰǲ鶱ϕǲϑςΰϱ靐ǅ]" },
+      "MEMBERSHIP": { "string": "[ḾḖḾƁḖŘŞĦĪƤ 鶱ϕΐſϑſϰǅǲǅ]" },
+      "SERVICE": { "string": "[ŞḖŘṼĪƇḖ ϖϑϖϖϰςϑ]" }
+    }
+  }
+}
