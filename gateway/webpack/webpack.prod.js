@@ -140,8 +140,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                     'en',
                     'es',
                     'fr',
-                    'de',
-                    'xx'
+                    'de'
                     // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array
                 ]
         }),
