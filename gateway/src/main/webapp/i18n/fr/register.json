@@ -1,0 +1,24 @@
+{
+  "register": {
+    "title": { "string": "Registration" },
+    "form": {
+      "button": { "string": "Register" }
+    },
+    "messages": {
+      "validate": {
+        "login": {
+          "required": { "string": "Your username is required." },
+          "minlength": { "string": "Your username is required to be at least 1 character." },
+          "maxlength": { "string": "Your username cannot be longer than 50 characters." },
+          "pattern": { "string": "Your username can only contain letters and digits." }
+        }
+      },
+      "success": { "string": "<strong>Registration saved!</strong> Please check your email for confirmation." },
+      "error": {
+        "fail": { "string": "<strong>Registration failed!</strong> Please try again later." },
+        "userexists": { "string": "<strong>Login name already registered!</strong> Please choose another one." },
+        "emailexists": { "string": "<strong>Email is already in use!</strong> Please choose another one." }
+      }
+    }
+  }
+}

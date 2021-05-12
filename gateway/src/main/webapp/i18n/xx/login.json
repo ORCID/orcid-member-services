@@ -1,0 +1,21 @@
+{
+  "login": {
+    "title": { "string": "[Şīɠƞ īƞ ΰǈıΰ ǲı]" },
+    "form": {
+      "password": {
+        "string": "[Ƥȧşşẇǿřḓ ϐϱıΐϕ靐衋ϖ]",
+        "placeholder": { "string": "Your password" }
+      },
+      "rememberme": { "string": "[Řḗḿḗḿƀḗř ḿḗ ſẛǋǲΐϖςϵ ϵǲ]" },
+      "button": { "string": "[Şīɠƞ īƞ ſ靐ẛϰ 靐ı]" }
+    },
+    "messages": {
+      "error": {
+        "authentication": { "string": "[<strong>Ƒȧīŀḗḓ ŧǿ şīɠƞ īƞ!</strong> Ƥŀḗȧşḗ ƈħḗƈķ ẏǿŭř ƈřḗḓḗƞŧīȧŀş ȧƞḓ ŧřẏ ȧɠȧīƞ. ϵΰǋſǈǲϐϵǅ鶱ǈςǅ]" }
+      }
+    },
+    "password": {
+      "forgot": { "string": "[Ḓīḓ ẏǿŭ ƒǿřɠḗŧ ẏǿŭř ƥȧşşẇǿřḓ? ǅΰϕ ǅ靐ǲ ϑǅϱ]" }
+    }
+  }
+}

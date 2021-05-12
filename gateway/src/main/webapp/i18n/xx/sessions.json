@@ -1,0 +1,15 @@
+{
+  "sessions": {
+    "title": { "string": "[Ȧƈŧīṽḗ şḗşşīǿƞş ƒǿř [<strong>{{username}}</strong>] ϵẛǲǲǋ衋]" },
+    "table": {
+      "ipaddress": { "string": "[ĪƤ ȧḓḓřḗşş ϱΐ ǅϱςſϵẛϖ]" },
+      "useragent": { "string": "[Ŭşḗř Ȧɠḗƞŧ ıςǅ鶱 ıϵΰſſ]" },
+      "date": { "string": "[Ḓȧŧḗ ǋẛǅ靐]" },
+      "button": { "string": "[Īƞṽȧŀīḓȧŧḗ ǅϰſϱſıϕẛϑϵ]" }
+    },
+    "messages": {
+      "success": { "string": "[<strong>Şḗşşīǿƞ īƞṽȧŀīḓȧŧḗḓ!</strong> ϖΐϱϕıϵ鶱ǈıϑ]" },
+      "error": { "string": "[<strong>Ȧƞ ḗřřǿř ħȧş ǿƈƈŭřřḗḓ!</strong> Ŧħḗ şḗşşīǿƞ ƈǿŭŀḓ ƞǿŧ ƀḗ īƞṽȧŀīḓȧŧḗḓ. ǈϖſ衋ſϕΰϖẛϱ 靐]" }
+    }
+  }
+}

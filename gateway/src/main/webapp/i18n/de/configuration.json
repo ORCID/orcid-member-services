@@ -1,0 +1,10 @@
+{
+  "configuration": {
+    "title": { "string": "Configuration" },
+    "filter": { "string": "Filter (by prefix)" },
+    "table": {
+      "prefix": { "string": "Prefix" },
+      "properties": { "string": "Properties" }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSMember": {
+      "home": {
+        "title": { "string": "[Ḿȧƞȧɠḗ ḿḗḿƀḗřş ϵǅǲϵǅϑ ϵΐẛ靐ẛ]" },
+        "createLabel": { "string": "[Ȧḓḓ ḿḗḿƀḗř ϱıϐ ϕϱ鶱鶱ϰϖ]" },
+        "createOrEditLabel": { "string": "[Ȧḓḓ ǿř ḗḓīŧ ḿḗḿƀḗř ǈϐϱ ϖǲ ǈςǅ]" },
+        "notFound": { "string": "[Ƞǿ ḿḗḿƀḗřş ŧǿ şħǿẇ 靐ϰ ϱϱς衋ϖΐϱ]" },
+        "uploadLabel": { "string": "[Īḿƥǿřŧ ḿḗḿƀḗřş ƒřǿḿ ƇŞṼ 鶱衋ǲΐϐϐ ϐϕ靐ϱ]" }
+      },
+      "delete": {
+        "question": { "string": "[Ȧřḗ ẏǿŭ şŭřḗ ẏǿŭ ẇȧƞŧ ŧǿ ḓḗŀḗŧḗ {{ ƈŀīḗƞŧȠȧḿḗ }} ƒřǿḿ ŧħḗ Ḿḗḿƀḗř Ƥǿřŧȧŀ? 鶱ΰẛ ſΰϰ ǲıϱ]" },
+        "anyUsersAndAffiliations": {
+          "string": "[Ȧƞẏ ŭşḗřş ȧƞḓ ȧƒƒīŀīȧŧīǿƞş ȧşşǿƈīȧŧḗḓ ẇīŧħ ŧħīş ḿḗḿƀḗř ẇīŀŀ ȧŀşǿ ƀḗ ḓḗŀḗŧḗḓ ƒřǿḿ ŧħḗ Ḿḗḿƀḗř Ƥǿřŧȧŀ, ħǿẇḗṽḗř ḓȧŧȧ ȧḓḓḗḓ ŧǿ ŧħḗ ǾŘƇĪḒ Řḗɠīşŧřẏ ẇīŀŀ řḗḿȧīƞ īƞ ǾŘƇĪḒ. ẛΐ衋 ςϕıſẛ ϕſϵ ǅǲıϵΰſ衋衋ϱ鶱ϑſ ıſ]"
+        }
+      },
+      "detail": {
+        "title": { "string": "[Ḿḗḿƀḗř ḓḗŧȧīŀş ϵϑſ靐ϖǈ ǋϱ衋靐ϑ]" }
+      },
+      "import": {
+        "title": { "string": "[Īḿƥǿřŧ ḿḗḿƀḗřş ǋẛϖϱΐ鶱 靐ǋΐΐǋ]" },
+        "label": { "string": "[Ƥŀḗȧşḗ şḗŀḗƈŧ ȧ ƇŞṼ ƒīŀḗ ŧǿ ŭƥŀǿȧḓ ςϕΐϰǋſ ǅϵϑ]" },
+        "emptyFile": { "string": "[Ŧħḗřḗ īş ƞǿ ƒīŀḗ ŧǿ ŭƥŀǿȧḓ. Ƥŀḗȧşḗ şḗŀḗƈŧ ǿƞḗ. ϰǈϐẛϕ ϐǋ ΰ]" },
+        "filePath": { "string": "[Ƒīŀḗ ƥȧŧħ ς鶱ǲı ϱςςς]" },
+        "errors": {
+          "label": {
+            "string": "[Ǿǿƥş! Ŧħḗřḗ ẇȧş ȧ ƥřǿƀŀḗḿ ƥřǿƈḗşşīƞɠ ẏǿŭř ḓȧŧȧ. Ƥŀḗȧşḗş ƒīẋ ŧħḗ ḗřřǿřş ƀḗŀǿẇ ȧƞḓ ŧřẏ ȧɠȧīƞ ẛǈϖϑǋ ϖϐϕſς ẛǅϐ]"
+          }
+        }
+      },
+      "clientId": {
+        "string": "[Ƈŀīḗƞŧ Īḓ ϖϑſẛ靐ϱ ΰ靐]",
+        "note": { "string": "Note: Client ID must have Member OBO enabled AND" },
+        "addedAsRedirect": { "string": "added as a Redirect URI in" }
+      },
+      "clientName": { "string": "[Ḿḗḿƀḗř Ƞȧḿḗ ıϐǈϑϱǋ ǅϑǲϑ]" },
+      "clientSecret": { "string": "[Ƈŀīḗƞŧ Şḗƈřḗŧ ǲϖϑΐſϑ 衋ϐϱǈ]" },
+      "salesforceId": { "string": "[Şȧŀḗşƒǿřƈḗ Īḓ ΐϖϰ靐衋ǋ鶱ǈſΰ]" },
+      "parentSalesforceId": { "string": "[Ƥȧřḗƞŧ Şȧŀḗşƒǿřƈḗ Īḓ ϑϑϰǈϐ靐 ϕϕϱϕϕ]" },
+      "isConsortiumLead": { "string": "[Ƈǿƞşǿřŧīŭḿ Ŀḗȧḓ ǅſΐΐǅǅΐǲϐϵ]" },
+      "assertionServiceEnabled": { "string": "[Ȧşşḗřŧīǿƞş Ḗƞȧƀŀḗḓ ẛΰϑſς衋ẛ靐ϰ衋]" },
+      "createdBy": { "string": "[Ƈřḗȧŧḗḓ Ɓẏ ϵ靐ϵϱϖϐϖ ϱΐ]" },
+      "createdDate": { "string": "[Ƈřḗȧŧḗḓ ϵıϰ衋ϖſϐ]" },
+      "lastModifiedBy": { "string": "[Ŀȧşŧ Ḿǿḓīƒīḗḓ Ɓẏ ϖΰǋΰ ſϱẛ鶱衋ǋ]" },
+      "lastModifiedDate": { "string": "[Ŀȧşŧ Ḿǿḓīƒīḗḓ ǲςΐſ ϰǲǅϖǅϑ]" }
+    }
+  },
+  "memberServiceApp": {
+    "member": {
+      "created": { "string": "[Ḿḗḿƀḗř ƈřḗȧŧḗḓ ς鶱ϑϖ鶱ΐ ϱ鶱ϑǈϑ]" },
+      "updated": { "string": "[Ḿḗḿƀḗř ŭƥḓȧŧḗḓ şŭƈƈḗşşƒŭŀŀẏ ϑϵϐϕϰς ẛ衋ΰ]" },
+      "deleted": { "string": "[Ḿḗḿƀḗř ḓḗŀḗŧḗḓ şŭƈƈḗşşƒŭŀŀẏ ϱǲς衋ϐΰ ǈϰϰ]" }
+    }
+  }
+}

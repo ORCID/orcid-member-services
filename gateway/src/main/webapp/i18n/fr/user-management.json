@@ -1,0 +1,30 @@
+{
+  "userManagement": {
+    "home": {
+      "title": { "string": "Users" },
+      "createLabel": { "string": "Create a new user" },
+      "createOrEditLabel": { "string": "Create or edit a user" }
+    },
+    "created": { "string": "A new user is created with identifier {{ param }}" },
+    "updated": { "string": "A user is updated with identifier {{ param }}" },
+    "deleted": { "string": "A user is deleted with identifier {{ param }}" },
+    "delete": {
+      "question": { "string": "Are you sure you want to delete user {{ login }}?" }
+    },
+    "detail": {
+      "title": { "string": "User" }
+    },
+    "login": { "string": "Login" },
+    "firstName": { "string": "First name" },
+    "lastName": { "string": "Last name" },
+    "email": { "string": "Email" },
+    "activated": { "string": "Activated" },
+    "deactivated": { "string": "Deactivated" },
+    "profiles": { "string": "Profiles" },
+    "langKey": { "string": "Language" },
+    "createdBy": { "string": "Created by" },
+    "createdDate": { "string": "Created date" },
+    "lastModifiedBy": { "string": "Modified by" },
+    "lastModifiedDate": { "string": "Modified date" }
+  }
+}
