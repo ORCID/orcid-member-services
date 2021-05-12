@@ -389,11 +389,9 @@ public class AssertionService {
 		OrcidRecord record = optional.get();
 		String idToken = record.getToken(assertion.getSalesforceId());
 		if (StringUtils.isBlank(record.getOrcid())) {
-			LOG.warn("Orcid id still not available for {}", assertion.getEmail());
 			return;
 		}
 		if (StringUtils.isBlank(idToken)) {
-			LOG.warn("Id token still not available for {}", assertion.getEmail());
 			return;
 		}
 
