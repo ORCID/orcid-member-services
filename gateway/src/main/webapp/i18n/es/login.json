@@ -4,16 +4,14 @@
     "form": {
       "password": {
         "string": "Contraseña",
-        "placeholder": { "string": "Su contraseña" }
+        "placeholder": { "string": "Your password" }
       },
       "rememberme": { "string": "Iniciar la sesión automáticamente" },
       "button": { "string": "Iniciar sesión" }
     },
     "messages": {
       "error": {
-        "authentication": {
-          "string": "<strong>¡El inicio de sesión ha fallado!</strong> Por favor, revise las credenciales e intente de nuevo."
-        }
+        "authentication": { "string": "<strong>¡El inicio de sesión ha fallado!</strong> Por favor, revise las credenciales e intente de nuevo." }
       }
     },
     "password": {
