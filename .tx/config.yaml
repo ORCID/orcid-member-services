@@ -104,4 +104,51 @@ filters:
     translation_files_expression: gateway/src/main/webapp/i18n/<lang>/user-management.json
     source_file: gateway/src/main/webapp/i18n/en/user-management.json
 
+  - filter_type: file
+    file_format: UNICODEPROPERTIES
+    source_language: en
+    translation_files_expression: gateway/src/main/resources/i18n/messages_<lang>.properties
+    source_file: gateway/src/main/resources/i18n/messages_en.properties
+
+  - filter_type: file
+    file_format: UNICODEPROPERTIES
+    source_language: en
+    translation_files_expression: gateway/src/test/resources/i18n/messages_<lang>.properties
+    source_file: gateway/src/test/resources/i18n/messages_en.properties 
+
+  - filter_type: file
+    file_format: UNICODEPROPERTIES
+    source_language: en
+    translation_files_expression: assertionservice/src/main/resources/i18n/messages_<lang>.properties
+    source_file: assertionservice/src/main/resources/i18n/messages_en.properties
+
+  - filter_type: file
+    file_format: UNICODEPROPERTIES
+    source_language: en
+    translation_files_expression: assertionservice/src/test/resources/i18n/messages_<lang>.properties
+    source_file: assertionservice/src/test/resources/i18n/messages_en.properties
+
+  - filter_type: file
+    file_format: UNICODEPROPERTIES
+    source_language: en
+    translation_files_expression: memberservice/src/main/resources/i18n/messages_<lang>.properties
+    source_file: memberservice/src/main/resources/i18n/messages_en.properties
+
+  - filter_type: file
+    file_format: UNICODEPROPERTIES
+    source_language: en
+    translation_files_expression: memberservice/src/test/resources/i18n/messages_<lang>.properties
+    source_file: memberservice/src/test/resources/i18n/messages_en.properties
+
+  - filter_type: file
+    file_format: UNICODEPROPERTIES
+    source_language: en
+    translation_files_expression: userservice/src/main/resources/i18n/messages_<lang>.properties
+    source_file: userservice/src/main/resources/i18n/messages_en.properties
+
+  - filter_type: file
+    file_format: UNICODEPROPERTIES
+    source_language: en
+    translation_files_expression: userservice/src/test/resources/i18n/messages_<lang>.properties
+    source_file: userservice/src/test/resources/i18n/messages_en.properties
 

@@ -103,4 +103,54 @@ source_file = gateway/src/main/webapp/i18n/en/user-management.json
 source_lang = en
 type = STRUCTURED_JSON
 
+[gateway.backend]
+file_filter = gateway/src/main/resources/i18n/messages_<lang>.properties
+source_file = gateway/src/main/resources/i18n/messages_en.properties
+source_lang = en
+type = UNICODEPROPERTIES
+
+[gateway.backend.test]
+file_filter = gateway/src/test/resources/i18n/messages_<lang>.properties
+source_file = gateway/src/test/resources/i18n/messages_en.properties
+source_lang = en
+type = UNICODEPROPERTIES
+
+[assertionservice.backend]
+file_filter = assertionservice/src/main/resources/i18n/messages_<lang>.properties
+source_file = assertionservice/src/main/resources/i18n/messages_en.properties
+source_lang = en
+type = UNICODEPROPERTIES
+
+[assertionservice.backend.test]
+file_filter = assertionservice/src/test/resources/i18n/messages_<lang>.properties
+source_file = assertionservice/src/test/resources/i18n/messages_en.properties
+source_lang = en
+type = UNICODEPROPERTIES
+
+[memberservice.backend]
+file_filter = memberservice/src/main/resources/i18n/messages_<lang>.properties
+source_file = memberservice/src/main/resources/i18n/messages_en.properties
+source_lang = en
+type = UNICODEPROPERTIES
+
+[memberservice.backend.test]
+file_filter = memberservice/src/test/resources/i18n/messages_<lang>.properties
+source_file = memberservice/src/test/resources/i18n/messages_en.properties
+source_lang = en
+type = UNICODEPROPERTIES
+
+[userservice.backend]
+file_filter = userservice/src/main/resources/i18n/messages_<lang>.properties
+source_file = userservice/src/main/resources/i18n/messages_en.properties
+source_lang = en
+type = UNICODEPROPERTIES
+
+[userservice.backend.test]
+file_filter = userservice/src/test/resources/i18n/messages_<lang>.properties
+source_file = userservice/src/test/resources/i18n/messages_en.properties
+source_lang = en
+type = UNICODEPROPERTIES
+
+
+
 
