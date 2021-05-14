@@ -2,8 +2,8 @@
 host = https://www.transifex.com
 
 [member-portal.assertion]
-file_filter = gateway/src/main/webapp/i18n/<lang>/assertionServiceAssertion.json
-source_file = gateway/src/main/webapp/i18n/en/assertionServiceAssertion.json
+file_filter = gateway/src/main/webapp/i18n/<lang>/assertion-serviceAssertion.json
+source_file = gateway/src/main/webapp/i18n/en/assertion-serviceAssertion.json
 source_lang = en
 type = STRUCTURED_JSON
 
@@ -14,8 +14,8 @@ source_lang = en
 type = STRUCTURED_JSON
 
 [member-portal.affiliation-section]
-file_filter = gateway/src/main/webapp/i18n/<lang>/AssertionService-affiliationSection.json
-source_file = gateway/src/main/webapp/i18n/en/AssertionService-affiliationSection.json
+file_filter = gateway/src/main/webapp/i18n/<lang>/assertion-service-affiliationSection.json
+source_file = gateway/src/main/webapp/i18n/en/assertion-service-affiliationSection.json
 source_lang = en
 type = STRUCTURED_JSON
 
@@ -56,14 +56,14 @@ source_lang = en
 type = STRUCTURED_JSON
 
 [member-portal.member]
-file_filter = gateway/src/main/webapp/i18n/<lang>/msUserServiceMSMember.json
-source_file = gateway/src/main/webapp/i18n/en/msUserServiceMSMember.json
+file_filter = gateway/src/main/webapp/i18n/<lang>/msuser-serviceMSMember.json
+source_file = gateway/src/main/webapp/i18n/en/msuser-serviceMSMember.json
 source_lang = en
 type = STRUCTURED_JSON
 
 [member-portal.user]
-file_filter = gateway/src/main/webapp/i18n/<lang>/msUserServiceMSUser.json
-source_file = gateway/src/main/webapp/i18n/en/msUserServiceMSUser.json
+file_filter = gateway/src/main/webapp/i18n/<lang>/msuser-serviceMSUser.json
+source_file = gateway/src/main/webapp/i18n/en/msuser-serviceMSUser.json
 source_lang = en
 type = STRUCTURED_JSON
 
@@ -115,39 +115,39 @@ source_file = gateway/src/test/resources/i18n/messages_en.properties
 source_lang = en
 type = UNICODEPROPERTIES
 
-[assertionservice.backend]
-file_filter = assertionservice/src/main/resources/i18n/messages_<lang>.properties
-source_file = assertionservice/src/main/resources/i18n/messages_en.properties
+[assertion-service.backend]
+file_filter = assertion-service/src/main/resources/i18n/messages_<lang>.properties
+source_file = assertion-service/src/main/resources/i18n/messages_en.properties
 source_lang = en
 type = UNICODEPROPERTIES
 
-[assertionservice.backend.test]
-file_filter = assertionservice/src/test/resources/i18n/messages_<lang>.properties
-source_file = assertionservice/src/test/resources/i18n/messages_en.properties
+[assertion-service.backend.test]
+file_filter = assertion-service/src/test/resources/i18n/messages_<lang>.properties
+source_file = assertion-service/src/test/resources/i18n/messages_en.properties
 source_lang = en
 type = UNICODEPROPERTIES
 
-[memberservice.backend]
-file_filter = memberservice/src/main/resources/i18n/messages_<lang>.properties
-source_file = memberservice/src/main/resources/i18n/messages_en.properties
+[member-service.backend]
+file_filter = member-service/src/main/resources/i18n/messages_<lang>.properties
+source_file = member-service/src/main/resources/i18n/messages_en.properties
 source_lang = en
 type = UNICODEPROPERTIES
 
-[memberservice.backend.test]
-file_filter = memberservice/src/test/resources/i18n/messages_<lang>.properties
-source_file = memberservice/src/test/resources/i18n/messages_en.properties
+[member-service.backend.test]
+file_filter = member-service/src/test/resources/i18n/messages_<lang>.properties
+source_file = member-service/src/test/resources/i18n/messages_en.properties
 source_lang = en
 type = UNICODEPROPERTIES
 
-[userservice.backend]
-file_filter = userservice/src/main/resources/i18n/messages_<lang>.properties
-source_file = userservice/src/main/resources/i18n/messages_en.properties
+[user-service.backend]
+file_filter = user-service/src/main/resources/i18n/messages_<lang>.properties
+source_file = user-service/src/main/resources/i18n/messages_en.properties
 source_lang = en
 type = UNICODEPROPERTIES
 
-[userservice.backend.test]
-file_filter = userservice/src/test/resources/i18n/messages_<lang>.properties
-source_file = userservice/src/test/resources/i18n/messages_en.properties
+[user-service.backend.test]
+file_filter = user-service/src/test/resources/i18n/messages_<lang>.properties
+source_file = user-service/src/test/resources/i18n/messages_en.properties
 source_lang = en
 type = UNICODEPROPERTIES
 

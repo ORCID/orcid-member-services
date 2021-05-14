@@ -5,8 +5,8 @@ filters:
   - filter_type: file
     file_format: STRUCTURED_JSON
     source_language: en
-    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/assertionServiceAssertion.json
-    source_file: gateway/src/main/webapp/i18n/en/assertionServiceAssertion.json
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/assertion-serviceAssertion.json
+    source_file: gateway/src/main/webapp/i18n/en/assertion-serviceAssertion.json
 
   - filter_type: file
     file_format: STRUCTURED_JSON
@@ -17,8 +17,8 @@ filters:
   - filter_type: file
     file_format: STRUCTURED_JSON
     source_language: en
-    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/AssertionService-affiliationSection.json
-    source_file: gateway/src/main/webapp/i18n/en/AssertionService-affiliationSection.json
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/assertion-service-affiliationSection.json
+    source_file: gateway/src/main/webapp/i18n/en/assertion-service-affiliationSection.json
 
   - filter_type: file
     file_format: STRUCTURED_JSON
@@ -59,14 +59,14 @@ filters:
   - filter_type: file
     file_format: STRUCTURED_JSON
     source_language: en
-    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/msUserServiceMSMember.json
-    source_file: gateway/src/main/webapp/i18n/en/msUserServiceMSMember.json
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/msuser-serviceMSMember.json
+    source_file: gateway/src/main/webapp/i18n/en/msuser-serviceMSMember.json
 
   - filter_type: file
     file_format: STRUCTURED_JSON
     source_language: en
-    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/msUserServiceMSUser.json
-    source_file: gateway/src/main/webapp/i18n/en/msUserServiceMSUser.json
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/msuser-serviceMSUser.json
+    source_file: gateway/src/main/webapp/i18n/en/msuser-serviceMSUser.json
 
   - filter_type: file
     file_format: STRUCTURED_JSON
@@ -119,36 +119,36 @@ filters:
   - filter_type: file
     file_format: UNICODEPROPERTIES
     source_language: en
-    translation_files_expression: assertionservice/src/main/resources/i18n/messages_<lang>.properties
-    source_file: assertionservice/src/main/resources/i18n/messages_en.properties
+    translation_files_expression: assertion-service/src/main/resources/i18n/messages_<lang>.properties
+    source_file: assertion-service/src/main/resources/i18n/messages_en.properties
 
   - filter_type: file
     file_format: UNICODEPROPERTIES
     source_language: en
-    translation_files_expression: assertionservice/src/test/resources/i18n/messages_<lang>.properties
-    source_file: assertionservice/src/test/resources/i18n/messages_en.properties
+    translation_files_expression: assertion-service/src/test/resources/i18n/messages_<lang>.properties
+    source_file: assertion-service/src/test/resources/i18n/messages_en.properties
 
   - filter_type: file
     file_format: UNICODEPROPERTIES
     source_language: en
-    translation_files_expression: memberservice/src/main/resources/i18n/messages_<lang>.properties
-    source_file: memberservice/src/main/resources/i18n/messages_en.properties
+    translation_files_expression: member-service/src/main/resources/i18n/messages_<lang>.properties
+    source_file: member-service/src/main/resources/i18n/messages_en.properties
 
   - filter_type: file
     file_format: UNICODEPROPERTIES
     source_language: en
-    translation_files_expression: memberservice/src/test/resources/i18n/messages_<lang>.properties
-    source_file: memberservice/src/test/resources/i18n/messages_en.properties
+    translation_files_expression: member-service/src/test/resources/i18n/messages_<lang>.properties
+    source_file: member-service/src/test/resources/i18n/messages_en.properties
 
   - filter_type: file
     file_format: UNICODEPROPERTIES
     source_language: en
-    translation_files_expression: userservice/src/main/resources/i18n/messages_<lang>.properties
-    source_file: userservice/src/main/resources/i18n/messages_en.properties
+    translation_files_expression: user-service/src/main/resources/i18n/messages_<lang>.properties
+    source_file: user-service/src/main/resources/i18n/messages_en.properties
 
   - filter_type: file
     file_format: UNICODEPROPERTIES
     source_language: en
-    translation_files_expression: userservice/src/test/resources/i18n/messages_<lang>.properties
-    source_file: userservice/src/test/resources/i18n/messages_en.properties
+    translation_files_expression: user-service/src/test/resources/i18n/messages_<lang>.properties
+    source_file: user-service/src/test/resources/i18n/messages_en.properties
 
