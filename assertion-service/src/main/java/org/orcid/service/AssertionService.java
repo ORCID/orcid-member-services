@@ -612,7 +612,8 @@ public class AssertionService {
 	}
 
 	public AssertionsUploadSummary uploadAssertions(MultipartFile file) {
-		AssertionsUpload upload = readUpload(file);
+		AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+		AssertionsUpload upload = readUpload(file, user);
 		AssertionsUploadSummary summary = processUpload(upload);
 		return summary;
 	}
@@ -661,13 +662,13 @@ public class AssertionService {
 		return summary;
 	}
 
-	private AssertionsUpload readUpload(MultipartFile file) {
+	private AssertionsUpload readUpload(MultipartFile file, AssertionServiceUser user) {
 		InputStream inputStream = null;
 		AssertionsUpload upload = null;
 		
 		try {
 			inputStream = file.getInputStream();
-			upload = assertionsCsvReader.readAssertionsUpload(inputStream);
+			upload = assertionsCsvReader.readAssertionsUpload(inputStream, user);
 		} catch (IOException e) {
 			LOG.warn("Error reading user upload", e);
 			throw new RuntimeException(e);
