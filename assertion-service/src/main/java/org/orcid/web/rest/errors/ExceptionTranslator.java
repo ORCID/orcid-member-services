@@ -70,7 +70,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
                 .withInstance(problem.getInstance());
             problem.getParameters().forEach(builder::with);
             if (!problem.getParameters().containsKey(MESSAGE_KEY) && problem.getStatus() != null) {
-                builder.with(MESSAGE_KEY, "error.http." + problem.getStatus().getStatusCode());
+                builder.with(MESSAGE_KEY, "error.http." + problem.getStatus().getStatusCode() + ".string");
             }
         }
         return new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode());

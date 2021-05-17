@@ -66,7 +66,7 @@ public class ExceptionTranslatorIT {
         mockMvc.perform(get("/test/missing-servlet-request-part"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.400"));
+            .andExpect(jsonPath("$.message").value("error.http.400.string"));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class ExceptionTranslatorIT {
         mockMvc.perform(get("/test/missing-servlet-request-parameter"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.400"));
+            .andExpect(jsonPath("$.message").value("error.http.400.string"));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class ExceptionTranslatorIT {
         mockMvc.perform(get("/test/access-denied"))
             .andExpect(status().isForbidden())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.403"))
+            .andExpect(jsonPath("$.message").value("error.http.403.string"))
             .andExpect(jsonPath("$.detail").value("test access denied!"));
     }
 
@@ -91,7 +91,7 @@ public class ExceptionTranslatorIT {
         mockMvc.perform(get("/test/unauthorized"))
             .andExpect(status().isUnauthorized())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.401"))
+            .andExpect(jsonPath("$.message").value("error.http.401.string"))
             .andExpect(jsonPath("$.path").value("/test/unauthorized"))
             .andExpect(jsonPath("$.detail").value("test authentication failed!"));
     }
@@ -101,7 +101,7 @@ public class ExceptionTranslatorIT {
         mockMvc.perform(post("/test/access-denied"))
             .andExpect(status().isMethodNotAllowed())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.405"))
+            .andExpect(jsonPath("$.message").value("error.http.405.string"))
             .andExpect(jsonPath("$.detail").value("Request method 'POST' not supported"));
     }
 
@@ -110,7 +110,7 @@ public class ExceptionTranslatorIT {
         mockMvc.perform(get("/test/response-status"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.400"))
+            .andExpect(jsonPath("$.message").value("error.http.400.string"))
             .andExpect(jsonPath("$.title").value("test response status"));
     }
 
@@ -119,7 +119,7 @@ public class ExceptionTranslatorIT {
         mockMvc.perform(get("/test/internal-server-error"))
             .andExpect(status().isInternalServerError())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.500"))
+            .andExpect(jsonPath("$.message").value("error.http.500.string"))
             .andExpect(jsonPath("$.title").value("Internal Server Error"));
     }
 
