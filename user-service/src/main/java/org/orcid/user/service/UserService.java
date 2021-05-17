@@ -353,10 +353,10 @@ public class UserService {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }
 
-    public UserUpload uploadUserCSV(InputStream inputStream, String createdBy) {
+    public UserUpload uploadUserCSV(InputStream inputStream, User currentUser) {
         UserUpload usersUpload = null;
         try {
-            usersUpload = usersUploadReader.readUsersUpload(inputStream, createdBy);
+            usersUpload = usersUploadReader.readUsersUpload(inputStream, currentUser);
         } catch (IOException e) {
             LOG.warn("Error reading user upload", e);
             throw new RuntimeException(e);

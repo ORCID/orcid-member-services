@@ -1,45 +1,53 @@
 package org.orcid.user.upload.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Optional;
 
+import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.upload.UserUpload;
+import org.springframework.context.MessageSource;
 
 class UserCsvReaderTest {
 
-    @Mock
-    private UserRepository userRepository;
-    
-    @Mock
-    private UserService userService;
+	@Mock
+	private UserRepository userRepository;
 
-    @InjectMocks
-    private UserCsvReader reader;
+	@Mock
+	private UserService userService;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+	@Mock
+	private MessageSource messageSource;
+
+	@InjectMocks
+	private UserCsvReader reader;
+
+	@BeforeEach
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+	}
 
 	@Test
 	void testReadUsersUpload() throws IOException {
-        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.empty());
-        Mockito.when(userService.memberExists(Mockito.anyString())).thenReturn(true);
+		Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.empty());
+		Mockito.when(userService.memberExists(Mockito.anyString())).thenReturn(true);
 
-        InputStream inputStream = getClass().getResourceAsStream("/users.csv");
-		UserUpload upload = reader.readUsersUpload(inputStream, "some-user");
+		InputStream inputStream = getClass().getResourceAsStream("/users.csv");
+		UserUpload upload = reader.readUsersUpload(inputStream, getUser("en"));
 		assertEquals(3, upload.getUserDTOs().size());
 
 		UserDTO userDTO1 = upload.getUserDTOs().get(0);
@@ -61,7 +69,56 @@ class UserCsvReaderTest {
 		assertEquals("sssalesforceid1", userDTO1.getSalesforceId());
 		assertEquals("salesforceid3", userDTO2.getSalesforceId());
 		assertEquals("salesforceid2", userDTO3.getSalesforceId());
+	}
 
+	@Test
+	void testReadUsersUploadInvalidEmails() throws IOException, JSONException {
+		Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.empty());
+		Mockito.when(userService.memberExists(Mockito.anyString())).thenReturn(true);
+		Mockito.when(messageSource.getMessage(Mockito.eq("user.csv.upload.error.invalidEmail"), Mockito.any(),
+				Mockito.eq(Locale.ENGLISH))).thenReturn("some-value");
+
+		InputStream inputStream = getClass().getResourceAsStream("/users-invalid-emails.csv");
+		UserUpload upload = reader.readUsersUpload(inputStream, getUser("en"));
+		assertEquals(0, upload.getUserDTOs().size());
+		assertEquals(3, upload.getErrors().length());
+
+		assertTrue(upload.getErrors().get(0).toString().contains("some-value"));
+		assertTrue(upload.getErrors().get(1).toString().contains("some-value"));
+		assertTrue(upload.getErrors().get(2).toString().contains("some-value"));
+
+		Mockito.verify(messageSource, Mockito.times(3)).getMessage(Mockito.anyString(), Mockito.any(),
+				Mockito.eq(Locale.ENGLISH));
+	}
+
+	@Test
+	void testReadUsersUploadMissingEmails() throws IOException, JSONException {
+		Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.empty());
+		Mockito.when(userService.memberExists(Mockito.anyString())).thenReturn(true);
+		Mockito.when(messageSource.getMessage(Mockito.eq("user.csv.upload.error.missingEmail"), Mockito.isNull(),
+				Mockito.eq(Locale.ENGLISH))).thenReturn("some-value");
+
+		InputStream inputStream = getClass().getResourceAsStream("/users-missing-emails.csv");
+		UserUpload upload = reader.readUsersUpload(inputStream, getUser("en"));
+		assertEquals(0, upload.getUserDTOs().size());
+		assertEquals(3, upload.getErrors().length());
+
+		assertTrue(upload.getErrors().get(0).toString().contains("some-value"));
+		assertTrue(upload.getErrors().get(1).toString().contains("some-value"));
+		assertTrue(upload.getErrors().get(2).toString().contains("some-value"));
+
+		Mockito.verify(messageSource, Mockito.times(3)).getMessage(Mockito.anyString(), Mockito.any(),
+				Mockito.eq(Locale.ENGLISH));
+	}
+
+	private User getUser(String langKey) {
+		User user = new User();
+		user.setId("some-id");
+		user.setLangKey(langKey);
+		user.setLogin("something@orcid.org");
+		user.setLoginAs("something@orcid.org");
+		user.setSalesforceId("something");
+		return user;
 	}
 
 }
