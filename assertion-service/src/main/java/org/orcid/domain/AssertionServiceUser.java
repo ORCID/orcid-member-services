@@ -9,6 +9,8 @@ public class AssertionServiceUser {
     private String salesforceId;
 
     private String loginAs;
+    
+    private String langKey;
 
     public String getLoginAs() {
         return loginAs;
@@ -41,5 +43,13 @@ public class AssertionServiceUser {
     public void setSalesforceId(String salesforceId) {
         this.salesforceId = salesforceId;
     }
+
+	public String getLangKey() {
+		return langKey;
+	}
+
+	public void setLangKey(String langKey) {
+		this.langKey = langKey;
+	}
 
 }

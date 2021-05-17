@@ -74,9 +74,9 @@ class AssertionServiceTest {
 
 	@Mock
 	private UserService assertionsUserService;
-	
+
 	@Mock
-    private AssertionsCsvReader assertionsCsvReader;
+	private AssertionsCsvReader assertionsCsvReader;
 
 	@InjectMocks
 	private AssertionService assertionService;
@@ -93,6 +93,7 @@ class AssertionServiceTest {
 		user.setId(DEFAULT_JHI_USER_ID);
 		user.setLogin(DEFAULT_LOGIN);
 		user.setSalesforceId(DEFAULT_SALESFORCE_ID);
+		user.setLangKey("en");
 		return user;
 	}
 
@@ -469,7 +470,7 @@ class AssertionServiceTest {
 		Mockito.verify(orcidAPIClient, Mockito.never()).deleteAffiliation(Mockito.anyString(),
 				Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
 	}
-	
+
 	@Test
 	void testIsDuplicate() {
 		Assertion a = getAssertionWithoutIdForEmail("email");
@@ -479,196 +480,201 @@ class AssertionServiceTest {
 		c.setEndDay("09");
 		Assertion d = getAssertionWithoutIdForEmail("email");
 		d.setAffiliationSection(AffiliationSection.EMPLOYMENT);
-		
+
 		Assertion comparison = getAssertionWithoutIdForEmail("email"); // duplicate of assertion a
 		Mockito.when(assertionsRepository.findByEmail(Mockito.eq("email"))).thenReturn(Arrays.asList(b, c, a, d));
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		a.setUrl("something-different");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setUrl(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setUrl("url");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		comparison.setUrl(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		comparison.setUrl("url");
 		assertTrue(assertionService.isDuplicate(comparison));
 
 		a.setUrl(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setUrl("url");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		comparison.setUrl("");
 		a.setUrl(null);
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		comparison.setUrl("url");
 		a.setUrl("url");
 		assertTrue(assertionService.isDuplicate(comparison));
 
 		a.setStartMonth("08");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setStartMonth(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setStartMonth("01");
 		assertTrue(assertionService.isDuplicate(comparison));
 
 		comparison.setStartMonth(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		comparison.setStartMonth("01");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		a.setStartYear("1981");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setStartYear(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setStartYear("2020");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		a.setEndDay("02");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setEndDay(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setEndDay("01");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		a.setEndMonth("06");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setEndMonth(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setEndMonth("01");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		a.setEndYear("1981");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setEndYear(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setEndYear("2021");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		a.setOrgName("something-different");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setOrgName(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setOrgName("org");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		a.setOrgCity("something-different");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setOrgCity(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setOrgCity("city");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		a.setDisambiguationSource("something-different");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setDisambiguationSource(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setDisambiguationSource("RINGGOLD");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		a.setDisambiguatedOrgId("something-different");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setDisambiguatedOrgId(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setDisambiguatedOrgId("id");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		a.setExternalId("something-different");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setExternalId(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setExternalId("extId");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		a.setExternalIdType("something-different");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setExternalIdType(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setExternalIdType("extIdType");
 		assertTrue(assertionService.isDuplicate(comparison));
-		
+
 		a.setExternalIdUrl("something-different");
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setExternalIdUrl(null);
 		assertFalse(assertionService.isDuplicate(comparison));
-		
+
 		a.setExternalIdUrl("extIdUrl");
 		assertTrue(assertionService.isDuplicate(comparison));
 
 		comparison.setId("not-null"); // id should be ignored
 		assertTrue(assertionService.isDuplicate(comparison));
 	}
-	
+
 	@Test
 	void testUploadAssertionsNoProcessingIfErrorsPresent() throws IOException {
 		MultipartFile file = Mockito.mock(MultipartFile.class);
 		Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
-		
+
 		AssertionsUpload upload = new AssertionsUpload();
 		upload.addAssertion(getAssertionWithEmail("1@email.com"));
 		upload.addAssertion(getAssertionWithEmail("2@email.com"));
 		upload.addAssertion(getAssertionWithEmail("3@email.com"));
 		upload.addError(1, "test error");
-		
-		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class))).thenReturn(upload);
-		
+
+		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class),
+				Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
+
 		assertionService.uploadAssertions(file);
-		
+
 		Mockito.verify(assertionsRepository, Mockito.never()).insert(Mockito.any(Assertion.class));
 		Mockito.verify(assertionsRepository, Mockito.never()).save(Mockito.any(Assertion.class));
 		Mockito.verify(assertionsRepository, Mockito.never()).delete(Mockito.any(Assertion.class));
 	}
-	
+
 	@Test
 	void testUploadAssertions() throws IOException {
 		MultipartFile file = Mockito.mock(MultipartFile.class);
 		Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
-		
+
 		AssertionsUpload upload = new AssertionsUpload();
 		upload.addAssertion(getAssertionWithEmail("1@email.com"));
 		upload.addAssertion(getAssertionWithEmail("2@email.com"));
 		upload.addAssertion(getAssertionWithEmail("3@email.com"));
-		
+
 		Assertion toUpdate = getAssertionWithEmail("4@email.com");
 		toUpdate.setId("12346");
 		upload.addAssertion(toUpdate);
-		
-		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("1@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
-		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("2@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
-		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("3@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
-		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("4@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
+
+		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("1@email.com")))
+				.thenReturn(Optional.of(new OrcidRecord()));
+		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("2@email.com")))
+				.thenReturn(Optional.of(new OrcidRecord()));
+		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("3@email.com")))
+				.thenReturn(Optional.of(new OrcidRecord()));
+		Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("4@email.com")))
+				.thenReturn(Optional.of(new OrcidRecord()));
 		Mockito.when(assertionsRepository.insert(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
 			@Override
 			public Assertion answer(InvocationOnMock invocation) throws Throwable {
@@ -688,41 +694,44 @@ class AssertionServiceTest {
 			}
 		});
 		Mockito.when(assertionsRepository.findById(Mockito.eq("12346"))).thenReturn(Optional.of(toUpdate));
-		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class))).thenReturn(upload);
-		
+		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class),
+				Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
+
 		AssertionsUploadSummary summary = assertionService.uploadAssertions(file);
 		assertEquals(3, summary.getNumAdded());
 		assertEquals(0, summary.getNumDuplicates());
 		assertEquals(0, summary.getNumDeleted());
 		assertEquals(1, summary.getNumUpdated());
-		
+
 		Mockito.verify(assertionsRepository, Mockito.times(3)).insert(Mockito.any(Assertion.class));
 		Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.any(Assertion.class));
 	}
-	
+
 	@Test
 	void testUploadAssertionsWithDuplicates() throws IOException {
 		MultipartFile file = Mockito.mock(MultipartFile.class);
 		Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
-		
+
 		Assertion alreadyPersisted1 = getAssertionWithEmail("1@email.com");
 		alreadyPersisted1.setDepartmentName("not a duplicate");
 		Assertion alreadyPersisted2 = getAssertionWithEmail("1@email.com");
-		Mockito.when(assertionsRepository.findByEmail(Mockito.eq("1@email.com"))).thenReturn(Arrays.asList(alreadyPersisted1, alreadyPersisted2));
-		
+		Mockito.when(assertionsRepository.findByEmail(Mockito.eq("1@email.com")))
+				.thenReturn(Arrays.asList(alreadyPersisted1, alreadyPersisted2));
+
 		AssertionsUpload upload = new AssertionsUpload();
 		upload.addAssertion(getAssertionWithEmail("1@email.com"));
 		upload.addAssertion(getAssertionWithEmail("1@email.com"));
 		upload.addAssertion(getAssertionWithEmail("1@email.com"));
-		
-		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class))).thenReturn(upload);
-		
+
+		Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class),
+				Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
+
 		AssertionsUploadSummary summary = assertionService.uploadAssertions(file);
 		assertEquals(3, summary.getNumDuplicates());
-		
+
 		Mockito.verify(assertionsRepository, Mockito.never()).insert(Mockito.any(Assertion.class));
 	}
-	
+
 	private Assertion getAssertionWithoutIdForEmail(String email) {
 		Assertion a = new Assertion();
 		a.setEmail(email);
