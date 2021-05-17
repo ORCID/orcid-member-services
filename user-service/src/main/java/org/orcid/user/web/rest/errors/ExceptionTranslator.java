@@ -1,32 +1,30 @@
 package org.orcid.user.web.rest.errors;
 
-import io.github.jhipster.web.util.HeaderUtil;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
-import org.orcid.user.config.Constants;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.zalando.problem.*;
+import org.zalando.problem.DefaultProblem;
+import org.zalando.problem.Problem;
+import org.zalando.problem.ProblemBuilder;
+import org.zalando.problem.Status;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
+import io.github.jhipster.web.util.HeaderUtil;
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly json structures.
@@ -73,7 +71,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
                 .withInstance(problem.getInstance());
             problem.getParameters().forEach(builder::with);
             if (!problem.getParameters().containsKey(MESSAGE_KEY) && problem.getStatus() != null) {
-                builder.with(MESSAGE_KEY, "error.http." + problem.getStatus().getStatusCode());
+                builder.with(MESSAGE_KEY, "error.http." + problem.getStatus().getStatusCode() + ".string");
             }
         }
         return new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode());
