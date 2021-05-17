@@ -2,7 +2,6 @@ package org.orcid.user.security;
 
 import java.util.Optional;
 
-import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -63,17 +62,4 @@ public final class SecurityUtils {
             .orElse(false);
     }
     
-    public static String getAuthenticatedUser() {
-        if (!isAuthenticated()) {
-            throw new BadRequestAlertException("User is not logged in", "login", "null");
-        }
-
-        String loggedInUser = getCurrentUserLogin().get();
-
-        /*if (!isCurrentUserInRole(AuthoritiesConstants.ADMIN ) || !isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER )) {
-            throw new BadRequestAlertException("User does not have the required scope 'AuthoritiesConstants.ADMIN or AuthoritiesConstants.ORG_OWNER'", "login", loggedInUser);
-        }*/
-
-        return loggedInUser;
-    }
 }

@@ -6,6 +6,22 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
+        <div class="alerts top right" role="alert" *ngIf="csvErrors && csvErrors.length > 0">
+			<ngb-alert class="alert alert-danger alert-dismissible" role="alert" ng-reflect-type="danger" (close)="csvErrors = null">
+				<p jhiTranslate="gatewayApp.msUserServiceMSUser.import.errors.label.string">Oops! There was a problem processing your data. Pleases fix the errors below and try again</p>
+			    <table>
+			    	<thead>
+			    		<th>Errors</th>
+			    	</thead>
+			    	<tbody>
+			    		<tr *ngFor="let error of csvErrors">
+			        		<td>Row {{error['index']}}</td>
+			        		<td>{{error['message']}}</td>
+			       		</tr>
+			    	</tbody>
+			    </table>
+			</ngb-alert>
+		</div>
         <p id="jhi-delete-msUser-heading" jhiTranslate="gatewayApp.msUserServiceMSUser.import.label.string">Please select a CSV file to upload</p>
 
         <div class="form-group">
@@ -26,17 +42,3 @@
         </button>
     </div>
 </form>
-<div class="modal-body" *ngIf="csvErrors && csvErrors.length > 0">
-    <p jhiTranslate="gatewayApp.msUserServiceMSUser.import.errors.label.string">Oops! There was a problem processing your data. Pleases fix the errors below and try again</p>
-    <table>
-    	<thead>
-    		<th>Errors</th>
-    	</thead>
-    	<tbody>
-    		<tr *ngFor="let error of csvErrors">
-        		<td>Row {{error['index']}}</td>
-        		<td>{{error['message']}}</td>
-       		</tr>
-    	</tbody>
-    </table>
-</div>

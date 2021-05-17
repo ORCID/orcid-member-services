@@ -260,8 +260,9 @@ public class UserResource {
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) throws Throwable {
         LOG.debug("Uploading users settings CSV");
-        String createdBy = SecurityUtils.getAuthenticatedUser();
-        UserUpload upload = userService.uploadUserCSV(file.getInputStream(), createdBy);
+        String login = SecurityUtils.getCurrentUserLogin().get();
+        User currentUser = userService.getUserWithAuthoritiesByLogin(login).get();
+        UserUpload upload = userService.uploadUserCSV(file.getInputStream(), currentUser);
         return ResponseEntity.ok().body(upload.getErrors().toString());
     }
 
@@ -290,7 +291,7 @@ public class UserResource {
             LOG.warn("Attempt to create user with non existent member {}", userDTO.getSalesforceId());
             return ResponseEntity.badRequest().body(userDTO);
         }
-        String createdBy = SecurityUtils.getAuthenticatedUser();
+        String createdBy = SecurityUtils.getCurrentUserLogin().get();
         //change the auth if the logged in user is org owner and this is set as mainContact
         boolean owner = userDTO.getMainContact();
         List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
@@ -360,7 +361,7 @@ public class UserResource {
 
         //change the auth if the logged in user is org owner and this is set as mainContact
         if (user.getMainContact()) {
-            Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getAuthenticatedUser());
+            Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
             if (authUser.isPresent() && !StringUtils.equals(authUser.get().getId(), user.getId()) && SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER)) {
                 userService.removeAuthorityFromUser(authUser.get().getId(), AuthoritiesConstants.ORG_OWNER);
             } else {
@@ -398,7 +399,7 @@ public class UserResource {
     @DeleteMapping("/users/{jhiUserId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String jhiUserId, @RequestParam(value = "noMainContactCheck", required = false) boolean noMainContactCheck) {
         LOG.debug("REST request to delete user {}", jhiUserId);
-        String authUserLogin = SecurityUtils.getAuthenticatedUser();
+        String authUserLogin = SecurityUtils.getCurrentUserLogin().get();
         if (StringUtils.equalsIgnoreCase(authUserLogin, jhiUserId)) {
             throw new BadRequestAlertException("Cannot delete current authenticated user", "User", "delete.auth.user.string");
         }
@@ -526,7 +527,7 @@ public class UserResource {
      */
     @PostMapping("/logout_as")
     public ResponseEntity<Void> logoutAsSwitchedUser(@RequestParam(value = "username", required = true) String username) {
-        Optional<User> authUser = userService.getUserWithAuthoritiesByLogin(SecurityUtils.getAuthenticatedUser());
+        Optional<User> authUser = userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin().get());
         if(authUser.isPresent()) {
             UserDTO userDTO = UserDTO.valueOf(authUser.get());
             userDTO.setIsAdmin(true);

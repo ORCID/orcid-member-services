@@ -1,0 +1,4 @@
+salesforceId,email,firstName,lastName,grant,mainContact
+sssalesforceid1,,Angel,Montenegro,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]",true
+salesforceid3,,Leonardo,Mendoza,"[ROLE_USER]",false
+salesforceid2,,Daniel,Palafox,"[ROLE_USER]",false
