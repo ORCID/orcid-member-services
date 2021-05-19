@@ -21,6 +21,7 @@ import org.mockito.stubbing.Answer;
 import org.orcid.member.domain.Member;
 import org.orcid.member.repository.MemberRepository;
 import org.orcid.member.security.MockSecurityContext;
+import org.orcid.member.service.user.MemberServiceUser;
 import org.orcid.member.upload.MemberUpload;
 import org.orcid.member.upload.MembersUploadReader;
 import org.orcid.member.web.rest.errors.BadRequestAlertException;
@@ -154,7 +155,7 @@ class MemberServiceTest {
 
 	@Test
 	void testUploadMemberCSV() throws IOException {
-		Mockito.when(membersUploadReader.readMemberUpload(Mockito.any())).thenReturn(getMemberUpload());
+		Mockito.when(membersUploadReader.readMemberUpload(Mockito.any(), Mockito.any(MemberServiceUser.class))).thenReturn(getMemberUpload());
 		Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("one"))).thenReturn(Optional.empty());
 		//Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("two"))).thenReturn(Optional.of(getMember()));
 		//Mockito.when(memberRepository.findById(Mockito.eq("two"))).thenReturn(Optional.of(getMemberUpload().getMembers().get(1)));

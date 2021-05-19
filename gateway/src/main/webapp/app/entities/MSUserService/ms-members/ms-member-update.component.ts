@@ -131,7 +131,7 @@ export class MSMemberUpdateComponent implements OnInit {
       salesforceId: msMember.salesforceId,
       parentSalesforceId: msMember.parentSalesforceId,
       isConsortiumLead: msMember.isConsortiumLead,
-      assertionServiceEnabled: msMember.assertionServiceEnabled,
+      assertionServiceEnabled: msMember.assertionServiceEnabled ? true : false,
       createdBy: msMember.createdBy,
       createdDate: msMember.createdDate != null ? msMember.createdDate.format(DATE_TIME_FORMAT) : null,
       lastModifiedBy: msMember.lastModifiedBy,
@@ -169,7 +169,7 @@ export class MSMemberUpdateComponent implements OnInit {
       salesforceId: this.editForm.get(['salesforceId']).value,
       parentSalesforceId: this.editForm.get(['parentSalesforceId']).value,
       isConsortiumLead: this.editForm.get(['isConsortiumLead']).value,
-      assertionServiceEnabled: this.editForm.get(['assertionServiceEnabled']).value,
+      assertionServiceEnabled: this.editForm.get(['assertionServiceEnabled']).value ? true : false,
       createdBy: this.editForm.get(['createdBy']).value,
       createdDate:
         this.editForm.get(['createdDate']).value != null ? moment(this.editForm.get(['createdDate']).value, DATE_TIME_FORMAT) : undefined,

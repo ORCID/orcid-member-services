@@ -6,37 +6,49 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.orcid.member.repository.MemberRepository;
-import org.orcid.member.upload.MemberUpload;
 import org.orcid.member.domain.Member;
+import org.orcid.member.repository.MemberRepository;
+import org.orcid.member.service.user.MemberServiceUser;
+import org.orcid.member.upload.MemberUpload;
+import org.orcid.member.validation.MemberValidator;
+import org.springframework.context.MessageSource;
 
 class MemberCsvReaderTest {
 
-    @Mock
-    MemberRepository memberRepository;
+	@Mock
+	private MemberRepository memberRepository;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+	@Mock
+	private MessageSource messageSource;
 
-    private MemberCsvReader reader = null;
+	@Mock
+	private MemberValidator memberValidator;
+
+	@BeforeEach
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+	}
+
+	@InjectMocks
+	private MemberCsvReader reader;
 
 	@Test
 	void testReadMembersUpload() throws IOException {
-        reader = new MemberCsvReader(memberRepository);
+		Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.empty());
+		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class), Mockito.eq(true)))
+				.thenReturn(new ArrayList<>());
 
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.empty());
-
-        InputStream inputStream = getClass().getResourceAsStream("/members.csv");
-		MemberUpload upload = reader.readMemberUpload(inputStream);
+		InputStream inputStream = getClass().getResourceAsStream("/members.csv");
+		MemberUpload upload = reader.readMemberUpload(inputStream, getUser());
 
 		assertEquals(2, upload.getMembers().size());
 
@@ -60,6 +72,12 @@ class MemberCsvReaderTest {
 
 		assertEquals("some-client-name", one.getClientName());
 		assertEquals("some-other-client-name", two.getClientName());
+	}
+
+	private MemberServiceUser getUser() {
+		MemberServiceUser user = new MemberServiceUser();
+		user.setLangKey("en");
+		return user;
 	}
 
 }

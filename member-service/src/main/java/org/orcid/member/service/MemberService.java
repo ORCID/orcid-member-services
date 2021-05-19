@@ -15,7 +15,7 @@ import org.orcid.member.security.SecurityUtils;
 import org.orcid.member.service.user.MemberServiceUser;
 import org.orcid.member.upload.MemberUpload;
 import org.orcid.member.upload.MembersUploadReader;
-import org.orcid.member.web.rest.MemberValidator;
+import org.orcid.member.validation.MemberValidator;
 import org.orcid.member.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +41,9 @@ public class MemberService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private MemberValidator memberValidator;
 
 	@Autowired
 	private AssertionService assertionService;
@@ -55,10 +58,14 @@ public class MemberService {
 		LOG.info("Reading member CSV upload");
 		MemberUpload upload = null;
 		try {
-			upload = memberUploadReader.readMemberUpload(inputStream);
+			upload = memberUploadReader.readMemberUpload(inputStream, userService.getLoggedInUser());
 		} catch (IOException e) {
 			LOG.warn("Error reading member CSV upload");
 			throw new RuntimeException(e);
+		}
+		
+		if (upload.getErrors().length() > 0) {
+			return upload;
 		}
 
 		for (Member member : upload.getMembers()) {
@@ -100,8 +107,10 @@ public class MemberService {
 		if (optionalMemberName.isPresent()) {
 			throw new BadRequestAlertException("A member with that name already exists", "member", "memberNameUsed.string");
 		}
-		if (!MemberValidator.validate(member)) {
-			throw new BadRequestAlertException("Member invalid", "member", "invalid.string");
+		
+		// XXX to do - proper validation. this is functionally the same as previously, when validator returned boolean
+		if (memberValidator.validate(member, userService.getLoggedInUser(), true).size() > 0) {
+			throw new BadRequestAlertException("Member invalid", "member", "validation.string");
 		}
 
 		if (member.getCreatedBy() == null) {
@@ -118,6 +127,8 @@ public class MemberService {
 	}
 
 	public Member updateMember(Member member) {
+		MemberServiceUser currentUser = userService.getLoggedInUser();
+		
 		if (member.getId() == null) {
 			throw new BadRequestAlertException("Invalid id", "member", "idnull.string");
 		}
@@ -127,7 +138,8 @@ public class MemberService {
 			throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
 		}
 
-		if (!MemberValidator.validate(member)) {
+		// XXX functionally equal to previously, this will be replaced with proper validation
+		if (memberValidator.validate(member, currentUser, false).size() > 0) {
 			// what to do here? return member object with errors for ui?
 			// something
 			// consistent
