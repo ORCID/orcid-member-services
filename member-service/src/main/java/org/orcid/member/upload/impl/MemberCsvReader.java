@@ -3,20 +3,27 @@ package org.orcid.member.upload.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
-import io.micrometer.core.instrument.util.StringUtils;
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.input.BOMInputStream;
 import org.orcid.member.domain.Member;
 import org.orcid.member.repository.MemberRepository;
+import org.orcid.member.service.user.MemberServiceUser;
 import org.orcid.member.upload.MemberUpload;
 import org.orcid.member.upload.MembersUploadReader;
-import org.orcid.member.web.rest.MemberValidator;
+import org.orcid.member.validation.MemberValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,113 +31,91 @@ public class MemberCsvReader implements MembersUploadReader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MemberCsvReader.class);
 
-    @Autowired
-    private MemberRepository memberRepository;
-
-    MemberCsvReader(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+	@Autowired
+	private MemberRepository memberRepository;
+	
+	@Autowired
+	private MessageSource messageSource;
+	
+	@Autowired
+	private MemberValidator memberValidator;
 
 	@Override
-	public MemberUpload readMemberUpload(InputStream inputStream) {
-		Instant now = Instant.now();
-		InputStreamReader isr = new InputStreamReader(inputStream);
-		Iterable<CSVRecord> elements = null;
+	public MemberUpload readMemberUpload(InputStream inputStream, MemberServiceUser user) throws IOException {
 		MemberUpload upload = new MemberUpload();
 
-		try {
-			elements = CSVFormat.DEFAULT.withHeader().parse(isr);
-		} catch (IOException e) {
-			try {
-				isr.close();
-			} catch (IOException io) {
-				LOG.error("Error closing csv assertions upload input stream", e);
-				throw new RuntimeException(io);
-			}
+		try (final Reader reader = new InputStreamReader(new BOMInputStream(inputStream), StandardCharsets.UTF_8);
+				final CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader())) {
 
-			LOG.error("Error reading CSV upload", e);
-			throw new RuntimeException(e);
-		}
+			for (CSVRecord line : parser) {
+				try {
+					Member member = createMemberInstance(user);
+					member = parseLine(line, member);
 
-		try {
-			for (CSVRecord line : elements) {
-			    try {
-                    long index = line.getRecordNumber();
-                    Member member = parseLine(line, now);
-
-                    if (member.getError() != null || !MemberValidator.validate(member)) {
-                        upload.addError(index, member.getError());
-                    } else {
-                        upload.addMember(member);
-                    }
-                } catch (Exception e) {
-                    LOG.info("CSV upload error found for record number {}", line.getRecordNumber());
-                    upload.addError(line.getRecordNumber(), e.getMessage());
-                }
-			}
-		} finally {
-			try {
-				isr.close();
-			} catch (IOException e) {
-				LOG.error("Error closing csv assertions upload input stream", e);
-				throw new RuntimeException(e);
+					List<String> errors = memberValidator.validate(member, user, true);
+					if (!errors.isEmpty()) {
+						for (String error : errors) {
+							upload.addError(line.getRecordNumber(), error);
+						}
+					} else {
+						upload.addMember(member);
+					}
+				} catch (Exception e) {
+					LOG.info("CSV upload error found for record number {}", line.getRecordNumber());
+					upload.addError(line.getRecordNumber(), getError("unexpected", e.getMessage(), user));
+				}
 			}
 		}
 		return upload;
 	}
-
-	private Member parseLine(CSVRecord record, Instant now) {
+	
+	private Member createMemberInstance(MemberServiceUser user) {
+		Instant now = Instant.now();
 		Member member = new Member();
+		member.setCreatedDate(now);
+		member.setLastModifiedDate(now);
+		member.setCreatedBy(user.getLogin());
+		member.setLastModifiedBy(user.getLogin());
+		return member;
+	}
+
+	private Member parseLine(CSVRecord record, Member member) {
 		if (record.isSet("assertionServiceEnabled")) {
 			member.setAssertionServiceEnabled(Boolean.parseBoolean(record.get("assertionServiceEnabled")));
 		} else {
 			member.setAssertionServiceEnabled(false);
 		}
 
-        if (validateField(record, "clientId", "Client id should not be empty", member)) {
-            member.setClientId(record.get("clientId"));
-        }
+		if (record.isSet("clientId")) {
+			member.setClientId(record.get("clientId"));
+		}
 
-		Boolean isConsortiumLead = false;
 		if (record.isSet("isConsortiumLead")) {
-			isConsortiumLead = Boolean.parseBoolean(record.get("isConsortiumLead"));
+			member.setIsConsortiumLead(Boolean.parseBoolean(record.get("isConsortiumLead")));
 		}
-		member.setIsConsortiumLead(isConsortiumLead);
 
+		if (record.isSet("salesforceId")) {
+			member.setSalesforceId(record.get("salesforceId"));
+		}
 		
-                member.setSalesforceId(record.get("salesforceId"));
-            
-        
-
-		if (!isConsortiumLead) {
-            if (validateField(record,"parentSalesforceId", "Parent salesforce id should not be empty if it is not a consortium lead", member)) {
-                member.setParentSalesforceId(record.get("parentSalesforceId"));
-            }
+		if (record.isSet("parentSalesforceId")) {
+			member.setParentSalesforceId(record.get("parentSalesforceId"));
 		}
+		
 		if (record.isSet("clientName")) {
-            if (validateField(record, "clientName", "Member name should not be empty", member)) {
-                member.setClientName(record.get("clientName"));
-            }
+			member.setClientName(record.get("clientName"));
 		}
-
-		member.setCreatedDate(now);
-		member.setLastModifiedDate(now);
 		return member;
 	}
 
-    private boolean validateField(CSVRecord record, String value, String error, Member member) {
-        try {
-            record.get(value);
-        } catch (IllegalArgumentException e) {
-            member.setError(error);
-            return false;
-        }
-        return true;
-    }
-
-    public Boolean memberExists(String salesforceId) {
-        Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
-        return existingMember.isPresent();
-    }
+	private boolean memberExists(String salesforceId) {
+		Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
+		return existingMember.isPresent();
+	}
+	
+	private String getError(String code, String arg, MemberServiceUser user) {
+		return messageSource.getMessage("member.validation.error." + code, arg != null ? new Object[] { arg } : null,
+				Locale.forLanguageTag(user.getLangKey()));
+	}
 
 }

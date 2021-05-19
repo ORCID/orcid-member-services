@@ -15,7 +15,7 @@ public interface MemberRepository extends MongoRepository<Member, String> {
 	
     Optional<Member> findBySalesforceId(String salesforceId);
 
-    Optional<Member> findByClientName(String salesforceId);
+    Optional<Member> findByClientName(String clientName);
 
     Boolean existsBySalesforceId(String salesforceId);
     

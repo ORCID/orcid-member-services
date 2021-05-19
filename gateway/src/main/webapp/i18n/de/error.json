@@ -20,10 +20,8 @@
     "disambiguationSource": { "string": "Organization source can not be empty." },
     "emailUsed": { "string": "That email is already registered" },
     "ownerExists": { "string": "Organization already has an owner." },
-    "validation": { "string": "Validation error on the server." },
     "memberNotFound": { "string": "Member not found with salesForceId: {{ params }} " },
     "salesForceIdUsed": { "string": "A member with that salesforce id already exists" },
-    "affiliationOtherOrganization": { "string": "This affiliations doesnt belong to your organization" },
     "emailAffiliationUsed": {
       "string": "Unable to add affiliation. An affiliation for {{ params }} already exists and belongs to another organization."
     },

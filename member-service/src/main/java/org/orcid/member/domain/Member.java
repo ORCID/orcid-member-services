@@ -6,7 +6,6 @@ import java.time.Instant;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -58,11 +57,6 @@ public class Member implements Serializable {
     @Field("last_modified_date")
     private Instant lastModifiedDate;
 
-    @Transient
-    private String error;
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not
-    // remove
     public String getId() {
         return id;
     }
@@ -195,14 +189,6 @@ public class Member implements Serializable {
         this.superadminEnabled = superadminEnabled;
     }
 
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
     public String getClientName() {
         return clientName;
     }
@@ -220,7 +206,6 @@ public class Member implements Serializable {
         result = prime * result + ((clientName == null) ? 0 : clientName.hashCode());
         result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
         result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
-        result = prime * result + ((error == null) ? 0 : error.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((isConsortiumLead == null) ? 0 : isConsortiumLead.hashCode());
         result = prime * result + ((superadminEnabled == null) ? 0 : superadminEnabled.hashCode());
@@ -265,11 +250,6 @@ public class Member implements Serializable {
                 return false;
         } else if (!createdDate.equals(other.createdDate))
             return false;
-        if (error == null) {
-            if (other.error != null)
-                return false;
-        } else if (!error.equals(other.error))
-            return false;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -312,6 +292,6 @@ public class Member implements Serializable {
     public String toString() {
         return "Member [id=" + id + ", clientId=" + clientId + ", salesforceId=" + salesforceId + ", parentSalesforceId=" + parentSalesforceId + ", clientName="
                 + clientName + ", isConsortiumLead=" + isConsortiumLead + ", assertionServiceEnabled=" + assertionServiceEnabled + ", superadminEnabled=" + superadminEnabled + ", createdBy=" + createdBy
-                + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + ", error=" + error + "]";
+                + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + "]";
     }
 }

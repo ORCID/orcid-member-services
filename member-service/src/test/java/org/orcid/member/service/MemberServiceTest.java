@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -20,11 +22,13 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.orcid.member.domain.Member;
 import org.orcid.member.repository.MemberRepository;
+import org.orcid.member.security.EncryptUtil;
 import org.orcid.member.security.MockSecurityContext;
+import org.orcid.member.service.user.MemberServiceUser;
 import org.orcid.member.upload.MemberUpload;
 import org.orcid.member.upload.MembersUploadReader;
+import org.orcid.member.validation.MemberValidator;
 import org.orcid.member.web.rest.errors.BadRequestAlertException;
-import org.orcid.member.security.EncryptUtil;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 class MemberServiceTest {
@@ -37,24 +41,30 @@ class MemberServiceTest {
 
 	@Mock
 	private UserService userService;
-	
+
 	@Mock
 	private AssertionService assertionService;
-	
+
+	@Mock
+	private MemberValidator memberValidator;
+
 	@InjectMocks
 	private MemberService memberService;
-	
+
 	@Mock
 	private EncryptUtil encryptUtil;
-	
+
 	@BeforeEach
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		SecurityContextHolder.setContext(new MockSecurityContext("me"));
+		Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
 	}
 
 	@Test
 	void testCreateMember() {
+		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class),
+				Mockito.anyBoolean())).thenReturn(new ArrayList<>());
 		Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.empty());
 		Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
 			@Override
@@ -78,6 +88,8 @@ class MemberServiceTest {
 
 	@Test
 	void testCreateMemberWhenMemberExists() {
+		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class),
+				Mockito.anyBoolean())).thenReturn(new ArrayList<>());
 		Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.of(getMember()));
 		Member member = getMember();
 
@@ -88,6 +100,8 @@ class MemberServiceTest {
 
 	@Test
 	void testUpdateMember() {
+		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class),
+				Mockito.anyBoolean())).thenReturn(new ArrayList<>());
 		Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
 		Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
 			@Override
@@ -109,9 +123,11 @@ class MemberServiceTest {
 		assertEquals(member.getAssertionServiceEnabled(), updated.getAssertionServiceEnabled());
 		assertEquals(member.getIsConsortiumLead(), updated.getIsConsortiumLead());
 	}
-	
+
 	@Test
 	void testUpdateNonExistentMember() {
+		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class),
+				Mockito.anyBoolean())).thenReturn(new ArrayList<>());
 		Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
 		Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
 			@Override
@@ -128,9 +144,11 @@ class MemberServiceTest {
 			memberService.updateMember(member);
 		});
 	}
-	
+
 	@Test
 	void testUpdateInvalidMember() {
+		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class),
+				Mockito.anyBoolean())).thenReturn(Arrays.asList("some-error"));
 		Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
 
 		Member member = getMember();
@@ -145,52 +163,60 @@ class MemberServiceTest {
 
 	@Test
 	void testMemberExists() {
+		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class),
+				Mockito.anyBoolean())).thenReturn(new ArrayList<>());
 		Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.of(getMember()));
 		assertTrue(memberService.memberExists("anything"));
-		
+
 		Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.empty());
 		assertFalse(memberService.memberExists("anything"));
 	}
 
 	@Test
 	void testUploadMemberCSV() throws IOException {
-		Mockito.when(membersUploadReader.readMemberUpload(Mockito.any())).thenReturn(getMemberUpload());
+		Mockito.when(membersUploadReader.readMemberUpload(Mockito.any(), Mockito.any(MemberServiceUser.class)))
+				.thenReturn(getMemberUpload());
 		Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("one"))).thenReturn(Optional.empty());
-		//Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("two"))).thenReturn(Optional.of(getMember()));
-		//Mockito.when(memberRepository.findById(Mockito.eq("two"))).thenReturn(Optional.of(getMemberUpload().getMembers().get(1)));
+		// Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("two"))).thenReturn(Optional.of(getMember()));
+		// Mockito.when(memberRepository.findById(Mockito.eq("two"))).thenReturn(Optional.of(getMemberUpload().getMembers().get(1)));
 		Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("three"))).thenReturn(Optional.empty());
 		memberService.uploadMemberCSV(null);
 		Mockito.verify(memberRepository, Mockito.times(3)).save(Mockito.any(Member.class));
 	}
-	
+
 	@Test
 	void testGetAuthorizedMemberForUser() {
-	    String email = "email@email.com";
-            String encrypted = encryptUtil.encrypt("salesforceid" + "&&" + email);
+		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class),
+				Mockito.anyBoolean())).thenReturn(new ArrayList<>());
+		String email = "email@email.com";
+		String encrypted = encryptUtil.encrypt("salesforceid" + "&&" + email);
 		Mockito.when(assertionService.getOwnerIdForOrcidUser(Mockito.eq(encrypted))).thenReturn("ownerId");
 		Mockito.when(userService.getSalesforceIdForUser(Mockito.eq("ownerId"))).thenReturn("salesforceId");
 		Mockito.when(memberRepository.findById(Mockito.eq("salesforceid"))).thenReturn(Optional.empty());
-		Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceid"))).thenReturn(Optional.of(getMember()));
-	        Mockito.when(encryptUtil.decrypt(Mockito.eq(encrypted))).thenReturn("salesforceid" + "&&" + email);
+		Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceid")))
+				.thenReturn(Optional.of(getMember()));
+		Mockito.when(encryptUtil.decrypt(Mockito.eq(encrypted))).thenReturn("salesforceid" + "&&" + email);
 
 		Optional<Member> optional = memberService.getAuthorizedMemberForUser(encrypted);
-		
+
 		assertTrue(optional.isPresent());
-		
+
 		Member member = optional.get();
 		assertNotNull(member);
 		assertEquals(getMember().getClientId(), member.getClientId());
 		assertEquals(getMember().getClientName(), member.getClientName());
 	}
-	
+
 	@Test
 	void testGetAuthorizedMemberForUserBadEmail() {
-	    String email = "email@email.com";
-            String encrypted = encryptUtil.encrypt("salesforceid" + "&&" + email);
-            Mockito.when(assertionService.getOwnerIdForOrcidUser(encrypted)).thenReturn(null);
-	    Mockito.when(encryptUtil.decrypt(Mockito.eq(encrypted))).thenReturn("salesforceid" + "&&" + email);
-	    Optional<Member> optional = memberService.getAuthorizedMemberForUser(encrypted);
-	    assertTrue(!optional.isPresent());
+		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class),
+				Mockito.anyBoolean())).thenReturn(new ArrayList<>());
+		String email = "email@email.com";
+		String encrypted = encryptUtil.encrypt("salesforceid" + "&&" + email);
+		Mockito.when(assertionService.getOwnerIdForOrcidUser(encrypted)).thenReturn(null);
+		Mockito.when(encryptUtil.decrypt(Mockito.eq(encrypted))).thenReturn("salesforceid" + "&&" + email);
+		Optional<Member> optional = memberService.getAuthorizedMemberForUser(encrypted);
+		assertTrue(!optional.isPresent());
 	}
 
 	private MemberUpload getMemberUpload() {
@@ -198,25 +224,32 @@ class MemberServiceTest {
 		one.setSalesforceId("one");
 		one.setClientName("one");
 		one.setClientId("XXXX-XXXX-XXXX-XXX8");
-		
+
 		Member two = getMember();
-		//two.setId("two");
+		// two.setId("two");
 		two.setSalesforceId("two");
 		two.setClientName("two");
 		two.setClientId("XXXX-XXXX-XXXX-XXX9");
-		
+
 		Member three = getMember();
 		three.setSalesforceId("three");
 		three.setClientName("three");
 		three.setClientId("XXXX-XXXX-XXXX-XXX7");
-		
-		
+
 		MemberUpload upload = new MemberUpload();
 		upload.getMembers().add(one);
 		upload.getMembers().add(two);
 		upload.getMembers().add(three);
-		
+
 		return upload;
+	}
+	
+	private MemberServiceUser getUser() {
+		MemberServiceUser user = new MemberServiceUser();
+		user.setLogin("logged-in-user@orcid.org");
+		user.setEmail("logged-in-user@orcid.org");
+		user.setLangKey("en");
+		return user;
 	}
 
 	private Member getMember() {
