@@ -1,31 +1,33 @@
 {
   "error": {
-    "title": { "string": "Your request cannot be processed" },
-    "subtitle": { "string": "Sorry, an error has occurred" },
+    "title": { "string": "[Ẏǿŭř řḗɋŭḗşŧ ƈȧƞƞǿŧ ƀḗ ƥřǿƈḗşşḗḓ 衋ϵ衋ς ΰϑϵıς靐]" },
+    "subtitle": { "string": "[Şǿřřẏ, ȧƞ ḗřřǿř ħȧş ǿƈƈŭřřḗḓ ǋǅϰϑϵǋ ϐϐ ǲ]" },
     "http": {
-      "400": { "string": "Bad request." },
-      "403": { "string": "You are not authorized to access this page." },
-      "404": { "string": "The page does not exist." },
-      "405": { "string": "The HTTP verb you used is not supported for this URL." },
-      "500": { "string": "Internal server error." }
+      "400": { "string": "[Ɓȧḓ řḗɋŭḗşŧ. 靐ϕΐ ϖſϰǅǈϐ]" },
+      "403": { "string": "[Ẏǿŭ ȧřḗ ƞǿŧ ȧŭŧħǿřīzḗḓ ŧǿ ȧƈƈḗşş ŧħīş ƥȧɠḗ. ϑΐϕ ǈϕ靐 ϱϱ]" },
+      "404": { "string": "[Ŧħḗ ƥȧɠḗ ḓǿḗş ƞǿŧ ḗẋīşŧ. ẛϐϖ ıǲϵ靐 ϕ]" },
+      "405": { "string": "[Ŧħḗ ĦŦŦƤ ṽḗřƀ ẏǿŭ ŭşḗḓ īş ƞǿŧ şŭƥƥǿřŧḗḓ ƒǿř ŧħīş ŬŘĿ. 鶱ϱϱ 靐ϰſ]" },
+      "500": { "string": "[Īƞŧḗřƞȧŀ şḗřṽḗř ḗřřǿř. ϰϕΰııǋϖẛ ϐẛ]" }
     },
-    "concurrencyFailure": { "string": "Another user modified this data at the same time as you. Your changes were rejected." },
-    "validation": { "string": "Validation error on the server." },
-    "email": { "string": "Email is not a valid format" },
-    "size": { "string": "Does not meet min/max size requirements!" },
-    "idused": { "string": "It cannot be eliminated!. It has relationship with other elements." },
-    "pattern": { "string": "This field can only contain letters, digits and e-mail addresses." },
-    "invalidUrl": { "string": "The url is invalid" },
-    "deleteAssertionsForSalesforceId": { "string": "Unable to delete assertions for member." },
-    "disambiguationSource": { "string": "Organization source can not be empty." },
-    "emailUsed": { "string": "That email is already registered" },
-    "ownerExists": { "string": "Organization already has an owner." },
-    "memberNotFound": { "string": "Member not found with salesForceId: {{ params }} " },
-    "salesForceIdUsed": { "string": "A member with that salesforce id already exists" },
-    "affiliationOtherOrganization": { "string": "This affiliations doesnt belong to your organization" },
+    "concurrencyFailure": {
+      "string": "[Ȧƞǿŧħḗř ŭşḗř ḿǿḓīƒīḗḓ ŧħīş ḓȧŧȧ ȧŧ ŧħḗ şȧḿḗ ŧīḿḗ ȧş ẏǿŭ. Ẏǿŭř ƈħȧƞɠḗş ẇḗřḗ řḗĵḗƈŧḗḓ. ẛϖẛǈ鶱靐ϰ ςϵ鶱鶱]"
+    },
+    "validation": { "string": "[Ṽȧŀīḓȧŧīǿƞ ḗřřǿř ǿƞ ŧħḗ şḗřṽḗř. ϕϖϑǋΰςΐ鶱ẛ鶱]" },
+    "email": { "string": "[Ḗḿȧīŀ īş ƞǿŧ ȧ ṽȧŀīḓ ƒǿřḿȧŧ ǲςϐϕϰ ΰϖ ẛ]" },
+    "size": { "string": "[Ḓǿḗş ƞǿŧ ḿḗḗŧ ḿīƞ/ḿȧẋ şīzḗ řḗɋŭīřḗḿḗƞŧş! ϵ鶱ſϱ ẛϰϐ ς]" },
+    "idused": { "string": "[Īŧ ƈȧƞƞǿŧ ƀḗ ḗŀīḿīƞȧŧḗḓ!. Īŧ ħȧş řḗŀȧŧīǿƞşħīƥ ẇīŧħ ǿŧħḗř ḗŀḗḿḗƞŧş. ǅϑ ϑϐϑǋϐΐ]" },
+    "pattern": { "string": "[Ŧħīş ƒīḗŀḓ ƈȧƞ ǿƞŀẏ ƈǿƞŧȧīƞ ŀḗŧŧḗřş, ḓīɠīŧş ȧƞḓ ḗ-ḿȧīŀ ȧḓḓřḗşşḗş. 靐ıϕ衋 ſϐϱϰϑ]" },
+    "invalidUrl": { "string": "[Ŧħḗ ŭřŀ īş īƞṽȧŀīḓ ıǲϐ ϐǋǲ 衋ı]" },
+    "deleteAssertionsForSalesforceId": { "string": "[Ŭƞȧƀŀḗ ŧǿ ḓḗŀḗŧḗ ȧşşḗřŧīǿƞş ƒǿř ḿḗḿƀḗř. ϑǲϵẛϐǈ ΐǋ]" },
+    "disambiguationSource": { "string": "[Ǿřɠȧƞīzȧŧīǿƞ şǿŭřƈḗ ƈȧƞ ƞǿŧ ƀḗ ḗḿƥŧẏ. ΰ衋ǈϰǅı鶱鶱衋ẛ]" },
+    "emailUsed": { "string": "[Ŧħȧŧ ḗḿȧīŀ īş ȧŀřḗȧḓẏ řḗɠīşŧḗřḗḓ ϕςϱϰ ǈϰ靐靐ΰ]" },
+    "ownerExists": { "string": "[Ǿřɠȧƞīzȧŧīǿƞ ȧŀřḗȧḓẏ ħȧş ȧƞ ǿẇƞḗř. ϵςϱϕϖϱϵϵϱſ]" },
+    "memberNotFound": { "string": "[Ḿḗḿƀḗř ƞǿŧ ƒǿŭƞḓ ẇīŧħ şȧŀḗşƑǿřƈḗĪḓ: {{ ƥȧřȧḿş }}  ϕ靐ſΐϱǈ ſΰ靐]" },
+    "salesForceIdUsed": { "string": "[Ȧ ḿḗḿƀḗř ẇīŧħ ŧħȧŧ şȧŀḗşƒǿřƈḗ īḓ ȧŀřḗȧḓẏ ḗẋīşŧş 靐 ſϵǲϵϰǋ ϑ]" },
+    "affiliationOtherOrganization": { "string": "[Ŧħīş ȧƒƒīŀīȧŧīǿƞş ḓǿḗşƞŧ ƀḗŀǿƞɠ ŧǿ ẏǿŭř ǿřɠȧƞīzȧŧīǿƞ ϕ靐ϕϕ ς衋]" },
     "emailAffiliationUsed": {
-      "string": "Unable to add affiliation. An affiliation for {{ params }} already exists and belongs to another organization."
+      "string": "[Ŭƞȧƀŀḗ ŧǿ ȧḓḓ ȧƒƒīŀīȧŧīǿƞ. Ȧƞ ȧƒƒīŀīȧŧīǿƞ ƒǿř {{ ƥȧřȧḿş }} ȧŀřḗȧḓẏ ḗẋīşŧş ȧƞḓ ƀḗŀǿƞɠş ŧǿ ȧƞǿŧħḗř ǿřɠȧƞīzȧŧīǿƞ. ϖςΐϖϵς ϕ靐 ſϰǈ ǋ鶱ϱẛẛ]"
     },
-    "memberNameUsed": { "string": "A member with that name already exists" }
+    "memberNameUsed": { "string": "[Ȧ ḿḗḿƀḗř ẇīŧħ ŧħȧŧ ƞȧḿḗ ȧŀřḗȧḓẏ ḗẋīşŧş ϰ ΰϑ衋ǅϰϑ 衋ı]" }
   }
 }
