@@ -39,6 +39,7 @@ public class Member implements Serializable {
     @Field("is_consortium_lead")
     private Boolean isConsortiumLead;
 
+    @NotNull
     @Field("assertion_service_enabled")
     private Boolean assertionServiceEnabled;
     

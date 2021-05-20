@@ -6,19 +6,17 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
 import org.orcid.member.domain.Member;
-import org.orcid.member.repository.MemberRepository;
 import org.orcid.member.service.user.MemberServiceUser;
 import org.orcid.member.upload.MemberUpload;
 import org.orcid.member.upload.MembersUploadReader;
+import org.orcid.member.validation.MemberValidation;
 import org.orcid.member.validation.MemberValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +29,6 @@ public class MemberCsvReader implements MembersUploadReader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MemberCsvReader.class);
 
-	@Autowired
-	private MemberRepository memberRepository;
-	
 	@Autowired
 	private MessageSource messageSource;
 	
@@ -52,9 +47,9 @@ public class MemberCsvReader implements MembersUploadReader {
 					Member member = createMemberInstance(user);
 					member = parseLine(line, member);
 
-					List<String> errors = memberValidator.validate(member, user, true);
-					if (!errors.isEmpty()) {
-						for (String error : errors) {
+					MemberValidation validation = memberValidator.validate(member, user, true); 
+					if (!validation.isValid()) {
+						for (String error : validation.getErrors()) {
 							upload.addError(line.getRecordNumber(), error);
 						}
 					} else {
@@ -108,11 +103,6 @@ public class MemberCsvReader implements MembersUploadReader {
 		return member;
 	}
 
-	private boolean memberExists(String salesforceId) {
-		Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
-		return existingMember.isPresent();
-	}
-	
 	private String getError(String code, String arg, MemberServiceUser user) {
 		return messageSource.getMessage("member.validation.error." + code, arg != null ? new Object[] { arg } : null,
 				Locale.forLanguageTag(user.getLangKey()));

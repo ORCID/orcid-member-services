@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,16 +15,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.member.domain.Member;
-import org.orcid.member.repository.MemberRepository;
 import org.orcid.member.service.user.MemberServiceUser;
 import org.orcid.member.upload.MemberUpload;
+import org.orcid.member.validation.MemberValidation;
 import org.orcid.member.validation.MemberValidator;
 import org.springframework.context.MessageSource;
 
 class MemberCsvReaderTest {
-
-	@Mock
-	private MemberRepository memberRepository;
 
 	@Mock
 	private MessageSource messageSource;
@@ -43,9 +39,8 @@ class MemberCsvReaderTest {
 
 	@Test
 	void testReadMembersUpload() throws IOException {
-		Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.empty());
-		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class), Mockito.eq(true)))
-				.thenReturn(new ArrayList<>());
+		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class),
+				Mockito.eq(true))).thenReturn(getValidValidation());
 
 		InputStream inputStream = getClass().getResourceAsStream("/members.csv");
 		MemberUpload upload = reader.readMemberUpload(inputStream, getUser());
@@ -72,6 +67,13 @@ class MemberCsvReaderTest {
 
 		assertEquals("some-client-name", one.getClientName());
 		assertEquals("some-other-client-name", two.getClientName());
+	}
+
+	private MemberValidation getValidValidation() {
+		MemberValidation validation = new MemberValidation();
+		validation.setErrors(new ArrayList<>());
+		validation.setValid(true);
+		return validation;
 	}
 
 	private MemberServiceUser getUser() {

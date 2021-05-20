@@ -30,14 +30,18 @@ public class MemberValidator {
 	@Autowired
 	private MemberRepository memberRepository;
 	
-	public List<String> validate(Member member, MemberServiceUser user, boolean creatingMember) {
+	public MemberValidation validate(Member member, MemberServiceUser user, boolean creatingMember) {
 		List<String> errors = new ArrayList<>();
 		validateAssertionServiceEnabled(member, user, errors);
 		validateSalesforceId(member, user, errors, creatingMember);
 		validateConsortiumLeadAndParentSalesforceId(member, user, errors);
 		validateClientId(member, user, errors);
 		validateClientName(member, user, errors, creatingMember);
-		return errors;
+
+		MemberValidation validation = new MemberValidation();
+		validation.setValid(errors.isEmpty());
+		validation.setErrors(errors);
+		return validation;
 	}
 	
 	private void validateClientName(Member member, MemberServiceUser user, List<String> errors,
