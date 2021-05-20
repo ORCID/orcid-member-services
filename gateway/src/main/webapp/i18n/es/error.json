@@ -1,29 +1,31 @@
 {
   "error": {
-    "title": { "string": "¡Página de error!" },
+    "title": { "string": "Your request cannot be processed" },
+    "subtitle": { "string": "Sorry, an error has occurred" },
     "http": {
       "400": { "string": "Bad request." },
-      "403": { "string": "No tiene permisos para acceder a la página." },
-      "404": { "string": "La página no existe." },
-      "405": { "string": "El verbo HTTP utilizado no tiene soporte para este URL." },
-      "500": { "string": "Error interno del servidor." }
+      "403": { "string": "You are not authorized to access this page." },
+      "404": { "string": "The page does not exist." },
+      "405": { "string": "The HTTP verb you used is not supported for this URL." },
+      "500": { "string": "Internal server error." }
     },
-    "concurrencyFailure": { "string": "Otro usuario ha modificado esta data al mismo tiempo que tú. Tus cambios fueron rechazados." },
-    "validation": { "string": "Error de validación en el servidor." },
-    "email": { "string": "Email no es un valor valido " },
-    "size": { "string": "No cumple con los requisitos min/max size requerimientos!" },
-    "idused": { "string": "No, puede ser eliminado!. Tiene relacion con otros elementos." },
-    "pattern": { "string": "Este campo solo puede contener letras, digitos y direcciones e-mail." },
-    "invalidUrl": { "string": "La url es invalida" },
-    "disambiguationSource": { "string": "Fuente de organizacion no puede ir vacio." },
-    "emailUsed": { "string": "El email ya esta registrado" },
+    "concurrencyFailure": { "string": "Another user modified this data at the same time as you. Your changes were rejected." },
+    "validation": { "string": "Validation error on the server." },
+    "email": { "string": "Email is not a valid format" },
+    "size": { "string": "Does not meet min/max size requirements!" },
+    "idused": { "string": "It cannot be eliminated!. It has relationship with other elements." },
+    "pattern": { "string": "This field can only contain letters, digits and e-mail addresses." },
+    "invalidUrl": { "string": "The url is invalid" },
+    "deleteAssertionsForSalesforceId": { "string": "Unable to delete assertions for member." },
+    "disambiguationSource": { "string": "Organization source can not be empty." },
+    "emailUsed": { "string": "That email is already registered" },
     "ownerExists": { "string": "Organization already has an owner." },
-    "memberNotFound": { "string": "Miembro no encontrado con salesForceId: {{ params }} " },
-    "salesForceIdUsed": { "string": "Un miembro con ese salesforce id ya existe" },
-    "affiliationOtherOrganization": { "string": "Esta afiliacion no pertenece a tu organizacion" },
+    "memberNotFound": { "string": "Member not found with salesForceId: {{ params }} " },
+    "salesForceIdUsed": { "string": "A member with that salesforce id already exists" },
+    "affiliationOtherOrganization": { "string": "This affiliations doesnt belong to your organization" },
     "emailAffiliationUsed": {
-      "string": "No fue posible agregar la afiliacion. Una afiliacion con {{ params }} ya existe y pertenece a otra organizacion."
+      "string": "Unable to add affiliation. An affiliation for {{ params }} already exists and belongs to another organization."
     },
-    "memberNameUsed": { "string": "Un miembro con ese nombre ya existe" }
+    "memberNameUsed": { "string": "A member with that name already exists" }
   }
 }

@@ -1,30 +1,30 @@
 {
   "userManagement": {
     "home": {
-      "title": { "string": "Usuarios" },
-      "createLabel": { "string": "Crear un nuevo usuario" },
-      "createOrEditLabel": { "string": "Crear o editar un usuario" }
+      "title": { "string": "Users" },
+      "createLabel": { "string": "Create a new user" },
+      "createOrEditLabel": { "string": "Create or edit a user" }
     },
     "created": { "string": "A new user is created with identifier {{ param }}" },
     "updated": { "string": "A user is updated with identifier {{ param }}" },
     "deleted": { "string": "A user is deleted with identifier {{ param }}" },
     "delete": {
-      "question": { "string": "¿Seguro que quieres eliminar el usuario {{ login }}?" }
+      "question": { "string": "Are you sure you want to delete user {{ login }}?" }
     },
     "detail": {
-      "title": { "string": "Usuario" }
+      "title": { "string": "User" }
     },
     "login": { "string": "Login" },
-    "firstName": { "string": "Nombre" },
-    "lastName": { "string": "Apellidos" },
+    "firstName": { "string": "First name" },
+    "lastName": { "string": "Last name" },
     "email": { "string": "Email" },
-    "activated": { "string": "Activado" },
-    "deactivated": { "string": "Desactivado" },
-    "profiles": { "string": "Perfiles" },
-    "langKey": { "string": "Idioma" },
-    "createdBy": { "string": "Creado por" },
-    "createdDate": { "string": "Fecha de creación" },
-    "lastModifiedBy": { "string": "Modificado por" },
-    "lastModifiedDate": { "string": "Fecha de modificación" }
+    "activated": { "string": "Activated" },
+    "deactivated": { "string": "Deactivated" },
+    "profiles": { "string": "Profiles" },
+    "langKey": { "string": "Language" },
+    "createdBy": { "string": "Created by" },
+    "createdDate": { "string": "Created date" },
+    "lastModifiedBy": { "string": "Modified by" },
+    "lastModifiedDate": { "string": "Modified date" }
   }
 }

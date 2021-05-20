@@ -2,14 +2,14 @@
   "gatewayApp": {
     "msUserServiceMSUser": {
       "home": {
-        "title": { "string": "User Settings" },
-        "createLabel": { "string": "Crear nuevo User Settings" },
-        "createOrEditLabel": { "string": "Crear o editar User Settings" },
-        "notFound": { "string": "No User Settings found" },
-        "uploadLabel": { "string": "Upload User Settings" }
+        "title": { "string": "Manage users" },
+        "createLabel": { "string": "Add user" },
+        "createOrEditLabel": { "string": "Add or edit user" },
+        "notFound": { "string": "No users to show" },
+        "uploadLabel": { "string": "Import users from CSV" }
       },
       "delete": {
-        "question": { "string": "¿Seguro que quiere eliminar User Settings {{ id }}?" }
+        "question": { "string": "Are you sure you want to delete user {{ login }}?" }
       },
       "changeOwnership": {
         "question": {
@@ -17,40 +17,51 @@
         }
       },
       "detail": {
-        "title": { "string": "User Settings" }
+        "title": { "string": "User details" }
+      },
+      "sendActivate": {
+        "success": { "string": "Invite sent." },
+        "error": { "string": "Invite email couldn´t be sent." }
       },
       "import": {
-        "title": { "string": "User Settings" },
+        "title": { "string": "Import users" },
         "label": { "string": "Please select the CSV file to upload" },
-        "filePath": { "string": "Ruta del archivo" },
+        "filePath": { "string": "File path" },
         "emptyFile": { "string": "There is no file to upload. Please select one." },
         "errors": {
-          "label": {
-            "string": "Oops! Ocurrio un error al procesar tu informacion. Por favor corrige los siguientes errores e intenta de nuevo"
-          }
+          "label": { "string": "Oops! There was a problem processing your data. Pleases fix the errors below and try again" }
         }
       },
-      "confirm_password": { "string": "Confirmar contraseña" },
+      "assertionService": {
+        "enabled": { "string": "Assertions enabled" }
+      },
       "login": { "string": "Login" },
       "email": { "string": "Email" },
-      "password": { "string": "Contrasena" },
-      "firstName": { "string": "Nombre" },
-      "lastName": { "string": "Apellido" },
-      "mainContact": { "string": "Proprietario de la organización" },
-      "salesforceId": { "string": "Salesforce Id" },
+      "password": { "string": "Password" },
+      "confirm_password": { "string": "Confirm Password" },
+      "firstName": { "string": "First Name" },
+      "lastName": { "string": "Last Name" },
+      "mainContact": { "string": "Organization Owner" },
+      "salesforceId": { "string": "Organization" },
       "parentSalesforceId": { "string": "Parent Salesforce Id" },
+      "activated": { "string": "Activated" },
       "isAdmin": { "string": "Admin" },
-      "createdBy": { "string": "Creado por" },
-      "createdDate": { "string": "Fecha de creacion" },
-      "lastModifiedBy": { "string": "Ultima vez modificado por" },
-      "lastModifiedDate": { "string": "Ultima fecha de modificacion" }
+      "createdBy": { "string": "Created By" },
+      "createdDate": { "string": "Created" },
+      "lastModifiedBy": { "string": "Last Modified By" },
+      "lastModifiedDate": { "string": "Last Modified" }
+    },
+    "userDTO": {
+      "login": { "string": "email" },
+      "firstName": { "string": "first name" },
+      "lastName": { "string": "last name" }
     }
   },
   "userServiceApp": {
     "user": {
-      "created": { "string": "Nuevo user ha sido creado." },
-      "updated": { "string": "User ha sido actualizado." },
-      "deleted": { "string": "User ha sido eliminado." }
+      "created": { "string": "User created. Invite sent." },
+      "updated": { "string": "User updated successfully" },
+      "deleted": { "string": "User deleted successfully" }
     }
   }
 }
