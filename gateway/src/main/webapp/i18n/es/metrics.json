@@ -1,66 +1,67 @@
 {
   "metrics": {
-    "title": "Métricas de aplicación",
-    "refresh.button": "Refrescar",
-    "updating": "Actualizando...",
+    "title": "Application Metrics",
+    "refresh.button": "Refresh",
+    "updating": "Updating...",
     "jvm": {
-      "title": "Métricas de JVM",
+      "title": "JVM Metrics",
       "memory": {
-        "title": "Memoria",
-        "total": "Memoria total",
-        "heap": "Memoria del Heap",
-        "nonheap": "Memoria no Heap"
+        "title": "Memory",
+        "total": "Total Memory",
+        "heap": "Heap Memory",
+        "nonheap": "Non-Heap Memory"
       },
       "threads": {
-        "title": "Hilos",
-        "all": "Todo",
-        "runnable": "Ejecutables",
+        "title": "Threads",
+        "all": "All",
+        "runnable": "Runnable",
         "timedwaiting": "Timed waiting",
-        "waiting": "Esperando",
-        "blocked": "Bloqueados",
+        "waiting": "Waiting",
+        "blocked": "Blocked",
         "dump": {
           "title": "Threads dump",
           "id": "Id: ",
-          "blockedtime": "Tiempo bloqueado",
-          "blockedcount": "Contador bloqueados",
-          "waitedtime": "Tiempo en espera",
-          "waitedcount": "Contador en espera",
+          "blockedtime": "Blocked Time",
+          "blockedcount": "Blocked Count",
+          "waitedtime": "Waited Time",
+          "waitedcount": "Waited Count",
           "lockname": "Lock name",
           "stacktrace": "Stacktrace",
-          "show": "Mostrar",
-          "hide": "Ocultar"
+          "show": "Show Stacktrace",
+          "hide": "Hide Stacktrace"
         }
       },
       "gc": {
-        "title": "Colecciones de basura",
+        "title": "Garbage collections",
         "marksweepcount": "Mark Sweep count",
         "marksweeptime": "Mark Sweep time",
         "scavengecount": "Scavenge count",
         "scavengetime": "Scavenge time"
       },
       "http": {
-        "title": "Peticiones HTTP (eventos por segundo)",
-        "active": "Peticiones activas:",
-        "total": "Peticiones totales:",
+        "title": "HTTP requests (time in millisecond)",
+        "active": "Active requests:",
+        "total": "Total requests:",
         "table": {
-          "code": "Código",
-          "count": "Recuento",
-          "mean": "Media",
-          "average": "Promedio"
+          "code": "Code",
+          "count": "Count",
+          "mean": "Mean",
+          "average": "Average",
+          "max": "Max"
         },
         "code": {
           "ok": "Ok",
-          "notfound": "No encontrado",
-          "servererror": "Error de servidor"
+          "notfound": "Not found",
+          "servererror": "Server Error"
         }
       }
     },
     "servicesstats": {
-      "title": "Estadísticas de servicios (tiempo en milisegundos)",
+      "title": "Services statistics (time in millisecond)",
       "table": {
-        "name": "Nombre del servicio",
-        "count": "Contador",
-        "mean": "Media",
+        "name": "Service name",
+        "count": "Count",
+        "mean": "Mean",
         "min": "Min",
         "max": "Max",
         "p50": "p50",
@@ -70,18 +71,26 @@
       }
     },
     "cache": {
-      "title": "Estadísticas de cache",
-      "cachename": "Nombre cache",
-      "hits": "Accesos",
-      "misses": "Fallos",
-      "evictions": "Contador desalojo"
+      "title": "Cache statistics",
+      "cachename": "Cache name",
+      "hits": "Cache Hits",
+      "misses": "Cache Misses",
+      "gets": "Cache Gets",
+      "puts": "Cache Puts",
+      "removals": "Cache Removals",
+      "evictions": "Cache Evictions",
+      "hitPercent": "Cache Hit %",
+      "missPercent": "Cache Miss %",
+      "averageGetTime": "Average get time (µs)",
+      "averagePutTime": "Average put time (µs)",
+      "averageRemoveTime": "Average remove time (µs)"
     },
     "datasource": {
-      "usage": "Uso",
-      "title": "Estadísticas de la fuente de datos (tiempo en milisegundos)",
-      "name": "Uso del pool",
-      "count": "Recuento",
-      "mean": "Media",
+      "usage": "Connection Pool Usage",
+      "title": "DataSource statistics (time in millisecond)",
+      "name": "Pool usage",
+      "count": "Count",
+      "mean": "Mean",
       "min": "Min",
       "max": "Max",
       "p50": "p50",

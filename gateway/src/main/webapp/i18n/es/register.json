@@ -1,23 +1,23 @@
 {
   "register": {
-    "title": { "string": "Registro" },
+    "title": { "string": "Registration" },
     "form": {
-      "button": { "string": "Crear la cuenta" }
+      "button": { "string": "Register" }
     },
     "messages": {
       "validate": {
         "login": {
-          "required": { "string": "Su nombre de usuario es obligatorio." },
-          "minlength": { "string": "Su nombre de usuario debe tener al menos 1 caracter." },
-          "maxlength": { "string": "Su nombre de usuario no puede tener más de 50 caracteres." },
-          "pattern": { "string": "Su nombre de usuario sólo puede contener letras minúsculas y dígitos." }
+          "required": { "string": "Your username is required." },
+          "minlength": { "string": "Your username is required to be at least 1 character." },
+          "maxlength": { "string": "Your username cannot be longer than 50 characters." },
+          "pattern": { "string": "Your username can only contain letters and digits." }
         }
       },
-      "success": { "string": "<strong>¡Registro guardado!</strong> Por favor, revise su correo electrónico para confirmar." },
+      "success": { "string": "<strong>Registration saved!</strong> Please check your email for confirmation." },
       "error": {
-        "fail": { "string": "<strong>¡El registro ha fallado!</strong> Por favor, inténtelo de nuevo más tarde." },
-        "userexists": { "string": "<strong>¡El nombre de usuario ya está registrado!</strong> Por favor, escoja otro usuario." },
-        "emailexists": { "string": "<strong>¡El correo electrónico ya está en uso!</strong> Por favor, escoja otro email." }
+        "fail": { "string": "<strong>Registration failed!</strong> Please try again later." },
+        "userexists": { "string": "<strong>Login name already registered!</strong> Please choose another one." },
+        "emailexists": { "string": "<strong>Email is already in use!</strong> Please choose another one." }
       }
     }
   }

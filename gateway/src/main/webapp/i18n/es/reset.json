@@ -1,26 +1,26 @@
 {
   "reset": {
     "request": {
-      "title": { "string": "Restablecer su contraseña" },
+      "title": { "string": "Reset your password" },
       "form": {
-        "button": { "string": "Restablecer la contraseña" }
+        "button": { "string": "Reset password" }
       },
       "messages": {
-        "info": { "string": "Introduzca la dirección de correo electrónico que utilizó para registrarse" },
-        "success": { "string": "Revise su correo electrónico para obtener más información sobre cómo restablecer su contraseña." },
-        "notfound": { "string": "<strong>¡Dirección de correo no registrada!</strong> Por favor, compruebe e inténtelo de nuevo" }
+        "info": { "string": "Enter the email address you used to register" },
+        "success": { "string": "Check your emails for details on how to reset your password." },
+        "notfound": { "string": "<strong>Email address isn't registered!</strong> Please check and try again" }
       }
     },
     "finish": {
-      "title": { "string": "Restablecer la contraseña" },
+      "title": { "string": "Reset password" },
       "form": {
-        "button": { "string": "Validar la nueva contraseña" }
+        "button": { "string": "Validate new password" }
       },
       "messages": {
-        "info": { "string": "Elija una contraseña nueva" },
-        "success": { "string": "<strong>Su contraseña ha sido restablecida.</strong> Por favor, " },
-        "keymissing": { "string": "Falta la clave de reinicio." },
-        "error": { "string": "Su contraseña no puede ser restablecida. Recuerde que una solicitud de reinicio de contraseña sólo es válida durante 24 horas." }
+        "info": { "string": "Choose a new password" },
+        "success": { "string": "<strong>Your password has been reset.</strong> Please " },
+        "keymissing": { "string": "The reset key is missing." },
+        "error": { "string": "Your password couldn't be reset. Remember a password request is only valid for 24 hours." }
       }
     }
   }

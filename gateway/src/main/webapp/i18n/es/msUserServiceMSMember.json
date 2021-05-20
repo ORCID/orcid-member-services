@@ -2,27 +2,28 @@
   "gatewayApp": {
     "msUserServiceMSMember": {
       "home": {
-        "title": { "string": "Member Settings" },
-        "createLabel": { "string": "Crear nuevo Member Settings" },
-        "createOrEditLabel": { "string": "Crear o editar Member Settings" },
-        "notFound": { "string": "No Member Settings found" },
-        "uploadLabel": { "string": "Upload Member Settings" }
+        "title": { "string": "Manage members" },
+        "createLabel": { "string": "Add member" },
+        "createOrEditLabel": { "string": "Add or edit member" },
+        "notFound": { "string": "No members to show" },
+        "uploadLabel": { "string": "Import members from CSV" }
       },
       "delete": {
-        "question": { "string": "¿Seguro que quiere eliminar Member Settings {{ id }}?" }
+        "question": { "string": "Are you sure you want to delete {{ clientName }} from the Member Portal?" },
+        "anyUsersAndAffiliations": {
+          "string": "Any users and affiliations associated with this member will also be deleted from the Member Portal, however data added to the ORCID Registry will remain in ORCID."
+        }
       },
       "detail": {
-        "title": { "string": "Member Settings" }
+        "title": { "string": "Member details" }
       },
       "import": {
-        "title": { "string": "Member Settings" },
-        "label": { "string": "Please select the CSV file to upload" },
-        "filePath": { "string": "File path" },
+        "title": { "string": "Import members" },
+        "label": { "string": "Please select a CSV file to upload" },
         "emptyFile": { "string": "There is no file to upload. Please select one." },
+        "filePath": { "string": "File path" },
         "errors": {
-          "label": {
-            "string": "Oops! Ocurrio un error al procesar tu informacion. Por favor corrige los siguientes errores e intenta de nuevo"
-          }
+          "label": { "string": "Oops! There was a problem processing your data. Pleases fix the errors below and try again" }
         }
       },
       "clientId": {
@@ -30,28 +31,23 @@
         "note": { "string": "Note: Client ID must have Member OBO enabled AND" },
         "addedAsRedirect": { "string": "added as a Redirect URI in" }
       },
-      "clientName": { "string": "Client name" },
+      "clientName": { "string": "Member Name" },
       "clientSecret": { "string": "Client Secret" },
       "salesforceId": { "string": "Salesforce Id" },
       "parentSalesforceId": { "string": "Parent Salesforce Id" },
-      "isConsortiumLead": { "string": "Is Consortium Lead" },
-      "assertionServiceEnabled": { "string": "Assertion Service Enabled" },
+      "isConsortiumLead": { "string": "Consortium Lead" },
+      "assertionServiceEnabled": { "string": "Assertions Enabled" },
       "createdBy": { "string": "Created By" },
-      "createdDate": { "string": "Created Date" },
+      "createdDate": { "string": "Created" },
       "lastModifiedBy": { "string": "Last Modified By" },
-      "lastModifiedDate": { "string": "Last Modified Date" }
-    },
-    "userDTO": {
-      "login": { "string": "email" },
-      "firstName": { "string": "first name" },
-      "lastName": { "string": "last name" }
+      "lastModifiedDate": { "string": "Last Modified" }
     }
   },
-  "msUserServiceApp": {
-    "msUserServiceMSMember": {
-      "created": { "string": "Member ha sido creado" },
-      "updated": { "string": "Member ha sido actualizado" },
-      "deleted": { "string": "Member ha sido eliminado" }
+  "memberServiceApp": {
+    "member": {
+      "created": { "string": "Member created" },
+      "updated": { "string": "Member updated successfully" },
+      "deleted": { "string": "Member deleted successfully" }
     }
   }
 }

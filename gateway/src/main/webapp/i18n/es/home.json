@@ -1,19 +1,15 @@
 {
   "home": {
-    "title": { "string": "¡Bienvenido, Java Hipster!" },
-    "subtitle": { "string": "Esta es su página de inicio" },
+    "title": { "string": "ORCID Member Portal" },
+    "alert": {
+      "thisSiteIsFor": {
+        "string": "This site is for administrators of ORCID member organizations and is separate from the ORCID registry. Go to the ORCID Registry to"
+      },
+      "signIntoOrcid": { "string": "sign into your ORCID record" }
+    },
     "logged": {
-      "message": { "string": "Está conectado como \"{{username}}\"." }
+      "message": { "string": "You are logged in as user \"{{username}}\"." }
     },
-    "question": { "string": "Si tiene preguntas sobre JHipster:" },
-    "link": {
-      "homepage": { "string": "Página de inicio de JHipster" },
-      "stackoverflow": { "string": "JHipster en Stack Overflow" },
-      "bugtracker": { "string": "JHipster seguimiento de errores" },
-      "chat": { "string": "Sala de chat pública de JHipster" },
-      "follow": { "string": "contacto @java_hipster en Twitter" }
-    },
-    "like": { "string": "Si te gusta JHipster, danos una estrella en" },
-    "github": { "string": "GitHub" }
+    "test": { "string": "this is a test" }
   }
 }
