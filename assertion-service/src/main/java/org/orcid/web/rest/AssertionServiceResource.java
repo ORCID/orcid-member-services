@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.codehaus.jettison.json.JSONException;
 import org.json.JSONObject;
@@ -85,6 +86,8 @@ public class AssertionServiceResource {
 
 	@Autowired
 	private UserService assertionsUserService;
+
+	private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
 	String[] urlValschemes = { "http", "https", "ftp" }; // DEFAULT schemes =
 	// "http", "https",
@@ -349,6 +352,10 @@ public class AssertionServiceResource {
 
 		if (StringUtils.isBlank(assertion.getEmail())) {
 			throw new IllegalArgumentException("email must not be null");
+		}
+
+		if (!emailValidator.isValid(assertion.getEmail())) {
+			throw new BadRequestAlertException("Invalid email", "email", "email.string");
 		}
 
 		if (assertion.getAffiliationSection() == null) {
