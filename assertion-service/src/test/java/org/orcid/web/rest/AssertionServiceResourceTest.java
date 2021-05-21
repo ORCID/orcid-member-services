@@ -198,8 +198,8 @@ class AssertionServiceResourceTest {
 	
 	@Test
 	void testCreateAssertion() throws BadRequestAlertException, URISyntaxException {
-		Assertion creatingAssertion = getAssertion("test create assertion");
-		Assertion createdAssertion = getAssertion("test create assertion");
+		Assertion creatingAssertion = getAssertion("test-create-assertion@orcid.org");
+		Assertion createdAssertion = getAssertion("test-create-assertion@orcid.org");
 		createdAssertion.setId("some-id-because-this-assertion-exists-already");
 		Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(false);
 		Mockito.when(assertionService.createAssertion(Mockito.any(Assertion.class))).thenReturn(createdAssertion);
@@ -210,8 +210,16 @@ class AssertionServiceResourceTest {
 	}
 	
 	@Test
+	void testCreateAssertionInvalidEmail() throws BadRequestAlertException, URISyntaxException {
+		Assertion creatingAssertion = getAssertion("test-create-assertion@orcid");
+		Assertions.assertThrows(BadRequestAlertException.class, () -> {
+			assertionServiceResource.createAssertion(creatingAssertion);
+		});
+	}
+	
+	@Test
 	void testUpdateAssertion() throws BadRequestAlertException, URISyntaxException, org.codehaus.jettison.json.JSONException {
-		Assertion assertion = getAssertion("test update assertion");
+		Assertion assertion = getAssertion("test-update-assertion@orcid.org");
 		assertion.setId("some-id-because-this-assertion-exists-already");
 		Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(false);
 		Mockito.when(assertionService.updateAssertion(Mockito.any(Assertion.class))).thenReturn(assertion);
@@ -222,8 +230,17 @@ class AssertionServiceResourceTest {
 	}
 	
 	@Test
+	void testUpdateAssertionInvalidEmail() throws BadRequestAlertException, URISyntaxException {
+		Assertion updatingAssertion = getAssertion("test-create-assertion@orcid");
+		updatingAssertion.setId("some-id-because-this-assertion-exists-already");
+		Assertions.assertThrows(BadRequestAlertException.class, () -> {
+			assertionServiceResource.updateAssertion(updatingAssertion);
+		});
+	}
+	
+	@Test
 	void testCreateDuplicateAssertion() throws BadRequestAlertException, URISyntaxException {
-		Assertion creatingAssertion = getAssertion("test create assertion");
+		Assertion creatingAssertion = getAssertion("test-create-assertion@orcid.org");
 		Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(true);
 		
 		Assertions.assertThrows(BadRequestAlertException.class, () -> {
@@ -236,7 +253,7 @@ class AssertionServiceResourceTest {
 	
 	@Test
 	void testUpdateDuplicateAssertion() throws BadRequestAlertException, URISyntaxException {
-		Assertion assertion = getAssertion("test update assertion");
+		Assertion assertion = getAssertion("test-update-assertion@orcid.org");
 		Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(true);
 		
 		Assertions.assertThrows(BadRequestAlertException.class, () -> {
