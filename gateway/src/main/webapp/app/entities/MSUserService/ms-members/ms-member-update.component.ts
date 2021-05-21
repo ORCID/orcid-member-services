@@ -158,7 +158,7 @@ export class MSMemberUpdateComponent implements OnInit {
     this.isSaving = true;
     const msMember = this.createFromForm();
     this.msMemberService.validate(msMember).subscribe(response => {
-      let data = response.body;
+      const data = response.body;
       if (data.valid) {
         if (msMember.id !== undefined) {
           this.subscribeToUpdateResponse(this.msMemberService.update(msMember));
