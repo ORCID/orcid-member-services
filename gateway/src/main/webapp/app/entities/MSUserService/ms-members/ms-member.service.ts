@@ -38,11 +38,11 @@ export class MSMemberService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  validate(msMember: IMSMember): Observable<EntityResponseType> {
+  validate(msMember: IMSMember): Observable<any> {
     const copy = this.convertDateFromClient(msMember);
     return this.http
       .post<IMSMember>(this.resourceUrl + '/validate', copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map((res: any) => this.convertDateFromServer(res)));
   }
 
   find(id: string): Observable<EntityResponseType> {
