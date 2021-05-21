@@ -1,9 +1,5 @@
 package org.orcid.repository;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.WriteResult;
-
 import java.util.List;
 
 import org.bson.Document;

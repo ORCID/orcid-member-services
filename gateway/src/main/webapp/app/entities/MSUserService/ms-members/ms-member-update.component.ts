@@ -74,6 +74,8 @@ export class MSMemberUpdateComponent implements OnInit {
   orcidBaseUrl: string = ORCID_BASE_URL;
   baseUrl: string = BASE_URL;
   isSaving: boolean;
+  validation: any;
+
   editForm = this.fb.group({
     id: [],
     clientId: new FormControl(null, [clientIdValidator()]),
@@ -94,7 +96,9 @@ export class MSMemberUpdateComponent implements OnInit {
     protected msMemberService: MSMemberService,
     private fb: FormBuilder,
     private alertService: JhiAlertService
-  ) {}
+  ) {
+    this.validation = {};
+  }
 
   ngOnInit() {
     this.isSaving = false;
@@ -153,11 +157,19 @@ export class MSMemberUpdateComponent implements OnInit {
   save() {
     this.isSaving = true;
     const msMember = this.createFromForm();
-    if (msMember.id !== undefined) {
-      this.subscribeToUpdateResponse(this.msMemberService.update(msMember));
-    } else {
-      this.subscribeToSaveResponse(this.msMemberService.create(msMember));
-    }
+    this.msMemberService.validate(msMember).subscribe(response => {
+      const data = response.body;
+      if (data.valid) {
+        if (msMember.id !== undefined) {
+          this.subscribeToUpdateResponse(this.msMemberService.update(msMember));
+        } else {
+          this.subscribeToSaveResponse(this.msMemberService.create(msMember));
+        }
+      } else {
+        this.isSaving = false;
+        this.validation = data;
+      }
+    });
   }
 
   private createFromForm(): IMSMember {

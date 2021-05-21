@@ -11,6 +11,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.orcid.member.domain.Member;
 import org.orcid.member.service.MemberService;
 import org.orcid.member.upload.MemberUpload;
+import org.orcid.member.validation.MemberValidation;
 import org.orcid.member.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +81,7 @@ public class MemberResource {
 	private MemberService memberService;
 
 	/**
-	 * {@code POST  /member} : Create a new member.
+	 * {@code POST  /members} : Create a new member.
 	 *
 	 * @param member the member to create.
 	 * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
@@ -95,8 +96,24 @@ public class MemberResource {
 			throws URISyntaxException, JSONException {
 		LOG.debug("REST request to save Member : {}", member);
 		Member created = memberService.createMember(member);
-		return ResponseEntity
-				.created(new URI("/api/member/" + created.getId())).body(created);
+		return ResponseEntity.created(new URI("/api/member/" + created.getId())).body(created);
+	}
+
+	/**
+	 * {@code POST  /members/validate} : Validates a member.
+	 *
+	 * @param member the member to validate.
+	 * @return the {@link ResponseEntity} with status {@code 200 (Ok)} and with a
+	 *         MemberValidation object in the body.
+	 * @throws URISyntaxException if the Location URI syntax is incorrect.
+	 * @throws JSONException
+	 */
+	@PostMapping("/members/validate")
+	@PreAuthorize("hasRole(\"ROLE_ADMIN\")")
+	public ResponseEntity<MemberValidation> validateMember(@Valid @RequestBody Member member)
+			throws URISyntaxException, JSONException {
+		MemberValidation validation = memberService.validateMember(member);
+		return ResponseEntity.ok(validation);
 	}
 
 	/**
@@ -159,7 +176,7 @@ public class MemberResource {
 				.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
 		return ResponseEntity.ok().headers(headers).body(page.getContent());
 	}
-	
+
 	/**
 	 * {@code GET  /member} : get all the member.
 	 *
