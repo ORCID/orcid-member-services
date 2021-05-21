@@ -96,7 +96,7 @@ public class MemberService {
 	}
 
 	public Member createMember(Member member) {
-		MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser(), true);
+		MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
 		if (!validation.isValid()) {
 			throw new BadRequestAlertException("Member invalid", "member", "validation.string");
 		}
@@ -110,7 +110,7 @@ public class MemberService {
 	}
 
 	public Member updateMember(Member member) {
-		MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser(), false);
+		MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
 		if (!validation.isValid()) {
 			throw new BadRequestAlertException("Member invalid", "member", "validation.string");
 		}
@@ -160,7 +160,7 @@ public class MemberService {
 	}
 	
 	public MemberValidation validateMember(Member member) {
-		return memberValidator.validate(member, userService.getLoggedInUser(), member.getId() != null);
+		return memberValidator.validate(member, userService.getLoggedInUser());
 	}
 
 	public Page<Member> getMembers(Pageable pageable) {

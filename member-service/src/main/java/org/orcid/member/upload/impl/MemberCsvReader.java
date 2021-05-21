@@ -47,7 +47,7 @@ public class MemberCsvReader implements MembersUploadReader {
 					Member member = createMemberInstance(user);
 					member = parseLine(line, member);
 
-					MemberValidation validation = memberValidator.validate(member, user, true); 
+					MemberValidation validation = memberValidator.validate(member, user); 
 					if (!validation.isValid()) {
 						for (String error : validation.getErrors()) {
 							upload.addError(line.getRecordNumber(), error);

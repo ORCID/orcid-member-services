@@ -379,3 +379,8 @@ div.org-name {
   display: inline-block;
   max-width: calc(100% - 350px);
 }
+
+ul.validation-errors {
+  list-style: none;
+  padding: 0;
+}

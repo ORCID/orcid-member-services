@@ -48,7 +48,7 @@ public class MemberValidatorTest {
 	@Test
 	public void testValidateWithMissingAssertionsEnabled() {
 		Member member = getMemberWithMissingAssertionsEnabled();
-		MemberValidation validation = memberValidator.validate(member, getUser(), true);
+		MemberValidation validation = memberValidator.validate(member, getUser());
 		List<String> errors = validation.getErrors();
 		assertFalse(validation.isValid());
 		assertEquals(1, errors.size());
@@ -60,7 +60,7 @@ public class MemberValidatorTest {
 	@Test
 	public void testValidateWithMissingSalesforceId() {
 		Member member = getMemberWithMissingSalesforceId();
-		MemberValidation validation = memberValidator.validate(member, getUser(), true);
+		MemberValidation validation = memberValidator.validate(member, getUser());
 		List<String> errors = validation.getErrors();
 		assertFalse(validation.isValid());
 		assertEquals(1, errors.size());
@@ -72,7 +72,7 @@ public class MemberValidatorTest {
 	@Test
 	public void testValidateWithMissingClientId() {
 		Member member = getMemberWithMissingClientId();
-		MemberValidation validation = memberValidator.validate(member, getUser(), true);
+		MemberValidation validation = memberValidator.validate(member, getUser());
 		List<String> errors = validation.getErrors();
 		assertFalse(validation.isValid());
 		assertEquals(1, errors.size());
@@ -84,7 +84,7 @@ public class MemberValidatorTest {
 	@Test
 	public void testValidateWithMissingClientName() {
 		Member member = getMemberWithMissingClientName();
-		MemberValidation validation = memberValidator.validate(member, getUser(), true);
+		MemberValidation validation = memberValidator.validate(member, getUser());
 		List<String> errors = validation.getErrors();
 		assertFalse(validation.isValid());
 		assertEquals(1, errors.size());
@@ -96,7 +96,7 @@ public class MemberValidatorTest {
 	@Test
 	public void testValidateWithInvalidClientId() {
 		Member member = getMemberWithInvalidClientId();
-		MemberValidation validation = memberValidator.validate(member, getUser(), true);
+		MemberValidation validation = memberValidator.validate(member, getUser());
 		List<String> errors = validation.getErrors();
 		assertFalse(validation.isValid());
 		assertEquals(1, errors.size());
@@ -108,7 +108,7 @@ public class MemberValidatorTest {
 	@Test
 	public void testValidateWithValidOldClientId() {
 		Member member = getMemberWithValidOldClientId();
-		MemberValidation validation = memberValidator.validate(member, getUser(), true);
+		MemberValidation validation = memberValidator.validate(member, getUser());
 		List<String> errors = validation.getErrors();
 		assertTrue(validation.isValid());
 		assertEquals(0, errors.size());
@@ -118,7 +118,7 @@ public class MemberValidatorTest {
 	@Test
 	public void testValidateWithValidNewClientId() {
 		Member member = getMemberWithValidNewClientId();
-		MemberValidation validation = memberValidator.validate(member, getUser(), true);
+		MemberValidation validation = memberValidator.validate(member, getUser());
 		List<String> errors = validation.getErrors();
 		assertTrue(validation.isValid());
 		assertEquals(0, errors.size());
@@ -128,7 +128,7 @@ public class MemberValidatorTest {
 	@Test
 	public void testValidateWithMissingConsortiumLead() {
 		Member member = getMemberWithMissingConsortiumLead();
-		MemberValidation validation = memberValidator.validate(member, getUser(), true);
+		MemberValidation validation = memberValidator.validate(member, getUser());
 		List<String> errors = validation.getErrors();
 		assertFalse(validation.isValid());
 		assertEquals(1, errors.size());
@@ -140,7 +140,7 @@ public class MemberValidatorTest {
 	@Test
 	public void testValidateNonConsortiumLeadWithMissingParentSalesforceId() {
 		Member member = getNonConsortiumLeadWithMissingParentSalesforceId();
-		MemberValidation validation = memberValidator.validate(member, getUser(), true);
+		MemberValidation validation = memberValidator.validate(member, getUser());
 		List<String> errors = validation.getErrors();
 		assertFalse(validation.isValid());
 		assertEquals(1, errors.size());
@@ -150,10 +150,14 @@ public class MemberValidatorTest {
 	}
 	
 	@Test
-	public void testValidateSalesforceIdExists() {
-		Member member = getMemberWithValidNewClientId();
-		Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.of(member));
-		MemberValidation validation = memberValidator.validate(member, getUser(), true);
+	public void testValidateCreateMemberWhereSalesforceIdExists() {
+		Member existingMember = getMemberWithValidNewClientId();
+		existingMember.setId("existing-member-id");
+		Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.of(existingMember));
+		
+		Member invalidNewMemberWithClashingSalesforceId = getMemberWithValidNewClientId();
+		MemberValidation validation = memberValidator.validate(invalidNewMemberWithClashingSalesforceId, getUser());
+		
 		List<String> errors = validation.getErrors();
 		assertFalse(validation.isValid());
 		assertEquals(1, errors.size());
@@ -163,10 +167,14 @@ public class MemberValidatorTest {
 	}
 	
 	@Test
-	public void testValidateNameExists() {
-		Member member = getMemberWithValidNewClientId();
-		Mockito.when(memberRepository.findByClientName(Mockito.anyString())).thenReturn(Optional.of(member));
-		MemberValidation validation = memberValidator.validate(member, getUser(), true);
+	public void testValidateCreateMemberWhereNameExists() {
+		Member existingMember = getMemberWithValidNewClientId();
+		existingMember.setId("existing-member-id");
+		Mockito.when(memberRepository.findByClientName(Mockito.anyString())).thenReturn(Optional.of(existingMember));
+		
+		Member invalidNewMemberDueToClashingClientName = getMemberWithValidNewClientId();
+		MemberValidation validation = memberValidator.validate(invalidNewMemberDueToClashingClientName, getUser());
+		
 		List<String> errors = validation.getErrors();
 		assertFalse(validation.isValid());
 		assertEquals(1, errors.size());
@@ -175,6 +183,41 @@ public class MemberValidatorTest {
 		assertEquals("member.validation.error.nameAlreadyExists", propertyName);
 	}
 	
+	@Test
+	public void testValidateUpdateMemberWhereSalesforceIdExists() {
+		Member existingMember = getMemberWithValidNewClientId();
+		existingMember.setId("existing-member-id");
+		Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.of(existingMember));
+		
+		Member invalidUpdatingMemberWithClashingSalesforceId = getMemberWithValidNewClientId();
+		invalidUpdatingMemberWithClashingSalesforceId.setId("some-id");
+		MemberValidation validation = memberValidator.validate(invalidUpdatingMemberWithClashingSalesforceId, getUser());
+		
+		List<String> errors = validation.getErrors();
+		assertFalse(validation.isValid());
+		assertEquals(1, errors.size());
+		Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
+		String propertyName = errorMessagePropertyCaptor.getValue();
+		assertEquals("member.validation.error.salesforceIdAlreadyExists", propertyName);
+	}
+	
+	@Test
+	public void testValidateUpdateMemberWhereNameExists() {
+		Member existingMember = getMemberWithValidNewClientId();
+		existingMember.setId("existing-member-id");
+		Mockito.when(memberRepository.findByClientName(Mockito.anyString())).thenReturn(Optional.of(existingMember));
+		
+		Member invalidUpdatingMemberDueToClashingClientName = getMemberWithValidNewClientId();
+		invalidUpdatingMemberDueToClashingClientName.setId("some-id");
+		MemberValidation validation = memberValidator.validate(invalidUpdatingMemberDueToClashingClientName, getUser());
+		
+		List<String> errors = validation.getErrors();
+		assertFalse(validation.isValid());
+		assertEquals(1, errors.size());
+		Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
+		String propertyName = errorMessagePropertyCaptor.getValue();
+		assertEquals("member.validation.error.nameAlreadyExists", propertyName);
+	}
 	
 	private Member getMemberWithValidOldClientId() {
 		Member member = getMember();

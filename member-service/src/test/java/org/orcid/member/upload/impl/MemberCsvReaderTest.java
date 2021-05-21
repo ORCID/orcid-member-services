@@ -39,8 +39,8 @@ class MemberCsvReaderTest {
 
 	@Test
 	void testReadMembersUpload() throws IOException {
-		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class),
-				Mockito.eq(true))).thenReturn(getValidValidation());
+		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class)))
+				.thenReturn(getValidValidation());
 
 		InputStream inputStream = getClass().getResourceAsStream("/members.csv");
 		MemberUpload upload = reader.readMemberUpload(inputStream, getUser());
