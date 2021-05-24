@@ -97,6 +97,9 @@ public class MemberValidator {
 	private void validateAssertionServiceEnabled(Member member, MemberServiceUser user, List<String> errors) {
 		if (member.getAssertionServiceEnabled() == null) {
 			errors.add(getError("missingAssertionsEnabled", user));
+		} else if (member.getAssertionServiceEnabled() && Boolean.TRUE.equals(member.getIsConsortiumLead())
+				&& StringUtils.isBlank(member.getClientId())) {
+			errors.add(getError("invalidAssertionsEnabled", user));
 		}
 	}
 
