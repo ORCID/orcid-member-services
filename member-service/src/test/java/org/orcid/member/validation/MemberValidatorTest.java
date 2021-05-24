@@ -58,6 +58,19 @@ public class MemberValidatorTest {
 	}
 	
 	@Test
+	public void testValidateWithInvalidAssertionsEnabled() {
+		Member member = getConsortiaLeadWithNoClientId();
+		member.setAssertionServiceEnabled(true); // invalid due to no client id
+		MemberValidation validation = memberValidator.validate(member, getUser());
+		List<String> errors = validation.getErrors();
+		assertFalse(validation.isValid());
+		assertEquals(1, errors.size());
+		Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
+		String propertyName = errorMessagePropertyCaptor.getValue();
+		assertEquals("member.validation.error.invalidAssertionsEnabled", propertyName);
+	}
+	
+	@Test
 	public void testValidateWithMissingSalesforceId() {
 		Member member = getMemberWithMissingSalesforceId();
 		MemberValidation validation = memberValidator.validate(member, getUser());
@@ -80,8 +93,9 @@ public class MemberValidatorTest {
 		String propertyName = errorMessagePropertyCaptor.getValue();
 		assertEquals("member.validation.error.missingClientId", propertyName);
 		
-		// shouldn't be required if consortia lead
+		// shouldn't be required if consortia lead 
 		member.setIsConsortiumLead(true);
+		member.setAssertionServiceEnabled(false);
 		validation = memberValidator.validate(member, getUser());
 		errors = validation.getErrors();
 		assertTrue(validation.isValid());
@@ -284,6 +298,14 @@ public class MemberValidatorTest {
 	private Member getMemberWithMissingAssertionsEnabled() {
 		Member member = getMember();
 		member.setAssertionServiceEnabled(null);
+		return member;
+	}
+	
+	private Member getConsortiaLeadWithNoClientId() {
+		Member member = getMember();
+		member.setClientId(null);
+		member.setIsConsortiumLead(true);
+		member.setParentSalesforceId(null);
 		return member;
 	}
 
