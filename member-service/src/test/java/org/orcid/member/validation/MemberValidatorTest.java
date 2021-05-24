@@ -79,6 +79,13 @@ public class MemberValidatorTest {
 		Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
 		String propertyName = errorMessagePropertyCaptor.getValue();
 		assertEquals("member.validation.error.missingClientId", propertyName);
+		
+		// shouldn't be required if consortia lead
+		member.setIsConsortiumLead(true);
+		validation = memberValidator.validate(member, getUser());
+		errors = validation.getErrors();
+		assertTrue(validation.isValid());
+		assertEquals(0, errors.size());
 	}
 	
 	@Test
