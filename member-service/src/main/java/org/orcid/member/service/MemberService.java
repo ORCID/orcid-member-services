@@ -15,6 +15,7 @@ import org.orcid.member.security.SecurityUtils;
 import org.orcid.member.service.user.MemberServiceUser;
 import org.orcid.member.upload.MemberUpload;
 import org.orcid.member.upload.MembersUploadReader;
+import org.orcid.member.validation.MemberValidation;
 import org.orcid.member.validation.MemberValidator;
 import org.orcid.member.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
@@ -95,68 +96,37 @@ public class MemberService {
 	}
 
 	public Member createMember(Member member) {
-		if (member.getId() != null) {
-			throw new BadRequestAlertException("A new member cannot already have an ID", "member", "idexists.string");
-		}
-		Optional<Member> optional = memberRepository.findBySalesforceId(member.getSalesforceId());
-		if (optional.isPresent()) {
-			throw new BadRequestAlertException("A member with that salesforce id already exists", "member",
-					"salesForceIdUsed.string");
-		}
-		Optional<Member> optionalMemberName = memberRepository.findByClientName(member.getClientName());
-		if (optionalMemberName.isPresent()) {
-			throw new BadRequestAlertException("A member with that name already exists", "member", "memberNameUsed.string");
-		}
-		
-		// XXX to do - proper validation. this is functionally the same as previously, when validator returned boolean
-		if (memberValidator.validate(member, userService.getLoggedInUser(), true).size() > 0) {
+		MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
+		if (!validation.isValid()) {
 			throw new BadRequestAlertException("Member invalid", "member", "validation.string");
 		}
 
-		if (member.getCreatedBy() == null) {
-			member.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
-			member.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-		}
-
-		if (member.getCreatedDate() == null) {
-			Instant now = Instant.now();
-			member.setCreatedDate(now);
-			member.setLastModifiedDate(now);
-		}
+		Instant now = Instant.now();
+		member.setCreatedDate(now);
+		member.setLastModifiedDate(now);
+		member.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
+		member.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
 		return memberRepository.save(member);
 	}
 
 	public Member updateMember(Member member) {
-		MemberServiceUser currentUser = userService.getLoggedInUser();
-		
-		if (member.getId() == null) {
-			throw new BadRequestAlertException("Invalid id", "member", "idnull.string");
+		MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
+		if (!validation.isValid()) {
+			throw new BadRequestAlertException("Member invalid", "member", "validation.string");
 		}
-
+		
 		Optional<Member> optional = memberRepository.findById(member.getId());
 		if (!optional.isPresent()) {
 			throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
 		}
-
-		// XXX functionally equal to previously, this will be replaced with proper validation
-		if (memberValidator.validate(member, currentUser, false).size() > 0) {
-			// what to do here? return member object with errors for ui?
-			// something
-			// consistent
-			throw new BadRequestAlertException("Invalid member", "member", "clientidinvalid.string");
-		}
-
-		Instant now = Instant.now();
-		member.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-		member.setLastModifiedDate(now);
 
 		Member existingMember = optional.get();
 		existingMember.setClientId(member.getClientId());
 		existingMember.setClientName(member.getClientName());
 		existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
 		existingMember.setParentSalesforceId(member.getParentSalesforceId());
-		existingMember.setLastModifiedBy(member.getLastModifiedBy());
-		existingMember.setLastModifiedDate(member.getLastModifiedDate());
+		existingMember.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+		existingMember.setLastModifiedDate(Instant.now());
 
 		// Check if name changed
 		if (!existingMember.getClientName().equals(member.getClientName())) {
@@ -187,6 +157,10 @@ public class MemberService {
 			return member;
 		}
 		return memberRepository.save(existingMember);
+	}
+	
+	public MemberValidation validateMember(Member member) {
+		return memberValidator.validate(member, userService.getLoggedInUser());
 	}
 
 	public Page<Member> getMembers(Pageable pageable) {

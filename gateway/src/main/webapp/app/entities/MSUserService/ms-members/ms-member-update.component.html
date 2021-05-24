@@ -4,6 +4,15 @@
             <h1 id="jhi-ms-member-heading" class="mt-5" jhiTranslate="gatewayApp.msUserServiceMSMember.home.createOrEditLabel.string">Add or edit member</h1>
             <div>
                 <jhi-alert-error></jhi-alert-error>
+                <div class="alerts top right" role="alert" *ngIf="validation.errors && validation.errors.length > 0">
+					<ngb-alert class="alert alert-danger alert-dismissible" role="alert" ng-reflect-type="danger" (close)="validation.errors = null">
+					    <ul class="validation-errors">
+				    		<li *ngFor="let error of validation.errors">
+				    			{{ error }}
+				       		</li>
+					    </ul>
+				    </ngb-alert>
+				</div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.salesforceId.string" for="field_salesforceId.string">Salesforce Id</label>
                     <input type="text" class="form-control" name="salesforceId" id="field_salesforceId"

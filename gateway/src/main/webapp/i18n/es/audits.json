@@ -1,28 +1,28 @@
 {
   "audits": {
-    "title": "Auditorías",
+    "title": "Audits",
     "filter": {
-      "title": "Filtrar por fecha",
-      "from": "desde",
-      "to": "hasta",
+      "title": "Filter per date",
+      "from": "from",
+      "to": "to",
       "button": {
-        "weeks": "Semanas",
-        "today": "hoy",
-        "clear": "limpiar",
-        "close": "cerrar"
+        "weeks": "Weeks",
+        "today": "today",
+        "clear": "clear",
+        "close": "close"
       }
     },
     "table": {
       "header": {
-        "principal": "Usuario",
-        "date": "Fecha",
-        "status": "Estado",
-        "data": "Datos extra"
+        "principal": "User",
+        "date": "Date",
+        "status": "State",
+        "data": "Extra data"
       },
       "data": {
-        "remoteAddress": "Dirección remota:"
+        "remoteAddress": "Remote Address:"
       }
     },
-    "notFound": "No auditoria encontrada"
+    "notFound": "No audit found"
   }
 }

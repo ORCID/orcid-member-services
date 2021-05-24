@@ -1,21 +1,21 @@
 {
   "login": {
-    "title": { "string": "Iniciar la sesión" },
+    "title": { "string": "Sign in" },
     "form": {
       "password": {
-        "string": "Contraseña",
+        "string": "Password",
         "placeholder": { "string": "Your password" }
       },
-      "rememberme": { "string": "Iniciar la sesión automáticamente" },
-      "button": { "string": "Iniciar sesión" }
+      "rememberme": { "string": "Remember me" },
+      "button": { "string": "Sign in" }
     },
     "messages": {
       "error": {
-        "authentication": { "string": "<strong>¡El inicio de sesión ha fallado!</strong> Por favor, revise las credenciales e intente de nuevo." }
+        "authentication": { "string": "<strong>Failed to sign in!</strong> Please check your credentials and try again." }
       }
     },
     "password": {
-      "forgot": { "string": "¿Ha olvidado su contraseña?" }
+      "forgot": { "string": "Did you forget your password?" }
     }
   }
 }

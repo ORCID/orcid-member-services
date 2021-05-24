@@ -1,7 +1,7 @@
 {
   "health": {
-    "title": "Control de salud",
-    "refresh.button": "Refrescar",
+    "title": "Health Checks",
+    "refresh.button": "Refresh",
     "stacktrace": "Stacktrace",
     "details": {
       "details": "Details",
@@ -15,18 +15,18 @@
       "refreshScope": "Microservice Refresh Scope",
       "configServer": "Microservice Config Server",
       "hystrix": "Hystrix",
-      "diskSpace": "Espacio en disco",
+      "diskSpace": "Disk space",
       "mail": "Email",
       "mongo": "MongoDB"
     },
     "table": {
-      "service": "Nombre del servicio",
-      "status": "Estado"
+      "service": "Service name",
+      "status": "Status"
     },
     "status": {
       "UNKNOWN": "UNKNOWN",
-      "UP": "LEVANTADO",
-      "DOWN": "CAÍDO"
+      "UP": "UP",
+      "DOWN": "DOWN"
     }
   }
 }

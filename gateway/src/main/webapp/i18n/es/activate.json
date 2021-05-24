@@ -1,9 +1,9 @@
 {
   "activate": {
-    "title": { "string": "Activación" },
+    "title": { "string": "Activation" },
     "messages": {
-      "success": { "string": "<strong>Su cuenta ha sido activada.</strong> Por favor, " },
-      "error": { "string": "<strong>Su cuenta no pudo ser activada.</strong> Por favor, utilice el formulario de inscripción para registrarse." }
+      "success": { "string": "<strong>Your user account has been activated.</strong> Please " },
+      "error": { "string": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up." }
     }
   }
 }

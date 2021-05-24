@@ -3,6 +3,7 @@ package org.orcid.member.validation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,36 +24,42 @@ public class MemberValidator {
 	private static final String NEW_CLIENT_ID_PATTERN = NEW_CLIENT_ID_PREFIX + "[A-Z0-9]{16}$";
 	private static final Pattern oldPattern = Pattern.compile(OLD_CLIENT_ID_PATTERN);
 	private static final Pattern newPattern = Pattern.compile(NEW_CLIENT_ID_PATTERN);
-	
+
 	@Autowired
 	private MessageSource messageSource;
-	
+
 	@Autowired
 	private MemberRepository memberRepository;
-	
-	public List<String> validate(Member member, MemberServiceUser user, boolean creatingMember) {
+
+	public MemberValidation validate(Member member, MemberServiceUser user) {
 		List<String> errors = new ArrayList<>();
 		validateAssertionServiceEnabled(member, user, errors);
-		validateSalesforceId(member, user, errors, creatingMember);
+		validateSalesforceId(member, user, errors);
 		validateConsortiumLeadAndParentSalesforceId(member, user, errors);
 		validateClientId(member, user, errors);
-		validateClientName(member, user, errors, creatingMember);
-		return errors;
+		validateClientName(member, user, errors);
+
+		MemberValidation validation = new MemberValidation();
+		validation.setValid(errors.isEmpty());
+		validation.setErrors(errors);
+		return validation;
 	}
-	
-	private void validateClientName(Member member, MemberServiceUser user, List<String> errors,
-			boolean creatingMember) {
+
+	private void validateClientName(Member member, MemberServiceUser user, List<String> errors) {
 		if (StringUtils.isBlank(member.getClientName())) {
 			errors.add(getError("missingClientName", user));
-		} else if (creatingMember && memberRepository.findByClientName(member.getClientName()).isPresent()) {
-			errors.add(getError("nameAlreadyExists", member.getClientName(), user));
+		} else {
+			Optional<Member> matchingName = memberRepository.findByClientName(member.getClientName());
+			if (matchingName.isPresent() && !matchingName.get().getId().equals(member.getId())) {
+				errors.add(getError("nameAlreadyExists", member.getClientName(), user));
+			}
 		}
 	}
 
 	private void validateClientId(Member member, MemberServiceUser user, List<String> errors) {
-		if (StringUtils.isBlank(member.getClientId())) {
+		if (Boolean.FALSE.equals(member.getIsConsortiumLead()) && StringUtils.isBlank(member.getClientId())) {
 			errors.add(getError("missingClientId", user));
-		} else {
+		} else if (!StringUtils.isBlank(member.getClientId())) {
 			if (member.getClientId().startsWith(NEW_CLIENT_ID_PREFIX)) {
 				Matcher newMatcher = newPattern.matcher(member.getClientId());
 				if (!newMatcher.matches()) {
@@ -67,11 +74,14 @@ public class MemberValidator {
 		}
 	}
 
-	private void validateSalesforceId(Member member, MemberServiceUser user, List<String> errors, boolean creatingMember) {
+	private void validateSalesforceId(Member member, MemberServiceUser user, List<String> errors) {
 		if (StringUtils.isBlank(member.getSalesforceId())) {
 			errors.add(getError("missingSalesforceId", user));
-		} else if (creatingMember && memberRepository.findBySalesforceId(member.getSalesforceId()).isPresent()) {
-			errors.add(getError("salesforceIdAlreadyExists", member.getSalesforceId(), user));
+		} else {
+			Optional<Member> matchingSalesforceId = memberRepository.findBySalesforceId(member.getSalesforceId());
+			if (matchingSalesforceId.isPresent() && !matchingSalesforceId.get().getId().equals(member.getId())) {
+				errors.add(getError("salesforceIdAlreadyExists", member.getSalesforceId(), user));
+			}
 		}
 	}
 
@@ -87,6 +97,9 @@ public class MemberValidator {
 	private void validateAssertionServiceEnabled(Member member, MemberServiceUser user, List<String> errors) {
 		if (member.getAssertionServiceEnabled() == null) {
 			errors.add(getError("missingAssertionsEnabled", user));
+		} else if (member.getAssertionServiceEnabled() && Boolean.TRUE.equals(member.getIsConsortiumLead())
+				&& StringUtils.isBlank(member.getClientId())) {
+			errors.add(getError("invalidAssertionsEnabled", user));
 		}
 	}
 

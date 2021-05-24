@@ -3,7 +3,6 @@ import java.io.Serializable;
 import java.time.Instant;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.orcid.domain.enumeration.AffiliationSection;
@@ -20,7 +19,6 @@ public class Assertion implements Serializable {
     private String id;
 
     @NotNull
-    @Pattern(regexp = ".*@.*\\..*")
     @Field("email")
     private String email;
 
