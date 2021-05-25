@@ -103,6 +103,12 @@ source_file = gateway/src/main/webapp/i18n/en/user-management.json
 source_lang = en
 type = STRUCTURED_JSON
 
+[member-portal.report]
+file_filter = gateway/src/main/webapp/i18n/<lang>/report.json
+source_file = gateway/src/main/webapp/i18n/en/report.json
+source_lang = en
+type = STRUCTURED_JSON
+
 [gateway.backend]
 file_filter = gateway/src/main/resources/i18n/messages_<lang>.properties
 source_file = gateway/src/main/resources/i18n/messages_en.properties
