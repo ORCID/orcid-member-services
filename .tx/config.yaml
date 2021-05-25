@@ -105,6 +105,12 @@ filters:
     source_file: gateway/src/main/webapp/i18n/en/user-management.json
 
   - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    translation_files_expression: gateway/src/main/webapp/i18n/<lang>/report.json
+    source_file: gateway/src/main/webapp/i18n/en/report.json
+
+  - filter_type: file
     file_format: UNICODEPROPERTIES
     source_language: en
     translation_files_expression: gateway/src/main/resources/i18n/messages_<lang>.properties
