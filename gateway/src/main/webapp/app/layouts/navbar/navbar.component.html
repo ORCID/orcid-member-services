@@ -33,7 +33,12 @@
                             <span jhiTranslate="global.menu.entities.assertionServiceAffiliationManager.string">Affiliation Manager</span>
                         </a>
                     </li>
-                    <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
+                    <li>
+                        <a class="dropdown-item" routerLink="report" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon [icon]="faChartPie" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.report.string">Report</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li *ngIf="this.isOrganizationOwner() || this.hasRoleAdmin() || hasRoleConsortiumLead()" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
