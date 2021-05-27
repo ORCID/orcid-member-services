@@ -12,9 +12,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
+	
 	private String orcidOrgClientId;
+	
 	private String orcidOrgSalesForceId;
-
+	
+	private String chartioOrgId;
+	
+	private String chartioSecret;
+	
+	private String chartioMemberDashboardId;
+	
+	private String chartioMemberDashboardUrl;
+	
 	public String getOrcidOrgClientId() {
 		return orcidOrgClientId;
 	}
@@ -31,4 +41,36 @@ public class ApplicationProperties {
 		this.orcidOrgSalesForceId = orcidOrgSalesForceId;
 	}
 
+	public String getChartioOrgId() {
+		return chartioOrgId;
+	}
+
+	public void setChartioOrgId(String chartioOrgId) {
+		this.chartioOrgId = chartioOrgId;
+	}
+
+	public String getChartioSecret() {
+		return chartioSecret;
+	}
+
+	public void setChartioSecret(String chartioSecret) {
+		this.chartioSecret = chartioSecret;
+	}
+
+	public String getChartioMemberDashboardId() {
+		return chartioMemberDashboardId;
+	}
+
+	public void setChartioMemberDashboardId(String chartioMemberDashboardId) {
+		this.chartioMemberDashboardId = chartioMemberDashboardId;
+	}
+
+	public String getChartioMemberDashboardUrl() {
+		return chartioMemberDashboardUrl;
+	}
+
+	public void setChartioMemberDashboardUrl(String chartioMemberDashboardUrl) {
+		this.chartioMemberDashboardUrl = chartioMemberDashboardUrl;
+	}
+	
 }

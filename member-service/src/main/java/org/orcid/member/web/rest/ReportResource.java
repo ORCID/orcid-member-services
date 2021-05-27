@@ -1,0 +1,32 @@
+package org.orcid.member.web.rest;
+
+import org.orcid.member.service.ReportService;
+import org.orcid.member.service.reports.ReportInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * REST controller for requesting JWTs for chartio reports.
+ */
+@RestController
+@RequestMapping("/api")
+public class ReportResource {
+
+	private final Logger LOG = LoggerFactory.getLogger(ReportResource.class);
+	
+	@Autowired
+	private ReportService reportService;
+
+	@GetMapping("/reports/member")
+	public ResponseEntity<ReportInfo> getMemberReport() {
+		LOG.debug("Generating member report");
+		ReportInfo memberReportInfo = reportService.getMemberReportInfo();
+		return ResponseEntity.ok(memberReportInfo);
+	}
+
+}
