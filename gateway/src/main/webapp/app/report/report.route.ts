@@ -7,6 +7,6 @@ export const REPORT_ROUTE: Route = {
   component: ReportComponent,
   data: {
     authorities: [],
-    pageTitle: 'report.title.string'
+    pageTitle: 'gatewayApp.report.title.string'
   }
 };

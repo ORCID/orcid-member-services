@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service.ts';
+import { ReportService } from './report.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'jhi-report',
@@ -7,9 +8,19 @@ import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member
   styleUrls: ['report.scss']
 })
 export class ReportComponent implements OnInit {
-  token: string;
+  reportSrc: any;
 
-  constructor(private memberService: MSMemberService) {}
+  constructor(private reportService: ReportService, private sanitizer: DomSanitizer) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.reportService.getChartioMemberDashboardJwt().subscribe(res => {
+      const url = res.body.url;
+      const token = res.body.jwt;
+      this.reportSrc = url + '?embed_token=' + token;
+    });
+  }
+
+  safeUrl(url: string) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
 }
