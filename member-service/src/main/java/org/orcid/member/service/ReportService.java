@@ -40,6 +40,13 @@ public class ReportService {
 		info.setJwt(getJwt(Integer.valueOf(applicationProperties.getChartioMemberDashboardId())));
 		return info;
 	}
+	
+	public ReportInfo getIntegrationReportInfo() {
+		ReportInfo info = new ReportInfo();
+		info.setUrl(applicationProperties.getChartioIntegrationDashboardUrl());
+		info.setJwt(getJwt(Integer.valueOf(applicationProperties.getChartioIntegrationDashboardId())));
+		return info;
+	}
 
 	private String getJwt(int dashboard) {
 		long iat = Instant.now().toEpochMilli() / 1000;

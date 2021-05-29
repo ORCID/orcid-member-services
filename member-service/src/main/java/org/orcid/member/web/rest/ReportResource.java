@@ -28,5 +28,12 @@ public class ReportResource {
 		ReportInfo memberReportInfo = reportService.getMemberReportInfo();
 		return ResponseEntity.ok(memberReportInfo);
 	}
+	
+	@GetMapping("/reports/integration")
+	public ResponseEntity<ReportInfo> getIntegrationReport() {
+		LOG.debug("Generating integration report");
+		ReportInfo memberReportInfo = reportService.getIntegrationReportInfo();
+		return ResponseEntity.ok(memberReportInfo);
+	}
 
 }

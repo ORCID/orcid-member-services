@@ -195,3 +195,6 @@ application:
     chartioSecret: ${chartio.secret}
     chartioMemberDashboardId: ${chartio.member.dashboard.id}
     chartioMemberDashboardUrl: ${chartio.member.dashboard.url}
+    chartioIntegrationDashboardId: ${chartio.integration.dashboard.id}
+    chartioIntegrationDashboardUrl: ${chartio.integration.dashboard.url}
+

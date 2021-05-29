@@ -6,24 +6,28 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Properties specific to Member Service.
  * <p>
- * Properties are configured in the {@code application.yml} file.
- * See {@link io.github.jhipster.config.JHipsterProperties} for a good example.
+ * Properties are configured in the {@code application.yml} file. See
+ * {@link io.github.jhipster.config.JHipsterProperties} for a good example.
  */
 @Configuration
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
-	
+
 	private String orcidOrgClientId;
-	
+
 	private String orcidOrgSalesForceId;
-	
+
 	private String chartioOrgId;
-	
+
 	private String chartioSecret;
-	
+
 	private String chartioMemberDashboardId;
-	
+
 	private String chartioMemberDashboardUrl;
+
+	private String chartioIntegrationDashboardId;
+
+	private String chartioIntegrationDashboardUrl;
 	
 	public String getOrcidOrgClientId() {
 		return orcidOrgClientId;
@@ -71,6 +75,22 @@ public class ApplicationProperties {
 
 	public void setChartioMemberDashboardUrl(String chartioMemberDashboardUrl) {
 		this.chartioMemberDashboardUrl = chartioMemberDashboardUrl;
+	}
+
+	public String getChartioIntegrationDashboardId() {
+		return chartioIntegrationDashboardId;
+	}
+
+	public void setChartioIntegrationDashboardId(String chartioIntegrationDashboardId) {
+		this.chartioIntegrationDashboardId = chartioIntegrationDashboardId;
+	}
+
+	public String getChartioIntegrationDashboardUrl() {
+		return chartioIntegrationDashboardUrl;
+	}
+
+	public void setChartioIntegrationDashboardUrl(String chartioIntegrationDashboardUrl) {
+		this.chartioIntegrationDashboardUrl = chartioIntegrationDashboardUrl;
 	}
 	
 }

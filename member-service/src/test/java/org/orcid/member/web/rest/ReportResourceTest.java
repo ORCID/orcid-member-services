@@ -34,6 +34,15 @@ public class ReportResourceTest {
 		assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
 		assertThat(response.getBody()).isNotNull();
 	}
+	
+	@Test
+	public void testGetIntegrationReport() {
+		Mockito.when(mockReportService.getIntegrationReportInfo()).thenReturn(getReportInfo());
+		ResponseEntity<ReportInfo> response = reportResource.getIntegrationReport();
+		assertThat(response).isNotNull();
+		assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
+		assertThat(response.getBody()).isNotNull();
+	}
 
 	private ReportInfo getReportInfo() {
 		ReportInfo info = new ReportInfo();
