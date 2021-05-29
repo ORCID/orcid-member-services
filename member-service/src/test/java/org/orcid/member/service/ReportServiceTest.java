@@ -30,11 +30,13 @@ public class ReportServiceTest {
 		Mockito.when(mockApplicationProperties.getChartioSecret()).thenReturn("some-secret-long-enough-not-to-case-a-weak-key-exception");
 		Mockito.when(mockApplicationProperties.getChartioMemberDashboardId()).thenReturn("2");
 		Mockito.when(mockApplicationProperties.getChartioMemberDashboardUrl()).thenReturn("some-dashboard-url");
+		Mockito.when(mockApplicationProperties.getChartioIntegrationDashboardId()).thenReturn("3");
+		Mockito.when(mockApplicationProperties.getChartioIntegrationDashboardUrl()).thenReturn("some-other-dashboard-url");
 		Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
 	}
 
 	@Test
-	public void testGetMemberReportJwt() {
+	public void testGetMemberReportInfo() {
 		ReportInfo reportInfo = reportService.getMemberReportInfo();
 		assertThat(reportInfo).isNotNull();
 		assertThat(reportInfo.getUrl()).isNotNull();
@@ -46,6 +48,22 @@ public class ReportServiceTest {
 		Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioSecret();
 		Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioMemberDashboardId();
 		Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioMemberDashboardUrl();
+		Mockito.verify(mockUserService, Mockito.times(1)).getLoggedInUser();
+	}
+	
+	@Test
+	public void testGetIntegrationReportInfo() {
+		ReportInfo reportInfo = reportService.getIntegrationReportInfo();
+		assertThat(reportInfo).isNotNull();
+		assertThat(reportInfo.getUrl()).isNotNull();
+		assertThat(reportInfo.getUrl()).isEqualTo("some-other-dashboard-url");
+		assertThat(reportInfo.getJwt()).isNotNull();
+		assertThat(reportInfo.getJwt()).isNotEmpty();
+		
+		Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioOrgId();
+		Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioSecret();
+		Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioIntegrationDashboardId();
+		Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioIntegrationDashboardUrl();
 		Mockito.verify(mockUserService, Mockito.times(1)).getLoggedInUser();
 	}
 	
