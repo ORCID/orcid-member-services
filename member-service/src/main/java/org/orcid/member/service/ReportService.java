@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.orcid.member.config.ApplicationProperties;
 import org.orcid.member.service.reports.ReportInfo;
+import org.orcid.member.service.user.MemberServiceUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -68,7 +69,11 @@ public class ReportService {
 	}
 
 	private String getLoggedInSalesforceId() {
-		return userService.getLoggedInUser().getSalesforceId();
+		MemberServiceUser loggedInUser = userService.getLoggedInUser();
+		if (loggedInUser.getLoginAs() != null) {
+			loggedInUser = userService.getImpersonatedUser();
+		}
+		return loggedInUser.getSalesforceId();
 	}
 
 }
