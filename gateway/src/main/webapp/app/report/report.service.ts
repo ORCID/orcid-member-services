@@ -17,4 +17,8 @@ export class ReportService {
   getChartioIntegrationDashboardInfo(): Observable<HttpResponse<any>> {
     return this.http.get<String>(`${this.resourceUrl}/integration`, { observe: 'response' });
   }
+
+  getChartioConsortiumDashboardInfo(): Observable<HttpResponse<any>> {
+    return this.http.get<String>(`${this.resourceUrl}/consortium`, { observe: 'response' });
+  }
 }
