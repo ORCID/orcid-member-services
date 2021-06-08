@@ -29,6 +29,10 @@ public class ApplicationProperties {
 
 	private String chartioIntegrationDashboardUrl;
 	
+	private String chartioConsortiumDashboardId;
+
+	private String chartioConsortiumDashboardUrl;
+	
 	public String getOrcidOrgClientId() {
 		return orcidOrgClientId;
 	}
@@ -91,6 +95,22 @@ public class ApplicationProperties {
 
 	public void setChartioIntegrationDashboardUrl(String chartioIntegrationDashboardUrl) {
 		this.chartioIntegrationDashboardUrl = chartioIntegrationDashboardUrl;
+	}
+
+	public String getChartioConsortiumDashboardId() {
+		return chartioConsortiumDashboardId;
+	}
+
+	public void setChartioConsortiumDashboardId(String chartioConsortiumDashboardId) {
+		this.chartioConsortiumDashboardId = chartioConsortiumDashboardId;
+	}
+
+	public String getChartioConsortiumDashboardUrl() {
+		return chartioConsortiumDashboardUrl;
+	}
+
+	public void setChartioConsortiumDashboardUrl(String chartioConsortiumDashboardUrl) {
+		this.chartioConsortiumDashboardUrl = chartioConsortiumDashboardUrl;
 	}
 	
 }
