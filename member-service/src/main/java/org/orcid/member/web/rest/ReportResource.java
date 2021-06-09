@@ -35,5 +35,12 @@ public class ReportResource {
 		ReportInfo memberReportInfo = reportService.getIntegrationReportInfo();
 		return ResponseEntity.ok(memberReportInfo);
 	}
+	
+	@GetMapping("/reports/consortium")
+	public ResponseEntity<ReportInfo> getConsortiumReport() {
+		LOG.debug("Generating consortium report");
+		ReportInfo consortiumReportInfo = reportService.getConsortiumReportInfo();
+		return ResponseEntity.ok(consortiumReportInfo);
+	}
 
 }

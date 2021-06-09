@@ -9,5 +9,9 @@
 	    	<p>mp-integration-dashboard</p>
 	    	<iframe *ngIf="integrationReportSrc" [src]="safeUrl(integrationReportSrc)"></iframe>
     	</div>
+    	<div *ngIf="consortiumLead">
+	    	<p>mp-consortia-dashboard</p>
+	    	<iframe *ngIf="consortiumReportSrc" [src]="safeUrl(consortiumReportSrc)"></iframe>
+    	</div>
     </div>
 </div>

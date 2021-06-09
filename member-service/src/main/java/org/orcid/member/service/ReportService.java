@@ -4,10 +4,13 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.orcid.member.config.ApplicationProperties;
+import org.orcid.member.domain.Member;
 import org.orcid.member.service.reports.ReportInfo;
 import org.orcid.member.service.user.MemberServiceUser;
+import org.orcid.member.web.rest.errors.BadRequestAlertException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +34,9 @@ public class ReportService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private MemberService memberService;
 
 	@Autowired
 	private ApplicationProperties applicationProperties;
@@ -47,6 +53,21 @@ public class ReportService {
 		info.setUrl(applicationProperties.getChartioIntegrationDashboardUrl());
 		info.setJwt(getJwt(Integer.valueOf(applicationProperties.getChartioIntegrationDashboardId())));
 		return info;
+	}
+	
+	public ReportInfo getConsortiumReportInfo() {
+		checkConsortiumReportAccess();
+		ReportInfo info = new ReportInfo();
+		info.setUrl(applicationProperties.getChartioConsortiumDashboardUrl());
+		info.setJwt(getJwt(Integer.valueOf(applicationProperties.getChartioConsortiumDashboardId())));
+		return info;
+	}
+
+	private void checkConsortiumReportAccess() {
+		Optional<Member> member = memberService.getMember(getLoggedInSalesforceId());
+		if (!Boolean.TRUE.equals(member.get().getIsConsortiumLead())) {
+			throw new BadRequestAlertException("Only consortia leads can view consortia reports", null, null);
+		}
 	}
 
 	private String getJwt(int dashboard) {
