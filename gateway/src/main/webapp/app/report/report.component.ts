@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportService } from './report.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MSMemberService } from '../entities/MSUserService/ms-members/ms-member.service';
-import { AccountService } from '../core/auth/account.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'jhi-report',
@@ -10,42 +9,19 @@ import { AccountService } from '../core/auth/account.service';
   styleUrls: ['report.scss']
 })
 export class ReportComponent implements OnInit {
-  memberReportSrc: any;
-  integrationReportSrc: any;
-  consortiumReportSrc: any;
-  consortiumLead: boolean;
+  reportSrc: any;
+  reportType: string;
 
-  constructor(
-    private reportService: ReportService,
-    private accountService: AccountService,
-    private memberService: MSMemberService,
-    private sanitizer: DomSanitizer
-  ) {}
+  constructor(private reportService: ReportService, private sanitizer: DomSanitizer, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
-    this.reportService.getChartioMemberDashboardInfo().subscribe(res => {
-      const url = res.body.url;
-      const token = res.body.jwt;
-      this.memberReportSrc = url + '?embed_token=' + token;
-    });
+    this.activatedRoute.data.subscribe(data => {
+      this.reportType = data.reportType;
 
-    this.reportService.getChartioIntegrationDashboardInfo().subscribe(res => {
-      const url = res.body.url;
-      const token = res.body.jwt;
-      this.integrationReportSrc = url + '?embed_token=' + token;
-    });
-
-    this.accountService.fetch().subscribe(accountResponse => {
-      const salesforceId = accountResponse.body.salesforceId;
-      this.memberService.find(salesforceId).subscribe(memberResponse => {
-        this.consortiumLead = memberResponse.body.isConsortiumLead;
-        if (this.consortiumLead) {
-          this.reportService.getChartioConsortiumDashboardInfo().subscribe(res => {
-            const url = res.body.url;
-            const token = res.body.jwt;
-            this.consortiumReportSrc = url + '?embed_token=' + token;
-          });
-        }
+      this.reportService.getChartioDashboardInfo(this.reportType).subscribe(res => {
+        const url = res.body.url;
+        const token = res.body.jwt;
+        this.reportSrc = url + '?embed_token=' + token;
       });
     });
   }

@@ -10,15 +10,7 @@ export class ReportService {
 
   constructor(protected http: HttpClient) {}
 
-  getChartioMemberDashboardInfo(): Observable<HttpResponse<any>> {
-    return this.http.get<String>(`${this.resourceUrl}/member`, { observe: 'response' });
-  }
-
-  getChartioIntegrationDashboardInfo(): Observable<HttpResponse<any>> {
-    return this.http.get<String>(`${this.resourceUrl}/integration`, { observe: 'response' });
-  }
-
-  getChartioConsortiumDashboardInfo(): Observable<HttpResponse<any>> {
-    return this.http.get<String>(`${this.resourceUrl}/consortium`, { observe: 'response' });
+  getChartioDashboardInfo(reportType: string): Observable<HttpResponse<any>> {
+    return this.http.get<String>(`${this.resourceUrl}/` + reportType, { observe: 'response' });
   }
 }
