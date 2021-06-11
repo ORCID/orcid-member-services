@@ -33,15 +33,16 @@ public class UserService {
         throw new IllegalArgumentException("No user found for username" + login);
     }
 
-    public MemberServiceUser getLoginAsUser(MemberServiceUser loggedInUser) {
+    public MemberServiceUser getImpersonatedUser() {
+    	MemberServiceUser loggedInUser = getLoggedInUser();
         if (!StringUtils.isAllBlank(loggedInUser.getLoginAs())) {
             ResponseEntity<MemberServiceUser> userResponse = userServiceClient.getUser(loggedInUser.getLoginAs());
             if (userResponse.getStatusCode().is2xxSuccessful()) {
                 return userResponse.getBody();
             }
         }
-        LOG.error("No user found in user service for impersonated user for admin {}", loggedInUser.getLogin());
-        throw new IllegalArgumentException("No user found for impersonated user for admin" + loggedInUser.getLogin());
+        LOG.error("No impersonated user found");
+        throw new IllegalArgumentException("No impersonated user found");
     }
 
     public String getLoggedInUserId() {

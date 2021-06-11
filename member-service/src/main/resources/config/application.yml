@@ -191,3 +191,12 @@ jhipster:
 application:
     orcidOrgClientId: APP-1ERTY7037V1I8FE5
     orcidOrgSalesForceId: 001G000001AP83e
+    chartioOrgId: ${chartio.org.id}
+    chartioSecret: ${chartio.secret}
+    chartioMemberDashboardId: ${chartio.member.dashboard.id}
+    chartioMemberDashboardUrl: ${chartio.member.dashboard.url}
+    chartioIntegrationDashboardId: ${chartio.integration.dashboard.id}
+    chartioIntegrationDashboardUrl: ${chartio.integration.dashboard.url}
+    chartioConsortiumDashboardId: ${chartio.consortium.dashboard.id}
+    chartioConsortiumDashboardUrl: ${chartio.consortium.dashboard.url}
+

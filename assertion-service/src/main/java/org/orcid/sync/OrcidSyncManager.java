@@ -10,6 +10,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+
 @Component
 @EnableScheduling
 public class OrcidSyncManager {
@@ -20,12 +22,14 @@ public class OrcidSyncManager {
     private AssertionService assertionsService;
     
     @Scheduled(fixedDelayString = "${application.cron.postAffiliations}")
+    @SchedulerLock(name = "postAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "1m")
     public void createAffiliations() throws JAXBException {
         log.info("Running cron to create assertions to ORCID");
         assertionsService.postAssertionsToOrcid();
     }
     
     @Scheduled(fixedDelayString = "${application.cron.putAffiliations}")
+    @SchedulerLock(name = "putAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "1m")
     public void updateAffiliations() throws JAXBException {
         log.info("Running cron to update assertions to ORCID");
         assertionsService.putAssertionsToOrcid();

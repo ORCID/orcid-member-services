@@ -32,6 +32,7 @@ export class NavbarComponent implements OnInit {
   memberCallDone: boolean;
   account: Account;
   userName: string;
+  consortiumLead: boolean;
 
   faAddressCard = faAddressCard;
   faUniversity = faUniversity;
@@ -77,6 +78,7 @@ export class NavbarComponent implements OnInit {
             (res: HttpResponse<IMSMember>) => {
               if (res.body) {
                 this.organizationName = ' | ' + res.body.clientName;
+                this.consortiumLead = res.body.isConsortiumLead;
               }
               return this.organizationName;
             },
@@ -104,10 +106,6 @@ export class NavbarComponent implements OnInit {
 
   isOrganizationOwner() {
     return this.accountService.isOrganizationOwner();
-  }
-
-  hasRoleConsortiumLead() {
-    return this.accountService.hasAnyAuthority(['ROLE_CONSORTIUM_LEAD']);
   }
 
   hasRoleUser() {
