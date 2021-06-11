@@ -10,6 +10,7 @@
       "500": { "string": "Internal server error." }
     },
     "concurrencyFailure": { "string": "Another user modified this data at the same time as you. Your changes were rejected." },
+    "validation": { "string": "Validation error on the server." },
     "email": { "string": "Email is not a valid format" },
     "size": { "string": "Does not meet min/max size requirements!" },
     "idused": { "string": "It cannot be eliminated!. It has relationship with other elements." },
@@ -19,7 +20,6 @@
     "disambiguationSource": { "string": "Organization source can not be empty." },
     "emailUsed": { "string": "That email is already registered" },
     "ownerExists": { "string": "Organization already has an owner." },
-    "validation": { "string": "Validation error on the server." },
     "memberNotFound": { "string": "Member not found with salesForceId: {{ params }} " },
     "salesForceIdUsed": { "string": "A member with that salesforce id already exists" },
     "affiliationOtherOrganization": { "string": "This affiliations doesnt belong to your organization" },
