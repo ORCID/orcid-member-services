@@ -1,6 +1,62 @@
 {
   "home": {
     "title": { "string": "ORCID Member Portal" },
+    "heading": { "string": "Welcome to the ORCID Member Portal" },
+    "mainContent": {
+      "section1": {
+        "text": {
+          "string": "The ORCID Member Portal is a suite of tools that help institutions make the most of their ORCID membership. We already have some tools available and are actively developing others that allow our Members to:"
+        },
+        "bullet1": { "string": "Add/update data on researchers' ORCID records" },
+        "bullet2": { "string": "Access data and reports" },
+        "bullet3": { "string": "Manage your organization's ORCID membership information" },
+        "bullet4": { "string": "Manage your organization's ORCID API credentials" }
+      },
+      "section2": {
+        "text": { "string": "Tools currently available:" },
+        "affiliationManager": {
+          "heading": { "string": "Affiliation Manager" },
+          "description": {
+            "string": "Affiliation Manager simplifies the process of adding affiliation information (employment, education, etc) to ORCID records by allowing you to add and update affiliation information on behalf of your researchers using a CSV file, without any need to integrate ORCID directly into your current systems or to acquire an ORCID-enabled vendor system. Available to consortia members only"
+          }
+        },
+        "memberReporting": {
+          "heading": { "string": "Member Reporting" },
+          "description": {
+            "string": "Member reporting provides real time reporting for all members allowing organisations to easily discover, view and download member and integration statistics"
+          }
+        }
+      },
+      "section3": {
+        "heading": { "string": "Resources" },
+        "table": {
+          "line1": {
+            "heading": { "string": "Account Management guide" },
+            "description": { "string": "Guide on how to manage your users access to the Member Portal" }
+          },
+          "line2": {
+            "heading": { "string": "Affiliation Manager guide" },
+            "description": { "string": "Guide for staff at your institution who will be using the Affiliation Manager" }
+          },
+          "line3": {
+            "heading": { "string": "Member Reporting guide" },
+            "description": { "string": "Guide on how to read your member reports" }
+          }
+        }
+      },
+      "section4": {
+        "heading": { "string": "Support contacts" },
+        "text": { "string": "For help or questions about the Member Portal, please contact:" },
+        "bullet1": {
+          "text": { "string": "Your " },
+          "linkText": { "string": "consortium lead organization" }
+        },
+        "bullet2": {
+          "text": { "string": "Or email: " },
+          "email": { "string": "membership@orcid.org" }
+        }
+      }
+    },
     "alert": {
       "thisSiteIsFor": {
         "string": "This site is for administrators of ORCID member organizations and is separate from the ORCID registry. Go to the ORCID Registry to"
@@ -9,7 +65,6 @@
     },
     "logged": {
       "message": { "string": "You are logged in as user \"{{username}}\"." }
-    },
-    "test": { "string": "this is a test" }
+    }
   }
 }
