@@ -17,13 +17,13 @@
         "affiliationManager": {
           "heading": { "string": "Affiliation Manager" },
           "description": {
-            "string": "Affiliation Manager simplifies the process of adding affiliation information (employment, education, etc) to ORCID records by allowing you to add and update affiliation information on behalf of your researchers using a CSV file, without any need to integrate ORCID directly into your current systems or to acquire an ORCID-enabled vendor system. Available to consortia members only"
+            "string": "Affiliation Manager simplifies the process of adding affiliation information (employment, education, etc) to ORCID records by allowing you to add and update affiliation information on behalf of your researchers using a CSV file, without any need to integrate ORCID directly into your current systems or to acquire an ORCID-enabled vendor system. Available to consortia members only."
           }
         },
         "memberReporting": {
           "heading": { "string": "Member Reporting" },
           "description": {
-            "string": "Member reporting provides real time reporting for all members allowing organisations to easily discover, view and download member and integration statistics"
+            "string": "Member reporting provides real time reporting for all members allowing organisations to easily discover, view and download member and integration statistics."
           }
         }
       },
