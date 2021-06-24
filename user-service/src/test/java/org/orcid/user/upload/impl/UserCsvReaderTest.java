@@ -89,7 +89,7 @@ class UserCsvReaderTest {
 	void testReadUsersUploadDuplicateMainContactsWithinSameSpreadsheet() throws IOException, JSONException {
 		Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class)))
 				.thenReturn(getUserValidation(new ArrayList<>()));
-		Mockito.when(messageSource.getMessage(Mockito.eq("user.csv.upload.error.multipleOrgOwners"), Mockito.any(),
+		Mockito.when(messageSource.getMessage(Mockito.eq("user.validation.error.multipleOrgOwners"), Mockito.any(),
 				Mockito.eq(Locale.ENGLISH))).thenReturn("some-value");
 
 		InputStream inputStream = getClass().getResourceAsStream("/users-with-multiple-main-contacts.csv");
@@ -100,7 +100,7 @@ class UserCsvReaderTest {
 		assertTrue(upload.getErrors().get(0).toString().contains("some-value"));
 
 		Mockito.verify(messageSource, Mockito.times(1)).getMessage(
-				Mockito.eq("user.csv.upload.error.multipleOrgOwners"), Mockito.any(), Mockito.eq(Locale.ENGLISH));
+				Mockito.eq("user.validation.error.multipleOrgOwners"), Mockito.any(), Mockito.eq(Locale.ENGLISH));
 	}
 
 	private UserValidation getUserValidation(List<String> errors) {
