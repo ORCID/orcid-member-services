@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,19 +18,16 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.user.domain.User;
-import org.orcid.user.repository.UserRepository;
-import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.upload.UserUpload;
+import org.orcid.user.validation.UserValidation;
+import org.orcid.user.validation.UserValidator;
 import org.springframework.context.MessageSource;
 
 class UserCsvReaderTest {
 
 	@Mock
-	private UserRepository userRepository;
-
-	@Mock
-	private UserService userService;
+	private UserValidator userValidator;
 
 	@Mock
 	private MessageSource messageSource;
@@ -43,8 +42,8 @@ class UserCsvReaderTest {
 
 	@Test
 	void testReadUsersUpload() throws IOException {
-		Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.empty());
-		Mockito.when(userService.memberExists(Mockito.anyString())).thenReturn(true);
+		Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class)))
+				.thenReturn(getUserValidation(new ArrayList<>()));
 
 		InputStream inputStream = getClass().getResourceAsStream("/users.csv");
 		UserUpload upload = reader.readUsersUpload(inputStream, getUser("en"));
@@ -73,42 +72,42 @@ class UserCsvReaderTest {
 
 	@Test
 	void testReadUsersUploadInvalidEmails() throws IOException, JSONException {
-		Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.empty());
-		Mockito.when(userService.memberExists(Mockito.anyString())).thenReturn(true);
-		Mockito.when(messageSource.getMessage(Mockito.eq("user.csv.upload.error.invalidEmail"), Mockito.any(),
-				Mockito.eq(Locale.ENGLISH))).thenReturn("some-value");
+		Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class)))
+				.thenReturn(getUserValidation(Arrays.asList("some-error")));
 
-		InputStream inputStream = getClass().getResourceAsStream("/users-invalid-emails.csv");
+		InputStream inputStream = getClass().getResourceAsStream("/users.csv");
 		UserUpload upload = reader.readUsersUpload(inputStream, getUser("en"));
 		assertEquals(0, upload.getUserDTOs().size());
 		assertEquals(3, upload.getErrors().length());
 
-		assertTrue(upload.getErrors().get(0).toString().contains("some-value"));
-		assertTrue(upload.getErrors().get(1).toString().contains("some-value"));
-		assertTrue(upload.getErrors().get(2).toString().contains("some-value"));
-
-		Mockito.verify(messageSource, Mockito.times(3)).getMessage(Mockito.anyString(), Mockito.any(),
-				Mockito.eq(Locale.ENGLISH));
+		assertTrue(upload.getErrors().get(0).toString().contains("some-error"));
+		assertTrue(upload.getErrors().get(1).toString().contains("some-error"));
+		assertTrue(upload.getErrors().get(2).toString().contains("some-error"));
 	}
 
 	@Test
-	void testReadUsersUploadMissingEmails() throws IOException, JSONException {
-		Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.empty());
-		Mockito.when(userService.memberExists(Mockito.anyString())).thenReturn(true);
-		Mockito.when(messageSource.getMessage(Mockito.eq("user.csv.upload.error.missingEmail"), Mockito.isNull(),
+	void testReadUsersUploadDuplicateMainContactsWithinSameSpreadsheet() throws IOException, JSONException {
+		Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class)))
+				.thenReturn(getUserValidation(new ArrayList<>()));
+		Mockito.when(messageSource.getMessage(Mockito.eq("user.csv.upload.error.multipleOrgOwners"), Mockito.any(),
 				Mockito.eq(Locale.ENGLISH))).thenReturn("some-value");
 
-		InputStream inputStream = getClass().getResourceAsStream("/users-missing-emails.csv");
+		InputStream inputStream = getClass().getResourceAsStream("/users-with-multiple-main-contacts.csv");
 		UserUpload upload = reader.readUsersUpload(inputStream, getUser("en"));
-		assertEquals(0, upload.getUserDTOs().size());
-		assertEquals(3, upload.getErrors().length());
+		assertEquals(3, upload.getUserDTOs().size());
+		assertEquals(1, upload.getErrors().length());
 
 		assertTrue(upload.getErrors().get(0).toString().contains("some-value"));
-		assertTrue(upload.getErrors().get(1).toString().contains("some-value"));
-		assertTrue(upload.getErrors().get(2).toString().contains("some-value"));
 
-		Mockito.verify(messageSource, Mockito.times(3)).getMessage(Mockito.anyString(), Mockito.any(),
-				Mockito.eq(Locale.ENGLISH));
+		Mockito.verify(messageSource, Mockito.times(1)).getMessage(
+				Mockito.eq("user.csv.upload.error.multipleOrgOwners"), Mockito.any(), Mockito.eq(Locale.ENGLISH));
+	}
+
+	private UserValidation getUserValidation(List<String> errors) {
+		UserValidation validation = new UserValidation();
+		validation.setValid(errors.isEmpty());
+		validation.setErrors(errors);
+		return validation;
 	}
 
 	private User getUser(String langKey) {
