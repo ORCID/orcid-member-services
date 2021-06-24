@@ -44,381 +44,382 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private AuthorityRepository authorityRepository;
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
-	@Autowired
-	private UserCaches userCaches;
+    @Autowired
+    private UserCaches userCaches;
 
-	@Autowired
-	private UserUploadReader usersUploadReader;
+    @Autowired
+    private UserUploadReader usersUploadReader;
 
-	@Autowired
-	private MemberService memberService;
+    @Autowired
+    private MemberService memberService;
 
-	@Autowired
-	private MailService mailService;
+    @Autowired
+    private MailService mailService;
 
-	public Optional<User> completePasswordReset(String newPassword, String key) {
-		LOG.debug("Reset user password for reset key {}", key);
-		return userRepository.findOneByResetKey(key)
-				.filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400))).map(user -> {
-					user.setPassword(passwordEncoder.encode(newPassword));
-					user.setResetKey(null);
-					user.setResetDate(null);
-					user.setActivated(true);
-					userRepository.save(user);
-					userCaches.evictEntryFromUserCaches(user.getEmail());
-					return user;
-				});
-	}
+    public Optional<User> completePasswordReset(String newPassword, String key) {
+        LOG.debug("Reset user password for reset key {}", key);
+        return userRepository.findOneByResetKey(key)
+                .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400))).map(user -> {
+                    user.setPassword(passwordEncoder.encode(newPassword));
+                    user.setResetKey(null);
+                    user.setResetDate(null);
+                    user.setActivated(true);
+                    userRepository.save(user);
+                    userCaches.evictEntryFromUserCaches(user.getEmail());
+                    return user;
+                });
+    }
 
-	public Optional<User> requestPasswordReset(String mail) {
-		return userRepository.findOneByEmailIgnoreCase(mail).filter(User::getActivated).map(user -> {
-			user.setResetKey(RandomUtil.generateResetKey());
-			user.setResetDate(Instant.now());
-			userRepository.save(user);
-			userCaches.evictEntryFromUserCaches(user.getEmail());
-			return user;
-		});
-	}
+    public Optional<User> requestPasswordReset(String mail) {
+        return userRepository.findOneByEmailIgnoreCase(mail).filter(User::getActivated).map(user -> {
+            user.setResetKey(RandomUtil.generateResetKey());
+            user.setResetDate(Instant.now());
+            userRepository.save(user);
+            userCaches.evictEntryFromUserCaches(user.getEmail());
+            return user;
+        });
+    }
 
-	public User registerUser(UserDTO userDTO, String password) {
-		userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
-			boolean removed = removeNonActivatedUser(existingUser);
-			if (!removed) {
-				throw new LoginAlreadyUsedException();
-			}
-		});
-		userRepository.findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase()).ifPresent(existingUser -> {
-			boolean removed = removeNonActivatedUser(existingUser);
-			if (!removed) {
-				throw new EmailAlreadyUsedException();
-			}
-		});
-		User newUser = new User();
-		String encryptedPassword = passwordEncoder.encode(password);
-		newUser.setLogin(userDTO.getLogin().toLowerCase());
-		// new user gets initially a generated password
-		newUser.setPassword(encryptedPassword);
-		newUser.setFirstName(userDTO.getFirstName());
-		newUser.setLastName(userDTO.getLastName());
-		newUser.setEmail(userDTO.getEmail().toLowerCase());
-		newUser.setImageUrl(userDTO.getImageUrl());
-		newUser.setLangKey(userDTO.getLangKey());
-		newUser.setActivated(false);
-		// new user gets registration key
-		newUser.setActivationKey(RandomUtil.generateActivationKey());
-		newUser.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
-		userRepository.save(newUser);
-		userCaches.evictEntryFromUserCaches(newUser.getEmail());
-		LOG.debug("Created Information for User: {}", newUser);
-		return newUser;
-	}
+    public User registerUser(UserDTO userDTO, String password) {
+        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new LoginAlreadyUsedException();
+            }
+        });
+        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new EmailAlreadyUsedException();
+            }
+        });
+        User newUser = new User();
+        String encryptedPassword = passwordEncoder.encode(password);
+        newUser.setLogin(userDTO.getLogin().toLowerCase());
+        // new user gets initially a generated password
+        newUser.setPassword(encryptedPassword);
+        newUser.setFirstName(userDTO.getFirstName());
+        newUser.setLastName(userDTO.getLastName());
+        newUser.setEmail(userDTO.getEmail().toLowerCase());
+        newUser.setImageUrl(userDTO.getImageUrl());
+        newUser.setLangKey(userDTO.getLangKey());
+        newUser.setActivated(false);
+        // new user gets registration key
+        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        newUser.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
+        userRepository.save(newUser);
+        userCaches.evictEntryFromUserCaches(newUser.getEmail());
+        LOG.debug("Created Information for User: {}", newUser);
+        return newUser;
+    }
 
-	private boolean removeNonActivatedUser(User existingUser) {
-		if (existingUser.getActivated()) {
-			return false;
-		}
-		userRepository.delete(existingUser);
-		userCaches.evictEntryFromUserCaches(existingUser.getEmail());
-		return true;
-	}
+    private boolean removeNonActivatedUser(User existingUser) {
+        if (existingUser.getActivated()) {
+            return false;
+        }
+        userRepository.delete(existingUser);
+        userCaches.evictEntryFromUserCaches(existingUser.getEmail());
+        return true;
+    }
 
-	public User createUser(UserDTO userDTO) {
-		userDTO.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
+    public User createUser(UserDTO userDTO) {
+        userDTO.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
 
-		User user = userDTO.toUser();
-		user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
-		user.setPassword("placeholder");
-		user.setResetKey(RandomUtil.generateResetKey());
-		user.setResetDate(Instant.now());
-		userRepository.save(user);
-		userCaches.evictEntryFromUserCaches(user.getEmail());
-		LOG.debug("Created User: {}", user);
+        User user = userDTO.toUser();
+        user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
+        user.setPassword("placeholder");
+        user.setResetKey(RandomUtil.generateResetKey());
+        user.setResetDate(Instant.now());
+        userRepository.save(user);
+        userCaches.evictEntryFromUserCaches(user.getEmail());
+        LOG.debug("Created User: {}", user);
 
-		LOG.debug("Sending email to user {}", user.getEmail());
-		mailService.sendCreationEmail(user);
+        LOG.debug("Sending email to user {}", user.getEmail());
+        mailService.sendCreationEmail(user);
 
-		return user;
-	}
+        return user;
+    }
 
-	/**
-	 * Update basic information (first name, last name, email, language) for the
-	 * current user.
-	 *
-	 * @param firstName first name of user.
-	 * @param lastName  last name of user.
-	 * @param email     email id of user.
-	 * @param langKey   language key.
-	 * @param imageUrl  image URL of user.
-	 */
-	public void updateAccount(String firstName, String lastName, String email, String langKey, String imageUrl) {
-		SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(user -> {
-			user.setFirstName(firstName);
-			user.setLastName(lastName);
-			user.setLangKey(langKey);
-			user.setImageUrl(imageUrl);
-			userRepository.save(user);
-			userCaches.evictEntryFromUserCaches(user.getEmail());
-			LOG.debug("Changed Information for User: {}", user);
-		});
-	}
+    /**
+     * Update basic information (first name, last name, email, language) for the
+     * current user.
+     *
+     * @param firstName first name of user.
+     * @param lastName  last name of user.
+     * @param email     email id of user.
+     * @param langKey   language key.
+     * @param imageUrl  image URL of user.
+     */
+    public void updateAccount(String firstName, String lastName, String email, String langKey, String imageUrl) {
+        SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(user -> {
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setLangKey(langKey);
+            user.setImageUrl(imageUrl);
+            userRepository.save(user);
+            userCaches.evictEntryFromUserCaches(user.getEmail());
+            LOG.debug("Changed Information for User: {}", user);
+        });
+    }
 
-	/**
-	 * Update all information for a specific user, and return the modified user.
-	 *
-	 * @param userDTO user to update.
-	 * @return updated user.
-	 */
-	public Optional<UserDTO> updateUser(UserDTO userDTO) {
-		return Optional.of(userRepository.findById(userDTO.getId())).filter(Optional::isPresent).map(Optional::get)
-				.map(user -> {
-					userCaches.evictEntryFromUserCaches(user.getEmail());
-					user.setLogin(userDTO.getLogin().toLowerCase());
-					user.setFirstName(userDTO.getFirstName());
-					user.setLastName(userDTO.getLastName());
-					user.setImageUrl(userDTO.getImageUrl());
-					user.setMainContact(userDTO.getMainContact());
-					user.setSalesforceId(userDTO.getSalesforceId());
-					user.setLoginAs(userDTO.getLoginAs());
-					// user.setActivated(userDTO.isActivated());
-					if (userDTO.getLangKey() != null) {
-						user.setLangKey(userDTO.getLangKey());
-					}
+    /**
+     * Update all information for a specific user, and return the modified user.
+     *
+     * @param userDTO user to update.
+     * @return updated user.
+     */
+    public Optional<UserDTO> updateUser(UserDTO userDTO) {
+        return Optional.of(userRepository.findById(userDTO.getId())).filter(Optional::isPresent).map(Optional::get)
+                .map(user -> {
+                    userCaches.evictEntryFromUserCaches(user.getEmail());
+                    user.setLogin(userDTO.getLogin().toLowerCase());
+                    user.setFirstName(userDTO.getFirstName());
+                    user.setLastName(userDTO.getLastName());
+                    user.setImageUrl(userDTO.getImageUrl());
+                    user.setMainContact(userDTO.getMainContact());
+                    user.setSalesforceId(userDTO.getSalesforceId());
+                    user.setLoginAs(userDTO.getLoginAs());
+                    // user.setActivated(userDTO.isActivated());
+                    if (userDTO.getLangKey() != null) {
+                        user.setLangKey(userDTO.getLangKey());
+                    }
 
-					user.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
-					if (!StringUtils.equals(user.getEmail(), userDTO.getEmail().toLowerCase())) {
-						user.setEmail(userDTO.getEmail().toLowerCase());
-						user.setActivated(false);
-						user.setActivationKey(RandomUtil.generateResetKey());
-						user.setActivationDate(Instant.now());
-						mailService.sendActivationEmail(user);
-					}
-					if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null
-							&& !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
-						user.setSalesforceId(userDTO.getSalesforceId());
-						user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-						user.setLastModifiedDate(Instant.now());
-					}
+                    user.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
+                    if (!StringUtils.equals(user.getEmail(), userDTO.getEmail().toLowerCase())) {
+                        user.setEmail(userDTO.getEmail().toLowerCase());
+                        user.setActivated(false);
+                        user.setActivationKey(RandomUtil.generateResetKey());
+                        user.setActivationDate(Instant.now());
+                        mailService.sendActivationEmail(user);
+                    }
+                    if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null
+                            && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
+                        user.setSalesforceId(userDTO.getSalesforceId());
+                        user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+                        user.setLastModifiedDate(Instant.now());
+                    }
 
-					userRepository.save(user);
-					userCaches.evictEntryFromUserCaches(user.getEmail());
-					userCaches.evictEntryFromUserCaches(user.getLogin());
-					LOG.debug("Changed Information for User: {}", user);
-					return user;
-				}).map(UserDTO::valueOf);
-	}
+                    userRepository.save(user);
+                    userCaches.evictEntryFromUserCaches(user.getEmail());
+                    userCaches.evictEntryFromUserCaches(user.getLogin());
+                    LOG.debug("Changed Information for User: {}", user);
+                    return user;
+                }).map(UserDTO::valueOf);
+    }
 
-	public void deleteUser(String login) {
-		userRepository.findOneByLogin(login).ifPresent(user -> {
-			userRepository.delete(user);
-			userCaches.evictEntryFromUserCaches(user.getEmail());
-			LOG.debug("Deleted User: {}", user);
-		});
-	}
+    public void deleteUser(String login) {
+        userRepository.findOneByLogin(login).ifPresent(user -> {
+            userRepository.delete(user);
+            userCaches.evictEntryFromUserCaches(user.getEmail());
+            LOG.debug("Deleted User: {}", user);
+        });
+    }
 
-	public void clearUser(String id) {
-		Optional<User> u = userRepository.findOneById(id);
-		if (u.isPresent()) {
-			LOG.debug("About to clear User with id: {}", id);
-			User user = u.get();
-			String email = user.getEmail();
-			userCaches.evictEntryFromUserCaches(email);
+    public void clearUser(String id) {
+        Optional<User> u = userRepository.findOneById(id);
+        if (u.isPresent()) {
+            LOG.debug("About to clear User with id: {}", id);
+            User user = u.get();
+            String email = user.getEmail();
+            userCaches.evictEntryFromUserCaches(email);
 
-			user.setActivated(false);
-			user.setActivationKey(null);
-			user.setAuthorities(new HashSet<String>());
-			user.setEmail(id + "@deleted.orcid.org");
-			user.setFirstName(null);
-			user.setImageUrl(null);
-			user.setLangKey(null);
-			user.setLastName(null);
-			user.setLogin(user.getEmail());
-			user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-			user.setResetDate(null);
-			user.setResetKey(null);
-			user.setDeleted(Boolean.TRUE);
-			user.setLastModifiedDate(Instant.now());
-			userRepository.save(user);
-			LOG.debug("User cleared: {}", id);
-		}
-	}
+            user.setActivated(false);
+            user.setActivationKey(null);
+            user.setAuthorities(new HashSet<String>());
+            user.setEmail(id + "@deleted.orcid.org");
+            user.setFirstName(null);
+            user.setImageUrl(null);
+            user.setLangKey(null);
+            user.setLastName(null);
+            user.setLogin(user.getEmail());
+            user.setPassword(RandomStringUtils.randomAlphanumeric(60));
+            user.setResetDate(null);
+            user.setResetKey(null);
+            user.setDeleted(Boolean.TRUE);
+            user.setLastModifiedDate(Instant.now());
+            userRepository.save(user);
+            LOG.debug("User cleared: {}", id);
+        }
+    }
 
-	public void changePassword(String currentClearTextPassword, String newPassword) {
-		SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(user -> {
-			String currentEncryptedPassword = user.getPassword();
-			if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
-				throw new InvalidPasswordException();
-			}
-			String encryptedPassword = passwordEncoder.encode(newPassword);
-			user.setPassword(encryptedPassword);
-			userRepository.save(user);
-			userCaches.evictEntryFromUserCaches(user.getEmail());
-			LOG.debug("Changed password for User: {}", user);
-		});
-	}
+    public void changePassword(String currentClearTextPassword, String newPassword) {
+        SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(user -> {
+            String currentEncryptedPassword = user.getPassword();
+            if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
+                throw new InvalidPasswordException();
+            }
+            String encryptedPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(encryptedPassword);
+            userRepository.save(user);
+            userCaches.evictEntryFromUserCaches(user.getEmail());
+            LOG.debug("Changed password for User: {}", user);
+        });
+    }
 
-	public Optional<User> sendActivationEmail(String mail) {
-		return userRepository.findOneByEmailIgnoreCase(mail).map(user -> {
-			user.setActivated(false);
-			user.setResetKey(RandomUtil.generateResetKey());
-			user.setResetDate(Instant.now());
-			userRepository.save(user);
-			userCaches.evictEntryFromUserCaches(user.getEmail());
-			mailService.sendActivationEmail(user);
-			return user;
-		});
-	}
+    public Optional<User> sendActivationEmail(String mail) {
+        return userRepository.findOneByEmailIgnoreCase(mail).map(user -> {
+            user.setActivated(false);
+            user.setResetKey(RandomUtil.generateResetKey());
+            user.setResetDate(Instant.now());
+            userRepository.save(user);
+            userCaches.evictEntryFromUserCaches(user.getEmail());
+            mailService.sendActivationEmail(user);
+            return user;
+        });
+    }
 
-	public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-		return userRepository.findByDeletedFalse(pageable).map(UserDTO::valueOf);
-	}
+    public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
+        return userRepository.findByDeletedFalse(pageable).map(UserDTO::valueOf);
+    }
 
-	public Optional<User> getUserWithAuthoritiesByLogin(String login) {
-		return userRepository.findOneByLogin(login);
-	}
+    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
+        return userRepository.findOneByLogin(login);
+    }
 
-	public Optional<User> getUserWithAuthorities(String id) {
-		return userRepository.findById(id);
-	}
+    public Optional<User> getUserWithAuthorities(String id) {
+        return userRepository.findById(id);
+    }
 
-	public Optional<User> getUserWithAuthorities() {
-		return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
-	}
+    public Optional<User> getUserWithAuthorities() {
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
+    }
 
-	public List<User> findAllByLoginOrEmail(String login, String email) {
-		return userRepository.findAllByLoginOrEmail(login, email);
-	}
+    public List<User> findAllByLoginOrEmail(String login, String email) {
+        return userRepository.findAllByLoginOrEmail(login, email);
+    }
 
-	public void removeAuthorityFromUser(String id, String authority) {
-		Optional<User> existing = getUserWithAuthorities(id);
-		if (!existing.isPresent()) {
-			throw new BadRequestAlertException("User not present " + id, "user", null);
-		}
+    public void removeAuthorityFromUser(String id, String authority) {
+        Optional<User> existing = getUserWithAuthorities(id);
+        if (!existing.isPresent()) {
+            throw new BadRequestAlertException("User not present " + id, "user", null);
+        }
 
-		User user = existing.get();
-		if (user.getAuthorities() != null && !user.getAuthorities().isEmpty()) {
-			user.setAuthorities(
-					user.getAuthorities().stream().filter(a -> !a.equals(authority)).collect(Collectors.toSet()));
-		}
-		userRepository.save(user);
-	}
+        User user = existing.get();
+        if (user.getAuthorities() != null && !user.getAuthorities().isEmpty()) {
+            user.setAuthorities(
+                    user.getAuthorities().stream().filter(a -> !a.equals(authority)).collect(Collectors.toSet()));
+        }
+        userRepository.save(user);
+    }
 
-	public void removeOwnershipFromUser(String id) {
-		Optional<User> existing = getUserWithAuthoritiesByLogin(id);
-		if (!existing.isPresent()) {
-			throw new BadRequestAlertException("User not present " + id, "user", null);
-		}
+    public void removeOwnershipFromUser(String id) {
+        Optional<User> existing = getUserWithAuthoritiesByLogin(id);
+        if (!existing.isPresent()) {
+            throw new BadRequestAlertException("User not present " + id, "user", null);
+        }
 
-		User user = existing.get();
-		if (user.getAuthorities() != null && !user.getAuthorities().isEmpty()) {
-			user.setAuthorities(user.getAuthorities().stream().filter(a -> !a.equals(AuthoritiesConstants.ORG_OWNER))
-					.collect(Collectors.toSet()));
-		}
-		user.setMainContact(false);
-		userRepository.save(user);
-	}
+        User user = existing.get();
+        if (user.getAuthorities() != null && !user.getAuthorities().isEmpty()) {
+            user.setAuthorities(user.getAuthorities().stream().filter(a -> !a.equals(AuthoritiesConstants.ORG_OWNER))
+                    .collect(Collectors.toSet()));
+        }
+        user.setMainContact(false);
+        userRepository.save(user);
+    }
 
-	/**
-	 * Not activated users should be automatically deleted after 3 days.
-	 * <p>
-	 * This is scheduled to get fired everyday, at 01:00 (am).
-	 */
-	@Scheduled(cron = "0 0 1 * * ?")
-	public void removeNotActivatedUsers() {
-		userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
-				Instant.now().minus(3, ChronoUnit.DAYS)).forEach(user -> {
-					LOG.debug("Deleting not activated user {}", user.getLogin());
-					userRepository.delete(user);
-					userCaches.evictEntryFromUserCaches(user.getEmail());
-				});
-	}
+    /**
+     * Not activated users should be automatically deleted after 3 days.
+     * <p>
+     * This is scheduled to get fired everyday, at 01:00 (am).
+     */
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void removeNotActivatedUsers() {
+        userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
+                Instant.now().minus(3, ChronoUnit.DAYS)).forEach(user -> {
+                    LOG.debug("Deleting not activated user {}", user.getLogin());
+                    userRepository.delete(user);
+                    userCaches.evictEntryFromUserCaches(user.getEmail());
+                });
+    }
 
-	/**
-	 * Gets a list of all the authorities.
-	 *
-	 * @return a list of all the authorities.
-	 */
-	public List<String> getAuthorities() {
-		return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
-	}
+    /**
+     * Gets a list of all the authorities.
+     *
+     * @return a list of all the authorities.
+     */
+    public List<String> getAuthorities() {
+        return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
+    }
 
-	public UserUpload uploadUserCSV(InputStream inputStream, User currentUser) {
-		UserUpload usersUpload = null;
-		try {
-			usersUpload = usersUploadReader.readUsersUpload(inputStream, currentUser);
-		} catch (IOException e) {
-			LOG.warn("Error reading user upload", e);
-			throw new RuntimeException(e);
-		}
+    public UserUpload uploadUserCSV(InputStream inputStream, User currentUser) {
+        UserUpload usersUpload = null;
+        try {
+            usersUpload = usersUploadReader.readUsersUpload(inputStream, currentUser);
+        } catch (IOException e) {
+            LOG.warn("Error reading user upload", e);
+            throw new RuntimeException(e);
+        }
 
-		usersUpload.getUserDTOs().forEach(userDTO -> {
-			String salesforceId = userDTO.getSalesforceId();
-			Optional<User> existing = getUserWithAuthoritiesByLogin(userDTO.getLogin());
-			if (!existing.isPresent() && !userRepository.findOneBySalesforceIdAndMainContactIsTrue(salesforceId).isPresent()) {
-				userDTO.setMainContact(true);
-				createUser(userDTO);
-			}
-		});
-		return usersUpload;
-	}
+        usersUpload.getUserDTOs().forEach(userDTO -> {
+            String salesforceId = userDTO.getSalesforceId();
+            Optional<User> existing = getUserWithAuthoritiesByLogin(userDTO.getLogin());
+            if (!existing.isPresent()
+                    && !userRepository.findOneBySalesforceIdAndMainContactIsTrue(salesforceId).isPresent()) {
+                userDTO.setMainContact(true);
+                createUser(userDTO);
+            }
+        });
+        return usersUpload;
+    }
 
-	public Boolean memberExists(String salesforceId) {
-		return memberService.memberExistsWithSalesforceId(salesforceId);
-	}
+    public Boolean memberExists(String salesforceId) {
+        return memberService.memberExistsWithSalesforceId(salesforceId);
+    }
 
-	public Boolean memberSuperadminEnabled(String salesforceId) {
-		return memberService.memberExistsWithSalesforceIdAndSuperadminEnabled(salesforceId);
-	}
+    public Boolean memberSuperadminEnabled(String salesforceId) {
+        return memberService.memberExistsWithSalesforceIdAndSuperadminEnabled(salesforceId);
+    }
 
-	public List<UserDTO> getAllUsersBySalesforceId(String salesforceId) {
-		List<User> users = userRepository.findBySalesforceIdAndDeletedIsFalse(salesforceId);
-		return users.stream().map(UserDTO::valueOf).collect(Collectors.toList());
-	}
+    public List<UserDTO> getAllUsersBySalesforceId(String salesforceId) {
+        List<User> users = userRepository.findBySalesforceIdAndDeletedIsFalse(salesforceId);
+        return users.stream().map(UserDTO::valueOf).collect(Collectors.toList());
+    }
 
-	public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId) {
-		return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId).map(UserDTO::valueOf);
+    public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId) {
+        return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId).map(UserDTO::valueOf);
 
-	}
+    }
 
-	private Set<String> getAuthoritiesForUser(UserDTO userDTO, boolean isAdmin) {
-		Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
-		if (!org.apache.commons.lang3.StringUtils.isBlank(userDTO.getSalesforceId())) {
-			if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(userDTO.getSalesforceId())) {
-				authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
-			}
-			if (memberService.memberIsConsortiumLead(userDTO.getSalesforceId())) {
-				authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
-			}
-		}
+    private Set<String> getAuthoritiesForUser(UserDTO userDTO, boolean isAdmin) {
+        Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
+        if (!org.apache.commons.lang3.StringUtils.isBlank(userDTO.getSalesforceId())) {
+            if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(userDTO.getSalesforceId())) {
+                authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
+            }
+            if (memberService.memberIsConsortiumLead(userDTO.getSalesforceId())) {
+                authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
+            }
+        }
 
-		if (userDTO.getMainContact() != null) {
-			if (userDTO.getMainContact()) {
-				authorities.add(AuthoritiesConstants.ORG_OWNER);
-			}
-		}
-		if (isAdmin) {
-			authorities.add(AuthoritiesConstants.ADMIN);
-		}
-		return authorities;
-	}
+        if (userDTO.getMainContact() != null) {
+            if (userDTO.getMainContact()) {
+                authorities.add(AuthoritiesConstants.ORG_OWNER);
+            }
+        }
+        if (isAdmin) {
+            authorities.add(AuthoritiesConstants.ADMIN);
+        }
+        return authorities;
+    }
 
-	public boolean hasOwnerForSalesforceId(String salesforceId) {
-		List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(salesforceId);
-		if (owners.isEmpty()) {
-			return false;
-		}
+    public boolean hasOwnerForSalesforceId(String salesforceId) {
+        List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(salesforceId);
+        if (owners.isEmpty()) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
 }
