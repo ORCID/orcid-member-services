@@ -42,7 +42,7 @@ public class UserValidator {
 	}
 
 	private void validateMainContact(UserDTO user, User currentUser, List<String> errors) {
-		if (user.getMainContact() && !StringUtils.isBlank(user.getSalesforceId())) {
+		if (user.getMainContact() != null && user.getMainContact() && !StringUtils.isBlank(user.getSalesforceId())) {
 			Optional<User> existingMainContact = userRepository
 					.findOneBySalesforceIdAndMainContactIsTrue(user.getSalesforceId());
 			if (existingMainContact.isPresent()
