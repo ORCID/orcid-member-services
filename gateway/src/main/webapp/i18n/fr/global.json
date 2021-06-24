@@ -21,7 +21,11 @@
         "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
         "member": { "string": "Member" }
       },
-      "report": { "string": "Report" },
+      "report": {
+        "member": { "string": "Member report" },
+        "integration": { "string": "Integration report" },
+        "consortium": { "string": "Consortium report" }
+      },
       "account": {
         "main": { "string": "Account" },
         "settings": { "string": "Settings" },

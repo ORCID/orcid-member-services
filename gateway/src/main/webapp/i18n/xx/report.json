@@ -1,7 +1,15 @@
 {
   "gatewayApp": {
     "report": {
-      "title": { "string": "[Řḗƥǿřŧ ϕϐǲ鶱ǲǋ]" }
+      "member": {
+        "title": { "string": "[Ḿḗḿƀḗř řḗƥǿřŧ ϕϱϖǋς衋 ǋϱẛ衋]" }
+      },
+      "integration": {
+        "title": { "string": "[Īƞŧḗɠřȧŧīǿƞ řḗƥǿřŧ 鶱ǋϱς鶱ΐϖϕǲı]" }
+      },
+      "consortium": {
+        "title": { "string": "[Ƈǿƞşǿřŧīŭḿ řḗƥǿřŧ ϱςẛſẛΰςϐϱϐ ϵ]" }
+      }
     }
   }
 }
