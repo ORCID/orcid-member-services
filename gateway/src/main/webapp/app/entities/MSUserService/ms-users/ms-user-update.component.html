@@ -4,53 +4,29 @@
             <h1 id="jhi-ms-user-heading" class="mt-5" jhiTranslate="gatewayApp.msUserServiceMSUser.home.createOrEditLabel.string">Create or edit a User Settings</h1>
             <div>
                 <jhi-alert-error></jhi-alert-error>
+                <div class="alerts top right" role="alert" *ngIf="validation.errors && validation.errors.length > 0">
+					<ngb-alert class="alert alert-danger alert-dismissible" role="alert" ng-reflect-type="danger" (close)="validation.errors = null">
+					    <ul class="validation-errors">
+				    		<li *ngFor="let error of validation.errors">
+				    			{{ error }}
+				       		</li>
+					    </ul>
+				    </ngb-alert>
+				</div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.email.string" for="field_login.string">Login</label>
                     <input type="text" class="form-control" name="login" id="field_login"
                            formControlName="login"/>
-
-                    <div *ngIf="(editForm.get('login').invalid && editForm.get('login').touched) || editForm.get('login').dirty">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('login').errors && editForm.get('login').errors.required" jhiTranslate="entity.validation.required.string">
-                            This field is required.
-                        </small>
-
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('login').errors && editForm.get('login').errors.maxlength" jhiTranslate="entity.validation.maxlength.string"
-                               [translateValues]="{max: 50}">
-                            This field cannot be longer than 50 characters.
-                        </small>
-
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('login').errors
-                               && (editForm.get('login').errors.email || editForm.get('login').errors.invalidEmail)"
-                               jhiTranslate="entity.validation.email.string">
-                            Please provide a valid email address.
-                        </small>
-                    </div>
-
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.firstName.string" for="field_firstName.string">First Name</label>
                     <input type="text" class="form-control" name="firstName" id="field_firstName"
                            formControlName="firstName"/>
-                    <div *ngIf="(editForm.get('firstName').invalid && editForm.get('firstName').touched) || editForm.get('firstName').dirty">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('firstName').errors && editForm.get('firstName').errors.required" jhiTranslate="entity.validation.required.string">
-                            This field is required.
-                        </small>
-                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.lastName.string" for="field_lastName.string">Last Name</label>
                     <input type="text" class="form-control" name="lastName" id="field_lastName"
                            formControlName="lastName"/>
-                    <div *ngIf="(editForm.get('lastName').invalid && editForm.get('lastName').touched) || editForm.get('lastName').dirty">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('lastName').errors && editForm.get('lastName').errors.required" jhiTranslate="entity.validation.required.string">
-                            This field is required.
-                        </small>
-                    </div>
                 </div>
                 <div class="form-group">
                     <input
@@ -70,15 +46,6 @@
                       <option *ngFor="let member of membersList" [ngValue]="member.salesforceId">{{member.clientName}}</option>
                     </select>
                     </fieldset>
-                    <div *ngIf="(editForm.get('salesforceId').invalid && editForm.get('salesforceId').touched) || editForm.get('salesforceId').dirty">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('salesforceId').errors && editForm.get('salesforceId').errors.required" jhiTranslate="entity.validation.required.string">
-                            This field is required.
-                        </small>
-                        <small class="form-text text-danger" *ngIf="editForm.get('salesforceId').errors">
-                               {{salesforceId.errors| json}}
-                        </small>
-                    </div>
                     <fieldset [disabled]="true">
                     <div class="form-group">
                       <input type="checkbox" class="form-control" name="activated" id="field_activated"

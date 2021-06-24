@@ -20,6 +20,8 @@ import org.orcid.user.service.MemberService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.upload.UserUpload;
+import org.orcid.user.validation.UserValidation;
+import org.orcid.user.validation.UserValidator;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.user.web.rest.errors.LoginAlreadyUsedException;
@@ -100,20 +102,22 @@ public class UserResource {
 
     @Autowired
     private MailService mailService;
-    
+
+    @Autowired
+    private UserValidator userValidator;
+
     private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
     /**
      * {@code PUT /users} : Updates an existing User.
      *
-     * @param userDTO
-     *            the user to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
-     *         body the updated user.
-     * @throws EmailAlreadyUsedException
-     *             {@code 400 (Bad Request)} if the email is already in use.
-     * @throws LoginAlreadyUsedException
-     *             {@code 400 (Bad Request)} if the login is already in use.
+     * @param userDTO the user to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated user.
+     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is
+     *                                   already in use.
+     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is
+     *                                   already in use.
      */
     @PutMapping("/users")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
@@ -127,24 +131,26 @@ public class UserResource {
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
-        if (!validateExistingUser(userDTO)) {
-	    //return ResponseEntity.badRequest().body(userDTO);
-            throw new BadRequestAlertException("Admin users cannot be associated with this member", "user", "member.no.admin.allowed.string");
-	}
 
-        //change the auth if the logged in user is org owner and this is set as mainContact
+        if (!userValidator.validate(userDTO, getCurrentUser()).isValid()) {
+            return ResponseEntity.badRequest().body(userDTO);
+        }
+
+        // change the auth if the logged in user is org owner and this is set as
+        // mainContact
         boolean owner = userDTO.getMainContact();
         if (owner) {
-        	
-        	List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
-            for(User prevOwner: owners) {
-            	if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
+
+            List<User> owners = userRepository
+                    .findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
+            for (User prevOwner : owners) {
+                if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
                     userService.removeOwnershipFromUser(prevOwner.getLogin());
                 }
             }
-                
+
             userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
-            
+
         }
 
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
@@ -160,17 +166,15 @@ public class UserResource {
     /**
      * {@code GET /users} : get all users.
      *
-     * @param queryParams
-     *            a {@link MultiValueMap} query parameters.
-     * @param uriBuilder
-     *            a {@link UriComponentsBuilder} URI builder.
-     * @param pageable
-     *            the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
-     *         body all users.
+     * @param queryParams a {@link MultiValueMap} query parameters.
+     * @param uriBuilder  a {@link UriComponentsBuilder} URI builder.
+     * @param pageable    the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         all users.
      */
     @GetMapping("/users")
-    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder, Pageable pageable) {
+    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams,
+            UriComponentsBuilder uriBuilder, Pageable pageable) {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -179,14 +183,11 @@ public class UserResource {
     /**
      * {@code GET /users/salesforce/:salesforceId} : get users by salesforce id.
      *
-     * @param queryParams
-     *            a {@link MultiValueMap} query parameters.
-     * @param uriBuilder
-     *            a {@link UriComponentsBuilder} URI builder.
-     * @param pageable
-     *            the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
-     *         body all users.
+     * @param queryParams a {@link MultiValueMap} query parameters.
+     * @param uriBuilder  a {@link UriComponentsBuilder} URI builder.
+     * @param pageable    the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         all users.
      */
     @GetMapping("/users/salesforce/{salesforceId}")
     public ResponseEntity<List<UserDTO>> getUsersBySalesforceId(@PathVariable String salesforceId) {
@@ -195,23 +196,19 @@ public class UserResource {
     }
 
     /**
-     * {@code GET /users/salesforce/:salesforceId/p} : get users by salesforce
-     * id.
+     * {@code GET /users/salesforce/:salesforceId/p} : get users by salesforce id.
      *
-     * @param salesforceId
-     *            the salesforce id for the organization.
-     * @param queryParams
-     *            a {@link MultiValueMap} query parameters.
-     * @param uriBuilder
-     *            a {@link UriComponentsBuilder} URI builder.
-     * @param pageable
-     *            the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
-     *         body all users.
+     * @param salesforceId the salesforce id for the organization.
+     * @param queryParams  a {@link MultiValueMap} query parameters.
+     * @param uriBuilder   a {@link UriComponentsBuilder} URI builder.
+     * @param pageable     the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         all users.
      */
     @GetMapping("/users/salesforce/{salesforceId}/p")
-    public ResponseEntity<List<UserDTO>> getUsersBySalesforceId(@PathVariable String salesforceId, @RequestParam MultiValueMap<String, String> queryParams,
-            UriComponentsBuilder uriBuilder, Pageable pageable) {
+    public ResponseEntity<List<UserDTO>> getUsersBySalesforceId(@PathVariable String salesforceId,
+            @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder,
+            Pageable pageable) {
         final Page<UserDTO> page = userService.getAllUsersBySalesforceId(pageable, salesforceId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -231,10 +228,9 @@ public class UserResource {
     /**
      * {@code GET /users/:login} : get the "login" user.
      *
-     * @param login
-     *            the login of the user to find.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
-     *         body the "login" user, or with status {@code 404 (Not Found)}.
+     * @param login the login of the user to find.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the "login" user, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/users/{loginOrId}")
     public ResponseEntity<UserDTO> getUserByLogin(@PathVariable String loginOrId) {
@@ -249,19 +245,17 @@ public class UserResource {
     /**
      * {@code POST  /user/upload} : Create a list of users.
      *
-     * @param file:
-     *            file containing the users to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and
-     *         with a map indicating if each user was created or not, or with
-     *         status {@code 400 (Bad Request)} if the file cannot be parsed.
+     * @param file: file containing the users to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         a map indicating if each user was created or not, or with status
+     *         {@code 400 (Bad Request)} if the file cannot be parsed.
      * @throws Throwable
      */
     @PostMapping("/users/upload")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) throws Throwable {
         LOG.debug("Uploading users settings CSV");
-        String login = SecurityUtils.getCurrentUserLogin().get();
-        User currentUser = userService.getUserWithAuthoritiesByLogin(login).get();
+        User currentUser = getCurrentUser();
         UserUpload upload = userService.uploadUserCSV(file.getInputStream(), currentUser);
         return ResponseEntity.ok().body(upload.getErrors().toString());
     }
@@ -269,11 +263,10 @@ public class UserResource {
     /**
      * {@code POST  /user} : Create a new memberServicesUser.
      *
-     * @param userDTO:
-     *            the user to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and
-     *         with body the new user, or with status {@code 400 (Bad Request)}
-     *         if the user has already an ID.
+     * @param userDTO: the user to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new user, or with status {@code 400 (Bad Request)} if the
+     *         user has already an ID.
      * @throws JSONException
      * @throws URISyntaxException
      * @throws Throwable
@@ -284,7 +277,7 @@ public class UserResource {
         if (!StringUtils.isBlank(userDTO.getId())) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "User", "idexists");
         }
-        if (!validate(userDTO)) {
+        if (!userValidator.validate(userDTO, getCurrentUser()).isValid()) {
             return ResponseEntity.badRequest().body(userDTO);
         }
         if (!userService.memberExists(userDTO.getSalesforceId())) {
@@ -292,14 +285,15 @@ public class UserResource {
             return ResponseEntity.badRequest().body(userDTO);
         }
         String createdBy = SecurityUtils.getCurrentUserLogin().get();
-        //change the auth if the logged in user is org owner and this is set as mainContact
+        // change the auth if the logged in user is org owner and this is set as
+        // mainContact
         boolean owner = userDTO.getMainContact();
-        List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
-        
-        if (owner) {
+        List<User> owners = userRepository
+                .findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
 
-        	for(User prevOwner: owners) {
-            	if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
+        if (owner) {
+            for (User prevOwner : owners) {
+                if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
                     userService.removeOwnershipFromUser(prevOwner.getLogin());
                 }
             }
@@ -328,92 +322,50 @@ public class UserResource {
         return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin())).body(UserDTO.valueOf(newUser));
     }
 
-	private boolean validate(UserDTO user) {
-		boolean isOk = true;
-		if (StringUtils.isBlank(user.getLogin())) {
-			isOk = false;
-			user.setLoginError("Login should not be empty");
-		}
-		if (StringUtils.isBlank(user.getSalesforceId())) {
-			isOk = false;
-			user.setSalesforceIdError("Salesforce Id should not be empty");
-			LOG.info("Salesforce id missing");
-		}
-		if (user.getIsAdmin() && !StringUtils.isBlank(user.getSalesforceId())) {
-			if(!userService.memberSuperadminEnabled(user.getSalesforceId())) {
-				isOk = false;
-				user.setSalesforceIdError("Admin users cannot be associated with this member");
-			}
-		}
-		Optional<User> existing = userRepository.findOneByLogin(user.getLogin().toLowerCase());
-		if (existing.isPresent() && !existing.get().getDeleted()) {
-            throw new BadRequestAlertException("Invalid email", "user", "emailUsed.string");
-        }
-
-        existing = userRepository.findOneByEmailIgnoreCase(user.getEmail());
-        if (existing.isPresent() && !existing.get().getDeleted()) {
-            throw new BadRequestAlertException("Invalid email", "user", "emailUsed.string");
-        }
-
-        if (!emailValidator.isValid(user.getEmail())) {
-        	throw new BadRequestAlertException("Invalid email", "user", "email.string");
-        }
-
-        //change the auth if the logged in user is org owner and this is set as mainContact
-        if (user.getMainContact()) {
-            Optional<User> authUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
-            if (authUser.isPresent() && !StringUtils.equals(authUser.get().getId(), user.getId()) && SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ORG_OWNER)) {
-                userService.removeAuthorityFromUser(authUser.get().getId(), AuthoritiesConstants.ORG_OWNER);
-            } else {
-                List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(user.getSalesforceId());
-
-                for (User prevOwner : owners) {
-                    if (!StringUtils.equals(prevOwner.getId(), user.getId())) {
-                        userService.removeOwnershipFromUser(prevOwner.getLogin());
-                    }
-                }
-            }
-        }
-        return isOk;
+    /**
+     * {@code POST  /user} : Validate a memberServicesUser.
+     *
+     * @param userDTO: the user to validate.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and user
+     *         validation in the body.
+     * @throws JSONException
+     * @throws URISyntaxException
+     * @throws Throwable
+     */
+    @PostMapping("/users/validate")
+    public ResponseEntity<UserValidation> validateUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
+        Optional<User> currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+        UserValidation validation = userValidator.validate(userDTO, currentUser.get());
+        return ResponseEntity.ok(validation);
     }
-
-	private boolean validateExistingUser(UserDTO user) {
-		boolean isOk = true;
-		if (user.getIsAdmin() == true && !StringUtils.isBlank(user.getSalesforceId())) {
-			if(!userService.memberSuperadminEnabled(user.getSalesforceId())) {
-				isOk = false;
-				user.setSalesforceIdError("Admin users cannot be associated with this member");
-			}
-		}
-		return isOk;
-	}
 
     /**
      * {@code DELETE  /users/:login} : delete the 'login' user.
      *
-     * @param login
-     *            the id of the User to delete.
+     * @param login the id of the User to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      * @throws JSONException
      */
     @DeleteMapping("/users/{jhiUserId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String jhiUserId, @RequestParam(value = "noMainContactCheck", required = false) boolean noMainContactCheck) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String jhiUserId,
+            @RequestParam(value = "noMainContactCheck", required = false) boolean noMainContactCheck) {
         LOG.debug("REST request to delete user {}", jhiUserId);
         String authUserLogin = SecurityUtils.getCurrentUserLogin().get();
         if (StringUtils.equalsIgnoreCase(authUserLogin, jhiUserId)) {
-            throw new BadRequestAlertException("Cannot delete current authenticated user", "User", "delete.auth.user.string");
+            throw new BadRequestAlertException("Cannot delete current authenticated user", "User",
+                    "delete.auth.user.string");
         }
         Optional<User> user = userService.getUserWithAuthorities(jhiUserId);
-        if(user.isPresent()) {
-            //not main contact
-            if(user.get().getMainContact() && !noMainContactCheck){
+        if (user.isPresent()) {
+            // not main contact
+            if (user.get().getMainContact() && !noMainContactCheck) {
                 throw new BadRequestAlertException("Cannot delete main contact", "User", "delete.main.contact.string");
             }
-            //not last admin
-            if(user.get().getAuthorities().stream()
+            // not last admin
+            if (user.get().getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.equals(AuthoritiesConstants.ADMIN))) {
-                //check if it is last admin
-                if(userRepository.findAllByAuthoritiesAndDeletedIsFalse(AuthoritiesConstants.ADMIN).size() <= 1 )  {
+                // check if it is last admin
+                if (userRepository.findAllByAuthoritiesAndDeletedIsFalse(AuthoritiesConstants.ADMIN).size() <= 1) {
                     throw new BadRequestAlertException("Cannot delete last admin", "User", "delete.last.admin.string");
                 }
             }
@@ -423,13 +375,11 @@ public class UserResource {
     }
 
     /**
-     * {@code DELETE  /users/:id/:authority} : remove the authority from the
-     * given user.
+     * {@code DELETE  /users/:id/:authority} : remove the authority from the given
+     * user.
      *
-     * @param id
-     *            the id of the User.
-     * @param authority
-     *            the authority to be removed
+     * @param id        the id of the User.
+     * @param authority the authority to be removed
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/users/{id}/{authority}")
@@ -442,10 +392,9 @@ public class UserResource {
     /**
      * {@code PUT /users/:id/sendActivate} : send the activation email.
      *
-     * @param login
-     *            the login of the user to find.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
-     *         body the "login" user, or with status {@code 404 (Not Found)}.
+     * @param login the login of the user to find.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the "login" user, or with status {@code 404 (Not Found)}.
      */
     @PutMapping("/users/{loginOrId}/sendActivate")
     public ResponseEntity<UserDTO> sendActivate(@PathVariable String loginOrId) {
@@ -460,43 +409,40 @@ public class UserResource {
     }
 
     /**
-     * {@code PUT /users/:salesforceId/:newSalesforceId} : Updates salesForceId
-     * for existing Users.
+     * {@code PUT /users/:salesforceId/:newSalesforceId} : Updates salesForceId for
+     * existing Users.
      *
-     * @param salesforceId
-     *            the salesforceId to the find the users to update.
-     * @param newSalesforceId
-     *            the new salesforceId to update.
+     * @param salesforceId    the salesforceId to the find the users to update.
+     * @param newSalesforceId the new salesforceId to update.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
      */
     @PutMapping("/users/{salesforceId}/{newSalesforceId}")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> updateUserSalesforceOrAssertion(@PathVariable String salesforceId, @PathVariable String newSalesforceId) {
+    public ResponseEntity<Void> updateUserSalesforceOrAssertion(@PathVariable String salesforceId,
+            @PathVariable String newSalesforceId) {
         LOG.debug("REST request to update Users by salesforce : {}", salesforceId);
         List<UserDTO> usersBelongingToMember = userService.getAllUsersBySalesforceId(salesforceId);
         for (UserDTO user : usersBelongingToMember) {
             user.setSalesforceId(newSalesforceId);
             userService.updateUser(user);
         }
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", salesforceId)).build();
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", salesforceId)).build();
     }
-
 
     /**
      * {@code GET /users/:saleforceId}/owner : get the "login" user.
      *
-     * @param login
-     *            the login of the user to find.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
-     *         body the "login" user, or with status {@code 404 (Not Found)}.
+     * @param login the login of the user to find.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the "login" user, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/users/{salesforceId}/owner")
     public boolean getOwner(@PathVariable String salesforceId) {
         LOG.debug("REST request to get Owner for : {}", salesforceId);
         return userService.hasOwnerForSalesforceId(salesforceId);
     }
-
 
     /**
      * {@code POST /switch_user} : Switch user
@@ -508,17 +454,14 @@ public class UserResource {
     public ResponseEntity<Void> switchUser(@RequestParam(value = "username", required = true) String username) {
         Optional<User> authUser = userService.getUserWithAuthorities();
 
-        if(authUser.isPresent()) {
+        if (authUser.isPresent()) {
             UserDTO userDTO = UserDTO.valueOf(authUser.get());
             userDTO.setLoginAs(username);
             userDTO.setIsAdmin(true);
             userService.updateUser(userDTO);
         }
-        return ResponseEntity.status(HttpStatus.FOUND)
-                .location(URI.create("/"))
-                .build();
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/")).build();
     }
-
 
     /**
      * {@code POST /logout_as} : Switch user
@@ -526,18 +469,20 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
      */
     @PostMapping("/logout_as")
-    public ResponseEntity<Void> logoutAsSwitchedUser(@RequestParam(value = "username", required = true) String username) {
+    public ResponseEntity<Void> logoutAsSwitchedUser(
+            @RequestParam(value = "username", required = true) String username) {
         Optional<User> authUser = userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin().get());
-        if(authUser.isPresent()) {
+        if (authUser.isPresent()) {
             UserDTO userDTO = UserDTO.valueOf(authUser.get());
             userDTO.setIsAdmin(true);
             userDTO.setLoginAs(null);
             userService.updateUser(userDTO);
         }
 
-       return ResponseEntity.status(HttpStatus.FOUND)
-        .location(URI.create("/"))
-        .build();
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/")).build();
     }
 
+    private User getCurrentUser() {
+        return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+    }
 }

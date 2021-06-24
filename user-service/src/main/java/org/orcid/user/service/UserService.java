@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -70,15 +69,16 @@ public class UserService {
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
         LOG.debug("Reset user password for reset key {}", key);
-        return userRepository.findOneByResetKey(key).filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400))).map(user -> {
-            user.setPassword(passwordEncoder.encode(newPassword));
-            user.setResetKey(null);
-            user.setResetDate(null);
-            user.setActivated(true);
-            userRepository.save(user);
-            userCaches.evictEntryFromUserCaches(user.getEmail());
-            return user;
-        });
+        return userRepository.findOneByResetKey(key)
+                .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400))).map(user -> {
+                    user.setPassword(passwordEncoder.encode(newPassword));
+                    user.setResetKey(null);
+                    user.setResetDate(null);
+                    user.setActivated(true);
+                    userRepository.save(user);
+                    userCaches.evictEntryFromUserCaches(user.getEmail());
+                    return user;
+                });
     }
 
     public Optional<User> requestPasswordReset(String mail) {
@@ -155,16 +155,11 @@ public class UserService {
      * Update basic information (first name, last name, email, language) for the
      * current user.
      *
-     * @param firstName
-     *            first name of user.
-     * @param lastName
-     *            last name of user.
-     * @param email
-     *            email id of user.
-     * @param langKey
-     *            language key.
-     * @param imageUrl
-     *            image URL of user.
+     * @param firstName first name of user.
+     * @param lastName  last name of user.
+     * @param email     email id of user.
+     * @param langKey   language key.
+     * @param imageUrl  image URL of user.
      */
     public void updateAccount(String firstName, String lastName, String email, String langKey, String imageUrl) {
         SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(user -> {
@@ -181,45 +176,46 @@ public class UserService {
     /**
      * Update all information for a specific user, and return the modified user.
      *
-     * @param userDTO
-     *            user to update.
+     * @param userDTO user to update.
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
-        return Optional.of(userRepository.findById(userDTO.getId())).filter(Optional::isPresent).map(Optional::get).map(user -> {
-            userCaches.evictEntryFromUserCaches(user.getEmail());
-            user.setLogin(userDTO.getLogin().toLowerCase());
-            user.setFirstName(userDTO.getFirstName());
-            user.setLastName(userDTO.getLastName());
-            user.setImageUrl(userDTO.getImageUrl());
-            user.setMainContact(userDTO.getMainContact());
-            user.setSalesforceId(userDTO.getSalesforceId());
-            user.setLoginAs(userDTO.getLoginAs());
-            // user.setActivated(userDTO.isActivated());
-            if (userDTO.getLangKey() != null) {
-                user.setLangKey(userDTO.getLangKey());
-            }
+        return Optional.of(userRepository.findById(userDTO.getId())).filter(Optional::isPresent).map(Optional::get)
+                .map(user -> {
+                    userCaches.evictEntryFromUserCaches(user.getEmail());
+                    user.setLogin(userDTO.getLogin().toLowerCase());
+                    user.setFirstName(userDTO.getFirstName());
+                    user.setLastName(userDTO.getLastName());
+                    user.setImageUrl(userDTO.getImageUrl());
+                    user.setMainContact(userDTO.getMainContact());
+                    user.setSalesforceId(userDTO.getSalesforceId());
+                    user.setLoginAs(userDTO.getLoginAs());
+                    // user.setActivated(userDTO.isActivated());
+                    if (userDTO.getLangKey() != null) {
+                        user.setLangKey(userDTO.getLangKey());
+                    }
 
-            user.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
-            if (!StringUtils.equals(user.getEmail(), userDTO.getEmail().toLowerCase())) {
-                user.setEmail(userDTO.getEmail().toLowerCase());
-                user.setActivated(false);
-                user.setActivationKey(RandomUtil.generateResetKey());
-                user.setActivationDate(Instant.now());
-                mailService.sendActivationEmail(user);
-            }
-            if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
-                user.setSalesforceId(userDTO.getSalesforceId());
-                user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-                user.setLastModifiedDate(Instant.now());
-            }
+                    user.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
+                    if (!StringUtils.equals(user.getEmail(), userDTO.getEmail().toLowerCase())) {
+                        user.setEmail(userDTO.getEmail().toLowerCase());
+                        user.setActivated(false);
+                        user.setActivationKey(RandomUtil.generateResetKey());
+                        user.setActivationDate(Instant.now());
+                        mailService.sendActivationEmail(user);
+                    }
+                    if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null
+                            && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
+                        user.setSalesforceId(userDTO.getSalesforceId());
+                        user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+                        user.setLastModifiedDate(Instant.now());
+                    }
 
-            userRepository.save(user);
-            userCaches.evictEntryFromUserCaches(user.getEmail());
-            userCaches.evictEntryFromUserCaches(user.getLogin());
-            LOG.debug("Changed Information for User: {}", user);
-            return user;
-        }).map(UserDTO::valueOf);
+                    userRepository.save(user);
+                    userCaches.evictEntryFromUserCaches(user.getEmail());
+                    userCaches.evictEntryFromUserCaches(user.getLogin());
+                    LOG.debug("Changed Information for User: {}", user);
+                    return user;
+                }).map(UserDTO::valueOf);
     }
 
     public void deleteUser(String login) {
@@ -311,7 +307,8 @@ public class UserService {
 
         User user = existing.get();
         if (user.getAuthorities() != null && !user.getAuthorities().isEmpty()) {
-            user.setAuthorities(user.getAuthorities().stream().filter(a -> !a.equals(authority)).collect(Collectors.toSet()));
+            user.setAuthorities(
+                    user.getAuthorities().stream().filter(a -> !a.equals(authority)).collect(Collectors.toSet()));
         }
         userRepository.save(user);
     }
@@ -324,7 +321,8 @@ public class UserService {
 
         User user = existing.get();
         if (user.getAuthorities() != null && !user.getAuthorities().isEmpty()) {
-            user.setAuthorities(user.getAuthorities().stream().filter(a -> !a.equals(AuthoritiesConstants.ORG_OWNER)).collect(Collectors.toSet()));
+            user.setAuthorities(user.getAuthorities().stream().filter(a -> !a.equals(AuthoritiesConstants.ORG_OWNER))
+                    .collect(Collectors.toSet()));
         }
         user.setMainContact(false);
         userRepository.save(user);
@@ -337,11 +335,12 @@ public class UserService {
      */
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
-        userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS)).forEach(user -> {
-            LOG.debug("Deleting not activated user {}", user.getLogin());
-            userRepository.delete(user);
-            userCaches.evictEntryFromUserCaches(user.getEmail());
-        });
+        userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
+                Instant.now().minus(3, ChronoUnit.DAYS)).forEach(user -> {
+                    LOG.debug("Deleting not activated user {}", user.getLogin());
+                    userRepository.delete(user);
+                    userCaches.evictEntryFromUserCaches(user.getEmail());
+                });
     }
 
     /**
@@ -362,17 +361,12 @@ public class UserService {
             throw new RuntimeException(e);
         }
 
-        Map<String, String> orgWithOwner = usersUpload.getOrgWithOwner();
         usersUpload.getUserDTOs().forEach(userDTO -> {
             String salesforceId = userDTO.getSalesforceId();
             Optional<User> existing = getUserWithAuthoritiesByLogin(userDTO.getLogin());
-            if (existing.isPresent()) {
-                updateUser(userDTO);
-            } else {
-                if(!orgWithOwner.containsKey(salesforceId)) {
-                    orgWithOwner.put(userDTO.getSalesforceId(), userDTO.getEmail());
-                    userDTO.setMainContact(true);
-                }
+            if (!existing.isPresent()
+                    && !userRepository.findOneBySalesforceIdAndMainContactIsTrue(salesforceId).isPresent()) {
+                userDTO.setMainContact(true);
                 createUser(userDTO);
             }
         });
@@ -399,12 +393,12 @@ public class UserService {
 
     private Set<String> getAuthoritiesForUser(UserDTO userDTO, boolean isAdmin) {
         Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
-         if (!org.apache.commons.lang3.StringUtils.isBlank(userDTO.getSalesforceId())) {
-            if(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(userDTO.getSalesforceId())) {
-            	authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
+        if (!org.apache.commons.lang3.StringUtils.isBlank(userDTO.getSalesforceId())) {
+            if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(userDTO.getSalesforceId())) {
+                authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
             }
-            if(memberService.memberIsConsortiumLead (userDTO.getSalesforceId())) {
-              	authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
+            if (memberService.memberIsConsortiumLead(userDTO.getSalesforceId())) {
+                authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
             }
         }
 
@@ -420,10 +414,10 @@ public class UserService {
     }
 
     public boolean hasOwnerForSalesforceId(String salesforceId) {
-    	 List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(salesforceId);
-    	 if(owners.isEmpty()) {
-    		 return false;
-    	 }
+        List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(salesforceId);
+        if (owners.isEmpty()) {
+            return false;
+        }
 
         return true;
     }
