@@ -58,7 +58,7 @@ public class UserValidatorTest {
 		assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
 		Mockito.verify(messageSource, Mockito.times(1))
-				.getMessage(Mockito.eq("member.validation.error.invalidSalesforceId"), Mockito.any(), Mockito.any());
+				.getMessage(Mockito.eq("user.validation.error.invalidSalesforceId"), Mockito.any(), Mockito.any());
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class UserValidatorTest {
 		assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
 		Mockito.verify(messageSource, Mockito.times(1))
-				.getMessage(Mockito.eq("member.validation.error.missingSalesforceId"), Mockito.any(), Mockito.any());
+				.getMessage(Mockito.eq("user.validation.error.missingSalesforceId"), Mockito.any(), Mockito.any());
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class UserValidatorTest {
 		assertThat(validation.getErrors()).isNotEmpty();
 		assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
-		Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("member.validation.error.invalidEmail"),
+		Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.invalidEmail"),
 				Mockito.any(), Mockito.any());
 	}
 
@@ -105,7 +105,7 @@ public class UserValidatorTest {
 		assertThat(validation.getErrors()).isNotEmpty();
 		assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
-		Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("member.validation.error.missingEmail"),
+		Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.missingEmail"),
 				Mockito.any(), Mockito.any());
 	}
 
@@ -123,7 +123,7 @@ public class UserValidatorTest {
 		assertThat(validation.getErrors()).isNotEmpty();
 		assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
-		Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("member.validation.error.multipleOrgOwners"),
+		Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.multipleOrgOwners"),
 				Mockito.any(), Mockito.any());
 	}
 
