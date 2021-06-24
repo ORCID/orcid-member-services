@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
@@ -27,6 +29,7 @@ import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
+import org.orcid.user.upload.UserUpload;
 import org.orcid.user.upload.UserUploadReader;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -208,7 +211,7 @@ class UserServiceTest {
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
-        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn("some@email.com");
+        Mockito.when(authentication.getPrincipal()).thenReturn("some@email.com");
 		
 		User user = new User();
 		user.setFirstName("old first name");
@@ -232,6 +235,44 @@ class UserServiceTest {
 		assertEquals(2, authorities.length); // no change to authorities
 		assertTrue(AuthoritiesConstants.ADMIN.equals(authorities[0]) || AuthoritiesConstants.ADMIN.equals(authorities[1]));
 		assertTrue(AuthoritiesConstants.USER.equals(authorities[0]) || AuthoritiesConstants.USER.equals(authorities[1]));
+	}
+	
+	@Test
+	public void testUploadUserCSV() throws IOException {
+		Mockito.when(usersUploadReader.readUsersUpload(Mockito.any(InputStream.class), Mockito.any(User.class))).thenReturn(getUserUpload());
+		Mockito.when(userRepository.findOneByLogin(Mockito.eq("user1@orcid.org"))).thenReturn(Optional.empty());
+		Mockito.when(userRepository.findOneByLogin(Mockito.eq("user2@orcid.org"))).thenReturn(Optional.of(getUser("user2@orcid.org")));
+		Mockito.when(userRepository.findOneById(Mockito.eq("user2@orcid.org"))).thenReturn(Optional.of(getUser("user2@orcid.org")));
+		
+		InputStream inputStream = Mockito.mock(InputStream.class);
+		userService.uploadUserCSV(inputStream, getUser("some-user@orcid.org"));
+		
+		// check only new users saved
+		Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
+	}
+	
+	private User getUser(String login) {
+		User user = new User();
+		user.setLogin(login);
+		user.setEmail(login);
+		user.setId(login);
+		return user;
+	}
+
+	private UserUpload getUserUpload() {
+		UserUpload upload = new UserUpload();
+		UserDTO user1 = new UserDTO();
+		user1.setLogin("user1@orcid.org");
+		user1.setEmail("user1@orcid.org");
+		
+		UserDTO user2 = new UserDTO();
+		user2.setLogin("user2@orcid.org");
+		user2.setEmail("user2@orcid.org");
+		
+		upload.addUserDTO(user1);
+		upload.addUserDTO(user2);
+		
+		return upload;
 	}
 
 	private UserDTO getUserDTO() {

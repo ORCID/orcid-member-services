@@ -28,6 +28,7 @@ export class MSUserUpdateComponent implements OnInit {
   faCheckCircle = faCheckCircle;
   showIsAdminCheckbox = false;
   currentAccount: any;
+  validation: any;
 
   editForm = this.fb.group({
     id: [],
@@ -56,7 +57,9 @@ export class MSUserUpdateComponent implements OnInit {
     protected accountService: AccountService,
     private fb: FormBuilder,
     private cdref: ChangeDetectorRef
-  ) {}
+  ) {
+    this.validation = {};
+  }
 
   ngOnInit() {
     this.isSaving = false;
@@ -179,25 +182,34 @@ export class MSUserUpdateComponent implements OnInit {
     if (this.editForm.valid) {
       this.isSaving = true;
       const msUser = this.createFromForm();
-      if (msUser.id !== undefined) {
-        if (this.currentAccount.id === msUser.id) {
-          if (this.currentAccount.mainContact !== msUser.mainContact) {
-            this.subscribeToUpdateResponseWithOwnershipChange(this.msUserService.update(msUser));
+
+      this.msUserService.validate(msUser).subscribe(response => {
+        const data = response.body;
+        if (data.valid) {
+          if (msUser.id !== undefined) {
+            if (this.currentAccount.id === msUser.id) {
+              if (this.currentAccount.mainContact !== msUser.mainContact) {
+                this.subscribeToUpdateResponseWithOwnershipChange(this.msUserService.update(msUser));
+              } else {
+                this.subscribeToUpdateResponse(this.msUserService.update(msUser));
+              }
+            } else if (msUser.mainContact && !this.hasRoleAdmin()) {
+              this.subscribeToUpdateResponseWithOwnershipChange(this.msUserService.update(msUser));
+            } else {
+              this.subscribeToUpdateResponse(this.msUserService.update(msUser));
+            }
           } else {
-            this.subscribeToUpdateResponse(this.msUserService.update(msUser));
+            if (msUser.mainContact && !this.hasRoleAdmin()) {
+              this.subscribeToSaveResponseWithOwnershipChange(this.msUserService.create(msUser));
+            } else {
+              this.subscribeToSaveResponse(this.msUserService.create(msUser));
+            }
           }
-        } else if (msUser.mainContact && !this.hasRoleAdmin()) {
-          this.subscribeToUpdateResponseWithOwnershipChange(this.msUserService.update(msUser));
         } else {
-          this.subscribeToUpdateResponse(this.msUserService.update(msUser));
+          this.isSaving = false;
+          this.validation = data;
         }
-      } else {
-        if (msUser.mainContact && !this.hasRoleAdmin()) {
-          this.subscribeToSaveResponseWithOwnershipChange(this.msUserService.create(msUser));
-        } else {
-          this.subscribeToSaveResponse(this.msUserService.create(msUser));
-        }
-      }
+      });
     }
   }
 

@@ -26,6 +26,13 @@ export class MSUserService {
       .pipe(map((res: EntityResponseType) => this.convertFromServer(res)));
   }
 
+  validate(msUser: IMSUser): Observable<HttpResponse<any>> {
+    const copy = this.convertDateFromClient(msUser);
+    return this.http
+      .post<IMSUser>(this.resourceUrl + '/validate', copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertFromServer(res)));
+  }
+
   upload(msUser: IMSUser): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(msUser);
     return this.http
