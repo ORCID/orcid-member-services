@@ -18,6 +18,9 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
   success: string;
   modalRef: NgbModalRef;
   key: string;
+  invalidKey: boolean;
+  expiredKey: boolean;
+  activationEmailResent: boolean;
 
   passwordForm = this.fb.group({
     newPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
@@ -38,6 +41,16 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
       this.key = params['key'];
     });
     this.keyMissing = !this.key;
+    this.passwordResetFinishService.validateKey({ key: this.key }).subscribe(res => {
+      this.expiredKey = res.body.expiredKey;
+      this.invalidKey = res.body.invalidKey;
+
+      if (this.expiredKey) {
+        this.passwordResetFinishService.resendActivationEmail({ key: this.key }).subscribe(res => {
+          this.activationEmailResent = res.body.resent;
+        });
+      }
+    });
   }
 
   ngAfterViewInit() {

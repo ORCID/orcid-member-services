@@ -24,6 +24,7 @@ import org.orcid.user.validation.UserValidator;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.user.web.rest.errors.LoginAlreadyUsedException;
+import org.orcid.user.web.rest.vm.ResendActivationResponseVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -404,19 +405,25 @@ public class UserResource {
         userService.sendActivationEmail(user.get().getEmail());
         return ResponseUtil.wrapOrNotFound(user.map(UserDTO::valueOf));
     }
-    
+
     /**
-     * {@code POST /users/:id/sendActivate} : send the activation email.
+     * {@code POST /users/:id/resendActivate} : send the activation email.
      *
      * @param login the login of the user to find.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
      *         the "login" user, or with status {@code 404 (Not Found)}.
      */
-    @PostMapping("/users/{key}/resendActivate")
-    public ResponseEntity<Void> resendActivate(@PathVariable String key) {
+    @PostMapping("/users/{key}/resendActivation")
+    public ResponseEntity<ResendActivationResponseVM> resendActivation(@PathVariable String key) {
         LOG.debug("REST request to resend user activation for key : {}", key);
-        userService.resendActivationEmail(key);
-        return ResponseEntity.ok().build();
+        ResendActivationResponseVM response = new ResendActivationResponseVM();
+        try {
+            userService.resendActivationEmail(key);
+            response.setResent(true);
+        } catch (Exception e) {
+            response.setResent(false);
+        }
+        return ResponseEntity.ok(response);
     }
 
     /**

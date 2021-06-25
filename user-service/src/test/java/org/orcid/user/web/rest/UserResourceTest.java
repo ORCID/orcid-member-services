@@ -62,9 +62,9 @@ class UserResourceTest {
     }
 
     @Test
-    public void testResendActivate() {
+    public void testResendActivation() {
         Mockito.doNothing().when(userService).resendActivationEmail(Mockito.anyString());
-        userResource.resendActivate("key");
+        userResource.resendActivation("key");
         Mockito.verify(userService, Mockito.times(1)).resendActivationEmail(Mockito.eq("key"));
     }
     
