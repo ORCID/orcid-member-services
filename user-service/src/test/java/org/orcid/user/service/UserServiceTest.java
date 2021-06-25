@@ -1,5 +1,6 @@
 package org.orcid.user.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -69,6 +70,26 @@ class UserServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+    }
+    
+    @Test
+    void testResendActivationEmail() {
+        User user = new User();
+        user.setResetKey("key");
+        user.setResetDate(Instant.now().minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS + 10000));
+        Mockito.when(userRepository.findOneByResetKey(Mockito.eq("key"))).thenReturn(Optional.of(user));
+        Mockito.doNothing().when(mailService).sendActivationEmail(Mockito.any(User.class));
+        
+        userService.resendActivationEmail("key");
+        
+        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+        Mockito.verify(userRepository, Mockito.times(1)).save(captor.capture());
+        Mockito.verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
+        
+        User updated = captor.getValue();
+        assertThat(updated.getResetKey()).isNotNull();
+        assertThat(updated.getResetDate()).isNotNull();
+        assertThat(updated.getResetKey()).isNotEqualTo("key");
     }
 
     @Test

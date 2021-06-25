@@ -99,6 +99,11 @@ public class UserService {
         Optional<User> resetUser = userRepository.findOneByResetKey(key);
         return resetUser.isPresent() && !resetUser.get().getResetDate().isAfter(Instant.now().minusSeconds(RESET_KEY_LIFESPAN_IN_SECONDS));
     }
+    
+    public void resendActivationEmail(String previousKey) {
+        User user = userRepository.findOneByResetKey(previousKey).get();
+        sendActivationEmail(user);
+    }
 
     public Optional<User> requestPasswordReset(String mail) {
         return userRepository.findOneByEmailIgnoreCase(mail).filter(User::getActivated).map(user -> {
@@ -288,16 +293,11 @@ public class UserService {
 
     public Optional<User> sendActivationEmail(String mail) {
         return userRepository.findOneByEmailIgnoreCase(mail).map(user -> {
-            user.setActivated(false);
-            user.setResetKey(RandomUtil.generateResetKey());
-            user.setResetDate(Instant.now());
-            userRepository.save(user);
-            userCaches.evictEntryFromUserCaches(user.getEmail());
-            mailService.sendActivationEmail(user);
+            sendActivationEmail(user);
             return user;
         });
     }
-
+    
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
         return userRepository.findByDeletedFalse(pageable).map(UserDTO::valueOf);
     }
@@ -408,6 +408,15 @@ public class UserService {
     public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId) {
         return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId).map(UserDTO::valueOf);
 
+    }
+    
+    private void sendActivationEmail(User user) {
+        user.setActivated(false);
+        user.setResetKey(RandomUtil.generateResetKey());
+        user.setResetDate(Instant.now());
+        userRepository.save(user);
+        userCaches.evictEntryFromUserCaches(user.getEmail());
+        mailService.sendActivationEmail(user);
     }
 
     private Set<String> getAuthoritiesForUser(UserDTO userDTO, boolean isAdmin) {
