@@ -16,10 +16,6 @@
       		<a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}/reset/finish?key=${user.resetKey}|})"
         	th:href="${url}" th:text="${url}">Login link</a>
     	</p>
-    	<p>
-			<span th:text="#{email.creation.text2}">This link will expire in 24 hours. If you need a new activation link or have any other questions, please contact us at</span> <a style="color: #2E7F9F;"
-				href="mailto:membership@orcid.org">membership@orcid.org</a>
-		</p>
 		<p>
 			<span th:text="#{email.common.warmRegards}">Warm Regards,</span> <br />
 			<span th:text="#{email.common.signature}">The ORCID Member Portal Team</span> <br />
