@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
@@ -259,6 +260,26 @@ class UserServiceTest {
 
         // check only new users saved
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
+    }
+    
+    @Test
+    public void testExpiredResetKey() {
+        User user = new User();
+        user.setResetDate(Instant.now().minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS - 2000));
+        Mockito.when(userRepository.findOneByResetKey(Mockito.anyString())).thenReturn(Optional.of(user));
+        assertFalse(userService.expiredResetKey("anything"));
+        
+        user.setResetDate(Instant.now().minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS + 2000));
+        assertTrue(userService.expiredResetKey("anything"));
+    }
+    
+    @Test
+    public void testValidResetKey() {
+        Mockito.when(userRepository.findOneByResetKey(Mockito.anyString())).thenReturn(Optional.of(new User()));
+        assertTrue(userService.validResetKey("anything"));
+        
+        Mockito.when(userRepository.findOneByResetKey(Mockito.anyString())).thenReturn(Optional.empty());
+        assertFalse(userService.validResetKey("anything"));
     }
 
     private User getUser(String login) {

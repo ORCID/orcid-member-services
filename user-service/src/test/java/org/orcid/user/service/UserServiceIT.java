@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.orcid.user.UserServiceApp;
 import org.orcid.user.domain.User;
@@ -17,6 +18,8 @@ import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.util.RandomUtil;
+import org.orcid.user.web.rest.errors.ExpiredKeyException;
+import org.orcid.user.web.rest.errors.InvalidKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -85,29 +88,55 @@ public class UserServiceIT {
         user.setResetKey(resetKey);
         userRepository.save(user);
 
-        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
-        assertThat(maybeUser).isNotPresent();
+        Assertions.assertThrows(ExpiredKeyException.class, () -> {
+            userService.completePasswordReset("johndoe2", user.getResetKey());
+        });
         removeUser(user);
     }
 
     @Test
     public void assertThatResetKeyMustBeValid() {
     	User user = getUser();
-        Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         user.setActivated(true);
-        user.setResetDate(daysAgo);
-        user.setResetKey("1234");
+        user.setResetDate(null);
+        user.setResetKey(null);
         userRepository.save(user);
 
-        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
-        assertThat(maybeUser).isNotPresent();
+        Assertions.assertThrows(InvalidKeyException.class, () -> {
+            userService.completePasswordReset("johndoe2", "wrongkey");
+        });
+        removeUser(user);
+    }
+    
+    @Test
+    public void assertThatOldKeyRecognised() {
+        User user = getUser();
+        Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
+        String resetKey = RandomUtil.generateResetKey();
+        user.setActivated(true);
+        user.setResetDate(daysAgo);
+        user.setResetKey(resetKey);
+        userRepository.save(user);
+
+        assertThat(userService.expiredResetKey(resetKey)).isTrue();
         removeUser(user);
     }
 
     @Test
-    public void assertThatUserCanResetPassword() {
+    public void assertThatInvalidKeyRecognised() {
+        User user = getUser();
+        user.setActivated(true);
+        user.setResetDate(null);
+        user.setResetKey(null);
+        userRepository.save(user);
+
+        assertThat(userService.validResetKey("wrongkey")).isFalse();
+        removeUser(user);
+    }
+
+    @Test
+    public void assertThatUserCanResetPassword() throws ExpiredKeyException, InvalidKeyException {
     	User user = getUser();
-        String oldPassword = user.getPassword();
         Instant daysAgo = Instant.now().minus(2, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
@@ -115,12 +144,7 @@ public class UserServiceIT {
         user.setResetKey(resetKey);
         userRepository.save(user);
 
-        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
-        assertThat(maybeUser).isPresent();
-        assertThat(maybeUser.orElse(null).getResetDate()).isNull();
-        assertThat(maybeUser.orElse(null).getResetKey()).isNull();
-        assertThat(maybeUser.orElse(null).getPassword()).isNotEqualTo(oldPassword);
-
+        userService.completePasswordReset("johndoe2", user.getResetKey());
         removeUser(user);
     }
 
