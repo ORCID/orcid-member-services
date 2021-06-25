@@ -27,7 +27,9 @@ import org.orcid.user.upload.UserUpload;
 import org.orcid.user.upload.UserUploadReader;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
+import org.orcid.user.web.rest.errors.InvalidKeyException;
 import org.orcid.user.web.rest.errors.InvalidPasswordException;
+import org.orcid.user.web.rest.errors.ExpiredKeyException;
 import org.orcid.user.web.rest.errors.LoginAlreadyUsedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +47,8 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
+    
+    public static final int RESET_KEY_LIFESPAN_IN_SECONDS = 86400;
 
     @Autowired
     private UserRepository userRepository;
@@ -67,18 +71,38 @@ public class UserService {
     @Autowired
     private MailService mailService;
 
-    public Optional<User> completePasswordReset(String newPassword, String key) {
+    public void completePasswordReset(String newPassword, String key) throws ExpiredKeyException, InvalidKeyException {
         LOG.debug("Reset user password for reset key {}", key);
-        return userRepository.findOneByResetKey(key)
-                .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400))).map(user -> {
-                    user.setPassword(passwordEncoder.encode(newPassword));
-                    user.setResetKey(null);
-                    user.setResetDate(null);
-                    user.setActivated(true);
-                    userRepository.save(user);
-                    userCaches.evictEntryFromUserCaches(user.getEmail());
-                    return user;
-                });
+        if (!validResetKey(key)) {
+            throw new InvalidKeyException();
+        }
+        
+        if (expiredResetKey(key)) {
+            throw new ExpiredKeyException();
+        }
+        
+        User user = userRepository.findOneByResetKey(key).get();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setResetKey(null);
+        user.setResetDate(null);
+        user.setActivated(true);
+        userRepository.save(user);
+        userCaches.evictEntryFromUserCaches(user.getEmail());
+    }
+    
+    public boolean validResetKey(String key) {
+        Optional<User> resetUser = userRepository.findOneByResetKey(key);
+        return resetUser.isPresent();
+    }
+    
+    public boolean expiredResetKey(String key) {
+        Optional<User> resetUser = userRepository.findOneByResetKey(key);
+        return resetUser.isPresent() && !resetUser.get().getResetDate().isAfter(Instant.now().minusSeconds(RESET_KEY_LIFESPAN_IN_SECONDS));
+    }
+    
+    public void resendActivationEmail(String previousKey) {
+        User user = userRepository.findOneByResetKey(previousKey).get();
+        sendActivationEmail(user);
     }
 
     public Optional<User> requestPasswordReset(String mail) {
@@ -269,16 +293,11 @@ public class UserService {
 
     public Optional<User> sendActivationEmail(String mail) {
         return userRepository.findOneByEmailIgnoreCase(mail).map(user -> {
-            user.setActivated(false);
-            user.setResetKey(RandomUtil.generateResetKey());
-            user.setResetDate(Instant.now());
-            userRepository.save(user);
-            userCaches.evictEntryFromUserCaches(user.getEmail());
-            mailService.sendActivationEmail(user);
+            sendActivationEmail(user);
             return user;
         });
     }
-
+    
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
         return userRepository.findByDeletedFalse(pageable).map(UserDTO::valueOf);
     }
@@ -389,6 +408,15 @@ public class UserService {
     public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId) {
         return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId).map(UserDTO::valueOf);
 
+    }
+    
+    private void sendActivationEmail(User user) {
+        user.setActivated(false);
+        user.setResetKey(RandomUtil.generateResetKey());
+        user.setResetDate(Instant.now());
+        userRepository.save(user);
+        userCaches.evictEntryFromUserCaches(user.getEmail());
+        mailService.sendActivationEmail(user);
     }
 
     private Set<String> getAuthoritiesForUser(UserDTO userDTO, boolean isAdmin) {

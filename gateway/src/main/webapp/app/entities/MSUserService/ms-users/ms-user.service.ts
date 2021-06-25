@@ -49,7 +49,7 @@ export class MSUserService {
 
   sendActivate(msUser: IMSUser): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(msUser);
-    return this.http.put<IMSUser>(`${this.resourceUrl}/${msUser.id}/sendActivate`, copy, { observe: 'response' });
+    return this.http.post<IMSUser>(`${this.resourceUrl}/${msUser.id}/sendActivate`, copy, { observe: 'response' });
   }
 
   find(login: string): Observable<EntityResponseType> {

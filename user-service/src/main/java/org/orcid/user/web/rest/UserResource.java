@@ -9,7 +9,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.codehaus.jettison.json.JSONException;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
@@ -25,6 +24,7 @@ import org.orcid.user.validation.UserValidator;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.user.web.rest.errors.LoginAlreadyUsedException;
+import org.orcid.user.web.rest.vm.ResendActivationResponseVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,8 +105,6 @@ public class UserResource {
 
     @Autowired
     private UserValidator userValidator;
-
-    private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
     /**
      * {@code PUT /users} : Updates an existing User.
@@ -390,15 +388,15 @@ public class UserResource {
     }
 
     /**
-     * {@code PUT /users/:id/sendActivate} : send the activation email.
+     * {@code POST /users/:id/sendActivate} : send the activation email.
      *
      * @param login the login of the user to find.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
      *         the "login" user, or with status {@code 404 (Not Found)}.
      */
-    @PutMapping("/users/{loginOrId}/sendActivate")
+    @PostMapping("/users/{loginOrId}/sendActivate")
     public ResponseEntity<UserDTO> sendActivate(@PathVariable String loginOrId) {
-        LOG.debug("REST request to get User : {}", loginOrId);
+        LOG.debug("REST request to send user activation: {}", loginOrId);
         Optional<User> user = userService.getUserWithAuthoritiesByLogin(loginOrId);
         if (!user.isPresent()) {
             user = userService.getUserWithAuthorities(loginOrId);
@@ -406,6 +404,26 @@ public class UserResource {
 
         userService.sendActivationEmail(user.get().getEmail());
         return ResponseUtil.wrapOrNotFound(user.map(UserDTO::valueOf));
+    }
+
+    /**
+     * {@code POST /users/:id/resendActivate} : send the activation email.
+     *
+     * @param login the login of the user to find.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the "login" user, or with status {@code 404 (Not Found)}.
+     */
+    @PostMapping("/users/{key}/resendActivation")
+    public ResponseEntity<ResendActivationResponseVM> resendActivation(@PathVariable String key) {
+        LOG.debug("REST request to resend user activation for key : {}", key);
+        ResendActivationResponseVM response = new ResendActivationResponseVM();
+        try {
+            userService.resendActivationEmail(key);
+            response.setResent(true);
+        } catch (Exception e) {
+            response.setResent(false);
+        }
+        return ResponseEntity.ok(response);
     }
 
     /**

@@ -31,89 +31,96 @@ import org.springframework.web.multipart.MultipartFile;
 
 class UserResourceTest {
 
-	@Mock
-	private UserService userService;
+    @Mock
+    private UserService userService;
 
-	@Mock
-	private UserRepository userRepository;
+    @Mock
+    private UserRepository userRepository;
 
-	@Mock
-	private MemberService memberService;
+    @Mock
+    private MemberService memberService;
 
-	@Mock
-	private MailService mailService;
+    @Mock
+    private MailService mailService;
 
-	@Mock
-	private UserValidator userValidator;
+    @Mock
+    private UserValidator userValidator;
 
-	@InjectMocks
-	private UserResource userResource;
+    @InjectMocks
+    private UserResource userResource;
 
-	@BeforeEach
-	public void setUp() {
-		MockitoAnnotations.initMocks(this);
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
 
-		Authentication authentication = Mockito.mock(Authentication.class);
-		SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-		Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-		SecurityContextHolder.setContext(securityContext);
-		Mockito.when(authentication.getPrincipal()).thenReturn("some@email.com");
-		Mockito.when(userRepository.findOneByLogin(Mockito.eq("some@email.com"))).thenReturn(getCurrentUser());
-	}
+        Authentication authentication = Mockito.mock(Authentication.class);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        Mockito.when(authentication.getPrincipal()).thenReturn("some@email.com");
+        Mockito.when(userRepository.findOneByLogin(Mockito.eq("some@email.com"))).thenReturn(getCurrentUser());
+    }
 
-	@Test
-	public void testUploadUsers() throws Throwable {
-		Mockito.when(userService.uploadUserCSV(Mockito.any(InputStream.class), Mockito.any(User.class)))
-				.thenReturn(getUserUpload());
-		MultipartFile file = Mockito.mock(MultipartFile.class);
-		InputStream inputStream = Mockito.mock(InputStream.class);
-		Mockito.when(file.getInputStream()).thenReturn(inputStream);
+    @Test
+    public void testResendActivation() {
+        Mockito.doNothing().when(userService).resendActivationEmail(Mockito.anyString());
+        userResource.resendActivation("key");
+        Mockito.verify(userService, Mockito.times(1)).resendActivationEmail(Mockito.eq("key"));
+    }
+    
+    @Test
+    public void testUploadUsers() throws Throwable {
+        Mockito.when(userService.uploadUserCSV(Mockito.any(InputStream.class), Mockito.any(User.class)))
+                .thenReturn(getUserUpload());
+        MultipartFile file = Mockito.mock(MultipartFile.class);
+        InputStream inputStream = Mockito.mock(InputStream.class);
+        Mockito.when(file.getInputStream()).thenReturn(inputStream);
 
-		userResource.uploadUsers(file);
+        userResource.uploadUsers(file);
 
-		Mockito.verify(userService, Mockito.times(1)).uploadUserCSV(Mockito.any(InputStream.class),
-				Mockito.any(User.class));
-	}
+        Mockito.verify(userService, Mockito.times(1)).uploadUserCSV(Mockito.any(InputStream.class),
+                Mockito.any(User.class));
+    }
 
-	@Test
-	public void testValidateUser_validUser() throws Throwable {
-		Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class)))
-				.thenReturn(getUserValidation(new ArrayList<String>()));
+    @Test
+    public void testValidateUser_validUser() throws Throwable {
+        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class)))
+                .thenReturn(getUserValidation(new ArrayList<String>()));
 
-		ResponseEntity<UserValidation> response = userResource.validateUser(new UserDTO());
-		assertEquals(200, response.getStatusCodeValue());
+        ResponseEntity<UserValidation> response = userResource.validateUser(new UserDTO());
+        assertEquals(200, response.getStatusCodeValue());
 
-		Mockito.verify(userValidator, Mockito.times(1)).validate(Mockito.any(UserDTO.class), Mockito.any(User.class));
-	}
+        Mockito.verify(userValidator, Mockito.times(1)).validate(Mockito.any(UserDTO.class), Mockito.any(User.class));
+    }
 
-	@Test
-	public void testValidateUser_invalidUser() throws Throwable {
-		Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class)))
-				.thenReturn(getUserValidation(Arrays.asList("some error")));
+    @Test
+    public void testValidateUser_invalidUser() throws Throwable {
+        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class)))
+                .thenReturn(getUserValidation(Arrays.asList("some error")));
 
-		ResponseEntity<UserValidation> response = userResource.validateUser(new UserDTO());
-		assertEquals(200, response.getStatusCodeValue());
+        ResponseEntity<UserValidation> response = userResource.validateUser(new UserDTO());
+        assertEquals(200, response.getStatusCodeValue());
 
-		Mockito.verify(userValidator, Mockito.times(1)).validate(Mockito.any(UserDTO.class), Mockito.any(User.class));
-	}
+        Mockito.verify(userValidator, Mockito.times(1)).validate(Mockito.any(UserDTO.class), Mockito.any(User.class));
+    }
 
-	private Optional<User> getCurrentUser() {
-		User user = new User();
-		user.setEmail("some@email.com");
-		user.setLangKey("en");
-		return Optional.of(user);
-	}
+    private Optional<User> getCurrentUser() {
+        User user = new User();
+        user.setEmail("some@email.com");
+        user.setLangKey("en");
+        return Optional.of(user);
+    }
 
-	private UserValidation getUserValidation(List<String> errors) {
-		UserValidation validation = new UserValidation();
-		validation.setValid(errors.isEmpty());
-		validation.setErrors(errors);
-		return validation;
-	}
+    private UserValidation getUserValidation(List<String> errors) {
+        UserValidation validation = new UserValidation();
+        validation.setValid(errors.isEmpty());
+        validation.setErrors(errors);
+        return validation;
+    }
 
-	private UserUpload getUserUpload() {
-		UserUpload upload = new UserUpload();
-		return upload;
-	}
+    private UserUpload getUserUpload() {
+        UserUpload upload = new UserUpload();
+        return upload;
+    }
 
 }
