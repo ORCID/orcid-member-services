@@ -53,7 +53,7 @@
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.string" for="field_clientId.string">Client ID</label>
                     <p><em><span jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.note.string">Note: Client ID must have User OBO enabled AND</span> <a href="{{baseUrl}}">{{baseUrl}}</a> <span jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.addedAsRedirect.string">added as a Redirect URI in</span> <a href="{{orcidBaseUrl}}/manage-members.string">{{orcidBaseUrl}}/manage-members</a></em></p>
                     <input type="text" class="form-control" name="clientId" id="field_clientId"
-                           formControlName="clientId"/>
+                           formControlName="clientId" />
                     <div *ngIf="editForm.get('clientId').invalid && (editForm.get('clientId').dirty || editForm.get('clientId').touched)">
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('clientId').errors.required" jhiTranslate="entity.validation.required.string">

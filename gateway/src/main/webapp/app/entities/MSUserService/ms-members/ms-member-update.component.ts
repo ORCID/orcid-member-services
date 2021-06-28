@@ -44,10 +44,14 @@ function clientIdValidator(): ValidatorFn {
     if (control.parent !== undefined && control.value !== undefined && isNaN(control.value)) {
       const clientIdValue = control.value;
       const isConsortiumLead = control.parent.get('isConsortiumLead').value;
+      const assertionServiceEnabled = control.parent.get('assertionServiceEnabled').value;
       if (!isConsortiumLead && clientIdValue === '') {
         return Validators.required(control.parent.get('clientId'));
       }
       if (isConsortiumLead && (!clientIdValue || clientIdValue === '')) {
+        return null;
+      }
+      if (!assertionServiceEnabled && (!clientIdValue || clientIdValue === '')) {
         return null;
       }
       if (clientIdValue.startsWith('APP-') && clientIdValue.match(/APP-[A-Z0-9]{16}$/)) {
@@ -59,6 +63,11 @@ function clientIdValidator(): ValidatorFn {
     }
     if (control.parent !== undefined) {
       if (control.parent.get('isConsortiumLead').value) {
+        return null;
+      }
+    }
+    if (control.parent !== undefined) {
+      if (!control.parent.get('assertionServiceEnabled').value) {
         return null;
       }
     }
@@ -119,8 +128,13 @@ export class MSMemberUpdateComponent implements OnInit {
 
     this.editForm.get('clientId').valueChanges.subscribe(value => {
       if (!value || (value && value === '')) {
-        this.editForm.get('assertionServiceEnabled').reset();
-        this.editForm.get('assertionServiceEnabled').disable();
+        if (this.editForm.get('assertionServiceEnabled').value) {
+          this.editForm.get('assertionServiceEnabled').reset();
+          this.editForm.get('clientId').updateValueAndValidity();
+        }
+        if (!this.editForm.get('assertionServiceEnabled').disabled) {
+          this.editForm.get('assertionServiceEnabled').disable();
+        }
       } else {
         this.editForm.get('assertionServiceEnabled').enable();
       }
