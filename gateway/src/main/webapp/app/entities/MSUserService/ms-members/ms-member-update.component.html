@@ -28,13 +28,6 @@
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.parentSalesforceId.string" for="field_parentSalesforceId.string">Parent Salesforce Id</label>
                     <input type="text" class="form-control" name="parentSalesforceId" id="field_parentSalesforceId"
                            formControlName="parentSalesforceId" />
-                    <div *ngIf="(editForm.get('isConsortiumLead').dirty || editForm.get('isConsortiumLead').touched || editForm.get('parentSalesforceId').dirty || editForm.get('parentSalesforceId').touched)">
-                        <small class="form-text text-danger" *ngIf="(editForm.get('parentSalesforceId').errors && editForm.get('parentSalesforceId').errors.required)">
-                        This field is required.
-                        </small>                    
-                    </div>
-
-
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.clientName.string" for="field_clientName.string">Member Name</label>

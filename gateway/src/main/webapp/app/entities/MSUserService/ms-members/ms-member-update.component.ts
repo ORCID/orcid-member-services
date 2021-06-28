@@ -27,18 +27,6 @@ function consortiumLeadValidator(): ValidatorFn {
   };
 }
 
-function parentSalesforceIdConditionallyRequiredValidator(): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: boolean } | null => {
-    if (control.parent !== undefined) {
-      const isConsortiumLead = control.parent.get('isConsortiumLead').value;
-      if (!isConsortiumLead) {
-        return Validators.required(control.parent.get('parentSalesforceId'));
-      }
-    }
-    return null;
-  };
-}
-
 function clientIdValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
     if (control.parent !== undefined && control.value !== undefined && isNaN(control.value)) {
@@ -90,7 +78,7 @@ export class MSMemberUpdateComponent implements OnInit {
     clientId: new FormControl(null, [clientIdValidator()]),
     clientName: [null, [Validators.required]],
     salesforceId: [null, [Validators.required]],
-    parentSalesforceId: [null, [Validators.required, parentSalesforceIdConditionallyRequiredValidator()]],
+    parentSalesforceId: [],
     isConsortiumLead: [null, [Validators.required, consortiumLeadValidator()]],
     assertionServiceEnabled: [],
     createdBy: [],
