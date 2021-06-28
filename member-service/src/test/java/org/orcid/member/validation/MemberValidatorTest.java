@@ -165,16 +165,10 @@ public class MemberValidatorTest {
     }
 
     @Test
-    public void testValidateNonConsortiumLeadWithMissingParentSalesforceId() {
-        Member member = getNonConsortiumLeadWithMissingParentSalesforceId();
+    public void testValidateNonConsortiumLeadWithNoParentSalesforceId() {
+        Member member = getNonConsortiumLeadWithNoParentSalesforceId();
         MemberValidation validation = memberValidator.validate(member, getUser());
-        List<String> errors = validation.getErrors();
-        assertFalse(validation.isValid());
-        assertEquals(1, errors.size());
-        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(),
-                Mockito.any());
-        String propertyName = errorMessagePropertyCaptor.getValue();
-        assertEquals("member.validation.error.missingParentSalesforceId", propertyName);
+        assertTrue(validation.isValid());
     }
 
     @Test
@@ -289,7 +283,7 @@ public class MemberValidatorTest {
         return member;
     }
 
-    private Member getNonConsortiumLeadWithMissingParentSalesforceId() {
+    private Member getNonConsortiumLeadWithNoParentSalesforceId() {
         Member member = getMember();
         member.setIsConsortiumLead(false);
         member.setParentSalesforceId(null);
