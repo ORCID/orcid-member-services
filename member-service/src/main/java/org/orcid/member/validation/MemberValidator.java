@@ -57,7 +57,9 @@ public class MemberValidator {
     }
 
     private void validateClientId(Member member, MemberServiceUser user, List<String> errors) {
-        if (Boolean.FALSE.equals(member.getIsConsortiumLead()) && StringUtils.isBlank(member.getClientId())) {
+        if (Boolean.FALSE.equals(member.getIsConsortiumLead())
+                && Boolean.TRUE.equals(member.getAssertionServiceEnabled())
+                && StringUtils.isBlank(member.getClientId())) {
             errors.add(getError("missingClientId", user));
         } else if (!StringUtils.isBlank(member.getClientId())) {
             if (member.getClientId().startsWith(NEW_CLIENT_ID_PREFIX)) {

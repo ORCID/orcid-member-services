@@ -97,8 +97,7 @@ public class MemberValidatorTest {
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.missingClientId", propertyName);
 
-        // shouldn't be required if consortia lead
-        member.setIsConsortiumLead(true);
+        // shouldn't be required if assertion service not enabled
         member.setAssertionServiceEnabled(false);
         validation = memberValidator.validate(member, getUser());
         errors = validation.getErrors();
@@ -274,6 +273,7 @@ public class MemberValidatorTest {
     private Member getMemberWithMissingClientId() {
         Member member = getMember();
         member.setClientId(null);
+        member.setAssertionServiceEnabled(true);
         return member;
     }
 
