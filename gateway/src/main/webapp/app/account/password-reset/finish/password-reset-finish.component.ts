@@ -21,6 +21,7 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
   invalidKey: boolean;
   expiredKey: boolean;
   activationEmailResent: boolean;
+  showPasswordForm: boolean;
 
   passwordForm = this.fb.group({
     newPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
@@ -44,7 +45,7 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
     this.passwordResetFinishService.validateKey({ key: this.key }).subscribe(res => {
       this.expiredKey = res.body.expiredKey;
       this.invalidKey = res.body.invalidKey;
-
+      this.showPasswordForm = !this.invalidKey && !this.expiredKey;
       if (this.expiredKey) {
         this.passwordResetFinishService.resendActivationEmail({ key: this.key }).subscribe(res => {
           this.activationEmailResent = res.body.resent;
