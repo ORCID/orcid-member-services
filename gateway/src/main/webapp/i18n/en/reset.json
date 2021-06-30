@@ -30,11 +30,7 @@
             "string": "To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address."
           },
           "paragraph3": {
-            "part1": {
-              "string": "If you are still having problems activating your account or have not received your new activation link please "
-            },
-            "part2": { "string": "contact our support team" },
-            "part3": { "string": "." }
+            "string": "If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org."
           }
         },
         "error": { "string": "Your password couldn't be reset. Remember a password request is only valid for 24 hours." }
