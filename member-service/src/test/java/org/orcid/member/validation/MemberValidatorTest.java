@@ -172,6 +172,21 @@ public class MemberValidatorTest {
     }
 
     @Test
+    public void testValidateConsortiumLeadWithParentSalesforceId() {
+        Member member = getConsortiaLeadWithNoClientId();
+        member.setParentSalesforceId("illegal");
+        member.setAssertionServiceEnabled(false);
+        MemberValidation validation = memberValidator.validate(member, getUser());
+        assertFalse(validation.isValid());
+        List<String> errors = validation.getErrors();
+        assertEquals(1, errors.size());
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(),
+                Mockito.any());
+        String propertyName = errorMessagePropertyCaptor.getValue();
+        assertEquals("member.validation.error.parentSalesforceIdNotAllowed", propertyName);
+    }
+
+    @Test
     public void testValidateCreateMemberWhereSalesforceIdExists() {
         Member existingMember = getMemberWithValidNewClientId();
         existingMember.setId("existing-member-id");

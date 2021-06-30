@@ -91,6 +91,8 @@ public class MemberValidator {
             List<String> errors) {
         if (member.getIsConsortiumLead() == null) {
             errors.add(getError("missingConsortiumLead", user));
+        } else if (member.getIsConsortiumLead() && !StringUtils.isBlank(member.getParentSalesforceId())) {
+            errors.add(getError("parentSalesforceIdNotAllowed", user));
         }
     }
 
