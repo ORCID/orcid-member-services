@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
-import { faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle, faCheckCircle, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
 import { AccountService } from 'app/core';
@@ -34,7 +34,10 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   reverse: any;
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
+  faTimes = faTimes;
+  faSearch = faSearch;
   itemCount: string;
+  searchTerm: string;
 
   constructor(
     protected msMemberService: MSMemberService,
@@ -124,6 +127,14 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       result.push('id');
     }
     return result;
+  }
+
+  resetSearch() {
+    this.searchTerm = '';
+  }
+
+  submitSearch() {
+    console.log('searching ' + this.searchTerm);
   }
 
   protected paginateMSMember(data: IMSMember[], headers: HttpHeaders) {
