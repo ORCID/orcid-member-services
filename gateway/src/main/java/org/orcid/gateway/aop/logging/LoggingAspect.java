@@ -42,11 +42,12 @@ public class LoggingAspect {
     }
 
     /**
-     * Pointcut that matches all Spring beans in the application's main packages.
+     * Pointcut that matches all Spring beans in the application's main packages, except authentication.
      */
-    @Pointcut("within(org.orcid.gateway.repository..*)"+
-        " || within(org.orcid.gateway.service..*)"+
-        " || within(org.orcid.gateway.web.rest..*)")
+    @Pointcut("(within(org.orcid.gateway.repository..*)" +
+        " || within(org.orcid.gateway.service..*)" +
+        " || within(org.orcid.gateway.web.rest..*))" +
+        " && !within(org.orcid.gateway.web.rest.AuthResource)")
     public void applicationPackagePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
