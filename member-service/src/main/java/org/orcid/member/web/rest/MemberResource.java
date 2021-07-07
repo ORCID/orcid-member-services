@@ -72,169 +72,169 @@ import io.github.jhipster.web.util.ResponseUtil;
 @RequestMapping("/api")
 public class MemberResource {
 
-	private final Logger LOG = LoggerFactory.getLogger(MemberResource.class);
+    private final Logger LOG = LoggerFactory.getLogger(MemberResource.class);
 
-	@Value("${jhipster.clientApp.name}")
-	private String applicationName;
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
-	@Autowired
-	private MemberService memberService;
+    @Autowired
+    private MemberService memberService;
 
-	/**
-	 * {@code POST  /members} : Create a new member.
-	 *
-	 * @param member the member to create.
-	 * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-	 *         body the new member, or with status {@code 400 (Bad Request)} if the
-	 *         member has already an ID.
-	 * @throws URISyntaxException if the Location URI syntax is incorrect.
-	 * @throws JSONException
-	 */
-	@PostMapping("/members")
-	@PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-	public ResponseEntity<Member> createMember(@Valid @RequestBody Member member)
-			throws URISyntaxException, JSONException {
-		LOG.debug("REST request to save Member : {}", member);
-		Member created = memberService.createMember(member);
-		return ResponseEntity.created(new URI("/api/member/" + created.getId())).body(created);
-	}
+    /**
+     * {@code POST  /members} : Create a new member.
+     *
+     * @param member the member to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new member, or with status {@code 400 (Bad Request)} if the
+     *         member has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @throws JSONException
+     */
+    @PostMapping("/members")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
+    public ResponseEntity<Member> createMember(@Valid @RequestBody Member member)
+            throws URISyntaxException, JSONException {
+        LOG.debug("REST request to save Member : {}", member);
+        Member created = memberService.createMember(member);
+        return ResponseEntity.created(new URI("/api/member/" + created.getId())).body(created);
+    }
 
-	/**
-	 * {@code POST  /members/validate} : Validates a member.
-	 *
-	 * @param member the member to validate.
-	 * @return the {@link ResponseEntity} with status {@code 200 (Ok)} and with a
-	 *         MemberValidation object in the body.
-	 * @throws URISyntaxException if the Location URI syntax is incorrect.
-	 * @throws JSONException
-	 */
-	@PostMapping("/members/validate")
-	@PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-	public ResponseEntity<MemberValidation> validateMember(@Valid @RequestBody Member member)
-			throws URISyntaxException, JSONException {
-		MemberValidation validation = memberService.validateMember(member);
-		return ResponseEntity.ok(validation);
-	}
+    /**
+     * {@code POST  /members/validate} : Validates a member.
+     *
+     * @param member the member to validate.
+     * @return the {@link ResponseEntity} with status {@code 200 (Ok)} and with a
+     *         MemberValidation object in the body.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @throws JSONException
+     */
+    @PostMapping("/members/validate")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
+    public ResponseEntity<MemberValidation> validateMember(@Valid @RequestBody Member member)
+            throws URISyntaxException, JSONException {
+        MemberValidation validation = memberService.validateMember(member);
+        return ResponseEntity.ok(validation);
+    }
 
-	/**
-	 * {@code POST  /members/upload} : Create a list of member settings.
-	 *
-	 * @param file: file containing the member to create.
-	 * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-	 *         a map indicating if each user was created or not, or with status
-	 *         {@code 400 (Bad Request)} if the file cannot be parsed.
-	 * @throws Throwable
-	 */
-	@PostMapping("/members/upload")
-	@PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-	public ResponseEntity<String> uploadMember(@RequestParam("file") MultipartFile file) throws Throwable {
-		LOG.debug("Uploading member CSV");
-		MemberUpload upload = memberService.uploadMemberCSV(file.getInputStream());
-		return ResponseEntity.ok().body(upload.getErrors().toString());
-	}
+    /**
+     * {@code POST  /members/upload} : Create a list of member settings.
+     *
+     * @param file: file containing the member to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         a map indicating if each user was created or not, or with status
+     *         {@code 400 (Bad Request)} if the file cannot be parsed.
+     * @throws Throwable
+     */
+    @PostMapping("/members/upload")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
+    public ResponseEntity<String> uploadMember(@RequestParam("file") MultipartFile file) throws Throwable {
+        LOG.debug("Uploading member CSV");
+        MemberUpload upload = memberService.uploadMemberCSV(file.getInputStream());
+        return ResponseEntity.ok().body(upload.getErrors().toString());
+    }
 
-	/**
-	 * {@code PUT  /members} : Updates an existing member.
-	 *
-	 * @param member the member to update.
-	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
-	 *         the updated member, or with status {@code 400 (Bad Request)} if the
-	 *         member is not valid, or with status
-	 *         {@code 500 (Internal Server Error)} if the member couldn't be
-	 *         updated.
-	 * @throws URISyntaxException if the Location URI syntax is incorrect.
-	 * @throws JSONException
-	 */
-	@PutMapping("/members")
-	@PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-	public ResponseEntity<Member> updateMember(@Valid @RequestBody Member member)
-			throws URISyntaxException, JSONException {
-		LOG.debug("REST request to update Member : {}", member);
-		Optional<Member> existentMember = memberService.getMember(member.getId());
-		if (!existentMember.isPresent()) {
-			throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
-		}
-		member = memberService.updateMember(member);
-		memberService.updateUsersOnConsortiumLeadChange(member, existentMember.get());
-		return ResponseEntity.ok().body(member);
-	}
+    /**
+     * {@code PUT  /members} : Updates an existing member.
+     *
+     * @param member the member to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated member, or with status {@code 400 (Bad Request)} if the
+     *         member is not valid, or with status
+     *         {@code 500 (Internal Server Error)} if the member couldn't be
+     *         updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @throws JSONException
+     */
+    @PutMapping("/members")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
+    public ResponseEntity<Member> updateMember(@Valid @RequestBody Member member)
+            throws URISyntaxException, JSONException {
+        LOG.debug("REST request to update Member : {}", member);
+        Optional<Member> existentMember = memberService.getMember(member.getId());
+        if (!existentMember.isPresent()) {
+            throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
+        }
+        member = memberService.updateMember(member);
+        memberService.updateUsersOnConsortiumLeadChange(member, existentMember.get());
+        return ResponseEntity.ok().body(member);
+    }
 
-	/**
-	 * {@code GET  /member} : get all the member.
-	 *
-	 *
-	 * @param pageable the pagination information.
-	 *
-	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
-	 *         of member in body.
-	 */
-	@GetMapping("/members")
-	public ResponseEntity<List<Member>> getAllMembers(Pageable pageable) {
-		LOG.debug("REST request to get a page of Member");
-		Page<Member> page = memberService.getMembers(pageable);
-		HttpHeaders headers = PaginationUtil
-				.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-		return ResponseEntity.ok().headers(headers).body(page.getContent());
-	}
+    /**
+     * {@code GET  /member} : get all the member.
+     *
+     *
+     * @param pageable the pagination information.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of member in body.
+     */
+    @GetMapping("/members")
+    public ResponseEntity<List<Member>> getAllMembers(Pageable pageable) {
+        LOG.debug("REST request to get a page of Member");
+        Page<Member> page = memberService.getMembers(pageable);
+        HttpHeaders headers = PaginationUtil
+                .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
 
-	/**
-	 * {@code GET  /member} : get all the member.
-	 *
-	 *
-	 * @param pageable the pagination information.
-	 *
-	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
-	 *         of member in body.
-	 */
-	@GetMapping("/members/list/all")
-	public ResponseEntity<List<Member>> getMembersList() {
-		LOG.debug("REST request to get a page of Member");
-		List<Member> members = memberService.getAllMembers();
-		return new ResponseEntity<>(members, HttpStatus.OK);
-	}
+    /**
+     * {@code GET  /member} : get all the member.
+     *
+     *
+     * @param pageable the pagination information.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of member in body.
+     */
+    @GetMapping("/members/list/all")
+    public ResponseEntity<List<Member>> getMembersList() {
+        LOG.debug("REST request to get a page of Member");
+        List<Member> members = memberService.getAllMembers();
+        return new ResponseEntity<>(members, HttpStatus.OK);
+    }
 
-	/**
-	 * {@code GET  /members/:id} : get the "id" member.
-	 *
-	 * @param id - the id or salesforce id of the member to retrieve.
-	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
-	 *         the member, or with status {@code 404 (Not Found)}.
-	 */
-	@GetMapping("/members/{id}")
-	public ResponseEntity<Member> getMember(@PathVariable String id) {
-		LOG.debug("REST request to get Member : {}", id);
-		Optional<Member> member = memberService.getMember(id);
-		return ResponseUtil.wrapOrNotFound(member);
-	}
+    /**
+     * {@code GET  /members/:id} : get the "id" member.
+     *
+     * @param id - the id or salesforce id of the member to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the member, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/members/{id}")
+    public ResponseEntity<Member> getMember(@PathVariable String id) {
+        LOG.debug("REST request to get Member : {}", id);
+        Optional<Member> member = memberService.getMember(id);
+        return ResponseUtil.wrapOrNotFound(member);
+    }
 
-	/**
-	 * {@code GET  /members/authorized/:encryptedEmail} : get the authorized member
-	 * details for the specified encrypted email.
-	 *
-	 * @param encryptedEmail - the encrypted email of the user that has authorized
-	 *                       the member
-	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with the
-	 *         member details in the body, or status {@code 404 (Not Found)}.
-	 */
-	@GetMapping("/members/authorized/{encryptedEmail}")
-	public ResponseEntity<Member> getAuthorizedMember(@PathVariable String encryptedEmail) {
-		LOG.debug("REST request to get authorized Member details for encrypted email : {}", encryptedEmail);
-		Optional<Member> member = memberService.getAuthorizedMemberForUser(encryptedEmail);
-		return ResponseUtil.wrapOrNotFound(member);
-	}
+    /**
+     * {@code GET  /members/authorized/:encryptedEmail} : get the authorized member
+     * details for the specified encrypted email.
+     *
+     * @param encryptedEmail - the encrypted email of the user that has authorized
+     *                       the member
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with the
+     *         member details in the body, or status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/members/authorized/{encryptedEmail}")
+    public ResponseEntity<Member> getAuthorizedMember(@PathVariable String encryptedEmail) {
+        LOG.debug("REST request to get authorized Member details for encrypted email : {}", encryptedEmail);
+        Optional<Member> member = memberService.getAuthorizedMemberForUser(encryptedEmail);
+        return ResponseUtil.wrapOrNotFound(member);
+    }
 
-	/**
-	 * {@code DELETE  /members/:id} : delete the "id" member.
-	 *
-	 * @param id the id of the member to delete.
-	 * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-	 */
-	@DeleteMapping("/members/{id}")
-	@PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-	public ResponseEntity<Void> deleteMember(@PathVariable String id) {
-		LOG.debug("REST request to delete Member : {}", id);
-		memberService.deleteMember(id);
-		return ResponseEntity.noContent().build();
-	}
+    /**
+     * {@code DELETE  /members/:id} : delete the "id" member.
+     *
+     * @param id the id of the member to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/members/{id}")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
+    public ResponseEntity<Void> deleteMember(@PathVariable String id) {
+        LOG.debug("REST request to delete Member : {}", id);
+        memberService.deleteMember(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
