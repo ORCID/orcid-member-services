@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
-import { faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle, faCheckCircle, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
 import { AccountService } from 'app/core';
@@ -34,7 +34,10 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   reverse: any;
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
+  faTimes = faTimes;
+  faSearch = faSearch;
   itemCount: string;
+  searchTerm: string;
 
   constructor(
     protected msMemberService: MSMemberService,
@@ -76,7 +79,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       .query({
         page: this.page - 1,
         size: this.itemsPerPage,
-        sort: this.sort()
+        sort: this.sort(),
+        filter: this.searchTerm ? this.searchTerm : ''
       })
       .subscribe(
         (res: HttpResponse<IMSMember[]>) => this.paginateMSMember(res.body, res.headers),
@@ -96,7 +100,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        filter: this.searchTerm ? this.searchTerm : ''
       }
     });
     this.loadAll();
@@ -108,7 +113,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       '/ms-member',
       {
         page: this.page,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        filter: this.searchTerm ? this.searchTerm : ''
       }
     ]);
     this.loadAll();
@@ -124,6 +130,15 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       result.push('id');
     }
     return result;
+  }
+
+  resetSearch() {
+    this.searchTerm = '';
+    this.loadAll();
+  }
+
+  submitSearch() {
+    this.loadAll();
   }
 
   protected paginateMSMember(data: IMSMember[], headers: HttpHeaders) {
