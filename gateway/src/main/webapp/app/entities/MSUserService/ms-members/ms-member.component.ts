@@ -79,7 +79,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       .query({
         page: this.page - 1,
         size: this.itemsPerPage,
-        sort: this.sort()
+        sort: this.sort(),
+        filter: this.searchTerm ? this.searchTerm : ''
       })
       .subscribe(
         (res: HttpResponse<IMSMember[]>) => this.paginateMSMember(res.body, res.headers),
@@ -99,7 +100,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        filter: this.searchTerm ? this.searchTerm : ''
       }
     });
     this.loadAll();
@@ -111,7 +113,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       '/ms-member',
       {
         page: this.page,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        filter: this.searchTerm ? this.searchTerm : ''
       }
     ]);
     this.loadAll();
@@ -131,10 +134,11 @@ export class MSMemberComponent implements OnInit, OnDestroy {
 
   resetSearch() {
     this.searchTerm = '';
+    this.loadAll();
   }
 
   submitSearch() {
-    console.log('searching ' + this.searchTerm);
+    this.loadAll();
   }
 
   protected paginateMSMember(data: IMSMember[], headers: HttpHeaders) {
