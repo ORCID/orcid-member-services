@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.orcid.member.domain.Member;
 import org.orcid.member.service.MemberService;
@@ -160,7 +161,7 @@ public class MemberResource {
     }
 
     /**
-     * {@code GET  /member} : get all the member.
+     * {@code GET  /members} : get all members.
      *
      *
      * @param pageable the pagination information.
@@ -169,9 +170,14 @@ public class MemberResource {
      *         of member in body.
      */
     @GetMapping("/members")
-    public ResponseEntity<List<Member>> getAllMembers(Pageable pageable) {
+    public ResponseEntity<List<Member>> getAllMembers(@RequestParam("filter") String filter, Pageable pageable) {
         LOG.debug("REST request to get a page of Member");
-        Page<Member> page = memberService.getMembers(pageable);
+        Page<Member> page = null;
+        if (StringUtils.isBlank(filter)) {
+            page = memberService.getMembers(pageable);
+        } else {
+            page = memberService.getMembers(pageable, filter);
+        }
         HttpHeaders headers = PaginationUtil
                 .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());

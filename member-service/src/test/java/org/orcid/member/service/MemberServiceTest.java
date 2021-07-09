@@ -30,6 +30,9 @@ import org.orcid.member.upload.MembersUploadReader;
 import org.orcid.member.validation.MemberValidation;
 import org.orcid.member.validation.MemberValidator;
 import org.orcid.member.web.rest.errors.BadRequestAlertException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 class MemberServiceTest {
@@ -223,6 +226,27 @@ class MemberServiceTest {
         Mockito.when(encryptUtil.decrypt(Mockito.eq(encrypted))).thenReturn("salesforceid" + "&&" + email);
         Optional<Member> optional = memberService.getAuthorizedMemberForUser(encrypted);
         assertTrue(!optional.isPresent());
+    }
+
+    @Test
+    void testGetMembers() {
+        Mockito.when(memberRepository.findAll(Mockito.any(Pageable.class)))
+                .thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember())));
+        Page<Member> page = memberService.getMembers(Mockito.mock(Pageable.class));
+        assertNotNull(page);
+        assertEquals(3, page.getTotalElements());
+        Mockito.verify(memberRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
+
+        Mockito.when(memberRepository
+                .findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
+                        Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Pageable.class)))
+                .thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember())));
+        page = memberService.getMembers(Mockito.mock(Pageable.class), "test");
+        assertNotNull(page);
+        assertEquals(3, page.getTotalElements());
+        Mockito.verify(memberRepository, Mockito.times(1))
+                .findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
+                        Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Pageable.class));
     }
 
     private MemberUpload getMemberUpload() {

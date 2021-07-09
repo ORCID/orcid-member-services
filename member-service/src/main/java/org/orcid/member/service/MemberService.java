@@ -166,6 +166,12 @@ public class MemberService {
     public Page<Member> getMembers(Pageable pageable) {
         return memberRepository.findAll(pageable);
     }
+    
+    public Page<Member> getMembers(Pageable pageable, String filter) {
+        return memberRepository
+                .findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
+                        filter, filter, filter, pageable);
+    }
 
     public List<Member> getAllMembers() {
         return memberRepository.findAll();
