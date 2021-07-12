@@ -330,7 +330,16 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>
-        <!-- jhipster-needle-maven-add-dependency -->
+		<dependency>
+		    <groupId>ch.qos.logback.contrib</groupId>
+		    <artifactId>logback-json-classic</artifactId>
+		    <version>0.1.5</version>
+		</dependency>
+		<dependency>
+		    <groupId>ch.qos.logback.contrib</groupId>
+		    <artifactId>logback-jackson</artifactId>
+		    <version>0.1.5</version>
+		</dependency>        
     </dependencies>
 
     <build>
