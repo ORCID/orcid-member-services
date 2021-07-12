@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
@@ -83,24 +82,6 @@ class UserCsvReaderTest {
         assertTrue(upload.getErrors().get(0).toString().contains("some-error"));
         assertTrue(upload.getErrors().get(1).toString().contains("some-error"));
         assertTrue(upload.getErrors().get(2).toString().contains("some-error"));
-    }
-
-    @Test
-    void testReadUsersUploadDuplicateMainContactsWithinSameSpreadsheet() throws IOException, JSONException {
-        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class)))
-                .thenReturn(getUserValidation(new ArrayList<>()));
-        Mockito.when(messageSource.getMessage(Mockito.eq("user.validation.error.multipleOrgOwners"), Mockito.any(),
-                Mockito.eq(Locale.ENGLISH))).thenReturn("some-value");
-
-        InputStream inputStream = getClass().getResourceAsStream("/users-with-multiple-main-contacts.csv");
-        UserUpload upload = reader.readUsersUpload(inputStream, getUser("en"));
-        assertEquals(3, upload.getUserDTOs().size());
-        assertEquals(1, upload.getErrors().length());
-
-        assertTrue(upload.getErrors().get(0).toString().contains("some-value"));
-
-        Mockito.verify(messageSource, Mockito.times(1)).getMessage(
-                Mockito.eq("user.validation.error.multipleOrgOwners"), Mockito.any(), Mockito.eq(Locale.ENGLISH));
     }
 
     private UserValidation getUserValidation(List<String> errors) {
