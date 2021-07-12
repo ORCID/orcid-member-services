@@ -110,21 +110,13 @@ public class UserValidatorTest {
     }
 
     @Test
-    public void testValidateUserInvalidMainContact() {
+    public void testValidateUserChangeMainContact() {
         Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(false);
         Mockito.when(userRepository.findOneBySalesforceIdAndMainContactIsTrue(Mockito.eq("salesforce-id")))
                 .thenReturn(Optional.of(getUser()));
 
         UserDTO toValidate = getValidUser();
         toValidate.setMainContact(true);
-
-        UserValidation validation = userValidator.validate(toValidate, getUser());
-        assertThat(validation.isValid()).isFalse();
-        assertThat(validation.getErrors()).isNotEmpty();
-        assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
-
-        Mockito.verify(messageSource, Mockito.times(1))
-                .getMessage(Mockito.eq("user.validation.error.multipleOrgOwners"), Mockito.any(), Mockito.any());
     }
 
     private User getUser() {

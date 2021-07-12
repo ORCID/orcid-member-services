@@ -33,23 +33,11 @@ public class UserValidator {
         List<String> errors = new ArrayList<>();
         validateEmail(user, currentUser, errors);
         validateSalesforceId(user, currentUser, errors);
-        validateMainContact(user, currentUser, errors);
 
         UserValidation validation = new UserValidation();
         validation.setValid(errors.isEmpty());
         validation.setErrors(errors);
         return validation;
-    }
-
-    private void validateMainContact(UserDTO user, User currentUser, List<String> errors) {
-        if (user.getMainContact() != null && user.getMainContact() && !StringUtils.isBlank(user.getSalesforceId())) {
-            Optional<User> existingMainContact = userRepository
-                    .findOneBySalesforceIdAndMainContactIsTrue(user.getSalesforceId());
-            if (existingMainContact.isPresent()
-                    && !StringUtils.equalsAnyIgnoreCase(existingMainContact.get().getEmail(), user.getEmail())) {
-                errors.add(getError("multipleOrgOwners", currentUser));
-            }
-        }
     }
 
     private void validateSalesforceId(UserDTO user, User currentUser, List<String> errors) {
