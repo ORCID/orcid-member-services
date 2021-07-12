@@ -174,7 +174,7 @@ public class MemberService {
     }
 
     public List<Member> getAllMembers() {
-        return memberRepository.findAll();
+        return memberRepository.findAllByOrderByClientNameAsc();
     }
 
     public Optional<Member> getMember(String id) {
