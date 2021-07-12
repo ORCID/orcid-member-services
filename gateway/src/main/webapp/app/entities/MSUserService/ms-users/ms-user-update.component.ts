@@ -129,6 +129,10 @@ export class MSUserUpdateComponent implements OnInit {
       lastModifiedBy: msUser.lastModifiedBy,
       lastModifiedDate: msUser.lastModifiedDate != null ? msUser.lastModifiedDate.format(DATE_TIME_FORMAT) : null
     });
+    if (msUser.mainContact) {
+      this.editForm.get('mainContact').disable();
+    }
+
     if (msUser.salesforceId) {
       this.isExistentMember = true;
     }
