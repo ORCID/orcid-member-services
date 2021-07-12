@@ -19,127 +19,127 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserValidatorTest {
 
-	@Mock
-	private MessageSource messageSource;
+    @Mock
+    private MessageSource messageSource;
 
-	@Mock
-	private UserRepository userRepository;
+    @Mock
+    private UserRepository userRepository;
 
-	@Mock
-	private UserService userService;
+    @Mock
+    private UserService userService;
 
-	@InjectMocks
-	private UserValidator userValidator;
+    @InjectMocks
+    private UserValidator userValidator;
 
-	@BeforeEach
-	public void setUp() {
-		MockitoAnnotations.initMocks(this);
-		Mockito.when(messageSource.getMessage(Mockito.anyString(), Mockito.any(), Mockito.any(Locale.class)))
-				.thenReturn("error-message");
-	}
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        Mockito.when(messageSource.getMessage(Mockito.anyString(), Mockito.any(), Mockito.any(Locale.class)))
+                .thenReturn("error-message");
+    }
 
-	@Test
-	public void testValidateUser() {
-		Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(true);
+    @Test
+    public void testValidateUser() {
+        Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(true);
 
-		UserDTO toValidate = getValidUser();
-		UserValidation validation = userValidator.validate(toValidate, getUser());
-		assertThat(validation.isValid()).isTrue();
-	}
+        UserDTO toValidate = getValidUser();
+        UserValidation validation = userValidator.validate(toValidate, getUser());
+        assertThat(validation.isValid()).isTrue();
+    }
 
-	@Test
-	public void testValidateUserInvalidSalesforceId() {
-		Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(false);
+    @Test
+    public void testValidateUserInvalidSalesforceId() {
+        Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(false);
 
-		UserDTO toValidate = getValidUser();
-		UserValidation validation = userValidator.validate(toValidate, getUser());
-		assertThat(validation.isValid()).isFalse();
-		assertThat(validation.getErrors()).isNotEmpty();
-		assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
+        UserDTO toValidate = getValidUser();
+        UserValidation validation = userValidator.validate(toValidate, getUser());
+        assertThat(validation.isValid()).isFalse();
+        assertThat(validation.getErrors()).isNotEmpty();
+        assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
-		Mockito.verify(messageSource, Mockito.times(1))
-				.getMessage(Mockito.eq("user.validation.error.invalidSalesforceId"), Mockito.any(), Mockito.any());
-	}
+        Mockito.verify(messageSource, Mockito.times(1))
+                .getMessage(Mockito.eq("user.validation.error.invalidSalesforceId"), Mockito.any(), Mockito.any());
+    }
 
-	@Test
-	public void testValidateUserMissingSalesforceId() {
-		Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(false);
+    @Test
+    public void testValidateUserMissingSalesforceId() {
+        Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(false);
 
-		UserDTO toValidate = getValidUser();
-		toValidate.setSalesforceId(null);
+        UserDTO toValidate = getValidUser();
+        toValidate.setSalesforceId(null);
 
-		UserValidation validation = userValidator.validate(toValidate, getUser());
-		assertThat(validation.isValid()).isFalse();
-		assertThat(validation.getErrors()).isNotEmpty();
-		assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
+        UserValidation validation = userValidator.validate(toValidate, getUser());
+        assertThat(validation.isValid()).isFalse();
+        assertThat(validation.getErrors()).isNotEmpty();
+        assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
-		Mockito.verify(messageSource, Mockito.times(1))
-				.getMessage(Mockito.eq("user.validation.error.missingSalesforceId"), Mockito.any(), Mockito.any());
-	}
+        Mockito.verify(messageSource, Mockito.times(1))
+                .getMessage(Mockito.eq("user.validation.error.missingSalesforceId"), Mockito.any(), Mockito.any());
+    }
 
-	@Test
-	public void testValidateUserInvalidEmail() {
-		Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(false);
+    @Test
+    public void testValidateUserInvalidEmail() {
+        Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(false);
 
-		UserDTO toValidate = getValidUser();
-		toValidate.setEmail("invalid-email");
+        UserDTO toValidate = getValidUser();
+        toValidate.setEmail("invalid-email");
 
-		UserValidation validation = userValidator.validate(toValidate, getUser());
-		assertThat(validation.isValid()).isFalse();
-		assertThat(validation.getErrors()).isNotEmpty();
-		assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
+        UserValidation validation = userValidator.validate(toValidate, getUser());
+        assertThat(validation.isValid()).isFalse();
+        assertThat(validation.getErrors()).isNotEmpty();
+        assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
-		Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.invalidEmail"),
-				Mockito.any(), Mockito.any());
-	}
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.invalidEmail"),
+                Mockito.any(), Mockito.any());
+    }
 
-	@Test
-	public void testValidateUserMissingEmail() {
-		Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(false);
+    @Test
+    public void testValidateUserMissingEmail() {
+        Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(false);
 
-		UserDTO toValidate = getValidUser();
-		toValidate.setEmail(null);
+        UserDTO toValidate = getValidUser();
+        toValidate.setEmail(null);
 
-		UserValidation validation = userValidator.validate(toValidate, getUser());
-		assertThat(validation.isValid()).isFalse();
-		assertThat(validation.getErrors()).isNotEmpty();
-		assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
+        UserValidation validation = userValidator.validate(toValidate, getUser());
+        assertThat(validation.isValid()).isFalse();
+        assertThat(validation.getErrors()).isNotEmpty();
+        assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
-		Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.missingEmail"),
-				Mockito.any(), Mockito.any());
-	}
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.missingEmail"),
+                Mockito.any(), Mockito.any());
+    }
 
-	@Test
-	public void testValidateUserInvalidMainContact() {
-		Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(false);
-		Mockito.when(userRepository.findOneBySalesforceIdAndMainContactIsTrue(Mockito.eq("salesforce-id")))
-			.thenReturn(Optional.of(getUser()));
+    @Test
+    public void testValidateUserInvalidMainContact() {
+        Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(false);
+        Mockito.when(userRepository.findOneBySalesforceIdAndMainContactIsTrue(Mockito.eq("salesforce-id")))
+                .thenReturn(Optional.of(getUser()));
 
-		UserDTO toValidate = getValidUser();
-		toValidate.setMainContact(true);
+        UserDTO toValidate = getValidUser();
+        toValidate.setMainContact(true);
 
-		UserValidation validation = userValidator.validate(toValidate, getUser());
-		assertThat(validation.isValid()).isFalse();
-		assertThat(validation.getErrors()).isNotEmpty();
-		assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
+        UserValidation validation = userValidator.validate(toValidate, getUser());
+        assertThat(validation.isValid()).isFalse();
+        assertThat(validation.getErrors()).isNotEmpty();
+        assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
-		Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.multipleOrgOwners"),
-				Mockito.any(), Mockito.any());
-	}
+        Mockito.verify(messageSource, Mockito.times(1))
+                .getMessage(Mockito.eq("user.validation.error.multipleOrgOwners"), Mockito.any(), Mockito.any());
+    }
 
-	private User getUser() {
-		User user = new User();
-		user.setLangKey("en");
-		user.setEmail("some-email@orcid.org");
-		return user;
-	}
+    private User getUser() {
+        User user = new User();
+        user.setLangKey("en");
+        user.setEmail("some-email@orcid.org");
+        return user;
+    }
 
-	private UserDTO getValidUser() {
-		UserDTO user = new UserDTO();
-		user.setEmail("email@orcid.org");
-		user.setMainContact(false);
-		user.setSalesforceId("salesforce-id");
-		return user;
-	}
+    private UserDTO getValidUser() {
+        UserDTO user = new UserDTO();
+        user.setEmail("email@orcid.org");
+        user.setMainContact(false);
+        user.setSalesforceId("salesforce-id");
+        return user;
+    }
 
 }
