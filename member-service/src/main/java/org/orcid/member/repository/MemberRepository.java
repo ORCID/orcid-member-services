@@ -21,7 +21,7 @@ public interface MemberRepository extends MongoRepository<Member, String> {
 
     Boolean existsBySalesforceId(String salesforceId);
 
-    List<Member> findAll();
+    List<Member> findAllByOrderByClientNameAsc();
 
     Page<Member> findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
             String clientName, String salesforceId, String parentSalesforceId, Pageable pageable);
