@@ -9,9 +9,7 @@
     <logger name="javax.management.remote" level="WARN"/>
     <logger name="javax.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
-    
     <logger name="com.netflix" level="WARN"/>
-    <logger name="com.netflix.discovery" level="INFO"/>
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
@@ -33,8 +31,10 @@
     <logger name="springfox" level="WARN"/>
     <logger name="sun.rmi" level="WARN"/>
     <logger name="springfox.documentation.schema.property" level="ERROR"/>
+    <logger name="sun.net.www" level="WARN"/>
     <logger name="sun.rmi.transport" level="WARN"/>
 	<logger name="net.sf.ehcache" level="WARN" />
+	<logger name="org.orcid" level="INFO"/>
 
     <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
