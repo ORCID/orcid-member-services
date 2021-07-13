@@ -34,6 +34,7 @@
     <logger name="sun.net.www" level="WARN"/>
     <logger name="sun.rmi.transport" level="WARN"/>
     <logger name="org.orcid" level="INFO"/>
+    <logger name="jdk.event.security" level="WARN" />
 
     <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
