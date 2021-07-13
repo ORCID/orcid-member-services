@@ -125,3 +125,14 @@ services:
       file: jhipster-registry.yml
       service: jhipster-registry
 
+  r7insight_docker:
+    restart: unless-stopped
+    image: rapid7/r7insight_docker:4.0.0
+    security_opt:
+      - no-new-privileges
+    environment:
+      - INSIGHT_TOKEN=${INSIGHT_TOKEN}
+    command: -r us -j --no-stats --no-docker-events --skipByName '.*jhipster-registry.*'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
