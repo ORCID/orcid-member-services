@@ -22,7 +22,6 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   currentAccount: any;
   msMember: IMSMember[];
   error: any;
-  success: any;
   eventSubscriber: Subscription;
   routeData: any;
   links: any;
@@ -30,7 +29,6 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   itemsPerPage: any;
   page: any;
   predicate: any;
-  previousPage: any;
   reverse: any;
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
@@ -38,6 +36,7 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   faSearch = faSearch;
   itemCount: string;
   searchTerm: string;
+  submittedSearchTerm: string;
 
   constructor(
     protected msMemberService: MSMemberService,
@@ -52,7 +51,6 @@ export class MSMemberComponent implements OnInit, OnDestroy {
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.routeData = this.activatedRoute.data.subscribe(data => {
       this.page = data.pagingParams.page;
-      this.previousPage = data.pagingParams.page;
       this.reverse = data.pagingParams.ascending;
       this.predicate = data.pagingParams.predicate;
     });
@@ -75,12 +73,18 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   }
 
   loadAll() {
+    if (this.submittedSearchTerm) {
+      this.searchTerm = this.submittedSearchTerm;
+    } else {
+      this.searchTerm = '';
+    }
+
     this.msMemberService
       .query({
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort(),
-        filter: this.searchTerm ? this.searchTerm : ''
+        filter: this.submittedSearchTerm ? this.searchTerm : ''
       })
       .subscribe(
         (res: HttpResponse<IMSMember[]>) => this.paginateMSMember(res.body, res.headers),
@@ -89,10 +93,7 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   }
 
   loadPage(page: number) {
-    if (page !== this.previousPage) {
-      this.previousPage = page;
-      this.transition();
-    }
+    this.transition();
   }
 
   transition() {
@@ -133,11 +134,15 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   }
 
   resetSearch() {
+    this.page = 1;
     this.searchTerm = '';
+    this.submittedSearchTerm = '';
     this.loadAll();
   }
 
   submitSearch() {
+    this.page = 1;
+    this.submittedSearchTerm = this.searchTerm;
     this.loadAll();
   }
 
