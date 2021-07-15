@@ -131,6 +131,7 @@ export class MSUserUpdateComponent implements OnInit {
     });
     if (msUser.mainContact) {
       this.editForm.get('mainContact').disable();
+      this.editForm.get('salesforceId').disable();
     }
 
     if (msUser.salesforceId) {
@@ -170,7 +171,7 @@ export class MSUserUpdateComponent implements OnInit {
     return this.accountService.hasAnyAuthority(['ROLE_CONSORTIUM_LEAD']);
   }
 
-  hasOwnerValidation() {
+  validateOrgOwners() {
     this.isSaving = true;
     this.msUserService.hasOwner(this.editForm.get('salesforceId').value).subscribe(value => {
       this.isSaving = false;
@@ -180,6 +181,10 @@ export class MSUserUpdateComponent implements OnInit {
         this.hasOwner = value;
       }
     });
+
+    if (this.editForm.get('mainContact').value) {
+      this.editForm.get('salesforceId').disable();
+    }
   }
 
   save() {
