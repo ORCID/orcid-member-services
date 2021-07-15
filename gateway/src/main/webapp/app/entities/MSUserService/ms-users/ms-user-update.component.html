@@ -35,14 +35,14 @@
                         name="mainContact"
                         id="field_mainContact"
                         formControlName="mainContact"
-                        (change)="hasOwnerValidation()"
+                        (change)="validateOrgOwners()"
                     />
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.mainContact.string" for="field_mainContact">Main Contact</label>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId.string" for="field_salesforceId.string">Salesforce Id</label>
                     <fieldset [disabled]="disableSalesForceIdDD()">
-                    <select  *ngIf="membersList.length  > 0"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId" (change)="hasOwnerValidation()">
+                    <select  *ngIf="membersList.length  > 0"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId" (change)="validateOrgOwners()">
                       <option *ngFor="let member of membersList" [ngValue]="member.salesforceId">{{member.clientName}}</option>
                     </select>
                     </fieldset>
