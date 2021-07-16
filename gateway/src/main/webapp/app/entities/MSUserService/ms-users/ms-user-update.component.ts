@@ -184,6 +184,8 @@ export class MSUserUpdateComponent implements OnInit {
 
     if (this.editForm.get('mainContact').value) {
       this.editForm.get('salesforceId').disable();
+    } else {
+      this.editForm.get('salesforceId').enable();
     }
   }
 
