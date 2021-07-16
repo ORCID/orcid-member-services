@@ -13,12 +13,6 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-logging:
-  level:
-    ROOT: INFO
-    io.github.jhipster: INFO
-    org.orcid: INFO
-
 eureka:
   instance:
     prefer-ip-address: true
