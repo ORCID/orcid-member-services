@@ -3,7 +3,7 @@
 
 <configuration scan="true">
     <property name="LOG_PATH" value="logs"/>
-
+    
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
     <logger name="javax.management.remote" level="WARN"/>
@@ -32,6 +32,7 @@
     <logger name="sun.rmi" level="WARN"/>
     <logger name="springfox.documentation.schema.property" level="ERROR"/>
     <logger name="sun.net.www" level="WARN"/>
+    <logger name="sun.rmi.transport" level="WARN"/>
     <logger name="org.orcid" level="INFO"/>
     <logger name="jdk.event.security" level="WARN" />
 
@@ -41,22 +42,23 @@
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
     </contextListener>
-
+    
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/gateway.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/member_service.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
-        <encoder>
-            <charset>utf-8</charset>
-            <Pattern>%d %-5level [%thread] %logger{0}: %msg%n</Pattern>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter"/>
+                <appendLineSeparator>true</appendLineSeparator>
+            </layout>
         </encoder>
     </appender>
 
     <root level="${logging.level.root}">
         <appender-ref ref="FILE"/>
     </root>
-
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
             <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
