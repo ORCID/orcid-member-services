@@ -21,6 +21,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.user.UserServiceApp;
 import org.orcid.user.config.Constants;
@@ -29,9 +30,11 @@ import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.service.MailService;
+import org.orcid.user.service.MemberService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.PasswordChangeDTO;
 import org.orcid.user.service.dto.UserDTO;
+import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.web.rest.errors.ExceptionTranslator;
 import org.orcid.user.web.rest.vm.KeyAndPasswordVM;
 import org.orcid.user.web.rest.vm.KeyVM;
@@ -43,6 +46,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -75,6 +79,12 @@ public class AccountResourceIT {
 
     @Mock
     private MailService mockMailService;
+    
+    @Autowired
+    private UserMapper userMapper;
+    
+    @Mock
+    private MemberService mockMemberService;
 
     private MockMvc restMvc;
 
@@ -85,9 +95,14 @@ public class AccountResourceIT {
         userRepository.deleteAll();
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(any());
-        AccountResource accountResource = new AccountResource(userRepository, userService, mockMailService);
+        
+        Mockito.when(mockMemberService.memberExistsWithSalesforceId(Mockito.anyString())).thenReturn(Boolean.TRUE);
+        Mockito.when(mockMemberService.memberNameBySalesforce(Mockito.anyString())).thenReturn("member");
+        ReflectionTestUtils.setField(userMapper, "memberService", mockMemberService);
+        
+        AccountResource accountResource = new AccountResource(userRepository, userService, mockMailService, userMapper);
 
-        AccountResource accountUserMockResource = new AccountResource(userRepository, mockUserService, mockMailService);
+        AccountResource accountUserMockResource = new AccountResource(userRepository, mockUserService, mockMailService, userMapper);
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource).setMessageConverters(httpMessageConverters).setControllerAdvice(exceptionTranslator).build();
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource).setControllerAdvice(exceptionTranslator).build();
     }

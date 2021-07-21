@@ -68,26 +68,6 @@ export class MSMemberService {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  getOrgNameMap(): any {
-    if (Object.keys(this.orgNameMap).length === 0) {
-      this.allMembers$.subscribe(
-        (res: HttpResponse<IMSMember[]>) => {
-          if (res.body) {
-            res.body.forEach((msMember: IMSMember) => {
-              this.orgNameMap[msMember.salesforceId] = msMember.clientName;
-            });
-          }
-          return this.orgNameMap;
-        },
-        (res: HttpErrorResponse) => {
-          console.log('ms-member.service: error fetching org name map');
-        }
-      );
-    } else {
-      return this.orgNameMap;
-    }
-  }
-
   protected convertDateFromClient(msMember: IMSMember): IMSMember {
     const copy: IMSMember = Object.assign({}, msMember, {
       createdDate: msMember.createdDate != null && msMember.createdDate.isValid() ? msMember.createdDate.toJSON() : null,

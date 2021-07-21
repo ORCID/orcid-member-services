@@ -7,7 +7,6 @@ import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
 import { AccountService } from 'app/core';
-import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
 import { SERVER_API_URL } from 'app/app.constants';
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { MSUserService } from './ms-user.service';
@@ -40,7 +39,6 @@ export class MSUserComponent implements OnInit, OnDestroy {
 
   constructor(
     protected msUserService: MSUserService,
-    protected msMemberService: MSMemberService,
     protected parseLinks: JhiParseLinks,
     protected jhiAlertService: JhiAlertService,
     protected accountService: AccountService,
@@ -59,7 +57,6 @@ export class MSUserComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.msMemberService.getOrgNameMap();
     this.accountService.identity().then(account => {
       this.currentAccount = account;
     });

@@ -98,6 +98,7 @@ class UserCsvReaderTest {
         user.setLogin("something@orcid.org");
         user.setLoginAs("something@orcid.org");
         user.setSalesforceId("something");
+        user.setMemberName("some member name");
         return user;
     }
 

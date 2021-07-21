@@ -13,6 +13,8 @@ import org.orcid.user.service.MailService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.PasswordChangeDTO;
 import org.orcid.user.service.dto.UserDTO;
+import org.orcid.user.service.mapper.UserMapper;
+import org.orcid.user.web.rest.errors.AccountResourceException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.user.web.rest.errors.EmailNotFoundException;
 import org.orcid.user.web.rest.errors.InvalidKeyException;
@@ -38,12 +40,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class AccountResource {
 
-    protected static class AccountResourceException extends RuntimeException {
-        protected AccountResourceException(String message) {
-            super(message);
-        }
-    }
-
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     public static final String ROLE_PREVIOUS_ADMINISTRATOR = "ROLE_PREVIOUS_ADMINISTRATOR";
@@ -52,12 +48,16 @@ public class AccountResource {
 
     protected final UserService userService;
 
+    protected final UserMapper userMapper;
+
     protected final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService,
+            UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -109,10 +109,10 @@ public class AccountResource {
     public UserDTO getAccount() {
         Optional<User> user = userService.getUserWithAuthorities();
         if (user.isPresent()) {
-            UserDTO userDTO = UserDTO.valueOf(user.get());
+            UserDTO userDTO = userMapper.toUserDTO(user.get());
             if (!StringUtils.isAllBlank(userDTO.getLoginAs())) {
                 Optional<User> loginAsUser = userService.getUserWithAuthoritiesByLogin(userDTO.getLoginAs());
-                userDTO = UserDTO.valueOf(loginAsUser.get());
+                userDTO = userMapper.toUserDTO(loginAsUser.get());
                 userDTO.setLoggedAs(true);
             }
             return userDTO;

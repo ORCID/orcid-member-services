@@ -11,7 +11,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.orcid.user.config.Constants;
-import org.orcid.user.domain.User;
 import org.orcid.user.security.AuthoritiesConstants;
 
 /**
@@ -72,6 +71,8 @@ public class UserDTO {
     private boolean isLoggedAs = false;
 
     private String loginAs;
+    
+    private String memberName;
 
     public UserDTO() {
         // Empty constructor needed for Jackson.
@@ -253,45 +254,13 @@ public class UserDTO {
     public void setLoginAs(String loginAs) {
         this.loginAs = loginAs;
     }
-
-    public User toUser() {
-        User user = new User();
-        user.setLogin(this.getLogin().toLowerCase());
-        user.setFirstName(this.getFirstName());
-        user.setLastName(this.getLastName());
-        user.setEmail(this.getEmail().toLowerCase());
-        user.setImageUrl(this.getImageUrl());
-        user.setDeleted(Boolean.FALSE);
-        user.setSalesforceId(this.getSalesforceId());
-        user.setMainContact(this.getMainContact());
-        user.setLangKey(this.getLangKey());
-        user.setActivated(this.isActivated());
-        user.setAuthorities(this.getAuthorities());
-        user.setMainContact(user.getMainContact());
-        user.setId(this.getId());
-        user.setLoginAs(this.loginAs);
-        return user;
+    
+    public String getMemberName() {
+        return memberName;
     }
 
-    public static UserDTO valueOf(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setLogin(user.getLogin());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setActivated(user.getActivated());
-        userDTO.setImageUrl(user.getImageUrl());
-        userDTO.setLangKey(user.getLangKey());
-        userDTO.setCreatedBy(user.getCreatedBy());
-        userDTO.setCreatedDate(user.getCreatedDate());
-        userDTO.setLastModifiedBy(user.getLastModifiedBy());
-        userDTO.setLastModifiedDate(user.getLastModifiedDate());
-        userDTO.setAuthorities(user.getAuthorities());
-        userDTO.setSalesforceId(user.getSalesforceId());
-        userDTO.setMainContact(user.getMainContact());
-        userDTO.setId(user.getId());
-        userDTO.setLoginAs(user.getLoginAs());
-        return userDTO;
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
     }
 
     @Override

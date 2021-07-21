@@ -66,7 +66,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Field("activation_key")
     @JsonIgnore
     private String activationKey;
-    
+
     @Field("activation_date")
     private Instant activationDate = null;
 
@@ -77,16 +77,19 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Field("reset_date")
     private Instant resetDate = null;
-    
+
     @Field("salesforce_id")
     private String salesforceId;
+
+    @Field("member_name")
+    private String memberName;
 
     @Field("main_contact")
     private Boolean mainContact;
 
     @Field("deleted")
     private Boolean deleted = false;
-    
+
     @Field("login_as")
     private String loginAs;
 
@@ -113,7 +116,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
         return login;
     }
 
-    // Lowercase the login before saving it in database
     public void setLogin(String login) {
         this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
     }
@@ -173,7 +175,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public void setActivationKey(String activationKey) {
         this.activationKey = activationKey;
     }
-    
+
     public Instant getActivationDate() {
         return activationDate;
     }
@@ -213,32 +215,40 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
     }
-    
+
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
     public String getSalesforceId() {
-		return salesforceId;
-	}
+        return salesforceId;
+    }
 
-	public void setSalesforceId(String salesforceId) {
-		this.salesforceId = salesforceId;
-	}
+    public void setSalesforceId(String salesforceId) {
+        this.salesforceId = salesforceId;
+    }
 
-	public Boolean getMainContact() {
-		return mainContact;
-	}
+    public Boolean getMainContact() {
+        return mainContact;
+    }
 
-	public void setMainContact(Boolean mainContact) {
-		this.mainContact = mainContact;
-	}
+    public void setMainContact(Boolean mainContact) {
+        this.mainContact = mainContact;
+    }
 
-	public Boolean getDeleted() {
-		return deleted;
-	}
+    public Boolean getDeleted() {
+        return deleted;
+    }
 
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
-	}
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
 
-	@Override
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -256,15 +266,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated='" + activated + '\'' +
-            ", langKey='" + langKey + '\'' +
-            ", activationKey='" + activationKey + '\'' +
-            "}";
+        return "User{" + "login='" + login + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName
+                + '\'' + ", email='" + email + '\'' + ", imageUrl='" + imageUrl + '\'' + ", activated='" + activated
+                + '\'' + ", langKey='" + langKey + '\'' + ", activationKey='" + activationKey + '\'' + "}";
     }
 }
