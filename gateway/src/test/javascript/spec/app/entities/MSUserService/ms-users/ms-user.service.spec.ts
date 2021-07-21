@@ -36,6 +36,7 @@ describe('Service Tests', () => {
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
+        'Member name',
         currentDate,
         'AAAAAAA',
         false,
