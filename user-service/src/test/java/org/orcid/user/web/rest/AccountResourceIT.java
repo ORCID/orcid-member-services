@@ -32,6 +32,7 @@ import org.orcid.user.service.MailService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.PasswordChangeDTO;
 import org.orcid.user.service.dto.UserDTO;
+import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.web.rest.errors.ExceptionTranslator;
 import org.orcid.user.web.rest.vm.KeyAndPasswordVM;
 import org.orcid.user.web.rest.vm.KeyVM;
@@ -75,6 +76,9 @@ public class AccountResourceIT {
 
     @Mock
     private MailService mockMailService;
+    
+    @Mock
+    private UserMapper userMapper;
 
     private MockMvc restMvc;
 
@@ -85,9 +89,9 @@ public class AccountResourceIT {
         userRepository.deleteAll();
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(any());
-        AccountResource accountResource = new AccountResource(userRepository, userService, mockMailService);
+        AccountResource accountResource = new AccountResource(userRepository, userService, mockMailService, userMapper);
 
-        AccountResource accountUserMockResource = new AccountResource(userRepository, mockUserService, mockMailService);
+        AccountResource accountUserMockResource = new AccountResource(userRepository, mockUserService, mockMailService, userMapper);
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource).setMessageConverters(httpMessageConverters).setControllerAdvice(exceptionTranslator).build();
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource).setControllerAdvice(exceptionTranslator).build();
     }

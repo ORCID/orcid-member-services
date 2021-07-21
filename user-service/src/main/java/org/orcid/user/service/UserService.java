@@ -22,6 +22,7 @@ import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
+import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.service.util.RandomUtil;
 import org.orcid.user.upload.UserUpload;
 import org.orcid.user.upload.UserUploadReader;
@@ -47,7 +48,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
-    
+
     public static final int RESET_KEY_LIFESPAN_IN_SECONDS = 86400;
 
     @Autowired
@@ -71,16 +72,19 @@ public class UserService {
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    private UserMapper userMapper;
+
     public void completePasswordReset(String newPassword, String key) throws ExpiredKeyException, InvalidKeyException {
         LOG.debug("Reset user password for reset key {}", key);
         if (!validResetKey(key)) {
             throw new InvalidKeyException();
         }
-        
+
         if (expiredResetKey(key)) {
             throw new ExpiredKeyException();
         }
-        
+
         User user = userRepository.findOneByResetKey(key).get();
         user.setPassword(passwordEncoder.encode(newPassword));
         user.setResetKey(null);
@@ -89,17 +93,18 @@ public class UserService {
         userRepository.save(user);
         userCaches.evictEntryFromUserCaches(user.getEmail());
     }
-    
+
     public boolean validResetKey(String key) {
         Optional<User> resetUser = userRepository.findOneByResetKey(key);
         return resetUser.isPresent();
     }
-    
+
     public boolean expiredResetKey(String key) {
         Optional<User> resetUser = userRepository.findOneByResetKey(key);
-        return resetUser.isPresent() && !resetUser.get().getResetDate().isAfter(Instant.now().minusSeconds(RESET_KEY_LIFESPAN_IN_SECONDS));
+        return resetUser.isPresent()
+                && !resetUser.get().getResetDate().isAfter(Instant.now().minusSeconds(RESET_KEY_LIFESPAN_IN_SECONDS));
     }
-    
+
     public void resendActivationEmail(String previousKey) {
         User user = userRepository.findOneByResetKey(previousKey).get();
         sendActivationEmail(user);
@@ -160,7 +165,7 @@ public class UserService {
     public User createUser(UserDTO userDTO) {
         userDTO.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
 
-        User user = userDTO.toUser();
+        User user = userMapper.toUser(userDTO);
         user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         user.setPassword("placeholder");
         user.setResetKey(RandomUtil.generateResetKey());
@@ -213,6 +218,7 @@ public class UserService {
                     user.setImageUrl(userDTO.getImageUrl());
                     user.setMainContact(userDTO.getMainContact());
                     user.setSalesforceId(userDTO.getSalesforceId());
+                    user.setMemberName(memberService.memberNameBySalesforce(userDTO.getSalesforceId()));
                     user.setLoginAs(userDTO.getLoginAs());
                     // user.setActivated(userDTO.isActivated());
                     if (userDTO.getLangKey() != null) {
@@ -239,7 +245,7 @@ public class UserService {
                     userCaches.evictEntryFromUserCaches(user.getLogin());
                     LOG.debug("Changed Information for User: {}", user);
                     return user;
-                }).map(UserDTO::valueOf);
+                }).map(u -> userMapper.toUserDTO(u));
     }
 
     public void deleteUser(String login) {
@@ -297,9 +303,9 @@ public class UserService {
             return user;
         });
     }
-    
+
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findByDeletedFalse(pageable).map(UserDTO::valueOf);
+        return userRepository.findByDeletedFalse(pageable).map(u -> userMapper.toUserDTO(u));
     }
 
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
@@ -402,14 +408,15 @@ public class UserService {
 
     public List<UserDTO> getAllUsersBySalesforceId(String salesforceId) {
         List<User> users = userRepository.findBySalesforceIdAndDeletedIsFalse(salesforceId);
-        return users.stream().map(UserDTO::valueOf).collect(Collectors.toList());
+        return users.stream().map(u -> userMapper.toUserDTO(u)).collect(Collectors.toList());
     }
 
     public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId) {
-        return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId).map(UserDTO::valueOf);
+        return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId)
+                .map(u -> userMapper.toUserDTO(u));
 
     }
-    
+
     private void sendActivationEmail(User user) {
         user.setActivated(false);
         user.setResetKey(RandomUtil.generateResetKey());

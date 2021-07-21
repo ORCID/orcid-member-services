@@ -31,6 +31,7 @@ import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
+import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.upload.UserUpload;
 import org.orcid.user.upload.UserUploadReader;
 import org.springframework.security.core.Authentication;
@@ -60,6 +61,9 @@ class UserServiceTest {
 
     @Mock
     private MailService mailService;
+    
+    @Mock
+    private UserMapper userMapper;
 
     @Captor
     private ArgumentCaptor<User> userCaptor;
@@ -126,22 +130,16 @@ class UserServiceTest {
         Mockito.doNothing().when(mailService).sendCreationEmail(Mockito.any(User.class));
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString()))
                 .thenReturn(true);
+        Mockito.when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(new User());
 
         UserDTO userDTO = getUserDTO();
         userService.createUser(userDTO);
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
+        Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
         Mockito.verify(mailService, Mockito.times(1)).sendCreationEmail(Mockito.any(User.class));
         Mockito.verify(memberService, Mockito.times(1))
                 .memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString());
-
-        User user = userCaptor.getValue();
-        assertEquals(userDTO.getFirstName(), user.getFirstName());
-        assertEquals(userDTO.getLastName(), user.getLastName());
-        assertEquals(userDTO.getLogin(), user.getLogin());
-        assertEquals(userDTO.getEmail(), user.getEmail());
-        assertTrue(user.getAuthorities().contains(AuthoritiesConstants.USER));
-        assertTrue(user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
+        Mockito.verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
     }
 
     @Test
@@ -155,22 +153,16 @@ class UserServiceTest {
         Mockito.doNothing().when(mailService).sendCreationEmail(Mockito.any(User.class));
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString()))
                 .thenReturn(false);
+        Mockito.when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(new User());
 
         UserDTO userDTO = getUserDTO();
         userService.createUser(userDTO);
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
+        Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
         Mockito.verify(mailService, Mockito.times(1)).sendCreationEmail(Mockito.any(User.class));
         Mockito.verify(memberService, Mockito.times(1))
                 .memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString());
-
-        User user = userCaptor.getValue();
-        assertEquals(userDTO.getFirstName(), user.getFirstName());
-        assertEquals(userDTO.getLastName(), user.getLastName());
-        assertEquals(userDTO.getLogin(), user.getLogin());
-        assertEquals(userDTO.getEmail(), user.getEmail());
-        assertTrue(user.getAuthorities().contains(AuthoritiesConstants.USER));
-        assertFalse(user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
+        Mockito.verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
     }
 
     @Test
@@ -275,12 +267,14 @@ class UserServiceTest {
                 .thenReturn(Optional.of(getUser("user2@orcid.org")));
         Mockito.when(userRepository.findOneById(Mockito.eq("user2@orcid.org")))
                 .thenReturn(Optional.of(getUser("user2@orcid.org")));
+        Mockito.when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(new User());
 
         InputStream inputStream = Mockito.mock(InputStream.class);
         userService.uploadUserCSV(inputStream, getUser("some-user@orcid.org"));
 
         // check only new users saved
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
+        Mockito.verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
     }
     
     @Test
