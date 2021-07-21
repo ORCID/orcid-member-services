@@ -9,8 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,6 +36,9 @@ import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.upload.UserUpload;
 import org.orcid.user.upload.UserUploadReader;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -296,12 +301,43 @@ class UserServiceTest {
         Mockito.when(userRepository.findOneByResetKey(Mockito.anyString())).thenReturn(Optional.empty());
         assertFalse(userService.validResetKey("anything"));
     }
+    
+    @Test
+    public void testUpdateMemberNames_fullPage() {
+        Mockito.when(userRepository.findByMemberName(Mockito.any(Pageable.class), Mockito.isNull())).thenReturn(new PageImpl<>(getListOfUsers(10)));
+        Mockito.when(memberService.memberNameBySalesforce(Mockito.anyString())).thenReturn("member name");
+        
+        userService.updateMemberNames();
+        
+        Mockito.verify(userRepository, Mockito.times(1)).findByMemberName(Mockito.any(Pageable.class), Mockito.isNull());
+        Mockito.verify(memberService, Mockito.times(10)).memberNameBySalesforce(Mockito.anyString());
+    }
+
+    @Test
+    public void testUpdateMemberNames_partPage() {
+        Mockito.when(userRepository.findByMemberName(Mockito.any(Pageable.class), Mockito.isNull())).thenReturn(new PageImpl<>(getListOfUsers(2)));
+        Mockito.when(memberService.memberNameBySalesforce(Mockito.anyString())).thenReturn("member name");
+        
+        userService.updateMemberNames();
+        
+        Mockito.verify(userRepository, Mockito.times(1)).findByMemberName(Mockito.any(Pageable.class), Mockito.isNull());
+        Mockito.verify(memberService, Mockito.times(10)).memberNameBySalesforce(Mockito.anyString());
+    }
+
+    private List<User> getListOfUsers(int size) {
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            users.add(getUser(String.valueOf(i)));
+        }
+        return users;
+    }
 
     private User getUser(String login) {
         User user = new User();
         user.setLogin(login);
         user.setEmail(login);
         user.setId(login);
+        user.setSalesforceId(login);
         return user;
     }
 
