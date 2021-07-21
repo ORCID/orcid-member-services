@@ -19,53 +19,53 @@ import org.springframework.cache.CacheManager;
 @SpringBootTest(classes = UserServiceApp.class)
 class UserCachesTest {
 
-	@Autowired
-	private CacheManager cacheManager;
-	
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private CacheManager cacheManager;
 
-	@Autowired
-	private UserCaches userCaches;
+    @Autowired
+    private UserRepository userRepository;
 
-	@BeforeEach
-	public void setUp() throws IOException {
-		Cache emailCache = cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE);
-		Cache loginCache = cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE);
+    @Autowired
+    private UserCaches userCaches;
 
-		emailCache.put("test", "value");
-		loginCache.put("test", "value");
-	}
+    @BeforeEach
+    public void setUp() throws IOException {
+        Cache emailCache = cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE);
+        Cache loginCache = cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE);
 
-	@Test
-	public void testEvictEntryFromUserCaches() {
-		assertNotNull(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test"));
-		assertNotNull(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test"));
-		assertEquals("value", cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test").get());
-		assertEquals("value", cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test").get());
-		userCaches.evictEntryFromUserCaches("test");
-		assertNull(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test"));
-		assertNull(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test"));
-		assertFalse(userRepository.findOneByEmailIgnoreCase("test").isPresent());
-		assertFalse(userRepository.findOneByLogin("test").isPresent());
-	}
+        emailCache.put("test", "value");
+        loginCache.put("test", "value");
+    }
 
-	@Test
-	public void testEvictEntryFromLoginCache() {
-		assertNotNull(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test"));
-		assertEquals("value", cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test").get());
-		userCaches.evictEntryFromLoginCache("test");
-		assertNull(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test"));
-		assertFalse(userRepository.findOneByLogin("test").isPresent());
-	}
+    @Test
+    public void testEvictEntryFromUserCaches() {
+        assertNotNull(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test"));
+        assertNotNull(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test"));
+        assertEquals("value", cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test").get());
+        assertEquals("value", cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test").get());
+        userCaches.evictEntryFromUserCaches("test");
+        assertNull(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test"));
+        assertNull(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test"));
+        assertFalse(userRepository.findOneByEmailIgnoreCase("test").isPresent());
+        assertFalse(userRepository.findOneByLogin("test").isPresent());
+    }
 
-	@Test
-	public void testEvictEntryFromEmailCache() {
-		assertNotNull(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test"));
-		assertEquals("value", cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test").get());
-		userCaches.evictEntryFromEmailCache("test");
-		assertNull(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test"));
-		assertFalse(userRepository.findOneByEmailIgnoreCase("test").isPresent());
-	}
+    @Test
+    public void testEvictEntryFromLoginCache() {
+        assertNotNull(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test"));
+        assertEquals("value", cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test").get());
+        userCaches.evictEntryFromLoginCache("test");
+        assertNull(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test"));
+        assertFalse(userRepository.findOneByLogin("test").isPresent());
+    }
+
+    @Test
+    public void testEvictEntryFromEmailCache() {
+        assertNotNull(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test"));
+        assertEquals("value", cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test").get());
+        userCaches.evictEntryFromEmailCache("test");
+        assertNull(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test"));
+        assertFalse(userRepository.findOneByEmailIgnoreCase("test").isPresent());
+    }
 
 }
