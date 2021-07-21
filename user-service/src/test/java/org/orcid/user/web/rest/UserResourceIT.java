@@ -27,6 +27,7 @@ import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.service.MemberService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.cache.UserCaches;
+import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.web.rest.errors.ExceptionTranslator;
 import org.orcid.user.web.rest.vm.ManagedUserVM;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +100,9 @@ public class UserResourceIT {
 
     @Autowired
     private UserResource userResource;
+    
+    @Autowired
+    private UserMapper userMapper;
 
     private MockMvc restUserMockMvc;
 
@@ -126,9 +130,10 @@ public class UserResourceIT {
         Mockito.when(mockedMemberService.memberNameBySalesforce(Mockito.eq(UPDATED_SALESFORCE_ID)))
                 .thenReturn(UPDATED_MEMBER_NAME);
         ReflectionTestUtils.setField(userService, "memberService", mockedMemberService);
+        ReflectionTestUtils.setField(userMapper, "memberService", mockedMemberService);
     }
 
-    private void createLoggedInUser() {
+    private void createLoggedInUser() { 
         User user = new User();
         user.setLogin(LOGGED_IN_LOGIN);
         user.setPassword(LOGGED_IN_PASSWORD);
