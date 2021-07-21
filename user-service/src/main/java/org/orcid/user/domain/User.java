@@ -80,6 +80,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     
     @Field("salesforce_id")
     private String salesforceId;
+    
+    @Field("member_name")
+    private String memberName;
 
     @Field("main_contact")
     private Boolean mainContact;
@@ -212,6 +215,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
+    }
+    
+    public String getMemberName() {
+        return memberName;
+    }
+    
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
     }
     
     public String getSalesforceId() {
