@@ -23,7 +23,7 @@ public class UserMapperTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        Mockito.when(memberService.memberNameBySalesforce(Mockito.eq("salesforce1"))).thenReturn("member 1");
+        Mockito.when(memberService.getMemberNameBySalesforce(Mockito.eq("salesforce1"))).thenReturn("member 1");
     }
     
     @Test

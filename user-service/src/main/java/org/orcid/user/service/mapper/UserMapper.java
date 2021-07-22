@@ -21,7 +21,7 @@ public class UserMapper {
         user.setImageUrl(userDTO.getImageUrl());
         user.setDeleted(Boolean.FALSE);
         user.setSalesforceId(userDTO.getSalesforceId());
-        user.setMemberName(memberService.memberNameBySalesforce(userDTO.getSalesforceId()));
+        user.setMemberName(memberService.getMemberNameBySalesforce(userDTO.getSalesforceId()));
         user.setMainContact(userDTO.getMainContact());
         user.setLangKey(userDTO.getLangKey());
         user.setActivated(userDTO.isActivated());

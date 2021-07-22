@@ -3,6 +3,7 @@ package org.orcid.user.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -66,7 +67,7 @@ class UserServiceTest {
 
     @Mock
     private MailService mailService;
-    
+
     @Mock
     private UserMapper userMapper;
 
@@ -80,7 +81,7 @@ class UserServiceTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
-    
+
     @Test
     void testResendActivationEmail() {
         User user = new User();
@@ -88,13 +89,13 @@ class UserServiceTest {
         user.setResetDate(Instant.now().minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS + 10000));
         Mockito.when(userRepository.findOneByResetKey(Mockito.eq("key"))).thenReturn(Optional.of(user));
         Mockito.doNothing().when(mailService).sendActivationEmail(Mockito.any(User.class));
-        
+
         userService.resendActivationEmail("key");
-        
+
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
         Mockito.verify(userRepository, Mockito.times(1)).save(captor.capture());
         Mockito.verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
-        
+
         User updated = captor.getValue();
         assertThat(updated.getResetKey()).isNotNull();
         assertThat(updated.getResetDate()).isNotNull();
@@ -281,52 +282,84 @@ class UserServiceTest {
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
         Mockito.verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
     }
-    
+
     @Test
     public void testExpiredResetKey() {
         User user = new User();
         user.setResetDate(Instant.now().minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS - 2000));
         Mockito.when(userRepository.findOneByResetKey(Mockito.anyString())).thenReturn(Optional.of(user));
         assertFalse(userService.expiredResetKey("anything"));
-        
+
         user.setResetDate(Instant.now().minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS + 2000));
         assertTrue(userService.expiredResetKey("anything"));
     }
-    
+
     @Test
     public void testValidResetKey() {
         Mockito.when(userRepository.findOneByResetKey(Mockito.anyString())).thenReturn(Optional.of(new User()));
         assertTrue(userService.validResetKey("anything"));
-        
+
         Mockito.when(userRepository.findOneByResetKey(Mockito.anyString())).thenReturn(Optional.empty());
         assertFalse(userService.validResetKey("anything"));
     }
-    
+
     @Test
     public void testUpdateMemberNames_fullPage() {
-        Mockito.when(userRepository.findByMemberName(Mockito.any(Pageable.class), Mockito.isNull())).thenReturn(new PageImpl<>(getListOfUsers(10)));
-        Mockito.when(memberService.memberNameBySalesforce(Mockito.anyString())).thenReturn("member name");
-        
+        Mockito.when(userRepository.findByMemberName(Mockito.any(Pageable.class), Mockito.isNull()))
+                .thenReturn(new PageImpl<>(getListOfUsers(10)));
+        Mockito.when(memberService.getMemberNameBySalesforce(Mockito.anyString())).thenReturn("member name");
+
         userService.updateMemberNames();
-        
-        Mockito.verify(userRepository, Mockito.times(1)).findByMemberName(Mockito.any(Pageable.class), Mockito.isNull());
-        Mockito.verify(memberService, Mockito.times(10)).memberNameBySalesforce(Mockito.anyString());
+
+        Mockito.verify(userRepository, Mockito.times(1)).findByMemberName(Mockito.any(Pageable.class),
+                Mockito.isNull());
+        Mockito.verify(memberService, Mockito.times(10)).getMemberNameBySalesforce(Mockito.anyString());
     }
 
     @Test
     public void testUpdateMemberNames_partPage() {
-        Mockito.when(userRepository.findByMemberName(Mockito.any(Pageable.class), Mockito.isNull())).thenReturn(new PageImpl<>(getListOfUsers(2)));
-        Mockito.when(memberService.memberNameBySalesforce(Mockito.anyString())).thenReturn("member name");
-        
+        Mockito.when(userRepository.findByMemberName(Mockito.any(Pageable.class), Mockito.isNull()))
+                .thenReturn(new PageImpl<>(getListOfUsers(2)));
+        Mockito.when(memberService.getMemberNameBySalesforce(Mockito.anyString())).thenReturn("member name");
+
         userService.updateMemberNames();
-        
-        Mockito.verify(userRepository, Mockito.times(1)).findByMemberName(Mockito.any(Pageable.class), Mockito.isNull());
-        Mockito.verify(memberService, Mockito.times(10)).memberNameBySalesforce(Mockito.anyString());
+
+        Mockito.verify(userRepository, Mockito.times(1)).findByMemberName(Mockito.any(Pageable.class),
+                Mockito.isNull());
+        Mockito.verify(memberService, Mockito.times(2)).getMemberNameBySalesforce(Mockito.anyString());
+    }
+
+    @Test
+    public void testGetAllManagedUsers() {
+        Mockito.when(userRepository.findByDeletedFalse(Mockito.any(Pageable.class)))
+                .thenReturn(new PageImpl<>(getListOfUsers(20)));
+        Mockito.when(userRepository
+                .findByMemberNameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseAndDeletedFalse(
+                        Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"),
+                        Mockito.any(Pageable.class)))
+                .thenReturn(new PageImpl<>(getListOfUsers(10)));
+
+        Page<UserDTO> users = userService.getAllManagedUsers(Mockito.mock(Pageable.class));
+        assertNotNull(users);
+        assertEquals(20, users.getTotalElements());
+
+        Mockito.verify(userRepository, Mockito.times(1)).findByDeletedFalse(Mockito.any(Pageable.class));
+        Mockito.verify(userMapper, Mockito.times(20)).toUserDTO(Mockito.any(User.class));
+
+        users = userService.getAllManagedUsers(Mockito.mock(Pageable.class), "filter");
+        assertNotNull(users);
+        assertEquals(10, users.getTotalElements());
+
+        Mockito.verify(userRepository, Mockito.times(1))
+                .findByMemberNameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseAndDeletedFalse(
+                        Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"),
+                        Mockito.any(Pageable.class));
+        Mockito.verify(userMapper, Mockito.times(30)).toUserDTO(Mockito.any(User.class)); // 10 more
     }
 
     private List<User> getListOfUsers(int size) {
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < size; i++) {
             users.add(getUser(String.valueOf(i)));
         }
         return users;

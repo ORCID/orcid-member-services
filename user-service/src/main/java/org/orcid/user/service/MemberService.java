@@ -1,6 +1,8 @@
 package org.orcid.user.service;
 
 import feign.FeignException;
+
+import org.apache.commons.lang3.StringUtils;
 import org.orcid.user.client.MemberServiceClient;
 import org.orcid.user.service.member.MemberServiceMember;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +76,11 @@ public class MemberService {
         throw new RuntimeException("Error contacting member service");
     }
 
-    public String memberNameBySalesforce(String salesforceId) {
+    public String getMemberNameBySalesforce(String salesforceId) {
+        if (StringUtils.isBlank(salesforceId)) {
+            return null;
+        }
+        
         ResponseEntity<MemberServiceMember> response = memberServiceClient.getMember(salesforceId);
         if (response.getStatusCode().is2xxSuccessful()) {
             return response.getBody().getClientName();

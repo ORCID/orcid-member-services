@@ -158,7 +158,7 @@ public class UserResource {
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
         if (owner) {
-            String member = memberService.memberNameBySalesforce(updatedUser.get().getSalesforceId());
+            String member = memberService.getMemberNameBySalesforce(updatedUser.get().getSalesforceId());
             mailService.sendOrganizationOwnerChangedMail(userMapper.toUser(updatedUser.get()), member);
         }
 
@@ -175,9 +175,14 @@ public class UserResource {
      *         all users.
      */
     @GetMapping("/users")
-    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams,
+    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams, @RequestParam("filter") String filter,
             UriComponentsBuilder uriBuilder, Pageable pageable) {
-        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+        Page<UserDTO> page = null;
+        if (StringUtils.isBlank(filter)) {
+            page = userService.getAllManagedUsers(pageable);
+        } else {
+            page = userService.getAllManagedUsers(pageable, filter);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -317,7 +322,7 @@ public class UserResource {
         User newUser = userService.createUser(userDTO);
 
         if (owner) {
-            String member = memberService.memberNameBySalesforce(newUser.getSalesforceId());
+            String member = memberService.getMemberNameBySalesforce(newUser.getSalesforceId());
             mailService.sendOrganizationOwnerChangedMail(newUser, member);
         }
 

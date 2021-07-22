@@ -97,7 +97,7 @@ public class AccountResourceIT {
         doNothing().when(mockMailService).sendActivationEmail(any());
         
         Mockito.when(mockMemberService.memberExistsWithSalesforceId(Mockito.anyString())).thenReturn(Boolean.TRUE);
-        Mockito.when(mockMemberService.memberNameBySalesforce(Mockito.anyString())).thenReturn("member");
+        Mockito.when(mockMemberService.getMemberNameBySalesforce(Mockito.anyString())).thenReturn("member");
         ReflectionTestUtils.setField(userMapper, "memberService", mockMemberService);
         
         AccountResource accountResource = new AccountResource(userRepository, userService, mockMailService, userMapper);
