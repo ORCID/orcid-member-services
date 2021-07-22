@@ -385,22 +385,22 @@ ul.validation-errors {
   padding: 0;
 }
 
-div.member-filter-group {
+div.filter-group {
   margin: 10px 0 10px 0;
 }
 
-div.member-filter-input {
+div.filter-input {
   position: relative;
   width: 40%;
 }
 
-div.member-filter-group > button.search {
+div.filter-group > button.search {
   background-color: white;
   border: 1px solid #ced4da;
   position: relative;
 }
 
-div.member-filter-input > button.reset {
+div.filter-input > button.reset {
   background-color: white;
   border: none;
   position: absolute;
