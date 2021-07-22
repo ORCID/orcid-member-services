@@ -175,7 +175,7 @@ public class UserResource {
      *         all users.
      */
     @GetMapping("/users")
-    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams, @RequestParam("filter") String filter,
+    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams, @RequestParam(required = false, name = "filter") String filter,
             UriComponentsBuilder uriBuilder, Pageable pageable) {
         Page<UserDTO> page = null;
         if (StringUtils.isBlank(filter)) {
