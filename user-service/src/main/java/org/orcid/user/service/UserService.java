@@ -11,8 +11,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.orcid.user.config.Constants;
 import org.orcid.user.domain.Authority;
 import org.orcid.user.domain.User;
@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -366,6 +367,21 @@ public class UserService {
                     userRepository.delete(user);
                     userCaches.evictEntryFromUserCaches(user.getEmail());
                 });
+    }
+    
+    /**
+     * Task to populate empty member names, to update 10 every five minutes
+     */
+    @Scheduled(initialDelay = 300000l, fixedDelay = 300000l)
+    public void updateMemberNames() {
+        Page<User> page = userRepository.findByMemberName(PageRequest.of(0, 10), null);
+        page.getContent().stream().filter(u -> !StringUtils.isBlank(u.getSalesforceId())).forEach(u -> {
+            LOG.info("Populating member name field for user {}", u.getLogin());
+            u.setMemberName(memberService.memberNameBySalesforce(u.getSalesforceId()));
+            userRepository.save(u);
+            userCaches.evictEntryFromUserCaches(u.getEmail());
+            userCaches.evictEntryFromUserCaches(u.getLogin());
+        });
     }
 
     /**
