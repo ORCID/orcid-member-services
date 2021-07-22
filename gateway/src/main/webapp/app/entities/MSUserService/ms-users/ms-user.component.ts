@@ -3,7 +3,7 @@ import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/ht
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
-import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faTimesCircle, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
 import { AccountService } from 'app/core';
@@ -21,7 +21,6 @@ export class MSUserComponent implements OnInit, OnDestroy {
   currentAccount: IMSUser;
   msUser: IMSUser[];
   error: any;
-  success: any;
   eventSubscriber: Subscription;
   routeData: any;
   links: any;
@@ -29,9 +28,12 @@ export class MSUserComponent implements OnInit, OnDestroy {
   itemsPerPage: any;
   page: any;
   predicate: any;
-  previousPage: any;
   reverse: any;
   itemCount: string;
+  faTimes = faTimes;
+  faSearch = faSearch;
+  searchTerm: string;
+  submittedSearchTerm: string;
 
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
@@ -50,7 +52,6 @@ export class MSUserComponent implements OnInit, OnDestroy {
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.routeData = this.activatedRoute.data.subscribe(data => {
       this.page = data.pagingParams.page;
-      this.previousPage = data.pagingParams.page;
       this.reverse = data.pagingParams.ascending;
       this.predicate = data.pagingParams.predicate;
     });
@@ -73,12 +74,19 @@ export class MSUserComponent implements OnInit, OnDestroy {
   }
 
   loadAll() {
+    if (this.submittedSearchTerm) {
+      this.searchTerm = this.submittedSearchTerm;
+    } else {
+      this.searchTerm = '';
+    }
+
     if (this.hasRoleAdmin()) {
       this.msUserService
         .query({
           page: this.page - 1,
           size: this.itemsPerPage,
-          sort: this.sort()
+          sort: this.sort(),
+          filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
         })
         .subscribe(
           (res: HttpResponse<IMSUser[]>) => this.paginateMSUser(res.body, res.headers),
@@ -89,7 +97,8 @@ export class MSUserComponent implements OnInit, OnDestroy {
         .findBySalesForceId(this.accountService.getSalesforceId(), {
           page: this.page - 1,
           size: this.itemsPerPage,
-          sort: this.sort()
+          sort: this.sort(),
+          filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
         })
         .subscribe(
           (res: HttpResponse<IMSUser[]>) => this.paginateMSUser(res.body, res.headers),
@@ -99,10 +108,7 @@ export class MSUserComponent implements OnInit, OnDestroy {
   }
 
   loadPage(page: number) {
-    if (page !== this.previousPage) {
-      this.previousPage = page;
-      this.transition();
-    }
+    this.transition();
   }
 
   transition() {
@@ -110,7 +116,8 @@ export class MSUserComponent implements OnInit, OnDestroy {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
       }
     });
     this.loadAll();
@@ -122,7 +129,8 @@ export class MSUserComponent implements OnInit, OnDestroy {
       '/ms-user',
       {
         page: this.page,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
       }
     ]);
     this.loadAll();
@@ -187,6 +195,19 @@ export class MSUserComponent implements OnInit, OnDestroy {
     this.msUserService.switchUser(login).subscribe(res => {
       window.location.href = SERVER_API_URL;
     });
+  }
+
+  resetSearch() {
+    this.page = 1;
+    this.searchTerm = '';
+    this.submittedSearchTerm = '';
+    this.loadAll();
+  }
+
+  submitSearch() {
+    this.page = 1;
+    this.submittedSearchTerm = this.searchTerm;
+    this.loadAll();
   }
 
   protected paginateMSUser(data: IMSUser[], headers: HttpHeaders) {

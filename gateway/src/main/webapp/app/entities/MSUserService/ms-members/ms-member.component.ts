@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 import { faTimesCircle, faCheckCircle, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 
@@ -84,7 +83,7 @@ export class MSMemberComponent implements OnInit, OnDestroy {
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort(),
-        filter: this.submittedSearchTerm ? this.searchTerm : ''
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
       })
       .subscribe(
         (res: HttpResponse<IMSMember[]>) => this.paginateMSMember(res.body, res.headers),
@@ -102,7 +101,7 @@ export class MSMemberComponent implements OnInit, OnDestroy {
         page: this.page,
         size: this.itemsPerPage,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
-        filter: this.searchTerm ? this.searchTerm : ''
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
       }
     });
     this.loadAll();
@@ -115,7 +114,7 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       {
         page: this.page,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
-        filter: this.searchTerm ? this.searchTerm : ''
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
       }
     ]);
     this.loadAll();

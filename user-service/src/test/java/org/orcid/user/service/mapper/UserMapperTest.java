@@ -23,8 +23,7 @@ public class UserMapperTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        Mockito.when(memberService.memberNameBySalesforce(Mockito.eq("salesforce1"))).thenReturn("member 1");
-        Mockito.when(memberService.memberNameBySalesforce(Mockito.eq("salesforce2"))).thenReturn("member 2");
+        Mockito.when(memberService.getMemberNameBySalesforce(Mockito.eq("salesforce1"))).thenReturn("member 1");
     }
     
     @Test
@@ -82,6 +81,7 @@ public class UserMapperTest {
         user.setLangKey("en");
         user.setCreatedBy("someone");
         user.setLastModifiedBy("some@email.com");
+        user.setMemberName("member 2");
         return user;
     }
 

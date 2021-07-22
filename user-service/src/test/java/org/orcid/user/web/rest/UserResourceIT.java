@@ -125,9 +125,9 @@ public class UserResourceIT {
         Mockito.when(mockedMemberService.memberExistsWithSalesforceId(Mockito.anyString())).thenReturn(Boolean.TRUE);
         Mockito.when(mockedMemberService.memberExistsWithSalesforceIdAndSuperadminEnabled(Mockito.anyString()))
                 .thenReturn(Boolean.FALSE);
-        Mockito.when(mockedMemberService.memberNameBySalesforce(Mockito.eq(DEFAULT_SALESFORCE_ID)))
+        Mockito.when(mockedMemberService.getMemberNameBySalesforce(Mockito.eq(DEFAULT_SALESFORCE_ID)))
                 .thenReturn(DEFAULT_MEMBER_NAME);
-        Mockito.when(mockedMemberService.memberNameBySalesforce(Mockito.eq(UPDATED_SALESFORCE_ID)))
+        Mockito.when(mockedMemberService.getMemberNameBySalesforce(Mockito.eq(UPDATED_SALESFORCE_ID)))
                 .thenReturn(UPDATED_MEMBER_NAME);
         ReflectionTestUtils.setField(userService, "memberService", mockedMemberService);
         ReflectionTestUtils.setField(userMapper, "memberService", mockedMemberService);

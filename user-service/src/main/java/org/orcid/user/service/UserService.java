@@ -219,7 +219,7 @@ public class UserService {
                     user.setImageUrl(userDTO.getImageUrl());
                     user.setMainContact(userDTO.getMainContact());
                     user.setSalesforceId(userDTO.getSalesforceId());
-                    user.setMemberName(memberService.memberNameBySalesforce(userDTO.getSalesforceId()));
+                    user.setMemberName(memberService.getMemberNameBySalesforce(userDTO.getSalesforceId()));
                     user.setLoginAs(userDTO.getLoginAs());
                     // user.setActivated(userDTO.isActivated());
                     if (userDTO.getLangKey() != null) {
@@ -309,6 +309,13 @@ public class UserService {
         return userRepository.findByDeletedFalse(pageable).map(u -> userMapper.toUserDTO(u));
     }
 
+    public Page<UserDTO> getAllManagedUsers(Pageable pageable, String filter) {
+        return userRepository
+                .findByMemberNameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseAndDeletedFalse(
+                        filter, filter, filter, filter, pageable)
+                .map(u -> userMapper.toUserDTO(u));
+    }
+
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneByLogin(login);
     }
@@ -368,7 +375,7 @@ public class UserService {
                     userCaches.evictEntryFromUserCaches(user.getEmail());
                 });
     }
-    
+
     /**
      * Task to populate empty member names, to update 10 every five minutes
      */
@@ -377,7 +384,7 @@ public class UserService {
         Page<User> page = userRepository.findByMemberName(PageRequest.of(0, 10), null);
         page.getContent().stream().filter(u -> !StringUtils.isBlank(u.getSalesforceId())).forEach(u -> {
             LOG.info("Populating member name field for user {}", u.getLogin());
-            u.setMemberName(memberService.memberNameBySalesforce(u.getSalesforceId()));
+            u.setMemberName(memberService.getMemberNameBySalesforce(u.getSalesforceId()));
             userRepository.save(u);
             userCaches.evictEntryFromUserCaches(u.getEmail());
             userCaches.evictEntryFromUserCaches(u.getLogin());
