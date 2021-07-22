@@ -47,7 +47,7 @@ public class UserMapper {
         userDTO.setLastModifiedDate(user.getLastModifiedDate());
         userDTO.setAuthorities(user.getAuthorities());
         userDTO.setSalesforceId(user.getSalesforceId());
-        userDTO.setMemberName(memberService.memberNameBySalesforce(user.getSalesforceId()));
+        userDTO.setMemberName(user.getMemberName());
         userDTO.setMainContact(user.getMainContact());
         userDTO.setId(user.getId());
         userDTO.setLoginAs(user.getLoginAs());
