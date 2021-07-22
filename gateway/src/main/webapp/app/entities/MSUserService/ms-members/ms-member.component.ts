@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 import { faTimesCircle, faCheckCircle, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 
