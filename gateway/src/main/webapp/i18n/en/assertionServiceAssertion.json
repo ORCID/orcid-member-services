@@ -18,7 +18,7 @@
         "generateReport": { "string": "Download affiliation status report" },
         "exportForEdit": { "string": "Download affiliations for edit" },
         "forHelpTroubleshooting": {
-          "string": "For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below."
+          "string": "If you require help troubleshooting this error, please contact your consortium lead or membership@orcid.org. Please include a screenshot of the error message below."
         }
       },
       "delete": {
