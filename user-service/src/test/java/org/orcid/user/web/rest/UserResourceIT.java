@@ -49,7 +49,6 @@ public class UserResourceIT {
 
     private static final String DEFAULT_LOGIN = "user@orcid.org";
     private static final String LOGGED_IN_LOGIN = "loggedin@orcid.org";
-    private static final String UPDATED_LOGIN = "jhipster@orcid.org";
 
     private static final String DEFAULT_PASSWORD = "password";
     private static final String LOGGED_IN_PASSWORD = "0123456789";
@@ -57,7 +56,6 @@ public class UserResourceIT {
 
     private static final String DEFAULT_EMAIL = "user@orcid.org";
     private static final String LOGGED_IN_EMAIL = "loggedin@orcid.org";
-    private static final String UPDATED_EMAIL = "user@something.com";
 
     private static final String DEFAULT_FIRSTNAME = "user";
     private static final String LOGGED_IN_FIRSTNAME = "logged";
@@ -160,6 +158,7 @@ public class UserResourceIT {
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
         user.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        user.setMainContact(false);
         user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         return user;
     }
@@ -381,7 +380,7 @@ public class UserResourceIT {
         managedUserVM.setPassword(UPDATED_PASSWORD);
         managedUserVM.setFirstName(UPDATED_FIRSTNAME);
         managedUserVM.setLastName(UPDATED_LASTNAME);
-        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setEmail(DEFAULT_EMAIL);
         managedUserVM.setActivated(updatedUser.getActivated());
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
         managedUserVM.setLangKey(UPDATED_LANGKEY);
@@ -402,56 +401,11 @@ public class UserResourceIT {
         User testUser = userList.get(userList.size() - 1);
         assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
         assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
-        assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
+        assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
         assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         assertThat(testUser.getSalesforceId()).isEqualTo(UPDATED_SALESFORCE_ID);
         assertThat(testUser.getMemberName()).isEqualTo(UPDATED_MEMBER_NAME);
-    }
-
-    @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN",
-            "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
-    public void updateUserLogin() throws Exception {
-        // Initialize the database
-        userRepository.save(user);
-        int databaseSizeBeforeUpdate = userRepository.findAll().size();
-
-        // Update the user
-        User updatedUser = userRepository.findById(user.getId()).get();
-
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setLogin(UPDATED_LOGIN);
-        managedUserVM.setPassword(UPDATED_PASSWORD);
-        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
-        managedUserVM.setLastName(UPDATED_LASTNAME);
-        managedUserVM.setEmail(UPDATED_EMAIL);
-        managedUserVM.setActivated(updatedUser.getActivated());
-        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
-        managedUserVM.setLangKey(UPDATED_LANGKEY);
-        managedUserVM.setSalesforceId(UPDATED_SALESFORCE_ID);
-        managedUserVM.setMainContact(false);
-        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
-        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
-        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-
-        restUserMockMvc.perform(put("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM))).andExpect(status().isOk());
-
-        // Validate the User in the database
-        List<User> userList = userRepository.findAll();
-        assertThat(userList).hasSize(databaseSizeBeforeUpdate);
-        User testUser = userList.get(userList.size() - 1);
-        assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
-        assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
-        assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
-        assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-        assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
-        assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
-        assertThat(testUser.getSalesforceId()).isEqualTo(UPDATED_SALESFORCE_ID);
     }
 
     @Test
@@ -556,7 +510,7 @@ public class UserResourceIT {
         managedUserVM.setPassword(UPDATED_PASSWORD);
         managedUserVM.setFirstName(UPDATED_FIRSTNAME);
         managedUserVM.setLastName(UPDATED_LASTNAME);
-        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setEmail(DEFAULT_EMAIL);
         managedUserVM.setActivated(updatedUser.getActivated());
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
         managedUserVM.setLangKey(UPDATED_LANGKEY);
