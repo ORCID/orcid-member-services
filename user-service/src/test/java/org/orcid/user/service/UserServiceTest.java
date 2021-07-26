@@ -334,7 +334,7 @@ class UserServiceTest {
         Mockito.when(userRepository.findByDeletedFalse(Mockito.any(Pageable.class)))
                 .thenReturn(new PageImpl<>(getListOfUsers(20)));
         Mockito.when(userRepository
-                .findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                .findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndEmailContainingIgnoreCase(
                         Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"),
                         Mockito.any(Pageable.class)))
                 .thenReturn(new PageImpl<>(getListOfUsers(10)));
@@ -351,7 +351,7 @@ class UserServiceTest {
         assertEquals(10, users.getTotalElements());
 
         Mockito.verify(userRepository, Mockito.times(1))
-                .findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                .findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndEmailContainingIgnoreCase(
                         Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"),
                         Mockito.any(Pageable.class));
         Mockito.verify(userMapper, Mockito.times(30)).toUserDTO(Mockito.any(User.class)); // 10 more
