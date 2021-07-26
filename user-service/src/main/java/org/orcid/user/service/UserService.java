@@ -311,7 +311,7 @@ public class UserService {
 
     public Page<UserDTO> getAllManagedUsers(Pageable pageable, String filter) {
         return userRepository
-                .findByMemberNameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseAndDeletedFalse(
+                .findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
                         filter, filter, filter, filter, pageable)
                 .map(u -> userMapper.toUserDTO(u));
     }
