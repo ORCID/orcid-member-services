@@ -179,12 +179,20 @@ class UserServiceTest {
                 return (User) invocation.getArgument(0);
             }
         });
+        
+        User existing = new User();
+        existing.setId("id");
+        existing.setLogin("login");
+        existing.setMainContact(false);
+        
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString()))
                 .thenReturn(true);
-        Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(new User()));
-
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
+        Mockito.when(userMapper.toUserDTO(Mockito.any(User.class))).thenReturn(new UserDTO());
+        
         UserDTO userDTO = getUserDTO();
         userDTO.setId("id");
+        userDTO.setMainContact(false);
         userService.updateUser(userDTO);
 
         Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
@@ -211,10 +219,19 @@ class UserServiceTest {
         Mockito.doNothing().when(mailService).sendCreationEmail(Mockito.any(User.class));
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString()))
                 .thenReturn(false);
-        Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(new User()));
-
+        
+        User existing = new User();
+        existing.setId("id");
+        existing.setLogin("login");
+        existing.setMainContact(false);
+        
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
+        Mockito.when(userMapper.toUserDTO(Mockito.any(User.class))).thenReturn(new UserDTO());
+        
         UserDTO userDTO = getUserDTO();
         userDTO.setId("id");
+        userDTO.setLogin("login");
+        userDTO.setMainContact(false);
         userService.updateUser(userDTO);
 
         Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
@@ -230,6 +247,49 @@ class UserServiceTest {
         assertFalse(user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
     }
 
+    @Test
+    public void testUpdateUserNoOrgOwnerChange() {
+        UserDTO toUpdate = new UserDTO();
+        toUpdate.setMainContact(false);
+        toUpdate.setLogin("some-login");
+        toUpdate.setId("some-id");
+
+        User existing = new User();
+        existing.setMainContact(false);
+        existing.setId("some-id");
+        
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
+        Mockito.when(userMapper.toUserDTO(Mockito.any(User.class))).thenReturn(new UserDTO());
+        
+        userService.updateUser(toUpdate);
+
+        Mockito.verify(mailService, Mockito.never()).sendOrganizationOwnerChangedMail(Mockito.any(User.class),
+                Mockito.anyString());
+    }
+    
+    @Test
+    public void testUpdateUserWithOrgOwnerChange() {
+        UserDTO toUpdate = new UserDTO();
+        toUpdate.setMainContact(true);
+        toUpdate.setLogin("some-login");
+        toUpdate.setId("some-id");
+        toUpdate.setSalesforceId("salesforce");
+
+        User existing = new User();
+        existing.setMainContact(false);
+        existing.setId("some-id");
+        existing.setSalesforceId("salesforce");
+        
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
+        Mockito.when(userMapper.toUserDTO(Mockito.any(User.class))).thenReturn(new UserDTO());
+        Mockito.when(memberService.getMemberNameBySalesforce(Mockito.anyString())).thenReturn("member");
+        
+        userService.updateUser(toUpdate);
+
+        Mockito.verify(mailService, Mockito.times(1)).sendOrganizationOwnerChangedMail(Mockito.any(User.class),
+                Mockito.anyString());
+    }
+             
     @Test
     public void testUpdateAccount() {
         Authentication authentication = Mockito.mock(Authentication.class);

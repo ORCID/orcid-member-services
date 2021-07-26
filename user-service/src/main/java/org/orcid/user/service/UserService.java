@@ -28,9 +28,9 @@ import org.orcid.user.upload.UserUpload;
 import org.orcid.user.upload.UserUploadReader;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
+import org.orcid.user.web.rest.errors.ExpiredKeyException;
 import org.orcid.user.web.rest.errors.InvalidKeyException;
 import org.orcid.user.web.rest.errors.InvalidPasswordException;
-import org.orcid.user.web.rest.errors.ExpiredKeyException;
 import org.orcid.user.web.rest.errors.LoginAlreadyUsedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -210,43 +210,71 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
-        return Optional.of(userRepository.findById(userDTO.getId())).filter(Optional::isPresent).map(Optional::get)
-                .map(user -> {
-                    userCaches.evictEntryFromUserCaches(user.getEmail());
-                    user.setLogin(userDTO.getLogin().toLowerCase());
-                    user.setFirstName(userDTO.getFirstName());
-                    user.setLastName(userDTO.getLastName());
-                    user.setImageUrl(userDTO.getImageUrl());
-                    user.setMainContact(userDTO.getMainContact());
-                    user.setSalesforceId(userDTO.getSalesforceId());
-                    user.setMemberName(memberService.getMemberNameBySalesforce(userDTO.getSalesforceId()));
-                    user.setLoginAs(userDTO.getLoginAs());
-                    // user.setActivated(userDTO.isActivated());
-                    if (userDTO.getLangKey() != null) {
-                        user.setLangKey(userDTO.getLangKey());
-                    }
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        checkUpdateConstraints(existingUser, userDTO);
+        User user = existingUser.get();
+        boolean previouslyOwner = user.getMainContact();
+        boolean owner = userDTO.getMainContact();
 
-                    user.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
-                    if (!StringUtils.equals(user.getEmail(), userDTO.getEmail().toLowerCase())) {
-                        user.setEmail(userDTO.getEmail().toLowerCase());
-                        user.setActivated(false);
-                        user.setActivationKey(RandomUtil.generateResetKey());
-                        user.setActivationDate(Instant.now());
-                        mailService.sendActivationEmail(user);
-                    }
-                    if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null
-                            && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
-                        user.setSalesforceId(userDTO.getSalesforceId());
-                        user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-                        user.setLastModifiedDate(Instant.now());
-                    }
+        if (owner && !previouslyOwner) {
+            List<User> owners = userRepository
+                    .findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
+            for (User prevOwner : owners) {
+                if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
+                    removeOwnershipFromUser(prevOwner.getLogin());
+                }
+            }
+            userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
 
-                    userRepository.save(user);
-                    userCaches.evictEntryFromUserCaches(user.getEmail());
-                    userCaches.evictEntryFromUserCaches(user.getLogin());
-                    LOG.debug("Changed Information for User: {}", user);
-                    return user;
-                }).map(u -> userMapper.toUserDTO(u));
+        }
+
+        userCaches.evictEntryFromUserCaches(user.getEmail());
+        user.setLogin(userDTO.getLogin().toLowerCase());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setImageUrl(userDTO.getImageUrl());
+        user.setMainContact(userDTO.getMainContact());
+        user.setSalesforceId(userDTO.getSalesforceId());
+        user.setMemberName(memberService.getMemberNameBySalesforce(userDTO.getSalesforceId()));
+        user.setLoginAs(userDTO.getLoginAs());
+        user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
+        user.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
+
+        if (!StringUtils.equals(user.getEmail(), userDTO.getEmail().toLowerCase())) {
+            user.setEmail(userDTO.getEmail().toLowerCase());
+            user.setActivated(false);
+            user.setActivationKey(RandomUtil.generateResetKey());
+            user.setActivationDate(Instant.now());
+            mailService.sendActivationEmail(user);
+        }
+        
+        if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null
+                && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
+            user.setSalesforceId(userDTO.getSalesforceId());
+            user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+            user.setLastModifiedDate(Instant.now());
+        }
+
+        userRepository.save(user);
+        userCaches.evictEntryFromUserCaches(user.getEmail());
+        userCaches.evictEntryFromUserCaches(user.getLogin());
+        
+        if (owner && !previouslyOwner) {
+            String member = memberService.getMemberNameBySalesforce(user.getSalesforceId());
+            mailService.sendOrganizationOwnerChangedMail(user, member);
+        }
+        
+        return Optional.of(userMapper.toUserDTO(user));
+    }
+
+    private void checkUpdateConstraints(Optional<User> existingUser, UserDTO userDTO) {
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+            throw new EmailAlreadyUsedException();
+        }
+        existingUser = userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+            throw new LoginAlreadyUsedException();
+        }
     }
 
     public void deleteUser(String login) {
