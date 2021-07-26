@@ -2,6 +2,7 @@ package org.orcid.user.web.rest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -136,6 +137,20 @@ class UserResourceTest {
         assertEquals(2, users.size());
         Mockito.verify(userService, Mockito.times(1)).getAllManagedUsers(Mockito.any(Pageable.class),
                 Mockito.anyString());
+    }
+    
+    @Test
+    public void testUpdateUser() {
+        UserValidation userValidation = new UserValidation();
+        userValidation.setValid(true);
+        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class))).thenReturn(userValidation);
+        Mockito.when(userService.updateUser(Mockito.any(UserDTO.class))).thenReturn(Optional.of(new UserDTO()));
+        
+        ResponseEntity<UserDTO> response = userResource.updateUser(new UserDTO());
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+        
+        Mockito.verify(userValidator, Mockito.times(1)).validate(Mockito.any(UserDTO.class), Mockito.any(User.class));
+        Mockito.verify(userService, Mockito.times(1)).updateUser(Mockito.any(UserDTO.class));
     }
 
     private UserDTO getUser() {

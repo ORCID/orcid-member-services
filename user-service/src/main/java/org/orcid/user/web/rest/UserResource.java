@@ -124,44 +124,11 @@ public class UserResource {
     @PutMapping("/users")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
         LOG.debug("REST request to update User : {}", userDTO);
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
-            throw new EmailAlreadyUsedException();
-        }
-        existingUser = userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
-        // XXX - eh?
-        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
-            throw new LoginAlreadyUsedException();
-        }
-
         if (!userValidator.validate(userDTO, getCurrentUser()).isValid()) {
             return ResponseEntity.badRequest().body(userDTO);
         }
 
-        // change the auth if the logged in user is org owner and this is set as
-        // mainContact
-        boolean owner = userDTO.getMainContact();
-        if (owner) {
-
-            List<User> owners = userRepository
-                    .findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
-            for (User prevOwner : owners) {
-                if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
-                    userService.removeOwnershipFromUser(prevOwner.getLogin());
-                }
-            }
-
-            userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
-
-        }
-
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
-
-        if (owner) {
-            String member = memberService.getMemberNameBySalesforce(updatedUser.get().getSalesforceId());
-            mailService.sendOrganizationOwnerChangedMail(userMapper.toUser(updatedUser.get()), member);
-        }
-
         return ResponseUtil.wrapOrNotFound(updatedUser);
     }
 
