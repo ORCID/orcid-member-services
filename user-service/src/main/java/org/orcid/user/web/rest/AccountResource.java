@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
-import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.service.MailService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.PasswordChangeDTO;
@@ -17,9 +16,9 @@ import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.web.rest.errors.AccountResourceException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.user.web.rest.errors.EmailNotFoundException;
+import org.orcid.user.web.rest.errors.ExpiredKeyException;
 import org.orcid.user.web.rest.errors.InvalidKeyException;
 import org.orcid.user.web.rest.errors.InvalidPasswordException;
-import org.orcid.user.web.rest.errors.ExpiredKeyException;
 import org.orcid.user.web.rest.vm.KeyAndPasswordVM;
 import org.orcid.user.web.rest.vm.KeyVM;
 import org.orcid.user.web.rest.vm.ManagedUserVM;
@@ -84,15 +83,10 @@ public class AccountResource {
      */
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
-        String userLogin = SecurityUtils.getCurrentUserLogin()
-                .orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        User currentUser = userService.getCurrentUser();
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && !existingUser.get().getLogin().equalsIgnoreCase(userLogin)) {
+        if (existingUser.isPresent() && !existingUser.get().getLogin().equalsIgnoreCase(currentUser.getLogin())) {
             throw new EmailAlreadyUsedException();
-        }
-        Optional<User> user = userRepository.findOneByLogin(userLogin);
-        if (!user.isPresent()) {
-            throw new AccountResourceException("User could not be found");
         }
         userService.updateAccount(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
                 userDTO.getLangKey(), userDTO.getImageUrl());
@@ -199,7 +193,7 @@ public class AccountResource {
         }
         return ResponseEntity.ok(result);
     }
-
+    
     protected static boolean checkPasswordLength(String password) {
         return !StringUtils.isEmpty(password) && password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH
                 && password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
