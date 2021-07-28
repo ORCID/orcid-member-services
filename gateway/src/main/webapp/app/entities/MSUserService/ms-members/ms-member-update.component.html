@@ -74,7 +74,7 @@
             </div>
             <br>
             <div class="form-group">
-                <button type="button" id="cancel-save" class="btn btn-outline-primary"  (click)="previousState()">
+                <button type="button" id="cancel-save" class="btn btn-outline-primary"  (click)="navigateToMembersList()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
                 </button>
                 <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
