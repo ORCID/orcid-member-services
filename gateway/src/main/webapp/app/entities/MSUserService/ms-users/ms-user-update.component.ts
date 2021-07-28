@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { JhiAlertService } from 'ng-jhipster';
@@ -54,6 +54,7 @@ export class MSUserUpdateComponent implements OnInit {
     protected msUserService: MSUserService,
     protected msMemberService: MSMemberService,
     protected activatedRoute: ActivatedRoute,
+    protected router: Router,
     protected accountService: AccountService,
     private fb: FormBuilder,
     private cdref: ChangeDetectorRef
@@ -129,13 +130,18 @@ export class MSUserUpdateComponent implements OnInit {
       lastModifiedBy: msUser.lastModifiedBy,
       lastModifiedDate: msUser.lastModifiedDate != null ? msUser.lastModifiedDate.format(DATE_TIME_FORMAT) : null
     });
+    if (msUser.mainContact) {
+      this.editForm.get('mainContact').disable();
+      this.editForm.get('salesforceId').disable();
+    }
+
     if (msUser.salesforceId) {
       this.isExistentMember = true;
     }
   }
 
-  previousState() {
-    window.history.back();
+  navigateToUsersList() {
+    this.router.navigate(['/ms-user']);
   }
 
   disableSalesForceIdDD() {
@@ -166,7 +172,7 @@ export class MSUserUpdateComponent implements OnInit {
     return this.accountService.hasAnyAuthority(['ROLE_CONSORTIUM_LEAD']);
   }
 
-  hasOwnerValidation() {
+  validateOrgOwners() {
     this.isSaving = true;
     this.msUserService.hasOwner(this.editForm.get('salesforceId').value).subscribe(value => {
       this.isSaving = false;
@@ -176,6 +182,12 @@ export class MSUserUpdateComponent implements OnInit {
         this.hasOwner = value;
       }
     });
+
+    if (this.editForm.get('mainContact').value) {
+      this.editForm.get('salesforceId').disable();
+    } else {
+      this.editForm.get('salesforceId').enable();
+    }
   }
 
   save() {
@@ -220,7 +232,7 @@ export class MSUserUpdateComponent implements OnInit {
       } else {
         this.alertService.success('gatewayApp.msUserServiceMSUser.sendActivate.error.string', null, null);
       }
-      this.previousState();
+      this.navigateToUsersList();
     });
   }
 
@@ -272,13 +284,13 @@ export class MSUserUpdateComponent implements OnInit {
 
   protected onSaveSuccess() {
     this.isSaving = false;
-    this.previousState();
+    this.navigateToUsersList();
     this.alertService.success('userServiceApp.user.created.string');
   }
 
   protected onUpdateSuccess() {
     this.isSaving = false;
-    this.previousState();
+    this.navigateToUsersList();
     this.alertService.success('userServiceApp.user.updated.string');
   }
 

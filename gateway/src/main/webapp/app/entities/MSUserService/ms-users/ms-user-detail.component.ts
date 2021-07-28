@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
-import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
 import { MSUserService } from './ms-user.service';
 import { JhiAlertService } from 'ng-jhipster';
 
@@ -19,15 +18,13 @@ export class MSUserDetailComponent implements OnInit {
   constructor(
     protected activatedRoute: ActivatedRoute,
     protected msUserService: MSUserService,
-    protected jhiAlertService: JhiAlertService,
-    protected msMemberService: MSMemberService
+    protected jhiAlertService: JhiAlertService
   ) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ msUser }) => {
       this.msUser = msUser;
     });
-    this.msMemberService.getOrgNameMap();
   }
 
   sendActivate() {

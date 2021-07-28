@@ -28,13 +28,6 @@
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.parentSalesforceId.string" for="field_parentSalesforceId.string">Parent Salesforce Id</label>
                     <input type="text" class="form-control" name="parentSalesforceId" id="field_parentSalesforceId"
                            formControlName="parentSalesforceId" />
-                    <div *ngIf="(editForm.get('isConsortiumLead').dirty || editForm.get('isConsortiumLead').touched || editForm.get('parentSalesforceId').dirty || editForm.get('parentSalesforceId').touched)">
-                        <small class="form-text text-danger" *ngIf="(editForm.get('parentSalesforceId').errors && editForm.get('parentSalesforceId').errors.required)">
-                        This field is required.
-                        </small>                    
-                    </div>
-
-
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.clientName.string" for="field_clientName.string">Member Name</label>
@@ -53,7 +46,7 @@
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.string" for="field_clientId.string">Client ID</label>
                     <p><em><span jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.note.string">Note: Client ID must have User OBO enabled AND</span> <a href="{{baseUrl}}">{{baseUrl}}</a> <span jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.addedAsRedirect.string">added as a Redirect URI in</span> <a href="{{orcidBaseUrl}}/manage-members.string">{{orcidBaseUrl}}/manage-members</a></em></p>
                     <input type="text" class="form-control" name="clientId" id="field_clientId"
-                           formControlName="clientId"/>
+                           formControlName="clientId" />
                     <div *ngIf="editForm.get('clientId').invalid && (editForm.get('clientId').dirty || editForm.get('clientId').touched)">
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('clientId').errors.required" jhiTranslate="entity.validation.required.string">
@@ -81,7 +74,7 @@
             </div>
             <br>
             <div class="form-group">
-                <button type="button" id="cancel-save" class="btn btn-outline-primary"  (click)="previousState()">
+                <button type="button" id="cancel-save" class="btn btn-outline-primary"  (click)="navigateToMembersList()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
                 </button>
                 <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">

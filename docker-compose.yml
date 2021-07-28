@@ -125,3 +125,4 @@ services:
       file: jhipster-registry.yml
       service: jhipster-registry
 
+

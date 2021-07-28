@@ -8,16 +8,17 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
-import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.service.MailService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.PasswordChangeDTO;
 import org.orcid.user.service.dto.UserDTO;
+import org.orcid.user.service.mapper.UserMapper;
+import org.orcid.user.web.rest.errors.AccountResourceException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.user.web.rest.errors.EmailNotFoundException;
+import org.orcid.user.web.rest.errors.ExpiredKeyException;
 import org.orcid.user.web.rest.errors.InvalidKeyException;
 import org.orcid.user.web.rest.errors.InvalidPasswordException;
-import org.orcid.user.web.rest.errors.ExpiredKeyException;
 import org.orcid.user.web.rest.vm.KeyAndPasswordVM;
 import org.orcid.user.web.rest.vm.KeyVM;
 import org.orcid.user.web.rest.vm.ManagedUserVM;
@@ -38,12 +39,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class AccountResource {
 
-    protected static class AccountResourceException extends RuntimeException {
-        protected AccountResourceException(String message) {
-            super(message);
-        }
-    }
-
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     public static final String ROLE_PREVIOUS_ADMINISTRATOR = "ROLE_PREVIOUS_ADMINISTRATOR";
@@ -52,12 +47,16 @@ public class AccountResource {
 
     protected final UserService userService;
 
+    protected final UserMapper userMapper;
+
     protected final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService,
+            UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -84,15 +83,10 @@ public class AccountResource {
      */
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
-        String userLogin = SecurityUtils.getCurrentUserLogin()
-                .orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        User currentUser = userService.getCurrentUser();
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && !existingUser.get().getLogin().equalsIgnoreCase(userLogin)) {
+        if (existingUser.isPresent() && !existingUser.get().getLogin().equalsIgnoreCase(currentUser.getLogin())) {
             throw new EmailAlreadyUsedException();
-        }
-        Optional<User> user = userRepository.findOneByLogin(userLogin);
-        if (!user.isPresent()) {
-            throw new AccountResourceException("User could not be found");
         }
         userService.updateAccount(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
                 userDTO.getLangKey(), userDTO.getImageUrl());
@@ -109,10 +103,10 @@ public class AccountResource {
     public UserDTO getAccount() {
         Optional<User> user = userService.getUserWithAuthorities();
         if (user.isPresent()) {
-            UserDTO userDTO = UserDTO.valueOf(user.get());
+            UserDTO userDTO = userMapper.toUserDTO(user.get());
             if (!StringUtils.isAllBlank(userDTO.getLoginAs())) {
                 Optional<User> loginAsUser = userService.getUserWithAuthoritiesByLogin(userDTO.getLoginAs());
-                userDTO = UserDTO.valueOf(loginAsUser.get());
+                userDTO = userMapper.toUserDTO(loginAsUser.get());
                 userDTO.setLoggedAs(true);
             }
             return userDTO;
@@ -199,7 +193,7 @@ public class AccountResource {
         }
         return ResponseEntity.ok(result);
     }
-
+    
     protected static boolean checkPasswordLength(String password) {
         return !StringUtils.isEmpty(password) && password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH
                 && password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;

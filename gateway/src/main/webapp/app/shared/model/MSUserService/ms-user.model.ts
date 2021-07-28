@@ -14,6 +14,7 @@ export interface IMSUser {
   lastName?: string;
   mainContact?: boolean;
   salesforceId?: string;
+  memberName?: string;
   parentSalesforceId?: string;
   activated?: boolean;
   isAdmin?: boolean;
@@ -32,6 +33,7 @@ export class MSUser implements IMSUser {
     public lastName?: string,
     public mainContact?: boolean,
     public salesforceId?: string,
+    public memberName?: string,
     public parentSalesforceId?: string,
     public createdBy?: string,
     public createdDate?: Moment,

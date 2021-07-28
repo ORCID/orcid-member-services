@@ -1,10 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
-import { faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle, faCheckCircle, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
 import { AccountService } from 'app/core';
@@ -22,7 +21,6 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   currentAccount: any;
   msMember: IMSMember[];
   error: any;
-  success: any;
   eventSubscriber: Subscription;
   routeData: any;
   links: any;
@@ -30,11 +28,14 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   itemsPerPage: any;
   page: any;
   predicate: any;
-  previousPage: any;
   reverse: any;
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
+  faTimes = faTimes;
+  faSearch = faSearch;
   itemCount: string;
+  searchTerm: string;
+  submittedSearchTerm: string;
 
   constructor(
     protected msMemberService: MSMemberService,
@@ -49,7 +50,6 @@ export class MSMemberComponent implements OnInit, OnDestroy {
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.routeData = this.activatedRoute.data.subscribe(data => {
       this.page = data.pagingParams.page;
-      this.previousPage = data.pagingParams.page;
       this.reverse = data.pagingParams.ascending;
       this.predicate = data.pagingParams.predicate;
     });
@@ -72,11 +72,18 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   }
 
   loadAll() {
+    if (this.submittedSearchTerm) {
+      this.searchTerm = this.submittedSearchTerm;
+    } else {
+      this.searchTerm = '';
+    }
+
     this.msMemberService
       .query({
         page: this.page - 1,
         size: this.itemsPerPage,
-        sort: this.sort()
+        sort: this.sort(),
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
       })
       .subscribe(
         (res: HttpResponse<IMSMember[]>) => this.paginateMSMember(res.body, res.headers),
@@ -85,10 +92,7 @@ export class MSMemberComponent implements OnInit, OnDestroy {
   }
 
   loadPage(page: number) {
-    if (page !== this.previousPage) {
-      this.previousPage = page;
-      this.transition();
-    }
+    this.transition();
   }
 
   transition() {
@@ -96,7 +100,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
       }
     });
     this.loadAll();
@@ -108,7 +113,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       '/ms-member',
       {
         page: this.page,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
       }
     ]);
     this.loadAll();
@@ -124,6 +130,19 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       result.push('id');
     }
     return result;
+  }
+
+  resetSearch() {
+    this.page = 1;
+    this.searchTerm = '';
+    this.submittedSearchTerm = '';
+    this.loadAll();
+  }
+
+  submitSearch() {
+    this.page = 1;
+    this.submittedSearchTerm = this.searchTerm;
+    this.loadAll();
   }
 
   protected paginateMSMember(data: IMSMember[], headers: HttpHeaders) {

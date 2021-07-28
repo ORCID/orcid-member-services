@@ -11,8 +11,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.orcid.user.config.Constants;
 import org.orcid.user.domain.Authority;
 import org.orcid.user.domain.User;
@@ -22,19 +22,22 @@ import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.security.SecurityUtils;
 import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
+import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.service.util.RandomUtil;
 import org.orcid.user.upload.UserUpload;
 import org.orcid.user.upload.UserUploadReader;
+import org.orcid.user.web.rest.errors.AccountResourceException;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
+import org.orcid.user.web.rest.errors.ExpiredKeyException;
 import org.orcid.user.web.rest.errors.InvalidKeyException;
 import org.orcid.user.web.rest.errors.InvalidPasswordException;
-import org.orcid.user.web.rest.errors.ExpiredKeyException;
 import org.orcid.user.web.rest.errors.LoginAlreadyUsedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,7 +50,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
-    
+
     public static final int RESET_KEY_LIFESPAN_IN_SECONDS = 86400;
 
     @Autowired
@@ -71,16 +74,19 @@ public class UserService {
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    private UserMapper userMapper;
+
     public void completePasswordReset(String newPassword, String key) throws ExpiredKeyException, InvalidKeyException {
         LOG.debug("Reset user password for reset key {}", key);
         if (!validResetKey(key)) {
             throw new InvalidKeyException();
         }
-        
+
         if (expiredResetKey(key)) {
             throw new ExpiredKeyException();
         }
-        
+
         User user = userRepository.findOneByResetKey(key).get();
         user.setPassword(passwordEncoder.encode(newPassword));
         user.setResetKey(null);
@@ -89,17 +95,18 @@ public class UserService {
         userRepository.save(user);
         userCaches.evictEntryFromUserCaches(user.getEmail());
     }
-    
+
     public boolean validResetKey(String key) {
         Optional<User> resetUser = userRepository.findOneByResetKey(key);
         return resetUser.isPresent();
     }
-    
+
     public boolean expiredResetKey(String key) {
         Optional<User> resetUser = userRepository.findOneByResetKey(key);
-        return resetUser.isPresent() && !resetUser.get().getResetDate().isAfter(Instant.now().minusSeconds(RESET_KEY_LIFESPAN_IN_SECONDS));
+        return resetUser.isPresent()
+                && !resetUser.get().getResetDate().isAfter(Instant.now().minusSeconds(RESET_KEY_LIFESPAN_IN_SECONDS));
     }
-    
+
     public void resendActivationEmail(String previousKey) {
         User user = userRepository.findOneByResetKey(previousKey).get();
         sendActivationEmail(user);
@@ -160,7 +167,7 @@ public class UserService {
     public User createUser(UserDTO userDTO) {
         userDTO.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
 
-        User user = userDTO.toUser();
+        User user = userMapper.toUser(userDTO);
         user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         user.setPassword("placeholder");
         user.setResetKey(RandomUtil.generateResetKey());
@@ -186,15 +193,14 @@ public class UserService {
      * @param imageUrl  image URL of user.
      */
     public void updateAccount(String firstName, String lastName, String email, String langKey, String imageUrl) {
-        SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(user -> {
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setLangKey(langKey);
-            user.setImageUrl(imageUrl);
-            userRepository.save(user);
-            userCaches.evictEntryFromUserCaches(user.getEmail());
-            LOG.debug("Changed Information for User: {}", user);
-        });
+        User user = getCurrentUser();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setLangKey(langKey);
+        user.setImageUrl(imageUrl);
+        userRepository.save(user);
+        userCaches.evictEntryFromUserCaches(user.getEmail());
+        LOG.debug("Changed Information for User: {}", user);
     }
 
     /**
@@ -204,42 +210,71 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
-        return Optional.of(userRepository.findById(userDTO.getId())).filter(Optional::isPresent).map(Optional::get)
-                .map(user -> {
-                    userCaches.evictEntryFromUserCaches(user.getEmail());
-                    user.setLogin(userDTO.getLogin().toLowerCase());
-                    user.setFirstName(userDTO.getFirstName());
-                    user.setLastName(userDTO.getLastName());
-                    user.setImageUrl(userDTO.getImageUrl());
-                    user.setMainContact(userDTO.getMainContact());
-                    user.setSalesforceId(userDTO.getSalesforceId());
-                    user.setLoginAs(userDTO.getLoginAs());
-                    // user.setActivated(userDTO.isActivated());
-                    if (userDTO.getLangKey() != null) {
-                        user.setLangKey(userDTO.getLangKey());
-                    }
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        checkUpdateConstraints(existingUser, userDTO);
+        User user = existingUser.get();
+        boolean previouslyOwner = user.getMainContact();
+        boolean owner = userDTO.getMainContact();
 
-                    user.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
-                    if (!StringUtils.equals(user.getEmail(), userDTO.getEmail().toLowerCase())) {
-                        user.setEmail(userDTO.getEmail().toLowerCase());
-                        user.setActivated(false);
-                        user.setActivationKey(RandomUtil.generateResetKey());
-                        user.setActivationDate(Instant.now());
-                        mailService.sendActivationEmail(user);
-                    }
-                    if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null
-                            && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
-                        user.setSalesforceId(userDTO.getSalesforceId());
-                        user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-                        user.setLastModifiedDate(Instant.now());
-                    }
+        if (owner && !previouslyOwner) {
+            List<User> owners = userRepository
+                    .findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
+            for (User prevOwner : owners) {
+                if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
+                    removeOwnershipFromUser(prevOwner.getLogin());
+                }
+            }
+            userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
 
-                    userRepository.save(user);
-                    userCaches.evictEntryFromUserCaches(user.getEmail());
-                    userCaches.evictEntryFromUserCaches(user.getLogin());
-                    LOG.debug("Changed Information for User: {}", user);
-                    return user;
-                }).map(UserDTO::valueOf);
+        }
+
+        userCaches.evictEntryFromUserCaches(user.getEmail());
+        user.setLogin(userDTO.getLogin().toLowerCase());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setImageUrl(userDTO.getImageUrl());
+        user.setMainContact(userDTO.getMainContact());
+        user.setSalesforceId(userDTO.getSalesforceId());
+        user.setMemberName(memberService.getMemberNameBySalesforce(userDTO.getSalesforceId()));
+        user.setLoginAs(userDTO.getLoginAs());
+        user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
+        user.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
+
+        if (!StringUtils.equals(user.getEmail(), userDTO.getEmail().toLowerCase())) {
+            user.setEmail(userDTO.getEmail().toLowerCase());
+            user.setActivated(false);
+            user.setActivationKey(RandomUtil.generateResetKey());
+            user.setActivationDate(Instant.now());
+            mailService.sendActivationEmail(user);
+        }
+        
+        if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null
+                && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
+            user.setSalesforceId(userDTO.getSalesforceId());
+            user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+            user.setLastModifiedDate(Instant.now());
+        }
+
+        userRepository.save(user);
+        userCaches.evictEntryFromUserCaches(user.getEmail());
+        userCaches.evictEntryFromUserCaches(user.getLogin());
+        
+        if (owner && !previouslyOwner) {
+            String member = memberService.getMemberNameBySalesforce(user.getSalesforceId());
+            mailService.sendOrganizationOwnerChangedMail(user, member);
+        }
+        
+        return Optional.of(userMapper.toUserDTO(user));
+    }
+
+    private void checkUpdateConstraints(Optional<User> existingUser, UserDTO userDTO) {
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+            throw new EmailAlreadyUsedException();
+        }
+        existingUser = userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+            throw new LoginAlreadyUsedException();
+        }
     }
 
     public void deleteUser(String login) {
@@ -297,9 +332,16 @@ public class UserService {
             return user;
         });
     }
-    
+
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findByDeletedFalse(pageable).map(UserDTO::valueOf);
+        return userRepository.findByDeletedFalse(pageable).map(u -> userMapper.toUserDTO(u));
+    }
+
+    public Page<UserDTO> getAllManagedUsers(Pageable pageable, String filter) {
+        return userRepository
+                .findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndEmailContainingIgnoreCase(
+                        filter, filter, filter, filter, pageable)
+                .map(u -> userMapper.toUserDTO(u));
     }
 
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
@@ -363,6 +405,21 @@ public class UserService {
     }
 
     /**
+     * Task to populate empty member names, to update 10 every five minutes
+     */
+    @Scheduled(initialDelay = 300000l, fixedDelay = 300000l)
+    public void updateMemberNames() {
+        Page<User> page = userRepository.findByMemberName(PageRequest.of(0, 10), null);
+        page.getContent().stream().filter(u -> !StringUtils.isBlank(u.getSalesforceId())).forEach(u -> {
+            LOG.info("Populating member name field for user {}", u.getLogin());
+            u.setMemberName(memberService.getMemberNameBySalesforce(u.getSalesforceId()));
+            userRepository.save(u);
+            userCaches.evictEntryFromUserCaches(u.getEmail());
+            userCaches.evictEntryFromUserCaches(u.getLogin());
+        });
+    }
+
+    /**
      * Gets a list of all the authorities.
      *
      * @return a list of all the authorities.
@@ -402,14 +459,15 @@ public class UserService {
 
     public List<UserDTO> getAllUsersBySalesforceId(String salesforceId) {
         List<User> users = userRepository.findBySalesforceIdAndDeletedIsFalse(salesforceId);
-        return users.stream().map(UserDTO::valueOf).collect(Collectors.toList());
+        return users.stream().map(u -> userMapper.toUserDTO(u)).collect(Collectors.toList());
     }
 
     public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId) {
-        return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId).map(UserDTO::valueOf);
+        return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId)
+                .map(u -> userMapper.toUserDTO(u));
 
     }
-    
+
     private void sendActivationEmail(User user) {
         user.setActivated(false);
         user.setResetKey(RandomUtil.generateResetKey());
@@ -448,6 +506,23 @@ public class UserService {
         }
 
         return true;
+    }
+
+    /**
+     * Returns the user currently logged in or being impersonated.
+     * 
+     * @return
+     */
+    public User getCurrentUser() {
+        String login = SecurityUtils.getCurrentUserLogin()
+                .orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        Optional<User> user = userRepository.findOneByLogin(login);
+
+        if (StringUtils.isEmpty(user.get().getLoginAs())) {
+            return user.get();
+        }
+
+        return userRepository.findOneByLogin(user.get().getLoginAs()).get();
     }
 
 }

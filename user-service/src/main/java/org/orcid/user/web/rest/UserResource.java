@@ -18,6 +18,7 @@ import org.orcid.user.service.MailService;
 import org.orcid.user.service.MemberService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.dto.UserDTO;
+import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.upload.UserUpload;
 import org.orcid.user.validation.UserValidation;
 import org.orcid.user.validation.UserValidator;
@@ -105,6 +106,9 @@ public class UserResource {
 
     @Autowired
     private UserValidator userValidator;
+    
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * {@code PUT /users} : Updates an existing User.
@@ -120,44 +124,11 @@ public class UserResource {
     @PutMapping("/users")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
         LOG.debug("REST request to update User : {}", userDTO);
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
-            throw new EmailAlreadyUsedException();
-        }
-        existingUser = userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
-        // XXX - eh?
-        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
-            throw new LoginAlreadyUsedException();
-        }
-
         if (!userValidator.validate(userDTO, getCurrentUser()).isValid()) {
             return ResponseEntity.badRequest().body(userDTO);
         }
 
-        // change the auth if the logged in user is org owner and this is set as
-        // mainContact
-        boolean owner = userDTO.getMainContact();
-        if (owner) {
-
-            List<User> owners = userRepository
-                    .findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
-            for (User prevOwner : owners) {
-                if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
-                    userService.removeOwnershipFromUser(prevOwner.getLogin());
-                }
-            }
-
-            userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
-
-        }
-
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
-
-        if (owner) {
-            String member = memberService.memberNameBySalesforce(updatedUser.get().getSalesforceId());
-            mailService.sendOrganizationOwnerChangedMail(updatedUser.get().toUser(), member);
-        }
-
         return ResponseUtil.wrapOrNotFound(updatedUser);
     }
 
@@ -171,9 +142,14 @@ public class UserResource {
      *         all users.
      */
     @GetMapping("/users")
-    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams,
+    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams, @RequestParam(required = false, name = "filter") String filter,
             UriComponentsBuilder uriBuilder, Pageable pageable) {
-        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+        Page<UserDTO> page = null;
+        if (StringUtils.isBlank(filter)) {
+            page = userService.getAllManagedUsers(pageable);
+        } else {
+            page = userService.getAllManagedUsers(pageable, filter);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -237,7 +213,7 @@ public class UserResource {
         if (!user.isPresent()) {
             user = userService.getUserWithAuthorities(loginOrId);
         }
-        return ResponseUtil.wrapOrNotFound(user.map(UserDTO::valueOf));
+        return userOrNotFound(user);
     }
 
     /**
@@ -313,11 +289,11 @@ public class UserResource {
         User newUser = userService.createUser(userDTO);
 
         if (owner) {
-            String member = memberService.memberNameBySalesforce(newUser.getSalesforceId());
+            String member = memberService.getMemberNameBySalesforce(newUser.getSalesforceId());
             mailService.sendOrganizationOwnerChangedMail(newUser, member);
         }
 
-        return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin())).body(UserDTO.valueOf(newUser));
+        return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin())).body(userMapper.toUserDTO(newUser));
     }
 
     /**
@@ -403,7 +379,7 @@ public class UserResource {
         }
 
         userService.sendActivationEmail(user.get().getEmail());
-        return ResponseUtil.wrapOrNotFound(user.map(UserDTO::valueOf));
+        return userOrNotFound(user);
     }
 
     /**
@@ -473,7 +449,7 @@ public class UserResource {
         Optional<User> authUser = userService.getUserWithAuthorities();
 
         if (authUser.isPresent()) {
-            UserDTO userDTO = UserDTO.valueOf(authUser.get());
+            UserDTO userDTO = userMapper.toUserDTO(authUser.get());
             userDTO.setLoginAs(username);
             userDTO.setIsAdmin(true);
             userService.updateUser(userDTO);
@@ -491,7 +467,7 @@ public class UserResource {
             @RequestParam(value = "username", required = true) String username) {
         Optional<User> authUser = userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin().get());
         if (authUser.isPresent()) {
-            UserDTO userDTO = UserDTO.valueOf(authUser.get());
+            UserDTO userDTO = userMapper.toUserDTO(authUser.get());
             userDTO.setIsAdmin(true);
             userDTO.setLoginAs(null);
             userService.updateUser(userDTO);
@@ -502,5 +478,12 @@ public class UserResource {
 
     private User getCurrentUser() {
         return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+    }
+    
+    private ResponseEntity<UserDTO> userOrNotFound(Optional<User> user) {
+        if (!user.isPresent()) {
+            return ResponseEntity.notFound().build();
+         }
+         return ResponseEntity.ok(userMapper.toUserDTO(user.get()));
     }
 }

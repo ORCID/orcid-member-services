@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { AbstractControl, FormBuilder, FormControl, ValidatorFn, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
@@ -27,27 +27,19 @@ function consortiumLeadValidator(): ValidatorFn {
   };
 }
 
-function parentSalesforceIdConditionallyRequiredValidator(): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: boolean } | null => {
-    if (control.parent !== undefined) {
-      const isConsortiumLead = control.parent.get('isConsortiumLead').value;
-      if (!isConsortiumLead) {
-        return Validators.required(control.parent.get('parentSalesforceId'));
-      }
-    }
-    return null;
-  };
-}
-
 function clientIdValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
     if (control.parent !== undefined && control.value !== undefined && isNaN(control.value)) {
       const clientIdValue = control.value;
       const isConsortiumLead = control.parent.get('isConsortiumLead').value;
+      const assertionServiceEnabled = control.parent.get('assertionServiceEnabled').value;
       if (!isConsortiumLead && clientIdValue === '') {
         return Validators.required(control.parent.get('clientId'));
       }
       if (isConsortiumLead && (!clientIdValue || clientIdValue === '')) {
+        return null;
+      }
+      if (!assertionServiceEnabled && (!clientIdValue || clientIdValue === '')) {
         return null;
       }
       if (clientIdValue.startsWith('APP-') && clientIdValue.match(/APP-[A-Z0-9]{16}$/)) {
@@ -59,6 +51,11 @@ function clientIdValidator(): ValidatorFn {
     }
     if (control.parent !== undefined) {
       if (control.parent.get('isConsortiumLead').value) {
+        return null;
+      }
+    }
+    if (control.parent !== undefined) {
+      if (!control.parent.get('assertionServiceEnabled').value) {
         return null;
       }
     }
@@ -81,7 +78,7 @@ export class MSMemberUpdateComponent implements OnInit {
     clientId: new FormControl(null, [clientIdValidator()]),
     clientName: [null, [Validators.required]],
     salesforceId: [null, [Validators.required]],
-    parentSalesforceId: [null, [Validators.required, parentSalesforceIdConditionallyRequiredValidator()]],
+    parentSalesforceId: [],
     isConsortiumLead: [null, [Validators.required, consortiumLeadValidator()]],
     assertionServiceEnabled: [],
     createdBy: [],
@@ -93,6 +90,7 @@ export class MSMemberUpdateComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
+    protected router: Router,
     protected msMemberService: MSMemberService,
     private fb: FormBuilder,
     private alertService: JhiAlertService
@@ -119,8 +117,13 @@ export class MSMemberUpdateComponent implements OnInit {
 
     this.editForm.get('clientId').valueChanges.subscribe(value => {
       if (!value || (value && value === '')) {
-        this.editForm.get('assertionServiceEnabled').reset();
-        this.editForm.get('assertionServiceEnabled').disable();
+        if (this.editForm.get('assertionServiceEnabled').value) {
+          this.editForm.get('assertionServiceEnabled').reset();
+          this.editForm.get('clientId').updateValueAndValidity();
+        }
+        if (!this.editForm.get('assertionServiceEnabled').disabled) {
+          this.editForm.get('assertionServiceEnabled').disable();
+        }
       } else {
         this.editForm.get('assertionServiceEnabled').enable();
       }
@@ -150,8 +153,8 @@ export class MSMemberUpdateComponent implements OnInit {
     }
   }
 
-  previousState() {
-    window.history.back();
+  navigateToMembersList() {
+    this.router.navigate(['/ms-member']);
   }
 
   save() {
@@ -199,7 +202,7 @@ export class MSMemberUpdateComponent implements OnInit {
 
   protected onSaveSuccess() {
     this.isSaving = false;
-    this.previousState();
+    this.navigateToMembersList();
     this.alertService.success('memberServiceApp.member.created.string');
   }
 
@@ -209,7 +212,7 @@ export class MSMemberUpdateComponent implements OnInit {
 
   protected onUpdateSuccess() {
     this.isSaving = false;
-    this.previousState();
+    this.navigateToMembersList();
     this.alertService.success('memberServiceApp.member.updated.string');
   }
 

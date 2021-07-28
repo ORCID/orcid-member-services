@@ -3,14 +3,17 @@ package org.orcid.user.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,10 +32,15 @@ import org.orcid.user.domain.User;
 import org.orcid.user.repository.AuthorityRepository;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
+import org.orcid.user.security.MockSecurityContext;
 import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
+import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.upload.UserUpload;
 import org.orcid.user.upload.UserUploadReader;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -61,6 +69,9 @@ class UserServiceTest {
     @Mock
     private MailService mailService;
 
+    @Mock
+    private UserMapper userMapper;
+
     @Captor
     private ArgumentCaptor<User> userCaptor;
 
@@ -70,8 +81,9 @@ class UserServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        SecurityContextHolder.setContext(new MockSecurityContext("username"));
     }
-    
+
     @Test
     void testResendActivationEmail() {
         User user = new User();
@@ -79,13 +91,13 @@ class UserServiceTest {
         user.setResetDate(Instant.now().minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS + 10000));
         Mockito.when(userRepository.findOneByResetKey(Mockito.eq("key"))).thenReturn(Optional.of(user));
         Mockito.doNothing().when(mailService).sendActivationEmail(Mockito.any(User.class));
-        
+
         userService.resendActivationEmail("key");
-        
+
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
         Mockito.verify(userRepository, Mockito.times(1)).save(captor.capture());
         Mockito.verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
-        
+
         User updated = captor.getValue();
         assertThat(updated.getResetKey()).isNotNull();
         assertThat(updated.getResetDate()).isNotNull();
@@ -126,22 +138,16 @@ class UserServiceTest {
         Mockito.doNothing().when(mailService).sendCreationEmail(Mockito.any(User.class));
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString()))
                 .thenReturn(true);
+        Mockito.when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(new User());
 
         UserDTO userDTO = getUserDTO();
         userService.createUser(userDTO);
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
+        Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
         Mockito.verify(mailService, Mockito.times(1)).sendCreationEmail(Mockito.any(User.class));
         Mockito.verify(memberService, Mockito.times(1))
                 .memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString());
-
-        User user = userCaptor.getValue();
-        assertEquals(userDTO.getFirstName(), user.getFirstName());
-        assertEquals(userDTO.getLastName(), user.getLastName());
-        assertEquals(userDTO.getLogin(), user.getLogin());
-        assertEquals(userDTO.getEmail(), user.getEmail());
-        assertTrue(user.getAuthorities().contains(AuthoritiesConstants.USER));
-        assertTrue(user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
+        Mockito.verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
     }
 
     @Test
@@ -155,22 +161,16 @@ class UserServiceTest {
         Mockito.doNothing().when(mailService).sendCreationEmail(Mockito.any(User.class));
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString()))
                 .thenReturn(false);
+        Mockito.when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(new User());
 
         UserDTO userDTO = getUserDTO();
         userService.createUser(userDTO);
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
+        Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
         Mockito.verify(mailService, Mockito.times(1)).sendCreationEmail(Mockito.any(User.class));
         Mockito.verify(memberService, Mockito.times(1))
                 .memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString());
-
-        User user = userCaptor.getValue();
-        assertEquals(userDTO.getFirstName(), user.getFirstName());
-        assertEquals(userDTO.getLastName(), user.getLastName());
-        assertEquals(userDTO.getLogin(), user.getLogin());
-        assertEquals(userDTO.getEmail(), user.getEmail());
-        assertTrue(user.getAuthorities().contains(AuthoritiesConstants.USER));
-        assertFalse(user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
+        Mockito.verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
     }
 
     @Test
@@ -181,12 +181,20 @@ class UserServiceTest {
                 return (User) invocation.getArgument(0);
             }
         });
+        
+        User existing = new User();
+        existing.setId("id");
+        existing.setLogin("login");
+        existing.setMainContact(false);
+        
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString()))
                 .thenReturn(true);
-        Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(new User()));
-
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
+        Mockito.when(userMapper.toUserDTO(Mockito.any(User.class))).thenReturn(new UserDTO());
+        
         UserDTO userDTO = getUserDTO();
         userDTO.setId("id");
+        userDTO.setMainContact(false);
         userService.updateUser(userDTO);
 
         Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
@@ -213,10 +221,19 @@ class UserServiceTest {
         Mockito.doNothing().when(mailService).sendCreationEmail(Mockito.any(User.class));
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString()))
                 .thenReturn(false);
-        Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(new User()));
-
+        
+        User existing = new User();
+        existing.setId("id");
+        existing.setLogin("login");
+        existing.setMainContact(false);
+        
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
+        Mockito.when(userMapper.toUserDTO(Mockito.any(User.class))).thenReturn(new UserDTO());
+        
         UserDTO userDTO = getUserDTO();
         userDTO.setId("id");
+        userDTO.setLogin("login");
+        userDTO.setMainContact(false);
         userService.updateUser(userDTO);
 
         Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
@@ -232,6 +249,49 @@ class UserServiceTest {
         assertFalse(user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
     }
 
+    @Test
+    public void testUpdateUserNoOrgOwnerChange() {
+        UserDTO toUpdate = new UserDTO();
+        toUpdate.setMainContact(false);
+        toUpdate.setLogin("some-login");
+        toUpdate.setId("some-id");
+
+        User existing = new User();
+        existing.setMainContact(false);
+        existing.setId("some-id");
+        
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
+        Mockito.when(userMapper.toUserDTO(Mockito.any(User.class))).thenReturn(new UserDTO());
+        
+        userService.updateUser(toUpdate);
+
+        Mockito.verify(mailService, Mockito.never()).sendOrganizationOwnerChangedMail(Mockito.any(User.class),
+                Mockito.anyString());
+    }
+    
+    @Test
+    public void testUpdateUserWithOrgOwnerChange() {
+        UserDTO toUpdate = new UserDTO();
+        toUpdate.setMainContact(true);
+        toUpdate.setLogin("some-login");
+        toUpdate.setId("some-id");
+        toUpdate.setSalesforceId("salesforce");
+
+        User existing = new User();
+        existing.setMainContact(false);
+        existing.setId("some-id");
+        existing.setSalesforceId("salesforce");
+        
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
+        Mockito.when(userMapper.toUserDTO(Mockito.any(User.class))).thenReturn(new UserDTO());
+        Mockito.when(memberService.getMemberNameBySalesforce(Mockito.anyString())).thenReturn("member");
+        
+        userService.updateUser(toUpdate);
+
+        Mockito.verify(mailService, Mockito.times(1)).sendOrganizationOwnerChangedMail(Mockito.any(User.class),
+                Mockito.anyString());
+    }
+             
     @Test
     public void testUpdateAccount() {
         Authentication authentication = Mockito.mock(Authentication.class);
@@ -275,32 +335,116 @@ class UserServiceTest {
                 .thenReturn(Optional.of(getUser("user2@orcid.org")));
         Mockito.when(userRepository.findOneById(Mockito.eq("user2@orcid.org")))
                 .thenReturn(Optional.of(getUser("user2@orcid.org")));
+        Mockito.when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(new User());
 
         InputStream inputStream = Mockito.mock(InputStream.class);
         userService.uploadUserCSV(inputStream, getUser("some-user@orcid.org"));
 
         // check only new users saved
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
+        Mockito.verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
     }
-    
+
     @Test
     public void testExpiredResetKey() {
         User user = new User();
         user.setResetDate(Instant.now().minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS - 2000));
         Mockito.when(userRepository.findOneByResetKey(Mockito.anyString())).thenReturn(Optional.of(user));
         assertFalse(userService.expiredResetKey("anything"));
-        
+
         user.setResetDate(Instant.now().minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS + 2000));
         assertTrue(userService.expiredResetKey("anything"));
     }
-    
+
     @Test
     public void testValidResetKey() {
         Mockito.when(userRepository.findOneByResetKey(Mockito.anyString())).thenReturn(Optional.of(new User()));
         assertTrue(userService.validResetKey("anything"));
-        
+
         Mockito.when(userRepository.findOneByResetKey(Mockito.anyString())).thenReturn(Optional.empty());
         assertFalse(userService.validResetKey("anything"));
+    }
+
+    @Test
+    public void testUpdateMemberNames_fullPage() {
+        Mockito.when(userRepository.findByMemberName(Mockito.any(Pageable.class), Mockito.isNull()))
+                .thenReturn(new PageImpl<>(getListOfUsers(10)));
+        Mockito.when(memberService.getMemberNameBySalesforce(Mockito.anyString())).thenReturn("member name");
+
+        userService.updateMemberNames();
+
+        Mockito.verify(userRepository, Mockito.times(1)).findByMemberName(Mockito.any(Pageable.class),
+                Mockito.isNull());
+        Mockito.verify(memberService, Mockito.times(10)).getMemberNameBySalesforce(Mockito.anyString());
+    }
+
+    @Test
+    public void testUpdateMemberNames_partPage() {
+        Mockito.when(userRepository.findByMemberName(Mockito.any(Pageable.class), Mockito.isNull()))
+                .thenReturn(new PageImpl<>(getListOfUsers(2)));
+        Mockito.when(memberService.getMemberNameBySalesforce(Mockito.anyString())).thenReturn("member name");
+
+        userService.updateMemberNames();
+
+        Mockito.verify(userRepository, Mockito.times(1)).findByMemberName(Mockito.any(Pageable.class),
+                Mockito.isNull());
+        Mockito.verify(memberService, Mockito.times(2)).getMemberNameBySalesforce(Mockito.anyString());
+    }
+
+    @Test
+    public void testGetAllManagedUsers() {
+        Mockito.when(userRepository.findByDeletedFalse(Mockito.any(Pageable.class)))
+                .thenReturn(new PageImpl<>(getListOfUsers(20)));
+        Mockito.when(userRepository
+                .findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndEmailContainingIgnoreCase(
+                        Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"),
+                        Mockito.any(Pageable.class)))
+                .thenReturn(new PageImpl<>(getListOfUsers(10)));
+
+        Page<UserDTO> users = userService.getAllManagedUsers(Mockito.mock(Pageable.class));
+        assertNotNull(users);
+        assertEquals(20, users.getTotalElements());
+
+        Mockito.verify(userRepository, Mockito.times(1)).findByDeletedFalse(Mockito.any(Pageable.class));
+        Mockito.verify(userMapper, Mockito.times(20)).toUserDTO(Mockito.any(User.class));
+
+        users = userService.getAllManagedUsers(Mockito.mock(Pageable.class), "filter");
+        assertNotNull(users);
+        assertEquals(10, users.getTotalElements());
+
+        Mockito.verify(userRepository, Mockito.times(1))
+                .findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndEmailContainingIgnoreCase(
+                        Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"),
+                        Mockito.any(Pageable.class));
+        Mockito.verify(userMapper, Mockito.times(30)).toUserDTO(Mockito.any(User.class)); // 10 more
+    }
+    
+    @Test
+    public void testGetCurrentUser() {
+        User impersonatingUser = new User();
+        impersonatingUser.setLogin("admin-user");
+        impersonatingUser.setLoginAs("impersonated-user");
+        
+        User impersonatedUser = new User();
+        impersonatedUser.setLogin("impersonated-user");
+        
+        Mockito.when(userRepository.findOneByLogin(Mockito.eq("username"))).thenReturn(Optional.of(impersonatingUser));
+        Mockito.when(userRepository.findOneByLogin(Mockito.eq("impersonated-user"))).thenReturn(Optional.of(impersonatedUser));
+        
+        User user = userService.getCurrentUser();
+        assertEquals("impersonated-user", user.getLogin());
+        
+        impersonatingUser.setLoginAs(null);
+        user = userService.getCurrentUser();
+        assertEquals("admin-user", user.getLogin());
+    }
+
+    private List<User> getListOfUsers(int size) {
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            users.add(getUser(String.valueOf(i)));
+        }
+        return users;
     }
 
     private User getUser(String login) {
@@ -308,6 +452,7 @@ class UserServiceTest {
         user.setLogin(login);
         user.setEmail(login);
         user.setId(login);
+        user.setSalesforceId(login);
         return user;
     }
 

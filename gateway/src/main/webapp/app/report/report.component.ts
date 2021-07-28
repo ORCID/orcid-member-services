@@ -21,7 +21,7 @@ export class ReportComponent implements OnInit {
       this.reportService.getChartioDashboardInfo(this.reportType).subscribe(res => {
         const url = res.body.url;
         const token = res.body.jwt;
-        this.reportSrc = url + '?embed_token=' + token;
+        this.reportSrc = this.safeUrl(url + '?embed_token=' + token);
       });
     });
   }

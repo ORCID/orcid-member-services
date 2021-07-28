@@ -68,7 +68,8 @@
       "confirmpassword.label": { "string": "New password confirmation" },
       "confirmpassword.placeholder": { "string": "Confirm the new password" },
       "email.label": { "string": "Email" },
-      "email.placeholder": { "string": "Your email" }
+      "email.placeholder": { "string": "Your email" },
+      "search": { "string": "Search..." }
     },
     "messages": {
       "info": {
