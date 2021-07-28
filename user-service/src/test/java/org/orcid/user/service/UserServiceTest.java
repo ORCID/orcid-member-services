@@ -32,6 +32,7 @@ import org.orcid.user.domain.User;
 import org.orcid.user.repository.AuthorityRepository;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
+import org.orcid.user.security.MockSecurityContext;
 import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.service.mapper.UserMapper;
@@ -80,6 +81,7 @@ class UserServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        SecurityContextHolder.setContext(new MockSecurityContext("username"));
     }
 
     @Test
@@ -355,6 +357,26 @@ class UserServiceTest {
                         Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"), Mockito.eq("filter"),
                         Mockito.any(Pageable.class));
         Mockito.verify(userMapper, Mockito.times(30)).toUserDTO(Mockito.any(User.class)); // 10 more
+    }
+    
+    @Test
+    public void testGetCurrentUser() {
+        User impersonatingUser = new User();
+        impersonatingUser.setLogin("admin-user");
+        impersonatingUser.setLoginAs("impersonated-user");
+        
+        User impersonatedUser = new User();
+        impersonatedUser.setLogin("impersonated-user");
+        
+        Mockito.when(userRepository.findOneByLogin(Mockito.eq("username"))).thenReturn(Optional.of(impersonatingUser));
+        Mockito.when(userRepository.findOneByLogin(Mockito.eq("impersonated-user"))).thenReturn(Optional.of(impersonatedUser));
+        
+        User user = userService.getCurrentUser();
+        assertEquals("impersonated-user", user.getLogin());
+        
+        impersonatingUser.setLoginAs(null);
+        user = userService.getCurrentUser();
+        assertEquals("admin-user", user.getLogin());
     }
 
     private List<User> getListOfUsers(int size) {

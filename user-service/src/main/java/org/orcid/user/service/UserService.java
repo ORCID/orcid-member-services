@@ -26,6 +26,7 @@ import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.service.util.RandomUtil;
 import org.orcid.user.upload.UserUpload;
 import org.orcid.user.upload.UserUploadReader;
+import org.orcid.user.web.rest.errors.AccountResourceException;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.user.web.rest.errors.InvalidKeyException;
@@ -192,15 +193,14 @@ public class UserService {
      * @param imageUrl  image URL of user.
      */
     public void updateAccount(String firstName, String lastName, String email, String langKey, String imageUrl) {
-        SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(user -> {
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setLangKey(langKey);
-            user.setImageUrl(imageUrl);
-            userRepository.save(user);
-            userCaches.evictEntryFromUserCaches(user.getEmail());
-            LOG.debug("Changed Information for User: {}", user);
-        });
+        User user = getCurrentUser();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setLangKey(langKey);
+        user.setImageUrl(imageUrl);
+        userRepository.save(user);
+        userCaches.evictEntryFromUserCaches(user.getEmail());
+        LOG.debug("Changed Information for User: {}", user);
     }
 
     /**
@@ -478,6 +478,23 @@ public class UserService {
         }
 
         return true;
+    }
+
+    /**
+     * Returns the user currently logged in or being impersonated.
+     * 
+     * @return
+     */
+    public User getCurrentUser() {
+        String login = SecurityUtils.getCurrentUserLogin()
+                .orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        Optional<User> user = userRepository.findOneByLogin(login);
+
+        if (StringUtils.isEmpty(user.get().getLoginAs())) {
+            return user.get();
+        }
+
+        return userRepository.findOneByLogin(user.get().getLoginAs()).get();
     }
 
 }
