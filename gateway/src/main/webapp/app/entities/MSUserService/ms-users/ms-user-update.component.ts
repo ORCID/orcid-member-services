@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { JhiAlertService } from 'ng-jhipster';
@@ -54,6 +54,7 @@ export class MSUserUpdateComponent implements OnInit {
     protected msUserService: MSUserService,
     protected msMemberService: MSMemberService,
     protected activatedRoute: ActivatedRoute,
+    protected router: Router,
     protected accountService: AccountService,
     private fb: FormBuilder,
     private cdref: ChangeDetectorRef
@@ -139,8 +140,8 @@ export class MSUserUpdateComponent implements OnInit {
     }
   }
 
-  previousState() {
-    window.history.back();
+  navigateToUsersList() {
+    this.router.navigate(['/ms-user']);
   }
 
   disableSalesForceIdDD() {
@@ -231,7 +232,7 @@ export class MSUserUpdateComponent implements OnInit {
       } else {
         this.alertService.success('gatewayApp.msUserServiceMSUser.sendActivate.error.string', null, null);
       }
-      this.previousState();
+      this.navigateToUsersList();
     });
   }
 
@@ -283,13 +284,13 @@ export class MSUserUpdateComponent implements OnInit {
 
   protected onSaveSuccess() {
     this.isSaving = false;
-    this.previousState();
+    this.navigateToUsersList();
     this.alertService.success('userServiceApp.user.created.string');
   }
 
   protected onUpdateSuccess() {
     this.isSaving = false;
-    this.previousState();
+    this.navigateToUsersList();
     this.alertService.success('userServiceApp.user.updated.string');
   }
 
