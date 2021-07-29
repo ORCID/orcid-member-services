@@ -214,7 +214,7 @@ public class UserService {
         checkUpdateConstraints(existingUser, userDTO);
         User user = existingUser.get();
         boolean previouslyOwner = user.getMainContact() != null ? user.getMainContact() : false;
-        boolean owner = userDTO.getMainContact() != null ? user.getMainContact() : false;
+        boolean owner = userDTO.getMainContact() != null ? userDTO.getMainContact() : false;
 
         if (owner && !previouslyOwner) {
             List<User> owners = userRepository
