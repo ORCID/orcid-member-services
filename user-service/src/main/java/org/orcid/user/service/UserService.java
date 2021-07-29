@@ -213,8 +213,8 @@ public class UserService {
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         checkUpdateConstraints(existingUser, userDTO);
         User user = existingUser.get();
-        boolean previouslyOwner = user.getMainContact();
-        boolean owner = userDTO.getMainContact();
+        boolean previouslyOwner = user.getMainContact() != null ? user.getMainContact() : false;
+        boolean owner = userDTO.getMainContact() != null ? user.getMainContact() : false;
 
         if (owner && !previouslyOwner) {
             List<User> owners = userRepository
