@@ -177,4 +177,5 @@ application:
   mailApiKey: ${application.mail.apiKey}
   mailApiUrl: ${application.mail.apiUrl}
   mailFromAddress: ${application.mail.fromAddress}  
+  mailFromName: ${application.mail.fromName}
   baseUrl: ${application.baseUrl}
