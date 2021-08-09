@@ -302,6 +302,11 @@ class AssertionServiceTest {
                     Mockito.any(Assertion.class))).thenReturn("putCode" + i);
         }
 
+        for (int i = 1; i <= 20; i++) {
+            Mockito.when(assertionsRepository.findById("id" + i))
+                    .thenReturn(Optional.of(getAssertionWithEmailAndPutCode(i + "@email.com", String.valueOf(i))));
+        }
+
         assertionService.putAssertionsToOrcid();
 
         Mockito.verify(orcidRecordService, Mockito.times(25)).findOneByEmail(Mockito.anyString());
@@ -824,7 +829,7 @@ class AssertionServiceTest {
 
     private Assertion getAssertionWithEmailAndPutCode(String email, String putCode) {
         Assertion assertion = new Assertion();
-        assertion.setId("id");
+        assertion.setId("id" + putCode);
         assertion.setEmail(email);
         assertion.setPutCode(putCode);
         assertion.setSalesforceId(DEFAULT_SALESFORCE_ID);
