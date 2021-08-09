@@ -8,7 +8,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.domain.Assertion;
-import org.orcid.repository.impl.AssertionRepository;
+import org.orcid.repository.AssertionRepository;
 import org.orcid.service.UserService;
 import org.orcid.service.assertions.download.CsvWriter;
 import org.springframework.beans.factory.annotation.Autowired;

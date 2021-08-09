@@ -19,7 +19,7 @@ import org.orcid.domain.OrcidToken;
 import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.domain.enumeration.AssertionStatus;
 import org.orcid.domain.utils.AssertionUtils;
-import org.orcid.repository.impl.AssertionRepository;
+import org.orcid.repository.AssertionRepository;
 import org.orcid.security.SecurityUtils;
 import org.orcid.service.assertions.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;

@@ -22,7 +22,7 @@ import org.orcid.config.ApplicationProperties;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.enumeration.AffiliationSection;
-import org.orcid.repository.impl.AssertionRepository;
+import org.orcid.repository.AssertionRepository;
 import org.orcid.security.EncryptUtil;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.UserService;

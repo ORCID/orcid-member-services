@@ -1,4 +1,4 @@
-package org.orcid.repository.impl;
+package org.orcid.repository;
 
 import java.util.List;
 import java.util.Optional;

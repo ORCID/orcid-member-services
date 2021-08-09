@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.orcid.AssertionServiceApp;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.enumeration.AffiliationSection;
+import org.orcid.repository.AssertionRepository;
+import org.orcid.repository.AssertionRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;

@@ -35,7 +35,7 @@ import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.domain.enumeration.AffiliationSection;
-import org.orcid.repository.impl.AssertionRepository;
+import org.orcid.repository.AssertionRepository;
 import org.orcid.service.assertions.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;
 import org.orcid.service.assertions.download.impl.PermissionLinksCsvWriter;

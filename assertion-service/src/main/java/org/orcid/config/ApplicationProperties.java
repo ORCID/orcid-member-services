@@ -119,16 +119,16 @@ public class ApplicationProperties {
     }
 
     public static class Cron {
-    	
+
         private String syncAffiliations;
 
-		public String getSyncAffiliations() {
-			return syncAffiliations;
-		}
+        public String getSyncAffiliations() {
+            return syncAffiliations;
+        }
 
-		public void setSyncAffiliations(String syncAffiliations) {
-			this.syncAffiliations = syncAffiliations;
-		}
-        
+        public void setSyncAffiliations(String syncAffiliations) {
+            this.syncAffiliations = syncAffiliations;
+        }
+
     }
 }

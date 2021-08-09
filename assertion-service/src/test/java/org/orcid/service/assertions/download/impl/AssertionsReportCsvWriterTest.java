@@ -24,7 +24,7 @@ import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.domain.enumeration.AffiliationSection;
-import org.orcid.repository.impl.AssertionRepository;
+import org.orcid.repository.AssertionRepository;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.UserService;
 import org.springframework.data.domain.Sort;

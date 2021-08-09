@@ -2,8 +2,8 @@ package org.orcid.repository.impl;
 
 import java.util.List;
 
-import org.bson.Document;
 import org.orcid.domain.Assertion;
+import org.orcid.repository.AssertionRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
