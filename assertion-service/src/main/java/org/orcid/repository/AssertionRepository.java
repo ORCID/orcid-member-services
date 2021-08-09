@@ -34,7 +34,6 @@ public interface AssertionRepository extends MongoRepository<Assertion, String>,
 
     Optional<Assertion> findOneByEmailIgnoreCase(String email);
     
-
     List<Assertion> findByStatus(String status);
 
 }

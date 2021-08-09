@@ -142,7 +142,6 @@ public class AssertionsForEditCsvWriterTest {
         assertion.setOwnerId("what?" + i);
         assertion.setRoleTitle("role-" + i);
         assertion.setStatus("not sure");
-        assertion.setUpdated(true);
         assertion.setUpdatedInORCID(Instant.now());
         assertion.setDisambiguationSource("source-" + i);
         assertion.setDisambiguatedOrgId("id-" + i);
