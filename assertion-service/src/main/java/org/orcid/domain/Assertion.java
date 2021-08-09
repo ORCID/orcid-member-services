@@ -104,9 +104,6 @@ public class Assertion implements Serializable {
     @Field("salesforce_id")
     private String salesforceId;
     
-    @Field("updated")
-    private boolean updated;
-
     @Field("added_to_orcid")
     private Instant addedToORCID;
     
@@ -464,14 +461,6 @@ public class Assertion implements Serializable {
         this.salesforceId = salesforceId;
     }
 
-    public boolean isUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(boolean updated) {
-        this.updated = updated;
-    }
-
     public Instant getDeletedFromORCID() {
         return deletedFromORCID;
     }
@@ -562,7 +551,6 @@ public class Assertion implements Serializable {
         result = prime * result + ((startYear == null) ? 0 : startYear.hashCode());
         result = prime * result + ((status == null) ? 0 : status.hashCode());
         result = prime * result + ((url == null) ? 0 : url.hashCode());
-        result = prime * result + (updated ? 1231 : 1237);
         result = prime * result + ((updatedInORCID == null) ? 0 : updatedInORCID.hashCode());
         result = prime * result + ((orcidId == null) ? 0 : orcidId.hashCode());
         return result;
@@ -723,8 +711,6 @@ public class Assertion implements Serializable {
             if (other.url != null)
                 return false;
         } else if (!url.equals(other.url))
-            return false;
-        if (updated != other.updated)
             return false;
         if (updatedInORCID == null) {
             if (other.updatedInORCID != null)
