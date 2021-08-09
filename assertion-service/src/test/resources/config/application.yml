@@ -93,5 +93,4 @@ jhipster:
 application:
     jwtSignatureUrl: https://sandbox.orcid.org/oauth/jwks
     cron:        
-        postAffiliations: 300000
-        putAffiliations: 300000
+        syncAffiliations: 300000

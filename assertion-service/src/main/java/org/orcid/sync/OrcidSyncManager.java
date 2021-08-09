@@ -21,17 +21,11 @@ public class OrcidSyncManager {
     @Autowired
     private AssertionService assertionsService;
     
-    @Scheduled(fixedDelayString = "${application.cron.postAffiliations}")
-    @SchedulerLock(name = "postAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "2m")
-    public void createAffiliations() throws JAXBException {
-        log.info("Running cron to create assertions to ORCID");
+    @Scheduled(fixedDelayString = "${application.cron.syncAffiliations}")
+    @SchedulerLock(name = "syncAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "2m")
+    public void syncAffiliations() throws JAXBException {
+        log.info("Running cron to sync assertions with registry");
         assertionsService.postAssertionsToOrcid();
-    }
-    
-    @Scheduled(fixedDelayString = "${application.cron.putAffiliations}")
-    @SchedulerLock(name = "putAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "2m")
-    public void updateAffiliations() throws JAXBException {
-        log.info("Running cron to update assertions to ORCID");
         assertionsService.putAssertionsToOrcid();
     }
 }
