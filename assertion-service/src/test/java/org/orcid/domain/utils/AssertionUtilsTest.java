@@ -13,7 +13,7 @@ import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.domain.enumeration.AssertionStatus;
 
-class AffiliationUtilsTest {
+class AssertionUtilsTest {
 
 	@Test
 	void testGetAffiliationStatusWhereErrorOccured() {
@@ -42,30 +42,42 @@ class AffiliationUtilsTest {
 		Assertion assertion = new Assertion();
 		assertion.setSalesforceId("salesforceId");
 		List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-		OrcidToken newToken = new OrcidToken(assertion.getSalesforceId(), "idToken", Instant.now(),null);
+		OrcidToken newToken = new OrcidToken(assertion.getSalesforceId(), "idToken", Instant.now(), null);
 
 		tokens.add(newToken);
 		record.setTokens(tokens);
 		assertEquals(AssertionStatus.USER_DENIED_ACCESS.getValue(),
-		AssertionUtils.getAssertionStatus(assertion, record));
+				AssertionUtils.getAssertionStatus(assertion, record));
 
 		newToken = new OrcidToken(assertion.getSalesforceId(), "idToken", null, null);
 
 		tokens = new ArrayList<OrcidToken>();
 		tokens.add(newToken);
 		record.setTokens(tokens);
-		assertEquals(AssertionStatus.PENDING.getValue(),
-				AssertionUtils.getAssertionStatus(assertion, record));
+		assertEquals(AssertionStatus.PENDING.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
 		tokens = new ArrayList<OrcidToken>();
 		newToken = new OrcidToken(assertion.getSalesforceId(), null, null, null);
-                tokens.add(newToken);
-                record.setTokens(tokens);
+		tokens.add(newToken);
+		record.setTokens(tokens);
 		assertion.setPutCode("put-code");
 		assertion.setDeletedFromORCID(Instant.now());
-		assertEquals(AssertionStatus.DELETED_IN_ORCID.getValue(),
-				AssertionUtils.getAssertionStatus(assertion, record));
+		assertEquals(AssertionStatus.DELETED_IN_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
 		assertion.setDeletedFromORCID(null);
 
+		assertEquals(AssertionStatus.IN_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
+
+		assertion.setAddedToORCID(Instant.now());
+		assertion.setModified(Instant.now());
+		assertion.setPutCode("1");
+		assertEquals(AssertionStatus.PENDING_RETRY.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
+
+		assertion.setPutCode(null);
+		assertion.setAddedToORCID(null);
+		assertEquals(AssertionStatus.PENDING.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
+
+		assertion.setModified(Instant.now());
+		assertion.setAddedToORCID(Instant.now());
+		assertion.setPutCode("1");
 		assertEquals(AssertionStatus.IN_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
 	}
 
@@ -75,7 +87,7 @@ class AffiliationUtilsTest {
 		error.put("error", "dummy");
 		return error;
 	}
-	
+
 	private JSONObject getInvalidScopeError(int statusCode) {
 		JSONObject error = new JSONObject();
 		error.put("statusCode", statusCode);

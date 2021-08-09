@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.utils.AssertionUtils;
-import org.orcid.repository.AssertionsRepository;
+import org.orcid.repository.AssertionRepository;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.UserService;
 import org.orcid.service.assertions.download.CsvWriter;
@@ -30,7 +30,7 @@ public class AssertionsReportCsvWriter extends CsvWriter {
 	private UserService assertionsUserService;
 
 	@Autowired
-	private AssertionsRepository assertionsRepository;
+	private AssertionRepository assertionsRepository;
 
 	@Autowired
 	private OrcidRecordService orcidRecordService;

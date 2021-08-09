@@ -8,7 +8,7 @@ import org.apache.commons.csv.CSVPrinter;
 import org.orcid.config.ApplicationProperties;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
-import org.orcid.repository.AssertionsRepository;
+import org.orcid.repository.AssertionRepository;
 import org.orcid.security.EncryptUtil;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.UserService;
@@ -32,7 +32,7 @@ public class PermissionLinksCsvWriter extends CsvWriter {
 	private UserService assertionsUserService;
 
 	@Autowired
-	private AssertionsRepository assertionsRepository;
+	private AssertionRepository assertionsRepository;
 
 	@Override
 	public String writeCsv() throws IOException {

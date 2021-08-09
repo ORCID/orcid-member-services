@@ -1,4 +1,4 @@
 /**
  * Spring Data JPA repositories.
  */
-package org.orcid.repository;
+package org.orcid.repository.impl;
