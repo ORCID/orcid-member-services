@@ -1,6 +1,11 @@
 package org.orcid.user.config;
 
-import io.github.jhipster.config.JHipsterProperties;
+import java.net.MalformedURLException;
+import java.security.KeyPair;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.orcid.user.security.AuthoritiesConstants;
 import org.springframework.beans.BeansException;
@@ -10,7 +15,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileUrlResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,12 +37,7 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
-import javax.servlet.http.HttpServletResponse;
-
-import java.net.MalformedURLException;
-import java.security.KeyPair;
-import java.util.ArrayList;
-import java.util.Collection;
+import io.github.jhipster.config.JHipsterProperties;
 
 @Configuration
 @EnableAuthorizationServer

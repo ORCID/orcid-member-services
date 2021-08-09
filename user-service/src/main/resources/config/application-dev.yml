@@ -39,11 +39,6 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017
       database: userservice
-  mail:
-    host: localhost
-    port: 25
-    username:
-    password:
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
@@ -126,4 +121,5 @@ uaa:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  mailTestMode: true
