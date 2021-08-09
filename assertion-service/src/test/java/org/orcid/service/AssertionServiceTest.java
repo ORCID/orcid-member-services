@@ -35,7 +35,7 @@ import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.domain.enumeration.AffiliationSection;
-import org.orcid.repository.AssertionsRepository;
+import org.orcid.repository.impl.AssertionRepository;
 import org.orcid.service.assertions.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.service.assertions.download.impl.AssertionsReportCsvWriter;
 import org.orcid.service.assertions.download.impl.PermissionLinksCsvWriter;
@@ -64,7 +64,7 @@ class AssertionServiceTest {
 	private PermissionLinksCsvWriter permissionLinksCsvWriter;
 
 	@Mock
-	private AssertionsRepository assertionsRepository;
+	private AssertionRepository assertionsRepository;
 
 	@Mock
 	private OrcidRecordService orcidRecordService;
@@ -268,7 +268,7 @@ class AssertionServiceTest {
 	@Test
 	void testPostAssertionsToOrcid()
 			throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
-		Mockito.when(assertionsRepository.findAllToCreate()).thenReturn(getAssertionsForCreatingInOrcid());
+		Mockito.when(assertionsRepository.findAllToCreateInOrcidRegistry()).thenReturn(getAssertionsForCreatingInOrcid());
 		for (int i = 1; i <= 20; i++) {
 			Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(getOptionalOrcidRecord(i));
 		}
@@ -290,7 +290,7 @@ class AssertionServiceTest {
 
 	@Test
 	void testPutAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
-		Mockito.when(assertionsRepository.findAllToUpdate()).thenReturn(getAssertionsForUpdateInOrcid());
+		Mockito.when(assertionsRepository.findAllToUpdateInOrcidRegistry()).thenReturn(getAssertionsForUpdateInOrcid());
 		for (int i = 1; i <= 20; i++) {
 			Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(getOptionalOrcidRecord(i));
 		}
