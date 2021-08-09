@@ -24,7 +24,7 @@ import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.domain.enumeration.AffiliationSection;
-import org.orcid.repository.AssertionsRepository;
+import org.orcid.repository.impl.AssertionRepository;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.UserService;
 import org.springframework.data.domain.Sort;
@@ -38,7 +38,7 @@ public class AssertionsReportCsvWriterTest {
 	private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
 
 	@Mock
-	private AssertionsRepository assertionsRepository;
+	private AssertionRepository assertionsRepository;
 	
 	@Mock
 	private UserService assertionsUserService;
@@ -174,7 +174,6 @@ public class AssertionsReportCsvWriterTest {
         assertion.setOwnerId("what?" + i);
         assertion.setRoleTitle("role-" + i);
         assertion.setStatus("status-" + i);
-        assertion.setUpdated(true);
         assertion.setUpdatedInORCID(Instant.now());
         assertion.setOrcidId("orcid-" + i);
         assertion.setPutCode(String.valueOf(i));

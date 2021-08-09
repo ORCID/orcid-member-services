@@ -1,4 +1,4 @@
-package org.orcid.repository;
+package org.orcid.repository.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AssertionsRepository extends MongoRepository<Assertion, String>, AssertionsRepositoryCustom {
+public interface AssertionRepository extends MongoRepository<Assertion, String>, AssertionRepositoryCustom {
     
     @Query("{ownerId: ?0}")    
     Page<Assertion> findByOwnerId(String ownerId, Pageable pageable);
@@ -27,12 +27,6 @@ public interface AssertionsRepository extends MongoRepository<Assertion, String>
     List<Assertion> findBySalesforceId(String salesforceId, Sort sort);
 
     List<Assertion> findBySalesforceId(String salesforceId);
-
-    @Query("{putCode: null}")
-    List<Assertion> findAllToCreate();
-    
-    @Query("{updated: true}")
-    List<Assertion> findAllToUpdate();
 
     List<Assertion> findByEmail(String email);
     

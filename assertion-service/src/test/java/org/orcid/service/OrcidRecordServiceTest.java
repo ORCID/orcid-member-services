@@ -23,7 +23,7 @@ import org.orcid.client.OrcidAPIClient;
 import org.orcid.domain.AssertionServiceUser;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
-import org.orcid.repository.OrcidRecordRepository;
+import org.orcid.repository.impl.OrcidRecordRepository;
 import org.orcid.web.rest.errors.BadRequestAlertException;
 
 class OrcidRecordServiceTest {

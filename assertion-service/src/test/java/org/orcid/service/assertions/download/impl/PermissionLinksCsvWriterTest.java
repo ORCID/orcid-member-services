@@ -22,7 +22,7 @@ import org.orcid.config.ApplicationProperties;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.enumeration.AffiliationSection;
-import org.orcid.repository.AssertionsRepository;
+import org.orcid.repository.impl.AssertionRepository;
 import org.orcid.security.EncryptUtil;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.UserService;
@@ -44,7 +44,7 @@ public class PermissionLinksCsvWriterTest {
 	private UserService assertionsUserService;
 
 	@Mock
-	private AssertionsRepository assertionsRepository;
+	private AssertionRepository assertionsRepository;
 
 	@InjectMocks
 	private PermissionLinksCsvWriter csvWriter;
@@ -150,7 +150,6 @@ public class PermissionLinksCsvWriterTest {
 		assertion.setOwnerId("what?" + i);
 		assertion.setRoleTitle("role-" + i);
 		assertion.setStatus("not sure");
-		assertion.setUpdated(true);
 		assertion.setUpdatedInORCID(Instant.now());
 		assertion.setDisambiguationSource("source-" + i);
 		assertion.setDisambiguatedOrgId("id-" + i);
