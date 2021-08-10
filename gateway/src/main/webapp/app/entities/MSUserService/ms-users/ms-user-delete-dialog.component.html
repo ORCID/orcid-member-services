@@ -6,7 +6,7 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <p id="jhi-delete-msUser-heading" jhiTranslate="gatewayApp.msUserServiceMSUser.delete.question.string" [translateValues]="{login: msUser.login}">Are you sure you want to delete user {{msUser.login}}?</p>
+        <p id="jhi-delete-msUser-heading" jhiTranslate="gatewayApp.msUserServiceMSUser.delete.question.string" [translateValues]="{email: msUser.email}">Are you sure you want to delete user {{msUser.email}}?</p>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">

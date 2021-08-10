@@ -5,8 +5,6 @@ import java.util.Set;
 
 public class MemberServiceUser {
 
-    private String login;
-
     private String id;
 
     private String salesforceId;
@@ -50,14 +48,6 @@ public class MemberServiceUser {
     }
 
     private String loginAs;
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
 
     public String getId() {
         return id;

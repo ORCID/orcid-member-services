@@ -47,9 +47,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @SpringBootTest(classes = UserServiceApp.class)
 public class UserResourceIT {
 
-    private static final String DEFAULT_LOGIN = "user@orcid.org";
-    private static final String LOGGED_IN_LOGIN = "loggedin@orcid.org";
-
     private static final String DEFAULT_PASSWORD = "password";
     private static final String LOGGED_IN_PASSWORD = "0123456789";
     private static final String UPDATED_PASSWORD = "new-password";
@@ -108,7 +105,6 @@ public class UserResourceIT {
 
     @BeforeEach
     public void setup() {
-        cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).clear();
         userRepository.deleteAll();
         user = createEntity();
@@ -133,7 +129,6 @@ public class UserResourceIT {
 
     private void createLoggedInUser() { 
         User user = new User();
-        user.setLogin(LOGGED_IN_LOGIN);
         user.setPassword(LOGGED_IN_PASSWORD);
         user.setActivated(true);
         user.setEmail(LOGGED_IN_EMAIL);
@@ -149,7 +144,6 @@ public class UserResourceIT {
 
     private User createEntity() {
         User user = new User();
-        user.setLogin(DEFAULT_LOGIN);
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
         user.setEmail(DEFAULT_EMAIL);
@@ -164,14 +158,13 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN",
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
             "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void createUser() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         // Create the User
         ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setLogin(DEFAULT_LOGIN);
         managedUserVM.setPassword(DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
         managedUserVM.setLastName(DEFAULT_LASTNAME);
@@ -190,7 +183,6 @@ public class UserResourceIT {
         List<User> userList = userRepository.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeCreate + 1);
         User testUser = userList.get(userList.size() - 1);
-        assertThat(testUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(testUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(testUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
@@ -201,14 +193,13 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN",
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
             "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId("1L");
-        managedUserVM.setLogin(DEFAULT_LOGIN);
         managedUserVM.setPassword(DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
         managedUserVM.setLastName(DEFAULT_LASTNAME);
@@ -229,7 +220,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN",
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
             "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void createUserWithExistingLogin() throws Exception {
         // Initialize the database
@@ -237,12 +228,10 @@ public class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setLogin(DEFAULT_LOGIN);// this login should already be
-                                              // used
         managedUserVM.setPassword(DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
         managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail("anothermail@localhost");
+        managedUserVM.setEmail(DEFAULT_EMAIL);
         managedUserVM.setActivated(true);
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
         managedUserVM.setLangKey(DEFAULT_LANGKEY);
@@ -258,7 +247,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN",
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
             "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void createUserWithExistingEmail() throws Exception {
         // Initialize the database
@@ -266,7 +255,6 @@ public class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setLogin("anotherlogin");
         managedUserVM.setPassword(DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
         managedUserVM.setLastName(DEFAULT_LASTNAME);
@@ -288,14 +276,13 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN",
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
             "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void createUserWithRoleAdmin() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         // Create the User
         ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setLogin(DEFAULT_LOGIN);
         managedUserVM.setPassword(DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
         managedUserVM.setLastName(DEFAULT_LASTNAME);
@@ -319,7 +306,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN",
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
             "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void getAllUsers() throws Exception {
         // Initialize the database
@@ -328,7 +315,6 @@ public class UserResourceIT {
         // Get all the users
         restUserMockMvc.perform(get("/api/users").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
                 .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
                 .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
                 .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
@@ -337,25 +323,24 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN",
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
             "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void getUser() throws Exception {
         // Initialize the database
         userRepository.save(user);
 
-        assertThat(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
+        assertThat(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get(user.getEmail())).isNull();
 
         // Get the user
-        restUserMockMvc.perform(get("/api/users/{login}/", user.getLogin())).andExpect(status().isOk())
+        restUserMockMvc.perform(get("/api/users/{login}/", user.getEmail())).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.login").value(user.getLogin()))
                 .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
                 .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
                 .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
                 .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL))
                 .andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
 
-        assertThat(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
+        assertThat(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get(user.getEmail())).isNotNull();
     }
 
     @Test
@@ -364,7 +349,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN",
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
             "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void updateUser() throws Exception {
         // Initialize the database
@@ -376,7 +361,6 @@ public class UserResourceIT {
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setLogin(updatedUser.getLogin());
         managedUserVM.setPassword(UPDATED_PASSWORD);
         managedUserVM.setFirstName(UPDATED_FIRSTNAME);
         managedUserVM.setLastName(UPDATED_LASTNAME);
@@ -409,14 +393,13 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN",
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
             "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
         userRepository.save(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster@orcid.org");
         anotherUser.setPassword(RandomStringUtils.random(60));
         anotherUser.setActivated(true);
         anotherUser.setEmail("jhipster@orcid.org");
@@ -432,7 +415,6 @@ public class UserResourceIT {
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setLogin(updatedUser.getLogin());
         managedUserVM.setPassword(updatedUser.getPassword());
         managedUserVM.setFirstName(updatedUser.getFirstName());
         managedUserVM.setLastName(updatedUser.getLastName());
@@ -453,14 +435,13 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN",
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
             "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void updateUserExistingLogin() throws Exception {
         // Initialize the database
         userRepository.save(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster@orcid.org");
         anotherUser.setPassword(RandomStringUtils.random(60));
         anotherUser.setActivated(true);
         anotherUser.setEmail("jhipster@orcid.org");
@@ -476,8 +457,6 @@ public class UserResourceIT {
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setLogin("jhipster");// this login should already be used
-                                           // by anotherUser
         managedUserVM.setPassword(updatedUser.getPassword());
         managedUserVM.setFirstName(updatedUser.getFirstName());
         managedUserVM.setLastName(updatedUser.getLastName());
@@ -496,7 +475,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = LOGGED_IN_PASSWORD)
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = LOGGED_IN_PASSWORD)
     public void updateUserWithRoleAdmin() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -506,7 +485,6 @@ public class UserResourceIT {
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setLogin(updatedUser.getLogin());
         managedUserVM.setPassword(UPDATED_PASSWORD);
         managedUserVM.setFirstName(UPDATED_FIRSTNAME);
         managedUserVM.setLastName(UPDATED_LASTNAME);
@@ -527,7 +505,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_LOGIN, authorities = { "ROLE_ADMIN",
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
             "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void getAllAuthorities() throws Exception {
         restUserMockMvc

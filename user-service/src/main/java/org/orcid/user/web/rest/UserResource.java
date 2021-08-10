@@ -268,11 +268,10 @@ public class UserResource {
         if (owner) {
             for (User prevOwner : owners) {
                 if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
-                    userService.removeOwnershipFromUser(prevOwner.getLogin());
+                    userService.removeOwnershipFromUser(prevOwner.getEmail());
                 }
             }
             userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
-
         } else {
             if (owners.isEmpty()) {
                 userDTO.setMainContact(true);
@@ -293,7 +292,7 @@ public class UserResource {
             mailService.sendOrganizationOwnerChangedMail(newUser, member);
         }
 
-        return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin())).body(userMapper.toUserDTO(newUser));
+        return ResponseEntity.created(new URI("/api/users/" + newUser.getEmail())).body(userMapper.toUserDTO(newUser));
     }
 
     /**
@@ -308,7 +307,7 @@ public class UserResource {
      */
     @PostMapping("/users/validate")
     public ResponseEntity<UserValidation> validateUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
-        Optional<User> currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+        Optional<User> currentUser = userRepository.findOneByEmailIgnoreCase(SecurityUtils.getCurrentUserLogin().get());
         UserValidation validation = userValidator.validate(userDTO, currentUser.get());
         return ResponseEntity.ok(validation);
     }
@@ -477,7 +476,7 @@ public class UserResource {
     }
 
     private User getCurrentUser() {
-        return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        return userRepository.findOneByEmailIgnoreCase(SecurityUtils.getCurrentUserLogin().get()).get();
     }
     
     private ResponseEntity<UserDTO> userOrNotFound(Optional<User> user) {

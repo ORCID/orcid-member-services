@@ -29,8 +29,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(classes = UserServiceApp.class)
 public class UserServiceIT {
 
-    private static final String DEFAULT_LOGIN = "johndoe@orcid.org";
-
     private static final String DEFAULT_EMAIL = "johndoe@orcid.org";
 
     private static final String DEFAULT_FIRSTNAME = "john";
@@ -73,7 +71,7 @@ public class UserServiceIT {
         user.setActivated(false);
         userRepository.save(user);
 
-        Optional<User> maybeUser = userService.requestPasswordReset(user.getLogin());
+        Optional<User> maybeUser = userService.requestPasswordReset(user.getEmail());
         assertThat(maybeUser).isNotPresent();
         removeUser(user);
     }
@@ -183,7 +181,6 @@ public class UserServiceIT {
     
     private User getUser() {
     	User user = new User();
-        user.setLogin(DEFAULT_LOGIN);
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
         user.setEmail(DEFAULT_EMAIL);
@@ -197,7 +194,6 @@ public class UserServiceIT {
     
     private void removeUser(User user) {
     	userRepository.delete(user);
-        userCaches.evictEntryFromLoginCache(user.getLogin());
         userCaches.evictEntryFromEmailCache(user.getEmail());
     }
 

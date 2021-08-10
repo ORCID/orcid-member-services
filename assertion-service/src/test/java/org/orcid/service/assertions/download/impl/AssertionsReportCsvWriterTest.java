@@ -69,7 +69,7 @@ public class AssertionsReportCsvWriterTest {
 	private AssertionServiceUser getUser() {
 		AssertionServiceUser user = new AssertionServiceUser();
 		user.setId(DEFAULT_JHI_USER_ID);
-		user.setLogin(DEFAULT_LOGIN);
+		user.setEmail(DEFAULT_LOGIN);
 		user.setSalesforceId(DEFAULT_SALESFORCE_ID);
 		return user;
 	}

@@ -22,7 +22,7 @@ export class AssertionDetailComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ assertion }) => {
       this.assertion = assertion;
       this.userService.find(this.assertion.ownerId).subscribe(user => {
-        this.ownerId = user.body.login;
+        this.ownerId = user.body.email;
       });
     });
   }

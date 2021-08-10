@@ -295,7 +295,7 @@ class AssertionsCsvReaderTest {
 		AssertionServiceUser user = new AssertionServiceUser();
 		user.setId("some-id");
 		user.setLangKey(langKey);
-		user.setLogin("something@orcid.org");
+		user.setEmail("something@orcid.org");
 		user.setLoginAs("something@orcid.org");
 		user.setSalesforceId("something");
 		return user;

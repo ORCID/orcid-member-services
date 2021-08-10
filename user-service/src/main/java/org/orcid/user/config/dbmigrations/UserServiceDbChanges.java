@@ -16,10 +16,9 @@ public class UserServiceDbChanges {
     @ChangeSet(order = "01", author = "George Nash", id = "01-changeAdminEmail")
     public void addAuthorities(MongoTemplate mongoTemplate) {
     	Query query = new Query();
-    	query.addCriteria(Criteria.where("login").is("admin@orcid.org"));
+    	query.addCriteria(Criteria.where("email").is("admin@orcid.org"));
     	User adminUser = mongoTemplate.findOne(query, User.class, "jhi_user");
     	adminUser.setEmail("member-portal@orcid.org");
-    	adminUser.setLogin("member-portal@orcid.org");
     	adminUser.setLastModifiedDate(Instant.now());
     	adminUser.setLastModifiedBy("system");
     	mongoTemplate.save(adminUser);

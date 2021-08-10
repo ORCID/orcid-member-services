@@ -7,10 +7,8 @@ import java.util.stream.Stream;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.orcid.user.config.Constants;
 import org.orcid.user.security.AuthoritiesConstants;
 
 /**
@@ -19,11 +17,6 @@ import org.orcid.user.security.AuthoritiesConstants;
 public class UserDTO {
 
     private String id;
-
-    @NotBlank
-    @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
-    private String login;
 
     private String loginError;
 
@@ -92,15 +85,6 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-        this.email = login;
     }
 
     public String getFirstName() {
@@ -274,7 +258,7 @@ public class UserDTO {
         result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
         result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + ((login == null) ? 0 : login.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((mainContact == null) ? 0 : mainContact.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
         result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
@@ -325,10 +309,10 @@ public class UserDTO {
                 return false;
         } else if (!lastName.equals(other.lastName))
             return false;
-        if (login == null) {
-            if (other.login != null)
+        if (email == null) {
+            if (other.email != null)
                 return false;
-        } else if (!login.equals(other.login))
+        } else if (!email.equals(other.email))
             return false;
         if (mainContact == null) {
             if (other.mainContact != null)
@@ -355,7 +339,7 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "UserDTO{" + "login='" + login + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\'' + ", imageUrl='"
+        return "UserDTO{firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\'' + ", imageUrl='"
                 + imageUrl + '\'' + ", activated=" + activated + ", langKey='" + langKey + '\'' + ", createdBy=" + createdBy + ", createdDate=" + createdDate
                 + ", lastModifiedBy='" + lastModifiedBy + '\'' + ", lastModifiedDate=" + lastModifiedDate + ", authorities=" + authorities + " loginAs= " + loginAs
                 + " isLoggedAs= " + isLoggedAs + ", mainContact='" + mainContact + '\'' + "}";

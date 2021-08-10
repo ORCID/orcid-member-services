@@ -2,12 +2,12 @@
     <div class="col-8">
         <div *ngIf="user">
             <h2>
-                <span jhiTranslate="userManagement.detail.title.string">User</span> [<b>{{user.login}}</b>]
+                <span jhiTranslate="userManagement.detail.title.string">User</span> [<b>{{user.email}}</b>]
             </h2>
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="userManagement.login.string">Login</span></dt>
+                <dt><span jhiTranslate="userManagement.email.string">Email</span></dt>
                 <dd>
-                    <span>{{user.login}}</span>
+                    <span>{{user.email}}</span>
                     <jhi-boolean
                         [value]="user.activated"
                         [textTrue]="'userManagement.activated.string' | translate"

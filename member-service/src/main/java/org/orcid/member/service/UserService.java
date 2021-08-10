@@ -57,7 +57,7 @@ public class UserService {
     public void updateUser(MemberServiceUser user) {
         ResponseEntity<String> response = userServiceClient.updateUser(user);
         if (!response.getStatusCode().is2xxSuccessful()) {
-            LOG.warn("Error updating user {}, response code {}", user.getLogin(), response.getStatusCodeValue());
+            LOG.warn("Error updating user {}, response code {}", user.getEmail(), response.getStatusCodeValue());
             throw new BadRequestAlertException("Unable to update user", "User", null);
         }
     }

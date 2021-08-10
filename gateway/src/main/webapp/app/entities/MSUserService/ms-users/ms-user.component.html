@@ -40,7 +40,7 @@
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th></th>
-            <th jhiSortBy="login"><span jhiTranslate="gatewayApp.msUserServiceMSUser.email.string">Email</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="email"><span jhiTranslate="gatewayApp.msUserServiceMSUser.email.string">Email</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
             <th jhiSortBy="firstName"><span jhiTranslate="gatewayApp.msUserServiceMSUser.firstName.string">First Name</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
             <th jhiSortBy="lastName"><span jhiTranslate="gatewayApp.msUserServiceMSUser.lastName.string">Last Name</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
             <th jhiSortBy="mainContact"><span jhiTranslate="gatewayApp.msUserServiceMSUser.mainContact.string">Main Contact</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
@@ -55,7 +55,7 @@
             <tr *ngFor="let msUser of msUser ;trackBy: trackId">
                 <td>
                 <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit"
-                                (click) = "switchUser(msUser.login)"
+                                (click) = "switchUser(msUser.email)"
                                 replaceUrl="true"
                                 class="btn btn-primary btn-sm ml-1"
                                 [disabled]="disableImpersonate(msUser)"
@@ -63,7 +63,7 @@
                             <fa-icon [icon]="'sign-in-alt'"></fa-icon>
                         </button>
                 </td>
-                <td><a [routerLink]="['/ms-user', msUser.id, 'view' ]">{{msUser.login}}</a></td>
+                <td><a [routerLink]="['/ms-user', msUser.id, 'view' ]">{{msUser.email}}</a></td>
                 <td>{{msUser.firstName}}</td>
                 <td>{{msUser.lastName}}</td>
                 <td class="text-center">

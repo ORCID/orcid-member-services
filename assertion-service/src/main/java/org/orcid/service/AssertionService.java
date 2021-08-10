@@ -169,7 +169,7 @@ public class AssertionService {
         assertion.setOwnerId(user.getId());
         assertion.setCreated(now);
         assertion.setModified(now);
-        assertion.setLastModifiedBy(user.getLogin());
+        assertion.setLastModifiedBy(user.getEmail());
         assertion.setSalesforceId(assertionsUserService.getLoggedInUserSalesforceId());
 
         String email = assertion.getEmail();
@@ -243,7 +243,7 @@ public class AssertionService {
 
         copyFieldsToUpdate(assertion, existingAssertion);
         existingAssertion.setModified(Instant.now());
-        existingAssertion.setLastModifiedBy(user.getLogin());
+        existingAssertion.setLastModifiedBy(user.getEmail());
         existingAssertion.setStatus(getAssertionStatus(existingAssertion));
         assertion = assertionRepository.save(existingAssertion);
         assertion.setStatus(AssertionStatus.getStatus(assertion.getStatus()).getText());

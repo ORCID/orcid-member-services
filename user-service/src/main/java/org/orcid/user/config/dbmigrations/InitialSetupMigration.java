@@ -38,7 +38,6 @@ public class InitialSetupMigration {
 
         User adminUser = new User();
         adminUser.setId("admin@orcid.org");
-        adminUser.setLogin("admin@orcid.org");
         adminUser.setPassword("$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC");
         adminUser.setFirstName("admin");
         adminUser.setLastName("Administrator");

@@ -52,9 +52,9 @@ class UserCsvReaderTest {
         UserDTO userDTO2 = upload.getUserDTOs().get(1);
         UserDTO userDTO3 = upload.getUserDTOs().get(2);
 
-        assertEquals("1@user.com", userDTO1.getLogin());
-        assertEquals("2@user.com", userDTO2.getLogin());
-        assertEquals("3@user.com", userDTO3.getLogin());
+        assertEquals("1@user.com", userDTO1.getEmail());
+        assertEquals("2@user.com", userDTO2.getEmail());
+        assertEquals("3@user.com", userDTO3.getEmail());
 
         assertEquals("Angel", userDTO1.getFirstName());
         assertEquals("Leonardo", userDTO2.getFirstName());
@@ -95,7 +95,7 @@ class UserCsvReaderTest {
         User user = new User();
         user.setId("some-id");
         user.setLangKey(langKey);
-        user.setLogin("something@orcid.org");
+        user.setEmail("something@orcid.org");
         user.setLoginAs("something@orcid.org");
         user.setSalesforceId("something");
         user.setMemberName("some member name");

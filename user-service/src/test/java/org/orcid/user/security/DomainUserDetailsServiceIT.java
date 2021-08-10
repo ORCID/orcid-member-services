@@ -22,11 +22,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @SpringBootTest(classes = UserServiceApp.class)
 public class DomainUserDetailsServiceIT {
 
-    private static final String USER_ONE_LOGIN = "test-user-one@orcid.org";
     private static final String USER_ONE_EMAIL = "test-user-one@orcid.org";
-    private static final String USER_TWO_LOGIN = "test-user-two@orcid.org";
     private static final String USER_TWO_EMAIL = "test-user-two@orcid.org";
-    private static final String USER_THREE_LOGIN = "test-user-three@orcid.org";
     private static final String USER_THREE_EMAIL = "test-user-three@orcid.org";
 
     @Autowired
@@ -44,7 +41,6 @@ public class DomainUserDetailsServiceIT {
         userRepository.deleteAll();
 
         userOne = new User();
-        userOne.setLogin(USER_ONE_LOGIN);
         userOne.setPassword(RandomStringUtils.random(60));
         userOne.setActivated(true);
         userOne.setEmail(USER_ONE_EMAIL);
@@ -54,7 +50,6 @@ public class DomainUserDetailsServiceIT {
         userRepository.save(userOne);
 
         userTwo = new User();
-        userTwo.setLogin(USER_TWO_LOGIN);
         userTwo.setPassword(RandomStringUtils.random(60));
         userTwo.setActivated(true);
         userTwo.setEmail(USER_TWO_EMAIL);
@@ -64,7 +59,6 @@ public class DomainUserDetailsServiceIT {
         userRepository.save(userTwo);
 
         userThree = new User();
-        userThree.setLogin(USER_THREE_LOGIN);
         userThree.setPassword(RandomStringUtils.random(60));
         userThree.setActivated(false);
         userThree.setEmail(USER_THREE_EMAIL);
@@ -76,43 +70,43 @@ public class DomainUserDetailsServiceIT {
 
     @Test
     public void assertThatUserCanBeFoundByLogin() {
-        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_LOGIN);
+        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_EMAIL);
         assertThat(userDetails).isNotNull();
-        assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
+        assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_EMAIL);
     }
 
     @Test
     public void assertThatUserCanBeFoundByLoginIgnoreCase() {
-        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_LOGIN.toUpperCase(Locale.ENGLISH));
+        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_EMAIL.toUpperCase(Locale.ENGLISH));
         assertThat(userDetails).isNotNull();
-        assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
+        assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_EMAIL);
     }
 
     @Test
     public void assertThatUserCanBeFoundByEmail() {
         UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_TWO_EMAIL);
         assertThat(userDetails).isNotNull();
-        assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
+        assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_EMAIL);
     }
 
     @Test
     public void assertThatUserCanBeFoundByEmailIgnoreCase() {
         UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH));
         assertThat(userDetails).isNotNull();
-        assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
+        assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_EMAIL);
     }
 
     @Test
     public void assertThatEmailIsPrioritizedOverLogin() {
         UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_EMAIL);
         assertThat(userDetails).isNotNull();
-        assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
+        assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_EMAIL);
     }
 
     @Test
     public void assertThatUserNotActivatedExceptionIsThrownForNotActivatedUsers() {
         assertThatExceptionOfType(UserNotActivatedException.class).isThrownBy(
-            () -> domainUserDetailsService.loadUserByUsername(USER_THREE_LOGIN));
+            () -> domainUserDetailsService.loadUserByUsername(USER_THREE_EMAIL));
     }
 
 }

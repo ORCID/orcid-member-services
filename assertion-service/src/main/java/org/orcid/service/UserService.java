@@ -39,8 +39,8 @@ public class UserService {
 				return userResponse.getBody();
 			}
 		}
-		LOG.error("No user found in user service for impersonated user for admin {}", loggedInUser.getLogin());
-		throw new IllegalArgumentException("No user found for impersonated user for admin" + loggedInUser.getLogin());
+		LOG.error("No user found in user service for impersonated user for admin {}", loggedInUser.getEmail());
+		throw new IllegalArgumentException("No user found for impersonated user for admin" + loggedInUser.getEmail());
 	}
 
 	public String getLoggedInUserId() {
