@@ -59,7 +59,6 @@ public class UserMapperTest {
         userDTO.setFirstName("hello");
         userDTO.setLastName("orcid");
         userDTO.setSalesforceId("salesforce1");
-        userDTO.setLogin("hello@orcid.org");
         userDTO.setActivated(true);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey("en");
@@ -75,7 +74,6 @@ public class UserMapperTest {
         user.setLastName("last name");
         user.setEmail("some@email.com");
         user.setSalesforceId("salesforce2");
-        user.setLogin("some@email.com");
         user.setActivated(true);
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");

@@ -111,7 +111,6 @@ class UserServiceTest {
         userToBeCleared.setFirstName("first name");
         userToBeCleared.setLastName("last name");
         userToBeCleared.setEmail("something@somewhere.com");
-        userToBeCleared.setLogin("something@somewhere.com");
 
         Mockito.when(userRepository.findOneById(Mockito.eq("some-id"))).thenReturn(Optional.of(userToBeCleared));
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(null);
@@ -124,7 +123,6 @@ class UserServiceTest {
         assertNull(cleared.getFirstName());
         assertNull(cleared.getLastName());
         assertEquals("some-id@deleted.orcid.org", cleared.getEmail());
-        assertEquals("some-id@deleted.orcid.org", cleared.getLogin());
     }
 
     @Test
@@ -184,7 +182,7 @@ class UserServiceTest {
         
         User existing = new User();
         existing.setId("id");
-        existing.setLogin("login");
+        existing.setEmail("email@orcid.orgd");
         existing.setMainContact(false);
         
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString()))
@@ -204,7 +202,6 @@ class UserServiceTest {
         User user = userCaptor.getValue();
         assertEquals(userDTO.getFirstName(), user.getFirstName());
         assertEquals(userDTO.getLastName(), user.getLastName());
-        assertEquals(userDTO.getLogin(), user.getLogin());
         assertEquals(userDTO.getEmail(), user.getEmail());
         assertTrue(user.getAuthorities().contains(AuthoritiesConstants.USER));
         assertTrue(user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
@@ -224,7 +221,7 @@ class UserServiceTest {
         
         User existing = new User();
         existing.setId("id");
-        existing.setLogin("login");
+        existing.setEmail("email@orcid.org");
         existing.setMainContact(false);
         
         Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
@@ -232,7 +229,7 @@ class UserServiceTest {
         
         UserDTO userDTO = getUserDTO();
         userDTO.setId("id");
-        userDTO.setLogin("login");
+        userDTO.setEmail("email@orcid.org");
         userDTO.setMainContact(false);
         userService.updateUser(userDTO);
 
@@ -243,7 +240,6 @@ class UserServiceTest {
         User user = userCaptor.getValue();
         assertEquals(userDTO.getFirstName(), user.getFirstName());
         assertEquals(userDTO.getLastName(), user.getLastName());
-        assertEquals(userDTO.getLogin(), user.getLogin());
         assertEquals(userDTO.getEmail(), user.getEmail());
         assertTrue(user.getAuthorities().contains(AuthoritiesConstants.USER));
         assertFalse(user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
@@ -253,7 +249,7 @@ class UserServiceTest {
     public void testUpdateUserNoOrgOwnerChange() {
         UserDTO toUpdate = new UserDTO();
         toUpdate.setMainContact(false);
-        toUpdate.setLogin("some-login");
+        toUpdate.setEmail("email@orcid.org");
         toUpdate.setId("some-id");
 
         User existing = new User();
@@ -273,9 +269,9 @@ class UserServiceTest {
     public void testUpdateUserWithOrgOwnerChange() {
         UserDTO toUpdate = new UserDTO();
         toUpdate.setMainContact(true);
-        toUpdate.setLogin("some-login");
         toUpdate.setId("some-id");
         toUpdate.setSalesforceId("salesforce");
+        toUpdate.setEmail("email@orcid.org");
 
         User existing = new User();
         existing.setMainContact(false);
@@ -305,7 +301,7 @@ class UserServiceTest {
         user.setLastName("old last name");
         user.setEmail("some@email.com");
         user.setAuthorities(new HashSet<>(Arrays.asList("ROLE_USER", "ROLE_ADMIN")));
-        Mockito.when(userRepository.findOneByLogin(Mockito.anyString())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(user));
 
         userService.updateAccount("new first name", "new last name", "no@change.com", "en", "hmmmm");
 
@@ -330,8 +326,8 @@ class UserServiceTest {
     public void testUploadUserCSV() throws IOException {
         Mockito.when(usersUploadReader.readUsersUpload(Mockito.any(InputStream.class), Mockito.any(User.class)))
                 .thenReturn(getUserUpload());
-        Mockito.when(userRepository.findOneByLogin(Mockito.eq("user1@orcid.org"))).thenReturn(Optional.empty());
-        Mockito.when(userRepository.findOneByLogin(Mockito.eq("user2@orcid.org")))
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("user1@orcid.org"))).thenReturn(Optional.empty());
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("user2@orcid.org")))
                 .thenReturn(Optional.of(getUser("user2@orcid.org")));
         Mockito.when(userRepository.findOneById(Mockito.eq("user2@orcid.org")))
                 .thenReturn(Optional.of(getUser("user2@orcid.org")));
@@ -422,21 +418,21 @@ class UserServiceTest {
     @Test
     public void testGetCurrentUser() {
         User impersonatingUser = new User();
-        impersonatingUser.setLogin("admin-user");
+        impersonatingUser.setEmail("admin-user");
         impersonatingUser.setLoginAs("impersonated-user");
         
         User impersonatedUser = new User();
-        impersonatedUser.setLogin("impersonated-user");
+        impersonatedUser.setEmail("impersonated-user");
         
-        Mockito.when(userRepository.findOneByLogin(Mockito.eq("username"))).thenReturn(Optional.of(impersonatingUser));
-        Mockito.when(userRepository.findOneByLogin(Mockito.eq("impersonated-user"))).thenReturn(Optional.of(impersonatedUser));
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("username"))).thenReturn(Optional.of(impersonatingUser));
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("impersonated-user"))).thenReturn(Optional.of(impersonatedUser));
         
         User user = userService.getCurrentUser();
-        assertEquals("impersonated-user", user.getLogin());
+        assertEquals("impersonated-user", user.getEmail());
         
         impersonatingUser.setLoginAs(null);
         user = userService.getCurrentUser();
-        assertEquals("admin-user", user.getLogin());
+        assertEquals("admin-user", user.getEmail());
     }
 
     private List<User> getListOfUsers(int size) {
@@ -449,7 +445,6 @@ class UserServiceTest {
 
     private User getUser(String login) {
         User user = new User();
-        user.setLogin(login);
         user.setEmail(login);
         user.setId(login);
         user.setSalesforceId(login);
@@ -459,11 +454,9 @@ class UserServiceTest {
     private UserUpload getUserUpload() {
         UserUpload upload = new UserUpload();
         UserDTO user1 = new UserDTO();
-        user1.setLogin("user1@orcid.org");
         user1.setEmail("user1@orcid.org");
 
         UserDTO user2 = new UserDTO();
-        user2.setLogin("user2@orcid.org");
         user2.setEmail("user2@orcid.org");
 
         upload.addUserDTO(user1);
@@ -479,7 +472,6 @@ class UserServiceTest {
         user.setMainContact(false);
         user.setFirstName("first");
         user.setLastName("last");
-        user.setLogin("email@email.com");
         user.setSalesforceId("member");
         user.setIsAdmin(false);
         user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));

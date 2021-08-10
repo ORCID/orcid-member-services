@@ -275,7 +275,6 @@ class MemberServiceTest {
 
     private MemberServiceUser getUser() {
         MemberServiceUser user = new MemberServiceUser();
-        user.setLogin("logged-in-user@orcid.org");
         user.setEmail("logged-in-user@orcid.org");
         user.setLangKey("en");
         return user;

@@ -67,7 +67,7 @@ class UserResourceTest {
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
         Mockito.when(authentication.getPrincipal()).thenReturn("some@email.com");
-        Mockito.when(userRepository.findOneByLogin(Mockito.eq("some@email.com"))).thenReturn(getCurrentUser());
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("some@email.com"))).thenReturn(getCurrentUser());
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));

@@ -11,7 +11,7 @@ describe('Component Tests', () => {
     let comp: UserMgmtDetailComponent;
     let fixture: ComponentFixture<UserMgmtDetailComponent>;
     const route = ({
-      data: of({ user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin', null, null, null) })
+      data: of({ user: new User(1, 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin', null, null, null) })
     } as any) as ActivatedRoute;
 
     beforeEach(async(() => {
@@ -45,7 +45,6 @@ describe('Component Tests', () => {
         expect(comp.user).toEqual(
           jasmine.objectContaining({
             id: 1,
-            login: 'user',
             firstName: 'first',
             lastName: 'last',
             email: 'first@last.com',

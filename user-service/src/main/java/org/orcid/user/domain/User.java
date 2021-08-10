@@ -29,10 +29,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Id
     private String id;
 
-    @NotNull
-    @Indexed
-    private String login;
-
     @JsonIgnore
     @NotNull
     @Size(min = 10, max = 60)
@@ -111,14 +107,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
-    }
-
     public String getPassword() {
         return password;
     }
@@ -148,7 +136,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = StringUtils.lowerCase(email, Locale.ENGLISH);
+        ;
     }
 
     public String getImageUrl() {
@@ -260,13 +249,13 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        return 32 + (id != null ? id.hashCode() : 1) + (email != null ? email.hashCode() : 2);
     }
 
     @Override
     public String toString() {
-        return "User{" + "login='" + login + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName
-                + '\'' + ", email='" + email + '\'' + ", imageUrl='" + imageUrl + '\'' + ", activated='" + activated
-                + '\'' + ", langKey='" + langKey + '\'' + ", activationKey='" + activationKey + '\'' + "}";
+        return "User{firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\''
+                + ", imageUrl='" + imageUrl + '\'' + ", activated='" + activated + '\'' + ", langKey='" + langKey + '\''
+                + ", activationKey='" + activationKey + '\'' + "}";
     }
 }

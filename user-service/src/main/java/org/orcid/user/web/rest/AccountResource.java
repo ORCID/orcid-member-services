@@ -85,7 +85,7 @@ public class AccountResource {
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
         User currentUser = userService.getCurrentUser();
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && !existingUser.get().getLogin().equalsIgnoreCase(currentUser.getLogin())) {
+        if (existingUser.isPresent() && !existingUser.get().getEmail().equalsIgnoreCase(currentUser.getEmail())) {
             throw new EmailAlreadyUsedException();
         }
         userService.updateAccount(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),

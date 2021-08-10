@@ -17,7 +17,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
 @SpringBootTest(classes = UserServiceApp.class)
-class UserCachesTest {
+class UserCachesIT {
 
     @Autowired
     private CacheManager cacheManager;
@@ -31,32 +31,7 @@ class UserCachesTest {
     @BeforeEach
     public void setUp() throws IOException {
         Cache emailCache = cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE);
-        Cache loginCache = cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE);
-
         emailCache.put("test", "value");
-        loginCache.put("test", "value");
-    }
-
-    @Test
-    public void testEvictEntryFromUserCaches() {
-        assertNotNull(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test"));
-        assertNotNull(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test"));
-        assertEquals("value", cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test").get());
-        assertEquals("value", cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test").get());
-        userCaches.evictEntryFromUserCaches("test");
-        assertNull(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get("test"));
-        assertNull(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test"));
-        assertFalse(userRepository.findOneByEmailIgnoreCase("test").isPresent());
-        assertFalse(userRepository.findOneByLogin("test").isPresent());
-    }
-
-    @Test
-    public void testEvictEntryFromLoginCache() {
-        assertNotNull(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test"));
-        assertEquals("value", cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test").get());
-        userCaches.evictEntryFromLoginCache("test");
-        assertNull(cacheManager.getCache(UserCaches.USERS_BY_LOGIN_CACHE).get("test"));
-        assertFalse(userRepository.findOneByLogin("test").isPresent());
     }
 
     @Test

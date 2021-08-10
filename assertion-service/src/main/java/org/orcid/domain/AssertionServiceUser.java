@@ -2,14 +2,14 @@ package org.orcid.domain;
 
 public class AssertionServiceUser {
 
-    private String login;
+    private String email;
 
     private String id;
 
     private String salesforceId;
 
     private String loginAs;
-    
+
     private String langKey;
 
     public String getLoginAs() {
@@ -20,12 +20,12 @@ public class AssertionServiceUser {
         this.loginAs = loginAs;
     }
 
-    public String getLogin() {
-        return login;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setEmail(String login) {
+        this.email = login;
     }
 
     public String getId() {
@@ -44,12 +44,12 @@ public class AssertionServiceUser {
         this.salesforceId = salesforceId;
     }
 
-	public String getLangKey() {
-		return langKey;
-	}
+    public String getLangKey() {
+        return langKey;
+    }
 
-	public void setLangKey(String langKey) {
-		this.langKey = langKey;
-	}
+    public void setLangKey(String langKey) {
+        this.langKey = langKey;
+    }
 
 }

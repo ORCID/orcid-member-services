@@ -52,10 +52,9 @@ export class MSUserService {
     return this.http.post<IMSUser>(`${this.resourceUrl}/${msUser.id}/sendActivate`, copy, { observe: 'response' });
   }
 
-  find(login: string): Observable<EntityResponseType> {
-    console.log('login:' + login);
+  find(email: string): Observable<EntityResponseType> {
     return this.http
-      .get<IMSUser>(`${this.resourceUrl}/${login}`, { observe: 'response' })
+      .get<IMSUser>(`${this.resourceUrl}/${email}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertFromServer(res)));
   }
 

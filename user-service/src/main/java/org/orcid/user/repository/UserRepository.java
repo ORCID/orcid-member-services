@@ -27,14 +27,11 @@ public interface UserRepository extends MongoRepository<User, String> {
     @Cacheable(cacheNames = UserCaches.USERS_BY_EMAIL_CACHE)
     Optional<User> findOneByEmailIgnoreCase(String email);
 
-    @Cacheable(cacheNames = UserCaches.USERS_BY_LOGIN_CACHE)
-    Optional<User> findOneByLogin(String login);
-
     Optional<User> findOneById(String id);
 
-    List<User> findAllByLoginOrEmail(String login, String email);
-
-    Page<User> findAllByLoginNot(Pageable pageable, String login);
+    Page<User> findAllByEmailNot(Pageable pageable, String email);
+    
+    List<User> findAllByEmailIgnoreCase(String email);
 
     List<User> findBySalesforceIdAndDeletedIsFalse(String salesforceId);
 

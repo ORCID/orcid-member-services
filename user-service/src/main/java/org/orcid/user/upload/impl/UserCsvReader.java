@@ -41,7 +41,7 @@ public class UserCsvReader implements UserUploadReader {
 
             for (CSVRecord record : parser) {
                 try {
-                    UserDTO userDTO = getUserDTO(record, now, currentUser.getLogin());
+                    UserDTO userDTO = getUserDTO(record, now, currentUser.getEmail());
                     UserValidation userValidation = userValidator.validate(userDTO, currentUser);
                     if (userValidation.isValid()) {
                         upload.getUserDTOs().add(userDTO);
@@ -61,7 +61,6 @@ public class UserCsvReader implements UserUploadReader {
 
     private UserDTO getUserDTO(CSVRecord record, Instant now, String createdBy) {
         UserDTO u = new UserDTO();
-        u.setLogin(record.get("email"));
         u.setFirstName(record.get("firstName"));
         u.setLastName(record.get("lastName"));
         u.setSalesforceId(record.get("salesforceId"));

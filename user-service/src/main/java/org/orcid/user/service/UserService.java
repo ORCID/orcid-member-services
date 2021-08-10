@@ -93,7 +93,7 @@ public class UserService {
         user.setResetDate(null);
         user.setActivated(true);
         userRepository.save(user);
-        userCaches.evictEntryFromUserCaches(user.getEmail());
+        userCaches.evictEntryFromEmailCache(user.getEmail());
     }
 
     public boolean validResetKey(String key) {
@@ -117,13 +117,13 @@ public class UserService {
             user.setResetKey(RandomUtil.generateResetKey());
             user.setResetDate(Instant.now());
             userRepository.save(user);
-            userCaches.evictEntryFromUserCaches(user.getEmail());
+            userCaches.evictEntryFromEmailCache(user.getEmail());
             return user;
         });
     }
 
     public User registerUser(UserDTO userDTO, String password) {
-        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
                 throw new LoginAlreadyUsedException();
@@ -137,7 +137,6 @@ public class UserService {
         });
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
@@ -150,7 +149,7 @@ public class UserService {
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         newUser.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
         userRepository.save(newUser);
-        userCaches.evictEntryFromUserCaches(newUser.getEmail());
+        userCaches.evictEntryFromEmailCache(newUser.getEmail());
         LOG.debug("Created Information for User: {}", newUser);
         return newUser;
     }
@@ -160,7 +159,7 @@ public class UserService {
             return false;
         }
         userRepository.delete(existingUser);
-        userCaches.evictEntryFromUserCaches(existingUser.getEmail());
+        userCaches.evictEntryFromEmailCache(existingUser.getEmail());
         return true;
     }
 
@@ -173,7 +172,7 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         userRepository.save(user);
-        userCaches.evictEntryFromUserCaches(user.getEmail());
+        userCaches.evictEntryFromEmailCache(user.getEmail());
         LOG.debug("Created User: {}", user);
 
         LOG.debug("Sending email to user {}", user.getEmail());
@@ -199,7 +198,7 @@ public class UserService {
         user.setLangKey(langKey);
         user.setImageUrl(imageUrl);
         userRepository.save(user);
-        userCaches.evictEntryFromUserCaches(user.getEmail());
+        userCaches.evictEntryFromEmailCache(user.getEmail());
         LOG.debug("Changed Information for User: {}", user);
     }
 
@@ -221,15 +220,14 @@ public class UserService {
                     .findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
             for (User prevOwner : owners) {
                 if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
-                    removeOwnershipFromUser(prevOwner.getLogin());
+                    removeOwnershipFromUser(prevOwner.getEmail());
                 }
             }
             userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
 
         }
 
-        userCaches.evictEntryFromUserCaches(user.getEmail());
-        user.setLogin(userDTO.getLogin().toLowerCase());
+        userCaches.evictEntryFromEmailCache(user.getEmail());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setImageUrl(userDTO.getImageUrl());
@@ -256,8 +254,8 @@ public class UserService {
         }
 
         userRepository.save(user);
-        userCaches.evictEntryFromUserCaches(user.getEmail());
-        userCaches.evictEntryFromUserCaches(user.getLogin());
+        userCaches.evictEntryFromEmailCache(user.getEmail());
+        userCaches.evictEntryFromEmailCache(user.getEmail());
         
         if (owner && !previouslyOwner) {
             String member = memberService.getMemberNameBySalesforce(user.getSalesforceId());
@@ -271,16 +269,16 @@ public class UserService {
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
         }
-        existingUser = userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
+        existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
     }
 
     public void deleteUser(String login) {
-        userRepository.findOneByLogin(login).ifPresent(user -> {
+        userRepository.findOneByEmailIgnoreCase(login).ifPresent(user -> {
             userRepository.delete(user);
-            userCaches.evictEntryFromUserCaches(user.getEmail());
+            userCaches.evictEntryFromEmailCache(user.getEmail());
             LOG.debug("Deleted User: {}", user);
         });
     }
@@ -291,7 +289,7 @@ public class UserService {
             LOG.debug("About to clear User with id: {}", id);
             User user = u.get();
             String email = user.getEmail();
-            userCaches.evictEntryFromUserCaches(email);
+            userCaches.evictEntryFromEmailCache(email);
 
             user.setActivated(false);
             user.setActivationKey(null);
@@ -301,7 +299,6 @@ public class UserService {
             user.setImageUrl(null);
             user.setLangKey(null);
             user.setLastName(null);
-            user.setLogin(user.getEmail());
             user.setPassword(RandomStringUtils.randomAlphanumeric(60));
             user.setResetDate(null);
             user.setResetKey(null);
@@ -313,7 +310,7 @@ public class UserService {
     }
 
     public void changePassword(String currentClearTextPassword, String newPassword) {
-        SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(user -> {
+        SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByEmailIgnoreCase).ifPresent(user -> {
             String currentEncryptedPassword = user.getPassword();
             if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
                 throw new InvalidPasswordException();
@@ -321,7 +318,7 @@ public class UserService {
             String encryptedPassword = passwordEncoder.encode(newPassword);
             user.setPassword(encryptedPassword);
             userRepository.save(user);
-            userCaches.evictEntryFromUserCaches(user.getEmail());
+            userCaches.evictEntryFromEmailCache(user.getEmail());
             LOG.debug("Changed password for User: {}", user);
         });
     }
@@ -345,7 +342,7 @@ public class UserService {
     }
 
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
-        return userRepository.findOneByLogin(login);
+        return userRepository.findOneByEmailIgnoreCase(login);
     }
 
     public Optional<User> getUserWithAuthorities(String id) {
@@ -353,11 +350,11 @@ public class UserService {
     }
 
     public Optional<User> getUserWithAuthorities() {
-        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByEmailIgnoreCase);
     }
 
-    public List<User> findAllByLoginOrEmail(String login, String email) {
-        return userRepository.findAllByLoginOrEmail(login, email);
+    public List<User> findAllByEmail(String login, String email) {
+        return userRepository.findAllByEmailIgnoreCase(email);
     }
 
     public void removeAuthorityFromUser(String id, String authority) {
@@ -398,9 +395,9 @@ public class UserService {
     public void removeNotActivatedUsers() {
         userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
                 Instant.now().minus(3, ChronoUnit.DAYS)).forEach(user -> {
-                    LOG.debug("Deleting not activated user {}", user.getLogin());
+                    LOG.debug("Deleting not activated user {}", user.getEmail());
                     userRepository.delete(user);
-                    userCaches.evictEntryFromUserCaches(user.getEmail());
+                    userCaches.evictEntryFromEmailCache(user.getEmail());
                 });
     }
 
@@ -411,11 +408,11 @@ public class UserService {
     public void updateMemberNames() {
         Page<User> page = userRepository.findByMemberName(PageRequest.of(0, 10), null);
         page.getContent().stream().filter(u -> !StringUtils.isBlank(u.getSalesforceId())).forEach(u -> {
-            LOG.info("Populating member name field for user {}", u.getLogin());
+            LOG.info("Populating member name field for user {}", u.getEmail());
             u.setMemberName(memberService.getMemberNameBySalesforce(u.getSalesforceId()));
             userRepository.save(u);
-            userCaches.evictEntryFromUserCaches(u.getEmail());
-            userCaches.evictEntryFromUserCaches(u.getLogin());
+            userCaches.evictEntryFromEmailCache(u.getEmail());
+            userCaches.evictEntryFromEmailCache(u.getEmail());
         });
     }
 
@@ -439,7 +436,7 @@ public class UserService {
 
         usersUpload.getUserDTOs().forEach(userDTO -> {
             String salesforceId = userDTO.getSalesforceId();
-            Optional<User> existing = getUserWithAuthoritiesByLogin(userDTO.getLogin());
+            Optional<User> existing = getUserWithAuthoritiesByLogin(userDTO.getEmail());
             if (!existing.isPresent()
                     && !userRepository.findOneBySalesforceIdAndMainContactIsTrue(salesforceId).isPresent()) {
                 userDTO.setMainContact(true);
@@ -473,7 +470,7 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         userRepository.save(user);
-        userCaches.evictEntryFromUserCaches(user.getEmail());
+        userCaches.evictEntryFromEmailCache(user.getEmail());
         mailService.sendActivationEmail(user);
     }
 
@@ -516,13 +513,13 @@ public class UserService {
     public User getCurrentUser() {
         String login = SecurityUtils.getCurrentUserLogin()
                 .orElseThrow(() -> new AccountResourceException("Current user login not found"));
-        Optional<User> user = userRepository.findOneByLogin(login);
+        Optional<User> user = userRepository.findOneByEmailIgnoreCase(login);
 
         if (StringUtils.isEmpty(user.get().getLoginAs())) {
             return user.get();
         }
 
-        return userRepository.findOneByLogin(user.get().getLoginAs()).get();
+        return userRepository.findOneByEmailIgnoreCase(user.get().getLoginAs()).get();
     }
 
 }

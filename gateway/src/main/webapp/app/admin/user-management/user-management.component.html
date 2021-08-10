@@ -11,7 +11,6 @@
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
                 <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
-                <th jhiSortBy="login"><span jhiTranslate="userManagement.login">Login</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
                 <th jhiSortBy="email"><span jhiTranslate="userManagement.email">Email</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
                 <th></th>
                 <th jhiSortBy="langKey"> <span jhiTranslate="userManagement.langKey">Lang Key</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
@@ -24,14 +23,13 @@
             </thead>
             <tbody *ngIf ="users">
             <tr *ngFor="let user of users; trackBy: trackIdentity">
-                <td><a [routerLink]="['./', user.login, 'view']">{{user.id}}</a></td>
-                <td>{{user.login}}</td>
+                <td><a [routerLink]="['./', user.email, 'view']">{{user.id}}</a></td>
                 <td>{{user.email}}</td>
                 <td>
                     <button class="btn btn-danger btn-sm" (click)="setActive(user, true)" *ngIf="!user.activated"
                             jhiTranslate="userManagement.deactivated.string">Deactivated</button>
                     <button class="btn btn-success btn-sm" (click)="setActive(user, false)" *ngIf="user.activated"
-                            [disabled]="currentAccount.login === user.login" jhiTranslate="userManagement.activated.string">Activated</button>
+                            [disabled]="currentAccount.email === user.email" jhiTranslate="userManagement.activated.string">Activated</button>
                 </td>
                 <td>{{user.langKey}}</td>
                 <td>
@@ -45,20 +43,20 @@
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
-                                [routerLink]="['./', user.login, 'view']"
+                                [routerLink]="['./', user.email, 'view']"
                                 class="btn btn-info btn-sm">
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view.string">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['./', user.login, 'edit']"
+                                [routerLink]="['./', user.email, 'edit']"
                                 queryParamsHandling="merge"
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit.string">Edit</span>
                         </button>
                         <button type="button" (click)="deleteUser(user)"
-                                class="btn btn-danger btn-sm" [disabled]="currentAccount.login === user.login">
+                                class="btn btn-danger btn-sm" [disabled]="currentAccount.email === user.email">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete.string">Delete</span>
                         </button>
