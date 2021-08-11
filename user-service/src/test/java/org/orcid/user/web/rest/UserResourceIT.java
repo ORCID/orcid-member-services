@@ -24,6 +24,7 @@ import org.orcid.user.domain.Authority;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
+import org.orcid.user.service.MailService;
 import org.orcid.user.service.MemberService;
 import org.orcid.user.service.UserService;
 import org.orcid.user.service.cache.UserCaches;
@@ -121,6 +122,7 @@ public class UserResourceIT {
         Mockito.when(mockedMemberService.getMemberNameBySalesforce(Mockito.eq(UPDATED_SALESFORCE_ID))).thenReturn(UPDATED_MEMBER_NAME);
         ReflectionTestUtils.setField(userService, "memberService", mockedMemberService);
         ReflectionTestUtils.setField(userMapper, "memberService", mockedMemberService);
+        ReflectionTestUtils.setField(userService, "mailService", Mockito.mock(MailService.class));
     }
 
     private void createLoggedInUser() {

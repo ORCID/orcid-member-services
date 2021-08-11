@@ -51,16 +51,14 @@ public class MailService {
         this.mailgunClient = mailgunClient;
     }
 
-    @Async
     public void sendEmail(String to, String subject, String content) throws ClientProtocolException, IOException {
         try {
             mailgunClient.sendMail(to, subject, content);
         } catch (MailException e) {
-            LOGGER.warn("Error sending email to {}", to, content);
+            LOGGER.warn("Error sending email to {}", to, content, e);
         }
     }
 
-    @Async
     public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
@@ -75,7 +73,6 @@ public class MailService {
         }
     }
 
-    @Async
     public void sendEmailFromTemplateMemberInfo(User user, String member, String templateName, String titleKey) {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
@@ -102,25 +99,21 @@ public class MailService {
         }
     }
 
-    @Async
     public void sendActivationEmail(User user) {
         LOGGER.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
     }
 
-    @Async
     public void sendCreationEmail(User user) {
         LOGGER.debug("Sending creation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
     }
 
-    @Async
     public void sendPasswordResetMail(User user) {
         LOGGER.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
     }
 
-    @Async
     public void sendOrganizationOwnerChangedMail(User user, String member) {
         LOGGER.debug("Sending organization owner changed email to '{}'", user.getEmail());
         sendEmailFromTemplateMemberInfo(user, member, "mail/organizationOwnerChanged", "email.organization.title");
