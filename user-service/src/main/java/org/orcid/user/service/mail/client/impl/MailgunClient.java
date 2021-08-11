@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Component
 public class MailgunClient implements MailClient {
 
@@ -32,6 +34,7 @@ public class MailgunClient implements MailClient {
 
     @Override
     public void sendMail(String to, String subject, String html) throws MailException {
+        LOGGER.info("Preparing email {} for sending to {}", subject, to);
         List<NameValuePair> urlParameters = new ArrayList<>();
         urlParameters.add(new BasicNameValuePair("to", to));
         urlParameters.add(new BasicNameValuePair("from", getFrom()));
@@ -55,7 +58,8 @@ public class MailgunClient implements MailClient {
             LOGGER.info("Sending mail {} to {}", subject, to);
             HttpResponse response = client.execute(post);
             if (response.getStatusLine().getStatusCode() != 200) {
-                LOGGER.warn("Received response {} from mailgun: {}", response.getStatusLine().getReasonPhrase(), response.getEntity().toString());
+                LOGGER.warn("Received response {} from mailgun: {}", response.getStatusLine().getReasonPhrase(),
+                        new ObjectMapper().writeValueAsString(response.getEntity()));
             }
         } catch (IOException e) {
             throw new MailException("Error posting mail to mailgun", e);
