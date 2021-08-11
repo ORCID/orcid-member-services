@@ -80,7 +80,7 @@ public class MemberService {
         if (StringUtils.isBlank(salesforceId)) {
             return null;
         }
-        
+
         ResponseEntity<MemberServiceMember> response = memberServiceClient.getMember(salesforceId);
         if (response.getStatusCode().is2xxSuccessful()) {
             return response.getBody().getClientName();

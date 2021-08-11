@@ -23,11 +23,9 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 
-@ComponentScan(
-    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = OAuth2InterceptedFeignConfiguration.class)
-)
+@ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = OAuth2InterceptedFeignConfiguration.class))
 @SpringBootApplication
-@EnableConfigurationProperties({ApplicationProperties.class})
+@EnableConfigurationProperties({ ApplicationProperties.class })
 @EnableDiscoveryClient
 public class MemberServiceApp implements InitializingBean {
 
@@ -42,27 +40,29 @@ public class MemberServiceApp implements InitializingBean {
     /**
      * Initializes MemberService.
      * <p>
-     * Spring profiles can be configured with a program argument --spring.profiles.active=your-active-profile
+     * Spring profiles can be configured with a program argument
+     * --spring.profiles.active=your-active-profile
      * <p>
-     * You can find more information on how profiles work with JHipster on <a href="https://www.jhipster.tech/profiles/">https://www.jhipster.tech/profiles/</a>.
+     * You can find more information on how profiles work with JHipster on
+     * <a href=
+     * "https://www.jhipster.tech/profiles/">https://www.jhipster.tech/profiles/</a>.
      */
     @Override
     public void afterPropertiesSet() throws Exception {
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
-            log.error("You have misconfigured your application! It should not run " +
-                "with both the 'dev' and 'prod' profiles at the same time.");
+            log.error("You have misconfigured your application! It should not run " + "with both the 'dev' and 'prod' profiles at the same time.");
         }
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)) {
-            log.error("You have misconfigured your application! It should not " +
-                "run with both the 'dev' and 'cloud' profiles at the same time.");
+            log.error("You have misconfigured your application! It should not " + "run with both the 'dev' and 'cloud' profiles at the same time.");
         }
     }
 
     /**
      * Main method, used to run the application.
      *
-     * @param args the command line arguments.
+     * @param args
+     *            the command line arguments.
      */
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(MemberServiceApp.class);
@@ -87,26 +87,15 @@ public class MemberServiceApp implements InitializingBean {
         } catch (UnknownHostException e) {
             log.warn("The host name could not be determined, using `localhost` as fallback");
         }
-        log.info("\n----------------------------------------------------------\n\t" +
-                "Application '{}' is running! Access URLs:\n\t" +
-                "Local: \t\t{}://localhost:{}{}\n\t" +
-                "External: \t{}://{}:{}{}\n\t" +
-                "Profile(s): \t{}\n----------------------------------------------------------",
-            env.getProperty("spring.application.name"),
-            protocol,
-            serverPort,
-            contextPath,
-            protocol,
-            hostAddress,
-            serverPort,
-            contextPath,
-            env.getActiveProfiles());
+        log.info("\n----------------------------------------------------------\n\t" + "Application '{}' is running! Access URLs:\n\t"
+                + "Local: \t\t{}://localhost:{}{}\n\t" + "External: \t{}://{}:{}{}\n\t" + "Profile(s): \t{}\n----------------------------------------------------------",
+                env.getProperty("spring.application.name"), protocol, serverPort, contextPath, protocol, hostAddress, serverPort, contextPath, env.getActiveProfiles());
 
         String configServerStatus = env.getProperty("configserver.status");
         if (configServerStatus == null) {
             configServerStatus = "Not found or not setup for this application";
         }
-        log.info("\n----------------------------------------------------------\n\t" +
-                "Config Server: \t{}\n----------------------------------------------------------", configServerStatus);
+        log.info("\n----------------------------------------------------------\n\t" + "Config Server: \t{}\n----------------------------------------------------------",
+                configServerStatus);
     }
 }

@@ -61,4 +61,5 @@ public class DatabaseConfiguration {
         mongobee.setChangeLogsScanPackage("org.orcid.user.config.dbmigrations");
         mongobee.setEnabled(true);
         return mongobee;
-    }}
+    }
+}

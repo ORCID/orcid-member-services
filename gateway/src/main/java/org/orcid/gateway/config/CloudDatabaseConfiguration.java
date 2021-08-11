@@ -24,7 +24,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Configuration
 @EnableMongoRepositories("org.orcid.gateway.repository")
 @Profile(JHipsterConstants.SPRING_PROFILE_CLOUD)
@@ -62,8 +61,7 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
         List<ServiceInfo> matchingServiceInfos = cloud.getServiceInfos(MongoDbFactory.class);
 
         if (matchingServiceInfos.size() != 1) {
-            throw new CloudException("No unique service matching MongoDbFactory found. Expected 1, found "
-                + matchingServiceInfos.size());
+            throw new CloudException("No unique service matching MongoDbFactory found. Expected 1, found " + matchingServiceInfos.size());
         }
         MongoServiceInfo info = (MongoServiceInfo) matchingServiceInfos.get(0);
         Mongobee mongobee = new Mongobee(info.getUri());

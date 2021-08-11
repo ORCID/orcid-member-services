@@ -25,7 +25,7 @@ public class UserMapperTest {
         MockitoAnnotations.initMocks(this);
         Mockito.when(memberService.getMemberNameBySalesforce(Mockito.eq("salesforce1"))).thenReturn("member 1");
     }
-    
+
     @Test
     public void testToUser() {
         User user = userMapper.toUser(getUserDTO());
@@ -37,7 +37,7 @@ public class UserMapperTest {
         assertThat(user.getImageUrl()).isEqualTo("http://placehold.it/50x50");
         assertThat(user.getLangKey()).isEqualTo("en");
     }
-    
+
     @Test
     public void testToUserDTO() {
         UserDTO user = userMapper.toUserDTO(getUser());
@@ -51,7 +51,7 @@ public class UserMapperTest {
         assertThat(user.getCreatedBy()).isEqualTo("someone");
         assertThat(user.getLastModifiedBy()).isEqualTo("some@email.com");
     }
-    
+
     public UserDTO getUserDTO() {
         UserDTO userDTO = new UserDTO();
         userDTO.setId("id");
@@ -66,7 +66,7 @@ public class UserMapperTest {
         userDTO.setLastModifiedBy("hello@orcid.org");
         return userDTO;
     }
-    
+
     public User getUser() {
         User user = new User();
         user.setId("id");

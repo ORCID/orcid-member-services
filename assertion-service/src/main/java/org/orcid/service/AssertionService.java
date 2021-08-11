@@ -45,8 +45,7 @@ public class AssertionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AssertionService.class);
 
-    private final Sort SORT = new Sort(Sort.Direction.ASC, "email", "status", "created", "modified",
-            "deletedFromORCID");
+    private final Sort SORT = new Sort(Sort.Direction.ASC, "email", "status", "created", "modified", "deletedFromORCID");
 
     @Autowired
     private AssertionRepository assertionRepository;
@@ -77,8 +76,7 @@ public class AssertionService {
     }
 
     public Page<Assertion> findByOwnerId(Pageable pageable) {
-        Page<Assertion> assertionsPage = assertionRepository.findByOwnerId(assertionsUserService.getLoggedInUserId(),
-                pageable);
+        Page<Assertion> assertionsPage = assertionRepository.findByOwnerId(assertionsUserService.getLoggedInUserId(), pageable);
         assertionsPage.forEach(a -> {
             // set status as text to display in UI
             if (!StringUtils.isBlank(a.getStatus())) {
@@ -92,8 +90,7 @@ public class AssertionService {
     }
 
     public List<Assertion> findAllByOwnerId() {
-        List<Assertion> assertions = assertionRepository.findAllByOwnerId(assertionsUserService.getLoggedInUserId(),
-                SORT);
+        List<Assertion> assertions = assertionRepository.findAllByOwnerId(assertionsUserService.getLoggedInUserId(), SORT);
         assertions.forEach(a -> {
             // set status as text to display in UI
             if (!StringUtils.isBlank(a.getStatus())) {
@@ -147,8 +144,7 @@ public class AssertionService {
         String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
 
         if (!assertion.getSalesforceId().equals(salesforceId)) {
-            throw new IllegalArgumentException(
-                    "Illegal attempt to access assertion of org " + assertion.getSalesforceId());
+            throw new IllegalArgumentException("Illegal attempt to access assertion of org " + assertion.getSalesforceId());
         }
 
         if (!StringUtils.isBlank(assertion.getStatus())) {
@@ -229,8 +225,7 @@ public class AssertionService {
     private void checkAssertionAccess(Assertion existingAssertion) {
         String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
         if (!salesforceId.equals(existingAssertion.getSalesforceId())) {
-            throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation",
-                    "affiliationOtherOrganization");
+            throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
         }
     }
 
@@ -292,18 +287,13 @@ public class AssertionService {
             return false; // both the same record, not two duplicates
         }
 
-        return !different(a.getAffiliationSection(), b.getAffiliationSection())
-                && !different(a.getDepartmentName(), b.getDepartmentName())
-                && !different(a.getRoleTitle(), b.getRoleTitle()) && !different(a.getStartDay(), b.getStartDay())
-                && !different(a.getStartMonth(), b.getStartMonth()) && !different(a.getStartYear(), b.getStartYear())
-                && !different(a.getEndDay(), b.getEndDay()) && !different(a.getEndMonth(), b.getEndMonth())
-                && !different(a.getEndYear(), b.getEndYear()) && !different(a.getOrgName(), b.getOrgName())
-                && !different(a.getOrgCountry(), b.getOrgCountry()) && !different(a.getOrgCity(), b.getOrgCity())
-                && !different(a.getOrgRegion(), b.getOrgRegion())
-                && !different(a.getDisambiguationSource(), b.getDisambiguationSource())
-                && !different(a.getDisambiguatedOrgId(), b.getDisambiguatedOrgId())
-                && !different(a.getExternalId(), b.getExternalId())
-                && !different(a.getExternalIdType(), b.getExternalIdType())
+        return !different(a.getAffiliationSection(), b.getAffiliationSection()) && !different(a.getDepartmentName(), b.getDepartmentName())
+                && !different(a.getRoleTitle(), b.getRoleTitle()) && !different(a.getStartDay(), b.getStartDay()) && !different(a.getStartMonth(), b.getStartMonth())
+                && !different(a.getStartYear(), b.getStartYear()) && !different(a.getEndDay(), b.getEndDay()) && !different(a.getEndMonth(), b.getEndMonth())
+                && !different(a.getEndYear(), b.getEndYear()) && !different(a.getOrgName(), b.getOrgName()) && !different(a.getOrgCountry(), b.getOrgCountry())
+                && !different(a.getOrgCity(), b.getOrgCity()) && !different(a.getOrgRegion(), b.getOrgRegion())
+                && !different(a.getDisambiguationSource(), b.getDisambiguationSource()) && !different(a.getDisambiguatedOrgId(), b.getDisambiguatedOrgId())
+                && !different(a.getExternalId(), b.getExternalId()) && !different(a.getExternalIdType(), b.getExternalIdType())
                 && !different(a.getExternalIdUrl(), b.getExternalIdUrl()) && !different(a.getUrl(), b.getUrl());
     }
 
@@ -322,20 +312,14 @@ public class AssertionService {
     }
 
     private boolean assertionToDelete(Assertion assertion) {
-        return assertion.getId() != null && assertion.getAddedToORCID() == null
-                && assertion.getAffiliationSection() == null && assertion.getCreated() == null
-                && assertion.getDeletedFromORCID() == null && assertion.getDepartmentName() == null
-                && assertion.getDisambiguatedOrgId() == null && assertion.getDisambiguationSource() == null
-                && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null
-                && assertion.getEndYear() == null && assertion.getExternalId() == null
-                && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null
-                && assertion.getLastModifiedBy() == null && assertion.getModified() == null
-                && assertion.getOrcidError() == null && assertion.getOrcidId() == null && assertion.getOrgCity() == null
-                && assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null
-                && assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null
-                && assertion.getRoleTitle() == null && assertion.getSalesforceId() == null
-                && assertion.getStartDay() == null && assertion.getStartMonth() == null
-                && assertion.getStartYear() == null;
+        return assertion.getId() != null && assertion.getAddedToORCID() == null && assertion.getAffiliationSection() == null && assertion.getCreated() == null
+                && assertion.getDeletedFromORCID() == null && assertion.getDepartmentName() == null && assertion.getDisambiguatedOrgId() == null
+                && assertion.getDisambiguationSource() == null && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null
+                && assertion.getEndYear() == null && assertion.getExternalId() == null && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null
+                && assertion.getLastModifiedBy() == null && assertion.getModified() == null && assertion.getOrcidError() == null && assertion.getOrcidId() == null
+                && assertion.getOrgCity() == null && assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null
+                && assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null && assertion.getRoleTitle() == null
+                && assertion.getSalesforceId() == null && assertion.getStartDay() == null && assertion.getStartMonth() == null && assertion.getStartYear() == null;
     }
 
     private void copyFieldsToUpdate(Assertion source, Assertion destination) {
@@ -443,8 +427,7 @@ public class AssertionService {
         try {
             if (!StringUtils.isBlank(assertion.getPutCode())) {
                 accessToken = orcidAPIClient.exchangeToken(idToken);
-                LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid,
-                        assertion.getId());
+                LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
                 orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
                 Instant now = Instant.now();
                 assertion.setUpdatedInORCID(now);
@@ -463,13 +446,11 @@ public class AssertionService {
     }
 
     public boolean deleteAssertionFromOrcidRegistry(String assertionId) {
-        Assertion assertion = assertionRepository.findById(assertionId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid assertion id"));
+        Assertion assertion = assertionRepository.findById(assertionId).orElseThrow(() -> new IllegalArgumentException("Invalid assertion id"));
         String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
 
         if (!salesForceId.equals(assertion.getSalesforceId())) {
-            throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation",
-                    "affiliationOtherOrganization");
+            throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
         }
 
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
@@ -517,8 +498,7 @@ public class AssertionService {
     }
 
     private void storeError(String assertionId, int statusCode, String error) {
-        Assertion assertion = assertionRepository.findById(assertionId)
-                .orElseThrow(() -> new RuntimeException("Unable to find assertion with ID: " + assertionId));
+        Assertion assertion = assertionRepository.findById(assertionId).orElseThrow(() -> new RuntimeException("Unable to find assertion with ID: " + assertionId));
         JSONObject obj = new JSONObject();
         obj.put("statusCode", statusCode);
         obj.put("error", error);
@@ -534,8 +514,7 @@ public class AssertionService {
     public String getAssertionStatus(Assertion assertion) {
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(assertion.getEmail());
         if (!optionalRecord.isPresent()) {
-            throw new IllegalArgumentException("Found assertion with no corresponding record email - "
-                    + assertion.getEmail() + " - " + assertion.getEmail());
+            throw new IllegalArgumentException("Found assertion with no corresponding record email - " + assertion.getEmail() + " - " + assertion.getEmail());
         }
         return AssertionUtils.getAssertionStatus(assertion, optionalRecord.get());
     }

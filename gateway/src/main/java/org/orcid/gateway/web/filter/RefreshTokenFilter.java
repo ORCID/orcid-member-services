@@ -26,16 +26,18 @@ import java.io.IOException;
  */
 public class RefreshTokenFilter extends GenericFilterBean {
     /**
-     * Number of seconds before expiry to start refreshing access tokens so we don't run into race conditions when forwarding
-     * requests downstream. Otherwise, access tokens may still be valid when we check here but may then be expired
-     * when relayed to another microservice a wee bit later.
+     * Number of seconds before expiry to start refreshing access tokens so we
+     * don't run into race conditions when forwarding requests downstream.
+     * Otherwise, access tokens may still be valid when we check here but may
+     * then be expired when relayed to another microservice a wee bit later.
      */
     private static final int REFRESH_WINDOW_SECS = 30;
 
     private final Logger log = LoggerFactory.getLogger(RefreshTokenFilter.class);
 
     /**
-     * The {@link OAuth2AuthenticationService} is doing the actual work. We are just a simple filter after all.
+     * The {@link OAuth2AuthenticationService} is doing the actual work. We are
+     * just a simple filter after all.
      */
     private final OAuth2AuthenticationService authenticationService;
     private final TokenStore tokenStore;
@@ -46,11 +48,11 @@ public class RefreshTokenFilter extends GenericFilterBean {
     }
 
     /**
-     * Check access token cookie and refresh it, if it is either not present, expired or about to expire.
+     * Check access token cookie and refresh it, if it is either not present,
+     * expired or about to expire.
      */
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-        throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         try {
@@ -65,20 +67,25 @@ public class RefreshTokenFilter extends GenericFilterBean {
     /**
      * Refresh the access and refresh tokens if they are about to expire.
      *
-     * @param httpServletRequest  the servlet request holding the current cookies. If no refresh cookie is present,
-     *                            then we are out of luck.
-     * @param httpServletResponse the servlet response that gets the new set-cookie headers, if they had to be
-     *                            refreshed.
-     * @return a new request to use downstream that contains the new cookies, if they had to be refreshed.
-     * @throws InvalidTokenException if the tokens could not be refreshed.
+     * @param httpServletRequest
+     *            the servlet request holding the current cookies. If no refresh
+     *            cookie is present, then we are out of luck.
+     * @param httpServletResponse
+     *            the servlet response that gets the new set-cookie headers, if
+     *            they had to be refreshed.
+     * @return a new request to use downstream that contains the new cookies, if
+     *         they had to be refreshed.
+     * @throws InvalidTokenException
+     *             if the tokens could not be refreshed.
      */
-    public HttpServletRequest refreshTokensIfExpiring(HttpServletRequest httpServletRequest, HttpServletResponse
-        httpServletResponse) {
+    public HttpServletRequest refreshTokensIfExpiring(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         HttpServletRequest newHttpServletRequest = httpServletRequest;
-        //get access token from cookie
+        // get access token from cookie
         Cookie accessTokenCookie = OAuth2CookieHelper.getAccessTokenCookie(httpServletRequest);
-        if (mustRefreshToken(accessTokenCookie)) {        //we either have no access token, or it is expired, or it is about to expire
-            //get the refresh token cookie and, if present, request new tokens
+        if (mustRefreshToken(accessTokenCookie)) { // we either have no access
+                                                   // token, or it is expired,
+                                                   // or it is about to expire
+            // get the refresh token cookie and, if present, request new tokens
             Cookie refreshCookie = OAuth2CookieHelper.getRefreshTokenCookie(httpServletRequest);
             if (refreshCookie != null) {
                 try {
@@ -98,10 +105,11 @@ public class RefreshTokenFilter extends GenericFilterBean {
     }
 
     /**
-     * Check if we must refresh the access token.
-     * We must refresh it, if we either have no access token, or it is expired, or it is about to expire.
+     * Check if we must refresh the access token. We must refresh it, if we
+     * either have no access token, or it is expired, or it is about to expire.
      *
-     * @param accessTokenCookie the current access token.
+     * @param accessTokenCookie
+     *            the current access token.
      * @return true, if it must be refreshed; false, otherwise.
      */
     private boolean mustRefreshToken(Cookie accessTokenCookie) {
@@ -109,10 +117,10 @@ public class RefreshTokenFilter extends GenericFilterBean {
             return true;
         }
         OAuth2AccessToken token = tokenStore.readAccessToken(accessTokenCookie.getValue());
-        //check if token is expired or about to expire
+        // check if token is expired or about to expire
         if (token.isExpired() || token.getExpiresIn() < REFRESH_WINDOW_SECS) {
             return true;
         }
-        return false;       //access token is still fine
+        return false; // access token is still fine
     }
 }

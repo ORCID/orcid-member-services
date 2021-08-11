@@ -26,31 +26,31 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
     @Override
     public List<Assertion> findAllToUpdateInOrcidRegistry() {
-        ProjectionOperation timeModifiedAfterSync = Aggregation.project("added_to_orcid", "updated_in_orcid", "modified")
-                .andExpression("modified - added_to_orcid").as("timeModifiedAfterAddingToOrcid").andExpression("modified - updated_in_orcid").as("timeModifiedAfterUpdatingInOrcid");
-        
+        ProjectionOperation timeModifiedAfterSync = Aggregation.project("added_to_orcid", "updated_in_orcid", "modified").andExpression("modified - added_to_orcid")
+                .as("timeModifiedAfterAddingToOrcid").andExpression("modified - updated_in_orcid").as("timeModifiedAfterUpdatingInOrcid");
+
         Criteria addedToOrcidSet = new Criteria();
         addedToOrcidSet.andOperator(Criteria.where("added_to_orcid").exists(true), Criteria.where("added_to_orcid").ne(null));
-        
+
         Criteria updatedInOrcidSet = new Criteria();
         updatedInOrcidSet.andOperator(Criteria.where("updated_in_orcid").exists(true), Criteria.where("updated_in_orcid").ne(null));
-        
+
         Criteria updatedInOrcidNotSet = new Criteria();
         updatedInOrcidNotSet.orOperator(Criteria.where("updated_in_orcid").exists(false), Criteria.where("updated_in_orcid").is(null));
-        
+
         Criteria modifiedAfterUpdateInOrcid = new Criteria();
         modifiedAfterUpdateInOrcid.andOperator(updatedInOrcidSet, Criteria.where("timeModifiedAfterUpdatingInOrcid").gt(0));
-        
+
         Criteria modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet = new Criteria();
         modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet.andOperator(addedToOrcidSet, updatedInOrcidNotSet, Criteria.where("timeModifiedAfterAddingToOrcid").gt(0));
-        
+
         Criteria needsUpdatingInOrcid = new Criteria();
         needsUpdatingInOrcid.orOperator(modifiedAfterUpdateInOrcid, modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet);
 
         MatchOperation matchUpdatedAfterSync = Aggregation.match(needsUpdatingInOrcid);
         Aggregation aggregation = Aggregation.newAggregation(timeModifiedAfterSync, matchUpdatedAfterSync);
         AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
-        
+
         return results.getMappedResults();
     }
 

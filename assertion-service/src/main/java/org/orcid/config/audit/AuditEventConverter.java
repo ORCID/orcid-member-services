@@ -12,9 +12,11 @@ import java.util.*;
 public class AuditEventConverter {
 
     /**
-     * Convert a list of {@link PersistentAuditEvent}s to a list of {@link AuditEvent}s.
+     * Convert a list of {@link PersistentAuditEvent}s to a list of
+     * {@link AuditEvent}s.
      *
-     * @param persistentAuditEvents the list to convert.
+     * @param persistentAuditEvents
+     *            the list to convert.
      * @return the converted list.
      */
     public List<AuditEvent> convertToAuditEvent(Iterable<PersistentAuditEvent> persistentAuditEvents) {
@@ -31,21 +33,24 @@ public class AuditEventConverter {
     /**
      * Convert a {@link PersistentAuditEvent} to an {@link AuditEvent}.
      *
-     * @param persistentAuditEvent the event to convert.
+     * @param persistentAuditEvent
+     *            the event to convert.
      * @return the converted list.
      */
     public AuditEvent convertToAuditEvent(PersistentAuditEvent persistentAuditEvent) {
         if (persistentAuditEvent == null) {
             return null;
         }
-        return new AuditEvent(persistentAuditEvent.getAuditEventDate(), persistentAuditEvent.getPrincipal(),
-            persistentAuditEvent.getAuditEventType(), convertDataToObjects(persistentAuditEvent.getData()));
+        return new AuditEvent(persistentAuditEvent.getAuditEventDate(), persistentAuditEvent.getPrincipal(), persistentAuditEvent.getAuditEventType(),
+                convertDataToObjects(persistentAuditEvent.getData()));
     }
 
     /**
-     * Internal conversion. This is needed to support the current SpringBoot actuator {@code AuditEventRepository} interface.
+     * Internal conversion. This is needed to support the current SpringBoot
+     * actuator {@code AuditEventRepository} interface.
      *
-     * @param data the data to convert.
+     * @param data
+     *            the data to convert.
      * @return a map of {@link String}, {@link Object}.
      */
     public Map<String, Object> convertDataToObjects(Map<String, String> data) {
@@ -60,10 +65,11 @@ public class AuditEventConverter {
     }
 
     /**
-     * Internal conversion. This method will allow to save additional data.
-     * By default, it will save the object as string.
+     * Internal conversion. This method will allow to save additional data. By
+     * default, it will save the object as string.
      *
-     * @param data the data to convert.
+     * @param data
+     *            the data to convert.
      * @return a map of {@link String}, {@link String}.
      */
     public Map<String, String> convertDataToStrings(Map<String, Object> data) {

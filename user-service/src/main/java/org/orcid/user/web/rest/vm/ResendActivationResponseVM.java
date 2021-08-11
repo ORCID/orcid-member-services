@@ -1,7 +1,7 @@
 package org.orcid.user.web.rest.vm;
 
 public class ResendActivationResponseVM {
-    
+
     private boolean resent;
 
     public boolean isResent() {
@@ -11,5 +11,5 @@ public class ResendActivationResponseVM {
     public void setResent(boolean resent) {
         this.resent = resent;
     }
-    
+
 }

@@ -95,7 +95,7 @@ public class UserResourceIT {
 
     @Autowired
     private UserResource userResource;
-    
+
     @Autowired
     private UserMapper userMapper;
 
@@ -110,24 +110,20 @@ public class UserResourceIT {
         user = createEntity();
         createLoggedInUser();
 
-        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
-                .setCustomArgumentResolvers(pageableArgumentResolver).setControllerAdvice(exceptionTranslator)
+        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource).setCustomArgumentResolvers(pageableArgumentResolver).setControllerAdvice(exceptionTranslator)
                 .setMessageConverters(jacksonMessageConverter).build();
 
         // mock out calls to member service
         MemberService mockedMemberService = Mockito.mock(MemberService.class);
         Mockito.when(mockedMemberService.memberExistsWithSalesforceId(Mockito.anyString())).thenReturn(Boolean.TRUE);
-        Mockito.when(mockedMemberService.memberExistsWithSalesforceIdAndSuperadminEnabled(Mockito.anyString()))
-                .thenReturn(Boolean.FALSE);
-        Mockito.when(mockedMemberService.getMemberNameBySalesforce(Mockito.eq(DEFAULT_SALESFORCE_ID)))
-                .thenReturn(DEFAULT_MEMBER_NAME);
-        Mockito.when(mockedMemberService.getMemberNameBySalesforce(Mockito.eq(UPDATED_SALESFORCE_ID)))
-                .thenReturn(UPDATED_MEMBER_NAME);
+        Mockito.when(mockedMemberService.memberExistsWithSalesforceIdAndSuperadminEnabled(Mockito.anyString())).thenReturn(Boolean.FALSE);
+        Mockito.when(mockedMemberService.getMemberNameBySalesforce(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(DEFAULT_MEMBER_NAME);
+        Mockito.when(mockedMemberService.getMemberNameBySalesforce(Mockito.eq(UPDATED_SALESFORCE_ID))).thenReturn(UPDATED_MEMBER_NAME);
         ReflectionTestUtils.setField(userService, "memberService", mockedMemberService);
         ReflectionTestUtils.setField(userMapper, "memberService", mockedMemberService);
     }
 
-    private void createLoggedInUser() { 
+    private void createLoggedInUser() {
         User user = new User();
         user.setPassword(LOGGED_IN_PASSWORD);
         user.setActivated(true);
@@ -158,8 +154,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
-            "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void createUser() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
@@ -176,8 +171,8 @@ public class UserResourceIT {
         managedUserVM.setSalesforceId(DEFAULT_SALESFORCE_ID);
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
-        restUserMockMvc.perform(post("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM))).andExpect(status().isCreated());
+        restUserMockMvc.perform(post("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+                .andExpect(status().isCreated());
 
         // Validate the User in the database
         List<User> userList = userRepository.findAll();
@@ -193,8 +188,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
-            "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
@@ -211,8 +205,8 @@ public class UserResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call
         // must fail
-        restUserMockMvc.perform(post("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM))).andExpect(status().isBadRequest());
+        restUserMockMvc.perform(post("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+                .andExpect(status().isBadRequest());
 
         // Validate the User in the database
         List<User> userList = userRepository.findAll();
@@ -220,8 +214,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
-            "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void createUserWithExistingLogin() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -238,8 +231,8 @@ public class UserResourceIT {
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
-        restUserMockMvc.perform(post("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM))).andExpect(status().isBadRequest());
+        restUserMockMvc.perform(post("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+                .andExpect(status().isBadRequest());
 
         // Validate the User in the database
         List<User> userList = userRepository.findAll();
@@ -247,8 +240,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
-            "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void createUserWithExistingEmail() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -267,8 +259,8 @@ public class UserResourceIT {
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
-        restUserMockMvc.perform(post("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM))).andExpect(status().isBadRequest());
+        restUserMockMvc.perform(post("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+                .andExpect(status().isBadRequest());
 
         // Validate the User in the database
         List<User> userList = userRepository.findAll();
@@ -276,8 +268,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
-            "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void createUserWithRoleAdmin() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
@@ -297,8 +288,8 @@ public class UserResourceIT {
 
         // Mocked member does not have superadmin enabled so this request
         // must fail
-        restUserMockMvc.perform(post("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM))).andExpect(status().isBadRequest());
+        restUserMockMvc.perform(post("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+                .andExpect(status().isBadRequest());
 
         // Validate the User in the database
         List<User> userList = userRepository.findAll();
@@ -306,25 +297,20 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
-            "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void getAllUsers() throws Exception {
         // Initialize the database
         userRepository.save(user);
 
         // Get all the users
         restUserMockMvc.perform(get("/api/users").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
-                .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
-                .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
-                .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGEURL)))
-                .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
+                .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME))).andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
+                .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGEURL))).andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
-            "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void getUser() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -333,12 +319,9 @@ public class UserResourceIT {
 
         // Get the user
         restUserMockMvc.perform(get("/api/users/{login}/", user.getEmail())).andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
-                .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
-                .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
-                .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL))
-                .andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
+                .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME)).andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
+                .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL)).andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
 
         assertThat(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get(user.getEmail())).isNotNull();
     }
@@ -349,8 +332,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
-            "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void updateUser() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -376,8 +358,8 @@ public class UserResourceIT {
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
         managedUserVM.setSalesforceId(UPDATED_SALESFORCE_ID);
 
-        restUserMockMvc.perform(put("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM))).andExpect(status().isOk());
+        restUserMockMvc.perform(put("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+                .andExpect(status().isOk());
 
         // Validate the User in the database
         List<User> userList = userRepository.findAll();
@@ -393,8 +375,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
-            "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
         userRepository.save(user);
@@ -430,13 +411,12 @@ public class UserResourceIT {
         managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
-        restUserMockMvc.perform(put("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM))).andExpect(status().isBadRequest());
+        restUserMockMvc.perform(put("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
-            "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void updateUserExistingLogin() throws Exception {
         // Initialize the database
         userRepository.save(user);
@@ -470,8 +450,8 @@ public class UserResourceIT {
         managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
-        restUserMockMvc.perform(put("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM))).andExpect(status().isBadRequest());
+        restUserMockMvc.perform(put("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -500,19 +480,15 @@ public class UserResourceIT {
         managedUserVM.setSalesforceId("salesforceId");
         managedUserVM.setIsAdmin(true);
 
-        restUserMockMvc.perform(put("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM))).andExpect(status().isBadRequest());
+        restUserMockMvc.perform(put("/api/users").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN",
-            "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void getAllAuthorities() throws Exception {
-        restUserMockMvc
-                .perform(get("/api/users/authorities").accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$").isArray())
+        restUserMockMvc.perform(get("/api/users/authorities").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
     }
 

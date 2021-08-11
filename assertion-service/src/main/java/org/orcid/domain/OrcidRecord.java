@@ -16,11 +16,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Document(collection = "orcid_record")
 public class OrcidRecord {
-    
-    public static String KEY_TOKEN_ID= "token_id";
-    
-    public static String KEY_SALESFORCE_ID= "salesforce_id";
-    
+
+    public static String KEY_TOKEN_ID = "token_id";
+
+    public static String KEY_SALESFORCE_ID = "salesforce_id";
+
     @Id
     private String id;
 
@@ -123,56 +123,51 @@ public class OrcidRecord {
     public void setModified(Instant modified) {
         this.modified = modified;
     }
-    
+
     public String getToken(String salesforceId) {
         List<OrcidToken> tokens = this.getTokens();
-        if(tokens != null) {
-            for(OrcidToken token: tokens)
-            {   
-                if(StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
-                	if(StringUtils.isBlank(token.getToken_id())) {
-                		return null;
-                	}
+        if (tokens != null) {
+            for (OrcidToken token : tokens) {
+                if (StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
+                    if (StringUtils.isBlank(token.getToken_id())) {
+                        return null;
+                    }
                     return token.getToken_id();
                 }
             }
         }
-        return null;  
+        return null;
     }
-    
+
     public Instant getDeniedDate(String salesforceId) {
         List<OrcidToken> tokens = this.getTokens();
-        if(tokens != null) {
-            for(OrcidToken token: tokens)
-            {   
-                if(StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
-                	if(token.getDenied_date() == null) {
-                		return null;
-                	}
+        if (tokens != null) {
+            for (OrcidToken token : tokens) {
+                if (StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
+                    if (token.getDenied_date() == null) {
+                        return null;
+                    }
                     return token.getDenied_date();
                 }
             }
         }
-        return null;  
+        return null;
     }
-    
-    
+
     public Instant getRevokedDate(String salesforceId) {
         List<OrcidToken> tokens = this.getTokens();
-        if(tokens != null) {
-            for(OrcidToken token: tokens)
-            {   
-                if(StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
-                	if(token.getRevoked_date() == null) {
-                		return null;
-                	}
+        if (tokens != null) {
+            for (OrcidToken token : tokens) {
+                if (StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
+                    if (token.getRevoked_date() == null) {
+                        return null;
+                    }
                     return token.getRevoked_date();
                 }
             }
         }
-        return null;  
+        return null;
     }
-    
 
     @Override
     public int hashCode() {

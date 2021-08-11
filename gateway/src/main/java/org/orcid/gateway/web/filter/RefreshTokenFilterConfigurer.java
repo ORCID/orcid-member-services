@@ -9,13 +9,15 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 
 /**
- * Configures a {@link RefreshTokenFilter} to refresh access tokens if they are about to expire.
+ * Configures a {@link RefreshTokenFilter} to refresh access tokens if they are
+ * about to expire.
  *
  * @see RefreshTokenFilter
  */
 public class RefreshTokenFilterConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
     /**
-     * {@link RefreshTokenFilter} needs the {@link OAuth2AuthenticationService} to refresh cookies using the refresh token.
+     * {@link RefreshTokenFilter} needs the {@link OAuth2AuthenticationService}
+     * to refresh cookies using the refresh token.
      */
     private OAuth2AuthenticationService authenticationService;
     private final TokenStore tokenStore;

@@ -24,9 +24,11 @@ class OAuth2Cookies {
     }
 
     /**
-     * Add the access token and refresh token as cookies to the response after successful authentication.
+     * Add the access token and refresh token as cookies to the response after
+     * successful authentication.
      *
-     * @param response the response to add them to.
+     * @param response
+     *            the response to add them to.
      */
     void addCookiesTo(HttpServletResponse response) {
         response.addCookie(getAccessTokenCookie());

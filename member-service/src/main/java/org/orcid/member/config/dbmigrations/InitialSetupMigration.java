@@ -11,29 +11,28 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.time.Instant;
 
-
 /**
  * Creates the initial database setup.
  */
 @ChangeLog(order = "001")
 public class InitialSetupMigration {
-	private static final Logger LOG = LoggerFactory.getLogger(InitialSetupMigration.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InitialSetupMigration.class);
 
     @ChangeSet(order = "01", author = "initiator", id = "01-addMembers")
-    public void addMembers(MongoTemplate mongoTemplate, Environment environment)  {    	
+    public void addMembers(MongoTemplate mongoTemplate, Environment environment) {
         Member orcidMember = new Member();
         String salesForceId = "001G000001AP83e";
-        
+
         if (environment.getProperty("application_orcidOrgSalesForceId") != null) {
-        	salesForceId = environment.getProperty("application.orcidOrgSalesForceId");
+            salesForceId = environment.getProperty("application.orcidOrgSalesForceId");
         }
-        String clientId= "APP-1ERTY7037V1I8FE5";
+        String clientId = "APP-1ERTY7037V1I8FE5";
         if (environment.getProperty("application.orcidOrgClientId") != null) {
-        	clientId = environment.getProperty("application.orcidOrgClientId");
+            clientId = environment.getProperty("application.orcidOrgClientId");
         }
         orcidMember.setId("ORCID, Inc");
         orcidMember.setClientName("ORCID, Inc");
-        orcidMember.setSalesforceId(salesForceId);    
+        orcidMember.setSalesforceId(salesForceId);
         orcidMember.setClientId(clientId);
         orcidMember.setIsConsortiumLead(true);
         orcidMember.setAssertionServiceEnabled(true);
@@ -42,6 +41,5 @@ public class InitialSetupMigration {
         orcidMember.setCreatedDate(Instant.now());
         mongoTemplate.save(orcidMember);
     }
-   
-    
+
 }

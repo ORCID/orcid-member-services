@@ -22,50 +22,48 @@ import org.springframework.stereotype.Component;
 @Component
 public class MailgunClient implements MailClient {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(MailgunClient.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(MailgunClient.class);
 
-	@Autowired
-	private ApplicationProperties applicationProperties;
-	
-	@Autowired
-	private HttpClient client;
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
-	@Override
-	public void sendMail(String to, String subject, String html) throws MailException {
-		List<NameValuePair> urlParameters = new ArrayList<>();
-		urlParameters.add(new BasicNameValuePair("to", to));
-		urlParameters.add(new BasicNameValuePair("from", getFrom()));
-		urlParameters.add(new BasicNameValuePair("subject", subject));
-		urlParameters.add(new BasicNameValuePair("html", html));
+    @Autowired
+    private HttpClient client;
 
-		if (applicationProperties.isMailTestMode()) {
-			urlParameters.add(new BasicNameValuePair("o:testmode", "yes"));
-			LOGGER.info("Test mode email {} to {}", subject, to);
-			LOGGER.info(html);
-		}
+    @Override
+    public void sendMail(String to, String subject, String html) throws MailException {
+        List<NameValuePair> urlParameters = new ArrayList<>();
+        urlParameters.add(new BasicNameValuePair("to", to));
+        urlParameters.add(new BasicNameValuePair("from", getFrom()));
+        urlParameters.add(new BasicNameValuePair("subject", subject));
+        urlParameters.add(new BasicNameValuePair("html", html));
 
-		HttpPost post = new HttpPost(applicationProperties.getMailApiUrl());
-		try {
-			post.setEntity(new UrlEncodedFormEntity(urlParameters));
-		} catch (UnsupportedEncodingException e) {
-			throw new MailException("Error encoding url params for post body", e);
-		}
+        if (applicationProperties.isMailTestMode()) {
+            urlParameters.add(new BasicNameValuePair("o:testmode", "yes"));
+            LOGGER.info("Test mode email {} to {}", subject, to);
+            LOGGER.info(html);
+        }
 
-		try {
-			HttpResponse response = client.execute(post);
-			if (response.getStatusLine().getStatusCode() != 200) {
-				LOGGER.warn("Received response {} from mailgun: {}", response.getStatusLine().getReasonPhrase(),
-						response.getEntity().toString());
-			}
-		} catch (IOException e) {
-			throw new MailException("Error posting mail to mailgun", e);
-		}
-	}
+        HttpPost post = new HttpPost(applicationProperties.getMailApiUrl());
+        try {
+            post.setEntity(new UrlEncodedFormEntity(urlParameters));
+        } catch (UnsupportedEncodingException e) {
+            throw new MailException("Error encoding url params for post body", e);
+        }
 
-	private String getFrom() {
-		return applicationProperties.getMailFromName() != null
-				? applicationProperties.getMailFromName() + " <" + applicationProperties.getMailFromAddress() + ">"
-				: applicationProperties.getMailFromAddress();
-	}
+        try {
+            HttpResponse response = client.execute(post);
+            if (response.getStatusLine().getStatusCode() != 200) {
+                LOGGER.warn("Received response {} from mailgun: {}", response.getStatusLine().getReasonPhrase(), response.getEntity().toString());
+            }
+        } catch (IOException e) {
+            throw new MailException("Error posting mail to mailgun", e);
+        }
+    }
+
+    private String getFrom() {
+        return applicationProperties.getMailFromName() != null ? applicationProperties.getMailFromName() + " <" + applicationProperties.getMailFromAddress() + ">"
+                : applicationProperties.getMailFromAddress();
+    }
 
 }

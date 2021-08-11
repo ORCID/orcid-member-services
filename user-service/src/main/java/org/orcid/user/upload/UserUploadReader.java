@@ -7,6 +7,6 @@ import org.orcid.user.domain.User;
 
 public interface UserUploadReader {
 
-	UserUpload readUsersUpload(InputStream inputStream, User currentUser) throws IOException;
-	
+    UserUpload readUsersUpload(InputStream inputStream, User currentUser) throws IOException;
+
 }

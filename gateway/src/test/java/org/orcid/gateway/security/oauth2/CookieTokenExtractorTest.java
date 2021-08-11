@@ -9,8 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
 /**
- * Test whether the {@link CookieTokenExtractor} can properly extract access tokens from
- * Cookies and Headers.
+ * Test whether the {@link CookieTokenExtractor} can properly extract access
+ * tokens from Cookies and Headers.
  */
 public class CookieTokenExtractorTest {
     private CookieTokenExtractor cookieTokenExtractor;

@@ -13,27 +13,27 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AssertionRepository extends MongoRepository<Assertion, String>, AssertionRepositoryCustom {
-    
-    @Query("{ownerId: ?0}")    
+
+    @Query("{ownerId: ?0}")
     Page<Assertion> findByOwnerId(String ownerId, Pageable pageable);
-    
-    @Query("{ownerId: ?0}")    
+
+    @Query("{ownerId: ?0}")
     List<Assertion> findAllByOwnerId(String ownerId, Sort sort);
-    
-    @Query("{salesforceId: ?0}")    
+
+    @Query("{salesforceId: ?0}")
     Page<Assertion> findBySalesforceId(String salesforceId, Pageable pageable);
-    
-    @Query("{salesforceId: ?0}")    
+
+    @Query("{salesforceId: ?0}")
     List<Assertion> findBySalesforceId(String salesforceId, Sort sort);
 
     List<Assertion> findBySalesforceId(String salesforceId);
 
     List<Assertion> findByEmail(String email);
-    
+
     List<Assertion> findByEmailAndSalesforceId(String email, String salesforceId);
 
     Optional<Assertion> findOneByEmailIgnoreCase(String email);
-    
+
     List<Assertion> findByStatus(String status);
 
 }

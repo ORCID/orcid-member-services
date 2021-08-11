@@ -23,11 +23,8 @@ import static io.github.jhipster.config.logging.LoggingUtils.*;
 @RefreshScope
 public class LoggingConfiguration {
 
-    public LoggingConfiguration(@Value("${spring.application.name}") String appName,
-                                @Value("${server.port}") String serverPort,
-                                JHipsterProperties jHipsterProperties,
-                                ObjectProvider<BuildProperties> buildProperties,
-                                ObjectMapper mapper) throws JsonProcessingException {
+    public LoggingConfiguration(@Value("${spring.application.name}") String appName, @Value("${server.port}") String serverPort, JHipsterProperties jHipsterProperties,
+            ObjectProvider<BuildProperties> buildProperties, ObjectMapper mapper) throws JsonProcessingException {
 
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
 

@@ -32,7 +32,8 @@ public class GatewayResource {
     /**
      * {@code GET  /routes} : get the active routes.
      *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the list of routes.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
+     *         body the list of routes.
      */
     @GetMapping("/routes")
     @Secured(AuthoritiesConstants.ADMIN)

@@ -32,11 +32,12 @@ public class OAuth2Properties {
          */
         private int sessionTimeoutInSeconds = 1800;
         /**
-         * Defines the cookie domain. If specified, cookies will be set on this domain.
-         * If not configured, then cookies will be set on the top-level domain of the
-         * request you sent, i.e. if you send a request to {@code app1.your-domain.com},
-         * then cookies will be set on {@code .your-domain.com}, such that they
-         * are also valid for {@code app2.your-domain.com}.
+         * Defines the cookie domain. If specified, cookies will be set on this
+         * domain. If not configured, then cookies will be set on the top-level
+         * domain of the request you sent, i.e. if you send a request to
+         * {@code app1.your-domain.com}, then cookies will be set on
+         * {@code .your-domain.com}, such that they are also valid for
+         * {@code app2.your-domain.com}.
          */
         private String cookieDomain;
 
@@ -75,19 +76,20 @@ public class OAuth2Properties {
 
     public static class SignatureVerification {
         /**
-         * Maximum refresh rate for public keys in ms.
-         * We won't fetch new public keys any faster than that to avoid spamming UAA in case
-         * we receive a lot of "illegal" tokens.
+         * Maximum refresh rate for public keys in ms. We won't fetch new public
+         * keys any faster than that to avoid spamming UAA in case we receive a
+         * lot of "illegal" tokens.
          */
         private long publicKeyRefreshRateLimit = 10 * 1000L;
         /**
-         * Maximum TTL for the public key in ms.
-         * The public key will be fetched again from UAA if it gets older than that.
-         * That way, we make sure that we get the newest keys always in case they are updated there.
+         * Maximum TTL for the public key in ms. The public key will be fetched
+         * again from UAA if it gets older than that. That way, we make sure
+         * that we get the newest keys always in case they are updated there.
          */
         private long ttl = 24 * 60 * 60 * 1000L;
         /**
-         * Endpoint where to retrieve the public key used to verify token signatures.
+         * Endpoint where to retrieve the public key used to verify token
+         * signatures.
          */
         private String publicKeyEndpointUri = "http://uaa/oauth/token_key";
 

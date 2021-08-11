@@ -74,7 +74,7 @@ public class OAuth2AuthenticationServiceTest {
 
     public static OAuth2AccessToken createAccessToken(String accessTokenValue, String refreshTokenValue) {
         DefaultOAuth2AccessToken accessToken = new DefaultOAuth2AccessToken(accessTokenValue);
-        accessToken.setExpiration(new Date());          //token expires now
+        accessToken.setExpiration(new Date()); // token expires now
         DefaultOAuth2RefreshToken refreshToken = new DefaultOAuth2RefreshToken(refreshTokenValue);
         accessToken.setRefreshToken(refreshToken);
         return accessToken;
@@ -91,40 +91,48 @@ public class OAuth2AuthenticationServiceTest {
     private void mockInvalidPassword() {
         HttpHeaders reqHeaders = new HttpHeaders();
         reqHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        reqHeaders.add("Authorization", CLIENT_AUTHORIZATION);                //take over Authorization header from client request to UAA request
+        reqHeaders.add("Authorization", CLIENT_AUTHORIZATION); // take over
+                                                               // Authorization
+                                                               // header from
+                                                               // client request
+                                                               // to UAA request
         MultiValueMap<String, String> formParams = new LinkedMultiValueMap<>();
         formParams.set("username", "user");
         formParams.set("password", "user2");
         formParams.add("grant_type", "password");
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(formParams, reqHeaders);
-        when(restTemplate.postForEntity("http://uaa/oauth/token", entity, OAuth2AccessToken.class))
-            .thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
+        when(restTemplate.postForEntity("http://uaa/oauth/token", entity, OAuth2AccessToken.class)).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
     }
 
     private void mockPasswordGrant(OAuth2AccessToken accessToken) {
         HttpHeaders reqHeaders = new HttpHeaders();
         reqHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        reqHeaders.add("Authorization", CLIENT_AUTHORIZATION);                //take over Authorization header from client request to UAA request
+        reqHeaders.add("Authorization", CLIENT_AUTHORIZATION); // take over
+                                                               // Authorization
+                                                               // header from
+                                                               // client request
+                                                               // to UAA request
         MultiValueMap<String, String> formParams = new LinkedMultiValueMap<>();
         formParams.set("username", "user");
         formParams.set("password", "user");
         formParams.add("grant_type", "password");
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(formParams, reqHeaders);
         when(restTemplate.postForEntity("http://uaa/oauth/token", entity, OAuth2AccessToken.class))
-            .thenReturn(new ResponseEntity<OAuth2AccessToken>(accessToken, HttpStatus.OK));
+                .thenReturn(new ResponseEntity<OAuth2AccessToken>(accessToken, HttpStatus.OK));
     }
 
     private void mockRefreshGrant() {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "refresh_token");
         params.add("refresh_token", REFRESH_TOKEN_VALUE);
-        //we must authenticate with the UAA server via HTTP basic authentication using the browser's client_id with no client secret
+        // we must authenticate with the UAA server via HTTP basic
+        // authentication using the browser's client_id with no client secret
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", CLIENT_AUTHORIZATION);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
         OAuth2AccessToken newAccessToken = createAccessToken(NEW_ACCESS_TOKEN_VALUE, NEW_REFRESH_TOKEN_VALUE);
         when(restTemplate.postForEntity("http://uaa/oauth/token", entity, OAuth2AccessToken.class))
-            .thenReturn(new ResponseEntity<OAuth2AccessToken>(newAccessToken, HttpStatus.OK));
+                .thenReturn(new ResponseEntity<OAuth2AccessToken>(newAccessToken, HttpStatus.OK));
     }
 
     @Test
@@ -138,7 +146,7 @@ public class OAuth2AuthenticationServiceTest {
         params.put("rememberMe", "true");
         MockHttpServletResponse response = new MockHttpServletResponse();
         authenticationService.authenticate(request, response, params);
-        //check that cookies are set correctly
+        // check that cookies are set correctly
         Cookie accessTokenCookie = response.getCookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE);
         Assertions.assertEquals(ACCESS_TOKEN_VALUE, accessTokenCookie.getValue());
         Cookie refreshTokenCookie = response.getCookie(OAuth2CookieHelper.REFRESH_TOKEN_COOKIE);
@@ -156,7 +164,7 @@ public class OAuth2AuthenticationServiceTest {
         params.put("rememberMe", "false");
         MockHttpServletResponse response = new MockHttpServletResponse();
         authenticationService.authenticate(request, response, params);
-        //check that cookies are set correctly
+        // check that cookies are set correctly
         Cookie accessTokenCookie = response.getCookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE);
         Assertions.assertEquals(ACCESS_TOKEN_VALUE, accessTokenCookie.getValue());
         Cookie refreshTokenCookie = response.getCookie(OAuth2CookieHelper.SESSION_TOKEN_COOKIE);
@@ -197,12 +205,12 @@ public class OAuth2AuthenticationServiceTest {
         request.setCookies(accessTokenCookie, refreshTokenCookie);
         MockHttpServletResponse response = new MockHttpServletResponse();
         HttpServletRequest newRequest = refreshTokenFilter.refreshTokensIfExpiring(request, response);
-        //cookies in response are deleted
+        // cookies in response are deleted
         Cookie newAccessTokenCookie = response.getCookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE);
         Assertions.assertEquals(0, newAccessTokenCookie.getMaxAge());
         Cookie newRefreshTokenCookie = response.getCookie(OAuth2CookieHelper.REFRESH_TOKEN_COOKIE);
         Assertions.assertEquals(0, newRefreshTokenCookie.getMaxAge());
-        //request no longer contains cookies
+        // request no longer contains cookies
         Cookie requestAccessTokenCookie = OAuth2CookieHelper.getAccessTokenCookie(newRequest);
         Assertions.assertNull(requestAccessTokenCookie);
         Cookie requestRefreshTokenCookie = OAuth2CookieHelper.getRefreshTokenCookie(newRequest);
@@ -210,7 +218,8 @@ public class OAuth2AuthenticationServiceTest {
     }
 
     /**
-     * If no refresh token is found and the access token has expired, then expect an exception.
+     * If no refresh token is found and the access token has expired, then
+     * expect an exception.
      */
     @Test
     public void testRefreshGrantNoRefreshToken() {

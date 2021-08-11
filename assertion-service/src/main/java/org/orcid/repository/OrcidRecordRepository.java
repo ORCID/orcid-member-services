@@ -17,7 +17,7 @@ public interface OrcidRecordRepository extends MongoRepository<OrcidRecord, Stri
 
     @Query(value = "{tokens: {salesforce_id: ?0}}")
     List<OrcidRecord> findAllToInvite(String salesforceId);
-    
-    @Query("{tokens: {salesforce_id: ?0}}")    
+
+    @Query("{tokens: {salesforce_id: ?0}}")
     Page<OrcidRecord> findBySalesforceId(String salesforceId, Pageable pageable);
 }

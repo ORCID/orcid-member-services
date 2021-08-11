@@ -166,11 +166,10 @@ public class MemberService {
     public Page<Member> getMembers(Pageable pageable) {
         return memberRepository.findAll(pageable);
     }
-    
+
     public Page<Member> getMembers(Pageable pageable, String filter) {
-        return memberRepository
-                .findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
-                        filter, filter, filter, pageable);
+        return memberRepository.findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(filter, filter, filter,
+                pageable);
     }
 
     public List<Member> getAllMembers() {
@@ -191,8 +190,7 @@ public class MemberService {
         if (!optional.isPresent()) {
             throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
         }
-        List<MemberServiceUser> usersBelongingToMember = userService
-                .getUsersBySalesforceId(optional.get().getSalesforceId());
+        List<MemberServiceUser> usersBelongingToMember = userService.getUsersBySalesforceId(optional.get().getSalesforceId());
         if (usersBelongingToMember != null && !usersBelongingToMember.isEmpty()) {
             assertionService.deleteAssertionsForSalesforceIn(optional.get().getSalesforceId());
 
@@ -209,8 +207,7 @@ public class MemberService {
             throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
         }
         if (Boolean.compare(existentMember.getIsConsortiumLead(), member.getIsConsortiumLead()) != 0) {
-            List<MemberServiceUser> usersBelongingToMember = userService
-                    .getUsersBySalesforceId(member.getSalesforceId());
+            List<MemberServiceUser> usersBelongingToMember = userService.getUsersBySalesforceId(member.getSalesforceId());
             for (MemberServiceUser user : usersBelongingToMember) {
                 Set<String> authorities = user.getAuthorities();
                 if (member.getIsConsortiumLead()) {

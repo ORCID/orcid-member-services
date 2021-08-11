@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
-@SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, GatewayApp.class})
+@SpringBootTest(classes = { SecurityBeanOverrideConfiguration.class, GatewayApp.class })
 public class ExceptionTranslatorIT {
 
     @Autowired
@@ -36,91 +36,65 @@ public class ExceptionTranslatorIT {
 
     @BeforeEach
     public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(controller)
-            .setControllerAdvice(exceptionTranslator)
-            .setMessageConverters(jacksonMessageConverter)
-            .build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(exceptionTranslator).setMessageConverters(jacksonMessageConverter).build();
     }
 
     @Test
     public void testConcurrencyFailure() throws Exception {
-        mockMvc.perform(get("/test/concurrency-failure"))
-            .andExpect(status().isConflict())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_CONCURRENCY_FAILURE));
+        mockMvc.perform(get("/test/concurrency-failure")).andExpect(status().isConflict()).andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_CONCURRENCY_FAILURE));
     }
 
     @Test
     public void testMethodArgumentNotValid() throws Exception {
-         mockMvc.perform(post("/test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON))
-             .andExpect(status().isBadRequest())
-             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-             .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
-             .andExpect(jsonPath("$.fieldErrors.[0].objectName").value("testDTO"))
-             .andExpect(jsonPath("$.fieldErrors.[0].field").value("test"))
-             .andExpect(jsonPath("$.fieldErrors.[0].message").value("notnull"));
+        mockMvc.perform(post("/test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON)).andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
+                .andExpect(jsonPath("$.fieldErrors.[0].objectName").value("testDTO")).andExpect(jsonPath("$.fieldErrors.[0].field").value("test"))
+                .andExpect(jsonPath("$.fieldErrors.[0].message").value("notnull"));
     }
 
     @Test
     public void testMissingServletRequestPartException() throws Exception {
-        mockMvc.perform(get("/test/missing-servlet-request-part"))
-            .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.400.string"));
+        mockMvc.perform(get("/test/missing-servlet-request-part")).andExpect(status().isBadRequest()).andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.message").value("error.http.400.string"));
     }
 
     @Test
     public void testMissingServletRequestParameterException() throws Exception {
-        mockMvc.perform(get("/test/missing-servlet-request-parameter"))
-            .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.400.string"));
+        mockMvc.perform(get("/test/missing-servlet-request-parameter")).andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON)).andExpect(jsonPath("$.message").value("error.http.400.string"));
     }
 
     @Test
     public void testAccessDenied() throws Exception {
-        mockMvc.perform(get("/test/access-denied"))
-            .andExpect(status().isForbidden())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.403.string"))
-            .andExpect(jsonPath("$.detail").value("test access denied!"));
+        mockMvc.perform(get("/test/access-denied")).andExpect(status().isForbidden()).andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.message").value("error.http.403.string")).andExpect(jsonPath("$.detail").value("test access denied!"));
     }
 
     @Test
     public void testUnauthorized() throws Exception {
-        mockMvc.perform(get("/test/unauthorized"))
-            .andExpect(status().isUnauthorized())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.401.string"))
-            .andExpect(jsonPath("$.path").value("/test/unauthorized"))
-            .andExpect(jsonPath("$.detail").value("test authentication failed!"));
+        mockMvc.perform(get("/test/unauthorized")).andExpect(status().isUnauthorized()).andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.message").value("error.http.401.string")).andExpect(jsonPath("$.path").value("/test/unauthorized"))
+                .andExpect(jsonPath("$.detail").value("test authentication failed!"));
     }
 
     @Test
     public void testMethodNotSupported() throws Exception {
-        mockMvc.perform(post("/test/access-denied"))
-            .andExpect(status().isMethodNotAllowed())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.405.string"))
-            .andExpect(jsonPath("$.detail").value("Request method 'POST' not supported"));
+        mockMvc.perform(post("/test/access-denied")).andExpect(status().isMethodNotAllowed()).andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.message").value("error.http.405.string")).andExpect(jsonPath("$.detail").value("Request method 'POST' not supported"));
     }
 
     @Test
     public void testExceptionWithResponseStatus() throws Exception {
-        mockMvc.perform(get("/test/response-status"))
-            .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.400.string"))
-            .andExpect(jsonPath("$.title").value("test response status"));
+        mockMvc.perform(get("/test/response-status")).andExpect(status().isBadRequest()).andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.message").value("error.http.400.string")).andExpect(jsonPath("$.title").value("test response status"));
     }
 
     @Test
     public void testInternalServerError() throws Exception {
-        mockMvc.perform(get("/test/internal-server-error"))
-            .andExpect(status().isInternalServerError())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.500.string"))
-            .andExpect(jsonPath("$.title").value("Internal Server Error"));
+        mockMvc.perform(get("/test/internal-server-error")).andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON)).andExpect(jsonPath("$.message").value("error.http.500.string"))
+                .andExpect(jsonPath("$.title").value("Internal Server Error"));
     }
 
 }

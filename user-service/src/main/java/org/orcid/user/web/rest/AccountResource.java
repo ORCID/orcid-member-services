@@ -51,8 +51,7 @@ public class AccountResource {
 
     protected final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService,
-            UserMapper userMapper) {
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
@@ -60,10 +59,11 @@ public class AccountResource {
     }
 
     /**
-     * {@code GET  /authenticate} : check if the user is authenticated, and return
-     * its login.
+     * {@code GET  /authenticate} : check if the user is authenticated, and
+     * return its login.
      *
-     * @param request the HTTP request.
+     * @param request
+     *            the HTTP request.
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
@@ -75,11 +75,13 @@ public class AccountResource {
     /**
      * {@code POST  /account} : update the current user information.
      *
-     * @param userDTO the current user information.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is
-     *                                   already used.
-     * @throws RuntimeException          {@code 500 (Internal Server Error)} if the
-     *                                   user login wasn't found.
+     * @param userDTO
+     *            the current user information.
+     * @throws EmailAlreadyUsedException
+     *             {@code 400 (Bad Request)} if the email is already used.
+     * @throws RuntimeException
+     *             {@code 500 (Internal Server Error)} if the user login wasn't
+     *             found.
      */
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
@@ -88,16 +90,16 @@ public class AccountResource {
         if (existingUser.isPresent() && !existingUser.get().getEmail().equalsIgnoreCase(currentUser.getEmail())) {
             throw new EmailAlreadyUsedException();
         }
-        userService.updateAccount(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-                userDTO.getLangKey(), userDTO.getImageUrl());
+        userService.updateAccount(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getLangKey(), userDTO.getImageUrl());
     }
 
     /**
      * {@code GET  /account} : get the current user.
      *
      * @return the current user.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user
-     *                          couldn't be returned.
+     * @throws RuntimeException
+     *             {@code 500 (Internal Server Error)} if the user couldn't be
+     *             returned.
      */
     @GetMapping("/account")
     public UserDTO getAccount() {
@@ -116,11 +118,13 @@ public class AccountResource {
     }
 
     /**
-     * {@code POST  /account/change-password} : changes the current user's password.
+     * {@code POST  /account/change-password} : changes the current user's
+     * password.
      *
-     * @param passwordChangeDto current and new password.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new
-     *                                  password is incorrect.
+     * @param passwordChangeDto
+     *            current and new password.
+     * @throws InvalidPasswordException
+     *             {@code 400 (Bad Request)} if the new password is incorrect.
      */
     @PostMapping(path = "/account/change-password")
     public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
@@ -134,25 +138,28 @@ public class AccountResource {
      * {@code POST   /account/reset-password/init} : Send an email to reset the
      * password of the user.
      *
-     * @param mail the mail of the user.
-     * @throws EmailNotFoundException {@code 400 (Bad Request)} if the email address
-     *                                is not registered.
+     * @param mail
+     *            the mail of the user.
+     * @throws EmailNotFoundException
+     *             {@code 400 (Bad Request)} if the email address is not
+     *             registered.
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
-        mailService
-                .sendPasswordResetMail(userService.requestPasswordReset(mail).orElseThrow(EmailNotFoundException::new));
+        mailService.sendPasswordResetMail(userService.requestPasswordReset(mail).orElseThrow(EmailNotFoundException::new));
     }
 
     /**
-     * {@code POST   /account/reset-password/finish} : Finish to reset the password
-     * of the user.
+     * {@code POST   /account/reset-password/finish} : Finish to reset the
+     * password of the user.
      *
-     * @param keyAndPassword the generated key and the new password.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is
-     *                                  incorrect.
-     * @throws RuntimeException         {@code 500 (Internal Server Error)} if the
-     *                                  password could not be reset.
+     * @param keyAndPassword
+     *            the generated key and the new password.
+     * @throws InvalidPasswordException
+     *             {@code 400 (Bad Request)} if the password is incorrect.
+     * @throws RuntimeException
+     *             {@code 500 (Internal Server Error)} if the password could not
+     *             be reset.
      */
     @PostMapping(path = "/account/reset-password/finish")
     public ResponseEntity<PasswordResetResultVM> finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
@@ -177,11 +184,13 @@ public class AccountResource {
      * {@code POST   /account/reset-password/key/validate} : validate a reset
      * password key
      *
-     * @param keyAndPassword the generated key and the new password.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is
-     *                                  incorrect.
-     * @throws RuntimeException         {@code 500 (Internal Server Error)} if the
-     *                                  password could not be reset.
+     * @param keyAndPassword
+     *            the generated key and the new password.
+     * @throws InvalidPasswordException
+     *             {@code 400 (Bad Request)} if the password is incorrect.
+     * @throws RuntimeException
+     *             {@code 500 (Internal Server Error)} if the password could not
+     *             be reset.
      */
     @PostMapping(path = "/account/reset-password/validate")
     public ResponseEntity<PasswordResetResultVM> validateKey(@RequestBody KeyVM key) {
@@ -193,9 +202,8 @@ public class AccountResource {
         }
         return ResponseEntity.ok(result);
     }
-    
+
     protected static boolean checkPasswordLength(String password) {
-        return !StringUtils.isEmpty(password) && password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH
-                && password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
+        return !StringUtils.isEmpty(password) && password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH && password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
     }
 }

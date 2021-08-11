@@ -23,7 +23,7 @@ public interface MemberRepository extends MongoRepository<Member, String> {
 
     List<Member> findAllByOrderByClientNameAsc();
 
-    Page<Member> findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
-            String clientName, String salesforceId, String parentSalesforceId, Pageable pageable);
+    Page<Member> findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(String clientName, String salesforceId,
+            String parentSalesforceId, Pageable pageable);
 
 }

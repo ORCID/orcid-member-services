@@ -20,81 +20,79 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class ReportService {
 
-	private static final String IAT_PARAM = "iat";
+    private static final String IAT_PARAM = "iat";
 
-	private static final String EXP_PARAM = "exp";
+    private static final String EXP_PARAM = "exp";
 
-	private static final String ORG_PARAM = "organization";
+    private static final String ORG_PARAM = "organization";
 
-	private static final String DASHBOARD_PARAM = "dashboard";
+    private static final String DASHBOARD_PARAM = "dashboard";
 
-	private static final String ENV_PARAM = "env";
+    private static final String ENV_PARAM = "env";
 
-	private static final String SALESFORCE_ID_PARAM = "SF_ID";
+    private static final String SALESFORCE_ID_PARAM = "SF_ID";
 
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private MemberService memberService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private ApplicationProperties applicationProperties;
+    @Autowired
+    private MemberService memberService;
 
-	public ReportInfo getMemberReportInfo() {
-		ReportInfo info = new ReportInfo();
-		info.setUrl(applicationProperties.getChartioMemberDashboardUrl());
-		info.setJwt(getJwt(Integer.valueOf(applicationProperties.getChartioMemberDashboardId())));
-		return info;
-	}
-	
-	public ReportInfo getIntegrationReportInfo() {
-		ReportInfo info = new ReportInfo();
-		info.setUrl(applicationProperties.getChartioIntegrationDashboardUrl());
-		info.setJwt(getJwt(Integer.valueOf(applicationProperties.getChartioIntegrationDashboardId())));
-		return info;
-	}
-	
-	public ReportInfo getConsortiumReportInfo() {
-		checkConsortiumReportAccess();
-		ReportInfo info = new ReportInfo();
-		info.setUrl(applicationProperties.getChartioConsortiumDashboardUrl());
-		info.setJwt(getJwt(Integer.valueOf(applicationProperties.getChartioConsortiumDashboardId())));
-		return info;
-	}
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
-	private void checkConsortiumReportAccess() {
-		Optional<Member> member = memberService.getMember(getLoggedInSalesforceId());
-		if (!Boolean.TRUE.equals(member.get().getIsConsortiumLead())) {
-			throw new BadRequestAlertException("Only consortia leads can view consortia reports", null, null);
-		}
-	}
+    public ReportInfo getMemberReportInfo() {
+        ReportInfo info = new ReportInfo();
+        info.setUrl(applicationProperties.getChartioMemberDashboardUrl());
+        info.setJwt(getJwt(Integer.valueOf(applicationProperties.getChartioMemberDashboardId())));
+        return info;
+    }
 
-	private String getJwt(int dashboard) {
-		long iat = Instant.now().toEpochMilli() / 1000;
-		long exp = iat + 900;
+    public ReportInfo getIntegrationReportInfo() {
+        ReportInfo info = new ReportInfo();
+        info.setUrl(applicationProperties.getChartioIntegrationDashboardUrl());
+        info.setJwt(getJwt(Integer.valueOf(applicationProperties.getChartioIntegrationDashboardId())));
+        return info;
+    }
 
-		Map<String, Object> envMap = new HashMap<>();
-		envMap.put(SALESFORCE_ID_PARAM, getLoggedInSalesforceId());
+    public ReportInfo getConsortiumReportInfo() {
+        checkConsortiumReportAccess();
+        ReportInfo info = new ReportInfo();
+        info.setUrl(applicationProperties.getChartioConsortiumDashboardUrl());
+        info.setJwt(getJwt(Integer.valueOf(applicationProperties.getChartioConsortiumDashboardId())));
+        return info;
+    }
 
-		Map<String, Object> claims = new HashMap<>();
-		claims.put(IAT_PARAM, iat);
-		claims.put(EXP_PARAM, exp);
-		claims.put(ORG_PARAM, Integer.valueOf(applicationProperties.getChartioOrgId()));
-		claims.put(DASHBOARD_PARAM, dashboard);
-		claims.put(ENV_PARAM, envMap);
+    private void checkConsortiumReportAccess() {
+        Optional<Member> member = memberService.getMember(getLoggedInSalesforceId());
+        if (!Boolean.TRUE.equals(member.get().getIsConsortiumLead())) {
+            throw new BadRequestAlertException("Only consortia leads can view consortia reports", null, null);
+        }
+    }
 
-		return Jwts.builder().addClaims(claims)
-				.signWith(Keys.hmacShaKeyFor(applicationProperties.getChartioSecret().getBytes(StandardCharsets.UTF_8)))
-				.compact();
-	}
+    private String getJwt(int dashboard) {
+        long iat = Instant.now().toEpochMilli() / 1000;
+        long exp = iat + 900;
 
-	private String getLoggedInSalesforceId() {
-		MemberServiceUser loggedInUser = userService.getLoggedInUser();
-		if (loggedInUser.getLoginAs() != null) {
-			loggedInUser = userService.getImpersonatedUser();
-		}
-		return loggedInUser.getSalesforceId();
-	}
+        Map<String, Object> envMap = new HashMap<>();
+        envMap.put(SALESFORCE_ID_PARAM, getLoggedInSalesforceId());
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(IAT_PARAM, iat);
+        claims.put(EXP_PARAM, exp);
+        claims.put(ORG_PARAM, Integer.valueOf(applicationProperties.getChartioOrgId()));
+        claims.put(DASHBOARD_PARAM, dashboard);
+        claims.put(ENV_PARAM, envMap);
+
+        return Jwts.builder().addClaims(claims).signWith(Keys.hmacShaKeyFor(applicationProperties.getChartioSecret().getBytes(StandardCharsets.UTF_8))).compact();
+    }
+
+    private String getLoggedInSalesforceId() {
+        MemberServiceUser loggedInUser = userService.getLoggedInUser();
+        if (loggedInUser.getLoginAs() != null) {
+            loggedInUser = userService.getImpersonatedUser();
+        }
+        return loggedInUser.getSalesforceId();
+    }
 
 }

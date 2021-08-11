@@ -18,15 +18,15 @@ public class InitialSetupMigration {
 
     @ChangeSet(order = "01", author = "initiator", id = "01-addAuthorities")
     public void addAuthorities(MongoTemplate mongoTemplate) {
-    	Authority adminAuthority = new Authority();
-    	adminAuthority.setName(AuthoritiesConstants.ADMIN);
-    	Authority userAuthority = new Authority();
-    	userAuthority.setName(AuthoritiesConstants.USER);
-    	Authority consortiumLeadAuthority = new Authority();
-    	consortiumLeadAuthority.setName(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
-    	mongoTemplate.save(adminAuthority);
-    	mongoTemplate.save(userAuthority);
-    	mongoTemplate.save(consortiumLeadAuthority);
+        Authority adminAuthority = new Authority();
+        adminAuthority.setName(AuthoritiesConstants.ADMIN);
+        Authority userAuthority = new Authority();
+        userAuthority.setName(AuthoritiesConstants.USER);
+        Authority consortiumLeadAuthority = new Authority();
+        consortiumLeadAuthority.setName(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
+        mongoTemplate.save(adminAuthority);
+        mongoTemplate.save(userAuthority);
+        mongoTemplate.save(consortiumLeadAuthority);
     }
 
     @ChangeSet(order = "02", author = "initiator", id = "02-addUsers")

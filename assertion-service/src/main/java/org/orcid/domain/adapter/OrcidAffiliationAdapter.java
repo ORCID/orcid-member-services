@@ -23,7 +23,7 @@ import org.orcid.jaxb.model.v3.release.record.Qualification;
 import org.orcid.jaxb.model.v3.release.record.Service;
 
 public class OrcidAffiliationAdapter {
-    
+
     public static Affiliation toOrcidAffiliation(Assertion assertion) {
         Affiliation orcidAffiliation;
         switch (assertion.getAffiliationSection()) {
@@ -56,7 +56,7 @@ public class OrcidAffiliationAdapter {
             orcidAffiliation.setPutCode(Long.valueOf(assertion.getPutCode()));
         }
         orcidAffiliation.setDepartmentName(assertion.getDepartmentName());
-        
+
         if (!StringUtils.isBlank(assertion.getEndYear())) {
             FuzzyDate endDate = new FuzzyDate();
             endDate.setYear(new Year(Integer.valueOf(assertion.getEndYear())));

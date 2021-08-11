@@ -65,8 +65,7 @@ public class MailServiceIT {
     @Test
     public void testSendEmail() throws Exception {
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent");
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(),
-                contentCaptor.capture());
+        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
         assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
         assertThat(subjectCaptor.getValue()).isEqualTo("testSubject");
         assertThat(contentCaptor.getValue()).isEqualTo("testContent");
@@ -78,8 +77,7 @@ public class MailServiceIT {
         user.setEmail("john.doe@example.com");
         user.setLangKey("en");
         mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(),
-                contentCaptor.capture());
+        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
         assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
         assertThat(subjectCaptor.getValue()).isEqualTo("test title");
         assertThat(contentCaptor.getValue()).isNotNull();
@@ -91,8 +89,7 @@ public class MailServiceIT {
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setEmail("john.doe@example.com");
         mailService.sendActivationEmail(user);
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(),
-                contentCaptor.capture());
+        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
         assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
         assertThat(subjectCaptor.getValue()).isEqualTo("userservice account activation");
         assertThat(contentCaptor.getValue()).isNotNull();
@@ -104,8 +101,7 @@ public class MailServiceIT {
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setEmail("john.doe@example.com");
         mailService.sendCreationEmail(user);
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(),
-                contentCaptor.capture());
+        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
         assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
         assertThat(subjectCaptor.getValue()).isEqualTo("userservice account activation");
         assertThat(contentCaptor.getValue()).isNotNull();
@@ -117,8 +113,7 @@ public class MailServiceIT {
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setEmail("john.doe@example.com");
         mailService.sendPasswordResetMail(user);
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(),
-                contentCaptor.capture());
+        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
         assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
         assertThat(subjectCaptor.getValue()).isEqualTo("ORCID Member Portal password reset");
         assertThat(contentCaptor.getValue()).isNotNull();
@@ -130,8 +125,7 @@ public class MailServiceIT {
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setEmail("john.doe@example.com");
         mailService.sendOrganizationOwnerChangedMail(user, "Member 1");
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(),
-                contentCaptor.capture());
+        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
         assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
         assertThat(subjectCaptor.getValue()).isEqualTo("ORCID Member Portal organization owner updated");
         assertThat(contentCaptor.getValue()).isNotNull();
@@ -140,11 +134,9 @@ public class MailServiceIT {
 
     @Test
     public void testSendEmailWithException() throws Exception {
-        doThrow(MailException.class).when(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(),
-                contentCaptor.capture());
+        doThrow(MailException.class).when(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent");
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(),
-                contentCaptor.capture());
+        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
         assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
         assertThat(subjectCaptor.getValue()).isEqualTo("testSubject");
         assertThat(contentCaptor.getValue()).isEqualTo("testContent");
@@ -158,8 +150,7 @@ public class MailServiceIT {
             user.setLangKey(langKey);
             mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
         }
-        verify(mailgunClient, Mockito.times(2)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(),
-                contentCaptor.capture());
+        verify(mailgunClient, Mockito.times(2)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
 
         assertThat(recipientCaptor.getAllValues().get(0)).isEqualTo("john.doe@example.com");
         assertThat(recipientCaptor.getAllValues().get(1)).isEqualTo("john.doe@example.com");

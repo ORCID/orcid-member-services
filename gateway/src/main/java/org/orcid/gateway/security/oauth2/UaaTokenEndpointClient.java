@@ -17,8 +17,8 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class UaaTokenEndpointClient extends OAuth2TokenEndpointClientAdapter implements OAuth2TokenEndpointClient {
 
-    public UaaTokenEndpointClient(@Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
-                                  JHipsterProperties jHipsterProperties, OAuth2Properties oAuth2Properties) {
+    public UaaTokenEndpointClient(@Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate, JHipsterProperties jHipsterProperties,
+            OAuth2Properties oAuth2Properties) {
         super(restTemplate, jHipsterProperties, oAuth2Properties);
     }
 

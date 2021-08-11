@@ -31,7 +31,7 @@ public class EncryptUtil {
     private final SecretKeyFactory factory;
 
     private final KeySpec spec = new PBEKeySpec(keyValue.toCharArray(), hex(salt), 1000, 128);
-    
+
     {
         try {
             factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
@@ -55,7 +55,7 @@ public class EncryptUtil {
     }
 
     public String decrypt(String toDecrypt) {
-        try {            
+        try {
             Key key = new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
             Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
             c.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(hex(salt)));

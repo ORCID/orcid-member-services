@@ -82,22 +82,19 @@ class UserResourceTest {
 
     @Test
     public void testUploadUsers() throws Throwable {
-        Mockito.when(userService.uploadUserCSV(Mockito.any(InputStream.class), Mockito.any(User.class)))
-                .thenReturn(getUserUpload());
+        Mockito.when(userService.uploadUserCSV(Mockito.any(InputStream.class), Mockito.any(User.class))).thenReturn(getUserUpload());
         MultipartFile file = Mockito.mock(MultipartFile.class);
         InputStream inputStream = Mockito.mock(InputStream.class);
         Mockito.when(file.getInputStream()).thenReturn(inputStream);
 
         userResource.uploadUsers(file);
 
-        Mockito.verify(userService, Mockito.times(1)).uploadUserCSV(Mockito.any(InputStream.class),
-                Mockito.any(User.class));
+        Mockito.verify(userService, Mockito.times(1)).uploadUserCSV(Mockito.any(InputStream.class), Mockito.any(User.class));
     }
 
     @Test
     public void testValidateUser_validUser() throws Throwable {
-        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class)))
-                .thenReturn(getUserValidation(new ArrayList<String>()));
+        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class))).thenReturn(getUserValidation(new ArrayList<String>()));
 
         ResponseEntity<UserValidation> response = userResource.validateUser(new UserDTO());
         assertEquals(200, response.getStatusCodeValue());
@@ -107,8 +104,7 @@ class UserResourceTest {
 
     @Test
     public void testValidateUser_invalidUser() throws Throwable {
-        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class)))
-                .thenReturn(getUserValidation(Arrays.asList("some error")));
+        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class))).thenReturn(getUserValidation(Arrays.asList("some error")));
 
         ResponseEntity<UserValidation> response = userResource.validateUser(new UserDTO());
         assertEquals(200, response.getStatusCodeValue());
@@ -118,37 +114,32 @@ class UserResourceTest {
 
     @Test
     public void testGetAllUsers() {
-        Mockito.when(userService.getAllManagedUsers(Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<>(Arrays.asList(getUser(), getUser(), getUser(), getUser())));
-        Mockito.when(userService.getAllManagedUsers(Mockito.any(Pageable.class), Mockito.anyString()))
-                .thenReturn(new PageImpl<>(Arrays.asList(getUser(), getUser())));
+        Mockito.when(userService.getAllManagedUsers(Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(getUser(), getUser(), getUser(), getUser())));
+        Mockito.when(userService.getAllManagedUsers(Mockito.any(Pageable.class), Mockito.anyString())).thenReturn(new PageImpl<>(Arrays.asList(getUser(), getUser())));
 
-        ResponseEntity<List<UserDTO>> response = userResource.getAllUsers(new HttpHeaders(), "",
-                UriComponentsBuilder.newInstance(), Mockito.mock(Pageable.class));
+        ResponseEntity<List<UserDTO>> response = userResource.getAllUsers(new HttpHeaders(), "", UriComponentsBuilder.newInstance(), Mockito.mock(Pageable.class));
         assertNotNull(response);
         List<UserDTO> users = response.getBody();
         assertEquals(4, users.size());
         Mockito.verify(userService, Mockito.times(1)).getAllManagedUsers(Mockito.any(Pageable.class));
 
-        response = userResource.getAllUsers(new HttpHeaders(), "some-filter", UriComponentsBuilder.newInstance(),
-                Mockito.mock(Pageable.class));
+        response = userResource.getAllUsers(new HttpHeaders(), "some-filter", UriComponentsBuilder.newInstance(), Mockito.mock(Pageable.class));
         assertNotNull(response);
         users = response.getBody();
         assertEquals(2, users.size());
-        Mockito.verify(userService, Mockito.times(1)).getAllManagedUsers(Mockito.any(Pageable.class),
-                Mockito.anyString());
+        Mockito.verify(userService, Mockito.times(1)).getAllManagedUsers(Mockito.any(Pageable.class), Mockito.anyString());
     }
-    
+
     @Test
     public void testUpdateUser() {
         UserValidation userValidation = new UserValidation();
         userValidation.setValid(true);
         Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class))).thenReturn(userValidation);
         Mockito.when(userService.updateUser(Mockito.any(UserDTO.class))).thenReturn(Optional.of(new UserDTO()));
-        
+
         ResponseEntity<UserDTO> response = userResource.updateUser(new UserDTO());
         assertTrue(response.getStatusCode().is2xxSuccessful());
-        
+
         Mockito.verify(userValidator, Mockito.times(1)).validate(Mockito.any(UserDTO.class), Mockito.any(User.class));
         Mockito.verify(userService, Mockito.times(1)).updateUser(Mockito.any(UserDTO.class));
     }
