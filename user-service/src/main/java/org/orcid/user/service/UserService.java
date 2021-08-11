@@ -258,7 +258,6 @@ public class UserService {
 
         userRepository.save(user);
         userCaches.evictEntryFromEmailCache(user.getEmail());
-        userCaches.evictEntryFromEmailCache(user.getEmail());
 
         if (owner && !previouslyOwner) {
             String member = memberService.getMemberNameBySalesforce(user.getSalesforceId());
@@ -411,7 +410,6 @@ public class UserService {
             LOG.info("Populating member name field for user {}", u.getEmail());
             u.setMemberName(memberService.getMemberNameBySalesforce(u.getSalesforceId()));
             userRepository.save(u);
-            userCaches.evictEntryFromEmailCache(u.getEmail());
             userCaches.evictEntryFromEmailCache(u.getEmail());
         });
     }
