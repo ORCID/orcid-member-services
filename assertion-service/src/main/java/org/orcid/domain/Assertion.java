@@ -21,9 +21,6 @@ public class Assertion implements Serializable {
     @NotNull
     @Field("email")
     private String email;
-    
-    @Field("orcid_id")
-    private String orcidId;
 
     @NotNull
     @Field("affiliation_section")
