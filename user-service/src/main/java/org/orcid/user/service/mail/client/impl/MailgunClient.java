@@ -52,6 +52,7 @@ public class MailgunClient implements MailClient {
         }
 
         try {
+            LOGGER.info("Sending mail {} to {}", subject, to);
             HttpResponse response = client.execute(post);
             if (response.getStatusLine().getStatusCode() != 200) {
                 LOGGER.warn("Received response {} from mailgun: {}", response.getStatusLine().getReasonPhrase(), response.getEntity().toString());
