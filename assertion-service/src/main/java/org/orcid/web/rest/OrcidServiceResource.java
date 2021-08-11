@@ -28,20 +28,20 @@ import io.github.jhipster.web.util.PaginationUtil;
 @RestController
 @RequestMapping("/api")
 public class OrcidServiceResource {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(OrcidRecordService.class);
-    
+
     @Autowired
     private OrcidRecordService orcidRecordService;
-    
+
     @GetMapping("/orcid_records")
     public ResponseEntity<List<OrcidRecord>> getOrcidRecords(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder)
-            throws BadRequestAlertException, JSONException {        
+            throws BadRequestAlertException, JSONException {
         Page<OrcidRecord> records = orcidRecordService.findBySalesforceId(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), records);
         return ResponseEntity.ok().headers(headers).body(records.getContent());
     }
-    
+
     @GetMapping("/orcid_record/{id}")
     public ResponseEntity<OrcidRecord> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
         LOG.debug("REST request to fetch orcid record {} from user {}", id, SecurityUtils.getCurrentUserLogin().get());

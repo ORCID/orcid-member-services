@@ -15,12 +15,12 @@ import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 @Component
 @EnableScheduling
 public class OrcidSyncManager {
-    
+
     private final Logger log = LoggerFactory.getLogger(OrcidSyncManager.class);
 
     @Autowired
     private AssertionService assertionsService;
-    
+
     @Scheduled(fixedDelayString = "${application.cron.syncAffiliations}")
     @SchedulerLock(name = "syncAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "2m")
     public void syncAffiliations() throws JAXBException {

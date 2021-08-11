@@ -17,30 +17,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ReportResource {
 
-	private final Logger LOG = LoggerFactory.getLogger(ReportResource.class);
-	
-	@Autowired
-	private ReportService reportService;
+    private final Logger LOG = LoggerFactory.getLogger(ReportResource.class);
 
-	@GetMapping("/reports/member")
-	public ResponseEntity<ReportInfo> getMemberReport() {
-		LOG.debug("Generating member report");
-		ReportInfo memberReportInfo = reportService.getMemberReportInfo();
-		return ResponseEntity.ok(memberReportInfo);
-	}
-	
-	@GetMapping("/reports/integration")
-	public ResponseEntity<ReportInfo> getIntegrationReport() {
-		LOG.debug("Generating integration report");
-		ReportInfo memberReportInfo = reportService.getIntegrationReportInfo();
-		return ResponseEntity.ok(memberReportInfo);
-	}
-	
-	@GetMapping("/reports/consortium")
-	public ResponseEntity<ReportInfo> getConsortiumReport() {
-		LOG.debug("Generating consortium report");
-		ReportInfo consortiumReportInfo = reportService.getConsortiumReportInfo();
-		return ResponseEntity.ok(consortiumReportInfo);
-	}
+    @Autowired
+    private ReportService reportService;
+
+    @GetMapping("/reports/member")
+    public ResponseEntity<ReportInfo> getMemberReport() {
+        LOG.debug("Generating member report");
+        ReportInfo memberReportInfo = reportService.getMemberReportInfo();
+        return ResponseEntity.ok(memberReportInfo);
+    }
+
+    @GetMapping("/reports/integration")
+    public ResponseEntity<ReportInfo> getIntegrationReport() {
+        LOG.debug("Generating integration report");
+        ReportInfo memberReportInfo = reportService.getIntegrationReportInfo();
+        return ResponseEntity.ok(memberReportInfo);
+    }
+
+    @GetMapping("/reports/consortium")
+    public ResponseEntity<ReportInfo> getConsortiumReport() {
+        LOG.debug("Generating consortium report");
+        ReportInfo consortiumReportInfo = reportService.getConsortiumReportInfo();
+        return ResponseEntity.ok(consortiumReportInfo);
+    }
 
 }

@@ -37,7 +37,7 @@ public class OAuth2CookieHelperTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("test.com");
         String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);
-        assertThat(name).isNull();        //already top-level domain
+        assertThat(name).isNull(); // already top-level domain
     }
 
     @Test
@@ -64,13 +64,12 @@ public class OAuth2CookieHelperTest {
         assertThat(name).isEqualTo(".test.com");
     }
 
-
     @Test
     public void testCoUkDomain() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("test.co.uk");
         String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);
-        assertThat(name).isNull();            //already top-level domain
+        assertThat(name).isNull(); // already top-level domain
     }
 
     @Test

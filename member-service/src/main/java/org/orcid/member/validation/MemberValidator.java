@@ -57,9 +57,7 @@ public class MemberValidator {
     }
 
     private void validateClientId(Member member, MemberServiceUser user, List<String> errors) {
-        if (Boolean.FALSE.equals(member.getIsConsortiumLead())
-                && Boolean.TRUE.equals(member.getAssertionServiceEnabled())
-                && StringUtils.isBlank(member.getClientId())) {
+        if (Boolean.FALSE.equals(member.getIsConsortiumLead()) && Boolean.TRUE.equals(member.getAssertionServiceEnabled()) && StringUtils.isBlank(member.getClientId())) {
             errors.add(getError("missingClientId", user));
         } else if (!StringUtils.isBlank(member.getClientId())) {
             if (member.getClientId().startsWith(NEW_CLIENT_ID_PREFIX)) {
@@ -87,8 +85,7 @@ public class MemberValidator {
         }
     }
 
-    private void validateConsortiumLeadAndParentSalesforceId(Member member, MemberServiceUser user,
-            List<String> errors) {
+    private void validateConsortiumLeadAndParentSalesforceId(Member member, MemberServiceUser user, List<String> errors) {
         if (member.getIsConsortiumLead() == null) {
             errors.add(getError("missingConsortiumLead", user));
         } else if (member.getIsConsortiumLead() && !StringUtils.isBlank(member.getParentSalesforceId())) {
@@ -99,8 +96,7 @@ public class MemberValidator {
     private void validateAssertionServiceEnabled(Member member, MemberServiceUser user, List<String> errors) {
         if (member.getAssertionServiceEnabled() == null) {
             errors.add(getError("missingAssertionsEnabled", user));
-        } else if (member.getAssertionServiceEnabled() && Boolean.TRUE.equals(member.getIsConsortiumLead())
-                && StringUtils.isBlank(member.getClientId())) {
+        } else if (member.getAssertionServiceEnabled() && Boolean.TRUE.equals(member.getIsConsortiumLead()) && StringUtils.isBlank(member.getClientId())) {
             errors.add(getError("invalidAssertionsEnabled", user));
         }
     }
@@ -110,8 +106,7 @@ public class MemberValidator {
     }
 
     private String getError(String code, String arg, MemberServiceUser user) {
-        return messageSource.getMessage("member.validation.error." + code, arg != null ? new Object[] { arg } : null,
-                Locale.forLanguageTag(user.getLangKey()));
+        return messageSource.getMessage("member.validation.error." + code, arg != null ? new Object[] { arg } : null, Locale.forLanguageTag(user.getLangKey()));
     }
 
 }

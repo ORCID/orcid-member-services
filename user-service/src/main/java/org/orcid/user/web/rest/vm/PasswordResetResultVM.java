@@ -1,11 +1,11 @@
 package org.orcid.user.web.rest.vm;
 
 public class PasswordResetResultVM {
-    
+
     private boolean success;
-    
+
     private boolean expiredKey;
-    
+
     private boolean invalidKey;
 
     public boolean isSuccess() {
@@ -31,5 +31,5 @@ public class PasswordResetResultVM {
     public void setInvalidKey(boolean invalidKey) {
         this.invalidKey = invalidKey;
     }
-    
+
 }

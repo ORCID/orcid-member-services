@@ -6,17 +6,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ApplicationProperties {
 
     private String mailDomain;
-    
+
     private String mailApiKey;
-    
+
     private String mailApiUrl;
-    
+
     private String mailFromAddress;
-    
+
     private String mailFromName;
-    
+
     private boolean mailTestMode;
-    
+
     private String baseUrl;
 
     public String getMailDomain() {
@@ -67,12 +67,12 @@ public class ApplicationProperties {
         this.mailApiUrl = mailApiUrl;
     }
 
-	public boolean isMailTestMode() {
-		return mailTestMode;
-	}
+    public boolean isMailTestMode() {
+        return mailTestMode;
+    }
 
-	public void setMailTestMode(boolean mailTestMode) {
-		this.mailTestMode = mailTestMode;
-	}
-    
+    public void setMailTestMode(boolean mailTestMode) {
+        this.mailTestMode = mailTestMode;
+    }
+
 }

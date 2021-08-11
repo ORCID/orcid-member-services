@@ -34,8 +34,7 @@ public class UserValidatorTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        Mockito.when(messageSource.getMessage(Mockito.anyString(), Mockito.any(), Mockito.any(Locale.class)))
-                .thenReturn("error-message");
+        Mockito.when(messageSource.getMessage(Mockito.anyString(), Mockito.any(), Mockito.any(Locale.class))).thenReturn("error-message");
     }
 
     @Test
@@ -57,8 +56,7 @@ public class UserValidatorTest {
         assertThat(validation.getErrors()).isNotEmpty();
         assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
-        Mockito.verify(messageSource, Mockito.times(1))
-                .getMessage(Mockito.eq("user.validation.error.invalidSalesforceId"), Mockito.any(), Mockito.any());
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.invalidSalesforceId"), Mockito.any(), Mockito.any());
     }
 
     @Test
@@ -73,8 +71,7 @@ public class UserValidatorTest {
         assertThat(validation.getErrors()).isNotEmpty();
         assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
-        Mockito.verify(messageSource, Mockito.times(1))
-                .getMessage(Mockito.eq("user.validation.error.missingSalesforceId"), Mockito.any(), Mockito.any());
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.missingSalesforceId"), Mockito.any(), Mockito.any());
     }
 
     @Test
@@ -89,8 +86,7 @@ public class UserValidatorTest {
         assertThat(validation.getErrors()).isNotEmpty();
         assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
-        Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.invalidEmail"),
-                Mockito.any(), Mockito.any());
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.invalidEmail"), Mockito.any(), Mockito.any());
     }
 
     @Test
@@ -105,15 +101,13 @@ public class UserValidatorTest {
         assertThat(validation.getErrors()).isNotEmpty();
         assertThat(validation.getErrors().get(0)).isEqualTo("error-message");
 
-        Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.missingEmail"),
-                Mockito.any(), Mockito.any());
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("user.validation.error.missingEmail"), Mockito.any(), Mockito.any());
     }
 
     @Test
     public void testValidateUserChangeMainContact() {
         Mockito.when(userService.memberExists(Mockito.eq("salesforce-id"))).thenReturn(false);
-        Mockito.when(userRepository.findOneBySalesforceIdAndMainContactIsTrue(Mockito.eq("salesforce-id")))
-                .thenReturn(Optional.of(getUser()));
+        Mockito.when(userRepository.findOneBySalesforceIdAndMainContactIsTrue(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getUser()));
 
         UserDTO toValidate = getValidUser();
         toValidate.setMainContact(true);

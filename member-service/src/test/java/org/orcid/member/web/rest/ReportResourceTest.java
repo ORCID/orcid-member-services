@@ -16,58 +16,58 @@ import org.orcid.member.web.rest.errors.BadRequestAlertException;
 import org.springframework.http.ResponseEntity;
 
 public class ReportResourceTest {
-	
-	@Mock
-	private ReportService mockReportService;
-	
-	@InjectMocks
-	private ReportResource reportResource;
-	
-	@BeforeEach
-	public void setUp() {
-		MockitoAnnotations.initMocks(this);
-	}
-	
-	@Test
-	public void testGetMemberReport() {
-		Mockito.when(mockReportService.getMemberReportInfo()).thenReturn(getReportInfo());
-		ResponseEntity<ReportInfo> response = reportResource.getMemberReport();
-		assertThat(response).isNotNull();
-		assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
-		assertThat(response.getBody()).isNotNull();
-	}
-	
-	@Test
-	public void testGetIntegrationReport() {
-		Mockito.when(mockReportService.getIntegrationReportInfo()).thenReturn(getReportInfo());
-		ResponseEntity<ReportInfo> response = reportResource.getIntegrationReport();
-		assertThat(response).isNotNull();
-		assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
-		assertThat(response.getBody()).isNotNull();
-	}
-	
-	@Test
-	public void testGetConsortiumReport() {
-		Mockito.when(mockReportService.getConsortiumReportInfo()).thenReturn(getReportInfo());
-		ResponseEntity<ReportInfo> response = reportResource.getConsortiumReport();
-		assertThat(response).isNotNull();
-		assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
-		assertThat(response.getBody()).isNotNull();
-	}
-	
-	@Test
-	public void testGetConsortiumReportIllegalAccess() {
-		Mockito.when(mockReportService.getConsortiumReportInfo()).thenThrow(new BadRequestAlertException("test", null, null));
-		Assertions.assertThrows(BadRequestAlertException.class, () -> {
-			reportResource.getConsortiumReport();
-		});
-	}
 
-	private ReportInfo getReportInfo() {
-		ReportInfo info = new ReportInfo();
-		info.setJwt("jwt");
-		info.setUrl("url");
-		return info;
-	}
+    @Mock
+    private ReportService mockReportService;
+
+    @InjectMocks
+    private ReportResource reportResource;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testGetMemberReport() {
+        Mockito.when(mockReportService.getMemberReportInfo()).thenReturn(getReportInfo());
+        ResponseEntity<ReportInfo> response = reportResource.getMemberReport();
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
+        assertThat(response.getBody()).isNotNull();
+    }
+
+    @Test
+    public void testGetIntegrationReport() {
+        Mockito.when(mockReportService.getIntegrationReportInfo()).thenReturn(getReportInfo());
+        ResponseEntity<ReportInfo> response = reportResource.getIntegrationReport();
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
+        assertThat(response.getBody()).isNotNull();
+    }
+
+    @Test
+    public void testGetConsortiumReport() {
+        Mockito.when(mockReportService.getConsortiumReportInfo()).thenReturn(getReportInfo());
+        ResponseEntity<ReportInfo> response = reportResource.getConsortiumReport();
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
+        assertThat(response.getBody()).isNotNull();
+    }
+
+    @Test
+    public void testGetConsortiumReportIllegalAccess() {
+        Mockito.when(mockReportService.getConsortiumReportInfo()).thenThrow(new BadRequestAlertException("test", null, null));
+        Assertions.assertThrows(BadRequestAlertException.class, () -> {
+            reportResource.getConsortiumReport();
+        });
+    }
+
+    private ReportInfo getReportInfo() {
+        ReportInfo info = new ReportInfo();
+        info.setJwt("jwt");
+        info.setUrl("url");
+        return info;
+    }
 
 }

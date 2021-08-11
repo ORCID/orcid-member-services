@@ -27,7 +27,8 @@ import io.github.jhipster.config.JHipsterProperties;
 /**
  * Zuul filter for limiting the number of HTTP calls per client.
  *
- * See the Bucket4j documentation at https://github.com/vladimir-bukhtoyarov/bucket4j
+ * See the Bucket4j documentation at
+ * https://github.com/vladimir-bukhtoyarov/bucket4j
  * https://github.com/vladimir-bukhtoyarov/bucket4j/blob/master/doc-pages/jcache-usage
  * .md#example-1---limiting-access-to-http-server-by-ip-address
  */
@@ -48,9 +49,7 @@ public class RateLimitingFilter extends ZuulFilter {
 
         CachingProvider cachingProvider = Caching.getCachingProvider();
         CacheManager cacheManager = cachingProvider.getCacheManager();
-        CompleteConfiguration<String, GridBucketState> config =
-            new MutableConfiguration<String, GridBucketState>()
-                .setTypes(String.class, GridBucketState.class);
+        CompleteConfiguration<String, GridBucketState> config = new MutableConfiguration<String, GridBucketState>().setTypes(String.class, GridBucketState.class);
 
         this.cache = cacheManager.createCache(GATEWAY_RATE_LIMITING_CACHE_NAME, config);
         this.buckets = Bucket4j.extension(JCache.class).proxyManagerForCache(cache);
@@ -69,7 +68,9 @@ public class RateLimitingFilter extends ZuulFilter {
     @Override
     public boolean shouldFilter() {
         // specific APIs can be filtered out using
-        // if (RequestContext.getCurrentContext().getRequest().getRequestURI().startsWith("/api")) { ... }
+        // if
+        // (RequestContext.getCurrentContext().getRequest().getRequestURI().startsWith("/api"))
+        // { ... }
         return true;
     }
 
@@ -90,13 +91,10 @@ public class RateLimitingFilter extends ZuulFilter {
 
     private Supplier<BucketConfiguration> getConfigSupplier() {
         return () -> {
-            JHipsterProperties.Gateway.RateLimiting rateLimitingProperties =
-                jHipsterProperties.getGateway().getRateLimiting();
+            JHipsterProperties.Gateway.RateLimiting rateLimitingProperties = jHipsterProperties.getGateway().getRateLimiting();
 
             return Bucket4j.configurationBuilder()
-                .addLimit(Bandwidth.simple(rateLimitingProperties.getLimit(),
-                    Duration.ofSeconds(rateLimitingProperties.getDurationInSeconds())))
-                .build();
+                    .addLimit(Bandwidth.simple(rateLimitingProperties.getLimit(), Duration.ofSeconds(rateLimitingProperties.getDurationInSeconds()))).build();
         };
     }
 
@@ -113,7 +111,8 @@ public class RateLimitingFilter extends ZuulFilter {
     }
 
     /**
-     * The ID that will identify the limit: the user login or the user IP address.
+     * The ID that will identify the limit: the user login or the user IP
+     * address.
      */
     private String getId(HttpServletRequest httpServletRequest) {
         return SecurityUtils.getCurrentUserLogin().orElse(httpServletRequest.getRemoteAddr());

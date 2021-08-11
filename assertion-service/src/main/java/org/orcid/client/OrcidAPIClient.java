@@ -50,7 +50,7 @@ import org.springframework.stereotype.Component;
 public class OrcidAPIClient {
     private final Logger log = LoggerFactory.getLogger(AssertionServiceResource.class);
 
-    private final Marshaller jaxbMarshaller;        
+    private final Marshaller jaxbMarshaller;
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -59,7 +59,7 @@ public class OrcidAPIClient {
         JAXBContext jaxbContext = JAXBContext.newInstance(Affiliation.class, Distinction.class, Employment.class, Education.class, InvitedPosition.class,
                 Membership.class, Qualification.class, Service.class, OrcidError.class);
         this.jaxbMarshaller = jaxbContext.createMarshaller();
-        this.jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);                       
+        this.jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
     }
 
     public String exchangeToken(String idToken) throws JSONException, ClientProtocolException, IOException {
@@ -162,7 +162,7 @@ public class OrcidAPIClient {
         return false;
     }
 
-    public boolean deleteAffiliation(String orcid, String accessToken, Assertion assertion)  {
+    public boolean deleteAffiliation(String orcid, String accessToken, Assertion assertion) {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
         log.info("Deleting affiliation with putcode {} for {}", assertion.getPutCode(), orcid);
 

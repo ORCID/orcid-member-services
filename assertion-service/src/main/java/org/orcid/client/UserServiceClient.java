@@ -19,7 +19,7 @@ public interface UserServiceClient {
     @RequestMapping(method = RequestMethod.GET, value = "/api/users/{loginOrId}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "5000")
     ResponseEntity<AssertionServiceUser> getUser(@PathVariable("loginOrId") String loginOrId);
-    
+
     @RequestMapping(method = RequestMethod.POST, value = "/api/users", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "5000")
     ResponseEntity<Void> registerUser(Map<String, ?> queryMap);
@@ -27,7 +27,7 @@ public interface UserServiceClient {
     @RequestMapping(method = RequestMethod.PUT, value = "/api/users", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "5000")
     ResponseEntity<String> updateUser(Map<String, ?> queryMap);
-    
+
     @RequestMapping(method = RequestMethod.GET, value = "/api/users/salesforce/{salesforceId}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "5000")
     ResponseEntity<List<AssertionServiceUser>> getUsersBySalesforceId(@PathVariable("salesforceId") String salesforceId);

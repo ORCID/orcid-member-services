@@ -30,7 +30,7 @@ public class OrcidUrlValidator extends UrlValidator {
     private static final Pattern PORT_PATTERN = Pattern.compile(PORT_REGEX);
 
     public OrcidUrlValidator(String[] urlValschemes) {
-        super(urlValschemes,UrlValidator.ALLOW_2_SLASHES);
+        super(urlValschemes, UrlValidator.ALLOW_2_SLASHES);
     }
 
     protected boolean isValidAuthority(String authority) {
@@ -72,4 +72,3 @@ public class OrcidUrlValidator extends UrlValidator {
     }
 
 }
-

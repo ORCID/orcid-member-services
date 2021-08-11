@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
-    
+
     @Autowired
     private MemberService memberService;
-    
+
     public User toUser(UserDTO userDTO) {
         User user = new User();
         user.setFirstName(userDTO.getFirstName());
@@ -30,7 +30,7 @@ public class UserMapper {
         user.setLoginAs(userDTO.getLoginAs());
         return user;
     }
-    
+
     public UserDTO toUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setFirstName(user.getFirstName());

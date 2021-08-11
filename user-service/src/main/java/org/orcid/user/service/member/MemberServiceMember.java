@@ -3,78 +3,78 @@ package org.orcid.user.service.member;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 public class MemberServiceMember {
-	
-	 	@Field("client_id")
-	    private String clientId;
 
-	    @Field("salesforce_id")
-	    private String salesforceId;
+    @Field("client_id")
+    private String clientId;
 
-	    @Field("parent_salesforce_id")
-	    private String parentSalesforceId;
+    @Field("salesforce_id")
+    private String salesforceId;
 
-	    @Field("client_name")
-	    private String clientName;
+    @Field("parent_salesforce_id")
+    private String parentSalesforceId;
 
-	    @Field("assertion_service_enabled")
-	    private Boolean assertionServiceEnabled;
-	    
-	    @Field("superadmin_enabled")
-	    private Boolean superadminEnabled;
-	    
-	    @Field("is_consortium_lead")
-	    private Boolean isConsortiumLead;
+    @Field("client_name")
+    private String clientName;
 
-		public Boolean getIsConsortiumLead() {
-			return isConsortiumLead;
-		}
+    @Field("assertion_service_enabled")
+    private Boolean assertionServiceEnabled;
 
-		public void setIsConsortiumLead(Boolean isConsortiumLead) {
-			this.isConsortiumLead = isConsortiumLead;
-		}
+    @Field("superadmin_enabled")
+    private Boolean superadminEnabled;
 
-		public String getClientId() {
-			return clientId;
-		}
+    @Field("is_consortium_lead")
+    private Boolean isConsortiumLead;
 
-		public void setClientId(String clientId) {
-			this.clientId = clientId;
-		}
+    public Boolean getIsConsortiumLead() {
+        return isConsortiumLead;
+    }
 
-		public String getSalesforceId() {
-			return salesforceId;
-		}
+    public void setIsConsortiumLead(Boolean isConsortiumLead) {
+        this.isConsortiumLead = isConsortiumLead;
+    }
 
-		public void setSalesforceId(String salesforceId) {
-			this.salesforceId = salesforceId;
-		}
+    public String getClientId() {
+        return clientId;
+    }
 
-		public String getParentSalesforceId() {
-			return parentSalesforceId;
-		}
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
 
-		public void setParentSalesforceId(String parentSalesforceId) {
-			this.parentSalesforceId = parentSalesforceId;
-		}
+    public String getSalesforceId() {
+        return salesforceId;
+    }
 
-		public String getClientName() {
-			return clientName;
-		}
+    public void setSalesforceId(String salesforceId) {
+        this.salesforceId = salesforceId;
+    }
 
-		public void setClientName(String clientName) {
-			this.clientName = clientName;
-		}
+    public String getParentSalesforceId() {
+        return parentSalesforceId;
+    }
 
-		public Boolean getAssertionServiceEnabled() {
-			return assertionServiceEnabled;
-		}
+    public void setParentSalesforceId(String parentSalesforceId) {
+        this.parentSalesforceId = parentSalesforceId;
+    }
 
-		public void setAssertionServiceEnabled(Boolean assertionServiceEnabled) {
-			this.assertionServiceEnabled = assertionServiceEnabled;
-		}
-		
-		public Boolean getSuperadminEnabled() {
-			return superadminEnabled;
-		}
-	    
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public Boolean getAssertionServiceEnabled() {
+        return assertionServiceEnabled;
+    }
+
+    public void setAssertionServiceEnabled(Boolean assertionServiceEnabled) {
+        this.assertionServiceEnabled = assertionServiceEnabled;
+    }
+
+    public Boolean getSuperadminEnabled() {
+        return superadminEnabled;
+    }
+
 }

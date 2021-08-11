@@ -11,7 +11,8 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import java.util.Map;
 
 /**
- * Improved {@link JwtAccessTokenConverter} that can handle lazy fetching of public verifier keys.
+ * Improved {@link JwtAccessTokenConverter} that can handle lazy fetching of
+ * public verifier keys.
  */
 public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
     private final Logger log = LoggerFactory.getLogger(OAuth2JwtAccessTokenConverter.class);
@@ -30,18 +31,20 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
     }
 
     /**
-     * Try to decode the token with the current public key.
-     * If it fails, contact the OAuth2 server to get a new public key, then try again.
-     * We might not have fetched it in the first place or it might have changed.
+     * Try to decode the token with the current public key. If it fails, contact
+     * the OAuth2 server to get a new public key, then try again. We might not
+     * have fetched it in the first place or it might have changed.
      *
-     * @param token the JWT token to decode.
+     * @param token
+     *            the JWT token to decode.
      * @return the resulting claims.
-     * @throws InvalidTokenException if we cannot decode the token.
+     * @throws InvalidTokenException
+     *             if we cannot decode the token.
      */
     @Override
     protected Map<String, Object> decode(String token) {
         try {
-            //check if our public key and thus SignatureVerifier have expired
+            // check if our public key and thus SignatureVerifier have expired
             long ttl = oAuth2Properties.getSignatureVerification().getTtl();
             if (ttl > 0 && System.currentTimeMillis() - lastKeyFetchTimestamp > ttl) {
                 throw new InvalidTokenException("public key expired");
@@ -78,6 +81,7 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
         }
         return false;
     }
+
     /**
      * Extract JWT claims and set it to OAuth2Authentication decoded details.
      * Here is how to get details:
@@ -96,8 +100,10 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
      *      }
      *  }
      * </code>
-     *  </pre>
-     * @param claims OAuth2JWTToken claims.
+     * </pre>
+     * 
+     * @param claims
+     *            OAuth2JWTToken claims.
      * @return {@link OAuth2Authentication}.
      */
     @Override

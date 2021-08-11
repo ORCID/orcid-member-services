@@ -13,104 +13,104 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
 
-	private String orcidOrgClientId;
+    private String orcidOrgClientId;
 
-	private String orcidOrgSalesForceId;
+    private String orcidOrgSalesForceId;
 
-	private String chartioOrgId;
+    private String chartioOrgId;
 
-	private String chartioSecret;
+    private String chartioSecret;
 
-	private String chartioMemberDashboardId;
+    private String chartioMemberDashboardId;
 
-	private String chartioMemberDashboardUrl;
+    private String chartioMemberDashboardUrl;
 
-	private String chartioIntegrationDashboardId;
+    private String chartioIntegrationDashboardId;
 
-	private String chartioIntegrationDashboardUrl;
-	
-	private String chartioConsortiumDashboardId;
+    private String chartioIntegrationDashboardUrl;
 
-	private String chartioConsortiumDashboardUrl;
-	
-	public String getOrcidOrgClientId() {
-		return orcidOrgClientId;
-	}
+    private String chartioConsortiumDashboardId;
 
-	public void setOrcidOrgClientId(String orcidOrgClientId) {
-		this.orcidOrgClientId = orcidOrgClientId;
-	}
+    private String chartioConsortiumDashboardUrl;
 
-	public String getOrcidOrgSalesForceId() {
-		return orcidOrgSalesForceId;
-	}
+    public String getOrcidOrgClientId() {
+        return orcidOrgClientId;
+    }
 
-	public void setOrcidOrgSalesForceId(String orcidOrgSalesForceId) {
-		this.orcidOrgSalesForceId = orcidOrgSalesForceId;
-	}
+    public void setOrcidOrgClientId(String orcidOrgClientId) {
+        this.orcidOrgClientId = orcidOrgClientId;
+    }
 
-	public String getChartioOrgId() {
-		return chartioOrgId;
-	}
+    public String getOrcidOrgSalesForceId() {
+        return orcidOrgSalesForceId;
+    }
 
-	public void setChartioOrgId(String chartioOrgId) {
-		this.chartioOrgId = chartioOrgId;
-	}
+    public void setOrcidOrgSalesForceId(String orcidOrgSalesForceId) {
+        this.orcidOrgSalesForceId = orcidOrgSalesForceId;
+    }
 
-	public String getChartioSecret() {
-		return chartioSecret;
-	}
+    public String getChartioOrgId() {
+        return chartioOrgId;
+    }
 
-	public void setChartioSecret(String chartioSecret) {
-		this.chartioSecret = chartioSecret;
-	}
+    public void setChartioOrgId(String chartioOrgId) {
+        this.chartioOrgId = chartioOrgId;
+    }
 
-	public String getChartioMemberDashboardId() {
-		return chartioMemberDashboardId;
-	}
+    public String getChartioSecret() {
+        return chartioSecret;
+    }
 
-	public void setChartioMemberDashboardId(String chartioMemberDashboardId) {
-		this.chartioMemberDashboardId = chartioMemberDashboardId;
-	}
+    public void setChartioSecret(String chartioSecret) {
+        this.chartioSecret = chartioSecret;
+    }
 
-	public String getChartioMemberDashboardUrl() {
-		return chartioMemberDashboardUrl;
-	}
+    public String getChartioMemberDashboardId() {
+        return chartioMemberDashboardId;
+    }
 
-	public void setChartioMemberDashboardUrl(String chartioMemberDashboardUrl) {
-		this.chartioMemberDashboardUrl = chartioMemberDashboardUrl;
-	}
+    public void setChartioMemberDashboardId(String chartioMemberDashboardId) {
+        this.chartioMemberDashboardId = chartioMemberDashboardId;
+    }
 
-	public String getChartioIntegrationDashboardId() {
-		return chartioIntegrationDashboardId;
-	}
+    public String getChartioMemberDashboardUrl() {
+        return chartioMemberDashboardUrl;
+    }
 
-	public void setChartioIntegrationDashboardId(String chartioIntegrationDashboardId) {
-		this.chartioIntegrationDashboardId = chartioIntegrationDashboardId;
-	}
+    public void setChartioMemberDashboardUrl(String chartioMemberDashboardUrl) {
+        this.chartioMemberDashboardUrl = chartioMemberDashboardUrl;
+    }
 
-	public String getChartioIntegrationDashboardUrl() {
-		return chartioIntegrationDashboardUrl;
-	}
+    public String getChartioIntegrationDashboardId() {
+        return chartioIntegrationDashboardId;
+    }
 
-	public void setChartioIntegrationDashboardUrl(String chartioIntegrationDashboardUrl) {
-		this.chartioIntegrationDashboardUrl = chartioIntegrationDashboardUrl;
-	}
+    public void setChartioIntegrationDashboardId(String chartioIntegrationDashboardId) {
+        this.chartioIntegrationDashboardId = chartioIntegrationDashboardId;
+    }
 
-	public String getChartioConsortiumDashboardId() {
-		return chartioConsortiumDashboardId;
-	}
+    public String getChartioIntegrationDashboardUrl() {
+        return chartioIntegrationDashboardUrl;
+    }
 
-	public void setChartioConsortiumDashboardId(String chartioConsortiumDashboardId) {
-		this.chartioConsortiumDashboardId = chartioConsortiumDashboardId;
-	}
+    public void setChartioIntegrationDashboardUrl(String chartioIntegrationDashboardUrl) {
+        this.chartioIntegrationDashboardUrl = chartioIntegrationDashboardUrl;
+    }
 
-	public String getChartioConsortiumDashboardUrl() {
-		return chartioConsortiumDashboardUrl;
-	}
+    public String getChartioConsortiumDashboardId() {
+        return chartioConsortiumDashboardId;
+    }
 
-	public void setChartioConsortiumDashboardUrl(String chartioConsortiumDashboardUrl) {
-		this.chartioConsortiumDashboardUrl = chartioConsortiumDashboardUrl;
-	}
-	
+    public void setChartioConsortiumDashboardId(String chartioConsortiumDashboardId) {
+        this.chartioConsortiumDashboardId = chartioConsortiumDashboardId;
+    }
+
+    public String getChartioConsortiumDashboardUrl() {
+        return chartioConsortiumDashboardUrl;
+    }
+
+    public void setChartioConsortiumDashboardUrl(String chartioConsortiumDashboardUrl) {
+        this.chartioConsortiumDashboardUrl = chartioConsortiumDashboardUrl;
+    }
+
 }

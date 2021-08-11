@@ -82,8 +82,7 @@ public class CustomAuditEventRepositoryIT {
         assertThat(persistentAuditEvent.getAuditEventType()).isEqualTo(event.getType());
         assertThat(persistentAuditEvent.getData()).containsKey("test-key");
         assertThat(persistentAuditEvent.getData().get("test-key")).isEqualTo("test-value");
-        assertThat(persistentAuditEvent.getAuditEventDate().truncatedTo(ChronoUnit.MILLIS))
-            .isEqualTo(event.getTimestamp().truncatedTo(ChronoUnit.MILLIS));
+        assertThat(persistentAuditEvent.getAuditEventDate().truncatedTo(ChronoUnit.MILLIS)).isEqualTo(event.getTimestamp().truncatedTo(ChronoUnit.MILLIS));
     }
 
     @Test
@@ -105,8 +104,7 @@ public class CustomAuditEventRepositoryIT {
         String actualData = persistentAuditEvent.getData().get("test-key");
         assertThat(actualData.length()).isEqualTo(EVENT_DATA_COLUMN_MAX_LENGTH);
         assertThat(actualData).isSubstringOf(largeData);
-        assertThat(persistentAuditEvent.getAuditEventDate().truncatedTo(ChronoUnit.MILLIS))
-            .isEqualTo(event.getTimestamp().truncatedTo(ChronoUnit.MILLIS));
+        assertThat(persistentAuditEvent.getAuditEventDate().truncatedTo(ChronoUnit.MILLIS)).isEqualTo(event.getTimestamp().truncatedTo(ChronoUnit.MILLIS));
     }
 
     @Test

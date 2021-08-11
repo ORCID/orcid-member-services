@@ -30,7 +30,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     Optional<User> findOneById(String id);
 
     Page<User> findAllByEmailNot(Pageable pageable, String email);
-    
+
     List<User> findAllByEmailIgnoreCase(String email);
 
     List<User> findBySalesforceIdAndDeletedIsFalse(String salesforceId);

@@ -103,8 +103,7 @@ public class UserService {
 
     public boolean expiredResetKey(String key) {
         Optional<User> resetUser = userRepository.findOneByResetKey(key);
-        return resetUser.isPresent()
-                && !resetUser.get().getResetDate().isAfter(Instant.now().minusSeconds(RESET_KEY_LIFESPAN_IN_SECONDS));
+        return resetUser.isPresent() && !resetUser.get().getResetDate().isAfter(Instant.now().minusSeconds(RESET_KEY_LIFESPAN_IN_SECONDS));
     }
 
     public void resendActivationEmail(String previousKey) {
@@ -185,11 +184,16 @@ public class UserService {
      * Update basic information (first name, last name, email, language) for the
      * current user.
      *
-     * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     * @param imageUrl  image URL of user.
+     * @param firstName
+     *            first name of user.
+     * @param lastName
+     *            last name of user.
+     * @param email
+     *            email id of user.
+     * @param langKey
+     *            language key.
+     * @param imageUrl
+     *            image URL of user.
      */
     public void updateAccount(String firstName, String lastName, String email, String langKey, String imageUrl) {
         User user = getCurrentUser();
@@ -205,7 +209,8 @@ public class UserService {
     /**
      * Update all information for a specific user, and return the modified user.
      *
-     * @param userDTO user to update.
+     * @param userDTO
+     *            user to update.
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
@@ -216,8 +221,7 @@ public class UserService {
         boolean owner = userDTO.getMainContact() != null ? userDTO.getMainContact() : false;
 
         if (owner && !previouslyOwner) {
-            List<User> owners = userRepository
-                    .findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
+            List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
             for (User prevOwner : owners) {
                 if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
                     removeOwnershipFromUser(prevOwner.getEmail());
@@ -245,9 +249,8 @@ public class UserService {
             user.setActivationDate(Instant.now());
             mailService.sendActivationEmail(user);
         }
-        
-        if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null
-                && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
+
+        if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
             user.setSalesforceId(userDTO.getSalesforceId());
             user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
             user.setLastModifiedDate(Instant.now());
@@ -256,12 +259,12 @@ public class UserService {
         userRepository.save(user);
         userCaches.evictEntryFromEmailCache(user.getEmail());
         userCaches.evictEntryFromEmailCache(user.getEmail());
-        
+
         if (owner && !previouslyOwner) {
             String member = memberService.getMemberNameBySalesforce(user.getSalesforceId());
             mailService.sendOrganizationOwnerChangedMail(user, member);
         }
-        
+
         return Optional.of(userMapper.toUserDTO(user));
     }
 
@@ -365,8 +368,7 @@ public class UserService {
 
         User user = existing.get();
         if (user.getAuthorities() != null && !user.getAuthorities().isEmpty()) {
-            user.setAuthorities(
-                    user.getAuthorities().stream().filter(a -> !a.equals(authority)).collect(Collectors.toSet()));
+            user.setAuthorities(user.getAuthorities().stream().filter(a -> !a.equals(authority)).collect(Collectors.toSet()));
         }
         userRepository.save(user);
     }
@@ -379,8 +381,7 @@ public class UserService {
 
         User user = existing.get();
         if (user.getAuthorities() != null && !user.getAuthorities().isEmpty()) {
-            user.setAuthorities(user.getAuthorities().stream().filter(a -> !a.equals(AuthoritiesConstants.ORG_OWNER))
-                    .collect(Collectors.toSet()));
+            user.setAuthorities(user.getAuthorities().stream().filter(a -> !a.equals(AuthoritiesConstants.ORG_OWNER)).collect(Collectors.toSet()));
         }
         user.setMainContact(false);
         userRepository.save(user);
@@ -393,12 +394,11 @@ public class UserService {
      */
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
-        userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
-                Instant.now().minus(3, ChronoUnit.DAYS)).forEach(user -> {
-                    LOG.debug("Deleting not activated user {}", user.getEmail());
-                    userRepository.delete(user);
-                    userCaches.evictEntryFromEmailCache(user.getEmail());
-                });
+        userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS)).forEach(user -> {
+            LOG.debug("Deleting not activated user {}", user.getEmail());
+            userRepository.delete(user);
+            userCaches.evictEntryFromEmailCache(user.getEmail());
+        });
     }
 
     /**
@@ -437,8 +437,7 @@ public class UserService {
         usersUpload.getUserDTOs().forEach(userDTO -> {
             String salesforceId = userDTO.getSalesforceId();
             Optional<User> existing = getUserWithAuthoritiesByLogin(userDTO.getEmail());
-            if (!existing.isPresent()
-                    && !userRepository.findOneBySalesforceIdAndMainContactIsTrue(salesforceId).isPresent()) {
+            if (!existing.isPresent() && !userRepository.findOneBySalesforceIdAndMainContactIsTrue(salesforceId).isPresent()) {
                 userDTO.setMainContact(true);
                 createUser(userDTO);
             }
@@ -460,8 +459,7 @@ public class UserService {
     }
 
     public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId) {
-        return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId)
-                .map(u -> userMapper.toUserDTO(u));
+        return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId).map(u -> userMapper.toUserDTO(u));
 
     }
 
@@ -511,8 +509,7 @@ public class UserService {
      * @return
      */
     public User getCurrentUser() {
-        String login = SecurityUtils.getCurrentUserLogin()
-                .orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<User> user = userRepository.findOneByEmailIgnoreCase(login);
 
         if (StringUtils.isEmpty(user.get().getLoginAs())) {

@@ -52,9 +52,9 @@ public class AsyncConfiguration implements AsyncConfigurer {
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
         return new SimpleAsyncUncaughtExceptionHandler();
     }
-    
+
     @Bean
-	public LockProvider lockProvider(MongoClient client, MongoProperties mongoProperties) {
-	    return new MongoLockProvider(client.getDatabase(mongoProperties.getDatabase()));
-	}
+    public LockProvider lockProvider(MongoClient client, MongoProperties mongoProperties) {
+        return new MongoLockProvider(client.getDatabase(mongoProperties.getDatabase()));
+    }
 }

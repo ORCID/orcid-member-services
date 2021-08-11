@@ -251,10 +251,9 @@ public class Member implements Serializable {
 
     @Override
     public String toString() {
-        return "Member [id=" + id + ", clientId=" + clientId + ", salesforceId=" + salesforceId
-                + ", parentSalesforceId=" + parentSalesforceId + ", clientName=" + clientName + ", isConsortiumLead="
-                + isConsortiumLead + ", assertionServiceEnabled=" + assertionServiceEnabled + ", superadminEnabled="
-                + superadminEnabled + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy="
-                + lastModifiedBy + ", lastModifiedDate=" + lastModifiedDate + "]";
+        return "Member [id=" + id + ", clientId=" + clientId + ", salesforceId=" + salesforceId + ", parentSalesforceId=" + parentSalesforceId + ", clientName="
+                + clientName + ", isConsortiumLead=" + isConsortiumLead + ", assertionServiceEnabled=" + assertionServiceEnabled + ", superadminEnabled="
+                + superadminEnabled + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate="
+                + lastModifiedDate + "]";
     }
 }

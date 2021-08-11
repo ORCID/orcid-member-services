@@ -27,32 +27,24 @@ public class ClientForwardControllerIT {
     @BeforeEach
     public void setup() {
         ClientForwardController clientForwardController = new ClientForwardController();
-        this.restMockMvc = MockMvcBuilders
-            .standaloneSetup(clientForwardController, new TestController())
-            .build();
+        this.restMockMvc = MockMvcBuilders.standaloneSetup(clientForwardController, new TestController()).build();
     }
 
     @Test
     public void getBackendEndpoint() throws Exception {
-        restMockMvc.perform(get("/test"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN_VALUE))
-            .andExpect(content().string("test"));
+        restMockMvc.perform(get("/test")).andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN_VALUE))
+                .andExpect(content().string("test"));
     }
 
     @Test
     public void getClientEndpoint() throws Exception {
         ResultActions perform = restMockMvc.perform(get("/non-existant-mapping"));
-        perform
-            .andExpect(status().isOk())
-            .andExpect(forwardedUrl("/"));
+        perform.andExpect(status().isOk()).andExpect(forwardedUrl("/"));
     }
 
     @Test
     public void getNestedClientEndpoint() throws Exception {
-        restMockMvc.perform(get("/admin/user-management"))
-            .andExpect(status().isOk())
-            .andExpect(forwardedUrl("/"));
+        restMockMvc.perform(get("/admin/user-management")).andExpect(status().isOk()).andExpect(forwardedUrl("/"));
     }
 
     @RestController

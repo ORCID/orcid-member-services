@@ -64,7 +64,7 @@ public class UserDTO {
     private boolean isLoggedAs = false;
 
     private String loginAs;
-    
+
     private String memberName;
 
     public UserDTO() {
@@ -238,7 +238,7 @@ public class UserDTO {
     public void setLoginAs(String loginAs) {
         this.loginAs = loginAs;
     }
-    
+
     public String getMemberName() {
         return memberName;
     }
@@ -339,9 +339,9 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "UserDTO{firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\'' + ", imageUrl='"
-                + imageUrl + '\'' + ", activated=" + activated + ", langKey='" + langKey + '\'' + ", createdBy=" + createdBy + ", createdDate=" + createdDate
-                + ", lastModifiedBy='" + lastModifiedBy + '\'' + ", lastModifiedDate=" + lastModifiedDate + ", authorities=" + authorities + " loginAs= " + loginAs
-                + " isLoggedAs= " + isLoggedAs + ", mainContact='" + mainContact + '\'' + "}";
+        return "UserDTO{firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\'' + ", imageUrl='" + imageUrl + '\''
+                + ", activated=" + activated + ", langKey='" + langKey + '\'' + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy='"
+                + lastModifiedBy + '\'' + ", lastModifiedDate=" + lastModifiedDate + ", authorities=" + authorities + " loginAs= " + loginAs + " isLoggedAs= "
+                + isLoggedAs + ", mainContact='" + mainContact + '\'' + "}";
     }
 }

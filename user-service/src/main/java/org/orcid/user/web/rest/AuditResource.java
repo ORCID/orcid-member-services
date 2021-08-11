@@ -34,10 +34,14 @@ public class AuditResource {
     /**
      * {@code GET /audits} : get a page of {@link AuditEvent}s.
      *
-     * @param queryParams a {@link MultiValueMap} query parameters.
-     * @param uriBuilder a {@link UriComponentsBuilder} URI builder.
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of {@link AuditEvent}s in body.
+     * @param queryParams
+     *            a {@link MultiValueMap} query parameters.
+     * @param uriBuilder
+     *            a {@link UriComponentsBuilder} URI builder.
+     * @param pageable
+     *            the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the
+     *         list of {@link AuditEvent}s in body.
      */
     @GetMapping
     public ResponseEntity<List<AuditEvent>> getAll(@RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder, Pageable pageable) {
@@ -47,26 +51,28 @@ public class AuditResource {
     }
 
     /**
-     * {@code GET  /audits} : get a page of {@link AuditEvent} between the {@code fromDate} and {@code toDate}.
+     * {@code GET  /audits} : get a page of {@link AuditEvent} between the
+     * {@code fromDate} and {@code toDate}.
      *
-     * @param fromDate the start of the time period of {@link AuditEvent} to get.
-     * @param toDate the end of the time period of {@link AuditEvent} to get.
-     * @param queryParams a {@link MultiValueMap} query parameters.
-     * @param uriBuilder a {@link UriComponentsBuilder} URI builder.
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of {@link AuditEvent} in body.
+     * @param fromDate
+     *            the start of the time period of {@link AuditEvent} to get.
+     * @param toDate
+     *            the end of the time period of {@link AuditEvent} to get.
+     * @param queryParams
+     *            a {@link MultiValueMap} query parameters.
+     * @param uriBuilder
+     *            a {@link UriComponentsBuilder} URI builder.
+     * @param pageable
+     *            the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the
+     *         list of {@link AuditEvent} in body.
      */
-    @GetMapping(params = {"fromDate", "toDate"})
-    public ResponseEntity<List<AuditEvent>> getByDates(
-        @RequestParam(value = "fromDate") LocalDate fromDate,
-        @RequestParam(value = "toDate") LocalDate toDate,
-        @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder,
-        Pageable pageable) {
+    @GetMapping(params = { "fromDate", "toDate" })
+    public ResponseEntity<List<AuditEvent>> getByDates(@RequestParam(value = "fromDate") LocalDate fromDate, @RequestParam(value = "toDate") LocalDate toDate,
+            @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder, Pageable pageable) {
 
-        Page<AuditEvent> page = auditEventService.findByDates(
-            fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant(),
-            toDate.atStartOfDay(ZoneId.systemDefault()).plusDays(1).toInstant(),
-            pageable);
+        Page<AuditEvent> page = auditEventService.findByDates(fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant(),
+                toDate.atStartOfDay(ZoneId.systemDefault()).plusDays(1).toInstant(), pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -74,8 +80,10 @@ public class AuditResource {
     /**
      * {@code GET  /audits/:id} : get an {@link AuditEvent} by id.
      *
-     * @param id the id of the entity to get.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the {@link AuditEvent} in body, or status {@code 404 (Not Found)}.
+     * @param id
+     *            the id of the entity to get.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the
+     *         {@link AuditEvent} in body, or status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id:.+}")
     public ResponseEntity<AuditEvent> get(@PathVariable String id) {

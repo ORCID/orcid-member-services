@@ -34,16 +34,12 @@ public class OAuth2AuthenticationConfiguration extends ResourceServerConfigurerA
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
-            .antMatchers("/auth/login").permitAll()
-            .antMatchers("/auth/logout").authenticated()
-            .and()
-            .apply(refreshTokenSecurityConfigurerAdapter());
+        http.authorizeRequests().antMatchers("/auth/login").permitAll().antMatchers("/auth/logout").authenticated().and().apply(refreshTokenSecurityConfigurerAdapter());
     }
 
     /**
-     * A {@code SecurityConfigurerAdapter} to install a servlet filter that refreshes OAuth2 tokens.
+     * A {@code SecurityConfigurerAdapter} to install a servlet filter that
+     * refreshes OAuth2 tokens.
      */
     private RefreshTokenFilterConfigurer refreshTokenSecurityConfigurerAdapter() {
         return new RefreshTokenFilterConfigurer(uaaAuthenticationService(), tokenStore);
@@ -60,7 +56,8 @@ public class OAuth2AuthenticationConfiguration extends ResourceServerConfigurerA
     }
 
     /**
-     * Configure the ResourceServer security by installing a new {@link TokenExtractor}.
+     * Configure the ResourceServer security by installing a new
+     * {@link TokenExtractor}.
      */
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
@@ -68,7 +65,8 @@ public class OAuth2AuthenticationConfiguration extends ResourceServerConfigurerA
     }
 
     /**
-     * The new {@link TokenExtractor} can extract tokens from Cookies and Authorization headers.
+     * The new {@link TokenExtractor} can extract tokens from Cookies and
+     * Authorization headers.
      *
      * @return the {@link CookieTokenExtractor} bean.
      */

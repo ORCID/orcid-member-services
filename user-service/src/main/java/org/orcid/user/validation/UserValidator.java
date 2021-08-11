@@ -46,8 +46,7 @@ public class UserValidator {
             errors.add(getError("missingSalesforceId", currentUser));
         } else if (!userService.memberExists(salesforceId)) {
             errors.add(getError("invalidSalesforceId", salesforceId, currentUser));
-        } else if (user.getIsAdmin() == true && user.getSalesforceId() != null
-                && !userService.memberSuperadminEnabled(user.getSalesforceId())) {
+        } else if (user.getIsAdmin() == true && user.getSalesforceId() != null && !userService.memberSuperadminEnabled(user.getSalesforceId())) {
             errors.add(getError("superAdminNotAllowed", currentUser));
         }
     }
@@ -75,8 +74,7 @@ public class UserValidator {
     }
 
     private String getError(String code, String arg, User user) {
-        return messageSource.getMessage("user.validation.error." + code, arg != null ? new Object[] { arg } : null,
-                Locale.forLanguageTag(user.getLangKey()));
+        return messageSource.getMessage("user.validation.error." + code, arg != null ? new Object[] { arg } : null, Locale.forLanguageTag(user.getLangKey()));
     }
 
 }

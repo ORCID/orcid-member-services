@@ -46,8 +46,7 @@ public class AssertionsForEditCsvWriterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforceId");
-        when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforceId"), Mockito.any(Sort.class)))
-                .thenReturn(getListOfAsserions());
+        when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforceId"), Mockito.any(Sort.class))).thenReturn(getListOfAsserions());
         when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getDummyOrcidRecord());
     }
 

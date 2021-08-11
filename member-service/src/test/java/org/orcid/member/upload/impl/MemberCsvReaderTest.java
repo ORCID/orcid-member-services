@@ -23,63 +23,62 @@ import org.springframework.context.MessageSource;
 
 class MemberCsvReaderTest {
 
-	@Mock
-	private MessageSource messageSource;
+    @Mock
+    private MessageSource messageSource;
 
-	@Mock
-	private MemberValidator memberValidator;
+    @Mock
+    private MemberValidator memberValidator;
 
-	@BeforeEach
-	public void setUp() {
-		MockitoAnnotations.initMocks(this);
-	}
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
 
-	@InjectMocks
-	private MemberCsvReader reader;
+    @InjectMocks
+    private MemberCsvReader reader;
 
-	@Test
-	void testReadMembersUpload() throws IOException {
-		Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class)))
-				.thenReturn(getValidValidation());
+    @Test
+    void testReadMembersUpload() throws IOException {
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
 
-		InputStream inputStream = getClass().getResourceAsStream("/members.csv");
-		MemberUpload upload = reader.readMemberUpload(inputStream, getUser());
+        InputStream inputStream = getClass().getResourceAsStream("/members.csv");
+        MemberUpload upload = reader.readMemberUpload(inputStream, getUser());
 
-		assertEquals(2, upload.getMembers().size());
+        assertEquals(2, upload.getMembers().size());
 
-		Member one = upload.getMembers().get(0);
-		Member two = upload.getMembers().get(1);
+        Member one = upload.getMembers().get(0);
+        Member two = upload.getMembers().get(1);
 
-		assertTrue(one.getAssertionServiceEnabled());
-		assertFalse(two.getAssertionServiceEnabled());
+        assertTrue(one.getAssertionServiceEnabled());
+        assertFalse(two.getAssertionServiceEnabled());
 
-		assertEquals("XXXX-XXXX-XXXX-XXX1", one.getClientId());
-		assertEquals("XXXX-XXXX-XXXX-XXX2", two.getClientId());
+        assertEquals("XXXX-XXXX-XXXX-XXX1", one.getClientId());
+        assertEquals("XXXX-XXXX-XXXX-XXX2", two.getClientId());
 
-		assertFalse(one.getIsConsortiumLead());
-		assertFalse(two.getIsConsortiumLead());
+        assertFalse(one.getIsConsortiumLead());
+        assertFalse(two.getIsConsortiumLead());
 
-		assertEquals("salesforce-1", one.getSalesforceId());
-		assertEquals("salesforce-2", two.getSalesforceId());
+        assertEquals("salesforce-1", one.getSalesforceId());
+        assertEquals("salesforce-2", two.getSalesforceId());
 
-		assertEquals("salesforce-parent", one.getParentSalesforceId());
-		assertEquals("salesforce-parent", two.getParentSalesforceId());
+        assertEquals("salesforce-parent", one.getParentSalesforceId());
+        assertEquals("salesforce-parent", two.getParentSalesforceId());
 
-		assertEquals("some-client-name", one.getClientName());
-		assertEquals("some-other-client-name", two.getClientName());
-	}
+        assertEquals("some-client-name", one.getClientName());
+        assertEquals("some-other-client-name", two.getClientName());
+    }
 
-	private MemberValidation getValidValidation() {
-		MemberValidation validation = new MemberValidation();
-		validation.setErrors(new ArrayList<>());
-		validation.setValid(true);
-		return validation;
-	}
+    private MemberValidation getValidValidation() {
+        MemberValidation validation = new MemberValidation();
+        validation.setErrors(new ArrayList<>());
+        validation.setValid(true);
+        return validation;
+    }
 
-	private MemberServiceUser getUser() {
-		MemberServiceUser user = new MemberServiceUser();
-		user.setLangKey("en");
-		return user;
-	}
+    private MemberServiceUser getUser() {
+        MemberServiceUser user = new MemberServiceUser();
+        user.setLangKey("en");
+        return user;
+    }
 
 }

@@ -6,56 +6,56 @@ import java.util.List;
 
 public class AssertionsUploadSummary implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private int numAdded;
-	
-	private int numUpdated;
-	
-	private int numDeleted;
-	
-	private int numDuplicates;
-	
-	List<AssertionsUploadError> errors = new ArrayList<>();
+    private int numAdded;
 
-	public int getNumAdded() {
-		return numAdded;
-	}
+    private int numUpdated;
 
-	public void setNumAdded(int numAdded) {
-		this.numAdded = numAdded;
-	}
+    private int numDeleted;
 
-	public int getNumUpdated() {
-		return numUpdated;
-	}
+    private int numDuplicates;
 
-	public void setNumUpdated(int numUpdated) {
-		this.numUpdated = numUpdated;
-	}
+    List<AssertionsUploadError> errors = new ArrayList<>();
 
-	public int getNumDeleted() {
-		return numDeleted;
-	}
+    public int getNumAdded() {
+        return numAdded;
+    }
 
-	public void setNumDeleted(int numDeleted) {
-		this.numDeleted = numDeleted;
-	}
+    public void setNumAdded(int numAdded) {
+        this.numAdded = numAdded;
+    }
 
-	public int getNumDuplicates() {
-		return numDuplicates;
-	}
+    public int getNumUpdated() {
+        return numUpdated;
+    }
 
-	public void setNumDuplicates(int numDuplicates) {
-		this.numDuplicates = numDuplicates;
-	}
+    public void setNumUpdated(int numUpdated) {
+        this.numUpdated = numUpdated;
+    }
 
-	public List<AssertionsUploadError> getErrors() {
-		return errors;
-	}
+    public int getNumDeleted() {
+        return numDeleted;
+    }
 
-	public void setErrors(List<AssertionsUploadError> errors) {
-		this.errors = errors;
-	}
+    public void setNumDeleted(int numDeleted) {
+        this.numDeleted = numDeleted;
+    }
+
+    public int getNumDuplicates() {
+        return numDuplicates;
+    }
+
+    public void setNumDuplicates(int numDuplicates) {
+        this.numDuplicates = numDuplicates;
+    }
+
+    public List<AssertionsUploadError> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<AssertionsUploadError> errors) {
+        this.errors = errors;
+    }
 
 }

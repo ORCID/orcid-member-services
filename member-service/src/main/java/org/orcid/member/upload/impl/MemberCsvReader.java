@@ -104,8 +104,7 @@ public class MemberCsvReader implements MembersUploadReader {
     }
 
     private String getError(String code, String arg, MemberServiceUser user) {
-        return messageSource.getMessage("member.validation.error." + code, arg != null ? new Object[] { arg } : null,
-                Locale.forLanguageTag(user.getLangKey()));
+        return messageSource.getMessage("member.validation.error." + code, arg != null ? new Object[] { arg } : null, Locale.forLanguageTag(user.getLangKey()));
     }
 
 }

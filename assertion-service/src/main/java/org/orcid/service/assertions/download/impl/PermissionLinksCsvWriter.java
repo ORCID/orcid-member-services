@@ -18,48 +18,48 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PermissionLinksCsvWriter extends CsvWriter {
-	
-	@Autowired
-	private EncryptUtil encryptUtil;
 
-	@Autowired
-	private ApplicationProperties applicationProperties;
-	
-	@Autowired
-	private OrcidRecordService orcidRecordService;
+    @Autowired
+    private EncryptUtil encryptUtil;
 
-	@Autowired
-	private UserService assertionsUserService;
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
-	@Autowired
-	private AssertionRepository assertionsRepository;
+    @Autowired
+    private OrcidRecordService orcidRecordService;
 
-	@Override
-	public String writeCsv() throws IOException {
-		String landingPageUrl = applicationProperties.getLandingPageUrl();
-		StringBuffer buffer = new StringBuffer();
-		CSVPrinter csvPrinter = getCSVPrinterWithHeaders(buffer);
-		
-		String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
-		List<OrcidRecord> records = orcidRecordService.getRecordsWithoutTokens(salesForceId);
+    @Autowired
+    private UserService assertionsUserService;
 
-		for (OrcidRecord record : records) {
-			String email = record.getEmail();
-			List<Assertion> assertions = assertionsRepository.findByEmailAndSalesforceId(email, salesForceId);
-			if (assertions.size() > 0) {
-				String encrypted = encryptUtil.encrypt(salesForceId + "&&" + email);
-				String link = landingPageUrl + "?state=" + encrypted;
-				csvPrinter.printRecord(email, link);
-			}
-		}
+    @Autowired
+    private AssertionRepository assertionsRepository;
 
-		csvPrinter.flush();
-		csvPrinter.close();
-		return buffer.toString();
-	}
+    @Override
+    public String writeCsv() throws IOException {
+        String landingPageUrl = applicationProperties.getLandingPageUrl();
+        StringBuffer buffer = new StringBuffer();
+        CSVPrinter csvPrinter = getCSVPrinterWithHeaders(buffer);
 
-	private CSVPrinter getCSVPrinterWithHeaders(StringBuffer buffer) throws IOException {
-		return new CSVPrinter(buffer, CSVFormat.DEFAULT.withHeader("email", "link"));
-	}
+        String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
+        List<OrcidRecord> records = orcidRecordService.getRecordsWithoutTokens(salesForceId);
+
+        for (OrcidRecord record : records) {
+            String email = record.getEmail();
+            List<Assertion> assertions = assertionsRepository.findByEmailAndSalesforceId(email, salesForceId);
+            if (assertions.size() > 0) {
+                String encrypted = encryptUtil.encrypt(salesForceId + "&&" + email);
+                String link = landingPageUrl + "?state=" + encrypted;
+                csvPrinter.printRecord(email, link);
+            }
+        }
+
+        csvPrinter.flush();
+        csvPrinter.close();
+        return buffer.toString();
+    }
+
+    private CSVPrinter getCSVPrinterWithHeaders(StringBuffer buffer) throws IOException {
+        return new CSVPrinter(buffer, CSVFormat.DEFAULT.withHeader("email", "link"));
+    }
 
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class MemberNotFoundException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private static final String PARAM = "params";
 
@@ -14,8 +14,8 @@ public class MemberNotFoundException extends RuntimeException {
     private final Map<String, String> paramMap = new HashMap<>();
 
     public MemberNotFoundException(String message) {
-		super(message);
-	}
+        super(message);
+    }
 
     public MemberNotFoundException(String message, String... params) {
         super(message);

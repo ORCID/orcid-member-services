@@ -39,18 +39,18 @@ public class OAuth2CookieHelper {
      */
     public static final String REFRESH_TOKEN_COOKIE = OAuth2AccessToken.REFRESH_TOKEN;
     /**
-     * Name of the session-only refresh token in case the user did not check remember me.
+     * Name of the session-only refresh token in case the user did not check
+     * remember me.
      */
     public static final String SESSION_TOKEN_COOKIE = "session_token";
     /**
      * The names of the Cookies we set.
      */
-    private static final List<String> COOKIE_NAMES = Arrays.asList(ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE,
-        SESSION_TOKEN_COOKIE);
+    private static final List<String> COOKIE_NAMES = Arrays.asList(ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE, SESSION_TOKEN_COOKIE);
     /**
-     * Number of seconds to expire refresh token cookies before the enclosed token expires.
-     * This makes sure we don't run into race conditions where the cookie is still there but
-     * expires while we process it.
+     * Number of seconds to expire refresh token cookies before the enclosed
+     * token expires. This makes sure we don't run into race conditions where
+     * the cookie is still there but expires while we process it.
      */
     private static final long REFRESH_TOKEN_EXPIRATION_WINDOW_SECS = 3L;
 
@@ -87,12 +87,13 @@ public class OAuth2CookieHelper {
         return cookie;
     }
 
-
     /**
      * Get a cookie by name from the given servlet request.
      *
-     * @param request    the request containing the cookie.
-     * @param cookieName the case-sensitive name of the cookie to get.
+     * @param request
+     *            the request containing the cookie.
+     * @param cookieName
+     *            the case-sensitive name of the cookie to get.
      * @return the resulting {@link Cookie}; or {@code null}, if not found.
      */
     private static Cookie getCookie(HttpServletRequest request, String cookieName) {
@@ -112,13 +113,16 @@ public class OAuth2CookieHelper {
     /**
      * Create cookies using the provided values.
      *
-     * @param request     the request we are handling.
-     * @param accessToken the access token and enclosed refresh token for our cookies.
-     * @param rememberMe  whether the user had originally checked "remember me".
-     * @param result      will get the resulting cookies set.
+     * @param request
+     *            the request we are handling.
+     * @param accessToken
+     *            the access token and enclosed refresh token for our cookies.
+     * @param rememberMe
+     *            whether the user had originally checked "remember me".
+     * @param result
+     *            will get the resulting cookies set.
      */
-    public void createCookies(HttpServletRequest request, OAuth2AccessToken accessToken, boolean rememberMe,
-                              OAuth2Cookies result) {
+    public void createCookies(HttpServletRequest request, OAuth2AccessToken accessToken, boolean rememberMe, OAuth2Cookies result) {
         String domain = getCookieDomain(request);
         log.debug("creating cookies for domain {}", domain);
         Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN_COOKIE, accessToken.getValue());
@@ -128,18 +132,18 @@ public class OAuth2CookieHelper {
         OAuth2RefreshToken refreshToken = accessToken.getRefreshToken();
         Cookie refreshTokenCookie = createRefreshTokenCookie(refreshToken, rememberMe);
         setCookieProperties(refreshTokenCookie, request.isSecure(), domain);
-        log.debug("created refresh token cookie '{}', age: {}", refreshTokenCookie.getName(), refreshTokenCookie
-            .getMaxAge());
+        log.debug("created refresh token cookie '{}', age: {}", refreshTokenCookie.getName(), refreshTokenCookie.getMaxAge());
 
         result.setCookies(accessTokenCookie, refreshTokenCookie);
     }
 
     /**
-     * Create a cookie out of the given refresh token.
-     * Refresh token cookies contain the base64 encoded refresh token (a JWT token).
-     * They also contain a hint whether the refresh token was for remember me or not.
-     * If not, then the cookie will be prefixed by the timestamp it was created at followed by a pipe '|'.
-     * This gives us the chance to expire session cookies regardless of the token duration.
+     * Create a cookie out of the given refresh token. Refresh token cookies
+     * contain the base64 encoded refresh token (a JWT token). They also contain
+     * a hint whether the refresh token was for remember me or not. If not, then
+     * the cookie will be prefixed by the timestamp it was created at followed
+     * by a pipe '|'. This gives us the chance to expire session cookies
+     * regardless of the token duration.
      */
     private Cookie createRefreshTokenCookie(OAuth2RefreshToken refreshToken, boolean rememberMe) {
         int maxAge = -1;
@@ -147,13 +151,14 @@ public class OAuth2CookieHelper {
         String value = refreshToken.getValue();
         if (rememberMe) {
             name = REFRESH_TOKEN_COOKIE;
-            //get expiration in seconds from the token's "exp" claim
+            // get expiration in seconds from the token's "exp" claim
             Integer exp = getClaim(refreshToken.getValue(), AccessTokenConverter.EXP, Integer.class);
             if (exp != null) {
                 int now = (int) (System.currentTimeMillis() / 1000L);
                 maxAge = exp - now;
                 log.debug("refresh token valid for another {} secs", maxAge);
-                //let cookie expire a bit earlier than the token to avoid race conditions
+                // let cookie expire a bit earlier than the token to avoid race
+                // conditions
                 maxAge -= REFRESH_TOKEN_EXPIRATION_WINDOW_SECS;
             }
         }
@@ -163,10 +168,11 @@ public class OAuth2CookieHelper {
     }
 
     /**
-     * Returns true if the refresh token cookie was set with remember me checked.
-     * We can recognize this by the name of the cookie.
+     * Returns true if the refresh token cookie was set with remember me
+     * checked. We can recognize this by the name of the cookie.
      *
-     * @param refreshTokenCookie the cookie holding the refresh token.
+     * @param refreshTokenCookie
+     *            the cookie holding the refresh token.
      * @return true, if it was set persistently (i.e. for "remember me").
      */
     public static boolean isRememberMe(Cookie refreshTokenCookie) {
@@ -174,11 +180,12 @@ public class OAuth2CookieHelper {
     }
 
     /**
-     * Extracts the refresh token from the refresh token cookie.
-     * Since we encode additional information into the cookie, this needs to be called to get
+     * Extracts the refresh token from the refresh token cookie. Since we encode
+     * additional information into the cookie, this needs to be called to get
      * hold of the enclosed JWT.
      *
-     * @param refreshCookie the cookie we store the value in.
+     * @param refreshCookie
+     *            the cookie we store the value in.
      * @return the refresh JWT from the cookie.
      */
     public static String getRefreshTokenValue(Cookie refreshCookie) {
@@ -191,41 +198,50 @@ public class OAuth2CookieHelper {
     }
 
     /**
-     * Checks if the refresh token session has expired.
-     * Only makes sense for non-persistent cookies, i.e. when remember me was not checked.
-     * The motivation for this is that we want to throw out a user after a while if he's inactive.
-     * We cannot do this via refresh token validity because that one is also used for remember me.
+     * Checks if the refresh token session has expired. Only makes sense for
+     * non-persistent cookies, i.e. when remember me was not checked. The
+     * motivation for this is that we want to throw out a user after a while if
+     * he's inactive. We cannot do this via refresh token validity because that
+     * one is also used for remember me.
      *
-     * @param refreshCookie the refresh token cookie to check.
+     * @param refreshCookie
+     *            the refresh token cookie to check.
      * @return true, if the session is expired.
      */
     public boolean isSessionExpired(Cookie refreshCookie) {
-        if (isRememberMe(refreshCookie)) {       //no session expiration for "remember me"
+        if (isRememberMe(refreshCookie)) { // no session expiration for
+                                           // "remember me"
             return false;
         }
-        //read non-remember-me session length in secs
+        // read non-remember-me session length in secs
         int validity = oAuth2Properties.getWebClientConfiguration().getSessionTimeoutInSeconds();
-        if (validity < 0) {           //no session expiration configured
+        if (validity < 0) { // no session expiration configured
             return false;
         }
         Integer iat = getClaim(refreshCookie.getValue(), "iat", Integer.class);
-        if (iat == null) {           //token creating timestamp in secs is missing, session does not expire
+        if (iat == null) { // token creating timestamp in secs is missing,
+                           // session does not expire
             return false;
         }
         int now = (int) (System.currentTimeMillis() / 1000L);
         int sessionDuration = now - iat;
         log.debug("session duration {} secs, will timeout at {}", sessionDuration, validity);
-        return sessionDuration > validity;            //session has expired
+        return sessionDuration > validity; // session has expired
     }
 
     /**
      * Retrieve the given claim from the given token.
      *
-     * @param refreshToken the JWT token to examine.
-     * @param claimName    name of the claim to get.
-     * @param clazz        the {@link Class} we expect to find there.
+     * @param refreshToken
+     *            the JWT token to examine.
+     * @param claimName
+     *            name of the claim to get.
+     * @param clazz
+     *            the {@link Class} we expect to find there.
      * @return the desired claim.
-     * @throws InvalidTokenException if we cannot find the claim in the token or it is of wrong type.
+     * @throws InvalidTokenException
+     *             if we cannot find the claim in the token or it is of wrong
+     *             type.
      */
     @SuppressWarnings("unchecked")
     private <T> T getClaim(String refreshToken, String claimName, Class<T> clazz) {
@@ -245,14 +261,19 @@ public class OAuth2CookieHelper {
     /**
      * Set cookie properties of access and refresh tokens.
      *
-     * @param cookie   the cookie to modify.
-     * @param isSecure whether it is coming from a secure request.
-     * @param domain   the domain for which the cookie is valid. If {@code null}, then will fall back to default.
+     * @param cookie
+     *            the cookie to modify.
+     * @param isSecure
+     *            whether it is coming from a secure request.
+     * @param domain
+     *            the domain for which the cookie is valid. If {@code null},
+     *            then will fall back to default.
      */
     private void setCookieProperties(Cookie cookie, boolean isSecure, String domain) {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setSecure(isSecure);       //if the request comes per HTTPS set the secure option on the cookie
+        cookie.setSecure(isSecure); // if the request comes per HTTPS set the
+                                    // secure option on the cookie
         if (domain != null) {
             cookie.setDomain(domain);
         }
@@ -261,8 +282,10 @@ public class OAuth2CookieHelper {
     /**
      * Logs the user out by clearing all cookies.
      *
-     * @param httpServletRequest  the request containing the Cookies.
-     * @param httpServletResponse the response used to clear them.
+     * @param httpServletRequest
+     *            the request containing the Cookies.
+     * @param httpServletResponse
+     *            the response used to clear them.
      */
     public void clearCookies(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         String domain = getCookieDomain(httpServletRequest);
@@ -271,8 +294,7 @@ public class OAuth2CookieHelper {
         }
     }
 
-    private void clearCookie(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                             String domain, String cookieName) {
+    private void clearCookie(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, String domain, String cookieName) {
         Cookie cookie = new Cookie(cookieName, "");
         setCookieProperties(cookie, httpServletRequest.isSecure(), domain);
         cookie.setMaxAge(0);
@@ -281,18 +303,21 @@ public class OAuth2CookieHelper {
     }
 
     /**
-     * Returns the top level domain of the server from the request. This is used to limit the Cookie
-     * to the top domain instead of the full domain name.
+     * Returns the top level domain of the server from the request. This is used
+     * to limit the Cookie to the top domain instead of the full domain name.
      * <p>
-     * A lot of times, individual gateways of the same domain get their own subdomain but authentication
-     * shall work across all subdomains of the top level domain.
+     * A lot of times, individual gateways of the same domain get their own
+     * subdomain but authentication shall work across all subdomains of the top
+     * level domain.
      * <p>
-     * For example, when sending a request to {@code app1.domain.com},
-     * this returns {@code .domain.com}.
+     * For example, when sending a request to {@code app1.domain.com}, this
+     * returns {@code .domain.com}.
      *
-     * @param request the HTTP request we received from the client.
-     * @return the top level domain to set the cookies for.
-     * Returns {@code null} if the domain is not under a public suffix (.com, .co.uk), e.g. for localhost.
+     * @param request
+     *            the HTTP request we received from the client.
+     * @return the top level domain to set the cookies for. Returns {@code null}
+     *         if the domain is not under a public suffix (.com, .co.uk), e.g.
+     *         for localhost.
      */
     private String getCookieDomain(HttpServletRequest request) {
         String domain = oAuth2Properties.getWebClientConfiguration().getCookieDomain();
@@ -321,7 +346,8 @@ public class OAuth2CookieHelper {
     /**
      * Strip our token cookies from the array.
      *
-     * @param cookies the cookies we receive as input.
+     * @param cookies
+     *            the cookies we receive as input.
      * @return the new cookie array without our tokens.
      */
     Cookie[] stripCookies(Cookie[] cookies) {

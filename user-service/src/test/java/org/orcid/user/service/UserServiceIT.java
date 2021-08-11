@@ -44,14 +44,14 @@ public class UserServiceIT {
 
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private UserCaches userCaches;
-    
+
     @Test
     public void assertThatUserMustExistToResetPassword() {
-    	User user = getUser();
-    	user.setActivated(true);
+        User user = getUser();
+        user.setActivated(true);
         userRepository.save(user);
         Optional<User> maybeUser = userService.requestPasswordReset("invalid.login@orcid.org");
         assertThat(maybeUser).isNotPresent();
@@ -61,13 +61,13 @@ public class UserServiceIT {
         assertThat(maybeUser.orElse(null).getEmail()).isEqualTo(user.getEmail());
         assertThat(maybeUser.orElse(null).getResetDate()).isNotNull();
         assertThat(maybeUser.orElse(null).getResetKey()).isNotNull();
-        
+
         removeUser(user);
     }
 
     @Test
     public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
-    	User user = getUser();
+        User user = getUser();
         user.setActivated(false);
         userRepository.save(user);
 
@@ -78,7 +78,7 @@ public class UserServiceIT {
 
     @Test
     public void assertThatResetKeyMustNotBeOlderThan24Hours() {
-    	User user = getUser();
+        User user = getUser();
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
@@ -94,7 +94,7 @@ public class UserServiceIT {
 
     @Test
     public void assertThatResetKeyMustBeValid() {
-    	User user = getUser();
+        User user = getUser();
         user.setActivated(true);
         user.setResetDate(null);
         user.setResetKey(null);
@@ -105,7 +105,7 @@ public class UserServiceIT {
         });
         removeUser(user);
     }
-    
+
     @Test
     public void assertThatOldKeyRecognised() {
         User user = getUser();
@@ -134,7 +134,7 @@ public class UserServiceIT {
 
     @Test
     public void assertThatUserCanResetPassword() throws ExpiredKeyException, InvalidKeyException {
-    	User user = getUser();
+        User user = getUser();
         Instant daysAgo = Instant.now().minus(2, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
@@ -148,7 +148,7 @@ public class UserServiceIT {
 
     @Test
     public void assertThatNotActivatedUsersWithNotNullActivationKeyCreatedBefore3DaysAreDeleted() {
-    	User user = getUser();
+        User user = getUser();
         Instant now = Instant.now();
         user.setActivated(false);
         user.setActivationKey(RandomStringUtils.random(20));
@@ -165,7 +165,7 @@ public class UserServiceIT {
 
     @Test
     public void assertThatNotActivatedUsersWithNullActivationKeyCreatedBefore3DaysAreNotDeleted() {
-    	User user = getUser();
+        User user = getUser();
         Instant now = Instant.now();
         user.setActivated(false);
         User dbUser = userRepository.save(user);
@@ -178,9 +178,9 @@ public class UserServiceIT {
         assertThat(maybeDbUser).contains(dbUser);
         removeUser(user);
     }
-    
+
     private User getUser() {
-    	User user = new User();
+        User user = new User();
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
         user.setEmail(DEFAULT_EMAIL);
@@ -191,9 +191,9 @@ public class UserServiceIT {
         user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         return user;
     }
-    
+
     private void removeUser(User user) {
-    	userRepository.delete(user);
+        userRepository.delete(user);
         userCaches.evictEntryFromEmailCache(user.getEmail());
     }
 

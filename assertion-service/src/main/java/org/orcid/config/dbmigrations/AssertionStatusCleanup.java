@@ -10,16 +10,16 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AssertionStatusCleanup {
-	private static final Logger LOG = LoggerFactory.getLogger(AssertionStatusCleanup.class);
-	
-	@Autowired
+    private static final Logger LOG = LoggerFactory.getLogger(AssertionStatusCleanup.class);
+
+    @Autowired
     private AssertionService assertionsService;
 
     @Bean
     CommandLineRunner runner() {
         return args -> {
-        	LOG.info("Running the assertion status cleanup process.");
-        	assertionsService.assertionStatusCleanup();
+            LOG.info("Running the assertion status cleanup process.");
+            assertionsService.assertionStatusCleanup();
         };
     }
 }

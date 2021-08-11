@@ -36,7 +36,7 @@ public class MemberResourceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        
+
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
     }
@@ -54,11 +54,9 @@ public class MemberResourceTest {
 
     @Test
     public void testGetAllMembers() {
-        Mockito.when(memberService.getMembers(Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember(), getMember())));
-        Mockito.when(memberService.getMembers(Mockito.any(Pageable.class), Mockito.anyString()))
-                .thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember())));
-        
+        Mockito.when(memberService.getMembers(Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember(), getMember())));
+        Mockito.when(memberService.getMembers(Mockito.any(Pageable.class), Mockito.anyString())).thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember())));
+
         ResponseEntity<List<Member>> response = memberResource.getAllMembers("", Mockito.mock(Pageable.class));
         assertNotNull(response);
         List<Member> members = response.getBody();

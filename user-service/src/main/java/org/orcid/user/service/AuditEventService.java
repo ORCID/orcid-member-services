@@ -13,7 +13,8 @@ import java.util.Optional;
 /**
  * Service for managing audit events.
  * <p>
- * This is the default implementation to support SpringBoot Actuator {@code AuditEventRepository}.
+ * This is the default implementation to support SpringBoot Actuator
+ * {@code AuditEventRepository}.
  */
 @Service
 public class AuditEventService {
@@ -22,28 +23,22 @@ public class AuditEventService {
 
     private final AuditEventConverter auditEventConverter;
 
-    public AuditEventService(
-        PersistenceAuditEventRepository persistenceAuditEventRepository,
-        AuditEventConverter auditEventConverter) {
+    public AuditEventService(PersistenceAuditEventRepository persistenceAuditEventRepository, AuditEventConverter auditEventConverter) {
 
         this.persistenceAuditEventRepository = persistenceAuditEventRepository;
         this.auditEventConverter = auditEventConverter;
     }
 
     public Page<AuditEvent> findAll(Pageable pageable) {
-        return persistenceAuditEventRepository.findAll(pageable)
-            .map(auditEventConverter::convertToAuditEvent);
+        return persistenceAuditEventRepository.findAll(pageable).map(auditEventConverter::convertToAuditEvent);
     }
 
     public Page<AuditEvent> findByDates(Instant fromDate, Instant toDate, Pageable pageable) {
-        return persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate, pageable)
-            .map(auditEventConverter::convertToAuditEvent);
+        return persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate, pageable).map(auditEventConverter::convertToAuditEvent);
     }
 
     public Optional<AuditEvent> find(String id) {
-        return Optional.ofNullable(persistenceAuditEventRepository.findById(id))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(auditEventConverter::convertToAuditEvent);
+        return Optional.ofNullable(persistenceAuditEventRepository.findById(id)).filter(Optional::isPresent).map(Optional::get)
+                .map(auditEventConverter::convertToAuditEvent);
     }
 }

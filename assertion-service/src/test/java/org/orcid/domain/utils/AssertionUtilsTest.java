@@ -15,84 +15,80 @@ import org.orcid.domain.enumeration.AssertionStatus;
 
 class AssertionUtilsTest {
 
-	@Test
-	void testGetAffiliationStatusWhereErrorOccured() {
-		OrcidRecord record = new OrcidRecord();
-		Assertion assertion = new Assertion();
+    @Test
+    void testGetAffiliationStatusWhereErrorOccured() {
+        OrcidRecord record = new OrcidRecord();
+        Assertion assertion = new Assertion();
 
-		JSONObject error = getDummyError(404);
-		assertion.setOrcidError(error.toString());
-		assertEquals(AssertionStatus.USER_DELETED_FROM_ORCID.getValue(),
-				AssertionUtils.getAssertionStatus(assertion, record));
+        JSONObject error = getDummyError(404);
+        assertion.setOrcidError(error.toString());
+        assertEquals(AssertionStatus.USER_DELETED_FROM_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
 
-		error = getInvalidScopeError(400);
-		assertion.setOrcidError(error.toString());
-		assertEquals(AssertionStatus.USER_REVOKED_ACCESS.getValue(),
-				AssertionUtils.getAssertionStatus(assertion, record));
+        error = getInvalidScopeError(400);
+        assertion.setOrcidError(error.toString());
+        assertEquals(AssertionStatus.USER_REVOKED_ACCESS.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
 
-		error = getDummyError(500);
-		assertion.setOrcidError(error.toString());
-		assertEquals(AssertionStatus.ERROR_ADDING_TO_ORCID.getValue(),
-				AssertionUtils.getAssertionStatus(assertion, record));
-	}
+        error = getDummyError(500);
+        assertion.setOrcidError(error.toString());
+        assertEquals(AssertionStatus.ERROR_ADDING_TO_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
+    }
 
-	@Test
-	void testGetAffiliationStatusWhereNoErrorOccured() {
-		OrcidRecord record = new OrcidRecord();
-		Assertion assertion = new Assertion();
-		assertion.setSalesforceId("salesforceId");
-		List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-		OrcidToken newToken = new OrcidToken(assertion.getSalesforceId(), "idToken", Instant.now(), null);
+    @Test
+    void testGetAffiliationStatusWhereNoErrorOccured() {
+        OrcidRecord record = new OrcidRecord();
+        Assertion assertion = new Assertion();
+        assertion.setSalesforceId("salesforceId");
+        List<OrcidToken> tokens = new ArrayList<OrcidToken>();
+        OrcidToken newToken = new OrcidToken(assertion.getSalesforceId(), "idToken", Instant.now(), null);
 
-		tokens.add(newToken);
-		record.setTokens(tokens);
-		assertEquals(AssertionStatus.USER_DENIED_ACCESS.getValue(),
-				AssertionUtils.getAssertionStatus(assertion, record));
+        tokens.add(newToken);
+        record.setTokens(tokens);
+        assertEquals(AssertionStatus.USER_DENIED_ACCESS.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
 
-		newToken = new OrcidToken(assertion.getSalesforceId(), "idToken", null, null);
+        newToken = new OrcidToken(assertion.getSalesforceId(), "idToken", null, null);
 
-		tokens = new ArrayList<OrcidToken>();
-		tokens.add(newToken);
-		record.setTokens(tokens);
-		assertEquals(AssertionStatus.PENDING.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
-		tokens = new ArrayList<OrcidToken>();
-		newToken = new OrcidToken(assertion.getSalesforceId(), null, null, null);
-		tokens.add(newToken);
-		record.setTokens(tokens);
-		assertion.setPutCode("put-code");
-		assertion.setDeletedFromORCID(Instant.now());
-		assertEquals(AssertionStatus.DELETED_IN_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
-		assertion.setDeletedFromORCID(null);
+        tokens = new ArrayList<OrcidToken>();
+        tokens.add(newToken);
+        record.setTokens(tokens);
+        assertEquals(AssertionStatus.PENDING.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
+        tokens = new ArrayList<OrcidToken>();
+        newToken = new OrcidToken(assertion.getSalesforceId(), null, null, null);
+        tokens.add(newToken);
+        record.setTokens(tokens);
+        assertion.setPutCode("put-code");
+        assertion.setDeletedFromORCID(Instant.now());
+        assertEquals(AssertionStatus.DELETED_IN_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
+        assertion.setDeletedFromORCID(null);
 
-		assertEquals(AssertionStatus.IN_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
+        assertEquals(AssertionStatus.IN_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
 
-		assertion.setAddedToORCID(Instant.now());
-		assertion.setModified(Instant.now());
-		assertion.setPutCode("1");
-		assertEquals(AssertionStatus.PENDING_RETRY.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
+        assertion.setAddedToORCID(Instant.now());
+        assertion.setModified(Instant.now());
+        assertion.setPutCode("1");
+        assertEquals(AssertionStatus.PENDING_RETRY.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
 
-		assertion.setPutCode(null);
-		assertion.setAddedToORCID(null);
-		assertEquals(AssertionStatus.PENDING.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
+        assertion.setPutCode(null);
+        assertion.setAddedToORCID(null);
+        assertEquals(AssertionStatus.PENDING.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
 
-		assertion.setModified(Instant.now());
-		assertion.setAddedToORCID(Instant.now());
-		assertion.setPutCode("1");
-		assertEquals(AssertionStatus.IN_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
-	}
+        assertion.setModified(Instant.now());
+        assertion.setAddedToORCID(Instant.now());
+        assertion.setPutCode("1");
+        assertEquals(AssertionStatus.IN_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
+    }
 
-	private JSONObject getDummyError(int statusCode) {
-		JSONObject error = new JSONObject();
-		error.put("statusCode", statusCode);
-		error.put("error", "dummy");
-		return error;
-	}
+    private JSONObject getDummyError(int statusCode) {
+        JSONObject error = new JSONObject();
+        error.put("statusCode", statusCode);
+        error.put("error", "dummy");
+        return error;
+    }
 
-	private JSONObject getInvalidScopeError(int statusCode) {
-		JSONObject error = new JSONObject();
-		error.put("statusCode", statusCode);
-		error.put("error", "error: invalid_scope");
-		return error;
-	}
+    private JSONObject getInvalidScopeError(int statusCode) {
+        JSONObject error = new JSONObject();
+        error.put("statusCode", statusCode);
+        error.put("error", "error: invalid_scope");
+        return error;
+    }
 
 }

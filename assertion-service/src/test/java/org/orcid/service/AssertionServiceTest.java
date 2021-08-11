@@ -116,8 +116,7 @@ class AssertionServiceTest {
         a.setEmail("email");
         a.setOwnerId(DEFAULT_JHI_USER_ID);
 
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString()))
-                .thenReturn(getOptionalOrcidRecordWithIdToken());
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getOptionalOrcidRecordWithIdToken());
 
         Mockito.when(assertionsRepository.insert(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
             @Override
@@ -143,8 +142,7 @@ class AssertionServiceTest {
         a.setEmail("email");
         a.setOwnerId(DEFAULT_JHI_USER_ID);
 
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString()))
-                .thenReturn(getOptionalOrcidRecordWithoutIdToken());
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getOptionalOrcidRecordWithoutIdToken());
 
         Mockito.when(assertionsRepository.insert(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
             @Override
@@ -180,8 +178,7 @@ class AssertionServiceTest {
                 return assertion;
             }
         });
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email")))
-                .thenReturn(getOptionalOrcidRecordWithIdToken());
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithIdToken());
         a = assertionService.updateAssertion(a);
         assertNotNull(a.getStatus());
         assertEquals("orcid", a.getOrcidId());
@@ -207,8 +204,7 @@ class AssertionServiceTest {
                 return assertion;
             }
         });
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email")))
-                .thenReturn(getOptionalOrcidRecordWithoutIdToken());
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithoutIdToken());
         a = assertionService.updateAssertion(a);
         assertNotNull(a.getStatus());
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
@@ -233,8 +229,7 @@ class AssertionServiceTest {
                 return assertion;
             }
         });
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email")))
-                .thenReturn(getOptionalOrcidRecordWithIdToken());
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithIdToken());
         a = assertionService.updateAssertion(a);
         assertNotNull(a.getStatus());
         assertEquals("orcid-already-present", a.getOrcidId());
@@ -266,18 +261,15 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionsToOrcid()
-            throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
-        Mockito.when(assertionsRepository.findAllToCreateInOrcidRegistry())
-                .thenReturn(getAssertionsForCreatingInOrcid());
+    void testPostAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+        Mockito.when(assertionsRepository.findAllToCreateInOrcidRegistry()).thenReturn(getAssertionsForCreatingInOrcid());
         for (int i = 1; i <= 20; i++) {
             Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(getOptionalOrcidRecord(i));
         }
 
         for (int i = 16; i <= 20; i++) {
             Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken" + i))).thenReturn("accessToken" + i);
-            Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid" + i), Mockito.eq("accessToken" + i),
-                    Mockito.any(Assertion.class))).thenReturn("putCode" + i);
+            Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid" + i), Mockito.eq("accessToken" + i), Mockito.any(Assertion.class))).thenReturn("putCode" + i);
         }
 
         assertionService.postAssertionsToOrcid();
@@ -285,8 +277,7 @@ class AssertionServiceTest {
         Mockito.verify(orcidRecordService, Mockito.times(20)).findOneByEmail(Mockito.anyString());
         // Mockito.verify(orcidAPIClient,
         // Mockito.times(5)).exchangeToken(Mockito.anyString());
-        Mockito.verify(orcidAPIClient, Mockito.times(5)).postAffiliation(Mockito.anyString(), Mockito.anyString(),
-                Mockito.any(Assertion.class));
+        Mockito.verify(orcidAPIClient, Mockito.times(5)).postAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
     }
 
     @Test
@@ -298,21 +289,18 @@ class AssertionServiceTest {
 
         for (int i = 16; i <= 20; i++) {
             Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken" + i))).thenReturn("accessToken" + i);
-            Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid" + i), Mockito.eq("accessToken" + i),
-                    Mockito.any(Assertion.class))).thenReturn("putCode" + i);
+            Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid" + i), Mockito.eq("accessToken" + i), Mockito.any(Assertion.class))).thenReturn("putCode" + i);
         }
 
         for (int i = 1; i <= 20; i++) {
-            Mockito.when(assertionsRepository.findById("id" + i))
-                    .thenReturn(Optional.of(getAssertionWithEmailAndPutCode(i + "@email.com", String.valueOf(i))));
+            Mockito.when(assertionsRepository.findById("id" + i)).thenReturn(Optional.of(getAssertionWithEmailAndPutCode(i + "@email.com", String.valueOf(i))));
         }
 
         assertionService.putAssertionsToOrcid();
 
         Mockito.verify(orcidRecordService, Mockito.times(25)).findOneByEmail(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
-        Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(),
-                Mockito.any(Assertion.class));
+        Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
     }
 
     @Test
@@ -377,8 +365,7 @@ class AssertionServiceTest {
         Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
         Mockito.when(assertionsRepository.findByEmail(Mockito.eq("test@orcid.org"))).thenReturn(new ArrayList<>());
         Mockito.when(orcidRecordService.generateLinkForEmail(Mockito.eq("test@orcid.org"))).thenReturn("don't care");
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org")))
-                .thenReturn(getOptionalOrcidRecordWithoutIdToken());
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(getOptionalOrcidRecordWithoutIdToken());
         Mockito.doNothing().when(orcidRecordService).deleteOrcidRecord(Mockito.any(OrcidRecord.class));
         Mockito.doNothing().when(assertionsRepository).deleteById(Mockito.eq("id"));
 
@@ -390,48 +377,40 @@ class AssertionServiceTest {
 
     @Test
     void testDeleteAllBySalesforceId_orcidRecordsDeleted() {
-        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class)))
-                .thenReturn(getAssertionsForUpdateInOrcid());
+        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class))).thenReturn(getAssertionsForUpdateInOrcid());
         Mockito.doNothing().when(assertionsRepository).deleteById(Mockito.anyString());
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(Optional.empty());
 
         assertionService.deleteAllBySalesforceId("salesforce-id");
 
-        Mockito.verify(assertionsRepository, Mockito.times(1)).findBySalesforceId(Mockito.eq("salesforce-id"),
-                Mockito.any(Sort.class));
+        Mockito.verify(assertionsRepository, Mockito.times(1)).findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class));
         Mockito.verify(assertionsRepository, Mockito.times(20)).deleteById(Mockito.anyString());
         Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecord(Mockito.any(OrcidRecord.class));
     }
 
     @Test
     void testDeleteAllBySalesforceId_orcidRecordsNotDeleted() {
-        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class)))
-                .thenReturn(getAssertionsForUpdateInOrcid());
+        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class))).thenReturn(getAssertionsForUpdateInOrcid());
         Mockito.doNothing().when(assertionsRepository).deleteById(Mockito.anyString());
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString()))
-                .thenReturn(getOptionalOrcidRecordWithoutIdToken());
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getOptionalOrcidRecordWithoutIdToken());
 
         assertionService.deleteAllBySalesforceId("salesforce-id");
 
-        Mockito.verify(assertionsRepository, Mockito.times(1)).findBySalesforceId(Mockito.eq("salesforce-id"),
-                Mockito.any(Sort.class));
+        Mockito.verify(assertionsRepository, Mockito.times(1)).findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class));
         Mockito.verify(assertionsRepository, Mockito.times(20)).deleteById(Mockito.anyString());
         Mockito.verify(orcidRecordService, Mockito.times(20)).deleteOrcidRecord(Mockito.any(OrcidRecord.class));
     }
 
     @Test
-    void testDeleteAssertionFromOrcidRegistry_deleteSuccessful()
-            throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testDeleteAssertionFromOrcidRegistry_deleteSuccessful() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@email.com", "1001");
         assertion.setSalesforceId("salesforce-id");
 
         Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
         Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@email.com")))
-                .thenReturn(getOptionalOrcidRecordWithIdToken());
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@email.com"))).thenReturn(getOptionalOrcidRecordWithIdToken());
         Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("exchange-token");
-        Mockito.when(orcidAPIClient.deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"),
-                Mockito.any(Assertion.class))).thenReturn(true);
+        Mockito.when(orcidAPIClient.deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class))).thenReturn(true);
 
         assertionService.deleteAssertionFromOrcidRegistry("id");
 
@@ -439,13 +418,11 @@ class AssertionServiceTest {
         Mockito.verify(assertionsUserService, Mockito.times(1)).getLoggedInUserSalesforceId();
         Mockito.verify(orcidRecordService, Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@email.com"));
         Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
-        Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(),
-                Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
     }
 
     @Test
-    void testDeleteAssertionFromOrcidRegistry_wrongSalesforceId()
-            throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testDeleteAssertionFromOrcidRegistry_wrongSalesforceId() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@email.com", "1001");
         assertion.setSalesforceId("salesforce-id");
         Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
@@ -457,15 +434,13 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testDeleteAssertionFromOrcidRegistry_CannotDelete()
-            throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testDeleteAssertionFromOrcidRegistry_CannotDelete() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@email.com", "1001");
         assertion.setSalesforceId("salesforce-id");
 
         Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
         Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@email.com")))
-                .thenReturn(getOptionalOrcidRecordWithoutIdToken());
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@email.com"))).thenReturn(getOptionalOrcidRecordWithoutIdToken());
 
         assertionService.deleteAssertionFromOrcidRegistry("id");
 
@@ -473,8 +448,7 @@ class AssertionServiceTest {
         Mockito.verify(assertionsUserService, Mockito.times(1)).getLoggedInUserSalesforceId();
         Mockito.verify(orcidRecordService, Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@email.com"));
         Mockito.verify(orcidAPIClient, Mockito.never()).exchangeToken(Mockito.anyString());
-        Mockito.verify(orcidAPIClient, Mockito.never()).deleteAffiliation(Mockito.anyString(),
-                Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
+        Mockito.verify(orcidAPIClient, Mockito.never()).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
     }
 
     @Test
@@ -487,7 +461,10 @@ class AssertionServiceTest {
         Assertion d = getAssertionWithoutIdForEmail("email");
         d.setAffiliationSection(AffiliationSection.EMPLOYMENT);
 
-        Assertion comparison = getAssertionWithoutIdForEmail("email"); // duplicate of assertion a
+        Assertion comparison = getAssertionWithoutIdForEmail("email"); // duplicate
+                                                                       // of
+                                                                       // assertion
+                                                                       // a
         Mockito.when(assertionsRepository.findByEmail(Mockito.eq("email"))).thenReturn(Arrays.asList(b, c, a, d));
         assertTrue(assertionService.isDuplicate(comparison));
 
@@ -649,8 +626,7 @@ class AssertionServiceTest {
         upload.addAssertion(getAssertionWithEmail("3@email.com"));
         upload.addError(1, "test error");
 
-        Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class),
-                Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
+        Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
 
         assertionService.uploadAssertions(file);
 
@@ -673,14 +649,10 @@ class AssertionServiceTest {
         toUpdate.setId("12346");
         upload.addAssertion(toUpdate);
 
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("1@email.com")))
-                .thenReturn(Optional.of(new OrcidRecord()));
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("2@email.com")))
-                .thenReturn(Optional.of(new OrcidRecord()));
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("3@email.com")))
-                .thenReturn(Optional.of(new OrcidRecord()));
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("4@email.com")))
-                .thenReturn(Optional.of(new OrcidRecord()));
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("1@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("2@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("3@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("4@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
         Mockito.when(assertionsRepository.insert(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
             @Override
             public Assertion answer(InvocationOnMock invocation) throws Throwable {
@@ -700,8 +672,7 @@ class AssertionServiceTest {
             }
         });
         Mockito.when(assertionsRepository.findById(Mockito.eq("12346"))).thenReturn(Optional.of(toUpdate));
-        Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class),
-                Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
+        Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
 
         AssertionsUploadSummary summary = assertionService.uploadAssertions(file);
         assertEquals(3, summary.getNumAdded());
@@ -721,16 +692,14 @@ class AssertionServiceTest {
         Assertion alreadyPersisted1 = getAssertionWithEmail("1@email.com");
         alreadyPersisted1.setDepartmentName("not a duplicate");
         Assertion alreadyPersisted2 = getAssertionWithEmail("1@email.com");
-        Mockito.when(assertionsRepository.findByEmail(Mockito.eq("1@email.com")))
-                .thenReturn(Arrays.asList(alreadyPersisted1, alreadyPersisted2));
+        Mockito.when(assertionsRepository.findByEmail(Mockito.eq("1@email.com"))).thenReturn(Arrays.asList(alreadyPersisted1, alreadyPersisted2));
 
         AssertionsUpload upload = new AssertionsUpload();
         upload.addAssertion(getAssertionWithEmail("1@email.com"));
         upload.addAssertion(getAssertionWithEmail("1@email.com"));
         upload.addAssertion(getAssertionWithEmail("1@email.com"));
 
-        Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class),
-                Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
+        Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
 
         AssertionsUploadSummary summary = assertionService.uploadAssertions(file);
         assertEquals(3, summary.getNumDuplicates());
