@@ -29,6 +29,7 @@ import org.orcid.user.upload.UserUploadReader;
 import org.orcid.user.web.rest.errors.AccountResourceException;
 import org.orcid.user.web.rest.errors.BadRequestAlertException;
 import org.orcid.user.web.rest.errors.EmailAlreadyUsedException;
+import org.orcid.user.web.rest.errors.EmailNotFoundException;
 import org.orcid.user.web.rest.errors.ExpiredKeyException;
 import org.orcid.user.web.rest.errors.InvalidKeyException;
 import org.orcid.user.web.rest.errors.InvalidPasswordException;
@@ -215,6 +216,10 @@ public class UserService {
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        if (!existingUser.isPresent()) {
+            throw new EmailNotFoundException();
+        }
+        
         checkUpdateConstraints(existingUser, userDTO);
         User user = existingUser.get();
         boolean previouslyOwner = user.getMainContact() != null ? user.getMainContact() : false;
