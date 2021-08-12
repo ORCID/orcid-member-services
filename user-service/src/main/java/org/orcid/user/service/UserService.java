@@ -235,7 +235,6 @@ public class UserService {
             userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
 
         }
-
         userCaches.evictEntryFromEmailCache(user.getEmail());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
@@ -260,9 +259,7 @@ public class UserService {
             user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
             user.setLastModifiedDate(Instant.now());
         }
-
         userRepository.save(user);
-        userCaches.evictEntryFromEmailCache(user.getEmail());
 
         if (owner && !previouslyOwner) {
             String member = memberService.getMemberNameBySalesforce(user.getSalesforceId());
