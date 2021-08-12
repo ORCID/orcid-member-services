@@ -3,7 +3,6 @@ package org.orcid.user.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,8 +28,6 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
  */
 @SpringBootTest(classes = UserServiceApp.class)
 public class MailServiceIT {
-
-    private static String languages[] = { "en", "es" };
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -60,27 +57,6 @@ public class MailServiceIT {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mailgunClient).sendMail(anyString(), anyString(), anyString());
         mailService = new MailService(applicationProperties, messageSource, templateEngine, mailgunClient);
-    }
-
-    @Test
-    public void testSendEmail() throws Exception {
-        mailService.sendEmail("john.doe@example.com", "testSubject", "testContent");
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
-        assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
-        assertThat(subjectCaptor.getValue()).isEqualTo("testSubject");
-        assertThat(contentCaptor.getValue()).isEqualTo("testContent");
-    }
-
-    @Test
-    public void testSendEmailFromTemplate() throws Exception {
-        User user = new User();
-        user.setEmail("john.doe@example.com");
-        user.setLangKey("en");
-        mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
-        assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
-        assertThat(subjectCaptor.getValue()).isEqualTo("test title");
-        assertThat(contentCaptor.getValue()).isNotNull();
     }
 
     @Test
@@ -130,34 +106,6 @@ public class MailServiceIT {
         assertThat(subjectCaptor.getValue()).isEqualTo("ORCID Member Portal organization owner updated");
         assertThat(contentCaptor.getValue()).isNotNull();
 
-    }
-
-    @Test
-    public void testSendEmailWithException() throws Exception {
-        doThrow(MailException.class).when(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
-        mailService.sendEmail("john.doe@example.com", "testSubject", "testContent");
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
-        assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
-        assertThat(subjectCaptor.getValue()).isEqualTo("testSubject");
-        assertThat(contentCaptor.getValue()).isEqualTo("testContent");
-    }
-
-    @Test
-    public void testSendLocalizedEmailForAllSupportedLanguages() throws Exception {
-        User user = new User();
-        user.setEmail("john.doe@example.com");
-        for (String langKey : languages) {
-            user.setLangKey(langKey);
-            mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
-        }
-        verify(mailgunClient, Mockito.times(2)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
-
-        assertThat(recipientCaptor.getAllValues().get(0)).isEqualTo("john.doe@example.com");
-        assertThat(recipientCaptor.getAllValues().get(1)).isEqualTo("john.doe@example.com");
-        assertThat(subjectCaptor.getAllValues().get(0)).isEqualTo("test title");
-        assertThat(subjectCaptor.getAllValues().get(1)).isEqualTo("Activación de userservice");
-        assertThat(contentCaptor.getAllValues().get(0)).isNotNull();
-        assertThat(contentCaptor.getAllValues().get(1)).isNotNull();
     }
 
 }

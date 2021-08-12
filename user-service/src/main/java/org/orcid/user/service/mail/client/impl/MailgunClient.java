@@ -1,7 +1,9 @@
 package org.orcid.user.service.mail.client.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class MailgunClient implements MailClient {
@@ -58,8 +58,10 @@ public class MailgunClient implements MailClient {
             LOGGER.info("Sending mail {} to {}", subject, to);
             HttpResponse response = client.execute(post);
             if (response.getStatusLine().getStatusCode() != 200) {
-                LOGGER.warn("Received response {} from mailgun: {}", response.getStatusLine().getReasonPhrase(),
-                        new ObjectMapper().writeValueAsString(response.getEntity()));
+                LOGGER.warn("Received response {} from mailgun: {}", response.getStatusLine().getReasonPhrase());
+                try (InputStream inputStream = response.getEntity().getContent()) {
+                    LOGGER.warn(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
+                }
             }
         } catch (IOException e) {
             throw new MailException("Error posting mail to mailgun", e);
