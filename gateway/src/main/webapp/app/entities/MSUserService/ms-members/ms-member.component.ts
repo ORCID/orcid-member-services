@@ -60,7 +60,10 @@ export class MSMemberComponent implements OnInit, OnDestroy {
     this.accountService.identity().then(account => {
       this.currentAccount = account;
     });
+
     this.eventSubscriber = this.eventManager.subscribe('msMemberListModification', () => {
+      this.searchTerm = '';
+      this.submittedSearchTerm = '';
       this.loadAll();
     });
   }
