@@ -219,7 +219,7 @@ public class UserService {
         if (!existingUser.isPresent()) {
             throw new EmailNotFoundException();
         }
-        
+
         checkUpdateConstraints(existingUser, userDTO);
         User user = existingUser.get();
         boolean previouslyOwner = user.getMainContact() != null ? user.getMainContact() : false;
@@ -463,7 +463,13 @@ public class UserService {
 
     public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId) {
         return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId).map(u -> userMapper.toUserDTO(u));
+    }
 
+    public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId, String filter) {
+        return userRepository
+                .findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
+                        pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter)
+                .map(u -> userMapper.toUserDTO(u));
     }
 
     private void sendActivationEmail(User user) {

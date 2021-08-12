@@ -146,6 +146,7 @@ public class UserResource {
      *         body all users.
      */
     @GetMapping("/users")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams,
             @RequestParam(required = false, name = "filter") String filter, UriComponentsBuilder uriBuilder, Pageable pageable) {
         Page<UserDTO> page = null;
@@ -193,8 +194,13 @@ public class UserResource {
      */
     @GetMapping("/users/salesforce/{salesforceId}/p")
     public ResponseEntity<List<UserDTO>> getUsersBySalesforceId(@PathVariable String salesforceId, @RequestParam MultiValueMap<String, String> queryParams,
-            UriComponentsBuilder uriBuilder, Pageable pageable) {
-        final Page<UserDTO> page = userService.getAllUsersBySalesforceId(pageable, salesforceId);
+            UriComponentsBuilder uriBuilder, @RequestParam(required = false, name = "filter") String filter, Pageable pageable) {
+        Page<UserDTO> page = null;
+        if (StringUtils.isBlank(filter)) {
+            page = userService.getAllUsersBySalesforceId(pageable, salesforceId);
+        } else {
+            page = userService.getAllUsersBySalesforceId(pageable, salesforceId, filter);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

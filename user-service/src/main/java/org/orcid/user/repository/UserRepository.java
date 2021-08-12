@@ -34,8 +34,12 @@ public interface UserRepository extends MongoRepository<User, String> {
     List<User> findAllByEmailIgnoreCase(String email);
 
     List<User> findBySalesforceIdAndDeletedIsFalse(String salesforceId);
-
+    
     Page<User> findBySalesforceIdAndDeletedIsFalse(Pageable pageable, String salesforceId);
+
+    Page<User> findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
+            Pageable pageable, String salesforceId1, String memberName, String salesforceId2, String firstName,
+            String salesforceId3, String lastName, String salesforceId4, String email);
 
     Page<User> findByDeletedFalse(Pageable pageable);
 
