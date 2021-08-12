@@ -63,6 +63,8 @@ export class MSUserComponent implements OnInit, OnDestroy {
     });
     this.loadAll();
     this.eventSubscriber = this.eventManager.subscribe('msUserListModification', () => {
+      this.searchTerm = '';
+      this.submittedSearchTerm = '';
       this.loadAll();
     });
   }

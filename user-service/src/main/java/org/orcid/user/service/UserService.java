@@ -219,7 +219,7 @@ public class UserService {
         if (!existingUser.isPresent()) {
             throw new EmailNotFoundException();
         }
-        
+
         checkUpdateConstraints(existingUser, userDTO);
         User user = existingUser.get();
         boolean previouslyOwner = user.getMainContact() != null ? user.getMainContact() : false;
@@ -235,7 +235,6 @@ public class UserService {
             userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
 
         }
-
         userCaches.evictEntryFromEmailCache(user.getEmail());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
@@ -260,9 +259,7 @@ public class UserService {
             user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
             user.setLastModifiedDate(Instant.now());
         }
-
         userRepository.save(user);
-        userCaches.evictEntryFromEmailCache(user.getEmail());
 
         if (owner && !previouslyOwner) {
             String member = memberService.getMemberNameBySalesforce(user.getSalesforceId());
@@ -463,7 +460,13 @@ public class UserService {
 
     public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId) {
         return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId).map(u -> userMapper.toUserDTO(u));
+    }
 
+    public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId, String filter) {
+        return userRepository
+                .findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
+                        pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter)
+                .map(u -> userMapper.toUserDTO(u));
     }
 
     private void sendActivationEmail(User user) {

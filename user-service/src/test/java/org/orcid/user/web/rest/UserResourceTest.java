@@ -144,6 +144,24 @@ class UserResourceTest {
         Mockito.verify(userService, Mockito.times(1)).updateUser(Mockito.any(UserDTO.class));
     }
 
+    @Test
+    public void testGetUsersBySalesforceId() {
+        Mockito.when(userService.getAllUsersBySalesforceId(Mockito.any(Pageable.class), Mockito.anyString()))
+                .thenReturn(new PageImpl<>(Arrays.asList(getUser(), getUser(), getUser())));
+
+        // same method but with filter, return page of only one user
+        Mockito.when(userService.getAllUsersBySalesforceId(Mockito.any(Pageable.class), Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(new PageImpl<>(Arrays.asList(getUser())));
+
+        ResponseEntity<List<UserDTO>> response = userResource.getUsersBySalesforceId("some-salesforceId", new HttpHeaders(), UriComponentsBuilder.newInstance(), "",
+                Mockito.mock(Pageable.class));
+        assertEquals(3, response.getBody().size());
+        
+        response = userResource.getUsersBySalesforceId("some-salesforceId", new HttpHeaders(), UriComponentsBuilder.newInstance(), "some filter",
+                Mockito.mock(Pageable.class));
+        assertEquals(1, response.getBody().size());
+    }
+
     private UserDTO getUser() {
         UserDTO user = new UserDTO();
         return user;

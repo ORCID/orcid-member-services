@@ -50,16 +50,32 @@ public class MailService {
         this.templateEngine = templateEngine;
         this.mailgunClient = mailgunClient;
     }
-
-    public void sendEmail(String to, String subject, String content) throws ClientProtocolException, IOException {
-        try {
-            mailgunClient.sendMail(to, subject, content);
-        } catch (MailException e) {
-            LOGGER.warn("Error sending email to {}", to, content, e);
-        }
+    
+    @Async
+    public void sendActivationEmail(User user) {
+        LOGGER.debug("Sending activation email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
     }
 
-    public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
+    @Async
+    public void sendCreationEmail(User user) {
+        LOGGER.debug("Sending creation email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
+    }
+
+    @Async
+    public void sendPasswordResetMail(User user) {
+        LOGGER.debug("Sending password reset email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    @Async
+    public void sendOrganizationOwnerChangedMail(User user, String member) {
+        LOGGER.debug("Sending organization owner changed email to '{}'", user.getEmail());
+        sendEmailFromTemplateMemberInfo(user, member, "mail/organizationOwnerChanged", "email.organization.title");
+    }
+
+    private void sendEmailFromTemplate(User user, String templateName, String titleKey) {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
@@ -69,11 +85,11 @@ public class MailService {
         try {
             sendEmail(user.getEmail(), subject, content);
         } catch (IOException e) {
-            LOGGER.warn("Mail sending failure: {}", e.getMessage());
+            LOGGER.warn("Mail sending failure: {}", e.getMessage(), e);
         }
     }
 
-    public void sendEmailFromTemplateMemberInfo(User user, String member, String templateName, String titleKey) {
+    private void sendEmailFromTemplateMemberInfo(User user, String member, String templateName, String titleKey) {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         String baseUrl = applicationProperties.getBaseUrl();
@@ -95,27 +111,16 @@ public class MailService {
         try {
             sendEmail(user.getEmail(), subject, content);
         } catch (IOException e) {
-            LOGGER.warn("Mail sending failure: {}", e.getMessage());
+            LOGGER.warn("Mail sending failure: {}", e.getMessage(), e);
+        }
+    }
+    
+    private void sendEmail(String to, String subject, String content) throws ClientProtocolException, IOException {
+        try {
+            mailgunClient.sendMail(to, subject, content);
+        } catch (MailException e) {
+            LOGGER.warn("Error sending email to {}", to, content, e);
         }
     }
 
-    public void sendActivationEmail(User user) {
-        LOGGER.debug("Sending activation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
-    }
-
-    public void sendCreationEmail(User user) {
-        LOGGER.debug("Sending creation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
-    }
-
-    public void sendPasswordResetMail(User user) {
-        LOGGER.debug("Sending password reset email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
-    }
-
-    public void sendOrganizationOwnerChangedMail(User user, String member) {
-        LOGGER.debug("Sending organization owner changed email to '{}'", user.getEmail());
-        sendEmailFromTemplateMemberInfo(user, member, "mail/organizationOwnerChanged", "email.organization.title");
-    }
 }

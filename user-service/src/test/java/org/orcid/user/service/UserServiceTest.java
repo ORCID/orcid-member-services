@@ -414,6 +414,22 @@ class UserServiceTest {
         assertEquals("admin-user", user.getEmail());
     }
 
+    @Test
+    public void testGetAllUsersBySalesforceId() {
+        Mockito.when(userRepository.findBySalesforceIdAndDeletedIsFalse(Mockito.any(Pageable.class), Mockito.anyString())).thenReturn(new PageImpl<>(getListOfUsers(10)));
+        Mockito.when(userRepository
+                .findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
+                        Mockito.any(Pageable.class), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
+                        Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(new PageImpl<>(getListOfUsers(5)));
+
+        Page<UserDTO> page = userService.getAllUsersBySalesforceId(Mockito.mock(Pageable.class), "some-salesforce-id");
+        assertEquals(10, page.getTotalElements());
+
+        page = userService.getAllUsersBySalesforceId(Mockito.mock(Pageable.class), "some-salesforce-id", "some-filter");
+        assertEquals(5, page.getTotalElements());
+    }
+
     private List<User> getListOfUsers(int size) {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < size; i++) {
