@@ -71,8 +71,8 @@ hystrix:
             timeoutInMilliseconds: 300000
 
 ribbon:
-  ReadTimeout: 300000
-  ConnectTimeout: 300000
+  ReadTimeout: 10000
+  ConnectTimeout: 15000
 
 jhipster:
   cache: # Cache configuration
