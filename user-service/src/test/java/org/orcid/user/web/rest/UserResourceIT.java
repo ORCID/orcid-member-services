@@ -315,7 +315,6 @@ public class UserResourceIT {
         // Initialize the database
         userRepository.save(user);
 
-        // Get all the users
         restUserMockMvc.perform(get("/api/users").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
                 .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME))).andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
@@ -330,7 +329,6 @@ public class UserResourceIT {
 
         assertThat(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get(user.getEmail())).isNull();
 
-        // Get the user
         restUserMockMvc.perform(get("/api/users/{login}/", user.getEmail())).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
                 .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME)).andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
