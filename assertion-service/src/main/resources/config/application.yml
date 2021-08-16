@@ -14,17 +14,6 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-hystrix:
-  command:
-    default:
-      execution:
-        thread:
-            timeoutInMilliseconds: 10000
-ribbon:
-  ReadTimeout: 10000
-  ConnectTimeout: 15000
-  eureka:
-    enabled: true
 logging:
   path: logs
 eureka:
