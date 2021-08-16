@@ -62,18 +62,6 @@ server:
 # Full reference is available at: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 300000
-
-ribbon:
-  ReadTimeout: 10000
-  ConnectTimeout: 15000
-
 jhipster:
   cache: # Cache configuration
     ehcache: # Ehcache configuration

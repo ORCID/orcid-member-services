@@ -13,18 +13,6 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 300000
-
-ribbon:
-  ReadTimeout: 10000
-  ConnectTimeout: 15000
-
 eureka:
   instance:
     prefer-ip-address: true
