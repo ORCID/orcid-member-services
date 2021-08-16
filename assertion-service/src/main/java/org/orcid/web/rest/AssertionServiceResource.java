@@ -98,12 +98,16 @@ public class AssertionServiceResource {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY_MM_dd");
 
     @GetMapping("/assertions")
-    public ResponseEntity<List<Assertion>> getAssertions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder)
-            throws BadRequestAlertException, JSONException {
+    public ResponseEntity<List<Assertion>> getAssertions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder,
+            @RequestParam(required = false, name = "filter") String filter) throws BadRequestAlertException, JSONException {
         LOG.debug("REST request to fetch assertions from user {}", SecurityUtils.getCurrentUserLogin().get());
-
-        Page<Assertion> affiliations = assertionService.findBySalesforceId(pageable);
-
+        Page<Assertion> affiliations = null;
+        if (StringUtils.isBlank(filter)) {
+            affiliations = assertionService.findBySalesforceId(pageable);
+        } else {
+            affiliations = assertionService.findBySalesforceId(pageable, filter);
+        }
+        
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
         return ResponseEntity.ok().headers(headers).body(affiliations.getContent());
     }

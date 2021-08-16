@@ -43,6 +43,9 @@ import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.AssertionsUploadSummary;
 import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -399,6 +402,24 @@ class AssertionServiceTest {
         Mockito.verify(assertionsRepository, Mockito.times(1)).findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class));
         Mockito.verify(assertionsRepository, Mockito.times(20)).deleteById(Mockito.anyString());
         Mockito.verify(orcidRecordService, Mockito.times(20)).deleteOrcidRecord(Mockito.any(OrcidRecord.class));
+    }
+
+    @Test
+    void testFindBySalesforceId() {
+        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Pageable.class)))
+                .thenReturn(new PageImpl<Assertion>(Arrays.asList(getAssertionWithEmail("email@orcid.org"), getAssertionWithEmail("email@orcid.org"))));
+        Mockito.when(assertionsRepository
+                .findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
+                        Mockito.any(Pageable.class), Mockito.eq("salesforce-id"), Mockito.eq("filter"), Mockito.eq("salesforce-id"), Mockito.eq("filter"),
+                        Mockito.eq("salesforce-id"), Mockito.eq("filter"), Mockito.eq("salesforce-id"), Mockito.eq("filter"), Mockito.eq("salesforce-id"),
+                        Mockito.eq("filter"), Mockito.eq("salesforce-id"), Mockito.eq("filter"), Mockito.eq("salesforce-id"), Mockito.eq("filter")))
+                .thenReturn(new PageImpl<Assertion>(Arrays.asList(getAssertionWithEmail("email@orcid.org"))));
+        
+        Page<Assertion> page = assertionService.findBySalesforceId(Mockito.mock(Pageable.class));
+        assertEquals(2, page.getTotalElements());
+        
+        page = assertionService.findBySalesforceId(Mockito.mock(Pageable.class), "filter");
+        assertEquals(1, page.getTotalElements());
     }
 
     @Test

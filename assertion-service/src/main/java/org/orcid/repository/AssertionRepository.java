@@ -20,8 +20,12 @@ public interface AssertionRepository extends MongoRepository<Assertion, String>,
     @Query("{ownerId: ?0}")
     List<Assertion> findAllByOwnerId(String ownerId, Sort sort);
 
-    @Query("{salesforceId: ?0}")
     Page<Assertion> findBySalesforceId(String salesforceId, Pageable pageable);
+
+    Page<Assertion> findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
+            Pageable pageable, String salesforceId1, String affiliationSection, String salesforceId2, String departmentName, String salesforceId3, String orcName,
+            String salesforceId4, String disambiguatedOrgId, String salesforceId5, String email, String salesforceId6, String orcidId, String salesforceId7,
+            String roleTitle);
 
     @Query("{salesforceId: ?0}")
     List<Assertion> findBySalesforceId(String salesforceId, Sort sort);

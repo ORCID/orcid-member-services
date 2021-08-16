@@ -105,16 +105,37 @@ public class AssertionService {
     }
 
     public Page<Assertion> findBySalesforceId(Pageable pageable) {
-        String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
-        Page<Assertion> assertions = assertionRepository.findBySalesforceId(salesForceId, pageable);
+        String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
+        Page<Assertion> assertions = assertionRepository.findBySalesforceId(salesforceId, pageable);
         assertions.forEach(a -> {
+            if (a.getOrcidId() == null) {
+                a.setOrcidId(getAssertionOrcidId(a));
+                assertionRepository.save(a);
+            }
+            
             if (!StringUtils.isBlank(a.getStatus())) {
                 LOG.debug("assertion status is: " + a.getStatus());
                 a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
             }
+        });
+        return assertions;
+    }
 
+    public Page<Assertion> findBySalesforceId(Pageable pageable, String filter) {
+        String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
+        Page<Assertion> assertions = assertionRepository
+                .findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
+                        pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter,
+                        salesforceId, filter);
+        assertions.forEach(a -> {
             if (a.getOrcidId() == null) {
                 a.setOrcidId(getAssertionOrcidId(a));
+                assertionRepository.save(a);
+            }
+
+            if (!StringUtils.isBlank(a.getStatus())) {
+                LOG.debug("assertion status is: " + a.getStatus());
+                a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
             }
         });
         return assertions;

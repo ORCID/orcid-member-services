@@ -36,6 +36,17 @@
     </div>
     <div class="row">
         <div class="col-md-12">
+            <div class="input-group filter-group justify-content-end">
+            	<div class="filter-input">
+			     	<input type="text" (keyup.enter)="submitSearch()" [(ngModel)]="searchTerm" placeholder="{{'global.form.search.string' | translate}}" ng-model="selected" class="form-control">
+			    	<button *ngIf="submittedSearchTerm" class="reset" (click)="resetSearch()"><fa-icon aria-hidden="true" [icon]="faTimes" [styles]="{'color': '#2e7f9f'}"></fa-icon></button>
+		    	</div>
+	    		<button class="search" (click)="submitSearch()"><fa-icon aria-hidden="true" [icon]="faSearch" [styles]="{'color': '#2e7f9f'}"></fa-icon></button>
+		    </div>
+    	</div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <jhi-alert></jhi-alert>
             <br/>
             <div class="alert alert-warning" *ngIf="assertions?.length === 0">
