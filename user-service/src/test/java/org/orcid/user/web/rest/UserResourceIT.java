@@ -27,14 +27,12 @@ import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.service.MailService;
 import org.orcid.user.service.MemberService;
 import org.orcid.user.service.UserService;
-import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.web.rest.errors.ExceptionTranslator;
 import org.orcid.user.web.rest.vm.ManagedUserVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cache.CacheManager;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -98,9 +96,6 @@ public class UserResourceIT {
     private ExceptionTranslator exceptionTranslator;
 
     @Autowired
-    private CacheManager cacheManager;
-
-    @Autowired
     private UserResource userResource;
 
     @Autowired
@@ -116,8 +111,6 @@ public class UserResourceIT {
     public void setup() {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-
-        cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).clear();
         userRepository.deleteAll();
         user = createEntity();
         createLoggedInUser();
@@ -327,14 +320,14 @@ public class UserResourceIT {
         // Initialize the database
         userRepository.save(user);
 
-        assertThat(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get(user.getEmail())).isNull();
-
-        restUserMockMvc.perform(get("/api/users/{login}/", user.getEmail())).andExpect(status().isOk())
+        // Get the user
+        MvcResult result = restUserMockMvc.perform(get("/api/users/{login}/", user.getEmail())).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
                 .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME)).andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
-                .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL)).andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
+                .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL)).andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY)).andReturn();
 
-        assertThat(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get(user.getEmail())).isNotNull();
+        UserDTO read = objectMapper.readValue(result.getResponse().getContentAsString(), UserDTO.class);
+        assertThat(read.getEmail()).isEqualTo(user.getEmail());
     }
 
     @Test
@@ -411,31 +404,31 @@ public class UserResourceIT {
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(10);
-        
+
         result = restUserMockMvc.perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "firstname 1").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(1);
-        
+
         result = restUserMockMvc.perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "lastname 2").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(1);
-        
+
         result = restUserMockMvc.perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "membername 3").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(1);
-        
+
         result = restUserMockMvc.perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "4@salesforce-id-1.org").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(1);
-        
+
         // bad salesforce id
         result = restUserMockMvc.perform(get("/api/users/salesforce/salesforce-id-5/p").param("filter", "4@orcid.org").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
@@ -443,7 +436,7 @@ public class UserResourceIT {
         });
         assertThat(users.size()).isEqualTo(0);
     }
-    
+
     @Test
     @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_USER", "ROLE_ADMIN" }, password = LOGGED_IN_PASSWORD)
     public void getAllUsersWithFilter() throws Exception {
@@ -452,32 +445,37 @@ public class UserResourceIT {
         saveTenUsersWithSalesforceId("salesforce-id-3");
         userRepository.save(user);
 
-        MvcResult result = restUserMockMvc.perform(get("/api/users").param("filter", "firstname").param("size", "50").accept(TestUtil.APPLICATION_JSON_UTF8)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        MvcResult result = restUserMockMvc.perform(
+                get("/api/users").param("filter", "firstname").param("size", "50").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
         List<UserDTO> users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(30);
-        
-        result = restUserMockMvc.perform(get("/api/users").param("filter", "firstname 1").accept(TestUtil.APPLICATION_JSON_UTF8)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+
+        result = restUserMockMvc
+                .perform(get("/api/users").param("filter", "firstname 1").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(3);
-        
-        result = restUserMockMvc.perform(get("/api/users").param("filter", "lastname 2").accept(TestUtil.APPLICATION_JSON_UTF8)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+
+        result = restUserMockMvc
+                .perform(get("/api/users").param("filter", "lastname 2").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(3);
-        
-        result = restUserMockMvc.perform(get("/api/users").param("filter", "membername 3").accept(TestUtil.APPLICATION_JSON_UTF8)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+
+        result = restUserMockMvc
+                .perform(get("/api/users").param("filter", "membername 3").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(3);
-        
-        result = restUserMockMvc.perform(get("/api/users").param("filter", "4@salesforce-id-1.org").accept(TestUtil.APPLICATION_JSON_UTF8)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+
+        result = restUserMockMvc
+                .perform(get("/api/users").param("filter", "4@salesforce-id-1.org").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(1);

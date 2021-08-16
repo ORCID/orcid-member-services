@@ -20,7 +20,6 @@ import org.orcid.user.repository.AuthorityRepository;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.security.SecurityUtils;
-import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.service.util.RandomUtil;
@@ -64,9 +63,6 @@ public class UserService {
     private AuthorityRepository authorityRepository;
 
     @Autowired
-    private UserCaches userCaches;
-
-    @Autowired
     private UserUploadReader usersUploadReader;
 
     @Autowired
@@ -94,7 +90,6 @@ public class UserService {
         user.setResetDate(null);
         user.setActivated(true);
         userRepository.save(user);
-        userCaches.evictEntryFromEmailCache(user.getEmail());
     }
 
     public boolean validResetKey(String key) {
@@ -117,7 +112,6 @@ public class UserService {
             user.setResetKey(RandomUtil.generateResetKey());
             user.setResetDate(Instant.now());
             userRepository.save(user);
-            userCaches.evictEntryFromEmailCache(user.getEmail());
             return user;
         });
     }
@@ -149,7 +143,6 @@ public class UserService {
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         newUser.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
         userRepository.save(newUser);
-        userCaches.evictEntryFromEmailCache(newUser.getEmail());
         LOG.debug("Created Information for User: {}", newUser);
         return newUser;
     }
@@ -159,7 +152,6 @@ public class UserService {
             return false;
         }
         userRepository.delete(existingUser);
-        userCaches.evictEntryFromEmailCache(existingUser.getEmail());
         return true;
     }
 
@@ -172,7 +164,6 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         userRepository.save(user);
-        userCaches.evictEntryFromEmailCache(user.getEmail());
         LOG.debug("Created User: {}", user);
 
         LOG.debug("Sending email to user {}", user.getEmail());
@@ -203,7 +194,6 @@ public class UserService {
         user.setLangKey(langKey);
         user.setImageUrl(imageUrl);
         userRepository.save(user);
-        userCaches.evictEntryFromEmailCache(user.getEmail());
         LOG.debug("Changed Information for User: {}", user);
     }
 
@@ -235,7 +225,6 @@ public class UserService {
             userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
 
         }
-        userCaches.evictEntryFromEmailCache(user.getEmail());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setImageUrl(userDTO.getImageUrl());
@@ -282,7 +271,6 @@ public class UserService {
     public void deleteUser(String login) {
         userRepository.findOneByEmailIgnoreCase(login).ifPresent(user -> {
             userRepository.delete(user);
-            userCaches.evictEntryFromEmailCache(user.getEmail());
             LOG.debug("Deleted User: {}", user);
         });
     }
@@ -292,9 +280,6 @@ public class UserService {
         if (u.isPresent()) {
             LOG.debug("About to clear User with id: {}", id);
             User user = u.get();
-            String email = user.getEmail();
-            userCaches.evictEntryFromEmailCache(email);
-
             user.setActivated(false);
             user.setActivationKey(null);
             user.setAuthorities(new HashSet<String>());
@@ -322,7 +307,6 @@ public class UserService {
             String encryptedPassword = passwordEncoder.encode(newPassword);
             user.setPassword(encryptedPassword);
             userRepository.save(user);
-            userCaches.evictEntryFromEmailCache(user.getEmail());
             LOG.debug("Changed password for User: {}", user);
         });
     }
@@ -398,7 +382,6 @@ public class UserService {
         userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS)).forEach(user -> {
             LOG.debug("Deleting not activated user {}", user.getEmail());
             userRepository.delete(user);
-            userCaches.evictEntryFromEmailCache(user.getEmail());
         });
     }
 
@@ -412,7 +395,6 @@ public class UserService {
             LOG.info("Populating member name field for user {}", u.getEmail());
             u.setMemberName(memberService.getMemberNameBySalesforce(u.getSalesforceId()));
             userRepository.save(u);
-            userCaches.evictEntryFromEmailCache(u.getEmail());
         });
     }
 
@@ -474,7 +456,6 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         userRepository.save(user);
-        userCaches.evictEntryFromEmailCache(user.getEmail());
         mailService.sendActivationEmail(user);
     }
 

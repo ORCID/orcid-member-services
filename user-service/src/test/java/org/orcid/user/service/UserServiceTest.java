@@ -33,7 +33,6 @@ import org.orcid.user.repository.AuthorityRepository;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.security.MockSecurityContext;
-import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.upload.UserUpload;
@@ -56,9 +55,6 @@ class UserServiceTest {
 
     @Mock
     private AuthorityRepository authorityRepository;
-
-    @Mock
-    private UserCaches userCaches;
 
     @Mock
     private UserUploadReader usersUploadReader;
