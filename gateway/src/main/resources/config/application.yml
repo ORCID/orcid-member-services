@@ -14,6 +14,17 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+hystrix:
+  command:
+    default:
+      execution:
+        thread:
+          timeoutInMilliseconds: 10000
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 15000
+  eureka:
+    enabled: true
 logging:
   path: logs
 eureka:
@@ -39,11 +50,7 @@ eureka:
       git-version: ${git.commit.id.describe:}
       git-commit: ${git.commit.id.abbrev:}
       git-branch: ${git.branch:}
-ribbon:
-  ReadTimeout: 10000
-  ConnectTimeout: 15000
-  eureka:
-    enabled: true
+
 # See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
 zuul: # those values must be configured depending on the application specific needs
   sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
@@ -55,15 +62,6 @@ zuul: # those values must be configured depending on the application specific ne
   prefix: /services
   semaphore:
     max-semaphores: 500
-
-# See https://github.com/Netflix/Hystrix/wiki/Configuration
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 300000
 
 management:
   endpoints:

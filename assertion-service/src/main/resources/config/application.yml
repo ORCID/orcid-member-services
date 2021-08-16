@@ -14,6 +14,17 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+hystrix:
+  command:
+    default:
+      execution:
+        thread:
+            timeoutInMilliseconds: 10000
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 15000
+  eureka:
+    enabled: true
 logging:
   path: logs
 eureka:
@@ -39,30 +50,9 @@ eureka:
       git-version: ${git.commit.id.describe:}
       git-commit: ${git.commit.id.abbrev:}
       git-branch: ${git.branch:}
-ribbon:
-  eureka:
-    enabled: true
 feign:
   hystrix:
     enabled: true
-  # client:
-  #     config:
-  #         default:
-  #             connectTimeout: 5000
-  #             readTimeout: 5000
-
-# See https://github.com/Netflix/Hystrix/wiki/Configuration
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          strategy: SEMAPHORE
-          # See https://github.com/spring-cloud/spring-cloud-netflix/issues/1330
-          # thread:
-          #     timeoutInMilliseconds: 10000
-  shareSecurityContext: true
-
 management:
   endpoints:
     web:
