@@ -27,14 +27,12 @@ import org.orcid.user.security.AuthoritiesConstants;
 import org.orcid.user.service.MailService;
 import org.orcid.user.service.MemberService;
 import org.orcid.user.service.UserService;
-import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.dto.UserDTO;
 import org.orcid.user.service.mapper.UserMapper;
 import org.orcid.user.web.rest.errors.ExceptionTranslator;
 import org.orcid.user.web.rest.vm.ManagedUserVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cache.CacheManager;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -98,9 +96,6 @@ public class UserResourceIT {
     private ExceptionTranslator exceptionTranslator;
 
     @Autowired
-    private CacheManager cacheManager;
-
-    @Autowired
     private UserResource userResource;
 
     @Autowired
@@ -116,8 +111,6 @@ public class UserResourceIT {
     public void setup() {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-
-        cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).clear();
         userRepository.deleteAll();
         user = createEntity();
         createLoggedInUser();
@@ -328,15 +321,14 @@ public class UserResourceIT {
         // Initialize the database
         userRepository.save(user);
 
-        assertThat(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get(user.getEmail())).isNull();
-
         // Get the user
-        restUserMockMvc.perform(get("/api/users/{login}/", user.getEmail())).andExpect(status().isOk())
+        MvcResult result = restUserMockMvc.perform(get("/api/users/{login}/", user.getEmail())).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
                 .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME)).andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
-                .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL)).andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
-
-        assertThat(cacheManager.getCache(UserCaches.USERS_BY_EMAIL_CACHE).get(user.getEmail())).isNotNull();
+                .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL)).andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY)).andReturn();
+        
+        UserDTO read = objectMapper.readValue(result.getResponse().getContentAsString(), UserDTO.class);
+        assertThat(read.getEmail()).isEqualTo(user.getEmail());
     }
 
     @Test
