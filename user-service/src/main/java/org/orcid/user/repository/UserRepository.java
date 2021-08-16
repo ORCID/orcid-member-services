@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.orcid.user.domain.User;
-import org.orcid.user.service.cache.UserCaches;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -24,7 +22,6 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     Optional<User> findOneByResetKey(String resetKey);
 
-    @Cacheable(cacheNames = UserCaches.USERS_BY_EMAIL_CACHE)
     Optional<User> findOneByEmailIgnoreCase(String email);
 
     Optional<User> findOneById(String id);

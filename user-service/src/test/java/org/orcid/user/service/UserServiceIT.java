@@ -16,7 +16,6 @@ import org.orcid.user.UserServiceApp;
 import org.orcid.user.domain.User;
 import org.orcid.user.repository.UserRepository;
 import org.orcid.user.security.AuthoritiesConstants;
-import org.orcid.user.service.cache.UserCaches;
 import org.orcid.user.service.util.RandomUtil;
 import org.orcid.user.web.rest.errors.ExpiredKeyException;
 import org.orcid.user.web.rest.errors.InvalidKeyException;
@@ -44,9 +43,6 @@ public class UserServiceIT {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserCaches userCaches;
 
     @Test
     public void assertThatUserMustExistToResetPassword() {
@@ -194,7 +190,6 @@ public class UserServiceIT {
 
     private void removeUser(User user) {
         userRepository.delete(user);
-        userCaches.evictEntryFromEmailCache(user.getEmail());
     }
 
 }

@@ -261,7 +261,7 @@ public class AccountResourceIT {
     }
 
     @Test
-    @WithMockUser("change-password@example.com")
+    @WithMockUser("change-password-wrong-existing-password@example.com")
     public void testChangePasswordWrongExistingPassword() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.random(60);
