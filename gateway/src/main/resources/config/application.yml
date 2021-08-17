@@ -19,9 +19,9 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 10000
+            timeoutInMilliseconds: 30000
 ribbon:
-  ReadTimeout: 10000
+  ReadTimeout: 5000
   ConnectTimeout: 10000
 logging:
   path: logs
