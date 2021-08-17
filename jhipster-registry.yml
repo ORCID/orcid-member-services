@@ -1,7 +1,7 @@
 version: '2'
 services:
   jhipster-registry:
-    image: jhipster/jhipster-registry:v5.0.2
+    image: jhipster/jhipster-registry:v6.1.2
     # By default the JHipster Registry runs with the "dev" and "native"
     # Spring profiles.
     # "native" profile means the filesystem is used to store data, see
