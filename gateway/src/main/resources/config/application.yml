@@ -51,6 +51,9 @@ zuul: # those values must be configured depending on the application specific ne
   prefix: /services
   semaphore:
     max-semaphores: 500
+  ribbon:
+    eager-load:
+      enabled: true
 
 management:
   endpoints:
