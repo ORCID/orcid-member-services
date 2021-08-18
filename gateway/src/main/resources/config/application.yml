@@ -19,10 +19,10 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 60000
+            timeoutInMilliseconds: 30000
 ribbon:
-  ReadTimeout: 5000
-  ConnectTimeout: 10000
+  ReadTimeout: 7000
+  ConnectTimeout: 7000
 logging:
   path: logs
 eureka:
