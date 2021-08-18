@@ -14,8 +14,8 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 ribbon:
-  ReadTimeout: 5000
-  ConnectTimeout: 10000
+  ReadTimeout: 10000
+  ConnectTimeout: 15000
 logging:
   path: logs
 eureka:
@@ -53,6 +53,9 @@ zuul: # those values must be configured depending on the application specific ne
   prefix: /services
   semaphore:
     max-semaphores: 500
+  ribbon:
+    eager-load:
+      enabled: true
 
 management:
   endpoints:
