@@ -13,16 +13,9 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 30000
 ribbon:
-  ReadTimeout: 7000
-  ConnectTimeout: 7000
+  ReadTimeout: 5000
+  ConnectTimeout: 10000
 logging:
   path: logs
 eureka:
@@ -55,14 +48,11 @@ zuul: # those values must be configured depending on the application specific ne
   host:
     max-total-connections: 1000
     max-per-route-connections: 100
-    connect-timeout-millis: 5000
-    socket-timeout-millis: 10000
+    connect-timeout-millis: 10000
+    socket-timeout-millis: 15000
   prefix: /services
   semaphore:
     max-semaphores: 500
-  ribbon:
-    eager-load:
-      enabled: true
 
 management:
   endpoints:
