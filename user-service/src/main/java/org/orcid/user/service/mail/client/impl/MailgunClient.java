@@ -13,6 +13,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.orcid.user.config.ApplicationProperties;
 import org.orcid.user.service.mail.MailException;
 import org.orcid.user.service.mail.client.MailClient;
@@ -62,6 +63,9 @@ public class MailgunClient implements MailClient {
                 try (InputStream inputStream = response.getEntity().getContent()) {
                     LOGGER.warn(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
                 }
+            }
+            else {
+                EntityUtils.consume(response.getEntity());
             }
         } catch (IOException e) {
             throw new MailException("Error posting mail to mailgun", e);
