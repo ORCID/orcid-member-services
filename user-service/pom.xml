@@ -542,7 +542,7 @@
                     <version>${jib-maven-plugin.version}</version>
                     <configuration>
                         <from>
-                            <image>adoptopenjdk:11-jre-hotspot</image>
+                            <image>eclipse-temurin:11</image>
                         </from>
                         <to>
                             <image>${DOCKER_REG}/userservice:${release.tag}</image>
