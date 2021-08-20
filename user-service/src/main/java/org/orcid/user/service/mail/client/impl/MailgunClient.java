@@ -63,8 +63,7 @@ public class MailgunClient implements MailClient {
                 try (InputStream inputStream = response.getEntity().getContent()) {
                     LOGGER.warn(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
                 }
-            }
-            else {
+            } else {
                 EntityUtils.consume(response.getEntity());
             }
         } catch (IOException e) {
