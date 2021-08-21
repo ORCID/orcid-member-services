@@ -11,8 +11,7 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_SECURITY_USER_PASSWORD=admin
       - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/ORCID/orcid-member-services/jhipster-registry
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
       - JHIPSTER_LOGGING_LOGSTASH_ENABLED=false
       # change the name of UAA server here, if needed
       - JHIPSTER_SECURITY_CLIENT_AUTHORIZATION_TOKEN_SERVICE_ID=uaa
