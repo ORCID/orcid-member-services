@@ -300,13 +300,13 @@ export class MSUserUpdateComponent implements OnInit {
 
   protected onSaveSuccessOwnershipChange() {
     this.isSaving = false;
-    this.navigateToUsersList();
+    window.location.href = SERVER_API_URL;
     this.alertService.success('userServiceApp.user.created.string');
   }
 
   protected onUpdateSuccessOwnershipChange() {
     this.isSaving = false;
-    this.navigateToUsersList();
+    window.location.href = SERVER_API_URL;
     this.alertService.success('userServiceApp.user.updated.string');
   }
 
