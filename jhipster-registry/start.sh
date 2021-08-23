@@ -10,5 +10,5 @@ if [ ! -f $JHIPSTER_JAR ]; then
     fi
 fi
 
-java -jar $JHIPSTER_JAR --spring.security.user.password=admin --jhipster.security.authentication.jwt.secret=my-secret-key-which-should-be-changed-in-production-and-be-base64-encoded --spring.cloud.config.server.composite.0.type=native
+java -jar $JHIPSTER_JAR --spring.profiles.active=dev,uaa --spring.security.user.password=admin --jhipster.security.authentication.jwt.base-64-secret=bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZA== --spring.cloud.config.server.composite.0.type=native
 
