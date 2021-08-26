@@ -78,12 +78,14 @@ public class AssertionService {
     public Page<Assertion> findByOwnerId(Pageable pageable) {
         Page<Assertion> assertionsPage = assertionRepository.findByOwnerId(assertionsUserService.getLoggedInUserId(), pageable);
         assertionsPage.forEach(a -> {
+            if (a.getOrcidId() == null) {
+                a.setOrcidId(getAssertionOrcidId(a));
+                assertionRepository.save(a);
+            }
+
             // set status as text to display in UI
             if (!StringUtils.isBlank(a.getStatus())) {
                 a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
-            }
-            if (a.getOrcidId() == null) {
-                a.setOrcidId(getAssertionOrcidId(a));
             }
         });
         return assertionsPage;
@@ -92,13 +94,14 @@ public class AssertionService {
     public List<Assertion> findAllByOwnerId() {
         List<Assertion> assertions = assertionRepository.findAllByOwnerId(assertionsUserService.getLoggedInUserId(), SORT);
         assertions.forEach(a -> {
+            if (a.getOrcidId() == null) {
+                a.setOrcidId(getAssertionOrcidId(a));
+                assertionRepository.save(a);
+            }
+
             // set status as text to display in UI
             if (!StringUtils.isBlank(a.getStatus())) {
                 a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
-            }
-
-            if (a.getOrcidId() == null) {
-                a.setOrcidId(getAssertionOrcidId(a));
             }
         });
         return assertions;
@@ -134,7 +137,6 @@ public class AssertionService {
             }
 
             if (!StringUtils.isBlank(a.getStatus())) {
-                LOG.debug("assertion status is: " + a.getStatus());
                 a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
             }
         });
@@ -193,6 +195,7 @@ public class AssertionService {
 
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(email);
         if (!optionalRecord.isPresent()) {
+            LOG.info("Creating ORCID_RECORD entry for {}", email);
             orcidRecordService.createOrcidRecord(email, now, assertion.getSalesforceId());
         } else {
             OrcidRecord record = optionalRecord.get();

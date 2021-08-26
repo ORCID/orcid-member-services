@@ -76,8 +76,8 @@ jhipster:
       max-entries: 1000 # Number of objects in each cache entry
   security:
     client-authorization:
-      access-token-uri: http://userservice/oauth/token
-      token-service-id: userservice
+      access-token-uri: http://uaa/oauth/token
+      token-service-id: uaa
       client-id: internal
       client-secret: internal
   mail: # specific JHipster mail property, for standard properties see MailProperties
@@ -85,7 +85,7 @@ jhipster:
     base-url: http://my-server-url-to-change # Modify according to your server's URL
 oauth2:
   signature-verification:
-    public-key-endpoint-uri: http://userservice/oauth/token_key
+    public-key-endpoint-uri: http://uaa/oauth/token_key
     #ttl for public keys to verify JWT tokens (in ms)
     ttl: 3600000
     #max. rate at which public keys will be fetched (in ms)

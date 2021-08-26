@@ -14,6 +14,34 @@
       "zipkin"
     ],
     "serviceDiscoveryType": "eureka",
-    "jwtSecretKey": "ZTIzYjk2ZTg5MTA5MDQxMjZlNjk2M2I3MzFjMmQ0ZGNlODU2ZGViMDcxMzE5ZmQxMjlkYTVjZDZiZmIyNDFlYzYyYzE0YTE4ODU5YjUyYjczZWIzNWFiZDg3N2Q1NTFhZWIwNA=="
+    "jwtSecretKey": "Njc0YmJmYzM4MzRmZTFhMjY3M2MwZmMwNmM1ZWQ4MWExYmJjNTE0ZTA5ZmYxOGU5MDQ4NTYwZjQyNzA5OTAwMDY5NGIyZDc2MGJmNTJlZjVkNWZjNWExZDU5ZTA0ZmFlNjU1NTRkYmQ1NWNkMWJhNGU3OGYyY2IwYWVhYmQwYmM=",
+    "promptValues": {
+      "packageName": "org.orcid.microservice"
+    },
+    "jhipsterVersion": "6.1.2",
+    "applicationType": "uaa",
+    "baseName": "userservice",
+    "packageName": "org.orcid.microservice",
+    "packageFolder": "org/orcid/microservice",
+    "serverPort": "9889",
+    "authenticationType": "uaa",
+    "cacheProvider": "no",
+    "enableHibernateCache": false,
+    "websocket": false,
+    "databaseType": "no",
+    "devDatabaseType": "no",
+    "prodDatabaseType": "no",
+    "searchEngine": false,
+    "messageBroker": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "clientPackageManager": "npm",
+    "skipClient": true
   }
 }

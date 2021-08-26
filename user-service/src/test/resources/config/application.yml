@@ -17,12 +17,12 @@ eureka:
   client:
     enabled: false
   instance:
-    appname: userservice
-    instanceId: userservice:${spring.application.instance-id:${random.value}}
+    appname: uaa
+    instanceId: uaa:${spring.application.instance-id:${random.value}}
 
 spring:
   application:
-    name: userservice
+    name: uaa
   data:
     mongodb:
       host: localhost
@@ -39,13 +39,13 @@ spring:
       enabled: false
   task:
     execution:
-      thread-name-prefix: userservice-task-
+      thread-name-prefix: uaa-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: userservice-scheduling-
+      thread-name-prefix: uaa-scheduling-
       pool:
         size: 1
   thymeleaf:
@@ -63,7 +63,7 @@ server:
 
 jhipster:
   clientApp:
-    name: 'userServiceApp'
+    name: 'uaaApp'
   mail:
     from: test@localhost
     base-url: http://127.0.0.1:8080
@@ -75,8 +75,6 @@ jhipster:
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
     client-authorization:
-      access-token-uri: http://userservice/oauth/token
-      token-service-id: userservice
       client-id: internal
       client-secret: internal
   metrics:

@@ -44,6 +44,7 @@ feign:
     enabled: true
 management:
   endpoints:
+    enabled-by-default: true
     web:
       base-path: /management
       exposure:

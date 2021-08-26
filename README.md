@@ -1,97 +1,101 @@
-# ORCID Member Portal
+# userservice
 
-The ORCID Member Portal is a new suite of tools intended to help organizations make the most of their ORCID membership. This application is currently under development and has not yet been released.
+This application was generated using JHipster 6.1.2, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.1.2](https://www.jhipster.tech/documentation-archive/v6.1.2).
 
-The first phase of development includes features that simplify the process of posting affiliation information (employment, education, etc) to researchers’ ORCID records.
+This is a "uaa" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
 
-Project tasks are managed in Trello:
-- Current development tasks: https://trello.com/b/a8Cxpwqe/member-services-current-development
-- Release notes: https://trello.com/b/9Xugawlx/member-services-release-notes-2020
+This is also a JHipster User Account and Authentication (UAA) Server, refer to [Using UAA for Microservice Security][] for details on how to secure JHipster microservices with OAuth2.
+This application is configured for Service Discovery and Configuration with the JHipster-Registry. On launch, it will refuse to start if it is not able to connect to the JHipster-Registry at [http://localhost:8761](http://localhost:8761). For more information, read our documentation on [Service Discovery and Configuration with the JHipster-Registry][].
 
-# Development setup
+## Development
 
-## Prerequisites
+To start your application in the dev profile, simply run:
 
-- [OpenJDK 11](https://openjdk.java.net/install/)
-- [Git](https://git-scm.com/downloads)
-- [NodeJS](https://nodejs.org/en/download)
-- [Yeoman](https://yeoman.io/learning/)
-- [Yarn](https://yarnpkg.com/lang/en/docs/install/#mac-stable)
-- [MongoDB](https://docs.mongodb.com/manual/installation/)
-- [MongoDB compass](https://www.mongodb.com/products/compass) also recommended
+    ./mvnw
 
-## Install and start MongoDB
+For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
-Install and start [MongoDB Community Edition for your OS](https://docs.mongodb.com/manual/administration/install-community/)
+## Building for production
 
-## Clone the orcid-member-services repository
+### Packaging as jar
 
-Create a `git` directory in your home folder, and clone the orcid-member-services project there:
+To build the final jar and optimize the userservice application for production, run:
 
-    mkdir ~/git
-    cd ~/git
-    git clone git@github.com:ORCID/orcid-member-services.git
+    ./mvnw -Pprod clean verify
 
-## Set Java version to Open JDK 11
+To ensure everything worked, run:
 
-Edit bash profile to set JAVA_HOME to your OpenJDK 11 path, ex:
+    java -jar target/*.jar
 
-    vim ~/.bash_profile
-    export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+Refer to [Using JHipster in production][] for more details.
 
-> **IMPORTANT!** You will need to set JAVA_HOME back to Java 8 in order to work on ORCID-Source
+### Packaging as war
 
-## Start the JHipster registry
+To package your application as a war in order to deploy it to an application server, run:
 
-- Open a new terminal
-- cd orcid-member-services/jhipster-registry/
-- Run `bash start.sh`. This should download the jhipster-registry jar if you don't have it installed. If for some reason the download fails you will need to download it manually
-- Wait for the jhipster-registry to start
-- Verify it has started properly. Go to http://localhost:8761/#/ and sign in with `admin@orcid.org`, password `admin`
+    ./mvnw -Pprod,war clean verify
 
+## Testing
 
-## Start the user service
+To launch your application's tests, run:
 
-Our user service, based on [JHipster UAA](https://www.jhipster.tech/using-uaa/), is the service we use to secure our member services app. We also use it for all user based functionality.
+    ./mvnw verify
 
-> **IMPORTANT!** For running locally without an email server connected, disable mail health check for oauth2-services before starting. Edit [oauth2-service/src/main/resources/config/application.yml](https://github.com/ORCID/orcid-member-services/blob/master/oauth2-service/src/main/resources/config/application.yml#L60) and set health - mail - enabled to false.
+For more information, refer to the [Running tests page][].
 
-- Open a new terminal
-- cd orcid-member-services/user-service/
-- Run `bash mvnw`
-- Wait for it to start
+### Code quality
 
-## Start the JHipster gateway:
+Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
 
-- Start MongoDB (e.g. `mongod --config /usr/local/etc/mongod.conf --fork`)
-- Open a new terminal
-- cd orcid-member-services/gateway/
-- Run `bash mvnw`
-- Wait for it to start
-- Go to [http://localhost:8080/](http://localhost:8080/) and sign in with the admin credentials `admin / admin`
+```
+docker-compose -f src/main/docker/sonar.yml up -d
+```
 
-## Start the Angular frontend
-> This is only required after making front end changes
+You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven plugin.
 
-- Stop the jhipster gateway if it's running
-- From the jhiptster gateway base directory, run `npm install` then `npm start`
-- Wait for it to start - localhost:9000 will open in a new browser tab once the server is up
-- Optionally kill it and start up again using bash mvnw as above
+Then, run a Sonar analysis:
 
-## Start the assertion service
+```
+./mvnw -Pprod clean verify sonar:sonar
+```
 
-- Open a new terminal
-- cd orcid-member-services/assertion-service
-- Run `bash mvnw`
-- Wait for it to start
+If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
 
-## Start the member service
+```
+./mvnw initialize sonar:sonar
+```
 
-- Open a new terminal
-- cd orcid-member-services/member-service
-- Run `bash mvnw`
-- Wait for it to start
+or
 
-## Notes
+For more information, refer to the [Code quality page][].
 
-- As long as the jhipster-registry is running first, the starting order of the other services is not important. They can also be started concurrently.
+## Using Docker to simplify development (optional)
+
+You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
+
+You can also fully dockerize your application and all the services that it depends on.
+To achieve this, first build a docker image of your app by running:
+
+    ./mvnw -Pprod verify jib:dockerBuild
+
+Then run:
+
+    docker-compose -f src/main/docker/app.yml up -d
+
+For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
+
+## Continuous Integration (optional)
+
+To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
+
+[jhipster homepage and latest documentation]: https://www.jhipster.tech
+[jhipster 6.1.2 archive]: https://www.jhipster.tech/documentation-archive/v6.1.2
+[doing microservices with jhipster]: https://www.jhipster.tech/documentation-archive/v6.1.2/microservices-architecture/
+
+[Using UAA for Microservice Security]: https://www.jhipster.tech/documentation-archive/v6.1.2/using-uaa/[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v6.1.2/development/
+[Service Discovery and Configuration with the JHipster-Registry]: https://www.jhipster.tech/documentation-archive/v6.1.2/microservices-architecture/#jhipster-registry
+[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v6.1.2/docker-compose
+[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v6.1.2/production/
+[Running tests page]: https://www.jhipster.tech/documentation-archive/v6.1.2/running-tests/
+[Code quality page]: https://www.jhipster.tech/documentation-archive/v6.1.2/code-quality/
+[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v6.1.2/setting-up-ci/

@@ -22,7 +22,7 @@ eureka:
 
 spring:
   profiles:
-    active: dev
+    active: uaa
     include:
       - swagger
       # Uncomment to activate TLS for the dev profile
@@ -63,6 +63,8 @@ server:
 # ===================================================================
 
 jhipster:
+  clientApp:
+    name: 'userServiceApp'
   cache: # Cache configuration
     ehcache: # Ehcache configuration
       time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
@@ -75,15 +77,6 @@ jhipster:
     exposed-headers: 'Authorization,Link,X-Total-Count'
     allow-credentials: true
     max-age: 1800
-  security:
-    client-authorization:
-      access-token-uri: http://userservice/oauth/token
-      token-service-id: userservice
-      client-id: internal
-      client-secret: internal
-  mail: # specific JHipster mail property, for standard properties see MailProperties
-    from: userservice@localhost
-    base-url: http://127.0.0.1:8080
   metrics:
     logs:
       enabled: false

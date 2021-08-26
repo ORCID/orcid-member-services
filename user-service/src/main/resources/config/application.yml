@@ -14,8 +14,6 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-logging:
-  path: logs
 eureka:
   client:
     enabled: true
@@ -39,6 +37,9 @@ eureka:
       git-version: ${git.commit.id.describe:}
       git-commit: ${git.commit.id.abbrev:}
       git-branch: ${git.branch:}
+ribbon:
+  eureka:
+    enabled: true
 management:
   endpoints:
     web:
@@ -54,6 +55,9 @@ management:
   info:
     git:
       mode: full
+  health:
+    mail:
+      enabled: false # When using the MailService, configure an SMTP server and set this to true
   metrics:
     export:
       # Prometheus is the default metrics backend
@@ -79,7 +83,7 @@ management:
 
 spring:
   application:
-    name: userservice
+    name: UserService
   jmx:
     enabled: false
   messages:
@@ -112,6 +116,7 @@ security:
       scope: openid profile email
     resource:
       filter-order: 3
+      user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
 
 server:
   servlet:
@@ -147,12 +152,10 @@ jhipster:
       token-service-id: userservice
       client-id: internal
       client-secret: internal
-  mail:
-    from: userservice@localhost
   swagger:
     default-include-pattern: /api/.*
-    title: userservice API
-    description: userservice API documentation
+    title: UserService API
+    description: UserService API documentation
     version: 0.0.1
     terms-of-service-url:
     contact-name:

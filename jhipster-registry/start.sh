@@ -1,4 +1,4 @@
-JHIPSTER_URL=https://github.com/jhipster/jhipster-registry/releases/download/v6.1.2/jhipster-registry-6.1.2.jar
+JHIPSTER_URL=https://github.com/jhipster/jhipster-registry/releases/download/v6.8.0/jhipster-registry-6.8.0.jar
 JHIPSTER_JAR=`basename $JHIPSTER_URL`
 
 if [ ! -f $JHIPSTER_JAR ]; then
