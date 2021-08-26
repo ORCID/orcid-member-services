@@ -45,7 +45,8 @@ public class AssertionUtils {
             return AssertionStatus.DELETED_IN_ORCID.getValue();
         }
 
-        if (assertion.getAddedToORCID() != null && assertion.getModified().isAfter(assertion.getAddedToORCID())) {
+        if (assertion.getAddedToORCID() != null && assertion.getModified().isAfter(assertion.getAddedToORCID())
+                && (assertion.getUpdatedInORCID() == null || assertion.getUpdatedInORCID().isBefore(assertion.getModified()))) {
             return AssertionStatus.PENDING_RETRY.getValue();
         }
 

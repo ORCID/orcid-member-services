@@ -66,6 +66,12 @@ class AssertionUtilsTest {
         assertion.setModified(Instant.now());
         assertion.setPutCode("1");
         assertEquals(AssertionStatus.PENDING_RETRY.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
+        
+        assertion.setAddedToORCID(Instant.now());
+        assertion.setUpdatedInORCID(Instant.now());
+        assertion.setModified(Instant.now());
+        assertion.setPutCode("1");
+        assertEquals(AssertionStatus.PENDING_RETRY.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
 
         assertion.setPutCode(null);
         assertion.setAddedToORCID(null);
@@ -74,6 +80,12 @@ class AssertionUtilsTest {
         assertion.setModified(Instant.now());
         assertion.setAddedToORCID(Instant.now());
         assertion.setPutCode("1");
+        assertEquals(AssertionStatus.IN_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
+        
+        assertion.setAddedToORCID(Instant.now());
+        assertion.setPutCode("1");
+        assertion.setModified(Instant.now());
+        assertion.setUpdatedInORCID(Instant.now());
         assertEquals(AssertionStatus.IN_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, record));
     }
 
