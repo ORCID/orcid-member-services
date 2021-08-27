@@ -13,7 +13,7 @@ public class AssertionUtils {
     private static final String GRID_BASE_URL_INSTITUTES_ALT = "https://grid.ac/institutes/";
 
     public static String getAssertionStatus(Assertion assertion, OrcidRecord orcidRecord) {
-        if (assertion.getOrcidError() != null && !assertionModifiedSinceLastSync(assertion)) {
+        if (assertion.getOrcidError() != null && !assertionModifiedSinceLastSyncAttempt(assertion)) {
             return getErrorStatus(assertion);
         }
 
@@ -21,7 +21,7 @@ public class AssertionUtils {
             return AssertionStatus.DELETED_IN_ORCID.getValue();
         }
 
-        if (assertionModifiedSinceLastSync(assertion)) {
+        if (assertionModifiedSinceLastSyncAttempt(assertion)) {
             return AssertionStatus.PENDING_RETRY.getValue();
         }
 
@@ -66,16 +66,8 @@ public class AssertionUtils {
         }
     }
 
-    private static boolean assertionModifiedSinceLastSync(Assertion assertion) {
-        if (assertion.getModified() == null || assertion.getAddedToORCID() == null) {
-            return false;
-        }
-        
-        if (assertion.getUpdatedInORCID() != null) {
-            return assertion.getModified().isAfter(assertion.getUpdatedInORCID());
-        }
-        
-        return assertion.getModified().isAfter(assertion.getAddedToORCID());
+    private static boolean assertionModifiedSinceLastSyncAttempt(Assertion assertion) {
+        return assertion.getModified() != null && assertion.getLastSyncAttempt() != null && assertion.getModified().isAfter(assertion.getLastSyncAttempt());
     }
 
     public static String stripGridURL(String gridIdentifier) {

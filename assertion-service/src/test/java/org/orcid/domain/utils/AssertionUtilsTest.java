@@ -20,26 +20,16 @@ class AssertionUtilsTest {
 
     @Test
     void testGetAffiliationStatusWhereErrorOccured() {
-        JSONObject error = getDummyError(404);
-        Assertion assertion = getAssertionUpdatedInOrcid();
-        assertion.setOrcidError(error.toString());
-        assertEquals(AssertionStatus.USER_DELETED_FROM_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, getOrcidRecordWithApprovedToken()));
-
-        error = getInvalidScopeError(400);
-        assertion = getAssertionUpdatedInOrcid();
-        assertion.setOrcidError(error.toString());
-        assertEquals(AssertionStatus.USER_REVOKED_ACCESS.getValue(), AssertionUtils.getAssertionStatus(assertion, getOrcidRecordWithRevokedToken()));
-
-        error = getDummyError(500);
-        assertion = getAssertionNotAddedToOrcid();
-        assertion.setOrcidError(error.toString());
-        assertEquals(AssertionStatus.ERROR_ADDING_TO_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, getOrcidRecordWithApprovedToken()));
-
-        error = getDummyError(500);
-        assertion = getAssertionAddedToOrcid();
-        assertion.setOrcidError(error.toString());
-        assertEquals(AssertionStatus.ERROR_UPDATING_TO_ORCID.getValue(), AssertionUtils.getAssertionStatus(assertion, getOrcidRecordWithApprovedToken()));
-
+        assertEquals(AssertionStatus.USER_DELETED_FROM_ORCID.getValue(),
+                AssertionUtils.getAssertionStatus(getAssertionUpdatedInOrcidWithLastSync404Failure(), getOrcidRecordWithApprovedToken()));
+        assertEquals(AssertionStatus.USER_REVOKED_ACCESS.getValue(),
+                AssertionUtils.getAssertionStatus(getAssertionUpdatedInOrcidWithLastSyncInvalidScopeFailure(), getOrcidRecordWithRevokedToken()));
+        assertEquals(AssertionStatus.ERROR_ADDING_TO_ORCID.getValue(),
+                AssertionUtils.getAssertionStatus(getAssertionWhereFirstSyncFailed(), getOrcidRecordWithApprovedToken()));
+        assertEquals(AssertionStatus.ERROR_UPDATING_TO_ORCID.getValue(),
+                AssertionUtils.getAssertionStatus(getAssertionUpdatedInOrcidWithLastSync500Failure(), getOrcidRecordWithApprovedToken()));
+        assertEquals(AssertionStatus.PENDING_RETRY.getValue(),
+                AssertionUtils.getAssertionStatus(getAssertionModifiedSinceLastSyncFailure(), getOrcidRecordWithApprovedToken()));
     }
 
     @Test
@@ -54,37 +44,78 @@ class AssertionUtilsTest {
         assertEquals(AssertionStatus.PENDING_RETRY.getValue(),
                 AssertionUtils.getAssertionStatus(getAssertionUpdatedSinceUpdatingInOrcid(), getOrcidRecordWithApprovedToken()));
     }
-    
+
+    private Assertion getAssertionModifiedSinceLastSyncFailure() {
+        Assertion assertion = getAssertionUpdatedInOrcid();
+        assertion.setLastSyncAttempt(Instant.now().plusSeconds(50l));
+        assertion.setOrcidError(getDummyError(500).toString());
+        assertion.setModified(Instant.now().plusSeconds(55l));
+        return assertion;
+    }
+
+    private Assertion getAssertionUpdatedInOrcidWithLastSync404Failure() {
+        Assertion assertion = getAssertionUpdatedInOrcid();
+        assertion.setLastSyncAttempt(Instant.now().plusSeconds(50l));
+        assertion.setOrcidError(getDummyError(404).toString());
+        return assertion;
+    }
+
+    private Assertion getAssertionUpdatedInOrcidWithLastSync500Failure() {
+        Assertion assertion = getAssertionUpdatedInOrcid();
+        assertion.setLastSyncAttempt(Instant.now().plusSeconds(50l));
+        assertion.setOrcidError(getDummyError(600).toString());
+        return assertion;
+    }
+
+    private Assertion getAssertionUpdatedInOrcidWithLastSyncInvalidScopeFailure() {
+        Assertion assertion = getAssertionUpdatedInOrcid();
+        assertion.setLastSyncAttempt(Instant.now().plusSeconds(50l));
+        assertion.setOrcidError(getInvalidScopeError(400).toString());
+        return assertion;
+    }
+
     private Assertion getAssertionNotAddedToOrcid() {
         Assertion assertion = new Assertion();
         assertion.setModified(Instant.now());
         assertion.setSalesforceId(SALESFORCE_ID);
         return assertion;
     }
-    
+
+    private Assertion getAssertionWhereFirstSyncFailed() {
+        Assertion assertion = getAssertionNotAddedToOrcid();
+        assertion.setLastSyncAttempt(Instant.now());
+        assertion.setOrcidError(getDummyError(500).toString());
+        return assertion;
+    }
+
     private Assertion getAssertionAddedToOrcid() {
         Assertion assertion = getAssertionNotAddedToOrcid();
-        assertion.setAddedToORCID(Instant.now().plusSeconds(10l));
+        Instant syncDate = Instant.now().plusSeconds(10l);
+        assertion.setAddedToORCID(syncDate);
+        assertion.setLastSyncAttempt(syncDate);
         assertion.setPutCode("put-code");
         return assertion;
     }
-    
+
     private Assertion getAssertionUpdatedSinceAddingToOrcid() {
         Assertion assertion = getAssertionAddedToOrcid();
         assertion.setModified(Instant.now().plusSeconds(20l));
         return assertion;
     }
-    
+
     private Assertion getAssertionUpdatedInOrcid() {
         Assertion assertion = getAssertionUpdatedSinceAddingToOrcid();
         assertion.setModified(Instant.now().plusSeconds(30l));
-        assertion.setUpdatedInORCID(Instant.now().plusSeconds(40l));
+        Instant syncDate = Instant.now().plusSeconds(40l);
+        assertion.setUpdatedInORCID(syncDate);
+        assertion.setLastSyncAttempt(syncDate);
         return assertion;
     }
-    
+
     private Assertion getAssertionDeletedInOrcid() {
         Assertion assertion = getAssertionAddedToOrcid();
-        assertion.setDeletedFromORCID(Instant.now().plusSeconds(20l));
+        Instant syncDate = Instant.now().plusSeconds(20l);
+        assertion.setDeletedFromORCID(syncDate);
         return assertion;
     }
 
@@ -107,7 +138,7 @@ class AssertionUtilsTest {
         record.setTokens(Arrays.asList(token));
         return record;
     }
-    
+
     private OrcidRecord getOrcidRecordWithRevokedToken() {
         OrcidRecord record = new OrcidRecord();
         OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN, null, Instant.now());
