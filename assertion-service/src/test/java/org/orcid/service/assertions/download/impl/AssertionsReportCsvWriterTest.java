@@ -179,6 +179,7 @@ public class AssertionsReportCsvWriterTest {
         assertion.setPutCode(String.valueOf(i));
         assertion.setCreated(Instant.now());
         assertion.setModified(Instant.now());
+        assertion.setLastSyncAttempt(Instant.now().minusSeconds(10l));
         assertion.setDisambiguatedOrgId("disambiguated-id-" + i);
         assertion.setDisambiguationSource("disambiguation-source-" + i);
         return assertion;

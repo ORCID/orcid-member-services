@@ -23,6 +23,8 @@ import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -43,6 +45,7 @@ import org.orcid.service.assertions.upload.AssertionsUpload;
 import org.orcid.service.assertions.upload.AssertionsUploadSummary;
 import org.orcid.service.assertions.upload.impl.AssertionsCsvReader;
 import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.orcid.web.rest.errors.ORCIDAPIException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -80,6 +83,9 @@ class AssertionServiceTest {
 
     @Mock
     private AssertionsCsvReader assertionsCsvReader;
+    
+    @Captor
+    private ArgumentCaptor<Assertion> assertionCaptor;
 
     @InjectMocks
     private AssertionService assertionService;
@@ -278,9 +284,10 @@ class AssertionServiceTest {
         assertionService.postAssertionsToOrcid();
 
         Mockito.verify(orcidRecordService, Mockito.times(20)).findOneByEmail(Mockito.anyString());
-        // Mockito.verify(orcidAPIClient,
-        // Mockito.times(5)).exchangeToken(Mockito.anyString());
-        Mockito.verify(orcidAPIClient, Mockito.times(5)).postAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
+        Mockito.verify(orcidAPIClient, Mockito.times(5)).postAffiliation(Mockito.anyString(), Mockito.anyString(), assertionCaptor.capture());
+        
+        List<Assertion> posted = assertionCaptor.getAllValues();
+        posted.forEach(a -> assertNotNull(a.getLastSyncAttempt()));
     }
 
     @Test
@@ -303,7 +310,63 @@ class AssertionServiceTest {
 
         Mockito.verify(orcidRecordService, Mockito.times(25)).findOneByEmail(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
-        Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
+        Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(), assertionCaptor.capture());
+        
+        List<Assertion> posted = assertionCaptor.getAllValues();
+        posted.forEach(a -> assertNotNull(a.getLastSyncAttempt()));
+    }
+    
+    @Test
+    void testDeleteAssertionFromOrcidRegistry_successfulDelete() throws org.json.JSONException, ClientProtocolException, IOException {
+        Mockito.when(assertionsRepository.findById(Mockito.eq("assertionId"))).thenReturn(Optional.of(getAssertionWithEmail("something@orcid.org")));
+        Mockito.when(orcidRecordService.findOneByEmail("something@orcid.org")).thenReturn(getOptionalOrcidRecordWithIdToken());
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("accessToken");
+        Mockito.when(orcidAPIClient.deleteAffiliation(Mockito.anyString(), Mockito.eq("accessToken"), Mockito.any(Assertion.class))).thenReturn(true);
+        assertionService.deleteAssertionFromOrcidRegistry("assertionId");
+        
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
+        
+        Mockito.verify(assertionsRepository, Mockito.times(2)).save(assertionCaptor.capture());
+        List<Assertion> captured = assertionCaptor.getAllValues();
+        Assertion lastSaved = captured.get(captured.size() - 1);
+        assertNotNull(lastSaved.getLastSyncAttempt());
+    }
+    
+    @Test
+    void testDeleteAssertionFromOrcidRegistry_failedDelete() throws org.json.JSONException, ClientProtocolException, IOException {
+        Mockito.when(assertionsRepository.findById(Mockito.eq("assertionId"))).thenReturn(Optional.of(getAssertionWithEmail("something@orcid.org")));
+        Mockito.when(orcidRecordService.findOneByEmail("something@orcid.org")).thenReturn(getOptionalOrcidRecordWithIdToken());
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("accessToken");
+        Mockito.when(orcidAPIClient.deleteAffiliation(Mockito.anyString(), Mockito.eq("accessToken"), Mockito.any(Assertion.class))).thenReturn(false);
+        assertionService.deleteAssertionFromOrcidRegistry("assertionId");
+        
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
+        
+        Mockito.verify(assertionsRepository, Mockito.times(1)).save(assertionCaptor.capture());
+        List<Assertion> captured = assertionCaptor.getAllValues();
+        Assertion lastSaved = captured.get(captured.size() - 1);
+        assertNotNull(lastSaved.getLastSyncAttempt());
+    }
+    
+    @Test
+    void testDeleteAssertionFromOrcidRegistry_errorDeleting() throws org.json.JSONException, ClientProtocolException, IOException {
+        Assertion assertion = getAssertionWithEmail("something@orcid.org");
+        assertion.setId("assertionId");
+        Mockito.when(assertionsRepository.findById(Mockito.eq("assertionId"))).thenReturn(Optional.of(assertion));
+        Mockito.when(orcidRecordService.findOneByEmail("something@orcid.org")).thenReturn(getOptionalOrcidRecordWithIdToken());
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("accessToken");
+        Mockito.doThrow(new ORCIDAPIException(404, "not found")).when(orcidAPIClient).deleteAffiliation(Mockito.anyString(), Mockito.eq("accessToken"), Mockito.any(Assertion.class));
+        assertionService.deleteAssertionFromOrcidRegistry("assertionId");
+        
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
+        
+        Mockito.verify(assertionsRepository, Mockito.times(2)).save(assertionCaptor.capture());
+        List<Assertion> captured = assertionCaptor.getAllValues();
+        Assertion lastSaved = captured.get(captured.size() - 1);
+        assertNotNull(lastSaved.getLastSyncAttempt());
     }
 
     @Test

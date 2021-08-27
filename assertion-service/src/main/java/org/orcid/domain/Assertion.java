@@ -1,4 +1,5 @@
 package org.orcid.domain;
+
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -92,50 +93,50 @@ public class Assertion implements Serializable {
 
     @Field("modified")
     private Instant modified;
+    
+    @Field("last_sync_attempt")
+    private Instant lastSyncAttempt;
 
     @Field("last_modified_by")
     private String lastModifiedBy;
 
-    // jhi_user.id
     @Field("owner_id")
     private String ownerId;
-    
+
     @Indexed
     @Field("salesforce_id")
     private String salesforceId;
-    
+
     @Field("added_to_orcid")
     private Instant addedToORCID;
-    
+
     @Field("updated_in_orcid")
     private Instant updatedInORCID;
-    
+
     @Field("deleted_from_orcid")
     private Instant deletedFromORCID;
-    
+
     @Field("url")
     private String url;
-    
+
     @Field("orcid_error")
     private String orcidError;
-    
+
     @Field("orcid_id")
     private String orcidId;
-    
+
     private String status;
-    
+
     private String permissionLink;
 
     public String getPermissionLink() {
-		return permissionLink;
-	}
+        return permissionLink;
+    }
 
-	public void setPermissionLink(String permissionLink) {
-		this.permissionLink = permissionLink;
-	}
+    public void setPermissionLink(String permissionLink) {
+        this.permissionLink = permissionLink;
+    }
 
-	// jhipster-needle-entity-add-field - JHipster will add fields here, do not
-    // remove
     public String getId() {
         return id;
     }
@@ -438,6 +439,14 @@ public class Assertion implements Serializable {
         this.lastModifiedBy = lastModifiedBy;
     }
 
+    public Instant getLastSyncAttempt() {
+        return lastSyncAttempt;
+    }
+
+    public void setLastSyncAttempt(Instant lastSyncAttempt) {
+        this.lastSyncAttempt = lastSyncAttempt;
+    }
+
     public String getOwnerId() {
         return ownerId;
     }
@@ -450,7 +459,7 @@ public class Assertion implements Serializable {
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
-    
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters
     // and setters here, do not remove
     public String getSalesforceId() {
@@ -484,7 +493,7 @@ public class Assertion implements Serializable {
     public void setAddedToORCID(Instant addedToORCID) {
         this.addedToORCID = addedToORCID;
     }
-    
+
     public Instant getUpdatedInORCID() {
         return updatedInORCID;
     }
@@ -492,32 +501,32 @@ public class Assertion implements Serializable {
     public void setUpdatedInORCID(Instant updatedInORCID) {
         this.updatedInORCID = updatedInORCID;
     }
-    
+
     public String getUrl() {
-		return url;
-	}
+        return url;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public String getOrcidError() {
+    public String getOrcidError() {
         return orcidError;
     }
 
     public void setOrcidError(String orcidError) {
         this.orcidError = orcidError;
     }
-    
+
     public String getOrcidId() {
-		return orcidId;
-	}
+        return orcidId;
+    }
 
-	public void setOrcidId(String orcidId) {
-		this.orcidId = orcidId;
-	}
+    public void setOrcidId(String orcidId) {
+        this.orcidId = orcidId;
+    }
 
-	@Override
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -537,6 +546,7 @@ public class Assertion implements Serializable {
         result = prime * result + ((externalIdUrl == null) ? 0 : externalIdUrl.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((modified == null) ? 0 : modified.hashCode());
+        result = prime * result + ((lastSyncAttempt == null) ? 0 : lastSyncAttempt.hashCode());
         result = prime * result + ((orcidError == null) ? 0 : orcidError.hashCode());
         result = prime * result + ((orgCity == null) ? 0 : orgCity.hashCode());
         result = prime * result + ((orgCountry == null) ? 0 : orgCountry.hashCode());
@@ -642,6 +652,11 @@ public class Assertion implements Serializable {
                 return false;
         } else if (!modified.equals(other.modified))
             return false;
+        if (lastSyncAttempt == null) {
+            if (other.lastSyncAttempt != null)
+                return false;
+        } else if (!lastSyncAttempt.equals(other.lastSyncAttempt))
+            return false;
         if (orcidError == null) {
             if (other.orcidError != null)
                 return false;
@@ -723,5 +738,5 @@ public class Assertion implements Serializable {
         } else if (!orcidId.equals(other.orcidId))
             return false;
         return true;
-    }  
+    }
 }

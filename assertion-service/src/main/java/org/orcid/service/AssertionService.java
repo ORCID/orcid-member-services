@@ -112,7 +112,7 @@ public class AssertionService {
                 a.setOrcidId(getAssertionOrcidId(a));
                 assertionRepository.save(a);
             }
-            
+
             if (!StringUtils.isBlank(a.getStatus())) {
                 LOG.debug("assertion status is: " + a.getStatus());
                 a.setStatus(AssertionStatus.getStatus(a.getStatus()).getText());
@@ -394,15 +394,15 @@ public class AssertionService {
 
         String orcid = record.getOrcid();
         String accessToken = null;
+        Instant now = Instant.now();
+
         try {
             accessToken = orcidAPIClient.exchangeToken(idToken);
-
             LOG.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
             String putCode = orcidAPIClient.postAffiliation(orcid, accessToken, assertion);
             Optional<Assertion> existentAssertion = assertionRepository.findById(assertion.getId());
             if (existentAssertion.isPresent() && StringUtils.isBlank(existentAssertion.get().getPutCode())) {
                 assertion.setPutCode(putCode);
-                Instant now = Instant.now();
                 assertion.setAddedToORCID(now);
                 assertion.setUpdatedInORCID(now);
                 assertion.setOrcidError(null);
@@ -415,7 +415,7 @@ public class AssertionService {
             LOG.error("Error with assertion " + assertion.getId(), e);
             storeError(assertion.getId(), 0, e.getMessage());
         }
-
+        logSyncAttempt(assertion, now);
     }
 
     public void putAssertionsToOrcid() throws JAXBException {
@@ -445,24 +445,28 @@ public class AssertionService {
         }
         String orcid = record.getOrcid();
         String accessToken = null;
-        try {
-            if (!StringUtils.isBlank(assertion.getPutCode())) {
+
+        if (!StringUtils.isBlank(assertion.getPutCode())) {
+            Instant now = Instant.now();
+            
+            try {
                 accessToken = orcidAPIClient.exchangeToken(idToken);
                 LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
                 orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
-                Instant now = Instant.now();
                 assertion.setUpdatedInORCID(now);
                 assertion.setOrcidError(null);
                 assertion.setStatus(getAssertionStatus(assertion));
                 assertionRepository.save(assertion);
-            } else {
-                LOG.error("Error with assertion " + assertion.getId() + " cannot update it with putcode empty.");
+            } catch (ORCIDAPIException oae) {
+                storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+            } catch (Exception e) {
+                LOG.error("Error with assertion " + assertion.getId(), e);
+                storeError(assertion.getId(), 0, e.getMessage());
             }
-        } catch (ORCIDAPIException oae) {
-            storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
-        } catch (Exception e) {
-            LOG.error("Error with assertion " + assertion.getId(), e);
-            storeError(assertion.getId(), 0, e.getMessage());
+            
+            logSyncAttempt(assertion, now);
+        } else {
+            LOG.error("Error with assertion " + assertion.getId() + " cannot update it with putcode empty.");
         }
     }
 
@@ -476,22 +480,25 @@ public class AssertionService {
 
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
         if (canDeleteAssertionFromOrcidRegistry(record, assertion)) {
-            LOG.info("Exchanging id token for {}", record.get().getOrcid());
+            Instant now = Instant.now();
             try {
+                LOG.info("Exchanging id token for {}", record.get().getOrcid());
                 String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId()));
                 Boolean deleted = orcidAPIClient.deleteAffiliation(record.get().getOrcid(), accessToken, assertion);
                 if (deleted) {
-                    Instant now = Instant.now();
                     assertion.setDeletedFromORCID(now);
                     assertion.setModified(now);
                     assertion.setStatus(getAssertionStatus(assertion));
                     assertionRepository.save(assertion);
                 }
+                logSyncAttempt(assertion, now);
                 return deleted;
             } catch (ORCIDAPIException oae) {
+                logSyncAttempt(assertion, now);
                 storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
             } catch (Exception e) {
                 LOG.error("Error with assertion " + assertion.getId(), e);
+                logSyncAttempt(assertion, now);
                 storeError(assertion.getId(), 0, e.getMessage());
             }
         }
@@ -538,6 +545,11 @@ public class AssertionService {
             throw new IllegalArgumentException("Found assertion with no corresponding record email - " + assertion.getEmail() + " - " + assertion.getEmail());
         }
         return AssertionUtils.getAssertionStatus(assertion, optionalRecord.get());
+    }
+
+    private void logSyncAttempt(Assertion assertion, Instant now) {
+        assertion.setLastSyncAttempt(now);
+        assertionRepository.save(assertion);
     }
 
     private String getAssertionOrcidId(Assertion assertion) {
