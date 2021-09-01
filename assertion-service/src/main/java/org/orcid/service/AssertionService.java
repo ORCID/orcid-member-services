@@ -410,10 +410,10 @@ public class AssertionService {
                 assertionRepository.save(assertion);
             }
         } catch (ORCIDAPIException oae) {
-            storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+            assertion = storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
         } catch (Exception e) {
             LOG.error("Error with assertion " + assertion.getId(), e);
-            storeError(assertion.getId(), 0, e.getMessage());
+            assertion = storeError(assertion.getId(), 0, e.getMessage());
         }
         logSyncAttempt(assertion, now);
     }
@@ -458,10 +458,10 @@ public class AssertionService {
                 assertion.setStatus(getAssertionStatus(assertion));
                 assertionRepository.save(assertion);
             } catch (ORCIDAPIException oae) {
-                storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
+                assertion = storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
             } catch (Exception e) {
                 LOG.error("Error with assertion " + assertion.getId(), e);
-                storeError(assertion.getId(), 0, e.getMessage());
+                assertion = storeError(assertion.getId(), 0, e.getMessage());
             }
             
             logSyncAttempt(assertion, now);
@@ -494,12 +494,12 @@ public class AssertionService {
                 logSyncAttempt(assertion, now);
                 return deleted;
             } catch (ORCIDAPIException oae) {
+                assertion = storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
                 logSyncAttempt(assertion, now);
-                storeError(assertion.getId(), oae.getStatusCode(), oae.getError());
             } catch (Exception e) {
                 LOG.error("Error with assertion " + assertion.getId(), e);
+                assertion = storeError(assertion.getId(), 0, e.getMessage());
                 logSyncAttempt(assertion, now);
-                storeError(assertion.getId(), 0, e.getMessage());
             }
         }
         return false;
@@ -525,7 +525,7 @@ public class AssertionService {
         return true;
     }
 
-    private void storeError(String assertionId, int statusCode, String error) {
+    private Assertion storeError(String assertionId, int statusCode, String error) {
         Assertion assertion = assertionRepository.findById(assertionId).orElseThrow(() -> new RuntimeException("Unable to find assertion with ID: " + assertionId));
         JSONObject obj = new JSONObject();
         obj.put("statusCode", statusCode);
@@ -536,7 +536,7 @@ public class AssertionService {
         if (StringUtils.equals(assertion.getStatus(), AssertionStatus.USER_REVOKED_ACCESS.getValue())) {
             orcidRecordService.deleteIdToken(assertion.getEmail(), assertion.getSalesforceId());
         }
-        assertionRepository.save(assertion);
+        return assertionRepository.save(assertion);
     }
 
     public String getAssertionStatus(Assertion assertion) {
