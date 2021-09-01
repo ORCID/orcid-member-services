@@ -355,6 +355,7 @@ class AssertionServiceTest {
         Assertion assertion = getAssertionWithEmail("something@orcid.org");
         assertion.setId("assertionId");
         Mockito.when(assertionsRepository.findById(Mockito.eq("assertionId"))).thenReturn(Optional.of(assertion));
+        Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenReturn(assertion);
         Mockito.when(orcidRecordService.findOneByEmail("something@orcid.org")).thenReturn(getOptionalOrcidRecordWithIdToken());
         Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("accessToken");
         Mockito.doThrow(new ORCIDAPIException(404, "not found")).when(orcidAPIClient).deleteAffiliation(Mockito.anyString(), Mockito.eq("accessToken"), Mockito.any(Assertion.class));
