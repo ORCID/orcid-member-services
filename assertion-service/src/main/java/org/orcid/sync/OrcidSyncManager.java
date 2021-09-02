@@ -26,6 +26,6 @@ public class OrcidSyncManager {
     public void syncAffiliations() throws JAXBException {
         log.info("Running cron to sync assertions with registry");
         assertionsService.postAssertionsToOrcid();
-        assertionsService.putAssertionsToOrcid();
+        assertionsService.putAssertionsInOrcid();
     }
 }

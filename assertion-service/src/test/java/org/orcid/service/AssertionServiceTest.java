@@ -287,7 +287,10 @@ class AssertionServiceTest {
         Mockito.verify(orcidAPIClient, Mockito.times(5)).postAffiliation(Mockito.anyString(), Mockito.anyString(), assertionCaptor.capture());
         
         List<Assertion> posted = assertionCaptor.getAllValues();
-        posted.forEach(a -> assertNotNull(a.getLastSyncAttempt()));
+        posted.forEach(a -> {
+            assertNotNull(a.getLastSyncAttempt());
+            assertEquals(a.getLastSyncAttempt(), a.getAddedToORCID());
+        });
     }
 
     @Test
@@ -306,7 +309,7 @@ class AssertionServiceTest {
             Mockito.when(assertionsRepository.findById("id" + i)).thenReturn(Optional.of(getAssertionWithEmailAndPutCode(i + "@email.com", String.valueOf(i))));
         }
 
-        assertionService.putAssertionsToOrcid();
+        assertionService.putAssertionsInOrcid();
 
         Mockito.verify(orcidRecordService, Mockito.times(25)).findOneByEmail(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
@@ -327,7 +330,7 @@ class AssertionServiceTest {
         Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
         
-        Mockito.verify(assertionsRepository, Mockito.times(2)).save(assertionCaptor.capture());
+        Mockito.verify(assertionsRepository, Mockito.times(1)).save(assertionCaptor.capture());
         List<Assertion> captured = assertionCaptor.getAllValues();
         Assertion lastSaved = captured.get(captured.size() - 1);
         assertNotNull(lastSaved.getLastSyncAttempt());
@@ -335,7 +338,8 @@ class AssertionServiceTest {
     
     @Test
     void testDeleteAssertionFromOrcidRegistry_failedDelete() throws org.json.JSONException, ClientProtocolException, IOException {
-        Mockito.when(assertionsRepository.findById(Mockito.eq("assertionId"))).thenReturn(Optional.of(getAssertionWithEmail("something@orcid.org")));
+        Assertion assertion = getAssertionWithEmail("something@orcid.org");
+        Mockito.when(assertionsRepository.findById(Mockito.eq("assertionId"))).thenReturn(Optional.of(assertion));
         Mockito.when(orcidRecordService.findOneByEmail("something@orcid.org")).thenReturn(getOptionalOrcidRecordWithIdToken());
         Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("accessToken");
         Mockito.when(orcidAPIClient.deleteAffiliation(Mockito.anyString(), Mockito.eq("accessToken"), Mockito.any(Assertion.class))).thenReturn(false);
@@ -344,10 +348,7 @@ class AssertionServiceTest {
         Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
         
-        Mockito.verify(assertionsRepository, Mockito.times(1)).save(assertionCaptor.capture());
-        List<Assertion> captured = assertionCaptor.getAllValues();
-        Assertion lastSaved = captured.get(captured.size() - 1);
-        assertNotNull(lastSaved.getLastSyncAttempt());
+        assertNotNull(assertion.getLastSyncAttempt());
     }
     
     @Test
@@ -364,7 +365,7 @@ class AssertionServiceTest {
         Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
         
-        Mockito.verify(assertionsRepository, Mockito.times(2)).save(assertionCaptor.capture());
+        Mockito.verify(assertionsRepository, Mockito.times(1)).save(assertionCaptor.capture());
         List<Assertion> captured = assertionCaptor.getAllValues();
         Assertion lastSaved = captured.get(captured.size() - 1);
         assertNotNull(lastSaved.getLastSyncAttempt());
@@ -852,7 +853,9 @@ class AssertionServiceTest {
     private List<Assertion> getAssertionsForCreatingInOrcid() {
         List<Assertion> assertions = new ArrayList<>();
         for (int i = 1; i <= 20; i++) {
-            assertions.add(getAssertionWithEmail(i + "@email.com"));
+            Assertion assertion = getAssertionWithEmail(i + "@email.com");
+            assertion.setId(String.valueOf(i));
+            assertions.add(assertion);
         }
         return assertions;
     }
