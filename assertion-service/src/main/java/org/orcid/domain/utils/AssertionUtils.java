@@ -18,24 +18,24 @@ public class AssertionUtils {
         }
 
         if (assertion.getDeletedFromORCID() != null) {
-            return AssertionStatus.DELETED_IN_ORCID.getValue();
+            return AssertionStatus.DELETED_IN_ORCID.name();
         }
 
         if (assertionModifiedSinceLastSyncAttempt(assertion)) {
-            return AssertionStatus.PENDING_RETRY.getValue();
+            return AssertionStatus.PENDING_RETRY.name();
         }
 
         if (StringUtils.isBlank(assertion.getPutCode())) {
             if (orcidRecord.getRevokedDate(assertion.getSalesforceId()) != null) {
-                return AssertionStatus.USER_REVOKED_ACCESS.getValue();
+                return AssertionStatus.USER_REVOKED_ACCESS.name();
             }
             if (orcidRecord.getDeniedDate(assertion.getSalesforceId()) != null) {
-                return AssertionStatus.USER_DENIED_ACCESS.getValue();
+                return AssertionStatus.USER_DENIED_ACCESS.name();
             }
-            return AssertionStatus.PENDING.getValue();
+            return AssertionStatus.PENDING.name();
         }
 
-        return AssertionStatus.IN_ORCID.getValue();
+        return AssertionStatus.IN_ORCID.name();
     }
 
     private static String getErrorStatus(Assertion assertion) {
@@ -44,24 +44,24 @@ public class AssertionUtils {
         String errorMessage = json.getString("error");
         switch (statusCode) {
         case 404:
-            return AssertionStatus.USER_DELETED_FROM_ORCID.getValue();
+            return AssertionStatus.USER_DELETED_FROM_ORCID.name();
         case 401:
-            return AssertionStatus.USER_REVOKED_ACCESS.getValue();
+            return AssertionStatus.USER_REVOKED_ACCESS.name();
         case 400:
             if (errorMessage.contains("invalid_scope")) {
-                return AssertionStatus.USER_REVOKED_ACCESS.getValue();
+                return AssertionStatus.USER_REVOKED_ACCESS.name();
             } else {
                 if (!StringUtils.isBlank(assertion.getPutCode())) {
-                    return AssertionStatus.ERROR_UPDATING_TO_ORCID.getValue();
+                    return AssertionStatus.ERROR_UPDATING_TO_ORCID.name();
                 } else {
-                    return AssertionStatus.ERROR_ADDING_TO_ORCID.getValue();
+                    return AssertionStatus.ERROR_ADDING_TO_ORCID.name();
                 }
             }
         default:
             if (!StringUtils.isBlank(assertion.getPutCode())) {
-                return AssertionStatus.ERROR_UPDATING_TO_ORCID.getValue();
+                return AssertionStatus.ERROR_UPDATING_TO_ORCID.name();
             } else {
-                return AssertionStatus.ERROR_ADDING_TO_ORCID.getValue();
+                return AssertionStatus.ERROR_ADDING_TO_ORCID.name();
             }
         }
     }

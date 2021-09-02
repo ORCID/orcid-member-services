@@ -286,8 +286,8 @@ public class AssertionServiceResource {
                     for (Assertion a : assertions) {
                         if (StringUtils.isBlank(a.getPutCode())) {
                             assertionService.postAssertionToOrcid(a);
-                        } else if (!StringUtils.equals(a.getStatus(), AssertionStatus.IN_ORCID.getValue())) {
-                            assertionService.putAssertionToOrcid(a);
+                        } else if (!StringUtils.equals(a.getStatus(), AssertionStatus.IN_ORCID.name())) {
+                            assertionService.putAssertionInOrcid(a);
                         }
                     }
 
@@ -309,7 +309,7 @@ public class AssertionServiceResource {
             try {
                 List<Assertion> assertions = assertionService.findByEmailAndSalesForceId(emailInStatus, salesForceId);
                 for (Assertion a : assertions) {
-                    if (!StringUtils.equals(a.getStatus(), AssertionStatus.IN_ORCID.getValue())) {
+                    if (!StringUtils.equals(a.getStatus(), AssertionStatus.IN_ORCID.name())) {
                         assertionService.updateAssertionStatus(AssertionStatus.USER_DENIED_ACCESS, a);
                     }
                 }
