@@ -393,7 +393,6 @@ public class AssertionService {
                 String putCode = postToOrcidRegistry(orcid, assertion, idToken);
                 assertion.setPutCode(putCode);
                 assertion.setAddedToORCID(now);
-                assertion.setUpdatedInORCID(now);
                 assertion.setOrcidError(null);
                 assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, record.get()));
                 assertionRepository.save(assertion);
