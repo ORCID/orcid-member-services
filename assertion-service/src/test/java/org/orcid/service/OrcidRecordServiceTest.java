@@ -91,8 +91,8 @@ class OrcidRecordServiceTest {
         List<OrcidToken> tokens = created.getTokens();
         OrcidToken token = tokens.get(0);
 
-        assertEquals(DEFAULT_SALESFORCE_ID, token.getSalesforce_id());
-        assertEquals(null, token.getToken_id());
+        assertEquals(DEFAULT_SALESFORCE_ID, token.getSalesforceId());
+        assertEquals(null, token.getTokenId());
 
     }
 
@@ -129,8 +129,8 @@ class OrcidRecordServiceTest {
 
         tokens = updated.getTokens();
         token = tokens.get(1);
-        assertEquals(OTHER_SALESFORCE_ID, token.getSalesforce_id());
-        assertEquals("tokenid2", token.getToken_id());
+        assertEquals(OTHER_SALESFORCE_ID, token.getSalesforceId());
+        assertEquals("tokenid2", token.getTokenId());
     }
 
     /*

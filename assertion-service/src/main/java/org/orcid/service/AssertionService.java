@@ -206,7 +206,7 @@ public class AssertionService {
                 createToken = true;
             } else {
                 for (OrcidToken token : tokens) {
-                    if (StringUtils.equals(token.getSalesforce_id().trim(), assertion.getSalesforceId().trim())) {
+                    if (StringUtils.equals(token.getSalesforceId().trim(), assertion.getSalesforceId().trim())) {
                         createToken = false;
                         break;
                     }

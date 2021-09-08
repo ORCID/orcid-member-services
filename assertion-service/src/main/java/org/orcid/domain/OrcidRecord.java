@@ -128,11 +128,11 @@ public class OrcidRecord {
         List<OrcidToken> tokens = this.getTokens();
         if (tokens != null) {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
-                    if (StringUtils.isBlank(token.getToken_id())) {
+                if (StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                    if (StringUtils.isBlank(token.getTokenId())) {
                         return null;
                     }
-                    return token.getToken_id();
+                    return token.getTokenId();
                 }
             }
         }
@@ -143,11 +143,11 @@ public class OrcidRecord {
         List<OrcidToken> tokens = this.getTokens();
         if (tokens != null) {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
-                    if (token.getDenied_date() == null) {
+                if (StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                    if (token.getDeniedDate() == null) {
                         return null;
                     }
-                    return token.getDenied_date();
+                    return token.getDeniedDate();
                 }
             }
         }
@@ -158,11 +158,11 @@ public class OrcidRecord {
         List<OrcidToken> tokens = this.getTokens();
         if (tokens != null) {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforce_id(), salesforceId)) {
-                    if (token.getRevoked_date() == null) {
+                if (StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                    if (token.getRevokedDate() == null) {
                         return null;
                     }
-                    return token.getRevoked_date();
+                    return token.getRevokedDate();
                 }
             }
         }
