@@ -79,7 +79,7 @@ public class OrcidRecordService {
             updatedTokens.add(newToken);
         } else {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforce_id(), salesForceId)) {
+                if (StringUtils.equals(token.getSalesforceId(), salesForceId)) {
                     updatedTokens.add(newToken);
                 } else {
                     updatedTokens.add(token);
@@ -103,7 +103,7 @@ public class OrcidRecordService {
             updatedTokens.add(newToken);
         } else {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforce_id(), salesForceId)) {
+                if (StringUtils.equals(token.getSalesforceId(), salesForceId)) {
                     updatedTokens.add(newToken);
                 } else {
                     updatedTokens.add(token);
@@ -125,7 +125,7 @@ public class OrcidRecordService {
             updatedTokens.add(newToken);
         } else {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforce_id(), salesForceId)) {
+                if (StringUtils.equals(token.getSalesforceId(), salesForceId)) {
                     updatedTokens.add(newToken);
                 } else {
                     updatedTokens.add(token);
@@ -189,7 +189,7 @@ public class OrcidRecordService {
             updatedTokens.add(newToken);
         } else {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforce_id(), salesForceId)) {
+                if (StringUtils.equals(token.getSalesforceId(), salesForceId)) {
                     updatedTokens.add(newToken);
                 } else {
                     updatedTokens.add(token);

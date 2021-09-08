@@ -2,33 +2,42 @@ package org.orcid.domain;
 
 import java.time.Instant;
 
+import org.springframework.data.mongodb.core.mapping.Field;
+
 public class OrcidToken {
 
-    private String salesforce_id;
-    private String token_id;
-    private Instant denied_date;
-    private Instant revoked_date;
+    @Field("salesforce_id")
+    private String salesforceId;
+    
+    @Field("token_id")
+    private String tokenId;
+    
+    @Field("denied_date")
+    private Instant deniedDate;
+    
+    @Field("revoked_date")
+    private Instant revokedDate;
 
-    public OrcidToken(final String salesforce_id, final String token_id, final Instant denied_date, final Instant revoked_date) {
-        this.salesforce_id = salesforce_id;
-        this.token_id = token_id;
-        this.denied_date = denied_date;
-        this.revoked_date = revoked_date;
+    public OrcidToken(final String salesforceId, final String tokenId, final Instant deniedDate, final Instant revokedDate) {
+        this.salesforceId = salesforceId;
+        this.tokenId = tokenId;
+        this.deniedDate = deniedDate;
+        this.revokedDate = revokedDate;
     }
 
-    public String getSalesforce_id() {
-        return this.salesforce_id;
+    public String getSalesforceId() {
+        return this.salesforceId;
     }
 
-    public String getToken_id() {
-        return this.token_id;
+    public String getTokenId() {
+        return this.tokenId;
     }
 
-    public Instant getDenied_date() {
-        return this.denied_date;
+    public Instant getDeniedDate() {
+        return this.deniedDate;
     }
 
-    public Instant getRevoked_date() {
-        return this.revoked_date;
+    public Instant getRevokedDate() {
+        return this.revokedDate;
     }
 }
