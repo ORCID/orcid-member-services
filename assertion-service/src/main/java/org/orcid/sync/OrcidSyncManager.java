@@ -27,5 +27,6 @@ public class OrcidSyncManager {
         log.info("Running cron to sync assertions with registry");
         assertionsService.postAssertionsToOrcid();
         assertionsService.putAssertionsInOrcid();
+        log.info("Sync complete");
     }
 }

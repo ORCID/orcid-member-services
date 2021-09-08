@@ -14,6 +14,8 @@ import org.orcid.domain.OrcidToken;
 import org.orcid.repository.OrcidRecordRepository;
 import org.orcid.security.EncryptUtil;
 import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OrcidRecordService {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(OrcidRecordService.class);
 
     @Autowired
     private OrcidRecordRepository orcidRecordRepository;
@@ -179,12 +183,15 @@ public class OrcidRecordService {
         return record;
     }
 
-    public void deleteIdToken(String emailInStatus, String salesForceId) {
-        OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus)
-                .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
+    public void revokeIdToken(String email, String salesForceId) {
+        LOG.info("Revoking id token for email {}, salesforce id {}", email, salesForceId);
+        OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + email));
+        
+        Instant now = Instant.now();
         List<OrcidToken> tokens = orcidRecord.getTokens();
         List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(salesForceId, null, null, Instant.now());
+        OrcidToken newToken = new OrcidToken(salesForceId, null, null, now);
         if (tokens == null || tokens.size() == 0) {
             updatedTokens.add(newToken);
         } else {
@@ -197,7 +204,7 @@ public class OrcidRecordService {
             }
         }
         orcidRecord.setTokens(updatedTokens);
-        orcidRecord.setModified(Instant.now());
+        orcidRecord.setModified(now);
         orcidRecordRepository.save(orcidRecord);
     }
 
