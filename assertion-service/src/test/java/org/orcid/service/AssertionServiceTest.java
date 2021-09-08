@@ -3,6 +3,7 @@ package org.orcid.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -312,6 +313,7 @@ class AssertionServiceTest {
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
         assertEquals(AssertionStatus.IN_ORCID.name(), saved.getStatus());
+        assertNull(saved.getUpdatedInORCID());
     }
 
     @Test
@@ -342,6 +344,7 @@ class AssertionServiceTest {
         Mockito.verify(assertionsRepository, Mockito.times(2)).save(assertionCaptor.capture());
         saved = assertionCaptor.getAllValues().get(1);
         assertEquals(AssertionStatus.USER_REVOKED_ACCESS.name(), saved.getStatus());
+        assertNull(saved.getUpdatedInORCID());
     }
 
     @Test
@@ -361,6 +364,7 @@ class AssertionServiceTest {
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
         assertEquals(AssertionStatus.ERROR_ADDING_TO_ORCID.name(), saved.getStatus());
+        assertNull(saved.getUpdatedInORCID());
     }
 
     @Test
@@ -383,6 +387,7 @@ class AssertionServiceTest {
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
         assertEquals(AssertionStatus.IN_ORCID.name(), saved.getStatus());
+        assertNull(saved.getUpdatedInORCID());
     }
 
     @Test
