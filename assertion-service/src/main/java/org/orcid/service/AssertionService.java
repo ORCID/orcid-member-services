@@ -377,7 +377,7 @@ public class AssertionService {
         LOG.info("POSTing affiliations to orcid registry...");
         List<Assertion> assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry();
         for (Assertion assertion : assertionsToAdd) {
-            LOG.debug("Preparing to POST assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - to orcid registry");
+            LOG.debug("Preparing to POST assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - to orcid registry", assertion.getId(), assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
             postAssertionToOrcid(assertion);
             LOG.debug("POST task complete for assertion {}", assertion.getId());
         }
@@ -421,9 +421,9 @@ public class AssertionService {
         List<Assertion> assertionsToUpdate = assertionRepository.findAllToUpdateInOrcidRegistry();
         for (Assertion assertion : assertionsToUpdate) {
             // query will return only id and modified dates, so fetch full data
-            LOG.debug("Preparing to PUT assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - in orcid registry");
+            LOG.debug("Preparing to PUT assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - in orcid registry", assertion.getId(), assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
             Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
-            LOG.debug("Refreshed assertion - id: {}, salesforceId: {}, email: {}, orcid id: {}");
+            LOG.debug("Refreshed assertion - id: {}, salesforceId: {}, email: {}, orcid id: {}", assertion.getId(), assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
             putAssertionInOrcid(refreshed);
             LOG.debug("PUT task complete for assertion {}", assertion.getId());
         }
