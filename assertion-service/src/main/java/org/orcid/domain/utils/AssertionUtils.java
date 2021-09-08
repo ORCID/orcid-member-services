@@ -13,6 +13,13 @@ public class AssertionUtils {
     private static final String GRID_BASE_URL_INSTITUTES_ALT = "https://grid.ac/institutes/";
 
     public static String getAssertionStatus(Assertion assertion, OrcidRecord orcidRecord) {
+        if (orcidRecord.getRevokedDate(assertion.getSalesforceId()) != null) {
+            return AssertionStatus.USER_REVOKED_ACCESS.name();
+        }
+        if (orcidRecord.getDeniedDate(assertion.getSalesforceId()) != null) {
+            return AssertionStatus.USER_DENIED_ACCESS.name();
+        }
+        
         if (assertion.getOrcidError() != null && !assertionModifiedSinceLastSyncAttempt(assertion)) {
             return getErrorStatus(assertion);
         }
@@ -26,12 +33,6 @@ public class AssertionUtils {
         }
 
         if (StringUtils.isBlank(assertion.getPutCode())) {
-            if (orcidRecord.getRevokedDate(assertion.getSalesforceId()) != null) {
-                return AssertionStatus.USER_REVOKED_ACCESS.name();
-            }
-            if (orcidRecord.getDeniedDate(assertion.getSalesforceId()) != null) {
-                return AssertionStatus.USER_DENIED_ACCESS.name();
-            }
             return AssertionStatus.PENDING.name();
         }
 
