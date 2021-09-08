@@ -412,6 +412,8 @@ public class AssertionService {
                 LOG.error("Error posting assertion " + assertion.getId(), e);
                 storeError(assertion, 0, e.getMessage());
             }
+        } else if (record.isPresent()) {
+            updateStatusAndSave(assertion, record.get());
         }
     }
 
@@ -455,6 +457,8 @@ public class AssertionService {
                 LOG.error("Error with assertion " + assertion.getId(), e);
                 storeError(assertion, 0, e.getMessage());
             }
+        } else if (record.isPresent()) {
+            updateStatusAndSave(assertion, record.get());
         }
     }
 
@@ -521,6 +525,11 @@ public class AssertionService {
         }
         LOG.debug("Found idToken, assertion {} cleared for registry sync", assertion.getId());
         return true;
+    }
+    
+    private void updateStatusAndSave(Assertion a, OrcidRecord r) {
+        a.setStatus(AssertionUtils.getAssertionStatus(a, r));
+        assertionRepository.save(a);
     }
 
     private String postToOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, ClientProtocolException, IOException, JAXBException {
