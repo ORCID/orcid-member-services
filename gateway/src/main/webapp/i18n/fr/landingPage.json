@@ -21,7 +21,7 @@
     "success": {
       "thanks": { "string": "Thanks, {{ given_name }} {{ family_name }}" },
       "youHaveSuccessfully": {
-        "string": "You have successfully granted {{ clientName }} permission to update your ORCID record, and your record has been updated with the affiliation information."
+        "string": "You have successfully granted {{ clientName }} permission to update your ORCID record, and your record will be updated with the affiliation information."
       },
       "ifYouFind": { "string": "If you find that data added to your ORCID record is incorrect, please contact {{ clientName }}" }
     }
