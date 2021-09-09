@@ -7,8 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.ServletOutputStream;
@@ -30,6 +34,7 @@ import org.orcid.domain.OrcidRecord;
 import org.orcid.domain.OrcidToken;
 import org.orcid.domain.enumeration.AffiliationSection;
 import org.orcid.security.EncryptUtil;
+import org.orcid.security.JWTUtil;
 import org.orcid.service.AssertionService;
 import org.orcid.service.OrcidRecordService;
 import org.orcid.service.assertions.upload.AssertionsUploadSummary;
@@ -37,6 +42,17 @@ import org.orcid.web.rest.errors.BadRequestAlertException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 
 class AssertionServiceResourceTest {
 
@@ -50,6 +66,9 @@ class AssertionServiceResourceTest {
 
     @Mock
     private EncryptUtil encryptUtil;
+    
+    @Mock
+    private JWTUtil jwtUtil;
 
     @InjectMocks
     private AssertionServiceResource assertionServiceResource;
@@ -270,6 +289,53 @@ class AssertionServiceResourceTest {
         Mockito.when(assertionService.uploadAssertions(Mockito.any())).thenReturn(new AssertionsUploadSummary());
         assertionServiceResource.uploadAssertions(file);
         Mockito.verify(assertionService, Mockito.times(1)).uploadAssertions(Mockito.any());
+    }
+
+    @Test
+    void testStoreIdToken() throws ParseException, JAXBException, JOSEException {
+        String email = "email@orcid.org";
+        String orcid = "1234-1234-1234-1234";
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq(email))).thenReturn(Optional.of(getOrcidRecord(email)));
+        Mockito.when(encryptUtil.decrypt(Mockito.eq("ermmmm....&&" + email))).thenReturn("ermmmm....&&" + email);
+        Mockito.when(jwtUtil.getSignedJWT(Mockito.anyString())).thenReturn(getDummySignedJWT(orcid));
+        assertionServiceResource.storeIdToken(getObjectNode(email));
+        Mockito.verify(orcidRecordService, Mockito.times(1)).storeIdToken(Mockito.eq(email), Mockito.anyString(), Mockito.eq(orcid), Mockito.anyString());
+        Mockito.verify(assertionService, Mockito.never()).postAssertionToOrcid(Mockito.any(Assertion.class));
+        Mockito.verify(assertionService, Mockito.never()).putAssertionInOrcid(Mockito.any(Assertion.class));
+        Mockito.verify(assertionService, Mockito.never()).updateAssertion(Mockito.any(Assertion.class));
+    }
+    
+    private SignedJWT getDummySignedJWT(String orcid) throws JOSEException {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("sub", orcid);
+        Date now = new Date();
+        JWTClaimsSet.Builder claimsSet = new JWTClaimsSet.Builder();
+        claimsSet.issueTime(now);
+        claimsSet.expirationTime(new Date(now.getTime() + (1000)));
+        claimsSet.notBeforeTime(now);
+        claimsSet.claim("something", "something else");
+        claims.entrySet().forEach((claim) -> claimsSet.claim(claim.getKey(), claim.getValue()));
+        JWSSigner signer = new MACSigner("something very secret indeed, really seriously secret.");
+        SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet.build());
+        signedJWT.sign(signer);
+        return signedJWT;
+    }
+
+    
+    private ObjectNode getObjectNode(String email) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode node = mapper.createObjectNode();
+        node.set("state", mapper.convertValue("ermmmm....&&" + email, JsonNode.class));
+        node.set("id_token", mapper.convertValue("errrr....", JsonNode.class));
+        node.set("salesforce_id", mapper.convertValue(DEFAULT_SALESFORCE_ID, JsonNode.class));
+        node.set("denied", mapper.convertValue(false, JsonNode.class));
+        return node;
+    }
+
+    private OrcidRecord getOrcidRecord(String email) {
+        OrcidRecord record = new OrcidRecord();
+        record.setEmail(email);
+        return record;
     }
 
     private Assertion getAssertion(String email) {

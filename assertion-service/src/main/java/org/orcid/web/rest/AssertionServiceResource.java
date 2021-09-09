@@ -22,7 +22,6 @@ import org.codehaus.jettison.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.domain.Assertion;
 import org.orcid.domain.OrcidRecord;
-import org.orcid.domain.enumeration.AssertionStatus;
 import org.orcid.domain.utils.AssertionUtils;
 import org.orcid.domain.validation.OrcidUrlValidator;
 import org.orcid.security.AuthoritiesConstants;
@@ -107,7 +106,7 @@ public class AssertionServiceResource {
         } else {
             affiliations = assertionService.findBySalesforceId(pageable, filter);
         }
-        
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
         return ResponseEntity.ok().headers(headers).body(affiliations.getContent());
     }
@@ -281,42 +280,18 @@ public class AssertionServiceResource {
 
             if (!StringUtils.isBlank(emailInStatus) && !StringUtils.isBlank(orcidIdInJWT)) {
                 orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, salesForceId);
-                try {
-                    List<Assertion> assertions = assertionService.findAssertionsByEmail(emailInStatus);
-                    for (Assertion a : assertions) {
-                        if (StringUtils.isBlank(a.getPutCode())) {
-                            assertionService.postAssertionToOrcid(a);
-                        } else if (!StringUtils.equals(a.getStatus(), AssertionStatus.IN_ORCID.name())) {
-                            assertionService.putAssertionInOrcid(a);
-                        }
-                    }
-
-                } catch (Exception ex) {
-                    LOG.error("Error when posting the affiliations for user " + emailInStatus + " after granting permission.", ex);
-                }
             } else {
                 if (StringUtils.isBlank(emailInStatus)) {
-                    LOG.warn("emailInStatus is empty in the state key: " + state);
+                    LOG.warn("Not storing token for user {} - emailInStatus is empty in the state key: {}", emailInStatus, state);
                 }
 
                 if (StringUtils.isBlank(orcidIdInJWT)) {
-                    LOG.warn("orcidIdInJWT is empty in the id token: " + idToken);
+                    LOG.warn("Not storing token for user {} - orcidIdInJWT is empty id token", emailInStatus);
                 }
             }
         } else {
             LOG.warn("User {} have denied access", emailInStatus);
             orcidRecordService.storeUserDeniedAccess(emailInStatus, salesForceId);
-            try {
-                List<Assertion> assertions = assertionService.findByEmailAndSalesForceId(emailInStatus, salesForceId);
-                for (Assertion a : assertions) {
-                    if (!StringUtils.equals(a.getStatus(), AssertionStatus.IN_ORCID.name())) {
-                        assertionService.updateAssertionStatus(AssertionStatus.USER_DENIED_ACCESS, a);
-                    }
-                }
-
-            } catch (Exception ex) {
-                LOG.error("Error when updating status to denied access for  the affiliations of the user " + emailInStatus + " after denying permission.", ex);
-            }
         }
         return ResponseEntity.ok().body(responseData.toString());
     }
