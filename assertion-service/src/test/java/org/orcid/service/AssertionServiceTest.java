@@ -346,6 +346,23 @@ class AssertionServiceTest {
         assertEquals(AssertionStatus.USER_REVOKED_ACCESS.name(), saved.getStatus());
         assertNull(saved.getUpdatedInORCID());
     }
+    
+    @Test
+    void testPostAssertionToOrcid_statusPendingToUserDeniedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+        OrcidRecord orcidRecord = getOrcidRecord("1234");
+        orcidRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, null, Instant.now(), null)));
+
+        Assertion assertion = getAssertionWithEmail("test@orcid.org");
+        assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord));
+
+        Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
+
+        assertionService.postAssertionToOrcid(assertion);
+
+        Mockito.verify(assertionsRepository, Mockito.times(1)).save(assertionCaptor.capture());
+        Assertion saved = assertionCaptor.getValue();
+        assertEquals(AssertionStatus.USER_DENIED_ACCESS.name(), saved.getStatus());
+    }
 
     @Test
     void testPostAssertionToOrcid_statusPendingToErrorAddingToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
@@ -494,6 +511,23 @@ class AssertionServiceTest {
         Mockito.verify(assertionsRepository, Mockito.times(2)).save(assertionCaptor.capture());
         saved = assertionCaptor.getAllValues().get(1);
         assertEquals(AssertionStatus.USER_REVOKED_ACCESS.name(), saved.getStatus());
+    }
+    
+    @Test
+    void testPutAssertionInOrcid_statusPendingToUserDeniedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+        OrcidRecord orcidRecord = getOrcidRecord("1234");
+        orcidRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, null, Instant.now(), null)));
+
+        Assertion assertion = getAssertionWithEmail("test@orcid.org");
+        assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord));
+
+        Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
+
+        assertionService.putAssertionInOrcid(assertion);
+
+        Mockito.verify(assertionsRepository, Mockito.times(1)).save(assertionCaptor.capture());
+        Assertion saved = assertionCaptor.getValue();
+        assertEquals(AssertionStatus.USER_DENIED_ACCESS.name(), saved.getStatus());
     }
 
     @Test
