@@ -58,7 +58,7 @@ public class DatabaseConfiguration {
         mongobee.setDbName(mongoProperties.getMongoClientDatabase());
         mongobee.setMongoTemplate(mongoTemplate);
         // package to scan for migrations
-        mongobee.setChangeLogsScanPackage("org.orcid.config.dbmigrations");
+        mongobee.setChangeLogsScanPackage("org.orcid.memberportal.service.assertion.config.dbmigrations");
         mongobee.setEnabled(true);
         return mongobee;
     }

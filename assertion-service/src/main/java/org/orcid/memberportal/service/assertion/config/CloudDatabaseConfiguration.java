@@ -68,7 +68,7 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
         mongobee.setDbName(mongoDbFactory.getDb().getName());
         mongobee.setMongoTemplate(mongoTemplate);
         // package to scan for migrations
-        mongobee.setChangeLogsScanPackage("org.orcid.config.dbmigrations");
+        mongobee.setChangeLogsScanPackage("org.orcid.memberportal.service.assertion.config.dbmigrations");
         mongobee.setEnabled(true);
         return mongobee;
     }
