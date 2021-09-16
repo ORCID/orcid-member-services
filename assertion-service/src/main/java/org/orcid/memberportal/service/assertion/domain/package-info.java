@@ -1,4 +1,4 @@
 /**
  * JPA domain objects.
  */
-package org.orcid.domain;
+package org.orcid.memberportal.service.assertion.domain;

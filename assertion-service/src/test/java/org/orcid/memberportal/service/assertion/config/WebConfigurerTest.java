@@ -1,4 +1,4 @@
-package org.orcid.config;
+package org.orcid.memberportal.service.assertion.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,6 +23,7 @@ import javax.servlet.ServletRegistration;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.orcid.memberportal.service.assertion.config.WebConfigurer;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.env.MockEnvironment;

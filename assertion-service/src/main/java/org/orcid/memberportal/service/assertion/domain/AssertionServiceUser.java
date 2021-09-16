@@ -1,4 +1,4 @@
-package org.orcid.domain;
+package org.orcid.memberportal.service.assertion.domain;
 
 public class AssertionServiceUser {
 

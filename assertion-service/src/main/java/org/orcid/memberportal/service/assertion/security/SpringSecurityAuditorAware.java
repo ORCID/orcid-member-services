@@ -1,9 +1,8 @@
-package org.orcid.security;
-
-import org.orcid.config.Constants;
+package org.orcid.memberportal.service.assertion.security;
 
 import java.util.Optional;
 
+import org.orcid.memberportal.service.assertion.config.Constants;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 

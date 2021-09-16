@@ -1,4 +1,4 @@
-package org.orcid.service.assertions.download.impl;
+package org.orcid.memberportal.service.assertion.download.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,10 +7,10 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.lang3.StringUtils;
-import org.orcid.domain.Assertion;
-import org.orcid.repository.AssertionRepository;
-import org.orcid.service.UserService;
-import org.orcid.service.assertions.download.CsvWriter;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.download.CsvWriter;
+import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
+import org.orcid.memberportal.service.assertion.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;

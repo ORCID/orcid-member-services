@@ -1,13 +1,13 @@
-package org.orcid.web.rest;
+package org.orcid.memberportal.service.assertion.web.rest;
 
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONException;
-import org.orcid.domain.Assertion;
-import org.orcid.domain.OrcidRecord;
-import org.orcid.security.SecurityUtils;
-import org.orcid.service.OrcidRecordService;
-import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.security.SecurityUtils;
+import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
+import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
-package org.orcid.repository;
+package org.orcid.memberportal.service.assertion.repository;
 
 import java.util.List;
 
-import org.orcid.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
 
 public interface AssertionRepositoryCustom {
 

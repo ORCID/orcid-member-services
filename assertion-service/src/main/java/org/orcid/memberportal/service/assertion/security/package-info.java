@@ -1,4 +1,4 @@
 /**
  * Spring Security configuration.
  */
-package org.orcid.security;
+package org.orcid.memberportal.service.assertion.security;

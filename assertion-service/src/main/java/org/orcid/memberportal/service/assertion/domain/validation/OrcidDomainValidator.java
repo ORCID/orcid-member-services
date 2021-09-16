@@ -1,4 +1,4 @@
-package org.orcid.domain.validation;
+package org.orcid.memberportal.service.assertion.domain.validation;
 
 import org.apache.commons.validator.routines.DomainValidator;
 import org.slf4j.Logger;

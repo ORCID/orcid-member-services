@@ -1,4 +1,4 @@
-package org.orcid.domain.enumeration;
+package org.orcid.memberportal.service.assertion.domain.enumeration;
 
 public enum AssertionStatus {
 

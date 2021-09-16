@@ -1,7 +1,6 @@
-package org.orcid.domain.adapter;
+package org.orcid.memberportal.service.assertion.domain.adapter;
 
 import org.apache.commons.lang3.StringUtils;
-import org.orcid.domain.Assertion;
 import org.orcid.jaxb.model.common.Iso3166Country;
 import org.orcid.jaxb.model.v3.release.common.Day;
 import org.orcid.jaxb.model.v3.release.common.DisambiguatedOrganization;
@@ -21,6 +20,7 @@ import org.orcid.jaxb.model.v3.release.record.InvitedPosition;
 import org.orcid.jaxb.model.v3.release.record.Membership;
 import org.orcid.jaxb.model.v3.release.record.Qualification;
 import org.orcid.jaxb.model.v3.release.record.Service;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
 
 public class OrcidAffiliationAdapter {
 

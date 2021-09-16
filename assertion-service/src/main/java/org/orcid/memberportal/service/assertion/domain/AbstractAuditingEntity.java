@@ -1,4 +1,4 @@
-package org.orcid.domain;
+package org.orcid.memberportal.service.assertion.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedBy;

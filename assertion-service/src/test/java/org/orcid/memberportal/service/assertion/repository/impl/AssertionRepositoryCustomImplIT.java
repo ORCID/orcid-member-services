@@ -1,4 +1,4 @@
-package org.orcid.repository.impl;
+package org.orcid.memberportal.service.assertion.repository.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,11 +8,12 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.orcid.AssertionServiceApp;
-import org.orcid.domain.Assertion;
-import org.orcid.domain.enumeration.AffiliationSection;
-import org.orcid.repository.AssertionRepository;
-import org.orcid.repository.AssertionRepositoryCustom;
+import org.orcid.memberportal.service.assertion.AssertionServiceApp;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
+import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
+import org.orcid.memberportal.service.assertion.repository.AssertionRepositoryCustom;
+import org.orcid.memberportal.service.assertion.repository.impl.AssertionRepositoryCustomImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;

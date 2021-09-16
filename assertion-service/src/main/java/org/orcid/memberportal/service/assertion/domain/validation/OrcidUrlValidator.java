@@ -1,4 +1,4 @@
-package org.orcid.domain.validation;
+package org.orcid.memberportal.service.assertion.domain.validation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

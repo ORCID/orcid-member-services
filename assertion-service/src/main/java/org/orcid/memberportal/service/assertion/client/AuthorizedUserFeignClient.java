@@ -1,4 +1,4 @@
-package org.orcid.client;
+package org.orcid.memberportal.service.assertion.client;
 
 import java.lang.annotation.*;
 

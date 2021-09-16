@@ -1,4 +1,4 @@
-package org.orcid.config;
+package org.orcid.memberportal.service.assertion.config;
 
 import ch.qos.logback.classic.LoggerContext;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,4 +1,4 @@
-package org.orcid.security;
+package org.orcid.memberportal.service.assertion.security;
 
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;

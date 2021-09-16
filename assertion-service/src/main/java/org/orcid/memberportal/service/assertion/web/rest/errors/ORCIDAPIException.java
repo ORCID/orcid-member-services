@@ -1,4 +1,4 @@
-package org.orcid.web.rest.errors;
+package org.orcid.memberportal.service.assertion.web.rest.errors;
 
 public class ORCIDAPIException extends RuntimeException {
     private static final long serialVersionUID = -3074497601567372837L;

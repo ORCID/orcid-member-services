@@ -1,4 +1,4 @@
-package org.orcid.service.assertions.upload.impl;
+package org.orcid.memberportal.service.assertion.upload.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -15,10 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.orcid.domain.Assertion;
-import org.orcid.domain.AssertionServiceUser;
-import org.orcid.service.AssertionService;
-import org.orcid.service.assertions.upload.AssertionsUpload;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
+import org.orcid.memberportal.service.assertion.services.AssertionService;
+import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
+import org.orcid.memberportal.service.assertion.upload.impl.AssertionsCsvReader;
 import org.springframework.context.MessageSource;
 
 class AssertionsCsvReaderTest {

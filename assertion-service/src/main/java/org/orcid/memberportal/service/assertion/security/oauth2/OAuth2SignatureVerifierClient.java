@@ -1,4 +1,4 @@
-package org.orcid.security.oauth2;
+package org.orcid.memberportal.service.assertion.security.oauth2;
 
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
 

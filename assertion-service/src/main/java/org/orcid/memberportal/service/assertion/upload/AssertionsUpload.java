@@ -1,11 +1,11 @@
-package org.orcid.service.assertions.upload;
+package org.orcid.memberportal.service.assertion.upload;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.orcid.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
 
 public class AssertionsUpload {
 

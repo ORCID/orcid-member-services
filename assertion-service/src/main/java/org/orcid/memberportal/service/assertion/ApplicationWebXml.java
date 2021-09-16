@@ -1,6 +1,6 @@
-package org.orcid;
+package org.orcid.memberportal.service.assertion;
 
-import org.orcid.config.DefaultProfileUtil;
+import org.orcid.memberportal.service.assertion.config.DefaultProfileUtil;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 

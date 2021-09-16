@@ -1,4 +1,4 @@
-package org.orcid.service;
+package org.orcid.memberportal.service.assertion.services;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -7,13 +7,13 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.orcid.config.ApplicationProperties;
-import org.orcid.domain.AssertionServiceUser;
-import org.orcid.domain.OrcidRecord;
-import org.orcid.domain.OrcidToken;
-import org.orcid.repository.OrcidRecordRepository;
-import org.orcid.security.EncryptUtil;
-import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
+import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.domain.OrcidToken;
+import org.orcid.memberportal.service.assertion.repository.OrcidRecordRepository;
+import org.orcid.memberportal.service.assertion.security.EncryptUtil;
+import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

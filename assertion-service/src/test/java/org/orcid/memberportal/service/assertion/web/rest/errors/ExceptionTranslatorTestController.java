@@ -1,4 +1,4 @@
-package org.orcid.web.rest.errors;
+package org.orcid.memberportal.service.assertion.web.rest.errors;
 
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.http.HttpStatus;

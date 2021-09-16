@@ -1,9 +1,9 @@
-package org.orcid.repository;
+package org.orcid.memberportal.service.assertion.repository;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.orcid.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;

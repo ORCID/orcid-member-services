@@ -1,4 +1,4 @@
-package org.orcid.client;
+package org.orcid.memberportal.service.assertion.client;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

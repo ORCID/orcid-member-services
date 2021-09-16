@@ -1,4 +1,4 @@
-package org.orcid.security;
+package org.orcid.memberportal.service.assertion.security;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletRequest;

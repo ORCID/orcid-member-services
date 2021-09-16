@@ -1,7 +1,9 @@
-package org.orcid.web.rest.errors;
+package org.orcid.memberportal.service.assertion.web.rest.errors;
 
-import org.orcid.AssertionServiceApp;
-import org.orcid.config.SecurityBeanOverrideConfiguration;
+import org.orcid.memberportal.service.assertion.AssertionServiceApp;
+import org.orcid.memberportal.service.assertion.config.SecurityBeanOverrideConfiguration;
+import org.orcid.memberportal.service.assertion.web.rest.errors.ErrorConstants;
+import org.orcid.memberportal.service.assertion.web.rest.errors.ExceptionTranslator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

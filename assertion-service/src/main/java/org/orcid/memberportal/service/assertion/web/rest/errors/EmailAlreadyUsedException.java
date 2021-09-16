@@ -1,4 +1,4 @@
-package org.orcid.web.rest.errors;
+package org.orcid.memberportal.service.assertion.web.rest.errors;
 
 import java.util.HashMap;
 import java.util.Map;

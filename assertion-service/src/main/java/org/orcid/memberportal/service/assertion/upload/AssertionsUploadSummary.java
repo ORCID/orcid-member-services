@@ -1,4 +1,4 @@
-package org.orcid.service.assertions.upload;
+package org.orcid.memberportal.service.assertion.upload;
 
 import java.io.Serializable;
 import java.util.ArrayList;

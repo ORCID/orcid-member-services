@@ -1,6 +1,6 @@
-package org.orcid.config.oauth2;
+package org.orcid.memberportal.service.assertion.config.oauth2;
 
-import org.orcid.security.oauth2.OAuth2SignatureVerifierClient;
+import org.orcid.memberportal.service.assertion.security.oauth2.OAuth2SignatureVerifierClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;

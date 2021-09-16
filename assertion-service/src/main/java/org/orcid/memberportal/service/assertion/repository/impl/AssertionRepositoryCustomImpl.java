@@ -1,9 +1,9 @@
-package org.orcid.repository.impl;
+package org.orcid.memberportal.service.assertion.repository.impl;
 
 import java.util.List;
 
-import org.orcid.domain.Assertion;
-import org.orcid.repository.AssertionRepositoryCustom;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.repository.AssertionRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;

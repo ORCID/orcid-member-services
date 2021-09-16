@@ -1,4 +1,4 @@
-package org.orcid.domain;
+package org.orcid.memberportal.service.assertion.domain;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -6,7 +6,7 @@ import java.time.Instant;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.orcid.domain.enumeration.AffiliationSection;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;

@@ -1,4 +1,4 @@
 /**
  * Service layer beans.
  */
-package org.orcid.service;
+package org.orcid.memberportal.service.assertion.services;

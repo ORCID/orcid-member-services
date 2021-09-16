@@ -1,4 +1,4 @@
-package org.orcid.security;
+package org.orcid.memberportal.service.assertion.security;
 
 /**
  * Constants for Spring Security authorities.

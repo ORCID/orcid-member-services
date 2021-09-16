@@ -1,4 +1,4 @@
-package org.orcid.config;
+package org.orcid.memberportal.service.assertion.config;
 
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;

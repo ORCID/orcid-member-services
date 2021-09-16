@@ -1,4 +1,4 @@
-package org.orcid.service;
+package org.orcid.memberportal.service.assertion.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -19,12 +19,14 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.orcid.client.OrcidAPIClient;
-import org.orcid.domain.AssertionServiceUser;
-import org.orcid.domain.OrcidRecord;
-import org.orcid.domain.OrcidToken;
-import org.orcid.repository.OrcidRecordRepository;
-import org.orcid.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
+import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.domain.OrcidToken;
+import org.orcid.memberportal.service.assertion.repository.OrcidRecordRepository;
+import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
+import org.orcid.memberportal.service.assertion.services.UserService;
+import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 
 class OrcidRecordServiceTest {
 

@@ -1,8 +1,8 @@
-package org.orcid;
+package org.orcid.memberportal.service.assertion;
 
-import org.orcid.client.OAuth2InterceptedFeignConfiguration;
-import org.orcid.config.ApplicationProperties;
-import org.orcid.config.DefaultProfileUtil;
+import org.orcid.memberportal.service.assertion.client.OAuth2InterceptedFeignConfiguration;
+import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
+import org.orcid.memberportal.service.assertion.config.DefaultProfileUtil;
 
 import io.github.jhipster.config.JHipsterConstants;
 

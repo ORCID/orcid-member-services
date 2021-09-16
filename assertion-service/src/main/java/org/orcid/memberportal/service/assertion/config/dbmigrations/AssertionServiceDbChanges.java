@@ -1,8 +1,8 @@
-package org.orcid.config.dbmigrations;
+package org.orcid.memberportal.service.assertion.config.dbmigrations;
 
 import java.util.List;
 
-import org.orcid.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;

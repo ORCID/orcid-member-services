@@ -1,4 +1,4 @@
-package org.orcid.web.rest;
+package org.orcid.memberportal.service.assertion.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;

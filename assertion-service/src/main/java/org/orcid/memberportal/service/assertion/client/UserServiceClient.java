@@ -1,11 +1,11 @@
-package org.orcid.client;
+package org.orcid.memberportal.service.assertion.client;
 
 import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-import org.orcid.domain.AssertionServiceUser;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

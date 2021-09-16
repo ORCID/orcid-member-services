@@ -1,10 +1,10 @@
-package org.orcid.service;
+package org.orcid.memberportal.service.assertion.services;
 
 import java.util.List;
 
-import org.orcid.client.UserServiceClient;
-import org.orcid.domain.AssertionServiceUser;
-import org.orcid.security.SecurityUtils;
+import org.orcid.memberportal.service.assertion.client.UserServiceClient;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
+import org.orcid.memberportal.service.assertion.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

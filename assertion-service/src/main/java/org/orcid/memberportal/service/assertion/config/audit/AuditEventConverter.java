@@ -1,7 +1,6 @@
-package org.orcid.config.audit;
+package org.orcid.memberportal.service.assertion.config.audit;
 
-import org.orcid.domain.PersistentAuditEvent;
-
+import org.orcid.memberportal.service.assertion.domain.PersistentAuditEvent;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;

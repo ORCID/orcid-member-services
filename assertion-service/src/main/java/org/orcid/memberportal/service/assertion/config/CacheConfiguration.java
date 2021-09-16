@@ -1,4 +1,4 @@
-package org.orcid.config;
+package org.orcid.memberportal.service.assertion.config;
 
 import java.time.Duration;
 

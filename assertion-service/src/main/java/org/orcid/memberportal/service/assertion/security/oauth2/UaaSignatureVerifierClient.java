@@ -1,6 +1,6 @@
-package org.orcid.security.oauth2;
+package org.orcid.memberportal.service.assertion.security.oauth2;
 
-import org.orcid.config.oauth2.OAuth2Properties;
+import org.orcid.memberportal.service.assertion.config.oauth2.OAuth2Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;

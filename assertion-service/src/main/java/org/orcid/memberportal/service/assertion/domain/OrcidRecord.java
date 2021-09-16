@@ -1,4 +1,4 @@
-package org.orcid.domain;
+package org.orcid.memberportal.service.assertion.domain;
 
 import java.time.Instant;
 import java.util.List;

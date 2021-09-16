@@ -1,4 +1,4 @@
-package org.orcid.domain;
+package org.orcid.memberportal.service.assertion.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

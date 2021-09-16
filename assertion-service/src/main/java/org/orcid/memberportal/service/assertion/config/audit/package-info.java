@@ -1,4 +1,4 @@
 /**
  * Audit specific code.
  */
-package org.orcid.config.audit;
+package org.orcid.memberportal.service.assertion.config.audit;

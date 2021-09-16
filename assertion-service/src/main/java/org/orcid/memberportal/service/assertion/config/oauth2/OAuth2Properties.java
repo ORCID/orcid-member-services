@@ -1,4 +1,4 @@
-package org.orcid.config.oauth2;
+package org.orcid.memberportal.service.assertion.config.oauth2;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

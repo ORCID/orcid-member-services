@@ -1,4 +1,4 @@
-package org.orcid.domain.utils;
+package org.orcid.memberportal.service.assertion.domain.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,10 +7,11 @@ import java.util.Arrays;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-import org.orcid.domain.Assertion;
-import org.orcid.domain.OrcidRecord;
-import org.orcid.domain.OrcidToken;
-import org.orcid.domain.enumeration.AssertionStatus;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.domain.OrcidToken;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
+import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 
 class AssertionUtilsTest {
 

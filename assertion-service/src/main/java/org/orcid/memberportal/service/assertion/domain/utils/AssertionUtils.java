@@ -1,10 +1,10 @@
-package org.orcid.domain.utils;
+package org.orcid.memberportal.service.assertion.domain.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
-import org.orcid.domain.Assertion;
-import org.orcid.domain.OrcidRecord;
-import org.orcid.domain.enumeration.AssertionStatus;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 
 public class AssertionUtils {
     private static final String GRID_BASE_URL = "https://www.grid.ac/";

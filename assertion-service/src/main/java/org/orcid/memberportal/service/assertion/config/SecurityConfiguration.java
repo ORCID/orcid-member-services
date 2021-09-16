@@ -1,9 +1,9 @@
-package org.orcid.config;
+package org.orcid.memberportal.service.assertion.config;
 
-import org.orcid.config.oauth2.OAuth2JwtAccessTokenConverter;
-import org.orcid.config.oauth2.OAuth2Properties;
-import org.orcid.security.AuthoritiesConstants;
-import org.orcid.security.oauth2.OAuth2SignatureVerifierClient;
+import org.orcid.memberportal.service.assertion.config.oauth2.OAuth2JwtAccessTokenConverter;
+import org.orcid.memberportal.service.assertion.config.oauth2.OAuth2Properties;
+import org.orcid.memberportal.service.assertion.security.AuthoritiesConstants;
+import org.orcid.memberportal.service.assertion.security.oauth2.OAuth2SignatureVerifierClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;

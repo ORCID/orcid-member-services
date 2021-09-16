@@ -1,4 +1,4 @@
-package org.orcid.config;
+package org.orcid.memberportal.service.assertion.config;
 
 import com.github.mongobee.Mongobee;
 
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@EnableMongoRepositories("org.orcid.repository")
+@EnableMongoRepositories("org.orcid.memberportal.service.assertion.repository")
 @Profile(JHipsterConstants.SPRING_PROFILE_CLOUD)
 public class CloudDatabaseConfiguration extends AbstractCloudConfig {
 

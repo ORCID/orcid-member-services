@@ -1,18 +1,18 @@
-package org.orcid.service.assertions.download.impl;
+package org.orcid.memberportal.service.assertion.download.impl;
 
 import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.orcid.config.ApplicationProperties;
-import org.orcid.domain.Assertion;
-import org.orcid.domain.OrcidRecord;
-import org.orcid.repository.AssertionRepository;
-import org.orcid.security.EncryptUtil;
-import org.orcid.service.OrcidRecordService;
-import org.orcid.service.UserService;
-import org.orcid.service.assertions.download.CsvWriter;
+import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.download.CsvWriter;
+import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
+import org.orcid.memberportal.service.assertion.security.EncryptUtil;
+import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
+import org.orcid.memberportal.service.assertion.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

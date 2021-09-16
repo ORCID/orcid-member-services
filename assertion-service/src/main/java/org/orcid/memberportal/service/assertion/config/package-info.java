@@ -1,4 +1,4 @@
 /**
  * Spring Framework configuration files.
  */
-package org.orcid.config;
+package org.orcid.memberportal.service.assertion.config;

@@ -1,4 +1,4 @@
-package org.orcid.security;
+package org.orcid.memberportal.service.assertion.security;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;

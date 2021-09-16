@@ -1,4 +1,4 @@
-package org.orcid.service.assertions.download.impl;
+package org.orcid.memberportal.service.assertion.download.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,14 +18,15 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.orcid.config.ApplicationProperties;
-import org.orcid.domain.Assertion;
-import org.orcid.domain.OrcidRecord;
-import org.orcid.domain.enumeration.AffiliationSection;
-import org.orcid.repository.AssertionRepository;
-import org.orcid.security.EncryptUtil;
-import org.orcid.service.OrcidRecordService;
-import org.orcid.service.UserService;
+import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
+import org.orcid.memberportal.service.assertion.download.impl.PermissionLinksCsvWriter;
+import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
+import org.orcid.memberportal.service.assertion.security.EncryptUtil;
+import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
+import org.orcid.memberportal.service.assertion.services.UserService;
 
 public class PermissionLinksCsvWriterTest {
 

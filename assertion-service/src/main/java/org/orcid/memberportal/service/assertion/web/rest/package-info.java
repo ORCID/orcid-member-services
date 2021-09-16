@@ -1,4 +1,4 @@
 /**
  * Spring MVC REST controllers.
  */
-package org.orcid.web.rest;
+package org.orcid.memberportal.service.assertion.web.rest;

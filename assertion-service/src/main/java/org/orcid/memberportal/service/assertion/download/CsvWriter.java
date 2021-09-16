@@ -1,4 +1,4 @@
-package org.orcid.service.assertions.download;
+package org.orcid.memberportal.service.assertion.download;
 
 import java.io.IOException;
 

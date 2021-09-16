@@ -1,4 +1,4 @@
-package org.orcid.domain.enumeration;
+package org.orcid.memberportal.service.assertion.domain.enumeration;
 
 public enum AffiliationSection {
     EMPLOYMENT("employment"), EDUCATION("education"), QUALIFICATION("qualification"), INVITED_POSITION("invited-position"), DISTINCTION("distinction"), MEMBERSHIP(

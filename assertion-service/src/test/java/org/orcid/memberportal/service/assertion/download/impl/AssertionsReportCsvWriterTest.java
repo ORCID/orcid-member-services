@@ -1,4 +1,4 @@
-package org.orcid.service.assertions.download.impl;
+package org.orcid.memberportal.service.assertion.download.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -19,14 +19,15 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.orcid.domain.Assertion;
-import org.orcid.domain.AssertionServiceUser;
-import org.orcid.domain.OrcidRecord;
-import org.orcid.domain.OrcidToken;
-import org.orcid.domain.enumeration.AffiliationSection;
-import org.orcid.repository.AssertionRepository;
-import org.orcid.service.OrcidRecordService;
-import org.orcid.service.UserService;
+import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
+import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.domain.OrcidToken;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
+import org.orcid.memberportal.service.assertion.download.impl.AssertionsReportCsvWriter;
+import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
+import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
+import org.orcid.memberportal.service.assertion.services.UserService;
 import org.springframework.data.domain.Sort;
 
 public class AssertionsReportCsvWriterTest {

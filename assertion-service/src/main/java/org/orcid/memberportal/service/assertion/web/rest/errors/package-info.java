@@ -3,4 +3,4 @@
  *
  * More information on https://github.com/zalando/problem-spring-web
  */
-package org.orcid.web.rest.errors;
+package org.orcid.memberportal.service.assertion.web.rest.errors;

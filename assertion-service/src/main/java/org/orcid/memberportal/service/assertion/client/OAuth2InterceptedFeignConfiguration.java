@@ -1,4 +1,4 @@
-package org.orcid.client;
+package org.orcid.memberportal.service.assertion.client;
 
 import org.springframework.cloud.security.oauth2.client.feign.OAuth2FeignRequestInterceptor;
 import org.springframework.context.annotation.Bean;
