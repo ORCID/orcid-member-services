@@ -1,19 +1,19 @@
-package org.orcid.member.security;
+package org.orcid.memberportal.service.user.security;
 
-import org.junit.jupiter.api.Test;
-import org.orcid.memberportal.service.member.security.AuthoritiesConstants;
-import org.orcid.memberportal.service.member.security.SecurityUtils;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
+import org.orcid.memberportal.service.user.security.SecurityUtils;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Test class for the {@link SecurityUtils} utility class.
