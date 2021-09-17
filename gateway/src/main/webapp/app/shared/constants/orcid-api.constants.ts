@@ -265,7 +265,7 @@ export const COUNTRIES = {
   Zimbabwe: 'ZW'
 };
 
-export const ORG_ID_TYPES = ['RINGGOLD', 'GRID'];
+export const ORG_ID_TYPES = ['RINGGOLD', 'GRID', 'ROR'];
 
 export const DEFAULT_EARLIEST_YEAR = 1913;
 

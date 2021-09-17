@@ -83,6 +83,11 @@ function disambiguatedOrgIdValidator(): ValidatorFn {
         if (gridId && !(gridId.substr(0, gridStartsWith.length) == gridStartsWith)) {
           return { validDisambiguatedOrgId: false };
         }
+      } else if (disambiguationSourceValue == 'ROR') {
+        var reg = new RegExp('^(https://ror.org/)?0[^ILO]{6}\\d{2}$');
+        if (control.value && !reg.test(control.value)) {
+          return { validDisambiguatedOrgId: false };
+        }
       }
     }
     return null;
