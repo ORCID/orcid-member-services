@@ -1,4 +1,4 @@
-package org.orcid.memberportal.service.assertion.org.validation.impl;
+package org.orcid.memberportal.service.assertion.domain.org.validation.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

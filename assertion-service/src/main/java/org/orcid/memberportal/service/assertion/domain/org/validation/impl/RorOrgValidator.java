@@ -1,9 +1,9 @@
-package org.orcid.memberportal.service.assertion.org.validation.impl;
+package org.orcid.memberportal.service.assertion.domain.org.validation.impl;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.orcid.memberportal.service.assertion.org.validation.OrgValidator;
+import org.orcid.memberportal.service.assertion.domain.org.validation.OrgValidator;
 import org.springframework.stereotype.Component;
 
 @Component
