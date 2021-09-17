@@ -30,10 +30,13 @@ import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.domain.validation.OrcidUrlValidator;
+import org.orcid.memberportal.service.assertion.org.validation.impl.GridOrgValidator;
+import org.orcid.memberportal.service.assertion.org.validation.impl.RinggoldOrgValidator;
+import org.orcid.memberportal.service.assertion.org.validation.impl.RorOrgValidator;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
-import org.orcid.memberportal.service.assertion.upload.AssertionsUploadReader;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload.AssertionsUploadDate;
+import org.orcid.memberportal.service.assertion.upload.AssertionsUploadReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +47,7 @@ import org.springframework.stereotype.Component;
 public class AssertionsCsvReader implements AssertionsUploadReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(AssertionsCsvReader.class);
-    private static final String GRID_STARTS_WITH = "grid.";
+
     private final DateTimeFormatter[] formatters = {
             new DateTimeFormatterBuilder().appendPattern("yyyy").parseDefaulting(ChronoField.MONTH_OF_YEAR, 1).parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
             new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
@@ -63,6 +66,15 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private GridOrgValidator gridValidator;
+
+    @Autowired
+    private RinggoldOrgValidator ringgoldValidator;
+
+    @Autowired
+    private RorOrgValidator rorValidator;
 
     @Override
     public AssertionsUpload readAssertionsUpload(InputStream inputStream, AssertionServiceUser user) throws IOException {
@@ -356,10 +368,12 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
 
     private boolean validateDisambiguatedOrganizationId(String orgId, String orgSource) {
         if (StringUtils.equalsIgnoreCase(orgSource, Constants.GRID_ORG_SOURCE)) {
-            return orgId.length() > (GRID_STARTS_WITH.length() + 1) && StringUtils.equals(orgId.substring(0, GRID_STARTS_WITH.length()), GRID_STARTS_WITH);
+            return gridValidator.validId(orgId);
         } else if (StringUtils.equalsIgnoreCase(orgSource, Constants.RINGGOLD_ORG_SOURCE)) {
-            return orgId.chars().allMatch(x -> Character.isDigit(x));
-        }
+            return ringgoldValidator.validId(orgId);
+        } else if (StringUtils.equalsIgnoreCase(orgSource, Constants.ROR_ORG_SOURCE)) {
+            return rorValidator.validId(orgId);
+        } 
         return false;
     }
 
