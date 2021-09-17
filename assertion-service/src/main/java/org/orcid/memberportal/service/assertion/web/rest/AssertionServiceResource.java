@@ -20,10 +20,14 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.codehaus.jettison.json.JSONException;
 import org.json.JSONObject;
+import org.orcid.memberportal.service.assertion.config.Constants;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.domain.validation.OrcidUrlValidator;
+import org.orcid.memberportal.service.assertion.org.validation.impl.GridOrgValidator;
+import org.orcid.memberportal.service.assertion.org.validation.impl.RinggoldOrgValidator;
+import org.orcid.memberportal.service.assertion.org.validation.impl.RorOrgValidator;
 import org.orcid.memberportal.service.assertion.security.AuthoritiesConstants;
 import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.security.JWTUtil;
@@ -85,6 +89,15 @@ public class AssertionServiceResource {
 
     @Autowired
     private UserService assertionsUserService;
+
+    @Autowired
+    private RinggoldOrgValidator ringgoldOrgValidator;
+
+    @Autowired
+    private GridOrgValidator gridOrgValidator;
+
+    @Autowired
+    private RorOrgValidator rorOrgValidator;
 
     private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
@@ -352,6 +365,10 @@ public class AssertionServiceResource {
             throw new BadRequestAlertException("disambiguation-source must not be null", "member", "disambiguationSource");
         }
 
+        if (!validOrgId(assertion)) {
+            throw new IllegalArgumentException("invalid org id");
+        }
+
         if (assertionService.isDuplicate(assertion)) {
             throw new BadRequestAlertException("This assertion already exists", "assertion", "assertion.validation.duplicate.string");
         }
@@ -362,6 +379,17 @@ public class AssertionServiceResource {
         }
 
         assertion.setUrl(validateUrl(assertion.getUrl()));
+    }
+
+    private boolean validOrgId(Assertion assertion) {
+        if (StringUtils.equalsIgnoreCase(assertion.getDisambiguationSource(), Constants.GRID_ORG_SOURCE)) {
+            return gridOrgValidator.validId(assertion.getDisambiguatedOrgId());
+        } else if (StringUtils.equalsIgnoreCase(assertion.getDisambiguationSource(), Constants.RINGGOLD_ORG_SOURCE)) {
+            return ringgoldOrgValidator.validId(assertion.getDisambiguatedOrgId());
+        } else if (StringUtils.equalsIgnoreCase(assertion.getDisambiguationSource(), Constants.ROR_ORG_SOURCE)) {
+            return rorOrgValidator.validId(assertion.getDisambiguatedOrgId());
+        }
+        return false;
     }
 
     private String validateUrl(String url) {

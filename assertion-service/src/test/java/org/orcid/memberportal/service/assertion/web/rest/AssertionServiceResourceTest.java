@@ -29,16 +29,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.orcid.memberportal.service.assertion.config.Constants;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
+import org.orcid.memberportal.service.assertion.org.validation.impl.GridOrgValidator;
+import org.orcid.memberportal.service.assertion.org.validation.impl.RinggoldOrgValidator;
+import org.orcid.memberportal.service.assertion.org.validation.impl.RorOrgValidator;
 import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.security.JWTUtil;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
-import org.orcid.memberportal.service.assertion.web.rest.AssertionServiceResource;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,13 +73,25 @@ class AssertionServiceResourceTest {
     
     @Mock
     private JWTUtil jwtUtil;
+    
+    @Mock
+    private RorOrgValidator rorOrgValidator;
 
+    @Mock
+    private RinggoldOrgValidator ringgoldOrgValidator;
+    
+    @Mock
+    private GridOrgValidator gridOrgValidator;
+    
     @InjectMocks
     private AssertionServiceResource assertionServiceResource;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        Mockito.when(rorOrgValidator.validId(Mockito.anyString())).thenReturn(true);
+        Mockito.when(gridOrgValidator.validId(Mockito.anyString())).thenReturn(true);
+        Mockito.when(ringgoldOrgValidator.validId(Mockito.anyString())).thenReturn(true);
     }
 
     @Test
@@ -228,6 +243,30 @@ class AssertionServiceResourceTest {
         Mockito.verify(assertionService, Mockito.times(1)).createAssertion(Mockito.any(Assertion.class));
         Mockito.verify(assertionService, Mockito.times(1)).isDuplicate(Mockito.any(Assertion.class));
     }
+    
+    @Test
+    void testCreateAssertion_verifyOrgsValidated() throws BadRequestAlertException, URISyntaxException {
+        Assertion creatingAssertion = getAssertion("test-create-assertion@orcid.org");
+        creatingAssertion.setDisambiguationSource(Constants.GRID_ORG_SOURCE);
+        creatingAssertion.setDisambiguatedOrgId("something");
+        Assertion createdAssertion = getAssertion("test-create-assertion@orcid.org");
+        createdAssertion.setId("some-id-because-this-assertion-exists-already");
+        Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(false);
+        Mockito.when(assertionService.createAssertion(Mockito.any(Assertion.class))).thenReturn(createdAssertion);
+        ResponseEntity<Assertion> response = assertionServiceResource.createAssertion(creatingAssertion);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        Mockito.verify(gridOrgValidator, Mockito.times(1)).validId(Mockito.eq("something"));
+        
+        creatingAssertion.setDisambiguationSource(Constants.RINGGOLD_ORG_SOURCE);
+        response = assertionServiceResource.createAssertion(creatingAssertion);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        Mockito.verify(ringgoldOrgValidator, Mockito.times(1)).validId(Mockito.eq("something"));
+        
+        creatingAssertion.setDisambiguationSource(Constants.ROR_ORG_SOURCE);
+        response = assertionServiceResource.createAssertion(creatingAssertion);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        Mockito.verify(gridOrgValidator, Mockito.times(1)).validId(Mockito.eq("something"));
+    }
 
     @Test
     void testCreateAssertionInvalidEmail() throws BadRequestAlertException, URISyntaxException {
@@ -346,7 +385,7 @@ class AssertionServiceResourceTest {
         assertion.setOrgCountry("US");
         assertion.setOrgCity("city");
         assertion.setDisambiguatedOrgId("something");
-        assertion.setDisambiguationSource("some source");
+        assertion.setDisambiguationSource(Constants.RINGGOLD_ORG_SOURCE);
         assertion.setEmail(email);
         return assertion;
     }
