@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class OAuth2AuthenticationService {
 
-    private final Logger log = LoggerFactory.getLogger(OAuth2AuthenticationService.class);
+    private final Logger LOG = LoggerFactory.getLogger(OAuth2AuthenticationService.class);
 
     /**
      * Number of milliseconds to cache refresh token grants so we don't have to
@@ -76,12 +76,10 @@ public class OAuth2AuthenticationService {
             OAuth2Cookies cookies = new OAuth2Cookies();
             cookieHelper.createCookies(request, accessToken, rememberMe, cookies);
             cookies.addCookiesTo(response);
-            if (log.isDebugEnabled()) {
-                log.debug("successfully authenticated user {}", params.get("username"));
-            }
+            LOG.info("Successfully authenticated user {}", params.get("username"));
             return ResponseEntity.ok(accessToken);
         } catch (HttpClientErrorException ex) {
-            log.error("failed to get OAuth2 tokens from UAA", ex);
+            LOG.error("Failed to get OAuth2 tokens from UAA", ex);
             throw new BadCredentialsException("Invalid credentials");
         }
     }
@@ -107,7 +105,7 @@ public class OAuth2AuthenticationService {
     public HttpServletRequest refreshToken(HttpServletRequest request, HttpServletResponse response, Cookie refreshCookie) {
         // check if non-remember-me session has expired
         if (cookieHelper.isSessionExpired(refreshCookie)) {
-            log.info("session has expired due to inactivity");
+            LOG.info("session has expired due to inactivity");
             logout(request, response); // logout to clear cookies in browser
             return stripTokens(request); // don't include cookies downstream
         }
@@ -123,7 +121,7 @@ public class OAuth2AuthenticationService {
                 // add cookies to response to update browser
                 cookies.addCookiesTo(response);
             } else {
-                log.debug("reusing cached refresh_token grant");
+                LOG.debug("reusing cached refresh_token grant");
             }
             // replace cookies in original request with new ones
             CookieCollection requestCookies = new CookieCollection(request.getCookies());
