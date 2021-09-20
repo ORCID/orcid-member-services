@@ -1,0 +1,30 @@
+{
+  "userManagement": {
+    "home": {
+      "title": { "string": "Utilisateurs" },
+      "createLabel": { "string": "Créer un nouvel utilisateur" },
+      "createOrEditLabel": { "string": "Créer ou modifier un utilisateur" }
+    },
+    "created": { "string": "Un nouvel utilisateur a été créé avec l'identifiant {{ param }}" },
+    "updated": { "string": "Un utilisateur est mis à jour grâce à l'identifiant {{ param}}." },
+    "deleted": { "string": "Un utilisateur avec l'identifiant {{ param }} a été supprimé" },
+    "delete": {
+      "question": { "string": "Êtes-vous sûr(e) de souhaiter supprimer l'utilisateur {{ login }} ?" }
+    },
+    "detail": {
+      "title": { "string": "Utilisateur" }
+    },
+    "login": { "string": "Connexion" },
+    "firstName": { "string": "Prénom" },
+    "lastName": { "string": "Nom" },
+    "email": { "string": "E-mail" },
+    "activated": { "string": "Activé" },
+    "deactivated": { "string": "Désactivé" },
+    "profiles": { "string": "Profils" },
+    "langKey": { "string": "Langue" },
+    "createdBy": { "string": "Créé par" },
+    "createdDate": { "string": "Date de création" },
+    "lastModifiedBy": { "string": "Modifié par" },
+    "lastModifiedDate": { "string": "Date de modification" }
+  }
+}
