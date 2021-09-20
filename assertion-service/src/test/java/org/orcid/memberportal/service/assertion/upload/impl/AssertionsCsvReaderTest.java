@@ -17,9 +17,11 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
+import org.orcid.memberportal.service.assertion.domain.validation.org.impl.GridOrgValidator;
+import org.orcid.memberportal.service.assertion.domain.validation.org.impl.RinggoldOrgValidator;
+import org.orcid.memberportal.service.assertion.domain.validation.org.impl.RorOrgValidator;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
-import org.orcid.memberportal.service.assertion.upload.impl.AssertionsCsvReader;
 import org.springframework.context.MessageSource;
 
 class AssertionsCsvReaderTest {
@@ -29,13 +31,26 @@ class AssertionsCsvReaderTest {
 
     @Mock
     private MessageSource messageSource;
-
+    
+    @Mock
+    private GridOrgValidator gridValidator;
+    
+    @Mock
+    private RorOrgValidator rorValidator;
+    
+    @Mock
+    private RinggoldOrgValidator ringgoldValidator;
+    
     @InjectMocks
     private AssertionsCsvReader reader;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        
+        Mockito.when(ringgoldValidator.validId(Mockito.anyString())).thenReturn(true);
+        Mockito.when(gridValidator.validId(Mockito.anyString())).thenReturn(true);
+        Mockito.when(rorValidator.validId(Mockito.anyString())).thenReturn(true);
     }
 
     @Test

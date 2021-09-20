@@ -40,6 +40,7 @@ import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
+import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.memberportal.service.assertion.download.impl.AssertionsReportCsvWriter;
@@ -90,6 +91,9 @@ class AssertionServiceTest {
 
     @Mock
     private AssertionsCsvReader assertionsCsvReader;
+    
+    @Mock
+    private AssertionNormalizer assertionNormalizer;
 
     @Captor
     private ArgumentCaptor<Assertion> assertionCaptor;
@@ -102,6 +106,12 @@ class AssertionServiceTest {
         MockitoAnnotations.initMocks(this);
         when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
         when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
+        when(assertionNormalizer.normalize(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
+            @Override
+            public Assertion answer(InvocationOnMock invocation) throws Throwable {
+                return invocation.getArgument(0);
+            }
+        });
     }
 
     private AssertionServiceUser getUser() {
@@ -147,6 +157,7 @@ class AssertionServiceTest {
 
         assertionService.createAssertion(a);
         Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(a));
+        Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
 
         assertEquals("orcid", a.getOrcidId());
     }
@@ -199,6 +210,7 @@ class AssertionServiceTest {
         assertNotNull(a.getStatus());
         assertEquals("orcid", a.getOrcidId());
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
+        Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
     }
 
     @Test

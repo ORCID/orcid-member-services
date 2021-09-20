@@ -24,7 +24,7 @@ import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
-import org.orcid.memberportal.service.assertion.download.impl.AssertionsReportCsvWriter;
+import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
@@ -46,6 +46,9 @@ public class AssertionsReportCsvWriterTest {
 
     @Mock
     private OrcidRecordService orcidRecordService;
+    
+    @Mock
+    private AssertionNormalizer assertionNormalizer;
 
     @InjectMocks
     private AssertionsReportCsvWriter reportWriter;

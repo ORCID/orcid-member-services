@@ -1,4 +1,4 @@
-package org.orcid.memberportal.service.assertion.domain.org.validation;
+package org.orcid.memberportal.service.assertion.domain.validation.org;
 
 public interface OrgValidator {
     

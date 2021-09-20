@@ -28,11 +28,11 @@ import org.orcid.memberportal.service.assertion.config.Constants;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
-import org.orcid.memberportal.service.assertion.domain.org.validation.impl.GridOrgValidator;
-import org.orcid.memberportal.service.assertion.domain.org.validation.impl.RinggoldOrgValidator;
-import org.orcid.memberportal.service.assertion.domain.org.validation.impl.RorOrgValidator;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.domain.validation.OrcidUrlValidator;
+import org.orcid.memberportal.service.assertion.domain.validation.org.impl.GridOrgValidator;
+import org.orcid.memberportal.service.assertion.domain.validation.org.impl.RinggoldOrgValidator;
+import org.orcid.memberportal.service.assertion.domain.validation.org.impl.RorOrgValidator;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload.AssertionsUploadDate;
@@ -91,7 +91,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
                     }
                     upload.addAssertion(assertion);
                 } catch (Exception e) {
-                    LOG.info("CSV upload error found for record number {}", record.getRecordNumber());
+                    LOG.info("CSV upload error found for record number {}", record.getRecordNumber(), e);
                     upload.addError(record.getRecordNumber(), getError("unexpected", e.getMessage(), user));
                 }
             }

@@ -1,6 +1,6 @@
-package org.orcid.memberportal.service.assertion.domain.org.validation.impl;
+package org.orcid.memberportal.service.assertion.domain.validation.org.impl;
 
-import org.orcid.memberportal.service.assertion.domain.org.validation.OrgValidator;
+import org.orcid.memberportal.service.assertion.domain.validation.org.OrgValidator;
 import org.springframework.stereotype.Component;
 
 @Component

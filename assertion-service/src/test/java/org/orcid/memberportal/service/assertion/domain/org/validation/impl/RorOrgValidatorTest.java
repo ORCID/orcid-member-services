@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
+import org.orcid.memberportal.service.assertion.domain.validation.org.impl.RorOrgValidator;
 
 public class RorOrgValidatorTest {
 

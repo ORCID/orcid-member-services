@@ -16,7 +16,6 @@ import org.orcid.memberportal.service.user.UserServiceApp;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.repository.UserRepository;
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
-import org.orcid.memberportal.service.user.services.UserService;
 import org.orcid.memberportal.service.user.util.RandomUtil;
 import org.orcid.memberportal.service.user.web.rest.errors.ExpiredKeyException;
 import org.orcid.memberportal.service.user.web.rest.errors.InvalidKeyException;

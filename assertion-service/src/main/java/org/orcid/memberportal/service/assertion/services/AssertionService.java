@@ -20,6 +20,7 @@ import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
+import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.memberportal.service.assertion.download.impl.AssertionsReportCsvWriter;
@@ -72,6 +73,9 @@ public class AssertionService {
 
     @Autowired
     private AssertionsCsvReader assertionsCsvReader;
+    
+    @Autowired
+    private AssertionNormalizer assertionNormalizer;
 
     public boolean assertionExists(String id) {
         return assertionRepository.existsById(id);
@@ -183,6 +187,8 @@ public class AssertionService {
     }
 
     public Assertion createAssertion(Assertion assertion) {
+        assertion = assertionNormalizer.normalize(assertion);
+        
         Instant now = Instant.now();
         AssertionServiceUser user = assertionsUserService.getLoggedInUser();
 
@@ -254,6 +260,8 @@ public class AssertionService {
     }
 
     public Assertion updateAssertion(Assertion assertion) {
+        assertion = assertionNormalizer.normalize(assertion);
+        
         Optional<Assertion> optional = assertionRepository.findById(assertion.getId());
         Assertion existingAssertion = optional.get();
         checkAssertionAccess(existingAssertion);
