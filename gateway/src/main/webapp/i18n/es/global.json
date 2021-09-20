@@ -1,0 +1,193 @@
+{
+  "global": {
+    "title": { "string": "Portal de miembros de ORCID" },
+    "by": { "string": "por" },
+    "false": { "string": "falso" },
+    "true": { "string": "verdadero" },
+    "browsehappy": {
+      "string": "Está usando un navegador <strong>desactualizado</strong>. <a href=\"http://browsehappy.com/?locale=en\">Actualice su navegador</a> para mejorar su experiencia."
+    },
+    "warning": { "string": "¡Advertencia!" },
+    "isATestEnvironment": {
+      "string": "es un entorno de prueba para el Portal de miembros de ORCID que se conecta al entorno de prueba del Registro ORCID"
+    },
+    "menu": {
+      "memberPortal": { "string": "Portal para miembros" },
+      "beta": { "string": "Beta" },
+      "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
+      "entities": {
+        "main": { "string": "Herramientas para miembros" },
+        "assertionServiceAffiliationManager": { "string": "Gestor de afiliación" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "member": { "string": "Miembro" }
+      },
+      "report": {
+        "member": { "string": "Informe de miembros" },
+        "integration": { "string": "Informe de integración" },
+        "consortium": { "string": "Informe del consorcio" }
+      },
+      "account": {
+        "main": { "string": "Cuenta" },
+        "settings": { "string": "Ajustes" },
+        "password": { "string": "Contraseña" },
+        "sessions": { "string": "Sesiones" },
+        "login": { "string": "Registrarse" },
+        "logout": { "string": "Cerrar sesión" },
+        "loggedInAs": { "string": "Conectado como" },
+        "logoutAs": { "string": "Cerrar sesión como" },
+        "register": { "string": "Registrarse" }
+      },
+      "admin": {
+        "main": { "string": "Administración" },
+        "msUserServiceMSUser": { "string": "Gestionar usuarios" },
+        "msUserServiceMSMember": { "string": "Gestionar miembros" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster agregará entradas de menú adicionales aquí (¡no traducir!)" }
+      },
+      "dev": {
+        "main": { "string": "Control del sistema" },
+        "gateway": { "string": "Puerta" },
+        "tracker": { "string": "Rastreador de usuarios" },
+        "metrics": { "string": "Métrica" },
+        "health": { "string": "Salud" },
+        "configuration": { "string": "Configuración" },
+        "logs": { "string": "Registros" },
+        "audits": { "string": "Auditorias" },
+        "apidocs": { "string": "API" },
+        "database": { "string": "Base de datos" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "language": { "string": "Idioma" }
+    },
+    "form": {
+      "username.label": { "string": "Nombre de usuario" },
+      "username.placeholder": { "string": "Su nombre de usuario" },
+      "currentpassword.label": { "string": "Contraseña actual" },
+      "currentpassword.placeholder": { "string": "Contraseña actual" },
+      "newpassword.label": { "string": "Nueva contraseña" },
+      "newpassword.placeholder": { "string": "Nueva contraseña" },
+      "confirmpassword.label": { "string": "Confirmación de la nueva contraseña" },
+      "confirmpassword.placeholder": { "string": "Confirme la nueva contraseña" },
+      "email.label": { "string": "Correo electrónico" },
+      "email.placeholder": { "string": "Su correo electrónico" },
+      "search": { "string": "Buscar..." }
+    },
+    "messages": {
+      "info": {
+        "authenticated": {
+          "prefix": { "string": "Si quiere" },
+          "link": { "string": "iniciar sesión" },
+          "suffix": {
+            "string": ", puede probar las cuentas predeterminadas:<br/>- Administrador (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\")."
+          }
+        },
+        "register": {
+          "noaccount": { "string": "¿Aún no tiene una cuenta?" },
+          "link": { "string": "Registre una cuenta nueva" }
+        }
+      },
+      "error": {
+        "dontmatch": { "string": "La contraseña y su confirmación no coinciden" }
+      },
+      "validate": {
+        "newpassword": {
+          "required": { "string": "Tu contraseña es necesaria." },
+          "minlength": { "string": "Su contraseña debe tener al menos 4 caracteres." },
+          "maxlength": { "string": "Su contraseña no puede tener más de 50 caracteres." },
+          "strength": { "string": "Seguridad de la contraseña:" }
+        },
+        "confirmpassword": {
+          "required": { "string": "Se requiere su contraseña de confirmación." },
+          "minlength": { "string": "La contraseña de confirmación tiene que contener al menos 4 caracteres." },
+          "maxlength": { "string": "Su contraseña de confirmación no puede tener más de 50 caracteres." }
+        },
+        "email": {
+          "required": { "string": "Su correo electrónico es necesario." },
+          "invalid": { "string": "Tu correo electrónico no es válido." },
+          "minlength": { "string": "Su correo electrónico debe tener al menos 5 caracteres." },
+          "maxlength": { "string": "El correo electrónico no puede tener más de 50 caracteres." }
+        }
+      }
+    },
+    "field": {
+      "id": { "string": "Identificación" }
+    },
+    "ribbon": {
+      "dev": { "string": "Desarrollo" }
+    },
+    "item-count": { "string": "Mostrando {{first}} - {{second}} de {{total}} elementos." }
+  },
+  "entity": {
+    "action": {
+      "addblob": { "string": "Añadir «blob»" },
+      "addimage": { "string": "Añadir imagen" },
+      "back": { "string": "Volver" },
+      "cancel": { "string": "Cancelar" },
+      "close": { "string": "Cerrar" },
+      "delete": { "string": "Eliminar" },
+      "delete-from-orcid": { "string": "Eliminar de orcid" },
+      "edit": { "string": "Editar" },
+      "open": { "string": "Abrir" },
+      "save": { "string": "Guardar" },
+      "continue": { "string": "Continuar " },
+      "upload": { "string": "Subir" },
+      "activate": { "string": "Volver a enviar correo electrónico de activación" },
+      "view": { "string": "Ver" }
+    },
+    "detail": {
+      "field": { "string": "Campo" },
+      "value": { "string": "Valor" }
+    },
+    "delete": {
+      "title": { "string": "Confirmar la eliminación" },
+      "error": { "string": "¡Vaya! Algo ha salido mal!" }
+    },
+    "changeOwnership": {
+      "title": { "string": "Confirmar cambio de propiedad" },
+      "error": { "string": "¡Vaya! ¡Ha ocurrido un error!" }
+    },
+    "validation": {
+      "required": { "string": "Este campo es obligatorio." },
+      "minlength": { "string": "Este campo debe tener al menos {{ min }} caracteres." },
+      "maxlength": { "string": "Este campo no puede tener más de {{ max }} caracteres." },
+      "min": { "string": "Este campo debe ser de al menos {{ min }}." },
+      "max": { "string": "Este campo no puede ser superior a {{ max }}." },
+      "minbytes": { "string": "Este campo debe tener al menos {{ min }} bytes." },
+      "maxbytes": { "string": "Este campo no puede tener más de {{ max }} bytes." },
+      "pattern": { "string": "Este campo debe seguir el patrón de {{ pattern }}." },
+      "number": { "string": "Este campo debe ser un número." },
+      "datetimelocal": { "string": "Este campo debe ser una fecha y una hora." },
+      "patternLogin": { "string": "Este campo solo puede contener letras, dígitos y direcciones de correo electrónico." },
+      "email": { "string": "Indique una dirección de correo electrónico válida." },
+      "endDate": { "string": "La fecha de inicio no puede ser mayor que la fecha de finalización." },
+      "disambiguatedOrgId": {
+        "string": "Este campo es necesario. La Identificación de organización de GRID debe comenzar con \"grid\" (por ejemplo: grid.12344) o debe ser una URL grid válida. La Identificación de organización de RINGGOLD debe ser un número."
+      }
+    }
+  },
+  "error": {
+    "internalServerError": { "string": "Error del servidor interno" },
+    "server.not.reachable": { "string": "Servidor no accesible" },
+    "url.not.found": { "string": "No encontrado" },
+    "notnull": { "string": "¡El campo {{ fieldName }} no puede estar vacío!" },
+    "size": { "string": "¡El campo {{ fieldName }} no cumple con los requisitos de tamaño mínimo/máximo!" },
+    "userexists": { "string": "¡El nombre de inicio de sesión ya está en uso!" },
+    "emailexists": { "string": "¡El correo electrónico ya está en uso!" },
+    "idexists": { "string": "Un nuevo {{entityName}} no puede tener ya una Identificación" },
+    "delete.auth.user": { "string": "No se puede eliminar el usuario actual." },
+    "delete.main.contact": { "string": "No se puede eliminar al propietario de la organización." },
+    "delete.last.admin": { "string": "No se puede eliminar el último administrador." },
+    "member.no.admin.allowed": { "string": "Los usuarios administradores no pueden asociarse con este miembro" },
+    "clientidinvalid": {
+      "string": "Identificación del cliente no válida. La Identificación del cliente debe tener el formato XXXX-XXXX-XXXX-XXXX o APP-XXXXXXXXXXXXXXXX. X puede ser un dígito o un carácter en mayúscula"
+    },
+    "idnull": { "string": "ID inválida" }
+  },
+  "footer": {
+    "footerLabel": { "string": "pie de página" },
+    "privacyPolicy": { "string": "Política de privacidad" },
+    "termsOfUse": { "string": "Términos de uso" },
+    "contactUs": { "string": "Contáctenos" },
+    "orcidRegistry": { "string": "Registro ORCID" },
+    "help": { "string": "Ayuda" }
+  }
+}
