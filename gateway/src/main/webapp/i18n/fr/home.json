@@ -1,0 +1,70 @@
+{
+  "home": {
+    "title": { "string": "Portail des membres d'ORCID" },
+    "heading": { "string": "Bienvenue sur le portail des membres d'ORCID." },
+    "mainContent": {
+      "section1": {
+        "text": {
+          "string": "Le portail des membres d'ORCID est un ensemble d'outils qui permet aux institutions de tirer le meilleur profit de leur adhésion à ORCID. Certains de nos outils sont déjà disponibles, et nous en développons activement d'autres qui permettent à nos membres de :"
+        },
+        "bullet1": { "string": "Ajouter/mettre à jour les données sur les dossiers ORCID des chercheurs" },
+        "bullet2": { "string": "Accès aux données et aux rapports" },
+        "bullet3": { "string": "Gérez les informations d'affiliation ORCID de votre organisation" },
+        "bullet4": { "string": "Gérer les informations d'authentification à l'API ORCID de votre organisation" }
+      },
+      "section2": {
+        "text": { "string": "Outils actuellement disponibles :" },
+        "affiliationManager": {
+          "heading": { "string": "Gestionnaire d'affiliation" },
+          "description": {
+            "string": "Le gestionnaire d'affiliation simplifie le processus d'ajout des données d'affiliation (emploi, formation, etc.) aux dossiers ORCID en vous permettant d'ajouter et de mettre à jour des données d'affiliation au nom de vos chercheurs à l'aide d'un fichier CSV, sans qu'il soit nécessaire d'intégrer ORCID directement dans vos systèmes actuels ou d'acquérir un système de fournisseur compatible avec ORCID. Disponible uniquement pour les membres de consortium."
+          }
+        },
+        "memberReporting": {
+          "heading": { "string": "Rapports des membres" },
+          "description": {
+            "string": "Les rapports sur les membres fournissent des informations en temps réel concernant tous les membres, ce qui permet aux organisations de découvrir, consulter et télécharger facilement les statistiques des membres et de l'intégration."
+          }
+        }
+      },
+      "section3": {
+        "heading": { "string": "Ressources" },
+        "table": {
+          "line1": {
+            "heading": { "string": "Guide de gestion du compte" },
+            "description": { "string": "Guide pour gérer l'accès de vos utilisateurs au Portail des membres" }
+          },
+          "line2": {
+            "heading": { "string": "Guide du gestionnaire d'affiliation" },
+            "description": { "string": "Guide pour le personnel de votre institution qui utilisera le gestionnaire d'affiliation" }
+          },
+          "line3": {
+            "heading": { "string": "Guide de signalement de membres" },
+            "description": { "string": "Guide pour apprendre à lire vos rapports de membres" }
+          }
+        }
+      },
+      "section4": {
+        "heading": { "string": "Contacts de l'assistance" },
+        "text": { "string": "Pour obtenir de l'aide ou poser vos questions au sujet du portail des membres, veuillez contacter :" },
+        "bullet1": {
+          "text": { "string": "Votre" },
+          "linkText": { "string": "organisation chef de file du consortium" }
+        },
+        "bullet2": {
+          "text": { "string": "Ou par e-mail :" },
+          "email": { "string": "membership@orcid.org" }
+        }
+      }
+    },
+    "alert": {
+      "thisSiteIsFor": {
+        "string": "Ce site est destiné aux administrateurs des organisations membres d'ORCID et est distinct du registre ORCID. Accédez au registre ORCID pour"
+      },
+      "signIntoOrcid": { "string": "Connectez-vous à votre dossier ORCID" }
+    },
+    "logged": {
+      "message": { "string": "Vous êtes connecté en tant que « {{username}} »." }
+    }
+  }
+}
