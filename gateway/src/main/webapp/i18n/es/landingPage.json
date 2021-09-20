@@ -1,0 +1,29 @@
+{
+  "landingPage": {
+    "title": { "string": "Servicios para miembros de ORCID " },
+    "connectionExists": {
+      "youHaveAlready": { "string": "Ya has otorgado" },
+      "permissionToUpdate": { "string": "permiso para actualizar su registro ORCID" },
+      "youDoNot": { "string": "No tiene que hacer nada más en este momento." },
+      "differentUser": {
+        "string": "Este enlace de autorización ya se ha utilizado. Póngase en contacto con {{ clientName }} para recibir un nuevo enlace de autorización."
+      }
+    },
+    "error": {
+      "somethingWentWrong": { "string": "¡Ups! Algo salió mal y no pudimos obtener su ID de ORCID" }
+    },
+    "denied": {
+      "youHaveDenied": { "string": "Vaya, se ha denegado el acceso." },
+      "willNotBeAble": { "string": "no podrá actualizar su registro ORCID." },
+      "ifThisWas": { "string": "Si ha sido un error, haga clic en el botón de abajo para otorgar acceso." },
+      "grantAccess": { "string": "Permitir que {{ clientName }} actualice mi registro ORCID" }
+    },
+    "success": {
+      "thanks": { "string": "Gracias, {{ given_name }} {{ family_name }}" },
+      "youHaveSuccessfully": {
+        "string": "Le ha concedido a {{ clientName }} los permisos necesarios para actualizar su registro ORCID, y su registro se ha actualizado con la información de afiliación."
+      },
+      "ifYouFind": { "string": "Si nota que los datos agregados a su registro ORCID son incorrectos, comuníquese con {{ clientName }}" }
+    }
+  }
+}
