@@ -1,0 +1,15 @@
+{
+  "gateway": {
+    "title": { "string": "Passerelle" },
+    "routes": {
+      "title": { "string": "Itinéraires actuels" },
+      "url": { "string": "URL" },
+      "service": { "string": "Service" },
+      "servers": { "string": "Serveurs disponibles" },
+      "error": { "string": "Attention : aucun serveur disponible !" }
+    },
+    "refresh": {
+      "button": { "string": "Rafraîchir" }
+    }
+  }
+}
