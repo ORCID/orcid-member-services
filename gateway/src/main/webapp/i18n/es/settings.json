@@ -1,0 +1,36 @@
+{
+  "settings": {
+    "title": { "string": "Configuración de {{username}} (usted)" },
+    "form": {
+      "firstname": {
+        "string": "Nombre",
+        "placeholder": { "string": "Your first name" }
+      },
+      "lastname": {
+        "string": "Apellido",
+        "placeholder": { "string": "Your last name" }
+      },
+      "language": { "string": "idioma" },
+      "button": { "string": "Guardar" }
+    },
+    "messages": {
+      "error": {
+        "fail": { "string": "<strong>¡Se ha producido un error!</strong> No se ha podido guardar la configuración." },
+        "emailexists": { "string": "<strong>¡El correo electrónico ya está en uso!</strong> Elija otro." }
+      },
+      "success": { "string": "<strong>¡Ajustes guardados!</strong>" },
+      "validate": {
+        "firstname": {
+          "required": { "string": "Hace falta indicar el nombre." },
+          "minlength": { "string": "El nombre tiene que contener al menos un carácter" },
+          "maxlength": { "string": "El nombre no puede tener más de 50 caracteres" }
+        },
+        "lastname": {
+          "required": { "string": "Se requiere su apellido." },
+          "minlength": { "string": "Su apellido debe tener al menos 1 carácter" },
+          "maxlength": { "string": "El apellido no puede tener más de 50 caracteres" }
+        }
+      }
+    }
+  }
+}
