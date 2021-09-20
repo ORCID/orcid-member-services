@@ -1,6 +1,8 @@
 package org.orcid.member.security;
 
 import org.junit.jupiter.api.Test;
+import org.orcid.memberportal.service.member.security.AuthoritiesConstants;
+import org.orcid.memberportal.service.member.security.SecurityUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

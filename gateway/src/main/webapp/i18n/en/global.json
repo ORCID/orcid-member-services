@@ -160,7 +160,7 @@
       "email": { "string": "Please provide a valid email address." },
       "endDate": { "string": "The start date cannot be greater than the end date." },
       "disambiguatedOrgId": {
-        "string": "This field is required. GRID Organization ID should start with grid. e.g. grid.12344 or should be a valid grid URL, RINGGOLD Organization ID should be a number."
+        "string": "This field is required. GRID Organization ID should start with grid. e.g. grid.12344 or should be a valid grid URL, RINGGOLD Organization ID should be a number. ROR IDs must be 9 characters, beginning with 0."
       }
     }
   },

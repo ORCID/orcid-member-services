@@ -94,7 +94,7 @@
                         <div *ngIf="editForm.get('disambiguatedOrgId').invalid && (editForm.get('disambiguatedOrgId').dirty || editForm.get('disambiguatedOrgId').touched)"> 
                             <small class="form-text text-danger"
                                *ngIf="!editForm.validDisambiguatedOrgId || editForm.get('disambiguatedOrgId').errors.required" jhiTranslate="entity.validation.disambiguatedOrgId.string">
-                            This field is required. GRID Organization ID should start with "grid.", RINGGOLD Organization ID should be a number.
+                            This field is required. GRID Organization ID should start with "grid.", RINGGOLD Organization ID should be a number, ROR IDs must be 9 characters, beginning with 0
                         	</small>
                         </div>
                     </div>
