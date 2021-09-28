@@ -1,26 +1,43 @@
 {
   "reset": {
     "request": {
-      "title": { "string": "Reset your password" },
+      "title": { "string": "Restablezca su contraseña" },
       "form": {
-        "button": { "string": "Reset password" }
+        "button": { "string": "Repetir contraseña" }
       },
       "messages": {
-        "info": { "string": "Enter the email address you used to register" },
-        "success": { "string": "Check your emails for details on how to reset your password." },
-        "notfound": { "string": "<strong>Email address isn't registered!</strong> Please check and try again" }
+        "info": { "string": "Introduzca la dirección de correo electrónico que utilizó para registrarse" },
+        "success": { "string": "Consulte sus correos electrónicos para consultar información para restablecer su contraseña." },
+        "notfound": {
+          "string": "<strong>¡La dirección de correo electrónico no está registrada!</strong> Compruébalo e inténtalo de nuevo."
+        }
       }
     },
     "finish": {
-      "title": { "string": "Reset password" },
+      "title": { "string": "Restablecer la contraseña" },
       "form": {
-        "button": { "string": "Validate new password" }
+        "button": { "string": "Validar la nueva contraseña" }
       },
       "messages": {
-        "info": { "string": "Choose a new password" },
-        "success": { "string": "<strong>Your password has been reset.</strong> Please " },
-        "keymissing": { "string": "The reset key is missing." },
-        "error": { "string": "Your password couldn't be reset. Remember a password request is only valid for 24 hours." }
+        "info": { "string": "Elija una nueva contraseña" },
+        "success": { "string": "<strong>Se ha restablecido su contraseña.</strong> Por favor," },
+        "keymissing": { "string": "Falta la clave de activación." },
+        "keyinvalid": { "string": "La clave de activación no es válida." },
+        "keyexpired": {
+          "string": "La clave de activación ha caducado.",
+          "paragraph1": {
+            "string": "ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired."
+          },
+          "paragraph2": {
+            "string": "To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address."
+          },
+          "paragraph3": {
+            "string": "If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org."
+          }
+        },
+        "error": {
+          "string": "No se ha podido restablecer tu contraseña. Recuerde que una solicitud de contraseña solo es válida por 24 horas."
+        }
       }
     }
   }

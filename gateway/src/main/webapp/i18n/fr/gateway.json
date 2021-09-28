@@ -1,15 +1,15 @@
 {
   "gateway": {
-    "title": { "string": "Gateway" },
+    "title": { "string": "Passerelle" },
     "routes": {
-      "title": { "string": "Current routes" },
+      "title": { "string": "Itinéraires actuels" },
       "url": { "string": "URL" },
       "service": { "string": "Service" },
-      "servers": { "string": "Available servers" },
-      "error": { "string": "Warning: no server available!" }
+      "servers": { "string": "Serveurs disponibles" },
+      "error": { "string": "Attention : aucun serveur disponible !" }
     },
     "refresh": {
-      "button": { "string": "Refresh" }
+      "button": { "string": "Rafraîchir" }
     }
   }
 }

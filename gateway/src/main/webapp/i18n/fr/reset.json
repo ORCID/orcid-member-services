@@ -1,26 +1,41 @@
 {
   "reset": {
     "request": {
-      "title": { "string": "Reset your password" },
+      "title": { "string": "Réinitialiser votre mot de passe" },
       "form": {
-        "button": { "string": "Reset password" }
+        "button": { "string": "Réinitialiser le mot de passe" }
       },
       "messages": {
-        "info": { "string": "Enter the email address you used to register" },
-        "success": { "string": "Check your emails for details on how to reset your password." },
-        "notfound": { "string": "<strong>Email address isn't registered!</strong> Please check and try again" }
+        "info": { "string": "Saisissez l'adresse e-mail que vous avez utilisée pour vous inscrire" },
+        "success": { "string": "Vérifiez vos e-mails pour plus d'informations sur la réinitialisation de votre mot de passe." },
+        "notfound": { "string": "<strong>L'adresse e-mail n'est pas enregistrée !</strong> Veuillez vérifier et réessayer" }
       }
     },
     "finish": {
-      "title": { "string": "Reset password" },
+      "title": { "string": "Réinitialiser le mot de passe" },
       "form": {
-        "button": { "string": "Validate new password" }
+        "button": { "string": "Validez le nouveau mot de passe" }
       },
       "messages": {
-        "info": { "string": "Choose a new password" },
-        "success": { "string": "<strong>Your password has been reset.</strong> Please " },
-        "keymissing": { "string": "The reset key is missing." },
-        "error": { "string": "Your password couldn't be reset. Remember a password request is only valid for 24 hours." }
+        "info": { "string": "Choisissez un nouveau mot de passe" },
+        "success": { "string": "<strong>Votre mot de passe a été réinitialisé.</strong> Veuillez" },
+        "keymissing": { "string": "La clé d'activation est manquante." },
+        "keyinvalid": { "string": "La clé d'activation est invalide." },
+        "keyexpired": {
+          "string": "La clé d'activation est expirée.",
+          "paragraph1": {
+            "string": "ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired."
+          },
+          "paragraph2": {
+            "string": "To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address."
+          },
+          "paragraph3": {
+            "string": "If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org."
+          }
+        },
+        "error": {
+          "string": "Votre mot de passe n'a pas pu être réinitialisé. N'oubliez pas qu'une demande de réinitialisation de mot de passe n'est valide que pendant 24 heures."
+        }
       }
     }
   }

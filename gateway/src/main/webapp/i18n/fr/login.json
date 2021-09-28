@@ -1,21 +1,21 @@
 {
   "login": {
-    "title": { "string": "Sign in" },
+    "title": { "string": "Se connecter" },
     "form": {
       "password": {
-        "string": "Password",
+        "string": "Mot de passe",
         "placeholder": { "string": "Your password" }
       },
-      "rememberme": { "string": "Remember me" },
-      "button": { "string": "Sign in" }
+      "rememberme": { "string": "Se souvenir de moi" },
+      "button": { "string": "Se connecter" }
     },
     "messages": {
       "error": {
-        "authentication": { "string": "<strong>Failed to sign in!</strong> Please check your credentials and try again." }
+        "authentication": { "string": "<strong>Échec de la connexion !</strong> Veuillez vérifier vos identifiants et réessayer." }
       }
     },
     "password": {
-      "forgot": { "string": "Did you forget your password?" }
+      "forgot": { "string": "Vous avez oublié votre mot de passe ?" }
     }
   }
 }

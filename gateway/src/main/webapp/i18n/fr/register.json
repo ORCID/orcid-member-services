@@ -1,23 +1,25 @@
 {
   "register": {
-    "title": { "string": "Registration" },
+    "title": { "string": "Inscription" },
     "form": {
-      "button": { "string": "Register" }
+      "button": { "string": "S'inscrire" }
     },
     "messages": {
       "validate": {
         "login": {
-          "required": { "string": "Your username is required." },
-          "minlength": { "string": "Your username is required to be at least 1 character." },
-          "maxlength": { "string": "Your username cannot be longer than 50 characters." },
-          "pattern": { "string": "Your username can only contain letters and digits." }
+          "required": { "string": "Votre nom d'utilisateur est requis." },
+          "minlength": { "string": "Votre nom d'utilisateur doit comporter au moins un caractère." },
+          "maxlength": { "string": "Votre nom d'utilisateur ne doit pas compter plus de 50 caractères." },
+          "pattern": { "string": "Votre nom d'utilisateur peut uniquement contenir des lettres et des chiffres." }
         }
       },
-      "success": { "string": "<strong>Registration saved!</strong> Please check your email for confirmation." },
+      "success": {
+        "string": "<strong>Inscription enregistrée !</strong> Veuillez consulter votre boîte de réception pour l'e-mail de confirmation."
+      },
       "error": {
-        "fail": { "string": "<strong>Registration failed!</strong> Please try again later." },
-        "userexists": { "string": "<strong>Login name already registered!</strong> Please choose another one." },
-        "emailexists": { "string": "<strong>Email is already in use!</strong> Please choose another one." }
+        "fail": { "string": "<strong>L'inscription a échoué !</strong> Veuillez réessayer plus tard." },
+        "userexists": { "string": "<strong>Cet identifiant est déjà inscrit !</strong> Veuillez en choisir un autre." },
+        "emailexists": { "string": "<strong>Adresse e-mail déjà utilisée !</strong> Veuillez en choisir une autre." }
       }
     }
   }

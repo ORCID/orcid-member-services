@@ -1,29 +1,33 @@
 {
   "landingPage": {
-    "title": { "string": "ORCID Member Services" },
+    "title": { "string": "Services aux membres ORCID" },
     "connectionExists": {
-      "youHaveAlready": { "string": "You have already granted" },
-      "permissionToUpdate": { "string": "permission to update your ORCID record" },
-      "youDoNot": { "string": "You do not need to do anything more at this time." },
+      "youHaveAlready": { "string": "Vous avez déjà accordé" },
+      "permissionToUpdate": { "string": "permission de mettre à jour votre dossier ORCID" },
+      "youDoNot": { "string": "Vous n'avez rien à faire de plus pour le moment." },
       "differentUser": {
-        "string": "This authorization link has already been used. Please contact {{ clientName }} for a new authorization link."
+        "string": "Ce lien d'autorisation a déjà été utilisé. Veuillez contacter {{ clientName }} pour obtenir un nouveau lien d'autorisation."
       }
     },
     "error": {
-      "somethingWentWrong": { "string": "Oops, something went wrong and we were not able to fetch your ORCID iD" }
+      "somethingWentWrong": {
+        "string": "Oups, une erreur s'est produite, et nous n'avons pas été mesure de récupérer votre identifiant ORCID."
+      }
     },
     "denied": {
-      "youHaveDenied": { "string": "Oops, you have denied access." },
-      "willNotBeAble": { "string": "will not be able to update your ORCID record." },
-      "ifThisWas": { "string": "If this was a mistake, click the button below to grant access." },
-      "grantAccess": { "string": "Allow {{ clientName }} to update my ORCID record" }
+      "youHaveDenied": { "string": "Oups, vous avez refusé l'accès." },
+      "willNotBeAble": { "string": "ne pourra pas mettre à jour votre dossier ORCID." },
+      "ifThisWas": { "string": "Si c'est une erreur, cliquez sur le bouton ci-dessous pour autoriser l'accès." },
+      "grantAccess": { "string": "Autoriser {{ clientName }} à mettre à jour mon dossier ORCID" }
     },
     "success": {
-      "thanks": { "string": "Thanks, {{ given_name }} {{ family_name }}" },
+      "thanks": { "string": "Merci, {{ given_name}} {{ family_name }}" },
       "youHaveSuccessfully": {
-        "string": "You have successfully granted {{ clientName }} permission to update your ORCID record, and your record will be updated with the affiliation information."
+        "string": "Vous avez accordé avec succès à {{ clientName }} l'autorisation de mettre à jour votre dossier ORCID, et votre dossier a été mis à jour avec les données d'affiliation."
       },
-      "ifYouFind": { "string": "If you find that data added to your ORCID record is incorrect, please contact {{ clientName }}" }
+      "ifYouFind": {
+        "string": "Si vous trouvez que les données ajoutées à votre dossier ORCID sont incorrectes, veuillez contacter {{ clientName }}"
+      }
     }
   }
 }
