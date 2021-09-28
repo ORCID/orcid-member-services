@@ -2,117 +2,117 @@
   "error": {
     "assertion": {
       "validation": {
-        "duplicate": { "string": "Duplicate affiliation. This affiliation has already been created." }
+        "duplicate": { "string": "Afiliación duplicada. Esta afiliación ya se creó." }
       }
     }
   },
   "gatewayApp": {
     "assertionServiceAssertion": {
       "home": {
-        "title": { "string": "Affiliations" },
-        "createLabel": { "string": "Add affiliation" },
-        "createOrEditLabel": { "string": "Add or edit affiliation" },
-        "notFound": { "string": "No affiliations found" },
-        "uploadLabel": { "string": "Import affiliations from CSV" },
-        "getLinks": { "string": "Download permission links" },
-        "generateReport": { "string": "Download affiliation status report" },
-        "exportForEdit": { "string": "Download affiliations for edit" },
+        "title": { "string": "Afiliaciones" },
+        "createLabel": { "string": "Añadir afiliación" },
+        "createOrEditLabel": { "string": "Agregar o editar afiliación" },
+        "notFound": { "string": "No se han encontrado afiliaciones" },
+        "uploadLabel": { "string": "Importar afiliaciones desde CSV" },
+        "getLinks": { "string": "Descargar enlaces de permisos" },
+        "generateReport": { "string": "Descargar el informe sobre el estado de la afiliación" },
+        "exportForEdit": { "string": "Descargar afiliaciones para editar" },
         "forHelpTroubleshooting": {
-          "string": "For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below."
+          "string": "Si necesita ayuda para solucionar un problema, póngase en contacto con el equipo del portal para miembros e incluya una captura de pantalla del mensaje de error que le aparece."
         }
       },
       "delete": {
-        "question": { "string": "Are you sure you want to delete this affiliation for {{ email }}?" },
-        "note": { "string": "This affiliation will also be deleted from the user's ORCID record." },
+        "question": { "string": "¿Está seguro de que desea eliminar esta afiliación de {{ email }}?" },
+        "note": { "string": "Esta afiliación también se eliminará del registro ORCID del usuario." },
         "noteRevoked": {
-          "string": "This affiliation will be deleted from the Member Portal but will remain in ORCID. The user has revoked access to their ORCID record and you no longer have permission to delete this item from their ORCID record."
+          "string": "Esta afiliación se eliminará del Portal de miembros pero permanecerá en ORCID. El usuario ha revocado el acceso a su registro ORCID y ya no tiene permiso para eliminar este elemento de su registro ORCID."
         },
-        "error": { "string": "Sorry, this affiliation could not be deleted." },
+        "error": { "string": "Lo sentimos, no se ha podido eliminar esta afiliación." },
         "userRevokedAccess": {
-          "string": "The user has revoked access to their ORCID record and you no longer have permission to edit or delete this item in ORCID."
+          "string": "El usuario ha revocado el acceso a su registro ORCID, por lo que usted ya no tiene los permisos necesarios para editar o eliminar este elemento en ORCID."
         }
       },
       "detail": {
-        "title": { "string": "Affiliation details" },
-        "org": { "string": "Organization" }
+        "title": { "string": "Datos de la afiliación" },
+        "org": { "string": "Organización" }
       },
       "import": {
-        "title": { "string": "Import affiliations" },
-        "label": { "string": "Please select a CSV file to upload" },
-        "filePath": { "string": "File path" },
-        "success": { "string": "The CSV import was successful." },
-        "added": { "string": "affiliations added" },
-        "updated": { "string": "affiliations updated" },
-        "deleted": { "string": "affiliations deleted" },
-        "duplicates": { "string": "duplicate(s) ignored" },
+        "title": { "string": "Importar afiliaciones" },
+        "label": { "string": "Seleccione un archivo CSV para subir" },
+        "filePath": { "string": "Ruta de archivo" },
+        "success": { "string": "La importación de CSV se ha realizado correctamente." },
+        "added": { "string": "afiliaciones añadidas" },
+        "updated": { "string": "afiliaciones actualizadas " },
+        "deleted": { "string": "afiliaciones eliminadas" },
+        "duplicates": { "string": "duplicado(s) ignorado(s)" },
         "errors": {
-          "label": { "string": "Oops! There was a problem processing your data. Pleases fix the errors below and try again" }
+          "label": { "string": "¡Vaya! Ha habido un problema al procesar sus datos. Corrija los siguientes errores e inténtelo de nuevo." }
         }
       },
-      "addedToOrcid": { "string": "Added To ORCID" },
-      "updatedInOrcid": { "string": "Updated In ORCID" },
-      "affiliationData": { "string": "Affiliation Data" },
-      "affiliationSection": { "string": "Affiliation Type" },
-      "departmentName": { "string": "Department" },
-      "id": { "string": "ID" },
-      "roleTitle": { "string": "Role/Title" },
+      "addedToOrcid": { "string": "Añadido a ORCID" },
+      "updatedInOrcid": { "string": "Actualizado en ORCID" },
+      "affiliationData": { "string": "Datos de afiliación" },
+      "affiliationSection": { "string": "Tipo de afiliación" },
+      "departmentName": { "string": "Departamento" },
+      "id": { "string": "Identificación" },
+      "roleTitle": { "string": "Rol/título" },
       "url": { "string": "URL" },
-      "startDate": { "string": "Start Date" },
-      "startYear": { "string": "Start Year" },
-      "startMonth": { "string": "Start Month" },
-      "startDay": { "string": "Start Day" },
-      "endDate": { "string": "End Date" },
-      "endYear": { "string": "End Year" },
-      "endMonth": { "string": "End Month" },
-      "endDay": { "string": "End Day" },
-      "orgName": { "string": "Organization Name" },
-      "orgCountry": { "string": "Country" },
-      "orgCity": { "string": "City" },
-      "orgRegion": { "string": "State/Region" },
-      "disambiguatedOrgId": { "string": "Organization ID" },
-      "disambiguationSource": { "string": "Organization ID Source" },
-      "externalId": { "string": "External ID" },
-      "externalIdType": { "string": "External ID Type" },
-      "externalIdUrl": { "string": "External ID Url" },
-      "putCode": { "string": "Put Code" },
-      "created": { "string": "Created" },
-      "modified": { "string": "Modified" },
-      "status": { "string": "Status" },
-      "deletedFromORCID": { "string": "Deleted From ORCID" },
-      "sent": { "string": "Sent" },
-      "adminId": { "string": "Admin Id" },
-      "email": { "string": "User Email" },
+      "startDate": { "string": "Fecha de inicio" },
+      "startYear": { "string": "Año de inicio" },
+      "startMonth": { "string": "Mes de inicio" },
+      "startDay": { "string": "Día de inicio" },
+      "endDate": { "string": "Fecha de término" },
+      "endYear": { "string": "Año de término" },
+      "endMonth": { "string": "Mes de término" },
+      "endDay": { "string": "Final del día" },
+      "orgName": { "string": "Nombre de la Organización" },
+      "orgCountry": { "string": "País" },
+      "orgCity": { "string": "Ciudad" },
+      "orgRegion": { "string": "Estado/región" },
+      "disambiguatedOrgId": { "string": "ID de la organización" },
+      "disambiguationSource": { "string": "Fuente de Identificación de la organización" },
+      "externalId": { "string": "ID externa" },
+      "externalIdType": { "string": "Tipo de ID externo" },
+      "externalIdUrl": { "string": "Url de ID externo" },
+      "putCode": { "string": "Código Put" },
+      "created": { "string": "Creado" },
+      "modified": { "string": "Modificado" },
+      "status": { "string": "Estado" },
+      "deletedFromORCID": { "string": "Eliminado de ORCID" },
+      "sent": { "string": "Enviado" },
+      "adminId": { "string": "Identificación de administrador" },
+      "email": { "string": "Correo del usuario" },
       "orcidId": { "string": "ORCID iD" },
-      "year": { "string": "Year" },
-      "month": { "string": "Month" },
-      "day": { "string": "Day" },
-      "permissionLink": { "string": "Permission Link" },
-      "copyClipboard": { "string": "Copy to clipboard" },
-      "copySuccess": { "string": "Copied to clipboard" },
-      "details": { "string": "View Details" },
+      "year": { "string": "Año" },
+      "month": { "string": "Mes" },
+      "day": { "string": "Día" },
+      "permissionLink": { "string": "Enlace de permiso" },
+      "copyClipboard": { "string": "Copiar al portapapeles\n" },
+      "copySuccess": { "string": "Copiado al portapapeles" },
+      "details": { "string": "Ver detalles" },
       "updateNote": {
-        "string": "Note: Please do not forget to download and send permission links to your researcher once the assertion has been saved."
+        "string": "Nota: no olvide descargar y enviar enlaces de permisos a su investigador cuando se haya guardado la confirmación."
       },
       "uploadNote": {
-        "string": "Note: Please do not forget to download and send permission links to your researchers once the upload has completed."
+        "string": "Nota: no olvide descargar y enviar enlaces de permiso a sus investigadores cuando se haya completado la carga."
       }
     },
     "assertion": {
-      "firstName": { "string": "first name" },
-      "lastName": { "string": "last name" },
-      "email": { "string": "email" },
-      "affiliationSection": { "string": "affiliation type" },
-      "orgCountry": { "string": "organization country" },
-      "orgCity": { "string": "organization city" },
-      "orgName": { "string": "organization name" },
-      "disambiguatedOrgId": { "string": "organization id" }
+      "firstName": { "string": "nombre" },
+      "lastName": { "string": "apellido" },
+      "email": { "string": "correo electrónico" },
+      "affiliationSection": { "string": "tipo de afiliación" },
+      "orgCountry": { "string": "país de la organización" },
+      "orgCity": { "string": "ciudad de la organización" },
+      "orgName": { "string": "nombre de la Organización" },
+      "disambiguatedOrgId": { "string": "identificación de la organización" }
     }
   },
   "assertionServiceApp": {
     "affiliation": {
-      "created": { "string": "Affiliation created" },
-      "updated": { "string": "Affiliation updated" },
-      "deleted": { "string": "Affiliation deleted" }
+      "created": { "string": "Afiliación creada" },
+      "updated": { "string": "Afiliación actualizada" },
+      "deleted": { "string": "Afiliación eliminada" }
     }
   }
 }

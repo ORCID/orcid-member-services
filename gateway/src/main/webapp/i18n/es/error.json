@@ -1,31 +1,33 @@
 {
   "error": {
-    "title": { "string": "Your request cannot be processed" },
-    "subtitle": { "string": "Sorry, an error has occurred" },
+    "title": { "string": "Su solicitud no puede procesarse" },
+    "subtitle": { "string": "Lo sentimos, se ha producido un error" },
     "http": {
-      "400": { "string": "Bad request." },
-      "403": { "string": "You are not authorized to access this page." },
-      "404": { "string": "The page does not exist." },
-      "405": { "string": "The HTTP verb you used is not supported for this URL." },
-      "500": { "string": "Internal server error." }
+      "400": { "string": "Solicitud incorrecta." },
+      "403": { "string": "No tiene permisos para acceder a esta página." },
+      "404": { "string": "La página no existe." },
+      "405": { "string": "El verbo HTTP utilizado no es compatible con esta URL." },
+      "500": { "string": "Error del servidor interno." }
     },
-    "concurrencyFailure": { "string": "Another user modified this data at the same time as you. Your changes were rejected." },
-    "validation": { "string": "Validation error on the server." },
-    "email": { "string": "Email is not a valid format" },
-    "size": { "string": "Does not meet min/max size requirements!" },
-    "idused": { "string": "It cannot be eliminated!. It has relationship with other elements." },
-    "pattern": { "string": "This field can only contain letters, digits and e-mail addresses." },
-    "invalidUrl": { "string": "The url is invalid" },
-    "deleteAssertionsForSalesforceId": { "string": "Unable to delete assertions for member." },
-    "disambiguationSource": { "string": "Organization source can not be empty." },
-    "emailUsed": { "string": "That email is already registered" },
-    "ownerExists": { "string": "Organization already has an owner." },
-    "memberNotFound": { "string": "Member not found with salesForceId: {{ params }} " },
-    "salesForceIdUsed": { "string": "A member with that salesforce id already exists" },
-    "affiliationOtherOrganization": { "string": "This affiliations doesnt belong to your organization" },
+    "concurrencyFailure": {
+      "string": "Otro usuario ha modificado estos datos al mismo tiempo que usted. Se han rechazado los cambios que usted ha hecho."
+    },
+    "validation": { "string": "Error de validación en el servidor." },
+    "email": { "string": "El correo electrónico no está en un formato válido" },
+    "size": { "string": "¡No cumple con los requisitos de tamaño mínimo / máximo!" },
+    "idused": { "string": "¡No se puede eliminar! Tiene relación con otros elementos." },
+    "pattern": { "string": "Este campo solo puede contener letras, dígitos y direcciones de correo electrónico. " },
+    "invalidUrl": { "string": "La URL no es válida." },
+    "deleteAssertionsForSalesforceId": { "string": "No se pueden eliminar las afirmaciones del miembro." },
+    "disambiguationSource": { "string": "La fuente de la organización no puede estar vacía." },
+    "emailUsed": { "string": "Ese correo electrónico ya está registrado" },
+    "ownerExists": { "string": "La organización ya tiene propietario." },
+    "memberNotFound": { "string": "Miembro no encontrado con salesForceId: {{params}}" },
+    "salesForceIdUsed": { "string": "Ya existe un miembro con esa Identificación de Salesforce" },
+    "affiliationOtherOrganization": { "string": "Estas afiliaciones no pertenecen a su organización" },
     "emailAffiliationUsed": {
-      "string": "Unable to add affiliation. An affiliation for {{ params }} already exists and belongs to another organization."
+      "string": "No se pudo añadir la afiliación. Ya existe una afiliación para {{ params }} y pertenece a otra organización."
     },
-    "memberNameUsed": { "string": "A member with that name already exists" }
+    "memberNameUsed": { "string": "Ya existe un miembro con ese nombre" }
   }
 }

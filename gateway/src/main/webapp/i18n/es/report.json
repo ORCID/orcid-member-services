@@ -2,13 +2,13 @@
   "gatewayApp": {
     "report": {
       "member": {
-        "title": { "string": "Member report" }
+        "title": { "string": "Informe de miembros" }
       },
       "integration": {
-        "title": { "string": "Integration report" }
+        "title": { "string": "Informe de integración" }
       },
       "consortium": {
-        "title": { "string": "Consortium report" }
+        "title": { "string": "Informe de consorcios" }
       }
     }
   }
