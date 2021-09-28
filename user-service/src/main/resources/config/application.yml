@@ -39,9 +39,6 @@ eureka:
       git-version: ${git.commit.id.describe:}
       git-commit: ${git.commit.id.abbrev:}
       git-branch: ${git.branch:}
-ribbon:
-  eureka:
-    enabled: true
 management:
   endpoints:
     web:
@@ -57,9 +54,6 @@ management:
   info:
     git:
       mode: full
-  health:
-    mail:
-      enabled: true # When using the MailService, configure an SMTP server and set this to true
   metrics:
     export:
       # Prometheus is the default metrics backend
@@ -175,4 +169,10 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  mailDomain: ${application.mail.domain}
+  mailApiKey: ${application.mail.apiKey}
+  mailApiUrl: ${application.mail.apiUrl}
+  mailFromAddress: ${application.mail.fromAddress}  
+  mailFromName: ${application.mail.fromName}
+  baseUrl: ${application.baseUrl}

@@ -12,24 +12,24 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="userManagement.login.string">Login</label>
-                    <input type="text" class="form-control" name="login"
-                           formControlName="login">
+                    <label class="form-control-label" jhiTranslate="userManagement.email.string">Login</label>
+                    <input type="text" class="form-control" name="email"
+                           formControlName="email">
 
-                    <div *ngIf="editForm.get('login').invalid && (editForm.get('login').dirty || editForm.get('login').touched)">
+                    <div *ngIf="editForm.get('email').invalid && (editForm.get('email').dirty || editForm.get('email').touched)">
                         <small class="form-text text-danger"
-                        *ngIf="editForm.get('login').errors.required" jhiTranslate="entity.validation.required.string">
+                        *ngIf="editForm.get('email').errors.required" jhiTranslate="entity.validation.required.string">
                             This field is required.
                         </small>
 
                         <small class="form-text text-danger"
-                        *ngIf="editForm.get('login').errors.maxlength" jhiTranslate="entity.validation.maxlength.string"
+                        *ngIf="editForm.get('email').errors.maxlength" jhiTranslate="entity.validation.maxlength.string"
                         [translateValues]="{max: 50}">
                             This field cannot be longer than 50 characters.
                         </small>
 
                         <small class="form-text text-danger"
-                        *ngIf="editForm.get('login').errors.pattern" jhiTranslate="entity.validation.patternLogin.string">
+                        *ngIf="editForm.get('email').errors.pattern" jhiTranslate="entity.validation.patternEmail.string">
                             This field can only contain letters, digits and e-mail addresses.
                         </small>
                     </div>

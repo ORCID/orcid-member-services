@@ -9,7 +9,7 @@ export const enum UserAuthorities {
 
 export interface IMSUser {
   id?: string;
-  login?: string;
+  email?: string;
   firstName?: string;
   lastName?: string;
   mainContact?: boolean;
@@ -28,7 +28,7 @@ export interface IMSUser {
 export class MSUser implements IMSUser {
   constructor(
     public id?: string,
-    public login?: string,
+    public email?: string,
     public firstName?: string,
     public lastName?: string,
     public mainContact?: boolean,

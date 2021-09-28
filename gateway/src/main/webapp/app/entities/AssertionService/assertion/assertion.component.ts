@@ -3,7 +3,7 @@ import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/ht
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
-import { faChartBar, faFileDownload, faFileImport } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faFileDownload, faFileImport, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 import { AccountService } from 'app/core';
@@ -41,6 +41,10 @@ export class AssertionComponent implements OnInit, OnDestroy {
   faChartBar = faChartBar;
   faFileDownload = faFileDownload;
   faFileImport = faFileImport;
+  faTimes = faTimes;
+  faSearch = faSearch;
+  searchTerm: string;
+  submittedSearchTerm: string;
 
   constructor(
     protected assertionService: AssertionService,
@@ -60,6 +64,8 @@ export class AssertionComponent implements OnInit, OnDestroy {
       this.currentAccount = account;
     });
     this.eventSubscriber = this.eventManager.subscribe('assertionListModification', () => {
+      this.searchTerm = '';
+      this.submittedSearchTerm = '';
       this.loadAll();
     });
     this.importEventSubscriber = this.eventManager.subscribe('importAssertions', () => {
@@ -78,7 +84,8 @@ export class AssertionComponent implements OnInit, OnDestroy {
       .query({
         page: this.page - 1,
         size: this.itemsPerPage,
-        sort: this.sort()
+        sort: this.sort(),
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
       })
       .subscribe(
         (res: HttpResponse<IAssertion[]>) => this.paginateAssertions(res.body, res.headers),
@@ -97,7 +104,8 @@ export class AssertionComponent implements OnInit, OnDestroy {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
       }
     });
     this.loadAll();
@@ -109,7 +117,8 @@ export class AssertionComponent implements OnInit, OnDestroy {
       '/assertion',
       {
         page: this.page,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
       }
     ]);
     this.loadAll();
@@ -137,6 +146,19 @@ export class AssertionComponent implements OnInit, OnDestroy {
 
   generateReport() {
     this.assertionService.generateReport();
+  }
+
+  resetSearch() {
+    this.page = 1;
+    this.searchTerm = '';
+    this.submittedSearchTerm = '';
+    this.loadAll();
+  }
+
+  submitSearch() {
+    this.page = 1;
+    this.submittedSearchTerm = this.searchTerm;
+    this.loadAll();
   }
 
   protected paginateAssertions(data: IAssertion[], headers: HttpHeaders) {

@@ -32,7 +32,7 @@ export class MSUserUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    login: ['', [Validators.required, Validators.email, Validators.maxLength(50), emailValidator]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(50), emailValidator]],
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     mainContact: [],
@@ -118,7 +118,7 @@ export class MSUserUpdateComponent implements OnInit {
   updateForm(msUser: IMSUser) {
     this.editForm.patchValue({
       id: msUser.id,
-      login: msUser.login,
+      email: msUser.email,
       firstName: msUser.firstName,
       lastName: msUser.lastName,
       mainContact: msUser.mainContact,
@@ -130,6 +130,7 @@ export class MSUserUpdateComponent implements OnInit {
       lastModifiedBy: msUser.lastModifiedBy,
       lastModifiedDate: msUser.lastModifiedDate != null ? msUser.lastModifiedDate.format(DATE_TIME_FORMAT) : null
     });
+
     if (msUser.mainContact) {
       this.editForm.get('mainContact').disable();
       this.editForm.get('salesforceId').disable();
@@ -137,6 +138,9 @@ export class MSUserUpdateComponent implements OnInit {
 
     if (msUser.salesforceId) {
       this.isExistentMember = true;
+    }
+    if (msUser.email) {
+      this.editForm.get('email').disable();
     }
   }
 
@@ -237,7 +241,7 @@ export class MSUserUpdateComponent implements OnInit {
   }
 
   displaySendActivate() {
-    if (this.existentMSUser && this.existentMSUser.login && !this.existentMSUser.activated) {
+    if (this.existentMSUser && this.existentMSUser.email && !this.existentMSUser.activated) {
       console.log('this.existentMSUser: ', this.existentMSUser);
       console.log('this.existentMSUser.activated', this.existentMSUser.activated);
       return true;
@@ -249,7 +253,7 @@ export class MSUserUpdateComponent implements OnInit {
     return {
       ...new MSUser(),
       id: this.editForm.get(['id']).value,
-      login: this.editForm.get(['login']).value,
+      email: this.editForm.get(['email']).value,
       firstName: this.editForm.get(['firstName']).value,
       lastName: this.editForm.get(['lastName']).value,
       mainContact: this.editForm.get(['mainContact']).value,

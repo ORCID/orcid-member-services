@@ -39,7 +39,7 @@ export class MSUserDetailComponent implements OnInit {
   }
 
   isDefaultAdmin(msUser: IMSUser) {
-    if (msUser.login == this.DEFAULT_ADMIN) {
+    if (msUser.email == this.DEFAULT_ADMIN) {
       return true;
     }
     return false;

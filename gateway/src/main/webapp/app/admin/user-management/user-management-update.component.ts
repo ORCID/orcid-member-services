@@ -16,7 +16,6 @@ export class UserMgmtUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [null],
-    login: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern('^[_.@A-Za-z0-9-]*')]],
     firstName: ['', [Validators.maxLength(50)]],
     lastName: ['', [Validators.maxLength(50)]],
     email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
@@ -51,7 +50,6 @@ export class UserMgmtUpdateComponent implements OnInit {
   private updateForm(user: User): void {
     this.editForm.patchValue({
       id: user.id,
-      login: user.login,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
@@ -76,7 +74,6 @@ export class UserMgmtUpdateComponent implements OnInit {
   }
 
   private updateUser(user: User): void {
-    user.login = this.editForm.get(['login']).value;
     user.firstName = this.editForm.get(['firstName']).value;
     user.lastName = this.editForm.get(['lastName']).value;
     user.email = this.editForm.get(['email']).value;

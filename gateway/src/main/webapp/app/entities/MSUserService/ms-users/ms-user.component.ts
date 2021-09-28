@@ -63,6 +63,8 @@ export class MSUserComponent implements OnInit, OnDestroy {
     });
     this.loadAll();
     this.eventSubscriber = this.eventManager.subscribe('msUserListModification', () => {
+      this.searchTerm = '';
+      this.submittedSearchTerm = '';
       this.loadAll();
     });
   }
@@ -159,28 +161,28 @@ export class MSUserComponent implements OnInit, OnDestroy {
   }
 
   disableDelete(msUser: IMSUser) {
-    if (msUser.login === this.DEFAULT_ADMIN) {
+    if (msUser.email === this.DEFAULT_ADMIN) {
       return true;
     }
     if (msUser.mainContact) {
       return true;
     }
-    return msUser.login === this.currentAccount.login;
+    return msUser.email === this.currentAccount.email;
   }
 
   isDefaultAdmin(msUser: IMSUser) {
-    return msUser.login === this.DEFAULT_ADMIN;
+    return msUser.email === this.DEFAULT_ADMIN;
   }
 
   isUserLoggedIn(msUser: IMSUser) {
-    return msUser.login === this.currentAccount.login;
+    return msUser.email === this.currentAccount.email;
   }
 
   disableImpersonate(msUser: IMSUser) {
-    if (msUser.login === this.DEFAULT_ADMIN) {
+    if (msUser.email === this.DEFAULT_ADMIN) {
       return true;
     }
-    return msUser.login === this.currentAccount.login;
+    return msUser.email === this.currentAccount.email;
   }
 
   hasRoleAdmin() {

@@ -4,7 +4,7 @@
             <div *ngSwitchCase="true">
                 <div class="alert alert-success mt-3">
                     <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message.string"
-                        [translateValues]="{username: account.login}"> You are logged in as user "{{account.login}}". </span>
+                        [translateValues]="{username: account.email}"> You are logged in as user "{{account.email}}". </span>
                 </div>
                 <!--This section is temporary for the pilot and will not be translated-->
                 <div class="article">

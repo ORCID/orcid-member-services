@@ -36,11 +36,6 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017
       database: userservice
-  mail:
-    host: localhost
-    port: 25
-    username:
-    password:
   thymeleaf:
     cache: true
   sleuth:
