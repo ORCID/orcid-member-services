@@ -1,0 +1,120 @@
+{
+  "error": {
+    "assertion": {
+      "validation": {
+        "duplicate": { "string": "Affiliation dupliquée. Cette affiliation a déjà été créée." }
+      }
+    }
+  },
+  "gatewayApp": {
+    "assertionServiceAssertion": {
+      "home": {
+        "title": { "string": "Affiliations" },
+        "createLabel": { "string": "Ajouter une affiliation" },
+        "createOrEditLabel": { "string": "Ajouter ou modifier une affiliation" },
+        "notFound": { "string": "Aucune affiliation trouvée" },
+        "uploadLabel": { "string": "Importer des affiliations à partir d'un CSV" },
+        "getLinks": { "string": "Liens d'autorisation de téléchargement" },
+        "generateReport": { "string": "Télécharger le rapport de situation de l'affiliation" },
+        "exportForEdit": { "string": "Télécharger les affiliations afin de les modifier" },
+        "forHelpTroubleshooting": {
+          "string": "Pour obtenir de l'aide en cas de problème, veuillez contacter l'équipe du portail des membres et copier-coller ci-dessous le message d'erreur ou en joindre une capture d'écran."
+        }
+      },
+      "delete": {
+        "question": { "string": "Êtes-vous sûr de vouloir supprimer cette affiliation pour {{ email }} ?" },
+        "note": { "string": "Cette affiliation sera également supprimée du dossier ORCID de l'utilisateur." },
+        "noteRevoked": {
+          "string": "Cette affiliation sera supprimée du Portail des membres mais restera dans ORCID. L'utilisateur a révoqué l'accès à son dossier ORCID et vous n'avez plus la permission de supprimer cet élément de son dossier ORCID."
+        },
+        "error": { "string": "Désolé, cette affiliation n'a pas pu être supprimée." },
+        "userRevokedAccess": {
+          "string": "L'utilisateur a révoqué l'accès à son dossier ORCID et vous n'êtes plus autorisé(e) à modifier ou supprimer cet élément dans ORCID."
+        }
+      },
+      "detail": {
+        "title": { "string": "Détails de l'affiliation" },
+        "org": { "string": "Organisation" }
+      },
+      "import": {
+        "title": { "string": "Importer les affiliations" },
+        "label": { "string": "Veuillez sélectionner un fichier CSV à télécharger." },
+        "filePath": { "string": "Chemin du fichier" },
+        "success": { "string": "Le fichier CSV a été importé avec succès." },
+        "added": { "string": "affiliations ajoutées" },
+        "updated": { "string": "affiliations mises à jour" },
+        "deleted": { "string": "affiliations supprimées" },
+        "duplicates": { "string": "doublon(s) ignoré(s)" },
+        "errors": {
+          "label": {
+            "string": "Oups ! Il y a eu un problème lors du traitement de vos données. Veuillez corriger les erreurs ci-dessous et réessayer."
+          }
+        }
+      },
+      "addedToOrcid": { "string": "Ajouté à ORCID" },
+      "updatedInOrcid": { "string": "Mis à jour dans ORCID" },
+      "affiliationData": { "string": "Données d'affiliation" },
+      "affiliationSection": { "string": "Type d'affiliation" },
+      "departmentName": { "string": "Service" },
+      "id": { "string": "Identifiant" },
+      "roleTitle": { "string": "Rôle/titre" },
+      "url": { "string": "URL" },
+      "startDate": { "string": "Date de début" },
+      "startYear": { "string": "Année de début" },
+      "startMonth": { "string": "Mois de début" },
+      "startDay": { "string": "Jour de début" },
+      "endDate": { "string": "Date de fin" },
+      "endYear": { "string": "De fin d'année" },
+      "endMonth": { "string": "Mois de la fin" },
+      "endDay": { "string": "Jour de fin" },
+      "orgName": { "string": "Nom de l'organisation" },
+      "orgCountry": { "string": "Pays" },
+      "orgCity": { "string": "Ville" },
+      "orgRegion": { "string": "État/région" },
+      "disambiguatedOrgId": { "string": "Identifiant de l'organisation" },
+      "disambiguationSource": { "string": "Source de l'identifiant de l'organisation" },
+      "externalId": { "string": "Identifiant externe" },
+      "externalIdType": { "string": "Type d'identifiant externe" },
+      "externalIdUrl": { "string": "URL d'identifiant externe" },
+      "putCode": { "string": "Saisissez le code" },
+      "created": { "string": "Créé" },
+      "modified": { "string": "Modifié" },
+      "status": { "string": "Statut" },
+      "deletedFromORCID": { "string": "Supprimé d'ORCID" },
+      "sent": { "string": "Envoyé" },
+      "adminId": { "string": "Identifiant de l'administrateur" },
+      "email": { "string": "Adresse e-mail de l'utilisateur" },
+      "orcidId": { "string": "Identifiant ORCID" },
+      "year": { "string": "Année" },
+      "month": { "string": "Mois" },
+      "day": { "string": "Jour" },
+      "permissionLink": { "string": "Lien de l'autorisation" },
+      "copyClipboard": { "string": "Copier dans le presse-papiers" },
+      "copySuccess": { "string": "Copié dans le presse-papiers" },
+      "details": { "string": "Voir les détails" },
+      "updateNote": {
+        "string": "Remarque : veuillez penser à télécharger et envoyer les liens d'autorisation à votre chercheur une fois que l'assertion aura été enregistrée."
+      },
+      "uploadNote": {
+        "string": "Remarque : veuillez penser à télécharger et envoyer les liens d'autorisation à vos chercheurs une fois que le téléchargement sera terminé."
+      }
+    },
+    "assertion": {
+      "firstName": { "string": "prénom" },
+      "lastName": { "string": "nom" },
+      "email": { "string": "adresse e-mail" },
+      "affiliationSection": { "string": "type d'affiliation" },
+      "orgCountry": { "string": "pays de l'organisation" },
+      "orgCity": { "string": "ville de l'organisation" },
+      "orgName": { "string": "nom de l'organisation" },
+      "disambiguatedOrgId": { "string": "Identifiant de l'organisation" }
+    }
+  },
+  "assertionServiceApp": {
+    "affiliation": {
+      "created": { "string": "Affiliation créée" },
+      "updated": { "string": "Affiliation mise à jour" },
+      "deleted": { "string": "Affiliation supprimée" }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "error": {
+    "title": { "string": "Votre demande ne peut pas être traitée." },
+    "subtitle": { "string": "Désolé, une erreur s'est produite" },
+    "http": {
+      "400": { "string": "Mauvaise demande." },
+      "403": { "string": "Vous n'êtes pas autorisé à accéder à cette page." },
+      "404": { "string": "La page n'existe pas. " },
+      "405": { "string": "Le verbe HTTP que vous avez utilisé n'est pas pris en charge pour cette URL." },
+      "500": { "string": "Erreur interne du serveur." }
+    },
+    "concurrencyFailure": {
+      "string": "Un autre utilisateur a modifié ces données en même temps que vous. Vos modifications ont été rejetées."
+    },
+    "validation": { "string": "Erreur de validation sur le serveur." },
+    "email": { "string": "Format d'adresse e-mail non valide" },
+    "size": { "string": "Ne répond pas aux exigences de taille minimale/maximale !" },
+    "idused": { "string": "Ceci est lié à d'autres éléments et ne peut être supprimé !" },
+    "pattern": { "string": "Ce champ ne peut contenir que des lettres, des chiffres et des adresses e-mail." },
+    "invalidUrl": { "string": "URL non valide" },
+    "deleteAssertionsForSalesforceId": { "string": "Impossible de supprimer les assertions de ce membre." },
+    "disambiguationSource": { "string": "La source de l'organisation ne peut pas être vide." },
+    "emailUsed": { "string": "Cette adresse e-mail est déjà enregistrée." },
+    "ownerExists": { "string": "L'organisation a déjà un propriétaire." },
+    "memberNotFound": { "string": "Membre introuvable avec l'identifiant Salesforce : {{ params }}" },
+    "salesForceIdUsed": { "string": "Un membre avec cet identifiant Salesforce existe déjà" },
+    "affiliationOtherOrganization": { "string": "Ces affiliations n'appartiennent pas à votre organisation." },
+    "emailAffiliationUsed": {
+      "string": "Impossible d'ajouter une affiliation. Une affiliation pour {{ params }} existe déjà et appartient à une autre organisation."
+    },
+    "memberNameUsed": { "string": "Un membre avec ce nom existe déjà" }
+  }
+}

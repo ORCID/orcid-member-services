@@ -1,0 +1,33 @@
+{
+  "landingPage": {
+    "title": { "string": "Services aux membres ORCID" },
+    "connectionExists": {
+      "youHaveAlready": { "string": "Vous avez déjà accordé" },
+      "permissionToUpdate": { "string": "permission de mettre à jour votre dossier ORCID" },
+      "youDoNot": { "string": "Vous n'avez rien à faire de plus pour le moment." },
+      "differentUser": {
+        "string": "Ce lien d'autorisation a déjà été utilisé. Veuillez contacter {{ clientName }} pour obtenir un nouveau lien d'autorisation."
+      }
+    },
+    "error": {
+      "somethingWentWrong": {
+        "string": "Oups, une erreur s'est produite, et nous n'avons pas été mesure de récupérer votre identifiant ORCID."
+      }
+    },
+    "denied": {
+      "youHaveDenied": { "string": "Oups, vous avez refusé l'accès." },
+      "willNotBeAble": { "string": "ne pourra pas mettre à jour votre dossier ORCID." },
+      "ifThisWas": { "string": "Si c'est une erreur, cliquez sur le bouton ci-dessous pour autoriser l'accès." },
+      "grantAccess": { "string": "Autoriser {{ clientName }} à mettre à jour mon dossier ORCID" }
+    },
+    "success": {
+      "thanks": { "string": "Merci, {{ given_name}} {{ family_name }}" },
+      "youHaveSuccessfully": {
+        "string": "Vous avez accordé avec succès à {{ clientName }} l'autorisation de mettre à jour votre dossier ORCID, et votre dossier a été mis à jour avec les données d'affiliation."
+      },
+      "ifYouFind": {
+        "string": "Si vous trouvez que les données ajoutées à votre dossier ORCID sont incorrectes, veuillez contacter {{ clientName }}"
+      }
+    }
+  }
+}

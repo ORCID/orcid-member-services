@@ -1,0 +1,55 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSMember": {
+      "home": {
+        "title": { "string": "Gestionar miembros" },
+        "createLabel": { "string": "Añadir miembro" },
+        "createOrEditLabel": { "string": "Agregar o editar miembro" },
+        "notFound": { "string": "No hay miembros para mostrar" },
+        "uploadLabel": { "string": "Importar miembros desde CSV" }
+      },
+      "delete": {
+        "question": { "string": "¿Está seguro de que desea eliminar {{clientName}} del Portal de miembros?" },
+        "anyUsersAndAffiliations": {
+          "string": "Todos los usuarios y afiliaciones asociados con este miembro también se eliminarán del Portal de miembros; sin embargo, los datos agregados al Registro ORCID permanecerán en ORCID."
+        }
+      },
+      "detail": {
+        "title": { "string": "Datos del miembro" }
+      },
+      "import": {
+        "title": { "string": "Importar miembros" },
+        "label": { "string": "Seleccione un archivo CSV para cargar" },
+        "emptyFile": { "string": "No hay ningún archivo para subir. Seleccione uno." },
+        "filePath": { "string": "Ruta del archivo" },
+        "errors": {
+          "label": {
+            "string": "¡Ups! Ha ocurrido un problema al procesar sus datos. Corrija los errores que aparecen a continuación e inténtelo de nuevo"
+          }
+        }
+      },
+      "clientId": {
+        "string": "Identificación del cliente",
+        "note": { "string": "Note: Client ID must have Member OBO enabled AND" },
+        "addedAsRedirect": { "string": "added as a Redirect URI in" }
+      },
+      "clientName": { "string": "Nombre de miembro" },
+      "clientSecret": { "string": "Secreto del cliente" },
+      "salesforceId": { "string": "ID de Salesforce" },
+      "parentSalesforceId": { "string": "ID de Parent Salesforce" },
+      "isConsortiumLead": { "string": "Líder del consorcio" },
+      "assertionServiceEnabled": { "string": "Aseveraciones habilitadas" },
+      "createdBy": { "string": "Creado por" },
+      "createdDate": { "string": "Creado" },
+      "lastModifiedBy": { "string": "Ultima modificación por" },
+      "lastModifiedDate": { "string": "Última modificación" }
+    }
+  },
+  "memberServiceApp": {
+    "member": {
+      "created": { "string": "Se ha creado el miembro" },
+      "updated": { "string": "Se ha actualizado el miembro con éxito" },
+      "deleted": { "string": "Se ha eliminado al miembro con éxito" }
+    }
+  }
+}

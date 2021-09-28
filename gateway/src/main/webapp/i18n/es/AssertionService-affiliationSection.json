@@ -1,0 +1,14 @@
+{
+  "gatewayApp": {
+    "AffiliationSection": {
+      "null": { "string": "" },
+      "EMPLOYMENT": { "string": "EMPLEO" },
+      "EDUCATION": { "string": "EDUCACIÓN" },
+      "QUALIFICATION": { "string": "CALIFICACIÓN" },
+      "INVITED_POSITION": { "string": "INVITED_POSITION" },
+      "DISTINCTION": { "string": "DISTINCIÓN" },
+      "MEMBERSHIP": { "string": "AFILIACIÓN" },
+      "SERVICE": { "string": "SERVICIO" }
+    }
+  }
+}

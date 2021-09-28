@@ -1,0 +1,23 @@
+{
+  "login": {
+    "title": { "string": "Registrarse" },
+    "form": {
+      "password": {
+        "string": "Contraseña",
+        "placeholder": { "string": "Your password" }
+      },
+      "rememberme": { "string": "Recuérdame" },
+      "button": { "string": "Registrarse" }
+    },
+    "messages": {
+      "error": {
+        "authentication": {
+          "string": "<strong>¡No se ha podido iniciar sesión!</strong> Compruebe sus credenciales y vuelva a intentarlo."
+        }
+      }
+    },
+    "password": {
+      "forgot": { "string": "¿Ha olvidado su contraseña?" }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSUser": {
+      "home": {
+        "title": { "string": "Gérer les utilisateurs" },
+        "createLabel": { "string": "Ajouter un utilisateur" },
+        "createOrEditLabel": { "string": "Ajouter ou modifier un utilisateur" },
+        "notFound": { "string": "Aucun utilisateur à afficher" },
+        "uploadLabel": { "string": "Importer des utilisateurs depuis un CSV" }
+      },
+      "delete": {
+        "question": { "string": "Êtes-vous sûr(e) de vouloir supprimer l'utilisateur {{ login }} ?" }
+      },
+      "changeOwnership": {
+        "question": {
+          "string": "Êtes-vous sûr(e) de vouloir transférer la propriété ? Vous êtes sur le point de transférer la propriété de ce compte d'organisation. Si vous êtes le propriétaire de l'organisation après le transfert de propriété, vous n'aurez plus accès aux fonctions d'administrateur, telles que la gestion des utilisateurs."
+        }
+      },
+      "detail": {
+        "title": { "string": "Détails de l'utilisateur" }
+      },
+      "sendActivate": {
+        "success": { "string": "Invitation envoyée." },
+        "error": { "string": "L'e-mail d'invitation n'a pas pu être envoyé." }
+      },
+      "import": {
+        "title": { "string": "Importer des utilisateurs" },
+        "label": { "string": "Veuillez sélectionner le fichier CSV à télécharger" },
+        "filePath": { "string": "Chemin du fichier" },
+        "emptyFile": { "string": "Il n'y a aucun fichier à transférer. Veuillez en sélectionner un." },
+        "errors": {
+          "label": {
+            "string": "Oups ! Une erreur s'est produite dans le traitement de vos données. Veuillez corriger les erreurs ci-dessous et réessayer"
+          }
+        }
+      },
+      "assertionService": {
+        "enabled": { "string": "Assertions activées" }
+      },
+      "login": { "string": "Connexion" },
+      "email": { "string": "E-mail" },
+      "password": { "string": "Mot de passe" },
+      "confirm_password": { "string": "Confirmer le mot de passe" },
+      "firstName": { "string": "Prénom" },
+      "lastName": { "string": "Nom" },
+      "mainContact": { "string": "Propriétaire de l'organisation" },
+      "salesforceId": { "string": "Organisation" },
+      "parentSalesforceId": { "string": "Identifiant du service commercial parent" },
+      "activated": { "string": "Activé" },
+      "isAdmin": { "string": "Admin" },
+      "createdBy": { "string": "Créé par" },
+      "createdDate": { "string": "Créé" },
+      "lastModifiedBy": { "string": "Dernière modification par" },
+      "lastModifiedDate": { "string": "Dernière modification" }
+    },
+    "userDTO": {
+      "login": { "string": "e-mail" },
+      "firstName": { "string": "prénom" },
+      "lastName": { "string": "nom de famille" }
+    }
+  },
+  "userServiceApp": {
+    "user": {
+      "created": { "string": "Utilisateur créé. Invitation envoyée." },
+      "updated": { "string": "Utilisateur mis à jour avec succès" },
+      "deleted": { "string": "L'utilisateur a bien été supprimé" }
+    }
+  }
+}

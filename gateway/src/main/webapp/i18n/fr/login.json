@@ -1,0 +1,21 @@
+{
+  "login": {
+    "title": { "string": "Se connecter" },
+    "form": {
+      "password": {
+        "string": "Mot de passe",
+        "placeholder": { "string": "Your password" }
+      },
+      "rememberme": { "string": "Se souvenir de moi" },
+      "button": { "string": "Se connecter" }
+    },
+    "messages": {
+      "error": {
+        "authentication": { "string": "<strong>Échec de la connexion !</strong> Veuillez vérifier vos identifiants et réessayer." }
+      }
+    },
+    "password": {
+      "forgot": { "string": "Vous avez oublié votre mot de passe ?" }
+    }
+  }
+}
