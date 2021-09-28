@@ -1,34 +1,34 @@
 {
   "settings": {
-    "title": { "string": "Settings for {{username}} (You)" },
+    "title": { "string": "Paramètres pour {{username}} (vous)" },
     "form": {
       "firstname": {
-        "string": "First Name",
+        "string": "Prénom",
         "placeholder": { "string": "Your first name" }
       },
       "lastname": {
-        "string": "Last Name",
+        "string": "Nom de famille",
         "placeholder": { "string": "Your last name" }
       },
-      "language": { "string": "Language" },
-      "button": { "string": "Save" }
+      "language": { "string": "Langue" },
+      "button": { "string": "Enregistrer" }
     },
     "messages": {
       "error": {
-        "fail": { "string": "<strong>An error has occurred!</strong> Settings could not be saved." },
-        "emailexists": { "string": "<strong>Email is already in use!</strong> Please choose another one." }
+        "fail": { "string": "<strong>Une erreur s'est produite !</strong> Les paramètres n'ont pas pu être enregistrés." },
+        "emailexists": { "string": "<strong>Cette adresse e-mail est déjà utilisée !</strong> Veuillez en choisir une autre." }
       },
-      "success": { "string": "<strong>Settings saved!</strong>" },
+      "success": { "string": "<strong>Réglages enregistrés !</strong>" },
       "validate": {
         "firstname": {
-          "required": { "string": "Your first name is required." },
-          "minlength": { "string": "Your first name is required to be at least 1 character" },
-          "maxlength": { "string": "Your first name cannot be longer than 50 characters" }
+          "required": { "string": "Votre prénom est obligatoire." },
+          "minlength": { "string": "Votre prénom doit contenir au moins 1 caractère" },
+          "maxlength": { "string": "Votre prénom ne doit pas comporter plus de 50 caractères" }
         },
         "lastname": {
-          "required": { "string": "Your last name is required." },
-          "minlength": { "string": "Your last name is required to be at least 1 character" },
-          "maxlength": { "string": "Your last name cannot be longer than 50 characters" }
+          "required": { "string": "Votre nom est obligatoire." },
+          "minlength": { "string": "Votre nom de famille doit compter au moins un caractère." },
+          "maxlength": { "string": "Votre nom ne peut pas comporter plus de 50 caractères" }
         }
       }
     }

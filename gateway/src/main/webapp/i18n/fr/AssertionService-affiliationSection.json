@@ -3,9 +3,9 @@
     "AffiliationSection": {
       "null": { "string": "" },
       "EMPLOYMENT": { "string": "EMPLOI" },
-      "EDUCATION": { "string": "FORMATION" },
-      "QUALIFICATION": { "string": "QUALIFICATION" },
-      "INVITED_POSITION": { "string": "POSITION INVITEE" },
+      "EDUCATION": { "string": "ÉDUCATION" },
+      "QUALIFICATION": { "string": "DIPLÔME" },
+      "INVITED_POSITION": { "string": "INVITED_POSITION" },
       "DISTINCTION": { "string": "DISTINCTION" },
       "MEMBERSHIP": { "string": "ADHÉSION" },
       "SERVICE": { "string": "SERVICE" }
