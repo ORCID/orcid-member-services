@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title th:text="#{email.activation.title}">ORCID Member Portal activation</title>
+<title th:text="#{email.activation.title}">Welcome to the ORCID Member Portal</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
 </head>
@@ -9,13 +9,27 @@
 	style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
 	<div style="padding: 20px; padding-top: 10px; margin: auto;">
 		<div th:insert="~{mail/common :: emailHeader}"></div>
-		<p th:text="#{email.creation.text1}">Your account on the ORCID
-			Member Portal needs to be activated. Please click on the URL
-			below to activate your account and set a password:</p>
+		<p>
+		  <span th:text="#{email.creation.text1}">As part of your organization’s ORCID membership you have access to the </span>
+		  <a href="https://info.orcid.org/documentation/member-portal/" th:text="#{email.creation.link1.text}">ORCID Member Portal</a>
+		  <span th:text="#{email.creation.text2}">. As part of your organization’s ORCID membership you have access to the </span>
+		  <a href="https://info.orcid.org/documentation/features/member-reporting/" th:text="#{email.creation.link2.text}">member reports</a>
+		  <span th:text="#{email.creation.text3}"> and a suite of other tools that will help you make the most of your membership. </span>
+		</p>
+		<p>
+		  <span th:text="#{email.creation.text4}">Your ORCID member portal account is ready to be activated. Please click on the URL below to activate your account and set a password.</span>
+		</p>
 		<p>
       		<a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}/reset/finish?key=${user.resetKey}|})"
         	th:href="${url}" th:text="${url}">Login link</a>
     	</p>
+    	<p>
+		  <span th:text="#{email.creation.text5}">This link is only valid for 24 hours. If you click the link after it has expired you will automatically be sent a new link by email.</span>
+		</p>
+		<p>
+		  <span th:text="#{email.creation.text6}">If you have any questions or problems accessing then please contact our </span>
+		  <a href="mailto:membership@orcid.org" th:text="#{email.creation.link3.text}">Engagement Team</a>
+		</p>
 		<p>
 			<span th:text="#{email.common.warmRegards}">Warm Regards,</span> <br />
 			<span th:text="#{email.common.signature}">The ORCID Member Portal Team</span> <br />
