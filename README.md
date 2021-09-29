@@ -39,15 +39,13 @@ Edit bash profile to set JAVA_HOME to your OpenJDK 11 path, ex:
     vim ~/.bash_profile
     export JAVA_HOME=$(/usr/libexec/java_home -v 11)
 
-> **IMPORTANT!** You will need to set JAVA_HOME back to Java 8 in order to work on ORCID-Source
-
 ## Start the JHipster registry
 
 - Open a new terminal
 - cd orcid-member-services/jhipster-registry/
 - Run `bash start.sh`. This should download the jhipster-registry jar if you don't have it installed. If for some reason the download fails you will need to download it manually
 - Wait for the jhipster-registry to start
-- Verify it has started properly. Go to http://localhost:8761/#/ and sign in with `admin@orcid.org`, password `admin`
+- Verify it has started properly. Go to http://localhost:8761/#/ and sign in with `admin`, password `admin`
 
 
 ## Start the user service
