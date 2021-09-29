@@ -22,6 +22,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
  * We use the {@link Async} annotation to send emails asynchronously.
  */
 @Service
+@Async
 public class MailService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(MailService.class);
