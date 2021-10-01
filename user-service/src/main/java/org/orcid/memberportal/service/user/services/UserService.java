@@ -235,14 +235,6 @@ public class UserService {
         user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
         user.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
 
-        if (!StringUtils.equals(user.getEmail(), userDTO.getEmail().toLowerCase())) {
-            user.setEmail(userDTO.getEmail().toLowerCase());
-            user.setActivated(false);
-            user.setActivationKey(RandomUtil.generateResetKey());
-            user.setActivationDate(Instant.now());
-            mailService.sendActivationEmail(user);
-        }
-
         if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
             user.setSalesforceId(userDTO.getSalesforceId());
             user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
