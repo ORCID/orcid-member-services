@@ -99,6 +99,7 @@ public class UserService {
         user.setResetKey(null);
         user.setResetDate(null);
         user.setActivated(true);
+        user.setActivationDate(Instant.now());
         userRepository.save(user);
     }
 
@@ -173,12 +174,10 @@ public class UserService {
         user.setPassword("placeholder");
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
+        user.setActivated(false);
         userRepository.save(user);
-        LOG.debug("Created User: {}", user);
-
-        LOG.debug("Sending email to user {}", user.getEmail());
+        
         mailService.sendCreationEmail(user);
-
         return user;
     }
 
@@ -244,14 +243,6 @@ public class UserService {
         user.setLoginAs(userDTO.getLoginAs());
         user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
         user.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
-
-        if (!StringUtils.equals(user.getEmail(), userDTO.getEmail().toLowerCase())) {
-            user.setEmail(userDTO.getEmail().toLowerCase());
-            user.setActivated(false);
-            user.setActivationKey(RandomUtil.generateResetKey());
-            user.setActivationDate(Instant.now());
-            mailService.sendActivationEmail(user);
-        }
 
         if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
             user.setSalesforceId(userDTO.getSalesforceId());
