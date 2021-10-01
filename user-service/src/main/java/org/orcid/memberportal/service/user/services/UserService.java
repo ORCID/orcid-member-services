@@ -89,6 +89,7 @@ public class UserService {
         user.setResetKey(null);
         user.setResetDate(null);
         user.setActivated(true);
+        user.setActivationDate(Instant.now());
         userRepository.save(user);
     }
 
