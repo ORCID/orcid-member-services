@@ -163,12 +163,10 @@ public class UserService {
         user.setPassword("placeholder");
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
+        user.setActivated(false);
         userRepository.save(user);
-        LOG.debug("Created User: {}", user);
-
-        LOG.debug("Sending email to user {}", user.getEmail());
+        
         mailService.sendCreationEmail(user);
-
         return user;
     }
 
