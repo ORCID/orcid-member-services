@@ -3,6 +3,7 @@ package org.orcid.memberportal.service.user.domain;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -64,6 +65,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Field("activation_date")
     private Instant activationDate = null;
+    
+    @Field("activation_reminders")
+    private List<ActivationReminder> activationReminders;
 
     @Size(max = 20)
     @Field("reset_key")
@@ -234,6 +238,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+    
+    public List<ActivationReminder> getActivationReminders() {
+        return activationReminders;
+    }
+
+    public void setActivationReminders(List<ActivationReminder> activationReminders) {
+        this.activationReminders = activationReminders;
     }
 
     @Override

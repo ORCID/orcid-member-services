@@ -3,7 +3,10 @@ package org.orcid.memberportal.service.user.services;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +17,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.user.config.Constants;
+import org.orcid.memberportal.service.user.domain.ActivationReminder;
 import org.orcid.memberportal.service.user.domain.Authority;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.dto.UserDTO;
@@ -52,6 +56,12 @@ public class UserService {
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     public static final int RESET_KEY_LIFESPAN_IN_SECONDS = 86400;
+
+    /**
+     * ordered list for days activation email is resent to users who haven't
+     * activated yet
+     */
+    private static final int[] ACTIVATION_REMINDER_DAYS = new int[] { 7, 30 };
 
     @Autowired
     private UserRepository userRepository;
@@ -449,6 +459,45 @@ public class UserService {
                 .findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
                         pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter)
                 .map(u -> userMapper.toUserDTO(u));
+    }
+
+    public void sendActivationReminders() {
+        List<User> users = userRepository.findAllByActivatedIsFalseAndDeletedIsFalse();
+        users.forEach(u -> {
+            List<ActivationReminder> remindersSent = u.getActivationReminders();
+            for (int daysElapsed : ACTIVATION_REMINDER_DAYS) {
+                LocalDateTime userCreated = LocalDateTime.ofInstant(u.getCreatedDate(), ZoneId.systemDefault());
+                if (reminderDue(userCreated, daysElapsed)) {
+                    if (!reminderSentForNumDaysElapsed(remindersSent, daysElapsed)) {
+                        sendActivationEmail(u);
+                        logReminderSent(daysElapsed, u);
+                    }
+                }
+            }
+        });
+    }
+
+    private void logReminderSent(int daysElapsed, User u) {
+        if (u.getActivationReminders() == null) {
+            u.setActivationReminders(new ArrayList<>());
+        }
+        u.getActivationReminders().add(new ActivationReminder(daysElapsed, Instant.now()));
+        userRepository.save(u);
+    }
+
+    private boolean reminderDue(LocalDateTime userCreated, int daysElapsed) {
+        return userCreated.until(LocalDateTime.now(), ChronoUnit.DAYS) >= daysElapsed;
+    }
+
+    private boolean reminderSentForNumDaysElapsed(List<ActivationReminder> remindersSent, int daysElapsed) {
+        if (remindersSent != null) {
+            for (ActivationReminder reminder : remindersSent) {
+                if (reminder.getDaysElapsed() == daysElapsed) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void sendActivationEmail(User user) {

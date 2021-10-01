@@ -176,3 +176,5 @@ application:
   mailFromAddress: ${application.mail.fromAddress}  
   mailFromName: ${application.mail.fromName}
   baseUrl: ${application.baseUrl}
+  cron:
+    sendActivationReminders: 3600000 # hourly
