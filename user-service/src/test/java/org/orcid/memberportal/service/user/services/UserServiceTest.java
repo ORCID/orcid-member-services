@@ -177,7 +177,7 @@ class UserServiceTest {
 
         User existing = new User();
         existing.setId("id");
-        existing.setEmail("email@orcid.orgd");
+        existing.setEmail("email@email.com");
         existing.setMainContact(false);
 
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString())).thenReturn(true);
