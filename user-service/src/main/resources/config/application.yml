@@ -176,3 +176,4 @@ application:
   mailFromAddress: ${application.mail.fromAddress}  
   mailFromName: ${application.mail.fromName}
   baseUrl: ${application.baseUrl}
+  sendActivationRemindersDelay: 3600000 # hourly

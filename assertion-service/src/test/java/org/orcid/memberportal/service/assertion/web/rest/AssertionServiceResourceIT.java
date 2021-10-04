@@ -17,7 +17,6 @@ import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSe
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.UserService;
-import org.orcid.memberportal.service.assertion.web.rest.AssertionServiceResource;
 import org.orcid.memberportal.service.assertion.web.rest.errors.ExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

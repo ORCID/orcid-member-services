@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -28,6 +30,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.orcid.memberportal.service.user.domain.ActivationReminder;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.dto.UserDTO;
 import org.orcid.memberportal.service.user.mapper.UserMapper;
@@ -35,9 +38,6 @@ import org.orcid.memberportal.service.user.repository.AuthorityRepository;
 import org.orcid.memberportal.service.user.repository.UserRepository;
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
 import org.orcid.memberportal.service.user.security.MockSecurityContext;
-import org.orcid.memberportal.service.user.services.MailService;
-import org.orcid.memberportal.service.user.services.MemberService;
-import org.orcid.memberportal.service.user.services.UserService;
 import org.orcid.memberportal.service.user.upload.UserUpload;
 import org.orcid.memberportal.service.user.upload.UserUploadReader;
 import org.springframework.data.domain.Page;
@@ -177,7 +177,7 @@ class UserServiceTest {
 
         User existing = new User();
         existing.setId("id");
-        existing.setEmail("email@orcid.orgd");
+        existing.setEmail("email@email.com");
         existing.setMainContact(false);
 
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString())).thenReturn(true);
@@ -428,7 +428,58 @@ class UserServiceTest {
         page = userService.getAllUsersBySalesforceId(Mockito.mock(Pageable.class), "some-salesforce-id", "some-filter");
         assertEquals(5, page.getTotalElements());
     }
-
+    
+    @Test
+    public void testSendActivationReminders() {
+        // user not due any reminders
+        User user1 = getUser("1@user.com");
+        user1.setCreatedDate(LocalDateTime.now().minusWeeks(2).atZone(ZoneId.systemDefault()).toInstant());
+        
+        List<ActivationReminder> user1Reminders = new ArrayList<>();
+        user1Reminders.add(new ActivationReminder(7, Instant.now()));
+        user1.setActivationReminders(user1Reminders);
+        
+        // user due 30 day reminder
+        User user2 = getUser("2@user.com");
+        user2.setCreatedDate(LocalDateTime.now().minusWeeks(5).atZone(ZoneId.systemDefault()).toInstant());
+        
+        List<ActivationReminder> user2Reminders = new ArrayList<>();
+        user2Reminders.add(new ActivationReminder(7, Instant.now()));
+        user2.setActivationReminders(user2Reminders);
+        
+        // user due 7 day reminder
+        User user3 = getUser("3@user.com");
+        user3.setCreatedDate(LocalDateTime.now().minusDays(8).atZone(ZoneId.systemDefault()).toInstant());
+        
+        // user not due any reminders
+        User user4 = getUser("4@user.com");
+        user4.setCreatedDate(LocalDateTime.now().minusDays(3).atZone(ZoneId.systemDefault()).toInstant());
+        
+        // user not due any reminders
+        User user5 = getUser("5@user.com");
+        user5.setCreatedDate(LocalDateTime.now().minusWeeks(5).atZone(ZoneId.systemDefault()).toInstant());
+        
+        List<ActivationReminder> user5Reminders = new ArrayList<>();
+        user5Reminders.add(new ActivationReminder(7, Instant.now()));
+        user5Reminders.add(new ActivationReminder(30, Instant.now()));
+        user5.setActivationReminders(user5Reminders);
+        
+        Mockito.when(userRepository.findAllByActivatedIsFalseAndDeletedIsFalse()).thenReturn(Arrays.asList(user1, user2, user3, user4, user5));
+        
+        userService.sendActivationReminders();
+        
+        Mockito.verify(userRepository, Mockito.times(4)).save(userCaptor.capture());
+        
+        List<User> captured = userCaptor.getAllValues();
+        assertThat(captured.get(1).getEmail()).isEqualTo("2@user.com");
+        assertThat(captured.get(1).getActivationReminders().size()).isEqualTo(2);
+        assertThat(captured.get(1).getActivationReminders().get(0).getDaysElapsed()).isEqualTo(7);
+        assertThat(captured.get(1).getActivationReminders().get(1).getDaysElapsed()).isEqualTo(30);
+        assertThat(captured.get(3).getEmail()).isEqualTo("3@user.com");
+        assertThat(captured.get(3).getActivationReminders().size()).isEqualTo(1);
+        assertThat(captured.get(3).getActivationReminders().get(0).getDaysElapsed()).isEqualTo(7);
+    }
+    
     private List<User> getListOfUsers(int size) {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < size; i++) {

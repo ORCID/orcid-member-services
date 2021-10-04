@@ -93,4 +93,5 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  sendActivationRemindersDelay: 3600000 # hourly
