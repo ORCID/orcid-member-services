@@ -21,7 +21,7 @@ public class UserScheduledTasks {
     @Autowired
     private UserService userService;
     
-    @Scheduled(fixedDelayString = "${application.cron.sendActivationReminders}")
+    @Scheduled(fixedDelayString = "${application.sendActivationRemindersDelay}")
     @SchedulerLock(name = "sendActivationReminders", lockAtMostFor = "20m", lockAtLeastFor = "10m")
     public void sendActivationReminders() throws JAXBException {
         log.info("Running cron to send activation reminders");

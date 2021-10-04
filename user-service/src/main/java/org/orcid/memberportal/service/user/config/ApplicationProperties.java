@@ -1,7 +1,9 @@
 package org.orcid.memberportal.service.user.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
 
@@ -19,6 +21,8 @@ public class ApplicationProperties {
 
     private String baseUrl;
 
+    private String sendActivationRemindersDelay;
+    
     public String getMailDomain() {
         return mailDomain;
     }
@@ -75,4 +79,12 @@ public class ApplicationProperties {
         this.mailTestMode = mailTestMode;
     }
 
+    public String getSendActivationRemindersDelay() {
+        return sendActivationRemindersDelay;
+    }
+
+    public void setSendActivationRemindersDelay(String sendActivationRemindersDelay) {
+        this.sendActivationRemindersDelay = sendActivationRemindersDelay;
+    }
+    
 }
