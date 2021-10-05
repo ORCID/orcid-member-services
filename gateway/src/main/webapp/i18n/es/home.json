@@ -48,11 +48,11 @@
         "heading": { "string": "Contactos de asistencia" },
         "text": { "string": "Si necesita ayuda o tiene alguna pregunta sobre el portal para miembros, póngase en contacto con:" },
         "bullet1": {
-          "text": { "string": "Su" },
-          "linkText": { "string": "organización principal del consorcio " }
+          "text": { "string": "Su " },
+          "linkText": { "string": "organización principal del consorcio" }
         },
         "bullet2": {
-          "text": { "string": "O correo electrónico:" },
+          "text": { "string": "O correo electrónico: " },
           "email": { "string": "membership@orcid.org" }
         }
       }
