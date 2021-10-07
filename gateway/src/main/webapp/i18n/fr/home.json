@@ -17,7 +17,7 @@
         "affiliationManager": {
           "heading": { "string": "Gestionnaire d'affiliation" },
           "description": {
-            "string": "Le gestionnaire d'affiliation simplifie le processus d'ajout des données d'affiliation (emploi, formation, etc.) aux dossiers ORCID en vous permettant d'ajouter et de mettre à jour des données d'affiliation au nom de vos chercheurs à l'aide d'un fichier CSV, sans qu'il soit nécessaire d'intégrer ORCID directement dans vos systèmes actuels ou d'acquérir un système de fournisseur compatible avec ORCID. Disponible uniquement pour les membres de consortium."
+            "string": "Le gestionnaire d'affiliation simplifie le processus d'ajout des données d'affiliation (emploi, formation, etc.) aux dossiers ORCID en vous permettant d'ajouter et de mettre à jour des données d'affiliation au nom de vos chercheurs à l'aide d'un fichier CSV, sans qu'il soit nécessaire d'intégrer ORCID directement dans vos systèmes actuels ou d'acquérir un système de fournisseur compatible avec ORCID. Disponible uniquement pour les membres de consortium. "
           }
         },
         "memberReporting": {
