@@ -18,7 +18,6 @@ import org.orcid.memberportal.service.user.config.Constants;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.mail.MailException;
 import org.orcid.memberportal.service.user.mail.client.impl.MailgunClient;
-import org.orcid.memberportal.service.user.services.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
