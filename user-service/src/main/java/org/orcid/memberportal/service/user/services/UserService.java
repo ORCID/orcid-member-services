@@ -177,7 +177,7 @@ public class UserService {
         user.setActivated(false);
         userRepository.save(user);
         
-        mailService.sendCreationEmail(user);
+        mailService.sendActivationEmail(user);
         return user;
     }
 

@@ -57,11 +57,6 @@ public class MailService {
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
     }
 
-    public void sendCreationEmail(User user) {
-        LOGGER.debug("Sending creation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
-    }
-
     public void sendPasswordResetMail(User user) {
         LOGGER.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");

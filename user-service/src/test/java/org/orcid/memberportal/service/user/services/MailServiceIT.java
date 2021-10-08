@@ -73,18 +73,6 @@ public class MailServiceIT {
     }
 
     @Test
-    public void testCreationEmail() throws Exception {
-        User user = new User();
-        user.setLangKey(Constants.DEFAULT_LANGUAGE);
-        user.setEmail("john.doe@example.com");
-        mailService.sendCreationEmail(user);
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
-        assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
-        assertThat(subjectCaptor.getValue()).isEqualTo("userservice account activation");
-        assertThat(contentCaptor.getValue()).isNotNull();
-    }
-
-    @Test
     public void testSendPasswordResetMail() throws Exception {
         User user = new User();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
