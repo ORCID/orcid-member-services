@@ -132,7 +132,7 @@ class UserServiceTest {
                 return (User) invocation.getArgument(0);
             }
         });
-        Mockito.doNothing().when(mailService).sendCreationEmail(Mockito.any(User.class));
+        Mockito.doNothing().when(mailService).sendActivationEmail(Mockito.any(User.class));
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString())).thenReturn(true);
         Mockito.when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(new User());
 
@@ -140,7 +140,7 @@ class UserServiceTest {
         userService.createUser(userDTO);
 
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
-        Mockito.verify(mailService, Mockito.times(1)).sendCreationEmail(Mockito.any(User.class));
+        Mockito.verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
         Mockito.verify(memberService, Mockito.times(1)).memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString());
         Mockito.verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
     }
@@ -153,7 +153,7 @@ class UserServiceTest {
                 return (User) invocation.getArgument(0);
             }
         });
-        Mockito.doNothing().when(mailService).sendCreationEmail(Mockito.any(User.class));
+        Mockito.doNothing().when(mailService).sendActivationEmail(Mockito.any(User.class));
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString())).thenReturn(false);
         Mockito.when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(new User());
 
@@ -161,7 +161,7 @@ class UserServiceTest {
         userService.createUser(userDTO);
 
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
-        Mockito.verify(mailService, Mockito.times(1)).sendCreationEmail(Mockito.any(User.class));
+        Mockito.verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
         Mockito.verify(memberService, Mockito.times(1)).memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString());
         Mockito.verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
     }
@@ -208,7 +208,7 @@ class UserServiceTest {
                 return (User) invocation.getArgument(0);
             }
         });
-        Mockito.doNothing().when(mailService).sendCreationEmail(Mockito.any(User.class));
+        Mockito.doNothing().when(mailService).sendActivationEmail(Mockito.any(User.class));
         Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.anyString())).thenReturn(false);
 
         User existing = new User();
