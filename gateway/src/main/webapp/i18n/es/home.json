@@ -17,7 +17,7 @@
         "affiliationManager": {
           "heading": { "string": "Gestor de afiliación" },
           "description": {
-            "string": "El gestor de Afiliación simplifica el proceso de añadir información de afiliación (empleo, educación, etc.) a los registros de ORCID, al permitirle añadir y actualizar la información de afiliación en nombre de sus investigadores mediante un archivo CSV, sin necesidad de integrar ORCID directamente en sus sistemas actuales ni de adquirir un sistema de proveedor habilitado para ORCID. Disponible solo para miembros del consorcio."
+            "string": "El gestor de Afiliación simplifica el proceso de añadir información de afiliación (empleo, educación, etc.) a los registros de ORCID, al permitirle añadir y actualizar la información de afiliación en nombre de sus investigadores mediante un archivo CSV, sin necesidad de integrar ORCID directamente en sus sistemas actuales ni de adquirir un sistema de proveedor habilitado para ORCID. Disponible solo para miembros del consorcio. "
           }
         },
         "memberReporting": {
