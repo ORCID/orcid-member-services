@@ -50,7 +50,7 @@ public class MailgunClient implements MailClient {
 
         HttpPost post = new HttpPost(applicationProperties.getMailApiUrl());
         try {
-            post.setEntity(new UrlEncodedFormEntity(urlParameters));
+            post.setEntity(new UrlEncodedFormEntity(urlParameters, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             throw new MailException("Error encoding url params for post body", e);
         }

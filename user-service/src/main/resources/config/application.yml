@@ -84,6 +84,7 @@ spring:
     enabled: false
   messages:
     basename: i18n/messages
+    encoding: ISO-8859-1
   main:
     allow-bean-definition-overriding: true
   mvc:
