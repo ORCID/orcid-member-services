@@ -24,7 +24,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.user.config.ApplicationProperties;
 import org.orcid.memberportal.service.user.mail.MailException;
-import org.orcid.memberportal.service.user.mail.client.impl.MailgunClient;
 
 public class MailgunClientTest {
 
@@ -56,7 +55,7 @@ public class MailgunClientTest {
         Mockito.verify(httpClient).execute(postCaptor.capture());
         HttpPost post = postCaptor.getValue();
         UrlEncodedFormEntity entity = (UrlEncodedFormEntity) post.getEntity();
-        assertThat(entity.getContentType().getValue()).isEqualTo("application/x-www-form-urlencoded");
+        assertThat(entity.getContentType().getValue()).isEqualTo("application/x-www-form-urlencoded; charset=UTF-8");
 
         List<NameValuePair> params = URLEncodedUtils.parse(post.getEntity());
         for (NameValuePair pair : params) {
