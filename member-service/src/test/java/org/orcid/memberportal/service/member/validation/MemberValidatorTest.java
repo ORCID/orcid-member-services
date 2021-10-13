@@ -20,8 +20,6 @@ import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
 import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
-import org.orcid.memberportal.service.member.validation.MemberValidation;
-import org.orcid.memberportal.service.member.validation.MemberValidator;
 import org.springframework.context.MessageSource;
 
 public class MemberValidatorTest {
