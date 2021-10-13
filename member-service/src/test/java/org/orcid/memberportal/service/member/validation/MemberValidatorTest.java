@@ -248,6 +248,32 @@ public class MemberValidatorTest {
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.nameAlreadyExists", propertyName);
     }
+    
+    @Test
+    public void testValidateMemberWithInvalidMemberType() {
+        Member member = getMemberWithValidNewClientId();
+        member.setType("invalid member type");
+        MemberValidation validation = memberValidator.validate(member, getUser());
+
+        List<String> errors = validation.getErrors();
+        assertFalse(validation.isValid());
+        assertEquals(1, errors.size());
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
+        String propertyName = errorMessagePropertyCaptor.getValue();
+        assertEquals("member.validation.error.invalidMemberType", propertyName);
+    }
+    
+    @Test
+    public void testValidateMemberWithValidMemberType() {
+        Member member = getMemberWithValidNewClientId();
+        member.setType("basic");
+        MemberValidation validation = memberValidator.validate(member, getUser());
+        assertTrue(validation.isValid());
+        
+        member.setType("premium");
+        validation = memberValidator.validate(member, getUser());
+        assertTrue(validation.isValid());
+    }
 
     private Member getMemberWithValidOldClientId() {
         Member member = getMember();

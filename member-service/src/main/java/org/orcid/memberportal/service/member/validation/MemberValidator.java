@@ -19,11 +19,13 @@ import io.micrometer.core.instrument.util.StringUtils;
 @Component
 public class MemberValidator {
 
-    private static final String OLD_CLIENT_ID_PATTERN = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$";
+    private static final String OLD_CLIENT_ID_REGEX = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$";
     private static final String NEW_CLIENT_ID_PREFIX = "APP-";
-    private static final String NEW_CLIENT_ID_PATTERN = NEW_CLIENT_ID_PREFIX + "[A-Z0-9]{16}$";
-    private static final Pattern oldPattern = Pattern.compile(OLD_CLIENT_ID_PATTERN);
-    private static final Pattern newPattern = Pattern.compile(NEW_CLIENT_ID_PATTERN);
+    private static final String NEW_CLIENT_ID_REGEX = NEW_CLIENT_ID_PREFIX + "[A-Z0-9]{16}$";
+    private static final Pattern OLD_CLIENT_ID_PATTERN = Pattern.compile(OLD_CLIENT_ID_REGEX);
+    private static final Pattern NEW_CLIENT_ID_PATTERN = Pattern.compile(NEW_CLIENT_ID_REGEX);
+    private static final String MEMBER_TYPE_BASIC = "basic";
+    private static final String MEMBER_TYPE_PREMIUM = "premium";
 
     @Autowired
     private MessageSource messageSource;
@@ -38,6 +40,7 @@ public class MemberValidator {
         validateConsortiumLeadAndParentSalesforceId(member, user, errors);
         validateClientId(member, user, errors);
         validateClientName(member, user, errors);
+        validateType(member, user, errors);
 
         MemberValidation validation = new MemberValidation();
         validation.setValid(errors.isEmpty());
@@ -61,12 +64,12 @@ public class MemberValidator {
             errors.add(getError("missingClientId", user));
         } else if (!StringUtils.isBlank(member.getClientId())) {
             if (member.getClientId().startsWith(NEW_CLIENT_ID_PREFIX)) {
-                Matcher newMatcher = newPattern.matcher(member.getClientId());
+                Matcher newMatcher = NEW_CLIENT_ID_PATTERN.matcher(member.getClientId());
                 if (!newMatcher.matches()) {
                     errors.add(getError("invalidClientId", user));
                 }
             } else {
-                Matcher oldMatcher = oldPattern.matcher(member.getClientId());
+                Matcher oldMatcher = OLD_CLIENT_ID_PATTERN.matcher(member.getClientId());
                 if (!oldMatcher.matches()) {
                     errors.add(getError("invalidClientId", user));
                 }
@@ -99,6 +102,14 @@ public class MemberValidator {
         } else if (member.getAssertionServiceEnabled() && Boolean.TRUE.equals(member.getIsConsortiumLead()) && StringUtils.isBlank(member.getClientId())) {
             errors.add(getError("invalidAssertionsEnabled", user));
         }
+    }
+    
+    private void validateType(Member member, MemberServiceUser user, List<String> errors) {
+        if (member.getType() != null) {
+            if (!MEMBER_TYPE_BASIC.equals(member.getType()) && !MEMBER_TYPE_PREMIUM.equals(member.getType())) {
+                errors.add(getError("invalidMemberType", user));
+            }
+        } 
     }
 
     private String getError(String code, MemberServiceUser user) {

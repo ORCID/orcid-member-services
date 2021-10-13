@@ -57,6 +57,9 @@ public class Member implements Serializable {
 
     @Field("last_modified_date")
     private Instant lastModifiedDate;
+    
+    @Field
+    private String type;
 
     public String getId() {
         return id;
@@ -157,6 +160,14 @@ public class Member implements Serializable {
     public void setClientName(String clientName) {
         this.clientName = clientName != null ? clientName.trim() : null;
     }
+    
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     @Override
     public int hashCode() {
@@ -174,6 +185,7 @@ public class Member implements Serializable {
         result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
         result = prime * result + ((parentSalesforceId == null) ? 0 : parentSalesforceId.hashCode());
         result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
     }
 
@@ -246,6 +258,11 @@ public class Member implements Serializable {
                 return false;
         } else if (!salesforceId.equals(other.salesforceId))
             return false;
+        if (type == null) {
+            if (other.type != null)
+                return false;
+        } else if (!type.equals(other.type))
+            return false;
         return true;
     }
 
@@ -254,6 +271,6 @@ public class Member implements Serializable {
         return "Member [id=" + id + ", clientId=" + clientId + ", salesforceId=" + salesforceId + ", parentSalesforceId=" + parentSalesforceId + ", clientName="
                 + clientName + ", isConsortiumLead=" + isConsortiumLead + ", assertionServiceEnabled=" + assertionServiceEnabled + ", superadminEnabled="
                 + superadminEnabled + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate="
-                + lastModifiedDate + "]";
+                + lastModifiedDate + ", type=" + type + "]";
     }
 }
