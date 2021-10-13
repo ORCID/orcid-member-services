@@ -18,6 +18,9 @@ export class MSMemberDetailComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ msMember }) => {
       this.msMember = msMember;
+      if (!this.msMember.type) {
+        this.msMember.type = 'null';
+      }
     });
   }
 

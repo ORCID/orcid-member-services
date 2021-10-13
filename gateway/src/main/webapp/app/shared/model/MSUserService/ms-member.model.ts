@@ -14,6 +14,7 @@ export interface IMSMember {
   createdDate?: Moment;
   lastModifiedBy?: string;
   lastModifiedDate?: Moment;
+  type?: string;
 }
 
 export class MSMember implements IMSMember {
@@ -35,6 +36,5 @@ export class MSMember implements IMSMember {
     this.isConsortiumLead = this.isConsortiumLead || false;
     this.superadminEnabled = this.superadminEnabled || false;
     this.assertionServiceEnabled = this.assertionServiceEnabled || false;
-
   }
 }

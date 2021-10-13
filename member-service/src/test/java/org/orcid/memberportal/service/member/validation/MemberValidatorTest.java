@@ -20,8 +20,6 @@ import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
 import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
-import org.orcid.memberportal.service.member.validation.MemberValidation;
-import org.orcid.memberportal.service.member.validation.MemberValidator;
 import org.springframework.context.MessageSource;
 
 public class MemberValidatorTest {
@@ -247,6 +245,32 @@ public class MemberValidatorTest {
         Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.nameAlreadyExists", propertyName);
+    }
+    
+    @Test
+    public void testValidateMemberWithInvalidMemberType() {
+        Member member = getMemberWithValidNewClientId();
+        member.setType("invalid member type");
+        MemberValidation validation = memberValidator.validate(member, getUser());
+
+        List<String> errors = validation.getErrors();
+        assertFalse(validation.isValid());
+        assertEquals(1, errors.size());
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
+        String propertyName = errorMessagePropertyCaptor.getValue();
+        assertEquals("member.validation.error.invalidMemberType", propertyName);
+    }
+    
+    @Test
+    public void testValidateMemberWithValidMemberType() {
+        Member member = getMemberWithValidNewClientId();
+        member.setType("basic");
+        MemberValidation validation = memberValidator.validate(member, getUser());
+        assertTrue(validation.isValid());
+        
+        member.setType("premium");
+        validation = memberValidator.validate(member, getUser());
+        assertTrue(validation.isValid());
     }
 
     private Member getMemberWithValidOldClientId() {
