@@ -272,6 +272,32 @@ public class MemberValidatorTest {
         validation = memberValidator.validate(member, getUser());
         assertTrue(validation.isValid());
     }
+    
+    @Test
+    public void testValidateMemberWithInvalidMemberStatus() {
+        Member member = getMemberWithValidNewClientId();
+        member.setStatus("invalid member status");
+        MemberValidation validation = memberValidator.validate(member, getUser());
+
+        List<String> errors = validation.getErrors();
+        assertFalse(validation.isValid());
+        assertEquals(1, errors.size());
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
+        String propertyName = errorMessagePropertyCaptor.getValue();
+        assertEquals("member.validation.error.invalidMemberStatus", propertyName);
+    }
+    
+    @Test
+    public void testValidateMemberWithValidMemberStatus() {
+        Member member = getMemberWithValidNewClientId();
+        member.setStatus("Active");
+        MemberValidation validation = memberValidator.validate(member, getUser());
+        assertTrue(validation.isValid());
+        
+        member.setStatus("Deactivated");
+        validation = memberValidator.validate(member, getUser());
+        assertTrue(validation.isValid());
+    }
 
     private Member getMemberWithValidOldClientId() {
         Member member = getMember();

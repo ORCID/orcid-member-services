@@ -60,6 +60,9 @@ public class Member implements Serializable {
     
     @Field
     private String type;
+    
+    @Field
+    private String status;
 
     public String getId() {
         return id;
@@ -168,6 +171,14 @@ public class Member implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
+    
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     @Override
     public int hashCode() {
@@ -186,6 +197,7 @@ public class Member implements Serializable {
         result = prime * result + ((parentSalesforceId == null) ? 0 : parentSalesforceId.hashCode());
         result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result + ((status == null) ? 0 : status.hashCode());
         return result;
     }
 
@@ -263,6 +275,11 @@ public class Member implements Serializable {
                 return false;
         } else if (!type.equals(other.type))
             return false;
+        if (status == null) {
+            if (other.status != null)
+                return false;
+        } else if (!status.equals(other.status))
+            return false;
         return true;
     }
 
@@ -271,6 +288,6 @@ public class Member implements Serializable {
         return "Member [id=" + id + ", clientId=" + clientId + ", salesforceId=" + salesforceId + ", parentSalesforceId=" + parentSalesforceId + ", clientName="
                 + clientName + ", isConsortiumLead=" + isConsortiumLead + ", assertionServiceEnabled=" + assertionServiceEnabled + ", superadminEnabled="
                 + superadminEnabled + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate="
-                + lastModifiedDate + ", type=" + type + "]";
+                + lastModifiedDate + ", type=" + type  + ", status=" + status + "]";
     }
 }
