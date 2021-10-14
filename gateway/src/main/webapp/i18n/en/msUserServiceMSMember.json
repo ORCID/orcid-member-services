@@ -41,7 +41,8 @@
       "createdDate": { "string": "Created" },
       "lastModifiedBy": { "string": "Last Modified By" },
       "lastModifiedDate": { "string": "Last Modified" },
-      "type": { "string": "Type" }
+      "type": { "string": "Type" },
+      "status": { "string": "Status" }
     }
   },
   "memberServiceApp": {

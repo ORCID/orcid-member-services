@@ -19,7 +19,10 @@ export class MSMemberDetailComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ msMember }) => {
       this.msMember = msMember;
       if (!this.msMember.type) {
-        this.msMember.type = 'null';
+        this.msMember.type = 'unset';
+      }
+      if (!this.msMember.status) {
+        this.msMember.status = 'unset';
       }
     });
   }

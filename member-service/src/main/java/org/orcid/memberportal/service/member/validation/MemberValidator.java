@@ -26,6 +26,8 @@ public class MemberValidator {
     private static final Pattern NEW_CLIENT_ID_PATTERN = Pattern.compile(NEW_CLIENT_ID_REGEX);
     private static final String MEMBER_TYPE_BASIC = "basic";
     private static final String MEMBER_TYPE_PREMIUM = "premium";
+    private static final String MEMBER_STATUS_ACTIVE = "Active";
+    private static final String MEMBER_STATUS_DEACTIVATED = "Deactivated";
 
     @Autowired
     private MessageSource messageSource;
@@ -41,6 +43,7 @@ public class MemberValidator {
         validateClientId(member, user, errors);
         validateClientName(member, user, errors);
         validateType(member, user, errors);
+        validateStatus(member, user, errors);
 
         MemberValidation validation = new MemberValidation();
         validation.setValid(errors.isEmpty());
@@ -108,6 +111,14 @@ public class MemberValidator {
         if (member.getType() != null) {
             if (!MEMBER_TYPE_BASIC.equals(member.getType()) && !MEMBER_TYPE_PREMIUM.equals(member.getType())) {
                 errors.add(getError("invalidMemberType", user));
+            }
+        } 
+    }
+    
+    private void validateStatus(Member member, MemberServiceUser user, List<String> errors) {
+        if (member.getStatus() != null) {
+            if (!MEMBER_STATUS_ACTIVE.equals(member.getStatus()) && !MEMBER_STATUS_DEACTIVATED.equals(member.getStatus())) {
+                errors.add(getError("invalidMemberStatus", user));
             }
         } 
     }
