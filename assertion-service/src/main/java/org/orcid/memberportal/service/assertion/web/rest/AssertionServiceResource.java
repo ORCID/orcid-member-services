@@ -146,35 +146,38 @@ public class AssertionServiceResource {
         String csvReport = assertionService.generatePermissionLinks();
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
+        LOG.info("{} generated assertions permission links", SecurityUtils.getCurrentUserLogin().get());
     }
 
     @PutMapping("/assertion")
     public ResponseEntity<Assertion> updateAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
-        LOG.debug("REST request to update assertion : {}", assertion);
         validateAssertion(assertion);
         Assertion existingAssertion = assertionService.updateAssertion(assertion);
+        LOG.info("{} updated assertion {}", SecurityUtils.getCurrentUserLogin().get(), assertion.getId());
         return ResponseEntity.ok().body(existingAssertion);
     }
 
     @PostMapping("/assertion")
     public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, URISyntaxException {
         LOG.debug("REST request to create assertion : {}", assertion);
-
         validateAssertion(assertion);
         assertion = assertionService.createAssertion(assertion);
-
+        LOG.info("{} created assertion {}", SecurityUtils.getCurrentUserLogin().get(), assertion.getId());
         return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId())).body(assertion);
     }
 
     @PostMapping("/assertion/upload")
     public ResponseEntity<AssertionsUploadSummary> uploadAssertions(@RequestParam("file") MultipartFile file) {
         AssertionsUploadSummary summary = assertionService.uploadAssertions(file);
+        LOG.info("{} uploaded assertion CSV: {} added, {} updated, {} deleted, {} duplicates", new Object[] { SecurityUtils.getCurrentUserLogin().get(),
+                summary.getNumAdded(), summary.getNumUpdated(), summary.getNumDeleted(), summary.getNumDuplicates() });
         return ResponseEntity.ok().body(summary);
     }
 
     @DeleteMapping("/assertion/{id}")
     public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
         assertionService.deleteById(id);
+        LOG.info("{} deleted assertion {}", SecurityUtils.getCurrentUserLogin().get(), id);
         return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
     }
 
@@ -238,6 +241,9 @@ public class AssertionServiceResource {
             String error = (String) obj.get("error");
             responseData.put("statusCode", statusCode);
             responseData.put("error", error);
+            LOG.info("{} failed to delete assertion {} from orcid", SecurityUtils.getCurrentUserLogin().get(), id);
+        } else {
+            LOG.info("{} deleted assertion {} from orcid", SecurityUtils.getCurrentUserLogin().get(), id);
         }
 
         return ResponseEntity.ok().body(responseData.toString());
@@ -318,6 +324,7 @@ public class AssertionServiceResource {
         String csvReport = assertionService.generateAssertionsReport();
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
+        LOG.info("{} generated assertions CSV report", SecurityUtils.getCurrentUserLogin().get());
     }
 
     @GetMapping(path = "/assertion/csv")
@@ -329,6 +336,7 @@ public class AssertionServiceResource {
         String csvReport = assertionService.generateAssertionsCSV();
         response.getOutputStream().write(csvReport.getBytes());
         response.flushBuffer();
+        LOG.info("{} generated assertions CSV for editing", SecurityUtils.getCurrentUserLogin().get());
     }
 
     private void validateAssertion(Assertion assertion) {
