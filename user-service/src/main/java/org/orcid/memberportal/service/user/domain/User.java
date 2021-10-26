@@ -141,7 +141,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setEmail(String email) {
         this.email = StringUtils.lowerCase(email, Locale.ENGLISH);
-        ;
     }
 
     public String getImageUrl() {
