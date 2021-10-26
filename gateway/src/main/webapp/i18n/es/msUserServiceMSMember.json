@@ -42,7 +42,9 @@
       "createdBy": { "string": "Creado por" },
       "createdDate": { "string": "Creado" },
       "lastModifiedBy": { "string": "Ultima modificación por" },
-      "lastModifiedDate": { "string": "Última modificación" }
+      "lastModifiedDate": { "string": "Última modificación" },
+      "type": { "string": "Tipo" },
+      "status": { "string": "Estado" }
     }
   },
   "memberServiceApp": {
