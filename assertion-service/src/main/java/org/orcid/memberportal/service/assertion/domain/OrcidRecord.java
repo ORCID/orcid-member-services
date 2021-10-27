@@ -2,6 +2,7 @@ package org.orcid.memberportal.service.assertion.domain;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Locale;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -65,7 +66,7 @@ public class OrcidRecord {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = StringUtils.lowerCase(email, Locale.ENGLISH);
     }
 
     public String getOrcid() {

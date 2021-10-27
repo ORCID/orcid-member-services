@@ -2,10 +2,12 @@ package org.orcid.memberportal.service.assertion.domain;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Locale;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -149,22 +151,12 @@ public class Assertion implements Serializable {
         return email;
     }
 
-    public Assertion email(String email) {
-        this.email = email;
-        return this;
-    }
-
     public void setEmail(String email) {
-        this.email = email;
+        this.email = StringUtils.lowerCase(email, Locale.ENGLISH);
     }
 
     public AffiliationSection getAffiliationSection() {
         return affiliationSection;
-    }
-
-    public Assertion affiliationSection(AffiliationSection affiliationSection) {
-        this.affiliationSection = affiliationSection;
-        return this;
     }
 
     public void setAffiliationSection(AffiliationSection affiliationSection) {
@@ -175,22 +167,12 @@ public class Assertion implements Serializable {
         return departmentName;
     }
 
-    public Assertion departmentName(String departmentName) {
-        this.departmentName = departmentName;
-        return this;
-    }
-
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
 
     public String getRoleTitle() {
         return roleTitle;
-    }
-
-    public Assertion roleTitle(String roleTitle) {
-        this.roleTitle = roleTitle;
-        return this;
     }
 
     public void setRoleTitle(String roleTitle) {
@@ -201,22 +183,12 @@ public class Assertion implements Serializable {
         return startYear;
     }
 
-    public Assertion startYear(String startYear) {
-        this.startYear = startYear;
-        return this;
-    }
-
     public void setStartYear(String startYear) {
         this.startYear = startYear;
     }
 
     public String getStartMonth() {
         return startMonth;
-    }
-
-    public Assertion startMonth(String startMonth) {
-        this.startMonth = startMonth;
-        return this;
     }
 
     public void setStartMonth(String startMonth) {
@@ -227,22 +199,12 @@ public class Assertion implements Serializable {
         return startDay;
     }
 
-    public Assertion startDay(String startDay) {
-        this.startDay = startDay;
-        return this;
-    }
-
     public void setStartDay(String startDay) {
         this.startDay = startDay;
     }
 
     public String getEndYear() {
         return endYear;
-    }
-
-    public Assertion endYear(String endYear) {
-        this.endYear = endYear;
-        return this;
     }
 
     public void setEndYear(String endYear) {
@@ -253,22 +215,12 @@ public class Assertion implements Serializable {
         return endMonth;
     }
 
-    public Assertion endMonth(String endMonth) {
-        this.endMonth = endMonth;
-        return this;
-    }
-
     public void setEndMonth(String endMonth) {
         this.endMonth = endMonth;
     }
 
     public String getEndDay() {
         return endDay;
-    }
-
-    public Assertion endDay(String endDay) {
-        this.endDay = endDay;
-        return this;
     }
 
     public void setEndDay(String endDay) {
@@ -279,22 +231,12 @@ public class Assertion implements Serializable {
         return orgName;
     }
 
-    public Assertion orgName(String orgName) {
-        this.orgName = orgName;
-        return this;
-    }
-
     public void setOrgName(String orgName) {
         this.orgName = orgName;
     }
 
     public String getOrgCountry() {
         return orgCountry;
-    }
-
-    public Assertion orgCountry(String orgCountry) {
-        this.orgCountry = orgCountry;
-        return this;
     }
 
     public void setOrgCountry(String orgCountry) {
@@ -305,22 +247,12 @@ public class Assertion implements Serializable {
         return orgCity;
     }
 
-    public Assertion orgCity(String orgCity) {
-        this.orgCity = orgCity;
-        return this;
-    }
-
     public void setOrgCity(String orgCity) {
         this.orgCity = orgCity;
     }
 
     public String getOrgRegion() {
         return orgRegion;
-    }
-
-    public Assertion orgRegion(String orgRegion) {
-        this.orgRegion = orgRegion;
-        return this;
     }
 
     public void setOrgRegion(String orgRegion) {
@@ -331,22 +263,12 @@ public class Assertion implements Serializable {
         return disambiguatedOrgId;
     }
 
-    public Assertion disambiguatedOrgId(String disambiguatedOrgId) {
-        this.disambiguatedOrgId = disambiguatedOrgId;
-        return this;
-    }
-
     public void setDisambiguatedOrgId(String disambiguatedOrgId) {
         this.disambiguatedOrgId = disambiguatedOrgId;
     }
 
     public String getDisambiguationSource() {
         return disambiguationSource;
-    }
-
-    public Assertion disambiguationSource(String disambiguationSource) {
-        this.disambiguationSource = disambiguationSource;
-        return this;
     }
 
     public void setDisambiguationSource(String disambiguationSource) {
@@ -357,22 +279,12 @@ public class Assertion implements Serializable {
         return externalId;
     }
 
-    public Assertion externalId(String externalId) {
-        this.externalId = externalId;
-        return this;
-    }
-
     public void setExternalId(String externalId) {
         this.externalId = externalId;
     }
 
     public String getExternalIdType() {
         return externalIdType;
-    }
-
-    public Assertion externalIdType(String externalIdType) {
-        this.externalIdType = externalIdType;
-        return this;
     }
 
     public void setExternalIdType(String externalIdType) {
@@ -383,22 +295,12 @@ public class Assertion implements Serializable {
         return externalIdUrl;
     }
 
-    public Assertion externalIdUrl(String externalIdUrl) {
-        this.externalIdUrl = externalIdUrl;
-        return this;
-    }
-
     public void setExternalIdUrl(String externalIdUrl) {
         this.externalIdUrl = externalIdUrl;
     }
 
     public String getPutCode() {
         return putCode;
-    }
-
-    public Assertion putCode(String putCode) {
-        this.putCode = putCode;
-        return this;
     }
 
     public void setPutCode(String putCode) {
@@ -409,22 +311,12 @@ public class Assertion implements Serializable {
         return created;
     }
 
-    public Assertion created(Instant created) {
-        this.created = created;
-        return this;
-    }
-
     public void setCreated(Instant created) {
         this.created = created;
     }
 
     public Instant getModified() {
         return modified;
-    }
-
-    public Assertion modified(Instant modified) {
-        this.modified = modified;
-        return this;
     }
 
     public void setModified(Instant modified) {
@@ -449,11 +341,6 @@ public class Assertion implements Serializable {
 
     public String getOwnerId() {
         return ownerId;
-    }
-
-    public Assertion ownerId(String ownerId) {
-        this.ownerId = ownerId;
-        return this;
     }
 
     public void setOwnerId(String ownerId) {
