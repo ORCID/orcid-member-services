@@ -6,6 +6,8 @@ export class FindLanguageFromKeyPipe implements PipeTransform {
     en: { name: 'English' },
     es: { name: 'Español' },
     fr: { name: 'Français' },
+    ja: { name: '日本語' },
+    zh_TW: { name: '繁體中文' },
     xx: { name: 'Test' }
     // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
   };
