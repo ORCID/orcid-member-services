@@ -1,0 +1,71 @@
+{
+  "home": {
+    "title": { "string": "ORCIDメンバーポータル" },
+    "heading": { "string": "ORCID メンバー ポータルへようこそ" },
+    "mainContent": {
+      "section1": {
+        "text": {
+          "string": "ORCIDメンバーポータルは、機関がORCIDのメンバーシップを最大限に活用するのに役立つツールスイートです。すでにいくつかのツールが利用可能であり、またメンバーが以下のことを行えるようにする他のツールも積極的に開発しています："
+        },
+        "bullet1": { "string": "研究者のORCIDレコードのデータを追加 / 更新する" },
+        "bullet2": { "string": "データおよびレポートにアクセスする" },
+        "bullet3": { "string": "組織のORCIDメンバーシップ情報の管理を行います" },
+        "bullet4": { "string": "あなたの組織のORCID API認証情報を管理します" }
+      },
+      "section2": {
+        "text": { "string": "現在利用可能なツール：" },
+        "affiliationManager": {
+          "heading": { "string": "アフィリエーション マネージャー" },
+          "description": {
+            "string": "Affiliation Managerは、CSVファイルを使用して研究者に代わって所属情報を追加および更新できるようにすることで、ORCIDレコードに所属情報（雇用、教育など）を追加するプロセスを簡素化します。ORCIDを現在のシステムに直接統合したり、ORCID対応のベンダーシステムを取得する必要はありません。コンソーシアムメンバーのみ利用できます。"
+          },
+          "requestAccessNow": { "string": "今アクセスを要求してください。" }
+        },
+        "memberReporting": {
+          "heading": { "string": "メンバーの報告" },
+          "description": {
+            "string": "メンバーレポートは、すべてのメンバーにリアルタイムのレポートを提供し、組織がメンバーと統合のデータを簡単に検出、表示、ダウンロードできるようにします。"
+          }
+        }
+      },
+      "section3": {
+        "heading": { "string": "リソース" },
+        "table": {
+          "line1": {
+            "heading": { "string": "アカウント管理ガイド" },
+            "description": { "string": "メンバーポータルにアクセスするユーザーをどのように管理するかについて説明する" }
+          },
+          "line2": {
+            "heading": { "string": "アフィリエーションマネージャーガイド" },
+            "description": { "string": "アフィリエーションマネージャーを使用する、貴機関在籍スタッフ向けガイド" }
+          },
+          "line3": {
+            "heading": { "string": "メンバーレポートガイド" },
+            "description": { "string": "メンバーレポートの読み方に関するガイド" }
+          }
+        }
+      },
+      "section4": {
+        "heading": { "string": "サポート用連絡先" },
+        "text": { "string": "メンバー ポータルに関するヘルプ、あるいはご質問については、以下までご連絡ください :" },
+        "bullet1": {
+          "text": { "string": "あなたの" },
+          "linkText": { "string": "コンソーシアム責任者の組織" }
+        },
+        "bullet2": {
+          "text": { "string": "またはEメール：" },
+          "email": { "string": "membership@orcid.org" }
+        }
+      }
+    },
+    "alert": {
+      "thisSiteIsFor": {
+        "string": "このサイトは、ORCID 加盟組織の管理者用のもので、ORCID レジストリとは別のものです。ORCID レジストリに行き、お進め下さい"
+      },
+      "signIntoOrcid": { "string": "あなたのORCIDレコードにサインインします" }
+    },
+    "logged": {
+      "message": { "string": "あなたは、ユーザー「{{username}}」としてログインしています。" }
+    }
+  }
+}

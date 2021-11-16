@@ -1,0 +1,21 @@
+{
+  "login": {
+    "title": { "string": "登入" },
+    "form": {
+      "password": {
+        "string": "密碼",
+        "placeholder": { "string": "Your password" }
+      },
+      "rememberme": { "string": "記住我" },
+      "button": { "string": "登入" }
+    },
+    "messages": {
+      "error": {
+        "authentication": { "string": "<strong>登入失敗！</strong>請檢查您的憑證並再試一次。" }
+      }
+    },
+    "password": {
+      "forgot": { "string": "您忘記密碼了嗎？" }
+    }
+  }
+}

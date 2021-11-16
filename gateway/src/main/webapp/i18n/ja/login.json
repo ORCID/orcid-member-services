@@ -1,0 +1,21 @@
+{
+  "login": {
+    "title": { "string": "サインイン" },
+    "form": {
+      "password": {
+        "string": "パスワード",
+        "placeholder": { "string": "Your password" }
+      },
+      "rememberme": { "string": "私のことを記憶させる" },
+      "button": { "string": "サインイン" }
+    },
+    "messages": {
+      "error": {
+        "authentication": { "string": "<strong> サインインに失敗しました。</strong> 認証情報をご確認の上、再度お試し下さい。 " }
+      }
+    },
+    "password": {
+      "forgot": { "string": "パスワードをお忘れですか？" }
+    }
+  }
+}

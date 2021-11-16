@@ -1,0 +1,55 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSMember": {
+      "home": {
+        "title": { "string": "メンバーを管理する" },
+        "createLabel": { "string": "メンバーを追加する" },
+        "createOrEditLabel": { "string": "メンバーを追加または編集する" },
+        "notFound": { "string": "表示するメンバーはいません" },
+        "uploadLabel": { "string": "CSVからメンバーをインポート" }
+      },
+      "delete": {
+        "question": { "string": "メンバーポータルから{{ clientName }} を削除してもよろしいですか？" },
+        "anyUsersAndAffiliations": {
+          "string": "こちらのメンバーに関連するすべてのユーザー及びアフィリエーションは、メンバー ポータルからも削除されますが、ORCID レジストリに追加したデータは ORCID には残ります。"
+        }
+      },
+      "detail": {
+        "title": { "string": "メンバーの詳細" }
+      },
+      "import": {
+        "title": { "string": "メンバーをインポート" },
+        "label": { "string": "アップロードするCSVファイルを選択してください" },
+        "emptyFile": { "string": "アップロードするファイルがありません。1つ選択してください。" },
+        "filePath": { "string": "ファイルパス" },
+        "errors": {
+          "label": { "string": "おっと。お客様のデータ処理に問題がありました。以下のエラーを修正して、再度お試し下さい" }
+        }
+      },
+      "clientId": {
+        "string": "クライアント Id",
+        "note": { "string": "Note: Client ID must have Member OBO enabled AND" },
+        "addedAsRedirect": { "string": "added as a Redirect URI in" }
+      },
+      "clientName": { "string": "メンバー名" },
+      "clientSecret": { "string": "クライアント シークレット" },
+      "salesforceId": { "string": "Salesforce ID" },
+      "parentSalesforceId": { "string": "親SalesforceID" },
+      "isConsortiumLead": { "string": "コンソーシアムリード" },
+      "assertionServiceEnabled": { "string": "アサーションが有効化されました" },
+      "createdBy": { "string": "作成者" },
+      "createdDate": { "string": "作成されました" },
+      "lastModifiedBy": { "string": "最終変更者：" },
+      "lastModifiedDate": { "string": "最終更新" },
+      "type": { "string": "タイプ" },
+      "status": { "string": "ステータス" }
+    }
+  },
+  "memberServiceApp": {
+    "member": {
+      "created": { "string": "メンバーが作成されました" },
+      "updated": { "string": "メンバーを更新できました" },
+      "deleted": { "string": "メンバーを削除できました" }
+    }
+  }
+}

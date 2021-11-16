@@ -1,0 +1,71 @@
+{
+  "home": {
+    "title": { "string": "ORCID 會員入口網站" },
+    "heading": { "string": "歡迎使用 ORCID 成員入口" },
+    "mainContent": {
+      "section1": {
+        "text": {
+          "string": "ORCID 會員專區是一套能幫助機構充分利用 ORCID 會籍的工具。我們已開放了一些工具，且也在積極開發其他工具來讓會員："
+        },
+        "bullet1": { "string": "新增 / 更新研究者 ORCID 紀錄的資料" },
+        "bullet2": { "string": "存取資料與報告" },
+        "bullet3": { "string": "管理您組織的 ORCID 會員資訊" },
+        "bullet4": { "string": "管理您組織的 ORCID API 憑證" }
+      },
+      "section2": {
+        "text": { "string": "目前可使用的工具：" },
+        "affiliationManager": {
+          "heading": { "string": "機關管理系統" },
+          "description": {
+            "string": "透過准許您代表您的研究者，使用 CSV 檔案新增與更新機關資訊，機關管理者可以將新增機關資訊（雇用、教育狀況等等）至 ORCID 紀錄的過程簡化。他們將不再需要直接將 ORCID 合併至您目前使用的系統，或取得配有 ORCID 的供應商系統。此功能僅對聯合成員開放。"
+          },
+          "requestAccessNow": { "string": "立刻要求存取！" }
+        },
+        "memberReporting": {
+          "heading": { "string": "會員報告" },
+          "description": {
+            "string": "成員報告會提供由所有成員及時回傳的報告，讓組織能夠更加輕易地探索、瀏覽並下載成員相關與整合的數據。"
+          }
+        }
+      },
+      "section3": {
+        "heading": { "string": "資源" },
+        "table": {
+          "line1": {
+            "heading": { "string": "帳號管理指南" },
+            "description": { "string": "有關如何管理您的成員對成員入口存取權限的指南" }
+          },
+          "line2": {
+            "heading": { "string": "機關管理者指南" },
+            "description": { "string": "供您所屬單位使用機關管理系統之工作人員查閱的指南" }
+          },
+          "line3": {
+            "heading": { "string": "成員報告指南" },
+            "description": { "string": "有關如何閱讀您的成員報告的指南" }
+          }
+        }
+      },
+      "section4": {
+        "heading": { "string": "支援窗口" },
+        "text": { "string": "如果需要有關會員入口網站的協助或有疑問，請連絡：" },
+        "bullet1": {
+          "text": { "string": "您的" },
+          "linkText": { "string": "聯盟領導組織" }
+        },
+        "bullet2": {
+          "text": { "string": "或電子郵件：" },
+          "email": { "string": "membership@orcid.org" }
+        }
+      }
+    },
+    "alert": {
+      "thisSiteIsFor": {
+        "string": "此網站僅供 ORCID 成員組織的管理員使用，並獨立於 ORCID 註冊檔之外。請至 ORCID 註冊檔"
+      },
+      "signIntoOrcid": { "string": "登入您的 ORCID 紀錄" }
+    },
+    "logged": {
+      "message": { "string": "您已以「{{username}}」使用者身分登入。" }
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "error": {
+    "assertion": {
+      "validation": {
+        "duplicate": { "string": "重複的所屬單位。此所屬單位已建立過了。" }
+      }
+    }
+  },
+  "gatewayApp": {
+    "assertionServiceAssertion": {
+      "home": {
+        "title": { "string": "所屬單位" },
+        "createLabel": { "string": "新增機關" },
+        "createOrEditLabel": { "string": "新增或編輯機關" },
+        "notFound": { "string": "找不到任何機關" },
+        "uploadLabel": { "string": "從 CSV 匯入所屬單位" },
+        "getLinks": { "string": "下載許可連結" },
+        "generateReport": { "string": "下載機關狀態報告" },
+        "exportForEdit": { "string": "下載機關以編輯" },
+        "forHelpTroubleshooting": {
+          "string": "如果您需要協助疑難排解此錯誤，請連絡您的聯盟領導人或 membership@orcid.org。請在下方附上錯誤訊息的螢幕擷取畫面。"
+        }
+      },
+      "delete": {
+        "question": { "string": "您確定要刪除 {{ email }} 的這個所屬機構嗎？" },
+        "note": { "string": "此所屬單位也將從用戶的 ORCID 記錄中刪除。" },
+        "noteRevoked": {
+          "string": "此機關將會自成員入口刪除，但仍會保留於 ORCID中。使用者已撤銷您對他們 ORCID 紀錄的存取權限，您已不再擁有自他們的 ORCID 紀錄上刪除此物件的許可。"
+        },
+        "error": { "string": "抱歉，此所屬單位無法刪除。" },
+        "userRevokedAccess": {
+          "string": "使用者已撤銷您對他們 ORCID 紀錄的存取權限，您已不再擁有在 ORCID 上編輯或刪除此物件的許可。"
+        }
+      },
+      "detail": {
+        "title": { "string": "機關詳細資訊" },
+        "org": { "string": "組織" }
+      },
+      "import": {
+        "title": { "string": "匯入機關" },
+        "label": { "string": "請選擇欲上傳的 CSV 檔案" },
+        "filePath": { "string": "檔案路徑" },
+        "success": { "string": "成功匯入 CSV。" },
+        "added": { "string": "已新增所屬機構" },
+        "updated": { "string": "已更新的機關" },
+        "deleted": { "string": "已刪除機關" },
+        "duplicates": { "string": "已忽略副本(們)" },
+        "errors": {
+          "label": { "string": "糟糕！在處理您的資料時發生了問題。請修正下列錯誤並再試一次" }
+        }
+      },
+      "addedToOrcid": { "string": "已新增至 ORCID" },
+      "updatedInOrcid": { "string": "已於 ORCID 中更新" },
+      "affiliationData": { "string": "機關資料" },
+      "affiliationSection": { "string": "機關類別" },
+      "departmentName": { "string": "系所" },
+      "id": { "string": "編碼" },
+      "roleTitle": { "string": "角色／職稱" },
+      "url": { "string": "網址" },
+      "startDate": { "string": "開始日期" },
+      "startYear": { "string": "開始年份" },
+      "startMonth": { "string": "開始月份" },
+      "startDay": { "string": "開始日" },
+      "endDate": { "string": "結束日期" },
+      "endYear": { "string": "結束年份" },
+      "endMonth": { "string": "結束月份" },
+      "endDay": { "string": "結束日" },
+      "orgName": { "string": "組織名稱" },
+      "orgCountry": { "string": "國家" },
+      "orgCity": { "string": "城市" },
+      "orgRegion": { "string": "州／地區" },
+      "disambiguatedOrgId": { "string": "組織 ID" },
+      "disambiguationSource": { "string": "組織編碼來源" },
+      "externalId": { "string": "外部編碼" },
+      "externalIdType": { "string": "外部識別碼類別" },
+      "externalIdUrl": { "string": "外部編碼網址" },
+      "putCode": { "string": "放置代碼" },
+      "created": { "string": "已創建" },
+      "modified": { "string": "已修改" },
+      "status": { "string": "狀態" },
+      "deletedFromORCID": { "string": "從 ORCID 中刪除" },
+      "sent": { "string": "已寄出" },
+      "adminId": { "string": "管理者編碼" },
+      "email": { "string": "使用者電子郵件地址" },
+      "orcidId": { "string": "ORCID 編碼" },
+      "year": { "string": "年份" },
+      "month": { "string": "月份" },
+      "day": { "string": "天" },
+      "permissionLink": { "string": "許可連結" },
+      "copyClipboard": { "string": "已複製到剪貼簿" },
+      "copySuccess": { "string": "已複製到剪貼簿" },
+      "details": { "string": "觀看細節" },
+      "updateNote": {
+        "string": "提醒：當判定成功儲存後，請記得下載並發送許可用連結給您的研究者。"
+      },
+      "uploadNote": {
+        "string": "注意：上傳完成後，請勿忘記下載並向您的研究人員傳送權限連結。"
+      }
+    },
+    "assertion": {
+      "firstName": { "string": "名字" },
+      "lastName": { "string": "姓氏" },
+      "email": { "string": "電子郵件" },
+      "affiliationSection": { "string": "機關類別" },
+      "orgCountry": { "string": "組織國家" },
+      "orgCity": { "string": "組織所在城市" },
+      "orgName": { "string": "組織名稱" },
+      "disambiguatedOrgId": { "string": "組織 id" }
+    }
+  },
+  "assertionServiceApp": {
+    "affiliation": {
+      "created": { "string": "已建立所屬單位" },
+      "updated": { "string": "已更新所屬單位" },
+      "deleted": { "string": "已刪除所屬單位" }
+    }
+  }
+}

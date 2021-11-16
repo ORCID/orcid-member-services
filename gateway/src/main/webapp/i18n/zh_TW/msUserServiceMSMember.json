@@ -1,0 +1,55 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSMember": {
+      "home": {
+        "title": { "string": "管理成員" },
+        "createLabel": { "string": "新增會員" },
+        "createOrEditLabel": { "string": "新增或編輯會員" },
+        "notFound": { "string": "沒有可顯示的成員" },
+        "uploadLabel": { "string": "由 CSV 檔案匯入成員" }
+      },
+      "delete": {
+        "question": { "string": "您確定要從成員入口中刪除 {{ clientName }} 嗎？" },
+        "anyUsersAndAffiliations": {
+          "string": "任何與此成員連結的使用者和機關也將會一併自成員入口中刪除，但已新增至 ORCID 註冊檔的資料仍將保留在 ORCID 中。"
+        }
+      },
+      "detail": {
+        "title": { "string": "成員詳細資訊" }
+      },
+      "import": {
+        "title": { "string": "匯入會員" },
+        "label": { "string": "請選擇欲上傳的 CSV 檔案" },
+        "emptyFile": { "string": "沒有可以上傳的檔案。請選擇一個檔案。" },
+        "filePath": { "string": "檔案路徑" },
+        "errors": {
+          "label": { "string": "糟糕！在處理您的資料時發生了問題。請修正下列錯誤並再試一次" }
+        }
+      },
+      "clientId": {
+        "string": "用戶端識別碼",
+        "note": { "string": "Note: Client ID must have Member OBO enabled AND" },
+        "addedAsRedirect": { "string": "added as a Redirect URI in" }
+      },
+      "clientName": { "string": "成員姓名" },
+      "clientSecret": { "string": "用戶端密碼" },
+      "salesforceId": { "string": "銷售人員編碼" },
+      "parentSalesforceId": { "string": "母銷售人員編碼" },
+      "isConsortiumLead": { "string": "聯合代表" },
+      "assertionServiceEnabled": { "string": "判斷提示已啟用" },
+      "createdBy": { "string": "建立者" },
+      "createdDate": { "string": "已建立" },
+      "lastModifiedBy": { "string": "最後修改者" },
+      "lastModifiedDate": { "string": "上次變更" },
+      "type": { "string": "類別" },
+      "status": { "string": "狀態" }
+    }
+  },
+  "memberServiceApp": {
+    "member": {
+      "created": { "string": "已建立會員" },
+      "updated": { "string": "成功更新會員" },
+      "deleted": { "string": "成功刪除成員" }
+    }
+  }
+}

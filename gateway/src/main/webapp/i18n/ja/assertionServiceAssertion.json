@@ -1,0 +1,118 @@
+{
+  "error": {
+    "assertion": {
+      "validation": {
+        "duplicate": { "string": "アフィリエーションを複製する。こちらのアフィリエーションは既に作成されています。" }
+      }
+    }
+  },
+  "gatewayApp": {
+    "assertionServiceAssertion": {
+      "home": {
+        "title": { "string": "アフィリエーション" },
+        "createLabel": { "string": "アフィリエーションを追加する" },
+        "createOrEditLabel": { "string": "所属を追加または編集" },
+        "notFound": { "string": "所属が見つかりません" },
+        "uploadLabel": { "string": "CSVから所属をインポート" },
+        "getLinks": { "string": "パーミッションリンクのダウンロード" },
+        "generateReport": { "string": "アフィリエーションステータスレポートをダウンロード" },
+        "exportForEdit": { "string": "編集用アフィリエーションをダウンロードする" },
+        "forHelpTroubleshooting": {
+          "string": "このエラーのトラブルシューティングについてサポートが必要な場合は、コンソーシアムの責任者またはmembership@orcid.orgにお問い合わせください。以下のエラーメッセージのスクリーンショットを含めてください。"
+        }
+      },
+      "delete": {
+        "question": { "string": "{{ email }} へのこちらのアフィリエーションを本当に削除しますか。" },
+        "note": { "string": "このアフィリエーションは、ユーザーのORCIDレコードからも削除されます。" },
+        "noteRevoked": {
+          "string": "このアフィリエーションはメンバーポータルから削除されますが、ORCIDには残ります。ユーザーがORCIDレコードへのアクセスを取り消したため、あなたがこのアイテムをORCIDレコードから削除する権限がなくなりました。"
+        },
+        "error": { "string": "申し訳ありませんが、このアフィリエーションは削除できませんでした。" },
+        "userRevokedAccess": {
+          "string": "ユーザーがORCIDレコードへのアクセスを取り消したため、ORCIDでこのアイテムを編集または削除する権限がなくなりました。"
+        }
+      },
+      "detail": {
+        "title": { "string": "所属の詳細" },
+        "org": { "string": "組織" }
+      },
+      "import": {
+        "title": { "string": "所属をインポート" },
+        "label": { "string": "アップロードするCSVファイルを選択してください" },
+        "filePath": { "string": "ファイルパス" },
+        "success": { "string": "CSVのインポートに成功しました。" },
+        "added": { "string": "アフィリエーションが追加されました" },
+        "updated": { "string": "アフィリエーションが更新されました" },
+        "deleted": { "string": "アフィリエーションが削除されました" },
+        "duplicates": { "string": "重複が無視されました" },
+        "errors": {
+          "label": { "string": "おっと！あなたのデータの処理で問題がありました。以下のエラーを修正して、もう一度やり直してください" }
+        }
+      },
+      "addedToOrcid": { "string": "ORCIDに追加されました" },
+      "updatedInOrcid": { "string": "ORCID で更新されました" },
+      "affiliationData": { "string": "アフィリエーション データ" },
+      "affiliationSection": { "string": "アフィリエーションタイプ" },
+      "departmentName": { "string": "部" },
+      "id": { "string": "ID" },
+      "roleTitle": { "string": "役割 / 役職" },
+      "url": { "string": "URL" },
+      "startDate": { "string": "開始日付" },
+      "startYear": { "string": "開始年" },
+      "startMonth": { "string": "月を開始する" },
+      "startDay": { "string": "開始日" },
+      "endDate": { "string": "終了日付" },
+      "endYear": { "string": "終了年" },
+      "endMonth": { "string": "終了月" },
+      "endDay": { "string": "終了日" },
+      "orgName": { "string": "組織名" },
+      "orgCountry": { "string": "国" },
+      "orgCity": { "string": "市" },
+      "orgRegion": { "string": "州/地域" },
+      "disambiguatedOrgId": { "string": "組織ID" },
+      "disambiguationSource": { "string": "組織IDソース" },
+      "externalId": { "string": "外部ID" },
+      "externalIdType": { "string": "外部IDタイプ" },
+      "externalIdUrl": { "string": "外部 ID の Url" },
+      "putCode": { "string": "コードを入力する" },
+      "created": { "string": "作成されました" },
+      "modified": { "string": "変更しました" },
+      "status": { "string": "ステータス" },
+      "deletedFromORCID": { "string": "ORCIDから削除されました" },
+      "sent": { "string": "送信されました" },
+      "adminId": { "string": "管理者ID" },
+      "email": { "string": "ユーザーのEメール" },
+      "orcidId": { "string": "ORCID iD" },
+      "year": { "string": "年" },
+      "month": { "string": "月" },
+      "day": { "string": "日" },
+      "permissionLink": { "string": "パーミッションリンク：" },
+      "copyClipboard": { "string": "クリップボードにコピー" },
+      "copySuccess": { "string": "クリップボードにコピーされました" },
+      "details": { "string": "詳細を表示" },
+      "updateNote": {
+        "string": "注 : アサーションがいったん保存された際には、ダウンロードして、許可用リンクをお客様のリサーチャーに送信することを忘れないようお願いいたします。"
+      },
+      "uploadNote": {
+        "string": "ご注意：アップロードが完了したら、許可リンクをダウンロードして研究者に送信することを忘れないでください。"
+      }
+    },
+    "assertion": {
+      "firstName": { "string": "名" },
+      "lastName": { "string": "姓" },
+      "email": { "string": "Eメール" },
+      "affiliationSection": { "string": "アフィリエーションタイプ" },
+      "orgCountry": { "string": "組織の国" },
+      "orgCity": { "string": "組織の都市" },
+      "orgName": { "string": "組織名" },
+      "disambiguatedOrgId": { "string": "組織 id" }
+    }
+  },
+  "assertionServiceApp": {
+    "affiliation": {
+      "created": { "string": "アフィリエーションが作成されました" },
+      "updated": { "string": "アフィリエーションが更新されました" },
+      "deleted": { "string": "アフィリエーションが削除されました" }
+    }
+  }
+}

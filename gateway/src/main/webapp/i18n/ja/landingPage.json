@@ -1,0 +1,29 @@
+{
+  "landingPage": {
+    "title": { "string": "ORCIDメンバーサービス" },
+    "connectionExists": {
+      "youHaveAlready": { "string": "お客様は既に許可されています" },
+      "permissionToUpdate": { "string": "ORCIDレコードを更新する権限" },
+      "youDoNot": { "string": "現時点では、これ以上何もする必要はありません。" },
+      "differentUser": {
+        "string": "こちらの承認用リンクはすでに使用されています。{{ clientName }} に連絡して、新しい承認用リンクを入手してください。"
+      }
+    },
+    "error": {
+      "somethingWentWrong": { "string": "おっと、なにか問題が発生し、ORCID iDを取得できませんでした" }
+    },
+    "denied": {
+      "youHaveDenied": { "string": "おっと、アクセスを拒否しました。" },
+      "willNotBeAble": { "string": "では ORCID の記録を更新できません。" },
+      "ifThisWas": { "string": "こちらが間違いである場合には、以下のボタンをクリックして、アクセスを許可してください。" },
+      "grantAccess": { "string": "{{ clientName }}が私のORCIDレコードを更新できるようにする" }
+    },
+    "success": {
+      "thanks": { "string": "{{ given_name }} {{ family_name }}さん、ありがとうございます" },
+      "youHaveSuccessfully": {
+        "string": "{{ clientName }}にあなたのORCIDレコードを更新する権限が正常に付与されました。あなたのレコードは、アフィリエーション情報で更新されます。"
+      },
+      "ifYouFind": { "string": "ORCIDレコードに追加されたデータが正しくないことを発見した場合は、{{ clientName }}にご連絡ください。" }
+    }
+  }
+}

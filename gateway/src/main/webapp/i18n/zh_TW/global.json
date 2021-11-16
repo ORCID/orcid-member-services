@@ -1,0 +1,193 @@
+{
+  "global": {
+    "title": { "string": "ORCID 成員入口" },
+    "by": { "string": "由" },
+    "false": { "string": "假" },
+    "true": { "string": "真" },
+    "browsehappy": {
+      "string": "您使用的是 <strong> 過期的 </strong> 瀏覽器。請 <a href=\"http://browsehappy.com/?locale=en\"> 更新您的瀏覽器 </a> 以獲得更佳瀏覽體驗。"
+    },
+    "warning": { "string": "警告！" },
+    "isATestEnvironment": {
+      "string": "是一個與 ORCID 登錄檔測試用環境連結的 ORCID 成員入口測試用環境。"
+    },
+    "menu": {
+      "memberPortal": { "string": "會員入口網站" },
+      "beta": { "string": "測試版" },
+      "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
+      "entities": {
+        "main": { "string": "會員工具" },
+        "assertionServiceAffiliationManager": { "string": "機關管理者" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster 會在此處新增額外的物件（不要翻譯！）" },
+        "member": { "string": "成員" }
+      },
+      "report": {
+        "member": { "string": "會員報告" },
+        "integration": { "string": "整合報告" },
+        "consortium": { "string": "聯合報告" }
+      },
+      "account": {
+        "main": { "string": "帳號" },
+        "settings": { "string": "設定" },
+        "password": { "string": "密碼" },
+        "sessions": { "string": "對話" },
+        "login": { "string": "登入" },
+        "logout": { "string": "登出" },
+        "loggedInAs": { "string": "已登入為" },
+        "logoutAs": { "string": "登出為" },
+        "register": { "string": "註冊" }
+      },
+      "admin": {
+        "main": { "string": "管理" },
+        "msUserServiceMSUser": { "string": "管理用戶" },
+        "msUserServiceMSMember": { "string": "管理成員" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "dev": {
+        "main": { "string": "系統監控" },
+        "gateway": { "string": "閘道" },
+        "tracker": { "string": "使用者追蹤器" },
+        "metrics": { "string": "度量" },
+        "health": { "string": "健康" },
+        "configuration": { "string": "設定" },
+        "logs": { "string": "日誌" },
+        "audits": { "string": "審計" },
+        "apidocs": { "string": "應用程式介面" },
+        "database": { "string": "資料庫" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster 會在此處新增額外的選單物件（不要翻譯！）" }
+      },
+      "language": { "string": "語言" }
+    },
+    "form": {
+      "username.label": { "string": "使用者名稱" },
+      "username.placeholder": { "string": "您的用戶名稱" },
+      "currentpassword.label": { "string": "目前密碼" },
+      "currentpassword.placeholder": { "string": "目前的密碼" },
+      "newpassword.label": { "string": "新密碼" },
+      "newpassword.placeholder": { "string": "新密碼" },
+      "confirmpassword.label": { "string": "新的確認用密碼" },
+      "confirmpassword.placeholder": { "string": "確認新密碼" },
+      "email.label": { "string": "電子郵件" },
+      "email.placeholder": { "string": "您的電子郵件" },
+      "search": { "string": "搜尋......" }
+    },
+    "messages": {
+      "info": {
+        "authenticated": {
+          "prefix": { "string": "如果您想要" },
+          "link": { "string": "登入" },
+          "suffix": {
+            "string": "，您可以嘗試使用預設帳號：<br/> - 管理者 (login=\"admin\" and password=\"admin\") <br/> - 使用者 (login=\"user\" and password=\"user\")。"
+          }
+        },
+        "register": {
+          "noaccount": { "string": "您尚未擁有帳號嗎？" },
+          "link": { "string": "註冊新帳戶" }
+        }
+      },
+      "error": {
+        "dontmatch": { "string": "密碼與確認用密碼不相符！" }
+      },
+      "validate": {
+        "newpassword": {
+          "required": { "string": "需要您的密碼。" },
+          "minlength": { "string": "您的密碼至少必須有 4 個字元。" },
+          "maxlength": { "string": "您的密碼不能超過 50 個字元。" },
+          "strength": { "string": "密碼強度：" }
+        },
+        "confirmpassword": {
+          "required": { "string": "需要您的確認密碼。" },
+          "minlength": { "string": "您的確認用密碼必須至少為 4 個字元。" },
+          "maxlength": { "string": "您的確認用密碼長度不能超過 50 個字元。" }
+        },
+        "email": {
+          "required": { "string": "需要您的電子郵件。" },
+          "invalid": { "string": "您的電子郵件無效。" },
+          "minlength": { "string": "您的電子郵件需至少有 5 個字元。" },
+          "maxlength": { "string": "您的電子郵件不能超過 50 字元。" }
+        }
+      }
+    },
+    "field": {
+      "id": { "string": "編碼" }
+    },
+    "ribbon": {
+      "dev": { "string": "開發" }
+    },
+    "item-count": { "string": "顯示 {{total}} 項物件中的 {{first}} - {{second}} 項。" }
+  },
+  "entity": {
+    "action": {
+      "addblob": { "string": "新增二進位大型物件" },
+      "addimage": { "string": "新增圖片" },
+      "back": { "string": "回去" },
+      "cancel": { "string": "取消" },
+      "close": { "string": "關閉" },
+      "delete": { "string": "刪除" },
+      "delete-from-orcid": { "string": "從 ORCID 中刪除" },
+      "edit": { "string": "編輯" },
+      "open": { "string": "開啟" },
+      "save": { "string": "儲存" },
+      "continue": { "string": "繼續" },
+      "upload": { "string": "上傳" },
+      "activate": { "string": "重新發送啟用電子郵件" },
+      "view": { "string": "瀏覽" }
+    },
+    "detail": {
+      "field": { "string": "欄位" },
+      "value": { "string": "數值" }
+    },
+    "delete": {
+      "title": { "string": "確認刪除" },
+      "error": { "string": "糟糕，發生了一些錯誤！" }
+    },
+    "changeOwnership": {
+      "title": { "string": "確認所有權變更" },
+      "error": { "string": "糟糕，發生了一些錯誤！" }
+    },
+    "validation": {
+      "required": { "string": "此為必要欄位。" },
+      "minlength": { "string": "此欄位最少必須有 {{min}} 個字元。" },
+      "maxlength": { "string": "此欄位不能超過 {{ max }} 個字元。" },
+      "min": { "string": "此欄位至少必須為 {{ min }}。" },
+      "max": { "string": "此欄位不能超過 {{ max }}。" },
+      "minbytes": { "string": "此欄位最少必須有 {{min}} 個位元組。" },
+      "maxbytes": { "string": "此欄位不能超過 {{ max }} 個位元組。" },
+      "pattern": { "string": "此欄位應遵循 {{ pattern }} 的模式。" },
+      "number": { "string": "此欄位必須為數字。" },
+      "datetimelocal": { "string": "此欄位必須為日期與時間。" },
+      "patternLogin": { "string": "此欄位只能包含文字、數字與電子郵件地址。" },
+      "email": { "string": "請提供有效的電子郵件位址。" },
+      "endDate": { "string": "開始日期不能晚於結束日期。" },
+      "disambiguatedOrgId": {
+        "string": "此為必要欄位。GRID 組織識別碼應以 grid 開頭。例如 grid.12344 或應為一個有效的 grid URL，RINGGOLD 組織識別碼應為一個數字。ROR 識別碼必須是以 0 為開頭的 9 個字元。"
+      }
+    }
+  },
+  "error": {
+    "internalServerError": { "string": "內部伺服器錯誤" },
+    "server.not.reachable": { "string": "無法連接伺服器" },
+    "url.not.found": { "string": "沒有找到" },
+    "notnull": { "string": "{{ fieldName }} 欄位不能為空白！" },
+    "size": { "string": "{{ fieldName }} 欄位未滿足最大 / 最小的大小條件！" },
+    "userexists": { "string": "登入名稱已使用！" },
+    "emailexists": { "string": "電子郵件地址已使用！" },
+    "idexists": { "string": "新的 {{ entityName }} 不能已擁有編碼" },
+    "delete.auth.user": { "string": "無法刪除目前的使用者。" },
+    "delete.main.contact": { "string": "無法刪除組織擁有者。" },
+    "delete.last.admin": { "string": "無法刪除最後一個管理者。" },
+    "member.no.admin.allowed": { "string": "管理員使用者無法與此成員連結" },
+    "clientidinvalid": {
+      "string": "無效的客戶端識別碼。客戶端識別碼的格式應為 XXXX-XXXX-XXXX-XXXX 或 APP-XXXXXXXXXXXXXXXX。X 可以是數字或大寫字元"
+    },
+    "idnull": { "string": "無效的識別碼" }
+  },
+  "footer": {
+    "footerLabel": { "string": "頁腳" },
+    "privacyPolicy": { "string": "隱私權政策" },
+    "termsOfUse": { "string": "使用條款" },
+    "contactUs": { "string": "連絡我們" },
+    "orcidRegistry": { "string": "ORCID 註冊" },
+    "help": { "string": "說明" }
+  }
+}

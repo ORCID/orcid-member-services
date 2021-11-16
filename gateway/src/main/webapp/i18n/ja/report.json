@@ -1,0 +1,15 @@
+{
+  "gatewayApp": {
+    "report": {
+      "member": {
+        "title": { "string": "メンバーのレポート" }
+      },
+      "integration": {
+        "title": { "string": "統合レポート" }
+      },
+      "consortium": {
+        "title": { "string": "コンソーシアムレポート" }
+      }
+    }
+  }
+}

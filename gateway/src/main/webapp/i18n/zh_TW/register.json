@@ -1,0 +1,24 @@
+{
+  "register": {
+    "title": { "string": "註冊" },
+    "form": {
+      "button": { "string": "登記" }
+    },
+    "messages": {
+      "validate": {
+        "login": {
+          "required": { "string": "需要您的用戶名稱。" },
+          "minlength": { "string": "您的用戶名稱需至少有 1 個字元。" },
+          "maxlength": { "string": "您的使用者名稱長度不能超過 50 個字元。" },
+          "pattern": { "string": "您的使用者名稱只能包含文字和數字。" }
+        }
+      },
+      "success": { "string": "<strong>已儲存登記！</strong>請查看您信箱中的確認信。" },
+      "error": {
+        "fail": { "string": "<strong> 註冊失敗！</strong> 請稍後再試。" },
+        "userexists": { "string": "<strong>登入名稱已註冊！</strong> 請選擇其他名稱。" },
+        "emailexists": { "string": "<strong> 電子郵件地址已使用！</strong> 請選擇其他的電子郵件地址。" }
+      }
+    }
+  }
+}

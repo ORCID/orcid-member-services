@@ -1,0 +1,193 @@
+{
+  "global": {
+    "title": { "string": "ORCID メンバーポータル" },
+    "by": { "string": "による" },
+    "false": { "string": "正しくありません" },
+    "true": { "string": "true" },
+    "browsehappy": {
+      "string": "<strong>古い</strong>ブラウザを使用しています。<a href=\"http://browsehappy.com/?locale=en\">ブラウザをアップグレード</a>して、エクスペリエンスを向上させてください。"
+    },
+    "warning": { "string": "警告！" },
+    "isATestEnvironment": {
+      "string": "は、ORCIDレジストリテスト環境に接続されるORCIDメンバーポータルのテスト環境です"
+    },
+    "menu": {
+      "memberPortal": { "string": "メンバーポータル" },
+      "beta": { "string": "ベータ" },
+      "jhipster-needle-menu-add-element": { "string": "JHipsterはここにメニューエントリーを追加します（翻訳しないでください！）" },
+      "entities": {
+        "main": { "string": "メンバーツール" },
+        "assertionServiceAffiliationManager": { "string": "アフィリエーションマネージャー" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster はこちらにエンティティをさらに追加します ( 翻訳しないで下さい )" },
+        "member": { "string": "メンバー" }
+      },
+      "report": {
+        "member": { "string": "メンバーレポート" },
+        "integration": { "string": "統合レポート" },
+        "consortium": { "string": "コンソーシアムレポート" }
+      },
+      "account": {
+        "main": { "string": "アカウント" },
+        "settings": { "string": "設定" },
+        "password": { "string": "パスワード" },
+        "sessions": { "string": "セッション" },
+        "login": { "string": "サインイン" },
+        "logout": { "string": "サインアウト" },
+        "loggedInAs": { "string": "としてログインしました" },
+        "logoutAs": { "string": "以下としてログアウト：" },
+        "register": { "string": "登録する" }
+      },
+      "admin": {
+        "main": { "string": "管理" },
+        "msUserServiceMSUser": { "string": "ユーザーを管理する" },
+        "msUserServiceMSMember": { "string": "メンバーを管理する" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipsterはここにメニューエントリを追加します（翻訳しないでください！）" }
+      },
+      "dev": {
+        "main": { "string": "システムの監視" },
+        "gateway": { "string": "ゲートウェイ" },
+        "tracker": { "string": "ユーザートラッカー" },
+        "metrics": { "string": "指標" },
+        "health": { "string": "健康" },
+        "configuration": { "string": "コンフィグレーション" },
+        "logs": { "string": "ログ" },
+        "audits": { "string": "監査" },
+        "apidocs": { "string": "API" },
+        "database": { "string": "データベース" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster はこちらにメニュー入力をさらに追加します ( 翻訳しないで下さい )" }
+      },
+      "language": { "string": "言語" }
+    },
+    "form": {
+      "username.label": { "string": "ユーザー名" },
+      "username.placeholder": { "string": "あなたのユーザー名" },
+      "currentpassword.label": { "string": "現在のパスワード" },
+      "currentpassword.placeholder": { "string": "現在のパスワード" },
+      "newpassword.label": { "string": "新しいパスワード" },
+      "newpassword.placeholder": { "string": "新しいパスワード" },
+      "confirmpassword.label": { "string": "新しいパスワードの確認" },
+      "confirmpassword.placeholder": { "string": "新しいパスワードの確認" },
+      "email.label": { "string": "メール" },
+      "email.placeholder": { "string": "あなたのEメール" },
+      "search": { "string": "検索する..." }
+    },
+    "messages": {
+      "info": {
+        "authenticated": {
+          "prefix": { "string": "あなたがしたい場合は" },
+          "link": { "string": "サインイン" },
+          "suffix": {
+            "string": "、デフォルトアカウントを試すことができます：<br/>- 管理者（ログイン=「admin」、パスワード=「admin」）<br/>- ユーザー（ログイン=「user」、パスワード=「user」）。"
+          }
+        },
+        "register": {
+          "noaccount": { "string": "まだアカウントをお持ちではありませんか？" },
+          "link": { "string": "新しいアカウントを登録する" }
+        }
+      },
+      "error": {
+        "dontmatch": { "string": "パスワードとその確認が一致しません！" }
+      },
+      "validate": {
+        "newpassword": {
+          "required": { "string": "パスワードが必要です。" },
+          "minlength": { "string": "パスワードは4文字以上である必要があります。" },
+          "maxlength": { "string": "パスワードは 50 文字より長くすることはできません" },
+          "strength": { "string": "パスワードの強度：" }
+        },
+        "confirmpassword": {
+          "required": { "string": "確認パスワードが必要です。" },
+          "minlength": { "string": "確認用パスワード には少なくとも 4 文字が必要です。" },
+          "maxlength": { "string": "確認パスワードは50文字を超えることはできません。" }
+        },
+        "email": {
+          "required": { "string": "あなたのEメールが必要です。" },
+          "invalid": { "string": "Eメールが無効です。" },
+          "minlength": { "string": "e メールには少なくとも 5 文字必要です。" },
+          "maxlength": { "string": "Eメールを50文字超にはできません。" }
+        }
+      }
+    },
+    "field": {
+      "id": { "string": "ID" }
+    },
+    "ribbon": {
+      "dev": { "string": "部" }
+    },
+    "item-count": { "string": "{{total}}アイテムの{{first}} - {{second}}を表示しています。" }
+  },
+  "entity": {
+    "action": {
+      "addblob": { "string": "ブロブを追加する" },
+      "addimage": { "string": "画像を追加する" },
+      "back": { "string": "戻る" },
+      "cancel": { "string": "キャンセル" },
+      "close": { "string": "閉じる" },
+      "delete": { "string": "削除する" },
+      "delete-from-orcid": { "string": "orcidから削除する" },
+      "edit": { "string": "編集" },
+      "open": { "string": "開く" },
+      "save": { "string": "保存する" },
+      "continue": { "string": "継続する" },
+      "upload": { "string": "アップロード" },
+      "activate": { "string": "有効化Eメールを再送する" },
+      "view": { "string": "見る" }
+    },
+    "detail": {
+      "field": { "string": "フィールド" },
+      "value": { "string": "値" }
+    },
+    "delete": {
+      "title": { "string": "削除を確認する" },
+      "error": { "string": "おっと、なにか問題が発生しました！" }
+    },
+    "changeOwnership": {
+      "title": { "string": "所有権変更を確認する" },
+      "error": { "string": "おっと、なにか問題が発生しました！" }
+    },
+    "validation": {
+      "required": { "string": "この欄は必須です。" },
+      "minlength": { "string": "この欄は、{{ min }}文字以上である必要があります。" },
+      "maxlength": { "string": "この欄は、{{ max }}文字より長くすることはできません。" },
+      "min": { "string": "この欄は{{ min }}以上である必要があります。" },
+      "max": { "string": "こちらのフィールドは {{ max }} より多くすることができません。" },
+      "minbytes": { "string": "この欄は{{ min }}バイト以上である必要があります。" },
+      "maxbytes": { "string": "こちらのフィールドは {{ max }} バイトを超えることができません。" },
+      "pattern": { "string": "この欄は、{{ pattern }}のパターンに従う必要があります。" },
+      "number": { "string": "こちらのフィールドは数字である必要があります。" },
+      "datetimelocal": { "string": "こちらのフィールドは日付と時間である必要があります。" },
+      "patternLogin": { "string": "このフィールドには、文字、数字および e メールアドレスのみを含めることができます。" },
+      "email": { "string": "有効な e メールアドレスをご連絡ください" },
+      "endDate": { "string": "開始日を終了日より後にすることはできません。" },
+      "disambiguatedOrgId": {
+        "string": "こちらのフィールドが必要です。GRID 組織 ID は、grid.12344 のように grid. で始まる必要があります。あるいは有効な grid URL である必要があります。RINGGOLD 組織 ID は数字である必要があります。ROR ID は 0 から始まり、9 文字である必要があります。"
+      }
+    }
+  },
+  "error": {
+    "internalServerError": { "string": "内部サーバーエラー" },
+    "server.not.reachable": { "string": "サーバーに到達できません" },
+    "url.not.found": { "string": "見つかりませんでした" },
+    "notnull": { "string": "フィールド  {{ fieldName }} は空欄にすることができません。" },
+    "size": { "string": "{{ fieldName }}欄が最小/最大サイズの要件を満たしていません！" },
+    "userexists": { "string": "ログイン名は既に使われています。" },
+    "emailexists": { "string": "メールアドレスが既に使用されています！" },
+    "idexists": { "string": "新しい{{ entityName }}は、まだIDを持つことができません" },
+    "delete.auth.user": { "string": "現在のユーザーを削除できません。" },
+    "delete.main.contact": { "string": "組織の所有者を削除できません。" },
+    "delete.last.admin": { "string": "最終管理者は削除できません。" },
+    "member.no.admin.allowed": { "string": "管理者ユーザーをこのメンバーに関連付けることはできません。" },
+    "clientidinvalid": {
+      "string": "無効なクライアント ID です。クライアント ID は XXXX-XXXX-XXXX-XXXX または APP-XXXXXXXXXXXXXXXX 形式である必要があります。X は数字、または大文字とすることができます"
+    },
+    "idnull": { "string": "無効なID" }
+  },
+  "footer": {
+    "footerLabel": { "string": "フッタ" },
+    "privacyPolicy": { "string": "個人情報保護方針" },
+    "termsOfUse": { "string": "利用規約" },
+    "contactUs": { "string": "お問い合わせ" },
+    "orcidRegistry": { "string": "ORCID レジストリ" },
+    "help": { "string": "ヘルプ" }
+  }
+}

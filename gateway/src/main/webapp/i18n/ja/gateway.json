@@ -1,0 +1,15 @@
+{
+  "gateway": {
+    "title": { "string": "ゲートウェイ" },
+    "routes": {
+      "title": { "string": "現在経路" },
+      "url": { "string": "URL" },
+      "service": { "string": "サービス" },
+      "servers": { "string": "利用可能なサーバー" },
+      "error": { "string": "警告：利用可能なサーバーがありません！" }
+    },
+    "refresh": {
+      "button": { "string": "再読み込みする" }
+    }
+  }
+}
