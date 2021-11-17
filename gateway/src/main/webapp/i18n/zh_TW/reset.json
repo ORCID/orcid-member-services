@@ -1,0 +1,40 @@
+{
+  "reset": {
+    "request": {
+      "title": { "string": "重設您的密碼" },
+      "form": {
+        "button": { "string": "重設密碼" }
+      },
+      "messages": {
+        "info": { "string": "輸入您使用的電子郵件地址以登錄" },
+        "success": { "string": "請查收您的電子郵件，以獲得重設密碼的相關資訊。" },
+        "notfound": { "string": "<strong> 電子郵件地址尚未登錄！</strong> 請在檢查後再試一次" }
+      }
+    },
+    "finish": {
+      "title": { "string": "重設密碼" },
+      "form": {
+        "button": { "string": "認證新密碼" }
+      },
+      "messages": {
+        "info": { "string": "請選擇一個新密碼" },
+        "success": { "string": "<strong>已重設您的密碼。</strong> 請" },
+        "keymissing": { "string": "缺少啟動金鑰" },
+        "keyinvalid": { "string": "啟用金鑰無效。" },
+        "keyexpired": {
+          "string": "啟動金鑰已過期。",
+          "paragraph1": {
+            "string": "ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired."
+          },
+          "paragraph2": {
+            "string": "To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address."
+          },
+          "paragraph3": {
+            "string": "If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org."
+          }
+        },
+        "error": { "string": "無法重設您的密碼。請記得密碼要求只在 24 小時內有效。" }
+      }
+    }
+  }
+}

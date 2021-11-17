@@ -1,0 +1,67 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSUser": {
+      "home": {
+        "title": { "string": "管理使用者" },
+        "createLabel": { "string": "新增用戶" },
+        "createOrEditLabel": { "string": "新增或編輯使用者" },
+        "notFound": { "string": "沒有可顯示的使用者" },
+        "uploadLabel": { "string": "由 CSV 檔案匯入使用者" }
+      },
+      "delete": {
+        "question": { "string": "你確定要刪除用戶 {{ login }} 嗎？" }
+      },
+      "changeOwnership": {
+        "question": {
+          "string": "您確定要轉移所有權嗎？您即將轉移此組織帳號的所有權。如您為組織擁有者，在轉移完成後就無法繼續使用如管理用戶等行政功能。"
+        }
+      },
+      "detail": {
+        "title": { "string": "用戶細節" }
+      },
+      "sendActivate": {
+        "success": { "string": "已寄出邀請。" },
+        "error": { "string": "無法寄送邀請電子郵件。" }
+      },
+      "import": {
+        "title": { "string": "匯入使用者" },
+        "label": { "string": "請選擇欲上傳的 CSV 檔案" },
+        "filePath": { "string": "檔案路經" },
+        "emptyFile": { "string": "沒有可以上傳的檔案。請選擇一個檔案。" },
+        "errors": {
+          "label": { "string": "糟糕！在處理您的資料時發生了問題。請修正下列錯誤並再試一次" }
+        }
+      },
+      "assertionService": {
+        "enabled": { "string": "已啟用判定" }
+      },
+      "login": { "string": "登入" },
+      "email": { "string": "電子郵件" },
+      "password": { "string": "密碼" },
+      "confirm_password": { "string": "確認用密碼" },
+      "firstName": { "string": "名字" },
+      "lastName": { "string": "姓氏" },
+      "mainContact": { "string": "組織所有人" },
+      "salesforceId": { "string": "組織" },
+      "parentSalesforceId": { "string": "母銷售人員編碼" },
+      "activated": { "string": "已啟用" },
+      "isAdmin": { "string": "管理者" },
+      "createdBy": { "string": "建立者" },
+      "createdDate": { "string": "已創建的" },
+      "lastModifiedBy": { "string": "最後更改者為" },
+      "lastModifiedDate": { "string": "上次變更" }
+    },
+    "userDTO": {
+      "login": { "string": "電子郵件" },
+      "firstName": { "string": "名字" },
+      "lastName": { "string": "姓氏" }
+    }
+  },
+  "userServiceApp": {
+    "user": {
+      "created": { "string": "已創建使用者。已寄送邀請。" },
+      "updated": { "string": "成功更新使用者" },
+      "deleted": { "string": "已成功刪除使用者" }
+    }
+  }
+}

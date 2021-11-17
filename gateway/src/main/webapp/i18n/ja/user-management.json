@@ -1,0 +1,30 @@
+{
+  "userManagement": {
+    "home": {
+      "title": { "string": "ユーザー" },
+      "createLabel": { "string": "新しいユーザーを作成する" },
+      "createOrEditLabel": { "string": "ユーザーを作成または編集する" }
+    },
+    "created": { "string": "識別情報{{ param }}で新しいユーザーが作成されます" },
+    "updated": { "string": "識別情報{{ param }}でユーザーが更新されます" },
+    "deleted": { "string": "{{ param }} 識別子によりユーザーが削除されています" },
+    "delete": {
+      "question": { "string": "本当にユーザー{{ login }}を削除しますか？" }
+    },
+    "detail": {
+      "title": { "string": "ユーザー" }
+    },
+    "login": { "string": "ログイン" },
+    "firstName": { "string": "名" },
+    "lastName": { "string": "姓" },
+    "email": { "string": "E メール" },
+    "activated": { "string": "有効化されました" },
+    "deactivated": { "string": "動作を停止させました" },
+    "profiles": { "string": "プロフィール" },
+    "langKey": { "string": "言語" },
+    "createdBy": { "string": "によって作成されました" },
+    "createdDate": { "string": "作成日付" },
+    "lastModifiedBy": { "string": "変更者：" },
+    "lastModifiedDate": { "string": "変更日付" }
+  }
+}

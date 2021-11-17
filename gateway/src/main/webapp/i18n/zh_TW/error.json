@@ -1,0 +1,31 @@
+{
+  "error": {
+    "title": { "string": "無法處理您的要求" },
+    "subtitle": { "string": "抱歉，出現了錯誤" },
+    "http": {
+      "400": { "string": "錯誤的請求。" },
+      "403": { "string": "您沒有存取此頁面的權限。" },
+      "404": { "string": "此頁面不存在。" },
+      "405": { "string": "此網址不支援您所使用的 HTTP 動詞。" },
+      "500": { "string": "內部伺服器錯誤。" }
+    },
+    "concurrencyFailure": { "string": "其他成員與您同時變更了此資料。系統已拒絕您的更動。" },
+    "validation": { "string": "伺服器發生驗證錯誤。" },
+    "email": { "string": "電子郵件不是有效的格式" },
+    "size": { "string": "未滿足最大 / 最小的大小條件！" },
+    "idused": { "string": "無法消除！此物件已與其他元件連結。" },
+    "pattern": { "string": "此欄位只能包含文字、數字與電子郵件地址。" },
+    "invalidUrl": { "string": "此網址無效" },
+    "deleteAssertionsForSalesforceId": { "string": "無法刪除成員的判定。" },
+    "disambiguationSource": { "string": "組織來源不能為空白。" },
+    "emailUsed": { "string": "此電子郵件已經註冊過了" },
+    "ownerExists": { "string": "組織已有所有人。" },
+    "memberNotFound": { "string": "找不到 salesForceId：{{ params }} 的會員" },
+    "salesForceIdUsed": { "string": "已存在使用此銷售隊伍 id 的會員" },
+    "affiliationOtherOrganization": { "string": "此機關不隸屬於您的組織" },
+    "emailAffiliationUsed": {
+      "string": "無法新增所屬單位。{{ params }} 的所屬單位已經存在，且隸屬於另一組織。"
+    },
+    "memberNameUsed": { "string": "已存在使用該姓名的使用者" }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "landingPage": {
+    "title": { "string": "ORCID 會員服務" },
+    "connectionExists": {
+      "youHaveAlready": { "string": "您已允許過" },
+      "permissionToUpdate": { "string": "更新您的 ORCID 記錄的權限" },
+      "youDoNot": { "string": "現在您不需再執行任何操作。" },
+      "differentUser": {
+        "string": "此認證連結已經用過了。請聯絡 {{ clientName }} 取得新的認證連結。"
+      }
+    },
+    "error": {
+      "somethingWentWrong": { "string": "糟糕，發生了一些錯誤，導致我們無法取得您的 ORCID 編碼" }
+    },
+    "denied": {
+      "youHaveDenied": { "string": "歐嗚，您已拒絕存取。" },
+      "willNotBeAble": { "string": "將無法更新您的 ORCID 紀錄。" },
+      "ifThisWas": { "string": "如果這是錯誤的操作，請點擊以下按鈕授予存取權限。" },
+      "grantAccess": { "string": "允許 {{ clientName }} 更新我的 ORCID 紀錄" }
+    },
+    "success": {
+      "thanks": { "string": "感謝您， {{ given_name }} {{ family_name }}" },
+      "youHaveSuccessfully": {
+        "string": "您已經成功給予 {{ clientName }} 更新您 ORCID 紀錄的權限，您的紀錄並會隨機關資訊更新。"
+      },
+      "ifYouFind": { "string": "如果您發現新增至您的 ORCID 紀錄的檔案並不正確，請聯繫 {{ clientName }}" }
+    }
+  }
+}

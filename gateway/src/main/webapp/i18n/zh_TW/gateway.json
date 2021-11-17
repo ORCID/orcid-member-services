@@ -1,0 +1,15 @@
+{
+  "gateway": {
+    "title": { "string": "通路" },
+    "routes": {
+      "title": { "string": "目前傳送途徑" },
+      "url": { "string": "網址" },
+      "service": { "string": "服務" },
+      "servers": { "string": "可用的伺服器" },
+      "error": { "string": "警告：沒有可用的伺服器！" }
+    },
+    "refresh": {
+      "button": { "string": "重新整理" }
+    }
+  }
+}

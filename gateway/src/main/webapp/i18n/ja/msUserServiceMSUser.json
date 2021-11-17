@@ -1,0 +1,67 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSUser": {
+      "home": {
+        "title": { "string": "ユーザーを管理する" },
+        "createLabel": { "string": "ユーザーを追加する" },
+        "createOrEditLabel": { "string": "ユーザーを追加、編集する" },
+        "notFound": { "string": "表示するユーザーはいません" },
+        "uploadLabel": { "string": "CSVからユーザーをインポート" }
+      },
+      "delete": {
+        "question": { "string": "本当にユーザー{{ login }}を削除しますか？" }
+      },
+      "changeOwnership": {
+        "question": {
+          "string": "所有権を本当に移転しますか。こちらの組織アカウントの所有権を移転しようとしています。所有権移転後にも組織の所有者である場合には、ユーザー管理といった管理機能にアクセスすることはもうできなくなります。"
+        }
+      },
+      "detail": {
+        "title": { "string": "ユーザー詳細" }
+      },
+      "sendActivate": {
+        "success": { "string": "招待が送信されました。" },
+        "error": { "string": "招待Eメールを送信できませんでした。" }
+      },
+      "import": {
+        "title": { "string": "ユーザーをインポートする" },
+        "label": { "string": "アップロードするCSVファイルを選択してください" },
+        "filePath": { "string": "ファイルパス" },
+        "emptyFile": { "string": "アップロードするファイルがありません。ファイルを 1 つ選択してください。" },
+        "errors": {
+          "label": { "string": "おっと！あなたのデータの処理で問題がありました。以下のエラーを修正して、もう一度やり直してください" }
+        }
+      },
+      "assertionService": {
+        "enabled": { "string": "アサーションが有効です" }
+      },
+      "login": { "string": "ログイン" },
+      "email": { "string": "Eメール" },
+      "password": { "string": "パスワード" },
+      "confirm_password": { "string": "パスワードの確認" },
+      "firstName": { "string": "名" },
+      "lastName": { "string": "姓" },
+      "mainContact": { "string": "組織の所有者組織の所有者" },
+      "salesforceId": { "string": "組織" },
+      "parentSalesforceId": { "string": "セールフォースの親ID" },
+      "activated": { "string": "有効化されました" },
+      "isAdmin": { "string": "管理者" },
+      "createdBy": { "string": "作成者：" },
+      "createdDate": { "string": "作成されました" },
+      "lastModifiedBy": { "string": "最終更新：" },
+      "lastModifiedDate": { "string": "最終変更" }
+    },
+    "userDTO": {
+      "login": { "string": "Eメール" },
+      "firstName": { "string": "名" },
+      "lastName": { "string": "姓" }
+    }
+  },
+  "userServiceApp": {
+    "user": {
+      "created": { "string": "ユーザーが作成されました。招待を送信しました。" },
+      "updated": { "string": "ユーザー アップデートに成功しました" },
+      "deleted": { "string": "ユーザーが正常に削除されました" }
+    }
+  }
+}

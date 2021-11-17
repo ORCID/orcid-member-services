@@ -1,0 +1,24 @@
+{
+  "register": {
+    "title": { "string": "登録" },
+    "form": {
+      "button": { "string": "登録する" }
+    },
+    "messages": {
+      "validate": {
+        "login": {
+          "required": { "string": "ユーザー名が必要です。" },
+          "minlength": { "string": "ユーザー名には少なくとも 1 文字必要です。" },
+          "maxlength": { "string": "お客様のユーザー名は、50 文字を超えることができません。" },
+          "pattern": { "string": "ユーザー名には文字と数字のみを含めることができます。" }
+        }
+      },
+      "success": { "string": "<strong>登録が保存されました！</strong>確認のためにEメールをチェックしてください。" },
+      "error": {
+        "fail": { "string": "<strong>登録できませんでした！</strong>後でもう一度やり直してください。" },
+        "userexists": { "string": "<strong>ログイン名がすでに登録されています！</strong>別のものをお選びください。" },
+        "emailexists": { "string": "<strong>Eメールはすでに使われています！</strong>別のものをお選びください。" }
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "settings": {
+    "title": { "string": " {{username}} ( お客様 ) 用設定" },
+    "form": {
+      "firstname": {
+        "string": "名",
+        "placeholder": { "string": "Your first name" }
+      },
+      "lastname": {
+        "string": "姓",
+        "placeholder": { "string": "Your last name" }
+      },
+      "language": { "string": "言語" },
+      "button": { "string": "保存する" }
+    },
+    "messages": {
+      "error": {
+        "fail": { "string": "<strong>エラーが発生しました！</strong>設定を保存できませんでした。" },
+        "emailexists": { "string": "<strong>Eメールはすでに使われています！</strong>別のものをお選びください。" }
+      },
+      "success": { "string": "<strong>設定が保存されました！</strong>" },
+      "validate": {
+        "firstname": {
+          "required": { "string": "名が必要です。" },
+          "minlength": { "string": "お客様の名前には少なくとも 1 文字必要です" },
+          "maxlength": { "string": "名を50文字超にすることはできません" }
+        },
+        "lastname": {
+          "required": { "string": "姓が必要です。" },
+          "minlength": { "string": "姓は1文字以上である必要があります。" },
+          "maxlength": { "string": " 姓は 50 文字より長くすることができません" }
+        }
+      }
+    }
+  }
+}

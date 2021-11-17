@@ -1,0 +1,14 @@
+{
+  "gatewayApp": {
+    "AffiliationSection": {
+      "null": { "string": "" },
+      "EMPLOYMENT": { "string": "雇用" },
+      "EDUCATION": { "string": "教育" },
+      "QUALIFICATION": { "string": "資格" },
+      "INVITED_POSITION": { "string": "招待状況" },
+      "DISTINCTION": { "string": "区別" },
+      "MEMBERSHIP": { "string": "メンバーシップ" },
+      "SERVICE": { "string": "サービス" }
+    }
+  }
+}

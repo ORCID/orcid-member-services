@@ -1,0 +1,31 @@
+{
+  "error": {
+    "title": { "string": "リクエストを処理できません" },
+    "subtitle": { "string": "申し訳ございません、エラーが発生しました" },
+    "http": {
+      "400": { "string": "不正なリクエスト。" },
+      "403": { "string": "あなたはこのページにアクセスする権限がありません。" },
+      "404": { "string": "このページは存在しません。" },
+      "405": { "string": "使用したHTTP動詞は、このURLではサポートされていません。" },
+      "500": { "string": "内部サーバーのエラー。" }
+    },
+    "concurrencyFailure": { "string": "別のユーザーがお客様と同時にデータを変更しました。お客様が行った変更は拒否されました。" },
+    "validation": { "string": "サーバーで検証エラー。" },
+    "email": { "string": "Eメールが有効な形式ではありません" },
+    "size": { "string": "最小/最大サイズの要件を満たしていません！" },
+    "idused": { "string": "消去することはできません！他の要素と関係しています。" },
+    "pattern": { "string": "この欄には、文字、数字、Eメールアドレスのみを含めることができます。" },
+    "invalidUrl": { "string": "URLが無効です" },
+    "deleteAssertionsForSalesforceId": { "string": "メンバーのアサーションを削除できません。" },
+    "disambiguationSource": { "string": "組織ソースは空白にできません。" },
+    "emailUsed": { "string": "そのEメールはすでに登録済みです" },
+    "ownerExists": { "string": "組織にはすでにオーナーがいます。" },
+    "memberNotFound": { "string": "salesForceId: {{params}}でメンバーが見つかりません" },
+    "salesForceIdUsed": { "string": "そのSalesforceIDを持つメンバーはすでに存在します" },
+    "affiliationOtherOrganization": { "string": "このアフィリエーションはあなたの組織に属していません" },
+    "emailAffiliationUsed": {
+      "string": "アフィリエーションを追加できません。{{ params }}のアフィリエーションはすでに存在し、別の組織に属しています。"
+    },
+    "memberNameUsed": { "string": "その名前のメンバーはすでに存在します" }
+  }
+}

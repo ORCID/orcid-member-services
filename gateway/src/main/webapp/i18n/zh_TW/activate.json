@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": { "string": "啟用" },
+    "messages": {
+      "success": { "string": "<strong> 您的使用者帳號已啟用。</strong> 請" },
+      "error": { "string": "<strong>無法啟用您的用戶。</strong>請使用登記表格來註冊。" }
+    }
+  }
+}

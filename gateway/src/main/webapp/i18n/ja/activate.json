@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": { "string": "有効化" },
+    "messages": {
+      "success": { "string": "<strong> ユーザーアカウントが起動されています。</strong> 行って下さい。 " },
+      "error": { "string": "<strong>ユーザーを有効にできませんでした。</strong>登録フォームを使用してサインアップしてください。" }
+    }
+  }
+}
