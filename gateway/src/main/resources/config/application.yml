@@ -14,7 +14,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 ribbon:
-  ReadTimeout: 10000
+  ReadTimeout: 15000
   ConnectTimeout: 15000
 logging:
   path: logs
@@ -48,7 +48,7 @@ zuul: # those values must be configured depending on the application specific ne
   host:
     max-total-connections: 1000
     max-per-route-connections: 100
-    connect-timeout-millis: 10000
+    connect-timeout-millis: 15000
     socket-timeout-millis: 15000
   prefix: /services
   semaphore:
