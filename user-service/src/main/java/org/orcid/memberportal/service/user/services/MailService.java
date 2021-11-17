@@ -68,7 +68,7 @@ public class MailService {
     }
 
     private void sendEmailFromTemplate(User user, String templateName, String titleKey) {
-        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Locale locale = new Locale(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
         context.setVariable(BASE_URL, applicationProperties.getBaseUrl());
