@@ -82,7 +82,7 @@ public class MailService {
     }
 
     private void sendEmailFromTemplateMemberInfo(User user, String member, String templateName, String titleKey) {
-        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Locale locale = new Locale(user.getLangKey());
         Context context = new Context(locale);
         String baseUrl = applicationProperties.getBaseUrl();
         String infoEmail = "info@member-portal.orcid.org";
