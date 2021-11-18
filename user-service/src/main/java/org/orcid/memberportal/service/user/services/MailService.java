@@ -51,7 +51,7 @@ public class MailService {
         this.templateEngine = templateEngine;
         this.mailgunClient = mailgunClient;
     }
-    
+
     public void sendActivationEmail(User user) {
         LOGGER.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
@@ -68,7 +68,8 @@ public class MailService {
     }
 
     private void sendEmailFromTemplate(User user, String templateName, String titleKey) {
-        Locale locale = new Locale(user.getLangKey());
+        LOGGER.debug("Preparing email using template {}", templateName);
+        Locale locale = getLocale(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
         context.setVariable(BASE_URL, applicationProperties.getBaseUrl());
@@ -82,7 +83,8 @@ public class MailService {
     }
 
     private void sendEmailFromTemplateMemberInfo(User user, String member, String templateName, String titleKey) {
-        Locale locale = new Locale(user.getLangKey());
+        LOGGER.debug("Preparing email using template {}", templateName);
+        Locale locale = getLocale(user.getLangKey());
         Context context = new Context(locale);
         String baseUrl = applicationProperties.getBaseUrl();
         String infoEmail = "info@member-portal.orcid.org";
@@ -106,7 +108,15 @@ public class MailService {
             LOGGER.warn("Mail sending failure: {}", e.getMessage(), e);
         }
     }
-    
+
+    private Locale getLocale(String langKey) {
+        LOGGER.debug("Creating locale using language key {}", langKey);
+        Locale locale = new Locale(langKey);
+        LOGGER.debug("Locale created, locale has language {}, ({})",
+                new Object[] { locale.getLanguage(), locale.getDisplayLanguage() });
+        return locale;
+    }
+
     private void sendEmail(String to, String subject, String content) throws ClientProtocolException, IOException {
         try {
             mailgunClient.sendMail(to, subject, content);
