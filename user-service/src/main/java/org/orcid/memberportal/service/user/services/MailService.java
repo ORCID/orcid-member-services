@@ -8,6 +8,7 @@ import org.orcid.memberportal.service.user.config.ApplicationProperties;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.mail.MailException;
 import org.orcid.memberportal.service.user.mail.client.impl.MailgunClient;
+import org.orcid.memberportal.service.user.services.locale.LocaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -111,8 +112,8 @@ public class MailService {
 
     private Locale getLocale(String langKey) {
         LOGGER.debug("Creating locale using language key {}", langKey);
-        Locale locale = new Locale(langKey);
-        LOGGER.debug("Locale created, locale has language {}, ({})",
+        Locale locale = LocaleUtils.getLocale(langKey);
+        LOGGER.debug("Locale created, locale has language {} ({})",
                 new Object[] { locale.getLanguage(), locale.getDisplayLanguage() });
         return locale;
     }
