@@ -43,19 +43,6 @@
         "msUserServiceMSMember": { "string": "Manage members" },
         "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
       },
-      "dev": {
-        "main": { "string": "System monitoring" },
-        "gateway": { "string": "Gateway" },
-        "tracker": { "string": "User tracker" },
-        "metrics": { "string": "Metrics" },
-        "health": { "string": "Health" },
-        "configuration": { "string": "Configuration" },
-        "logs": { "string": "Logs" },
-        "audits": { "string": "Audits" },
-        "apidocs": { "string": "API" },
-        "database": { "string": "Database" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
-      },
       "language": { "string": "Language" }
     },
     "form": {
