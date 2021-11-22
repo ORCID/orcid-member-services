@@ -38,6 +38,8 @@ public class MemberServiceUser {
     private String langKey;
 
     private Set<String> authorities;
+    
+    private String memberName;
 
     public String getLoginAs() {
         return loginAs;
@@ -183,6 +185,14 @@ public class MemberServiceUser {
 
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
+    }
+
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
     }
 
 }

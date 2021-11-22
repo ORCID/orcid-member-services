@@ -11,7 +11,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.member.service.reports.ReportInfo;
+import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
 import org.orcid.memberportal.service.member.services.ReportService;
+import org.orcid.memberportal.service.member.services.UserService;
 import org.orcid.memberportal.service.member.web.rest.ReportResource;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ public class ReportResourceTest {
 
     @Mock
     private ReportService mockReportService;
+    
+    @Mock
+    private UserService mockUserService;
 
     @InjectMocks
     private ReportResource reportResource;
@@ -27,6 +32,7 @@ public class ReportResourceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
     }
 
     @Test
@@ -69,6 +75,13 @@ public class ReportResourceTest {
         info.setJwt("jwt");
         info.setUrl("url");
         return info;
+    }
+    
+    private MemberServiceUser getUser() {
+        MemberServiceUser user = new MemberServiceUser();
+        user.setEmail("email@orcid.org");
+        user.setMemberName("orcid.org");
+        return user;
     }
 
 }
