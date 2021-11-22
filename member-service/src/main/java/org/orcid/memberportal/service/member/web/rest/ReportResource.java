@@ -1,8 +1,9 @@
 package org.orcid.memberportal.service.member.web.rest;
 
-import org.orcid.memberportal.service.member.security.SecurityUtils;
 import org.orcid.memberportal.service.member.service.reports.ReportInfo;
+import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
 import org.orcid.memberportal.service.member.services.ReportService;
+import org.orcid.memberportal.service.member.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,24 +23,30 @@ public class ReportResource {
 
     @Autowired
     private ReportService reportService;
+    
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/reports/member")
     public ResponseEntity<ReportInfo> getMemberReport() {
-        LOG.info("Generating member report for user {}", SecurityUtils.getCurrentUserLogin().get());
+        MemberServiceUser user = userService.getLoggedInUser();
+        LOG.info("Generating member report for user {} of {}", user.getEmail(), user.getMemberName());
         ReportInfo memberReportInfo = reportService.getMemberReportInfo();
         return ResponseEntity.ok(memberReportInfo);
     }
 
     @GetMapping("/reports/integration")
     public ResponseEntity<ReportInfo> getIntegrationReport() {
-        LOG.info("Generating integration report for user {}", SecurityUtils.getCurrentUserLogin().get());
+        MemberServiceUser user = userService.getLoggedInUser();
+        LOG.info("Generating integration report for user {} of {}", user.getEmail(), user.getMemberName());
         ReportInfo memberReportInfo = reportService.getIntegrationReportInfo();
         return ResponseEntity.ok(memberReportInfo);
     }
 
     @GetMapping("/reports/consortium")
     public ResponseEntity<ReportInfo> getConsortiumReport() {
-        LOG.info("Generating consortium report for user {}", SecurityUtils.getCurrentUserLogin().get());
+        MemberServiceUser user = userService.getLoggedInUser();
+        LOG.info("Generating consortium report for user {} of {}", user.getEmail(), user.getMemberName());
         ReportInfo consortiumReportInfo = reportService.getConsortiumReportInfo();
         return ResponseEntity.ok(consortiumReportInfo);
     }
