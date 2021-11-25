@@ -3,11 +3,13 @@ package org.orcid.memberportal.service.assertion.repository.impl;
 import java.util.List;
 
 import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -51,6 +53,16 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         Aggregation aggregation = Aggregation.newAggregation(timeModifiedAfterSync, matchUpdatedAfterSync);
         AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
 
+        return results.getMappedResults();
+    }
+
+    @Override
+    public List<MemberAssertionStatusCount> getMemberAssertionStatusCounts() {
+        GroupOperation countByStatus = Aggregation.group("salesforce_id", "status").count().as("statusCount");
+        ProjectionOperation projection = Aggregation.project().andExpression("_id.salesforce_id").as("salesforceId").andExpression("status").as("status")
+                .andExpression("statusCount").as("statusCount");
+        Aggregation aggregation = Aggregation.newAggregation(countByStatus, projection);
+        AggregationResults<MemberAssertionStatusCount> results = mongoTemplate.aggregate(aggregation, "assertion", MemberAssertionStatusCount.class);
         return results.getMappedResults();
     }
 
