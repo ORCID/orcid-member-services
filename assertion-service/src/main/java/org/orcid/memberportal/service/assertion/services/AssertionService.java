@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
@@ -14,19 +16,22 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
+import org.orcid.memberportal.service.assertion.csv.CsvWriter;
+import org.orcid.memberportal.service.assertion.csv.download.impl.AssertionsForEditCsvWriter;
+import org.orcid.memberportal.service.assertion.csv.download.impl.AssertionsReportCsvWriter;
+import org.orcid.memberportal.service.assertion.csv.download.impl.PermissionLinksCsvWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
+import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
-import org.orcid.memberportal.service.assertion.download.impl.AssertionsForEditCsvWriter;
-import org.orcid.memberportal.service.assertion.download.impl.AssertionsReportCsvWriter;
-import org.orcid.memberportal.service.assertion.download.impl.PermissionLinksCsvWriter;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.security.SecurityUtils;
+import org.orcid.memberportal.service.assertion.stats.MemberAssertionStats;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.orcid.memberportal.service.assertion.upload.impl.AssertionsCsvReader;
@@ -67,7 +72,7 @@ public class AssertionService {
 
     @Autowired
     private PermissionLinksCsvWriter permissionLinksCsvWriter;
-
+    
     @Autowired
     private UserService assertionsUserService;
 
@@ -76,6 +81,9 @@ public class AssertionService {
     
     @Autowired
     private AssertionNormalizer assertionNormalizer;
+    
+    @Autowired
+    private MemberService memberService;
 
     public boolean assertionExists(String id) {
         return assertionRepository.existsById(id);
@@ -506,6 +514,41 @@ public class AssertionService {
 
     public String generateAssertionsReport() throws IOException {
         return assertionsReportCsvWriter.writeCsv();
+    }
+    
+    public void generateAndSendMemberAssertionStats() throws IOException {
+        List<MemberAssertionStatusCount> counts = assertionRepository.getMemberAssertionStatusCounts();
+        Map<String, MemberAssertionStats> stats = getMemberAssertionStats(counts);
+        String reportCsv = getMemberAssertionStatsCsv(stats);
+        // write to file
+        // email file
+    }
+
+    private String getMemberAssertionStatsCsv(Map<String, MemberAssertionStats> stats) throws IOException {
+        List<List<String>> rows = new ArrayList<>();
+        for (MemberAssertionStats memberStats : stats.values()) {
+            List<String> row = new ArrayList<>();
+            row.add(memberStats.getMemberName());
+            row.add(Integer.toString(memberStats.getTotalAssertions()));
+            row.add(memberStats.getStatusCountsString());
+            rows.add(row);
+        }
+        
+        String[] headers = new String[] { "Member name", "Total affiliations", "Statuses" };
+        return new CsvWriter().writeCsv(headers, rows);
+    }
+
+    private Map<String, MemberAssertionStats> getMemberAssertionStats(List<MemberAssertionStatusCount> counts) {
+        Map<String, MemberAssertionStats> stats = new HashMap<>();
+        for (MemberAssertionStatusCount count : counts) {
+            if (!stats.containsKey(count.getSalesforceId())) {
+                MemberAssertionStats memberStats = new MemberAssertionStats();
+                memberStats.setMemberName(memberService.getMemberName(count.getSalesforceId()));
+                stats.put(count.getSalesforceId(), memberStats);
+            }
+            stats.get(count.getSalesforceId()).setStatusCount(count.getStatus(), count.getStatusCount());
+        }
+        return stats;
     }
 
     private boolean canSyncWithOrcidRegistry(Optional<OrcidRecord> record, Assertion assertion) {

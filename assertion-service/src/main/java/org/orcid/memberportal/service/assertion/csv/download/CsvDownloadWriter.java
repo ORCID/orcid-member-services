@@ -1,13 +1,14 @@
-package org.orcid.memberportal.service.assertion.download;
+package org.orcid.memberportal.service.assertion.csv.download;
 
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.orcid.memberportal.service.assertion.csv.CsvWriter;
 
-public abstract class CsvWriter {
+public abstract class CsvDownloadWriter extends CsvWriter {
 
     public abstract String writeCsv() throws IOException;
-
+    
     protected String getDateString(String year, String month, String day) {
         if (!StringUtils.isBlank(year)) {
             String endDate = year;

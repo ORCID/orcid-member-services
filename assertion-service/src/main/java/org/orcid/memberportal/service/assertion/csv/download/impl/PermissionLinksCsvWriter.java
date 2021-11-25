@@ -1,14 +1,13 @@
-package org.orcid.memberportal.service.assertion.download.impl;
+package org.orcid.memberportal.service.assertion.csv.download.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
+import org.orcid.memberportal.service.assertion.csv.download.CsvDownloadWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
-import org.orcid.memberportal.service.assertion.download.CsvWriter;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
@@ -17,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PermissionLinksCsvWriter extends CsvWriter {
+public class PermissionLinksCsvWriter extends CsvDownloadWriter {
+    
+    private static final String[] HEADERS = new String[] { "email", "link" };
 
     @Autowired
     private EncryptUtil encryptUtil;
@@ -36,10 +37,12 @@ public class PermissionLinksCsvWriter extends CsvWriter {
 
     @Override
     public String writeCsv() throws IOException {
+        return super.writeCsv(HEADERS, getRows());
+    }
+    
+    private List<List<String>> getRows() {
+        List<List<String>> rows = new ArrayList<>();
         String landingPageUrl = applicationProperties.getLandingPageUrl();
-        StringBuffer buffer = new StringBuffer();
-        CSVPrinter csvPrinter = getCSVPrinterWithHeaders(buffer);
-
         String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
         List<OrcidRecord> records = orcidRecordService.getRecordsWithoutTokens(salesForceId);
 
@@ -49,17 +52,14 @@ public class PermissionLinksCsvWriter extends CsvWriter {
             if (assertions.size() > 0) {
                 String encrypted = encryptUtil.encrypt(salesForceId + "&&" + email);
                 String link = landingPageUrl + "?state=" + encrypted;
-                csvPrinter.printRecord(email, link);
+
+                List<String> row = new ArrayList<>();
+                row.add(email);
+                row.add(link);
+                rows.add(row);
             }
         }
-
-        csvPrinter.flush();
-        csvPrinter.close();
-        return buffer.toString();
+        return rows;
     }
-
-    private CSVPrinter getCSVPrinterWithHeaders(StringBuffer buffer) throws IOException {
-        return new CSVPrinter(buffer, CSVFormat.DEFAULT.withHeader("email", "link"));
-    }
-
+    
 }
