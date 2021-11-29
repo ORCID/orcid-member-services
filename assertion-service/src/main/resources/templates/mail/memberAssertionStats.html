@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="#{email.memberAssertionStats.title}">Welcome to the ORCID Member Portal</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body
+	style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+	<div style="padding: 20px; padding-top: 10px; margin: auto;">
+		<div th:insert="~{mail/common :: emailHeader}"></div>
+		<p>
+		  <span th:text="#{email.memberAssertionStats.content}">See attached member affiliation stats</span><a href="https://info.orcid.org/documentation/member-portal/" th:text="#{email.creation.link1.text}">ORCID Member Portal</a><span th:text="#{email.creation.text2}">. You can use the portal to access your </span><a href="https://info.orcid.org/documentation/features/member-reporting/" th:text="#{email.creation.link2.text}">member reports</a><span th:text="#{email.creation.text3}"> and a suite of other tools that will help you make the most of your membership.</span>
+		</p>
+		<div th:insert="~{mail/common :: emailFooter}"></div>
+	</div>
+</body>
+</html>
