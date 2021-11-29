@@ -19,6 +19,20 @@ public class ApplicationProperties {
     private TokenExchange tokenExchange;
 
     private Cron cron;
+    
+    private String mailDomain;
+
+    private String mailApiKey;
+
+    private String mailApiUrl;
+
+    private String mailFromAddress;
+
+    private String mailFromName;
+    
+    private boolean mailTestMode;
+    
+    private String memberAssertionStatsRecipient;
 
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
@@ -58,6 +72,62 @@ public class ApplicationProperties {
 
     public void setOrcidAPIEndpoint(String orcidAPIEndpoint) {
         this.orcidAPIEndpoint = orcidAPIEndpoint;
+    }
+    
+    public boolean isMailTestMode() {
+        return mailTestMode;
+    }
+
+    public void setMailTestMode(boolean mailTestMode) {
+        this.mailTestMode = mailTestMode;
+    }
+    
+    public String getMailDomain() {
+        return mailDomain;
+    }
+
+    public void setMailDomain(String mailDomain) {
+        this.mailDomain = mailDomain;
+    }
+
+    public String getMailApiKey() {
+        return mailApiKey;
+    }
+
+    public void setMailApiKey(String mailApiKey) {
+        this.mailApiKey = mailApiKey;
+    }
+
+    public String getMailApiUrl() {
+        return mailApiUrl;
+    }
+
+    public void setMailApiUrl(String mailApiUrl) {
+        this.mailApiUrl = mailApiUrl;
+    }
+
+    public String getMailFromAddress() {
+        return mailFromAddress;
+    }
+
+    public void setMailFromAddress(String mailFromAddress) {
+        this.mailFromAddress = mailFromAddress;
+    }
+
+    public String getMailFromName() {
+        return mailFromName;
+    }
+
+    public void setMailFromName(String mailFromName) {
+        this.mailFromName = mailFromName;
+    }
+
+    public String getMemberAssertionStatsRecipient() {
+        return memberAssertionStatsRecipient;
+    }
+
+    public void setMemberAssertionStatsRecipient(String memberAssertionStatsRecipient) {
+        this.memberAssertionStatsRecipient = memberAssertionStatsRecipient;
     }
 
     public static class TokenExchange {
