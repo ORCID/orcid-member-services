@@ -33,6 +33,10 @@ public class ApplicationProperties {
     private boolean mailTestMode;
     
     private String memberAssertionStatsRecipient;
+    
+    private int storedFileLifespan;
+    
+    private String memberAssertionStatsFileDirectory;
 
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
@@ -128,6 +132,22 @@ public class ApplicationProperties {
 
     public void setMemberAssertionStatsRecipient(String memberAssertionStatsRecipient) {
         this.memberAssertionStatsRecipient = memberAssertionStatsRecipient;
+    }
+    
+    public int getStoredFileLifespan() {
+        return storedFileLifespan;
+    }
+
+    public void setStoredFileLifespan(int storedFileLifespan) {
+        this.storedFileLifespan = storedFileLifespan;
+    }
+    
+    public String getMemberAssertionStatsFileDirectory() {
+        return memberAssertionStatsFileDirectory;
+    }
+
+    public void setMemberAssertionStatsFileDirectory(String memberAssertionStatsFileDirectory) {
+        this.memberAssertionStatsFileDirectory = memberAssertionStatsFileDirectory;
     }
 
     public static class TokenExchange {

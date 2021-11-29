@@ -7,6 +7,14 @@ public class MemberAssertionStatusCount {
     private String status;
     
     private Integer statusCount;
+    
+    public MemberAssertionStatusCount(String salesforceId, String status, Integer statusCount) {
+        this.salesforceId = salesforceId;
+        this.status = status;
+        this.statusCount = statusCount;
+    }
+    
+    public MemberAssertionStatusCount() {}
 
     public String getSalesforceId() {
         return salesforceId;

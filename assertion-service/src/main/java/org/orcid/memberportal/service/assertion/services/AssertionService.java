@@ -1,5 +1,6 @@
 package org.orcid.memberportal.service.assertion.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
@@ -84,7 +85,13 @@ public class AssertionService {
     
     @Autowired
     private MemberService memberService;
-
+    
+    @Autowired
+    private StoredFileService storedFileService;
+    
+    @Autowired
+    private MailService mailService;
+    
     public boolean assertionExists(String id) {
         return assertionRepository.existsById(id);
     }
@@ -520,8 +527,8 @@ public class AssertionService {
         List<MemberAssertionStatusCount> counts = assertionRepository.getMemberAssertionStatusCounts();
         Map<String, MemberAssertionStats> stats = getMemberAssertionStats(counts);
         String reportCsv = getMemberAssertionStatsCsv(stats);
-        // write to file
-        // email file
+        File writtenFile = storedFileService.storeMemberAssertionStatsFile(reportCsv);
+        mailService.sendMemberAssertionStatsMail(writtenFile);
     }
 
     private String getMemberAssertionStatsCsv(Map<String, MemberAssertionStats> stats) throws IOException {

@@ -1,4 +1,4 @@
-package org.orcid.memberportal.service.assertion.service;
+package org.orcid.memberportal.service.assertion.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,7 +16,6 @@ import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
 import org.orcid.memberportal.service.assertion.mail.MailException;
 import org.orcid.memberportal.service.assertion.mail.client.impl.MailgunClient;
-import org.orcid.memberportal.service.assertion.services.MailService;
 import org.springframework.context.MessageSource;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.thymeleaf.context.IContext;
