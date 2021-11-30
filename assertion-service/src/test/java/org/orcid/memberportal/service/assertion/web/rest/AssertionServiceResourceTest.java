@@ -39,12 +39,14 @@ import org.orcid.memberportal.service.assertion.domain.validation.org.impl.Ringg
 import org.orcid.memberportal.service.assertion.domain.validation.org.impl.RorOrgValidator;
 import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.security.JWTUtil;
+import org.orcid.memberportal.service.assertion.security.MockSecurityContext;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -89,6 +91,7 @@ class AssertionServiceResourceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        SecurityContextHolder.setContext(new MockSecurityContext("user"));
         Mockito.when(rorOrgValidator.validId(Mockito.anyString())).thenReturn(true);
         Mockito.when(gridOrgValidator.validId(Mockito.anyString())).thenReturn(true);
         Mockito.when(ringgoldOrgValidator.validId(Mockito.anyString())).thenReturn(true);
