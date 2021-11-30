@@ -36,7 +36,7 @@ public class ApplicationProperties {
     
     private int storedFileLifespan;
     
-    private String memberAssertionStatsFileDirectory;
+    private String memberAssertionStatsDirectory;
 
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
@@ -142,12 +142,12 @@ public class ApplicationProperties {
         this.storedFileLifespan = storedFileLifespan;
     }
     
-    public String getMemberAssertionStatsFileDirectory() {
-        return memberAssertionStatsFileDirectory;
+    public String getMemberAssertionStatsDirectory() {
+        return memberAssertionStatsDirectory;
     }
 
-    public void setMemberAssertionStatsFileDirectory(String memberAssertionStatsFileDirectory) {
-        this.memberAssertionStatsFileDirectory = memberAssertionStatsFileDirectory;
+    public void setMemberAssertionStatsDirectory(String memberAssertionStatsDirectory) {
+        this.memberAssertionStatsDirectory = memberAssertionStatsDirectory;
     }
 
     public static class TokenExchange {
