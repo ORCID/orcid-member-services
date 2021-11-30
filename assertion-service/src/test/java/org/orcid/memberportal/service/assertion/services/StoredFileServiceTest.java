@@ -71,7 +71,7 @@ class StoredFileServiceTest {
 
     private ApplicationProperties getTestApplicationProperties() {
         ApplicationProperties properties = new ApplicationProperties();
-        properties.setMemberAssertionStatsFileDirectory(storedFilesDir.getAbsolutePath());
+        properties.setMemberAssertionStatsDirectory(storedFilesDir.getAbsolutePath());
         properties.setStoredFileLifespan(7);
         return properties;
     }

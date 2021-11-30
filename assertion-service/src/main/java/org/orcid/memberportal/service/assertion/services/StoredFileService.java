@@ -24,7 +24,7 @@ public class StoredFileService {
     private ApplicationProperties applicationProperties;
 
     public File storeMemberAssertionStatsFile(String content) throws IOException {
-        File outputFile = writeFile(content, MEMBER_ASSERTION_STATS_FILE_TYPE, applicationProperties.getMemberAssertionStatsFileDirectory(), ".csv");
+        File outputFile = writeFile(content, MEMBER_ASSERTION_STATS_FILE_TYPE, applicationProperties.getMemberAssertionStatsDirectory(), ".csv");
         StoredFile storedFile = new StoredFile();
         storedFile.setFileLocation(outputFile.getAbsolutePath());
         storedFile.setDateWritten(Instant.now());
