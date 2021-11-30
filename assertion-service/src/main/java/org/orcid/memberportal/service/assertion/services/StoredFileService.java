@@ -35,6 +35,14 @@ public class StoredFileService {
     }
 
     private File writeFile(String content, String memberAssertionStatsFileType, String memberAssertionStatsFileDirectory, String extension) throws IOException {
+        File parentDir = new File(memberAssertionStatsFileDirectory);
+        if (!parentDir.exists()) {
+            boolean created = parentDir.mkdir();
+            if (!created) {
+               throw new RuntimeException("Failed to create directory " + memberAssertionStatsFileDirectory);
+            }
+        }
+        
         File outputFile = File.createTempFile(memberAssertionStatsFileType, extension, new File(memberAssertionStatsFileDirectory));
         FileWriter writer = new FileWriter(outputFile);
         writer.write(content);
