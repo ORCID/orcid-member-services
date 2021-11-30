@@ -212,6 +212,8 @@ public class ApplicationProperties {
 
         private String syncAffiliations;
 
+        private String generateMemberAssertionStats;
+        
         public String getSyncAffiliations() {
             return syncAffiliations;
         }
@@ -220,5 +222,13 @@ public class ApplicationProperties {
             this.syncAffiliations = syncAffiliations;
         }
 
+        public String getGenerateMemberAssertionStats() {
+            return generateMemberAssertionStats;
+        }
+
+        public void setGenerateMemberAssertionStats(String generateMemberAssertionStats) {
+            this.generateMemberAssertionStats = generateMemberAssertionStats;
+        }
+        
     }
 }

@@ -15,7 +15,6 @@ import org.orcid.memberportal.service.assertion.mail.MailException;
 import org.orcid.memberportal.service.assertion.mail.client.MailClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,8 +22,7 @@ public class MailgunClient implements MailClient {
 
     private final Logger LOGGER = LoggerFactory.getLogger(MailgunClient.class);
 
-    @Autowired
-    private HttpClient client;
+    private HttpClient httpClient;
 
     private boolean testMode;
 
@@ -56,7 +54,7 @@ public class MailgunClient implements MailClient {
 
         try {
             LOGGER.info("Sending mail {} to {}", subject, to);
-            HttpResponse response = client.execute(post);
+            HttpResponse response = httpClient.execute(post);
             if (response.getStatusLine().getStatusCode() != 200) {
                 LOGGER.warn("Received response {} from mailgun", response.getStatusLine().getReasonPhrase());
                 try (InputStream inputStream = response.getEntity().getContent()) {
@@ -90,4 +88,8 @@ public class MailgunClient implements MailClient {
         this.fromAddress = fromAddress;
     }
 
+    public void setHttpClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
+    
 }

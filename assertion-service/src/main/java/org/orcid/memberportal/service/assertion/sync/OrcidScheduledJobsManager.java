@@ -32,7 +32,7 @@ public class OrcidScheduledJobsManager {
         log.info("Sync complete");
     }
     
-    @Scheduled(cron = "${application.cron.generateMemberAssertionStats")
+    @Scheduled(cron = "${application.cron.generateMemberAssertionStats}")
     @SchedulerLock(name = "generateMemberAssertionStats", lockAtMostFor = "60m", lockAtLeastFor = "10m")
     public void generateMemberAssertionStats() throws IOException  {
         assertionsService.generateAndSendMemberAssertionStats();
