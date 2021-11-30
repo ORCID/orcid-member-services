@@ -181,7 +181,7 @@ application:
     mailApiUrl: change-me
     mailFromAddress: change-me  
     mailFromName: change-me
-    memberAssertionStatsDirectory: change-me
+    memberAssertionStatsDirectory: /files
     storedFileLifespan: change-me
     memberAssertionStatsRecipient: change-me
     tokenExchange:
