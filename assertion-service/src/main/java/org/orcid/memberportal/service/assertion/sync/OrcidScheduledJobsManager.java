@@ -23,7 +23,7 @@ public class OrcidScheduledJobsManager {
     @Autowired
     private AssertionService assertionsService;
 
-    @Scheduled(fixedDelayString = "${application.cron.syncAffiliations}")
+    @Scheduled(fixedDelayString = "${application.syncAffiliationsDelay}")
     @SchedulerLock(name = "syncAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "2m")
     public void syncAffiliations() throws JAXBException {
         log.info("Running cron to sync assertions with registry");
@@ -32,7 +32,7 @@ public class OrcidScheduledJobsManager {
         log.info("Sync complete");
     }
     
-    @Scheduled(cron = "${application.cron.generateMemberAssertionStats}")
+    @Scheduled(cron = "${application.generateMemberAssertionStatsCron}")
     @SchedulerLock(name = "generateMemberAssertionStats", lockAtMostFor = "60m", lockAtLeastFor = "10m")
     public void generateMemberAssertionStats() throws IOException  {
         assertionsService.generateAndSendMemberAssertionStats();

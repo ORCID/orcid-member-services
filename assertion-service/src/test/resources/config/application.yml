@@ -92,6 +92,5 @@ jhipster:
 
 application:
     jwtSignatureUrl: https://sandbox.orcid.org/oauth/jwks
-    cron:        
-        syncAffiliations: 300000
-        generateMemberAssertionStats: 0 30 * * * ?
+    syncAffiliationsDelay: 300000
+    generateMemberAssertionStatsCron: 0 30 * * * ?
