@@ -115,4 +115,4 @@ oauth2:
 # ===================================================================
 
 application:
-  mailTestMode: false
+  mailTestMode: true
