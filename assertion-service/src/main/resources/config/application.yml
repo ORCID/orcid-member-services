@@ -193,3 +193,4 @@ application:
         clientSecret: change-me # Export it as an env variable before running gradlew: 'export APPLICATION_TOKENEXCHANGE_CLIENTSECRET=<client secret>'
     cron:        
         syncAffiliations: 60000
+        generateMemberAssertionStats: change-me
