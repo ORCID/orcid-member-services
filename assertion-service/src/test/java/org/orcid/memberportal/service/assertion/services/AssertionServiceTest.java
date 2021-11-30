@@ -1,5 +1,6 @@
-package org.orcid.memberportal.service.assertion.service;
+package org.orcid.memberportal.service.assertion.services;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -10,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
@@ -34,21 +36,19 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
+import org.orcid.memberportal.service.assertion.csv.download.impl.AssertionsForEditCsvWriter;
+import org.orcid.memberportal.service.assertion.csv.download.impl.AssertionsReportCsvWriter;
+import org.orcid.memberportal.service.assertion.csv.download.impl.PermissionLinksCsvWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
+import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
-import org.orcid.memberportal.service.assertion.download.impl.AssertionsForEditCsvWriter;
-import org.orcid.memberportal.service.assertion.download.impl.AssertionsReportCsvWriter;
-import org.orcid.memberportal.service.assertion.download.impl.PermissionLinksCsvWriter;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
-import org.orcid.memberportal.service.assertion.services.AssertionService;
-import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
-import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.orcid.memberportal.service.assertion.upload.impl.AssertionsCsvReader;
@@ -91,12 +91,24 @@ class AssertionServiceTest {
 
     @Mock
     private AssertionsCsvReader assertionsCsvReader;
-    
+
     @Mock
     private AssertionNormalizer assertionNormalizer;
 
+    @Mock
+    private StoredFileService storedFileService;
+
+    @Mock
+    private MailService mailService;
+    
+    @Mock
+    private MemberService memberService;
+
     @Captor
     private ArgumentCaptor<Assertion> assertionCaptor;
+
+    @Captor
+    private ArgumentCaptor<String> csvContentCaptor;
 
     @InjectMocks
     private AssertionService assertionService;
@@ -361,7 +373,7 @@ class AssertionServiceTest {
         assertEquals(AssertionStatus.USER_REVOKED_ACCESS.name(), saved.getStatus());
         assertNull(saved.getUpdatedInORCID());
     }
-    
+
     @Test
     void testPostAssertionToOrcid_statusPendingToUserDeniedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
@@ -527,7 +539,7 @@ class AssertionServiceTest {
         saved = assertionCaptor.getAllValues().get(1);
         assertEquals(AssertionStatus.USER_REVOKED_ACCESS.name(), saved.getStatus());
     }
-    
+
     @Test
     void testPutAssertionInOrcid_statusPendingToUserDeniedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
@@ -1042,6 +1054,36 @@ class AssertionServiceTest {
         assertEquals(3, summary.getNumDuplicates());
 
         Mockito.verify(assertionsRepository, Mockito.never()).insert(Mockito.any(Assertion.class));
+    }
+
+    @Test
+    public void testGenerateAndSendMemberAssertionStats() throws IOException {
+        Mockito.when(assertionsRepository.getMemberAssertionStatusCounts()).thenReturn(getDummyAssertionStatusCounts());
+        Mockito.when(storedFileService.storeMemberAssertionStatsFile(Mockito.anyString())).thenReturn(new File("something"));
+        Mockito.doNothing().when(mailService).sendMemberAssertionStatsMail(Mockito.any(File.class));
+        Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId1"))).thenReturn("member 1");
+        Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId2"))).thenReturn("member 2");
+
+        assertionService.generateAndSendMemberAssertionStats();
+
+        Mockito.verify(storedFileService).storeMemberAssertionStatsFile(csvContentCaptor.capture());
+        String csv = csvContentCaptor.getValue();
+        assertThat(csv).isNotNull();
+        assertThat(csv).contains("member 1");
+        assertThat(csv).contains("member 2");
+        assertThat(csv).contains("PENDING");
+        assertThat(csv).contains("IN_ORCID");
+        
+        Mockito.verify(mailService).sendMemberAssertionStatsMail(Mockito.any(File.class));
+    }
+
+    private List<MemberAssertionStatusCount> getDummyAssertionStatusCounts() {
+        List<MemberAssertionStatusCount> counts = new ArrayList<>();
+        counts.add(new MemberAssertionStatusCount("salesforceId1", "PENDING", 4));
+        counts.add(new MemberAssertionStatusCount("salesforceId1", "IN_ORCID", 12));
+        counts.add(new MemberAssertionStatusCount("salesforceId2", "PENDING", 220));
+        counts.add(new MemberAssertionStatusCount("salesforceId2", "IN_ORCID", 1));
+        return counts;
     }
 
     private Assertion getAssertionWithoutIdForEmail(String email) {

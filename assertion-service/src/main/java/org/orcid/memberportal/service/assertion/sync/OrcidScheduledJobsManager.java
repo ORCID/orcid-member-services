@@ -1,5 +1,7 @@
 package org.orcid.memberportal.service.assertion.sync;
 
+import java.io.IOException;
+
 import javax.xml.bind.JAXBException;
 
 import org.orcid.memberportal.service.assertion.services.AssertionService;
@@ -14,9 +16,9 @@ import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 
 @Component
 @EnableScheduling
-public class OrcidSyncManager {
+public class OrcidScheduledJobsManager {
 
-    private final Logger log = LoggerFactory.getLogger(OrcidSyncManager.class);
+    private final Logger log = LoggerFactory.getLogger(OrcidScheduledJobsManager.class);
 
     @Autowired
     private AssertionService assertionsService;
@@ -28,5 +30,11 @@ public class OrcidSyncManager {
         assertionsService.postAssertionsToOrcid();
         assertionsService.putAssertionsInOrcid();
         log.info("Sync complete");
+    }
+    
+    @Scheduled(cron = "${application.cron.generateMemberAssertionStats}")
+    @SchedulerLock(name = "generateMemberAssertionStats", lockAtMostFor = "60m", lockAtLeastFor = "10m")
+    public void generateMemberAssertionStats() throws IOException  {
+        assertionsService.generateAndSendMemberAssertionStats();
     }
 }

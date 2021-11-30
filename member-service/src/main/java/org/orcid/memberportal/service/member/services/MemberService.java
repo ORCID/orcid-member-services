@@ -179,7 +179,7 @@ public class MemberService {
     public Optional<Member> getMember(String id) {
         Optional<Member> member = memberRepository.findById(id);
         if (!member.isPresent()) {
-            LOG.debug("Member settings now found for id {}, searching against salesforceId", id);
+            LOG.debug("Member settings not found for id {}, searching against salesforceId", id);
             member = memberRepository.findBySalesforceId(id);
         }
         return member;

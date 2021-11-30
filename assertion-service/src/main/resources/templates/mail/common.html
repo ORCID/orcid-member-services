@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<!-- EMAIL HEADER -->
+	<div th:fragment="emailHeader">
+		<img src="https://orcid.org/sites/all/themes/orcid/img/orcid-logo.png"
+			alt="ORCID logo" />
+		<hr />
+	</div>
+	<!-- EMAIL FOOTER -->
+	<div th:fragment="emailFooter">
+		<small> <a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}|})" th:href="${url}">
+			<span th:text="#{email.common.orcidMemberTools}">ORCID Member Portal</span></a>
+			| <span th:text="#{email.common.orcidInc}">ORCID, Inc</span> | <span
+			th:text="#{email.common.orcidAddress}">10411 Motor City Drive,
+				Suite 750, Bethesda, MD 20817, USA</span> | <a style="color: #2E7F9F;" href="https://orcid.org">orcid.org</a>
+		</small>
+	</div>
+</body>
+
+</html>
