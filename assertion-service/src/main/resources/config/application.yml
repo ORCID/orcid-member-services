@@ -184,6 +184,8 @@ application:
     memberAssertionStatsDirectory: /files
     storedFileLifespan: change-me
     memberAssertionStatsRecipient: change-me
+    syncAffiliationsDelay: 60000
+    generateMemberAssertionStatsCron: change-me
     tokenExchange:
         endpoint: https://change-me-url
         grantType: change-me
@@ -191,6 +193,3 @@ application:
         requestedTokenType: change.me
         clientId: change-me # To overwrite it, export it as an env variable before running gradlew: 'export APPLICATION_TOKENEXCHANGE_CLIENTID=<client id>'
         clientSecret: change-me # Export it as an env variable before running gradlew: 'export APPLICATION_TOKENEXCHANGE_CLIENTSECRET=<client secret>'
-    cron:        
-        syncAffiliations: 60000
-        generateMemberAssertionStats: change-me

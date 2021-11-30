@@ -18,8 +18,6 @@ public class ApplicationProperties {
 
     private TokenExchange tokenExchange;
 
-    private Cron cron;
-    
     private String mailDomain;
 
     private String mailApiKey;
@@ -29,14 +27,18 @@ public class ApplicationProperties {
     private String mailFromAddress;
 
     private String mailFromName;
-    
+
     private boolean mailTestMode;
-    
+
     private String memberAssertionStatsRecipient;
-    
+
     private int storedFileLifespan;
-    
+
     private String memberAssertionStatsDirectory;
+    
+    private String syncAffiliationsDelay;
+
+    private String generateMemberAssertionStatsCron;
 
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
@@ -62,14 +64,6 @@ public class ApplicationProperties {
         this.tokenExchange = tokenExchange;
     }
 
-    public Cron getCron() {
-        return cron;
-    }
-
-    public void setCron(Cron cron) {
-        this.cron = cron;
-    }
-
     public String getOrcidAPIEndpoint() {
         return orcidAPIEndpoint;
     }
@@ -77,7 +71,7 @@ public class ApplicationProperties {
     public void setOrcidAPIEndpoint(String orcidAPIEndpoint) {
         this.orcidAPIEndpoint = orcidAPIEndpoint;
     }
-    
+
     public boolean isMailTestMode() {
         return mailTestMode;
     }
@@ -85,7 +79,7 @@ public class ApplicationProperties {
     public void setMailTestMode(boolean mailTestMode) {
         this.mailTestMode = mailTestMode;
     }
-    
+
     public String getMailDomain() {
         return mailDomain;
     }
@@ -133,7 +127,7 @@ public class ApplicationProperties {
     public void setMemberAssertionStatsRecipient(String memberAssertionStatsRecipient) {
         this.memberAssertionStatsRecipient = memberAssertionStatsRecipient;
     }
-    
+
     public int getStoredFileLifespan() {
         return storedFileLifespan;
     }
@@ -141,7 +135,7 @@ public class ApplicationProperties {
     public void setStoredFileLifespan(int storedFileLifespan) {
         this.storedFileLifespan = storedFileLifespan;
     }
-    
+
     public String getMemberAssertionStatsDirectory() {
         return memberAssertionStatsDirectory;
     }
@@ -149,6 +143,24 @@ public class ApplicationProperties {
     public void setMemberAssertionStatsDirectory(String memberAssertionStatsDirectory) {
         this.memberAssertionStatsDirectory = memberAssertionStatsDirectory;
     }
+    
+    public String getSyncAffiliationsDelay() {
+        return syncAffiliationsDelay;
+    }
+
+    public void setSyncAffiliationsDelay(String syncAffiliationsDelay) {
+        this.syncAffiliationsDelay = syncAffiliationsDelay;
+    }
+
+    public String getGenerateMemberAssertionStatsCron() {
+        return generateMemberAssertionStatsCron;
+    }
+
+    public void setGenerateMemberAssertionStatsCron(String generateMemberAssertionStatsCron) {
+        this.generateMemberAssertionStatsCron = generateMemberAssertionStatsCron;
+    }
+
+
 
     public static class TokenExchange {
         private String endpoint;
@@ -208,27 +220,5 @@ public class ApplicationProperties {
 
     }
 
-    public static class Cron {
 
-        private String syncAffiliations;
-
-        private String generateMemberAssertionStats;
-        
-        public String getSyncAffiliations() {
-            return syncAffiliations;
-        }
-
-        public void setSyncAffiliations(String syncAffiliations) {
-            this.syncAffiliations = syncAffiliations;
-        }
-
-        public String getGenerateMemberAssertionStats() {
-            return generateMemberAssertionStats;
-        }
-
-        public void setGenerateMemberAssertionStats(String generateMemberAssertionStats) {
-            this.generateMemberAssertionStats = generateMemberAssertionStats;
-        }
-        
-    }
 }
