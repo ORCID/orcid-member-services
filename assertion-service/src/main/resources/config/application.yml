@@ -176,11 +176,14 @@ application:
     orcidAPIEndpoint: https://change-me-url
     jwtSignatureUrl: https://change-me-url
     landingPageUrl: https://change-me-url  
-    mailDomain: ${application.mail.domain}
-    mailApiKey: ${application.mail.apiKey}
-    mailApiUrl: ${application.mail.apiUrl}
-    mailFromAddress: ${application.mail.fromAddress}  
-    mailFromName: ${application.mail.fromName}
+    mailDomain: change-me
+    mailApiKey: change-me
+    mailApiUrl: change-me
+    mailFromAddress: change-me  
+    mailFromName: change-me
+    memberAssertionStatsDirectory: change-me
+    storedFileLifespan: change-me
+    memberAssertionStatsRecipient: change-me
     tokenExchange:
         endpoint: https://change-me-url
         grantType: change-me
