@@ -18,7 +18,7 @@ import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 @EnableScheduling
 public class OrcidScheduledJobsManager {
 
-    private final Logger log = LoggerFactory.getLogger(OrcidScheduledJobsManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OrcidScheduledJobsManager.class);
 
     @Autowired
     private AssertionService assertionsService;
@@ -26,15 +26,17 @@ public class OrcidScheduledJobsManager {
     @Scheduled(fixedDelayString = "${application.syncAffiliationsDelay}")
     @SchedulerLock(name = "syncAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "2m")
     public void syncAffiliations() throws JAXBException {
-        log.info("Running cron to sync assertions with registry");
+        LOG.info("Running cron to sync assertions with registry");
         assertionsService.postAssertionsToOrcid();
         assertionsService.putAssertionsInOrcid();
-        log.info("Sync complete");
+        LOG.info("Sync complete");
     }
     
     @Scheduled(cron = "${application.generateMemberAssertionStatsCron}")
     @SchedulerLock(name = "generateMemberAssertionStats", lockAtMostFor = "60m", lockAtLeastFor = "10m")
     public void generateMemberAssertionStats() throws IOException  {
+        LOG.info("Running cron to generate member assertion stats");
         assertionsService.generateAndSendMemberAssertionStats();
+        LOG.info("Stats generation complete");
     }
 }
