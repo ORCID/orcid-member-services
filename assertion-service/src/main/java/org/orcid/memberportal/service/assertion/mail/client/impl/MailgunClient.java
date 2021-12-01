@@ -47,24 +47,24 @@ public class MailgunClient implements MailClient {
             builder.addTextBody("o:testmode", "yes");
             LOGGER.info("Test mode email {} to {}", subject, to);
             LOGGER.info(html);
-        }
+        } else {
+            HttpPost post = new HttpPost(mailApiUrl);
+            post.setEntity(builder.build());
 
-        HttpPost post = new HttpPost(mailApiUrl);
-        post.setEntity(builder.build());
-
-        try {
-            LOGGER.info("Sending mail {} to {}", subject, to);
-            HttpResponse response = httpClient.execute(post);
-            if (response.getStatusLine().getStatusCode() != 200) {
-                LOGGER.warn("Received response {} from mailgun", response.getStatusLine().getReasonPhrase());
-                try (InputStream inputStream = response.getEntity().getContent()) {
-                    LOGGER.warn(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
+            try {
+                LOGGER.info("Sending mail {} to {}", subject, to);
+                HttpResponse response = httpClient.execute(post);
+                if (response.getStatusLine().getStatusCode() != 200) {
+                    LOGGER.warn("Received response {} from mailgun", response.getStatusLine().getReasonPhrase());
+                    try (InputStream inputStream = response.getEntity().getContent()) {
+                        LOGGER.warn(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
+                    }
+                } else {
+                    EntityUtils.consume(response.getEntity());
                 }
-            } else {
-                EntityUtils.consume(response.getEntity());
+            } catch (IOException e) {
+                throw new MailException("Error posting mail to mailgun", e);
             }
-        } catch (IOException e) {
-            throw new MailException("Error posting mail to mailgun", e);
         }
     }
 
@@ -91,5 +91,5 @@ public class MailgunClient implements MailClient {
     public void setHttpClient(HttpClient httpClient) {
         this.httpClient = httpClient;
     }
-    
+
 }

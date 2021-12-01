@@ -181,11 +181,11 @@ application:
     mailApiUrl: change-me
     mailFromAddress: change-me  
     mailFromName: change-me
-    memberAssertionStatsDirectory: /files
-    storedFileLifespan: change-me
-    memberAssertionStatsRecipient: change-me
+    memberAssertionStatsDirectory: files
+    storedFileLifespan: ${STORED_FILE_LIFESPAN}
+    memberAssertionStatsRecipient: ${MEMBER_ASSERTION_STATS_RECIPIENT}
     syncAffiliationsDelay: 60000
-    generateMemberAssertionStatsCron: ${application.generateMemberAssertionStatsCron}
+    generateMemberAssertionStatsCron: ${MEMBER_ASSERTION_STATS_CRON}
     tokenExchange:
         endpoint: https://change-me-url
         grantType: change-me
