@@ -160,8 +160,6 @@ public class ApplicationProperties {
         this.generateMemberAssertionStatsCron = generateMemberAssertionStatsCron;
     }
 
-
-
     public static class TokenExchange {
         private String endpoint;
         private String grantType;

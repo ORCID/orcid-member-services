@@ -185,7 +185,7 @@ application:
     storedFileLifespan: change-me
     memberAssertionStatsRecipient: change-me
     syncAffiliationsDelay: 60000
-    generateMemberAssertionStatsCron: change-me
+    generateMemberAssertionStatsCron: ${application.generateMemberAssertionStatsCron}
     tokenExchange:
         endpoint: https://change-me-url
         grantType: change-me
