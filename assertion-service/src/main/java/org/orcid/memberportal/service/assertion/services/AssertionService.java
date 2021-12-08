@@ -1,6 +1,7 @@
 package org.orcid.memberportal.service.assertion.services;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
@@ -26,6 +27,7 @@ import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
+import org.orcid.memberportal.service.assertion.domain.StoredFile;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
@@ -699,12 +701,27 @@ public class AssertionService {
     public String generateAssertionsCSV() throws IOException {
         return assertionsForEditCsvWriter.writeCsv();
     }
-
-    public AssertionsUploadSummary uploadAssertions(MultipartFile file) {
+    
+    public void uploadAssertions(MultipartFile file) throws IOException {
         AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+        storedFileService.storeAssertionsCsvFile(file.getInputStream(), user);
+    }
+    
+    public void processAssertionUploads() {
+        List<StoredFile> pendingUploads = storedFileService.getUnprocessedStoredFilesByType(StoredFileService.ASSERTIONS_CSV_FILE_TYPE);
+        pendingUploads.forEach(this::processAssertionsUploadFile);
+    }
+    
+    private void processAssertionsUploadFile(StoredFile uploadFile) {
+        File file = new File(uploadFile.getFileLocation());
+        AssertionServiceUser user = assertionsUserService.getUserById(uploadFile.getOwnerId());
         AssertionsUpload upload = readUpload(file, user);
         AssertionsUploadSummary summary = processUpload(upload);
-        return summary;
+        mailService.sendAssertionsUploadSummaryMail(summary, user);
+        
+        if (summary.getErrors().isEmpty()) {
+            storedFileService.markAsProcessed(uploadFile);
+        }
     }
 
     private AssertionsUploadSummary processUpload(AssertionsUpload upload) {
@@ -751,12 +768,12 @@ public class AssertionService {
         return summary;
     }
 
-    private AssertionsUpload readUpload(MultipartFile file, AssertionServiceUser user) {
+    private AssertionsUpload readUpload(File file, AssertionServiceUser user) {
         InputStream inputStream = null;
         AssertionsUpload upload = null;
 
         try {
-            inputStream = file.getInputStream();
+            inputStream = new FileInputStream(file);
             upload = assertionsCsvReader.readAssertionsUpload(inputStream, user);
         } catch (IOException e) {
             LOG.warn("Error reading user upload", e);

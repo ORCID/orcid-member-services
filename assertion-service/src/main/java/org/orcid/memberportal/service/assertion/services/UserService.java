@@ -62,4 +62,14 @@ public class UserService {
         }
     }
 
+    public AssertionServiceUser getUserById(String id) {
+        ResponseEntity<AssertionServiceUser> userResponse = userServiceClient.getUser(id);
+        if (userResponse.getStatusCode().is2xxSuccessful()) {
+            return userResponse.getBody();
+        } else {
+            LOG.warn("User not found for id {}", id);
+            return null;
+        }
+    }
+
 }
