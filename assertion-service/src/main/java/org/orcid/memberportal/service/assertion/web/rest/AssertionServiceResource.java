@@ -35,7 +35,6 @@ import org.orcid.memberportal.service.assertion.security.SecurityUtils;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
-import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -167,11 +166,15 @@ public class AssertionServiceResource {
     }
 
     @PostMapping("/assertion/upload")
-    public ResponseEntity<AssertionsUploadSummary> uploadAssertions(@RequestParam("file") MultipartFile file) {
-        AssertionsUploadSummary summary = assertionService.uploadAssertions(file);
-        LOG.info("{} uploaded assertion CSV: {} added, {} updated, {} deleted, {} duplicates", new Object[] { SecurityUtils.getCurrentUserLogin().get(),
-                summary.getNumAdded(), summary.getNumUpdated(), summary.getNumDeleted(), summary.getNumDuplicates() });
-        return ResponseEntity.ok().body(summary);
+    public ResponseEntity<Boolean> uploadAssertions(@RequestParam("file") MultipartFile file) {
+        LOG.info("Uploading user csv upload for processing");
+        try {
+            assertionService.uploadAssertions(file);
+            return ResponseEntity.ok().body(Boolean.TRUE);
+        } catch (IOException e) {
+            LOG.error("Error uploading user csv file", e);
+            return ResponseEntity.ok().body(Boolean.FALSE); 
+        }
     }
 
     @DeleteMapping("/assertion/{id}")

@@ -42,7 +42,6 @@ import org.orcid.memberportal.service.assertion.security.JWTUtil;
 import org.orcid.memberportal.service.assertion.security.MockSecurityContext;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
-import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -327,10 +326,20 @@ class AssertionServiceResourceTest {
     }
 
     @Test
-    void testUploadAssertions() {
+    void testUploadAssertions() throws IOException {
         MultipartFile file = Mockito.mock(MultipartFile.class);
-        Mockito.when(assertionService.uploadAssertions(Mockito.any())).thenReturn(new AssertionsUploadSummary());
-        assertionServiceResource.uploadAssertions(file);
+        Mockito.doNothing().when(assertionService).uploadAssertions(Mockito.any());
+        ResponseEntity<Boolean> success = assertionServiceResource.uploadAssertions(file);
+        assertEquals(Boolean.TRUE, success.getBody());
+        Mockito.verify(assertionService, Mockito.times(1)).uploadAssertions(Mockito.any());
+    }
+    
+    @Test
+    void testUploadAssertionsErrorThrown() throws IOException {
+        MultipartFile file = Mockito.mock(MultipartFile.class);
+        Mockito.doThrow(new IOException()).when(assertionService).uploadAssertions(Mockito.any());
+        ResponseEntity<Boolean> success = assertionServiceResource.uploadAssertions(file);
+        assertEquals(Boolean.FALSE, success.getBody());
         Mockito.verify(assertionService, Mockito.times(1)).uploadAssertions(Mockito.any());
     }
 
