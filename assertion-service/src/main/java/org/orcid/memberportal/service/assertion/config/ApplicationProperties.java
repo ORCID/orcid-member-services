@@ -39,6 +39,8 @@ public class ApplicationProperties {
     private String syncAffiliationsDelay;
 
     private String generateMemberAssertionStatsCron;
+    
+    private String assertionsCsvUploadDirectory;
 
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
@@ -158,6 +160,14 @@ public class ApplicationProperties {
 
     public void setGenerateMemberAssertionStatsCron(String generateMemberAssertionStatsCron) {
         this.generateMemberAssertionStatsCron = generateMemberAssertionStatsCron;
+    }
+
+    public String getAssertionsCsvUploadDirectory() {
+        return assertionsCsvUploadDirectory;
+    }
+
+    public void setAssertionsCsvUploadDirectory(String assertionsCsvUploadDirectory) {
+        this.assertionsCsvUploadDirectory = assertionsCsvUploadDirectory;
     }
 
     public static class TokenExchange {
