@@ -39,15 +39,7 @@
       "import": {
         "title": { "string": "所属をインポート" },
         "label": { "string": "アップロードするCSVファイルを選択してください" },
-        "filePath": { "string": "ファイルパス" },
-        "success": { "string": "CSVのインポートに成功しました。" },
-        "added": { "string": "アフィリエーションが追加されました" },
-        "updated": { "string": "アフィリエーションが更新されました" },
-        "deleted": { "string": "アフィリエーションが削除されました" },
-        "duplicates": { "string": "重複が無視されました" },
-        "errors": {
-          "label": { "string": "おっと！あなたのデータの処理で問題がありました。以下のエラーを修正して、もう一度やり直してください" }
-        }
+        "filePath": { "string": "ファイルパス" }
       },
       "addedToOrcid": { "string": "ORCIDに追加されました" },
       "updatedInOrcid": { "string": "ORCID で更新されました" },

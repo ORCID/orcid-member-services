@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.affiliationUploadSuccess.title}">
+        Your affiliation CSV upload
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body
+    style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+<div style="padding: 20px; padding-top: 10px; margin: auto;">
+    <div th:insert="~{mail/common :: emailHeader}"></div>
+    <span th:if="${#lists.isEmpty(summary.errors)}">
+	    <p>
+	        <span th:text="#{email.affiliationUploadSuccess.processed}">
+	        	Your affiliation CSV upload has been processed with the following results:
+	        </span>
+	    </p>
+	    <p>
+	        <span th:text="(@{|${summary.numAdded}|})">
+	            x
+	        </span>
+	        &nbsp;
+	        <span th:text="#{email.affiliationUploadSuccess.added}">
+	        	added
+	        </span>
+	    </p>
+	    <p> 
+	        <span th:text="(@{|${summary.numUpdated}|})">
+	            x
+	        </span>
+	        &nbsp;
+	        <span th:text="#{email.affiliationUploadSuccess.updated}">
+	        	updated
+	        </span>
+	    </p>
+	    <p> 
+	        <span th:text="(@{|${summary.numDeleted}|})">
+	            x
+	        </span>
+	        &nbsp;
+	        <span th:text="#{email.affiliationUploadSuccess.deleted}">
+	        	duplicates
+	        </span>
+	    </p>
+	    <p> 
+	        <span th:text="(@{|${summary.numDuplicates}|})">
+	            x
+	        </span>
+	        &nbsp;
+	        <span th:text="#{email.affiliationUploadSuccess.duplicates}">
+	        	duplicates
+	        </span>
+	    </p>
+    </span>
+    <span th:if="${not #lists.isEmpty(summary.errors)}">
+	    <p>
+	        <span th:text="#{email.affiliationUploadFailure.failure}">
+	        	There was a problem processing your CSV upload. Pleases fix the errors below and try again.
+	        </span>
+	    </p>
+	    <table>
+	    	<tbody>
+	    		<tr th:each="error: ${summary.errors}">
+	        		<td>
+	        			<span th:text="#{email.affiliationUploadFailure.row}">
+				        	Row
+				        </span>
+				        &nbsp;
+				        <span th:text="${error.index}">
+				        	1
+				        </span>
+				    </td>
+	        		<td th:text="${error.message}">error</td>
+	       		</tr>
+	       		<tr th:if="${moreErrors > 0}">
+	       			<td>
+	       				<span th:text="#{email.affiliationUploadFailure.and}">
+				        	and
+				        </span>
+				        &nbsp;
+				        <span th:text="${moreErrors}">30</span>
+				        &nbsp;
+				        <span th:text="#{email.affiliationUploadFailure.moreErrors}">
+				        	more errors
+				        </span>
+				    </td>
+	       		</tr>
+	    	</tbody>
+	    </table>
+    </span> 
+    <p>
+        <span th:text="#{email.common.warmRegards}">Warm Regards,</span> <br />
+        <span th:text="#{email.common.signature}">The ORCID Member Portal Team</span> <br />
+        <a href="mailto:membership@orcid.org">membership@orcid.org</a>
+    </p>
+    <p th:text="#{email.common.youHaveReceived}">You have received
+        this email as a service announcement related to your ORCID Member Portal account.</p>
+    <div th:insert="~{mail/common :: emailFooter}"></div>
+</div>
+</body>
+</html>
