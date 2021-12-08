@@ -40,7 +40,8 @@
         "title": { "string": "Import affiliations" },
         "label": { "string": "Please select a CSV file to upload" },
         "filePath": { "string": "File path" },
-        "success": { "string": "Your CSV has been uploaded for processing." }
+        "success": { "string": "Your CSV has been uploaded for processing." },
+        "failure": { "string": "There was a problem uploading your CSV for processing." }
       },
       "addedToOrcid": { "string": "Added To ORCID" },
       "updatedInOrcid": { "string": "Updated In ORCID" },

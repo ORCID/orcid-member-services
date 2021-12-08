@@ -181,7 +181,8 @@ application:
     mailApiUrl: change-me
     mailFromAddress: change-me  
     mailFromName: change-me
-    memberAssertionStatsDirectory: files
+    memberAssertionStatsDirectory: files/stats
+    assertionsCsvUploadDirectory: files/uploads
     storedFileLifespan: ${STORED_FILE_LIFESPAN}
     memberAssertionStatsRecipient: ${MEMBER_ASSERTION_STATS_RECIPIENT}
     syncAffiliationsDelay: 60000

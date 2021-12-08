@@ -4,46 +4,17 @@
         <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
     </div>
     <div class="modal-body">
-    	<div class="alert alert-success" *ngIf="summary && (summary.numAdded > 0 || summary.numUpdated > 0 || summary.numDeleted > 0 || summary.numDuplicates > 0)">
-			<div class="row" *ngIf="summary.numAdded > 0">
+    	<div class="alert alert-success" *ngIf="uploaded && success">
+			<div class="row">
 				<div class="col-md-12">
-	            	<p>{{ summary.numAdded }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.added.string">affiliations added</span></p>
+	            	<span jhiTranslate="gatewayApp.assertionServiceAssertion.import.success.string">Your CSV has been uploaded for processing.</span>
 	            </div>
 	        </div>
-			<div class="row" *ngIf="summary.numUpdated > 0">
-				<div class="col-md-12">
-	            	<p>{{ summary.numUpdated }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.updated.string">affiliations updated</span></p>
-	            </div>
-			</div>
-			<div class="row" *ngIf="summary.numDeleted > 0">
-				<div class="col-md-12">
-	            	<p>{{ summary.numDeleted }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.deleted.string">affiliations deleted</span></p>
-	            </div>
-			</div>
-			<div class="row" *ngIf="summary.numDuplicates > 0">
-				<div class="col-md-12">
-	            	<p>{{ summary.numDuplicates }} <span jhiTranslate="gatewayApp.assertionServiceAssertion.import.duplicates.string">duplicate(s) detected</span></p>
-	            </div>
-			</div>
 		</div>
         <jhi-alert-error></jhi-alert-error>
-        <div class="alerts top right" role="alert" *ngIf="summary.errors && summary.errors.length > 0">
+        <div class="alerts top right" role="alert" *ngIf="uploaded && !success">
 			<ngb-alert class="alert alert-danger alert-dismissible" role="alert" ng-reflect-type="danger" (close)="csvErrors = null">
-			    <p jhiTranslate="gatewayApp.assertionServiceAssertion.import.errors.label.string">Oops! There was a problem processing your data. Pleases fix the errors below and try again</p>
-			    <table>
-			    	<thead>
-			    		<th>Errors</th>
-			    	</thead>
-			    	<tbody>
-			    		<tr *ngFor="let error of summary.errors | slice:0:10;">
-			        		<td>Row {{error['index']}}</td>
-			        		<td>{{error['message']}}</td>
-			       		</tr>
-			       		<tr *ngIf="summary.errors.length > 10">
-			       			<td>and {{ summary.errors.length - 10 }} more errors</td>
-			       		</tr>
-			    	</tbody>
-			    </table>
+			    <p jhiTranslate="gatewayApp.assertionServiceAssertion.import.failure.string">There was a problem uploading your CSV for processing.</p>
 		    </ngb-alert>
 		</div>
         <p id="jhi-delete-msUser-heading" jhiTranslate="gatewayApp.assertionServiceAssertion.import.label.string">Please select the CSV file to upload</p>
