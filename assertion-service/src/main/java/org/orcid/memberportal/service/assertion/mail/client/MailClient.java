@@ -8,4 +8,6 @@ public interface MailClient {
 
     void sendMailWithAttachment(String to, String subject, String html, File attachment) throws MailException;
 
+    void sendMail(String to, String subject, String html) throws MailException;
+
 }

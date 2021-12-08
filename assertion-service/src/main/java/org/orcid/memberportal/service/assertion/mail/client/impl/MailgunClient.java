@@ -33,6 +33,26 @@ public class MailgunClient implements MailClient {
     private String fromAddress;
 
     @Override
+    public void sendMail(String to, String subject, String html) throws MailException {
+        LOGGER.info("Preparing email {} for sending to {}", subject, to);
+
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.addTextBody("to", to);
+        builder.addTextBody("from", getFrom());
+        builder.addTextBody("subject", subject);
+        builder.addTextBody("html", html);
+        
+        if (testMode) {
+            builder.addTextBody("o:testmode", "yes");
+            LOGGER.info("Test mode email {} to {}", subject, to);
+            LOGGER.info(html);
+        } else {
+            LOGGER.info("Sending mail {} to {}", subject, to);
+            send(builder);
+        }
+    }
+
+    @Override
     public void sendMailWithAttachment(String to, String subject, String html, File file) throws MailException {
         LOGGER.info("Preparing email {} for sending to {}", subject, to);
 
@@ -45,26 +65,30 @@ public class MailgunClient implements MailClient {
 
         if (testMode) {
             builder.addTextBody("o:testmode", "yes");
-            LOGGER.info("Test mode email {} to {}", subject, to);
+            LOGGER.info("Test mode email {} with attachment {} to {}", subject, file.getName(), to);
             LOGGER.info(html);
         } else {
-            HttpPost post = new HttpPost(mailApiUrl);
-            post.setEntity(builder.build());
+            LOGGER.info("Sending mail {} to {}", subject, to);
+            send(builder);
+        }
+    }
+    
+    private void send(MultipartEntityBuilder builder) throws MailException {
+        HttpPost post = new HttpPost(mailApiUrl);
+        post.setEntity(builder.build());
 
-            try {
-                LOGGER.info("Sending mail {} to {}", subject, to);
-                HttpResponse response = httpClient.execute(post);
-                if (response.getStatusLine().getStatusCode() != 200) {
-                    LOGGER.warn("Received response {} from mailgun", response.getStatusLine().getReasonPhrase());
-                    try (InputStream inputStream = response.getEntity().getContent()) {
-                        LOGGER.warn(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
-                    }
-                } else {
-                    EntityUtils.consume(response.getEntity());
+        try {
+            HttpResponse response = httpClient.execute(post);
+            if (response.getStatusLine().getStatusCode() != 200) {
+                LOGGER.warn("Received response {} from mailgun", response.getStatusLine().getReasonPhrase());
+                try (InputStream inputStream = response.getEntity().getContent()) {
+                    LOGGER.warn(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
                 }
-            } catch (IOException e) {
-                throw new MailException("Error posting mail to mailgun", e);
+            } else {
+                EntityUtils.consume(response.getEntity());
             }
+        } catch (IOException e) {
+            throw new MailException("Error posting mail to mailgun", e);
         }
     }
 
