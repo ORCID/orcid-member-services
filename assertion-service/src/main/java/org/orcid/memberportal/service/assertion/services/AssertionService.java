@@ -99,49 +99,24 @@ public class AssertionService {
     }
 
     public Page<Assertion> findByOwnerId(Pageable pageable) {
-        Page<Assertion> assertionsPage = assertionRepository.findByOwnerId(assertionsUserService.getLoggedInUserId(), pageable);
-        assertionsPage.forEach(a -> {
-            if (!StringUtils.isBlank(a.getStatus())) {
-                a.setStatus(AssertionStatus.valueOf(a.getStatus()).getValue());
-            }
-        });
-        return assertionsPage;
+        return assertionRepository.findByOwnerId(assertionsUserService.getLoggedInUserId(), pageable);
     }
 
     public List<Assertion> findAllByOwnerId() {
-        List<Assertion> assertions = assertionRepository.findAllByOwnerId(assertionsUserService.getLoggedInUserId(), SORT);
-        assertions.forEach(a -> {
-            if (!StringUtils.isBlank(a.getStatus())) {
-                a.setStatus(AssertionStatus.valueOf(a.getStatus()).getValue());
-            }
-        });
-        return assertions;
+        return assertionRepository.findAllByOwnerId(assertionsUserService.getLoggedInUserId(), SORT);
     }
 
     public Page<Assertion> findBySalesforceId(Pageable pageable) {
-        String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
-        Page<Assertion> assertions = assertionRepository.findBySalesforceId(salesforceId, pageable);
-        assertions.forEach(a -> {
-            if (!StringUtils.isBlank(a.getStatus())) {
-                a.setStatus(AssertionStatus.valueOf(a.getStatus()).getValue());
-            }
-        });
-        return assertions;
+        return assertionRepository.findBySalesforceId(assertionsUserService.getLoggedInUserSalesforceId(), pageable);
     }
 
     public Page<Assertion> findBySalesforceId(Pageable pageable, String filter) {
         String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
-        Page<Assertion> assertions = assertionRepository
+        return assertionRepository
                 .findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
                         pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter,
                         salesforceId, filter);
-        assertions.forEach(a -> {
-            if (!StringUtils.isBlank(a.getStatus())) {
-                LOG.debug("assertion status is: " + a.getStatus());
-                a.setStatus(AssertionStatus.valueOf(a.getStatus()).getValue());
-            }
-        });
-        return assertions;
+        
     }
 
     public void deleteAllBySalesforceId(String salesforceId) {
@@ -164,12 +139,7 @@ public class AssertionService {
         if (!optional.isPresent()) {
             throw new IllegalArgumentException("Invalid assertion id");
         }
-        Assertion assertion = optional.get();
-        if (!StringUtils.isBlank(assertion.getStatus())) {
-            LOG.debug("assertion status is: " + assertion.getStatus());
-            assertion.setStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
-        }
-        return assertion;
+        return optional.get();
     }
 
     public Assertion createAssertion(Assertion assertion) {
