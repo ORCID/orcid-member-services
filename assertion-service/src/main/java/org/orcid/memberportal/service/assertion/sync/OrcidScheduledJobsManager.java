@@ -27,7 +27,7 @@ public class OrcidScheduledJobsManager {
     @Autowired
     private StoredFileService storedFileService;
 
-    @Scheduled(fixedDelayString = "${application.syncAffiliationsDelay}")
+    @Scheduled(initialDelay = 90000l, fixedDelayString = "${application.syncAffiliationsDelay}")
     @SchedulerLock(name = "syncAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "2m")
     public void syncAffiliations() throws JAXBException {
         LOG.info("Running cron to sync assertions with registry");
@@ -36,7 +36,7 @@ public class OrcidScheduledJobsManager {
         LOG.info("Sync complete");
     }
     
-    @Scheduled(cron = "${application.generateMemberAssertionStatsCron}")
+    @Scheduled(initialDelay = 90000l, cron = "${application.generateMemberAssertionStatsCron}")
     @SchedulerLock(name = "generateMemberAssertionStats", lockAtMostFor = "60m", lockAtLeastFor = "10m")
     public void generateMemberAssertionStats() throws IOException  {
         LOG.info("Running cron to generate member assertion stats");
@@ -44,7 +44,7 @@ public class OrcidScheduledJobsManager {
         LOG.info("Stats generation complete");
     }
     
-    @Scheduled(fixedDelayString = "${application.processAssertionUploadsDelay}")
+    @Scheduled(initialDelay = 90000l, fixedDelayString = "${application.processAssertionUploadsDelay}")
     @SchedulerLock(name = "processAssertionUploads", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void processAssertionUploads() throws IOException  {
         LOG.info("Running cron to process assertion uploads");
@@ -52,7 +52,7 @@ public class OrcidScheduledJobsManager {
         LOG.info("Assertion uploads processed");
     }
     
-    @Scheduled(fixedDelayString = "${application.removeStoredFilesDelay}")
+    @Scheduled(initialDelay = 90000l, fixedDelayString = "${application.removeStoredFilesDelay}")
     @SchedulerLock(name = "removeStoredFiles", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void removeStoredFiles() throws IOException  {
         LOG.info("Running cron to remove old files");
