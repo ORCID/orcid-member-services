@@ -43,6 +43,7 @@ import org.orcid.memberportal.service.assertion.security.JWTUtil;
 import org.orcid.memberportal.service.assertion.security.MockSecurityContext;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
+import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,7 +70,7 @@ class AssertionServiceResourceTest {
 
     @Mock
     private OrcidRecordService orcidRecordService;
-
+    
     @Mock
     private EncryptUtil encryptUtil;
     
@@ -79,6 +80,9 @@ class AssertionServiceResourceTest {
     @Mock
     private RorOrgValidator rorOrgValidator;
 
+    @Mock
+    private UserService assertionsUserService;
+    
     @Mock
     private RinggoldOrgValidator ringgoldOrgValidator;
     
@@ -95,6 +99,7 @@ class AssertionServiceResourceTest {
         Mockito.when(rorOrgValidator.validId(Mockito.anyString())).thenReturn(true);
         Mockito.when(gridOrgValidator.validId(Mockito.anyString())).thenReturn(true);
         Mockito.when(ringgoldOrgValidator.validId(Mockito.anyString())).thenReturn(true);
+        Mockito.when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
     }
 
     @Test
@@ -414,6 +419,15 @@ class AssertionServiceResourceTest {
         error.put("error", "not found");
         assertion.setOrcidError(error.toString());
         return assertion;
+    }
+    
+    private AssertionServiceUser getUser() {
+        AssertionServiceUser user = new AssertionServiceUser();
+        user.setId("owner");
+        user.setEmail("owner@orcid.org");
+        user.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        user.setLangKey("en");
+        return user;
     }
 
 }
