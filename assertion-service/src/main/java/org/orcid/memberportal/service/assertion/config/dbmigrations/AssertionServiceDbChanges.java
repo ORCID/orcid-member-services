@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.domain.StoredFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -57,6 +58,20 @@ public class AssertionServiceDbChanges {
             LOG.info("Converting orcid record with email {} to lower case", or.getEmail());
             or.setEmail(or.getEmail());
             mongoTemplate.save(or);
+        });
+    }
+    
+    @ChangeSet(order = "04", author = "George Nash", id = "04-addProcessedDateToCsvStatsFiles")
+    public void addProcessedDateToCsvStatsFiles(MongoTemplate mongoTemplate) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("file_type").is("assertion-stats"));
+        query.addCriteria(Criteria.where("date_processed").is(null));
+        List<StoredFile> storedFilesWithNullProcessedDate = mongoTemplate.find(query, StoredFile.class, "stored_file");
+        LOG.info("Found {} assertion-stats StoredFiles with null processed date", storedFilesWithNullProcessedDate.size());
+        storedFilesWithNullProcessedDate.forEach(f -> {
+            LOG.info("Setting processed date to date written value for stored file {}", f.getId());
+            f.setDateProcessed(f.getDateWritten());
+            mongoTemplate.save(f);
         });
     }
 
