@@ -187,6 +187,7 @@ application:
     memberAssertionStatsRecipient: ${MEMBER_ASSERTION_STATS_RECIPIENT}
     syncAffiliationsDelay: 60000
     generateMemberAssertionStatsCron: ${MEMBER_ASSERTION_STATS_CRON}
+    processAssertionUploadsDelay: 3000000
     tokenExchange:
         endpoint: https://change-me-url
         grantType: change-me
