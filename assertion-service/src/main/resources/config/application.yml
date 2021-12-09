@@ -1,3 +1,4 @@
+
 # ===================================================================
 # Spring Boot configuration.
 #
@@ -187,7 +188,7 @@ application:
     memberAssertionStatsRecipient: ${MEMBER_ASSERTION_STATS_RECIPIENT}
     syncAffiliationsDelay: 60000
     generateMemberAssertionStatsCron: ${MEMBER_ASSERTION_STATS_CRON}
-    processAssertionUploadsDelay: 3000000
+    processAssertionUploadsDelay: 300000
     tokenExchange:
         endpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}
         grantType: ${APPLICATION_TOKEN_EXCHANGE_GRANT_TYPE}
