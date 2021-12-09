@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="#{email.affiliationUploadSuccess.title}">
+    <title th:text="#{email.affiliationUploadSummary.title}">
         Your affiliation CSV upload
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -13,7 +13,7 @@
     <div th:insert="~{mail/common :: emailHeader}"></div>
     <span th:if="${#lists.isEmpty(summary.errors)}">
 	    <p>
-	        <span th:text="#{email.affiliationUploadSuccess.processed}">
+	        <span th:text="#{email.affiliationUploadSummary.processed}">
 	        	Your affiliation CSV upload has been processed with the following results:
 	        </span>
 	    </p>
@@ -22,7 +22,7 @@
 	            x
 	        </span>
 	        &nbsp;
-	        <span th:text="#{email.affiliationUploadSuccess.added}">
+	        <span th:text="#{email.affiliationUploadSummary.added}">
 	        	added
 	        </span>
 	    </p>
@@ -31,7 +31,7 @@
 	            x
 	        </span>
 	        &nbsp;
-	        <span th:text="#{email.affiliationUploadSuccess.updated}">
+	        <span th:text="#{email.affiliationUploadSummary.updated}">
 	        	updated
 	        </span>
 	    </p>
@@ -40,7 +40,7 @@
 	            x
 	        </span>
 	        &nbsp;
-	        <span th:text="#{email.affiliationUploadSuccess.deleted}">
+	        <span th:text="#{email.affiliationUploadSummary.deleted}">
 	        	duplicates
 	        </span>
 	    </p>
@@ -49,22 +49,22 @@
 	            x
 	        </span>
 	        &nbsp;
-	        <span th:text="#{email.affiliationUploadSuccess.duplicates}">
+	        <span th:text="#{email.affiliationUploadSummary.duplicates}">
 	        	duplicates
 	        </span>
 	    </p>
     </span>
     <span th:if="${not #lists.isEmpty(summary.errors)}">
 	    <p>
-	        <span th:text="#{email.affiliationUploadFailure.failure}">
+	        <span th:text="#{email.affiliationUploadSummary.failure}">
 	        	There was a problem processing your CSV upload. Pleases fix the errors below and try again.
 	        </span>
 	    </p>
 	    <table>
 	    	<tbody>
-	    		<tr th:each="error: ${summary.errors}">
+	    		<tr th:each="error,index: ${summary.errors}" th:if="${index.index} < 10">
 	        		<td>
-	        			<span th:text="#{email.affiliationUploadFailure.row}">
+	        			<span th:text="#{email.affiliationUploadSummary.row}">
 				        	Row
 				        </span>
 				        &nbsp;
@@ -74,15 +74,15 @@
 				    </td>
 	        		<td th:text="${error.message}">error</td>
 	       		</tr>
-	       		<tr th:if="${moreErrors > 0}">
+	       		<tr th:if="${#arrays.length(summary.errors) > 10}">
 	       			<td>
-	       				<span th:text="#{email.affiliationUploadFailure.and}">
+	       				<span th:text="#{email.affiliationUploadSummary.and}">
 				        	and
 				        </span>
 				        &nbsp;
-				        <span th:text="${moreErrors}">30</span>
+				        <span th:text="${#arrays.length(summary.errors) - 10}">30</span>
 				        &nbsp;
-				        <span th:text="#{email.affiliationUploadFailure.moreErrors}">
+				        <span th:text="#{email.affiliationUploadSummary.moreErrors}">
 				        	more errors
 				        </span>
 				    </td>

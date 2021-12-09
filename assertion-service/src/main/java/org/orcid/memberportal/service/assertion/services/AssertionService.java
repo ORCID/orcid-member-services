@@ -75,25 +75,25 @@ public class AssertionService {
 
     @Autowired
     private PermissionLinksCsvWriter permissionLinksCsvWriter;
-    
+
     @Autowired
     private UserService assertionsUserService;
 
     @Autowired
     private AssertionsCsvReader assertionsCsvReader;
-    
+
     @Autowired
     private AssertionNormalizer assertionNormalizer;
-    
+
     @Autowired
     private MemberService memberService;
-    
+
     @Autowired
     private StoredFileService storedFileService;
-    
+
     @Autowired
     private MailService mailService;
-    
+
     public boolean assertionExists(String id) {
         return assertionRepository.existsById(id);
     }
@@ -116,7 +116,7 @@ public class AssertionService {
                 .findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
                         pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter,
                         salesforceId, filter);
-        
+
     }
 
     public void deleteAllBySalesforceId(String salesforceId) {
@@ -144,14 +144,12 @@ public class AssertionService {
 
     public Assertion createAssertion(Assertion assertion, AssertionServiceUser owner) {
         assertion = assertionNormalizer.normalize(assertion);
-        
-        Instant now = Instant.now();
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
 
-        assertion.setOwnerId(user.getId());
+        Instant now = Instant.now();
+        assertion.setOwnerId(owner.getId());
         assertion.setCreated(now);
         assertion.setModified(now);
-        assertion.setLastModifiedBy(user.getEmail());
+        assertion.setLastModifiedBy(owner.getEmail());
         assertion.setSalesforceId(owner.getSalesforceId());
 
         String email = assertion.getEmail();
@@ -205,7 +203,7 @@ public class AssertionService {
 
     public Assertion updateAssertion(Assertion assertion, AssertionServiceUser user) {
         assertion = assertionNormalizer.normalize(assertion);
-        
+
         Optional<Assertion> optional = assertionRepository.findById(assertion.getId());
         Assertion existingAssertion = optional.get();
         if (!user.getSalesforceId().equals(existingAssertion.getSalesforceId())) {
@@ -325,7 +323,8 @@ public class AssertionService {
         LOG.info("POSTing affiliations to orcid registry...");
         List<Assertion> assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry();
         for (Assertion assertion : assertionsToAdd) {
-            LOG.debug("Preparing to POST assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - to orcid registry", assertion.getId(), assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
+            LOG.debug("Preparing to POST assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - to orcid registry", assertion.getId(),
+                    assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
             postAssertionToOrcid(assertion);
             LOG.debug("POST task complete for assertion {}", assertion.getId());
         }
@@ -350,7 +349,8 @@ public class AssertionService {
                 assertion.setOrcidError(null);
                 LOG.debug("Recalculating assertion {} status", assertion.getId());
                 assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, record.get()));
-                LOG.debug("Updating assertion details in db - lastSyncAttempt: {}, putCode: {}, status: {}, addedToOrcid: {}, error free", now, putCode, assertion.getStatus(), now);
+                LOG.debug("Updating assertion details in db - lastSyncAttempt: {}, putCode: {}, status: {}, addedToOrcid: {}, error free", now, putCode,
+                        assertion.getStatus(), now);
                 assertionRepository.save(assertion);
             } catch (ORCIDAPIException oae) {
                 LOG.info("Recieved orcid api exception");
@@ -370,9 +370,11 @@ public class AssertionService {
         List<Assertion> assertionsToUpdate = assertionRepository.findAllToUpdateInOrcidRegistry();
         for (Assertion assertion : assertionsToUpdate) {
             // query will return only id and modified dates, so fetch full data
-            LOG.debug("Preparing to PUT assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - in orcid registry", assertion.getId(), assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
+            LOG.debug("Preparing to PUT assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - in orcid registry", assertion.getId(),
+                    assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
             Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
-            LOG.debug("Refreshed assertion - id: {}, salesforceId: {}, email: {}, orcid id: {}", assertion.getId(), assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
+            LOG.debug("Refreshed assertion - id: {}, salesforceId: {}, email: {}, orcid id: {}", assertion.getId(), assertion.getSalesforceId(), assertion.getEmail(),
+                    assertion.getOrcidId());
             putAssertionInOrcid(refreshed);
             LOG.debug("PUT task complete for assertion {}", assertion.getId());
         }
@@ -447,7 +449,7 @@ public class AssertionService {
     public String generateAssertionsReport() throws IOException {
         return assertionsReportCsvWriter.writeCsv();
     }
-    
+
     public void generateAndSendMemberAssertionStats() throws IOException {
         List<MemberAssertionStatusCount> counts = assertionRepository.getMemberAssertionStatusCounts();
         Map<String, MemberAssertionStats> stats = getMemberAssertionStats(counts);
@@ -465,7 +467,7 @@ public class AssertionService {
             row.add(memberStats.getStatusCountsString());
             rows.add(row);
         }
-        
+
         String[] headers = new String[] { "Member name", "Total affiliations", "Statuses" };
         return new CsvWriter().writeCsv(headers, rows);
     }
@@ -501,7 +503,7 @@ public class AssertionService {
             return false;
         }
         LOG.debug("Found orcid id {}", orcid);
-        
+
         if (StringUtils.isBlank(idToken)) {
             LOG.debug("No id token for assertion {}, can't sync with registry", assertion.getId());
             return false;
@@ -509,7 +511,7 @@ public class AssertionService {
         LOG.debug("Found idToken, assertion {} cleared for registry sync", assertion.getId());
         return true;
     }
-    
+
     private void updateStatusAndSave(Assertion a, OrcidRecord r) {
         a.setStatus(AssertionUtils.getAssertionStatus(a, r));
         assertionRepository.save(a);
@@ -612,27 +614,24 @@ public class AssertionService {
     public String generateAssertionsCSV() throws IOException {
         return assertionsForEditCsvWriter.writeCsv();
     }
-    
+
     public void uploadAssertions(MultipartFile file) throws IOException {
         AssertionServiceUser user = assertionsUserService.getLoggedInUser();
         storedFileService.storeAssertionsCsvFile(file.getInputStream(), user);
     }
-    
+
     public void processAssertionUploads() {
         List<StoredFile> pendingUploads = storedFileService.getUnprocessedStoredFilesByType(StoredFileService.ASSERTIONS_CSV_FILE_TYPE);
         pendingUploads.forEach(this::processAssertionsUploadFile);
     }
-    
+
     private void processAssertionsUploadFile(StoredFile uploadFile) {
         File file = new File(uploadFile.getFileLocation());
         AssertionServiceUser user = assertionsUserService.getUserById(uploadFile.getOwnerId());
         AssertionsUpload upload = readUpload(file, user);
         AssertionsUploadSummary summary = processUpload(upload, user);
         mailService.sendAssertionsUploadSummaryMail(summary, user);
-        
-        if (summary.getErrors().isEmpty()) {
-            storedFileService.markAsProcessed(uploadFile);
-        }
+        storedFileService.markAsProcessed(uploadFile);
     }
 
     private AssertionsUploadSummary processUpload(AssertionsUpload upload, AssertionServiceUser user) {
@@ -700,7 +699,7 @@ public class AssertionService {
         List<Assertion> assertions = assertionRepository.findAllByEmail(email);
         assertions.stream().filter(a -> a.getOrcidId() == null).forEach(a -> {
             a.setOrcidId(orcid);
-            assertionRepository.save(a); 
+            assertionRepository.save(a);
         });
     }
 }

@@ -7,6 +7,7 @@ import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.mail.MailException;
 import org.orcid.memberportal.service.assertion.mail.client.impl.MailgunClient;
+import org.orcid.memberportal.service.assertion.services.locale.LocaleUtils;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,11 +59,11 @@ public class MailService {
     }
 
     public void sendAssertionsUploadSummaryMail(AssertionsUploadSummary summary, AssertionServiceUser user) {
-        Locale locale = new Locale(user.getLangKey());
+        Locale locale = LocaleUtils.getLocale(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable("summary", summary);
         String content = templateEngine.process("mail/affiliationUploadSummary", context);
-        String subject = messageSource.getMessage("email.affiliationUploadSummary.title", null, Locale.ENGLISH);
+        String subject = messageSource.getMessage("email.affiliationUploadSummary.title", null, locale);
         try {
             mailgunClient.sendMail(user.getEmail(), subject, content);
         } catch (MailException e) {

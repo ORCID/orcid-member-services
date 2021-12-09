@@ -113,8 +113,7 @@ public class MailService {
     private Locale getLocale(String langKey) {
         LOGGER.debug("Creating locale using language key {}", langKey);
         Locale locale = LocaleUtils.getLocale(langKey);
-        LOGGER.debug("Locale created, locale has language {} ({})",
-                new Object[] { locale.getLanguage(), locale.getDisplayLanguage() });
+        LOGGER.debug("Locale created, locale has language {} ({})", new Object[] { locale.getLanguage(), locale.getDisplayLanguage() });
         return locale;
     }
 
