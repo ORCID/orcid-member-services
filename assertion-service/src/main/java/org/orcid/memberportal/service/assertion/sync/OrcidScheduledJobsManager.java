@@ -40,8 +40,8 @@ public class OrcidScheduledJobsManager {
         LOG.info("Stats generation complete");
     }
     
-    @Scheduled(fixedDelayString = "${application.syncAffiliationsDelay}")
-    @SchedulerLock(name = "processAssertionUploads", lockAtMostFor = "60m", lockAtLeastFor = "10m")
+    @Scheduled(fixedDelayString = "${application.processAssertionUploadsDelay}")
+    @SchedulerLock(name = "processAssertionUploads", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void processAssertionUploads() throws IOException  {
         LOG.info("Running cron to process assertion uploads");
         assertionsService.processAssertionUploads();
