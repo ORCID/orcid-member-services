@@ -186,12 +186,6 @@ public class AssertionService {
             throw new IllegalArgumentException("Invalid assertion id");
         }
         Assertion assertion = optional.get();
-        String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
-
-        if (!assertion.getSalesforceId().equals(salesforceId)) {
-            throw new IllegalArgumentException("Illegal attempt to access assertion of org " + assertion.getSalesforceId());
-        }
-
         if (!StringUtils.isBlank(assertion.getStatus())) {
             LOG.debug("assertion status is: " + assertion.getStatus());
             assertion.setStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
