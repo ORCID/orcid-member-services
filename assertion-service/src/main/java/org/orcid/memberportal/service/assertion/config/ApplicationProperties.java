@@ -43,6 +43,8 @@ public class ApplicationProperties {
     private String assertionsCsvUploadDirectory;
     
     private String processAssertionUploadsDelay;
+    
+    private String removeStoredFilesDelay;
 
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
@@ -178,6 +180,14 @@ public class ApplicationProperties {
 
     public void setProcessAssertionUploadsDelay(String processAssertionUploadsDelay) {
         this.processAssertionUploadsDelay = processAssertionUploadsDelay;
+    }
+
+    public String getRemoveStoredFilesDelay() {
+        return removeStoredFilesDelay;
+    }
+
+    public void setRemoveStoredFilesDelay(String removeStoredFilesDelay) {
+        this.removeStoredFilesDelay = removeStoredFilesDelay;
     }
 
     public static class TokenExchange {

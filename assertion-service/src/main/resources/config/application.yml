@@ -189,6 +189,7 @@ application:
     syncAffiliationsDelay: 60000
     generateMemberAssertionStatsCron: ${MEMBER_ASSERTION_STATS_CRON}
     processAssertionUploadsDelay: 300000
+    removeStoredFilesDelay: 300000
     tokenExchange:
         endpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}
         grantType: ${APPLICATION_TOKEN_EXCHANGE_GRANT_TYPE}

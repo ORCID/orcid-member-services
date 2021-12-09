@@ -12,5 +12,8 @@ public interface StoredFileRepository extends MongoRepository<StoredFile, String
     
     @Query("{fileType: ?0, dateProcessed: null}")
     List<StoredFile> findUnprocessedByType(String type);
+    
+    @Query("{ dateProcessed: { $ne:null }}")
+    List<StoredFile> findProcessedFiles();
 
 }

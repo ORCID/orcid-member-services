@@ -94,4 +94,5 @@ application:
     jwtSignatureUrl: https://sandbox.orcid.org/oauth/jwks
     syncAffiliationsDelay: 300000
     processAssertionUploadsDelay: 300000
+    removeStoredFilesDelay: 300000
     generateMemberAssertionStatsCron: 0 30 * * * ?

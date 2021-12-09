@@ -15,16 +15,20 @@ import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.StoredFile;
 import org.orcid.memberportal.service.assertion.repository.StoredFileRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StoredFileService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(StoredFileService.class);
+
     static final String MEMBER_ASSERTION_STATS_FILE_TYPE = "assertion-stats";
 
     static final String ASSERTIONS_CSV_FILE_TYPE = "assertions-csv";
-    
+
     @Autowired
     private StoredFileRepository storedFileRepository;
 
@@ -44,7 +48,7 @@ public class StoredFileService {
         storedFileRepository.save(storedFile);
         return outputFile;
     }
-    
+
     public void storeAssertionsCsvFile(InputStream inputStream, AssertionServiceUser user) throws IOException {
         File outputFile = writeCsvUploadFile(inputStream);
         StoredFile storedFile = new StoredFile();
@@ -59,12 +63,12 @@ public class StoredFileService {
     public List<StoredFile> getUnprocessedStoredFilesByType(String type) {
         return storedFileRepository.findUnprocessedByType(ASSERTIONS_CSV_FILE_TYPE);
     }
-    
+
     public void markAsProcessed(StoredFile storedFile) {
         storedFile.setDateProcessed(Instant.now());
         storedFileRepository.save(storedFile);
     }
-    
+
     private File writeMemberAssertionStatsFile(String content) throws IOException {
         createDir(applicationProperties.getMemberAssertionStatsDirectory());
         File outputFile = File.createTempFile(MEMBER_ASSERTION_STATS_FILE_TYPE, ".csv", new File(applicationProperties.getMemberAssertionStatsDirectory()));
@@ -73,7 +77,7 @@ public class StoredFileService {
         writer.close();
         return outputFile;
     }
-    
+
     private File writeCsvUploadFile(InputStream inputStream) throws IOException {
         createDir(applicationProperties.getAssertionsCsvUploadDirectory());
         File outputFile = File.createTempFile(ASSERTIONS_CSV_FILE_TYPE, ".csv", new File(applicationProperties.getAssertionsCsvUploadDirectory()));
@@ -83,15 +87,33 @@ public class StoredFileService {
         outputStream.close();
         return outputFile;
     }
-    
+
     private void createDir(String path) {
         File dir = new File(path);
         if (!dir.exists()) {
             boolean created = dir.mkdir();
             if (!created) {
-               throw new RuntimeException("Failed to create directory " + path);
+                throw new RuntimeException("Failed to create directory " + path);
             }
         }
+    }
+
+    public void removeStoredFiles() {
+        List<StoredFile> oldFiles = storedFileRepository.findProcessedFiles();
+        oldFiles.forEach(f -> {
+            if (Instant.now().isAfter(f.getRemovalDate())) {
+                LOG.info("Removing file {} which is marked for deletion", f.getFileLocation());
+                File file = new File(f.getFileLocation());
+                boolean deleted = file.delete();
+                if (!deleted) {
+                    throw new RuntimeException("Failed to delete file " + file.getAbsolutePath());
+                }
+                LOG.info("File {} deleted", file.getAbsolutePath());
+                LOG.info("Removing corresponding StoredFile record");
+                storedFileRepository.delete(f);
+                LOG.info("Record deleted");
+            }
+        });
     }
 
 }
