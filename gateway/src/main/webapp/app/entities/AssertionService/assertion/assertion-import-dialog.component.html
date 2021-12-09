@@ -33,10 +33,10 @@
         <button type="button" class="btn btn-outline-primary" (click)="close()">
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
         </button>
-        <button id="jhi-confirm-csv-upload" type="submit" class="btn btn-primary" *ngIf="!summary || (!summary.numAdded && !summary.numUpdated && !summary.numDeleted && !summary.numAdded)">
+        <button id="jhi-confirm-csv-upload" type="submit" class="btn btn-primary" *ngIf="!uploaded">
             <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.upload.string">Upload</span>
         </button>
-        <button id="close-dialog" class="btn btn-primary" (click)="close()" *ngIf="summary && (summary.numAdded > 0 || summary.numUpdated > 0 || summary.numDeleted > 0 || summary.numAdded > 0)">
+        <button id="close-dialog" class="btn btn-primary" (click)="close()" *ngIf="uploaded">
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.close.string">Close</span>
         </button>
     </div>
