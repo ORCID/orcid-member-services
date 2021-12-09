@@ -40,14 +40,8 @@
         "title": { "string": "Import affiliations" },
         "label": { "string": "Please select a CSV file to upload" },
         "filePath": { "string": "File path" },
-        "success": { "string": "The CSV import was successful." },
-        "added": { "string": "affiliations added" },
-        "updated": { "string": "affiliations updated" },
-        "deleted": { "string": "affiliations deleted" },
-        "duplicates": { "string": "duplicate(s) ignored" },
-        "errors": {
-          "label": { "string": "Oops! There was a problem processing your data. Pleases fix the errors below and try again" }
-        }
+        "success": { "string": "Your CSV has been uploaded for processing." },
+        "failure": { "string": "There was a problem uploading your CSV for processing." }
       },
       "addedToOrcid": { "string": "Added To ORCID" },
       "updatedInOrcid": { "string": "Updated In ORCID" },

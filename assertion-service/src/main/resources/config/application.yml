@@ -1,3 +1,4 @@
+
 # ===================================================================
 # Spring Boot configuration.
 #
@@ -173,23 +174,26 @@ jhipster:
 # ===================================================================
 
 application:  
-    orcidAPIEndpoint: https://change-me-url
-    jwtSignatureUrl: https://change-me-url
-    landingPageUrl: https://change-me-url  
-    mailDomain: change-me
-    mailApiKey: change-me
-    mailApiUrl: change-me
-    mailFromAddress: change-me  
-    mailFromName: change-me
-    memberAssertionStatsDirectory: files
+    orcidAPIEndpoint: ${APPLICATION_ORCIDAPIENDPOINT}
+    jwtSignatureUrl: ${APPLICATION_JWT_SIGNATURE_URL}
+    landingPageUrl: ${APPLICATION_LANDING_PAGE_URL}
+    mailDomain: ${APPLICATION_MAIL_DOMAIN}
+    mailApiKey: ${APPLICATION_MAIL_API_KEY}
+    mailApiUrl: ${APPLICATION_MAIL_API_URL}
+    mailFromAddress: ${APPLICATION_MAIL_FROM_ADDRESS}  
+    mailFromName: ${APPLICATION_MAIL_FROM_NAME}
+    memberAssertionStatsDirectory: files/stats
+    assertionsCsvUploadDirectory: files/uploads
     storedFileLifespan: ${STORED_FILE_LIFESPAN}
     memberAssertionStatsRecipient: ${MEMBER_ASSERTION_STATS_RECIPIENT}
     syncAffiliationsDelay: 60000
     generateMemberAssertionStatsCron: ${MEMBER_ASSERTION_STATS_CRON}
+    processAssertionUploadsDelay: 300000
+    removeStoredFilesDelay: 300000
     tokenExchange:
-        endpoint: https://change-me-url
-        grantType: change-me
-        subjectTokenType: change-me
-        requestedTokenType: change.me
-        clientId: change-me # To overwrite it, export it as an env variable before running gradlew: 'export APPLICATION_TOKENEXCHANGE_CLIENTID=<client id>'
-        clientSecret: change-me # Export it as an env variable before running gradlew: 'export APPLICATION_TOKENEXCHANGE_CLIENTSECRET=<client secret>'
+        endpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}
+        grantType: ${APPLICATION_TOKEN_EXCHANGE_GRANT_TYPE}
+        subjectTokenType: ${APPLICATION_TOKEN_EXCHANGE_SUBJECT_TOKEN_TYPE}
+        requestedTokenType: ${APPLICATION_TOKEN_EXCHANGE_REQUESTED_TOKEN_TYPE}
+        clientId: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_ID} 
+        clientSecret: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET}

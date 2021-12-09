@@ -31,6 +31,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.assertion.config.Constants;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
@@ -42,7 +43,7 @@ import org.orcid.memberportal.service.assertion.security.JWTUtil;
 import org.orcid.memberportal.service.assertion.security.MockSecurityContext;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
-import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
+import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,7 +70,7 @@ class AssertionServiceResourceTest {
 
     @Mock
     private OrcidRecordService orcidRecordService;
-
+    
     @Mock
     private EncryptUtil encryptUtil;
     
@@ -79,6 +80,9 @@ class AssertionServiceResourceTest {
     @Mock
     private RorOrgValidator rorOrgValidator;
 
+    @Mock
+    private UserService assertionsUserService;
+    
     @Mock
     private RinggoldOrgValidator ringgoldOrgValidator;
     
@@ -95,6 +99,7 @@ class AssertionServiceResourceTest {
         Mockito.when(rorOrgValidator.validId(Mockito.anyString())).thenReturn(true);
         Mockito.when(gridOrgValidator.validId(Mockito.anyString())).thenReturn(true);
         Mockito.when(ringgoldOrgValidator.validId(Mockito.anyString())).thenReturn(true);
+        Mockito.when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
     }
 
     @Test
@@ -240,10 +245,10 @@ class AssertionServiceResourceTest {
         Assertion createdAssertion = getAssertion("test-create-assertion@orcid.org");
         createdAssertion.setId("some-id-because-this-assertion-exists-already");
         Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(false);
-        Mockito.when(assertionService.createAssertion(Mockito.any(Assertion.class))).thenReturn(createdAssertion);
+        Mockito.when(assertionService.createAssertion(Mockito.any(Assertion.class), Mockito.any(AssertionServiceUser.class))).thenReturn(createdAssertion);
         ResponseEntity<Assertion> response = assertionServiceResource.createAssertion(creatingAssertion);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        Mockito.verify(assertionService, Mockito.times(1)).createAssertion(Mockito.any(Assertion.class));
+        Mockito.verify(assertionService, Mockito.times(1)).createAssertion(Mockito.any(Assertion.class), Mockito.any(AssertionServiceUser.class));
         Mockito.verify(assertionService, Mockito.times(1)).isDuplicate(Mockito.any(Assertion.class));
     }
     
@@ -255,7 +260,7 @@ class AssertionServiceResourceTest {
         Assertion createdAssertion = getAssertion("test-create-assertion@orcid.org");
         createdAssertion.setId("some-id-because-this-assertion-exists-already");
         Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(false);
-        Mockito.when(assertionService.createAssertion(Mockito.any(Assertion.class))).thenReturn(createdAssertion);
+        Mockito.when(assertionService.createAssertion(Mockito.any(Assertion.class), Mockito.any(AssertionServiceUser.class))).thenReturn(createdAssertion);
         ResponseEntity<Assertion> response = assertionServiceResource.createAssertion(creatingAssertion);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         Mockito.verify(gridOrgValidator, Mockito.times(1)).validId(Mockito.eq("something"));
@@ -284,10 +289,10 @@ class AssertionServiceResourceTest {
         Assertion assertion = getAssertion("test-update-assertion@orcid.org");
         assertion.setId("some-id-because-this-assertion-exists-already");
         Mockito.when(assertionService.isDuplicate(Mockito.any(Assertion.class))).thenReturn(false);
-        Mockito.when(assertionService.updateAssertion(Mockito.any(Assertion.class))).thenReturn(assertion);
+        Mockito.when(assertionService.updateAssertion(Mockito.any(Assertion.class), Mockito.any(AssertionServiceUser.class))).thenReturn(assertion);
         ResponseEntity<Assertion> response = assertionServiceResource.updateAssertion(assertion);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        Mockito.verify(assertionService, Mockito.times(1)).updateAssertion(Mockito.any(Assertion.class));
+        Mockito.verify(assertionService, Mockito.times(1)).updateAssertion(Mockito.any(Assertion.class), Mockito.any(AssertionServiceUser.class));
         Mockito.verify(assertionService, Mockito.times(1)).isDuplicate(Mockito.any(Assertion.class));
     }
 
@@ -309,7 +314,7 @@ class AssertionServiceResourceTest {
             assertionServiceResource.createAssertion(creatingAssertion);
         });
 
-        Mockito.verify(assertionService, Mockito.never()).createAssertion(Mockito.any(Assertion.class));
+        Mockito.verify(assertionService, Mockito.never()).createAssertion(Mockito.any(Assertion.class), Mockito.any(AssertionServiceUser.class));
         Mockito.verify(assertionService, Mockito.times(1)).isDuplicate(Mockito.any(Assertion.class));
     }
 
@@ -322,15 +327,25 @@ class AssertionServiceResourceTest {
             assertionServiceResource.updateAssertion(assertion);
         });
 
-        Mockito.verify(assertionService, Mockito.never()).updateAssertion(Mockito.any(Assertion.class));
+        Mockito.verify(assertionService, Mockito.never()).updateAssertion(Mockito.any(Assertion.class), Mockito.any(AssertionServiceUser.class));
         Mockito.verify(assertionService, Mockito.times(1)).isDuplicate(Mockito.any(Assertion.class));
     }
 
     @Test
-    void testUploadAssertions() {
+    void testUploadAssertions() throws IOException {
         MultipartFile file = Mockito.mock(MultipartFile.class);
-        Mockito.when(assertionService.uploadAssertions(Mockito.any())).thenReturn(new AssertionsUploadSummary());
-        assertionServiceResource.uploadAssertions(file);
+        Mockito.doNothing().when(assertionService).uploadAssertions(Mockito.any());
+        ResponseEntity<Boolean> success = assertionServiceResource.uploadAssertions(file);
+        assertEquals(Boolean.TRUE, success.getBody());
+        Mockito.verify(assertionService, Mockito.times(1)).uploadAssertions(Mockito.any());
+    }
+    
+    @Test
+    void testUploadAssertionsErrorThrown() throws IOException {
+        MultipartFile file = Mockito.mock(MultipartFile.class);
+        Mockito.doThrow(new IOException()).when(assertionService).uploadAssertions(Mockito.any());
+        ResponseEntity<Boolean> success = assertionServiceResource.uploadAssertions(file);
+        assertEquals(Boolean.FALSE, success.getBody());
         Mockito.verify(assertionService, Mockito.times(1)).uploadAssertions(Mockito.any());
     }
 
@@ -341,11 +356,14 @@ class AssertionServiceResourceTest {
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq(email))).thenReturn(Optional.of(getOrcidRecord(email)));
         Mockito.when(encryptUtil.decrypt(Mockito.eq("ermmmm....&&" + email))).thenReturn("ermmmm....&&" + email);
         Mockito.when(jwtUtil.getSignedJWT(Mockito.anyString())).thenReturn(getDummySignedJWT(orcid));
+
         assertionServiceResource.storeIdToken(getObjectNode(email));
+        
         Mockito.verify(orcidRecordService, Mockito.times(1)).storeIdToken(Mockito.eq(email), Mockito.anyString(), Mockito.eq(orcid), Mockito.anyString());
         Mockito.verify(assertionService, Mockito.never()).postAssertionToOrcid(Mockito.any(Assertion.class));
         Mockito.verify(assertionService, Mockito.never()).putAssertionInOrcid(Mockito.any(Assertion.class));
-        Mockito.verify(assertionService, Mockito.never()).updateAssertion(Mockito.any(Assertion.class));
+        Mockito.verify(assertionService, Mockito.never()).updateAssertion(Mockito.any(Assertion.class), Mockito.any(AssertionServiceUser.class));
+        Mockito.verify(assertionService).updateOrcidIdsForEmail(Mockito.eq(email));
     }
     
     private SignedJWT getDummySignedJWT(String orcid) throws JOSEException {
@@ -401,6 +419,15 @@ class AssertionServiceResourceTest {
         error.put("error", "not found");
         assertion.setOrcidError(error.toString());
         return assertion;
+    }
+    
+    private AssertionServiceUser getUser() {
+        AssertionServiceUser user = new AssertionServiceUser();
+        user.setId("owner");
+        user.setEmail("owner@orcid.org");
+        user.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        user.setLangKey("en");
+        return user;
     }
 
 }

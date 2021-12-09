@@ -39,15 +39,7 @@
       "import": {
         "title": { "string": "匯入機關" },
         "label": { "string": "請選擇欲上傳的 CSV 檔案" },
-        "filePath": { "string": "檔案路徑" },
-        "success": { "string": "成功匯入 CSV。" },
-        "added": { "string": "已新增所屬機構" },
-        "updated": { "string": "已更新的機關" },
-        "deleted": { "string": "已刪除機關" },
-        "duplicates": { "string": "已忽略副本(們)" },
-        "errors": {
-          "label": { "string": "糟糕！在處理您的資料時發生了問題。請修正下列錯誤並再試一次" }
-        }
+        "filePath": { "string": "檔案路徑" }
       },
       "addedToOrcid": { "string": "已新增至 ORCID" },
       "updatedInOrcid": { "string": "已於 ORCID 中更新" },

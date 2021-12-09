@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 
 import org.orcid.memberportal.service.assertion.services.AssertionService;
+import org.orcid.memberportal.service.assertion.services.StoredFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class OrcidScheduledJobsManager {
 
     @Autowired
     private AssertionService assertionsService;
+    
+    @Autowired
+    private StoredFileService storedFileService;
 
     @Scheduled(fixedDelayString = "${application.syncAffiliationsDelay}")
     @SchedulerLock(name = "syncAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "2m")
@@ -38,5 +42,21 @@ public class OrcidScheduledJobsManager {
         LOG.info("Running cron to generate member assertion stats");
         assertionsService.generateAndSendMemberAssertionStats();
         LOG.info("Stats generation complete");
+    }
+    
+    @Scheduled(fixedDelayString = "${application.processAssertionUploadsDelay}")
+    @SchedulerLock(name = "processAssertionUploads", lockAtMostFor = "60m", lockAtLeastFor = "2m")
+    public void processAssertionUploads() throws IOException  {
+        LOG.info("Running cron to process assertion uploads");
+        assertionsService.processAssertionUploads();
+        LOG.info("Assertion uploads processed");
+    }
+    
+    @Scheduled(fixedDelayString = "${application.removeStoredFilesDelay}")
+    @SchedulerLock(name = "removeStoredFiles", lockAtMostFor = "60m", lockAtLeastFor = "2m")
+    public void removeStoredFiles() throws IOException  {
+        LOG.info("Running cron to remove old files");
+        storedFileService.removeStoredFiles();
+        LOG.info("Old files removed");
     }
 }

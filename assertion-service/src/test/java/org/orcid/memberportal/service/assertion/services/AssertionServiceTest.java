@@ -44,6 +44,7 @@ import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
+import org.orcid.memberportal.service.assertion.domain.StoredFile;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
@@ -109,6 +110,9 @@ class AssertionServiceTest {
 
     @Captor
     private ArgumentCaptor<String> csvContentCaptor;
+    
+    @Captor
+    private ArgumentCaptor<AssertionsUploadSummary> summaryCaptor;
 
     @InjectMocks
     private AssertionService assertionService;
@@ -133,6 +137,20 @@ class AssertionServiceTest {
         user.setSalesforceId(DEFAULT_SALESFORCE_ID);
         user.setLangKey("en");
         return user;
+    }
+    
+    @Test
+    void testUpdateOrcidIdsForEmail() {
+        OrcidRecord record = new OrcidRecord();
+        record.setOrcid("orcid");
+        Assertion one = new Assertion();
+        Assertion two = new Assertion();
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(Optional.of(record));
+        Mockito.when(assertionsRepository.findAllByEmail(Mockito.eq("email"))).thenReturn(Arrays.asList(one, two));
+        assertionService.updateOrcidIdsForEmail("email");
+        assertEquals("orcid", one.getOrcidId());
+        assertEquals("orcid", two.getOrcidId());
+        Mockito.verify(assertionsRepository, Mockito.times(2)).save(Mockito.any(Assertion.class));
     }
 
     @Test
@@ -167,11 +185,9 @@ class AssertionServiceTest {
             }
         });
 
-        assertionService.createAssertion(a);
+        assertionService.createAssertion(a, getUser());
         Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(a));
         Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
-
-        assertEquals("orcid", a.getOrcidId());
     }
 
     @Test
@@ -194,7 +210,7 @@ class AssertionServiceTest {
             }
         });
 
-        assertionService.createAssertion(a);
+        assertionService.createAssertion(a, getUser());
         Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(a));
 
     }
@@ -218,9 +234,8 @@ class AssertionServiceTest {
             }
         });
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-        a = assertionService.updateAssertion(a);
+        a = assertionService.updateAssertion(a, getUser());
         assertNotNull(a.getStatus());
-        assertEquals("orcid", a.getOrcidId());
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
         Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
     }
@@ -245,7 +260,7 @@ class AssertionServiceTest {
             }
         });
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithoutIdToken());
-        a = assertionService.updateAssertion(a);
+        a = assertionService.updateAssertion(a, getUser());
         assertNotNull(a.getStatus());
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
     }
@@ -270,7 +285,7 @@ class AssertionServiceTest {
             }
         });
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-        a = assertionService.updateAssertion(a);
+        a = assertionService.updateAssertion(a, getUser());
         assertNotNull(a.getStatus());
         assertEquals("orcid-already-present", a.getOrcidId());
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
@@ -296,7 +311,7 @@ class AssertionServiceTest {
         });
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            assertionService.updateAssertion(a);
+            assertionService.updateAssertion(a, getUser());
         });
     }
 
@@ -965,9 +980,9 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testUploadAssertionsNoProcessingIfErrorsPresent() throws IOException {
-        MultipartFile file = Mockito.mock(MultipartFile.class);
-        Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
+    void testProcessAssertionUploadsNoProcessingIfErrorsPresent() throws IOException {
+        Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE))).thenReturn(Arrays.asList(getDummyStoredFile()));
+        Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());
 
         AssertionsUpload upload = new AssertionsUpload();
         upload.addAssertion(getAssertionWithEmail("1@email.com"));
@@ -977,8 +992,9 @@ class AssertionServiceTest {
 
         Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
 
-        assertionService.uploadAssertions(file);
+        assertionService.processAssertionUploads();
 
+        Mockito.verify(mailService).sendAssertionsUploadSummaryMail(Mockito.any(AssertionsUploadSummary.class), Mockito.any(AssertionServiceUser.class));
         Mockito.verify(assertionsRepository, Mockito.never()).insert(Mockito.any(Assertion.class));
         Mockito.verify(assertionsRepository, Mockito.never()).save(Mockito.any(Assertion.class));
         Mockito.verify(assertionsRepository, Mockito.never()).delete(Mockito.any(Assertion.class));
@@ -988,6 +1004,14 @@ class AssertionServiceTest {
     void testUploadAssertions() throws IOException {
         MultipartFile file = Mockito.mock(MultipartFile.class);
         Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
+        assertionService.uploadAssertions(file);
+        Mockito.verify(storedFileService).storeAssertionsCsvFile(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class));
+    }
+    
+    @Test
+    void testProcessAssertionUploads() throws IOException {
+        Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE))).thenReturn(Arrays.asList(getDummyStoredFile()));
+        Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());
 
         AssertionsUpload upload = new AssertionsUpload();
         upload.addAssertion(getAssertionWithEmail("1@email.com"));
@@ -1023,7 +1047,10 @@ class AssertionServiceTest {
         Mockito.when(assertionsRepository.findById(Mockito.eq("12346"))).thenReturn(Optional.of(toUpdate));
         Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
 
-        AssertionsUploadSummary summary = assertionService.uploadAssertions(file);
+        assertionService.processAssertionUploads();
+        
+        Mockito.verify(mailService).sendAssertionsUploadSummaryMail(summaryCaptor.capture(), Mockito.any(AssertionServiceUser.class));
+        AssertionsUploadSummary summary = summaryCaptor.getValue();
         assertEquals(3, summary.getNumAdded());
         assertEquals(0, summary.getNumDuplicates());
         assertEquals(0, summary.getNumDeleted());
@@ -1033,10 +1060,17 @@ class AssertionServiceTest {
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.any(Assertion.class));
     }
 
+    private StoredFile getDummyStoredFile() {
+        StoredFile storedFile = new StoredFile();
+        storedFile.setFileLocation(getClass().getResource("/assertions-with-bad-url.csv").getFile()); // any file that exists, test won't actually use it
+        storedFile.setOwnerId("owner");
+        return storedFile;
+    }
+
     @Test
-    void testUploadAssertionsWithDuplicates() throws IOException {
-        MultipartFile file = Mockito.mock(MultipartFile.class);
-        Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
+    void testProcessAssertionUploadsWithDuplicates() throws IOException {
+        Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE))).thenReturn(Arrays.asList(getDummyStoredFile()));
+        Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());
 
         Assertion alreadyPersisted1 = getAssertionWithEmail("1@email.com");
         alreadyPersisted1.setDepartmentName("not a duplicate");
@@ -1050,7 +1084,11 @@ class AssertionServiceTest {
 
         Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
 
-        AssertionsUploadSummary summary = assertionService.uploadAssertions(file);
+        assertionService.processAssertionUploads();
+        
+        Mockito.verify(mailService).sendAssertionsUploadSummaryMail(summaryCaptor.capture(), Mockito.any(AssertionServiceUser.class));
+        AssertionsUploadSummary summary = summaryCaptor.getValue();
+
         assertEquals(3, summary.getNumDuplicates());
 
         Mockito.verify(assertionsRepository, Mockito.never()).insert(Mockito.any(Assertion.class));

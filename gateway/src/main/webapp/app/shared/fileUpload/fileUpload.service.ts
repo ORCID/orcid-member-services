@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/internal/Observable';
 export class FileUploadService {
   constructor(private http: HttpClient) {}
 
-  uploadFile(resourceUrl, file: File, expectedResponseType): Observable<HttpEvent<{}>> {
+  uploadFile(resourceUrl, file: File, expectedResponseType): Observable<HttpEvent<Boolean>> {
     const formdata: FormData = new FormData();
     formdata.append('file', file);
     const req = new HttpRequest('POST', resourceUrl, formdata, {

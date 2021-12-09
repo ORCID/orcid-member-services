@@ -4,8 +4,11 @@ import java.io.File;
 import java.util.Locale;
 
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.mail.MailException;
 import org.orcid.memberportal.service.assertion.mail.client.impl.MailgunClient;
+import org.orcid.memberportal.service.assertion.services.locale.LocaleUtils;
+import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +55,19 @@ public class MailService {
             mailgunClient.sendMailWithAttachment(applicationProperties.getMemberAssertionStatsRecipient(), subject, content, stats);
         } catch (MailException e) {
             LOGGER.error("Error sending member stats email", e);
+        }
+    }
+
+    public void sendAssertionsUploadSummaryMail(AssertionsUploadSummary summary, AssertionServiceUser user) {
+        Locale locale = LocaleUtils.getLocale(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable("summary", summary);
+        String content = templateEngine.process("mail/affiliationUploadSummary", context);
+        String subject = messageSource.getMessage("email.affiliationUploadSummary.title", null, locale);
+        try {
+            mailgunClient.sendMail(user.getEmail(), subject, content);
+        } catch (MailException e) {
+            LOGGER.error("Error sending csv upload summary email", e);
         }
     }
 

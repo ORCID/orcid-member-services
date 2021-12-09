@@ -39,6 +39,12 @@ public class ApplicationProperties {
     private String syncAffiliationsDelay;
 
     private String generateMemberAssertionStatsCron;
+    
+    private String assertionsCsvUploadDirectory;
+    
+    private String processAssertionUploadsDelay;
+    
+    private String removeStoredFilesDelay;
 
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
@@ -158,6 +164,30 @@ public class ApplicationProperties {
 
     public void setGenerateMemberAssertionStatsCron(String generateMemberAssertionStatsCron) {
         this.generateMemberAssertionStatsCron = generateMemberAssertionStatsCron;
+    }
+
+    public String getAssertionsCsvUploadDirectory() {
+        return assertionsCsvUploadDirectory;
+    }
+
+    public void setAssertionsCsvUploadDirectory(String assertionsCsvUploadDirectory) {
+        this.assertionsCsvUploadDirectory = assertionsCsvUploadDirectory;
+    }
+
+    public String getProcessAssertionUploadsDelay() {
+        return processAssertionUploadsDelay;
+    }
+
+    public void setProcessAssertionUploadsDelay(String processAssertionUploadsDelay) {
+        this.processAssertionUploadsDelay = processAssertionUploadsDelay;
+    }
+
+    public String getRemoveStoredFilesDelay() {
+        return removeStoredFilesDelay;
+    }
+
+    public void setRemoveStoredFilesDelay(String removeStoredFilesDelay) {
+        this.removeStoredFilesDelay = removeStoredFilesDelay;
     }
 
     public static class TokenExchange {

@@ -40,4 +40,6 @@ public interface AssertionRepository extends MongoRepository<Assertion, String>,
 
     List<Assertion> findByStatus(String status);
 
+    List<Assertion> findAllByEmail(String email);
+
 }

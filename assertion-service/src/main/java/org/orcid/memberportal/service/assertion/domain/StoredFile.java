@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class StoredFile implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    public static final String DEFAULT_SYSTEM_OWNER_ID = "system"; 
 
     @Id
     private String id;
@@ -24,8 +26,14 @@ public class StoredFile implements Serializable {
     @Field("date_stored")
     private Instant dateWritten;
     
+    @Field("date_processed")
+    private Instant dateProcessed;
+    
     @Field("removal_date")
     private Instant removalDate;
+    
+    @Field
+    private String ownerId;
 
     public String getId() {
         return id;
@@ -65,6 +73,22 @@ public class StoredFile implements Serializable {
 
     public void setRemovalDate(Instant removalDate) {
         this.removalDate = removalDate;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public Instant getDateProcessed() {
+        return dateProcessed;
+    }
+
+    public void setDateProcessed(Instant dateProcessed) {
+        this.dateProcessed = dateProcessed;
     }
     
 }

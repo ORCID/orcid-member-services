@@ -22,7 +22,8 @@ export class AssertionImportDialogComponent {
   assertion: IAssertion;
   isSaving: boolean;
   currentFile: FileList;
-  summary: any;
+  success: Boolean;
+  uploaded: boolean;
   loading = false;
 
   constructor(
@@ -34,7 +35,8 @@ export class AssertionImportDialogComponent {
   ) {
     this.isSaving = false;
     this.resourceUrl = this.assertionService.resourceUrl + '/upload';
-    this.summary = {};
+    this.success = false;
+    this.uploaded = false;
   }
 
   clear() {
@@ -52,7 +54,8 @@ export class AssertionImportDialogComponent {
       const f = this.currentFile.item(0);
       this.uploadService.uploadFile(this.resourceUrl, f, 'json').subscribe(event => {
         if (event instanceof HttpResponse) {
-          this.summary = event.body;
+          this.success = event.body;
+          this.uploaded = true;
           this.loading = false;
         }
       });

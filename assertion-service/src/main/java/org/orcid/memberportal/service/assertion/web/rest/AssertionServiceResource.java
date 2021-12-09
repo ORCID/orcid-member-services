@@ -35,7 +35,6 @@ import org.orcid.memberportal.service.assertion.security.SecurityUtils;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
-import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,7 +151,7 @@ public class AssertionServiceResource {
     @PutMapping("/assertion")
     public ResponseEntity<Assertion> updateAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
         validateAssertion(assertion);
-        Assertion existingAssertion = assertionService.updateAssertion(assertion);
+        Assertion existingAssertion = assertionService.updateAssertion(assertion, assertionsUserService.getLoggedInUser());
         LOG.info("{} updated assertion {}", SecurityUtils.getCurrentUserLogin().get(), assertion.getId());
         return ResponseEntity.ok().body(existingAssertion);
     }
@@ -161,17 +160,21 @@ public class AssertionServiceResource {
     public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, URISyntaxException {
         LOG.debug("REST request to create assertion : {}", assertion);
         validateAssertion(assertion);
-        assertion = assertionService.createAssertion(assertion);
+        assertion = assertionService.createAssertion(assertion, assertionsUserService.getLoggedInUser());
         LOG.info("{} created assertion {}", SecurityUtils.getCurrentUserLogin().get(), assertion.getId());
         return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId())).body(assertion);
     }
 
     @PostMapping("/assertion/upload")
-    public ResponseEntity<AssertionsUploadSummary> uploadAssertions(@RequestParam("file") MultipartFile file) {
-        AssertionsUploadSummary summary = assertionService.uploadAssertions(file);
-        LOG.info("{} uploaded assertion CSV: {} added, {} updated, {} deleted, {} duplicates", new Object[] { SecurityUtils.getCurrentUserLogin().get(),
-                summary.getNumAdded(), summary.getNumUpdated(), summary.getNumDeleted(), summary.getNumDuplicates() });
-        return ResponseEntity.ok().body(summary);
+    public ResponseEntity<Boolean> uploadAssertions(@RequestParam("file") MultipartFile file) {
+        LOG.info("Uploading user csv upload for processing");
+        try {
+            assertionService.uploadAssertions(file);
+            return ResponseEntity.ok().body(Boolean.TRUE);
+        } catch (IOException e) {
+            LOG.error("Error uploading user csv file", e);
+            return ResponseEntity.ok().body(Boolean.FALSE); 
+        }
     }
 
     @DeleteMapping("/assertion/{id}")
@@ -299,6 +302,7 @@ public class AssertionServiceResource {
 
             if (!StringUtils.isBlank(emailInStatus) && !StringUtils.isBlank(orcidIdInJWT)) {
                 orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, salesForceId);
+                assertionService.updateOrcidIdsForEmail(emailInStatus);
             } else {
                 if (StringUtils.isBlank(emailInStatus)) {
                     LOG.warn("Not storing token for user {} - emailInStatus is empty in the state key: {}", emailInStatus, state);

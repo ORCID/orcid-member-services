@@ -14,8 +14,10 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.assertion.AssertionServiceApp;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.mail.MailException;
 import org.orcid.memberportal.service.assertion.mail.client.impl.MailgunClient;
+import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
@@ -49,6 +51,7 @@ class MailServiceIT {
         MockitoAnnotations.initMocks(this);
         mailService = new MailService(getTestApplicationProperties(), messageSource, templateEngine, mailgunClient);
         Mockito.when(messageSource.getMessage(Mockito.eq("email.memberAssertionStats.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("member stats");
+        Mockito.when(messageSource.getMessage(Mockito.eq("email.affiliationUploadSummary.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("summary");
     }
 
     @Test
@@ -60,6 +63,31 @@ class MailServiceIT {
         assertThat(recipientCaptor.getValue()).isEqualTo("memberstats@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo("member stats");
         assertThat(fileCaptor.getValue()).isNotNull();
+    }
+    
+    @Test
+    void testSendAssertionsUploadSummaryMail() throws MailException {
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.eq("summary@orcid.org"), Mockito.eq("summary"), Mockito.eq("something"));
+        mailService.sendAssertionsUploadSummaryMail(getUploadSummary(), getUser());
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
+        assertThat(recipientCaptor.getValue()).isEqualTo("summary@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo("summary");
+    }
+
+    private AssertionServiceUser getUser() {
+        AssertionServiceUser user = new AssertionServiceUser();
+        user.setLangKey("en");
+        user.setEmail("summary@orcid.org");
+        return user;
+    }
+
+    private AssertionsUploadSummary getUploadSummary() {
+        AssertionsUploadSummary summary = new AssertionsUploadSummary();
+        summary.setNumAdded(1);
+        summary.setNumDeleted(1);
+        summary.setNumDuplicates(1);
+        summary.setNumUpdated(1);
+        return summary;
     }
 
     private ApplicationProperties getTestApplicationProperties() {
