@@ -129,16 +129,6 @@ public class Assertion implements Serializable {
 
     private String status;
 
-    private String permissionLink;
-
-    public String getPermissionLink() {
-        return permissionLink;
-    }
-
-    public void setPermissionLink(String permissionLink) {
-        this.permissionLink = permissionLink;
-    }
-
     public String getId() {
         return id;
     }
