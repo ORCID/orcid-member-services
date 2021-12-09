@@ -138,6 +138,20 @@ class AssertionServiceTest {
         user.setLangKey("en");
         return user;
     }
+    
+    @Test
+    void testUpdateOrcidIdsForEmail() {
+        OrcidRecord record = new OrcidRecord();
+        record.setOrcid("orcid");
+        Assertion one = new Assertion();
+        Assertion two = new Assertion();
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(Optional.of(record));
+        Mockito.when(assertionsRepository.findAllByEmail(Mockito.eq("email"))).thenReturn(Arrays.asList(one, two));
+        assertionService.updateOrcidIdsForEmail("email");
+        assertEquals("orcid", one.getOrcidId());
+        assertEquals("orcid", two.getOrcidId());
+        Mockito.verify(assertionsRepository, Mockito.times(2)).save(Mockito.any(Assertion.class));
+    }
 
     @Test
     void testAssertionExists() {
@@ -174,8 +188,6 @@ class AssertionServiceTest {
         assertionService.createAssertion(a);
         Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(a));
         Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
-
-        assertEquals("orcid", a.getOrcidId());
     }
 
     @Test
@@ -224,7 +236,6 @@ class AssertionServiceTest {
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithIdToken());
         a = assertionService.updateAssertion(a);
         assertNotNull(a.getStatus());
-        assertEquals("orcid", a.getOrcidId());
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
         Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
     }

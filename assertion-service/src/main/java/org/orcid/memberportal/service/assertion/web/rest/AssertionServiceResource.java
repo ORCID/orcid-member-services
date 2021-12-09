@@ -302,6 +302,7 @@ public class AssertionServiceResource {
 
             if (!StringUtils.isBlank(emailInStatus) && !StringUtils.isBlank(orcidIdInJWT)) {
                 orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, salesForceId);
+                assertionService.updateOrcidIdsForEmail(emailInStatus);
             } else {
                 if (StringUtils.isBlank(emailInStatus)) {
                     LOG.warn("Not storing token for user {} - emailInStatus is empty in the state key: {}", emailInStatus, state);

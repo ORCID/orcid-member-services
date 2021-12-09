@@ -350,11 +350,14 @@ class AssertionServiceResourceTest {
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq(email))).thenReturn(Optional.of(getOrcidRecord(email)));
         Mockito.when(encryptUtil.decrypt(Mockito.eq("ermmmm....&&" + email))).thenReturn("ermmmm....&&" + email);
         Mockito.when(jwtUtil.getSignedJWT(Mockito.anyString())).thenReturn(getDummySignedJWT(orcid));
+
         assertionServiceResource.storeIdToken(getObjectNode(email));
+        
         Mockito.verify(orcidRecordService, Mockito.times(1)).storeIdToken(Mockito.eq(email), Mockito.anyString(), Mockito.eq(orcid), Mockito.anyString());
         Mockito.verify(assertionService, Mockito.never()).postAssertionToOrcid(Mockito.any(Assertion.class));
         Mockito.verify(assertionService, Mockito.never()).putAssertionInOrcid(Mockito.any(Assertion.class));
         Mockito.verify(assertionService, Mockito.never()).updateAssertion(Mockito.any(Assertion.class));
+        Mockito.verify(assertionService).updateOrcidIdsForEmail(Mockito.eq(email));
     }
     
     private SignedJWT getDummySignedJWT(String orcid) throws JOSEException {

@@ -101,11 +101,6 @@ public class AssertionService {
     public Page<Assertion> findByOwnerId(Pageable pageable) {
         Page<Assertion> assertionsPage = assertionRepository.findByOwnerId(assertionsUserService.getLoggedInUserId(), pageable);
         assertionsPage.forEach(a -> {
-            if (a.getOrcidId() == null) {
-                a.setOrcidId(getAssertionOrcidId(a));
-                assertionRepository.save(a);
-            }
-
             if (!StringUtils.isBlank(a.getStatus())) {
                 a.setStatus(AssertionStatus.valueOf(a.getStatus()).getValue());
             }
@@ -116,12 +111,6 @@ public class AssertionService {
     public List<Assertion> findAllByOwnerId() {
         List<Assertion> assertions = assertionRepository.findAllByOwnerId(assertionsUserService.getLoggedInUserId(), SORT);
         assertions.forEach(a -> {
-            // set status as text to display in UI
-            if (a.getOrcidId() == null) {
-                a.setOrcidId(getAssertionOrcidId(a));
-                assertionRepository.save(a);
-            }
-
             if (!StringUtils.isBlank(a.getStatus())) {
                 a.setStatus(AssertionStatus.valueOf(a.getStatus()).getValue());
             }
@@ -133,11 +122,6 @@ public class AssertionService {
         String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
         Page<Assertion> assertions = assertionRepository.findBySalesforceId(salesforceId, pageable);
         assertions.forEach(a -> {
-            if (a.getOrcidId() == null) {
-                a.setOrcidId(getAssertionOrcidId(a));
-                assertionRepository.save(a);
-            }
-
             if (!StringUtils.isBlank(a.getStatus())) {
                 a.setStatus(AssertionStatus.valueOf(a.getStatus()).getValue());
             }
@@ -152,11 +136,6 @@ public class AssertionService {
                         pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter,
                         salesforceId, filter);
         assertions.forEach(a -> {
-            if (a.getOrcidId() == null) {
-                a.setOrcidId(getAssertionOrcidId(a));
-                assertionRepository.save(a);
-            }
-
             if (!StringUtils.isBlank(a.getStatus())) {
                 LOG.debug("assertion status is: " + a.getStatus());
                 a.setStatus(AssertionStatus.valueOf(a.getStatus()).getValue());
@@ -189,10 +168,6 @@ public class AssertionService {
         if (!StringUtils.isBlank(assertion.getStatus())) {
             LOG.debug("assertion status is: " + assertion.getStatus());
             assertion.setStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
-        }
-        if (assertion.getOrcidId() == null) {
-            assertion.setOrcidId(getAssertionOrcidId(assertion));
-            assertion.setPermissionLink(orcidRecordService.generateLinkForEmail(assertion.getEmail()));
         }
         return assertion;
     }
@@ -241,11 +216,6 @@ public class AssertionService {
         assertion.setStatus(getAssertionStatus(assertion));
         assertion = assertionRepository.insert(assertion);
         assertion.setStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
-
-        if (assertion.getOrcidId() == null) {
-            assertion.setOrcidId(getAssertionOrcidId(assertion));
-        }
-
         return assertion;
     }
 
@@ -285,10 +255,6 @@ public class AssertionService {
         existingAssertion.setStatus(getAssertionStatus(existingAssertion));
         assertion = assertionRepository.save(existingAssertion);
         assertion.setStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
-
-        if (assertion.getOrcidId() == null) {
-            assertion.setOrcidId(getAssertionOrcidId(assertion));
-        }
         return assertion;
     }
 
@@ -638,18 +604,6 @@ public class AssertionService {
         return AssertionUtils.getAssertionStatus(assertion, optionalRecord.get());
     }
 
-    private String getAssertionOrcidId(Assertion assertion) {
-        Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(assertion.getEmail());
-        if (optionalRecord.isPresent()) {
-            OrcidRecord record = optionalRecord.get();
-            if (StringUtils.isBlank(record.getToken(assertion.getSalesforceId()))) {
-                return null;
-            }
-            return record.getOrcid();
-        }
-        return null;
-    }
-
     public List<Assertion> findByEmail(String email) {
         return assertionRepository.findByEmail(email);
     }
@@ -774,5 +728,15 @@ public class AssertionService {
             throw new RuntimeException(e);
         }
         return upload;
+    }
+
+    public void updateOrcidIdsForEmail(String email) {
+        Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
+        final String orcid = record.get().getOrcid();
+        List<Assertion> assertions = assertionRepository.findAllByEmail(email);
+        assertions.stream().filter(a -> a.getOrcidId() == null).forEach(a -> {
+            a.setOrcidId(orcid);
+            assertionRepository.save(a); 
+        });
     }
 }
