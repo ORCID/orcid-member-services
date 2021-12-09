@@ -185,7 +185,7 @@ class AssertionServiceTest {
             }
         });
 
-        assertionService.createAssertion(a);
+        assertionService.createAssertion(a, getUser());
         Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(a));
         Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
     }
@@ -210,7 +210,7 @@ class AssertionServiceTest {
             }
         });
 
-        assertionService.createAssertion(a);
+        assertionService.createAssertion(a, getUser());
         Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(a));
 
     }
@@ -234,7 +234,7 @@ class AssertionServiceTest {
             }
         });
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-        a = assertionService.updateAssertion(a);
+        a = assertionService.updateAssertion(a, getUser());
         assertNotNull(a.getStatus());
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
         Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
@@ -260,7 +260,7 @@ class AssertionServiceTest {
             }
         });
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithoutIdToken());
-        a = assertionService.updateAssertion(a);
+        a = assertionService.updateAssertion(a, getUser());
         assertNotNull(a.getStatus());
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
     }
@@ -285,7 +285,7 @@ class AssertionServiceTest {
             }
         });
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-        a = assertionService.updateAssertion(a);
+        a = assertionService.updateAssertion(a, getUser());
         assertNotNull(a.getStatus());
         assertEquals("orcid-already-present", a.getOrcidId());
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
@@ -311,7 +311,7 @@ class AssertionServiceTest {
         });
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            assertionService.updateAssertion(a);
+            assertionService.updateAssertion(a, getUser());
         });
     }
 

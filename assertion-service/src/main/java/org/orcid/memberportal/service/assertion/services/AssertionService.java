@@ -142,7 +142,7 @@ public class AssertionService {
         return optional.get();
     }
 
-    public Assertion createAssertion(Assertion assertion) {
+    public Assertion createAssertion(Assertion assertion, AssertionServiceUser owner) {
         assertion = assertionNormalizer.normalize(assertion);
         
         Instant now = Instant.now();
@@ -152,7 +152,7 @@ public class AssertionService {
         assertion.setCreated(now);
         assertion.setModified(now);
         assertion.setLastModifiedBy(user.getEmail());
-        assertion.setSalesforceId(assertionsUserService.getLoggedInUserSalesforceId());
+        assertion.setSalesforceId(owner.getSalesforceId());
 
         String email = assertion.getEmail();
 
@@ -203,21 +203,14 @@ public class AssertionService {
         }
     }
 
-    private void checkAssertionAccess(Assertion existingAssertion) {
-        String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
-        if (!salesforceId.equals(existingAssertion.getSalesforceId())) {
-            throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
-        }
-    }
-
-    public Assertion updateAssertion(Assertion assertion) {
+    public Assertion updateAssertion(Assertion assertion, AssertionServiceUser user) {
         assertion = assertionNormalizer.normalize(assertion);
         
         Optional<Assertion> optional = assertionRepository.findById(assertion.getId());
         Assertion existingAssertion = optional.get();
-        checkAssertionAccess(existingAssertion);
-
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
+        if (!user.getSalesforceId().equals(existingAssertion.getSalesforceId())) {
+            throw new BadRequestAlertException("Illegal assertion access", "affiliation", "affiliationOtherOrganization");
+        }
 
         copyFieldsToUpdate(assertion, existingAssertion);
         existingAssertion.setModified(Instant.now());
@@ -634,7 +627,7 @@ public class AssertionService {
         File file = new File(uploadFile.getFileLocation());
         AssertionServiceUser user = assertionsUserService.getUserById(uploadFile.getOwnerId());
         AssertionsUpload upload = readUpload(file, user);
-        AssertionsUploadSummary summary = processUpload(upload);
+        AssertionsUploadSummary summary = processUpload(upload, user);
         mailService.sendAssertionsUploadSummaryMail(summary, user);
         
         if (summary.getErrors().isEmpty()) {
@@ -642,7 +635,7 @@ public class AssertionService {
         }
     }
 
-    private AssertionsUploadSummary processUpload(AssertionsUpload upload) {
+    private AssertionsUploadSummary processUpload(AssertionsUpload upload, AssertionServiceUser user) {
         AssertionsUploadSummary summary = new AssertionsUploadSummary();
 
         if (upload.getErrors().size() > 0) {
@@ -658,18 +651,19 @@ public class AssertionService {
         for (Assertion a : upload.getAssertions()) {
             if (!isDuplicate(a)) {
                 if (a.getId() == null || a.getId().isEmpty()) {
-                    createAssertion(a);
+                    createAssertion(a, user);
                     created++;
                 } else {
                     Assertion existingAssertion = findById(a.getId());
-                    checkAssertionAccess(existingAssertion);
-
+                    if (!user.getSalesforceId().equals(existingAssertion.getSalesforceId())) {
+                        throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
+                    }
                     if (assertionToDelete(a)) {
                         deleteAssertionFromOrcidRegistry(a.getId());
                         deleteById(a.getId());
                         deleted++;
                     } else {
-                        updateAssertion(a);
+                        updateAssertion(a, user);
                         updated++;
                     }
                 }

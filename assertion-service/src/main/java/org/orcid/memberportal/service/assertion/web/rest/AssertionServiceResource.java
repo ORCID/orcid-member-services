@@ -151,7 +151,7 @@ public class AssertionServiceResource {
     @PutMapping("/assertion")
     public ResponseEntity<Assertion> updateAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
         validateAssertion(assertion);
-        Assertion existingAssertion = assertionService.updateAssertion(assertion);
+        Assertion existingAssertion = assertionService.updateAssertion(assertion, assertionsUserService.getLoggedInUser());
         LOG.info("{} updated assertion {}", SecurityUtils.getCurrentUserLogin().get(), assertion.getId());
         return ResponseEntity.ok().body(existingAssertion);
     }
@@ -160,7 +160,7 @@ public class AssertionServiceResource {
     public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, URISyntaxException {
         LOG.debug("REST request to create assertion : {}", assertion);
         validateAssertion(assertion);
-        assertion = assertionService.createAssertion(assertion);
+        assertion = assertionService.createAssertion(assertion, assertionsUserService.getLoggedInUser());
         LOG.info("{} created assertion {}", SecurityUtils.getCurrentUserLogin().get(), assertion.getId());
         return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId())).body(assertion);
     }
