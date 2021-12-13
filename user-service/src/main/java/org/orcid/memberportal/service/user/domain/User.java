@@ -92,6 +92,15 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Field("login_as")
     private String loginAs;
 
+    @Field("mfa_enabled")
+    private Boolean mfaEnabled;
+    
+    @Field("mfa_encrypted_secret")
+    private String mfaEncryptedSecret;
+    
+    @Field("mfa_backup_codes")
+    private List<String> mfaBackupCodes;
+    
     public String getLoginAs() {
         return loginAs;
     }
@@ -245,6 +254,30 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setActivationReminders(List<ActivationReminder> activationReminders) {
         this.activationReminders = activationReminders;
+    }
+    
+    public Boolean getMfaEnabled() {
+        return mfaEnabled;
+    }
+
+    public void setMfaEnabled(Boolean mfaEnabled) {
+        this.mfaEnabled = mfaEnabled;
+    }
+
+    public String getMfaEncryptedSecret() {
+        return mfaEncryptedSecret;
+    }
+
+    public void setMfaEncryptedSecret(String mfaEncryptedSecret) {
+        this.mfaEncryptedSecret = mfaEncryptedSecret;
+    }
+
+    public List<String> getMfaBackupCodes() {
+        return mfaBackupCodes;
+    }
+
+    public void setMfaBackupCodes(List<String> mfaBackupCodes) {
+        this.mfaBackupCodes = mfaBackupCodes;
     }
 
     @Override

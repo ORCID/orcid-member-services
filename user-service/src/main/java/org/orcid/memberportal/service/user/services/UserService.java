@@ -16,6 +16,9 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.aerogear.security.otp.Totp;
+import org.jboss.aerogear.security.otp.api.Base32;
+import org.orcid.memberportal.service.user.config.ApplicationProperties;
 import org.orcid.memberportal.service.user.config.Constants;
 import org.orcid.memberportal.service.user.domain.ActivationReminder;
 import org.orcid.memberportal.service.user.domain.Authority;
@@ -25,6 +28,9 @@ import org.orcid.memberportal.service.user.mapper.UserMapper;
 import org.orcid.memberportal.service.user.repository.AuthorityRepository;
 import org.orcid.memberportal.service.user.repository.UserRepository;
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
+import org.orcid.memberportal.service.user.security.EncryptUtil;
+import org.orcid.memberportal.service.user.security.MfaAuthenticationFailureException;
+import org.orcid.memberportal.service.user.security.MfaSetup;
 import org.orcid.memberportal.service.user.security.SecurityUtils;
 import org.orcid.memberportal.service.user.upload.UserUpload;
 import org.orcid.memberportal.service.user.upload.UserUploadReader;
@@ -55,6 +61,10 @@ public class UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
+    static final int BACKUP_CODE_LENGTH = 10;
+
+    static final int BACKUP_CODE_BATCH_SIZE = 14;
+
     public static final int RESET_KEY_LIFESPAN_IN_SECONDS = 86400;
 
     /**
@@ -83,6 +93,12 @@ public class UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ApplicationProperties applicationProperties;
+
+    @Autowired
+    private EncryptUtil encryptUtil;
 
     public void completePasswordReset(String newPassword, String key) throws ExpiredKeyException, InvalidKeyException {
         LOG.debug("Reset user password for reset key {}", key);
@@ -176,7 +192,7 @@ public class UserService {
         user.setResetDate(Instant.now());
         user.setActivated(false);
         userRepository.save(user);
-        
+
         mailService.sendActivationEmail(user);
         return user;
     }
@@ -544,6 +560,72 @@ public class UserService {
         }
 
         return userRepository.findOneByEmailIgnoreCase(user.get().getLoginAs()).get();
+    }
+
+    public MfaSetup getMfaSetup() {
+        String secret = Base32.random();
+        String qrCode = String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", applicationProperties.getBaseUrl(), SecurityUtils.getCurrentUserLogin(), secret,
+                applicationProperties.getBaseUrl());
+        MfaSetup mfaSetup = new MfaSetup();
+        mfaSetup.setSecret(secret);
+        mfaSetup.setQrCode(qrCode);
+        return mfaSetup;
+    }
+
+    public List<String> enableMfa(MfaSetup mfaSetup) {
+        validateOtp(mfaSetup.getOtp(), mfaSetup.getSecret());
+
+        List<String> backupCodes = generateBackupCodes();
+        List<String> hashedBackupCodes = hashBackupCodes(backupCodes);
+
+        User user = getCurrentUser();
+        user.setMfaEnabled(true);
+        user.setMfaEncryptedSecret(encryptUtil.encrypt(mfaSetup.getSecret()));
+        user.setMfaBackupCodes(hashedBackupCodes);
+        userRepository.save(user);
+        
+        return backupCodes;
+    }
+    
+    public void validateOtp(String otp, String secret) {
+        otp = otp.replaceAll("\\s", "");
+        if (!validLong(otp)) {
+            throw new MfaAuthenticationFailureException("Invalid OTP");
+        }
+
+        Totp totp = new Totp(secret);
+        if (!totp.verify(otp)) {
+            throw new MfaAuthenticationFailureException("Invalid OTP");
+        }
+    }
+
+    public void disableMfa() {
+        User user = getCurrentUser();
+        user.setMfaEnabled(false);
+        user.setMfaEncryptedSecret(null);
+        user.setMfaBackupCodes(null);
+        userRepository.save(user);
+    }
+
+    private List<String> hashBackupCodes(List<String> backupCodes) {
+        return backupCodes.stream().map(passwordEncoder::encode).collect(Collectors.toList());
+    }
+
+    private List<String> generateBackupCodes() {
+        List<String> backupCodes = new ArrayList<>();
+        for (int i = 0; i < BACKUP_CODE_BATCH_SIZE; i++) {
+            backupCodes.add(RandomStringUtils.random(BACKUP_CODE_LENGTH, true, true));
+        }
+        return backupCodes;
+    }
+
+    private boolean validLong(String code) {
+        try {
+            Long.parseLong(code);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 }

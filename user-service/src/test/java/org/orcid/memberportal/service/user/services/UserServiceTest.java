@@ -20,6 +20,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jboss.aerogear.security.otp.Totp;
+import org.jboss.aerogear.security.otp.api.Base32;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -30,6 +33,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.orcid.memberportal.service.user.config.ApplicationProperties;
 import org.orcid.memberportal.service.user.domain.ActivationReminder;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.dto.UserDTO;
@@ -37,6 +41,9 @@ import org.orcid.memberportal.service.user.mapper.UserMapper;
 import org.orcid.memberportal.service.user.repository.AuthorityRepository;
 import org.orcid.memberportal.service.user.repository.UserRepository;
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
+import org.orcid.memberportal.service.user.security.EncryptUtil;
+import org.orcid.memberportal.service.user.security.MfaAuthenticationFailureException;
+import org.orcid.memberportal.service.user.security.MfaSetup;
 import org.orcid.memberportal.service.user.security.MockSecurityContext;
 import org.orcid.memberportal.service.user.upload.UserUpload;
 import org.orcid.memberportal.service.user.upload.UserUploadReader;
@@ -70,6 +77,12 @@ class UserServiceTest {
 
     @Mock
     private UserMapper userMapper;
+
+    @Mock
+    private ApplicationProperties applicationProperties;
+    
+    @Mock
+    private EncryptUtil encryptUtil;
 
     @Captor
     private ArgumentCaptor<User> userCaptor;
@@ -428,48 +441,48 @@ class UserServiceTest {
         page = userService.getAllUsersBySalesforceId(Mockito.mock(Pageable.class), "some-salesforce-id", "some-filter");
         assertEquals(5, page.getTotalElements());
     }
-    
+
     @Test
     public void testSendActivationReminders() {
         // user not due any reminders
         User user1 = getUser("1@user.com");
         user1.setCreatedDate(LocalDateTime.now().minusWeeks(2).atZone(ZoneId.systemDefault()).toInstant());
-        
+
         List<ActivationReminder> user1Reminders = new ArrayList<>();
         user1Reminders.add(new ActivationReminder(7, Instant.now()));
         user1.setActivationReminders(user1Reminders);
-        
+
         // user due 30 day reminder
         User user2 = getUser("2@user.com");
         user2.setCreatedDate(LocalDateTime.now().minusWeeks(5).atZone(ZoneId.systemDefault()).toInstant());
-        
+
         List<ActivationReminder> user2Reminders = new ArrayList<>();
         user2Reminders.add(new ActivationReminder(7, Instant.now()));
         user2.setActivationReminders(user2Reminders);
-        
+
         // user due 7 day reminder
         User user3 = getUser("3@user.com");
         user3.setCreatedDate(LocalDateTime.now().minusDays(8).atZone(ZoneId.systemDefault()).toInstant());
-        
+
         // user not due any reminders
         User user4 = getUser("4@user.com");
         user4.setCreatedDate(LocalDateTime.now().minusDays(3).atZone(ZoneId.systemDefault()).toInstant());
-        
+
         // user not due any reminders
         User user5 = getUser("5@user.com");
         user5.setCreatedDate(LocalDateTime.now().minusWeeks(5).atZone(ZoneId.systemDefault()).toInstant());
-        
+
         List<ActivationReminder> user5Reminders = new ArrayList<>();
         user5Reminders.add(new ActivationReminder(7, Instant.now()));
         user5Reminders.add(new ActivationReminder(30, Instant.now()));
         user5.setActivationReminders(user5Reminders);
-        
+
         Mockito.when(userRepository.findAllByActivatedIsFalseAndDeletedIsFalse()).thenReturn(Arrays.asList(user1, user2, user3, user4, user5));
-        
+
         userService.sendActivationReminders();
-        
+
         Mockito.verify(userRepository, Mockito.times(4)).save(userCaptor.capture());
-        
+
         List<User> captured = userCaptor.getAllValues();
         assertThat(captured.get(1).getEmail()).isEqualTo("2@user.com");
         assertThat(captured.get(1).getActivationReminders().size()).isEqualTo(2);
@@ -479,7 +492,106 @@ class UserServiceTest {
         assertThat(captured.get(3).getActivationReminders().size()).isEqualTo(1);
         assertThat(captured.get(3).getActivationReminders().get(0).getDaysElapsed()).isEqualTo(7);
     }
-    
+
+    @Test
+    public void testGetMfaSetup() {
+        MfaSetup mfaSetup = userService.getMfaSetup();
+        assertThat(mfaSetup.getSecret()).isNotNull();
+        assertThat(mfaSetup.getOtp()).isNull();
+        assertThat(mfaSetup.getQrCode()).isNotNull();
+    }
+
+    @Test
+    public void testDisableMfa() {
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("username"))).thenReturn(Optional.of(getUserUsingMfa()));
+        userService.disableMfa();
+        Mockito.verify(userRepository).save(userCaptor.capture());
+        User captured = userCaptor.getValue();
+        assertThat(captured.getMfaEnabled()).isFalse();
+        assertThat(captured.getMfaEncryptedSecret()).isNull();
+        assertThat(captured.getMfaBackupCodes()).isNull();
+    }
+
+    @Test
+    public void testValidateOtp() {
+        String secret = Base32.random();
+        Totp totp = new Totp(secret);
+        String code = totp.now();
+        userService.validateOtp(code, secret);
+
+        Assertions.assertThrows(MfaAuthenticationFailureException.class, () -> {
+            userService.validateOtp("non-numerical-code", secret);
+        });
+
+        Assertions.assertThrows(MfaAuthenticationFailureException.class, () -> {
+            userService.validateOtp("123456", secret);
+        });
+    }
+
+    @Test
+    public void testEnableMfa() {
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("username"))).thenReturn(Optional.of(getUser("username")));
+        Mockito.when(encryptUtil.encrypt(Mockito.anyString())).thenAnswer(new Answer<String>() {
+            @Override
+            public String answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                return "encrypted-" + (String) args[0];
+            }
+        });
+        Mockito.when(passwordEncoder.encode(Mockito.anyString())).thenAnswer(new Answer<String>() {
+            @Override
+            public String answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                return "encoded-" + (String) args[0];
+            }
+        });
+
+        MfaSetup mfaSetup = new MfaSetup();
+        String secret = Base32.random();
+        mfaSetup.setSecret(secret);
+        mfaSetup.setOtp("non-numerical-code");
+        Assertions.assertThrows(MfaAuthenticationFailureException.class, () -> {
+            userService.enableMfa(mfaSetup);
+        });
+        
+        mfaSetup.setOtp("123456");
+        Assertions.assertThrows(MfaAuthenticationFailureException.class, () -> {
+            userService.enableMfa(mfaSetup);
+        });
+        
+        Totp totp = new Totp(secret);
+        String code = totp.now();
+        mfaSetup.setOtp(code);
+        
+        List<String> backupCodes = userService.enableMfa(mfaSetup);
+        
+        assertThat(backupCodes).isNotNull();
+        assertThat(backupCodes.size()).isEqualTo(UserService.BACKUP_CODE_BATCH_SIZE);
+        backupCodes.forEach(c -> {
+            assertThat(c.length()).isEqualTo(UserService.BACKUP_CODE_LENGTH); // check code has not been hashed
+        });
+        
+        Mockito.verify(userRepository).save(userCaptor.capture());
+        
+        User captured = userCaptor.getValue();
+        assertThat(captured.getMfaEnabled()).isTrue();
+        assertThat(captured.getMfaEncryptedSecret()).isNotNull();
+        assertThat(captured.getMfaEncryptedSecret()).isEqualTo("encrypted-" + secret);
+        assertThat(captured.getMfaBackupCodes()).isNotNull();
+        assertThat(captured.getMfaBackupCodes().size()).isEqualTo(UserService.BACKUP_CODE_BATCH_SIZE);
+        captured.getMfaBackupCodes().forEach(c -> {
+            assertThat(c).startsWith("encoded-"); // check code has been hashed
+        });
+    }
+
+    private User getUserUsingMfa() {
+        User user = getUser("username");
+        user.setMfaEnabled(true);
+        user.setMfaEncryptedSecret("some encrypted secret");
+        user.setMfaBackupCodes(Arrays.asList("backup1", "backup2", "backupn"));
+        return user;
+    }
+
     private List<User> getListOfUsers(int size) {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < size; i++) {

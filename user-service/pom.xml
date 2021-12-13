@@ -362,6 +362,11 @@
 		    <artifactId>shedlock-spring</artifactId>
 		    <version>4.24.0</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.jboss.aerogear</groupId>
+		    <artifactId>aerogear-otp-java</artifactId>
+		    <version>1.0.0</version>
+		</dependency>
     </dependencies>
 
     <build>
