@@ -53,6 +53,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import net.glxn.qrgen.QRCode;
+
 /**
  * Service class for managing users.
  */
@@ -568,7 +570,7 @@ public class UserService {
                 applicationProperties.getBaseUrl());
         MfaSetup mfaSetup = new MfaSetup();
         mfaSetup.setSecret(secret);
-        mfaSetup.setQrCode(qrCode);
+        mfaSetup.setQrCode(QRCode.from(qrCode).withSize(250, 250).stream().toByteArray());
         return mfaSetup;
     }
 

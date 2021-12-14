@@ -6,7 +6,7 @@ public class MfaSetup {
     
     private String otp;
     
-    private String qrCode;
+    private byte[] qrCode;
 
     public String getSecret() {
         return secret;
@@ -24,12 +24,11 @@ public class MfaSetup {
         this.otp = otp;
     }
 
-    public String getQrCode() {
+    public byte[] getQrCode() {
         return qrCode;
     }
 
-    public void setQrCode(String qrCode) {
+    public void setQrCode(byte[] qrCode) {
         this.qrCode = qrCode;
     }
-    
 }
