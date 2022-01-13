@@ -1,20 +1,21 @@
 package org.orcid.memberportal.service.gateway.web.rest;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.orcid.memberportal.service.gateway.security.oauth2.LoginResult;
 import org.orcid.memberportal.service.gateway.security.oauth2.OAuth2AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * Authentication endpoint for web client. Used to authenticate a user using
@@ -49,10 +50,10 @@ public class AuthResource {
      *         code if it fails to authenticate the user.
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OAuth2AccessToken> authenticate(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, String> params) {
+    public ResponseEntity<LoginResult> authenticate(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, String> params) {
         return authenticationService.authenticate(request, response, params);
     }
-
+    
     /**
      * Logout current user deleting his cookies.
      *

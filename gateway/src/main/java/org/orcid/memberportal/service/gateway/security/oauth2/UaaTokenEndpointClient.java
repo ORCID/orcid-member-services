@@ -1,6 +1,6 @@
 package org.orcid.memberportal.service.gateway.security.oauth2;
 
-import io.github.jhipster.config.JHipsterProperties;
+import java.nio.charset.StandardCharsets;
 
 import org.orcid.memberportal.service.gateway.config.oauth2.OAuth2Properties;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,7 +10,7 @@ import org.springframework.util.Base64Utils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.StandardCharsets;
+import io.github.jhipster.config.JHipsterProperties;
 
 /**
  * Client talking to UAA's token endpoint to do different OAuth2 grants.

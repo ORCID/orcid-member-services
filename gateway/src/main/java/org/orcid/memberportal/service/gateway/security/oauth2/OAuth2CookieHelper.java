@@ -1,5 +1,19 @@
 package org.orcid.memberportal.service.gateway.security.oauth2;
 
+import static org.apache.http.conn.util.InetAddressUtils.isIPv4Address;
+import static org.apache.http.conn.util.InetAddressUtils.isIPv6Address;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.conn.util.PublicSuffixMatcher;
+import org.apache.http.conn.util.PublicSuffixMatcherLoader;
+import org.orcid.memberportal.service.gateway.config.oauth2.OAuth2Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
@@ -11,19 +25,6 @@ import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.util.StringUtils;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import static org.apache.http.conn.util.InetAddressUtils.isIPv4Address;
-import static org.apache.http.conn.util.InetAddressUtils.isIPv6Address;
-import org.apache.http.conn.util.PublicSuffixMatcher;
-import org.apache.http.conn.util.PublicSuffixMatcherLoader;
-import org.orcid.memberportal.service.gateway.config.oauth2.OAuth2Properties;
 
 /**
  * Helps with OAuth2 cookie handling.
