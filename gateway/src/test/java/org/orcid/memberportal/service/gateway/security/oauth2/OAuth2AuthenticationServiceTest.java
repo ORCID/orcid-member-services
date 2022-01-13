@@ -1,20 +1,27 @@
 package org.orcid.memberportal.service.gateway.security.oauth2;
 
-import org.orcid.memberportal.service.gateway.config.oauth2.OAuth2Properties;
-import org.orcid.memberportal.service.gateway.security.oauth2.CookieCollection;
-import org.orcid.memberportal.service.gateway.security.oauth2.OAuth2AuthenticationService;
-import org.orcid.memberportal.service.gateway.security.oauth2.OAuth2CookieHelper;
-import org.orcid.memberportal.service.gateway.security.oauth2.OAuth2TokenEndpointClient;
-import org.orcid.memberportal.service.gateway.security.oauth2.UaaTokenEndpointClient;
-import org.orcid.memberportal.service.gateway.web.filter.RefreshTokenFilter;
+import static org.mockito.Mockito.when;
 
-import io.github.jhipster.config.JHipsterProperties;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.http.*;
+import org.orcid.memberportal.service.gateway.config.oauth2.OAuth2Properties;
+import org.orcid.memberportal.service.gateway.web.filter.RefreshTokenFilter;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -29,13 +36,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.mockito.Mockito.when;
+import io.github.jhipster.config.JHipsterProperties;
 
 /**
  * Test password and refresh token grants.
@@ -73,7 +74,7 @@ public class OAuth2AuthenticationServiceTest {
         mockRefreshGrant();
 
         authorizationClient = new UaaTokenEndpointClient(restTemplate, jHipsterProperties, oAuth2Properties);
-        authenticationService = new OAuth2AuthenticationService(authorizationClient, cookieHelper);
+        authenticationService = new OAuth2AuthenticationService(authorizationClient, cookieHelper, tokenStore);
         when(tokenStore.readAccessToken(ACCESS_TOKEN_VALUE)).thenReturn(accessToken);
         refreshTokenFilter = new RefreshTokenFilter(authenticationService, tokenStore);
     }
