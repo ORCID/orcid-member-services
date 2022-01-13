@@ -585,10 +585,23 @@ public class UserService {
         user.setMfaEncryptedSecret(encryptUtil.encrypt(mfaSetup.getSecret()));
         user.setMfaBackupCodes(hashedBackupCodes);
         userRepository.save(user);
-        
+
         return backupCodes;
     }
-    
+
+    public boolean validMfaCode(String username, String code) {
+        Optional<User> user = userRepository.findOneByEmailIgnoreCase(username);
+        String encryptedSecret = user.get().getMfaEncryptedSecret();
+        String decryptedSecret = encryptUtil.decrypt(encryptedSecret);
+
+        try {
+            validateOtp(code, decryptedSecret);
+            return true;
+        } catch (MfaAuthenticationFailureException e) {
+            return false;
+        }
+    }
+
     public void validateOtp(String otp, String secret) {
         otp = otp.replaceAll("\\s", "");
         if (!validLong(otp)) {
@@ -607,6 +620,16 @@ public class UserService {
         user.setMfaEncryptedSecret(null);
         user.setMfaBackupCodes(null);
         userRepository.save(user);
+    }
+
+    public boolean isMfaEnabled(String username) {
+        Optional<User> user = userRepository.findOneByEmailIgnoreCase(username);
+        if (!user.isPresent()) {
+            return false;
+        } else {
+            Boolean mfaEnabled = user.get().getMfaEnabled(); 
+            return mfaEnabled != null ? mfaEnabled.booleanValue() : false;
+        }
     }
 
     private List<String> hashBackupCodes(List<String> backupCodes) {
