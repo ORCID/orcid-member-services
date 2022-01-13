@@ -114,6 +114,7 @@ export class SettingsComponent implements OnInit {
         res => {
           this.mfaBackupCodes = res.body;
           this.showMfaBackupCodes = true;
+          this.showMfaUpdated = true;
         },
         err => {
           this.mfaSetupFailure = true;
