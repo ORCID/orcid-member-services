@@ -179,7 +179,7 @@ public class AssertionServiceResource {
 
     @DeleteMapping("/assertion/{id}")
     public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
-        assertionService.deleteById(id);
+        assertionService.deleteById(id, assertionsUserService.getLoggedInUser());
         LOG.info("{} deleted assertion {}", SecurityUtils.getCurrentUserLogin().get(), id);
         return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
     }
@@ -231,7 +231,7 @@ public class AssertionServiceResource {
 
     @DeleteMapping("/assertion/orcid/{id}")
     public ResponseEntity<String> deleteAssertionFromOrcid(@PathVariable String id) throws JAXBException {
-        Boolean deleted = assertionService.deleteAssertionFromOrcidRegistry(id);
+        Boolean deleted = assertionService.deleteAssertionFromOrcidRegistry(id, assertionsUserService.getLoggedInUser());
         JSONObject responseData = new JSONObject();
         responseData.put("deleted", deleted);
 
