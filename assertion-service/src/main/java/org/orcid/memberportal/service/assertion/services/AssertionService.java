@@ -225,7 +225,7 @@ public class AssertionService {
         return assertionRepository.save(assertion);
     }
 
-    public void deleteById(String id) {
+    public void deleteById(String id, AssertionServiceUser user) {
         Assertion assertion = findById(id);
         String assertionEmail = assertion.getEmail();
 
@@ -412,13 +412,10 @@ public class AssertionService {
         }
     }
 
-    public boolean deleteAssertionFromOrcidRegistry(String assertionId) {
+    public boolean deleteAssertionFromOrcidRegistry(String assertionId, AssertionServiceUser user) {
         Assertion assertion = assertionRepository.findById(assertionId).orElseThrow(() -> new IllegalArgumentException("Invalid assertion id"));
-        String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
-
-        if (!salesForceId.equals(assertion.getSalesforceId())) {
-            throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
-        }
+        String salesforceId = user.getSalesforceId();
+        checkAssertionAccess(assertion, salesforceId);
 
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
         if (canDeleteAssertionFromOrcidRegistry(record, assertion)) {
@@ -444,6 +441,12 @@ public class AssertionService {
             }
         }
         return false;
+    }
+    
+    private void checkAssertionAccess(Assertion assertion, String salesforceId) {
+        if (!salesforceId.equals(assertion.getSalesforceId())) {
+            throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
+        }
     }
 
     public String generateAssertionsReport() throws IOException {
@@ -658,8 +661,8 @@ public class AssertionService {
                         throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
                     }
                     if (assertionToDelete(a)) {
-                        deleteAssertionFromOrcidRegistry(a.getId());
-                        deleteById(a.getId());
+                        deleteAssertionFromOrcidRegistry(a.getId(), user);
+                        deleteById(a.getId(), user);
                         deleted++;
                     } else {
                         updateAssertion(a, user);
