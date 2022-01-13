@@ -23,6 +23,10 @@ public class ApplicationProperties {
 
     private String sendActivationRemindersDelay;
     
+    private String encryptSalt;
+    
+    private String encryptKey;
+    
     public String getMailDomain() {
         return mailDomain;
     }
@@ -85,6 +89,22 @@ public class ApplicationProperties {
 
     public void setSendActivationRemindersDelay(String sendActivationRemindersDelay) {
         this.sendActivationRemindersDelay = sendActivationRemindersDelay;
+    }
+
+    public String getEncryptSalt() {
+        return encryptSalt;
+    }
+
+    public void setEncryptSalt(String encryptSalt) {
+        this.encryptSalt = encryptSalt;
+    }
+
+    public String getEncryptKey() {
+        return encryptKey;
+    }
+
+    public void setEncryptKey(String encryptKey) {
+        this.encryptKey = encryptKey;
     }
     
 }
