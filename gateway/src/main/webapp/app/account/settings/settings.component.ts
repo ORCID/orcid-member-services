@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { JhiLanguageService } from 'ng-jhipster';
 import { AccountService, JhiLanguageHelper } from 'app/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'jhi-settings',
@@ -12,6 +13,14 @@ export class SettingsComponent implements OnInit {
   success: string;
   languages: any[];
   userName: string;
+  mfaSetup: any;
+  showMfaSetup: boolean;
+  showMfaQrCode: boolean;
+  showMfaTextCode: boolean;
+  mfaSetupFailure: boolean;
+  mfaBackupCodes: string[];
+  showMfaBackupCodes: boolean;
+  showMfaUpdated: boolean;
   settingsForm = this.fb.group({
     firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
@@ -21,22 +30,56 @@ export class SettingsComponent implements OnInit {
     langKey: ['en'],
     imageUrl: []
   });
+  mfaForm = this.fb.group({
+    mfaEnabled: [[]],
+    verificationCode: []
+  });
 
   constructor(
     private accountService: AccountService,
     private fb: FormBuilder,
     private languageService: JhiLanguageService,
-    private languageHelper: JhiLanguageHelper
+    private languageHelper: JhiLanguageHelper,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
+    this.showMfaSetup = false;
     this.accountService.identity().then(account => {
       this.updateForm(account);
+      this.updateMfaForm(account);
       this.userName = this.accountService.getUserName();
+      if (!account.mfaEnabled) {
+        this.accountService.getMfaSetup().subscribe(res => {
+          this.mfaSetup = res.body;
+        });
+      }
     });
     this.languageHelper.getAll().then(languages => {
       this.languages = languages;
     });
+    this.showMfaQrCode = true;
+    this.showMfaTextCode = false;
+    this.showMfaBackupCodes = false;
+    this.onChanges();
+  }
+
+  onChanges(): void {
+    this.mfaForm.get('mfaEnabled').valueChanges.subscribe(val => {
+      this.showMfaUpdated = false;
+      if (val && this.mfaSetup) {
+        this.showMfaSetup = true;
+        this.showMfaBackupCodes = false;
+      } else {
+        this.showMfaSetup = false;
+        this.showMfaBackupCodes = false;
+      }
+    });
+  }
+
+  toggleMfaTextCode(): void {
+    this.showMfaQrCode = !this.showMfaQrCode;
+    this.showMfaTextCode = !this.showMfaTextCode;
   }
 
   save() {
@@ -47,6 +90,7 @@ export class SettingsComponent implements OnInit {
         this.success = 'OK';
         this.accountService.identity(true).then(account => {
           this.updateForm(account);
+          this.updateMfaForm(account);
         });
         this.languageService.getCurrent().then(current => {
           if (settingsAccount.langKey !== current) {
@@ -59,6 +103,37 @@ export class SettingsComponent implements OnInit {
         this.error = 'ERROR';
       }
     );
+  }
+
+  saveMfa() {
+    const enabled = this.mfaForm.get('mfaEnabled').value;
+    if (enabled) {
+      const otp = this.mfaForm.get('verificationCode').value;
+      this.mfaSetup.otp = otp;
+      this.accountService.enableMfa(this.mfaSetup).subscribe(
+        res => {
+          this.mfaBackupCodes = res.body;
+          this.showMfaBackupCodes = true;
+        },
+        err => {
+          this.mfaSetupFailure = true;
+        }
+      );
+    } else {
+      this.accountService.disableMfa().subscribe(
+        () => {
+          this.showMfaUpdated = true;
+          this.accountService.getMfaSetup().subscribe(res => {
+            this.mfaSetup = res.body;
+          });
+        },
+        err => console.log('error disabling mfa')
+      );
+    }
+  }
+
+  safeQrCode() {
+    return this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.mfaSetup.qrCode);
   }
 
   private accountFromForm(): any {
@@ -83,7 +158,14 @@ export class SettingsComponent implements OnInit {
       activated: account.activated,
       authorities: account.authorities,
       langKey: account.langKey,
-      imageUrl: account.imageUrl
+      imageUrl: account.imageUrl,
+      mfaEnabled: account.mfaEnabled
+    });
+  }
+
+  updateMfaForm(account: any): void {
+    this.mfaForm.patchValue({
+      mfaEnabled: account.mfaEnabled
     });
   }
 }

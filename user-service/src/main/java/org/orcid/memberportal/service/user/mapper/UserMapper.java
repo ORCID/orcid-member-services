@@ -49,6 +49,7 @@ public class UserMapper {
         userDTO.setMainContact(user.getMainContact());
         userDTO.setId(user.getId());
         userDTO.setLoginAs(user.getLoginAs());
+        userDTO.setMfaEnabled(user.getMfaEnabled() != null ? user.getMfaEnabled() : false);
         return userDTO;
     }
 

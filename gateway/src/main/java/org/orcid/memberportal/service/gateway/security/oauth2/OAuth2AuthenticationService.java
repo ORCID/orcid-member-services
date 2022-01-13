@@ -1,17 +1,23 @@
 package org.orcid.memberportal.service.gateway.security.oauth2;
 
-import io.github.jhipster.security.PersistentTokenCache;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.web.client.HttpClientErrorException;
+import java.util.Collection;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.web.client.HttpClientErrorException;
+
+import io.github.jhipster.security.PersistentTokenCache;
 
 /**
  * Manages authentication cases for OAuth2 updating the cookies holding access
@@ -47,9 +53,12 @@ public class OAuth2AuthenticationService {
      */
     private final PersistentTokenCache<OAuth2Cookies> recentlyRefreshed;
 
-    public OAuth2AuthenticationService(OAuth2TokenEndpointClient authorizationClient, OAuth2CookieHelper cookieHelper) {
+    private TokenStore tokenStore;
+
+    public OAuth2AuthenticationService(OAuth2TokenEndpointClient authorizationClient, OAuth2CookieHelper cookieHelper, TokenStore tokenStore) {
         this.authorizationClient = authorizationClient;
         this.cookieHelper = cookieHelper;
+        this.tokenStore = tokenStore;
         recentlyRefreshed = new PersistentTokenCache<>(REFRESH_TOKEN_VALIDITY_MILLIS);
     }
 
@@ -61,27 +70,45 @@ public class OAuth2AuthenticationService {
      * @param response
      *            the response going back to the server.
      * @param params
-     *            the params holding the username, password and rememberMe.
-     * @return the {@link OAuth2AccessToken} as a {@link ResponseEntity}. Will
-     *         return {@code OK (200)}, if successful. If the UAA cannot
-     *         authenticate the user, the status code returned by UAA will be
-     *         returned.
+     *            the params holding the username, password, rememberMe, and optional mfaCode.
+     * @return the LoginResult as a {@link ResponseEntity}. Will return
+     *         {@code OK (200)}, if successful. If the UAA cannot authenticate
+     *         the user, the status code returned by UAA will be returned.
      */
-    public ResponseEntity<OAuth2AccessToken> authenticate(HttpServletRequest request, HttpServletResponse response, Map<String, String> params) {
+    public ResponseEntity<LoginResult> authenticate(HttpServletRequest request, HttpServletResponse response, Map<String, String> params) {
         try {
             String username = params.get("username");
             String password = params.get("password");
+            String mfaCode = params.get("mfaCode");
             boolean rememberMe = Boolean.valueOf(params.get("rememberMe"));
-            OAuth2AccessToken accessToken = authorizationClient.sendPasswordGrant(username, password);
-            OAuth2Cookies cookies = new OAuth2Cookies();
-            cookieHelper.createCookies(request, accessToken, rememberMe, cookies);
-            cookies.addCookiesTo(response);
-            LOG.info("Successfully authenticated user {}", params.get("username"));
-            return ResponseEntity.ok(accessToken);
+            OAuth2AccessToken accessToken = authorizationClient.sendPasswordGrant(username, password, mfaCode);
+
+            LoginResult loginResult = getLoginResult(accessToken);
+            
+            if (!loginResult.isMfaRequired()) {
+                LOG.info("Successfully authenticated user {}", params.get("username"));
+                OAuth2Cookies cookies = new OAuth2Cookies();
+                cookieHelper.createCookies(request, accessToken, rememberMe, cookies);
+                cookies.addCookiesTo(response);
+            }
+            
+            return ResponseEntity.ok(loginResult);
         } catch (HttpClientErrorException ex) {
             LOG.error("Failed to get OAuth2 tokens from UAA", ex);
             throw new BadCredentialsException("Invalid credentials");
         }
+    }
+
+    private LoginResult getLoginResult(OAuth2AccessToken accessToken) {
+        OAuth2Authentication authentication = tokenStore.readAuthentication(accessToken);
+        Collection<GrantedAuthority> authorities = authentication.getAuthorities();
+        LoginResult loginResult = new LoginResult();
+        authorities.forEach(a -> {
+            if (a.getAuthority().equals("PRE_AUTH")) {
+                loginResult.setMfaRequired(true);
+            }
+        });
+        return loginResult;
     }
 
     /**

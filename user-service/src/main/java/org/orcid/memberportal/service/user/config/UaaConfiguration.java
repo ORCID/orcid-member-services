@@ -3,11 +3,14 @@ package org.orcid.memberportal.service.user.config;
 import java.net.MalformedURLException;
 import java.security.KeyPair;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
+import org.orcid.memberportal.service.user.security.PasswordTokenGranter;
+import org.orcid.memberportal.service.user.services.UserService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,6 +31,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.CompositeTokenGranter;
+import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenGranter;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -48,6 +55,9 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
     private static final int MIN_ACCESS_TOKEN_VALIDITY_SECS = 60;
 
     private ApplicationContext applicationContext;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -105,10 +115,6 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
         accessTokenValidity = Math.max(accessTokenValidity, MIN_ACCESS_TOKEN_VALIDITY_SECS);
         int refreshTokenValidity = uaaProperties.getWebClientConfiguration().getRefreshTokenValidityInSecondsForRememberMe();
         refreshTokenValidity = Math.max(refreshTokenValidity, accessTokenValidity);
-        /*
-         * For a better client design, this should be done by a
-         * ClientDetailsService (similar to UserDetailsService).
-         */
         clients.inMemory().withClient(uaaProperties.getWebClientConfiguration().getClientId())
                 .secret(passwordEncoder.encode(uaaProperties.getWebClientConfiguration().getSecret())).scopes("openid").autoApprove(true)
                 .authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code").accessTokenValiditySeconds(accessTokenValidity)
@@ -121,23 +127,27 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        // pick up all TokenEnhancers incl. those defined in the application
-        // this avoids changes to this class if an application wants to add its
-        // own to
-        // the chain
         Collection<TokenEnhancer> tokenEnhancers = applicationContext.getBeansOfType(TokenEnhancer.class).values();
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
         tokenEnhancerChain.setTokenEnhancers(new ArrayList<>(tokenEnhancers));
-        endpoints.authenticationManager(authenticationManager).tokenStore(tokenStore()).tokenEnhancer(tokenEnhancerChain).reuseRefreshTokens(false); // don't
-                                                                                                                                                     // reuse
-                                                                                                                                                     // or
-                                                                                                                                                     // we
-                                                                                                                                                     // will
-                                                                                                                                                     // run
-                                                                                                                                                     // into
-                                                                                                                                                     // session
-                                                                                                                                                     // inactivity
-                                                                                                                                                     // timeouts
+
+        // don't reuse refresh tokens to avoid inactivity timeouts
+        endpoints.authenticationManager(authenticationManager).tokenStore(tokenStore()).tokenEnhancer(tokenEnhancerChain).reuseRefreshTokens(false);
+        endpoints.tokenGranter(tokenGranter(endpoints));
+    }
+
+    @Bean
+    public DefaultTokenServices tokenServices() {
+        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setSupportRefreshToken(true);
+        defaultTokenServices.setTokenEnhancer(jwtAccessTokenConverter());
+        return defaultTokenServices;
+    }
+
+    private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints) {
+        return new CompositeTokenGranter(Arrays.asList(new PasswordTokenGranter(endpoints, authenticationManager, userService, tokenServices()),
+                new ClientCredentialsTokenGranter(tokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory())));
     }
 
     @Autowired

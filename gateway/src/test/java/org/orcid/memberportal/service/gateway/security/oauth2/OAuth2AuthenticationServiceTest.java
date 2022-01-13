@@ -1,27 +1,47 @@
 package org.orcid.memberportal.service.gateway.security.oauth2;
 
-import org.orcid.memberportal.service.gateway.config.oauth2.OAuth2Properties;
-import org.orcid.memberportal.service.gateway.security.oauth2.CookieCollection;
-import org.orcid.memberportal.service.gateway.security.oauth2.OAuth2AuthenticationService;
-import org.orcid.memberportal.service.gateway.security.oauth2.OAuth2CookieHelper;
-import org.orcid.memberportal.service.gateway.security.oauth2.OAuth2TokenEndpointClient;
-import org.orcid.memberportal.service.gateway.security.oauth2.UaaTokenEndpointClient;
-import org.orcid.memberportal.service.gateway.web.filter.RefreshTokenFilter;
+import static org.mockito.Mockito.when;
 
-import io.github.jhipster.config.JHipsterProperties;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.http.*;
+import org.mockito.Mockito;
+import org.orcid.memberportal.service.gateway.config.oauth2.OAuth2Properties;
+import org.orcid.memberportal.service.gateway.web.filter.RefreshTokenFilter;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.DefaultOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.LinkedMultiValueMap;
@@ -29,13 +49,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.mockito.Mockito.when;
+import io.github.jhipster.config.JHipsterProperties;
 
 /**
  * Test password and refresh token grants.
@@ -70,11 +84,13 @@ public class OAuth2AuthenticationServiceTest {
 
         mockInvalidPassword();
         mockPasswordGrant(accessToken);
+        mockPasswordGrantForMfa(accessToken);
         mockRefreshGrant();
 
         authorizationClient = new UaaTokenEndpointClient(restTemplate, jHipsterProperties, oAuth2Properties);
-        authenticationService = new OAuth2AuthenticationService(authorizationClient, cookieHelper);
+        authenticationService = new OAuth2AuthenticationService(authorizationClient, cookieHelper, tokenStore);
         when(tokenStore.readAccessToken(ACCESS_TOKEN_VALUE)).thenReturn(accessToken);
+        when(tokenStore.readAuthentication(Mockito.eq(accessToken))).thenReturn(getMockOAuth2Authentication("username", Collections.emptySet(), Collections.singleton("ROLE_USER")));
         refreshTokenFilter = new RefreshTokenFilter(authenticationService, tokenStore);
     }
 
@@ -93,6 +109,17 @@ public class OAuth2AuthenticationServiceTest {
         request.setCookies(accessTokenCookie, refreshTokenCookie);
         return request;
     }
+    
+    private OAuth2Authentication getMockOAuth2Authentication(String username, Set<String> scopes, Set<String> roles) {
+        List<GrantedAuthority> authorities = roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+
+        User principal = new User(username, "test", true, true, true, true, authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());
+
+        // Create the authorization request and OAuth2Authentication object
+        OAuth2Request authRequest = new OAuth2Request(null, "testClient", null, true, scopes, null, null, null, null);
+        return new OAuth2Authentication(authRequest, authentication);
+    }
 
     private void mockInvalidPassword() {
         HttpHeaders reqHeaders = new HttpHeaders();
@@ -106,6 +133,7 @@ public class OAuth2AuthenticationServiceTest {
         formParams.set("username", "user");
         formParams.set("password", "user2");
         formParams.add("grant_type", "password");
+        formParams.add("mfa_code", null);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(formParams, reqHeaders);
         when(restTemplate.postForEntity("http://uaa/oauth/token", entity, OAuth2AccessToken.class)).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
     }
@@ -122,6 +150,25 @@ public class OAuth2AuthenticationServiceTest {
         formParams.set("username", "user");
         formParams.set("password", "user");
         formParams.add("grant_type", "password");
+        formParams.add("mfa_code", null);
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(formParams, reqHeaders);
+        when(restTemplate.postForEntity("http://uaa/oauth/token", entity, OAuth2AccessToken.class))
+                .thenReturn(new ResponseEntity<OAuth2AccessToken>(accessToken, HttpStatus.OK));
+    }
+    
+    private void mockPasswordGrantForMfa(OAuth2AccessToken accessToken) {
+        HttpHeaders reqHeaders = new HttpHeaders();
+        reqHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        reqHeaders.add("Authorization", CLIENT_AUTHORIZATION); // take over
+                                                               // Authorization
+                                                               // header from
+                                                               // client request
+                                                               // to UAA request
+        MultiValueMap<String, String> formParams = new LinkedMultiValueMap<>();
+        formParams.set("username", "user");
+        formParams.set("password", "user");
+        formParams.add("grant_type", "password");
+        formParams.add("mfa_code", "mfa");
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(formParams, reqHeaders);
         when(restTemplate.postForEntity("http://uaa/oauth/token", entity, OAuth2AccessToken.class))
                 .thenReturn(new ResponseEntity<OAuth2AccessToken>(accessToken, HttpStatus.OK));
@@ -150,6 +197,26 @@ public class OAuth2AuthenticationServiceTest {
         params.put("username", "user");
         params.put("password", "user");
         params.put("rememberMe", "true");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        authenticationService.authenticate(request, response, params);
+        // check that cookies are set correctly
+        Cookie accessTokenCookie = response.getCookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE);
+        Assertions.assertEquals(ACCESS_TOKEN_VALUE, accessTokenCookie.getValue());
+        Cookie refreshTokenCookie = response.getCookie(OAuth2CookieHelper.REFRESH_TOKEN_COOKIE);
+        Assertions.assertEquals(REFRESH_TOKEN_VALUE, OAuth2CookieHelper.getRefreshTokenValue(refreshTokenCookie));
+        Assertions.assertTrue(OAuth2CookieHelper.isRememberMe(refreshTokenCookie));
+    }
+    
+    @Test
+    public void testAuthenticationCookiesWithMfa() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setServerName("www.test.com");
+        request.addHeader("Authorization", CLIENT_AUTHORIZATION);
+        Map<String, String> params = new HashMap<>();
+        params.put("username", "user");
+        params.put("password", "user");
+        params.put("rememberMe", "true");
+        params.put("mfaCode", "mfa");
         MockHttpServletResponse response = new MockHttpServletResponse();
         authenticationService.authenticate(request, response, params);
         // check that cookies are set correctly
@@ -188,6 +255,19 @@ public class OAuth2AuthenticationServiceTest {
         params.put("rememberMe", "false");
         MockHttpServletResponse response = new MockHttpServletResponse();
         Assertions.assertThrows(BadCredentialsException.class, () -> authenticationService.authenticate(request, response, params));
+    }
+    
+    @Test
+    public void testValidPasswordWithMfa() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setServerName("www.test.com");
+        Map<String, String> params = new HashMap<>();
+        params.put("username", "user");
+        params.put("password", "user");
+        params.put("rememberMe", "false");
+        params.put("mfaCode", "mfa");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        Assertions.assertNotNull(response);
     }
 
     @Test

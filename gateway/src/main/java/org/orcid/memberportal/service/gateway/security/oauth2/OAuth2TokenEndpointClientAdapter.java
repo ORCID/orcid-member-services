@@ -1,7 +1,5 @@
 package org.orcid.memberportal.service.gateway.security.oauth2;
 
-import io.github.jhipster.config.JHipsterProperties;
-
 import org.orcid.memberportal.service.gateway.config.oauth2.OAuth2Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +14,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import io.github.jhipster.config.JHipsterProperties;
 
 /**
  * Default base class for an {@link OAuth2TokenEndpointClient}. Individual
@@ -44,12 +44,13 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
      * @return the access token.
      */
     @Override
-    public OAuth2AccessToken sendPasswordGrant(String username, String password) {
+    public OAuth2AccessToken sendPasswordGrant(String username, String password, String mfaCode) {
         HttpHeaders reqHeaders = new HttpHeaders();
         reqHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> formParams = new LinkedMultiValueMap<>();
         formParams.set("username", username);
         formParams.set("password", password);
+        formParams.set("mfa_code", mfaCode);
         formParams.set("grant_type", "password");
         addAuthentication(reqHeaders, formParams);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(formParams, reqHeaders);
@@ -62,7 +63,7 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
         OAuth2AccessToken accessToken = responseEntity.getBody();
         return accessToken;
     }
-
+    
     /**
      * Sends a refresh grant to the token endpoint using the current refresh
      * token to obtain new tokens.

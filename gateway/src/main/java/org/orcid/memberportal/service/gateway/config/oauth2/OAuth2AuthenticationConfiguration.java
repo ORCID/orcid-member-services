@@ -52,7 +52,7 @@ public class OAuth2AuthenticationConfiguration extends ResourceServerConfigurerA
 
     @Bean
     public OAuth2AuthenticationService uaaAuthenticationService() {
-        return new OAuth2AuthenticationService(tokenEndpointClient, cookieHelper());
+        return new OAuth2AuthenticationService(tokenEndpointClient, cookieHelper(), tokenStore);
     }
 
     /**

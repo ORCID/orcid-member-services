@@ -66,6 +66,8 @@ public class UserDTO {
     private String loginAs;
 
     private String memberName;
+    
+    private boolean mfaEnabled;
 
     public UserDTO() {
         // Empty constructor needed for Jackson.
@@ -246,6 +248,14 @@ public class UserDTO {
     public void setMemberName(String memberName) {
         this.memberName = memberName;
     }
+    
+    public boolean isMfaEnabled() {
+        return mfaEnabled;
+    }
+
+    public void setMfaEnabled(boolean mfaEnabled) {
+        this.mfaEnabled = mfaEnabled;
+    }
 
     @Override
     public int hashCode() {
@@ -262,6 +272,7 @@ public class UserDTO {
         result = prime * result + ((mainContact == null) ? 0 : mainContact.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
         result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
+        result = prime * result + (mfaEnabled ? 0 : 1);
         return result;
     }
 
@@ -334,6 +345,9 @@ public class UserDTO {
                 return false;
         } else if (!parentSalesforceId.equals(other.parentSalesforceId))
             return false;
+        if (mfaEnabled != other.mfaEnabled) {
+            return false;
+        }
         return true;
     }
 

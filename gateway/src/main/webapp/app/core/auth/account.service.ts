@@ -21,8 +21,21 @@ export class AccountService {
     return this.http.get<Account>(SERVER_API_URL + 'services/userservice/api/account', { observe: 'response' });
   }
 
+  getMfaSetup(): Observable<HttpResponse<any>> {
+    return this.http.get<any>(SERVER_API_URL + 'services/userservice/api/account/mfa', { observe: 'response' });
+  }
+
   save(account: any): Observable<HttpResponse<any>> {
     return this.http.post(SERVER_API_URL + 'services/userservice/api/account', account, { observe: 'response' });
+  }
+
+  enableMfa(mfaSetup: any): Observable<HttpResponse<any>> {
+    return this.http.post(SERVER_API_URL + 'services/userservice/api/account/mfa/on', mfaSetup, { observe: 'response' });
+  }
+
+  disableMfa(): Observable<HttpResponse<any>> {
+    console.log('disabling mfa');
+    return this.http.post(SERVER_API_URL + 'services/userservice/api/account/mfa/off', null, { observe: 'response' });
   }
 
   authenticate(identity) {

@@ -8,6 +8,7 @@ export class Account {
     public lastName: string,
     public imageUrl: string,
     public salesforceId: string,
-    public loggedAs: boolean
+    public loggedAs: boolean,
+    public mfaEnabled: boolean
   ) {}
 }

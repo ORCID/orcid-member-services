@@ -95,3 +95,5 @@ jhipster:
 
 application:
   sendActivationRemindersDelay: 3600000 # hourly
+  encryptKey: Abcdefghijklmnop
+  encryptSalt: dc0da04af8fee58593442bf834b30739

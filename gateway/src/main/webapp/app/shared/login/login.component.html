@@ -21,6 +21,13 @@
                         <input type="password" class="form-control" name="password" id="password" placeholder="{{'login.form.password.placeholder.string' | translate}}"
                                formControlName="password">
                     </div>
+                    <div *ngIf="showMfa" class="form-group">
+                    	<div class="alert alert-danger" jhiTranslate="login.form.mfaCode.prompt.string">
+		                    <strong>Failed to sign in!</strong> Please check your credentials and try again.
+		                </div>
+                    	<label for="mfaCode" jhiTranslate="login.form.mfaCode.label.string">MFA code</label>
+                        <input type="text" class="form-control" name="mfaCode" id="mfaCode" formControlName="mfaCode">
+                    </div>
                     <div class="form-check">
                         <label class="form-check-label" for="rememberMe">
                             <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" checked>

@@ -23,6 +23,7 @@ export interface IMSUser {
   createdDate?: Moment;
   lastModifiedBy?: string;
   lastModifiedDate?: Moment;
+  mfaEnabled?: boolean;
 }
 
 export class MSUser implements IMSUser {
@@ -40,10 +41,12 @@ export class MSUser implements IMSUser {
     public lastModifiedBy?: string,
     public activated?: boolean,
     public isAdmin?: boolean,
-    public lastModifiedDate?: Moment
+    public lastModifiedDate?: Moment,
+    public mfaEnabled?: boolean
   ) {
     this.isAdmin = this.isAdmin || false;
     this.mainContact = this.mainContact || false;
     this.activated = this.activated || false;
+    this.mfaEnabled = this.mfaEnabled || false;
   }
 }
