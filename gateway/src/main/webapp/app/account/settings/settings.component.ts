@@ -20,6 +20,7 @@ export class SettingsComponent implements OnInit {
   mfaSetupFailure: boolean;
   mfaBackupCodes: string[];
   showMfaBackupCodes: boolean;
+  showMfaUpdated: boolean;
   settingsForm = this.fb.group({
     firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
@@ -65,6 +66,7 @@ export class SettingsComponent implements OnInit {
 
   onChanges(): void {
     this.mfaForm.get('mfaEnabled').valueChanges.subscribe(val => {
+      this.showMfaUpdated = false;
       if (val && this.mfaSetup) {
         this.showMfaSetup = true;
         this.showMfaBackupCodes = false;
@@ -118,7 +120,15 @@ export class SettingsComponent implements OnInit {
         }
       );
     } else {
-      this.accountService.disableMfa().subscribe(() => {}, err => console.log('error disabling mfa'));
+      this.accountService.disableMfa().subscribe(
+        () => {
+          this.showMfaUpdated = true;
+          this.accountService.getMfaSetup().subscribe(res => {
+            this.mfaSetup = res.body;
+          });
+        },
+        err => console.log('error disabling mfa')
+      );
     }
   }
 

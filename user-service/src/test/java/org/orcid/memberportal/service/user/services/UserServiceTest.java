@@ -527,6 +527,32 @@ class UserServiceTest {
             userService.validateOtp("123456", secret);
         });
     }
+    
+    @Test
+    public void testValidMfaCode() {
+        String backupCode1 = "backupCode1";
+        String backupCode2 = "backupCode2";
+        String backupCode3 = "backupCode3";
+        
+        Mockito.when(passwordEncoder.matches(Mockito.eq("backupCode2"), Mockito.eq("backupCode2"))).thenReturn(true);
+        
+        User user = new User();
+        user.setEmail("user");
+        user.setMfaEnabled(true);
+        user.setMfaEncryptedSecret("some secret");
+        user.setMfaBackupCodes(Arrays.asList(backupCode1, backupCode2, backupCode3));
+        
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("user"))).thenReturn(Optional.of(user));
+        userService.validMfaCode("user", "backupCode2");
+        
+        Mockito.verify(passwordEncoder, Mockito.times(3)).matches(Mockito.eq("backupCode2"), Mockito.anyString());
+        Mockito.verify(userRepository).findOneByEmailIgnoreCase(Mockito.eq("user"));
+        Mockito.verify(userRepository).save(userCaptor.capture());
+        
+        User saved = userCaptor.getValue();
+        assertEquals(2, saved.getMfaBackupCodes().size());
+        assertFalse(saved.getMfaBackupCodes().contains("backupCode2"));
+    }
 
     @Test
     public void testEnableMfa() {

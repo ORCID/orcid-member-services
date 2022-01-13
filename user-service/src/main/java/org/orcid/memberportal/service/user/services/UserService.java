@@ -598,8 +598,20 @@ public class UserService {
             validateOtp(code, decryptedSecret);
             return true;
         } catch (MfaAuthenticationFailureException e) {
-            return false;
+            return validMfaBackupCode(user.get(), code);
         }
+    }
+
+    private boolean validMfaBackupCode(User user, String code) {
+        boolean validBackupCode = false;
+        List<String> filteredBackupCodes = user.getMfaBackupCodes().stream().filter(c -> !passwordEncoder.matches(code, c)).collect(Collectors.toList());
+        if (filteredBackupCodes.size() == user.getMfaBackupCodes().size() - 1) {
+            // match found and removed
+            validBackupCode = true;
+            user.setMfaBackupCodes(filteredBackupCodes);
+            userRepository.save(user);
+        }
+        return validBackupCode;
     }
 
     public void validateOtp(String otp, String secret) {
@@ -627,7 +639,7 @@ public class UserService {
         if (!user.isPresent()) {
             return false;
         } else {
-            Boolean mfaEnabled = user.get().getMfaEnabled(); 
+            Boolean mfaEnabled = user.get().getMfaEnabled();
             return mfaEnabled != null ? mfaEnabled.booleanValue() : false;
         }
     }
