@@ -137,6 +137,9 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/mfa/on")
     public ResponseEntity<List<String>> switchOnMfa(@RequestBody MfaSetup mfaSetup) {
+        if (mfaSetup == null || StringUtils.isBlank(mfaSetup.getOtp())) {
+            return ResponseEntity.badRequest().build();
+        }
         List<String> backupCodes = userService.enableMfa(mfaSetup);
         return ResponseEntity.ok(backupCodes);
     }
