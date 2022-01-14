@@ -15,6 +15,8 @@ export class JhiLoginModalComponent implements AfterViewInit, OnInit {
   authenticationError: boolean;
   isModal = false;
   showMfa = false;
+  mfaSent = false;
+  mfaError = false;
 
   loginForm = this.fb.group({
     username: [''],
@@ -52,6 +54,12 @@ export class JhiLoginModalComponent implements AfterViewInit, OnInit {
   }
 
   login() {
+    this.mfaError = false;
+    const mfaCode = this.loginForm.get('mfaCode').value;
+    if (mfaCode) {
+      this.mfaSent = true;
+    }
+
     this.loginService
       .login({
         username: this.loginForm.get('username').value,
@@ -68,7 +76,9 @@ export class JhiLoginModalComponent implements AfterViewInit, OnInit {
             });
           } else {
             this.showMfa = true;
+            this.mfaError = this.mfaSent;
           }
+          this.mfaSent = false;
         },
         err => {
           this.loginService.logout();
