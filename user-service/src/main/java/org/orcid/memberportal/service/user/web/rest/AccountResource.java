@@ -12,6 +12,7 @@ import org.orcid.memberportal.service.user.dto.PasswordChangeDTO;
 import org.orcid.memberportal.service.user.dto.UserDTO;
 import org.orcid.memberportal.service.user.mapper.UserMapper;
 import org.orcid.memberportal.service.user.repository.UserRepository;
+import org.orcid.memberportal.service.user.security.MfaAuthenticationFailureException;
 import org.orcid.memberportal.service.user.security.MfaSetup;
 import org.orcid.memberportal.service.user.services.MailService;
 import org.orcid.memberportal.service.user.services.UserService;
@@ -118,9 +119,10 @@ public class AccountResource {
             throw new AccountResourceException("User could not be found");
         }
     }
-    
+
     /**
-     * {@code GET  /account/mfa} : get a secret to set up mfa for the current user
+     * {@code GET  /account/mfa} : get a secret to set up mfa for the current
+     * user
      *
      * @return object containing mfa which can then be used to submit otp.
      */
@@ -129,21 +131,28 @@ public class AccountResource {
         MfaSetup mfaSetup = userService.getMfaSetup();
         return ResponseEntity.ok(mfaSetup);
     }
-    
+
     /**
-     * {@code POST  /account/mfa} : enables mfa for the current user, if the supplied otp matches the secret
+     * {@code POST  /account/mfa} : enables mfa for the current user, if the
+     * supplied otp matches the secret
      *
-     * @param mfaSetup - the otp and secret
+     * @param mfaSetup
+     *            - the otp and secret
      */
     @PostMapping(path = "/account/mfa/on")
     public ResponseEntity<List<String>> switchOnMfa(@RequestBody MfaSetup mfaSetup) {
         if (mfaSetup == null || StringUtils.isBlank(mfaSetup.getOtp())) {
             return ResponseEntity.badRequest().build();
         }
-        List<String> backupCodes = userService.enableMfa(mfaSetup);
-        return ResponseEntity.ok(backupCodes);
+        
+        try {
+            List<String> backupCodes = userService.enableMfa(mfaSetup);
+            return ResponseEntity.ok(backupCodes);
+        } catch (MfaAuthenticationFailureException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
-    
+
     /**
      * {@code POST  /account/mfa} : disables mfa for the current user
      *
