@@ -10,6 +10,7 @@
       "button": { "string": "Sign in" },
       "mfaCode": {
         "prompt": { "string": "Please enter the MFA code from your authenticator app" },
+        "error": { "string": "Invalid MFA code" },
         "label": { "string": "MFA code" }
       }
     },
