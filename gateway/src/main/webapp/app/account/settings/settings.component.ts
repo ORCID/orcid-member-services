@@ -46,7 +46,7 @@ export class SettingsComponent implements OnInit {
     this.showMfaSetup = false;
     this.showMfaTextCode = false;
     this.showMfaBackupCodes = false;
-    this.accountService.identity().then(account => {
+    this.accountService.identity(true).then(account => {
       this.updateForm(account);
       this.updateMfaForm(account);
       this.userName = this.accountService.getUserName();
