@@ -44,7 +44,7 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit() {
     this.showMfaSetup = false;
-    this.accountService.identity().then(account => {
+    this.accountService.identity(true).then(account => {
       this.updateForm(account);
       this.updateMfaForm(account);
       this.userName = this.accountService.getUserName();
