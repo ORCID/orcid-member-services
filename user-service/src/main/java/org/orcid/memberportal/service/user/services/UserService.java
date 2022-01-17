@@ -68,6 +68,8 @@ public class UserService {
     static final int BACKUP_CODE_BATCH_SIZE = 14;
 
     public static final int RESET_KEY_LIFESPAN_IN_SECONDS = 86400;
+    
+    private static final String MFA_QR_CODE_ACCOUNT_NAME = "ORCID Member Portal";
 
     /**
      * ordered list for days activation email is resent to users who haven't
@@ -566,8 +568,8 @@ public class UserService {
 
     public MfaSetup getMfaSetup() {
         String secret = Base32.random();
-        String qrCode = String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", applicationProperties.getBaseUrl(), SecurityUtils.getCurrentUserLogin(), secret,
-                applicationProperties.getBaseUrl());
+        String qrCode = String.format("otpauth://totp/%s?secret=%s&issuer=%s", SecurityUtils.getCurrentUserLogin().get(), secret,
+                MFA_QR_CODE_ACCOUNT_NAME);
         MfaSetup mfaSetup = new MfaSetup();
         mfaSetup.setSecret(secret);
         mfaSetup.setQrCode(QRCode.from(qrCode).withSize(250, 250).stream().toByteArray());
