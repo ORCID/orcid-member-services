@@ -31,7 +31,8 @@ export class SettingsComponent implements OnInit {
   });
   mfaForm = this.fb.group({
     mfaEnabled: [[]],
-    verificationCode: []
+    verificationCode: [],
+    securitySave: []
   });
 
   constructor(
@@ -44,6 +45,8 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit() {
     this.showMfaSetup = false;
+    this.showMfaTextCode = false;
+    this.showMfaBackupCodes = false;
     this.accountService.identity(true).then(account => {
       this.updateForm(account);
       this.updateMfaForm(account);
@@ -57,8 +60,6 @@ export class SettingsComponent implements OnInit {
     this.languageHelper.getAll().then(languages => {
       this.languages = languages;
     });
-    this.showMfaTextCode = false;
-    this.showMfaBackupCodes = false;
     this.onChanges();
   }
 
@@ -156,8 +157,7 @@ export class SettingsComponent implements OnInit {
       activated: account.activated,
       authorities: account.authorities,
       langKey: account.langKey,
-      imageUrl: account.imageUrl,
-      mfaEnabled: account.mfaEnabled
+      imageUrl: account.imageUrl
     });
   }
 
