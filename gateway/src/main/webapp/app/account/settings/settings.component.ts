@@ -15,7 +15,6 @@ export class SettingsComponent implements OnInit {
   userName: string;
   mfaSetup: any;
   showMfaSetup: boolean;
-  showMfaQrCode: boolean;
   showMfaTextCode: boolean;
   mfaSetupFailure: boolean;
   mfaBackupCodes: string[];
@@ -58,7 +57,6 @@ export class SettingsComponent implements OnInit {
     this.languageHelper.getAll().then(languages => {
       this.languages = languages;
     });
-    this.showMfaQrCode = true;
     this.showMfaTextCode = false;
     this.showMfaBackupCodes = false;
     this.onChanges();
@@ -78,8 +76,7 @@ export class SettingsComponent implements OnInit {
   }
 
   toggleMfaTextCode(): void {
-    this.showMfaQrCode = !this.showMfaQrCode;
-    this.showMfaTextCode = !this.showMfaTextCode;
+    this.showMfaTextCode = true;
   }
 
   save() {
