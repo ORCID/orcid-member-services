@@ -76,7 +76,7 @@
 						Authentication</label> 
 					<input type="checkbox" class="form-control"
 						name="mfaEnabled" id="field_mfaEnabled"
-						formControlName="mfaEnabled" />
+						formControlName="mfaEnabled" (change)="mfaEnabledStateChange()" />
 				</div>
             	<div *ngIf="showMfaUpdated" jhiTranslate="settings.security.mfaUpdated.string">MFA settings updated</div>
 				<div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes">
