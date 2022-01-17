@@ -61,7 +61,7 @@
                         <option *ngFor="let language of languages" [value]="language">{{language | findLanguageFromKey}}</option>
                     </select>
                 </div>
-                <button type="submit" [disabled]="settingsForm.invalid" class="btn btn-primary" jhiTranslate="settings.form.button.string">Save</button>
+                <button type="submit" [disabled]="settingsForm.invalid || settingsForm.pristine" class="btn btn-primary" jhiTranslate="settings.form.button.string">Save</button>
             </form>
             <hr />
             
@@ -114,7 +114,7 @@
 						</table>
 					</div>
 				</div>
-				<button *ngIf="!showMfaBackupCodes" type="submit" class="btn btn-primary" jhiTranslate="settings.form.button.string">Save</button>
+				<button [disabled]="mfaForm.pristine || showMfaBackupCodes" type="submit" class="btn btn-primary" jhiTranslate="settings.form.button.string">Save</button>
 			</form>
 			<hr />
 		</div>
