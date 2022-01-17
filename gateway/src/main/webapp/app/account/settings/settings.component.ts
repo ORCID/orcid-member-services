@@ -44,6 +44,8 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit() {
     this.showMfaSetup = false;
+    this.showMfaTextCode = false;
+    this.showMfaBackupCodes = false;
     this.accountService.identity().then(account => {
       this.updateForm(account);
       this.updateMfaForm(account);
@@ -57,22 +59,19 @@ export class SettingsComponent implements OnInit {
     this.languageHelper.getAll().then(languages => {
       this.languages = languages;
     });
-    this.showMfaTextCode = false;
-    this.showMfaBackupCodes = false;
-    this.onChanges();
   }
 
-  onChanges(): void {
-    this.mfaForm.get('mfaEnabled').valueChanges.subscribe(val => {
-      this.showMfaUpdated = false;
-      if (val && this.mfaSetup) {
-        this.showMfaSetup = true;
-        this.showMfaBackupCodes = false;
-      } else {
-        this.showMfaSetup = false;
-        this.showMfaBackupCodes = false;
-      }
-    });
+  mfaEnabledStateChange(): void {
+    this.showMfaUpdated = false;
+    const mfaEnabled = this.mfaForm.get('mfaEnabled').value;
+    console.log('setup is ' + this.mfaSetup);
+    if (mfaEnabled && this.mfaSetup) {
+      this.showMfaSetup = true;
+      this.showMfaBackupCodes = false;
+    } else {
+      this.showMfaSetup = false;
+      this.showMfaBackupCodes = false;
+    }
   }
 
   toggleMfaTextCode(): void {
