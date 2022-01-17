@@ -56,35 +56,40 @@ export class JhiLoginModalComponent implements AfterViewInit, OnInit {
   login() {
     this.mfaError = false;
     const mfaCode = this.loginForm.get('mfaCode').value;
-    if (mfaCode) {
-      this.mfaSent = true;
-    }
 
-    this.loginService
-      .login({
-        username: this.loginForm.get('username').value,
-        password: this.loginForm.get('password').value,
-        rememberMe: this.loginForm.get('rememberMe').value,
-        mfaCode: this.loginForm.get('mfaCode').value
-      })
-      .subscribe(
-        data => {
-          if (!data.mfaRequired) {
-            this.showMfa = false;
-            this.accountService.identity(true).then(account => {
-              this.loginSuccess();
-            });
-          } else {
-            this.showMfa = true;
-            this.mfaError = this.mfaSent;
+    if (this.showMfa && !mfaCode) {
+      this.mfaError = true;
+    } else {
+      if (mfaCode) {
+        this.mfaSent = true;
+      }
+
+      this.loginService
+        .login({
+          username: this.loginForm.get('username').value,
+          password: this.loginForm.get('password').value,
+          rememberMe: this.loginForm.get('rememberMe').value,
+          mfaCode: this.loginForm.get('mfaCode').value
+        })
+        .subscribe(
+          data => {
+            if (!data.mfaRequired) {
+              this.showMfa = false;
+              this.accountService.identity(true).then(account => {
+                this.loginSuccess();
+              });
+            } else {
+              this.showMfa = true;
+              this.mfaError = this.mfaSent;
+            }
+            this.mfaSent = false;
+          },
+          err => {
+            this.loginService.logout();
+            this.authenticationError = true;
           }
-          this.mfaSent = false;
-        },
-        err => {
-          this.loginService.logout();
-          this.authenticationError = true;
-        }
-      );
+        );
+    }
   }
 
   loginSuccess(): void {
