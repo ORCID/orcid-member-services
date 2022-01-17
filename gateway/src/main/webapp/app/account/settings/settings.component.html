@@ -90,8 +90,8 @@
 					</div>
 				</div>
 				<div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes">
-					<img *ngIf="showMfaQrCode" [src]="safeQrCode()" />
-				</div>
+					<img [src]="safeQrCode()" />
+				</div>	
 				<div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes">
 				    <div class="col-md-8">
 						<p *ngIf="showMfaTextCode">{{ mfaSetup.secret }}</p>
