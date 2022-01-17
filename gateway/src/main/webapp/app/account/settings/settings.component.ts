@@ -31,7 +31,8 @@ export class SettingsComponent implements OnInit {
   });
   mfaForm = this.fb.group({
     mfaEnabled: [[]],
-    verificationCode: []
+    verificationCode: [],
+    securitySave: []
   });
 
   constructor(
@@ -155,8 +156,7 @@ export class SettingsComponent implements OnInit {
       activated: account.activated,
       authorities: account.authorities,
       langKey: account.langKey,
-      imageUrl: account.imageUrl,
-      mfaEnabled: account.mfaEnabled
+      imageUrl: account.imageUrl
     });
   }
 
