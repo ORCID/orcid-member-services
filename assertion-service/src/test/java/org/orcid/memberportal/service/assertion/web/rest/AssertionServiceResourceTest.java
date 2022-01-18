@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,7 @@ import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.validation.org.impl.GridOrgValidator;
 import org.orcid.memberportal.service.assertion.domain.validation.org.impl.RinggoldOrgValidator;
 import org.orcid.memberportal.service.assertion.domain.validation.org.impl.RorOrgValidator;
@@ -45,10 +47,15 @@ import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,25 +77,25 @@ class AssertionServiceResourceTest {
 
     @Mock
     private OrcidRecordService orcidRecordService;
-    
+
     @Mock
     private EncryptUtil encryptUtil;
-    
+
     @Mock
     private JWTUtil jwtUtil;
-    
+
     @Mock
     private RorOrgValidator rorOrgValidator;
 
     @Mock
     private UserService assertionsUserService;
-    
+
     @Mock
     private RinggoldOrgValidator ringgoldOrgValidator;
-    
+
     @Mock
     private GridOrgValidator gridOrgValidator;
-    
+
     @InjectMocks
     private AssertionServiceResource assertionServiceResource;
 
@@ -251,7 +258,7 @@ class AssertionServiceResourceTest {
         Mockito.verify(assertionService, Mockito.times(1)).createAssertion(Mockito.any(Assertion.class), Mockito.any(AssertionServiceUser.class));
         Mockito.verify(assertionService, Mockito.times(1)).isDuplicate(Mockito.any(Assertion.class));
     }
-    
+
     @Test
     void testCreateAssertion_verifyOrgsValidated() throws BadRequestAlertException, URISyntaxException {
         Assertion creatingAssertion = getAssertion("test-create-assertion@orcid.org");
@@ -264,12 +271,12 @@ class AssertionServiceResourceTest {
         ResponseEntity<Assertion> response = assertionServiceResource.createAssertion(creatingAssertion);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         Mockito.verify(gridOrgValidator, Mockito.times(1)).validId(Mockito.eq("something"));
-        
+
         creatingAssertion.setDisambiguationSource(Constants.RINGGOLD_ORG_SOURCE);
         response = assertionServiceResource.createAssertion(creatingAssertion);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         Mockito.verify(ringgoldOrgValidator, Mockito.times(1)).validId(Mockito.eq("something"));
-        
+
         creatingAssertion.setDisambiguationSource(Constants.ROR_ORG_SOURCE);
         response = assertionServiceResource.createAssertion(creatingAssertion);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -339,7 +346,7 @@ class AssertionServiceResourceTest {
         assertEquals(Boolean.TRUE, success.getBody());
         Mockito.verify(assertionService, Mockito.times(1)).uploadAssertions(Mockito.any());
     }
-    
+
     @Test
     void testUploadAssertionsErrorThrown() throws IOException {
         MultipartFile file = Mockito.mock(MultipartFile.class);
@@ -358,14 +365,42 @@ class AssertionServiceResourceTest {
         Mockito.when(jwtUtil.getSignedJWT(Mockito.anyString())).thenReturn(getDummySignedJWT(orcid));
 
         assertionServiceResource.storeIdToken(getObjectNode(email));
-        
+
         Mockito.verify(orcidRecordService, Mockito.times(1)).storeIdToken(Mockito.eq(email), Mockito.anyString(), Mockito.eq(orcid), Mockito.anyString());
         Mockito.verify(assertionService, Mockito.never()).postAssertionToOrcid(Mockito.any(Assertion.class));
         Mockito.verify(assertionService, Mockito.never()).putAssertionInOrcid(Mockito.any(Assertion.class));
         Mockito.verify(assertionService, Mockito.never()).updateAssertion(Mockito.any(Assertion.class), Mockito.any(AssertionServiceUser.class));
         Mockito.verify(assertionService).updateOrcidIdsForEmail(Mockito.eq(email));
     }
-    
+
+    @Test
+    void testGetAssertions() throws BadRequestAlertException, org.codehaus.jettison.json.JSONException {
+        Mockito.when(assertionService.findBySalesforceId(Mockito.any(Pageable.class))).thenReturn(getMockPage());
+        ResponseEntity<List<Assertion>> page = assertionServiceResource.getAssertions(Mockito.mock(Pageable.class), new HttpHeaders(), UriComponentsBuilder.newInstance(), "");
+        assertNotNull(page.getBody());
+        page.getBody().forEach(a -> { assertNotNull(a.getPrettyStatus()); });
+    }
+
+    private Page<Assertion> getMockPage() {
+        Assertion assertion1 = getAssertion("some-email@orcid.org");
+        assertion1.setStatus(AssertionStatus.PENDING.name());
+
+        Assertion assertion2 = getAssertion("some-email@orcid.org");
+        assertion2.setStatus(AssertionStatus.IN_ORCID.name());
+
+        Assertion assertion3 = getAssertion("some-email@orcid.org");
+        assertion3.setStatus(AssertionStatus.PENDING_RETRY.name());
+
+        Assertion assertion4 = getAssertion("some-email@orcid.org");
+        assertion4.setStatus(AssertionStatus.ERROR_ADDING_TO_ORCID.name());
+
+        Assertion assertion5 = getAssertion("some-email@orcid.org");
+        assertion5.setStatus(AssertionStatus.ERROR_UPDATING_TO_ORCID.name());
+
+        Page<Assertion> page = new PageImpl<>(Arrays.asList(assertion1, assertion2, assertion3, assertion4, assertion5));
+        return page;
+    }
+
     private SignedJWT getDummySignedJWT(String orcid) throws JOSEException {
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", orcid);
@@ -382,7 +417,6 @@ class AssertionServiceResourceTest {
         return signedJWT;
     }
 
-    
     private ObjectNode getObjectNode(String email) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
@@ -420,7 +454,7 @@ class AssertionServiceResourceTest {
         assertion.setOrcidError(error.toString());
         return assertion;
     }
-    
+
     private AssertionServiceUser getUser() {
         AssertionServiceUser user = new AssertionServiceUser();
         user.setId("owner");

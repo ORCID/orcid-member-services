@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -128,6 +129,9 @@ public class Assertion implements Serializable {
     private String orcidId;
 
     private String status;
+    
+    @Transient
+    private String prettyStatus;
 
     public String getId() {
         return id;
@@ -401,6 +405,14 @@ public class Assertion implements Serializable {
 
     public void setOrcidId(String orcidId) {
         this.orcidId = orcidId;
+    }
+    
+    public String getPrettyStatus() {
+        return prettyStatus;
+    }
+
+    public void setPrettyStatus(String prettyStatus) {
+        this.prettyStatus = prettyStatus;
     }
 
     @Override

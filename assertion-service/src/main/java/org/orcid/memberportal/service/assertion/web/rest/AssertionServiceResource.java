@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import org.orcid.memberportal.service.assertion.config.Constants;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.domain.validation.OrcidUrlValidator;
 import org.orcid.memberportal.service.assertion.domain.validation.org.impl.GridOrgValidator;
@@ -118,9 +119,13 @@ public class AssertionServiceResource {
         } else {
             affiliations = assertionService.findBySalesforceId(pageable, filter);
         }
-
+        setPrettyStatus(affiliations);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
         return ResponseEntity.ok().headers(headers).body(affiliations.getContent());
+    }
+
+    private void setPrettyStatus(Page<Assertion> affiliations) {
+        affiliations.forEach(a -> { a.setPrettyStatus(AssertionStatus.valueOf(a.getStatus()).getValue()); });
     }
 
     @GetMapping("/assertions/{email}")
