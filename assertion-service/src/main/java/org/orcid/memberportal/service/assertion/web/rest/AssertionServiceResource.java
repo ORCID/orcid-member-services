@@ -23,7 +23,6 @@ import org.json.JSONObject;
 import org.orcid.memberportal.service.assertion.config.Constants;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
-import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.domain.validation.OrcidUrlValidator;
 import org.orcid.memberportal.service.assertion.domain.validation.org.impl.GridOrgValidator;
