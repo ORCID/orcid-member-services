@@ -14,6 +14,8 @@ import org.orcid.memberportal.service.assertion.AssertionServiceApp;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
+import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.UserService;
@@ -142,6 +144,7 @@ public class AssertionServiceResourceIT {
         assertion.setOrgCountry("us " + identifier);
         assertion.setDisambiguatedOrgId("id " + identifier);
         assertion.setDisambiguationSource("source " + identifier);
+        assertion.setStatus(AssertionStatus.PENDING.name());
         return assertion;
     }
 

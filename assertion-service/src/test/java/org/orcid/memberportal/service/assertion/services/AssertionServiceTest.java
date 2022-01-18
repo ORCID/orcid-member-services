@@ -658,8 +658,18 @@ class AssertionServiceTest {
         List<Assertion> assertions = assertionService.findByEmail(email);
         assertFalse(assertions.isEmpty());
         assertEquals(1, assertions.size());
-
+        assertEquals(AssertionStatus.PENDING.getValue(), assertions.get(0).getPrettyStatus());
         Mockito.verify(assertionsRepository, Mockito.times(1)).findByEmail(Mockito.eq(email));
+    }
+    
+    @Test
+    void testFindById() {
+        Assertion a = getAssertionWithEmail("something@orcid.org");
+        Mockito.when(assertionsRepository.findById(Mockito.anyString())).thenReturn(Optional.of(a));
+
+        Assertion assertion = assertionService.findById("id");
+        assertNotNull(assertion);
+        assertEquals(AssertionStatus.PENDING.getValue(), assertion.getPrettyStatus());
     }
 
     @Test
@@ -760,9 +770,11 @@ class AssertionServiceTest {
 
         Page<Assertion> page = assertionService.findBySalesforceId(Mockito.mock(Pageable.class));
         assertEquals(2, page.getTotalElements());
-
+        assertEquals(AssertionStatus.PENDING.getValue(), page.getContent().get(0).getPrettyStatus());
+        assertEquals(AssertionStatus.PENDING.getValue(), page.getContent().get(1).getPrettyStatus());
         page = assertionService.findBySalesforceId(Mockito.mock(Pageable.class), "filter");
         assertEquals(1, page.getTotalElements());
+        assertEquals(AssertionStatus.PENDING.getValue(), page.getContent().get(0).getPrettyStatus());
     }
 
     @Test
@@ -1216,6 +1228,7 @@ class AssertionServiceTest {
         assertion.setOrgCountry("us");
         assertion.setDisambiguatedOrgId("id");
         assertion.setDisambiguationSource("source");
+        assertion.setStatus(AssertionStatus.PENDING.name());
         return assertion;
     }
 
@@ -1225,6 +1238,7 @@ class AssertionServiceTest {
         assertion.setEmail(email);
         assertion.setPutCode(putCode);
         assertion.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        assertion.setStatus(AssertionStatus.PENDING.name());
         return assertion;
     }
 

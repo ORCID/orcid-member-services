@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.assertion.csv.download.CsvDownloadWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
@@ -60,7 +61,9 @@ public class AssertionsReportCsvWriter extends CsvDownloadWriter {
                 orcidId = orcidRecordMap.get(a.getEmail()).getOrcid();
             }
             row.add(orcidId == null ? "" : orcidId);
-            row.add(AssertionUtils.getAssertionStatus(a, orcidRecordMap.get(a.getEmail())));
+            String status = AssertionUtils.getAssertionStatus(a, orcidRecordMap.get(a.getEmail()));
+            String prettyStatus = AssertionStatus.valueOf(status).getValue();
+            row.add(prettyStatus);
             row.add(a.getPutCode() == null ? "" : a.getPutCode());
             row.add(a.getCreated() == null ? "" : a.getCreated().toString());
             row.add(a.getModified() == null ? "" : a.getModified().toString());

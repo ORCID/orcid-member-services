@@ -118,7 +118,6 @@ public class AssertionServiceResource {
         } else {
             affiliations = assertionService.findBySalesforceId(pageable, filter);
         }
-
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), affiliations);
         return ResponseEntity.ok().headers(headers).body(affiliations.getContent());
     }
@@ -133,7 +132,8 @@ public class AssertionServiceResource {
     @GetMapping("/assertion/{id}")
     public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
         LOG.debug("REST request to fetch assertion {} from user {}", id, SecurityUtils.getCurrentUserLogin().get());
-        return ResponseEntity.ok().body(assertionService.findById(id));
+        Assertion assertion = assertionService.findById(id);
+        return ResponseEntity.ok().body(assertion);
     }
 
     @GetMapping("/assertion/permission-links")
@@ -454,5 +454,5 @@ public class AssertionServiceResource {
         }
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "assertion", salesforceId)).build();
     }
-
+    
 }
