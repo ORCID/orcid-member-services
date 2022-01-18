@@ -16,7 +16,7 @@
                     </dd>
                     <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.status.string">Status</dt>
                     <dd class="col-md-9">
-                        {{assertion.status}}
+                        {{assertion.prettyStatus}}
                     </dd>
                     <dt *ngIf="assertion.permissionLink && !assertion.orcidId" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.permissionLink.string">Permission link</dt>
                     <dd *ngIf="assertion.permissionLink && !assertion.orcidId" class="col-md-9">
