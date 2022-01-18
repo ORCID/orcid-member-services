@@ -378,7 +378,6 @@ class AssertionServiceResourceTest {
         Mockito.when(assertionService.findBySalesforceId(Mockito.any(Pageable.class))).thenReturn(getMockPage());
         ResponseEntity<List<Assertion>> page = assertionServiceResource.getAssertions(Mockito.mock(Pageable.class), new HttpHeaders(), UriComponentsBuilder.newInstance(), "");
         assertNotNull(page.getBody());
-        page.getBody().forEach(a -> { assertNotNull(a.getPrettyStatus()); });
     }
 
     private Page<Assertion> getMockPage() {

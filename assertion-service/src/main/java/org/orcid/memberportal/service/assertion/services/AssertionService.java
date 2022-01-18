@@ -107,16 +107,19 @@ public class AssertionService {
     }
 
     public Page<Assertion> findBySalesforceId(Pageable pageable) {
-        return assertionRepository.findBySalesforceId(assertionsUserService.getLoggedInUserSalesforceId(), pageable);
+        Page<Assertion> assertions = assertionRepository.findBySalesforceId(assertionsUserService.getLoggedInUserSalesforceId(), pageable);
+        setPrettyStatus(assertions);
+        return assertions;
     }
 
     public Page<Assertion> findBySalesforceId(Pageable pageable, String filter) {
         String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
-        return assertionRepository
+        Page<Assertion> assertions = assertionRepository
                 .findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
                         pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter,
                         salesforceId, filter);
-
+        setPrettyStatus(assertions);
+        return assertions;
     }
 
     public void deleteAllBySalesforceId(String salesforceId) {
@@ -139,7 +142,9 @@ public class AssertionService {
         if (!optional.isPresent()) {
             throw new IllegalArgumentException("Invalid assertion id");
         }
-        return optional.get();
+        Assertion assertion = optional.get();
+        setPrettyStatus(assertion);
+        return assertion;
     }
 
     public Assertion createAssertion(Assertion assertion, AssertionServiceUser owner) {
@@ -442,7 +447,7 @@ public class AssertionService {
         }
         return false;
     }
-    
+
     private void checkAssertionAccess(Assertion assertion, String salesforceId) {
         if (!salesforceId.equals(assertion.getSalesforceId())) {
             throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
@@ -573,7 +578,9 @@ public class AssertionService {
     }
 
     public List<Assertion> findByEmail(String email) {
-        return assertionRepository.findByEmail(email);
+        List<Assertion> assertions = assertionRepository.findByEmail(email);
+        setPrettyStatus(assertions);
+        return assertions;
     }
 
     public List<Assertion> findByEmailAndSalesForceId(String email, String salesForceId) {
@@ -704,5 +711,13 @@ public class AssertionService {
             a.setOrcidId(orcid);
             assertionRepository.save(a);
         });
+    }
+
+    private void setPrettyStatus(Iterable<Assertion> affiliations) {
+        affiliations.forEach(this::setPrettyStatus);
+    }
+
+    private void setPrettyStatus(Assertion assertion) {
+        assertion.setPrettyStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
     }
 }
