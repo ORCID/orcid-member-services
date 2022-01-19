@@ -638,9 +638,19 @@ public class AssertionService {
     private void processAssertionsUploadFile(StoredFile uploadFile) {
         File file = new File(uploadFile.getFileLocation());
         AssertionServiceUser user = assertionsUserService.getUserById(uploadFile.getOwnerId());
-        AssertionsUpload upload = readUpload(file, user);
-        AssertionsUploadSummary summary = processUpload(upload, user);
-        mailService.sendAssertionsUploadSummaryMail(summary, user);
+
+        try {
+            AssertionsUpload upload = readUpload(file, user);
+            AssertionsUploadSummary summary = processUpload(upload, user);
+            mailService.sendAssertionsUploadSummaryMail(summary, user);
+        } catch (Exception e) {
+            if (e.getCause() != null) {
+                uploadFile.setError(e.getCause().toString());
+            } else {
+                uploadFile.setError(e.getClass() + ": " + e.getMessage());
+            }
+        }
+
         storedFileService.markAsProcessed(uploadFile);
     }
 

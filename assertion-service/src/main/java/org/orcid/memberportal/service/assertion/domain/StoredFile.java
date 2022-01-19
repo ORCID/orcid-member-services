@@ -32,6 +32,9 @@ public class StoredFile implements Serializable {
     @Field("removal_date")
     private Instant removalDate;
     
+    @Field("processing_error")
+    private String error;
+    
     @Field
     private String ownerId;
 
@@ -89,6 +92,14 @@ public class StoredFile implements Serializable {
 
     public void setDateProcessed(Instant dateProcessed) {
         this.dateProcessed = dateProcessed;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
     
 }
