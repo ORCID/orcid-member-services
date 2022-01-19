@@ -113,6 +113,9 @@ class AssertionServiceTest {
     
     @Captor
     private ArgumentCaptor<AssertionsUploadSummary> summaryCaptor;
+    
+    @Captor
+    private ArgumentCaptor<StoredFile> storedFileCaptor;
 
     @InjectMocks
     private AssertionService assertionService;
@@ -1070,6 +1073,69 @@ class AssertionServiceTest {
 
         Mockito.verify(assertionsRepository, Mockito.times(3)).insert(Mockito.any(Assertion.class));
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.any(Assertion.class));
+    }
+    
+    @Test
+    void testProcessAssertionUploadsWhereErrorOccursInOneUpload() throws IOException {
+        Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE))).thenReturn(getDummyStoredFiles());
+        Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());
+
+        AssertionsUpload upload = new AssertionsUpload();
+        upload.addAssertion(getAssertionWithEmail("1@email.com"));
+        upload.addAssertion(getAssertionWithEmail("2@email.com"));
+        upload.addAssertion(getAssertionWithEmail("3@email.com"));
+
+        Assertion toUpdate = getAssertionWithEmail("4@email.com");
+        toUpdate.setId("12346");
+        upload.addAssertion(toUpdate);
+
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("1@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("2@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("3@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("4@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
+        Mockito.when(assertionsRepository.insert(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
+            @Override
+            public Assertion answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                Assertion assertion = (Assertion) args[0];
+                assertion.setId("12345");
+                return assertion;
+            }
+        });
+        Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
+            @Override
+            public Assertion answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                Assertion assertion = (Assertion) args[0];
+                assertion.setId("12346");
+                return assertion;
+            }
+        });
+        Mockito.when(assertionsRepository.findById(Mockito.eq("12346"))).thenReturn(Optional.of(toUpdate));
+        Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class))).thenThrow(new IOException("testing error message")).thenReturn(upload);
+
+        assertionService.processAssertionUploads();
+        
+        Mockito.verify(mailService).sendAssertionsUploadSummaryMail(summaryCaptor.capture(), Mockito.any(AssertionServiceUser.class));
+        AssertionsUploadSummary summary = summaryCaptor.getValue();
+        assertEquals(3, summary.getNumAdded());
+        assertEquals(0, summary.getNumDuplicates());
+        assertEquals(0, summary.getNumDeleted());
+        assertEquals(1, summary.getNumUpdated());
+        
+        Mockito.verify(assertionsRepository, Mockito.times(3)).insert(Mockito.any(Assertion.class));
+        Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.any(Assertion.class));
+        Mockito.verify(storedFileService, Mockito.times(2)).markAsProcessed(storedFileCaptor.capture());
+        
+        List<StoredFile> storedFiles = storedFileCaptor.getAllValues();
+        assertEquals(2, storedFiles.size());
+        assertNotNull(storedFiles.get(0).getError());
+        assertEquals("java.io.IOException: testing error message", storedFiles.get(0).getError());
+        assertNull(storedFiles.get(1).getError());
+    }
+    
+    private List<StoredFile> getDummyStoredFiles() {
+        return Arrays.asList(getDummyStoredFile(), getDummyStoredFile());
     }
 
     private StoredFile getDummyStoredFile() {
