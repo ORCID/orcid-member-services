@@ -43,11 +43,11 @@ public class ReportResource {
         return ResponseEntity.ok(memberReportInfo);
     }
 
-    @GetMapping("/reports/consortium")
-    public ResponseEntity<ReportInfo> getConsortiumReport() {
+    @GetMapping("/reports/consortia")
+    public ResponseEntity<ReportInfo> getConsortiaReport() {
         MemberServiceUser user = userService.getLoggedInUser();
         LOG.info("Generating consortium report for user {} of {}", user.getEmail(), user.getMemberName());
-        ReportInfo consortiumReportInfo = reportService.getConsortiumReportInfo();
+        ReportInfo consortiumReportInfo = reportService.getConsortiaReportInfo();
         return ResponseEntity.ok(consortiumReportInfo);
     }
 

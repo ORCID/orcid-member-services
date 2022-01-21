@@ -55,8 +55,8 @@ public class ReportResourceTest {
 
     @Test
     public void testGetConsortiumReport() {
-        Mockito.when(mockReportService.getConsortiumReportInfo()).thenReturn(getReportInfo());
-        ResponseEntity<ReportInfo> response = reportResource.getConsortiumReport();
+        Mockito.when(mockReportService.getConsortiaReportInfo()).thenReturn(getReportInfo());
+        ResponseEntity<ReportInfo> response = reportResource.getConsortiaReport();
         assertThat(response).isNotNull();
         assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
         assertThat(response.getBody()).isNotNull();
@@ -64,9 +64,9 @@ public class ReportResourceTest {
 
     @Test
     public void testGetConsortiumReportIllegalAccess() {
-        Mockito.when(mockReportService.getConsortiumReportInfo()).thenThrow(new BadRequestAlertException("test", null, null));
+        Mockito.when(mockReportService.getConsortiaReportInfo()).thenThrow(new BadRequestAlertException("test", null, null));
         Assertions.assertThrows(BadRequestAlertException.class, () -> {
-            reportResource.getConsortiumReport();
+            reportResource.getConsortiaReport();
         });
     }
 
