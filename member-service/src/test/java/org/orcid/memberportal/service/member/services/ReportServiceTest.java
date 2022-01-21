@@ -15,9 +15,6 @@ import org.orcid.memberportal.service.member.config.ApplicationProperties;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.service.reports.ReportInfo;
 import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
-import org.orcid.memberportal.service.member.services.MemberService;
-import org.orcid.memberportal.service.member.services.ReportService;
-import org.orcid.memberportal.service.member.services.UserService;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
 
 public class ReportServiceTest {
@@ -37,14 +34,13 @@ public class ReportServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        Mockito.when(mockApplicationProperties.getChartioOrgId()).thenReturn("1");
-        Mockito.when(mockApplicationProperties.getChartioSecret()).thenReturn("some-secret-long-enough-not-to-case-a-weak-key-exception");
-        Mockito.when(mockApplicationProperties.getChartioMemberDashboardId()).thenReturn("2");
-        Mockito.when(mockApplicationProperties.getChartioMemberDashboardUrl()).thenReturn("some-dashboard-url");
-        Mockito.when(mockApplicationProperties.getChartioIntegrationDashboardId()).thenReturn("3");
-        Mockito.when(mockApplicationProperties.getChartioIntegrationDashboardUrl()).thenReturn("some-other-dashboard-url");
-        Mockito.when(mockApplicationProperties.getChartioConsortiumDashboardId()).thenReturn("4");
-        Mockito.when(mockApplicationProperties.getChartioConsortiumDashboardUrl()).thenReturn("some-final-dashboard-url");
+        Mockito.when(mockApplicationProperties.getHolisticsConsortiaDashboardUrl()).thenReturn("https://secure.holistics.io/embed/consortia");
+        Mockito.when(mockApplicationProperties.getHolisticsConsortiaDashboardSecret()).thenReturn("some-long-holistics-consortia-dashboard-secret");
+        Mockito.when(mockApplicationProperties.getHolisticsMemberDashboardUrl()).thenReturn("https://secure.holistics.io/embed/member");
+        Mockito.when(mockApplicationProperties.getHolisticsMemberDashboardSecret()).thenReturn("some-long-holistics-member-dashboard-secret");
+        Mockito.when(mockApplicationProperties.getHolisticsIntegrationDashboardUrl()).thenReturn("https://secure.holistics.io/embed/integration");
+        Mockito.when(mockApplicationProperties.getHolisticsIntegrationDashboardSecret()).thenReturn("some-long-holistics-integration-dashboard-secret");
+        
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
     }
@@ -54,15 +50,13 @@ public class ReportServiceTest {
         ReportInfo reportInfo = reportService.getMemberReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
-        assertThat(reportInfo.getUrl()).isEqualTo("some-dashboard-url");
+        assertThat(reportInfo.getUrl()).isEqualTo("https://secure.holistics.io/embed/member");
         assertThat(reportInfo.getJwt()).isNotNull();
         assertThat(reportInfo.getJwt()).isNotEmpty();
 
-        Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioOrgId();
-        Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioSecret();
-        Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioMemberDashboardId();
-        Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioMemberDashboardUrl();
-        Mockito.verify(mockUserService, Mockito.times(1)).getLoggedInUser();
+        Mockito.verify(mockApplicationProperties).getHolisticsMemberDashboardUrl();
+        Mockito.verify(mockApplicationProperties).getHolisticsMemberDashboardSecret();
+        Mockito.verify(mockUserService).getLoggedInUser();
     }
 
     @Test
@@ -70,32 +64,28 @@ public class ReportServiceTest {
         ReportInfo reportInfo = reportService.getIntegrationReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
-        assertThat(reportInfo.getUrl()).isEqualTo("some-other-dashboard-url");
+        assertThat(reportInfo.getUrl()).isEqualTo("https://secure.holistics.io/embed/integration");
         assertThat(reportInfo.getJwt()).isNotNull();
         assertThat(reportInfo.getJwt()).isNotEmpty();
 
-        Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioOrgId();
-        Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioSecret();
-        Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioIntegrationDashboardId();
-        Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioIntegrationDashboardUrl();
-        Mockito.verify(mockUserService, Mockito.times(1)).getLoggedInUser();
+        Mockito.verify(mockApplicationProperties).getHolisticsIntegrationDashboardUrl();
+        Mockito.verify(mockApplicationProperties).getHolisticsIntegrationDashboardSecret();
+        Mockito.verify(mockUserService).getLoggedInUser();
     }
 
     @Test
-    public void testGetConsortiumReportInfo() {
-        ReportInfo reportInfo = reportService.getConsortiumReportInfo();
+    public void testGetConsortiaReportInfo() {
+        ReportInfo reportInfo = reportService.getConsortiaReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
-        assertThat(reportInfo.getUrl()).isEqualTo("some-final-dashboard-url");
+        assertThat(reportInfo.getUrl()).isEqualTo("https://secure.holistics.io/embed/consortia");
         assertThat(reportInfo.getJwt()).isNotNull();
         assertThat(reportInfo.getJwt()).isNotEmpty();
 
-        Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioOrgId();
-        Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioSecret();
-        Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioConsortiumDashboardId();
-        Mockito.verify(mockApplicationProperties, Mockito.times(1)).getChartioConsortiumDashboardUrl();
+        Mockito.verify(mockApplicationProperties).getHolisticsConsortiaDashboardUrl();
+        Mockito.verify(mockApplicationProperties).getHolisticsConsortiaDashboardSecret();
         Mockito.verify(mockUserService, Mockito.times(2)).getLoggedInUser();
-        Mockito.verify(mockMemberService, Mockito.times(1)).getMember(Mockito.eq("salesforce-id"));
+        Mockito.verify(mockMemberService).getMember(Mockito.eq("salesforce-id"));
     }
 
     @Test
@@ -104,7 +94,7 @@ public class ReportServiceTest {
         Mockito.when(mockMemberService.getMember(Mockito.eq("other-salesforce-id"))).thenReturn(Optional.of(getNonConsortiumLeadMember()));
 
         Assertions.assertThrows(BadRequestAlertException.class, () -> {
-            reportService.getConsortiumReportInfo();
+            reportService.getConsortiaReportInfo();
         });
     }
 
@@ -114,7 +104,7 @@ public class ReportServiceTest {
         Mockito.when(mockMemberService.getMember(Mockito.eq("final-salesforce-id"))).thenReturn(Optional.of(getMemberWithNullConsortiumLead()));
 
         Assertions.assertThrows(BadRequestAlertException.class, () -> {
-            reportService.getConsortiumReportInfo();
+            reportService.getConsortiaReportInfo();
         });
     }
 

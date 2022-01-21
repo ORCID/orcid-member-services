@@ -16,23 +16,19 @@ public class ApplicationProperties {
     private String orcidOrgClientId;
 
     private String orcidOrgSalesForceId;
-
-    private String chartioOrgId;
-
-    private String chartioSecret;
-
-    private String chartioMemberDashboardId;
-
-    private String chartioMemberDashboardUrl;
-
-    private String chartioIntegrationDashboardId;
-
-    private String chartioIntegrationDashboardUrl;
-
-    private String chartioConsortiumDashboardId;
-
-    private String chartioConsortiumDashboardUrl;
-
+    
+    private String holisticsMemberDashboardUrl;
+    
+    private String holisticsMemberDashboardSecret;
+    
+    private String holisticsIntegrationDashboardUrl;
+    
+    private String holisticsIntegrationDashboardSecret;
+    
+    private String holisticsConsortiaDashboardUrl;
+    
+    private String holisticsConsortiaDashboardSecret;
+    
     public String getOrcidOrgClientId() {
         return orcidOrgClientId;
     }
@@ -49,68 +45,52 @@ public class ApplicationProperties {
         this.orcidOrgSalesForceId = orcidOrgSalesForceId;
     }
 
-    public String getChartioOrgId() {
-        return chartioOrgId;
+    public String getHolisticsMemberDashboardUrl() {
+        return holisticsMemberDashboardUrl;
     }
 
-    public void setChartioOrgId(String chartioOrgId) {
-        this.chartioOrgId = chartioOrgId;
+    public void setHolisticsMemberDashboardUrl(String holisticsMemberDashboardUrl) {
+        this.holisticsMemberDashboardUrl = holisticsMemberDashboardUrl;
     }
 
-    public String getChartioSecret() {
-        return chartioSecret;
+    public String getHolisticsMemberDashboardSecret() {
+        return holisticsMemberDashboardSecret;
     }
 
-    public void setChartioSecret(String chartioSecret) {
-        this.chartioSecret = chartioSecret;
+    public void setHolisticsMemberDashboardSecret(String holisticsMemberDashboardSecret) {
+        this.holisticsMemberDashboardSecret = holisticsMemberDashboardSecret;
     }
 
-    public String getChartioMemberDashboardId() {
-        return chartioMemberDashboardId;
+    public String getHolisticsIntegrationDashboardUrl() {
+        return holisticsIntegrationDashboardUrl;
     }
 
-    public void setChartioMemberDashboardId(String chartioMemberDashboardId) {
-        this.chartioMemberDashboardId = chartioMemberDashboardId;
+    public void setHolisticsIntegrationDashboardUrl(String holisticsIntegrationDashboardUrl) {
+        this.holisticsIntegrationDashboardUrl = holisticsIntegrationDashboardUrl;
     }
 
-    public String getChartioMemberDashboardUrl() {
-        return chartioMemberDashboardUrl;
+    public String getHolisticsIntegrationDashboardSecret() {
+        return holisticsIntegrationDashboardSecret;
     }
 
-    public void setChartioMemberDashboardUrl(String chartioMemberDashboardUrl) {
-        this.chartioMemberDashboardUrl = chartioMemberDashboardUrl;
+    public void setHolisticsIntegrationDashboardSecret(String holisticsIntegrationDashboardSecret) {
+        this.holisticsIntegrationDashboardSecret = holisticsIntegrationDashboardSecret;
     }
 
-    public String getChartioIntegrationDashboardId() {
-        return chartioIntegrationDashboardId;
+    public String getHolisticsConsortiaDashboardUrl() {
+        return holisticsConsortiaDashboardUrl;
     }
 
-    public void setChartioIntegrationDashboardId(String chartioIntegrationDashboardId) {
-        this.chartioIntegrationDashboardId = chartioIntegrationDashboardId;
+    public void setHolisticsConsortiaDashboardUrl(String holisticsConsortiaDashboardUrl) {
+        this.holisticsConsortiaDashboardUrl = holisticsConsortiaDashboardUrl;
     }
 
-    public String getChartioIntegrationDashboardUrl() {
-        return chartioIntegrationDashboardUrl;
+    public String getHolisticsConsortiaDashboardSecret() {
+        return holisticsConsortiaDashboardSecret;
     }
 
-    public void setChartioIntegrationDashboardUrl(String chartioIntegrationDashboardUrl) {
-        this.chartioIntegrationDashboardUrl = chartioIntegrationDashboardUrl;
-    }
-
-    public String getChartioConsortiumDashboardId() {
-        return chartioConsortiumDashboardId;
-    }
-
-    public void setChartioConsortiumDashboardId(String chartioConsortiumDashboardId) {
-        this.chartioConsortiumDashboardId = chartioConsortiumDashboardId;
-    }
-
-    public String getChartioConsortiumDashboardUrl() {
-        return chartioConsortiumDashboardUrl;
-    }
-
-    public void setChartioConsortiumDashboardUrl(String chartioConsortiumDashboardUrl) {
-        this.chartioConsortiumDashboardUrl = chartioConsortiumDashboardUrl;
+    public void setHolisticsConsortiaDashboardSecret(String holisticsConsortiaDashboardSecret) {
+        this.holisticsConsortiaDashboardSecret = holisticsConsortiaDashboardSecret;
     }
 
 }
