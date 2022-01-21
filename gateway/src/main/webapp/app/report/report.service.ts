@@ -10,7 +10,7 @@ export class ReportService {
 
   constructor(protected http: HttpClient) {}
 
-  getChartioDashboardInfo(reportType: string): Observable<HttpResponse<any>> {
+  getDashboardInfo(reportType: string): Observable<HttpResponse<any>> {
     return this.http.get<String>(`${this.resourceUrl}/` + reportType, { observe: 'response' });
   }
 }

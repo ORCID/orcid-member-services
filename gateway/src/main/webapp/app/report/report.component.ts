@@ -18,10 +18,11 @@ export class ReportComponent implements OnInit {
     this.activatedRoute.data.subscribe(data => {
       this.reportType = data.reportType;
 
-      this.reportService.getChartioDashboardInfo(this.reportType).subscribe(res => {
+      this.reportService.getDashboardInfo(this.reportType).subscribe(res => {
         const url = res.body.url;
         const token = res.body.jwt;
-        this.reportSrc = this.safeUrl(url + '?embed_token=' + token);
+        this.reportSrc = this.safeUrl(url + '?_token=' + token);
+        console.log('reportSrc set to ' + this.reportSrc);
       });
     });
   }
