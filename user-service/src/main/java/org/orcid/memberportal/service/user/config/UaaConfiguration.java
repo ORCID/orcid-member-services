@@ -5,6 +5,7 @@ import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,6 +35,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenGranter;
+import org.springframework.security.oauth2.provider.refresh.RefreshTokenGranter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
@@ -146,8 +148,10 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
     }
 
     private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints) {
-        return new CompositeTokenGranter(Arrays.asList(new PasswordTokenGranter(endpoints, authenticationManager, userService, tokenServices()),
-                new ClientCredentialsTokenGranter(tokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory())));
+        PasswordTokenGranter passwordTokenGranter = new PasswordTokenGranter(endpoints, authenticationManager, userService, tokenServices());
+        RefreshTokenGranter refreshTokenGranter = new RefreshTokenGranter(tokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory());
+        ClientCredentialsTokenGranter clientCredentialsTokenGranter = new ClientCredentialsTokenGranter(tokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory());
+        return new CompositeTokenGranter(Arrays.asList(passwordTokenGranter, refreshTokenGranter, clientCredentialsTokenGranter));
     }
 
     @Autowired
@@ -185,6 +189,23 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
             return converter;
         } else {
             return null;
+        }
+    }
+
+    public class RefreshTokenConverter extends JwtAccessTokenConverter {
+        public RefreshTokenConverter() {
+            super();
+            try {
+                KeyPair keyPair = new KeyStoreKeyFactory(new FileUrlResource(uaaProperties.getKeyStore().getName()),
+                        uaaProperties.getKeyStore().getPassword().toCharArray()).getKeyPair(uaaProperties.getKeyStore().getAlias());
+                super.setKeyPair(keyPair);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException("Error creating keystore factory", e);
+            }
+        }
+
+        public Map<String, Object> decode(String token) {
+            return super.decode(token);
         }
     }
 
