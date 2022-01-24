@@ -14,7 +14,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 public interface MemberServiceClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/members/{id}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
-    @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "10000")
+    @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "20000")
     ResponseEntity<AssertionServiceMember> getMember(@PathVariable("id") String id);
 
 }
