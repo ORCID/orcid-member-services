@@ -132,6 +132,17 @@ public class Assertion implements Serializable {
     
     @Transient
     private String prettyStatus;
+    
+    @Transient
+    private String permissionLink;
+
+    public String getPermissionLink() {
+        return permissionLink;
+    }
+
+    public void setPermissionLink(String permissionLink) {
+        this.permissionLink = permissionLink;
+    }
 
     public String getId() {
         return id;

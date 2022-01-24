@@ -669,9 +669,12 @@ class AssertionServiceTest {
     void testFindById() {
         Assertion a = getAssertionWithEmail("something@orcid.org");
         Mockito.when(assertionsRepository.findById(Mockito.anyString())).thenReturn(Optional.of(a));
+        Mockito.when(orcidRecordService.generateLinkForEmail(Mockito.eq("something@orcid.org"))).thenReturn("permission-link");
 
         Assertion assertion = assertionService.findById("id");
         assertNotNull(assertion);
+        assertNotNull(assertion.getPermissionLink());
+        assertEquals("permission-link", assertion.getPermissionLink());
         assertEquals(AssertionStatus.PENDING.getValue(), assertion.getPrettyStatus());
     }
 
