@@ -63,34 +63,37 @@ export class NavbarComponent implements OnInit {
       this.swaggerEnabled = profileInfo.swaggerEnabled;
     });
 
-    this.accountService.identity(true).then(account => {
-      this.accountService.getAuthenticationState().subscribe(() => {
-        if (!this.isAuthenticated()) {
-          return null;
-        } else if (!this.accountService.getSalesforceId()) {
-          return null;
-        }
-        if (!this.memberCallDone && this.isAuthenticated() && this.hasRoleUser()) {
-          this.memberCallDone = true;
-          this.memberService
-            .find(this.accountService.getSalesforceId())
-            .toPromise()
-            .then(
-              (res: HttpResponse<IMSMember>) => {
-                if (res.body) {
-                  this.organizationName = ' | ' + res.body.clientName;
-                  this.consortiumLead = res.body.isConsortiumLead;
+    const fetchAccount = !this.isNavbarCollapsed;
+    if (fetchAccount) {
+      this.accountService.identity(fetchAccount).then(account => {
+        this.accountService.getAuthenticationState().subscribe(() => {
+          if (!this.isAuthenticated()) {
+            return null;
+          } else if (!this.accountService.getSalesforceId()) {
+            return null;
+          }
+          if (!this.memberCallDone && this.isAuthenticated() && this.hasRoleUser()) {
+            this.memberCallDone = true;
+            this.memberService
+              .find(this.accountService.getSalesforceId())
+              .toPromise()
+              .then(
+                (res: HttpResponse<IMSMember>) => {
+                  if (res.body) {
+                    this.organizationName = ' | ' + res.body.clientName;
+                    this.consortiumLead = res.body.isConsortiumLead;
+                  }
+                  return this.organizationName;
+                },
+                (res: HttpErrorResponse) => {
+                  console.error('Error when getting org name: ' + res.error);
+                  return null;
                 }
-                return this.organizationName;
-              },
-              (res: HttpErrorResponse) => {
-                console.error('Error when getting org name: ' + res.error);
-                return null;
-              }
-            );
-        }
+              );
+          }
+        });
       });
-    });
+    }
   }
 
   changeLanguage(languageKey: string) {
