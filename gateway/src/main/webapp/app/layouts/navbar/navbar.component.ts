@@ -54,7 +54,6 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('navbar onInit');
     this.languageHelper.getAll().then(languages => {
       this.languages = languages;
     });
