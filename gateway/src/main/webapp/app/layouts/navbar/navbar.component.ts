@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
@@ -54,6 +54,7 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('navbar onInit');
     this.languageHelper.getAll().then(languages => {
       this.languages = languages;
     });
@@ -63,37 +64,32 @@ export class NavbarComponent implements OnInit {
       this.swaggerEnabled = profileInfo.swaggerEnabled;
     });
 
-    const fetchAccount = !this.isNavbarCollapsed;
-    if (fetchAccount) {
-      this.accountService.identity(fetchAccount).then(account => {
-        this.accountService.getAuthenticationState().subscribe(() => {
-          if (!this.isAuthenticated()) {
-            return null;
-          } else if (!this.accountService.getSalesforceId()) {
-            return null;
-          }
-          if (!this.memberCallDone && this.isAuthenticated() && this.hasRoleUser()) {
-            this.memberCallDone = true;
-            this.memberService
-              .find(this.accountService.getSalesforceId())
-              .toPromise()
-              .then(
-                (res: HttpResponse<IMSMember>) => {
-                  if (res.body) {
-                    this.organizationName = ' | ' + res.body.clientName;
-                    this.consortiumLead = res.body.isConsortiumLead;
-                  }
-                  return this.organizationName;
-                },
-                (res: HttpErrorResponse) => {
-                  console.error('Error when getting org name: ' + res.error);
-                  return null;
-                }
-              );
-          }
-        });
-      });
-    }
+    this.accountService.getAuthenticationState().subscribe(() => {
+      if (!this.isAuthenticated()) {
+        return null;
+      } else if (!this.accountService.getSalesforceId()) {
+        return null;
+      }
+      if (!this.memberCallDone && this.isAuthenticated() && this.hasRoleUser()) {
+        this.memberCallDone = true;
+        this.memberService
+          .find(this.accountService.getSalesforceId())
+          .toPromise()
+          .then(
+            (res: HttpResponse<IMSMember>) => {
+              if (res.body) {
+                this.organizationName = ' | ' + res.body.clientName;
+                this.consortiumLead = res.body.isConsortiumLead;
+              }
+              return this.organizationName;
+            },
+            (res: HttpErrorResponse) => {
+              console.error('Error when getting org name: ' + res.error);
+              return null;
+            }
+          );
+      }
+    });
   }
 
   changeLanguage(languageKey: string) {
