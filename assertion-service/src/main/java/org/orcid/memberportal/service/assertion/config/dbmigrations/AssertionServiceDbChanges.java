@@ -7,7 +7,9 @@ import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.StoredFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -73,6 +75,12 @@ public class AssertionServiceDbChanges {
             f.setDateProcessed(f.getDateWritten());
             mongoTemplate.save(f);
         });
+    }
+    
+    @ChangeSet(order = "05", author = "George Nash", id = "05-makeOrcidRecordEmailIndexUnique")
+    public void makeOrcidRecordEmailIndexUnique(MongoTemplate mongoTemplate) {
+        mongoTemplate.indexOps("orcid_record").dropIndex("email");
+        mongoTemplate.indexOps("orcid_record").ensureIndex(new Index("email", Direction.ASC).unique().named("email_unique_idx"));
     }
 
 }

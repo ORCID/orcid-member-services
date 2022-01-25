@@ -9,7 +9,6 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -28,7 +27,7 @@ public class OrcidRecord {
     @NotNull
     @Pattern(regexp = ".*@.*\\..*")
     @Field("email")
-    @Indexed
+//    @Indexed(name = "email_unique_idx", unique = true)
     private String email;
 
     @Field("orcid")
