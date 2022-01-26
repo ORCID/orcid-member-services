@@ -27,7 +27,7 @@
         }
       },
       "clientId": {
-        "string": "Client Id",
+        "label": { "string": "Client Id" },
         "note": { "string": "Note: Client ID must have Member OBO enabled AND" },
         "addedAsRedirect": { "string": "added as a Redirect URI in" }
       },
