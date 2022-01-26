@@ -3,7 +3,7 @@
     "title": { "string": "Sign in" },
     "form": {
       "password": {
-        "string": "Password",
+        "label": { "string": "Password" },
         "placeholder": { "string": "Your password" }
       },
       "rememberme": { "string": "Remember me" },

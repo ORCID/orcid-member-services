@@ -16,11 +16,11 @@
     },
     "form": {
       "firstname": {
-        "string": "First Name",
+        "label": { "string": "First Name" },
         "placeholder": { "string": "Your first name" }
       },
       "lastname": {
-        "string": "Last Name",
+        "label": { "string": "Last Name" },
         "placeholder": { "string": "Your last name" }
       },
       "language": { "string": "Language" },
