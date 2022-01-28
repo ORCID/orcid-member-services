@@ -143,9 +143,12 @@ public class AssertionService {
             throw new IllegalArgumentException("Invalid assertion id");
         }
         Assertion assertion = optional.get();
-        assertion.setPermissionLink(orcidRecordService.generateLinkForEmail(assertion.getEmail()));
         setPrettyStatus(assertion);
         return assertion;
+    }
+    
+    public void populatePermissionLink(Assertion assertion) {
+        assertion.setPermissionLink(orcidRecordService.generateLinkForEmail(assertion.getEmail()));
     }
 
     public Assertion createAssertion(Assertion assertion, AssertionServiceUser owner) {

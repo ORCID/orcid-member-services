@@ -108,6 +108,15 @@ class AssertionServiceResourceTest {
         Mockito.when(ringgoldOrgValidator.validId(Mockito.anyString())).thenReturn(true);
         Mockito.when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
     }
+    
+    @Test
+    void testGetAssertion() throws BadRequestAlertException, org.codehaus.jettison.json.JSONException {
+        Mockito.when(assertionService.findById(Mockito.eq("test"))).thenReturn(new Assertion());
+        Mockito.doNothing().when(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
+        assertionServiceResource.getAssertion("test");
+        Mockito.verify(assertionService).findById(Mockito.eq("test"));
+        Mockito.verify(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
+    }
 
     @Test
     void testDeleteAssertionFromOrcidSuccessful() throws JSONException, JAXBException {
