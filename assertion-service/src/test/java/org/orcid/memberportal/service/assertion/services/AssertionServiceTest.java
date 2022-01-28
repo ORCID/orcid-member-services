@@ -155,7 +155,16 @@ class AssertionServiceTest {
         assertEquals("orcid", two.getOrcidId());
         Mockito.verify(assertionsRepository, Mockito.times(2)).save(Mockito.any(Assertion.class));
     }
-
+    
+    @Test
+    void testPopulatePermissionLink() {
+        Assertion assertion = getAssertionWithEmail("email");
+        Mockito.when(orcidRecordService.generateLinkForEmail(Mockito.eq("email"))).thenReturn("permission-link");
+        assertionService.populatePermissionLink(assertion);
+        assertEquals("permission-link", assertion.getPermissionLink());
+        Mockito.verify(orcidRecordService).generateLinkForEmail(Mockito.eq("email"));
+    }
+    
     @Test
     void testAssertionExists() {
         when(assertionsRepository.existsById(Mockito.eq("exists"))).thenReturn(true);
@@ -435,7 +444,7 @@ class AssertionServiceTest {
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         assertion.setOrcidError("{ statusCode: 400, error: 'something' }");
         Instant addedToOrcidAttempt = Instant.now();
-        assertion.setLastSyncAttempt(addedToOrcidAttempt);
+        assertion.setLastSyncAttempt(addedToOrcidAttempt.minusMillis(10000l));
         assertion.setModified(Instant.now());
         assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord));
         assertEquals(AssertionStatus.PENDING_RETRY.name(), assertion.getStatus());
@@ -673,8 +682,7 @@ class AssertionServiceTest {
 
         Assertion assertion = assertionService.findById("id");
         assertNotNull(assertion);
-        assertNotNull(assertion.getPermissionLink());
-        assertEquals("permission-link", assertion.getPermissionLink());
+        assertNull(assertion.getPermissionLink());
         assertEquals(AssertionStatus.PENDING.getValue(), assertion.getPrettyStatus());
     }
 

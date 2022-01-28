@@ -130,9 +130,10 @@ public class AssertionServiceResource {
     }
 
     @GetMapping("/assertion/{id}")
-    public ResponseEntity<Assertion> getAssertion(@PathVariable String id) throws BadRequestAlertException, JSONException {
+    public ResponseEntity<Assertion> getAssertion(@PathVariable String id) {
         LOG.debug("REST request to fetch assertion {} from user {}", id, SecurityUtils.getCurrentUserLogin().get());
         Assertion assertion = assertionService.findById(id);
+        assertionService.populatePermissionLink(assertion);
         return ResponseEntity.ok().body(assertion);
     }
 
