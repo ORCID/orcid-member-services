@@ -84,7 +84,7 @@ public class ReportServiceTest {
 
         Mockito.verify(mockApplicationProperties).getHolisticsConsortiaDashboardUrl();
         Mockito.verify(mockApplicationProperties).getHolisticsConsortiaDashboardSecret();
-        Mockito.verify(mockUserService, Mockito.times(2)).getLoggedInUser();
+        Mockito.verify(mockUserService, Mockito.times(3)).getLoggedInUser();
         Mockito.verify(mockMemberService).getMember(Mockito.eq("salesforce-id"));
     }
 
