@@ -100,3 +100,6 @@ oauth2:
 # More documentation is available at:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
+
+application:
+  mailTestMode: ${APPLICATION_MAIL_TEST_MODE}
