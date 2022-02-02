@@ -46,6 +46,8 @@ public class ReportService {
     private static final String INTEGRATION_REPORT_PATH = "client_model.public_sf_members.account_id";
 
     private static final String CONSORTIA_REPORT_PATH = "client_model.public_sf_consortia.account_id";
+    
+    private static final String CONSORTIA_FILTER_PATH = "consortia_country_code_model.public_sf_consortia.account_id";
 
     private static final String OPERATOR = "is";
 
@@ -116,7 +118,7 @@ public class ReportService {
     }
 
     private Map<String, Object> getIntegrationReportPermissions() {
-        Map<String, Object> config = getPermissionsConfigBase();
+        Map<String, Object> config = getRowBasedConfigBase();
         config.put(PATH_PARAM, INTEGRATION_REPORT_PATH);
 
         Map<String, Object> wrapper = new HashMap<>();
@@ -125,16 +127,19 @@ public class ReportService {
     }
 
     private Map<String, Object> getConsortiaReportPermissions() {
-        Map<String, Object> config = getPermissionsConfigBase();
+        Map<String, Object> config = getRowBasedConfigBase();
         config.put(PATH_PARAM, CONSORTIA_REPORT_PATH);
+        
+        Map<String, Object> filter = getRowBasedConfigBase();
+        filter.put(PATH_PARAM, CONSORTIA_FILTER_PATH);
 
         Map<String, Object> wrapper = new HashMap<>();
-        wrapper.put(ROW_BASED_PARAM, new Object[] { config });
+        wrapper.put(ROW_BASED_PARAM, new Object[] { config, filter });
         return wrapper;
     }
 
     private Map<String, Object> getMemberReportPermissions() {
-        Map<String, Object> config = getPermissionsConfigBase();
+        Map<String, Object> config = getRowBasedConfigBase();
         config.put(PATH_PARAM, MEMBER_REPORT_PATH);
 
         Map<String, Object> wrapper = new HashMap<>();
@@ -142,7 +147,7 @@ public class ReportService {
         return wrapper;
     }
 
-    private Map<String, Object> getPermissionsConfigBase() {
+    private Map<String, Object> getRowBasedConfigBase() {
         Map<String, Object> config = new HashMap<>();
         config.put(OPERATOR_PARAM, OPERATOR);
         config.put(MODIFIER_PARAM, null);

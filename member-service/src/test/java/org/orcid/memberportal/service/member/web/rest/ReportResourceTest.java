@@ -14,7 +14,6 @@ import org.orcid.memberportal.service.member.service.reports.ReportInfo;
 import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
 import org.orcid.memberportal.service.member.services.ReportService;
 import org.orcid.memberportal.service.member.services.UserService;
-import org.orcid.memberportal.service.member.web.rest.ReportResource;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
 import org.springframework.http.ResponseEntity;
 
