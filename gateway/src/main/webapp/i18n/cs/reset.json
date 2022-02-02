@@ -1,0 +1,40 @@
+{
+  "reset": {
+    "request": {
+      "title": { "string": "Obnovit vaše heslo" },
+      "form": {
+        "button": { "string": "Obnovit heslo" }
+      },
+      "messages": {
+        "info": { "string": "Vložte e-mailovou adresu, kterou jste použili při registraci" },
+        "success": { "string": "Podrobnosti o tom, jak obnovit heslo, najdete v e-mailu." },
+        "notfound": { "string": "<strong>E-mailová adresa není zaregistrovaná!</strong> Zkontrolujte ji prosím a zkuste to znovu" }
+      }
+    },
+    "finish": {
+      "title": { "string": "Znovu nastavit heslo" },
+      "form": {
+        "button": { "string": "Ověřte nové heslo" }
+      },
+      "messages": {
+        "info": { "string": "Vyberte nové heslo" },
+        "success": { "string": "<strong>Vaše heslo bylo obnoveno.</strong> Prosím" },
+        "keymissing": { "string": "Chybí aktivační klíč." },
+        "keyinvalid": { "string": "Aktivační klíč je neplatný." },
+        "keyexpired": {
+          "string": "Vypršela platnost aktivačního klíče.",
+          "paragraph1": {
+            "string": "ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired."
+          },
+          "paragraph2": {
+            "string": "To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address."
+          },
+          "paragraph3": {
+            "string": "If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org."
+          }
+        },
+        "error": { "string": "Heslo nelze znovu nastavit. Nezapomeňte, že žádost o heslo platí pouze 24 hodin." }
+      }
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSUser": {
+      "home": {
+        "title": { "string": "Gerir utilizadores" },
+        "createLabel": { "string": "Adicionar utilizador" },
+        "createOrEditLabel": { "string": "Adicionar ou editar utilizador" },
+        "notFound": { "string": "Sem utilizadores para apresentar" },
+        "uploadLabel": { "string": "Importar utilizadores de CSV" }
+      },
+      "delete": {
+        "question": { "string": "Tem a certeza de que quer eliminar o utilizador {{ login }}?" }
+      },
+      "changeOwnership": {
+        "question": {
+          "string": "Tem a certeza que quer transferir a propriedade? Está prestes a transferir a propriedade da conta desta organização. Se for o proprietário da conta depois de transferir a propriedade, não terá mais acesso a a funções administrativas, tais como a gestão de utilizadores."
+        }
+      },
+      "detail": {
+        "title": { "string": "Detalhes do utilizador" }
+      },
+      "sendActivate": {
+        "success": { "string": "Convite enviado." },
+        "error": { "string": "Não foi possível enviar o e-mail de convite." }
+      },
+      "import": {
+        "title": { "string": "Importar utilizadores" },
+        "label": { "string": "Selecione o ficheiro CRV que deseja carregar" },
+        "filePath": { "string": "Caminho do ficheiro" },
+        "emptyFile": { "string": "Não existe nenhum ficheiro para carregar. Selecione um." },
+        "errors": {
+          "label": { "string": "Ups! Ocorreu um problema com o processamento dos seus dados. Corrija os erros abaixo e tente novamente." }
+        }
+      },
+      "assertionService": {
+        "enabled": { "string": "Asserções ativadas" }
+      },
+      "login": { "string": "Iniciar Sessão" },
+      "email": { "string": "E-mail" },
+      "password": { "string": "Palavra-passe" },
+      "confirm_password": { "string": "Confirme a palavra-passe" },
+      "firstName": { "string": "Primeiro Nome" },
+      "lastName": { "string": "Apelido" },
+      "mainContact": { "string": "Titular da Organização" },
+      "salesforceId": { "string": "Organização" },
+      "parentSalesforceId": { "string": "ID Salesforce principal" },
+      "activated": { "string": "Ativado" },
+      "isAdmin": { "string": "Administrador" },
+      "createdBy": { "string": "Criado por" },
+      "createdDate": { "string": "Criada" },
+      "lastModifiedBy": { "string": "Última Modificação por" },
+      "lastModifiedDate": { "string": "Última Modificação" }
+    },
+    "userDTO": {
+      "login": { "string": "e-mail" },
+      "firstName": { "string": "primeiro nome" },
+      "lastName": { "string": "último nome" }
+    }
+  },
+  "userServiceApp": {
+    "user": {
+      "created": { "string": "Utilizador criado. Convite enviado." },
+      "updated": { "string": "Utilizador atualizado com sucesso" },
+      "deleted": { "string": "Utilizador eliminado com sucesso" }
+    }
+  }
+}

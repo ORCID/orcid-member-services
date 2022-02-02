@@ -1,0 +1,33 @@
+{
+  "error": {
+    "title": { "string": "Non è stato possibile elaborare la tua richiesta" },
+    "subtitle": { "string": "Spiacenti, si è verificato un errore\n" },
+    "http": {
+      "400": { "string": "Richiesta errata." },
+      "403": { "string": "Non sei autorizzato ad accedere a questa pagina." },
+      "404": { "string": "La pagina non esiste." },
+      "405": { "string": "Il verbo HTTP che hai usato non è supportato per questo URL." },
+      "500": { "string": "Errore interno del server.\n" }
+    },
+    "concurrencyFailure": {
+      "string": "Un altro utente ha modificato questi dati contemporaneamente a te. Le tue modifiche sono state rifiutate.\n"
+    },
+    "validation": { "string": "Errore di validazione sul server." },
+    "email": { "string": "L'email non è in un formato valido" },
+    "size": { "string": "Non soddisfa i requisiti di dimensione minima/massima!\n" },
+    "idused": { "string": "Non può essere eliminato! Presenta una relazione con altri elementi." },
+    "pattern": { "string": "Questo campo può contenere solo lettere, numeri e indirizzi email." },
+    "invalidUrl": { "string": "L'URL non è valido\n" },
+    "deleteAssertionsForSalesforceId": { "string": "Impossibile eliminare le asserzioni per il membro." },
+    "disambiguationSource": { "string": "L'origine dell'organizzazione non può essere vuota." },
+    "emailUsed": { "string": "Questa e-mail è già registrata\n" },
+    "ownerExists": { "string": "L'organizzazione ha già un proprietario." },
+    "memberNotFound": { "string": "Membro non trovato con salesForceId: {{ params }}" },
+    "salesForceIdUsed": { "string": "Esiste già un membro con lo stesso ID Salesforce" },
+    "affiliationOtherOrganization": { "string": "Questa affiliazione non appartiene alla tua organizzazione\n" },
+    "emailAffiliationUsed": {
+      "string": "Impossibile aggiungere un'affiliazione. Esiste già un'affiliazione per {{ params }} e appartiene ad un'altra organizzazione."
+    },
+    "memberNameUsed": { "string": "Esiste già un membro con quel nome" }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "gatewayApp": {
+    "AffiliationSection": {
+      "null": { "string": "" },
+      "EMPLOYMENT": { "string": "雇佣关系" },
+      "EDUCATION": { "string": "教育背景" },
+      "QUALIFICATION": { "string": "资质" },
+      "INVITED_POSITION": { "string": "特邀职位" },
+      "DISTINCTION": { "string": "区别" },
+      "MEMBERSHIP": { "string": "会员身份" },
+      "SERVICE": { "string": "服务" }
+    }
+  }
+}

@@ -3,11 +3,16 @@
     "title": { "string": "サインイン" },
     "form": {
       "password": {
-        "string": "パスワード",
-        "placeholder": { "string": "Your password" }
+        "label": { "string": "パスワード" },
+        "placeholder": { "string": "あなたのパスワード" }
       },
       "rememberme": { "string": "私のことを記憶させる" },
-      "button": { "string": "サインイン" }
+      "button": { "string": "サインイン" },
+      "mfaCode": {
+        "prompt": { "string": "認証アプリからのMFAコードを入力してください" },
+        "error": { "string": "無効なMFAコード" },
+        "label": { "string": "MFAコード" }
+      }
     },
     "messages": {
       "error": {

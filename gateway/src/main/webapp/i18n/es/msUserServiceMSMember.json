@@ -29,9 +29,9 @@
         }
       },
       "clientId": {
-        "string": "Identificación del cliente",
-        "note": { "string": "Note: Client ID must have Member OBO enabled AND" },
-        "addedAsRedirect": { "string": "added as a Redirect URI in" }
+        "label": { "string": "ID del cliente" },
+        "note": { "string": "Nota: la ID de cliente debe tener activado el OBO de miembro Y" },
+        "addedAsRedirect": { "string": "añadido como un URI de redirección en" }
       },
       "clientName": { "string": "Nombre de miembro" },
       "clientSecret": { "string": "Secreto del cliente" },

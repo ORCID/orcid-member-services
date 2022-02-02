@@ -1,0 +1,71 @@
+{
+  "home": {
+    "title": { "string": "Portal de Membros ORCID" },
+    "heading": { "string": "Bem-vindo ao Portal de Membros do ORCID" },
+    "mainContent": {
+      "section1": {
+        "text": {
+          "string": "O Portal do Membro do ORCID é um conjunto de ferramentas que ajudam as instituições a tirar o máximo partido da sua adesão ao ORCID. Já temos algumas ferramentas disponíveis e estamos a desenvolver ativamente outras que permitem aos nossos Membros:"
+        },
+        "bullet1": { "string": "Adicionar/atualizar dados sobre registos ORCID dos investigadores" },
+        "bullet2": { "string": "Aceder a dados e relatórios" },
+        "bullet3": { "string": "Gira as informações da adesão da sua organização ao ORCID" },
+        "bullet4": { "string": "Gira as credenciais API da sua organização ORCID" }
+      },
+      "section2": {
+        "text": { "string": "Ferramentas atualmente disponíveis:" },
+        "affiliationManager": {
+          "heading": { "string": "Gestor de Afiliação" },
+          "description": {
+            "string": "O Gestor de Afiliações simplifica o processo de inserção de dados sobre afiliações (emprego, habilitações, etc.) nos registos do ORCID, permitindo-lhe adicionar e atualizar essas informações em nome dos seus investigadores através de um ficheiro CSV, sem ser necessário integrar diretamente o ORCID nos seus sistemas atuais ou adquirir um sistema externo compatível com o ORCID. Disponível apenas para membros de consórcios."
+          },
+          "requestAccessNow": { "string": "Pedir acesso agora!" }
+        },
+        "memberReporting": {
+          "heading": { "string": "Relatórios de membro" },
+          "description": {
+            "string": "Os Relatórios de Membros fornecem relatórios em tempo real sobre todos os membros, permitindo que as organizações encontrem, visualizem e descarreguem facilmente estatísticas sobre membros e integração."
+          }
+        }
+      },
+      "section3": {
+        "heading": { "string": "Recursos." },
+        "table": {
+          "line1": {
+            "heading": { "string": "Guia de Gestão de Conta" },
+            "description": { "string": "Guia para gerir o acesso dos seus utilizadores ao Portal de Membros" }
+          },
+          "line2": {
+            "heading": { "string": "Guida para o Gestor de Afiliações" },
+            "description": { "string": "Guia para funcionários na sua instituição que vão utilizar o Gestor de Afiliação" }
+          },
+          "line3": {
+            "heading": { "string": "Guia do Relatório de Membros" },
+            "description": { "string": "Guia sobre como ler os relatórios dos seus membros" }
+          }
+        }
+      },
+      "section4": {
+        "heading": { "string": "Contactos de apoio" },
+        "text": { "string": "Para obter ajuda ou esclarecer dúvidas sobre o Portal de Membro, contacte:" },
+        "bullet1": {
+          "text": { "string": "A sua" },
+          "linkText": { "string": "organização que lidera o consórcio" }
+        },
+        "bullet2": {
+          "text": { "string": "Ou email:" },
+          "email": { "string": "membership@orcid.org" }
+        }
+      }
+    },
+    "alert": {
+      "thisSiteIsFor": {
+        "string": "Este site é para administradores de organizações membros do ORCID e é separado do registo do ORCID. Vá ao registo do ORCID para"
+      },
+      "signIntoOrcid": { "string": "inicie sessão no seu registo ORCID" }
+    },
+    "logged": {
+      "message": { "string": "Tem a sessão iniciada como utilizador \"{{username}}\"." }
+    }
+  }
+}

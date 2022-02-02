@@ -43,19 +43,6 @@
         "msUserServiceMSMember": { "string": "メンバーを管理する" },
         "jhipster-needle-menu-add-admin-element": { "string": "JHipsterはここにメニューエントリを追加します（翻訳しないでください！）" }
       },
-      "dev": {
-        "main": { "string": "システムの監視" },
-        "gateway": { "string": "ゲートウェイ" },
-        "tracker": { "string": "ユーザートラッカー" },
-        "metrics": { "string": "指標" },
-        "health": { "string": "健康" },
-        "configuration": { "string": "コンフィグレーション" },
-        "logs": { "string": "ログ" },
-        "audits": { "string": "監査" },
-        "apidocs": { "string": "API" },
-        "database": { "string": "データベース" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster はこちらにメニュー入力をさらに追加します ( 翻訳しないで下さい )" }
-      },
       "language": { "string": "言語" }
     },
     "form": {

@@ -43,19 +43,6 @@
         "msUserServiceMSMember": { "string": "Gestionar miembros" },
         "jhipster-needle-menu-add-admin-element": { "string": "JHipster agregará entradas de menú adicionales aquí (¡no traducir!)" }
       },
-      "dev": {
-        "main": { "string": "Control del sistema" },
-        "gateway": { "string": "Puerta" },
-        "tracker": { "string": "Rastreador de usuarios" },
-        "metrics": { "string": "Métrica" },
-        "health": { "string": "Salud" },
-        "configuration": { "string": "Configuración" },
-        "logs": { "string": "Registros" },
-        "audits": { "string": "Auditorias" },
-        "apidocs": { "string": "API" },
-        "database": { "string": "Base de datos" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
-      },
       "language": { "string": "Idioma" }
     },
     "form": {

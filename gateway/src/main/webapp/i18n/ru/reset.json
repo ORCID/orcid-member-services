@@ -1,0 +1,40 @@
+{
+  "reset": {
+    "request": {
+      "title": { "string": "Сбросить ваш пароль" },
+      "form": {
+        "button": { "string": "Сбросить пароль" }
+      },
+      "messages": {
+        "info": { "string": "Введите адрес электронной почты, который вы использовали для регистрации" },
+        "success": { "string": "На вашу электронную почту были отправлены инструкции по сбросу пароля." },
+        "notfound": { "string": "<strong>Электронный адрес не зарегистрирован!</strong>Пожалуйста, проверьте и попробуйте ещё раз" }
+      }
+    },
+    "finish": {
+      "title": { "string": "Сбросить пароль" },
+      "form": {
+        "button": { "string": "Подтвердить новый пароль" }
+      },
+      "messages": {
+        "info": { "string": "Выберите новый пароль" },
+        "success": { "string": "<strong>Ваш пароль сброшен.</strong> Пожалуйста," },
+        "keymissing": { "string": "Отсутствует ключ активации." },
+        "keyinvalid": { "string": "Ключ активации недействителен." },
+        "keyexpired": {
+          "string": "Срок действия ключа активации истек.",
+          "paragraph1": {
+            "string": "ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired."
+          },
+          "paragraph2": {
+            "string": "To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address."
+          },
+          "paragraph3": {
+            "string": "If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org."
+          }
+        },
+        "error": { "string": "Ваш пароль не может быть сброшен. Помните, что запрос пароля действителен только в течение 24 часов." }
+      }
+    }
+  }
+}

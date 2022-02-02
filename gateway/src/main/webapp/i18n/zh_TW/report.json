@@ -7,8 +7,8 @@
       "integration": {
         "title": { "string": "整合報告" }
       },
-      "consortium": {
-        "title": { "string": "聯盟報告" }
+      "consortia": {
+        "title": { "string": "Consortium report" }
       }
     }
   }

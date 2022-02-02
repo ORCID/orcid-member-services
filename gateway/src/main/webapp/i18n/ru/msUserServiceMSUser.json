@@ -1,0 +1,67 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSUser": {
+      "home": {
+        "title": { "string": "Управление пользователями" },
+        "createLabel": { "string": "Добавить пользователя" },
+        "createOrEditLabel": { "string": "Добавить или редактировать пользователя" },
+        "notFound": { "string": "Нет пользователей для показа" },
+        "uploadLabel": { "string": "Импортировать пользователей из CSV" }
+      },
+      "delete": {
+        "question": { "string": "Вы уверены, что хотите удалить пользователя {{ login }}?" }
+      },
+      "changeOwnership": {
+        "question": {
+          "string": "Вы уверены, что хотите передать право собственности? Вы собираетесь передать право собственности на аккаунт этой организации. Если вы будете владельцем организации после передачи права собственности, у вас больше не будет доступа к административным функциям, таким как управление пользователями."
+        }
+      },
+      "detail": {
+        "title": { "string": "Сведения о пользователе" }
+      },
+      "sendActivate": {
+        "success": { "string": "Приглашение отправлено." },
+        "error": { "string": "Не удалось отправить письмо с приглашением." }
+      },
+      "import": {
+        "title": { "string": "Импортировать пользователей" },
+        "label": { "string": "Выберите CSV-файл для загрузки" },
+        "filePath": { "string": "Путь файла" },
+        "emptyFile": { "string": "Нет файла для загрузки. Пожалуйста, выберите." },
+        "errors": {
+          "label": { "string": "Ой! При обработке ваших данных возникла проблема. Пожалуйста, исправьте ошибки ниже и повторите попытку" }
+        }
+      },
+      "assertionService": {
+        "enabled": { "string": "Утверждения активированы" }
+      },
+      "login": { "string": "Вход" },
+      "email": { "string": "Электронный адрес" },
+      "password": { "string": "Пароль" },
+      "confirm_password": { "string": "Подтвердить пароль" },
+      "firstName": { "string": "Имя" },
+      "lastName": { "string": "Фамилия" },
+      "mainContact": { "string": "Владелец организации" },
+      "salesforceId": { "string": "Организация" },
+      "parentSalesforceId": { "string": "Родительский идентификатор Salesforce" },
+      "activated": { "string": "Активировано" },
+      "isAdmin": { "string": "Администратор" },
+      "createdBy": { "string": "Создано" },
+      "createdDate": { "string": "Создано" },
+      "lastModifiedBy": { "string": "Последнее изменение" },
+      "lastModifiedDate": { "string": "Последние изменения" }
+    },
+    "userDTO": {
+      "login": { "string": "электронная почта" },
+      "firstName": { "string": "имя" },
+      "lastName": { "string": "фамилия" }
+    }
+  },
+  "userServiceApp": {
+    "user": {
+      "created": { "string": "Пользователь создан. Приглашение отправлено." },
+      "updated": { "string": "Пользователь успешно обновлен" },
+      "deleted": { "string": "Пользователь успешно удален" }
+    }
+  }
+}

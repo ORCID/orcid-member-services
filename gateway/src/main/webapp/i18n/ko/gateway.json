@@ -1,0 +1,15 @@
+{
+  "gateway": {
+    "title": { "string": "게이트웨이" },
+    "routes": {
+      "title": { "string": "현재 경로" },
+      "url": { "string": "URL" },
+      "service": { "string": "서비스" },
+      "servers": { "string": "사용 가능한 서버" },
+      "error": { "string": "경고: 이용 가능한 서버가 없습니다!" }
+    },
+    "refresh": {
+      "button": { "string": "새로 고침" }
+    }
+  }
+}

@@ -39,7 +39,9 @@
       "import": {
         "title": { "string": "Importar afiliaciones" },
         "label": { "string": "Seleccione un archivo CSV para subir" },
-        "filePath": { "string": "Ruta de archivo" }
+        "filePath": { "string": "Ruta de archivo" },
+        "success": { "string": "Su CSV se ha subido para procesarlo." },
+        "failure": { "string": "Hubo un problema al subir su CSV para procesarlo." }
       },
       "addedToOrcid": { "string": "Añadido a ORCID" },
       "updatedInOrcid": { "string": "Actualizado en ORCID" },

@@ -1,0 +1,29 @@
+{
+  "landingPage": {
+    "title": { "string": "Служба поддержки участников ORCID" },
+    "connectionExists": {
+      "youHaveAlready": { "string": "Вы уже предоставили" },
+      "permissionToUpdate": { "string": "разрешение на обновление вашей записи в ORCID" },
+      "youDoNot": { "string": "Пока что вам больше ничего не нужно делать." },
+      "differentUser": {
+        "string": "Эта ссылка для авторизации уже использовалась. Свяжитесь с {{ clientName }} для получения новой ссылки для авторизации."
+      }
+    },
+    "error": {
+      "somethingWentWrong": { "string": "К сожалению, что-то пошло не так, и мы не смогли получить ваш ORCID iD" }
+    },
+    "denied": {
+      "youHaveDenied": { "string": "Ой, вы запретили доступ." },
+      "willNotBeAble": { "string": "не сможет обновить вашу запись ORCID." },
+      "ifThisWas": { "string": "Если это была ошибка, нажмите кнопку ниже, чтобы предоставить доступ." },
+      "grantAccess": { "string": "Разрешить {{ clientName }} обновить мой профиль ORCID" }
+    },
+    "success": {
+      "thanks": { "string": "Спасибо, {{ given_name }} {{ family_name }}" },
+      "youHaveSuccessfully": {
+        "string": "Вы успешно предоставили {{ clientName }} разрешение на обновление вашей записи ORCID, и ваша запись будет обновлена с учетом информации о аффилиации."
+      },
+      "ifYouFind": { "string": "Если вы обнаружите, что данные, добавленные в вашу запись ORCID, неверны, свяжитесь с {{ clientName }}" }
+    }
+  }
+}

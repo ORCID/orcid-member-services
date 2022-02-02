@@ -1,0 +1,14 @@
+{
+  "gatewayApp": {
+    "AffiliationSection": {
+      "null": { "string": "" },
+      "EMPLOYMENT": { "string": "고용" },
+      "EDUCATION": { "string": "교육" },
+      "QUALIFICATION": { "string": "자격" },
+      "INVITED_POSITION": { "string": "INVITED_POSITION" },
+      "DISTINCTION": { "string": "구별" },
+      "MEMBERSHIP": { "string": "멤버십" },
+      "SERVICE": { "string": "서비스" }
+    }
+  }
+}

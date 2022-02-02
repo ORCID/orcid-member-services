@@ -1,0 +1,180 @@
+{
+  "global": {
+    "title": { "string": "Портал участников ORCID" },
+    "by": { "string": "кем" },
+    "false": { "string": "false" },
+    "true": { "string": "верно" },
+    "browsehappy": {
+      "string": "Вы используете <strong>устаревшую</strong> версию браузера. Пожалуйста, <a href=\"http://browsehappy.com/?locale=en\">обновите браузер</a>, чтобы улучшить его работу."
+    },
+    "warning": { "string": "Внимание!" },
+    "isATestEnvironment": {
+      "string": "это тестовая среда для портала участников ORCID, которая подключается к тестовой среде реестра ORCID."
+    },
+    "menu": {
+      "memberPortal": { "string": "Портал для участников" },
+      "beta": { "string": "Бета-версия" },
+      "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
+      "entities": {
+        "main": { "string": "Инструменты участников" },
+        "assertionServiceAffiliationManager": { "string": "Менеджер принадлежностей" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "member": { "string": "Участник" }
+      },
+      "report": {
+        "member": { "string": "Отчет участника" },
+        "integration": { "string": "Отчет об интеграции" },
+        "consortium": { "string": "Отчет консорциума" }
+      },
+      "account": {
+        "main": { "string": "Учётная запись" },
+        "settings": { "string": "Настройки" },
+        "password": { "string": "Пароль" },
+        "sessions": { "string": "Сеансы" },
+        "login": { "string": "Вход" },
+        "logout": { "string": "Выйти" },
+        "loggedInAs": { "string": "Вы вошли как" },
+        "logoutAs": { "string": "Выйти как" },
+        "register": { "string": "Зарегистрироваться" }
+      },
+      "admin": {
+        "main": { "string": "Администрация" },
+        "msUserServiceMSUser": { "string": "Настроить пользователей" },
+        "msUserServiceMSMember": { "string": "Настроить участников" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "language": { "string": "Язык" }
+    },
+    "form": {
+      "username.label": { "string": "Имя пользователя" },
+      "username.placeholder": { "string": "Ваше имя пользователя" },
+      "currentpassword.label": { "string": "Текущий пароль" },
+      "currentpassword.placeholder": { "string": "Текущий пароль" },
+      "newpassword.label": { "string": "Новый пароль" },
+      "newpassword.placeholder": { "string": "Новый пароль" },
+      "confirmpassword.label": { "string": "Новый пароль-подтверждение" },
+      "confirmpassword.placeholder": { "string": "Подтвердить новый пароль" },
+      "email.label": { "string": "Электронный адрес" },
+      "email.placeholder": { "string": "Ваш эл. адрес" },
+      "search": { "string": "Искать..." }
+    },
+    "messages": {
+      "info": {
+        "authenticated": {
+          "prefix": { "string": "Если вы хотите" },
+          "link": { "string": "войти" },
+          "suffix": {
+            "string": ", вы можете опробовать типовые учетные записи:<br/>- Администратор (имя пользователя=\"admin\" и пароль=\"admin\") <br/>- Пользователь (имя пользователя=\"user\" и пароль=\"user\")."
+          }
+        },
+        "register": {
+          "noaccount": { "string": "У вас еще нет учетной записи?" },
+          "link": { "string": "Зарегистрировать новую учетную запись" }
+        }
+      },
+      "error": {
+        "dontmatch": { "string": "Пароль и его подтверждение не совпадают!" }
+      },
+      "validate": {
+        "newpassword": {
+          "required": { "string": "Ваш пароль необходим." },
+          "minlength": { "string": "Ваш пароль должен состоять из минимум 4 символов." },
+          "maxlength": { "string": "Ваш пароль не может состоять из более чем 50 символов." },
+          "strength": { "string": "Надежность пароля:" }
+        },
+        "confirmpassword": {
+          "required": { "string": "Необходимо подтверждение пароля." },
+          "minlength": { "string": "Ваш пароль-подтверждение должен состоять из минимум 4 символов." },
+          "maxlength": { "string": "Ваш пароль-подтверждение не может состоять из более чем 50 символов." }
+        },
+        "email": {
+          "required": { "string": "Ваш адрес электронной почты необходим." },
+          "invalid": { "string": "Ваш электронный адрес недействителен." },
+          "minlength": { "string": "Ваш адрес электронной почты должен содержать не менее 5 символов." },
+          "maxlength": { "string": "Адрес вашей эл. почты не может состоять из более чем 50 символов." }
+        }
+      }
+    },
+    "field": {
+      "id": { "string": "ID" }
+    },
+    "ribbon": {
+      "dev": { "string": "Развитие" }
+    },
+    "item-count": { "string": "Показаны {{first}} - {{second}} из {{total}} элементов." }
+  },
+  "entity": {
+    "action": {
+      "addblob": { "string": "Добавить BLOB-объект" },
+      "addimage": { "string": "Добавить изображение" },
+      "back": { "string": "Назад" },
+      "cancel": { "string": "Отменить" },
+      "close": { "string": "Закрыть" },
+      "delete": { "string": "Удалить" },
+      "delete-from-orcid": { "string": "Удалить из orcid" },
+      "edit": { "string": "Редактировать" },
+      "open": { "string": "Открыть" },
+      "save": { "string": "Сохранить" },
+      "continue": { "string": "Продолжить" },
+      "upload": { "string": "Загрузить" },
+      "activate": { "string": "Отправить повторно электронное письмо для активации" },
+      "view": { "string": "Просмотреть" }
+    },
+    "detail": {
+      "field": { "string": "Поле" },
+      "value": { "string": "Значение" }
+    },
+    "delete": {
+      "title": { "string": "Подтвердить удаление" },
+      "error": { "string": "Ой, что-то пошло не так!" }
+    },
+    "changeOwnership": {
+      "title": { "string": "Подтвердить смену владельца" },
+      "error": { "string": "Ой, что-то пошло не так!" }
+    },
+    "validation": {
+      "required": { "string": "Это поле обязательно к заполнению." },
+      "minlength": { "string": "В этом поле должно быть не менее {{ min }} символов." },
+      "maxlength": { "string": "Это поле не может состоять из более чем {{ max }} символов." },
+      "min": { "string": "Это поле должно состоять из минимум {{ min }}." },
+      "max": { "string": "Это поле не должно быть больше {{ max }}." },
+      "minbytes": { "string": "Это поле должно иметь размер в минимум {{ min }} байт." },
+      "maxbytes": { "string": "Это поле не может быть больше {{ max }} байтов." },
+      "pattern": { "string": "Это поле должно следовать шаблону для {{ pattern }}." },
+      "number": { "string": "В этом поле должен быть номер." },
+      "datetimelocal": { "string": "В этом поле нужно указать дату и время." },
+      "patternLogin": { "string": "Это поле может содержать только буквы, цифры и электронные адреса." },
+      "email": { "string": "Пожалуйста, представьте действующий адрес электронной почты." },
+      "endDate": { "string": "Дата начала не может быть позднее даты окончания." },
+      "disambiguatedOrgId": {
+        "string": "Это поле обязательно к заполнению. GRID Идентификатор организации должен начинаться с grid. например, grid.12344 или должен быть действительным URL-адресом grid, RINGGOLD Идентификатор организации должен быть номером. ROR Идентификаторы должны содержать 9 символов и начинаться с 0."
+      }
+    }
+  },
+  "error": {
+    "internalServerError": { "string": "Внутренняя ошибка сервера" },
+    "server.not.reachable": { "string": "Сервер недоступен" },
+    "url.not.found": { "string": "Не найдено" },
+    "notnull": { "string": "Поле {{ fieldName }} не может быть пустым!" },
+    "size": { "string": "Поле {{ fieldName }} не соответствует требованиям к минимальному/максимальному размеру!" },
+    "userexists": { "string": "Имя логина уже используется!" },
+    "emailexists": { "string": "Адрес электронной почты уже используется!" },
+    "idexists": { "string": "Новый {{ entityName }} не может сразу иметь ID" },
+    "delete.auth.user": { "string": "Не удается удалить данного пользователя." },
+    "delete.main.contact": { "string": "Нельзя удалить владельца организации." },
+    "delete.last.admin": { "string": "Невозможно удалить последнего администратора." },
+    "member.no.admin.allowed": { "string": "Пользователи с правами администратора не могут быть связаны с этим участником" },
+    "clientidinvalid": {
+      "string": "Неверный ID клиента. ID клиента должен быть в формате XXXX-XXXX-XXXX-XXXX или APP-XXXXXXXXXXXXXXXX. X может быть цифрой или символом в верхнем регистре"
+    },
+    "idnull": { "string": "Неверный идентификатор" }
+  },
+  "footer": {
+    "footerLabel": { "string": "нижний колонтитул" },
+    "privacyPolicy": { "string": "Политика конфиденциальности" },
+    "termsOfUse": { "string": "Условия пользования" },
+    "contactUs": { "string": "Свяжитесь с нами" },
+    "orcidRegistry": { "string": "Реестр ORCID" },
+    "help": { "string": "Помощь" }
+  }
+}

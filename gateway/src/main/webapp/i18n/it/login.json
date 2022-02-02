@@ -1,0 +1,26 @@
+{
+  "login": {
+    "title": { "string": "Accedi" },
+    "form": {
+      "password": {
+        "label": { "string": "Password" },
+        "placeholder": { "string": "La tua password" }
+      },
+      "rememberme": { "string": "Ricordami" },
+      "button": { "string": "Accedi" },
+      "mfaCode": {
+        "prompt": { "string": "Inserisci il codice MFA dalla tua app di autenticazione" },
+        "error": { "string": "Codice MFA non valido" },
+        "label": { "string": "Codice MFA" }
+      }
+    },
+    "messages": {
+      "error": {
+        "authentication": { "string": "<strong>Accesso non riuscito!</strong> Controlla le credenziali e riprova." }
+      }
+    },
+    "password": {
+      "forgot": { "string": "Hai dimenticato la tua password?" }
+    }
+  }
+}

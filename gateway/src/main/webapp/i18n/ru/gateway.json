@@ -1,0 +1,15 @@
+{
+  "gateway": {
+    "title": { "string": "Шлюз" },
+    "routes": {
+      "title": { "string": "Текущие маршруты" },
+      "url": { "string": "URL-адрес" },
+      "service": { "string": "Служба" },
+      "servers": { "string": "Доступные серверы" },
+      "error": { "string": "Предупреждение: сервер недоступен!" }
+    },
+    "refresh": {
+      "button": { "string": "Обновить" }
+    }
+  }
+}

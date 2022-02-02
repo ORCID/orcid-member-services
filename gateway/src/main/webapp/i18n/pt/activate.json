@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": { "string": "Ativação" },
+    "messages": {
+      "success": { "string": "<strong>A sua conta de utilizador foi ativada.</strong> Por favor,\n" },
+      "error": { "string": "<strong>Não foi possível ativar o seu utilizador.</strong> Use o formulário de registo para criar uma conta." }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "register": {
+    "title": { "string": "Registrazione" },
+    "form": {
+      "button": { "string": "Registrati" }
+    },
+    "messages": {
+      "validate": {
+        "login": {
+          "required": { "string": "Il tuo nome utente è obbligatorio." },
+          "minlength": { "string": "Il tuo nome utente deve contenere almeno 1 carattere." },
+          "maxlength": { "string": "Il nome utente non può essere più lungo di 50 caratteri." },
+          "pattern": { "string": "Il nome utente può contenere solo lettere e cifre." }
+        }
+      },
+      "success": { "string": "<strong>Registrazione salvata!</strong> Controlla la tua e-mail per la conferma." },
+      "error": {
+        "fail": { "string": "<strong>Registrazione non riuscita!</strong> Riprova più tardi, per favore.\n" },
+        "userexists": { "string": "<strong>Nome per l'accesso già registrato!</strong> Per favore, scegline un altro.\n" },
+        "emailexists": { "string": "<strong>L'e-mail è già in uso.</strong> Scegline un'altra." }
+      }
+    }
+  }
+}

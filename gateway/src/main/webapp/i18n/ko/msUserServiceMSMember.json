@@ -1,0 +1,55 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSMember": {
+      "home": {
+        "title": { "string": "회원 관리" },
+        "createLabel": { "string": "회원 추가" },
+        "createOrEditLabel": { "string": "회원 추가 또는 편집" },
+        "notFound": { "string": "표시할 회원이 없습니다" },
+        "uploadLabel": { "string": "CSV에서 회원 가져오기" }
+      },
+      "delete": {
+        "question": { "string": "회원 포털에서 {{ clientName }} 님을 정말 삭제하시겠습니까?" },
+        "anyUsersAndAffiliations": {
+          "string": "이 회원과 관련된 모든 사용자 및 제휴는 회원 포털에서도 삭제되지만 ORCID 레지스트리에 추가된 데이터는 ORCID에 남습니다."
+        }
+      },
+      "detail": {
+        "title": { "string": "회원 세부 정보" }
+      },
+      "import": {
+        "title": { "string": "회원 가져오기" },
+        "label": { "string": "업로드할 CSV 파일을 선택해 주세요" },
+        "emptyFile": { "string": "업로드할 파일이 없습니다. 하나를 선택해 주세요." },
+        "filePath": { "string": "파일 경로" },
+        "errors": {
+          "label": { "string": "이런! 데이터 처리 중에 문제가 발생했습니다. 아래 오류를 수정하여 다시 시도해 주세요" }
+        }
+      },
+      "clientId": {
+        "label": { "string": "클라이언트 ID" },
+        "note": { "string": "참고: 클라이언트 ID에는 회원 OBO가 활성화되어 있어야 하며" },
+        "addedAsRedirect": { "string": "다음에 리디렉션 URI로 추가됨:" }
+      },
+      "clientName": { "string": "회원 이름" },
+      "clientSecret": { "string": "클라이언트 비밀" },
+      "salesforceId": { "string": "Salesforce ID" },
+      "parentSalesforceId": { "string": "상위 Salesforce ID" },
+      "isConsortiumLead": { "string": "컨소시엄 리드" },
+      "assertionServiceEnabled": { "string": "어설션 활서화됨" },
+      "createdBy": { "string": "생성자" },
+      "createdDate": { "string": "생성됨" },
+      "lastModifiedBy": { "string": "마지막 수정자:" },
+      "lastModifiedDate": { "string": "마지막 수정" },
+      "type": { "string": "유형" },
+      "status": { "string": "상태" }
+    }
+  },
+  "memberServiceApp": {
+    "member": {
+      "created": { "string": "회원 생성됨" },
+      "updated": { "string": "회원이 성공적으로 업데이트되었습니다" },
+      "deleted": { "string": "회원을 성공적으로 삭제했습니다" }
+    }
+  }
+}

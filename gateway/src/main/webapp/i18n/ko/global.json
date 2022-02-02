@@ -1,0 +1,180 @@
+{
+  "global": {
+    "title": { "string": "ORCID 회원 포털" },
+    "by": { "string": "다음에 의함:" },
+    "false": { "string": "거짓" },
+    "true": { "string": "참" },
+    "browsehappy": {
+      "string": "<strong>오래된</strong> 브라우저를 사용하고 있습니다. <a href=\"http://browsehappy.com/?locale=en\">브라우저를 업그레이드</a>하여 사용 환경을 개선해 주세요."
+    },
+    "warning": { "string": "경고!" },
+    "isATestEnvironment": {
+      "string": "ORCID 레지스트리 테스트 환경에 연결되는 ORCID 회원 포털용 테스트 환경입니다."
+    },
+    "menu": {
+      "memberPortal": { "string": "회원 포털" },
+      "beta": { "string": "베타" },
+      "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
+      "entities": {
+        "main": { "string": "회원 도구" },
+        "assertionServiceAffiliationManager": { "string": "제휴 관리자" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "member": { "string": "회원" }
+      },
+      "report": {
+        "member": { "string": "회원 보고서" },
+        "integration": { "string": "통합 보고서" },
+        "consortium": { "string": "컨소시엄 보고서" }
+      },
+      "account": {
+        "main": { "string": "계정" },
+        "settings": { "string": "설정" },
+        "password": { "string": "비밀번호" },
+        "sessions": { "string": "세션" },
+        "login": { "string": "로그인" },
+        "logout": { "string": "로그아웃" },
+        "loggedInAs": { "string": "다음으로 로그인:" },
+        "logoutAs": { "string": "다음 계정으로 로그아웃" },
+        "register": { "string": "등록" }
+      },
+      "admin": {
+        "main": { "string": "관리" },
+        "msUserServiceMSUser": { "string": "사용자 관리" },
+        "msUserServiceMSMember": { "string": "회원 관리" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster는 여기에 추가 메뉴 항목을 추가합니다(바꾸지 마십시오!)" }
+      },
+      "language": { "string": "언어" }
+    },
+    "form": {
+      "username.label": { "string": "사용자 이름" },
+      "username.placeholder": { "string": "사용자 이름" },
+      "currentpassword.label": { "string": "기존 비밀번호" },
+      "currentpassword.placeholder": { "string": "기존 비밀번호" },
+      "newpassword.label": { "string": "새 비밀번호" },
+      "newpassword.placeholder": { "string": "새 비밀번호" },
+      "confirmpassword.label": { "string": "새 비밀번호 확인" },
+      "confirmpassword.placeholder": { "string": "새 비밀번호 확인" },
+      "email.label": { "string": "이메일" },
+      "email.placeholder": { "string": "이메일" },
+      "search": { "string": "검색..." }
+    },
+    "messages": {
+      "info": {
+        "authenticated": {
+          "prefix": { "string": "다음을 원하는 경우:" },
+          "link": { "string": "로그인" },
+          "suffix": {
+            "string": ", 기본 계정을 사용해 볼 수 있습니다.<br/>- 관리자(로그인=\"관리자\" 및 비밀번호=\"관리자\") <br/>- 사용자(로그인=\"사용자\" 및 비밀번호=\"사용자\")."
+          }
+        },
+        "register": {
+          "noaccount": { "string": "아직 계정이 없으신가요?" },
+          "link": { "string": "새 계정 등록" }
+        }
+      },
+      "error": {
+        "dontmatch": { "string": "비밀번호와 비밀번호 확인이 일치하지 않습니다!" }
+      },
+      "validate": {
+        "newpassword": {
+          "required": { "string": "비밀번호가 필요합니다." },
+          "minlength": { "string": "비밀번호는 4자 이상이어야 합니다." },
+          "maxlength": { "string": "비밀번호는 50자를 초과할 수 없습니다." },
+          "strength": { "string": "비밀번호 강도:" }
+        },
+        "confirmpassword": {
+          "required": { "string": "확인 비밀번호가 필요합니다." },
+          "minlength": { "string": "확인 비밀번호는 4자 이상이어야 합니다." },
+          "maxlength": { "string": "확인 비밀번호는 50자를 초과할 수 없습니다." }
+        },
+        "email": {
+          "required": { "string": "이메일은 필수 항목입니다." },
+          "invalid": { "string": "이메일이 잘못되었습니다." },
+          "minlength": { "string": "이메일은 최소 5자여야 합니다." },
+          "maxlength": { "string": "이메일은 50자 이하여야 합니다." }
+        }
+      }
+    },
+    "field": {
+      "id": { "string": "ID" }
+    },
+    "ribbon": {
+      "dev": { "string": "개발" }
+    },
+    "item-count": { "string": "{{total}} 항목 중 {{first}} - {{second}} 항목 표시." }
+  },
+  "entity": {
+    "action": {
+      "addblob": { "string": "객체 추가" },
+      "addimage": { "string": "이미지 추가" },
+      "back": { "string": "뒤로" },
+      "cancel": { "string": "취소" },
+      "close": { "string": "닫기" },
+      "delete": { "string": "삭제" },
+      "delete-from-orcid": { "string": "Orcid에서 삭제" },
+      "edit": { "string": "편집" },
+      "open": { "string": "열기" },
+      "save": { "string": "저장" },
+      "continue": { "string": "계속" },
+      "upload": { "string": "업로드" },
+      "activate": { "string": "활성화 이메일 재전송" },
+      "view": { "string": "보기" }
+    },
+    "detail": {
+      "field": { "string": "필드" },
+      "value": { "string": "값" }
+    },
+    "delete": {
+      "title": { "string": "삭제 확인" },
+      "error": { "string": "이런, 문제가 발생했습니다!" }
+    },
+    "changeOwnership": {
+      "title": { "string": "소유권 변경 확인" },
+      "error": { "string": "문제가 발생했습니다!" }
+    },
+    "validation": {
+      "required": { "string": "이 필드는 필수입니다." },
+      "minlength": { "string": "이 필드는 {{ min }}자 이상이어야 합니다" },
+      "maxlength": { "string": "이 필드는 {{ max }}자를 초과할 수 없습니다." },
+      "min": { "string": "이 필드는 {{ min }} 이상이어야 합니다." },
+      "max": { "string": "이 필드는 {{ max }}보다 클 수 없습니다." },
+      "minbytes": { "string": "이 항목은 {{ min }}바이트 이상이어야 합니다." },
+      "maxbytes": { "string": "이 필드는 {{ max }}바이트를 초과할 수 없습니다." },
+      "pattern": { "string": "이 필드는 {{ pattern }}의 패턴을 따라야 합니다." },
+      "number": { "string": "이 항목은 숫자여야 합니다." },
+      "datetimelocal": { "string": "이 필드는 날짜 및 시간이어야 합니다." },
+      "patternLogin": { "string": "이 필드에는 문자, 숫자 및 전자 메일 주소만 포함될 수 있습니다." },
+      "email": { "string": "유효한 이메일 주소를 입력해 주세요." },
+      "endDate": { "string": "시작 날짜는 종료 날짜 이후일 수 없습니다." },
+      "disambiguatedOrgId": {
+        "string": "이 필드는 필수입니다. GRID 조직 ID는 grid로 시작해야 하거나(예: grid.12344) 유효한 grid URL이어야 합니다. RINGGOLD 조직 ID는 숫자여야 합니다. ROR ID는 0으로 시작하는 9자여야 합니다."
+      }
+    }
+  },
+  "error": {
+    "internalServerError": { "string": "내부 서버 오류" },
+    "server.not.reachable": { "string": "서버에 연결할 수 없습니다" },
+    "url.not.found": { "string": "찾을 수 없습니다" },
+    "notnull": { "string": "{{ fieldName }} 필드는 비워둘 수 없습니다!" },
+    "size": { "string": "{{ fieldName }} 필드가 최소/최대 크기 요건을 충족하지 않습니다!" },
+    "userexists": { "string": "이미 사용 중인 로그인 이름입니다!" },
+    "emailexists": { "string": "이메일이 이미 사용 중입니다!" },
+    "idexists": { "string": "새 {{ entityName }}에는 ID가 이미 있을 수 없습니다" },
+    "delete.auth.user": { "string": "기존 사용자를 삭제할 수 없습니다." },
+    "delete.main.contact": { "string": "조직 소유자를 삭제할 수 없습니다." },
+    "delete.last.admin": { "string": "마지막 관리자를 삭제할 수 없습니다." },
+    "member.no.admin.allowed": { "string": "관리 사용자는 이 회원과 연결할 수 없습니다" },
+    "clientidinvalid": {
+      "string": "잘못된 클라이언트 ID입니다. 클라이언트 ID는 XXXX-XXXX-XXXX-XXXX 또는 APP-XXXXXXXXXXXXXXXX이어야 합니다. X는 숫자 또는 대문자일 수 있습니다"
+    },
+    "idnull": { "string": "잘못된 ID" }
+  },
+  "footer": {
+    "footerLabel": { "string": "푸터" },
+    "privacyPolicy": { "string": "개인정보 보호정책" },
+    "termsOfUse": { "string": "이용약관" },
+    "contactUs": { "string": "문의하기" },
+    "orcidRegistry": { "string": "ORCID 레지스트리" },
+    "help": { "string": "도움" }
+  }
+}

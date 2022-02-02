@@ -1,0 +1,15 @@
+{
+  "gateway": {
+    "title": { "string": "Brána" },
+    "routes": {
+      "title": { "string": "Současné trasy" },
+      "url": { "string": "URL" },
+      "service": { "string": "Služba" },
+      "servers": { "string": "Dostupné servery" },
+      "error": { "string": "Upozornění: není k dispozici žádný server!" }
+    },
+    "refresh": {
+      "button": { "string": "Obnovit" }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "home": {
+    "title": { "string": "ORCID 회원 포털" },
+    "heading": { "string": "ORCID 회원 포털에 오신 것을 환영합니다" },
+    "mainContent": {
+      "section1": {
+        "text": {
+          "string": "ORCID 회원 포털은 기관이 ORCID 멤버십을 최대한 활용할 수 있도록 지원하는 도구 모음입니다. 사용할 수 있는 도구가 이미 몇 가지 있으며 회원이 다음을 수행할 수 있게 해 주는 다른 도구도 적극적으로 개발하고 있습니다:"
+        },
+        "bullet1": { "string": "연구원의 ORCID 기록에 대한 데이터 추가/업데이트" },
+        "bullet2": { "string": "데이터 및 보고서 액세스" },
+        "bullet3": { "string": "조직의 ORCID 회원 정보 관리" },
+        "bullet4": { "string": "조직의 ORCID API 자격 증명 관리" }
+      },
+      "section2": {
+        "text": { "string": "현재 사용 가능한 도구:" },
+        "affiliationManager": {
+          "heading": { "string": "제휴 관리자" },
+          "description": {
+            "string": "제휴 관리자는 ORCID를 기존 시스템에 직접 통합하거나 ORCID 지원 공급업체 시스템을 확보할 필요 없이 CSV 파일을 사용하여 연구원을 대신하여 제휴 정보를 추가하고 업데이트할 수 있도록 하여 제휴 정보(고용, 교육 등)를 ORCID 기록에 추가하는 프로세스를 단순화합니다. 컨소시엄 회원만 사용할 수 있습니다."
+          },
+          "requestAccessNow": { "string": "지금 액세스를 요청하세요!" }
+        },
+        "memberReporting": {
+          "heading": { "string": "회원 보고" },
+          "description": {
+            "string": "회원 보고는 조직이 회원 및 통합 통계를 쉽게 확인하고 다운로드할 수 있도록 모든 회원에 대한 실시간 보고를 제공합니다."
+          }
+        }
+      },
+      "section3": {
+        "heading": { "string": "리소스" },
+        "table": {
+          "line1": {
+            "heading": { "string": "계정 관리 가이드" },
+            "description": { "string": "회원 포털에 대한 사용자 액세스 관리 방법 안내" }
+          },
+          "line2": {
+            "heading": { "string": "제휴 관리자 안내" },
+            "description": { "string": "제휴 관리자를 사용할 기관의 직원을 위한 가이드" }
+          },
+          "line3": {
+            "heading": { "string": "회원 보고 안내" },
+            "description": { "string": "회원 보고서 읽는 방법 안내" }
+          }
+        }
+      },
+      "section4": {
+        "heading": { "string": "지원 문의처" },
+        "text": { "string": "회원 포털에 대한 도움이나 질문이 있는 경우 다음으로 연락해 주세요." },
+        "bullet1": {
+          "text": { "string": "귀하의" },
+          "linkText": { "string": "컨소시엄 주관 조직" }
+        },
+        "bullet2": {
+          "text": { "string": "또는 이메일:" },
+          "email": { "string": "membership@orcid.org" }
+        }
+      }
+    },
+    "alert": {
+      "thisSiteIsFor": {
+        "string": "이 사이트는 ORCID 회원 조직 관리자용으로 ORCID 레지스트리와 별개입니다. ORCID 레지스트리로 이동하여"
+      },
+      "signIntoOrcid": { "string": "ORCID 기록에 로그인" }
+    },
+    "logged": {
+      "message": { "string": "\"{{username}}\" 사용자로 로그인했습니다." }
+    }
+  }
+}

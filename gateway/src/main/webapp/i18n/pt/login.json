@@ -1,0 +1,28 @@
+{
+  "login": {
+    "title": { "string": "Iniciar sessão" },
+    "form": {
+      "password": {
+        "label": { "string": "Palavra-passe" },
+        "placeholder": { "string": "A sua palavra-passe" }
+      },
+      "rememberme": { "string": "Lembrar-me" },
+      "button": { "string": "Iniciar sessão" },
+      "mfaCode": {
+        "prompt": { "string": "Introduza o código MFA da sua aplicação autenticadora" },
+        "error": { "string": "Código MFA inválido" },
+        "label": { "string": "Código MFA" }
+      }
+    },
+    "messages": {
+      "error": {
+        "authentication": {
+          "string": "<strong>Erro ao iniciar sessão!</strong> Por favor verifique as suas credenciais e tente novamente."
+        }
+      }
+    },
+    "password": {
+      "forgot": { "string": "Esqueceu-se da sua palavra-passe?" }
+    }
+  }
+}

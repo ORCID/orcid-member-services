@@ -1,0 +1,112 @@
+{
+  "error": {
+    "assertion": {
+      "validation": {
+        "duplicate": { "string": "Affiliazione duplicata. Questa affiliazione è stata già creata." }
+      }
+    }
+  },
+  "gatewayApp": {
+    "assertionServiceAssertion": {
+      "home": {
+        "title": { "string": "Affiliazioni" },
+        "createLabel": { "string": "Aggiungi affiliazione" },
+        "createOrEditLabel": { "string": "Aggiungi o modifica affiliazione" },
+        "notFound": { "string": "Nessuna affiliazione trovata" },
+        "uploadLabel": { "string": "Importa affiliazioni da CSV" },
+        "getLinks": { "string": "Link per i permessi di download" },
+        "generateReport": { "string": "Scarica il rapporto sullo stato dell'affiliazione\n" },
+        "exportForEdit": { "string": "Scarica le affiliazioni per la modifica" },
+        "forHelpTroubleshooting": {
+          "string": "Se hai bisogno di aiuto per risolvere questo problema, contatta il tuo responsabile di consorzio oppure usa l'indirizzo membership@orcid.org. Allega uno screenshot del messaggio di errore qui sotto."
+        }
+      },
+      "delete": {
+        "question": { "string": "Sei sicuro di voler eliminare questa affiliazione per {{ email }}?" },
+        "note": { "string": "Questa affiliazione verrà eliminata anche dal record ORCID dell'utente." },
+        "noteRevoked": {
+          "string": "Questa affiliazione verrà eliminata dal Portale membri ma rimarrà in ORCID. L'utente ha revocato l'accesso al proprio record ORCID e non disponi più dell'autorizzazione per eliminare questo elemento dal suo record ORCID."
+        },
+        "error": { "string": "Spiacenti, questa affiliazione non può essere eliminata." },
+        "userRevokedAccess": {
+          "string": "Questo utente ha revocato l'accesso al proprio record ORCID e non hai più il permesso di modificare o eliminare questo elemento in ORCID"
+        }
+      },
+      "detail": {
+        "title": { "string": "Dettagli sull'affiliazione" },
+        "org": { "string": "Organizzazione" }
+      },
+      "import": {
+        "title": { "string": "Importa affiliazioni\n" },
+        "label": { "string": "Seleziona un file CSV da caricare" },
+        "filePath": { "string": "Percorso del file" },
+        "success": { "string": "Il tuo CSV è stato caricato per essere elaborato." },
+        "failure": { "string": "Si è verificato un problema nel caricamento del tuo CSV che deve essere elaborato." }
+      },
+      "addedToOrcid": { "string": "Aggiunto a ORCID\n" },
+      "updatedInOrcid": { "string": "Aggiornato in ORCID" },
+      "affiliationData": { "string": "Dati di affiliazione" },
+      "affiliationSection": { "string": "Tipo di affiliazione" },
+      "departmentName": { "string": "Dipartimento" },
+      "id": { "string": "ID" },
+      "roleTitle": { "string": "Ruolo/Titolo" },
+      "url": { "string": "URL" },
+      "startDate": { "string": "Data di inizio" },
+      "startYear": { "string": "Anno di inizio" },
+      "startMonth": { "string": "Mese di inizio" },
+      "startDay": { "string": "Giorno di inizio" },
+      "endDate": { "string": "Data di fine" },
+      "endYear": { "string": "Anno di fine" },
+      "endMonth": { "string": "Mese di fine" },
+      "endDay": { "string": "Giornata di fine" },
+      "orgName": { "string": "Nome dell'organizzazione" },
+      "orgCountry": { "string": "Paese" },
+      "orgCity": { "string": "Città" },
+      "orgRegion": { "string": "Stato/Regione" },
+      "disambiguatedOrgId": { "string": "ID organizzazione" },
+      "disambiguationSource": { "string": "Origine ID organizzazione" },
+      "externalId": { "string": "ID esterno\n" },
+      "externalIdType": { "string": "Tipo ID esterno" },
+      "externalIdUrl": { "string": "URL ID esterno\n" },
+      "putCode": { "string": "Inserisci il codice" },
+      "created": { "string": "Creato" },
+      "modified": { "string": "Modificato" },
+      "status": { "string": "Stato" },
+      "deletedFromORCID": { "string": "Eliminato da ORCID\n" },
+      "sent": { "string": "Inviato\n" },
+      "adminId": { "string": "ID amministratore" },
+      "email": { "string": "E-mail utente" },
+      "orcidId": { "string": "iD ORCID" },
+      "year": { "string": "Anno" },
+      "month": { "string": "Mese" },
+      "day": { "string": "Giorno" },
+      "permissionLink": { "string": "Link di permesso" },
+      "copyClipboard": { "string": "Copia negli appunti" },
+      "copySuccess": { "string": "Copiato negli appunti" },
+      "details": { "string": "Vedi i dettagli" },
+      "updateNote": {
+        "string": "Nota: non dimenticare di scaricare e inviare i collegamenti di autorizzazione al tuo ricercatore una volta che l'asserzione è stata salvata."
+      },
+      "uploadNote": {
+        "string": "Nota: per favore, non dimenticare di scaricare e inviare i link di autorizzazione ai tuoi ricercatori una volta completato il caricamento.\n"
+      }
+    },
+    "assertion": {
+      "firstName": { "string": "nome" },
+      "lastName": { "string": "cognome" },
+      "email": { "string": "e-mail" },
+      "affiliationSection": { "string": "tipo di affiliazione" },
+      "orgCountry": { "string": "paese dell'organizzazione\n" },
+      "orgCity": { "string": "città dell'organizzazione" },
+      "orgName": { "string": "nome organizzazione" },
+      "disambiguatedOrgId": { "string": "ID organizzazione" }
+    }
+  },
+  "assertionServiceApp": {
+    "affiliation": {
+      "created": { "string": "Affiliazione creata\n" },
+      "updated": { "string": "Affiliazione aggiornata" },
+      "deleted": { "string": "Affiliazione eliminata" }
+    }
+  }
+}

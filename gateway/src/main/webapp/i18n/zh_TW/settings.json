@@ -1,13 +1,26 @@
 {
   "settings": {
     "title": { "string": "{{username}}（你）的設定" },
+    "personalDetails": { "string": "Personal details" },
+    "security": {
+      "mfa": { "string": "Multi-factor Authentication" },
+      "heading": { "string": "Security" },
+      "mfaInstructions": { "string": "Scan the QR code using your MFA app and enter the verification code below." },
+      "preferText": { "string": "Prefer a text code?" },
+      "switchOnMfa": { "string": "Switch on MFA" },
+      "switchOffMfa": { "string": "Switch off MFA" },
+      "backupCodes": { "string": "Make a note of the following backup codes, this is the only time they will be shown." },
+      "otpError": { "string": "Incorrect verification code" },
+      "verificationCode": { "string": "Verification code" },
+      "mfaUpdated": { "string": "MFA settings updated" }
+    },
     "form": {
       "firstname": {
-        "string": "名字",
+        "label": { "string": "First Name" },
         "placeholder": { "string": "Your first name" }
       },
       "lastname": {
-        "string": "姓氏",
+        "label": { "string": "Last Name" },
         "placeholder": { "string": "Your last name" }
       },
       "language": { "string": "語言" },

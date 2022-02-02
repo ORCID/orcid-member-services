@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "title": { "string": "Nastavení pro {{username}} (vy)" },
+    "personalDetails": { "string": "Osobní " },
+    "security": {
+      "mfa": { "string": "Vícefaktorová autentizace" },
+      "heading": { "string": "Zabezpečení" },
+      "mfaInstructions": { "string": "Naskenujte QR kód pomocí aplikace MFA a zadejte ověřovací kód níže." },
+      "preferText": { "string": "Preferujete textový kód?" },
+      "switchOnMfa": { "string": "Zapnout MFA" },
+      "switchOffMfa": { "string": "Vypnout MFA" },
+      "backupCodes": { "string": "Poznamenejte si následující záložní kódy, toto je jediný případ, kdy se zobrazí." },
+      "otpError": { "string": "Nesprávný ověřovací kód" },
+      "verificationCode": { "string": "Ověřovací kód" },
+      "mfaUpdated": { "string": "Nastavení MFA aktualizováno" }
+    },
+    "form": {
+      "firstname": {
+        "label": { "string": "Křestní jméno" },
+        "placeholder": { "string": "Vaše křestní jméno" }
+      },
+      "lastname": {
+        "label": { "string": "Příjmení" },
+        "placeholder": { "string": "Vaše přijmení" }
+      },
+      "language": { "string": "Jazyk" },
+      "button": { "string": "Uložit" }
+    },
+    "messages": {
+      "error": {
+        "fail": { "string": "<strong>Vyskytla se chyba!</strong> Nastavení nemohlo být uloženo." },
+        "emailexists": { "string": "<strong>E-mail se již používá!</strong> Vyberte prosím jiný." }
+      },
+      "success": { "string": "<strong>Nastavení uloženo!</strong>" },
+      "validate": {
+        "firstname": {
+          "required": { "string": "Vaše křestní jméno je povinné." },
+          "minlength": { "string": "Vaše jméno musí obsahovat alespoň jeden znak" },
+          "maxlength": { "string": "Křestní jméno nesmí být delší než 50 znaků" }
+        },
+        "lastname": {
+          "required": { "string": "Vaše příjmení musí být uvedeno." },
+          "minlength": { "string": "Vaše příjmení musí obsahovat alespoň jeden znak" },
+          "maxlength": { "string": "Vaše příjmení nesmí být delší než 50 znaků" }
+        }
+      }
+    }
+  }
+}

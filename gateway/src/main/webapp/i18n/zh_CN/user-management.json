@@ -1,0 +1,30 @@
+{
+  "userManagement": {
+    "home": {
+      "title": { "string": "用户" },
+      "createLabel": { "string": "创建新用户" },
+      "createOrEditLabel": { "string": "创建或编辑用户" }
+    },
+    "created": { "string": "已创建标识符为 {{ param }} 的新用户" },
+    "updated": { "string": "已更新标识符为 {{ param }} 的用户" },
+    "deleted": { "string": "已删除标识符为 {{ param }} 的用户" },
+    "delete": {
+      "question": { "string": "确定要删除用户 {{ login }} 吗？" }
+    },
+    "detail": {
+      "title": { "string": "用户" }
+    },
+    "login": { "string": "登录" },
+    "firstName": { "string": "名字" },
+    "lastName": { "string": "姓氏" },
+    "email": { "string": "电子邮件" },
+    "activated": { "string": "已激活" },
+    "deactivated": { "string": "已停用" },
+    "profiles": { "string": "个人资料" },
+    "langKey": { "string": "语言" },
+    "createdBy": { "string": "创建者" },
+    "createdDate": { "string": "创建日期" },
+    "lastModifiedBy": { "string": "修改者" },
+    "lastModifiedDate": { "string": "修改日期" }
+  }
+}

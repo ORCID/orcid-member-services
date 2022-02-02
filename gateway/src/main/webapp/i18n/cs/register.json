@@ -1,0 +1,24 @@
+{
+  "register": {
+    "title": { "string": "Registrace" },
+    "form": {
+      "button": { "string": "Registrovat" }
+    },
+    "messages": {
+      "validate": {
+        "login": {
+          "required": { "string": "Je vyžadováno vaše uživatelské jméno." },
+          "minlength": { "string": "Vaše uživatelské jméno musí mít alespoň 1 znak." },
+          "maxlength": { "string": "Vaše uživatelské jméno nesmí být delší než 50 znaků." },
+          "pattern": { "string": "Vaše uživatelské jméno může obsahovat pouze písmena a číslice." }
+        }
+      },
+      "success": { "string": "<strong>Registrace uložena!</strong> Zkontrolujte prosím svůj e-mail pro potvrzení." },
+      "error": {
+        "fail": { "string": "<strong>Registrace se nezdařila!</strong> Zkuste to později." },
+        "userexists": { "string": "<strong>Přihlašovací jméno je již zaregistrováno!</strong> Vyberte prosím jiné." },
+        "emailexists": { "string": "<strong>E-mail se již používá!</strong> Vyberte prosím jiný." }
+      }
+    }
+  }
+}

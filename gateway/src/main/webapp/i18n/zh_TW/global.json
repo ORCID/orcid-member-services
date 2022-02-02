@@ -43,19 +43,6 @@
         "msUserServiceMSMember": { "string": "管理成員" },
         "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
       },
-      "dev": {
-        "main": { "string": "系統監控" },
-        "gateway": { "string": "閘道" },
-        "tracker": { "string": "使用者追蹤器" },
-        "metrics": { "string": "度量" },
-        "health": { "string": "健康" },
-        "configuration": { "string": "設定" },
-        "logs": { "string": "日誌" },
-        "audits": { "string": "審計" },
-        "apidocs": { "string": "應用程式介面" },
-        "database": { "string": "資料庫" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster 會在此處新增額外的選單物件（不要翻譯！）" }
-      },
       "language": { "string": "語言" }
     },
     "form": {

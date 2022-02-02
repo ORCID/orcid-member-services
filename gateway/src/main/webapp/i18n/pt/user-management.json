@@ -1,0 +1,30 @@
+{
+  "userManagement": {
+    "home": {
+      "title": { "string": "Utilizadores" },
+      "createLabel": { "string": "Criar um novo utilizador" },
+      "createOrEditLabel": { "string": "Crie ou edite um utilizador" }
+    },
+    "created": { "string": "Foi criado um novo utilizador com o identificador {{ param }}" },
+    "updated": { "string": "Um utilizador é atualizado com o identificador {{ param }}" },
+    "deleted": { "string": "Um utilizador é eliminado com o identificador {{ param }}" },
+    "delete": {
+      "question": { "string": "Tem a certeza de que quer eliminar o utilizador {{ login }}?" }
+    },
+    "detail": {
+      "title": { "string": "Utilizador" }
+    },
+    "login": { "string": "Início de sessão" },
+    "firstName": { "string": "Primeiro nome" },
+    "lastName": { "string": "Apelido" },
+    "email": { "string": "E-mail" },
+    "activated": { "string": "Ativado" },
+    "deactivated": { "string": "Desativado" },
+    "profiles": { "string": "Perfis" },
+    "langKey": { "string": "Idioma" },
+    "createdBy": { "string": "Criado por" },
+    "createdDate": { "string": "Data Criada" },
+    "lastModifiedBy": { "string": "Modificado por" },
+    "lastModifiedDate": { "string": "Data modificada" }
+  }
+}

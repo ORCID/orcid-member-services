@@ -1,0 +1,31 @@
+{
+  "error": {
+    "title": { "string": "无法处理您的请求" },
+    "subtitle": { "string": "抱歉，出错了" },
+    "http": {
+      "400": { "string": "请求错误。" },
+      "403": { "string": "您没有访问此页面的权限。" },
+      "404": { "string": "此页面不存在。" },
+      "405": { "string": "此 URL 不支持您使用的 HTTP 动词。" },
+      "500": { "string": "内部服务器错误。" }
+    },
+    "concurrencyFailure": { "string": "其他用户与您同时修改了此数据。您的更改已被拒绝。" },
+    "validation": { "string": "服务器验证错误。" },
+    "email": { "string": "电子邮件不是有效格式" },
+    "size": { "string": "不符合最小/最大要求！" },
+    "idused": { "string": "无法清除！它已与其他元素关联。" },
+    "pattern": { "string": "此字段只能包含字母、数字和电子邮件地址。" },
+    "invalidUrl": { "string": "URL 无效" },
+    "deleteAssertionsForSalesforceId": { "string": "无法删除会员断言。" },
+    "disambiguationSource": { "string": "组织源不能为空。" },
+    "emailUsed": { "string": "该电子邮件已注册" },
+    "ownerExists": { "string": "组织已有所有者。" },
+    "memberNotFound": { "string": "找不到具有 salesForceId {{ params }} 的会员" },
+    "salesForceIdUsed": { "string": "已存在具有该 Salesforce ID 的会员" },
+    "affiliationOtherOrganization": { "string": "此机构不属于您的组织" },
+    "emailAffiliationUsed": {
+      "string": "无法添加机构。已存在 {{ params }} 机构，并且其属于另一组织。"
+    },
+    "memberNameUsed": { "string": "已存在具有此名称的会员" }
+  }
+}

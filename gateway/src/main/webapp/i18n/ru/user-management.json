@@ -1,0 +1,30 @@
+{
+  "userManagement": {
+    "home": {
+      "title": { "string": "Пользователи" },
+      "createLabel": { "string": "Создать нового пользователя" },
+      "createOrEditLabel": { "string": "Создать или редактировать пользователя" }
+    },
+    "created": { "string": "Новый пользователь создается с идентификатором {{ param }}" },
+    "updated": { "string": "Пользователь обновлен с идентификатором {{ param }}" },
+    "deleted": { "string": "Уделен пользователь с идентификатором {{ param }}" },
+    "delete": {
+      "question": { "string": "Вы уверены, что хотите удалить пользователя {{ login }}?" }
+    },
+    "detail": {
+      "title": { "string": "Пользователь" }
+    },
+    "login": { "string": "Вход" },
+    "firstName": { "string": "Имя" },
+    "lastName": { "string": "Фамилия" },
+    "email": { "string": "Электронная почта" },
+    "activated": { "string": "Активировано" },
+    "deactivated": { "string": "Деактивировано" },
+    "profiles": { "string": "Профили" },
+    "langKey": { "string": "Язык" },
+    "createdBy": { "string": "Создано" },
+    "createdDate": { "string": "Дата создания" },
+    "lastModifiedBy": { "string": "Изменено" },
+    "lastModifiedDate": { "string": "Дата изменения" }
+  }
+}

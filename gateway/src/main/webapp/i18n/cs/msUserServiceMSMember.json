@@ -1,0 +1,55 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSMember": {
+      "home": {
+        "title": { "string": "Spravovat členy" },
+        "createLabel": { "string": "Přidat člena" },
+        "createOrEditLabel": { "string": "Přidat nebo upravit člena" },
+        "notFound": { "string": "Žádní členové k zobrazení" },
+        "uploadLabel": { "string": "Importovat členy z CSV" }
+      },
+      "delete": {
+        "question": { "string": "Jste si jisti, že chcete odstranit {{ clientName }} z členského portálu?" },
+        "anyUsersAndAffiliations": {
+          "string": "Všichni uživatelé a afiliace spojená s tímto členem budou také smazáni z Členského portálu, avšak data přidaná do registru ORCID zůstanou v ORCID."
+        }
+      },
+      "detail": {
+        "title": { "string": "Podrobnosti člena" }
+      },
+      "import": {
+        "title": { "string": "Importovat členy" },
+        "label": { "string": "Vyberte CSV soubor, který chcete nahrát" },
+        "emptyFile": { "string": "Neexistuje žádný soubor k nahrání. Prosím vyberte jeden." },
+        "filePath": { "string": "Cesta k souboru" },
+        "errors": {
+          "label": { "string": "Jejda! Při zpracování vašich údajů došlo k problému. Opravte prosím níže uvedené chyby a zkuste to znovu" }
+        }
+      },
+      "clientId": {
+        "label": { "string": "Id klienta" },
+        "note": { "string": "Poznámka: ID klienta musí mít povoleno Member OBO A" },
+        "addedAsRedirect": { "string": "přidáno jako URI přesměrování do" }
+      },
+      "clientName": { "string": "Jméno člena" },
+      "clientSecret": { "string": "Klientské tajemství" },
+      "salesforceId": { "string": "Salesforce ID" },
+      "parentSalesforceId": { "string": "Nadřazené Salesforce ID" },
+      "isConsortiumLead": { "string": "Vedení konsorcia" },
+      "assertionServiceEnabled": { "string": "Aserce aktivovány" },
+      "createdBy": { "string": "Vytvořil" },
+      "createdDate": { "string": "Vytvořeno" },
+      "lastModifiedBy": { "string": "Naposledy změněno" },
+      "lastModifiedDate": { "string": "Naposledy upraveno" },
+      "type": { "string": "Typ" },
+      "status": { "string": "Stav" }
+    }
+  },
+  "memberServiceApp": {
+    "member": {
+      "created": { "string": "Člen vytvořen" },
+      "updated": { "string": "Člen byl úspěšně aktualizován" },
+      "deleted": { "string": "Člen úspěšně vymazán" }
+    }
+  }
+}

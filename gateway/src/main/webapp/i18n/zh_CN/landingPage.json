@@ -1,0 +1,29 @@
+{
+  "landingPage": {
+    "title": { "string": "ORCID 会员服务" },
+    "connectionExists": {
+      "youHaveAlready": { "string": "您已授予" },
+      "permissionToUpdate": { "string": "权限以更新您的 ORCID 记录" },
+      "youDoNot": { "string": "目前您不需要执行更多操作了。" },
+      "differentUser": {
+        "string": "该授权链接已被使用。请联系 {{ clientName }} 获取新的授权链接。"
+      }
+    },
+    "error": {
+      "somethingWentWrong": { "string": "哎呀，出错了，我们无法获取您的 ORCID iD" }
+    },
+    "denied": {
+      "youHaveDenied": { "string": "哎呀，您的访问被拒。" },
+      "willNotBeAble": { "string": "将无法更新您的 ORCID 记录。" },
+      "ifThisWas": { "string": "如果这是错误，请单击下方的按钮以授予权限。" },
+      "grantAccess": { "string": "允许 {{ clientName }} 更新我的 ORCID 记录" }
+    },
+    "success": {
+      "thanks": { "string": "非常感谢，{{ given_name }} {{ family_name }}" },
+      "youHaveSuccessfully": {
+        "string": "您已成功向 {{ clientName }} 授予更新您的 ORCID 记录的权限，您的记录将随机构信息一同更新。"
+      },
+      "ifYouFind": { "string": "如果您发现添加到您的 ORCID 记录的数据错误，请联系 {{ clientName }}" }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "gatewayApp": {
+    "AffiliationSection": {
+      "null": { "string": "" },
+      "EMPLOYMENT": { "string": "ZAMĚSTNÁNÍ" },
+      "EDUCATION": { "string": "VZDĚLÁNÍ" },
+      "QUALIFICATION": { "string": "KVALIFIKACE" },
+      "INVITED_POSITION": { "string": "POZVANÁ_POZICE" },
+      "DISTINCTION": { "string": "ODLIŠENÍ" },
+      "MEMBERSHIP": { "string": "ČLENSTVÍ" },
+      "SERVICE": { "string": "SLUŽBA" }
+    }
+  }
+}

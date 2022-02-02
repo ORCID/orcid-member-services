@@ -7,7 +7,7 @@
       "integration": {
         "title": { "string": "統合レポート" }
       },
-      "consortium": {
+      "consortia": {
         "title": { "string": "コンソーシアムレポート" }
       }
     }

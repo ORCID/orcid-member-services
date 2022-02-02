@@ -1,0 +1,15 @@
+{
+  "gatewayApp": {
+    "report": {
+      "member": {
+        "title": { "string": "会员报告" }
+      },
+      "integration": {
+        "title": { "string": "整合报告" }
+      },
+      "consortia": {
+        "title": { "string": "财团报告" }
+      }
+    }
+  }
+}

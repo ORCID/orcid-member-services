@@ -1,0 +1,33 @@
+{
+  "error": {
+    "title": { "string": "O seu pedido não pode ser processado" },
+    "subtitle": { "string": "Desculpe, ocorreu um erro" },
+    "http": {
+      "400": { "string": "Bad request." },
+      "403": { "string": "Não está autorizado a aceder a esta página." },
+      "404": { "string": "Esta página não existe." },
+      "405": { "string": "O verbo HTTP que utilizou não é suportado para este URL." },
+      "500": { "string": "Erro de servidor interno." }
+    },
+    "concurrencyFailure": {
+      "string": "Outro utilizador alterou estes dados ao mesmo tempo que você. As suas alterações foram rejeitadas."
+    },
+    "validation": { "string": "Erro de validação no servidor." },
+    "email": { "string": "O formato do e-mail não é válido" },
+    "size": { "string": "Não cumpre os requisitos mínimos/máximos de tamanho" },
+    "idused": { "string": "Não pode ser eliminado! Tem uma relação com outros elementos." },
+    "pattern": { "string": "Este campo só pode conter letras, dígitos e endereços de e-mail." },
+    "invalidUrl": { "string": "O URL é inválido" },
+    "deleteAssertionsForSalesforceId": { "string": "Não foi possível apagar declarações do membro." },
+    "disambiguationSource": { "string": "A fonte da organização não pode estar vazia." },
+    "emailUsed": { "string": "Este e-mail já está registado" },
+    "ownerExists": { "string": "A organização já tem um proprietário." },
+    "memberNotFound": { "string": "Não foi possível encontrar o membro com a salesForceId: {{ params }}" },
+    "salesForceIdUsed": { "string": "Já existe um membro com essa identificação da força de vendas" },
+    "affiliationOtherOrganization": { "string": "Estas afiliações não pertencem à sua organização" },
+    "emailAffiliationUsed": {
+      "string": "Não foi possível adicionar a afiliação. Já existe uma afiliação para {{ params }} e pertence a outra organização."
+    },
+    "memberNameUsed": { "string": "Já existe um membro com esse nome" }
+  }
+}

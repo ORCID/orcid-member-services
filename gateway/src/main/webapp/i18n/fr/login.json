@@ -3,11 +3,16 @@
     "title": { "string": "Se connecter" },
     "form": {
       "password": {
-        "string": "Mot de passe",
-        "placeholder": { "string": "Your password" }
+        "label": { "string": "Mot de passe" },
+        "placeholder": { "string": "Votre mot de passe" }
       },
       "rememberme": { "string": "Se souvenir de moi" },
-      "button": { "string": "Se connecter" }
+      "button": { "string": "Se connecter" },
+      "mfaCode": {
+        "prompt": { "string": "Veuillez entrer le code MFA de votre application d'authentification" },
+        "error": { "string": "Code MFA non valide" },
+        "label": { "string": "Code MFA\n" }
+      }
     },
     "messages": {
       "error": {

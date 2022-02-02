@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": { "string": "Aktivace" },
+    "messages": {
+      "success": { "string": "<strong>Váš uživatelský účet byl aktivován.</strong> Prosím" },
+      "error": { "string": "<strong>Vašeho uživatele nelze aktivovat.</strong> Zaregistrujte se pomocí registračního formuláře." }
+    }
+  }
+}

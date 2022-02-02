@@ -1,0 +1,15 @@
+{
+  "gateway": {
+    "title": { "string": "网关" },
+    "routes": {
+      "title": { "string": "当前路径" },
+      "url": { "string": "URL" },
+      "service": { "string": "服务" },
+      "servers": { "string": "可用服务器" },
+      "error": { "string": "警告：没有可用的服务器！" }
+    },
+    "refresh": {
+      "button": { "string": "刷新" }
+    }
+  }
+}

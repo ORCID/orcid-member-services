@@ -1,0 +1,112 @@
+{
+  "error": {
+    "assertion": {
+      "validation": {
+        "duplicate": { "string": "Повторяющаяся аффилиация. Эта аффилиация уже создана." }
+      }
+    }
+  },
+  "gatewayApp": {
+    "assertionServiceAssertion": {
+      "home": {
+        "title": { "string": "Принадлежность" },
+        "createLabel": { "string": "Добавить принадлежность" },
+        "createOrEditLabel": { "string": "Добавить или редактировать принадлежность" },
+        "notFound": { "string": "Аффилиаций не найдено" },
+        "uploadLabel": { "string": "Импортировать принадлежности из CSV" },
+        "getLinks": { "string": "Скачать ссылки на разрешения" },
+        "generateReport": { "string": "Скачать отчет о статусе аффилиации" },
+        "exportForEdit": { "string": "Загрузить сведения о членстве для редактирования" },
+        "forHelpTroubleshooting": {
+          "string": "Если вам требуется помощь в устранении этой ошибки, обратитесь к руководителю вашего консорциума либо напишите по адресу membership@orcid.org. Приложите снимок экрана с сообщением об ошибке ниже."
+        }
+      },
+      "delete": {
+        "question": { "string": "Вы действительно хотите удалить эту аффилиацию для {{ email }}?" },
+        "note": { "string": "Эта аффилиация также будет удалена из записи ORCID пользователя." },
+        "noteRevoked": {
+          "string": "Эта принадлежность будет удалена с Портала для участников, но останется в ORCID. Пользователь отозвал доступ к своему профилю ORCID, и у вас больше нет разрешения на удаление этого элемента из его профиля ORCID."
+        },
+        "error": { "string": "Извините, эту принадлежность нельзя удалить." },
+        "userRevokedAccess": {
+          "string": "Пользователь отозвал доступ к своей записи ORCID, и у вас больше нет разрешения на редактирование или удаление этого элемента в ORCID."
+        }
+      },
+      "detail": {
+        "title": { "string": "Сведения о принадлежности" },
+        "org": { "string": "Организация" }
+      },
+      "import": {
+        "title": { "string": "Импортировать принадлежности" },
+        "label": { "string": "Выберите CSV-файл для загрузки" },
+        "filePath": { "string": "Путь к файлу" },
+        "success": { "string": "Ваш CSV-файл загружен для обработки." },
+        "failure": { "string": "При загрузке вашего CSV-файла для обработки возникла проблема." }
+      },
+      "addedToOrcid": { "string": "Добавлено в ORCID" },
+      "updatedInOrcid": { "string": "Обновлено в ORCID" },
+      "affiliationData": { "string": "Данные о принадлежности" },
+      "affiliationSection": { "string": "Тип принадлежности" },
+      "departmentName": { "string": "Отдел" },
+      "id": { "string": "ID" },
+      "roleTitle": { "string": "Роль/форма обращения" },
+      "url": { "string": "URL-адрес" },
+      "startDate": { "string": "Дата начала" },
+      "startYear": { "string": "Год начала" },
+      "startMonth": { "string": "Начать месяц" },
+      "startDay": { "string": "День начала" },
+      "endDate": { "string": "Дата окончания" },
+      "endYear": { "string": "Год окончания" },
+      "endMonth": { "string": "Месяц окончания" },
+      "endDay": { "string": "День окончания" },
+      "orgName": { "string": "Название организации" },
+      "orgCountry": { "string": "Страна" },
+      "orgCity": { "string": "Город" },
+      "orgRegion": { "string": "Штат/регион" },
+      "disambiguatedOrgId": { "string": "ID организации" },
+      "disambiguationSource": { "string": "Источник идентификатора организации" },
+      "externalId": { "string": "Внешний идентификатор" },
+      "externalIdType": { "string": "Тип внешнего ID" },
+      "externalIdUrl": { "string": "URL внешнего идентификатора" },
+      "putCode": { "string": "Пут-код" },
+      "created": { "string": "Создано" },
+      "modified": { "string": "Изменено" },
+      "status": { "string": "Статус" },
+      "deletedFromORCID": { "string": "Удалено из ORCID" },
+      "sent": { "string": "Отправлено" },
+      "adminId": { "string": "Идентификатор администратора" },
+      "email": { "string": "Эл. адрес пользователя" },
+      "orcidId": { "string": "Идентификатор ORCID" },
+      "year": { "string": "Год" },
+      "month": { "string": "Месяц" },
+      "day": { "string": "День" },
+      "permissionLink": { "string": "Ссылка на разрешение" },
+      "copyClipboard": { "string": "Копировать в буфер обмена" },
+      "copySuccess": { "string": "Скопировано в буфер обмена" },
+      "details": { "string": "Просмотреть подробности" },
+      "updateNote": {
+        "string": "Примечание: не забудьте загрузить и отправить ссылки разрешений вашему исследователю после сохранения утверждения."
+      },
+      "uploadNote": {
+        "string": "Примечание: после завершения загрузки не забудьте загрузить и отправить своим исследователям ссылки с разрешениями."
+      }
+    },
+    "assertion": {
+      "firstName": { "string": "имя" },
+      "lastName": { "string": "фамилия" },
+      "email": { "string": "электронная почта" },
+      "affiliationSection": { "string": "тип принадлежности" },
+      "orgCountry": { "string": "страна организации" },
+      "orgCity": { "string": "город организации" },
+      "orgName": { "string": "название организации" },
+      "disambiguatedOrgId": { "string": "идентификатор организации" }
+    }
+  },
+  "assertionServiceApp": {
+    "affiliation": {
+      "created": { "string": "Аффилиация создана" },
+      "updated": { "string": "Аффилиация обновлена" },
+      "deleted": { "string": "Аффилиация удалена" }
+    }
+  }
+}

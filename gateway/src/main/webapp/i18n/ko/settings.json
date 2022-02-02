@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "title": { "string": "{{username}}(사용자)에 대한 설정" },
+    "personalDetails": { "string": "개인 신상 명세" },
+    "security": {
+      "mfa": { "string": "다요소 인증" },
+      "heading": { "string": "보안" },
+      "mfaInstructions": { "string": "MFA 앱을 사용하여 QR 코드를 스캔하고 아래에 인증 코드를 입력하세요." },
+      "preferText": { "string": "텍스트 코드를 선호하시나요?" },
+      "switchOnMfa": { "string": "MFA 켜기" },
+      "switchOffMfa": { "string": "MFA 끄기" },
+      "backupCodes": { "string": "다음 백업 코드를 기록해 두세요. 해당 코드는 이번만 표시됩니다." },
+      "otpError": { "string": "잘못된 인증 코드" },
+      "verificationCode": { "string": "인증 코드" },
+      "mfaUpdated": { "string": "MFA 설정 업데이트됨" }
+    },
+    "form": {
+      "firstname": {
+        "label": { "string": "이름" },
+        "placeholder": { "string": "귀하의 이름" }
+      },
+      "lastname": {
+        "label": { "string": "성" },
+        "placeholder": { "string": "귀하의 성" }
+      },
+      "language": { "string": "언어" },
+      "button": { "string": "저장" }
+    },
+    "messages": {
+      "error": {
+        "fail": { "string": "<strong>오류가 발생했습니다!</strong> 설정을 저장할 수 없습니다." },
+        "emailexists": { "string": "<strong>이미 사용 중인 이메일입니다!</strong> 다른 이메일을 선택해 주세요." }
+      },
+      "success": { "string": "<strong>설정이 저장되었습니다!</strong>" },
+      "validate": {
+        "firstname": {
+          "required": { "string": "이름은 필수 항목입니다." },
+          "minlength": { "string": "이름은 1자 이상이어야 합니다" },
+          "maxlength": { "string": "이름은 50자 이하여야 합니다" }
+        },
+        "lastname": {
+          "required": { "string": "성은 필수 항목입니다." },
+          "minlength": { "string": "성은 최소 1자여야 합니다." },
+          "maxlength": { "string": "성은 50자 이하여야 합니다." }
+        }
+      }
+    }
+  }
+}

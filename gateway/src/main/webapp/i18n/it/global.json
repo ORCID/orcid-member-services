@@ -1,0 +1,180 @@
+{
+  "global": {
+    "title": { "string": "Portale Membri ORCID" },
+    "by": { "string": "da" },
+    "false": { "string": "falso" },
+    "true": { "string": "vero" },
+    "browsehappy": {
+      "string": "Stai utilizzando un browser <strong>non aggiornato</strong>. Per favore, <a href=\"http://browsehappy.com/?locale=en\">aggiorna il tuo browser</a> per migliorare la tua esperienza.\n"
+    },
+    "warning": { "string": "Attenzione!" },
+    "isATestEnvironment": {
+      "string": "è un ambiente di test per il Portale Membri ORCID che si collega all'ambiente di test del Registro ORCID"
+    },
+    "menu": {
+      "memberPortal": { "string": "Portale membri" },
+      "beta": { "string": "Beta" },
+      "jhipster-needle-menu-add-element": { "string": "JHipster aggiungerà ulteriori voci del menu qui (non tradurre!)" },
+      "entities": {
+        "main": { "string": "Strumenti per i membri" },
+        "assertionServiceAffiliationManager": { "string": "Responsabile dell'affiliazione\n" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster aggiungerà altre entità qui (non tradurre!)" },
+        "member": { "string": "Membro" }
+      },
+      "report": {
+        "member": { "string": "Segnalazione dei membri" },
+        "integration": { "string": "Rapporto di integrazione\n" },
+        "consortium": { "string": "Resoconto sul consorzio" }
+      },
+      "account": {
+        "main": { "string": "Account" },
+        "settings": { "string": "Impostazioni" },
+        "password": { "string": "Password" },
+        "sessions": { "string": "Sessioni" },
+        "login": { "string": "Accedi" },
+        "logout": { "string": "Esci" },
+        "loggedInAs": { "string": "Accesso effettuato come" },
+        "logoutAs": { "string": "Disconnettiti come" },
+        "register": { "string": "Registrati" }
+      },
+      "admin": {
+        "main": { "string": "Amministrazione\n" },
+        "msUserServiceMSUser": { "string": "Gestisci utenti" },
+        "msUserServiceMSMember": { "string": "Gestisci i membri" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster aggiungerà ulteriori voci di menu qui (non tradurre!)" }
+      },
+      "language": { "string": "Lingua" }
+    },
+    "form": {
+      "username.label": { "string": "Nome utente" },
+      "username.placeholder": { "string": "Il tuo nome utente" },
+      "currentpassword.label": { "string": "Password attuale\n" },
+      "currentpassword.placeholder": { "string": "Password attuale" },
+      "newpassword.label": { "string": "Nuova password" },
+      "newpassword.placeholder": { "string": "Nuova password" },
+      "confirmpassword.label": { "string": "Conferma nuova password" },
+      "confirmpassword.placeholder": { "string": "Conferma la nuova password" },
+      "email.label": { "string": "Email" },
+      "email.placeholder": { "string": "La tua email" },
+      "search": { "string": "Cerca..." }
+    },
+    "messages": {
+      "info": {
+        "authenticated": {
+          "prefix": { "string": "Se vuoi" },
+          "link": { "string": "accedi" },
+          "suffix": {
+            "string": ", puoi provare gli account predefiniti:<br/>- Amministratore (login=\"admin\" e password=\"admin\") <br/>- Utente (login=\"user\" e password=\"user\").\n"
+          }
+        },
+        "register": {
+          "noaccount": { "string": "Non hai ancora un account?" },
+          "link": { "string": "Registra un nuovo account" }
+        }
+      },
+      "error": {
+        "dontmatch": { "string": "La password e la sua conferma non combaciano!" }
+      },
+      "validate": {
+        "newpassword": {
+          "required": { "string": "La tua password è obbligatoria." },
+          "minlength": { "string": "La tua password deve contenere almeno 4 caratteri.\n" },
+          "maxlength": { "string": "La password non può essere più lunga di 50 caratteri." },
+          "strength": { "string": "Sicurezza della password:\n" }
+        },
+        "confirmpassword": {
+          "required": { "string": "La tua password di conferma è obbligatoria.\n" },
+          "minlength": { "string": "La password di conferma deve contenere almeno 4 caratteri" },
+          "maxlength": { "string": "La password di conferma non può contenere più di 50 caratteri." }
+        },
+        "email": {
+          "required": { "string": "La tua email è obbligatoria." },
+          "invalid": { "string": "La tua email non è valida." },
+          "minlength": { "string": "La tua email deve contenere almeno 5 caratteri." },
+          "maxlength": { "string": "La tua e-mail non può superare i 50 caratteri." }
+        }
+      }
+    },
+    "field": {
+      "id": { "string": "ID" }
+    },
+    "ribbon": {
+      "dev": { "string": "Sviluppo" }
+    },
+    "item-count": { "string": "Visualizzazione {{first}} - {{second}} di {{total}} elementi.\n" }
+  },
+  "entity": {
+    "action": {
+      "addblob": { "string": "Aggiungi blob" },
+      "addimage": { "string": "Aggiungi un'immagine" },
+      "back": { "string": "Indietro" },
+      "cancel": { "string": "Annulla\n" },
+      "close": { "string": "Chiudi" },
+      "delete": { "string": "Elimina" },
+      "delete-from-orcid": { "string": "Elimina da ORCID" },
+      "edit": { "string": "Modifica" },
+      "open": { "string": "Apri" },
+      "save": { "string": "Salva\n" },
+      "continue": { "string": "Continua\n" },
+      "upload": { "string": "Carica\n" },
+      "activate": { "string": "Invia nuovamente l'email di attivazione" },
+      "view": { "string": "Visualizza" }
+    },
+    "detail": {
+      "field": { "string": "Campo\n" },
+      "value": { "string": "Valore" }
+    },
+    "delete": {
+      "title": { "string": "Conferma l'eliminazione" },
+      "error": { "string": "Ops, qualcosa è andato storto!" }
+    },
+    "changeOwnership": {
+      "title": { "string": "Conferma cambio di proprietà\n" },
+      "error": { "string": "Ops, qualcosa è andato storto!" }
+    },
+    "validation": {
+      "required": { "string": "Questo campo è obbligatorio." },
+      "minlength": { "string": "Questo campo deve contenere almeno {{ min }} caratteri." },
+      "maxlength": { "string": "Questo campo non può superare i {{ max }} caratteri.\n" },
+      "min": { "string": "Questo campo deve contenere almeno {{ min }}.\n" },
+      "max": { "string": "Questo campo non può contenere più di {{ max }}." },
+      "minbytes": { "string": "Questo campo deve contenere almeno {{ min }} byte." },
+      "maxbytes": { "string": "Questo campo non può superare i {{ max }} byte.\n" },
+      "pattern": { "string": "Questo campo dovrebbe seguire lo schema {{ pattern }}." },
+      "number": { "string": "Questo campo dovrebbe essere un numero." },
+      "datetimelocal": { "string": "Questo campo dovrebbe contenere una data e un'ora." },
+      "patternLogin": { "string": "Questo campo può contenere solo lettere, numeri e indirizzi email." },
+      "email": { "string": "Fornisci un indirizzo email valido." },
+      "endDate": { "string": "La data di inizio non può essere successiva alla data di fine." },
+      "disambiguatedOrgId": {
+        "string": "Questo campo è obbligatorio. L'ID organizzazione GRID deve iniziare con grid., ad esempio grid.12344, o deve essere un URL grid valido, l'ID organizzazione RINGGOLD deve essere un numero. Gli ID ROR devono essere composti da 9 caratteri e iniziare con 0."
+      }
+    }
+  },
+  "error": {
+    "internalServerError": { "string": "Errore interno del server" },
+    "server.not.reachable": { "string": "Server non raggiungibile" },
+    "url.not.found": { "string": "Non trovato" },
+    "notnull": { "string": "Il campo {{ fieldName }} non può essere vuoto!" },
+    "size": { "string": "Il campo {{ fieldName }} non soddisfa i requisiti di dimensione minima/massima!" },
+    "userexists": { "string": "Nome per l'accesso già utilizzato!" },
+    "emailexists": { "string": "E-mail già utilizzata!" },
+    "idexists": { "string": "Un nuovo {{ entityName }} non può disporre già di un ID" },
+    "delete.auth.user": { "string": "Impossibile eliminare l'utente corrente." },
+    "delete.main.contact": { "string": "Impossibile eliminare il proprietario dell'organizzazione.\n" },
+    "delete.last.admin": { "string": "Impossibile eliminare l'ultimo amministratore." },
+    "member.no.admin.allowed": { "string": "Gli utenti amministratori non possono essere associati a questo membro" },
+    "clientidinvalid": {
+      "string": "ID cliente non valido. L'ID cliente deve essere nel formato XXXX-XXXX-XXXX-XXXX or APP-XXXXXXXXXXXXXXXX. X può essere una cifra o un carattere maiuscolo\n"
+    },
+    "idnull": { "string": "ID non valido" }
+  },
+  "footer": {
+    "footerLabel": { "string": "footer" },
+    "privacyPolicy": { "string": "Informativa sulla privacy" },
+    "termsOfUse": { "string": "Condizioni di utilizzo" },
+    "contactUs": { "string": "Contattaci" },
+    "orcidRegistry": { "string": "Registro ORCID" },
+    "help": { "string": "Aiuto" }
+  }
+}

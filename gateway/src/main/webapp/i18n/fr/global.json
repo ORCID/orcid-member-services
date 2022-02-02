@@ -45,19 +45,6 @@
           "string": "JHipster ajoutera des entrées de menu supplémentaires ici (ne pas traduire !)"
         }
       },
-      "dev": {
-        "main": { "string": "Surveillance du système" },
-        "gateway": { "string": "Passerelle" },
-        "tracker": { "string": "Suivi de l'utilisateur" },
-        "metrics": { "string": "Indicateurs" },
-        "health": { "string": "Santé" },
-        "configuration": { "string": "Configuration" },
-        "logs": { "string": "Journaux" },
-        "audits": { "string": "Audits" },
-        "apidocs": { "string": "API" },
-        "database": { "string": "Base de données" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
-      },
       "language": { "string": "Langue" }
     },
     "form": {

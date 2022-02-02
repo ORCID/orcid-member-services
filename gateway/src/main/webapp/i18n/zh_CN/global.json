@@ -1,0 +1,180 @@
+{
+  "global": {
+    "title": { "string": "ORCID 会员门户" },
+    "by": { "string": "方式" },
+    "false": { "string": "false" },
+    "true": { "string": "true" },
+    "browsehappy": {
+      "string": "您使用的浏览器<strong>已过期</strong>。请<a href=\"http://browsehappy.com/?locale=en\">升级浏览器</a>，获得更好的浏览体验。"
+    },
+    "warning": { "string": "警告！" },
+    "isATestEnvironment": {
+      "string": "是关联到 ORCID 注册表测试环境的 ORCID 会员门户测试环境"
+    },
+    "menu": {
+      "memberPortal": { "string": "会员门户" },
+      "beta": { "string": "Beta 版" },
+      "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
+      "entities": {
+        "main": { "string": "会员工具" },
+        "assertionServiceAffiliationManager": { "string": "机构管理器" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "member": { "string": "会员" }
+      },
+      "report": {
+        "member": { "string": "会员报告" },
+        "integration": { "string": "整合报告" },
+        "consortium": { "string": "联盟报告" }
+      },
+      "account": {
+        "main": { "string": "账户" },
+        "settings": { "string": "设置" },
+        "password": { "string": "密码" },
+        "sessions": { "string": "会话" },
+        "login": { "string": "登录" },
+        "logout": { "string": "注销" },
+        "loggedInAs": { "string": "以此身份登录：" },
+        "logoutAs": { "string": "注销身份" },
+        "register": { "string": "注册" }
+      },
+      "admin": {
+        "main": { "string": "管理" },
+        "msUserServiceMSUser": { "string": "管理用户" },
+        "msUserServiceMSMember": { "string": "管理会员" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "language": { "string": "语言" }
+    },
+    "form": {
+      "username.label": { "string": "用户名" },
+      "username.placeholder": { "string": "您的用户名" },
+      "currentpassword.label": { "string": "当前密码" },
+      "currentpassword.placeholder": { "string": "当前密码" },
+      "newpassword.label": { "string": "新密码" },
+      "newpassword.placeholder": { "string": "新密码" },
+      "confirmpassword.label": { "string": "新密码确认" },
+      "confirmpassword.placeholder": { "string": "确认新密码" },
+      "email.label": { "string": "电子邮件" },
+      "email.placeholder": { "string": "您的电子邮件" },
+      "search": { "string": "搜索..." }
+    },
+    "messages": {
+      "info": {
+        "authenticated": {
+          "prefix": { "string": "如果您希望" },
+          "link": { "string": "登录" },
+          "suffix": {
+            "string": "，您可以尝试使用默认账户：<br/>- 管理员（login=\"admin\" ，且 password=\"admin\"） <br/>-用户（login=\"user\" 且 password=\"user\"）。"
+          }
+        },
+        "register": {
+          "noaccount": { "string": "还没有账户？" },
+          "link": { "string": "注册新账户" }
+        }
+      },
+      "error": {
+        "dontmatch": { "string": "密码及确认密码不匹配！" }
+      },
+      "validate": {
+        "newpassword": {
+          "required": { "string": "密码是必填字段。" },
+          "minlength": { "string": "您的密码必须具有至少 4 个字符。" },
+          "maxlength": { "string": "密码长度不能超过 50 个字符。" },
+          "strength": { "string": "密码强度：" }
+        },
+        "confirmpassword": {
+          "required": { "string": "确认密码是必填字段。" },
+          "minlength": { "string": "您的确认密码必须至少具有 4 个字符。" },
+          "maxlength": { "string": "确认密码长度不能超过 50 个字符。" }
+        },
+        "email": {
+          "required": { "string": "必须提供您的电子邮件。" },
+          "invalid": { "string": "您的电子邮件无效。" },
+          "minlength": { "string": "您的电子邮件必须具有至少 5 个字符。" },
+          "maxlength": { "string": "电子邮件长度不能超过 50 个字符。" }
+        }
+      }
+    },
+    "field": {
+      "id": { "string": "ID" }
+    },
+    "ribbon": {
+      "dev": { "string": "开发" }
+    },
+    "item-count": { "string": "当前显示第 {{first}} - {{second}} 个项目，共计 {{total}} 个项目。" }
+  },
+  "entity": {
+    "action": {
+      "addblob": { "string": "添加 blob" },
+      "addimage": { "string": "添加图像" },
+      "back": { "string": "返回" },
+      "cancel": { "string": "取消" },
+      "close": { "string": "关闭" },
+      "delete": { "string": "删除" },
+      "delete-from-orcid": { "string": "从 ORCID 中删除" },
+      "edit": { "string": "编辑" },
+      "open": { "string": "打开" },
+      "save": { "string": "保存" },
+      "continue": { "string": "继续" },
+      "upload": { "string": "上传" },
+      "activate": { "string": "重新发送激活电子邮件" },
+      "view": { "string": "查看" }
+    },
+    "detail": {
+      "field": { "string": "字段" },
+      "value": { "string": "值" }
+    },
+    "delete": {
+      "title": { "string": "确认删除" },
+      "error": { "string": "哎呀，出错了！" }
+    },
+    "changeOwnership": {
+      "title": { "string": "确认更改所有权" },
+      "error": { "string": "哎呀，出错了！" }
+    },
+    "validation": {
+      "required": { "string": "此字段是必填字段。" },
+      "minlength": { "string": "此字段必须具有至少 {{ min }} 个字符。" },
+      "maxlength": { "string": "此字段长度不能超过 {{ max }} 个字符。" },
+      "min": { "string": "此字段必须为至少 {{ min }}。" },
+      "max": { "string": "此字段不能超过 {{ max }}。" },
+      "minbytes": { "string": "此字段必须具有至少 {{ min }} 字节。" },
+      "maxbytes": { "string": "此字段长度不能超过 {{ max }} 字节。" },
+      "pattern": { "string": "字段应遵循 {{ pattern }} 模式。" },
+      "number": { "string": "此字段必须是数字。" },
+      "datetimelocal": { "string": "此字段必须是日期和时间。" },
+      "patternLogin": { "string": "此字段只能包含字母、数字和电子邮件地址。" },
+      "email": { "string": "请提供有效的电子邮件地址。" },
+      "endDate": { "string": "开始日期不能晚于结束日期。" },
+      "disambiguatedOrgId": {
+        "string": "此字段是必填字段。GRID 组织 ID 应以 grid. 开头，例如 grid.12344；或者应该是有效的 grid URL，RINGGOLD 组织 ID 应该是一个数字。ROR ID 必须是 9 个字符，以 0 开头。"
+      }
+    }
+  },
+  "error": {
+    "internalServerError": { "string": "内部服务器错误" },
+    "server.not.reachable": { "string": "无法连接到服务器" },
+    "url.not.found": { "string": "找不到" },
+    "notnull": { "string": "字段 {{ fieldName }} 不能为空！" },
+    "size": { "string": "字段 {{ fieldName }} 不符合最小/最大要求！" },
+    "userexists": { "string": "登录名已被使用！" },
+    "emailexists": { "string": "电子邮件已被使用！" },
+    "idexists": { "string": "新的 {{ entityName }} 不能已拥有 ID" },
+    "delete.auth.user": { "string": "无法删除当前用户。" },
+    "delete.main.contact": { "string": "无法删除组织所有者。" },
+    "delete.last.admin": { "string": "无法删除最后一个 admin。" },
+    "member.no.admin.allowed": { "string": "管理用户不得与此会员关联" },
+    "clientidinvalid": {
+      "string": "客户 ID 无效。客户 ID 格式必须是 XXXX-XXXX-XXXX-XXXX 或 APP-XXXXXXXXXXXXXXXX。X 可以是数字或大写字母"
+    },
+    "idnull": { "string": "无效 ID" }
+  },
+  "footer": {
+    "footerLabel": { "string": "页脚" },
+    "privacyPolicy": { "string": "隐私政策" },
+    "termsOfUse": { "string": "使用条款" },
+    "contactUs": { "string": "联系我们" },
+    "orcidRegistry": { "string": "ORCID 注册表" },
+    "help": { "string": "帮助" }
+  }
+}

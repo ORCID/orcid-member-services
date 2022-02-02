@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "title": { "string": "{{username}}（您）的设置" },
+    "personalDetails": { "string": "个人资料" },
+    "security": {
+      "mfa": { "string": "多因子验证" },
+      "heading": { "string": "安全性" },
+      "mfaInstructions": { "string": "使用 MFA app 扫描二维码，并输入以下验证码。" },
+      "preferText": { "string": "更喜欢文本码?" },
+      "switchOnMfa": { "string": "打开 MFA" },
+      "switchOffMfa": { "string": "关闭 MFA" },
+      "backupCodes": { "string": "请记下以下备份代码，它们只会出现这一次。" },
+      "otpError": { "string": "验证码不正确" },
+      "verificationCode": { "string": "验证码" },
+      "mfaUpdated": { "string": "MFA 设置已更新" }
+    },
+    "form": {
+      "firstname": {
+        "label": { "string": "名字" },
+        "placeholder": { "string": "您的名字" }
+      },
+      "lastname": {
+        "label": { "string": "姓" },
+        "placeholder": { "string": "您的姓氏" }
+      },
+      "language": { "string": "语言" },
+      "button": { "string": "保存" }
+    },
+    "messages": {
+      "error": {
+        "fail": { "string": "<strong>出现错误！</strong>设置无法保存。" },
+        "emailexists": { "string": "<strong>电子邮件已被使用！</strong>请选择其他电子邮件" }
+      },
+      "success": { "string": "<strong>设置已保存！</strong>" },
+      "validate": {
+        "firstname": {
+          "required": { "string": "名字是必填字段。" },
+          "minlength": { "string": "您的名字必须具有至少 1 个字符" },
+          "maxlength": { "string": "名字长度不能超过 50 个字符" }
+        },
+        "lastname": {
+          "required": { "string": "姓氏是必填字段。" },
+          "minlength": { "string": "您的姓氏必须具有至少 1 个字符" },
+          "maxlength": { "string": "姓氏长度不能超过 50 个字符" }
+        }
+      }
+    }
+  }
+}

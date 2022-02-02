@@ -1,0 +1,24 @@
+{
+  "register": {
+    "title": { "string": "Registo" },
+    "form": {
+      "button": { "string": "Registe-se" }
+    },
+    "messages": {
+      "validate": {
+        "login": {
+          "required": { "string": "É necessário o seu nome de utilizador." },
+          "minlength": { "string": "O seu nome de utilizador tem de ter pelo menos 1 caractere." },
+          "maxlength": { "string": "O seu nome de utilizador não pode ter mais do que 50 caracteres." },
+          "pattern": { "string": "O seu nome de utilizador apenas pode conter letras e números." }
+        }
+      },
+      "success": { "string": "<strong>Inscrição guardado!</strong> Por favor verifique o seu email para confirmação." },
+      "error": {
+        "fail": { "string": "<strong>O registo falhou!</strong> Tente novamente mais tarde\n" },
+        "userexists": { "string": "<strong>Nome para início de sessão já registado!</strong> Escolha um nome diferente." },
+        "emailexists": { "string": "<strong>Este email já está a ser utilizado!</strong> Por favor escolha outro." }
+      }
+    }
+  }
+}

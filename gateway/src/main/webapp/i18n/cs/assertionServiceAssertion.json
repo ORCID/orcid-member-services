@@ -1,0 +1,112 @@
+{
+  "error": {
+    "assertion": {
+      "validation": {
+        "duplicate": { "string": "Duplikovat přidružení. Toto přidružení bylo již vytvořeno." }
+      }
+    }
+  },
+  "gatewayApp": {
+    "assertionServiceAssertion": {
+      "home": {
+        "title": { "string": "Přidružení" },
+        "createLabel": { "string": "Přidat přidružení" },
+        "createOrEditLabel": { "string": "Přidat nebo upravit přidružení" },
+        "notFound": { "string": "Nenalezena žádná přidružení" },
+        "uploadLabel": { "string": "Importujte afiliace z CSV" },
+        "getLinks": { "string": "Stáhnout odkazy pro oprávnění" },
+        "generateReport": { "string": "Stáhnout zprávu o statusu přidružení" },
+        "exportForEdit": { "string": "Stáhněte si afiliace pro úpravy" },
+        "forHelpTroubleshooting": {
+          "string": "Pokud potřebujete pomoc s řešením této chyby, obraťte se prosím na své vedení konsorcia nebo na member@orcid.org. Níže přiložte snímek obrazovky s chybovou zprávou."
+        }
+      },
+      "delete": {
+        "question": { "string": "Jste si jisti, že chcete pro zrušit toto přidružení pro {{ email }}?" },
+        "note": { "string": "Toto přidružení bude také vymazáno ze záznamu ORCID daného uživatele." },
+        "noteRevoked": {
+          "string": "Toto přidružení bude smazáno z členského portálu, ale zůstane v ORCID. Uživatel zrušil přístup ke svým záznamům v ORCID a vy již nemáte oprávnění pro to, abyste mohli tuto položku ze záznamů ORCID smazat."
+        },
+        "error": { "string": "Omlouváme se, toto přidružení nemůže být vymazáno." },
+        "userRevokedAccess": {
+          "string": "Uživatel zrušil přístup ke svému záznamu ORCID a vy již nemáte oprávnění tuto položku v ORCID upravovat nebo mazat."
+        }
+      },
+      "detail": {
+        "title": { "string": "Podrobnosti o afiliaci" },
+        "org": { "string": "Organizace" }
+      },
+      "import": {
+        "title": { "string": "Importovat přidružení" },
+        "label": { "string": "Zvolte prosím soubor CSV, který se nahraje" },
+        "filePath": { "string": "Cesta k souboru" },
+        "success": { "string": "Váš CSV soubor byl nahrán ke zpracování." },
+        "failure": { "string": "Při nahrávání vašeho CSV souboru ke zpracování došlo k problému." }
+      },
+      "addedToOrcid": { "string": "Přidáno do ORCID" },
+      "updatedInOrcid": { "string": "Aktualizováno v ORCID" },
+      "affiliationData": { "string": "Data o přidružení" },
+      "affiliationSection": { "string": "Typ přidružení" },
+      "departmentName": { "string": "Oddělení" },
+      "id": { "string": "ID" },
+      "roleTitle": { "string": "Role/Funkce" },
+      "url": { "string": "URL" },
+      "startDate": { "string": "Datum začátku" },
+      "startYear": { "string": "Počáteční rok" },
+      "startMonth": { "string": "Počáteční měsíc" },
+      "startDay": { "string": "Počáteční den" },
+      "endDate": { "string": "Datum ukončení" },
+      "endYear": { "string": "Rok ukončení" },
+      "endMonth": { "string": "Konec měsíce" },
+      "endDay": { "string": "Den konce" },
+      "orgName": { "string": "Jméno organizace" },
+      "orgCountry": { "string": "Země" },
+      "orgCity": { "string": "Město" },
+      "orgRegion": { "string": "Stát/region" },
+      "disambiguatedOrgId": { "string": "ID organizace" },
+      "disambiguationSource": { "string": "Zdroj ID organizace" },
+      "externalId": { "string": "Externí ID" },
+      "externalIdType": { "string": "Typ externího ID" },
+      "externalIdUrl": { "string": "Adresa URL externího ID" },
+      "putCode": { "string": "Vložte kód" },
+      "created": { "string": "Vytvořeno" },
+      "modified": { "string": "Upraveno" },
+      "status": { "string": "Status" },
+      "deletedFromORCID": { "string": "Vymazáno z ORCID" },
+      "sent": { "string": "Odesláno" },
+      "adminId": { "string": "Identifikace správce" },
+      "email": { "string": "E-mail uživatele" },
+      "orcidId": { "string": "ORCID iD" },
+      "year": { "string": "Rok" },
+      "month": { "string": "Měsíc" },
+      "day": { "string": "Den" },
+      "permissionLink": { "string": "Odkaz na povolení" },
+      "copyClipboard": { "string": "Zkopírovat do schránky" },
+      "copySuccess": { "string": "Zkopírováno do schránky" },
+      "details": { "string": "Zobrazit detaily" },
+      "updateNote": {
+        "string": "Poznámka: Po uložení tvrzení si prosím nezapomeňte stáhnout a odeslat odkazy na povolení vašemu výzkumníkovi."
+      },
+      "uploadNote": {
+        "string": "Poznámka: Po dokončení nahrávání si nezapomeňte stáhnout a odeslat odkazy na povolení svým výzkumníkům."
+      }
+    },
+    "assertion": {
+      "firstName": { "string": "křestní jméno" },
+      "lastName": { "string": "příjmení" },
+      "email": { "string": "e-mail" },
+      "affiliationSection": { "string": "typ afiliace" },
+      "orgCountry": { "string": "země organizace" },
+      "orgCity": { "string": "město organizace" },
+      "orgName": { "string": "název organizace" },
+      "disambiguatedOrgId": { "string": "ID organizace" }
+    }
+  },
+  "assertionServiceApp": {
+    "affiliation": {
+      "created": { "string": "Přidružení vytvořeno" },
+      "updated": { "string": "Přidružení aktualizováno" },
+      "deleted": { "string": "Afiliace smazána" }
+    }
+  }
+}

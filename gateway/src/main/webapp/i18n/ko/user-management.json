@@ -1,0 +1,30 @@
+{
+  "userManagement": {
+    "home": {
+      "title": { "string": "사용자" },
+      "createLabel": { "string": "새 사용자 생성" },
+      "createOrEditLabel": { "string": "사용자 생성 또는 편집" }
+    },
+    "created": { "string": "{{ param }} 식별자로 새 사용자가 생성됩니다" },
+    "updated": { "string": "사용자는 {{ param }} 식별자로 업데이트됩니다" },
+    "deleted": { "string": "{{ param }} 식별자로 사용자가 삭제되었습니다" },
+    "delete": {
+      "question": { "string": "{{ 로그인 }} 사용자를 정말 삭제하시겠습니까?" }
+    },
+    "detail": {
+      "title": { "string": "사용자" }
+    },
+    "login": { "string": "로그인" },
+    "firstName": { "string": "이름" },
+    "lastName": { "string": "성" },
+    "email": { "string": "이메일" },
+    "activated": { "string": "활성화됨" },
+    "deactivated": { "string": "비활성화됨" },
+    "profiles": { "string": "프로필" },
+    "langKey": { "string": "언어" },
+    "createdBy": { "string": "생성자" },
+    "createdDate": { "string": "생성된 날짜" },
+    "lastModifiedBy": { "string": "수정자:" },
+    "lastModifiedDate": { "string": "수정된 날짜" }
+  }
+}

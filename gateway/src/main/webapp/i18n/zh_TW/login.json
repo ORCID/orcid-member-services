@@ -3,11 +3,16 @@
     "title": { "string": "登入" },
     "form": {
       "password": {
-        "string": "密碼",
+        "label": { "string": "Password" },
         "placeholder": { "string": "Your password" }
       },
       "rememberme": { "string": "記住我" },
-      "button": { "string": "登入" }
+      "button": { "string": "登入" },
+      "mfaCode": {
+        "prompt": { "string": "Please enter the MFA code from your authenticator app" },
+        "error": { "string": "Invalid MFA code" },
+        "label": { "string": "MFA code" }
+      }
     },
     "messages": {
       "error": {
