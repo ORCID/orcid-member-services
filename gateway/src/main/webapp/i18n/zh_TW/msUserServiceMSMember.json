@@ -27,9 +27,9 @@
         }
       },
       "clientId": {
-        "label": { "string": "Client Id" },
-        "note": { "string": "Note: Client ID must have Member OBO enabled AND" },
-        "addedAsRedirect": { "string": "added as a Redirect URI in" }
+        "label": { "string": "客戶 ID" },
+        "note": { "string": "註：客戶 ID 必須已啟用成員 OBA 和" },
+        "addedAsRedirect": { "string": "在財團報告中" }
       },
       "clientName": { "string": "成員姓名" },
       "clientSecret": { "string": "用戶端密碼" },

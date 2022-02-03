@@ -3,15 +3,15 @@
     "title": { "string": "登入" },
     "form": {
       "password": {
-        "label": { "string": "Password" },
-        "placeholder": { "string": "Your password" }
+        "label": { "string": "密碼" },
+        "placeholder": { "string": "您的密碼" }
       },
       "rememberme": { "string": "記住我" },
       "button": { "string": "登入" },
       "mfaCode": {
-        "prompt": { "string": "Please enter the MFA code from your authenticator app" },
-        "error": { "string": "Invalid MFA code" },
-        "label": { "string": "MFA code" }
+        "prompt": { "string": "請輸入您身份驗證器應用程式中的 MFA 代碼" },
+        "error": { "string": "無效的 MFA 代碼" },
+        "label": { "string": "MFA 代碼" }
       }
     },
     "messages": {

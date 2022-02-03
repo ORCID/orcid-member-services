@@ -40,8 +40,8 @@
         "title": { "string": "匯入機關" },
         "label": { "string": "請選擇欲上傳的 CSV 檔案" },
         "filePath": { "string": "檔案路徑" },
-        "success": { "string": "Your CSV has been uploaded for processing." },
-        "failure": { "string": "There was a problem uploading your CSV for processing." }
+        "success": { "string": "您的 CSV 已上傳進行處理。" },
+        "failure": { "string": "在上傳您要處理的 CSV 檔案時發生問題。" }
       },
       "addedToOrcid": { "string": "已新增至 ORCID" },
       "updatedInOrcid": { "string": "已於 ORCID 中更新" },
