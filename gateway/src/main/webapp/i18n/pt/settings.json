@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "title": { "string": "Definições para {{username}} (Você)" },
+    "personalDetails": { "string": "Dados pessoais" },
+    "security": {
+      "mfa": { "string": "Autenticação Multifatorial" },
+      "heading": { "string": "Segurança" },
+      "mfaInstructions": { "string": "Digitalize o código QR utilizando a sua aplicação MFA e introduza o código de verificação abaixo." },
+      "preferText": { "string": "Prefere um código de texto?" },
+      "switchOnMfa": { "string": "Ligar MFA" },
+      "switchOffMfa": { "string": "Desligar MFA" },
+      "backupCodes": { "string": "Anote os seguintes códigos da cópia de segurança, esta é a única vez que serão exibidos." },
+      "otpError": { "string": "Código de verificação inválido" },
+      "verificationCode": { "string": "Código de verificação" },
+      "mfaUpdated": { "string": "Configurações da MFA atualizadas" }
+    },
+    "form": {
+      "firstname": {
+        "label": { "string": "Primeiro Nome" },
+        "placeholder": { "string": "O seu primeiro nome" }
+      },
+      "lastname": {
+        "label": { "string": "Último Nome" },
+        "placeholder": { "string": "O seu último nome" }
+      },
+      "language": { "string": "Idioma" },
+      "button": { "string": "Guardar" }
+    },
+    "messages": {
+      "error": {
+        "fail": { "string": "<strong>Ocorreu um erro!</strong> Não foi possível guardar as definições." },
+        "emailexists": { "string": "<strong>O e-mail já está a ser utilizado!</strong> Escolha outro." }
+      },
+      "success": { "string": "<strong>Configurações gravadas!</strong>" },
+      "validate": {
+        "firstname": {
+          "required": { "string": "É necessário o seu primeiro nome." },
+          "minlength": { "string": "O seu primeiro nome deve ter pelo menos 1 carácter " },
+          "maxlength": { "string": "O seu primeiro nome não pode ter mais do que 50 caracteres" }
+        },
+        "lastname": {
+          "required": { "string": "É necessário o seu último nome." },
+          "minlength": { "string": "O seu último nome tem que ter pelo menos 1 caractere." },
+          "maxlength": { "string": "O seu último nome não pode ter mais de 50 caractéres" }
+        }
+      }
+    }
+  }
+}

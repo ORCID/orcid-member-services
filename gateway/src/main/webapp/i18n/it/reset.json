@@ -1,0 +1,42 @@
+{
+  "reset": {
+    "request": {
+      "title": { "string": "Reimposta la tua password" },
+      "form": {
+        "button": { "string": "Ripristina la password" }
+      },
+      "messages": {
+        "info": { "string": "Inserisci l'indirizzo e-mail che hai usato per registrarti\n" },
+        "success": { "string": "Controlla la tua email per tutti i dettagli su come ripristinare la tua password." },
+        "notfound": { "string": "<strong>L'indirizzo e-mail non è registrato!</strong> Controlla e riprova" }
+      }
+    },
+    "finish": {
+      "title": { "string": "Ripristina la password" },
+      "form": {
+        "button": { "string": "Convalida la nuova password" }
+      },
+      "messages": {
+        "info": { "string": "Scegli una nuova password\n" },
+        "success": { "string": "<strong>La tua password è stata reimpostata.</strong> Per favore\n\n" },
+        "keymissing": { "string": "Manca la chiave di attivazione." },
+        "keyinvalid": { "string": "La chiave di attivazione non è valida." },
+        "keyexpired": {
+          "string": "La chiave di attivazione è scaduta.",
+          "paragraph1": {
+            "string": "ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired."
+          },
+          "paragraph2": {
+            "string": "To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address."
+          },
+          "paragraph3": {
+            "string": "If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org."
+          }
+        },
+        "error": {
+          "string": "Impossibile ripristinare la tua password. Ti ricordiamo che la richiesta della password è valida solo per 24 ore."
+        }
+      }
+    }
+  }
+}

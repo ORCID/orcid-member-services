@@ -1,0 +1,112 @@
+{
+  "error": {
+    "assertion": {
+      "validation": {
+        "duplicate": { "string": "重复的机构。此机构已创建。" }
+      }
+    }
+  },
+  "gatewayApp": {
+    "assertionServiceAssertion": {
+      "home": {
+        "title": { "string": "机构" },
+        "createLabel": { "string": "添加机构" },
+        "createOrEditLabel": { "string": "添加或编辑机构" },
+        "notFound": { "string": "找不到机构" },
+        "uploadLabel": { "string": "从 CSV 导入机构" },
+        "getLinks": { "string": "下载权限链接" },
+        "generateReport": { "string": "下载机构状态报告" },
+        "exportForEdit": { "string": "下载待编辑的机构" },
+        "forHelpTroubleshooting": {
+          "string": "如果您需要帮助诊断此错误，请联系联盟代表或 membership@orcid.org。请提供下方错误信息的截图。"
+        }
+      },
+      "delete": {
+        "question": { "string": "确定要删除 {{ email }} 的机构吗？" },
+        "note": { "string": "此机构还将从用户的 ORCID 记录中删除。" },
+        "noteRevoked": {
+          "string": "此机构将从会员门户中删除，但仍会保留在 ORCID 中。 用户已撤销对其 ORCID 记录的访问权限，您不再有权从其 ORCID 记录中删除此项目。"
+        },
+        "error": { "string": "抱歉，此机构无法删除。" },
+        "userRevokedAccess": {
+          "string": "用户已撤销对其 ORCID 记录的访问权限，您不再有权在 ORCID 中编辑或删除此项目。"
+        }
+      },
+      "detail": {
+        "title": { "string": "机构详细信息" },
+        "org": { "string": "组织" }
+      },
+      "import": {
+        "title": { "string": "导入机构" },
+        "label": { "string": "请选择待上传的 CSV 文件" },
+        "filePath": { "string": "文件路径" },
+        "success": { "string": "您的 CSV 文件已上传待处理。" },
+        "failure": { "string": "上传 CSV 文件以进行处理时出现问题。" }
+      },
+      "addedToOrcid": { "string": "已添加至 ORCID" },
+      "updatedInOrcid": { "string": "已在 ORCID 中更新" },
+      "affiliationData": { "string": "机构数据" },
+      "affiliationSection": { "string": "机构类型" },
+      "departmentName": { "string": "部门" },
+      "id": { "string": "ID" },
+      "roleTitle": { "string": "角色/职位" },
+      "url": { "string": "URL" },
+      "startDate": { "string": "开始日期" },
+      "startYear": { "string": "开始年份" },
+      "startMonth": { "string": "开始月份" },
+      "startDay": { "string": "开始日期" },
+      "endDate": { "string": "结束日期" },
+      "endYear": { "string": "结束年" },
+      "endMonth": { "string": "结束月份" },
+      "endDay": { "string": "结束日期" },
+      "orgName": { "string": "组织名称" },
+      "orgCountry": { "string": "国家/地区" },
+      "orgCity": { "string": "城市" },
+      "orgRegion": { "string": "州/地区" },
+      "disambiguatedOrgId": { "string": "组织 ID" },
+      "disambiguationSource": { "string": "组织 ID 源" },
+      "externalId": { "string": "外部 ID" },
+      "externalIdType": { "string": "外部 ID 类型" },
+      "externalIdUrl": { "string": "外部 ID URL" },
+      "putCode": { "string": "放置代码" },
+      "created": { "string": "已创建" },
+      "modified": { "string": "已修改" },
+      "status": { "string": "状态" },
+      "deletedFromORCID": { "string": "从 ORCID 中删除" },
+      "sent": { "string": "已发送" },
+      "adminId": { "string": "Admin ID" },
+      "email": { "string": "用户电子邮件" },
+      "orcidId": { "string": "ORCID iD" },
+      "year": { "string": "年" },
+      "month": { "string": "月" },
+      "day": { "string": "天" },
+      "permissionLink": { "string": "权限链接" },
+      "copyClipboard": { "string": "复制到剪贴板" },
+      "copySuccess": { "string": "已复制到剪贴板" },
+      "details": { "string": "查看详细信息" },
+      "updateNote": {
+        "string": "注意：断言保存后，别忘了下载权限链接并将其发送给研究人员。"
+      },
+      "uploadNote": {
+        "string": "注意：上传完成后，别忘了下载权限链接并将其发送给研究人员。"
+      }
+    },
+    "assertion": {
+      "firstName": { "string": "名字" },
+      "lastName": { "string": "姓氏" },
+      "email": { "string": "电子邮件" },
+      "affiliationSection": { "string": "机构类型" },
+      "orgCountry": { "string": "组织国家/地区" },
+      "orgCity": { "string": "组织城市" },
+      "orgName": { "string": "组织名称" },
+      "disambiguatedOrgId": { "string": "组织 ID" }
+    }
+  },
+  "assertionServiceApp": {
+    "affiliation": {
+      "created": { "string": "机构已创建" },
+      "updated": { "string": "机构已更新" },
+      "deleted": { "string": "机构已删除" }
+    }
+  }
+}

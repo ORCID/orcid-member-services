@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "title": { "string": "Настройки для {{username}} (Вы)" },
+    "personalDetails": { "string": "Личные данные" },
+    "security": {
+      "mfa": { "string": "Мультифакторная аутентификация" },
+      "heading": { "string": "Безопасность" },
+      "mfaInstructions": { "string": "Отсканируйте QR-код с помощью приложения МФА и введите код подтверждения ниже." },
+      "preferText": { "string": "Предпочитаете текстовый код?" },
+      "switchOnMfa": { "string": "Включить МФА" },
+      "switchOffMfa": { "string": "Выключить МФА" },
+      "backupCodes": { "string": "Запишите следующие резервные коды, они будут показаны только в этот раз." },
+      "otpError": { "string": "Неверный код подтверждения" },
+      "verificationCode": { "string": "Проверочный код" },
+      "mfaUpdated": { "string": "Настройки МФА обновлены" }
+    },
+    "form": {
+      "firstname": {
+        "label": { "string": "Имя" },
+        "placeholder": { "string": "Ваше имя" }
+      },
+      "lastname": {
+        "label": { "string": "Фамилия" },
+        "placeholder": { "string": "Ваша фамилия" }
+      },
+      "language": { "string": "Язык" },
+      "button": { "string": "Сохранить" }
+    },
+    "messages": {
+      "error": {
+        "fail": { "string": "<strong>Произошла ошибка!</strong> Не удалось сохранить настройки." },
+        "emailexists": { "string": "<strong>Электронная почта уже используется!</strong> Выберите другой адрес." }
+      },
+      "success": { "string": "<strong>Настройки сохранены!</strong>" },
+      "validate": {
+        "firstname": {
+          "required": { "string": "Необходимо указать ваше имя." },
+          "minlength": { "string": "Ваше имя должно состоять не менее чем из 1 символа" },
+          "maxlength": { "string": "Ваше имя не может содержать более 50 символов" }
+        },
+        "lastname": {
+          "required": { "string": "Необходимо указать вашу фамилию." },
+          "minlength": { "string": "Ваша фамилия должна содержать не менее 1 символа" },
+          "maxlength": { "string": "Ваша фамилия не может быть длиннее 50 символов" }
+        }
+      }
+    }
+  }
+}

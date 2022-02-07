@@ -1,0 +1,55 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSMember": {
+      "home": {
+        "title": { "string": "管理会员" },
+        "createLabel": { "string": "添加会员" },
+        "createOrEditLabel": { "string": "添加或编辑会员" },
+        "notFound": { "string": "没有可显示的会员" },
+        "uploadLabel": { "string": "从 CSV 导入会员" }
+      },
+      "delete": {
+        "question": { "string": "确定要将 {{ clientName }} 从会员门户中删除吗？" },
+        "anyUsersAndAffiliations": {
+          "string": "任意与此会员关联的用户以及机构也会从会员门户删除，但是已添加至 ORCID 注册表的数据将保留在 ORCID 中。"
+        }
+      },
+      "detail": {
+        "title": { "string": "会员详情" }
+      },
+      "import": {
+        "title": { "string": "导入会员" },
+        "label": { "string": "请选择待上传的 CSV 文件" },
+        "emptyFile": { "string": "没有待上传的文件。请选择一个文件。" },
+        "filePath": { "string": "文件路径" },
+        "errors": {
+          "label": { "string": "糟糕！处理数据时出现问题。请修复下方错误，然后重试" }
+        }
+      },
+      "clientId": {
+        "label": { "string": "客户 ID" },
+        "note": { "string": "注：客户端 ID 必须会员 OBO 启用 AND" },
+        "addedAsRedirect": { "string": "添加为 Redirect URI 于" }
+      },
+      "clientName": { "string": "会员姓名" },
+      "clientSecret": { "string": "客户机密钥" },
+      "salesforceId": { "string": "Salesforce ID" },
+      "parentSalesforceId": { "string": "父 Salesforce ID" },
+      "isConsortiumLead": { "string": "联盟代表" },
+      "assertionServiceEnabled": { "string": "已启用断言" },
+      "createdBy": { "string": "创建者" },
+      "createdDate": { "string": "已创建" },
+      "lastModifiedBy": { "string": "最后修改者" },
+      "lastModifiedDate": { "string": "上次修改时间" },
+      "type": { "string": "类型" },
+      "status": { "string": "状态" }
+    }
+  },
+  "memberServiceApp": {
+    "member": {
+      "created": { "string": "会员已创建" },
+      "updated": { "string": "会员更新成功" },
+      "deleted": { "string": "会员删除成功" }
+    }
+  }
+}

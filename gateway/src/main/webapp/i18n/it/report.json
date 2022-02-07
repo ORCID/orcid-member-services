@@ -1,0 +1,15 @@
+{
+  "gatewayApp": {
+    "report": {
+      "member": {
+        "title": { "string": "Resoconto membro" }
+      },
+      "integration": {
+        "title": { "string": "Resoconto sull'integrazione" }
+      },
+      "consortia": {
+        "title": { "string": "Rapporto del consorzio" }
+      }
+    }
+  }
+}

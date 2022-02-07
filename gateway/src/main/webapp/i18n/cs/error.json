@@ -1,0 +1,31 @@
+{
+  "error": {
+    "title": { "string": "Vaši žádost nelze zpracovat" },
+    "subtitle": { "string": "Omlouváme se, vyskytla se chyba" },
+    "http": {
+      "400": { "string": "Chybný požadavek" },
+      "403": { "string": "Pro přístup na tuto stránku nemáte dostatečná oprávnění." },
+      "404": { "string": "Stránka neexistuje." },
+      "405": { "string": "HTTP sloveso, které jste použili, není pro tuto URL adresu podporováno." },
+      "500": { "string": "Interní chyba serveru." }
+    },
+    "concurrencyFailure": { "string": "Jiný uživatel upravil tato data ve stejnou dobu jako vy. Vaše změny byly odmítnuty." },
+    "validation": { "string": "Chyba ověření na serveru." },
+    "email": { "string": "E-mail nemá platný formát" },
+    "size": { "string": "Nesplňuje minimální/maximální požadavky na velikost!" },
+    "idused": { "string": "Nelze to odstranit!. Má vztah s jinými prvky." },
+    "pattern": { "string": "Toto pole může obsahovat pouze písmena, číslice a e-mailové adresy." },
+    "invalidUrl": { "string": "URL je neplatné" },
+    "deleteAssertionsForSalesforceId": { "string": "Nelze smazat tvrzení pro člena." },
+    "disambiguationSource": { "string": "Zdroj organizace nemůže být prázdný." },
+    "emailUsed": { "string": "Tento e-mail je již registrovaný" },
+    "ownerExists": { "string": "Organizace již má vlastníka." },
+    "memberNotFound": { "string": "Člen nenalezen pomocí salesForceId: {{ params }}" },
+    "salesForceIdUsed": { "string": "Člen s tímto Salesforce ID již existuje" },
+    "affiliationOtherOrganization": { "string": "Přidružení nepatří k vaší organizaci" },
+    "emailAffiliationUsed": {
+      "string": "Přidružení se nepovedlo přidat. Přidružení pro {{ params }} již existuje a patří k jiné organizaci."
+    },
+    "memberNameUsed": { "string": "Člen s tímto jménem již existuje" }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "login": {
+    "title": { "string": "로그인" },
+    "form": {
+      "password": {
+        "label": { "string": "비밀번호" },
+        "placeholder": { "string": "귀하의 비밀번호" }
+      },
+      "rememberme": { "string": "저를 기억하세요" },
+      "button": { "string": "로그인" },
+      "mfaCode": {
+        "prompt": { "string": "인증 앱의 MFA 코드를 입력해 주세요." },
+        "error": { "string": "잘못된 MFA 코드" },
+        "label": { "string": "MFA 코드" }
+      }
+    },
+    "messages": {
+      "error": {
+        "authentication": { "string": "<strong>로그인에 실패했습니다!</strong> 사용자 자격 증명을 확인하여 다시 시도해 주세요." }
+      }
+    },
+    "password": {
+      "forgot": { "string": "비밀번호를 잊으셨나요?" }
+    }
+  }
+}

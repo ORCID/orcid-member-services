@@ -1,0 +1,71 @@
+{
+  "home": {
+    "title": { "string": "ORCID 会员门户" },
+    "heading": { "string": "欢迎使用 ORCID 会员门户" },
+    "mainContent": {
+      "section1": {
+        "text": {
+          "string": "ORCID 会员门户是一套可帮助机构充分利用其 ORCID 会员资格的工具。我们已经有一些可用的工具，并且正在积极开发其他工具，使我们的会员能够："
+        },
+        "bullet1": { "string": "添加/更新研究人员的 ORCID 记录" },
+        "bullet2": { "string": "访问数据和报告" },
+        "bullet3": { "string": "管理组织的 ORCID 会员信息" },
+        "bullet4": { "string": "管理组织的 ORCID API 凭证" }
+      },
+      "section2": {
+        "text": { "string": "当前可用的工具：" },
+        "affiliationManager": {
+          "heading": { "string": "机构管理器" },
+          "description": {
+            "string": "机构管理器允许您使用 CSV 文件代表您的研究人员添加和更新机构信息，而无需将 ORCID 直接集成到您当前的系统或启用支持 ORCID 的供应商系统，从而简化了机构信息（雇佣关系、教育背景等）添加流程。仅适用于联盟会员。 "
+          },
+          "requestAccessNow": { "string": "立即要求访问权限！" }
+        },
+        "memberReporting": {
+          "heading": { "string": "会员报告" },
+          "description": {
+            "string": "会员报告会提供由所有会员的实时报告，让组织能够轻松探索、查看并下载会员与整合统计数据。"
+          }
+        }
+      },
+      "section3": {
+        "heading": { "string": "资源" },
+        "table": {
+          "line1": {
+            "heading": { "string": "账户管理指南" },
+            "description": { "string": "有关如何管理用户对会员门户的访问权限的指南" }
+          },
+          "line2": {
+            "heading": { "string": "机构管理器指南" },
+            "description": { "string": "该指南供贵机构将使用机构管理器的员工参考" }
+          },
+          "line3": {
+            "heading": { "string": "会员报告指南" },
+            "description": { "string": "有关如何读取会员报告的指南" }
+          }
+        }
+      },
+      "section4": {
+        "heading": { "string": "支持联系人" },
+        "text": { "string": "如需获取帮助或对会员门户有疑问，请联系：" },
+        "bullet1": {
+          "text": { "string": "您的" },
+          "linkText": { "string": "联盟代表组织" }
+        },
+        "bullet2": {
+          "text": { "string": "或电子邮件：" },
+          "email": { "string": "membership@orcid.org" }
+        }
+      }
+    },
+    "alert": {
+      "thisSiteIsFor": {
+        "string": "该站点面向 ORCID 会员组织的管理员，独立于 ORCID 注册表。前往 ORCID 注册表"
+      },
+      "signIntoOrcid": { "string": "登录您的 ORCID 记录" }
+    },
+    "logged": {
+      "message": { "string": "您已以“{{username}}”用户身份登录。" }
+    }
+  }
+}

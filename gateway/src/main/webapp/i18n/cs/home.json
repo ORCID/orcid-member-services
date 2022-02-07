@@ -1,0 +1,71 @@
+{
+  "home": {
+    "title": { "string": "Členský portál ORCID" },
+    "heading": { "string": "Vítejte v členském portálu ORCID" },
+    "mainContent": {
+      "section1": {
+        "text": {
+          "string": "Členský portál ORCID je sada nástrojů, které pomáhají institucím co nejlépe využít jejich členství v ORCID. Některé nástroje již máme k dispozici a aktivně vyvíjíme další, které našim členům umožňují:"
+        },
+        "bullet1": { "string": "Zadat/aktualizovat údaje k záznamům výzkumníků v ORCID" },
+        "bullet2": { "string": "Přístup k datům a zprávám" },
+        "bullet3": { "string": "Spravujte informace své organizace o členství v ORCID" },
+        "bullet4": { "string": "Spravujte přihlašovací údaje své organizace pro ORCID API" }
+      },
+      "section2": {
+        "text": { "string": "Momentálně dostupné nástroje:" },
+        "affiliationManager": {
+          "heading": { "string": "Správce přidružení" },
+          "description": {
+            "string": "Správce přidružení zjednodušuje proces přidávání údajů o přidružení (zaměstnání, vzdělání atd.) do databáze ORCID, protože vám umožňuje prostřednictvím CSV souborů přidávat a aktualizovat údaje o přidružení jménem vašich výzkumníků aniž by bylo potřeba integrovat ORCID přímo do vašich stávajících systémů nebo pořizovat dodavatelský systém podporující ORCID. K dispozici pouze pro členy konsorcií."
+          },
+          "requestAccessNow": { "string": "Nyní požádejte o přístup!" }
+        },
+        "memberReporting": {
+          "heading": { "string": "Hlášení členů" },
+          "description": {
+            "string": "Zprávy ke členovi poskytují reporty v reálném čase pro všechny členy a organizace tak mohou snadno zjišťovat, zobrazovat a stahovat statistiky integrace členů."
+          }
+        }
+      },
+      "section3": {
+        "heading": { "string": "Zdroje" },
+        "table": {
+          "line1": {
+            "heading": { "string": "Návod pro správu účtu" },
+            "description": { "string": "Průvodce, jak spravovat přístup uživatelů k členskému portálu" }
+          },
+          "line2": {
+            "heading": { "string": "Návod pro Správce přidružení" },
+            "description": { "string": "Průvodce pro zaměstnance vaší instituce, kteří budou používat Affiliation Manager" }
+          },
+          "line3": {
+            "heading": { "string": "Průvodce nahlašováním členů" },
+            "description": { "string": "Návod, jak číst vaše členské zprávy" }
+          }
+        }
+      },
+      "section4": {
+        "heading": { "string": "Kontakty na podporu" },
+        "text": { "string": "Pro pomoc nebo otázky ohledně členského portálu prosím kontaktujte:" },
+        "bullet1": {
+          "text": { "string": "Váš" },
+          "linkText": { "string": "organizace vedení konsorcia" }
+        },
+        "bullet2": {
+          "text": { "string": "Nebo e-mail:" },
+          "email": { "string": "membership@orcid.org" }
+        }
+      }
+    },
+    "alert": {
+      "thisSiteIsFor": {
+        "string": "Tato stránka je určena pro správce členských organizací ORCID a je oddělená od registru ORCID. Přejděte do registru ORCID pro"
+      },
+      "signIntoOrcid": { "string": "přihlaste se do svého záznamu ORCID" }
+    },
+    "logged": {
+      "message": { "string": "Jste přihlášení jako uživatel „{{username}}“." }
+    }
+  }
+}

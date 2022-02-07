@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": { "string": "激活" },
+    "messages": {
+      "success": { "string": "<strong>您的用户账户已激活。</strong>请" },
+      "error": { "string": "<strong>您的用户无法激活。</strong>请使用注册表单以注册。" }
+    }
+  }
+}

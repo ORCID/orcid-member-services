@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": { "string": "활성화" },
+    "messages": {
+      "success": { "string": "<strong>사용자 계정이 활성화되었습니다.</strong>" },
+      "error": { "string": "<strong>사용자를 활성화할 수 없습니다.</strong> 등록 양식을 사용하여 가입해 주세요." }
+    }
+  }
+}

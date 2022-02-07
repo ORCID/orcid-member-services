@@ -1,0 +1,11 @@
+{
+  "activate": {
+    "title": { "string": "Attivazione\n" },
+    "messages": {
+      "success": { "string": "<strong>L'account utente è stato attivato.</strong> Per favore" },
+      "error": {
+        "string": "<strong>Non è stato possibile attivare il tuo utente.</strong> Usa il modulo di registrazione per registrarti."
+      }
+    }
+  }
+}

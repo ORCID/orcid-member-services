@@ -39,7 +39,9 @@
       "import": {
         "title": { "string": "Importer les affiliations" },
         "label": { "string": "Veuillez sélectionner un fichier CSV à télécharger." },
-        "filePath": { "string": "Chemin du fichier" }
+        "filePath": { "string": "Chemin du fichier" },
+        "success": { "string": "Votre CSV a été téléchargé pour traitement." },
+        "failure": { "string": "Problème lors du téléchargement de votre CSV pour traitement." }
       },
       "addedToOrcid": { "string": "Ajouté à ORCID" },
       "updatedInOrcid": { "string": "Mis à jour dans ORCID" },

@@ -1,0 +1,67 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSUser": {
+      "home": {
+        "title": { "string": "사용자 관리" },
+        "createLabel": { "string": "사용자 추가" },
+        "createOrEditLabel": { "string": "사용자 추가 또는 편집" },
+        "notFound": { "string": "표시할 사용자 없음" },
+        "uploadLabel": { "string": "CSV에서 사용자 가져오기" }
+      },
+      "delete": {
+        "question": { "string": "{{ 로그인 }} 사용자를 정말 삭제하시겠습니까?" }
+      },
+      "changeOwnership": {
+        "question": {
+          "string": "소유권을 정말 이전하시겠습니까? 이 조직 계정의 소유권을 이전하려고 합니다. 소유권 이전 후 조직 소유자인 경우 더 이상 사용자 관리와 같은 관리 기능에 액세스할 수 없습니다."
+        }
+      },
+      "detail": {
+        "title": { "string": "사용자 세부 정보" }
+      },
+      "sendActivate": {
+        "success": { "string": "초대장을 보냈습니다." },
+        "error": { "string": "초대 이메일을 보낼 수 없습니다." }
+      },
+      "import": {
+        "title": { "string": "사용자 가져오기" },
+        "label": { "string": "업로드할 CSV 파일을 선택해 주세요" },
+        "filePath": { "string": "파일 경로" },
+        "emptyFile": { "string": "업로드할 파일이 없습니다. 하나를 선택해 주세요." },
+        "errors": {
+          "label": { "string": "이런! 데이터 처리 중에 문제가 발생했습니다. 아래 오류를 수정한 후 다시 시도해 주세요" }
+        }
+      },
+      "assertionService": {
+        "enabled": { "string": "어설션 활성화됨" }
+      },
+      "login": { "string": "로그인" },
+      "email": { "string": "이메일" },
+      "password": { "string": "비밀번호" },
+      "confirm_password": { "string": "비밀번호 확인" },
+      "firstName": { "string": "이름" },
+      "lastName": { "string": "성" },
+      "mainContact": { "string": "조직 소유자" },
+      "salesforceId": { "string": "조직" },
+      "parentSalesforceId": { "string": "상위 Salesforce ID" },
+      "activated": { "string": "활성화됨" },
+      "isAdmin": { "string": "관리자" },
+      "createdBy": { "string": "작성자:" },
+      "createdDate": { "string": "생성됨" },
+      "lastModifiedBy": { "string": "마지막 수정자" },
+      "lastModifiedDate": { "string": "마지막 수정" }
+    },
+    "userDTO": {
+      "login": { "string": "이메일" },
+      "firstName": { "string": "이름" },
+      "lastName": { "string": "성" }
+    }
+  },
+  "userServiceApp": {
+    "user": {
+      "created": { "string": "사용자 생성됨. 초대장 전송됨." },
+      "updated": { "string": "사용자를 성공적으로 업데이트했습니다" },
+      "deleted": { "string": "사용자를 성공적으로 삭제했습니다" }
+    }
+  }
+}

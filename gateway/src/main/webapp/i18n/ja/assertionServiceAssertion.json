@@ -39,7 +39,9 @@
       "import": {
         "title": { "string": "所属をインポート" },
         "label": { "string": "アップロードするCSVファイルを選択してください" },
-        "filePath": { "string": "ファイルパス" }
+        "filePath": { "string": "ファイルパス" },
+        "success": { "string": "CSVは処理のためにアップロードされています。" },
+        "failure": { "string": "処理するためにCSVをアップロードする際に問題が発生しました。" }
       },
       "addedToOrcid": { "string": "ORCIDに追加されました" },
       "updatedInOrcid": { "string": "ORCID で更新されました" },

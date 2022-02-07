@@ -1,14 +1,27 @@
 {
   "settings": {
     "title": { "string": "{{username}}（你）的設定" },
+    "personalDetails": { "string": "個人詳細資料" },
+    "security": {
+      "mfa": { "string": "多重要素驗證" },
+      "heading": { "string": "安全性" },
+      "mfaInstructions": { "string": "使用您的 MFA 應用程式掃描 QR 代碼並輸入下方的驗證碼。" },
+      "preferText": { "string": "想要文字代碼？" },
+      "switchOnMfa": { "string": "開啟 MFA" },
+      "switchOffMfa": { "string": "關閉 MFA" },
+      "backupCodes": { "string": "請記下以下的備份代碼，因為這個代碼只會出現一次。" },
+      "otpError": { "string": "驗證代碼不正確" },
+      "verificationCode": { "string": "驗證代碼" },
+      "mfaUpdated": { "string": "已更新 MFA 設定" }
+    },
     "form": {
       "firstname": {
-        "string": "名字",
-        "placeholder": { "string": "Your first name" }
+        "label": { "string": "名字" },
+        "placeholder": { "string": "您的名字" }
       },
       "lastname": {
-        "string": "姓氏",
-        "placeholder": { "string": "Your last name" }
+        "label": { "string": "姓氏" },
+        "placeholder": { "string": "您的姓氏" }
       },
       "language": { "string": "語言" },
       "button": { "string": "儲存" }

@@ -1,0 +1,55 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSMember": {
+      "home": {
+        "title": { "string": "Управление участниками" },
+        "createLabel": { "string": "Добавить участника" },
+        "createOrEditLabel": { "string": "Добавить или изменить участника" },
+        "notFound": { "string": "Нет участников для отображения" },
+        "uploadLabel": { "string": "Импортировать участников из CSV" }
+      },
+      "delete": {
+        "question": { "string": "Вы уверены, что хотите удалить {{ clientName }} с портала участников?" },
+        "anyUsersAndAffiliations": {
+          "string": "Любые пользователи и аффилиации, связанные с этим участником, также будут удалены с портала участников, однако данные, добавленные в реестр ORCID, останутся в ORCID."
+        }
+      },
+      "detail": {
+        "title": { "string": "Сведения об участнике" }
+      },
+      "import": {
+        "title": { "string": "Импортировать участников" },
+        "label": { "string": "Выберите CSV-файл для загрузки" },
+        "emptyFile": { "string": "Файлы для загрузки отсутствуют. Пожалуйста, выберите файл." },
+        "filePath": { "string": "Путь к файлу" },
+        "errors": {
+          "label": { "string": "Ой! При обработке ваших данных возникла проблема. Исправьте ошибки ниже и попробуйте еще раз" }
+        }
+      },
+      "clientId": {
+        "label": { "string": "ID клиента" },
+        "note": { "string": "Примечание: в ID клиента должен быть включен OBO участника И" },
+        "addedAsRedirect": { "string": "добавлен как URI перенаправления в" }
+      },
+      "clientName": { "string": "Имя участника" },
+      "clientSecret": { "string": "Секрет клиента" },
+      "salesforceId": { "string": "Идентификатор торгового персонала" },
+      "parentSalesforceId": { "string": "ID родительской Salesforce" },
+      "isConsortiumLead": { "string": "Руководитель Консорциума" },
+      "assertionServiceEnabled": { "string": "Утверждения включены" },
+      "createdBy": { "string": "Автор:" },
+      "createdDate": { "string": "Создано" },
+      "lastModifiedBy": { "string": "Автор последнего изменения" },
+      "lastModifiedDate": { "string": "Последнее изменение" },
+      "type": { "string": "Тип" },
+      "status": { "string": "Статус" }
+    }
+  },
+  "memberServiceApp": {
+    "member": {
+      "created": { "string": "Участник создан" },
+      "updated": { "string": "Участник успешно обновлен" },
+      "deleted": { "string": "Участник успешно удален" }
+    }
+  }
+}

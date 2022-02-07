@@ -1,14 +1,27 @@
 {
   "settings": {
     "title": { "string": " {{username}} ( お客様 ) 用設定" },
+    "personalDetails": { "string": "個人情報" },
+    "security": {
+      "mfa": { "string": "多要素認証" },
+      "heading": { "string": "セキュリティ" },
+      "mfaInstructions": { "string": "MFAアプリを使用してQRコードをスキャンし、以下に認証コードを入力してください。" },
+      "preferText": { "string": "テキストコードをご希望ですか？" },
+      "switchOnMfa": { "string": "MFAをオンにする" },
+      "switchOffMfa": { "string": "MFAをオフにする" },
+      "backupCodes": { "string": "次のバックアップコードを控えておいてください。バックアップコードが表示されるのは今回のみになります。" },
+      "otpError": { "string": "間違った認証コード" },
+      "verificationCode": { "string": "認証コード" },
+      "mfaUpdated": { "string": "MFA設定が更新されました" }
+    },
     "form": {
       "firstname": {
-        "string": "名",
-        "placeholder": { "string": "Your first name" }
+        "label": { "string": "名" },
+        "placeholder": { "string": "あなたの名" }
       },
       "lastname": {
-        "string": "姓",
-        "placeholder": { "string": "Your last name" }
+        "label": { "string": "姓" },
+        "placeholder": { "string": "あなたの姓" }
       },
       "language": { "string": "言語" },
       "button": { "string": "保存する" }

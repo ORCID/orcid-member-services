@@ -1,0 +1,30 @@
+{
+  "userManagement": {
+    "home": {
+      "title": { "string": "uživatelé" },
+      "createLabel": { "string": "Vytvořit nového uživatele" },
+      "createOrEditLabel": { "string": "Vytvořit nebo upravit uživatele" }
+    },
+    "created": { "string": "Byl vytvořen nový uživatel s identifikátorem {{ param }}" },
+    "updated": { "string": "Uživatel je aktualizován s identifikátorem {{ param }}" },
+    "deleted": { "string": "Uživatel je vymazán identifikátorem {{ param }}" },
+    "delete": {
+      "question": { "string": "Jste si jisti, že chcete odstranit uživatele {{ login }}?" }
+    },
+    "detail": {
+      "title": { "string": "Uživatel" }
+    },
+    "login": { "string": "Přihlášení" },
+    "firstName": { "string": "Jméno" },
+    "lastName": { "string": "Příjmení" },
+    "email": { "string": "E-mail" },
+    "activated": { "string": "Aktivováno" },
+    "deactivated": { "string": "Deaktivováno" },
+    "profiles": { "string": "Profily" },
+    "langKey": { "string": "Jazyk" },
+    "createdBy": { "string": "Vytvořil" },
+    "createdDate": { "string": "Vytvořeno dne" },
+    "lastModifiedBy": { "string": "Upravil(a)" },
+    "lastModifiedDate": { "string": "Upraveno dne" }
+  }
+}

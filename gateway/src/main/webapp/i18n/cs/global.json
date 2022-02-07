@@ -1,0 +1,180 @@
+{
+  "global": {
+    "title": { "string": "Členský portál ORCID" },
+    "by": { "string": "podle" },
+    "false": { "string": "chybné" },
+    "true": { "string": "pravda" },
+    "browsehappy": {
+      "string": "Používáte <strong>zastaralý</strong> prohlížeč <a href=\"http://browsehappy.com/?locale=en\">Upgradujte si jej</a>, abyste měli lepší zážitek."
+    },
+    "warning": { "string": "Varování!" },
+    "isATestEnvironment": {
+      "string": "je testovací prostředí pro členský portál ORCID, které se propojuje s testovacím prostředím databáze ORCID"
+    },
+    "menu": {
+      "memberPortal": { "string": "Členský portál" },
+      "beta": { "string": "Beta" },
+      "jhipster-needle-menu-add-element": { "string": "Sem přidá JHipster další položky menu (nepřekládat!)" },
+      "entities": {
+        "main": { "string": "Členské nástroje" },
+        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "member": { "string": "Člen" }
+      },
+      "report": {
+        "member": { "string": "Členská zpráva" },
+        "integration": { "string": "Zpráva o integraci" },
+        "consortium": { "string": "Zpráva konzorcia" }
+      },
+      "account": {
+        "main": { "string": "Účet" },
+        "settings": { "string": "Nastavení" },
+        "password": { "string": "Heslo" },
+        "sessions": { "string": "Sezení" },
+        "login": { "string": "Přihlásit se" },
+        "logout": { "string": "Odhlásit se" },
+        "loggedInAs": { "string": "Přihlášen jako" },
+        "logoutAs": { "string": "Odhlásit se jako" },
+        "register": { "string": "Registrovat" }
+      },
+      "admin": {
+        "main": { "string": "Správa" },
+        "msUserServiceMSUser": { "string": "Spravovat uživatele" },
+        "msUserServiceMSMember": { "string": "Spravovat členy" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "language": { "string": "Jazyk" }
+    },
+    "form": {
+      "username.label": { "string": "Uživatelské jméno" },
+      "username.placeholder": { "string": "Vaše uživatelské jméno" },
+      "currentpassword.label": { "string": "Stávající heslo" },
+      "currentpassword.placeholder": { "string": "Současné heslo" },
+      "newpassword.label": { "string": "Nové heslo" },
+      "newpassword.placeholder": { "string": "Nové heslo" },
+      "confirmpassword.label": { "string": "Potvrzení nového hesla" },
+      "confirmpassword.placeholder": { "string": "Potvrďte nové heslo" },
+      "email.label": { "string": "E-mail" },
+      "email.placeholder": { "string": "Váš e-mail" },
+      "search": { "string": "Hledat..." }
+    },
+    "messages": {
+      "info": {
+        "authenticated": {
+          "prefix": { "string": "Chcete-li" },
+          "link": { "string": "přihlásit se" },
+          "suffix": {
+            "string": ", můžete vyzkoušet výchozí účty:<br/>- Správce (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+          }
+        },
+        "register": {
+          "noaccount": { "string": "Ještě nemáte účet?" },
+          "link": { "string": "Registrovat nový účet" }
+        }
+      },
+      "error": {
+        "dontmatch": { "string": "Heslo a jeho potvrzení nesouhlasí" }
+      },
+      "validate": {
+        "newpassword": {
+          "required": { "string": "Je potřeba vaše heslo" },
+          "minlength": { "string": "Vaše heslo musí mít alespoň 4 znaky." },
+          "maxlength": { "string": "Vaše heslo nesmí být delší než 50 znaků." },
+          "strength": { "string": "Síla hesla:" }
+        },
+        "confirmpassword": {
+          "required": { "string": "Musíte uvést potvrzovací heslo." },
+          "minlength": { "string": "Vaše potvrzovací heslo musí mít alespoň 4 znaky." },
+          "maxlength": { "string": "Vaše potvrzovací heslo nesmí být delší než 50 znaků." }
+        },
+        "email": {
+          "required": { "string": "Váš e-mail je povinný." },
+          "invalid": { "string": "Váš email je neplatný." },
+          "minlength": { "string": "Váš email musí mít alespoň 5 znaků." },
+          "maxlength": { "string": "Váš e-mail nesmí být delší než 50 znaků." }
+        }
+      }
+    },
+    "field": {
+      "id": { "string": "ID" }
+    },
+    "ribbon": {
+      "dev": { "string": "Vývoj" }
+    },
+    "item-count": { "string": "Zobrazují se položky {{first}} – {{second}} z {{total}}" }
+  },
+  "entity": {
+    "action": {
+      "addblob": { "string": "Přidat blob" },
+      "addimage": { "string": "Zadat obrázek" },
+      "back": { "string": "Zpět" },
+      "cancel": { "string": "Zrušit" },
+      "close": { "string": "Zavřít" },
+      "delete": { "string": "Smazat" },
+      "delete-from-orcid": { "string": "Vymazat z ORCID" },
+      "edit": { "string": "Upravit" },
+      "open": { "string": "Otevřít" },
+      "save": { "string": "Uložit" },
+      "continue": { "string": "Pokračovat" },
+      "upload": { "string": "Nahrát" },
+      "activate": { "string": "Odeslat aktivační e-mail znovu" },
+      "view": { "string": "Zobrazit" }
+    },
+    "detail": {
+      "field": { "string": "Pole" },
+      "value": { "string": "Hodnota" }
+    },
+    "delete": {
+      "title": { "string": "Potvrdit smazání" },
+      "error": { "string": "Jejda! Něco se pokazilo!" }
+    },
+    "changeOwnership": {
+      "title": { "string": "Potvrďte změnu vlastnictví" },
+      "error": { "string": "Jejda! Něco se pokazilo!" }
+    },
+    "validation": {
+      "required": { "string": "Toto pole je vyžadováno." },
+      "minlength": { "string": "Toto pole musí mít alespoň {{ min }} znaků." },
+      "maxlength": { "string": "Toto pole nemůže být delší než {{ max }} znaků." },
+      "min": { "string": "Toto pole by mělo mít alespoň {{ min }} znaků." },
+      "max": { "string": "Toto pole nemůže být vyšší než {{ max }}." },
+      "minbytes": { "string": "Toto pole by mělo mít alespoň {{ min }} bajtů." },
+      "maxbytes": { "string": "Toto pole nemůže mít více než {{ max }} bajtů." },
+      "pattern": { "string": "Toto pole musí být ve tvaru pro {{ pattern }}." },
+      "number": { "string": "V tomto poli by mělo být číslo." },
+      "datetimelocal": { "string": "Toto pole by mělo obsahovat datum a čas." },
+      "patternLogin": { "string": "Toto pole může obsahovat pouze písmena, číslice a e-mailové adresy." },
+      "email": { "string": "Uveďte prosím platnou e-mailovou adresu." },
+      "endDate": { "string": "Datum zahájení nemůže být pozdější než datum ukončení." },
+      "disambiguatedOrgId": {
+        "string": "Toto pole je povinné. Identifikace organizace GRID musí začínat frází grid, například grid.12344 nebo to musí být platná URL, identifikace organizace RINGGOLD musí být číslo. Identifkace ROR musejí mít 9 znaků a začínat 0."
+      }
+    }
+  },
+  "error": {
+    "internalServerError": { "string": "Interní chyba serveru" },
+    "server.not.reachable": { "string": "Server je nedostupný" },
+    "url.not.found": { "string": "Nenalezeno" },
+    "notnull": { "string": "Pole {{ fieldName }} nesmí být prázdné!" },
+    "size": { "string": "Pole {{ fieldName }} nesplňuje minimální/maximální požadavky na velikost!" },
+    "userexists": { "string": "Přihlašovací jméno již bylo použito!" },
+    "emailexists": { "string": "E-mail se již používá!" },
+    "idexists": { "string": "Nový {{entityName}} již nemůže mít ID" },
+    "delete.auth.user": { "string": "Aktuálního uživatele nelze smazat." },
+    "delete.main.contact": { "string": "Nelze vymazat vlastníka organizace." },
+    "delete.last.admin": { "string": "Nelze vymazat posledního správce." },
+    "member.no.admin.allowed": { "string": "S tímto číslem nelze spojit uživatele s právy správce" },
+    "clientidinvalid": {
+      "string": "Neplatné ID klienta. ID klienta by mělo být ve formátu XXXX-XXXX-XXXX-XXXX nebo APP-XXXXXXXXXXXXXXXX. X může být číslice nebo velké písmeno"
+    },
+    "idnull": { "string": "Neplatné ID" }
+  },
+  "footer": {
+    "footerLabel": { "string": "zápatí" },
+    "privacyPolicy": { "string": "Zásady ochrany osobních údajů" },
+    "termsOfUse": { "string": "Podmínky použití" },
+    "contactUs": { "string": "Kontaktujte nás" },
+    "orcidRegistry": { "string": "Registr ORCID" },
+    "help": { "string": "Pomoc" }
+  }
+}

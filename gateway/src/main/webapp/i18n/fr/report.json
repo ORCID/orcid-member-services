@@ -7,8 +7,8 @@
       "integration": {
         "title": { "string": "Rapport d'intégration" }
       },
-      "consortium": {
-        "title": { "string": "Rapport du consortium" }
+      "consortia": {
+        "title": { "string": "rapport Consortium" }
       }
     }
   }

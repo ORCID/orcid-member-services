@@ -1,0 +1,26 @@
+{
+  "login": {
+    "title": { "string": "登录" },
+    "form": {
+      "password": {
+        "label": { "string": "密码" },
+        "placeholder": { "string": "您的密码" }
+      },
+      "rememberme": { "string": "记住我" },
+      "button": { "string": "登录" },
+      "mfaCode": {
+        "prompt": { "string": "请从您的验证程序中输入 MFA 代码" },
+        "error": { "string": "无效的 MFA 代码" },
+        "label": { "string": "MFA 代码" }
+      }
+    },
+    "messages": {
+      "error": {
+        "authentication": { "string": "<strong>登录失败！</strong>请检查您的凭证并重试。" }
+      }
+    },
+    "password": {
+      "forgot": { "string": "忘记密码？" }
+    }
+  }
+}

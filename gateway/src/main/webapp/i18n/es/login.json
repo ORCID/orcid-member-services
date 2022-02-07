@@ -3,11 +3,16 @@
     "title": { "string": "Registrarse" },
     "form": {
       "password": {
-        "string": "Contraseña",
-        "placeholder": { "string": "Your password" }
+        "label": { "string": "Contraseña" },
+        "placeholder": { "string": "Su contraseña" }
       },
       "rememberme": { "string": "Recuérdame" },
-      "button": { "string": "Registrarse" }
+      "button": { "string": "Registrarse" },
+      "mfaCode": {
+        "prompt": { "string": "Introduzca el código MFA de su aplicación de autenticación" },
+        "error": { "string": "Código MFA no válido" },
+        "label": { "string": "Código MFA" }
+      }
     },
     "messages": {
       "error": {

@@ -1,0 +1,15 @@
+{
+  "gatewayApp": {
+    "report": {
+      "member": {
+        "title": { "string": "회원 보고서" }
+      },
+      "integration": {
+        "title": { "string": "통합 보고서" }
+      },
+      "consortia": {
+        "title": { "string": "컨소시엄 보고서" }
+      }
+    }
+  }
+}

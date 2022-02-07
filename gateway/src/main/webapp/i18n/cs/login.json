@@ -1,0 +1,28 @@
+{
+  "login": {
+    "title": { "string": "Přihlásit se" },
+    "form": {
+      "password": {
+        "label": { "string": "Heslo" },
+        "placeholder": { "string": "Vaše heslo" }
+      },
+      "rememberme": { "string": "Zapamatujte si mě" },
+      "button": { "string": "Přihlásit se" },
+      "mfaCode": {
+        "prompt": { "string": "Zadejte prosím MFA kód z aplikace pro ověřování" },
+        "error": { "string": "Neplatný MFA kód" },
+        "label": { "string": "MFA kód" }
+      }
+    },
+    "messages": {
+      "error": {
+        "authentication": {
+          "string": "<strong>Přihlášení se nezdařilo!</strong> Zkontrolujte prosím své přihlašovací údaje a zkuste to znovu."
+        }
+      }
+    },
+    "password": {
+      "forgot": { "string": "Zapomněli jste heslo?" }
+    }
+  }
+}

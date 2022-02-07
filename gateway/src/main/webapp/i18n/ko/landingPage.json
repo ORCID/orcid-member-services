@@ -1,0 +1,29 @@
+{
+  "landingPage": {
+    "title": { "string": "ORCID 회원 서비스" },
+    "connectionExists": {
+      "youHaveAlready": { "string": "이미 부여했습니다" },
+      "permissionToUpdate": { "string": "ORCID 기록 업데이트 권한" },
+      "youDoNot": { "string": "지금은 더 이상 아무것도 할 필요가 없습니다." },
+      "differentUser": {
+        "string": "이 승인 링크는 이미 사용되었습니다. 새 승인 링크를 위해 {{ clientName }} 님에게 문의해 주세요."
+      }
+    },
+    "error": {
+      "somethingWentWrong": { "string": "문제가 발생하여 ORCID ID를 가져오지 못했습니다" }
+    },
+    "denied": {
+      "youHaveDenied": { "string": "이런, 액세스를 거부했습니다." },
+      "willNotBeAble": { "string": "ORCID 기록을 업데이트할 수 없습니다." },
+      "ifThisWas": { "string": "이 작업이 실수였다면 아래 버튼을 클릭하여 액세스 권한을 부여하세요." },
+      "grantAccess": { "string": "{{ clientName }} 님이 내 ORCID 기록을 업데이트하도록 허용" }
+    },
+    "success": {
+      "thanks": { "string": "감사합니다, {{ given_name }} {{ family_name }} 님" },
+      "youHaveSuccessfully": {
+        "string": "{{ clientName }} 님에게 ORCID 기록을 업데이트할 수 있는 권한을 성공적으로 부여했으며, 기록이 제휴 정보로 업데이트됩니다."
+      },
+      "ifYouFind": { "string": "ORCID 기록에 추가된 데이터가 잘못되었다면 {{ clientName }}에 문의해 주세요" }
+    }
+  }
+}

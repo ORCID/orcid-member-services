@@ -1,0 +1,31 @@
+{
+  "error": {
+    "title": { "string": "요청을 처리할 수 없습니다" },
+    "subtitle": { "string": "죄송하지만 오류가 발생했습니다" },
+    "http": {
+      "400": { "string": "잘못된 요청." },
+      "403": { "string": "이 페이지에 액세스할 수 있는 권한이 없습니다." },
+      "404": { "string": "존재하지 않는 페이지입니다." },
+      "405": { "string": "사용한 HTTP 동사는 이 URL에서 지원되지 않습니다" },
+      "500": { "string": "내부 서버 오류." }
+    },
+    "concurrencyFailure": { "string": "또 다른 사용자가 동시에 이 데이터를 수정했습니다. 변경 내용이 거부되었습니다." },
+    "validation": { "string": "서버의 유효성 검사 오류입니다." },
+    "email": { "string": "이메일이 올바른 형식이 아닙니다" },
+    "size": { "string": "최소/최대 크기 요건을 충족하지 않습니다!" },
+    "idused": { "string": "제거할 수 없습니다! 다른 요소와 관계가 있습니다." },
+    "pattern": { "string": "이 필드에는 문자, 숫자 및 이메일 주소만 포함할 수 있습니다." },
+    "invalidUrl": { "string": "해당 URL이 잘못되었습니다" },
+    "deleteAssertionsForSalesforceId": { "string": "회원의 어설션을 삭제할 수 없습니다." },
+    "disambiguationSource": { "string": "조직 소스는 비워둘 수 없습니다." },
+    "emailUsed": { "string": "해당 이메일은 이미 등록되어 있습니다" },
+    "ownerExists": { "string": "조직에 이미 소유자가 있습니다." },
+    "memberNotFound": { "string": "salesForceId: {{ params }}(으)로 회원을 찾을 수 없습니다" },
+    "salesForceIdUsed": { "string": "해당 Salesforce ID를 가진 회원이 이미 존재합니다" },
+    "affiliationOtherOrganization": { "string": "이 제휴는 조직에 속하지 않습니다." },
+    "emailAffiliationUsed": {
+      "string": "제휴를 추가할 수 없습니다. {{ params }}에 대한 제휴가 이미 존재하며 다른 조직에 속해 있습니다."
+    },
+    "memberNameUsed": { "string": "해당 이름을 가진 회원이 이미 존재합니다" }
+  }
+}

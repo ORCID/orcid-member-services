@@ -1,0 +1,24 @@
+{
+  "register": {
+    "title": { "string": "등록" },
+    "form": {
+      "button": { "string": "등록" }
+    },
+    "messages": {
+      "validate": {
+        "login": {
+          "required": { "string": "사용자 이름이 필요합니다." },
+          "minlength": { "string": "사용자 이름은 1자 이상이어야 합니다." },
+          "maxlength": { "string": "사용자 이름은 50자를 초과할 수 없습니다." },
+          "pattern": { "string": "사용자 이름은 문자와 숫자만 포함할 수 있습니다." }
+        }
+      },
+      "success": { "string": "<strong>등록이 저장되었습니다!</strong> 이메일을 확인하여 해당 내용을 확인해 주세요." },
+      "error": {
+        "fail": { "string": "<strong>등록에 실패했습니다!</strong> 나중에 다시 시도해 주세요." },
+        "userexists": { "string": "<strong>이미 등록된 로그인 이름입니다.</strong> 다른 이름을 선택해 주세요." },
+        "emailexists": { "string": "<strong>이미 사용 중인 이메일입니다!</strong> 다른 이메일을 선택해 주세요." }
+      }
+    }
+  }
+}

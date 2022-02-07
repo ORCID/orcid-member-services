@@ -1,0 +1,29 @@
+{
+  "landingPage": {
+    "title": { "string": "Členské služby ORCID" },
+    "connectionExists": {
+      "youHaveAlready": { "string": "Již jste udělili" },
+      "permissionToUpdate": { "string": "povolení k aktualizaci vašeho záznamu ORCID" },
+      "youDoNot": { "string": "V tuto chvíli nemusíte dělat nic dalšího." },
+      "differentUser": {
+        "string": "Tento autorizační odkaz byl již využit. Pro získání nového autorizačního odkazu kontaktujte prosím {{ clientName }}."
+      }
+    },
+    "error": {
+      "somethingWentWrong": { "string": "Jejda, něco se pokazilo, a proto jsme nedokázali předat vaši identifikaci ORCID" }
+    },
+    "denied": {
+      "youHaveDenied": { "string": "Jejda, přístup byl odepřen." },
+      "willNotBeAble": { "string": "nebude moci aktualizovat váš záznam ORCID" },
+      "ifThisWas": { "string": "Pokud se jedná o chybu, udělte přístup kliknutím na tlačítko níže." },
+      "grantAccess": { "string": "Povolit {{ clientName }} aktualizace mého záznamu ORCID" }
+    },
+    "success": {
+      "thanks": { "string": "Díky, {{ given_name }} {{ family_name }}" },
+      "youHaveSuccessfully": {
+        "string": "Úspěšně jste {{ clientName }} udělili oprávnění k aktualizaci vašeho záznamu ORCID a váš záznam bude aktualizován o informace o přidružení."
+      },
+      "ifYouFind": { "string": "Pokud zjistíte, že údaje přidané do vašich záznamů ORCID jsou chybné, kontaktujte prosím " }
+    }
+  }
+}

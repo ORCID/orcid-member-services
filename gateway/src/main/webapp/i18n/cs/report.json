@@ -1,0 +1,15 @@
+{
+  "gatewayApp": {
+    "report": {
+      "member": {
+        "title": { "string": "Členská zpráva" }
+      },
+      "integration": {
+        "title": { "string": "Zpráva o integraci" }
+      },
+      "consortia": {
+        "title": { "string": "Zpráva konsorcia" }
+      }
+    }
+  }
+}

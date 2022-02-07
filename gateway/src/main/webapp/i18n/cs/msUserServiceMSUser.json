@@ -1,0 +1,67 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSUser": {
+      "home": {
+        "title": { "string": "Spravovat uživatele" },
+        "createLabel": { "string": "Přidat uživatele" },
+        "createOrEditLabel": { "string": "Přidat nebo upravit uživatele" },
+        "notFound": { "string": "Žádní uživatelé k zobrazení" },
+        "uploadLabel": { "string": "Importovat uživatele z CSV" }
+      },
+      "delete": {
+        "question": { "string": "Opravdu chcete smazat uživatele {{ login }}?" }
+      },
+      "changeOwnership": {
+        "question": {
+          "string": "Opravdu chcete převést vlastnictví? Chystáte se převést vlastnictví tohoto účtu organizace. Jste-li vlastníkem organizace, po převodu vlastnictví již nebudete mít přístup k administrátorským funkcím, jako je správa uživatelů."
+        }
+      },
+      "detail": {
+        "title": { "string": "Detaily uživatele" }
+      },
+      "sendActivate": {
+        "success": { "string": "Pozvánka odeslána." },
+        "error": { "string": "Zvací e-mail se nepodařilo odeslat." }
+      },
+      "import": {
+        "title": { "string": "Importovat uživatele" },
+        "label": { "string": "Vyberte CSV soubor, který chcete nahrát" },
+        "filePath": { "string": "Cesta k souboru" },
+        "emptyFile": { "string": "Neexistuje žádný soubor k nahrání. Prosím vyberte jej." },
+        "errors": {
+          "label": { "string": "Jejda! Při zpracování vašich údajů došlo k problému. Opravte prosím níže uvedené chyby a zkuste to znovu" }
+        }
+      },
+      "assertionService": {
+        "enabled": { "string": "Tvrzení povolena" }
+      },
+      "login": { "string": "Přihlášení" },
+      "email": { "string": "E-mail" },
+      "password": { "string": "Heslo" },
+      "confirm_password": { "string": "Potvrzení hesla" },
+      "firstName": { "string": "Křestní jméno" },
+      "lastName": { "string": "Příjmení" },
+      "mainContact": { "string": "Vlastník organizace" },
+      "salesforceId": { "string": "Organizace" },
+      "parentSalesforceId": { "string": "Mateřské Salesforce ID" },
+      "activated": { "string": "Aktivováno" },
+      "isAdmin": { "string": "Správce" },
+      "createdBy": { "string": "Vytvořil(a)" },
+      "createdDate": { "string": "Vytvořeno" },
+      "lastModifiedBy": { "string": "Naposledy upraveno uživatelem" },
+      "lastModifiedDate": { "string": "Naposledy upraveno" }
+    },
+    "userDTO": {
+      "login": { "string": "e-mail" },
+      "firstName": { "string": "jméno" },
+      "lastName": { "string": "Příjmení" }
+    }
+  },
+  "userServiceApp": {
+    "user": {
+      "created": { "string": "Uživatel vytvořen.  Pozvánka odeslána." },
+      "updated": { "string": "Uživatel byl úspěšně aktualizován" },
+      "deleted": { "string": "Uživatel úspěšně vymazán" }
+    }
+  }
+}

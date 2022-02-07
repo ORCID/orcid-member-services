@@ -1,0 +1,57 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSMember": {
+      "home": {
+        "title": { "string": "Gestisci membri\n" },
+        "createLabel": { "string": "Aggiungi membro" },
+        "createOrEditLabel": { "string": "Aggiungi o modifica un membro" },
+        "notFound": { "string": "Nessun membro da mostrare\n" },
+        "uploadLabel": { "string": "Importa membri da CSV" }
+      },
+      "delete": {
+        "question": { "string": "Sei sicuro di voler eliminare {{ clientName }} dal Portale Membri?\n" },
+        "anyUsersAndAffiliations": {
+          "string": "Eventuali utenti e affiliazioni associati a questo membro verranno eliminati anche dal Portale Membri, tuttavia i dati aggiunti al Registro ORCID rimarranno in ORCID."
+        }
+      },
+      "detail": {
+        "title": { "string": "Dettagli del membro" }
+      },
+      "import": {
+        "title": { "string": "Importa i membri" },
+        "label": { "string": "Seleziona un file CSV da caricare" },
+        "emptyFile": { "string": "Non ci sono file da caricare. Selezionane uno." },
+        "filePath": { "string": "Percorso file" },
+        "errors": {
+          "label": {
+            "string": "Oops! Si è verificato un problema durante l'elaborazione dei dati. Correggi gli errori indicati qui di seguito e riprova"
+          }
+        }
+      },
+      "clientId": {
+        "label": { "string": "Id cliente" },
+        "note": { "string": "Nota: l'ID cliente deve avere Membro OBO abilitato E" },
+        "addedAsRedirect": { "string": "aggiunto come URI di reindirizzamento in" }
+      },
+      "clientName": { "string": "Nome del membro" },
+      "clientSecret": { "string": "Chiave di accesso segreta del client" },
+      "salesforceId": { "string": "Salesforce Id\n" },
+      "parentSalesforceId": { "string": "ID Salesforce Genitore" },
+      "isConsortiumLead": { "string": "Capogruppo\n" },
+      "assertionServiceEnabled": { "string": "Asserzioni abilitate" },
+      "createdBy": { "string": "Creato da" },
+      "createdDate": { "string": "Creato" },
+      "lastModifiedBy": { "string": "Ultima modifica effettuata da" },
+      "lastModifiedDate": { "string": "Ultima modifica" },
+      "type": { "string": "Tipo" },
+      "status": { "string": "Stato" }
+    }
+  },
+  "memberServiceApp": {
+    "member": {
+      "created": { "string": "Membro creato" },
+      "updated": { "string": "Membro aggiornato correttamente" },
+      "deleted": { "string": "Membro eliminato correttamente" }
+    }
+  }
+}

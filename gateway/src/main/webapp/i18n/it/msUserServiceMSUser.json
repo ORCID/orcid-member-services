@@ -1,0 +1,69 @@
+{
+  "gatewayApp": {
+    "msUserServiceMSUser": {
+      "home": {
+        "title": { "string": "Gestisci gli utenti\n" },
+        "createLabel": { "string": "Aggiungi utente" },
+        "createOrEditLabel": { "string": "Aggiungi o modifica un utente" },
+        "notFound": { "string": "Nessun utente da mostrare" },
+        "uploadLabel": { "string": "Importa gli utenti da CSV" }
+      },
+      "delete": {
+        "question": { "string": "Sei sicuro di voler eliminare l'utente {{ login }}?\n" }
+      },
+      "changeOwnership": {
+        "question": {
+          "string": "Sei sicuro di voler trasferire la proprietà? Stai per trasferire la proprietà di questo account dell'organizzazione. Se sei il proprietario dell'organizzazione dopo aver trasferito la proprietà, non avrai più accesso alle funzioni di amministrazione, come la gestione degli utenti."
+        }
+      },
+      "detail": {
+        "title": { "string": "Dettagli dell'utente" }
+      },
+      "sendActivate": {
+        "success": { "string": "Invito spedito." },
+        "error": { "string": "Impossibile inviare l'email di invito." }
+      },
+      "import": {
+        "title": { "string": "Importa utenti\n" },
+        "label": { "string": "Seleziona il file CSV da caricare" },
+        "filePath": { "string": "Percorso file" },
+        "emptyFile": { "string": "Non ci sono file da caricare. Selezionane uno." },
+        "errors": {
+          "label": {
+            "string": "Oops! Si è verificato un problema durante l'elaborazione dei dati. Correggi gli errori indicati qui di seguito e riprova"
+          }
+        }
+      },
+      "assertionService": {
+        "enabled": { "string": "Asserzioni abilitate\n" }
+      },
+      "login": { "string": "Accedi" },
+      "email": { "string": "Email" },
+      "password": { "string": "Password" },
+      "confirm_password": { "string": "Conferma la password" },
+      "firstName": { "string": "Nome" },
+      "lastName": { "string": "Cognome" },
+      "mainContact": { "string": "Proprietario dell'organizzazione" },
+      "salesforceId": { "string": "Organizzazione\n" },
+      "parentSalesforceId": { "string": "Salesforce Id principale\n" },
+      "activated": { "string": "Attivato\n" },
+      "isAdmin": { "string": "Amministratore" },
+      "createdBy": { "string": "Creato da" },
+      "createdDate": { "string": "Creato" },
+      "lastModifiedBy": { "string": "Ultima modifica effettuata da" },
+      "lastModifiedDate": { "string": "Ultima modifica" }
+    },
+    "userDTO": {
+      "login": { "string": "email" },
+      "firstName": { "string": "nome" },
+      "lastName": { "string": "cognome" }
+    }
+  },
+  "userServiceApp": {
+    "user": {
+      "created": { "string": "Utente creato. Invito mandato." },
+      "updated": { "string": "Aggiornamento dell'utente riuscito" },
+      "deleted": { "string": "Utente eliminato correttamente" }
+    }
+  }
+}

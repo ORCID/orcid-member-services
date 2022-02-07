@@ -1,0 +1,24 @@
+{
+  "register": {
+    "title": { "string": "注册" },
+    "form": {
+      "button": { "string": "注册" }
+    },
+    "messages": {
+      "validate": {
+        "login": {
+          "required": { "string": "用户名是必填字段。" },
+          "minlength": { "string": "您的用户名必须具有至少 1 个字符。" },
+          "maxlength": { "string": "用户名长度不能超过 50 个字符。" },
+          "pattern": { "string": "用户名只能包含字母和数字。" }
+        }
+      },
+      "success": { "string": "<strong>登记已保存！</strong>请检查电子邮件中的确认信。" },
+      "error": {
+        "fail": { "string": "<strong>注册失败！</strong>请稍后重试。" },
+        "userexists": { "string": "<strong>登录名已注册！</strong>请选择其他登录名。" },
+        "emailexists": { "string": "<strong>电子邮件已被使用！</strong>请选择其他电子邮件。" }
+      }
+    }
+  }
+}

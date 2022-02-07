@@ -1,14 +1,27 @@
 {
   "settings": {
     "title": { "string": "Paramètres pour {{username}} (vous)" },
+    "personalDetails": { "string": "Détails personnels" },
+    "security": {
+      "mfa": { "string": "Authentification multifacteur" },
+      "heading": { "string": "Sécurité" },
+      "mfaInstructions": { "string": "Scannez le code QR avec votre application MFA et saisissez le code de vérification ci-dessous." },
+      "preferText": { "string": "Vous préférez un code texte ?" },
+      "switchOnMfa": { "string": "Activer MFA" },
+      "switchOffMfa": { "string": "Désactiver MFA" },
+      "backupCodes": { "string": "Notez les codes de sauvegarde suivants, c'est la seule fois qu'ils seront affichés." },
+      "otpError": { "string": "Code de vérification incorrect" },
+      "verificationCode": { "string": "Code de vérification" },
+      "mfaUpdated": { "string": "Mise à jour des paramètres MFA" }
+    },
     "form": {
       "firstname": {
-        "string": "Prénom",
-        "placeholder": { "string": "Your first name" }
+        "label": { "string": "Prénom" },
+        "placeholder": { "string": "Votre prénom" }
       },
       "lastname": {
-        "string": "Nom de famille",
-        "placeholder": { "string": "Your last name" }
+        "label": { "string": "Nom de famille" },
+        "placeholder": { "string": "Votre nom de famille" }
       },
       "language": { "string": "Langue" },
       "button": { "string": "Enregistrer" }

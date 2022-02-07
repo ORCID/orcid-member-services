@@ -1,0 +1,26 @@
+{
+  "login": {
+    "title": { "string": "Войти" },
+    "form": {
+      "password": {
+        "label": { "string": "Пароль" },
+        "placeholder": { "string": "Ваш пароль" }
+      },
+      "rememberme": { "string": "Запомнить меня" },
+      "button": { "string": "Вход" },
+      "mfaCode": {
+        "prompt": { "string": "Введите код МФА из вашего приложения для проверки подлинности" },
+        "error": { "string": "Неверный код МФА" },
+        "label": { "string": "Код МФА" }
+      }
+    },
+    "messages": {
+      "error": {
+        "authentication": { "string": "<strong>Не удалось войти!</strong> Проверьте свои учетные данные и повторите попытку." }
+      }
+    },
+    "password": {
+      "forgot": { "string": "Забыли пароль?" }
+    }
+  }
+}
