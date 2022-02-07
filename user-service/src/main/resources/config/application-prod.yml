@@ -107,4 +107,5 @@ uaa:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  mailTestMode: ${APPLICATION_MAIL_TEST_MODE}
