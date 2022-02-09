@@ -35,7 +35,7 @@ public class MailgunClient implements MailClient {
 
     @Override
     public void sendMail(String to, String subject, String html) throws MailException {
-        LOGGER.info("Preparing email {} for sending to {}", subject, to);
+        LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
         List<NameValuePair> urlParameters = new ArrayList<>();
         urlParameters.add(new BasicNameValuePair("to", to));
         urlParameters.add(new BasicNameValuePair("from", getFrom()));

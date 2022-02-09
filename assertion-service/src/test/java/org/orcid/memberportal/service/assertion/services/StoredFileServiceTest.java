@@ -97,7 +97,7 @@ class StoredFileServiceTest {
     @Test
     void testStoreAssertionsCsvFile() throws IOException {
         InputStream inputStream = new ByteArrayInputStream("some content".getBytes());
-        storedFileService.storeAssertionsCsvFile(inputStream, getUser());
+        storedFileService.storeAssertionsCsvFile(inputStream, "filename", getUser());
         Mockito.verify(storedFileRepository).save(storedFileCaptor.capture());
         StoredFile saved = storedFileCaptor.getValue();
         assertThat(saved.getFileLocation()).isNotNull();
@@ -108,6 +108,7 @@ class StoredFileServiceTest {
         assertThat(saved.getDateWritten()).isNotNull();
         assertThat(saved.getRemovalDate()).isNotNull();
         assertThat(saved.getRemovalDate().minus(7, ChronoUnit.DAYS)).isEqualTo(saved.getDateWritten());
+        assertThat(saved.getOriginalFilename()).isEqualTo("filename");
     }
     
     @Test

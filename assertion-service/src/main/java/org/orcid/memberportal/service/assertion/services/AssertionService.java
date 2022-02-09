@@ -5,9 +5,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -94,6 +98,8 @@ public class AssertionService {
     @Autowired
     private MailService mailService;
 
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault()).withZone(ZoneId.systemDefault());
+
     public boolean assertionExists(String id) {
         return assertionRepository.existsById(id);
     }
@@ -146,7 +152,7 @@ public class AssertionService {
         setPrettyStatus(assertion);
         return assertion;
     }
-    
+
     public void populatePermissionLink(Assertion assertion) {
         assertion.setPermissionLink(orcidRecordService.generateLinkForEmail(assertion.getEmail()));
     }
@@ -631,7 +637,7 @@ public class AssertionService {
 
     public void uploadAssertions(MultipartFile file) throws IOException {
         AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        storedFileService.storeAssertionsCsvFile(file.getInputStream(), user);
+        storedFileService.storeAssertionsCsvFile(file.getInputStream(), file.getOriginalFilename(), user);
     }
 
     public void processAssertionUploads() {
@@ -646,6 +652,8 @@ public class AssertionService {
         try {
             AssertionsUpload upload = readUpload(file, user);
             AssertionsUploadSummary summary = processUpload(upload, user);
+            summary.setFilename(uploadFile.getOriginalFilename());
+            summary.setDate(DATE_FORMAT.format(uploadFile.getDateWritten()));
             mailService.sendAssertionsUploadSummaryMail(summary, user);
         } catch (Exception e) {
             if (e.getCause() != null) {

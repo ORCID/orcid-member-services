@@ -116,6 +116,9 @@ class AssertionServiceTest {
     
     @Captor
     private ArgumentCaptor<StoredFile> storedFileCaptor;
+    
+    @Captor
+    private ArgumentCaptor<String> filenameCaptor;
 
     @InjectMocks
     private AssertionService assertionService;
@@ -1029,9 +1032,13 @@ class AssertionServiceTest {
     @Test
     void testUploadAssertions() throws IOException {
         MultipartFile file = Mockito.mock(MultipartFile.class);
+        Mockito.when(file.getOriginalFilename()).thenReturn("some-file.csv");
         Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
         assertionService.uploadAssertions(file);
-        Mockito.verify(storedFileService).storeAssertionsCsvFile(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class));
+        Mockito.verify(storedFileService).storeAssertionsCsvFile(Mockito.any(InputStream.class), filenameCaptor.capture(), Mockito.any(AssertionServiceUser.class));
+        
+        String filename = filenameCaptor.getValue();
+        assertEquals("some-file.csv", filename);
     }
     
     @Test
@@ -1081,6 +1088,8 @@ class AssertionServiceTest {
         assertEquals(0, summary.getNumDuplicates());
         assertEquals(0, summary.getNumDeleted());
         assertEquals(1, summary.getNumUpdated());
+        assertEquals("original-filename.csv", summary.getFilename());
+        assertNotNull(summary.getDate());
 
         Mockito.verify(assertionsRepository, Mockito.times(3)).insert(Mockito.any(Assertion.class));
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.any(Assertion.class));
@@ -1152,6 +1161,8 @@ class AssertionServiceTest {
     private StoredFile getDummyStoredFile() {
         StoredFile storedFile = new StoredFile();
         storedFile.setFileLocation(getClass().getResource("/assertions-with-bad-url.csv").getFile()); // any file that exists, test won't actually use it
+        storedFile.setOriginalFilename("original-filename.csv");
+        storedFile.setDateWritten(Instant.now());
         storedFile.setOwnerId("owner");
         return storedFile;
     }
@@ -1179,6 +1190,8 @@ class AssertionServiceTest {
         AssertionsUploadSummary summary = summaryCaptor.getValue();
 
         assertEquals(3, summary.getNumDuplicates());
+        assertEquals("original-filename.csv", summary.getFilename());
+        assertNotNull(summary.getDate());
 
         Mockito.verify(assertionsRepository, Mockito.never()).insert(Mockito.any(Assertion.class));
     }

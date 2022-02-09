@@ -15,6 +15,10 @@ public class AssertionsUploadSummary implements Serializable {
     private int numDeleted;
 
     private int numDuplicates;
+    
+    private String filename;
+    
+    private String date;
 
     List<AssertionsUploadError> errors = new ArrayList<>();
 
@@ -56,6 +60,22 @@ public class AssertionsUploadSummary implements Serializable {
 
     public void setErrors(List<AssertionsUploadError> errors) {
         this.errors = errors;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
 }
