@@ -102,18 +102,23 @@ public class StoredFileService {
         List<StoredFile> oldFiles = storedFileRepository.findProcessedFiles();
         oldFiles.forEach(f -> {
             if (Instant.now().isAfter(f.getRemovalDate())) {
-                LOG.info("Removing file {} which is marked for deletion", f.getFileLocation());
-                File file = new File(f.getFileLocation());
-                boolean deleted = file.delete();
-                if (!deleted) {
-                    throw new RuntimeException("Failed to delete file " + file.getAbsolutePath());
-                }
-                LOG.info("File {} deleted", file.getAbsolutePath());
-                LOG.info("Removing corresponding StoredFile record");
-                storedFileRepository.delete(f);
-                LOG.info("Record deleted");
+                removeStoredFile(f);
             }
         });
+    }
+
+    private void removeStoredFile(StoredFile f) {
+        LOG.info("Removing file {} which is marked for deletion", f.getFileLocation());
+        File file = new File(f.getFileLocation());
+        boolean deleted = file.delete();
+        if (!deleted) {
+            LOG.error("Failed to delete file {}", file.getAbsolutePath());
+        } else {
+            LOG.info("File {} deleted", file.getAbsolutePath());
+            LOG.info("Removing corresponding StoredFile record");
+            storedFileRepository.delete(f);
+            LOG.info("Record deleted");
+        }
     }
 
 }
