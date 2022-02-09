@@ -146,7 +146,7 @@ public class AssertionService {
         setPrettyStatus(assertion);
         return assertion;
     }
-    
+
     public void populatePermissionLink(Assertion assertion) {
         assertion.setPermissionLink(orcidRecordService.generateLinkForEmail(assertion.getEmail()));
     }
@@ -334,7 +334,11 @@ public class AssertionService {
         for (Assertion assertion : assertionsToAdd) {
             LOG.debug("Preparing to POST assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - to orcid registry", assertion.getId(),
                     assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
-            postAssertionToOrcid(assertion);
+            try {
+                postAssertionToOrcid(assertion);
+            } catch (Exception e) {
+                LOG.error("Unexpected error POSTing assertion to registry", e);
+            }
             LOG.debug("POST task complete for assertion {}", assertion.getId());
         }
         LOG.info("POSTing complete");
@@ -384,7 +388,11 @@ public class AssertionService {
             Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
             LOG.debug("Refreshed assertion - id: {}, salesforceId: {}, email: {}, orcid id: {}", assertion.getId(), assertion.getSalesforceId(), assertion.getEmail(),
                     assertion.getOrcidId());
-            putAssertionInOrcid(refreshed);
+            try {
+                putAssertionInOrcid(refreshed);
+            } catch (Exception e) {
+                LOG.error("Unexpected error PUTting assertion in registry", e);
+            }
             LOG.debug("PUT task complete for assertion {}", assertion.getId());
         }
         LOG.info("PUTting complete");
