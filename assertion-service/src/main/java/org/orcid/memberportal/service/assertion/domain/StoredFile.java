@@ -35,6 +35,9 @@ public class StoredFile implements Serializable {
     @Field("processing_error")
     private String error;
     
+    @Field("original_filename")
+    private String originalFilename;
+    
     @Field
     private String ownerId;
 
@@ -100,6 +103,14 @@ public class StoredFile implements Serializable {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public String getOriginalFilename() {
+        return originalFilename;
+    }
+
+    public void setOriginalFilename(String originalFilename) {
+        this.originalFilename = originalFilename;
     }
     
 }

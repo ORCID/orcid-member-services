@@ -631,7 +631,7 @@ public class AssertionService {
 
     public void uploadAssertions(MultipartFile file) throws IOException {
         AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        storedFileService.storeAssertionsCsvFile(file.getInputStream(), user);
+        storedFileService.storeAssertionsCsvFile(file.getInputStream(), file.getOriginalFilename(), user);
     }
 
     public void processAssertionUploads() {

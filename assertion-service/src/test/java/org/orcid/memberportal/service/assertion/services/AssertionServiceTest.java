@@ -59,6 +59,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 class AssertionServiceTest {
@@ -116,6 +117,9 @@ class AssertionServiceTest {
     
     @Captor
     private ArgumentCaptor<StoredFile> storedFileCaptor;
+    
+    @Captor
+    private ArgumentCaptor<String> filenameCaptor;
 
     @InjectMocks
     private AssertionService assertionService;
@@ -1029,9 +1033,13 @@ class AssertionServiceTest {
     @Test
     void testUploadAssertions() throws IOException {
         MultipartFile file = Mockito.mock(MultipartFile.class);
+        Mockito.when(file.getOriginalFilename()).thenReturn("some-file.csv");
         Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
         assertionService.uploadAssertions(file);
-        Mockito.verify(storedFileService).storeAssertionsCsvFile(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class));
+        Mockito.verify(storedFileService).storeAssertionsCsvFile(Mockito.any(InputStream.class), filenameCaptor.capture(), Mockito.any(AssertionServiceUser.class));
+        
+        String filename = filenameCaptor.getValue();
+        assertEquals("some-file.csv", filename);
     }
     
     @Test

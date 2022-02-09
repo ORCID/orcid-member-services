@@ -49,9 +49,10 @@ public class StoredFileService {
         return outputFile;
     }
 
-    public void storeAssertionsCsvFile(InputStream inputStream, AssertionServiceUser user) throws IOException {
+    public void storeAssertionsCsvFile(InputStream inputStream, String filename, AssertionServiceUser user) throws IOException {
         File outputFile = writeCsvUploadFile(inputStream);
         StoredFile storedFile = new StoredFile();
+        storedFile.setOriginalFilename(filename);
         storedFile.setFileLocation(outputFile.getAbsolutePath());
         storedFile.setDateWritten(Instant.now());
         storedFile.setRemovalDate(storedFile.getDateWritten().plus(applicationProperties.getStoredFileLifespan(), ChronoUnit.DAYS));
