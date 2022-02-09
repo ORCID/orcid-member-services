@@ -59,7 +59,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 class AssertionServiceTest {
@@ -1089,6 +1088,8 @@ class AssertionServiceTest {
         assertEquals(0, summary.getNumDuplicates());
         assertEquals(0, summary.getNumDeleted());
         assertEquals(1, summary.getNumUpdated());
+        assertEquals("original-filename.csv", summary.getFilename());
+        assertNotNull(summary.getDate());
 
         Mockito.verify(assertionsRepository, Mockito.times(3)).insert(Mockito.any(Assertion.class));
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.any(Assertion.class));
@@ -1160,6 +1161,8 @@ class AssertionServiceTest {
     private StoredFile getDummyStoredFile() {
         StoredFile storedFile = new StoredFile();
         storedFile.setFileLocation(getClass().getResource("/assertions-with-bad-url.csv").getFile()); // any file that exists, test won't actually use it
+        storedFile.setOriginalFilename("original-filename.csv");
+        storedFile.setDateWritten(Instant.now());
         storedFile.setOwnerId("owner");
         return storedFile;
     }
@@ -1187,6 +1190,8 @@ class AssertionServiceTest {
         AssertionsUploadSummary summary = summaryCaptor.getValue();
 
         assertEquals(3, summary.getNumDuplicates());
+        assertEquals("original-filename.csv", summary.getFilename());
+        assertNotNull(summary.getDate());
 
         Mockito.verify(assertionsRepository, Mockito.never()).insert(Mockito.any(Assertion.class));
     }

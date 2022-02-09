@@ -11,10 +11,15 @@
     style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
 <div style="padding: 20px; padding-top: 10px; margin: auto;">
     <div th:insert="~{mail/common :: emailHeader}"></div>
+    <p>
+        <span th:text="#{email.affiliationUploadSummary.summary(${summary.filename}, ${summary.date})}">
+        	The file {{ filename }} that you uploaded at {{ date }} (UTC) has been processed.
+        </span>
+    </p>
     <span th:if="${#lists.isEmpty(summary.errors)}">
 	    <p>
-	        <span th:text="#{email.affiliationUploadSummary.processed}">
-	        	Your affiliation CSV upload has been processed with the following results:
+	        <span th:text="#{email.affiliationUploadSummary.ok}">
+	        	The CSV upload was successfully processed with the following results:
 	        </span>
 	    </p>
 	    <p>
@@ -56,8 +61,8 @@
     </span>
     <span th:if="${not #lists.isEmpty(summary.errors)}">
 	    <p>
-	        <span th:text="#{email.affiliationUploadSummary.failure}">
-	        	There was a problem processing your CSV upload. Pleases fix the errors below and try again.
+	        <span th:text="#{email.affiliationUploadSummary.problem}">
+	        	There was a problem with your CSV upload. Pleases fix the errors below and try again.
 	        </span>
 	    </p>
 	    <table>

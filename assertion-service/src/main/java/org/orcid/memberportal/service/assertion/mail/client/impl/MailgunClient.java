@@ -34,7 +34,7 @@ public class MailgunClient implements MailClient {
 
     @Override
     public void sendMail(String to, String subject, String html) throws MailException {
-        LOGGER.info("Preparing email {} for sending to {}", subject, to);
+        LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.addTextBody("to", to);
@@ -54,7 +54,7 @@ public class MailgunClient implements MailClient {
 
     @Override
     public void sendMailWithAttachment(String to, String subject, String html, File file) throws MailException {
-        LOGGER.info("Preparing email {} for sending to {}", subject, to);
+        LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.addTextBody("to", to);
