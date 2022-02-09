@@ -8,8 +8,10 @@ import java.nio.charset.StandardCharsets;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.util.EntityUtils;
 import org.orcid.memberportal.service.assertion.mail.MailException;
 import org.orcid.memberportal.service.assertion.mail.client.MailClient;
@@ -37,10 +39,11 @@ public class MailgunClient implements MailClient {
         LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.setCharset(StandardCharsets.UTF_8);
         builder.addTextBody("to", to);
         builder.addTextBody("from", getFrom());
-        builder.addTextBody("subject", subject);
-        builder.addTextBody("html", html);
+        builder.addPart("subject", new StringBody(subject, ContentType.create("text/plain", StandardCharsets.UTF_8)));
+        builder.addPart("html", new StringBody(html, ContentType.create("text/html", StandardCharsets.UTF_8)));
         
         if (testMode) {
             builder.addTextBody("o:testmode", "yes");
@@ -57,10 +60,11 @@ public class MailgunClient implements MailClient {
         LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.setCharset(StandardCharsets.UTF_8);
         builder.addTextBody("to", to);
         builder.addTextBody("from", getFrom());
-        builder.addTextBody("subject", subject);
-        builder.addTextBody("html", html);
+        builder.addPart("subject", new StringBody(subject, ContentType.create("text/plain", StandardCharsets.UTF_8)));
+        builder.addPart("html", new StringBody(html, ContentType.create("text/html", StandardCharsets.UTF_8)));
         builder.addPart("attachment", new FileBody(file));
 
         if (testMode) {
