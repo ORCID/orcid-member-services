@@ -11,6 +11,7 @@ public class LocaleUtils {
     static {
         CUSTOM_LOCALES = new HashMap<>();
         CUSTOM_LOCALES.put("zh_TW", Locale.TRADITIONAL_CHINESE);
+        CUSTOM_LOCALES.put("zh_CN", Locale.SIMPLIFIED_CHINESE);
     }
     
     /**
