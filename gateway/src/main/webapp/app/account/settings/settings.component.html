@@ -71,38 +71,49 @@
 				<h1 class="mt-3" jhiTranslate="settings.security.heading.string">Security</h1>
             	<hr />
 				<div class="form-group">
+				    <p jhiTranslate="settings.security.mfaExplain.string">Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you'll be prompted to enter a six-digit code we send to your preferred authentication application.</p>
 					<label class="form-control-label" for="field_mfaEnabled"
-						jhiTranslate="settings.security.mfa.string">Multi-factor
+						jhiTranslate="settings.security.mfa.string">Two-factor
 						Authentication</label> 
 					<input type="checkbox" class="form-control"
 						name="mfaEnabled" id="field_mfaEnabled"
 						formControlName="mfaEnabled" (change)="mfaEnabledStateChange()" />
 				</div>
-            	<div *ngIf="showMfaUpdated" jhiTranslate="settings.security.mfaUpdated.string">MFA settings updated</div>
+            	<div *ngIf="showMfaUpdated" jhiTranslate="settings.security.mfaUpdated.string">2FA settings updated</div>
 				<div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes">
 				    <div class="col-md-8">
-						<p jhiTranslate="settings.security.mfaInstructions.string">Scan
-							the QR code using your MFA app and enter the verification code
-							below.</p>
-						<a href="JavaScript:void(0);" (click)="toggleMfaTextCode()"
-							jhiTranslate="settings.security.preferText.string">Prefer a
-							text code?</a>
+				    	<ul>
+				    		<li jhiTranslate="settings.security.mfaQrCodeSteps.one.string">Install a two-factor authentication app<br />A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2'>Google Authenticator</a>, <a href='https://freeotp.github.io/'>FreeOTP</a>, or <a href='https://authy.com/'>Authy</a>.</li>
+				    	    <li jhiTranslate="settings.security.mfaQrCodeSteps.two.string">Scan this QR code with your device<br />Open your 2FA app and scan the image below.</li>
+				    	</ul>
 					</div>
 				</div>
 				<div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes">
-					<img [src]="safeQrCode()" />
+				    <div class="col-md-8">
+						<img [src]="safeQrCode()" />
+					</div>
 				</div>	
+				<div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes && showMfaTextCode">
+				    <div class="col-md-8">
+						<p class="mfaSecret"><strong>{{ mfaSetup.secret }}</strong></p>
+					</div>
+				</div>
 				<div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes">
 				    <div class="col-md-8">
-						<p *ngIf="showMfaTextCode">{{ mfaSetup.secret }}</p>
+						<ul>
+							<li><span jhiTranslate="settings.security.mfaCannotScan.one.string">Can't scan the QR code?</span><br /><a href="JavaScript:void(0);" (click)="toggleMfaTextCode()" jhiTranslate="settings.security.mfaCannotScan.two.string">Get a text code</a>&nbsp;<span jhiTranslate="settings.security.mfaCannotScan.three.string">and enter it into your 2FA app instead</span></li>
+				    		<li jhiTranslate="settings.security.mfaTextCodeSteps.one.string">Enter the six-digit code from the app<br />After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save.</li>
+				    	</ul>
 					</div>
 				</div>
 				<div class="form-group" *ngIf="showMfaSetup && !showMfaBackupCodes">
-				    <div *ngIf="mfaSetupFailure" class="alert alert-danger" jhiTranslate="settings.security.otpError.string">
-				        Incorrect verification code
-				    </div>
-					<input name="verificationCode" formControlName="verificationCode"
-						placeholder="{{'settings.security.verificationCode.string' | translate}}" />
+					<div class="col-md-8">
+					    <div *ngIf="mfaSetupFailure" class="alert alert-danger" jhiTranslate="settings.security.otpError.string">
+					        Incorrect verification code
+					    </div>
+						<input class="indented" name="verificationCode" formControlName="verificationCode"
+							placeholder="{{'settings.security.verificationCode.string' | translate}}" />
+					</div>
 				</div>
 				<div class="row" *ngIf="showMfaBackupCodes && showMfaSetup">
 					<div class="col-md-8">
