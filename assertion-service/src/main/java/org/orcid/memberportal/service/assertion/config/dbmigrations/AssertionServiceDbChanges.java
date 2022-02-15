@@ -18,7 +18,7 @@ import com.github.mongobee.changeset.ChangeSet;
 
 @ChangeLog(order = "001")
 public class AssertionServiceDbChanges {
-   
+
     private static final Logger LOG = LoggerFactory.getLogger(AssertionServiceDbChanges.class);
 
     @ChangeSet(order = "01", author = "George Nash", id = "01-populateLastSyncAttempts")
@@ -36,7 +36,7 @@ public class AssertionServiceDbChanges {
             }
         });
     }
-    
+
     @ChangeSet(order = "02", author = "George Nash", id = "02-convertAffiliationEmailsToLowerCase")
     public void convertAffiliationEmailsToLowerCase(MongoTemplate mongoTemplate) {
         Query query = new Query();
@@ -49,7 +49,7 @@ public class AssertionServiceDbChanges {
             mongoTemplate.save(a);
         });
     }
-    
+
     @ChangeSet(order = "03", author = "George Nash", id = "03-convertOrcidRecordEmailsToLowerCase")
     public void convertOrcidRecordEmailsToLowerCase(MongoTemplate mongoTemplate) {
         Query query = new Query();
@@ -62,7 +62,7 @@ public class AssertionServiceDbChanges {
             mongoTemplate.save(or);
         });
     }
-    
+
     @ChangeSet(order = "04", author = "George Nash", id = "04-addProcessedDateToCsvStatsFiles")
     public void addProcessedDateToCsvStatsFiles(MongoTemplate mongoTemplate) {
         Query query = new Query();
@@ -76,10 +76,15 @@ public class AssertionServiceDbChanges {
             mongoTemplate.save(f);
         });
     }
-    
+
     @ChangeSet(order = "05", author = "George Nash", id = "05-makeOrcidRecordEmailIndexUnique")
     public void makeOrcidRecordEmailIndexUnique(MongoTemplate mongoTemplate) {
-        mongoTemplate.indexOps("orcid_record").dropIndex("email");
+        try {
+            mongoTemplate.indexOps("orcid_record").dropIndex("email");
+        } catch (Exception e) {
+            // do nothing - IT tests will not find index called email as it was
+            // previously generated from annotation in the domain object
+        }
         mongoTemplate.indexOps("orcid_record").ensureIndex(new Index("email", Direction.ASC).unique().named("email_unique_idx"));
     }
 
