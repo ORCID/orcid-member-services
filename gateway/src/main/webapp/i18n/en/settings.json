@@ -3,16 +3,16 @@
     "title": { "string": "Settings for {{username}} (You)" },
     "personalDetails": { "string": "Personal details" },
     "security": {
-      "mfa": { "string": "Multi-factor Authentication" },
+      "mfa": { "string": "Two-factor Authentication" },
       "heading": { "string": "Security" },
-      "mfaInstructions": { "string": "Scan the QR code using your MFA app and enter the verification code below." },
+      "mfaInstructions": { "string": "Scan the QR code using your 2FA app and enter the verification code below." },
       "preferText": { "string": "Prefer a text code?" },
-      "switchOnMfa": { "string": "Switch on MFA" },
-      "switchOffMfa": { "string": "Switch off MFA" },
+      "switchOnMfa": { "string": "Switch on 2FA" },
+      "switchOffMfa": { "string": "Switch off 2FA" },
       "backupCodes": { "string": "Make a note of the following backup codes, this is the only time they will be shown." },
       "otpError": { "string": "Incorrect verification code" },
       "verificationCode": { "string": "Verification code" },
-      "mfaUpdated": { "string": "MFA settings updated" }
+      "mfaUpdated": { "string": "2FA settings updated" }
     },
     "form": {
       "firstname": {
