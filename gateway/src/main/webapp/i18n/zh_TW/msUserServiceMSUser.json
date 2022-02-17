@@ -2,9 +2,9 @@
   "gatewayApp": {
     "msUserServiceMSUser": {
       "home": {
-        "title": { "string": "管理使用者" },
+        "title": { "string": "管理用戶" },
         "createLabel": { "string": "新增用戶" },
-        "createOrEditLabel": { "string": "新增或編輯使用者" },
+        "createOrEditLabel": { "string": "添加或编辑用户" },
         "notFound": { "string": "沒有可顯示的使用者" },
         "uploadLabel": { "string": "由 CSV 檔案匯入使用者" }
       },
@@ -54,7 +54,7 @@
     "userDTO": {
       "login": { "string": "電子郵件" },
       "firstName": { "string": "名字" },
-      "lastName": { "string": "姓氏" }
+      "lastName": { "string": "姓" }
     }
   },
   "userServiceApp": {

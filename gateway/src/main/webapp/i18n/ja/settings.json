@@ -3,16 +3,37 @@
     "title": { "string": " {{username}} ( お客様 ) 用設定" },
     "personalDetails": { "string": "個人情報" },
     "security": {
-      "mfa": { "string": "多要素認証" },
+      "mfa": { "string": "2段階認証" },
       "heading": { "string": "セキュリティ" },
-      "mfaInstructions": { "string": "MFAアプリを使用してQRコードをスキャンし、以下に認証コードを入力してください。" },
+      "mfaInstructions": { "string": "2段階認証アプリを使用してQRコードをスキャンしてから、以下に認証コードを入力してください。" },
+      "mfaExplain": {
+        "string": "2段階認証を有効にして、ORCIDメンバーポータルアカウントにさらなるセキュリティ対策を追加しましょう。サインインをするたびに、ご希望の認証アプリケーションに送信される6桁のコードを入力するように要求されます。"
+      },
+      "mfaQrCodeSteps": {
+        "one": {
+          "string": "<strong>2段階認証アプリをインストール</strong><br />サインインをする度にアカウントへのアクセスに必要となる6桁のコードを作成するために、2段階認証アプリが必須となります。多くのアプリはモバイルデバイス向けですが、デスクトップやウェブ上のアプリとして使用可能なものもあります。<a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2'>Google Authenticator</a>、<a href='https://freeotp.github.io/'>FreeOTP</a>、<a href='https://authy.com/'>Authy</a>などのお好きな2段階認証アプリをダウンロードして、インストールしてください。"
+        },
+        "two": {
+          "string": "<strong>ご使用のデバイスでこちらのQRコードをスキャンしてください</strong>\n<br />2段階認証アプリを開いて、以下の画像をスキャンしてください。"
+        }
+      },
+      "mfaCannotScan": {
+        "one": { "string": "<strong>QRコードのスキャンができませんか？</strong>" },
+        "two": { "string": "テキストコードを入手" },
+        "three": { "string": "して、代わりに2段階認証アプリに入力してください" }
+      },
+      "mfaTextCodeSteps": {
+        "one": {
+          "string": "<strong>アプリで受け取った6桁のコードを入力してください</strong><br />QRコードをスキャンまたはテキストコードを入力した後に、2段階認証アプリに6桁のコードが表示されます。このコードを以下のボックスに入力して、保存をクリックしてください。"
+        }
+      },
       "preferText": { "string": "テキストコードをご希望ですか？" },
-      "switchOnMfa": { "string": "MFAをオンにする" },
-      "switchOffMfa": { "string": "MFAをオフにする" },
+      "switchOnMfa": { "string": "2段階認証をオンにする" },
+      "switchOffMfa": { "string": "2段階認証をオフにする" },
       "backupCodes": { "string": "次のバックアップコードを控えておいてください。バックアップコードが表示されるのは今回のみになります。" },
       "otpError": { "string": "間違った認証コード" },
       "verificationCode": { "string": "認証コード" },
-      "mfaUpdated": { "string": "MFA設定が更新されました" }
+      "mfaUpdated": { "string": "2段階認証の設定が更新されました" }
     },
     "form": {
       "firstname": {

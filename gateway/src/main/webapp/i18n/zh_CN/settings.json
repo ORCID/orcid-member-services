@@ -3,16 +3,35 @@
     "title": { "string": "{{username}}（您）的设置" },
     "personalDetails": { "string": "个人资料" },
     "security": {
-      "mfa": { "string": "多因子验证" },
+      "mfa": { "string": "双重验证" },
       "heading": { "string": "安全性" },
-      "mfaInstructions": { "string": "使用 MFA app 扫描二维码，并输入以下验证码。" },
+      "mfaInstructions": { "string": "使用 2FA app 扫描二维码，并输入以下验证码。" },
+      "mfaExplain": {
+        "string": "启用双重身份验证，为您的 ORCID 成员门户账户增加额外的安全性。每次登录时，系统都会提示您输入发送到您首选身份验证应用程序的六位数验证码。"
+      },
+      "mfaQrCodeSteps": {
+        "one": {
+          "string": "<strong>安装双重身份验证应用</strong><br />每次登录时都需要 2FA 应用程序来创建访问帐户所需的六位数代码。大多数应用程序适用于移动设备；有些还可以作为桌面或基于 Web 的应用程序使用。下载并安装您首选的 2FA 应用，例如 <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2'>Google Authenticator</a>、<a href='https://freeotp.github.io/'>FreeOTP</a> 或 <a href='https://authy.com/'>Authy</a>。"
+        },
+        "two": { "string": "<strong>使用设备扫描此二维码</strong><br />打开 2FA 应用并扫描下方图像。" }
+      },
+      "mfaCannotScan": {
+        "one": { "string": "<strong>无法扫描二维码？</strong>" },
+        "two": { "string": "获取短信验证码" },
+        "three": { "string": "并将其输入 2FA 应用" }
+      },
+      "mfaTextCodeSteps": {
+        "one": {
+          "string": "<strong>输入来自应用的六位数验证码</strong><br />扫描二维码或输入短信验证码后，2FA 即会显示一个六位数验证码。在下方框中输入该验证码，然后单击“保存”。"
+        }
+      },
       "preferText": { "string": "更喜欢文本码?" },
-      "switchOnMfa": { "string": "打开 MFA" },
-      "switchOffMfa": { "string": "关闭 MFA" },
+      "switchOnMfa": { "string": "打开 2FA" },
+      "switchOffMfa": { "string": "关闭 2FA" },
       "backupCodes": { "string": "请记下以下备份代码，它们只会出现这一次。" },
       "otpError": { "string": "验证码不正确" },
       "verificationCode": { "string": "验证码" },
-      "mfaUpdated": { "string": "MFA 设置已更新" }
+      "mfaUpdated": { "string": "2FA 设置已更新" }
     },
     "form": {
       "firstname": {

@@ -3,18 +3,37 @@
     "title": { "string": "Configuración de {{username}} (usted)" },
     "personalDetails": { "string": "Detalles personales" },
     "security": {
-      "mfa": { "string": "Autenticación multifactor" },
+      "mfa": { "string": "Autenticación de dos factores" },
       "heading": { "string": "Seguridad" },
-      "mfaInstructions": {
-        "string": "Escanee el código QR usando su aplicación MFA e introduzca el código de verificación a continuación."
+      "mfaInstructions": { "string": "Escanee el código QR usando su aplicación 2FA e ingrese a continuación el código de verificación." },
+      "mfaExplain": {
+        "string": "Añada seguridad adicional a su cuenta del portal de miembros de ORCID activando la autenticación de dos factores. Cada vez que inicie sesión, se le pedirá que introduzca un código de seis dígitos que le enviaremos a su aplicación de autenticación preferida."
+      },
+      "mfaQrCodeSteps": {
+        "one": {
+          "string": "<strong>Instale una aplicación de autenticación de dos factores</strong><br />Es necesaria una aplicación 2FA que genere un código de seis dígitos para acceder a su cuenta cada vez que inicie sesión. La mayoría de estas aplicaciones son para dispositivos móviles, aunque también las hay para escritorio o basadas en la web. Descargue e instale su aplicación 2FA preferida, por ejemplo: <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2'>Google Authenticator</a>, <a href='https://freeotp.github.io/'>FreeOTP</a>, o <a href='https://authy.com/'>Authy</a>."
+        },
+        "two": {
+          "string": "<strong>Escanee este código QR en su dispositivo</strong><br />Abra su aplicación 2FA y escanee la siguiente imagen."
+        }
+      },
+      "mfaCannotScan": {
+        "one": { "string": "<strong>¿No puede escanear el código QR?</strong>" },
+        "two": { "string": "Obtenga un código de texto en su lugar" },
+        "three": { "string": "e introdúzcalo en su aplicación 2FA" }
+      },
+      "mfaTextCodeSteps": {
+        "one": {
+          "string": "<strong>Introduzca el código de seis dígitos de la aplicación</strong><br />Tras escanear el código QR o introducir el código de texto, su aplicación 2FA le mostrará un código de seis dígitos. Introdúzcalo en el cuadro siguiente y haga clic en Guardar."
+        }
       },
       "preferText": { "string": "¿Prefiere un código de texto?" },
-      "switchOnMfa": { "string": "Activar MFA" },
-      "switchOffMfa": { "string": "Desactivar MFA" },
+      "switchOnMfa": { "string": "Activar 2FA" },
+      "switchOffMfa": { "string": "Desactivar 2FA" },
       "backupCodes": { "string": "Tome nota de los siguientes códigos de respaldo; solo se mostrarán esta vez." },
       "otpError": { "string": "Código de verificación incorrecto" },
       "verificationCode": { "string": "Código de verificación" },
-      "mfaUpdated": { "string": "Configuración de MFA actualizada" }
+      "mfaUpdated": { "string": "Configuración 2FA actualizada" }
     },
     "form": {
       "firstname": {

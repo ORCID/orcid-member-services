@@ -3,16 +3,35 @@
     "title": { "string": "{{username}}（你）的設定" },
     "personalDetails": { "string": "個人詳細資料" },
     "security": {
-      "mfa": { "string": "多重要素驗證" },
+      "mfa": { "string": "雙重認證" },
       "heading": { "string": "安全性" },
-      "mfaInstructions": { "string": "使用您的 MFA 應用程式掃描 QR 代碼並輸入下方的驗證碼。" },
+      "mfaInstructions": { "string": "使用您的雙重認證 app 掃描 QR 碼並輸入下方的驗證碼。" },
+      "mfaExplain": {
+        "string": "透過啟用雙重認證，為您的 ORCID 成員入口帳戶增添額外的安全性。每次登入時，系統都會提示您輸入我們傳送至您首選認證應用程式的六位數代碼。"
+      },
+      "mfaQrCodeSteps": {
+        "one": {
+          "string": "<strong>安裝雙重認證 app</strong><br />您需要一個雙重認證 app 來創建您每次登入帳戶時所需的六位數代碼。多數 app 適用於行動裝置，部分 app 還能在電腦桌面使用，或是使用網頁型 app。下載並安裝您喜歡的雙重認證 app，例如 <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2'>Google Authenticator</a>、<a href='https://freeotp.github.io/'>FreeOTP</a>，或 <a href='https://authy.com/'>Authy</a>。"
+        },
+        "two": { "string": "<strong>使用您的裝置掃描此 QR 碼</strong><br />開啟您的雙重認證 app 並掃描下方圖片。" }
+      },
+      "mfaCannotScan": {
+        "one": { "string": "<strong>無法掃描 QR 碼？</strong>" },
+        "two": { "string": "取得簡訊代碼" },
+        "three": { "string": "那便將其輸入至您的雙重認證 app" }
+      },
+      "mfaTextCodeSteps": {
+        "one": {
+          "string": "<strong>輸入 app 中的六位數代碼</strong><br />掃描 QR 碼或輸入簡訊代碼後，您的雙重認證 app 便會顯示一個六位數代碼，將此代碼輸入下方選框後點擊「儲存」。"
+        }
+      },
       "preferText": { "string": "想要文字代碼？" },
-      "switchOnMfa": { "string": "開啟 MFA" },
-      "switchOffMfa": { "string": "關閉 MFA" },
+      "switchOnMfa": { "string": "啟用雙重認證" },
+      "switchOffMfa": { "string": "關閉雙重認證" },
       "backupCodes": { "string": "請記下以下的備份代碼，因為這個代碼只會出現一次。" },
       "otpError": { "string": "驗證代碼不正確" },
       "verificationCode": { "string": "驗證代碼" },
-      "mfaUpdated": { "string": "已更新 MFA 設定" }
+      "mfaUpdated": { "string": "已更新雙重認證設定" }
     },
     "form": {
       "firstname": {
