@@ -3,16 +3,37 @@
     "title": { "string": "Nastavení pro {{username}} (vy)" },
     "personalDetails": { "string": "Osobní " },
     "security": {
-      "mfa": { "string": "Vícefaktorová autentizace" },
+      "mfa": { "string": "Dvoufázové ověření" },
       "heading": { "string": "Zabezpečení" },
-      "mfaInstructions": { "string": "Naskenujte QR kód pomocí aplikace MFA a zadejte ověřovací kód níže." },
+      "mfaInstructions": { "string": "Naskenujte QR kód pomocí vaší aplikace pro dvoufázové ověření a vložte ověřovací kód níže." },
+      "mfaExplain": {
+        "string": "Přidejte další stupeň zabezpečení do svého účtu členského portálu ORCID povolením dvoufázového ověření. Při každém přihlášení budete vyzváni k zadání šestimístného kódu, který zašleme do vámi preferované ověřovací aplikace."
+      },
+      "mfaQrCodeSteps": {
+        "one": {
+          "string": "<strong>Nainstalujte si aplikaci pro dvoufázové ověření</strong><br />Aplikace pro dvoufázové ověření je vyžadována, abyste vytvořili šestimístní kód a pomocí něj získali přístup ke svému účtu pokaždé, když se přihlásíte. Většina aplikací je pro mobilní zařízení. Některé jsou také dostupné jako desktopové a prohlížečové aplikace. Stáhněte a nainstalujte si vámi preferovanou aplikaci pro dvoufázové ověření jako například <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2'>Google Authenticator</a>, <a href='https://freeotp.github.io/'>FreeOTP</a> nebo <a href='https://authy.com/'>Authy</a>."
+        },
+        "two": {
+          "string": "<strong>Naskenujte tento QR kód vaším zařízením</strong><br />Otěvřete svou aplikaci pro dvoufázové ověření a naskenujte obrázek níže."
+        }
+      },
+      "mfaCannotScan": {
+        "one": { "string": "<strong>Nejde vám QR kód naskenovat?</strong>" },
+        "two": { "string": "Získejte namísto toho SMS kód" },
+        "three": { "string": "a vložte jej do své aplikace pro dvoufázové ověření místo " }
+      },
+      "mfaTextCodeSteps": {
+        "one": {
+          "string": "<strong>Vložte šestimístní kód z aplikace</strong><br />Po naskenování QR kódu nebo vložení kódu z SMS se v aplikaci pro dvoufázové ověření zobrazí šestimístní kód. Vložte tento kód do pole níže a klikněte na tlačítko Uložit."
+        }
+      },
       "preferText": { "string": "Preferujete textový kód?" },
-      "switchOnMfa": { "string": "Zapnout MFA" },
-      "switchOffMfa": { "string": "Vypnout MFA" },
+      "switchOnMfa": { "string": "Zapnout dvoufázové ověření" },
+      "switchOffMfa": { "string": "Vypnout dvoufázové ověření" },
       "backupCodes": { "string": "Poznamenejte si následující záložní kódy, toto je jediný případ, kdy se zobrazí." },
       "otpError": { "string": "Nesprávný ověřovací kód" },
       "verificationCode": { "string": "Ověřovací kód" },
-      "mfaUpdated": { "string": "Nastavení MFA aktualizováno" }
+      "mfaUpdated": { "string": "Nastavení dvoufázového ověření aktualizováno" }
     },
     "form": {
       "firstname": {

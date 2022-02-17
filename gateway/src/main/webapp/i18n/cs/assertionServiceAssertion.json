@@ -71,7 +71,7 @@
       "putCode": { "string": "Vložte kód" },
       "created": { "string": "Vytvořeno" },
       "modified": { "string": "Upraveno" },
-      "status": { "string": "Status" },
+      "status": { "string": "Postavení" },
       "deletedFromORCID": { "string": "Vymazáno z ORCID" },
       "sent": { "string": "Odesláno" },
       "adminId": { "string": "Identifikace správce" },

@@ -3,16 +3,39 @@
     "title": { "string": "Paramètres pour {{username}} (vous)" },
     "personalDetails": { "string": "Détails personnels" },
     "security": {
-      "mfa": { "string": "Authentification multifacteur" },
+      "mfa": { "string": "Authentification à deux facteurs" },
       "heading": { "string": "Sécurité" },
-      "mfaInstructions": { "string": "Scannez le code QR avec votre application MFA et saisissez le code de vérification ci-dessous." },
+      "mfaInstructions": {
+        "string": "Scannez le code QR à l'aide de votre application A2F et saisissez le code de vérification ci-dessous."
+      },
+      "mfaExplain": {
+        "string": "Ajoutez une sécurité supplémentaire à votre compte du portail des membres ORCID en activant l'authentification à deux facteurs. Chaque fois que vous vous connecterez, vous serez invité à saisir un code à six chiffres que nous enverrons à votre application d'authentification préférée."
+      },
+      "mfaQrCodeSteps": {
+        "one": {
+          "string": "<strong>Installer une application d'authentification à deux facteurs</strong><br />Une application A2F est nécessaire pour créer le code à six chiffres dont vous avez besoin pour accéder à votre compte à chaque fois que vous vous connectez. La plupart des applications sont destinées aux appareils mobiles ; certaines sont également disponibles en tant qu'applications de bureau ou web. Téléchargez et installez votre application A2F préférée, telle que <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2'>Google Authenticator</a>, <a href='https://freeotp.github.io/'>FreeOTP</a>, ou <a href='https://authy.com/'>Authy</a>."
+        },
+        "two": {
+          "string": "<strong>Scannez ce code QR avec votre appareil</strong><br />Ouvrez votre application A2F et scannez l'image ci-dessous."
+        }
+      },
+      "mfaCannotScan": {
+        "one": { "string": "<strong>Vous ne pouvez pas scanner le code QR ?</strong>" },
+        "two": { "string": "Obtenez un code texte" },
+        "three": { "string": "et entrez-le dans votre application A2F à la place" }
+      },
+      "mfaTextCodeSteps": {
+        "one": {
+          "string": "<strong>Saisissez le code à six chiffres dans l'application</strong><br />Après avoir scanné le code QR ou saisi le code texte, votre application A2F affiche un code à six chiffres. Saisissez ce code dans la case ci-dessous et cliquez sur Enregistrer."
+        }
+      },
       "preferText": { "string": "Vous préférez un code texte ?" },
-      "switchOnMfa": { "string": "Activer MFA" },
-      "switchOffMfa": { "string": "Désactiver MFA" },
+      "switchOnMfa": { "string": "Activer A2F" },
+      "switchOffMfa": { "string": "Désactiver A2F" },
       "backupCodes": { "string": "Notez les codes de sauvegarde suivants, c'est la seule fois qu'ils seront affichés." },
       "otpError": { "string": "Code de vérification incorrect" },
       "verificationCode": { "string": "Code de vérification" },
-      "mfaUpdated": { "string": "Mise à jour des paramètres MFA" }
+      "mfaUpdated": { "string": "Mise à jour des paramètres A2F\n" }
     },
     "form": {
       "firstname": {

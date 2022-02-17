@@ -3,16 +3,37 @@
     "title": { "string": "Definições para {{username}} (Você)" },
     "personalDetails": { "string": "Dados pessoais" },
     "security": {
-      "mfa": { "string": "Autenticação Multifatorial" },
+      "mfa": { "string": "Autenticação de dois fatores" },
       "heading": { "string": "Segurança" },
-      "mfaInstructions": { "string": "Digitalize o código QR utilizando a sua aplicação MFA e introduza o código de verificação abaixo." },
+      "mfaInstructions": { "string": "Digitalize o código QR com a sua aplicação 2FA e introduza o código de verificação abaixo." },
+      "mfaExplain": {
+        "string": "Adicione mais segurança à sua conta permitindo a autenticação de dois fatores. De cada vez que iniciar sessão, ser-lhe-à solicitado que introduza um código de seis dígitos que enviaremos para a sua aplicação de autenticação preferida."
+      },
+      "mfaQrCodeSteps": {
+        "one": {
+          "string": "<strong>Instale uma aplicação de autenticação de dois fatores</strong><br />Uma aplicação de 2FA é requerida para criar o código de seis dígitos de que necessita para aceder à sua conta de cada vez que iniciar sessão. A maioria das aplicações são para dispositivos móveis; algumas estão disponíveis para PC, ou são baseadas na rede. Transfira e instale a sua aplicação de 2FA favorita, tal como a  <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2'>Google Authenticator</a>, a <a href='https://freeotp.github.io/'>FreeOTP</a>, ou a <a href='https://authy.com/'>Authy</a>."
+        },
+        "two": {
+          "string": "<strong>Digitalize este código QR com o seu dispositivo</strong><br />Abra a sua aplicação de 2FA e digitalize a imagem abaixo."
+        }
+      },
+      "mfaCannotScan": {
+        "one": { "string": "<strong>Não consegue digitalizar o código QR?</strong>" },
+        "two": { "string": "Obtenha antes um código de texto" },
+        "three": { "string": "e introduza-o na sua aplicação de 2FA" }
+      },
+      "mfaTextCodeSteps": {
+        "one": {
+          "string": "<strong>Introduza o código de seis dígitos na aplicação</strong><br />Após digitalizar o código QR ou introduzir o código de texto, a sua aplicação de 2FA exibirá um código de seis dígitos. Introduza este código na caixa abaixo e clique em Guardar."
+        }
+      },
       "preferText": { "string": "Prefere um código de texto?" },
-      "switchOnMfa": { "string": "Ligar MFA" },
-      "switchOffMfa": { "string": "Desligar MFA" },
+      "switchOnMfa": { "string": "Ativar a 2FA" },
+      "switchOffMfa": { "string": "Desativar a 2FA" },
       "backupCodes": { "string": "Anote os seguintes códigos da cópia de segurança, esta é a única vez que serão exibidos." },
       "otpError": { "string": "Código de verificação inválido" },
       "verificationCode": { "string": "Código de verificação" },
-      "mfaUpdated": { "string": "Configurações da MFA atualizadas" }
+      "mfaUpdated": { "string": "Definições da 2FA atualizadas" }
     },
     "form": {
       "firstname": {
