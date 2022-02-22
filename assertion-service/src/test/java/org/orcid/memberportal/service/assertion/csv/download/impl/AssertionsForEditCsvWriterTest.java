@@ -28,7 +28,7 @@ import org.springframework.data.domain.Sort;
 
 public class AssertionsForEditCsvWriterTest {
 
-    private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
+    private static final String DEFAULT_SALESFORCE_ID = "salesforceId";
 
     @Mock
     private AssertionRepository assertionsRepository;
@@ -45,8 +45,8 @@ public class AssertionsForEditCsvWriterTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforceId");
-        when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforceId"), Mockito.any(Sort.class))).thenReturn(getListOfAsserions());
+        when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
+        when(assertionsRepository.findBySalesforceId(Mockito.eq(DEFAULT_SALESFORCE_ID), Mockito.any(Sort.class))).thenReturn(getListOfAsserions());
         when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getDummyOrcidRecord());
     }
 
