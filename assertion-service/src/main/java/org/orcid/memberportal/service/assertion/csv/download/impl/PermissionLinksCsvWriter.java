@@ -8,10 +8,8 @@ import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
 import org.orcid.memberportal.service.assertion.csv.download.CsvDownloadWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
-import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
-import org.orcid.memberportal.service.assertion.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,28 +27,21 @@ public class PermissionLinksCsvWriter extends CsvDownloadWriter {
     @Autowired
     private OrcidRecordService orcidRecordService;
 
-    @Autowired
-    private UserService assertionsUserService;
-
-    @Autowired
-    private AssertionRepository assertionsRepository;
-
     @Override
-    public String writeCsv() throws IOException {
-        return super.writeCsv(HEADERS, getRows());
+    public String writeCsv(String salesforceId) throws IOException {
+        return super.writeCsv(HEADERS, getRows(salesforceId));
     }
     
-    private List<List<String>> getRows() {
+    private List<List<String>> getRows(String salesforceId) {
         List<List<String>> rows = new ArrayList<>();
         String landingPageUrl = applicationProperties.getLandingPageUrl();
-        String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
-        List<OrcidRecord> records = orcidRecordService.getRecordsWithoutTokens(salesForceId);
+        List<OrcidRecord> records = orcidRecordService.getRecordsWithoutTokens(salesforceId);
 
         for (OrcidRecord record : records) {
             String email = record.getEmail();
-            List<Assertion> assertions = assertionsRepository.findByEmailAndSalesforceId(email, salesForceId);
+            List<Assertion> assertions = assertionsRepository.findByEmailAndSalesforceId(email, salesforceId);
             if (assertions.size() > 0) {
-                String encrypted = encryptUtil.encrypt(salesForceId + "&&" + email);
+                String encrypted = encryptUtil.encrypt(salesforceId + "&&" + email);
                 String link = landingPageUrl + "?state=" + encrypted;
 
                 List<String> row = new ArrayList<>();

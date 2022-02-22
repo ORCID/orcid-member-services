@@ -19,7 +19,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.orcid.memberportal.service.assertion.csv.download.impl.AssertionsReportCsvWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
@@ -81,7 +80,7 @@ public class AssertionsReportCsvWriterTest {
 
     @Test
     public void testWriteAssertionsReport() throws IOException {
-        String test = reportWriter.writeCsv();
+        String test = reportWriter.writeCsv(assertionsUserService.getLoggedInUserSalesforceId());
         assertNotNull(test);
         assertTrue(test.length() > 0);
 

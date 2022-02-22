@@ -473,7 +473,7 @@ public class AssertionService {
     }
 
     public String generateAssertionsReport() throws IOException {
-        return assertionsReportCsvWriter.writeCsv();
+        return assertionsReportCsvWriter.writeCsv(assertionsUserService.getLoggedInUserSalesforceId());
     }
 
     public void generateAndSendMemberAssertionStats() throws IOException {
@@ -636,11 +636,11 @@ public class AssertionService {
     }
 
     public String generatePermissionLinks() throws IOException {
-        return permissionLinksCsvWriter.writeCsv();
+        return permissionLinksCsvWriter.writeCsv(assertionsUserService.getLoggedInUserSalesforceId());
     }
 
     public String generateAssertionsCSV() throws IOException {
-        return assertionsForEditCsvWriter.writeCsv();
+        return assertionsForEditCsvWriter.writeCsv(assertionsUserService.getLoggedInUserSalesforceId());
     }
 
     public void uploadAssertions(MultipartFile file) throws IOException {

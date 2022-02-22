@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.orcid.memberportal.service.assertion.csv.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
@@ -53,7 +52,7 @@ public class AssertionsForEditCsvWriterTest {
 
     @Test
     public void testWriteAssertionsReport() throws IOException {
-        String test = csvWriter.writeCsv();
+        String test = csvWriter.writeCsv(DEFAULT_SALESFORCE_ID);
         assertNotNull(test);
         assertTrue(test.length() > 0);
         String[] lines = test.split("\\n");

@@ -691,26 +691,26 @@ class AssertionServiceTest {
 
     @Test
     void testGenerateAssertionsCSV() throws IOException {
-        when(assertionsForEditCsvWriter.writeCsv()).thenReturn("test");
+        when(assertionsForEditCsvWriter.writeCsv(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn("test");
         String csv = assertionService.generateAssertionsCSV();
         assertEquals("test", csv);
-        verify(assertionsForEditCsvWriter, times(1)).writeCsv();
+        verify(assertionsForEditCsvWriter, times(1)).writeCsv(Mockito.eq(DEFAULT_SALESFORCE_ID));
     }
 
     @Test
     void testGenerateAssertionsReport() throws IOException {
-        Mockito.when(assertionsReportWriter.writeCsv()).thenReturn("test");
+        Mockito.when(assertionsReportWriter.writeCsv(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn("test");
         String csv = assertionService.generateAssertionsReport();
         assertEquals("test", csv);
-        Mockito.verify(assertionsReportWriter, Mockito.times(1)).writeCsv();
+        Mockito.verify(assertionsReportWriter, Mockito.times(1)).writeCsv(Mockito.eq(DEFAULT_SALESFORCE_ID));
     }
 
     @Test
     void testGenerateLinks() throws IOException {
-        Mockito.when(permissionLinksCsvWriter.writeCsv()).thenReturn("test");
+        Mockito.when(permissionLinksCsvWriter.writeCsv(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn("test");
         String csv = assertionService.generatePermissionLinks();
         assertEquals("test", csv);
-        Mockito.verify(permissionLinksCsvWriter, Mockito.times(1)).writeCsv();
+        Mockito.verify(permissionLinksCsvWriter, Mockito.times(1)).writeCsv(Mockito.eq(DEFAULT_SALESFORCE_ID));
     }
 
     @Test

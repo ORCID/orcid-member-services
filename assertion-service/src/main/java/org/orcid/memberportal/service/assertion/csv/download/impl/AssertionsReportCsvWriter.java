@@ -12,9 +12,7 @@ import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
-import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
-import org.orcid.memberportal.service.assertion.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -29,19 +27,12 @@ public class AssertionsReportCsvWriter extends CsvDownloadWriter {
             "external-id", "external-id-type", "external-id-url" };
 
     @Autowired
-    private UserService assertionsUserService;
-
-    @Autowired
-    private AssertionRepository assertionsRepository;
-
-    @Autowired
     private OrcidRecordService orcidRecordService;
 
     @Override
-    public String writeCsv() throws IOException {
-        String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
-        List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesForceId, this.SORT);
-        return super.writeCsv(HEADERS, getRows(assertions, salesForceId));
+    public String writeCsv(String salesforceId) throws IOException {
+        List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, this.SORT);
+        return super.writeCsv(HEADERS, getRows(assertions, salesforceId));
     }
 
     private List<List<String>> getRows(List<Assertion> assertions, String salesforceId) {
