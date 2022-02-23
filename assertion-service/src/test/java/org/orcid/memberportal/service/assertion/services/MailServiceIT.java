@@ -52,18 +52,17 @@ class MailServiceIT {
         mailService = new MailService(getTestApplicationProperties(), messageSource, templateEngine, mailgunClient);
         Mockito.when(messageSource.getMessage(Mockito.eq("email.memberAssertionStats.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("member stats");
         Mockito.when(messageSource.getMessage(Mockito.eq("email.affiliationUploadSummary.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("summary");
-        Mockito.when(messageSource.getMessage(Mockito.eq("email.csvReport.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("your csv file");
     }
     
     @Test
     void testSendCsvReportMail() throws MailException {
         Mockito.doNothing().when(mailgunClient).sendMailWithAttachment(Mockito.eq("memberstats@orcid.org"), Mockito.eq("member stats"), Mockito.eq("something"),
                 Mockito.any(File.class));
-        mailService.sendCsvReportMail(getAttachment(), getUser());
+        mailService.sendCsvReportMail(getAttachment(), getUser(), "subject", "content");
         
         Mockito.verify(mailgunClient).sendMailWithAttachment(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString(), fileCaptor.capture());
         assertThat(recipientCaptor.getValue()).isEqualTo("summary@orcid.org");
-        assertThat(subjectCaptor.getValue()).isEqualTo("your csv file");
+        assertThat(subjectCaptor.getValue()).isEqualTo("subject");
         assertThat(fileCaptor.getValue()).isNotNull();
     }
 

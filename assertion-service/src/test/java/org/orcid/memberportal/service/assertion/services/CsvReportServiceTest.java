@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.CsvReport;
 import org.orcid.memberportal.service.assertion.domain.StoredFile;
 import org.orcid.memberportal.service.assertion.repository.CsvReportRepository;
+import org.springframework.context.MessageSource;
 
 class CsvReportServiceTest {
 
@@ -46,6 +48,9 @@ class CsvReportServiceTest {
 
     @Mock
     private MailService mailService;
+    
+    @Mock
+    private MessageSource messageSource;
 
     @Captor
     private ArgumentCaptor<CsvReport> csvReportCaptor;
@@ -67,14 +72,22 @@ class CsvReportServiceTest {
         Mockito.when(permissionLinksCsvWriter.writeCsv(Mockito.eq("salesforce"))).thenReturn("report");
         Mockito.when(storedFileService.storeCsvReportFile(Mockito.eq("report"), Mockito.eq("file.csv"), Mockito.any(AssertionServiceUser.class)))
                 .thenReturn(getDummyStoredfile());
-        Mockito.doNothing().when(mailService).sendCsvReportMail(Mockito.any(File.class), Mockito.any(AssertionServiceUser.class));
+        Mockito.when(messageSource.getMessage(Mockito.eq("email.csvReport.affiliationsForEdit.subject"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("edit subject");
+        Mockito.when(messageSource.getMessage(Mockito.eq("email.csvReport.affiliationsForEdit.content"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("edit content");
+        Mockito.when(messageSource.getMessage(Mockito.eq("email.csvReport.permissionLinks.subject"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("links subject");
+        Mockito.when(messageSource.getMessage(Mockito.eq("email.csvReport.permissionLinks.content"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("links content");
+        Mockito.when(messageSource.getMessage(Mockito.eq("email.csvReport.affiliationStatusReport.subject"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("report subject");
+        Mockito.when(messageSource.getMessage(Mockito.eq("email.csvReport.affiliationStatusReport.content"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("report content");
+        Mockito.doNothing().when(mailService).sendCsvReportMail(Mockito.any(File.class), Mockito.any(AssertionServiceUser.class), Mockito.anyString(), Mockito.anyString());
 
         csvReportService.processCsvReports();
 
         Mockito.verify(assertionsReportCsvWriter).writeCsv(Mockito.eq("salesforce"));
         Mockito.verify(assertionsForEditCsvWriter).writeCsv(Mockito.eq("salesforce"));
         Mockito.verify(permissionLinksCsvWriter).writeCsv(Mockito.eq("salesforce"));
-        Mockito.verify(mailService, Mockito.times(3)).sendCsvReportMail(Mockito.any(File.class), Mockito.any(AssertionServiceUser.class));
+        Mockito.verify(mailService).sendCsvReportMail(Mockito.any(File.class), Mockito.any(AssertionServiceUser.class), Mockito.eq("edit subject"), Mockito.eq("edit content"));
+        Mockito.verify(mailService).sendCsvReportMail(Mockito.any(File.class), Mockito.any(AssertionServiceUser.class), Mockito.eq("links subject"), Mockito.eq("links content"));
+        Mockito.verify(mailService).sendCsvReportMail(Mockito.any(File.class), Mockito.any(AssertionServiceUser.class), Mockito.eq("report subject"), Mockito.eq("report content"));
     }
 
     @Test
@@ -111,6 +124,7 @@ class CsvReportServiceTest {
         AssertionServiceUser user = new AssertionServiceUser();
         user.setEmail("email");
         user.setSalesforceId("salesforce");
+        user.setLangKey("en");
         return user;
     }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="#{email.csvReport.title}">
+    <title th:text="(@{|${subject}|})">
         Your CSV file
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -12,8 +12,8 @@
 <div style="padding: 20px; padding-top: 10px; margin: auto;">
     <div th:insert="~{mail/common :: emailHeader}"></div>
     <p>
-        <span th:text="#{email.csvReport.summary}">
-        	Please find the CSV file you requested attached.
+        <span th:text="(@{|${text}|})">
+        	Please find your requested file attached.
         </span>
     </p>
     <p>

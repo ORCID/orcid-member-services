@@ -46,12 +46,13 @@ public class MailService {
         this.mailgunClient = mailgunClient;
     }
 
-    public void sendCsvReportMail(File report, AssertionServiceUser user) {
+    public void sendCsvReportMail(File report, AssertionServiceUser user, String subject, String text) {
         LOGGER.debug("Sending csv report email to '{}'", user.getEmail());
         Locale locale = LocaleUtils.getLocale(user.getLangKey());
         Context context = new Context(locale);
+        context.setVariable("text", text);
+        context.setVariable("subject", subject);
         String content = templateEngine.process("mail/csvReport", context);
-        String subject = messageSource.getMessage("email.csvReport.title", null, locale);
         try {
             mailgunClient.sendMailWithAttachment(user.getEmail(), subject, content, report);
         } catch (MailException e) {
