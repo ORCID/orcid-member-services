@@ -113,11 +113,14 @@ public class CsvReportService {
 
         StoredFile storedFile = storedFileService.storeCsvReportFile(report, csvReport.getOriginalFilename(), user);
         csvReport.setDateGenerated(storedFile.getDateWritten());
+        csvReportRepository.save(csvReport);
 
         LOG.info("Report generated. Sending report to {},,,", user.getEmail());
         File reportFile = new File(storedFile.getFileLocation());
         mailService.sendCsvReportMail(reportFile, user, subject, content);
         LOG.info("Report sent to {}", user.getEmail());
+        
+        storedFileService.markAsProcessed(storedFile);
     }
 
 }

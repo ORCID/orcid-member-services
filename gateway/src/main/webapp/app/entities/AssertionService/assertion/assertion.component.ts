@@ -45,6 +45,9 @@ export class AssertionComponent implements OnInit, OnDestroy {
   faSearch = faSearch;
   searchTerm: string;
   submittedSearchTerm: string;
+  showEditReportPendingMessage: boolean;
+  showStatusReportPendingMessage: boolean;
+  showLinksReportPendingMessage: boolean;
 
   constructor(
     protected assertionService: AssertionService,
@@ -136,16 +139,31 @@ export class AssertionComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  generatePermissionLinks() {
-    this.assertionService.generatePermissionLinks();
+  async generatePermissionLinks() {
+    this.assertionService.generatePermissionLinks().subscribe(res => {
+      this.showLinksReportPendingMessage = true;
+      setTimeout(() => {
+        this.showLinksReportPendingMessage = false;
+      }, 10000);
+    });
   }
 
-  generateCSV() {
-    this.assertionService.generateCSV();
+  async generateCSV() {
+    this.assertionService.generateCSV().subscribe(res => {
+      this.showEditReportPendingMessage = true;
+      setTimeout(() => {
+        this.showEditReportPendingMessage = false;
+      }, 10000);
+    });
   }
 
-  generateReport() {
-    this.assertionService.generateReport();
+  async generateReport() {
+    this.assertionService.generateReport().subscribe(res => {
+      this.showStatusReportPendingMessage = true;
+      setTimeout(() => {
+        this.showStatusReportPendingMessage = false;
+      }, 10000);
+    });
   }
 
   resetSearch() {

@@ -132,7 +132,7 @@ public class AssertionServiceResource {
         return ResponseEntity.ok().body(assertion);
     }
 
-    @GetMapping("/assertion/permission-links")
+    @PostMapping("/assertion/permission-links")
     public ResponseEntity<Void> generatePermissionLinks() throws IOException, JSONException {
         String userLogin = SecurityUtils.getCurrentUserLogin().get();
         LOG.info("Permission links requested by {}", userLogin);
@@ -311,7 +311,7 @@ public class AssertionServiceResource {
         return ResponseEntity.ok().body(responseData.toString());
     }
 
-    @GetMapping(path = "/assertion/report")
+    @PostMapping(path = "/assertion/report")
     public ResponseEntity<Void> generateReport() throws IOException {
         String userLogin = SecurityUtils.getCurrentUserLogin().get();
         LOG.info("CSV report requested by {}", userLogin);
@@ -319,7 +319,7 @@ public class AssertionServiceResource {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(path = "/assertion/csv")
+    @PostMapping(path = "/assertion/csv")
     public ResponseEntity<Void> generateCsv() throws IOException {
         String userLogin = SecurityUtils.getCurrentUserLogin().get();
         LOG.info("CSV for editing requested by {}", userLogin);

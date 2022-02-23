@@ -79,6 +79,7 @@ class CsvReportServiceTest {
         Mockito.when(messageSource.getMessage(Mockito.eq("email.csvReport.affiliationStatusReport.subject"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("report subject");
         Mockito.when(messageSource.getMessage(Mockito.eq("email.csvReport.affiliationStatusReport.content"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("report content");
         Mockito.doNothing().when(mailService).sendCsvReportMail(Mockito.any(File.class), Mockito.any(AssertionServiceUser.class), Mockito.anyString(), Mockito.anyString());
+        Mockito.doNothing().when(storedFileService).markAsProcessed(Mockito.any(StoredFile.class));
 
         csvReportService.processCsvReports();
 
@@ -88,6 +89,26 @@ class CsvReportServiceTest {
         Mockito.verify(mailService).sendCsvReportMail(Mockito.any(File.class), Mockito.any(AssertionServiceUser.class), Mockito.eq("edit subject"), Mockito.eq("edit content"));
         Mockito.verify(mailService).sendCsvReportMail(Mockito.any(File.class), Mockito.any(AssertionServiceUser.class), Mockito.eq("links subject"), Mockito.eq("links content"));
         Mockito.verify(mailService).sendCsvReportMail(Mockito.any(File.class), Mockito.any(AssertionServiceUser.class), Mockito.eq("report subject"), Mockito.eq("report content"));
+        Mockito.verify(storedFileService, Mockito.times(3)).markAsProcessed(Mockito.any(StoredFile.class));
+    }
+    
+    @Test
+    void testProcessCsvReportsWithError() throws IOException {
+        Mockito.when(csvReportRepository.findAllUnprocessed()).thenReturn(Arrays.asList(getCsvReport(CsvReport.PERMISSION_LINKS_TYPE)));
+        Mockito.when(userService.getUserById(Mockito.eq("user"))).thenReturn(getDummyUser());
+        Mockito.when(permissionLinksCsvWriter.writeCsv(Mockito.eq("salesforce"))).thenThrow(new IOException("some error"));
+
+        csvReportService.processCsvReports();
+
+        Mockito.verify(permissionLinksCsvWriter).writeCsv(Mockito.eq("salesforce"));
+        Mockito.verify(mailService, Mockito.never()).sendCsvReportMail(Mockito.any(File.class), Mockito.any(AssertionServiceUser.class), Mockito.eq("links subject"), Mockito.eq("links content"));
+        Mockito.verify(storedFileService, Mockito.never()).markAsProcessed(Mockito.any(StoredFile.class));
+        Mockito.verify(csvReportRepository).save(csvReportCaptor.capture());
+        
+        CsvReport updated = csvReportCaptor.getValue();
+        assertThat(updated.getError()).isNotNull();
+        assertThat(updated.getError()).contains("IOException");
+        assertThat(updated.getError()).contains("some error");
     }
 
     @Test
