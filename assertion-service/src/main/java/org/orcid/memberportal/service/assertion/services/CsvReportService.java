@@ -113,6 +113,7 @@ public class CsvReportService {
 
         StoredFile storedFile = storedFileService.storeCsvReportFile(report, csvReport.getOriginalFilename(), user);
         csvReport.setDateGenerated(storedFile.getDateWritten());
+        csvReport.setStatus(CsvReport.SUCCESS_STATUS);
         csvReportRepository.save(csvReport);
 
         LOG.info("Report generated. Sending report to {},,,", user.getEmail());
