@@ -6,12 +6,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.xml.bind.JAXBException;
 
@@ -106,8 +103,6 @@ public class AssertionServiceResource {
 
     UrlValidator urlValidator = new OrcidUrlValidator(urlValschemes);
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY_MM_dd");
-
     @GetMapping("/assertions")
     public ResponseEntity<List<Assertion>> getAssertions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder,
             @RequestParam(required = false, name = "filter") String filter) throws BadRequestAlertException, JSONException {
@@ -138,15 +133,11 @@ public class AssertionServiceResource {
     }
 
     @GetMapping("/assertion/permission-links")
-    public void generatePermissionLinks(HttpServletResponse response) throws IOException, JSONException {
-        final String fileName = dateFormat.format(new Date()) + "_orcid_permission_links.csv";
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-        response.setHeader("Content-Type", "text/csv");
-        response.setHeader("filename", fileName);
-        String csvReport = assertionService.generatePermissionLinks();
-        response.getOutputStream().write(csvReport.getBytes());
-        response.flushBuffer();
-        LOG.info("{} generated assertions permission links", SecurityUtils.getCurrentUserLogin().get());
+    public ResponseEntity<Void> generatePermissionLinks() throws IOException, JSONException {
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+        LOG.info("Permission links requested by {}", userLogin);
+        assertionService.generatePermissionLinks();
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/assertion")
@@ -321,27 +312,19 @@ public class AssertionServiceResource {
     }
 
     @GetMapping(path = "/assertion/report")
-    public void generateReport(HttpServletResponse response) throws IOException {
-        final String fileName = dateFormat.format(new Date()) + "_orcid_report.csv";
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-        response.setHeader("Content-Type", "text/csv");
-        response.setHeader("filename", fileName);
-        String csvReport = assertionService.generateAssertionsReport();
-        response.getOutputStream().write(csvReport.getBytes());
-        response.flushBuffer();
-        LOG.info("{} generated assertions CSV report", SecurityUtils.getCurrentUserLogin().get());
+    public ResponseEntity<Void> generateReport() throws IOException {
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+        LOG.info("CSV report requested by {}", userLogin);
+        assertionService.generateAssertionsReport();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path = "/assertion/csv")
-    public void generateCsv(HttpServletResponse response) throws IOException {
-        final String fileName = dateFormat.format(new Date()) + "_affiliations.csv";
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-        response.setHeader("Content-Type", "text/csv");
-        response.setHeader("filename", fileName);
-        String csvReport = assertionService.generateAssertionsCSV();
-        response.getOutputStream().write(csvReport.getBytes());
-        response.flushBuffer();
-        LOG.info("{} generated assertions CSV for editing", SecurityUtils.getCurrentUserLogin().get());
+    public ResponseEntity<Void> generateCsv() throws IOException {
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+        LOG.info("CSV for editing requested by {}", userLogin);
+        assertionService.generateAssertionsCSV();
+        return ResponseEntity.ok().build();
     }
 
     private void validateAssertion(Assertion assertion) {

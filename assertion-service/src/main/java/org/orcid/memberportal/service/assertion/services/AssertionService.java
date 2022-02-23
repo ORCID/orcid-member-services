@@ -23,11 +23,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
 import org.orcid.memberportal.service.assertion.csv.CsvWriter;
-import org.orcid.memberportal.service.assertion.csv.download.impl.AssertionsForEditCsvWriter;
-import org.orcid.memberportal.service.assertion.csv.download.impl.AssertionsReportCsvWriter;
-import org.orcid.memberportal.service.assertion.csv.download.impl.PermissionLinksCsvWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
+import org.orcid.memberportal.service.assertion.domain.CsvReport;
 import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
@@ -72,15 +70,6 @@ public class AssertionService {
     private OrcidAPIClient orcidAPIClient;
 
     @Autowired
-    private AssertionsReportCsvWriter assertionsReportCsvWriter;
-
-    @Autowired
-    private AssertionsForEditCsvWriter assertionsForEditCsvWriter;
-
-    @Autowired
-    private PermissionLinksCsvWriter permissionLinksCsvWriter;
-
-    @Autowired
     private UserService assertionsUserService;
 
     @Autowired
@@ -98,7 +87,11 @@ public class AssertionService {
     @Autowired
     private MailService mailService;
 
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault()).withZone(ZoneId.systemDefault());
+    @Autowired
+    private CsvReportService csvReportService;
+
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault())
+            .withZone(ZoneId.systemDefault());
 
     public boolean assertionExists(String id) {
         return assertionRepository.existsById(id);
@@ -472,8 +465,9 @@ public class AssertionService {
         }
     }
 
-    public String generateAssertionsReport() throws IOException {
-        return assertionsReportCsvWriter.writeCsv(assertionsUserService.getLoggedInUserSalesforceId());
+    public void generateAssertionsReport() throws IOException {
+        String filename = Instant.now() + "_orcid_report.csv";
+        csvReportService.storeCsvReportRequest(assertionsUserService.getLoggedInUserId(), filename, CsvReport.ASSERTIONS_REPORT_TYPE);
     }
 
     public void generateAndSendMemberAssertionStats() throws IOException {
@@ -635,12 +629,14 @@ public class AssertionService {
         assertionRepository.save(assertion);
     }
 
-    public String generatePermissionLinks() throws IOException {
-        return permissionLinksCsvWriter.writeCsv(assertionsUserService.getLoggedInUserSalesforceId());
+    public void generatePermissionLinks() {
+        String filename = Instant.now() + "_orcid_permission_links.csv";
+        csvReportService.storeCsvReportRequest(assertionsUserService.getLoggedInUserId(), filename, CsvReport.PERMISSION_LINKS_TYPE);
     }
 
-    public String generateAssertionsCSV() throws IOException {
-        return assertionsForEditCsvWriter.writeCsv(assertionsUserService.getLoggedInUserSalesforceId());
+    public void generateAssertionsCSV() {
+        String filename = Instant.now() + "_affiliations.csv";
+        csvReportService.storeCsvReportRequest(assertionsUserService.getLoggedInUserId(), filename, CsvReport.ASSERTIONS_FOR_EDIT_TYPE);
     }
 
     public void uploadAssertions(MultipartFile file) throws IOException {

@@ -46,6 +46,19 @@ public class MailService {
         this.mailgunClient = mailgunClient;
     }
 
+    public void sendCsvReportMail(File report, AssertionServiceUser user) {
+        LOGGER.debug("Sending csv report email to '{}'", user.getEmail());
+        Locale locale = LocaleUtils.getLocale(user.getLangKey());
+        Context context = new Context(locale);
+        String content = templateEngine.process("mail/csvReport", context);
+        String subject = messageSource.getMessage("email.csvReport.title", null, locale);
+        try {
+            mailgunClient.sendMailWithAttachment(user.getEmail(), subject, content, report);
+        } catch (MailException e) {
+            LOGGER.error("Error sending csv report email to {}", user.getEmail(), e);
+        }
+    }
+    
     public void sendMemberAssertionStatsMail(File stats) {
         LOGGER.debug("Sending member stats email to '{}'", applicationProperties.getMemberAssertionStatsRecipient());
         Context context = new Context(Locale.ENGLISH);
@@ -67,7 +80,7 @@ public class MailService {
         try {
             mailgunClient.sendMail(user.getEmail(), subject, content);
         } catch (MailException e) {
-            LOGGER.error("Error sending csv upload summary email", e);
+            LOGGER.error("Error sending csv upload summary email to {}", user.getEmail(), e);
         }
     }
 
