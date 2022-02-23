@@ -139,7 +139,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  async generatePermissionLinks() {
+  generatePermissionLinks() {
     this.assertionService.generatePermissionLinks().subscribe(res => {
       this.showLinksReportPendingMessage = true;
       setTimeout(() => {
@@ -148,7 +148,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
     });
   }
 
-  async generateCSV() {
+  generateCSV() {
     this.assertionService.generateCSV().subscribe(res => {
       this.showEditReportPendingMessage = true;
       setTimeout(() => {
@@ -157,7 +157,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
     });
   }
 
-  async generateReport() {
+  generateReport() {
     this.assertionService.generateReport().subscribe(res => {
       this.showStatusReportPendingMessage = true;
       setTimeout(() => {
