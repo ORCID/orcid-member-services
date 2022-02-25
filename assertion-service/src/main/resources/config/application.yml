@@ -184,6 +184,7 @@ application:
     mailFromName: ${APPLICATION_MAIL_FROM_NAME}
     memberAssertionStatsDirectory: files/stats
     assertionsCsvUploadDirectory: files/uploads
+    csvReportsDirectory: files/reports
     storedFileLifespan: ${STORED_FILE_LIFESPAN}
     memberAssertionStatsRecipient: ${MEMBER_ASSERTION_STATS_RECIPIENT}
     syncAffiliationsDelay: 60000

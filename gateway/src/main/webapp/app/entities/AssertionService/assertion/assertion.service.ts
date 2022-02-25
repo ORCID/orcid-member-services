@@ -60,43 +60,16 @@ export class AssertionService {
     return this.http.delete<any>(`${this.resourceUrl}/orcid/${id}`, { observe: 'response' });
   }
 
-  generatePermissionLinks() {
-    this.http.get(`${this.resourceUrl}/permission-links`, { observe: 'response', responseType: 'blob' }).subscribe(response => {
-      const filename = response.headers.get('filename') != null ? response.headers.get('filename') : 'permission-links.csv';
-      const blob = new Blob([response.body], { type: 'text/csv' });
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+  generatePermissionLinks(): Observable<HttpResponse<any>> {
+    return this.http.post<any>(`${this.resourceUrl}/permission-links`, { observe: 'response' });
   }
 
-  generateCSV() {
-    this.http.get(`${this.resourceUrl}/csv`, { observe: 'response', responseType: 'blob' }).subscribe(response => {
-      const filename = response.headers.get('filename') != null ? response.headers.get('filename') : 'affiliations.csv';
-      const blob = new Blob([response.body], { type: 'text/csv' });
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+  generateCSV(): Observable<HttpResponse<any>> {
+    return this.http.post<any>(`${this.resourceUrl}/csv`, { observe: 'response' });
   }
 
-  generateReport() {
-    this.http.get(`${this.resourceUrl}/report`, { observe: 'response', responseType: 'blob' }).subscribe(response => {
-      const filename = response.headers.get('filename') != null ? response.headers.get('filename') : 'report.csv';
-      const blob = new Blob([response.body], { type: 'text/csv' });
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+  generateReport(): Observable<HttpResponse<any>> {
+    return this.http.post<any>(`${this.resourceUrl}/report`, { observe: 'response' });
   }
 
   protected convertDateFromClient(assertion: IAssertion): IAssertion {

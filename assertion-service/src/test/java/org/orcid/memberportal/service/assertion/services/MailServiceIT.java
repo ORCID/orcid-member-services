@@ -53,6 +53,18 @@ class MailServiceIT {
         Mockito.when(messageSource.getMessage(Mockito.eq("email.memberAssertionStats.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("member stats");
         Mockito.when(messageSource.getMessage(Mockito.eq("email.affiliationUploadSummary.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("summary");
     }
+    
+    @Test
+    void testSendCsvReportMail() throws MailException {
+        Mockito.doNothing().when(mailgunClient).sendMailWithAttachment(Mockito.eq("memberstats@orcid.org"), Mockito.eq("member stats"), Mockito.eq("something"),
+                Mockito.any(File.class));
+        mailService.sendCsvReportMail(getAttachment(), getUser(), "subject", "content");
+        
+        Mockito.verify(mailgunClient).sendMailWithAttachment(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString(), fileCaptor.capture());
+        assertThat(recipientCaptor.getValue()).isEqualTo("summary@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo("subject");
+        assertThat(fileCaptor.getValue()).isNotNull();
+    }
 
     @Test
     void testSendMemberAssertionStatsMail() throws MailException {

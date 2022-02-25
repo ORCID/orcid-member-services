@@ -12,6 +12,7 @@ import { ITEMS_PER_PAGE } from 'app/shared';
 import { AssertionService } from './assertion.service';
 import { ORCID_BASE_URL } from 'app/app.constants';
 import { ASSERTION_STATUS } from 'app/shared/constants/orcid-api.constants';
+import { tap, delay } from 'rxjs/operators';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -45,6 +46,9 @@ export class AssertionComponent implements OnInit, OnDestroy {
   faSearch = faSearch;
   searchTerm: string;
   submittedSearchTerm: string;
+  showEditReportPendingMessage: boolean;
+  showStatusReportPendingMessage: boolean;
+  showLinksReportPendingMessage: boolean;
 
   constructor(
     protected assertionService: AssertionService,
@@ -137,15 +141,36 @@ export class AssertionComponent implements OnInit, OnDestroy {
   }
 
   generatePermissionLinks() {
-    this.assertionService.generatePermissionLinks();
+    this.assertionService
+      .generatePermissionLinks()
+      .pipe(
+        tap(() => (this.showLinksReportPendingMessage = true)),
+        delay(10000),
+        tap(() => (this.showLinksReportPendingMessage = false))
+      )
+      .subscribe(res => {});
   }
 
   generateCSV() {
-    this.assertionService.generateCSV();
+    this.assertionService
+      .generateCSV()
+      .pipe(
+        tap(() => (this.showEditReportPendingMessage = true)),
+        delay(10000),
+        tap(() => (this.showEditReportPendingMessage = false))
+      )
+      .subscribe(res => {});
   }
 
   generateReport() {
-    this.assertionService.generateReport();
+    this.assertionService
+      .generateReport()
+      .pipe(
+        tap(() => (this.showStatusReportPendingMessage = true)),
+        delay(10000),
+        tap(() => (this.showStatusReportPendingMessage = false))
+      )
+      .subscribe(res => {});
   }
 
   resetSearch() {

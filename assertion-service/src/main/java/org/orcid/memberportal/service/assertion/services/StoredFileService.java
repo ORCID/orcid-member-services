@@ -2,7 +2,6 @@ package org.orcid.memberportal.service.assertion.services;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,6 +27,8 @@ public class StoredFileService {
     static final String MEMBER_ASSERTION_STATS_FILE_TYPE = "assertion-stats";
 
     static final String ASSERTIONS_CSV_FILE_TYPE = "assertions-csv";
+    
+    static final String CSV_REPORT_FILE_TYPE = "csv-report";
 
     @Autowired
     private StoredFileRepository storedFileRepository;
@@ -60,6 +61,18 @@ public class StoredFileService {
         storedFile.setFileType(ASSERTIONS_CSV_FILE_TYPE);
         storedFileRepository.save(storedFile);
     }
+    
+    public StoredFile storeCsvReportFile(String report, String originalFilename, AssertionServiceUser user) throws IOException {
+        File outputFile = writeCsvReportFile(report);
+        StoredFile storedFile = new StoredFile();
+        storedFile.setOriginalFilename(originalFilename);
+        storedFile.setFileLocation(outputFile.getAbsolutePath());
+        storedFile.setDateWritten(Instant.now());
+        storedFile.setRemovalDate(storedFile.getDateWritten().plus(applicationProperties.getStoredFileLifespan(), ChronoUnit.DAYS));
+        storedFile.setOwnerId(user.getId());
+        storedFile.setFileType(CSV_REPORT_FILE_TYPE);
+        return storedFileRepository.save(storedFile);
+    }
 
     public List<StoredFile> getUnprocessedStoredFilesByType(String type) {
         return storedFileRepository.findUnprocessedByType(ASSERTIONS_CSV_FILE_TYPE);
@@ -70,18 +83,31 @@ public class StoredFileService {
         storedFileRepository.save(storedFile);
     }
 
+    private File writeCsvReportFile(String content) throws IOException {
+        createDir(applicationProperties.getCsvReportsDirectory());
+        return writeStringToFile(content, CSV_REPORT_FILE_TYPE, ".csv", new File(applicationProperties.getCsvReportsDirectory()));
+    }
+    
     private File writeMemberAssertionStatsFile(String content) throws IOException {
         createDir(applicationProperties.getMemberAssertionStatsDirectory());
-        File outputFile = File.createTempFile(MEMBER_ASSERTION_STATS_FILE_TYPE, ".csv", new File(applicationProperties.getMemberAssertionStatsDirectory()));
-        FileWriter writer = new FileWriter(outputFile);
-        writer.write(content);
-        writer.close();
-        return outputFile;
+        return writeStringToFile(content, MEMBER_ASSERTION_STATS_FILE_TYPE, ".csv", new File(applicationProperties.getMemberAssertionStatsDirectory()));
     }
 
     private File writeCsvUploadFile(InputStream inputStream) throws IOException {
         createDir(applicationProperties.getAssertionsCsvUploadDirectory());
-        File outputFile = File.createTempFile(ASSERTIONS_CSV_FILE_TYPE, ".csv", new File(applicationProperties.getAssertionsCsvUploadDirectory()));
+        return writeInputStreamToFile(inputStream, ASSERTIONS_CSV_FILE_TYPE, ".csv", new File(applicationProperties.getAssertionsCsvUploadDirectory()));
+    }
+    
+    private File writeStringToFile(String content, String fileType, String extension, File parent) throws IOException {
+        File outputFile = File.createTempFile(fileType, extension, parent);
+        OutputStream outputStream = new FileOutputStream(outputFile);
+        IOUtils.write(content, outputStream, "UTF-8");
+        outputStream.close();
+        return outputFile;
+    }
+    
+    private File writeInputStreamToFile(InputStream inputStream, String fileType, String extension, File parent) throws IOException {
+        File outputFile = File.createTempFile(fileType, extension, parent);
         OutputStream outputStream = new FileOutputStream(outputFile);
         IOUtils.copy(inputStream, outputStream);
         inputStream.close();

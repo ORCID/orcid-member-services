@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -37,10 +36,10 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
 import org.orcid.memberportal.service.assertion.csv.download.impl.AssertionsForEditCsvWriter;
-import org.orcid.memberportal.service.assertion.csv.download.impl.AssertionsReportCsvWriter;
 import org.orcid.memberportal.service.assertion.csv.download.impl.PermissionLinksCsvWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
+import org.orcid.memberportal.service.assertion.domain.CsvReport;
 import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
@@ -70,7 +69,7 @@ class AssertionServiceTest {
     private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
 
     @Mock
-    private AssertionsReportCsvWriter assertionsReportWriter;
+    private CsvReportService csvReportService;
 
     @Mock
     private AssertionsForEditCsvWriter assertionsForEditCsvWriter;
@@ -691,26 +690,26 @@ class AssertionServiceTest {
 
     @Test
     void testGenerateAssertionsCSV() throws IOException {
-        when(assertionsForEditCsvWriter.writeCsv()).thenReturn("test");
-        String csv = assertionService.generateAssertionsCSV();
-        assertEquals("test", csv);
-        verify(assertionsForEditCsvWriter, times(1)).writeCsv();
+        Mockito.when(assertionsUserService.getLoggedInUserId()).thenReturn("test");
+        Mockito.doNothing().when(csvReportService).storeCsvReportRequest(Mockito.eq("test"), Mockito.anyString(), Mockito.eq(CsvReport.ASSERTIONS_FOR_EDIT_TYPE));
+        assertionService.generateAssertionsCSV();
+        Mockito.verify(csvReportService).storeCsvReportRequest(Mockito.eq("test"), Mockito.anyString(), Mockito.eq(CsvReport.ASSERTIONS_FOR_EDIT_TYPE));
     }
 
     @Test
     void testGenerateAssertionsReport() throws IOException {
-        Mockito.when(assertionsReportWriter.writeCsv()).thenReturn("test");
-        String csv = assertionService.generateAssertionsReport();
-        assertEquals("test", csv);
-        Mockito.verify(assertionsReportWriter, Mockito.times(1)).writeCsv();
+        Mockito.when(assertionsUserService.getLoggedInUserId()).thenReturn("test");
+        Mockito.doNothing().when(csvReportService).storeCsvReportRequest(Mockito.eq("test"), Mockito.anyString(), Mockito.eq(CsvReport.ASSERTIONS_REPORT_TYPE));
+        assertionService.generateAssertionsReport();
+        Mockito.verify(csvReportService).storeCsvReportRequest(Mockito.eq("test"), Mockito.anyString(), Mockito.eq(CsvReport.ASSERTIONS_REPORT_TYPE));
     }
 
     @Test
-    void testGenerateLinks() throws IOException {
-        Mockito.when(permissionLinksCsvWriter.writeCsv()).thenReturn("test");
-        String csv = assertionService.generatePermissionLinks();
-        assertEquals("test", csv);
-        Mockito.verify(permissionLinksCsvWriter, Mockito.times(1)).writeCsv();
+    void testGeneratePermissionLinks() throws IOException {
+        Mockito.when(assertionsUserService.getLoggedInUserId()).thenReturn("test");
+        Mockito.doNothing().when(csvReportService).storeCsvReportRequest(Mockito.eq("test"), Mockito.anyString(), Mockito.eq(CsvReport.PERMISSION_LINKS_TYPE));
+        assertionService.generatePermissionLinks();
+        Mockito.verify(csvReportService).storeCsvReportRequest(Mockito.eq("test"), Mockito.anyString(), Mockito.eq(CsvReport.PERMISSION_LINKS_TYPE));
     }
 
     @Test

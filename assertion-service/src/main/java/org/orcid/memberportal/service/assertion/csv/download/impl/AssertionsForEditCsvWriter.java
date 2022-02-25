@@ -7,9 +7,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.assertion.csv.download.CsvDownloadWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
-import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
-import org.orcid.memberportal.service.assertion.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
@@ -22,15 +19,8 @@ public class AssertionsForEditCsvWriter extends CsvDownloadWriter {
             "org-country", "org-city", "org-region", "disambiguation-source", "disambiguated-organization-identifier", "external-id", "external-id-type",
             "external-id-url", "url", "id" };
 
-    @Autowired
-    private UserService assertionsUserService;
-
-    @Autowired
-    private AssertionRepository assertionsRepository;
-
     @Override
-    public String writeCsv() throws IOException {
-        String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
+    public String writeCsv(String salesforceId) throws IOException {
         List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, this.SORT);
         return super.writeCsv(HEADERS, getRows(assertions));
     }

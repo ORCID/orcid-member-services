@@ -4,20 +4,20 @@
         <div class="col-md-12 mb-2">
             <button id="jh-generate-links" class="btn btn-primary float-right jh-generate-links generate-links ml-1" (click)="generatePermissionLinks()">
                 <fa-icon [icon]="faFileDownload"></fa-icon>
-                <span  jhiTranslate="gatewayApp.assertionServiceAssertion.home.getLinks.string">
-                Download permission links
+                <span  jhiTranslate="gatewayApp.assertionServiceAssertion.reports.links.button.string">
+                Request permission links
                 </span>
             </button>
             <button id="jh-generate-report" class="btn btn-primary float-right jh-generate-reports generate-report ml-1" (click)="generateReport()">
                 <fa-icon [icon]="faChartBar"></fa-icon>
-                <span  jhiTranslate="gatewayApp.assertionServiceAssertion.home.generateReport.string">
-                Download affiliation status report
+                <span  jhiTranslate="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.button.string">
+                Request affiliation status report
                 </span>
             </button>
             <button id="jh-generate-links" class="btn btn-primary float-right jh-generate-links generate-links ml-1" (click)="generateCSV()">
                 <fa-icon [icon]="faFileDownload"></fa-icon>
-                <span  jhiTranslate="gatewayApp.assertionServiceAssertion.home.exportForEdit.string">
-                Download affiliations for edit
+                <span  jhiTranslate="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.button.string">
+                Request affiliations for edit
                 </span>
             </button>
             <button id="jh-upload-entities" class="btn btn-primary float-right jh-upload-entities upload-assertions ml-1" [routerLink]="['/', 'assertion', { outlets: { popup: 'import'} }]">
@@ -32,6 +32,23 @@
                 Add affiliation
                 </span>
             </button>
+        </div>
+    </div>
+    <div class="row success" *ngIf="showEditReportPendingMessage || showStatusReportPendingMessage || showLinksReportPendingMessage">
+    	<div class="col-md-12">
+	    	<span *ngIf="showEditReportPendingMessage" jhiTranslate="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.confirmation.string">
+	        	Your affiliations for edit file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org.
+	        </span>
+        </div>
+        <div class="col-md-12">
+	        <span *ngIf="showStatusReportPendingMessage" jhiTranslate="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.confirmation.string">
+	        	Your affiliation status report file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org.
+	        </span>
+        </div>
+        <div class="col-md-12">
+	        <span *ngIf="showLinksReportPendingMessage" jhiTranslate="gatewayApp.assertionServiceAssertion.reports.links.confirmation.string">
+	        	Your permission links file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org.
+	        </span>
         </div>
     </div>
     <div class="row">

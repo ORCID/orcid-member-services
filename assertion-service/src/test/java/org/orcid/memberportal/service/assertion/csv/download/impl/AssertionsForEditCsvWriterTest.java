@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.orcid.memberportal.service.assertion.csv.download.impl.AssertionsForEditCsvWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
@@ -29,7 +28,7 @@ import org.springframework.data.domain.Sort;
 
 public class AssertionsForEditCsvWriterTest {
 
-    private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
+    private static final String DEFAULT_SALESFORCE_ID = "salesforceId";
 
     @Mock
     private AssertionRepository assertionsRepository;
@@ -46,14 +45,14 @@ public class AssertionsForEditCsvWriterTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforceId");
-        when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforceId"), Mockito.any(Sort.class))).thenReturn(getListOfAsserions());
+        when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
+        when(assertionsRepository.findBySalesforceId(Mockito.eq(DEFAULT_SALESFORCE_ID), Mockito.any(Sort.class))).thenReturn(getListOfAsserions());
         when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getDummyOrcidRecord());
     }
 
     @Test
     public void testWriteAssertionsReport() throws IOException {
-        String test = csvWriter.writeCsv();
+        String test = csvWriter.writeCsv(DEFAULT_SALESFORCE_ID);
         assertNotNull(test);
         assertTrue(test.length() > 0);
         String[] lines = test.split("\\n");

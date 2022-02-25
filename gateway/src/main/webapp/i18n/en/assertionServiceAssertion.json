@@ -14,11 +14,28 @@
         "createOrEditLabel": { "string": "Add or edit affiliation" },
         "notFound": { "string": "No affiliations found" },
         "uploadLabel": { "string": "Import affiliations from CSV" },
-        "getLinks": { "string": "Download permission links" },
-        "generateReport": { "string": "Download affiliation status report" },
-        "exportForEdit": { "string": "Download affiliations for edit" },
         "forHelpTroubleshooting": {
           "string": "If you require help troubleshooting this error, please contact your consortium lead or membership@orcid.org. Please include a screenshot of the error message below."
+        }
+      },
+      "reports": {
+        "links": {
+          "button": { "string": "Request permission links" },
+          "confirmation": {
+            "string": "Your permission links file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org."
+          }
+        },
+        "affiliationsReport": {
+          "button": { "string": "Request affiliation status report" },
+          "confirmation": {
+            "string": "Your affiliation status report file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org."
+          }
+        },
+        "affiliationsForEdit": {
+          "button": { "string": "Request affiliations for edit" },
+          "confirmation": {
+            "string": "Your affiliations for edit file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org."
+          }
         }
       },
       "delete": {

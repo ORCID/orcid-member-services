@@ -19,7 +19,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
-import org.orcid.memberportal.service.assertion.csv.download.impl.PermissionLinksCsvWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
@@ -90,7 +89,7 @@ public class PermissionLinksCsvWriterTest {
 
     @Test
     public void testWriteAssertionsReport() throws IOException {
-        String test = csvWriter.writeCsv();
+        String test = csvWriter.writeCsv(assertionsUserService.getLoggedInUserSalesforceId());
         assertNotNull(test);
         assertTrue(test.length() > 0);
         String[] lines = test.split("\\n");

@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 
 import org.orcid.memberportal.service.assertion.services.AssertionService;
+import org.orcid.memberportal.service.assertion.services.CsvReportService;
 import org.orcid.memberportal.service.assertion.services.StoredFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,9 @@ public class OrcidScheduledJobsManager {
     
     @Autowired
     private StoredFileService storedFileService;
+    
+    @Autowired
+    private CsvReportService csvReportService;
 
     @Scheduled(initialDelay = 90000, fixedDelayString = "${application.syncAffiliationsDelay}")
     @SchedulerLock(name = "syncAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "2m")
@@ -58,5 +62,13 @@ public class OrcidScheduledJobsManager {
         LOG.info("Running cron to remove old files");
         storedFileService.removeStoredFiles();
         LOG.info("Old files removed");
+    }
+    
+    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.removeStoredFilesDelay}")
+    @SchedulerLock(name = "processCsvReports", lockAtMostFor = "60m", lockAtLeastFor = "2m")
+    public void sendCSVReports() throws IOException  {
+        LOG.info("Running cron to process CSV reports");
+        csvReportService.processCsvReports();
+        LOG.info("CSV reports processed");
     }
 }
