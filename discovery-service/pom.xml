@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.orcid</groupId>
-    <artifactId>discovery-service</artifactId>
+    <artifactId>discoveryservice</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
     <name>Discovery Service</name>
