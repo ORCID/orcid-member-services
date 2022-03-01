@@ -124,9 +124,19 @@ services:
 
   jhipster-registry:
     restart: unless-stopped
-    extends:
-      file: jhipster-registry.yml
-      service: jhipster-registry
+    image: ${DOCKER_REG}/discoveryservice:${TAG}
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,uaa
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - JHIPSTER_LOGGING_LOGSTASH_ENABLED=false
+      # change the name of UAA server here, if needed
+      - JHIPSTER_SECURITY_CLIENT_AUTHORIZATION_TOKEN_SERVICE_ID=uaa
+      - JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=${JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET}
+    ports:
+      - 8761:8761
 
   r7insight_docker:
     restart: unless-stopped
