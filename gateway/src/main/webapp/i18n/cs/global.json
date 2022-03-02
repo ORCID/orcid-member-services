@@ -17,7 +17,7 @@
       "jhipster-needle-menu-add-element": { "string": "Sem přidá JHipster další položky menu (nepřekládat!)" },
       "entities": {
         "main": { "string": "Členské nástroje" },
-        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
+        "assertionServiceAffiliationManager": { "string": "Manažer přidružení" },
         "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
         "member": { "string": "Člen" }
       },

@@ -45,7 +45,7 @@
       "salesforceId": { "string": "组织" },
       "parentSalesforceId": { "string": "父 Salesforce ID" },
       "activated": { "string": "已激活" },
-      "isAdmin": { "string": "Admin" },
+      "isAdmin": { "string": "管理者" },
       "createdBy": { "string": "创建者" },
       "createdDate": { "string": "已创建" },
       "lastModifiedBy": { "string": "最后修改者" },

@@ -5,7 +5,7 @@
       "EMPLOYMENT": { "string": "EMPLOI" },
       "EDUCATION": { "string": "ÉDUCATION" },
       "QUALIFICATION": { "string": "DIPLÔME" },
-      "INVITED_POSITION": { "string": "INVITED_POSITION" },
+      "INVITED_POSITION": { "string": "POSITION INVITÉE" },
       "DISTINCTION": { "string": "DISTINCTION" },
       "MEMBERSHIP": { "string": "ADHÉSION" },
       "SERVICE": { "string": "SERVICE" }
