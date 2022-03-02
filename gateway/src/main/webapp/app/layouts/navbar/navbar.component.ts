@@ -33,6 +33,7 @@ export class NavbarComponent implements OnInit {
   account: Account;
   userName: string;
   consortiumLead: boolean;
+  consortiumMember: boolean;
 
   faAddressCard = faAddressCard;
   faUniversity = faUniversity;
@@ -79,6 +80,7 @@ export class NavbarComponent implements OnInit {
               if (res.body) {
                 this.organizationName = ' | ' + res.body.clientName;
                 this.consortiumLead = res.body.isConsortiumLead;
+                this.consortiumMember = res.body.parentSalesforceId != null;
               }
               return this.organizationName;
             },
