@@ -26,7 +26,7 @@ public class ReportResource {
     
     @Autowired
     private UserService userService;
-
+    
     @GetMapping("/reports/member")
     public ResponseEntity<ReportInfo> getMemberReport() {
         MemberServiceUser user = userService.getLoggedInUser();
@@ -49,6 +49,14 @@ public class ReportResource {
         LOG.info("Generating consortium report for user {} of {}", user.getEmail(), user.getMemberName());
         ReportInfo consortiumReportInfo = reportService.getConsortiaReportInfo();
         return ResponseEntity.ok(consortiumReportInfo);
+    }
+    
+    @GetMapping("/reports/affiliation")
+    public ResponseEntity<ReportInfo> getAffiliationReport() {
+        MemberServiceUser user = userService.getLoggedInUser();
+        LOG.info("Generating affiliation report for user {} of {}", user.getEmail(), user.getMemberName());
+        ReportInfo affiliationReportInfo = reportService.getAffiliationReportInfo();
+        return ResponseEntity.ok(affiliationReportInfo);
     }
 
 }

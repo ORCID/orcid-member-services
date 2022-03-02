@@ -38,15 +38,17 @@ public class ReportServiceTest {
         Mockito.when(mockApplicationProperties.getHolisticsConsortiaDashboardSecret()).thenReturn("some-long-holistics-consortia-dashboard-secret");
         Mockito.when(mockApplicationProperties.getHolisticsMemberDashboardUrl()).thenReturn("https://secure.holistics.io/embed/member");
         Mockito.when(mockApplicationProperties.getHolisticsMemberDashboardSecret()).thenReturn("some-long-holistics-member-dashboard-secret");
+        Mockito.when(mockApplicationProperties.getHolisticsAffiliationDashboardUrl()).thenReturn("https://secure.holistics.io/embed/affiliation");
+        Mockito.when(mockApplicationProperties.getHolisticsAffiliationDashboardSecret()).thenReturn("some-long-holistics-affiliation-dashboard-secret");
         Mockito.when(mockApplicationProperties.getHolisticsIntegrationDashboardUrl()).thenReturn("https://secure.holistics.io/embed/integration");
         Mockito.when(mockApplicationProperties.getHolisticsIntegrationDashboardSecret()).thenReturn("some-long-holistics-integration-dashboard-secret");
-        
-        Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
     }
 
     @Test
     public void testGetMemberReportInfo() {
+        Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        
         ReportInfo reportInfo = reportService.getMemberReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
@@ -58,9 +60,29 @@ public class ReportServiceTest {
         Mockito.verify(mockApplicationProperties).getHolisticsMemberDashboardSecret();
         Mockito.verify(mockUserService).getLoggedInUser();
     }
+    
+    @Test
+    public void testGetAffiliationReportInfo() {
+        Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumMember()));
+        
+        ReportInfo reportInfo = reportService.getAffiliationReportInfo();
+        assertThat(reportInfo).isNotNull();
+        assertThat(reportInfo.getUrl()).isNotNull();
+        assertThat(reportInfo.getUrl()).isEqualTo("https://secure.holistics.io/embed/affiliation");
+        assertThat(reportInfo.getJwt()).isNotNull();
+        assertThat(reportInfo.getJwt()).isNotEmpty();
+
+        Mockito.verify(mockApplicationProperties).getHolisticsAffiliationDashboardUrl();
+        Mockito.verify(mockApplicationProperties).getHolisticsAffiliationDashboardSecret();
+        Mockito.verify(mockUserService, Mockito.times(2)).getLoggedInUser();
+    }
 
     @Test
     public void testGetIntegrationReportInfo() {
+        Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        
         ReportInfo reportInfo = reportService.getIntegrationReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
@@ -75,6 +97,9 @@ public class ReportServiceTest {
 
     @Test
     public void testGetConsortiaReportInfo() {
+        Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        
         ReportInfo reportInfo = reportService.getConsortiaReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
@@ -113,7 +138,7 @@ public class ReportServiceTest {
         user.setSalesforceId("salesforce-id");
         return user;
     }
-
+    
     private MemberServiceUser getOtherUser() {
         MemberServiceUser user = new MemberServiceUser();
         user.setSalesforceId("other-salesforce-id");
@@ -144,6 +169,14 @@ public class ReportServiceTest {
         Member member = new Member();
         member.setSalesforceId("salesforce-id");
         member.setIsConsortiumLead(true);
+        return member;
+    }
+    
+    private Member getConsortiumMember() {
+        Member member = new Member();
+        member.setSalesforceId("salesforce-id");
+        member.setParentSalesforceId("parent");
+        member.setIsConsortiumLead(false);
         return member;
     }
 
