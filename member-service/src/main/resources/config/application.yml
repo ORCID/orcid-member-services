@@ -180,6 +180,8 @@ application:
     orcidOrgSalesForceId: 001G000001AP83e
     holisticsMemberDashboardUrl: ${holistics.member.url}
     holisticsMemberDashboardSecret: ${holistics.member.secret}
+    holisticsAffiliationDashboardUrl: ${holistics.affiliation.url}
+    holisticsAffiliationDashboardSecret: ${holistics.affiliation.secret}
     holisticsIntegrationDashboardUrl: ${holistics.integration.url}
     holisticsIntegrationDashboardSecret: ${holistics.integration.secret}
     holisticsConsortiaDashboardUrl: ${holistics.consortia.url}

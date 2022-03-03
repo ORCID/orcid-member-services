@@ -42,6 +42,8 @@ public class ReportService {
     private static final String ENABLE_EXPORT_DATA_PARAM = "enable_export_data";
 
     private static final String MEMBER_REPORT_PATH = "client_model.public_sf_members.account_id";
+    
+    private static final String AFFILIATION_REPORT_PATH = "org_id_centric.public_sf_members.account_id";
 
     private static final String INTEGRATION_REPORT_PATH = "client_model.public_sf_members.account_id";
 
@@ -80,6 +82,21 @@ public class ReportService {
         info.setUrl(applicationProperties.getHolisticsConsortiaDashboardUrl());
         info.setJwt(getJwt(getClaims(getConsortiaReportPermissions()), applicationProperties.getHolisticsConsortiaDashboardSecret()));
         return info;
+    }
+    
+    public ReportInfo getAffiliationReportInfo() {
+        checkAffiliationReportAccess();
+        ReportInfo info = new ReportInfo();
+        info.setUrl(applicationProperties.getHolisticsAffiliationDashboardUrl());
+        info.setJwt(getJwt(getClaims(getAffiliationReportPermissions()), applicationProperties.getHolisticsAffiliationDashboardSecret()));
+        return info;
+    }
+
+    private void checkAffiliationReportAccess() {
+        Optional<Member> member = memberService.getMember(getLoggedInSalesforceId());
+        if (member.get().getParentSalesforceId() == null) {
+            throw new BadRequestAlertException("Only consortia members can view affiliation reports", null, null);
+        }
     }
 
     private void checkConsortiumReportAccess() {
@@ -141,6 +158,15 @@ public class ReportService {
     private Map<String, Object> getMemberReportPermissions() {
         Map<String, Object> config = getRowBasedConfigBase();
         config.put(PATH_PARAM, MEMBER_REPORT_PATH);
+
+        Map<String, Object> wrapper = new HashMap<>();
+        wrapper.put(ROW_BASED_PARAM, new Object[] { config });
+        return wrapper;
+    }
+    
+    private Map<String, Object> getAffiliationReportPermissions() {
+        Map<String, Object> config = getRowBasedConfigBase();
+        config.put(PATH_PARAM, AFFILIATION_REPORT_PATH);
 
         Map<String, Object> wrapper = new HashMap<>();
         wrapper.put(ROW_BASED_PARAM, new Object[] { config });

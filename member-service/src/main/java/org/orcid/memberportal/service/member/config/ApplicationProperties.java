@@ -29,6 +29,10 @@ public class ApplicationProperties {
     
     private String holisticsConsortiaDashboardSecret;
     
+    private String holisticsAffiliationDashboardUrl;
+    
+    private String holisticsAffiliationDashboardSecret;
+    
     public String getOrcidOrgClientId() {
         return orcidOrgClientId;
     }
@@ -93,4 +97,20 @@ public class ApplicationProperties {
         this.holisticsConsortiaDashboardSecret = holisticsConsortiaDashboardSecret;
     }
 
+    public String getHolisticsAffiliationDashboardUrl() {
+        return holisticsAffiliationDashboardUrl;
+    }
+
+    public void setHolisticsAffiliationDashboardUrl(String holisticsAffiliationDashboardUrl) {
+        this.holisticsAffiliationDashboardUrl = holisticsAffiliationDashboardUrl;
+    }
+
+    public String getHolisticsAffiliationDashboardSecret() {
+        return holisticsAffiliationDashboardSecret;
+    }
+
+    public void setHolisticsAffiliationDashboardSecret(String holisticsAffiliationDashboardSecret) {
+        this.holisticsAffiliationDashboardSecret = holisticsAffiliationDashboardSecret;
+    }
+    
 }
