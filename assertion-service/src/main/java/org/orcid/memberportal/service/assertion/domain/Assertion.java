@@ -116,9 +116,6 @@ public class Assertion implements Serializable {
     @Field("updated_in_orcid")
     private Instant updatedInORCID;
 
-    @Field("deleted_from_orcid")
-    private Instant deletedFromORCID;
-
     @Field("url")
     private String url;
 
@@ -362,14 +359,6 @@ public class Assertion implements Serializable {
         this.salesforceId = salesforceId;
     }
 
-    public Instant getDeletedFromORCID() {
-        return deletedFromORCID;
-    }
-
-    public void setDeletedFromORCID(Instant deletedFromORCID) {
-        this.deletedFromORCID = deletedFromORCID;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -433,7 +422,6 @@ public class Assertion implements Serializable {
         result = prime * result + ((addedToORCID == null) ? 0 : addedToORCID.hashCode());
         result = prime * result + ((affiliationSection == null) ? 0 : affiliationSection.hashCode());
         result = prime * result + ((created == null) ? 0 : created.hashCode());
-        result = prime * result + ((deletedFromORCID == null) ? 0 : deletedFromORCID.hashCode());
         result = prime * result + ((departmentName == null) ? 0 : departmentName.hashCode());
         result = prime * result + ((disambiguatedOrgId == null) ? 0 : disambiguatedOrgId.hashCode());
         result = prime * result + ((disambiguationSource == null) ? 0 : disambiguationSource.hashCode());
@@ -486,11 +474,6 @@ public class Assertion implements Serializable {
             if (other.created != null)
                 return false;
         } else if (!created.equals(other.created))
-            return false;
-        if (deletedFromORCID == null) {
-            if (other.deletedFromORCID != null)
-                return false;
-        } else if (!deletedFromORCID.equals(other.deletedFromORCID))
             return false;
         if (departmentName == null) {
             if (other.departmentName != null)

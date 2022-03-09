@@ -291,9 +291,9 @@ public class AssertionService {
 
     private boolean assertionToDelete(Assertion assertion) {
         return assertion.getId() != null && assertion.getAddedToORCID() == null && assertion.getAffiliationSection() == null && assertion.getCreated() == null
-                && assertion.getDeletedFromORCID() == null && assertion.getDepartmentName() == null && assertion.getDisambiguatedOrgId() == null
-                && assertion.getDisambiguationSource() == null && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null
-                && assertion.getEndYear() == null && assertion.getExternalId() == null && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null
+                && assertion.getDepartmentName() == null && assertion.getDisambiguatedOrgId() == null && assertion.getDisambiguationSource() == null
+                && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null && assertion.getEndYear() == null
+                && assertion.getExternalId() == null && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null
                 && assertion.getLastModifiedBy() == null && assertion.getModified() == null && assertion.getOrcidError() == null && assertion.getOrcidId() == null
                 && assertion.getOrgCity() == null && assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null
                 && assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null && assertion.getRoleTitle() == null
@@ -443,7 +443,6 @@ public class AssertionService {
                 String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId()));
                 Boolean deleted = orcidAPIClient.deleteAffiliation(record.get().getOrcid(), accessToken, assertion);
                 if (deleted) {
-                    assertion.setDeletedFromORCID(now);
                     assertion.setModified(now);
                     assertion.setStatus(getAssertionStatus(assertion));
                     assertionRepository.save(assertion);
