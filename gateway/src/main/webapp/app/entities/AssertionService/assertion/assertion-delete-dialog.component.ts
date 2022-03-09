@@ -39,7 +39,7 @@ export class AssertionDeleteDialogComponent {
     if (
       this.assertion.putCode &&
       (this.assertion.status === ASSERTION_STATUS.IN_ORCID ||
-        this.assertion.status === ASSERTION_STATUS.ERROR_UPDATING_IN_ORCID ||
+        this.assertion.status === ASSERTION_STATUS.ERROR_UPDATING_TO_ORCID ||
         this.assertion.status === ASSERTION_STATUS.PENDING_RETRY)
     ) {
       this.assertionService.deleteFromOrcid(this.assertion.id).subscribe(res => {
