@@ -11,7 +11,6 @@ import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
-import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 
 class AssertionUtilsTest {
 
@@ -37,7 +36,6 @@ class AssertionUtilsTest {
     void testGetAffiliationStatusWhereNoErrorOccured() {
         assertEquals(AssertionStatus.USER_DENIED_ACCESS.name(), AssertionUtils.getAssertionStatus(getAssertionNotAddedToOrcid(), getOrcidRecordWithDeniedToken()));
         assertEquals(AssertionStatus.PENDING.name(), AssertionUtils.getAssertionStatus(getAssertionNotAddedToOrcid(), getOrcidRecordWithApprovedToken()));
-        assertEquals(AssertionStatus.DELETED_IN_ORCID.name(), AssertionUtils.getAssertionStatus(getAssertionDeletedInOrcid(), getOrcidRecordWithApprovedToken()));
         assertEquals(AssertionStatus.IN_ORCID.name(), AssertionUtils.getAssertionStatus(getAssertionAddedToOrcid(), getOrcidRecordWithApprovedToken()));
         assertEquals(AssertionStatus.IN_ORCID.name(), AssertionUtils.getAssertionStatus(getAssertionUpdatedInOrcid(), getOrcidRecordWithApprovedToken()));
         assertEquals(AssertionStatus.PENDING_RETRY.name(), AssertionUtils.getAssertionStatus(getAssertionUpdatedSinceAddingToOrcid(), getOrcidRecordWithApprovedToken()));
@@ -117,13 +115,6 @@ class AssertionUtilsTest {
         Instant syncDate = Instant.now().plusSeconds(40l);
         assertion.setUpdatedInORCID(syncDate);
         assertion.setLastSyncAttempt(syncDate);
-        return assertion;
-    }
-
-    private Assertion getAssertionDeletedInOrcid() {
-        Assertion assertion = getAssertionAddedToOrcid();
-        Instant syncDate = Instant.now().plusSeconds(20l);
-        assertion.setDeletedFromORCID(syncDate);
         return assertion;
     }
 

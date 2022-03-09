@@ -24,10 +24,6 @@ public class AssertionUtils {
             return getErrorStatus(assertion);
         }
 
-        if (assertion.getDeletedFromORCID() != null) {
-            return AssertionStatus.DELETED_IN_ORCID.name();
-        }
-
         if (assertionModifiedSinceLastSyncAttempt(assertion)) {
             return AssertionStatus.PENDING_RETRY.name();
         }
