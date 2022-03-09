@@ -4,7 +4,6 @@ export const ASSERTION_STATUS = {
   USER_DENIED_ACCESS: 'User denied access',
   PENDING: 'Pending',
   PENDING_RETRY: 'Pending retry in ORCID',
-  DELETED_IN_ORCID: 'Deleted in ORCID',
   IN_ORCID: 'In ORCID',
   USER_GRANTED_ACCESS: 'User granted access',
   USER_DELETED_FROM_ORCID: 'User deleted from ORCID',
