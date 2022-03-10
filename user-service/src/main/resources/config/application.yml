@@ -78,6 +78,10 @@ management:
         auto-time-requests: true
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
   application:
     name: userservice
   jmx:
