@@ -24,7 +24,8 @@
       "report": {
         "member": { "string": "Отчет участника" },
         "integration": { "string": "Отчет об интеграции" },
-        "consortium": { "string": "Отчет консорциума" }
+        "consortium": { "string": "Отчет консорциума" },
+        "affiliation": { "string": "Отчет о статусе доступа" }
       },
       "account": {
         "main": { "string": "Учётная запись" },

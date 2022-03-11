@@ -14,11 +14,28 @@
         "createOrEditLabel": { "string": "Agregar o editar afiliación" },
         "notFound": { "string": "No se han encontrado afiliaciones" },
         "uploadLabel": { "string": "Importar afiliaciones desde CSV" },
-        "getLinks": { "string": "Descargar enlaces de permisos" },
-        "generateReport": { "string": "Descargar el informe sobre el estado de la afiliación" },
-        "exportForEdit": { "string": "Descargar afiliaciones para editar" },
         "forHelpTroubleshooting": {
           "string": "Si necesita ayuda para solucionar un problema, póngase en contacto con el equipo del portal para miembros e incluya una captura de pantalla del mensaje de error que le aparece."
+        }
+      },
+      "reports": {
+        "links": {
+          "button": { "string": "Solicitar enlaces de permiso" },
+          "confirmation": {
+            "string": "En breve se le enviará por correo el archivo de enlaces de permiso. Si no lo recibe, póngase en contacto con nosotros en membership@orcid.org."
+          }
+        },
+        "affiliationsReport": {
+          "button": { "string": "Solicitar informe de situación de afiliación" },
+          "confirmation": {
+            "string": "En breve se le enviará por correo el archivo de informe de situación de afiliación. Si no lo recibe, póngase en contacto con nosotros en membership@orcid.org."
+          }
+        },
+        "affiliationsForEdit": {
+          "button": { "string": "Solicitar asignaciones para editar" },
+          "confirmation": {
+            "string": "En breve se le enviará por correo el archivo de afiliaciones para editar. Si no lo recibe, póngase en contacto con nosotros en membership@orcid.org."
+          }
         }
       },
       "delete": {
@@ -40,7 +57,9 @@
         "title": { "string": "Importar afiliaciones" },
         "label": { "string": "Seleccione un archivo CSV para subir" },
         "filePath": { "string": "Ruta de archivo" },
-        "success": { "string": "Su CSV se ha subido para procesarlo." },
+        "successMessage": {
+          "string": "Se ha cargado el CSV para su procesamiento. En cuanto esté procesado, se le notificará por correo."
+        },
         "failure": { "string": "Hubo un problema al subir su CSV para procesarlo." }
       },
       "addedToOrcid": { "string": "Añadido a ORCID" },

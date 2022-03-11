@@ -24,7 +24,8 @@
       "report": {
         "member": { "string": "Členská zpráva" },
         "integration": { "string": "Zpráva o integraci" },
-        "consortium": { "string": "Zpráva konzorcia" }
+        "consortium": { "string": "Zpráva konzorcia" },
+        "affiliation": { "string": "Zpráva o přidružení" }
       },
       "account": {
         "main": { "string": "Účet" },

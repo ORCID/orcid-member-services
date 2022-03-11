@@ -9,6 +9,9 @@
       },
       "consortia": {
         "title": { "string": "컨소시엄 보고서" }
+      },
+      "affiliation": {
+        "title": { "string": "제휴 보고서" }
       }
     }
   }

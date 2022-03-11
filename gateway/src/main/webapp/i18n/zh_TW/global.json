@@ -24,7 +24,8 @@
       "report": {
         "member": { "string": "會員報告" },
         "integration": { "string": "整合報告" },
-        "consortium": { "string": "聯合報告" }
+        "consortium": { "string": "聯合報告" },
+        "affiliation": { "string": "聯盟關係報告" }
       },
       "account": {
         "main": { "string": "帳號" },
