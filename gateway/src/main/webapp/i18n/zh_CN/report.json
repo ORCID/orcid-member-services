@@ -9,6 +9,9 @@
       },
       "consortia": {
         "title": { "string": "财团报告" }
+      },
+      "affiliation": {
+        "title": { "string": "机构报告" }
       }
     }
   }

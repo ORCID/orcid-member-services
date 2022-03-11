@@ -14,11 +14,28 @@
         "createOrEditLabel": { "string": "所属を追加または編集" },
         "notFound": { "string": "所属が見つかりません" },
         "uploadLabel": { "string": "CSVから所属をインポート" },
-        "getLinks": { "string": "パーミッションリンクのダウンロード" },
-        "generateReport": { "string": "アフィリエーションステータスレポートをダウンロード" },
-        "exportForEdit": { "string": "編集用アフィリエーションをダウンロードする" },
         "forHelpTroubleshooting": {
           "string": "このエラーのトラブルシューティングについてサポートが必要な場合は、コンソーシアムの責任者またはmembership@orcid.orgにお問い合わせください。以下のエラーメッセージのスクリーンショットを含めてください。"
+        }
+      },
+      "reports": {
+        "links": {
+          "button": { "string": "許可リンクをリクエスト" },
+          "confirmation": {
+            "string": "許可リンクファイルが間もなく届きます。ファイルが届かない場合は、membership@orcid.orgまでご連絡ください。"
+          }
+        },
+        "affiliationsReport": {
+          "button": { "string": "アフィリエーションステータスレポートをリクエスト" },
+          "confirmation": {
+            "string": "アフィリエーションステータスレポートファイルが間もなく届きます。ファイルが届かない場合は、membership@orcid.orgまでご連絡ください。"
+          }
+        },
+        "affiliationsForEdit": {
+          "button": { "string": "編集用アフィリエーションをリクエスト" },
+          "confirmation": {
+            "string": "編集用アフィリエーションファイルが間もなく届きます。ファイルが届かない場合は、membership@orcid.orgまでご連絡ください。"
+          }
         }
       },
       "delete": {
@@ -40,7 +57,9 @@
         "title": { "string": "所属をインポート" },
         "label": { "string": "アップロードするCSVファイルを選択してください" },
         "filePath": { "string": "ファイルパス" },
-        "success": { "string": "CSVは処理のためにアップロードされています。" },
+        "successMessage": {
+          "string": "あなたのCSVが処理用にアップロードされました。ファイルの処理が完了次第、メールでお知らせします。"
+        },
         "failure": { "string": "処理するためにCSVをアップロードする際に問題が発生しました。" }
       },
       "addedToOrcid": { "string": "ORCIDに追加されました" },

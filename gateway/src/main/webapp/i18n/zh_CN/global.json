@@ -24,7 +24,8 @@
       "report": {
         "member": { "string": "会员报告" },
         "integration": { "string": "整合报告" },
-        "consortium": { "string": "联盟报告" }
+        "consortium": { "string": "联盟报告" },
+        "affiliation": { "string": "机构报告" }
       },
       "account": {
         "main": { "string": "账户" },

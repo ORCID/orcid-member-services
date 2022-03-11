@@ -14,11 +14,28 @@
         "createOrEditLabel": { "string": "Přidat nebo upravit přidružení" },
         "notFound": { "string": "Nenalezena žádná přidružení" },
         "uploadLabel": { "string": "Importujte afiliace z CSV" },
-        "getLinks": { "string": "Stáhnout odkazy pro oprávnění" },
-        "generateReport": { "string": "Stáhnout zprávu o statusu přidružení" },
-        "exportForEdit": { "string": "Stáhněte si afiliace pro úpravy" },
         "forHelpTroubleshooting": {
           "string": "Pokud potřebujete pomoc s řešením této chyby, obraťte se prosím na své vedení konsorcia nebo na member@orcid.org. Níže přiložte snímek obrazovky s chybovou zprávou."
+        }
+      },
+      "reports": {
+        "links": {
+          "button": { "string": "Vyžádejte si odkazy na oprávnění" },
+          "confirmation": {
+            "string": "Váš soubor odkazů na oprávnění vám bude brzy zaslán e-mailem. Pokud svůj soubor neobdržíte, kontaktujte nás prosím na adrese membership@orcid.org."
+          }
+        },
+        "affiliationsReport": {
+          "button": { "string": "Vyžádejte si zprávu o stavu přidružení" },
+          "confirmation": {
+            "string": "Soubor zprávy o stavu přidružení vám bude brzy zaslán e-mailem. Pokud svůj soubor neobdržíte, kontaktujte nás prosím na adrese membership@orcid.org."
+          }
+        },
+        "affiliationsForEdit": {
+          "button": { "string": "Vyžádejte si přidružení k úpravě" },
+          "confirmation": {
+            "string": "Vaše přidružení k úpravě souboru vám budou brzy zaslány e-mailem. Pokud svůj soubor neobdržíte, kontaktujte nás prosím na adrese membership@orcid.org."
+          }
         }
       },
       "delete": {
@@ -40,7 +57,9 @@
         "title": { "string": "Importovat přidružení" },
         "label": { "string": "Zvolte prosím soubor CSV, který se nahraje" },
         "filePath": { "string": "Cesta k souboru" },
-        "success": { "string": "Váš CSV soubor byl nahrán ke zpracování." },
+        "successMessage": {
+          "string": "Váš soubor CSV byl nahrán ke zpracování. Jakmile bude soubor zpracován, dáme vám vědět e-mailem."
+        },
         "failure": { "string": "Při nahrávání vašeho CSV souboru ke zpracování došlo k problému." }
       },
       "addedToOrcid": { "string": "Přidáno do ORCID" },

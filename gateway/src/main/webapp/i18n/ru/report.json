@@ -9,6 +9,9 @@
       },
       "consortia": {
         "title": { "string": "Отчет консорциума" }
+      },
+      "affiliation": {
+        "title": { "string": "Отчет о статусе доступа" }
       }
     }
   }

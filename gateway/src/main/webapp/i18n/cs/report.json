@@ -9,6 +9,9 @@
       },
       "consortia": {
         "title": { "string": "Zpráva konsorcia" }
+      },
+      "affiliation": {
+        "title": { "string": "Zpráva o přidružení" }
       }
     }
   }
