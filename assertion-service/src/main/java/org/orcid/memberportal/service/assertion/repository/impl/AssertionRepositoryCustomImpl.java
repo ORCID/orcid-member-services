@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.LimitOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -48,9 +49,9 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
         Criteria needsUpdatingInOrcid = new Criteria();
         needsUpdatingInOrcid.orOperator(modifiedAfterUpdateInOrcid, modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet);
-
+        
         MatchOperation matchUpdatedAfterSync = Aggregation.match(needsUpdatingInOrcid);
-        Aggregation aggregation = Aggregation.newAggregation(timeModifiedAfterSync, matchUpdatedAfterSync);
+        Aggregation aggregation = Aggregation.newAggregation(timeModifiedAfterSync, matchUpdatedAfterSync, new LimitOperation(MAX_RESULTS));
         AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
 
         return results.getMappedResults();
@@ -71,6 +72,7 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         Criteria criteria = new Criteria();
         criteria.orOperator(Criteria.where("added_to_orcid").exists(false), Criteria.where("added_to_orcid").is(null));
         Query query = new Query(criteria);
+        query.limit(MAX_RESULTS.intValue());
         return mongoTemplate.find(query, Assertion.class);
     }
 
