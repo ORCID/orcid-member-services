@@ -34,7 +34,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private eventManager: JhiEventManager,
     private router: Router,
     private appService: AppService
-  ) {}
+  ) {
+    this.version = '';
+  }
 
   ngOnInit(): void {
     this.appService.getVersion().subscribe(response => {

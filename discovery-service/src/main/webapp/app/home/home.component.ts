@@ -44,7 +44,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private refreshService: RefreshService,
     private appService: AppService
-  ) {}
+  ) {
+    this.version = '';
+  }
 
   ngOnInit(): void {
     this.appService.getVersion().subscribe(response => {
