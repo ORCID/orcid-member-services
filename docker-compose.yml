@@ -39,7 +39,7 @@ services:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
       - ${MEMBER_ASSERTION_STATS_VOLUME}:/files
     depends_on:
-      - "discovery-service"
+      - "jhipster-registry"
 
   gateway-app:
     restart: unless-stopped
@@ -62,7 +62,7 @@ services:
     ports:
       - '8080:8080'
     depends_on:
-      - "discovery-service"
+      - "jhipster-registry"
 
   userservice-app:
     restart: unless-stopped
@@ -93,7 +93,7 @@ services:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
       - ${HOST_KEYSTORE_DIR}:/keystores
     depends_on:
-      - "discovery-service"
+      - "jhipster-registry"
 
   memberservice-app:
     restart: unless-stopped
@@ -122,9 +122,9 @@ services:
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     depends_on:
-      - "discovery-service"
+      - "jhipster-registry"
 
-  discovery-service:
+  jhipster-registry:
     restart: unless-stopped
     image: ${DOCKER_REG}/discoveryservice:${TAG}
     environment:
