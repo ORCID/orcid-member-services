@@ -196,3 +196,6 @@ jhipster:
       audience:
         - account
         - api://default
+
+application:
+  appVersion: ${TAG}

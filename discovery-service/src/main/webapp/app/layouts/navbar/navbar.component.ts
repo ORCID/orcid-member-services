@@ -4,13 +4,13 @@ import { JhiEventManager } from 'ng-jhipster';
 
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 
-import { VERSION } from 'app/app.constants';
 import { takeUntil } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 import { LoginService } from 'app/core/login/login.service';
 import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
 import { LoginModalService } from 'app/core/login/login-modal.service';
 import { AccountService } from 'app/core/auth/account.service';
+import { AppService } from 'app/core/app/app.service';
 
 @Component({
   selector: 'jhi-navbar',
@@ -21,7 +21,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   inProduction?: boolean;
   isNavbarCollapsed = true;
   swaggerEnabled?: boolean;
-  version: string = VERSION ? 'v' + VERSION : '';
+  version: string;
   unsubscribe$ = new Subject();
   subscription?: Subscription;
 
@@ -32,10 +32,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private loginModalService: LoginModalService,
     private profileService: ProfileService,
     private eventManager: JhiEventManager,
-    private router: Router
+    private router: Router,
+    private appService: AppService
   ) {}
 
   ngOnInit(): void {
+    this.appService.getVersion().subscribe(response => {
+      this.version = response.body.version;
+    });
     this.getProfileInfo();
     this.registerAuthenticationSuccess();
   }

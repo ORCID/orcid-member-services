@@ -4,7 +4,6 @@ import { JhiEventManager } from 'ng-jhipster';
 
 import { Health, HealthService, HealthStatus } from 'app/admin/health/health.service';
 
-import { VERSION } from 'app/app.constants';
 import { EurekaStatusKey, EurekaStatusService } from './eureka.status.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
@@ -14,6 +13,7 @@ import { Account } from 'app/core/user/account.model';
 import { ApplicationsService, Instance } from 'app/registry/applications/applications.service';
 import { RefreshService } from 'app/shared/refresh/refresh.service';
 import { takeUntil } from 'rxjs/operators';
+import { AppService } from 'app/core/app/app.service';
 
 @Component({
   selector: 'jhi-home',
@@ -24,11 +24,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   account?: Account | null;
   updatingHealth?: boolean;
   health?: Health;
+  version: string;
+
   appInstances: Array<Instance> = [];
   status?: {
     [key in EurekaStatusKey]?: any;
   };
-  version: string = VERSION ? 'v' + VERSION : '';
   unsubscribe$ = new Subject();
   subscription?: Subscription;
 
@@ -41,10 +42,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     private applicationsService: ApplicationsService,
     private healthService: HealthService,
     private profileService: ProfileService,
-    private refreshService: RefreshService
+    private refreshService: RefreshService,
+    private appService: AppService
   ) {}
 
   ngOnInit(): void {
+    this.appService.getVersion().subscribe(response => {
+      this.version = response.body.version;
+    });
+
     this.accountService
       .identity()
       .pipe(takeUntil(this.unsubscribe$))
