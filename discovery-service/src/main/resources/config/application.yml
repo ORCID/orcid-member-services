@@ -198,4 +198,4 @@ jhipster:
         - api://default
 
 application:
-  appVersion: ${TAG}
+  appVersion: ${APPLICATION_VERSION}
