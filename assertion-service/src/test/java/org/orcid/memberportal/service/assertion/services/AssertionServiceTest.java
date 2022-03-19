@@ -100,7 +100,7 @@ class AssertionServiceTest {
 
     @Mock
     private MailService mailService;
-    
+
     @Mock
     private MemberService memberService;
 
@@ -109,13 +109,16 @@ class AssertionServiceTest {
 
     @Captor
     private ArgumentCaptor<String> csvContentCaptor;
-    
+
     @Captor
     private ArgumentCaptor<AssertionsUploadSummary> summaryCaptor;
-    
+
+    @Captor
+    private ArgumentCaptor<Pageable> pageableCaptor;
+
     @Captor
     private ArgumentCaptor<StoredFile> storedFileCaptor;
-    
+
     @Captor
     private ArgumentCaptor<String> filenameCaptor;
 
@@ -143,7 +146,7 @@ class AssertionServiceTest {
         user.setLangKey("en");
         return user;
     }
-    
+
     @Test
     void testUpdateOrcidIdsForEmail() {
         OrcidRecord record = new OrcidRecord();
@@ -157,7 +160,7 @@ class AssertionServiceTest {
         assertEquals("orcid", two.getOrcidId());
         Mockito.verify(assertionsRepository, Mockito.times(2)).save(Mockito.any(Assertion.class));
     }
-    
+
     @Test
     void testPopulatePermissionLink() {
         Assertion assertion = getAssertionWithEmail("email");
@@ -166,7 +169,7 @@ class AssertionServiceTest {
         assertEquals("permission-link", assertion.getPermissionLink());
         Mockito.verify(orcidRecordService).generateLinkForEmail(Mockito.eq("email"));
     }
-    
+
     @Test
     void testAssertionExists() {
         when(assertionsRepository.existsById(Mockito.eq("exists"))).thenReturn(true);
@@ -331,20 +334,41 @@ class AssertionServiceTest {
 
     @Test
     void testPostAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
-        Mockito.when(assertionsRepository.findAllToCreateInOrcidRegistry()).thenReturn(getAssertionsForCreatingInOrcid());
-        for (int i = 1; i <= 20; i++) {
+        Mockito.when(assertionsRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class)))
+                .thenReturn(getAssertionsForCreatingInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE))
+                .thenReturn(getAssertionsForCreatingInOrcid(AssertionService.REGISTRY_SYNC_BATCH_SIZE + 1,
+                        AssertionService.REGISTRY_SYNC_BATCH_SIZE + (AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2)))
+                .thenReturn(new ArrayList<>());
+
+        for (int i = 1; i <= 5; i++) {
+            Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(Optional.of(getOrcidRecord(Integer.toString(i))));
+        }
+
+        for (int i = 6; i <= AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5; i++) {
             Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(getOptionalOrcidRecord(i));
         }
 
-        for (int i = 16; i <= 20; i++) {
+        for (int i = 1; i <= 5; i++) {
             Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken" + i))).thenReturn("accessToken" + i);
             Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid" + i), Mockito.eq("accessToken" + i), Mockito.any(Assertion.class))).thenReturn("putCode" + i);
         }
 
         assertionService.postAssertionsToOrcid();
 
-        Mockito.verify(orcidRecordService, Mockito.times(20)).findOneByEmail(Mockito.anyString());
+        Mockito.verify(orcidRecordService, Mockito.times(AssertionService.REGISTRY_SYNC_BATCH_SIZE + (AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2)))
+                .findOneByEmail(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).postAffiliation(Mockito.anyString(), Mockito.anyString(), assertionCaptor.capture());
+        Mockito.verify(assertionsRepository, Mockito.times(3)).findAllToCreateInOrcidRegistry(pageableCaptor.capture());
+
+        List<Pageable> pageables = pageableCaptor.getAllValues();
+        assertEquals(0, pageables.get(0).getPageNumber());
+        assertEquals(AssertionService.REGISTRY_SYNC_BATCH_SIZE, pageables.get(0).getPageSize());
+
+        assertEquals(1, pageables.get(1).getPageNumber());
+        assertEquals(AssertionService.REGISTRY_SYNC_BATCH_SIZE, pageables.get(0).getPageSize());
+
+        assertEquals(2, pageables.get(2).getPageNumber());
+        assertEquals(AssertionService.REGISTRY_SYNC_BATCH_SIZE, pageables.get(0).getPageSize());
 
         List<Assertion> posted = assertionCaptor.getAllValues();
         posted.forEach(a -> {
@@ -465,23 +489,33 @@ class AssertionServiceTest {
 
     @Test
     void testPutAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
-        Mockito.when(assertionsRepository.findAllToUpdateInOrcidRegistry()).thenReturn(getAssertionsForUpdateInOrcid());
-        for (int i = 1; i <= 20; i++) {
+        Mockito.when(assertionsRepository.findAllToUpdateInOrcidRegistry(Mockito.any(Pageable.class)))
+                .thenReturn(getAssertionsForUpdateInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE))
+                .thenReturn(getAssertionsForUpdateInOrcid(AssertionService.REGISTRY_SYNC_BATCH_SIZE + 1, (int) (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5)))
+                .thenReturn(new ArrayList<>());
+        
+        for (int i = 1; i <= 5; i++) {
+            Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(Optional.of(getOrcidRecord(Integer.toString(i))));
+        }
+
+        for (int i = 6; i <= AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5; i++) {
             Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(getOptionalOrcidRecord(i));
         }
 
-        for (int i = 16; i <= 20; i++) {
+        for (int i = 1; i <= 5; i++) {
             Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken" + i))).thenReturn("accessToken" + i);
             Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid" + i), Mockito.eq("accessToken" + i), Mockito.any(Assertion.class))).thenReturn("putCode" + i);
         }
-
-        for (int i = 1; i <= 20; i++) {
-            Mockito.when(assertionsRepository.findById("id" + i)).thenReturn(Optional.of(getAssertionWithEmailAndPutCode(i + "@email.com", String.valueOf(i))));
+        
+        for (int i = 1; i <= AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5; i++) {
+            // for when assertion is refreshed
+            Mockito.when(assertionsRepository.findById(Mockito.eq("id" + i))).thenReturn(Optional.of(getAssertionWithEmailAndPutCode(i + "@email.com", String.valueOf(i))));
         }
 
         assertionService.putAssertionsInOrcid();
 
-        Mockito.verify(orcidRecordService, Mockito.times(25)).findOneByEmail(Mockito.anyString());
+        // findByEmail called for each assertion examined then again to calculate status of each posted (5 in this case)
+        Mockito.verify(orcidRecordService, Mockito.times((int) (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5) + 5)).findOneByEmail(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(), assertionCaptor.capture());
 
@@ -675,7 +709,7 @@ class AssertionServiceTest {
         assertEquals(AssertionStatus.PENDING.getValue(), assertions.get(0).getPrettyStatus());
         Mockito.verify(assertionsRepository, Mockito.times(1)).findByEmail(Mockito.eq(email));
     }
-    
+
     @Test
     void testFindById() {
         Assertion a = getAssertionWithEmail("something@orcid.org");
@@ -749,7 +783,7 @@ class AssertionServiceTest {
 
     @Test
     void testDeleteAllBySalesforceId_orcidRecordsDeleted() {
-        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class))).thenReturn(getAssertionsForUpdateInOrcid());
+        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class))).thenReturn(getAssertionsForUpdateInOrcid(1, 20));
         Mockito.doNothing().when(assertionsRepository).deleteById(Mockito.anyString());
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(Optional.empty());
 
@@ -762,7 +796,7 @@ class AssertionServiceTest {
 
     @Test
     void testDeleteAllBySalesforceId_orcidRecordsNotDeleted() {
-        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class))).thenReturn(getAssertionsForUpdateInOrcid());
+        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class))).thenReturn(getAssertionsForUpdateInOrcid(1, 20));
         Mockito.doNothing().when(assertionsRepository).deleteById(Mockito.anyString());
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getOptionalOrcidRecordWithoutIdToken());
 
@@ -1009,7 +1043,8 @@ class AssertionServiceTest {
 
     @Test
     void testProcessAssertionUploadsNoProcessingIfErrorsPresent() throws IOException {
-        Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE))).thenReturn(Arrays.asList(getDummyStoredFile()));
+        Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE)))
+                .thenReturn(Arrays.asList(getDummyStoredFile()));
         Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());
 
         AssertionsUpload upload = new AssertionsUpload();
@@ -1035,14 +1070,15 @@ class AssertionServiceTest {
         Mockito.when(file.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
         assertionService.uploadAssertions(file);
         Mockito.verify(storedFileService).storeAssertionsCsvFile(Mockito.any(InputStream.class), filenameCaptor.capture(), Mockito.any(AssertionServiceUser.class));
-        
+
         String filename = filenameCaptor.getValue();
         assertEquals("some-file.csv", filename);
     }
-    
+
     @Test
     void testProcessAssertionUploads() throws IOException {
-        Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE))).thenReturn(Arrays.asList(getDummyStoredFile()));
+        Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE)))
+                .thenReturn(Arrays.asList(getDummyStoredFile()));
         Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());
 
         AssertionsUpload upload = new AssertionsUpload();
@@ -1080,7 +1116,7 @@ class AssertionServiceTest {
         Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
 
         assertionService.processAssertionUploads();
-        
+
         Mockito.verify(mailService).sendAssertionsUploadSummaryMail(summaryCaptor.capture(), Mockito.any(AssertionServiceUser.class));
         AssertionsUploadSummary summary = summaryCaptor.getValue();
         assertEquals(3, summary.getNumAdded());
@@ -1093,7 +1129,7 @@ class AssertionServiceTest {
         Mockito.verify(assertionsRepository, Mockito.times(3)).insert(Mockito.any(Assertion.class));
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.any(Assertion.class));
     }
-    
+
     @Test
     void testProcessAssertionUploadsWhereErrorOccursInOneUpload() throws IOException {
         Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE))).thenReturn(getDummyStoredFiles());
@@ -1131,35 +1167,44 @@ class AssertionServiceTest {
             }
         });
         Mockito.when(assertionsRepository.findById(Mockito.eq("12346"))).thenReturn(Optional.of(toUpdate));
-        Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class))).thenThrow(new IOException("testing error message")).thenReturn(upload);
+        Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class)))
+                .thenThrow(new IOException("testing error message")).thenReturn(upload);
 
         assertionService.processAssertionUploads();
-        
+
         Mockito.verify(mailService).sendAssertionsUploadSummaryMail(summaryCaptor.capture(), Mockito.any(AssertionServiceUser.class));
         AssertionsUploadSummary summary = summaryCaptor.getValue();
         assertEquals(3, summary.getNumAdded());
         assertEquals(0, summary.getNumDuplicates());
         assertEquals(0, summary.getNumDeleted());
         assertEquals(1, summary.getNumUpdated());
-        
+
         Mockito.verify(assertionsRepository, Mockito.times(3)).insert(Mockito.any(Assertion.class));
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.any(Assertion.class));
         Mockito.verify(storedFileService, Mockito.times(2)).markAsProcessed(storedFileCaptor.capture());
-        
+
         List<StoredFile> storedFiles = storedFileCaptor.getAllValues();
         assertEquals(2, storedFiles.size());
         assertNotNull(storedFiles.get(0).getError());
         assertEquals("java.io.IOException: testing error message", storedFiles.get(0).getError());
         assertNull(storedFiles.get(1).getError());
     }
-    
+
     private List<StoredFile> getDummyStoredFiles() {
         return Arrays.asList(getDummyStoredFile(), getDummyStoredFile());
     }
 
     private StoredFile getDummyStoredFile() {
         StoredFile storedFile = new StoredFile();
-        storedFile.setFileLocation(getClass().getResource("/assertions-with-bad-url.csv").getFile()); // any file that exists, test won't actually use it
+        storedFile.setFileLocation(getClass().getResource("/assertions-with-bad-url.csv").getFile()); // any
+                                                                                                      // file
+                                                                                                      // that
+                                                                                                      // exists,
+                                                                                                      // test
+                                                                                                      // won't
+                                                                                                      // actually
+                                                                                                      // use
+                                                                                                      // it
         storedFile.setOriginalFilename("original-filename.csv");
         storedFile.setDateWritten(Instant.now());
         storedFile.setOwnerId("owner");
@@ -1168,7 +1213,8 @@ class AssertionServiceTest {
 
     @Test
     void testProcessAssertionUploadsWithDuplicates() throws IOException {
-        Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE))).thenReturn(Arrays.asList(getDummyStoredFile()));
+        Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE)))
+                .thenReturn(Arrays.asList(getDummyStoredFile()));
         Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());
 
         Assertion alreadyPersisted1 = getAssertionWithEmail("1@email.com");
@@ -1184,7 +1230,7 @@ class AssertionServiceTest {
         Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
 
         assertionService.processAssertionUploads();
-        
+
         Mockito.verify(mailService).sendAssertionsUploadSummaryMail(summaryCaptor.capture(), Mockito.any(AssertionServiceUser.class));
         AssertionsUploadSummary summary = summaryCaptor.getValue();
 
@@ -1212,7 +1258,7 @@ class AssertionServiceTest {
         assertThat(csv).contains("member 2");
         assertThat(csv).contains("PENDING");
         assertThat(csv).contains("IN_ORCID");
-        
+
         Mockito.verify(mailService).sendMemberAssertionStatsMail(Mockito.any(File.class));
     }
 
@@ -1250,29 +1296,18 @@ class AssertionServiceTest {
     }
 
     private Optional<OrcidRecord> getOptionalOrcidRecord(int i) {
-        // quarter without orcid record
-        if (i > 0 && i <= 5) {
+        if (i > 0 && i <= AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2) {
             return Optional.empty();
         }
 
         // quarter with no orcid
-        if (i > 5 && i <= 10) {
+        if (i > AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2 && i <= AssertionService.REGISTRY_SYNC_BATCH_SIZE) {
             return Optional.of(new OrcidRecord());
         }
 
-        // quarter with no id token
-        if (i > 10 && i <= 15) {
-            OrcidRecord record = new OrcidRecord();
-            record.setOrcid("orcid" + i);
-            return Optional.of(record);
-        }
-
-        // quarter with id token and orcid
-        if (i > 15 && i <= 20) {
-            return Optional.of(getOrcidRecord(String.valueOf(i)));
-        }
-
-        return null;
+        OrcidRecord orcidRecord = new OrcidRecord();
+        orcidRecord.setOrcid("orcid-" + i);
+        return Optional.of(orcidRecord);
     }
 
     private OrcidRecord getOrcidRecord(String variant) {
@@ -1286,9 +1321,9 @@ class AssertionServiceTest {
         return record;
     }
 
-    private List<Assertion> getAssertionsForCreatingInOrcid() {
+    private List<Assertion> getAssertionsForCreatingInOrcid(int min, int max) {
         List<Assertion> assertions = new ArrayList<>();
-        for (int i = 1; i <= 20; i++) {
+        for (int i = min; i <= max; i++) {
             Assertion assertion = getAssertionWithEmail(i + "@email.com");
             assertion.setId(String.valueOf(i));
             assertions.add(assertion);
@@ -1296,9 +1331,9 @@ class AssertionServiceTest {
         return assertions;
     }
 
-    private List<Assertion> getAssertionsForUpdateInOrcid() {
+    private List<Assertion> getAssertionsForUpdateInOrcid(int from, int to) {
         List<Assertion> assertions = new ArrayList<>();
-        for (int i = 1; i <= 20; i++) {
+        for (int i = from; i <= to; i++) {
             Assertion assertion = getAssertionWithEmailAndPutCode(i + "@email.com", String.valueOf(i));
             assertions.add(assertion);
         }

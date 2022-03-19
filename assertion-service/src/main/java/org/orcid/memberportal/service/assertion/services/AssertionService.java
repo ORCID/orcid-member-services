@@ -46,8 +46,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,6 +59,8 @@ import com.google.common.base.Objects;
 public class AssertionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AssertionService.class);
+    
+    public static final int REGISTRY_SYNC_BATCH_SIZE = 500;
 
     private final Sort SORT = new Sort(Sort.Direction.ASC, "email", "status", "created", "modified", "deletedFromORCID");
 
@@ -328,17 +332,23 @@ public class AssertionService {
     }
 
     public void postAssertionsToOrcid() throws JAXBException {
+        Pageable pageable = getPageableForRegistrySync();
+
         LOG.info("POSTing affiliations to orcid registry...");
-        List<Assertion> assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry();
-        for (Assertion assertion : assertionsToAdd) {
-            LOG.debug("Preparing to POST assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - to orcid registry", assertion.getId(),
-                    assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
-            try {
-                postAssertionToOrcid(assertion);
-            } catch (Exception e) {
-                LOG.error("Unexpected error POSTing assertion to registry", e);
+        List<Assertion> assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry(pageable);
+        while (assertionsToAdd != null && !assertionsToAdd.isEmpty()) {
+            for (Assertion assertion : assertionsToAdd) {
+                LOG.debug("Preparing to POST assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - to orcid registry", assertion.getId(),
+                        assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
+                try {
+                    postAssertionToOrcid(assertion);
+                } catch (Exception e) {
+                    LOG.error("Unexpected error POSTing assertion to registry", e);
+                }
+                LOG.debug("POST task complete for assertion {}", assertion.getId());
             }
-            LOG.debug("POST task complete for assertion {}", assertion.getId());
+            pageable = pageable.next();
+            assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry(pageable);
         }
         LOG.info("POSTing complete");
     }
@@ -379,20 +389,25 @@ public class AssertionService {
 
     public void putAssertionsInOrcid() throws JAXBException {
         LOG.info("PUTting assertions in orcid");
-        List<Assertion> assertionsToUpdate = assertionRepository.findAllToUpdateInOrcidRegistry();
-        for (Assertion assertion : assertionsToUpdate) {
-            // query will return only id and modified dates, so fetch full data
-            LOG.debug("Preparing to PUT assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - in orcid registry", assertion.getId(),
-                    assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
-            Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
-            LOG.debug("Refreshed assertion - id: {}, salesforceId: {}, email: {}, orcid id: {}", assertion.getId(), assertion.getSalesforceId(), assertion.getEmail(),
-                    assertion.getOrcidId());
-            try {
-                putAssertionInOrcid(refreshed);
-            } catch (Exception e) {
-                LOG.error("Unexpected error PUTting assertion in registry", e);
+        Pageable pageable = getPageableForRegistrySync();
+        List<Assertion> assertionsToUpdate = assertionRepository.findAllToUpdateInOrcidRegistry(pageable);
+        while (assertionsToUpdate != null && !assertionsToUpdate.isEmpty()) {
+            for (Assertion assertion : assertionsToUpdate) {
+                // query will return only id and modified dates, so fetch full data
+                LOG.debug("Preparing to PUT assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - in orcid registry", assertion.getId(),
+                        assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
+                Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
+                LOG.debug("Refreshed assertion - id: {}, salesforceId: {}, email: {}, orcid id: {}", assertion.getId(), assertion.getSalesforceId(), assertion.getEmail(),
+                        assertion.getOrcidId());
+                try {
+                    putAssertionInOrcid(refreshed);
+                } catch (Exception e) {
+                    LOG.error("Unexpected error PUTting assertion in registry", e);
+                }
+                LOG.debug("PUT task complete for assertion {}", assertion.getId());
             }
-            LOG.debug("PUT task complete for assertion {}", assertion.getId());
+            pageable = pageable.next();
+            assertionsToUpdate = assertionRepository.findAllToUpdateInOrcidRegistry(pageable);
         }
         LOG.info("PUTting complete");
     }
@@ -744,5 +759,9 @@ public class AssertionService {
 
     private void setPrettyStatus(Assertion assertion) {
         assertion.setPrettyStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
+    }
+
+    private Pageable getPageableForRegistrySync() {
+        return PageRequest.of(0, REGISTRY_SYNC_BATCH_SIZE, new Sort(Direction.ASC, "created"));
     }
 }
