@@ -8,9 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface AssertionRepositoryCustom {
     
-    public static final Long MAX_RESULTS = 500l;
-
-    List<Assertion> findAllToUpdateInOrcidRegistry();
+    List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable);
 
     List<Assertion> findAllToCreateInOrcidRegistry(Pageable pageable);
 

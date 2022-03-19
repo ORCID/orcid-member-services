@@ -49,7 +49,6 @@ import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStat
 import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
-import org.orcid.memberportal.service.assertion.repository.AssertionRepositoryCustom;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.orcid.memberportal.service.assertion.upload.impl.AssertionsCsvReader;
@@ -113,7 +112,7 @@ class AssertionServiceTest {
 
     @Captor
     private ArgumentCaptor<AssertionsUploadSummary> summaryCaptor;
-    
+
     @Captor
     private ArgumentCaptor<Pageable> pageableCaptor;
 
@@ -335,14 +334,17 @@ class AssertionServiceTest {
 
     @Test
     void testPostAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
-        Mockito.when(assertionsRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class))).thenReturn(getAssertionsForCreatingInOrcid(1, AssertionRepositoryCustom.MAX_RESULTS.intValue()))
-                .thenReturn(getAssertionsForCreatingInOrcid(AssertionRepositoryCustom.MAX_RESULTS.intValue() + 1, AssertionRepositoryCustom.MAX_RESULTS.intValue() + (AssertionRepositoryCustom.MAX_RESULTS.intValue() / 2))).thenReturn(new ArrayList<>());
-        
+        Mockito.when(assertionsRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class)))
+                .thenReturn(getAssertionsForCreatingInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE))
+                .thenReturn(getAssertionsForCreatingInOrcid(AssertionService.REGISTRY_SYNC_BATCH_SIZE + 1,
+                        AssertionService.REGISTRY_SYNC_BATCH_SIZE + (AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2)))
+                .thenReturn(new ArrayList<>());
+
         for (int i = 1; i <= 5; i++) {
             Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(Optional.of(getOrcidRecord(Integer.toString(i))));
         }
-        
-        for (int i = 6; i <= AssertionRepositoryCustom.MAX_RESULTS.intValue() * 1.5; i++) {
+
+        for (int i = 6; i <= AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5; i++) {
             Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(getOptionalOrcidRecord(i));
         }
 
@@ -353,20 +355,21 @@ class AssertionServiceTest {
 
         assertionService.postAssertionsToOrcid();
 
-        Mockito.verify(orcidRecordService, Mockito.times(AssertionRepositoryCustom.MAX_RESULTS.intValue() + (AssertionRepositoryCustom.MAX_RESULTS.intValue() / 2))).findOneByEmail(Mockito.anyString());
+        Mockito.verify(orcidRecordService, Mockito.times(AssertionService.REGISTRY_SYNC_BATCH_SIZE + (AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2)))
+                .findOneByEmail(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).postAffiliation(Mockito.anyString(), Mockito.anyString(), assertionCaptor.capture());
         Mockito.verify(assertionsRepository, Mockito.times(3)).findAllToCreateInOrcidRegistry(pageableCaptor.capture());
-        
+
         List<Pageable> pageables = pageableCaptor.getAllValues();
         assertEquals(0, pageables.get(0).getPageNumber());
-        assertEquals(AssertionRepositoryCustom.MAX_RESULTS.intValue(), pageables.get(0).getPageSize());
-        
+        assertEquals(AssertionService.REGISTRY_SYNC_BATCH_SIZE, pageables.get(0).getPageSize());
+
         assertEquals(1, pageables.get(1).getPageNumber());
-        assertEquals(AssertionRepositoryCustom.MAX_RESULTS.intValue(), pageables.get(0).getPageSize());
-        
+        assertEquals(AssertionService.REGISTRY_SYNC_BATCH_SIZE, pageables.get(0).getPageSize());
+
         assertEquals(2, pageables.get(2).getPageNumber());
-        assertEquals(AssertionRepositoryCustom.MAX_RESULTS.intValue(), pageables.get(0).getPageSize());
-        
+        assertEquals(AssertionService.REGISTRY_SYNC_BATCH_SIZE, pageables.get(0).getPageSize());
+
         List<Assertion> posted = assertionCaptor.getAllValues();
         posted.forEach(a -> {
             assertNotNull(a.getLastSyncAttempt());
@@ -486,23 +489,33 @@ class AssertionServiceTest {
 
     @Test
     void testPutAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
-        Mockito.when(assertionsRepository.findAllToUpdateInOrcidRegistry()).thenReturn(getAssertionsForUpdateInOrcid());
-        for (int i = 1; i <= 20; i++) {
+        Mockito.when(assertionsRepository.findAllToUpdateInOrcidRegistry(Mockito.any(Pageable.class)))
+                .thenReturn(getAssertionsForUpdateInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE))
+                .thenReturn(getAssertionsForUpdateInOrcid(AssertionService.REGISTRY_SYNC_BATCH_SIZE + 1, (int) (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5)))
+                .thenReturn(new ArrayList<>());
+        
+        for (int i = 1; i <= 5; i++) {
+            Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(Optional.of(getOrcidRecord(Integer.toString(i))));
+        }
+
+        for (int i = 6; i <= AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5; i++) {
             Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(getOptionalOrcidRecord(i));
         }
 
-        for (int i = 16; i <= 20; i++) {
+        for (int i = 1; i <= 5; i++) {
             Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken" + i))).thenReturn("accessToken" + i);
             Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid" + i), Mockito.eq("accessToken" + i), Mockito.any(Assertion.class))).thenReturn("putCode" + i);
         }
-
-        for (int i = 1; i <= 20; i++) {
-            Mockito.when(assertionsRepository.findById("id" + i)).thenReturn(Optional.of(getAssertionWithEmailAndPutCode(i + "@email.com", String.valueOf(i))));
+        
+        for (int i = 1; i <= AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5; i++) {
+            // for when assertion is refreshed
+            Mockito.when(assertionsRepository.findById(Mockito.eq("id" + i))).thenReturn(Optional.of(getAssertionWithEmailAndPutCode(i + "@email.com", String.valueOf(i))));
         }
 
         assertionService.putAssertionsInOrcid();
 
-        Mockito.verify(orcidRecordService, Mockito.times(25)).findOneByEmail(Mockito.anyString());
+        // findByEmail called for each assertion examined then again to calculate status of each posted (5 in this case)
+        Mockito.verify(orcidRecordService, Mockito.times((int) (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5) + 5)).findOneByEmail(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(), assertionCaptor.capture());
 
@@ -770,7 +783,7 @@ class AssertionServiceTest {
 
     @Test
     void testDeleteAllBySalesforceId_orcidRecordsDeleted() {
-        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class))).thenReturn(getAssertionsForUpdateInOrcid());
+        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class))).thenReturn(getAssertionsForUpdateInOrcid(1, 20));
         Mockito.doNothing().when(assertionsRepository).deleteById(Mockito.anyString());
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(Optional.empty());
 
@@ -783,7 +796,7 @@ class AssertionServiceTest {
 
     @Test
     void testDeleteAllBySalesforceId_orcidRecordsNotDeleted() {
-        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class))).thenReturn(getAssertionsForUpdateInOrcid());
+        Mockito.when(assertionsRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class))).thenReturn(getAssertionsForUpdateInOrcid(1, 20));
         Mockito.doNothing().when(assertionsRepository).deleteById(Mockito.anyString());
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getOptionalOrcidRecordWithoutIdToken());
 
@@ -1283,12 +1296,12 @@ class AssertionServiceTest {
     }
 
     private Optional<OrcidRecord> getOptionalOrcidRecord(int i) {
-        if (i > 0 && i <= AssertionRepositoryCustom.MAX_RESULTS.intValue() / 2) {
+        if (i > 0 && i <= AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2) {
             return Optional.empty();
         }
 
         // quarter with no orcid
-        if (i > AssertionRepositoryCustom.MAX_RESULTS.intValue() / 2 && i <= AssertionRepositoryCustom.MAX_RESULTS.intValue()) {
+        if (i > AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2 && i <= AssertionService.REGISTRY_SYNC_BATCH_SIZE) {
             return Optional.of(new OrcidRecord());
         }
 
@@ -1318,9 +1331,9 @@ class AssertionServiceTest {
         return assertions;
     }
 
-    private List<Assertion> getAssertionsForUpdateInOrcid() {
+    private List<Assertion> getAssertionsForUpdateInOrcid(int from, int to) {
         List<Assertion> assertions = new ArrayList<>();
-        for (int i = 1; i <= 20; i++) {
+        for (int i = from; i <= to; i++) {
             Assertion assertion = getAssertionWithEmailAndPutCode(i + "@email.com", String.valueOf(i));
             assertions.add(assertion);
         }
@@ -1370,5 +1383,5 @@ class AssertionServiceTest {
         record.setOrcid("orcid");
         return Optional.of(record);
     }
-    
+
 }
