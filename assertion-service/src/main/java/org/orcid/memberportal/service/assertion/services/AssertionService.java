@@ -35,6 +35,7 @@ import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStat
 import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
+import org.orcid.memberportal.service.assertion.repository.AssertionRepositoryCustom;
 import org.orcid.memberportal.service.assertion.security.SecurityUtils;
 import org.orcid.memberportal.service.assertion.stats.MemberAssertionStats;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
@@ -46,8 +47,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -328,17 +331,23 @@ public class AssertionService {
     }
 
     public void postAssertionsToOrcid() throws JAXBException {
+        Pageable pageable = getNewPageable();
+
         LOG.info("POSTing affiliations to orcid registry...");
-        List<Assertion> assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry();
-        for (Assertion assertion : assertionsToAdd) {
-            LOG.debug("Preparing to POST assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - to orcid registry", assertion.getId(),
-                    assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
-            try {
-                postAssertionToOrcid(assertion);
-            } catch (Exception e) {
-                LOG.error("Unexpected error POSTing assertion to registry", e);
+        List<Assertion> assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry(pageable);
+        while (assertionsToAdd != null && !assertionsToAdd.isEmpty()) {
+            for (Assertion assertion : assertionsToAdd) {
+                LOG.debug("Preparing to POST assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - to orcid registry", assertion.getId(),
+                        assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
+                try {
+                    postAssertionToOrcid(assertion);
+                } catch (Exception e) {
+                    LOG.error("Unexpected error POSTing assertion to registry", e);
+                }
+                LOG.debug("POST task complete for assertion {}", assertion.getId());
             }
-            LOG.debug("POST task complete for assertion {}", assertion.getId());
+            pageable = pageable.next();
+            assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry(pageable);
         }
         LOG.info("POSTing complete");
     }
@@ -744,5 +753,9 @@ public class AssertionService {
 
     private void setPrettyStatus(Assertion assertion) {
         assertion.setPrettyStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
+    }
+
+    private Pageable getNewPageable() {
+        return PageRequest.of(0, AssertionRepositoryCustom.MAX_RESULTS.intValue(), new Sort(Direction.ASC, "created"));
     }
 }

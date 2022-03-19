@@ -6,6 +6,8 @@ import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -68,11 +70,11 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
     }
 
     @Override
-    public List<Assertion> findAllToCreateInOrcidRegistry() {
+    public List<Assertion> findAllToCreateInOrcidRegistry(Pageable pageable) {
         Criteria criteria = new Criteria();
         criteria.orOperator(Criteria.where("added_to_orcid").exists(false), Criteria.where("added_to_orcid").is(null));
         Query query = new Query(criteria);
-        query.limit(MAX_RESULTS.intValue());
+        query.with(pageable);
         return mongoTemplate.find(query, Assertion.class);
     }
 
