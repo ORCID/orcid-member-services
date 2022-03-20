@@ -42,4 +42,6 @@ public interface AssertionRepository extends MongoRepository<Assertion, String>,
 
     List<Assertion> findAllByEmail(String email);
 
+    Long countByEmailAndSalesforceId(String email, String salesforceId);
+
 }

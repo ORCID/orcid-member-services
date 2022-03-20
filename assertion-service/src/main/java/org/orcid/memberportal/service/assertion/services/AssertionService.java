@@ -239,14 +239,13 @@ public class AssertionService {
 
     public void deleteById(String id, AssertionServiceUser user) {
         Assertion assertion = findById(id);
-        String assertionEmail = assertion.getEmail();
-
+        String salesforceId = user.getSalesforceId();
+        checkAssertionAccess(assertion, salesforceId);
+        
+        String email = assertion.getEmail();
         assertionRepository.deleteById(id);
-
-        // Remove OrcidRecord if no other assertions exist for user
-        List<Assertion> assertions = assertionRepository.findByEmail(assertionEmail);
-        if (assertions.isEmpty()) {
-            deleteOrcidRecordByEmail(assertionEmail);
+        if (assertionRepository.countByEmailAndSalesforceId(email, salesforceId) == 0) {
+            deleteOrcidRecordTokenByEmailAndSalesforceId(email, salesforceId);
         }
     }
 
@@ -763,5 +762,24 @@ public class AssertionService {
 
     private Pageable getPageableForRegistrySync() {
         return PageRequest.of(0, REGISTRY_SYNC_BATCH_SIZE, new Sort(Direction.ASC, "created"));
+    }
+    
+    private void deleteOrcidRecordTokenByEmailAndSalesforceId(String email, String salesforceId) {
+        Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(email);
+        if (orcidRecordOptional.isPresent()) {
+            OrcidRecord orcidRecord = orcidRecordOptional.get();
+            if (orcidRecord.getTokens() != null) {
+                List<OrcidToken> updated = new ArrayList<>();
+                for (OrcidToken token : orcidRecord.getTokens()) {
+                    if (!StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                        updated.add(token);
+                    }
+                }
+                orcidRecord.setTokens(updated);
+            }
+            if (orcidRecord.getTokens() == null || orcidRecord.getTokens().isEmpty()) {
+                deleteOrcidRecordByEmail(email);
+            }
+        }
     }
 }
