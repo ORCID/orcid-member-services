@@ -780,6 +780,44 @@ class AssertionServiceTest {
         Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.times(1)).deleteOrcidRecord(Mockito.any());
     }
+    
+    @Test
+    void testDeleteById_recordWithTokenAndNoOtherAssertions() {
+        Assertion assertion = getAssertionWithEmail("test@orcid.org");
+        assertion.setId("id");
+        Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
+        Mockito.when(assertionsRepository.findByEmail(Mockito.eq("test@orcid.org"))).thenReturn(new ArrayList<>());
+        Mockito.when(orcidRecordService.generateLinkForEmail(Mockito.eq("test@orcid.org"))).thenReturn("don't care");
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(getOptionalOrcidRecordWithIdToken());
+        Mockito.doNothing().when(orcidRecordService).deleteOrcidRecord(Mockito.any(OrcidRecord.class));
+        Mockito.doNothing().when(assertionsRepository).deleteById(Mockito.eq("id"));
+
+        assertionService.deleteById("id", getUser());
+
+        Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
+        Mockito.verify(orcidRecordService, Mockito.times(1)).deleteOrcidRecord(Mockito.any());
+    }
+    
+    @Test
+    void testDeleteById_recordWithTokenAndNoOtherAssertionsForOneMemberButTokenForOther() {
+        Optional<OrcidRecord> record = getOptionalOrcidRecordWithIdToken();
+        OrcidToken token = new OrcidToken("some other rg", "token", null, null);
+        record.get().getTokens().add(token);
+        
+        Assertion assertion = getAssertionWithEmail("test@orcid.org");
+        assertion.setId("id");
+        Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
+        Mockito.when(assertionsRepository.findByEmail(Mockito.eq("test@orcid.org"))).thenReturn(new ArrayList<>());
+        Mockito.when(orcidRecordService.generateLinkForEmail(Mockito.eq("test@orcid.org"))).thenReturn("don't care");
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(record);
+        Mockito.doNothing().when(orcidRecordService).deleteOrcidRecord(Mockito.any(OrcidRecord.class));
+        Mockito.doNothing().when(assertionsRepository).deleteById(Mockito.eq("id"));
+
+        assertionService.deleteById("id", getUser());
+
+        Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
+        Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecord(Mockito.any());
+    }
 
     @Test
     void testDeleteAllBySalesforceId_orcidRecordsDeleted() {
