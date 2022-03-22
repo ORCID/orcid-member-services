@@ -103,7 +103,7 @@ class AssertionServiceTest {
 
     @Mock
     private MemberService memberService;
-
+    
     @Captor
     private ArgumentCaptor<Assertion> assertionCaptor;
 
@@ -148,17 +148,29 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testUpdateOrcidIdsForEmail() {
+    void testUpdateOrcidIdsForEmailAndSalesforceId() {
         OrcidRecord record = new OrcidRecord();
         record.setOrcid("orcid");
+        
         Assertion one = new Assertion();
+        one.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        one.setRoleTitle("this one sould be saved");
+        
         Assertion two = new Assertion();
+        two.setSalesforceId("something from another org");
+        two.setRoleTitle("this shouldn't be saved");
+
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(Optional.of(record));
         Mockito.when(assertionsRepository.findAllByEmail(Mockito.eq("email"))).thenReturn(Arrays.asList(one, two));
-        assertionService.updateOrcidIdsForEmail("email");
-        assertEquals("orcid", one.getOrcidId());
-        assertEquals("orcid", two.getOrcidId());
-        Mockito.verify(assertionsRepository, Mockito.times(2)).save(Mockito.any(Assertion.class));
+        
+        assertionService.updateOrcidIdsForEmailAndSalesforceId("email", DEFAULT_SALESFORCE_ID);
+
+        Mockito.verify(assertionsRepository, Mockito.times(1)).save(assertionCaptor.capture());
+
+        Assertion captured = assertionCaptor.getValue();
+        assertEquals("this one sould be saved", captured.getRoleTitle());
+        assertNotNull(captured.getOrcidId());
+        assertEquals("orcid", captured.getOrcidId());
     }
 
     @Test
@@ -1189,22 +1201,14 @@ class AssertionServiceTest {
         assertEquals("java.io.IOException: testing error message", storedFiles.get(0).getError());
         assertNull(storedFiles.get(1).getError());
     }
-
+    
     private List<StoredFile> getDummyStoredFiles() {
         return Arrays.asList(getDummyStoredFile(), getDummyStoredFile());
     }
 
     private StoredFile getDummyStoredFile() {
         StoredFile storedFile = new StoredFile();
-        storedFile.setFileLocation(getClass().getResource("/assertions-with-bad-url.csv").getFile()); // any
-                                                                                                      // file
-                                                                                                      // that
-                                                                                                      // exists,
-                                                                                                      // test
-                                                                                                      // won't
-                                                                                                      // actually
-                                                                                                      // use
-                                                                                                      // it
+        storedFile.setFileLocation(getClass().getResource("/assertions-with-bad-url.csv").getFile()); // doesn't matter
         storedFile.setOriginalFilename("original-filename.csv");
         storedFile.setDateWritten(Instant.now());
         storedFile.setOwnerId("owner");
