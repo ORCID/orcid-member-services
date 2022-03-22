@@ -47,11 +47,7 @@ public class AssertionsReportCsvWriter extends CsvDownloadWriter {
                         .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for " + a.getEmail()));
                 orcidRecordMap.put(a.getEmail(), orcidRecord);
             }
-            String orcidId = null;
-            if (!StringUtils.isBlank(orcidRecordMap.get(a.getEmail()).getToken(salesforceId))) {
-                orcidId = orcidRecordMap.get(a.getEmail()).getOrcid();
-            }
-            row.add(orcidId == null ? "" : orcidId);
+            row.add(a.getOrcidId() == null ? "" : a.getOrcidId());
             String status = AssertionUtils.getAssertionStatus(a, orcidRecordMap.get(a.getEmail()));
             String prettyStatus = AssertionStatus.valueOf(status).getValue();
             row.add(prettyStatus);
