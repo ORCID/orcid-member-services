@@ -200,7 +200,8 @@ class AssertionServiceTest {
         a.setId("1");
         a.setEmail("email");
         a.setOwnerId(DEFAULT_JHI_USER_ID);
-
+        a.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getOptionalOrcidRecordWithIdToken());
 
         Mockito.when(assertionsRepository.insert(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
@@ -215,8 +216,11 @@ class AssertionServiceTest {
         });
 
         assertionService.createAssertion(a, getUser());
-        Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(a));
+        Mockito.verify(assertionsRepository, Mockito.times(1)).insert(assertionCaptor.capture());
         Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
+        
+        Assertion inserted = assertionCaptor.getValue();
+        assertEquals("orcid", inserted.getOrcidId());
     }
 
     @Test

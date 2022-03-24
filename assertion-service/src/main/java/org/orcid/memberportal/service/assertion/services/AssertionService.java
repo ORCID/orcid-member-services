@@ -190,6 +190,8 @@ public class AssertionService {
                 record.setTokens(tokens);
                 record.setModified(Instant.now());
                 orcidRecordService.updateOrcidRecord(record);
+            } else {
+                assertion.setOrcidId(record.getOrcid());
             }
 
         }
