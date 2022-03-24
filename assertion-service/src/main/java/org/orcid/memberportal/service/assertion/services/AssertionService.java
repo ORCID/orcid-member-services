@@ -190,6 +190,8 @@ public class AssertionService {
                 record.setTokens(tokens);
                 record.setModified(Instant.now());
                 orcidRecordService.updateOrcidRecord(record);
+            } else {
+                assertion.setOrcidId(record.getOrcid());
             }
 
         }
@@ -742,11 +744,11 @@ public class AssertionService {
         return upload;
     }
 
-    public void updateOrcidIdsForEmail(String email) {
+    public void updateOrcidIdsForEmailAndSalesforceId(String email, String salesforceId) {
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
         final String orcid = record.get().getOrcid();
         List<Assertion> assertions = assertionRepository.findAllByEmail(email);
-        assertions.stream().filter(a -> a.getOrcidId() == null).forEach(a -> {
+        assertions.stream().filter(a -> a.getOrcidId() == null && salesforceId.equals(a.getSalesforceId())).forEach(a -> {
             a.setOrcidId(orcid);
             assertionRepository.save(a);
         });

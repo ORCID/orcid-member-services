@@ -100,7 +100,7 @@ public class AssertionsReportCsvWriterTest {
 
     private void checkValues(String[] values, int i) {
         assertEquals(i + "@test.com", values[0].trim());
-        assertEquals("orcid-" + i + "@test.com", values[1].trim());
+        assertEquals("orcid-" + i, values[1].trim());
         assertEquals("Pending retry in ORCID", values[2].trim());
         assertEquals(String.valueOf(i), values[3].trim());
         assertNotNull(values[4].trim());

@@ -256,12 +256,12 @@ public class AssertionServiceResource {
     public ResponseEntity<String> storeIdToken(@RequestBody ObjectNode json) throws ParseException, JAXBException {
         String state = json.get("state").asText();
         String idToken = json.has("id_token") ? json.get("id_token").asText() : null;
-        String salesForceId = json.has("salesforce_id") ? json.get("salesforce_id").asText() : null;
+        String salesforceId = json.has("salesforce_id") ? json.get("salesforce_id").asText() : null;
         Boolean denied = json.has("denied") ? json.get("denied").asBoolean() : false;
         String[] stateTokens = encryptUtil.decrypt(state).split("&&");
         String emailInStatus = stateTokens[1];
-        if (salesForceId == null) {
-            salesForceId = stateTokens[0];
+        if (salesforceId == null) {
+            salesforceId = stateTokens[0];
         }
         JSONObject responseData = new JSONObject();
 
@@ -293,8 +293,8 @@ public class AssertionServiceResource {
             }
 
             if (!StringUtils.isBlank(emailInStatus) && !StringUtils.isBlank(orcidIdInJWT)) {
-                orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, salesForceId);
-                assertionService.updateOrcidIdsForEmail(emailInStatus);
+                orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, salesforceId);
+                assertionService.updateOrcidIdsForEmailAndSalesforceId(emailInStatus, salesforceId);
             } else {
                 if (StringUtils.isBlank(emailInStatus)) {
                     LOG.warn("Not storing token for user {} - emailInStatus is empty in the state key: {}", emailInStatus, state);
@@ -306,7 +306,7 @@ public class AssertionServiceResource {
             }
         } else {
             LOG.warn("User {} have denied access", emailInStatus);
-            orcidRecordService.storeUserDeniedAccess(emailInStatus, salesForceId);
+            orcidRecordService.storeUserDeniedAccess(emailInStatus, salesforceId);
         }
         return ResponseEntity.ok().body(responseData.toString());
     }
