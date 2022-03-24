@@ -65,7 +65,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
-class AssertionServiceResourceTest {
+class AssertionResourceTest {
 
     private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
 
@@ -94,7 +94,7 @@ class AssertionServiceResourceTest {
     private GridOrgValidator gridOrgValidator;
 
     @InjectMocks
-    private AssertionServiceResource assertionServiceResource;
+    private AssertionResource assertionServiceResource;
 
     @BeforeEach
     public void setUp() {

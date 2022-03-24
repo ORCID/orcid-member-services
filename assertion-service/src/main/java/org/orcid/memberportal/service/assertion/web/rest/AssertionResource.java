@@ -63,8 +63,8 @@ import io.github.jhipster.web.util.PaginationUtil;
 
 @RestController
 @RequestMapping("/api")
-public class AssertionServiceResource {
-    private static final Logger LOG = LoggerFactory.getLogger(AssertionServiceResource.class);
+public class AssertionResource {
+    private static final Logger LOG = LoggerFactory.getLogger(AssertionResource.class);
 
     private final String GRID_SOURCE_ID = "GRID";
 
