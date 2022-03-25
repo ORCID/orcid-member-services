@@ -36,41 +36,22 @@ export class AssertionDeleteDialogComponent {
 
   confirmDelete() {
     this.errorDeletingFromOrcid = false;
-    if (
-      this.assertion.putCode &&
-      (this.assertion.status === ASSERTION_STATUS.IN_ORCID ||
-        this.assertion.status === ASSERTION_STATUS.ERROR_UPDATING_TO_ORCID ||
-        this.assertion.status === ASSERTION_STATUS.PENDING_RETRY)
-    ) {
-      this.assertionService.deleteFromOrcid(this.assertion.id).subscribe(res => {
-        if (res.body.deleted === true || res.body.statusCode === 404) {
-          this.assertionService.delete(this.assertion.id).subscribe(response => {
-            this.eventManager.broadcast({
-              name: 'assertionListModification',
-              content: 'Deleted an assertion'
-            });
-            this.activeModal.dismiss(true);
-            this.alertService.success('assertionServiceApp.affiliation.deleted.string');
-          });
-        } else {
-          this.errorDeletingFromOrcid = true;
-          // TODO: API returns incorrect status code
-          // Change to 401 when this problem is corrected
-          if (res.body.statusCode === 400 || res.body.statusCode === 401) {
-            this.errorUserRevoked = true;
-          }
-        }
-      });
-    } else {
-      this.assertionService.delete(this.assertion.id).subscribe(response => {
+    this.assertionService.delete(this.assertion.id).subscribe(response => {
+      if (response.body.deleted) {
         this.eventManager.broadcast({
           name: 'assertionListModification',
           content: 'Deleted an assertion'
         });
-        this.activeModal.dismiss(true);
         this.alertService.success('assertionServiceApp.affiliation.deleted.string');
-      });
-    }
+      } else {
+        this.eventManager.broadcast({
+          name: 'assertionListModification',
+          content: 'Failed to delete an assertion'
+        });
+        this.alertService.warning('assertionServiceApp.affiliation.problemDeleting.string');
+      }
+      this.activeModal.dismiss(true);
+    });
   }
 }
 

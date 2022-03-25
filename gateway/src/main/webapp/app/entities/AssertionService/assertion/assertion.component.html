@@ -98,7 +98,7 @@
                     <br><a jhiTranslate="gatewayApp.assertionServiceAssertion.details.string" [routerLink]="['/assertion', assertion.id, 'view' ]">View details</a>
                 </td>
                 <td>{{assertion.prettyStatus}}
-                    <div *ngIf="assertion.prettyStatus == errorAddingToOrcid || assertion.prettyStatus == errorUpdatingInOrcid">
+                    <div *ngIf="assertion.prettyStatus == errorAddingToOrcid || assertion.prettyStatus == errorUpdatingInOrcid || assertion.prettyStatus == errorDeletingInOrcid">
                         <p class="note" jhiTranslate="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string">For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below.</p>
                         <div  class="alert alert-warning">
                             <pre><code>{{assertion.orcidError}}</code></pre>

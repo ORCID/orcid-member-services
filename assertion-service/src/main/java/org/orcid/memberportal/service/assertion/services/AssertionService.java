@@ -437,20 +437,22 @@ public class AssertionService {
 
     private void deleteAssertionFromOrcidRegistry(Assertion assertion) throws RegistryDeleteFailureException {
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
-        if (canDeleteAssertionFromOrcidRegistry(record, assertion)) {
-            assertion.setLastSyncAttempt(Instant.now());
+        if (!checkRegistryDeletePreconditions(record, assertion)) {
+            throw new RegistryDeleteFailureException();
+        }
+            
+        assertion.setLastSyncAttempt(Instant.now());
 
-            try {
-                LOG.info("Exchanging id token for {}", record.get().getOrcid());
-                String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId()));
-                orcidAPIClient.deleteAffiliation(record.get().getOrcid(), accessToken, assertion);
-            } catch (ORCIDAPIException oae) {
-                storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
-                throw new RegistryDeleteFailureException();
-            } catch (Exception e) {
-                storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
-                throw new RegistryDeleteFailureException();
-            }
+        try {
+            LOG.info("Exchanging id token for {}", record.get().getOrcid());
+            String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId()));
+            orcidAPIClient.deleteAffiliation(record.get().getOrcid(), accessToken, assertion);
+        } catch (ORCIDAPIException oae) {
+            storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
+            throw new RegistryDeleteFailureException();
+        } catch (Exception e) {
+            storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
+            throw new RegistryDeleteFailureException();
         }
     }
 
@@ -546,17 +548,24 @@ public class AssertionService {
         return orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
     }
 
-    private boolean canDeleteAssertionFromOrcidRegistry(Optional<OrcidRecord> record, Assertion assertion) {
+    private boolean checkRegistryDeletePreconditions(Optional<OrcidRecord> record, Assertion assertion) {
+        String error = null;
         if (!record.isPresent()) {
             LOG.error("OrcidRecord not available for email {}", assertion.getEmail());
-            return false;
+            error = "Orcid record not available";
         }
         if (StringUtils.isBlank(record.get().getOrcid())) {
             LOG.info("Orcid ID not available for {}", assertion.getEmail());
-            return false;
+            error = "ORCID iD not available";
         }
         if (record.get().getTokens() == null) {
-            LOG.info("Tokens not available for {}", assertion.getEmail());
+            LOG.info("Token not available for {}", assertion.getEmail());
+            error = "Token not available";
+        }
+        if (error != null) {
+            assertion.setOrcidError(error);
+            assertion.setStatus(AssertionStatus.ERROR_DELETING_IN_ORCID.name());
+            assertionRepository.save(assertion);
             return false;
         }
         return true;
