@@ -12,7 +12,7 @@ public class AssertionUtils {
     private static final String GRID_BASE_URL_ALT = "https://grid.ac/";
     private static final String GRID_BASE_URL_INSTITUTES_ALT = "https://grid.ac/institutes/";
 
-    public static String getAssertionStatus(Assertion assertion, OrcidRecord orcidRecord) {
+    public static String getAssertionStatus(Assertion assertion, OrcidRecord orcidRecord, String defaultError) {
         if (orcidRecord.getRevokedDate(assertion.getSalesforceId()) != null) {
             return AssertionStatus.USER_REVOKED_ACCESS.name();
         }
@@ -21,7 +21,7 @@ public class AssertionUtils {
         }
         
         if (assertion.getOrcidError() != null && !assertionModifiedSinceLastSyncAttempt(assertion)) {
-            return getErrorStatus(assertion);
+            return getErrorStatus(assertion, defaultError);
         }
 
         if (assertionModifiedSinceLastSyncAttempt(assertion)) {
@@ -35,7 +35,7 @@ public class AssertionUtils {
         return AssertionStatus.IN_ORCID.name();
     }
 
-    private static String getErrorStatus(Assertion assertion) {
+    private static String getErrorStatus(Assertion assertion, String defaultError) {
         JSONObject json = new JSONObject(assertion.getOrcidError());
         int statusCode = json.getInt("statusCode");
         String errorMessage = json.getString("error");
@@ -48,18 +48,10 @@ public class AssertionUtils {
             if (errorMessage.contains("invalid_scope")) {
                 return AssertionStatus.USER_REVOKED_ACCESS.name();
             } else {
-                if (!StringUtils.isBlank(assertion.getPutCode())) {
-                    return AssertionStatus.ERROR_UPDATING_TO_ORCID.name();
-                } else {
-                    return AssertionStatus.ERROR_ADDING_TO_ORCID.name();
-                }
+                return defaultError;
             }
         default:
-            if (!StringUtils.isBlank(assertion.getPutCode())) {
-                return AssertionStatus.ERROR_UPDATING_TO_ORCID.name();
-            } else {
-                return AssertionStatus.ERROR_ADDING_TO_ORCID.name();
-            }
+            return defaultError;
         }
     }
 

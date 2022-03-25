@@ -24,6 +24,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class AssertionComponent implements OnInit, OnDestroy {
   errorAddingToOrcid: string = ASSERTION_STATUS.ERROR_ADDING_TO_ORCID;
   errorUpdatingInOrcid: string = ASSERTION_STATUS.ERROR_UPDATING_TO_ORCID;
+  errorDeletingInOrcid: string = ASSERTION_STATUS.ERROR_DELETING_IN_ORCID;
   currentAccount: any;
   assertions: IAssertion[];
   error: any;

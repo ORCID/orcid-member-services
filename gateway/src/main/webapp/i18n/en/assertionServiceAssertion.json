@@ -125,7 +125,8 @@
     "affiliation": {
       "created": { "string": "Affiliation created" },
       "updated": { "string": "Affiliation updated" },
-      "deleted": { "string": "Affiliation deleted" }
+      "deleted": { "string": "Affiliation deleted" },
+      "problemDeleting": { "string": "There was a problem deleting the affiliation" }
     }
   }
 }

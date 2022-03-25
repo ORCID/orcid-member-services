@@ -33,6 +33,8 @@ import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.assertion.web.rest.errors.RegistryDeleteFailureException;
+import org.orcid.memberportal.service.assertion.web.rest.vm.AssertionDeletion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +65,8 @@ import io.github.jhipster.web.util.PaginationUtil;
 
 @RestController
 @RequestMapping("/api")
-public class AssertionServiceResource {
-    private static final Logger LOG = LoggerFactory.getLogger(AssertionServiceResource.class);
+public class AssertionResource {
+    private static final Logger LOG = LoggerFactory.getLogger(AssertionResource.class);
 
     private final String GRID_SOURCE_ID = "GRID";
 
@@ -170,10 +172,14 @@ public class AssertionServiceResource {
     }
 
     @DeleteMapping("/assertion/{id}")
-    public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
-        assertionService.deleteById(id, assertionsUserService.getLoggedInUser());
-        LOG.info("{} deleted assertion {}", SecurityUtils.getCurrentUserLogin().get(), id);
-        return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
+    public ResponseEntity<AssertionDeletion> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
+        try {
+            assertionService.deleteById(id, assertionsUserService.getLoggedInUser());
+            LOG.info("{} deleted assertion {}", SecurityUtils.getCurrentUserLogin().get(), id);
+            return ResponseEntity.ok().body(new AssertionDeletion(true));
+        } catch (RegistryDeleteFailureException e) {
+            return ResponseEntity.ok().body(new AssertionDeletion(false));
+        }
     }
 
     /**
@@ -219,29 +225,6 @@ public class AssertionServiceResource {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @DeleteMapping("/assertion/orcid/{id}")
-    public ResponseEntity<String> deleteAssertionFromOrcid(@PathVariable String id) throws JAXBException {
-        Boolean deleted = assertionService.deleteAssertionFromOrcidRegistry(id, assertionsUserService.getLoggedInUser());
-        JSONObject responseData = new JSONObject();
-        responseData.put("deleted", deleted);
-
-        if (!deleted) {
-            // fetch failure details
-            Assertion assertion = assertionService.findById(id);
-            String errorJson = assertion.getOrcidError();
-            JSONObject obj = new JSONObject(errorJson);
-            int statusCode = (int) obj.get("statusCode");
-            String error = (String) obj.get("error");
-            responseData.put("statusCode", statusCode);
-            responseData.put("error", error);
-            LOG.info("{} failed to delete assertion {} from orcid", SecurityUtils.getCurrentUserLogin().get(), id);
-        } else {
-            LOG.info("{} deleted assertion {} from orcid", SecurityUtils.getCurrentUserLogin().get(), id);
-        }
-
-        return ResponseEntity.ok().body(responseData.toString());
     }
 
     @DeleteMapping("/assertion/delete/{salesforceId}")
