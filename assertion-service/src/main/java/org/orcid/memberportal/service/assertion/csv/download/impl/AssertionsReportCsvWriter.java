@@ -11,7 +11,6 @@ import org.orcid.memberportal.service.assertion.csv.download.CsvDownloadWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
-import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -48,8 +47,7 @@ public class AssertionsReportCsvWriter extends CsvDownloadWriter {
                 orcidRecordMap.put(a.getEmail(), orcidRecord);
             }
             row.add(a.getOrcidId() == null ? "" : a.getOrcidId());
-            String status = AssertionUtils.getAssertionStatus(a, orcidRecordMap.get(a.getEmail()));
-            String prettyStatus = AssertionStatus.valueOf(status).getValue();
+            String prettyStatus = AssertionStatus.valueOf(a.getStatus()).getValue();
             row.add(prettyStatus);
             row.add(a.getPutCode() == null ? "" : a.getPutCode());
             row.add(a.getCreated() == null ? "" : a.getCreated().toString());

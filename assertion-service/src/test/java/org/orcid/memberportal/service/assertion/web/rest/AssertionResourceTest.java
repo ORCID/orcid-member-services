@@ -18,8 +18,6 @@ import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -113,23 +111,6 @@ class AssertionResourceTest {
         assertionServiceResource.getAssertion("test");
         Mockito.verify(assertionService).findById(Mockito.eq("test"));
         Mockito.verify(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
-    }
-
-    @Test
-    void testDeleteAssertionFromOrcidSuccessful() throws JSONException, JAXBException {
-        Mockito.when(assertionService.deleteAssertionFromOrcidRegistry(Mockito.eq("assertionId"), Mockito.any(AssertionServiceUser.class))).thenReturn(Boolean.TRUE);
-        ResponseEntity<String> response = assertionServiceResource.deleteAssertionFromOrcid("assertionId");
-        String body = response.getBody();
-        assertEquals("{\"deleted\":true}", body);
-    }
-
-    @Test
-    void testDeleteAssertionFromOrcidFailure() throws JSONException, JAXBException {
-        Mockito.when(assertionService.deleteAssertionFromOrcidRegistry(Mockito.eq("assertionId"), Mockito.any(AssertionServiceUser.class))).thenReturn(Boolean.FALSE);
-        Mockito.when(assertionService.findById(Mockito.eq("assertionId"))).thenReturn(getAssertionWithError());
-        ResponseEntity<String> response = assertionServiceResource.deleteAssertionFromOrcid("assertionId");
-        String body = response.getBody();
-        assertEquals("{\"deleted\":false,\"error\":\"not found\",\"statusCode\":404}", body);
     }
 
     @Test
@@ -381,16 +362,6 @@ class AssertionResourceTest {
         assertion.setDisambiguatedOrgId("something");
         assertion.setDisambiguationSource(Constants.RINGGOLD_ORG_SOURCE);
         assertion.setEmail(email);
-        return assertion;
-    }
-
-    private Assertion getAssertionWithError() {
-        Assertion assertion = getAssertion("error@error.com");
-        assertion.setId("assertionId");
-        JSONObject error = new JSONObject();
-        error.put("statusCode", 404);
-        error.put("error", "not found");
-        assertion.setOrcidError(error.toString());
         return assertion;
     }
 

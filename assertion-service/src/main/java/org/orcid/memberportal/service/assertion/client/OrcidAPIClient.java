@@ -162,7 +162,7 @@ public class OrcidAPIClient {
         return false;
     }
 
-    public boolean deleteAffiliation(String orcid, String accessToken, Assertion assertion) {
+    public void deleteAffiliation(String orcid, String accessToken, Assertion assertion) {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
         log.info("Deleting affiliation with putcode {} for {}", assertion.getPutCode(), orcid);
 
@@ -180,12 +180,10 @@ public class OrcidAPIClient {
                         response.getStatusLine().getStatusCode(), responseString);
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
-            return true;
         } catch (ClientProtocolException e) {
             log.error("Unable to update affiliation in ORCID", e);
         } catch (IOException e) {
             log.error("Unable to update affiliation in ORCID", e);
         }
-        return false;
     }
 }
