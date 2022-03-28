@@ -13,6 +13,8 @@ import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -24,8 +26,6 @@ import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.repository.OrcidRecordRepository;
-import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
-import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 
 class OrcidRecordServiceTest {
@@ -40,8 +40,6 @@ class OrcidRecordServiceTest {
 
     private static final String EMAIL_ONE = "emailone@record.com";
 
-    private static final String EMAIL_NO_TOKEN = "email_no_token@record.com";
-
     @InjectMocks
     private OrcidRecordService orcidRecordService;
 
@@ -53,6 +51,9 @@ class OrcidRecordServiceTest {
 
     @Mock
     private UserService assertionsUserService;
+    
+    @Captor
+    private ArgumentCaptor<OrcidRecord> recordCaptor;
 
     @BeforeEach
     public void setUp() throws JSONException {
@@ -120,7 +121,7 @@ class OrcidRecordServiceTest {
         recordOne.setId("xyz");
         List<OrcidToken> tokens = recordOne.getTokens();
         OrcidToken token = tokens.get(0);
-        OrcidToken token2 = new OrcidToken(OTHER_SALESFORCE_ID, "tokenid2", null, null);
+        OrcidToken token2 = new OrcidToken(OTHER_SALESFORCE_ID, "tokenid2");
         tokens.add(token2);
         recordOne.setTokens(tokens);
         recordOne.setModified(Instant.now());
@@ -133,6 +134,21 @@ class OrcidRecordServiceTest {
         token = tokens.get(1);
         assertEquals(OTHER_SALESFORCE_ID, token.getSalesforceId());
         assertEquals("tokenid2", token.getTokenId());
+    }
+    
+    @Test
+    void testRevokeIdToken() {
+        OrcidRecord recordWithMoreThanOneToken = getOrcidRecordWithIdToken("email");
+        recordWithMoreThanOneToken.getTokens().add(new OrcidToken("some other org", "not important"));
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("email"))).thenReturn(Optional.of(recordWithMoreThanOneToken));
+        
+        orcidRecordService.revokeIdToken("email", DEFAULT_SALESFORCE_ID);
+        
+        Mockito.verify(orcidRecordRepository).save(recordCaptor.capture());
+        OrcidRecord saved = recordCaptor.getValue();
+        assertEquals(2, saved.getTokens().size());
+        assertEquals(DEFAULT_SALESFORCE_ID, saved.getTokens().get(0).getSalesforceId());
+        assertNotNull(saved.getTokens().get(0).getRevokedDate());
     }
 
     /*
@@ -156,7 +172,7 @@ class OrcidRecordServiceTest {
         record.setCreated(Instant.now());
         record.setEmail(email);
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken", null, null);
+        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
         tokens.add(newToken);
         record.setTokens(tokens);
         record.setId("xyz");

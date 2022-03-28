@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
-import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.repository.OrcidRecordRepository;
@@ -17,8 +16,6 @@ import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertE
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,7 +48,7 @@ public class OrcidRecordService {
         OrcidRecord or = new OrcidRecord();
         or.setEmail(email);
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-        tokens.add(new OrcidToken(salesForceId, null, null, null));
+        tokens.add(new OrcidToken(salesForceId, null));
         or.setTokens(tokens);
         or.setCreated(now);
         or.setModified(now);
@@ -78,12 +75,13 @@ public class OrcidRecordService {
                 .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
         List<OrcidToken> tokens = orcidRecord.getTokens();
         List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(salesForceId, idToken, null, null);
+        OrcidToken newToken = new OrcidToken(salesForceId, idToken);
         if (tokens == null || tokens.size() == 0) {
             updatedTokens.add(newToken);
         } else {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforceId(), salesForceId)) {
+                if (StringUtils.equals(token.getSalesforceId(), salesForceId) && token.getRevokedDate() == null) {
+                    // new token replaces blank or already active token
                     updatedTokens.add(newToken);
                 } else {
                     updatedTokens.add(token);
@@ -97,40 +95,20 @@ public class OrcidRecordService {
         orcidRecordRepository.save(orcidRecord);
     }
 
-    public void storeUserDeniedAccess(String emailInStatus, String salesForceId) {
+    public void storeUserDeniedAccess(String emailInStatus, String salesforceId) {
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus)
                 .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
         List<OrcidToken> tokens = orcidRecord.getTokens();
         List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(salesForceId, null, Instant.now(), null);
+        OrcidToken deniedToken = new OrcidToken(salesforceId, null);
+        deniedToken.setDeniedDate(Instant.now());
+        
         if (tokens == null || tokens.size() == 0) {
-            updatedTokens.add(newToken);
+            updatedTokens.add(deniedToken);
         } else {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforceId(), salesForceId)) {
-                    updatedTokens.add(newToken);
-                } else {
-                    updatedTokens.add(token);
-                }
-            }
-        }
-        orcidRecord.setTokens(updatedTokens);
-        orcidRecord.setModified(Instant.now());
-        orcidRecordRepository.save(orcidRecord);
-    }
-
-    public void storeUserRevokedAccess(String emailInStatus, String salesForceId) {
-        OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus)
-                .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
-        List<OrcidToken> tokens = orcidRecord.getTokens();
-        List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(salesForceId, null, null, Instant.now());
-        if (tokens == null || tokens.size() == 0) {
-            updatedTokens.add(newToken);
-        } else {
-            for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforceId(), salesForceId)) {
-                    updatedTokens.add(newToken);
+                if (StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                    updatedTokens.add(deniedToken);
                 } else {
                     updatedTokens.add(token);
                 }
@@ -159,30 +137,6 @@ public class OrcidRecordService {
         return orcidRecordRepository.save(orcidRecord);
     }
 
-    public Page<OrcidRecord> findBySalesforceId(Pageable pageable) {
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        Page<OrcidRecord> orcidRecords = orcidRecordRepository.findBySalesforceId(user.getSalesforceId(), pageable);
-        orcidRecords.forEach(a -> {
-            if (StringUtils.isBlank(a.getToken(user.getSalesforceId()))) {
-                a.setOrcid(null);
-            }
-        });
-        return orcidRecords;
-    }
-
-    public OrcidRecord findById(String id) {
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        Optional<OrcidRecord> optional = orcidRecordRepository.findById(id);
-        if (!optional.isPresent()) {
-            throw new IllegalArgumentException("Invalid assertion id");
-        }
-        OrcidRecord record = optional.get();
-        if (StringUtils.isBlank(record.getToken(user.getSalesforceId()))) {
-            record.setOrcid(null);
-        }
-        return record;
-    }
-
     public void revokeIdToken(String email, String salesForceId) {
         LOG.info("Revoking id token for email {}, salesforce id {}", email, salesForceId);
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(email)
@@ -190,20 +144,14 @@ public class OrcidRecordService {
         
         Instant now = Instant.now();
         List<OrcidToken> tokens = orcidRecord.getTokens();
-        List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(salesForceId, null, null, now);
-        if (tokens == null || tokens.size() == 0) {
-            updatedTokens.add(newToken);
-        } else {
+        if (tokens != null && !tokens.isEmpty()) {
             for (OrcidToken token : tokens) {
                 if (StringUtils.equals(token.getSalesforceId(), salesForceId)) {
-                    updatedTokens.add(newToken);
-                } else {
-                    updatedTokens.add(token);
+                    token.setRevokedDate(Instant.now());
+                    break;
                 }
             }
         }
-        orcidRecord.setTokens(updatedTokens);
         orcidRecord.setModified(now);
         orcidRecordRepository.save(orcidRecord);
     }

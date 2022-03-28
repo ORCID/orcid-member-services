@@ -218,7 +218,7 @@ public class AssertionResource {
         Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(stateTokens[1]);
         if (optional.isPresent()) {
             OrcidRecord record = optional.get();
-            if (StringUtils.isBlank(record.getToken(stateTokens[0]))) {
+            if (StringUtils.isBlank(record.getToken(stateTokens[0], false))) {
                 record.setOrcid(null);
             }
             return ResponseEntity.ok().body(record);
@@ -256,14 +256,14 @@ public class AssertionResource {
             Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(stateTokens[1]);
             if (optional.isPresent()) {
                 OrcidRecord record = optional.get();
-                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0])) && !StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
+                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0], false)) && !StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
                     responseData.put("isDifferentUser", true);
                     responseData.put("isSameUserThatAlreadyGranted", false);
                     return ResponseEntity.ok().body(responseData.toString());
                 }
                 // still need to store the token in case the used had denied
                 // access before
-                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0])) && StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
+                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0], false)) && StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
                     responseData.put("isDifferentUser", false);
                     responseData.put("isSameUserThatAlreadyGranted", true);
                 } else {

@@ -186,7 +186,7 @@ public class AssertionService {
             }
 
             if (createToken) {
-                tokens.add(new OrcidToken(assertion.getSalesforceId(), null, null, null));
+                tokens.add(new OrcidToken(assertion.getSalesforceId(), null));
                 record.setTokens(tokens);
                 record.setModified(Instant.now());
                 orcidRecordService.updateOrcidRecord(record);
@@ -231,6 +231,7 @@ public class AssertionService {
         checkAssertionAccess(assertion, salesforceId);
 
         if (!StringUtils.isEmpty(assertion.getPutCode())) {
+            LOG.info("Deleting assertion {} in ORCID registry", id);
             deleteAssertionFromOrcidRegistry(assertion);
         }
 
@@ -347,8 +348,8 @@ public class AssertionService {
     public void postAssertionToOrcid(Assertion assertion) throws JAXBException {
         LOG.debug("Examining assertion {} for POSTing to registry", assertion.getId());
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
-        if (canSyncWithOrcidRegistry(record, assertion)) {
-            String idToken = record.get().getToken(assertion.getSalesforceId());
+        if (canWriteToOrcidRegistry(record, assertion)) {
+            String idToken = record.get().getToken(assertion.getSalesforceId(), false);
             String orcid = record.get().getOrcid();
 
             Instant now = Instant.now();
@@ -407,9 +408,9 @@ public class AssertionService {
     public void putAssertionInOrcid(Assertion assertion) throws JAXBException {
         LOG.debug("Examining assertion {} for PUTting in registry", assertion.getId());
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
-        if (canSyncWithOrcidRegistry(record, assertion) && !StringUtils.isBlank(assertion.getPutCode())) {
+        if (canWriteToOrcidRegistry(record, assertion) && !StringUtils.isBlank(assertion.getPutCode())) {
             String orcid = record.get().getOrcid();
-            String idToken = record.get().getToken(assertion.getSalesforceId());
+            String idToken = record.get().getToken(assertion.getSalesforceId(), false);
 
             Instant now = Instant.now();
             assertion.setLastSyncAttempt(now);
@@ -445,7 +446,7 @@ public class AssertionService {
 
         try {
             LOG.info("Exchanging id token for {}", record.get().getOrcid());
-            String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId()));
+            String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId(), true));
             orcidAPIClient.deleteAffiliation(record.get().getOrcid(), accessToken, assertion);
         } catch (ORCIDAPIException oae) {
             storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
@@ -502,8 +503,8 @@ public class AssertionService {
         return stats;
     }
 
-    private boolean canSyncWithOrcidRegistry(Optional<OrcidRecord> record, Assertion assertion) {
-        LOG.debug("Checking if assertion can be synched with registry - id: {}, salesforce id: {}, email: {}, orcid id: {}", assertion.getId(),
+    private boolean canWriteToOrcidRegistry(Optional<OrcidRecord> record, Assertion assertion) {
+        LOG.debug("Checking if assertion can be sent to registry - id: {}, salesforce id: {}, email: {}, orcid id: {}", assertion.getId(),
                 assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
 
         if (!record.isPresent()) {
@@ -512,7 +513,7 @@ public class AssertionService {
         }
         LOG.debug("Orcid record present for email {}", assertion.getEmail());
 
-        String idToken = record.get().getToken(assertion.getSalesforceId());
+        String idToken = record.get().getToken(assertion.getSalesforceId(), false);
         String orcid = record.get().getOrcid();
 
         if (StringUtils.isBlank(orcid)) {
@@ -572,6 +573,7 @@ public class AssertionService {
     }
 
     private void storeError(Assertion assertion, int statusCode, String error, String defaultErrorStatus) {
+        LOG.info("Error updating ORCID registry: status code - {}, error - {}", statusCode, error);
         JSONObject obj = new JSONObject();
         obj.put("statusCode", statusCode);
         obj.put("error", error);
