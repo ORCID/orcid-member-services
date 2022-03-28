@@ -852,7 +852,7 @@ class AssertionServiceTest {
         assertionService.deleteById("id", getUser());
 
         Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
-        Mockito.verify(orcidRecordService).deleteOrcidRecord(Mockito.any());
+        Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
         
         Mockito.verify(assertionsRepository, Mockito.times(1)).findById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@orcid.org"));
@@ -877,7 +877,7 @@ class AssertionServiceTest {
         assertionService.deleteById("id", getUser());
 
         Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
-        Mockito.verify(orcidRecordService).deleteOrcidRecord(Mockito.any());
+        Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
         
         Mockito.verify(assertionsRepository, Mockito.times(1)).findById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@orcid.org"));
@@ -924,7 +924,7 @@ class AssertionServiceTest {
         assertionService.deleteById("id", getUser());
 
         Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
-        Mockito.verify(orcidRecordService).deleteOrcidRecord(Mockito.any());
+        Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
         Mockito.verify(orcidAPIClient, Mockito.never()).exchangeToken(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.never()).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
     }
@@ -952,7 +952,7 @@ class AssertionServiceTest {
 
         Mockito.verify(assertionsRepository, Mockito.times(1)).findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class));
         Mockito.verify(assertionsRepository, Mockito.times(20)).deleteById(Mockito.anyString());
-        Mockito.verify(orcidRecordService, Mockito.times(20)).deleteOrcidRecord(Mockito.any(OrcidRecord.class));
+        Mockito.verify(orcidRecordService, Mockito.times(20)).deleteOrcidRecordByEmail(Mockito.anyString());
     }
 
     @Test

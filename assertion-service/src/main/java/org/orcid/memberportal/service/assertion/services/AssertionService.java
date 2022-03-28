@@ -449,8 +449,10 @@ public class AssertionService {
             String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId(), true));
             orcidAPIClient.deleteAffiliation(record.get().getOrcid(), accessToken, assertion);
         } catch (ORCIDAPIException oae) {
-            storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
-            throw new RegistryDeleteFailureException();
+            if (oae.getStatusCode() != 404) {
+                storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
+                throw new RegistryDeleteFailureException();
+            }
         } catch (Exception e) {
             storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
             throw new RegistryDeleteFailureException();
