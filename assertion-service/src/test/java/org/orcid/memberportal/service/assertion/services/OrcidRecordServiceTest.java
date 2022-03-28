@@ -150,6 +150,31 @@ class OrcidRecordServiceTest {
         assertEquals(DEFAULT_SALESFORCE_ID, saved.getTokens().get(0).getSalesforceId());
         assertNotNull(saved.getTokens().get(0).getRevokedDate());
     }
+    
+    @Test
+    void testDeleteOrcidRecordTokenByEmailAndSalesforceIdWhereNoOtherTokens() {
+        OrcidRecord record = getOrcidRecordWithIdToken("email");
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("email"))).thenReturn(Optional.of(record));
+        orcidRecordService.deleteOrcidRecordTokenByEmailAndSalesforceId("email", DEFAULT_SALESFORCE_ID);
+        Mockito.verify(orcidRecordRepository).save(recordCaptor.capture()); // for removing tokens
+        Mockito.verify(orcidRecordRepository).delete(Mockito.any(OrcidRecord.class)); // for removing record
+        
+        OrcidRecord captured = recordCaptor.getValue();
+        assertEquals(0, captured.getTokens().size());
+    }
+    
+    @Test
+    void testDeleteOrcidRecordTokenByEmailAndSalesforceIdWhereOtherTokensExist() {
+        OrcidRecord record = getOrcidRecordWithIdToken("email");
+        record.getTokens().add(new OrcidToken("something else", "some token id"));
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("email"))).thenReturn(Optional.of(record));
+        orcidRecordService.deleteOrcidRecordTokenByEmailAndSalesforceId("email", DEFAULT_SALESFORCE_ID);
+        Mockito.verify(orcidRecordRepository).save(recordCaptor.capture()); // for removing tokens
+        Mockito.verify(orcidRecordRepository, Mockito.never()).delete(Mockito.any(OrcidRecord.class)); // for removing record
+        
+        OrcidRecord captured = recordCaptor.getValue();
+        assertEquals(1, captured.getTokens().size());
+    }
 
     /*
      * @Test void testUpdateNonExistentOrcidRecord() {
