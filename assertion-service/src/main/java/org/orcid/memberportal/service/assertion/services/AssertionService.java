@@ -231,6 +231,7 @@ public class AssertionService {
         checkAssertionAccess(assertion, salesforceId);
 
         if (!StringUtils.isEmpty(assertion.getPutCode())) {
+            LOG.info("Deleting assertion {} in ORCID registry", id);
             deleteAssertionFromOrcidRegistry(assertion);
         }
 
@@ -572,6 +573,7 @@ public class AssertionService {
     }
 
     private void storeError(Assertion assertion, int statusCode, String error, String defaultErrorStatus) {
+        LOG.info("Error updating ORCID registry: status code - {}, error - {}", statusCode, error);
         JSONObject obj = new JSONObject();
         obj.put("statusCode", statusCode);
         obj.put("error", error);
