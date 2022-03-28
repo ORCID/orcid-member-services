@@ -131,21 +131,23 @@ class AssertionUtilsTest {
 
     private OrcidRecord getOrcidRecordWithDeniedToken() {
         OrcidRecord record = new OrcidRecord();
-        OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN, Instant.now(), null);
+        OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN);
+        token.setDeniedDate(Instant.now());
         record.setTokens(Arrays.asList(token));
         return record;
     }
 
     private OrcidRecord getOrcidRecordWithApprovedToken() {
         OrcidRecord record = new OrcidRecord();
-        OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN, null, null);
+        OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN);
         record.setTokens(Arrays.asList(token));
         return record;
     }
 
     private OrcidRecord getOrcidRecordWithRevokedToken() {
         OrcidRecord record = new OrcidRecord();
-        OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN, null, Instant.now());
+        OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN);
+        token.setRevokedDate(Instant.now());
         record.setTokens(Arrays.asList(token));
         return record;
     }

@@ -196,7 +196,7 @@ public class AssertionsReportCsvWriterTest {
         record.setEmail(email);
         record.setId("id");
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken", null, null);
+        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
         tokens.add(newToken);
         record.setTokens(tokens);
         record.setLastNotified(Instant.now());

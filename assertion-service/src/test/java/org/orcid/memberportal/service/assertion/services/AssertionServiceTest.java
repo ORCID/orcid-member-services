@@ -446,7 +446,9 @@ class AssertionServiceTest {
     @Test
     void testPostAssertionToOrcid_statusPendingToUserDeniedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
-        orcidRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, null, Instant.now(), null)));
+        OrcidToken token = new OrcidToken(DEFAULT_SALESFORCE_ID, null);
+        token.setDeniedDate(Instant.now());
+        orcidRecord.setTokens(Arrays.asList(token));
 
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
@@ -622,7 +624,9 @@ class AssertionServiceTest {
     @Test
     void testPutAssertionInOrcid_statusPendingToUserDeniedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
-        orcidRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, null, Instant.now(), null)));
+        OrcidToken token = new OrcidToken(DEFAULT_SALESFORCE_ID, null);
+        token.setDeniedDate(Instant.now());
+        orcidRecord.setTokens(Arrays.asList(token));
 
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
@@ -1203,17 +1207,17 @@ class AssertionServiceTest {
         OrcidRecord deleteOneRecord = new OrcidRecord();
         deleteOneRecord.setOrcid("9999");
         deleteOneRecord.setEmail("9999@email.com");
-        deleteOneRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, "token", null, null)));
+        deleteOneRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, "token")));
       
         OrcidRecord deleteTwoRecord = new OrcidRecord();                                                    
         deleteTwoRecord.setOrcid("6666");                                                                   
         deleteTwoRecord.setEmail("6666@email.com");                                                         
-        deleteTwoRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, "token", null, null)));  
+        deleteTwoRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, "token")));  
         
         OrcidRecord deleteThreeRecord = new OrcidRecord();                                                    
         deleteThreeRecord.setOrcid("7777");                                                                   
         deleteThreeRecord.setEmail("7777@email.com");                                                         
-        deleteThreeRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, "token", null, null)));  
+        deleteThreeRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, "token")));  
         
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("1@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("2@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
@@ -1311,17 +1315,17 @@ class AssertionServiceTest {
         OrcidRecord deleteOneRecord = new OrcidRecord();
         deleteOneRecord.setOrcid("9999");
         deleteOneRecord.setEmail("9999@email.com");
-        deleteOneRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, "token", null, null)));
+        deleteOneRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, "token")));
       
         OrcidRecord deleteTwoRecord = new OrcidRecord();                                                    
         deleteTwoRecord.setOrcid("6666");                                                                   
         deleteTwoRecord.setEmail("6666@email.com");                                                         
-        deleteTwoRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, "token", null, null)));  
+        deleteTwoRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, "token")));  
         
         OrcidRecord deleteThreeRecord = new OrcidRecord();                                                    
         deleteThreeRecord.setOrcid("7777");                                                                   
         deleteThreeRecord.setEmail("7777@email.com");                                                         
-        deleteThreeRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, "token", null, null)));  
+        deleteThreeRecord.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, "token")));  
         
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("1@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("2@email.com"))).thenReturn(Optional.of(new OrcidRecord()));
@@ -1554,7 +1558,7 @@ class AssertionServiceTest {
         record.setOrcid("orcid" + variant);
 
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken" + variant, null, null);
+        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken" + variant);
         tokens.add(newToken);
         record.setTokens(tokens);
         return record;
@@ -1609,7 +1613,7 @@ class AssertionServiceTest {
         OrcidRecord record = new OrcidRecord();
         record.setEmail("email");
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken", null, null);
+        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
         tokens.add(newToken);
         record.setTokens(tokens);
         record.setOrcid("orcid");

@@ -186,7 +186,7 @@ public class AssertionService {
             }
 
             if (createToken) {
-                tokens.add(new OrcidToken(assertion.getSalesforceId(), null, null, null));
+                tokens.add(new OrcidToken(assertion.getSalesforceId(), null));
                 record.setTokens(tokens);
                 record.setModified(Instant.now());
                 orcidRecordService.updateOrcidRecord(record);
