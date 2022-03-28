@@ -2,7 +2,6 @@ package org.orcid.memberportal.service.assertion.services;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -122,29 +121,6 @@ public class OrcidRecordService {
         orcidRecordRepository.save(orcidRecord);
     }
 
-    public void storeUserRevokedAccess(String emailInStatus, String salesForceId) {
-        OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus)
-                .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
-        List<OrcidToken> tokens = orcidRecord.getTokens();
-        List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
-        OrcidToken revokedToken = new OrcidToken(salesForceId, null);
-        revokedToken.setRevokedDate(Instant.now());
-        if (tokens == null || tokens.size() == 0) {
-            updatedTokens.add(revokedToken);
-        } else {
-            for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforceId(), salesForceId)) {
-                    updatedTokens.add(revokedToken);
-                } else {
-                    updatedTokens.add(token);
-                }
-            }
-        }
-        orcidRecord.setTokens(updatedTokens);
-        orcidRecord.setModified(Instant.now());
-        orcidRecordRepository.save(orcidRecord);
-    }
-
     public List<OrcidRecord> getRecordsWithoutTokens(String salesForceId) {
         return orcidRecordRepository.findAllToInvite(salesForceId);
     }
@@ -194,21 +170,14 @@ public class OrcidRecordService {
         
         Instant now = Instant.now();
         List<OrcidToken> tokens = orcidRecord.getTokens();
-        List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
-        OrcidToken revokedToken = new OrcidToken(salesForceId, null);
-        revokedToken.setRevokedDate(now);
-        if (tokens == null || tokens.size() == 0) {
-            updatedTokens.add(revokedToken);
-        } else {
+        if (tokens != null && !tokens.isEmpty()) {
             for (OrcidToken token : tokens) {
                 if (StringUtils.equals(token.getSalesforceId(), salesForceId)) {
-                    updatedTokens.add(revokedToken);
-                } else {
-                    updatedTokens.add(token);
+                    token.setRevokedDate(Instant.now());
+                    break;
                 }
             }
         }
-        orcidRecord.setTokens(updatedTokens);
         orcidRecord.setModified(now);
         orcidRecordRepository.save(orcidRecord);
     }
