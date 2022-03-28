@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
-import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.repository.OrcidRecordRepository;
@@ -17,8 +16,6 @@ import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertE
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -83,7 +80,8 @@ public class OrcidRecordService {
             updatedTokens.add(newToken);
         } else {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforceId(), salesForceId)) {
+                if (StringUtils.equals(token.getSalesforceId(), salesForceId) && token.getRevokedDate() == null) {
+                    // new token replaces blank or already active token
                     updatedTokens.add(newToken);
                 } else {
                     updatedTokens.add(token);
@@ -137,30 +135,6 @@ public class OrcidRecordService {
 
     public OrcidRecord updateOrcidRecord(OrcidRecord orcidRecord) {
         return orcidRecordRepository.save(orcidRecord);
-    }
-
-    public Page<OrcidRecord> findBySalesforceId(Pageable pageable) {
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        Page<OrcidRecord> orcidRecords = orcidRecordRepository.findBySalesforceId(user.getSalesforceId(), pageable);
-        orcidRecords.forEach(a -> {
-            if (StringUtils.isBlank(a.getToken(user.getSalesforceId()))) {
-                a.setOrcid(null);
-            }
-        });
-        return orcidRecords;
-    }
-
-    public OrcidRecord findById(String id) {
-        AssertionServiceUser user = assertionsUserService.getLoggedInUser();
-        Optional<OrcidRecord> optional = orcidRecordRepository.findById(id);
-        if (!optional.isPresent()) {
-            throw new IllegalArgumentException("Invalid assertion id");
-        }
-        OrcidRecord record = optional.get();
-        if (StringUtils.isBlank(record.getToken(user.getSalesforceId()))) {
-            record.setOrcid(null);
-        }
-        return record;
     }
 
     public void revokeIdToken(String email, String salesForceId) {

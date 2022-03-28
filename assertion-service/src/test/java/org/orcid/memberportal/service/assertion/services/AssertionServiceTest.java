@@ -392,6 +392,23 @@ class AssertionServiceTest {
             assertEquals(a.getLastSyncAttempt(), a.getAddedToORCID());
         });
     }
+    
+    @Test
+    void testPostAssertionsToOrcidWithRevokedTokens() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+        Mockito.when(assertionsRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class)))
+                .thenReturn(getAssertionsForCreatingInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE))
+                .thenReturn(new ArrayList<>());
+
+        OrcidRecord recordWithRevokedToken = getOrcidRecordWithRevokedToken();
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(Optional.of(recordWithRevokedToken));
+
+        assertionService.postAssertionsToOrcid();
+
+        Mockito.verify(orcidRecordService, Mockito.times(AssertionService.REGISTRY_SYNC_BATCH_SIZE))
+                .findOneByEmail(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.never()).postAffiliation(Mockito.anyString(), Mockito.anyString(), assertionCaptor.capture());
+        Mockito.verify(assertionsRepository, Mockito.times(2)).findAllToCreateInOrcidRegistry(pageableCaptor.capture());
+    }
 
     @Test
     void testPostAssertionToOrcid_statusPendingToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
@@ -815,6 +832,32 @@ class AssertionServiceTest {
         Assertion updated = assertionCaptor.getValue();
         assertNotNull(updated.getOrcidError());
         assertEquals(AssertionStatus.ERROR_DELETING_IN_ORCID.name(), updated.getStatus());
+    }
+    
+
+    @Test
+    void testDeleteByIdWithRevokedToken() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+        Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
+        assertion.setSalesforceId("salesforce-id");
+
+        Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
+        Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(Optional.of(getOrcidRecordWithRevokedToken()));
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("exchange-token");
+        Mockito.when(assertionsRepository.countByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(0l);
+
+        Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
+        Mockito.doNothing().when(assertionsRepository).deleteById(Mockito.eq("id"));
+
+        assertionService.deleteById("id", getUser());
+
+        Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
+        Mockito.verify(orcidRecordService).deleteOrcidRecord(Mockito.any());
+        
+        Mockito.verify(assertionsRepository, Mockito.times(1)).findById(Mockito.eq("id"));
+        Mockito.verify(orcidRecordService, Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@orcid.org"));
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
     }
     
     @Test
@@ -1560,6 +1603,18 @@ class AssertionServiceTest {
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
         OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken" + variant);
         tokens.add(newToken);
+        record.setTokens(tokens);
+        return record;
+    }
+    
+    private OrcidRecord getOrcidRecordWithRevokedToken() {
+        OrcidRecord record = new OrcidRecord();
+        record.setOrcid("orcid");
+
+        List<OrcidToken> tokens = new ArrayList<OrcidToken>();
+        OrcidToken token = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
+        token.setRevokedDate(Instant.now());
+        tokens.add(token);
         record.setTokens(tokens);
         return record;
     }

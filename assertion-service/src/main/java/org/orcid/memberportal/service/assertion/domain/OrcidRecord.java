@@ -125,15 +125,14 @@ public class OrcidRecord {
         this.modified = modified;
     }
 
-    public String getToken(String salesforceId) {
+    public String getToken(String salesforceId, boolean includeRevoked) {
         List<OrcidToken> tokens = this.getTokens();
         if (tokens != null) {
             for (OrcidToken token : tokens) {
                 if (StringUtils.equals(token.getSalesforceId(), salesforceId)) {
-                    if (StringUtils.isBlank(token.getTokenId())) {
-                        return null;
+                    if (token.getRevokedDate() == null || includeRevoked) {
+                        return token.getTokenId();
                     }
-                    return token.getTokenId();
                 }
             }
         }
