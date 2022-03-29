@@ -134,7 +134,7 @@ public class AssertionService {
             // Remove OrcidRecord if it has not already been removed
             Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(assertionEmail);
             if (orcidRecordOptional.isPresent()) {
-                deleteOrcidRecordByEmail(assertionEmail);
+                orcidRecordService.deleteOrcidRecordByEmail(assertionEmail);
             }
         });
         return;
@@ -238,7 +238,7 @@ public class AssertionService {
         String email = assertion.getEmail();
         assertionRepository.deleteById(id);
         if (assertionRepository.countByEmailAndSalesforceId(email, salesforceId) == 0) {
-            deleteOrcidRecordTokenByEmailAndSalesforceId(email, salesforceId);
+            orcidRecordService.deleteOrcidRecordTokenByEmailAndSalesforceId(email, salesforceId);
         }
     }
 
@@ -449,8 +449,10 @@ public class AssertionService {
             String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId(), true));
             orcidAPIClient.deleteAffiliation(record.get().getOrcid(), accessToken, assertion);
         } catch (ORCIDAPIException oae) {
-            storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
-            throw new RegistryDeleteFailureException();
+            if (oae.getStatusCode() != 404) {
+                storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
+                throw new RegistryDeleteFailureException();
+            }
         } catch (Exception e) {
             storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
             throw new RegistryDeleteFailureException();
@@ -605,14 +607,6 @@ public class AssertionService {
         return assertionRepository.findByEmailAndSalesforceId(email, salesForceId);
     }
 
-    private void deleteOrcidRecordByEmail(String email) {
-        Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(email);
-        if (orcidRecordOptional.isPresent()) {
-            OrcidRecord orcidRecord = orcidRecordOptional.get();
-            orcidRecordService.deleteOrcidRecord(orcidRecord);
-        }
-    }
-
     public Optional<Assertion> findOneByEmailIgnoreCase(String email) {
         return assertionRepository.findOneByEmailIgnoreCase(email.toLowerCase());
     }
@@ -756,22 +750,4 @@ public class AssertionService {
         return PageRequest.of(0, REGISTRY_SYNC_BATCH_SIZE, new Sort(Direction.ASC, "created"));
     }
 
-    private void deleteOrcidRecordTokenByEmailAndSalesforceId(String email, String salesforceId) {
-        Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(email);
-        if (orcidRecordOptional.isPresent()) {
-            OrcidRecord orcidRecord = orcidRecordOptional.get();
-            if (orcidRecord.getTokens() != null) {
-                List<OrcidToken> updated = new ArrayList<>();
-                for (OrcidToken token : orcidRecord.getTokens()) {
-                    if (!StringUtils.equals(token.getSalesforceId(), salesforceId)) {
-                        updated.add(token);
-                    }
-                }
-                orcidRecord.setTokens(updated);
-            }
-            if (orcidRecord.getTokens() == null || orcidRecord.getTokens().isEmpty()) {
-                deleteOrcidRecordByEmail(email);
-            }
-        }
-    }
 }

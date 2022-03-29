@@ -810,6 +810,32 @@ class AssertionServiceTest {
     }
     
     @Test
+    void testDeleteByIdAlreadyDeletedInTheRegistry() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+        Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
+        assertion.setSalesforceId("salesforce-id");
+
+        Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
+        Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(getOptionalOrcidRecordWithIdToken());
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("exchange-token");
+        Mockito.doThrow(new ORCIDAPIException(404, "already deleted")).when(orcidAPIClient).deleteAffiliation(Mockito.eq("orcid"), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
+        Mockito.when(assertionsRepository.countByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(2l);
+
+        Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
+        Mockito.doNothing().when(assertionsRepository).deleteById(Mockito.eq("id"));
+
+        assertionService.deleteById("id", getUser());
+
+        Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
+        Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecord(Mockito.any());
+        
+        Mockito.verify(assertionsRepository, Mockito.times(1)).findById(Mockito.eq("id"));
+        Mockito.verify(orcidRecordService, Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@orcid.org"));
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
+    }
+    
+    @Test
     void testDeleteByIdWithRegistryDeleteFailure() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
         assertion.setSalesforceId("salesforce-id");
@@ -852,7 +878,7 @@ class AssertionServiceTest {
         assertionService.deleteById("id", getUser());
 
         Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
-        Mockito.verify(orcidRecordService).deleteOrcidRecord(Mockito.any());
+        Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
         
         Mockito.verify(assertionsRepository, Mockito.times(1)).findById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@orcid.org"));
@@ -877,7 +903,7 @@ class AssertionServiceTest {
         assertionService.deleteById("id", getUser());
 
         Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
-        Mockito.verify(orcidRecordService).deleteOrcidRecord(Mockito.any());
+        Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
         
         Mockito.verify(assertionsRepository, Mockito.times(1)).findById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@orcid.org"));
@@ -924,7 +950,7 @@ class AssertionServiceTest {
         assertionService.deleteById("id", getUser());
 
         Mockito.verify(assertionsRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
-        Mockito.verify(orcidRecordService).deleteOrcidRecord(Mockito.any());
+        Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
         Mockito.verify(orcidAPIClient, Mockito.never()).exchangeToken(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.never()).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
     }
@@ -952,7 +978,7 @@ class AssertionServiceTest {
 
         Mockito.verify(assertionsRepository, Mockito.times(1)).findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Sort.class));
         Mockito.verify(assertionsRepository, Mockito.times(20)).deleteById(Mockito.anyString());
-        Mockito.verify(orcidRecordService, Mockito.times(20)).deleteOrcidRecord(Mockito.any(OrcidRecord.class));
+        Mockito.verify(orcidRecordService, Mockito.times(20)).deleteOrcidRecordByEmail(Mockito.anyString());
     }
 
     @Test

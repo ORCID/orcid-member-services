@@ -155,5 +155,34 @@ public class OrcidRecordService {
         orcidRecord.setModified(now);
         orcidRecordRepository.save(orcidRecord);
     }
+    
+    public void deleteOrcidRecordByEmail(String email) {
+        Optional<OrcidRecord> orcidRecordOptional = findOneByEmail(email);
+        if (orcidRecordOptional.isPresent()) {
+            OrcidRecord orcidRecord = orcidRecordOptional.get();
+            deleteOrcidRecord(orcidRecord);
+        }
+    }
+    
+    public void deleteOrcidRecordTokenByEmailAndSalesforceId(String email, String salesforceId) {
+        Optional<OrcidRecord> orcidRecordOptional = findOneByEmail(email);
+        if (orcidRecordOptional.isPresent()) {
+            OrcidRecord orcidRecord = orcidRecordOptional.get();
+            if (orcidRecord.getTokens() != null) {
+                List<OrcidToken> updated = new ArrayList<>();
+                for (OrcidToken token : orcidRecord.getTokens()) {
+                    if (!StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                        updated.add(token);
+                    }
+                }
+                orcidRecord.setTokens(updated);
+            }
+            orcidRecordRepository.save(orcidRecord);
+            
+            if (orcidRecord.getTokens() == null || orcidRecord.getTokens().isEmpty()) {
+                deleteOrcidRecordByEmail(email);
+            }
+        }
+    }
 
 }
