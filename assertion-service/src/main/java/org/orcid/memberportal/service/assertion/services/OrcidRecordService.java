@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OrcidRecordService {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(OrcidRecordService.class);
 
     @Autowired
@@ -70,25 +71,14 @@ public class OrcidRecordService {
         orcidRecordRepository.delete(orcidRecord);
     }
 
-    public void storeIdToken(String emailInStatus, String idToken, String orcidIdInJWT, String salesForceId) {
+    public void storeIdToken(String emailInStatus, String idToken, String orcidIdInJWT, String salesforceId) {
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus)
                 .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
-        List<OrcidToken> tokens = orcidRecord.getTokens();
-        List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(salesForceId, idToken);
-        if (tokens == null || tokens.size() == 0) {
-            updatedTokens.add(newToken);
-        } else {
-            for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforceId(), salesForceId) && token.getRevokedDate() == null) {
-                    // new token replaces blank or already active token
-                    updatedTokens.add(newToken);
-                } else {
-                    updatedTokens.add(token);
-                }
-            }
-        }
-        orcidRecord.setTokens(updatedTokens);
+
+        OrcidToken newToken = new OrcidToken(salesforceId, idToken);
+        List<OrcidToken> tokens = orcidRecord.getTokens().stream().filter(t -> !salesforceId.equals(t.getSalesforceId())).collect(Collectors.toList());
+        tokens.add(newToken);
+        orcidRecord.setTokens(tokens);
         orcidRecord.setModified(Instant.now());
         orcidRecord.setOrcid(orcidIdInJWT);
         orcidRecord.setRevokeNotificationSentDate(null);
@@ -102,7 +92,7 @@ public class OrcidRecordService {
         List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
         OrcidToken deniedToken = new OrcidToken(salesforceId, null);
         deniedToken.setDeniedDate(Instant.now());
-        
+
         if (tokens == null || tokens.size() == 0) {
             updatedTokens.add(deniedToken);
         } else {
@@ -141,7 +131,7 @@ public class OrcidRecordService {
         LOG.info("Revoking id token for email {}, salesforce id {}", email, salesForceId);
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + email));
-        
+
         Instant now = Instant.now();
         List<OrcidToken> tokens = orcidRecord.getTokens();
         if (tokens != null && !tokens.isEmpty()) {
@@ -155,7 +145,7 @@ public class OrcidRecordService {
         orcidRecord.setModified(now);
         orcidRecordRepository.save(orcidRecord);
     }
-    
+
     public void deleteOrcidRecordByEmail(String email) {
         Optional<OrcidRecord> orcidRecordOptional = findOneByEmail(email);
         if (orcidRecordOptional.isPresent()) {
@@ -163,7 +153,7 @@ public class OrcidRecordService {
             deleteOrcidRecord(orcidRecord);
         }
     }
-    
+
     public void deleteOrcidRecordTokenByEmailAndSalesforceId(String email, String salesforceId) {
         Optional<OrcidRecord> orcidRecordOptional = findOneByEmail(email);
         if (orcidRecordOptional.isPresent()) {
@@ -178,7 +168,7 @@ public class OrcidRecordService {
                 orcidRecord.setTokens(updated);
             }
             orcidRecordRepository.save(orcidRecord);
-            
+
             if (orcidRecord.getTokens() == null || orcidRecord.getTokens().isEmpty()) {
                 deleteOrcidRecordByEmail(email);
             }
