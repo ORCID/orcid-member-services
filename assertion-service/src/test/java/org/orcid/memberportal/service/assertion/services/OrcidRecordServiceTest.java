@@ -175,6 +175,50 @@ class OrcidRecordServiceTest {
         OrcidRecord captured = recordCaptor.getValue();
         assertEquals(1, captured.getTokens().size());
     }
+    
+    @Test
+    void testStoreIdToken() {
+        OrcidRecord record = getOrcidRecordWithIdToken("email");
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("email"))).thenReturn(Optional.of(record));
+        
+        orcidRecordService.storeIdToken("email", "id-token", "orcid", DEFAULT_SALESFORCE_ID);
+        
+        Mockito.verify(orcidRecordRepository).save(recordCaptor.capture());
+        OrcidRecord captured = recordCaptor.getValue();
+        assertEquals(1, captured.getTokens().size());
+    }
+    
+    @Test
+    void testStoreIdTokenWherePreviousTokenRevoked() {
+        OrcidRecord record = getOrcidRecordWithRevokedToken("email");
+        
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("email"))).thenReturn(Optional.of(record));
+        
+        orcidRecordService.storeIdToken("email", "new token", "orcid", DEFAULT_SALESFORCE_ID);
+        
+        Mockito.verify(orcidRecordRepository).save(recordCaptor.capture());
+        OrcidRecord captured = recordCaptor.getValue();
+        assertEquals(1, captured.getTokens().size());
+        assertEquals("new token", captured.getTokens().get(0).getTokenId());
+    }
+    
+    @Test
+    void testStoreIdTokenWhereMultipleLegacyTokensReplaced() {
+        OrcidRecord record = getOrcidRecordWithRevokedToken("email");
+        record.getTokens().add(new OrcidToken(DEFAULT_SALESFORCE_ID, "erm"));
+        record.getTokens().add(new OrcidToken(DEFAULT_SALESFORCE_ID, "errr"));
+        record.getTokens().add(new OrcidToken(DEFAULT_SALESFORCE_ID, "hmmm"));
+        
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("email"))).thenReturn(Optional.of(record));
+        
+        orcidRecordService.storeIdToken("email", "new token", "orcid", DEFAULT_SALESFORCE_ID);
+        
+        Mockito.verify(orcidRecordRepository).save(recordCaptor.capture());
+        OrcidRecord captured = recordCaptor.getValue();
+        assertEquals(1, captured.getTokens().size());
+        assertEquals("new token", captured.getTokens().get(0).getTokenId());
+    }
+    
 
     /*
      * @Test void testUpdateNonExistentOrcidRecord() {
@@ -198,6 +242,20 @@ class OrcidRecordServiceTest {
         record.setEmail(email);
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
         OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
+        tokens.add(newToken);
+        record.setTokens(tokens);
+        record.setId("xyz");
+        record.setOrcid("orcid");
+        return record;
+    }
+    
+    private OrcidRecord getOrcidRecordWithRevokedToken(String email) {
+        OrcidRecord record = new OrcidRecord();
+        record.setCreated(Instant.now());
+        record.setEmail(email);
+        List<OrcidToken> tokens = new ArrayList<OrcidToken>();
+        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "revoked token");
+        newToken.setRevokedDate(Instant.now());
         tokens.add(newToken);
         record.setTokens(tokens);
         record.setId("xyz");
