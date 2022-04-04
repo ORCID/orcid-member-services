@@ -2,7 +2,6 @@
   "id": "0000-0001-6964-278X",
   "email": "qa+mp_populated_record@mailinator.com",
   "invalidEmail": "@test@email.com",
-  "password": "test1234",
   "affiliation": {
     "id": "624acdc830c49e0008fcf505",
     "type": "SERVICE",

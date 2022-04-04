@@ -23,8 +23,9 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-import data from '../fixtures/test-data.json'
-import passwordData from '../fixtures/password-test-data.json'
+import data from '../fixtures/test-data.json';
+import credentials from '../fixtures/credentials.json';
+
 Cypress.Commands.add('signin', (email, password) => {
   cy.get('#username')
     .clear()
@@ -100,8 +101,8 @@ Cypress.Commands.add('processPasswordForm', () => {
     .invoke('attr', 'disabled')
     .should('exist');
   // type invalid passwords
-  cy.get('#password').type(passwordData.shortPassword);
-  cy.get('#confirmPassword').type(passwordData.shortConfirmationPassword);
+  cy.get('#password').type(credentials.shortPassword);
+  cy.get('#confirmPassword').type(credentials.shortConfirmationPassword);
   // check for min length error messages
   cy.get('small')
     .filter('[jhitranslate="global.messages.validate.newpassword.minlength.string"]')
@@ -112,11 +113,11 @@ Cypress.Commands.add('processPasswordForm', () => {
   // fix password
   cy.get('#password')
     .clear()
-    .type(passwordData.password);
+    .type(credentials.password);
   // enter invalid confirmation password
   cy.get('#confirmPassword')
     .clear()
-    .type(passwordData.wrongConfirmationPasssword);
+    .type(credentials.wrongConfirmationPasssword);
   // make sure you can't activate account
   cy.get('button')
     .filter('[type="submit"]')
@@ -126,7 +127,7 @@ Cypress.Commands.add('processPasswordForm', () => {
     .filter('[jhitranslate="global.messages.error.dontmatch.string"]')
     .should('exist');
   // fix confirmation password
-  cy.get('#confirmPassword').clear().type(passwordData.password);
+  cy.get('#confirmPassword').clear().type(credentials.password);
   // activate account
   cy.get('button')
     .filter('[type="submit"]')
