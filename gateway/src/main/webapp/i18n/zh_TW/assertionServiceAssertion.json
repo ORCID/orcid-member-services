@@ -39,7 +39,9 @@
         }
       },
       "delete": {
-        "question": { "string": "您確定要刪除 {{ email }} 的這個所屬機構嗎？" },
+        "question": {
+          "string": "您確定要刪除 {{ email }} 的此隸屬關係？隸屬關係將 從入口網站和登錄刪除。由於使用者已撤回給貴組織的許可，您得重新要求權限才能新增或編輯任何項目。"
+        },
         "note": { "string": "此所屬單位也將從用戶的 ORCID 記錄中刪除。" },
         "noteRevoked": {
           "string": "此機關將會自成員入口刪除，但仍會保留於 ORCID中。使用者已撤銷您對他們 ORCID 紀錄的存取權限，您已不再擁有自他們的 ORCID 紀錄上刪除此物件的許可。"
@@ -125,7 +127,8 @@
     "affiliation": {
       "created": { "string": "已建立所屬單位" },
       "updated": { "string": "已更新所屬單位" },
-      "deleted": { "string": "已刪除所屬單位" }
+      "deleted": { "string": "已刪除所屬單位" },
+      "problemDeleting": { "string": "刪除隸屬關係時發生問題" }
     }
   }
 }
