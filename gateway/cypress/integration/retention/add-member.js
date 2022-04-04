@@ -1,11 +1,11 @@
 /// <reference types="cypress" />
 import data from '../../fixtures/test-data.json';
-import admin from '../../fixtures/admin-data.json';
+import credentials from '../../fixtures/credentials.json';
 const { salesforceId, clientName, clientId } = data.member;
 
 describe('Test "Add member" functionality', () => {
   it('Add member', function() {
-    cy.programmaticSignin(admin.email, admin.password);
+    cy.programmaticSignin(credentials.adminEmail, credentials.adminPassword);
     cy.visit('/ms-member/new');
     // Check required field flags
     cy.get('#field_salesforceId').should('have.class', 'ng-invalid');
