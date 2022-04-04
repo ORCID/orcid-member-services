@@ -68,6 +68,7 @@ public class ReportServiceTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testGetMemberReportInfo() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
@@ -84,6 +85,16 @@ public class ReportServiceTest {
         });
         
         checkCommonClaims(reportInfo.getJwt(), MEMBER_DASHBOARD_SECRET);
+        
+        Claims claims = parseClaims(reportInfo.getJwt(), MEMBER_DASHBOARD_SECRET);
+        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
+
+        Map<String, Object> filter = (Map<String, Object>) claims.get(ReportService.FILTERS_PARAM);
+        assertThat(filter.get(ReportService.MEMBER_NAME_FILTER)).isNotNull();
+        
+        Map<String, Object> memberNameFilter = (Map<String, Object>) filter.get(ReportService.MEMBER_NAME_FILTER);
+        assertThat(memberNameFilter.get(ReportService.HIDDEN_PARAM)).isNotNull();
+        assertThat((boolean) memberNameFilter.get(ReportService.HIDDEN_PARAM)).isTrue();
 
         Mockito.verify(mockApplicationProperties).getHolisticsMemberDashboardUrl();
         Mockito.verify(mockApplicationProperties).getHolisticsMemberDashboardSecret();
@@ -156,10 +167,20 @@ public class ReportServiceTest {
         checkCommonClaims(reportInfo.getJwt(), CONSORTIA_DASHBOARD_SECRET);
 
         Claims claims = parseClaims(reportInfo.getJwt(), "some-long-holistics-consortia-dashboard-secret");
-        assertThat(claims.get(ReportService.DRILLTHROUGHS_PARAM)).isNotNull();
-        
         Map<String, Object> drillthroughs = (Map<String, Object>) claims.get(ReportService.DRILLTHROUGHS_PARAM);
+
+        assertThat(drillthroughs).isNotNull();
         assertThat(drillthroughs.get(ReportService.CONSORTIA_DRILLTHROUGH_KEY)).isNotNull();
+        
+        Map<String, Object> consortiaDrillthrough = (Map<String, Object>) drillthroughs.get(ReportService.CONSORTIA_DRILLTHROUGH_KEY);
+        assertThat(consortiaDrillthrough.get(ReportService.FILTER_PARAM)).isNotNull();
+
+        Map<String, Object> consortiaDrillthroughFilter = (Map<String, Object>) consortiaDrillthrough.get(ReportService.FILTER_PARAM);
+        assertThat(consortiaDrillthroughFilter.get(ReportService.MEMBER_NAME_FILTER)).isNotNull();
+        
+        Map<String, Object> memberNameFilter = (Map<String, Object>) consortiaDrillthroughFilter.get(ReportService.MEMBER_NAME_FILTER);
+        assertThat(memberNameFilter.get(ReportService.HIDDEN_PARAM)).isNotNull();
+        assertThat((boolean) memberNameFilter.get(ReportService.HIDDEN_PARAM)).isTrue();
         
         Mockito.verify(mockApplicationProperties).getHolisticsConsortiaDashboardUrl();
         Mockito.verify(mockApplicationProperties).getHolisticsConsortiaDashboardSecret();

@@ -56,6 +56,10 @@ public class ReportService {
     static final String CONSORTIA_FILTER_PATH = "consortia_country_code_model.public_sf_consortia.account_id";
     
     static final String CONSORTIA_DRILLTHROUGH_KEY = "34687";
+    
+    static final String MEMBER_NAME_FILTER = "client_model.public_sf_members.member_name";
+    
+    static final String HIDDEN_PARAM = "hidden";
 
     static final String OPERATOR = "is";
 
@@ -71,7 +75,7 @@ public class ReportService {
     public ReportInfo getMemberReportInfo() {
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsMemberDashboardUrl());
-        info.setJwt(getJwt(getClaims(getMemberReportPermissions()), applicationProperties.getHolisticsMemberDashboardSecret()));
+        info.setJwt(getJwt(getClaimsWithFilters(getMemberReportPermissions(), getMemberNameFilter()), applicationProperties.getHolisticsMemberDashboardSecret()));
         return info;
     }
 
@@ -132,11 +136,17 @@ public class ReportService {
 
         return claims;
     }
+    
+    private Map<String, Object> getClaimsWithFilters(Map<String, Object> permissions, Map<String, Object> filters) {
+        Map<String, Object> claims = getClaims(permissions);
+        claims.put(FILTERS_PARAM, filters);
+        return claims;
+    }
 
     private Map<String, Object> getClaimsWithDrillthrough(Map<String, Object> permissions, String drillthroughKey) {
         Map<String, Object> claims = getClaims(permissions);
         Map<String, Object> drillthroughFilter = new HashMap<>();
-        drillthroughFilter.put(FILTER_PARAM, new HashMap<String, Object>());
+        drillthroughFilter.put(FILTER_PARAM, getMemberNameFilter());
         Map<String, Object> drillthroughs = new HashMap<>();
         drillthroughs.put(drillthroughKey, drillthroughFilter);
         claims.put(DRILLTHROUGHS_PARAM, drillthroughs);
@@ -188,6 +198,16 @@ public class ReportService {
         Map<String, Object> wrapper = new HashMap<>();
         wrapper.put(ROW_BASED_PARAM, new Object[] { config });
         return wrapper;
+    }
+    
+    private Map<String, Object> getMemberNameFilter() {
+        Map<String, Object> hiddenConfig = new HashMap<>();
+        hiddenConfig.put(HIDDEN_PARAM, true);
+        
+        Map<String, Object> filters = new HashMap<>();
+        filters.put(MEMBER_NAME_FILTER, hiddenConfig);
+        
+        return filters;
     }
 
     private Map<String, Object> getRowBasedConfigBase() {
