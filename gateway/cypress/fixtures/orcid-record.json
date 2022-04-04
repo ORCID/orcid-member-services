@@ -2,7 +2,6 @@
   "id": "0000-0002-4386-4349",
   "email": "cya@mailinator.com",
   "invalidEmail": "@test@email.com",
-  "password": "test1234",
   "affiliation": {
     "type": "SERVICE",
     "countryCode": "BH",
@@ -11,7 +10,7 @@
       "ror": {
         "id": "https://ror.org/04z60tq39",
         "shortId": "04z60tq39",
-        "invalidId": "test1234",
+        "invalidId": "test12345678",
         "name": "ROR"
       },
       "grid": {

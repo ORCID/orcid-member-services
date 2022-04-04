@@ -13,9 +13,13 @@ import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepositoryCustom;
-import org.orcid.memberportal.service.assertion.repository.impl.AssertionRepositoryCustomImpl;
+import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @SpringBootTest(classes = { AssertionServiceApp.class })
@@ -45,14 +49,16 @@ public class AssertionRepositoryCustomImplIT {
 
     @Test
     public void testFindAllToCreateInOrcidRegistry() {
-        List<Assertion> toCreate = assertionRepositoryCustom.findAllToCreateInOrcidRegistry();
+        Pageable pageable = PageRequest.of(0, AssertionService.REGISTRY_SYNC_BATCH_SIZE, new Sort(Direction.ASC, "created"));
+        List<Assertion> toCreate = assertionRepositoryCustom.findAllToCreateInOrcidRegistry(pageable);
         assertThat(toCreate.size()).isEqualTo(10);
         toCreate.forEach(a -> assertThat(a.getRoleTitle()).startsWith("create"));
     }
 
     @Test
     public void testFindAllToUpdateInOrcidRegistry() {
-        List<Assertion> toUpdate = assertionRepositoryCustom.findAllToUpdateInOrcidRegistry();
+        Pageable pageable = PageRequest.of(0, AssertionService.REGISTRY_SYNC_BATCH_SIZE, new Sort(Direction.ASC, "created"));
+        List<Assertion> toUpdate = assertionRepositoryCustom.findAllToUpdateInOrcidRegistry(pageable);
         assertThat(toUpdate.size()).isEqualTo(10);
         toUpdate.forEach(a -> {
             Assertion reloaded = assertionRepository.findById(a.getId()).get();

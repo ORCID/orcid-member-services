@@ -9,6 +9,9 @@
       },
       "consortia": {
         "title": { "string": "rapport Consortium" }
+      },
+      "affiliation": {
+        "title": { "string": "Rapport d'affiliation" }
       }
     }
   }

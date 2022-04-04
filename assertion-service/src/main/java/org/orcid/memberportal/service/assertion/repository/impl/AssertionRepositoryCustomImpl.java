@@ -6,12 +6,16 @@ import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.LimitOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
+import org.springframework.data.mongodb.core.aggregation.SkipOperation;
+import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -27,8 +31,8 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
     }
 
     @Override
-    public List<Assertion> findAllToUpdateInOrcidRegistry() {
-        ProjectionOperation timeModifiedAfterSync = Aggregation.project("added_to_orcid", "updated_in_orcid", "modified").andExpression("modified - added_to_orcid")
+    public List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable) {
+        ProjectionOperation timeModifiedAfterSync = Aggregation.project("added_to_orcid", "updated_in_orcid", "modified", "created").andExpression("modified - added_to_orcid")
                 .as("timeModifiedAfterAddingToOrcid").andExpression("modified - updated_in_orcid").as("timeModifiedAfterUpdatingInOrcid");
 
         Criteria addedToOrcidSet = new Criteria();
@@ -48,9 +52,15 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
         Criteria needsUpdatingInOrcid = new Criteria();
         needsUpdatingInOrcid.orOperator(modifiedAfterUpdateInOrcid, modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet);
-
+        
         MatchOperation matchUpdatedAfterSync = Aggregation.match(needsUpdatingInOrcid);
-        Aggregation aggregation = Aggregation.newAggregation(timeModifiedAfterSync, matchUpdatedAfterSync);
+        
+        // pagination aggregation operations
+        SortOperation sort = new SortOperation(pageable.getSort());
+        SkipOperation skip = new SkipOperation(pageable.getOffset());
+        LimitOperation limit = new LimitOperation(pageable.getPageSize());
+        
+        Aggregation aggregation = Aggregation.newAggregation(timeModifiedAfterSync, matchUpdatedAfterSync, sort, skip, limit);
         AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
 
         return results.getMappedResults();
@@ -67,10 +77,11 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
     }
 
     @Override
-    public List<Assertion> findAllToCreateInOrcidRegistry() {
+    public List<Assertion> findAllToCreateInOrcidRegistry(Pageable pageable) {
         Criteria criteria = new Criteria();
         criteria.orOperator(Criteria.where("added_to_orcid").exists(false), Criteria.where("added_to_orcid").is(null));
         Query query = new Query(criteria);
+        query.with(pageable);
         return mongoTemplate.find(query, Assertion.class);
     }
 

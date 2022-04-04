@@ -9,6 +9,9 @@
       },
       "consortia": {
         "title": { "string": "Informe del consorcio" }
+      },
+      "affiliation": {
+        "title": { "string": "Informe de afiliación" }
       }
     }
   }

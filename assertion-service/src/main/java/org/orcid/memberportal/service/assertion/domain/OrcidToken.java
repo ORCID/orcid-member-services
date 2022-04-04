@@ -18,11 +18,9 @@ public class OrcidToken {
     @Field("revoked_date")
     private Instant revokedDate;
 
-    public OrcidToken(final String salesforceId, final String tokenId, final Instant deniedDate, final Instant revokedDate) {
+    public OrcidToken(final String salesforceId, final String tokenId) {
         this.salesforceId = salesforceId;
         this.tokenId = tokenId;
-        this.deniedDate = deniedDate;
-        this.revokedDate = revokedDate;
     }
 
     public String getSalesforceId() {
@@ -34,10 +32,19 @@ public class OrcidToken {
     }
 
     public Instant getDeniedDate() {
-        return this.deniedDate;
+        return deniedDate;
+    }
+
+    public void setDeniedDate(Instant deniedDate) {
+        this.deniedDate = deniedDate;
     }
 
     public Instant getRevokedDate() {
-        return this.revokedDate;
+        return revokedDate;
     }
+
+    public void setRevokedDate(Instant revokedDate) {
+        this.revokedDate = revokedDate;
+    }
+
 }

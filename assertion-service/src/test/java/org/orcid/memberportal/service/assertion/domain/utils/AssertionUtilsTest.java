@@ -11,7 +11,6 @@ import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
-import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 
 class AssertionUtilsTest {
 
@@ -21,36 +20,40 @@ class AssertionUtilsTest {
 
     @Test
     void testGetAffiliationStatusWhereErrorOccured() {
-        assertEquals(AssertionStatus.USER_DELETED_FROM_ORCID.name(),
-                AssertionUtils.getAssertionStatus(getAssertionUpdatedInOrcidWithLastSync404Failure(), getOrcidRecordWithApprovedToken()));
-        assertEquals(AssertionStatus.USER_REVOKED_ACCESS.name(),
-                AssertionUtils.getAssertionStatus(getAssertionUpdatedInOrcidWithLastSyncInvalidScopeFailure(), getOrcidRecordWithRevokedToken()));
+        assertEquals(AssertionStatus.USER_DELETED_FROM_ORCID.name(), AssertionUtils.getAssertionStatus(getAssertionUpdatedInOrcidWithLastSync404Failure(),
+                getOrcidRecordWithApprovedToken(), AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
+        assertEquals(AssertionStatus.USER_REVOKED_ACCESS.name(), AssertionUtils.getAssertionStatus(getAssertionUpdatedInOrcidWithLastSyncInvalidScopeFailure(),
+                getOrcidRecordWithRevokedToken(), AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
         assertEquals(AssertionStatus.ERROR_ADDING_TO_ORCID.name(),
-                AssertionUtils.getAssertionStatus(getAssertionWhereFirstSyncFailed(), getOrcidRecordWithApprovedToken()));
-        assertEquals(AssertionStatus.ERROR_UPDATING_TO_ORCID.name(),
-                AssertionUtils.getAssertionStatus(getAssertionUpdatedInOrcidWithLastSync500Failure(), getOrcidRecordWithApprovedToken()));
-        assertEquals(AssertionStatus.PENDING_RETRY.name(),
-                AssertionUtils.getAssertionStatus(getAssertionModifiedSinceLastSyncFailure(), getOrcidRecordWithApprovedToken()));
+                AssertionUtils.getAssertionStatus(getAssertionWhereFirstSyncFailed(), getOrcidRecordWithApprovedToken(), AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
+        assertEquals(AssertionStatus.ERROR_UPDATING_TO_ORCID.name(), AssertionUtils.getAssertionStatus(getAssertionUpdatedInOrcidWithLastSync500Failure(),
+                getOrcidRecordWithApprovedToken(), AssertionStatus.ERROR_UPDATING_TO_ORCID.name()));
+        assertEquals(AssertionStatus.PENDING_RETRY.name(), AssertionUtils.getAssertionStatus(getAssertionModifiedSinceLastSyncFailure(),
+                getOrcidRecordWithApprovedToken(), AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
     }
 
     @Test
     void testGetAffiliationStatusWhereNoErrorOccured() {
-        assertEquals(AssertionStatus.USER_DENIED_ACCESS.name(), AssertionUtils.getAssertionStatus(getAssertionNotAddedToOrcid(), getOrcidRecordWithDeniedToken()));
-        assertEquals(AssertionStatus.PENDING.name(), AssertionUtils.getAssertionStatus(getAssertionNotAddedToOrcid(), getOrcidRecordWithApprovedToken()));
-        assertEquals(AssertionStatus.DELETED_IN_ORCID.name(), AssertionUtils.getAssertionStatus(getAssertionDeletedInOrcid(), getOrcidRecordWithApprovedToken()));
-        assertEquals(AssertionStatus.IN_ORCID.name(), AssertionUtils.getAssertionStatus(getAssertionAddedToOrcid(), getOrcidRecordWithApprovedToken()));
-        assertEquals(AssertionStatus.IN_ORCID.name(), AssertionUtils.getAssertionStatus(getAssertionUpdatedInOrcid(), getOrcidRecordWithApprovedToken()));
-        assertEquals(AssertionStatus.PENDING_RETRY.name(), AssertionUtils.getAssertionStatus(getAssertionUpdatedSinceAddingToOrcid(), getOrcidRecordWithApprovedToken()));
-        assertEquals(AssertionStatus.PENDING_RETRY.name(),
-                AssertionUtils.getAssertionStatus(getAssertionUpdatedSinceUpdatingInOrcid(), getOrcidRecordWithApprovedToken()));
+        assertEquals(AssertionStatus.USER_DENIED_ACCESS.name(),
+                AssertionUtils.getAssertionStatus(getAssertionNotAddedToOrcid(), getOrcidRecordWithDeniedToken(), AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
+        assertEquals(AssertionStatus.PENDING.name(),
+                AssertionUtils.getAssertionStatus(getAssertionNotAddedToOrcid(), getOrcidRecordWithApprovedToken(), AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
+        assertEquals(AssertionStatus.IN_ORCID.name(),
+                AssertionUtils.getAssertionStatus(getAssertionAddedToOrcid(), getOrcidRecordWithApprovedToken(), AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
+        assertEquals(AssertionStatus.IN_ORCID.name(),
+                AssertionUtils.getAssertionStatus(getAssertionUpdatedInOrcid(), getOrcidRecordWithApprovedToken(), AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
+        assertEquals(AssertionStatus.PENDING_RETRY.name(), AssertionUtils.getAssertionStatus(getAssertionUpdatedSinceAddingToOrcid(), getOrcidRecordWithApprovedToken(),
+                AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
+        assertEquals(AssertionStatus.PENDING_RETRY.name(), AssertionUtils.getAssertionStatus(getAssertionUpdatedSinceUpdatingInOrcid(), getOrcidRecordWithApprovedToken(),
+                AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
     }
 
     @Test
     void testGetAffiliationStatusWithTokenIssues() {
-        assertEquals(AssertionStatus.USER_DENIED_ACCESS.name(),
-                AssertionUtils.getAssertionStatus(getAssertionUpdatedSinceUpdatingInOrcid(), getOrcidRecordWithDeniedToken()));
-        assertEquals(AssertionStatus.USER_REVOKED_ACCESS.name(),
-                AssertionUtils.getAssertionStatus(getAssertionUpdatedSinceUpdatingInOrcid(), getOrcidRecordWithRevokedToken()));
+        assertEquals(AssertionStatus.USER_DENIED_ACCESS.name(), AssertionUtils.getAssertionStatus(getAssertionUpdatedSinceUpdatingInOrcid(),
+                getOrcidRecordWithDeniedToken(), AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
+        assertEquals(AssertionStatus.USER_REVOKED_ACCESS.name(), AssertionUtils.getAssertionStatus(getAssertionUpdatedSinceUpdatingInOrcid(),
+                getOrcidRecordWithRevokedToken(), AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
     }
 
     private Assertion getAssertionModifiedSinceLastSyncFailure() {
@@ -120,13 +123,6 @@ class AssertionUtilsTest {
         return assertion;
     }
 
-    private Assertion getAssertionDeletedInOrcid() {
-        Assertion assertion = getAssertionAddedToOrcid();
-        Instant syncDate = Instant.now().plusSeconds(20l);
-        assertion.setDeletedFromORCID(syncDate);
-        return assertion;
-    }
-
     private Assertion getAssertionUpdatedSinceUpdatingInOrcid() {
         Assertion assertion = getAssertionUpdatedInOrcid();
         assertion.setModified(Instant.now().plusSeconds(50l));
@@ -135,21 +131,23 @@ class AssertionUtilsTest {
 
     private OrcidRecord getOrcidRecordWithDeniedToken() {
         OrcidRecord record = new OrcidRecord();
-        OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN, Instant.now(), null);
+        OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN);
+        token.setDeniedDate(Instant.now());
         record.setTokens(Arrays.asList(token));
         return record;
     }
 
     private OrcidRecord getOrcidRecordWithApprovedToken() {
         OrcidRecord record = new OrcidRecord();
-        OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN, null, null);
+        OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN);
         record.setTokens(Arrays.asList(token));
         return record;
     }
 
     private OrcidRecord getOrcidRecordWithRevokedToken() {
         OrcidRecord record = new OrcidRecord();
-        OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN, null, Instant.now());
+        OrcidToken token = new OrcidToken(SALESFORCE_ID, ID_TOKEN);
+        token.setRevokedDate(Instant.now());
         record.setTokens(Arrays.asList(token));
         return record;
     }

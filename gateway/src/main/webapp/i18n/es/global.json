@@ -24,7 +24,8 @@
       "report": {
         "member": { "string": "Informe de miembros" },
         "integration": { "string": "Informe de integración" },
-        "consortium": { "string": "Informe del consorcio" }
+        "consortium": { "string": "Informe del consorcio" },
+        "affiliation": { "string": "Informe de afiliación" }
       },
       "account": {
         "main": { "string": "Cuenta" },

@@ -12,11 +12,21 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ApplicationProperties {
 
     private final Oauth2 oauth2 = new Oauth2();
+    
+    private String appVersion;
+    
+    public String getAppVersion() {
+        return appVersion;
+    }
+
+    public void setAppVersion(String appVersion) {
+        this.appVersion = appVersion;
+    }
 
     public Oauth2 getOauth2() {
         return oauth2;
     }
-
+    
     public static class Oauth2 {
 
         private String principalAttribute;

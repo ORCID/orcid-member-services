@@ -125,6 +125,7 @@ public class JWTSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/authenticate").permitAll()
+            .antMatchers("/api/version").permitAll()
             .antMatchers("/api/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/health").permitAll()

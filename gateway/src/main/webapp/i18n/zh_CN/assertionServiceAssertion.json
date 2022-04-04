@@ -14,11 +14,28 @@
         "createOrEditLabel": { "string": "添加或编辑机构" },
         "notFound": { "string": "找不到机构" },
         "uploadLabel": { "string": "从 CSV 导入机构" },
-        "getLinks": { "string": "下载权限链接" },
-        "generateReport": { "string": "下载机构状态报告" },
-        "exportForEdit": { "string": "下载待编辑的机构" },
         "forHelpTroubleshooting": {
           "string": "如果您需要帮助诊断此错误，请联系联盟代表或 membership@orcid.org。请提供下方错误信息的截图。"
+        }
+      },
+      "reports": {
+        "links": {
+          "button": { "string": "请求权限链接" },
+          "confirmation": {
+            "string": "您的权限链接文件将很快通过邮件发送给您。如果您没有收到文件，请通过 membership@orcid.org 联系我们。"
+          }
+        },
+        "affiliationsReport": {
+          "button": { "string": "请求机构状态报告" },
+          "confirmation": {
+            "string": "您的机构状态报告文件将很快通过邮件发送给您。如果您没有收到文件，请通过 membership@orcid.org 联系我们。"
+          }
+        },
+        "affiliationsForEdit": {
+          "button": { "string": "请求编辑机构" },
+          "confirmation": {
+            "string": "您的机构编辑文件将很快通过邮件发送给您。如果您没有收到文件，请通过 membership@orcid.org 联系我们。"
+          }
         }
       },
       "delete": {
@@ -40,7 +57,9 @@
         "title": { "string": "导入机构" },
         "label": { "string": "请选择待上传的 CSV 文件" },
         "filePath": { "string": "文件路径" },
-        "success": { "string": "您的 CSV 文件已上传待处理。" },
+        "successMessage": {
+          "string": "您的 CSV 已上传，待处理。文件处理完成后，您将收到电子邮件通知。"
+        },
         "failure": { "string": "上传 CSV 文件以进行处理时出现问题。" }
       },
       "addedToOrcid": { "string": "已添加至 ORCID" },

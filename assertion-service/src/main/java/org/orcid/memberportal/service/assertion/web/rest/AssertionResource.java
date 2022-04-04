@@ -33,6 +33,8 @@ import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.assertion.web.rest.errors.RegistryDeleteFailureException;
+import org.orcid.memberportal.service.assertion.web.rest.vm.AssertionDeletion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +65,8 @@ import io.github.jhipster.web.util.PaginationUtil;
 
 @RestController
 @RequestMapping("/api")
-public class AssertionServiceResource {
-    private static final Logger LOG = LoggerFactory.getLogger(AssertionServiceResource.class);
+public class AssertionResource {
+    private static final Logger LOG = LoggerFactory.getLogger(AssertionResource.class);
 
     private final String GRID_SOURCE_ID = "GRID";
 
@@ -170,10 +172,14 @@ public class AssertionServiceResource {
     }
 
     @DeleteMapping("/assertion/{id}")
-    public ResponseEntity<String> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
-        assertionService.deleteById(id, assertionsUserService.getLoggedInUser());
-        LOG.info("{} deleted assertion {}", SecurityUtils.getCurrentUserLogin().get(), id);
-        return ResponseEntity.ok().body("{\"id\":\"" + id + "\"}");
+    public ResponseEntity<AssertionDeletion> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
+        try {
+            assertionService.deleteById(id, assertionsUserService.getLoggedInUser());
+            LOG.info("{} deleted assertion {}", SecurityUtils.getCurrentUserLogin().get(), id);
+            return ResponseEntity.ok().body(new AssertionDeletion(true));
+        } catch (RegistryDeleteFailureException e) {
+            return ResponseEntity.ok().body(new AssertionDeletion(false));
+        }
     }
 
     /**
@@ -212,36 +218,13 @@ public class AssertionServiceResource {
         Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(stateTokens[1]);
         if (optional.isPresent()) {
             OrcidRecord record = optional.get();
-            if (StringUtils.isBlank(record.getToken(stateTokens[0]))) {
+            if (StringUtils.isBlank(record.getToken(stateTokens[0], false))) {
                 record.setOrcid(null);
             }
             return ResponseEntity.ok().body(record);
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @DeleteMapping("/assertion/orcid/{id}")
-    public ResponseEntity<String> deleteAssertionFromOrcid(@PathVariable String id) throws JAXBException {
-        Boolean deleted = assertionService.deleteAssertionFromOrcidRegistry(id, assertionsUserService.getLoggedInUser());
-        JSONObject responseData = new JSONObject();
-        responseData.put("deleted", deleted);
-
-        if (!deleted) {
-            // fetch failure details
-            Assertion assertion = assertionService.findById(id);
-            String errorJson = assertion.getOrcidError();
-            JSONObject obj = new JSONObject(errorJson);
-            int statusCode = (int) obj.get("statusCode");
-            String error = (String) obj.get("error");
-            responseData.put("statusCode", statusCode);
-            responseData.put("error", error);
-            LOG.info("{} failed to delete assertion {} from orcid", SecurityUtils.getCurrentUserLogin().get(), id);
-        } else {
-            LOG.info("{} deleted assertion {} from orcid", SecurityUtils.getCurrentUserLogin().get(), id);
-        }
-
-        return ResponseEntity.ok().body(responseData.toString());
     }
 
     @DeleteMapping("/assertion/delete/{salesforceId}")
@@ -256,12 +239,12 @@ public class AssertionServiceResource {
     public ResponseEntity<String> storeIdToken(@RequestBody ObjectNode json) throws ParseException, JAXBException {
         String state = json.get("state").asText();
         String idToken = json.has("id_token") ? json.get("id_token").asText() : null;
-        String salesForceId = json.has("salesforce_id") ? json.get("salesforce_id").asText() : null;
+        String salesforceId = json.has("salesforce_id") ? json.get("salesforce_id").asText() : null;
         Boolean denied = json.has("denied") ? json.get("denied").asBoolean() : false;
         String[] stateTokens = encryptUtil.decrypt(state).split("&&");
         String emailInStatus = stateTokens[1];
-        if (salesForceId == null) {
-            salesForceId = stateTokens[0];
+        if (salesforceId == null) {
+            salesforceId = stateTokens[0];
         }
         JSONObject responseData = new JSONObject();
 
@@ -273,14 +256,14 @@ public class AssertionServiceResource {
             Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(stateTokens[1]);
             if (optional.isPresent()) {
                 OrcidRecord record = optional.get();
-                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0])) && !StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
+                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0], false)) && !StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
                     responseData.put("isDifferentUser", true);
                     responseData.put("isSameUserThatAlreadyGranted", false);
                     return ResponseEntity.ok().body(responseData.toString());
                 }
                 // still need to store the token in case the used had denied
                 // access before
-                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0])) && StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
+                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0], false)) && StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
                     responseData.put("isDifferentUser", false);
                     responseData.put("isSameUserThatAlreadyGranted", true);
                 } else {
@@ -293,8 +276,8 @@ public class AssertionServiceResource {
             }
 
             if (!StringUtils.isBlank(emailInStatus) && !StringUtils.isBlank(orcidIdInJWT)) {
-                orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, salesForceId);
-                assertionService.updateOrcidIdsForEmail(emailInStatus);
+                orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, salesforceId);
+                assertionService.updateOrcidIdsForEmailAndSalesforceId(emailInStatus, salesforceId);
             } else {
                 if (StringUtils.isBlank(emailInStatus)) {
                     LOG.warn("Not storing token for user {} - emailInStatus is empty in the state key: {}", emailInStatus, state);
@@ -306,7 +289,7 @@ public class AssertionServiceResource {
             }
         } else {
             LOG.warn("User {} have denied access", emailInStatus);
-            orcidRecordService.storeUserDeniedAccess(emailInStatus, salesForceId);
+            orcidRecordService.storeUserDeniedAccess(emailInStatus, salesforceId);
         }
         return ResponseEntity.ok().body(responseData.toString());
     }

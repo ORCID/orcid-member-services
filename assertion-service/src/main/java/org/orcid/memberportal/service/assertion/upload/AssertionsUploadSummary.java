@@ -21,6 +21,8 @@ public class AssertionsUploadSummary implements Serializable {
     private String date;
 
     List<AssertionsUploadError> errors = new ArrayList<>();
+    
+    List<String> registryDeleteFailures = new ArrayList<>();
 
     public int getNumAdded() {
         return numAdded;
@@ -78,4 +80,12 @@ public class AssertionsUploadSummary implements Serializable {
         this.date = date;
     }
 
+    public List<String> getRegistryDeleteFailures() {
+        return registryDeleteFailures;
+    }
+
+    public void setRegistryDeleteFailures(List<String> registryDeleteFailures) {
+        this.registryDeleteFailures = registryDeleteFailures;
+    }
+    
 }

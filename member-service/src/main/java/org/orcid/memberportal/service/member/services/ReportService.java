@@ -21,37 +21,43 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class ReportService {
 
-    private static final String FILTERS_PARAM = "filters";
-
-    private static final String SETTINGS_PARAM = "settings";
-
-    private static final String PERMISSIONS_PARAM = "permissions";
-
-    private static final String EXP_PARAM = "exp";
-
-    private static final String PATH_PARAM = "path";
-
-    private static final String OPERATOR_PARAM = "operator";
-
-    private static final String MODIFIER_PARAM = "modifier";
-
-    private static final String VALUES_PARAM = "values";
-
-    private static final String ROW_BASED_PARAM = "row_based";
-
-    private static final String ENABLE_EXPORT_DATA_PARAM = "enable_export_data";
-
-    private static final String MEMBER_REPORT_PATH = "client_model.public_sf_members.account_id";
+    static final String FILTERS_PARAM = "filters";
     
-    private static final String AFFILIATION_REPORT_PATH = "org_id_centric.public_sf_members.account_id";
-
-    private static final String INTEGRATION_REPORT_PATH = "client_model.public_sf_members.account_id";
-
-    private static final String CONSORTIA_REPORT_PATH = "client_model.public_sf_consortia.account_id";
+    static final String FILTER_PARAM = "filter";
     
-    private static final String CONSORTIA_FILTER_PATH = "consortia_country_code_model.public_sf_consortia.account_id";
+    static final String DRILLTHROUGHS_PARAM = "drillthroughs";
 
-    private static final String OPERATOR = "is";
+    static final String SETTINGS_PARAM = "settings";
+
+    static final String PERMISSIONS_PARAM = "permissions";
+
+    static final String EXP_PARAM = "exp";
+
+    static final String PATH_PARAM = "path";
+
+    static final String OPERATOR_PARAM = "operator";
+
+    static final String MODIFIER_PARAM = "modifier";
+
+    static final String VALUES_PARAM = "values";
+
+    static final String ROW_BASED_PARAM = "row_based";
+
+    static final String ENABLE_EXPORT_DATA_PARAM = "enable_export_data";
+
+    static final String MEMBER_REPORT_PATH = "client_model.public_sf_members.account_id";
+
+    static final String AFFILIATION_REPORT_PATH = "org_id_centric.public_sf_members.account_id";
+
+    static final String INTEGRATION_REPORT_PATH = "client_model.public_sf_members.account_id";
+
+    static final String CONSORTIA_REPORT_PATH = "client_model.public_sf_consortia.account_id";
+
+    static final String CONSORTIA_FILTER_PATH = "consortia_country_code_model.public_sf_consortia.account_id";
+    
+    static final String CONSORTIA_DRILLTHROUGH_KEY = "34687";
+
+    static final String OPERATOR = "is";
 
     @Autowired
     private UserService userService;
@@ -80,10 +86,11 @@ public class ReportService {
         checkConsortiumReportAccess();
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsConsortiaDashboardUrl());
-        info.setJwt(getJwt(getClaims(getConsortiaReportPermissions()), applicationProperties.getHolisticsConsortiaDashboardSecret()));
+        Map<String, Object> claims = getClaimsWithDrillthrough(getConsortiaReportPermissions(), CONSORTIA_DRILLTHROUGH_KEY);
+        info.setJwt(getJwt(claims, applicationProperties.getHolisticsConsortiaDashboardSecret()));
         return info;
     }
-    
+
     public ReportInfo getAffiliationReportInfo() {
         checkAffiliationReportAccess();
         ReportInfo info = new ReportInfo();
@@ -126,6 +133,16 @@ public class ReportService {
         return claims;
     }
 
+    private Map<String, Object> getClaimsWithDrillthrough(Map<String, Object> permissions, String drillthroughKey) {
+        Map<String, Object> claims = getClaims(permissions);
+        Map<String, Object> drillthroughFilter = new HashMap<>();
+        drillthroughFilter.put(FILTER_PARAM, new HashMap<String, Object>());
+        Map<String, Object> drillthroughs = new HashMap<>();
+        drillthroughs.put(drillthroughKey, drillthroughFilter);
+        claims.put(DRILLTHROUGHS_PARAM, drillthroughs);
+        return claims;
+    }
+
     private String getLoggedInSalesforceId() {
         MemberServiceUser loggedInUser = userService.getLoggedInUser();
         if (loggedInUser.getLoginAs() != null) {
@@ -146,7 +163,7 @@ public class ReportService {
     private Map<String, Object> getConsortiaReportPermissions() {
         Map<String, Object> config = getRowBasedConfigBase();
         config.put(PATH_PARAM, CONSORTIA_REPORT_PATH);
-        
+
         Map<String, Object> filter = getRowBasedConfigBase();
         filter.put(PATH_PARAM, CONSORTIA_FILTER_PATH);
 
@@ -163,7 +180,7 @@ public class ReportService {
         wrapper.put(ROW_BASED_PARAM, new Object[] { config });
         return wrapper;
     }
-    
+
     private Map<String, Object> getAffiliationReportPermissions() {
         Map<String, Object> config = getRowBasedConfigBase();
         config.put(PATH_PARAM, AFFILIATION_REPORT_PATH);

@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @SpringBootTest(classes = AssertionServiceApp.class)
-public class AssertionServiceResourceIT {
+public class AssertionResourceIT {
 
     private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
     private static final String OTHER_SALESFORCE_ID = "other-salesforce-id";
@@ -48,7 +48,7 @@ public class AssertionServiceResourceIT {
     private AssertionRepository assertionRepository;
 
     @Autowired
-    private AssertionServiceResource assertionResource;
+    private AssertionResource assertionResource;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;

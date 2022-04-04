@@ -35,19 +35,21 @@ import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStat
 import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
-import org.orcid.memberportal.service.assertion.security.SecurityUtils;
 import org.orcid.memberportal.service.assertion.stats.MemberAssertionStats;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.orcid.memberportal.service.assertion.upload.impl.AssertionsCsvReader;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.orcid.memberportal.service.assertion.web.rest.errors.ORCIDAPIException;
+import org.orcid.memberportal.service.assertion.web.rest.errors.RegistryDeleteFailureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,6 +59,8 @@ import com.google.common.base.Objects;
 public class AssertionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AssertionService.class);
+
+    public static final int REGISTRY_SYNC_BATCH_SIZE = 500;
 
     private final Sort SORT = new Sort(Sort.Direction.ASC, "email", "status", "created", "modified", "deletedFromORCID");
 
@@ -130,7 +134,7 @@ public class AssertionService {
             // Remove OrcidRecord if it has not already been removed
             Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(assertionEmail);
             if (orcidRecordOptional.isPresent()) {
-                deleteOrcidRecordByEmail(assertionEmail);
+                orcidRecordService.deleteOrcidRecordByEmail(assertionEmail);
             }
         });
         return;
@@ -182,31 +186,19 @@ public class AssertionService {
             }
 
             if (createToken) {
-                tokens.add(new OrcidToken(assertion.getSalesforceId(), null, null, null));
+                tokens.add(new OrcidToken(assertion.getSalesforceId(), null));
                 record.setTokens(tokens);
                 record.setModified(Instant.now());
                 orcidRecordService.updateOrcidRecord(record);
+            } else {
+                assertion.setOrcidId(record.getOrcid());
             }
 
         }
-        assertion.setStatus(getAssertionStatus(assertion));
+        assertion.setStatus(getAssertionStatus(assertion, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
         assertion = assertionRepository.insert(assertion);
         assertion.setStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
         return assertion;
-    }
-
-    public void createAssertions(List<Assertion> assertions) {
-        Instant now = Instant.now();
-        String ownerId = assertionsUserService.getLoggedInUserId();
-
-        for (Assertion a : assertions) {
-            a.setOwnerId(ownerId);
-            a.setCreated(now);
-            a.setModified(now);
-            a.setStatus(getAssertionStatus(a));
-            a.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-            assertionRepository.insert(a);
-        }
     }
 
     public Assertion updateAssertion(Assertion assertion, AssertionServiceUser user) {
@@ -221,7 +213,7 @@ public class AssertionService {
         copyFieldsToUpdate(assertion, existingAssertion);
         existingAssertion.setModified(Instant.now());
         existingAssertion.setLastModifiedBy(user.getEmail());
-        existingAssertion.setStatus(getAssertionStatus(existingAssertion));
+        existingAssertion.setStatus(getAssertionStatus(existingAssertion, AssertionStatus.ERROR_UPDATING_TO_ORCID.name()));
         assertion = assertionRepository.save(existingAssertion);
         assertion.setStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
         return assertion;
@@ -233,16 +225,20 @@ public class AssertionService {
         return assertionRepository.save(assertion);
     }
 
-    public void deleteById(String id, AssertionServiceUser user) {
+    public void deleteById(String id, AssertionServiceUser user) throws RegistryDeleteFailureException {
         Assertion assertion = findById(id);
-        String assertionEmail = assertion.getEmail();
+        String salesforceId = user.getSalesforceId();
+        checkAssertionAccess(assertion, salesforceId);
 
+        if (!StringUtils.isEmpty(assertion.getPutCode())) {
+            LOG.info("Deleting assertion {} in ORCID registry", id);
+            deleteAssertionFromOrcidRegistry(assertion);
+        }
+
+        String email = assertion.getEmail();
         assertionRepository.deleteById(id);
-
-        // Remove OrcidRecord if no other assertions exist for user
-        List<Assertion> assertions = assertionRepository.findByEmail(assertionEmail);
-        if (assertions.isEmpty()) {
-            deleteOrcidRecordByEmail(assertionEmail);
+        if (assertionRepository.countByEmailAndSalesforceId(email, salesforceId) == 0) {
+            orcidRecordService.deleteOrcidRecordTokenByEmailAndSalesforceId(email, salesforceId);
         }
     }
 
@@ -291,9 +287,9 @@ public class AssertionService {
 
     private boolean assertionToDelete(Assertion assertion) {
         return assertion.getId() != null && assertion.getAddedToORCID() == null && assertion.getAffiliationSection() == null && assertion.getCreated() == null
-                && assertion.getDeletedFromORCID() == null && assertion.getDepartmentName() == null && assertion.getDisambiguatedOrgId() == null
-                && assertion.getDisambiguationSource() == null && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null
-                && assertion.getEndYear() == null && assertion.getExternalId() == null && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null
+                && assertion.getDepartmentName() == null && assertion.getDisambiguatedOrgId() == null && assertion.getDisambiguationSource() == null
+                && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null && assertion.getEndYear() == null
+                && assertion.getExternalId() == null && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null
                 && assertion.getLastModifiedBy() == null && assertion.getModified() == null && assertion.getOrcidError() == null && assertion.getOrcidId() == null
                 && assertion.getOrgCity() == null && assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null
                 && assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null && assertion.getRoleTitle() == null
@@ -328,17 +324,23 @@ public class AssertionService {
     }
 
     public void postAssertionsToOrcid() throws JAXBException {
+        Pageable pageable = getPageableForRegistrySync();
+
         LOG.info("POSTing affiliations to orcid registry...");
-        List<Assertion> assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry();
-        for (Assertion assertion : assertionsToAdd) {
-            LOG.debug("Preparing to POST assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - to orcid registry", assertion.getId(),
-                    assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
-            try {
-                postAssertionToOrcid(assertion);
-            } catch (Exception e) {
-                LOG.error("Unexpected error POSTing assertion to registry", e);
+        List<Assertion> assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry(pageable);
+        while (assertionsToAdd != null && !assertionsToAdd.isEmpty()) {
+            for (Assertion assertion : assertionsToAdd) {
+                LOG.debug("Preparing to POST assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - to orcid registry", assertion.getId(),
+                        assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
+                try {
+                    postAssertionToOrcid(assertion);
+                } catch (Exception e) {
+                    LOG.error("Unexpected error POSTing assertion to registry", e);
+                }
+                LOG.debug("POST task complete for assertion {}", assertion.getId());
             }
-            LOG.debug("POST task complete for assertion {}", assertion.getId());
+            pageable = pageable.next();
+            assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry(pageable);
         }
         LOG.info("POSTing complete");
     }
@@ -346,8 +348,8 @@ public class AssertionService {
     public void postAssertionToOrcid(Assertion assertion) throws JAXBException {
         LOG.debug("Examining assertion {} for POSTing to registry", assertion.getId());
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
-        if (canSyncWithOrcidRegistry(record, assertion)) {
-            String idToken = record.get().getToken(assertion.getSalesforceId());
+        if (canWriteToOrcidRegistry(record, assertion)) {
+            String idToken = record.get().getToken(assertion.getSalesforceId(), false);
             String orcid = record.get().getOrcid();
 
             Instant now = Instant.now();
@@ -360,39 +362,45 @@ public class AssertionService {
                 assertion.setAddedToORCID(now);
                 assertion.setOrcidError(null);
                 LOG.debug("Recalculating assertion {} status", assertion.getId());
-                assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, record.get()));
+                assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, record.get(), AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
                 LOG.debug("Updating assertion details in db - lastSyncAttempt: {}, putCode: {}, status: {}, addedToOrcid: {}, error free", now, putCode,
                         assertion.getStatus(), now);
                 assertionRepository.save(assertion);
             } catch (ORCIDAPIException oae) {
                 LOG.info("Recieved orcid api exception");
                 LOG.debug("Orcid api exception details", oae);
-                storeError(assertion, oae.getStatusCode(), oae.getError());
+                storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_ADDING_TO_ORCID.name());
             } catch (Exception e) {
                 LOG.error("Error posting assertion " + assertion.getId(), e);
-                storeError(assertion, 0, e.getMessage());
+                storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_ADDING_TO_ORCID.name());
             }
         } else if (record.isPresent()) {
-            updateStatusAndSave(assertion, record.get());
+            updateStatusAndSave(assertion, record.get(), AssertionStatus.ERROR_ADDING_TO_ORCID.name());
         }
     }
 
     public void putAssertionsInOrcid() throws JAXBException {
         LOG.info("PUTting assertions in orcid");
-        List<Assertion> assertionsToUpdate = assertionRepository.findAllToUpdateInOrcidRegistry();
-        for (Assertion assertion : assertionsToUpdate) {
-            // query will return only id and modified dates, so fetch full data
-            LOG.debug("Preparing to PUT assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - in orcid registry", assertion.getId(),
-                    assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
-            Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
-            LOG.debug("Refreshed assertion - id: {}, salesforceId: {}, email: {}, orcid id: {}", assertion.getId(), assertion.getSalesforceId(), assertion.getEmail(),
-                    assertion.getOrcidId());
-            try {
-                putAssertionInOrcid(refreshed);
-            } catch (Exception e) {
-                LOG.error("Unexpected error PUTting assertion in registry", e);
+        Pageable pageable = getPageableForRegistrySync();
+        List<Assertion> assertionsToUpdate = assertionRepository.findAllToUpdateInOrcidRegistry(pageable);
+        while (assertionsToUpdate != null && !assertionsToUpdate.isEmpty()) {
+            for (Assertion assertion : assertionsToUpdate) {
+                // query will return only id and modified dates, so fetch full
+                // data
+                LOG.debug("Preparing to PUT assertion - id: {}, salesforceId: {}, email: {}, orcid id: {} - in orcid registry", assertion.getId(),
+                        assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
+                Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
+                LOG.debug("Refreshed assertion - id: {}, salesforceId: {}, email: {}, orcid id: {}", assertion.getId(), assertion.getSalesforceId(), assertion.getEmail(),
+                        assertion.getOrcidId());
+                try {
+                    putAssertionInOrcid(refreshed);
+                } catch (Exception e) {
+                    LOG.error("Unexpected error PUTting assertion in registry", e);
+                }
+                LOG.debug("PUT task complete for assertion {}", assertion.getId());
             }
-            LOG.debug("PUT task complete for assertion {}", assertion.getId());
+            pageable = pageable.next();
+            assertionsToUpdate = assertionRepository.findAllToUpdateInOrcidRegistry(pageable);
         }
         LOG.info("PUTting complete");
     }
@@ -400,9 +408,9 @@ public class AssertionService {
     public void putAssertionInOrcid(Assertion assertion) throws JAXBException {
         LOG.debug("Examining assertion {} for PUTting in registry", assertion.getId());
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
-        if (canSyncWithOrcidRegistry(record, assertion) && !StringUtils.isBlank(assertion.getPutCode())) {
+        if (canWriteToOrcidRegistry(record, assertion) && !StringUtils.isBlank(assertion.getPutCode())) {
             String orcid = record.get().getOrcid();
-            String idToken = record.get().getToken(assertion.getSalesforceId());
+            String idToken = record.get().getToken(assertion.getSalesforceId(), false);
 
             Instant now = Instant.now();
             assertion.setLastSyncAttempt(now);
@@ -412,51 +420,43 @@ public class AssertionService {
                 assertion.setUpdatedInORCID(now);
                 assertion.setOrcidError(null);
                 LOG.debug("Recalculating assertion {} status", assertion.getId());
-                assertion.setStatus(getAssertionStatus(assertion));
+                assertion.setStatus(getAssertionStatus(assertion, AssertionStatus.ERROR_UPDATING_TO_ORCID.name()));
                 LOG.debug("Updating assertion details in db - lastSyncAttempt: {}, status: {}, updatedInOrcid: {}, error free", now, assertion.getStatus(), now);
                 assertionRepository.save(assertion);
             } catch (ORCIDAPIException oae) {
-                storeError(assertion, oae.getStatusCode(), oae.getError());
+                storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_UPDATING_TO_ORCID.name());
                 LOG.info("Recieved orcid api exception");
                 LOG.debug("Orcid api exception details", oae);
             } catch (Exception e) {
                 LOG.error("Error with assertion " + assertion.getId(), e);
-                storeError(assertion, 0, e.getMessage());
+                storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_UPDATING_TO_ORCID.name());
             }
         } else if (record.isPresent()) {
-            updateStatusAndSave(assertion, record.get());
+            updateStatusAndSave(assertion, record.get(), AssertionStatus.ERROR_UPDATING_TO_ORCID.name());
         }
     }
 
-    public boolean deleteAssertionFromOrcidRegistry(String assertionId, AssertionServiceUser user) {
-        Assertion assertion = assertionRepository.findById(assertionId).orElseThrow(() -> new IllegalArgumentException("Invalid assertion id"));
-        String salesforceId = user.getSalesforceId();
-        checkAssertionAccess(assertion, salesforceId);
-
+    private void deleteAssertionFromOrcidRegistry(Assertion assertion) throws RegistryDeleteFailureException {
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
-        if (canDeleteAssertionFromOrcidRegistry(record, assertion)) {
-            Instant now = Instant.now();
-            assertion.setLastSyncAttempt(now);
-
-            try {
-                LOG.info("Exchanging id token for {}", record.get().getOrcid());
-                String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId()));
-                Boolean deleted = orcidAPIClient.deleteAffiliation(record.get().getOrcid(), accessToken, assertion);
-                if (deleted) {
-                    assertion.setDeletedFromORCID(now);
-                    assertion.setModified(now);
-                    assertion.setStatus(getAssertionStatus(assertion));
-                    assertionRepository.save(assertion);
-                }
-                return deleted;
-            } catch (ORCIDAPIException oae) {
-                storeError(assertion, oae.getStatusCode(), oae.getError());
-            } catch (Exception e) {
-                LOG.error("Error with assertion " + assertion.getId(), e);
-                storeError(assertion, 0, e.getMessage());
-            }
+        if (!checkRegistryDeletePreconditions(record, assertion)) {
+            throw new RegistryDeleteFailureException();
         }
-        return false;
+            
+        assertion.setLastSyncAttempt(Instant.now());
+
+        try {
+            LOG.info("Exchanging id token for {}", record.get().getOrcid());
+            String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId(), true));
+            orcidAPIClient.deleteAffiliation(record.get().getOrcid(), accessToken, assertion);
+        } catch (ORCIDAPIException oae) {
+            if (oae.getStatusCode() != 404) {
+                storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
+                throw new RegistryDeleteFailureException();
+            }
+        } catch (Exception e) {
+            storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_DELETING_IN_ORCID.name());
+            throw new RegistryDeleteFailureException();
+        }
     }
 
     private void checkAssertionAccess(Assertion assertion, String salesforceId) {
@@ -505,8 +505,8 @@ public class AssertionService {
         return stats;
     }
 
-    private boolean canSyncWithOrcidRegistry(Optional<OrcidRecord> record, Assertion assertion) {
-        LOG.debug("Checking if assertion can be synched with registry - id: {}, salesforce id: {}, email: {}, orcid id: {}", assertion.getId(),
+    private boolean canWriteToOrcidRegistry(Optional<OrcidRecord> record, Assertion assertion) {
+        LOG.debug("Checking if assertion can be sent to registry - id: {}, salesforce id: {}, email: {}, orcid id: {}", assertion.getId(),
                 assertion.getSalesforceId(), assertion.getEmail(), assertion.getOrcidId());
 
         if (!record.isPresent()) {
@@ -515,7 +515,7 @@ public class AssertionService {
         }
         LOG.debug("Orcid record present for email {}", assertion.getEmail());
 
-        String idToken = record.get().getToken(assertion.getSalesforceId());
+        String idToken = record.get().getToken(assertion.getSalesforceId(), false);
         String orcid = record.get().getOrcid();
 
         if (StringUtils.isBlank(orcid)) {
@@ -532,8 +532,8 @@ public class AssertionService {
         return true;
     }
 
-    private void updateStatusAndSave(Assertion a, OrcidRecord r) {
-        a.setStatus(AssertionUtils.getAssertionStatus(a, r));
+    private void updateStatusAndSave(Assertion a, OrcidRecord r, String defaultError) {
+        a.setStatus(AssertionUtils.getAssertionStatus(a, r, defaultError));
         assertionRepository.save(a);
     }
 
@@ -551,28 +551,36 @@ public class AssertionService {
         return orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
     }
 
-    private boolean canDeleteAssertionFromOrcidRegistry(Optional<OrcidRecord> record, Assertion assertion) {
+    private boolean checkRegistryDeletePreconditions(Optional<OrcidRecord> record, Assertion assertion) {
+        String error = null;
         if (!record.isPresent()) {
             LOG.error("OrcidRecord not available for email {}", assertion.getEmail());
-            return false;
+            error = "Orcid record not available";
         }
         if (StringUtils.isBlank(record.get().getOrcid())) {
             LOG.info("Orcid ID not available for {}", assertion.getEmail());
-            return false;
+            error = "ORCID iD not available";
         }
         if (record.get().getTokens() == null) {
-            LOG.info("Tokens not available for {}", assertion.getEmail());
+            LOG.info("Token not available for {}", assertion.getEmail());
+            error = "Token not available";
+        }
+        if (error != null) {
+            assertion.setOrcidError(error);
+            assertion.setStatus(AssertionStatus.ERROR_DELETING_IN_ORCID.name());
+            assertionRepository.save(assertion);
             return false;
         }
         return true;
     }
 
-    private void storeError(Assertion assertion, int statusCode, String error) {
+    private void storeError(Assertion assertion, int statusCode, String error, String defaultErrorStatus) {
+        LOG.info("Error updating ORCID registry: status code - {}, error - {}", statusCode, error);
         JSONObject obj = new JSONObject();
         obj.put("statusCode", statusCode);
         obj.put("error", error);
         assertion.setOrcidError(obj.toString());
-        assertion.setStatus(getAssertionStatus(assertion));
+        assertion.setStatus(getAssertionStatus(assertion, defaultErrorStatus));
 
         if (StringUtils.equals(assertion.getStatus(), AssertionStatus.USER_REVOKED_ACCESS.name())) {
             LOG.debug("Assertion status set to USER_REVOKED_ACCESS, updating id token accordingly");
@@ -580,13 +588,13 @@ public class AssertionService {
         }
         assertionRepository.save(assertion);
     }
-
-    public String getAssertionStatus(Assertion assertion) {
+    
+    public String getAssertionStatus(Assertion assertion, String defaultErrorStatus) {
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(assertion.getEmail());
         if (!optionalRecord.isPresent()) {
             throw new IllegalArgumentException("Found assertion with no corresponding record email - " + assertion.getEmail() + " - " + assertion.getEmail());
         }
-        return AssertionUtils.getAssertionStatus(assertion, optionalRecord.get());
+        return AssertionUtils.getAssertionStatus(assertion, optionalRecord.get(), defaultErrorStatus);
     }
 
     public List<Assertion> findByEmail(String email) {
@@ -599,29 +607,12 @@ public class AssertionService {
         return assertionRepository.findByEmailAndSalesforceId(email, salesForceId);
     }
 
-    private void deleteOrcidRecordByEmail(String email) {
-        Optional<OrcidRecord> orcidRecordOptional = orcidRecordService.findOneByEmail(email);
-        if (orcidRecordOptional.isPresent()) {
-            OrcidRecord orcidRecord = orcidRecordOptional.get();
-            orcidRecordService.deleteOrcidRecord(orcidRecord);
-        }
-    }
-
     public Optional<Assertion> findOneByEmailIgnoreCase(String email) {
         return assertionRepository.findOneByEmailIgnoreCase(email.toLowerCase());
     }
 
     public List<Assertion> getAssertionsBySalesforceId(String salesforceId) {
         return assertionRepository.findBySalesforceId(salesforceId);
-    }
-
-    public void assertionStatusCleanup() {
-        List<Assertion> statusesToClean = assertionRepository.findByStatus("");
-        LOG.info("Found " + statusesToClean.size() + " assertion statuses to cleanup.");
-        for (Assertion assertion : statusesToClean) {
-            assertion.setStatus(getAssertionStatus(assertion));
-            assertionRepository.save(assertion);
-        }
     }
 
     public void updateAssertionStatus(AssertionStatus status, Assertion assertion) {
@@ -682,6 +673,8 @@ public class AssertionService {
         int created = 0;
         int updated = 0;
         int deleted = 0;
+        
+        List<String> registryDeleteFailures = new ArrayList<>();
 
         for (Assertion a : upload.getAssertions()) {
             if (!isDuplicate(a)) {
@@ -691,12 +684,15 @@ public class AssertionService {
                 } else {
                     Assertion existingAssertion = findById(a.getId());
                     if (!user.getSalesforceId().equals(existingAssertion.getSalesforceId())) {
-                        throw new BadRequestAlertException("This affiliations doesnt belong to your organization", "affiliation", "affiliationOtherOrganization");
+                        throw new BadRequestAlertException("This affiliation doesn't belong to your organization", "affiliation", "affiliationOtherOrganization");
                     }
                     if (assertionToDelete(a)) {
-                        deleteAssertionFromOrcidRegistry(a.getId(), user);
-                        deleteById(a.getId(), user);
-                        deleted++;
+                        try {
+                            deleteById(a.getId(), user);
+                            deleted++;
+                        } catch (RegistryDeleteFailureException e) {
+                            registryDeleteFailures.add(a.getId());
+                        }
                     } else {
                         updateAssertion(a, user);
                         updated++;
@@ -711,6 +707,7 @@ public class AssertionService {
         summary.setNumUpdated(updated);
         summary.setNumDuplicates(duplicates);
         summary.setNumDeleted(deleted);
+        summary.setRegistryDeleteFailures(registryDeleteFailures);
 
         return summary;
     }
@@ -729,11 +726,11 @@ public class AssertionService {
         return upload;
     }
 
-    public void updateOrcidIdsForEmail(String email) {
+    public void updateOrcidIdsForEmailAndSalesforceId(String email, String salesforceId) {
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
         final String orcid = record.get().getOrcid();
         List<Assertion> assertions = assertionRepository.findAllByEmail(email);
-        assertions.stream().filter(a -> a.getOrcidId() == null).forEach(a -> {
+        assertions.stream().filter(a -> a.getOrcidId() == null && salesforceId.equals(a.getSalesforceId())).forEach(a -> {
             a.setOrcidId(orcid);
             assertionRepository.save(a);
         });
@@ -744,6 +741,13 @@ public class AssertionService {
     }
 
     private void setPrettyStatus(Assertion assertion) {
-        assertion.setPrettyStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
+        if (assertion.getStatus() != null) {
+            assertion.setPrettyStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
+        }
     }
+
+    private Pageable getPageableForRegistrySync() {
+        return PageRequest.of(0, REGISTRY_SYNC_BATCH_SIZE, new Sort(Direction.ASC, "created"));
+    }
+
 }
