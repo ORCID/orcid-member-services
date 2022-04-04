@@ -144,3 +144,10 @@ Desktop.ini
 ######################
 .eslintcache
 /.apt_generated_tests/
+
+######################
+# Cypress
+######################
+/cypress/plugins/credentials_qa.json
+/cypress/plugins/token_qa.json
+/cypress/fixtures/admin-data.json
