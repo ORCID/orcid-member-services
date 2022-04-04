@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 import data from '../../fixtures/test-data.json';
-import admin from '../../fixtures/admin-data.json';
+import credentials from '../../fixtures/credentials.json';
 
 describe('Manage members menu', () => {
   it('Test edit member form', function() {
-    cy.programmaticSignin(admin.email, admin.password)
+    cy.programmaticSignin(credentials.adminEmail, credentials.adminPassword)
     cy.visit(`/ms-member/${data.member.id}/edit`)
     cy.get('#field_salesforceId').clear()
     cy.get('#save-entity').invoke('attr', 'disabled').should('exist')
