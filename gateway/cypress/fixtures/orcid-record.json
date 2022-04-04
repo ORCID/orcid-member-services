@@ -1,0 +1,42 @@
+{
+  "id": "0000-0002-4386-4349",
+  "email": "cya@mailinator.com",
+  "invalidEmail": "@test@email.com",
+  "password": "test1234",
+  "affiliation": {
+    "type": "SERVICE",
+    "countryCode": "BH",
+    "country": "Bahrain",
+    "org": {
+      "ror": {
+        "id": "https://ror.org/04z60tq39",
+        "shortId": "04z60tq39",
+        "invalidId": "test1234",
+        "name": "ROR"
+      },
+      "grid": {
+        "id": "grid.238252.c",
+        "invalidId": "grd.238252.c",
+        "name": "GRID"
+      },
+      "ringgold": {
+        "id": "5072",
+        "invalidId": "test",
+        "name": "RINGGOLD"
+      } 
+    },
+    "startDate": {
+      "year": "2021",
+      "month": "January",
+      "invalidDay": "02",
+      "day": "01"
+    },
+    "endDate": {
+      "year": "2021",
+      "month": "January",
+      "day": "01"
+    },
+    "invalidUrl": "test.test",
+    "url": "http://example.com"
+  }
+}

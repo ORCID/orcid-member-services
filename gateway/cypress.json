@@ -1,0 +1,4 @@
+{
+  "baseUrl": "https://member-portal.qa.orcid.org",
+  "taskTimeout": 180000
+}
