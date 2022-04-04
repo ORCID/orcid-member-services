@@ -11,7 +11,6 @@ import org.orcid.memberportal.service.assertion.csv.download.CsvDownloadWriter;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
-import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -47,13 +46,8 @@ public class AssertionsReportCsvWriter extends CsvDownloadWriter {
                         .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for " + a.getEmail()));
                 orcidRecordMap.put(a.getEmail(), orcidRecord);
             }
-            String orcidId = null;
-            if (!StringUtils.isBlank(orcidRecordMap.get(a.getEmail()).getToken(salesforceId))) {
-                orcidId = orcidRecordMap.get(a.getEmail()).getOrcid();
-            }
-            row.add(orcidId == null ? "" : orcidId);
-            String status = AssertionUtils.getAssertionStatus(a, orcidRecordMap.get(a.getEmail()));
-            String prettyStatus = AssertionStatus.valueOf(status).getValue();
+            row.add(a.getOrcidId() == null ? "" : a.getOrcidId());
+            String prettyStatus = AssertionStatus.valueOf(a.getStatus()).getValue();
             row.add(prettyStatus);
             row.add(a.getPutCode() == null ? "" : a.getPutCode());
             row.add(a.getCreated() == null ? "" : a.getCreated().toString());

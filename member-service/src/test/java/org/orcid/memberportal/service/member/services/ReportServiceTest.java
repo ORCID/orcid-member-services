@@ -2,6 +2,8 @@ package org.orcid.memberportal.service.member.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -17,7 +19,28 @@ import org.orcid.memberportal.service.member.service.reports.ReportInfo;
 import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
+
 public class ReportServiceTest {
+    
+    private static final String CONSORTIA_DASHBOARD_URL = "https://secure.holistics.io/embed/consortia";
+    
+    private static final String INTEGRATION_DASHBOARD_URL = "https://secure.holistics.io/embed/integration";
+    
+    private static final String AFFILIATION_DASHBOARD_URL = "https://secure.holistics.io/embed/affiliation";
+    
+    private static final String MEMBER_DASHBOARD_URL = "https://secure.holistics.io/embed/member";
+    
+    private static final String CONSORTIA_DASHBOARD_SECRET = "some-long-holistics-consortia-dashboard-secret";
+    
+    private static final String INTEGRATION_DASHBOARD_SECRET = "some-long-holistics-integration-dashboard-secret";
+    
+    private static final String AFFILIATION_DASHBOARD_SECRET = "some-long-holistics-affiliation-dashboard-secret";
+    
+    private static final String MEMBER_DASHBOARD_SECRET = "some-long-holistics-member-dashboard-secret";
 
     @Mock
     private ApplicationProperties mockApplicationProperties;
@@ -34,14 +57,14 @@ public class ReportServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        Mockito.when(mockApplicationProperties.getHolisticsConsortiaDashboardUrl()).thenReturn("https://secure.holistics.io/embed/consortia");
-        Mockito.when(mockApplicationProperties.getHolisticsConsortiaDashboardSecret()).thenReturn("some-long-holistics-consortia-dashboard-secret");
-        Mockito.when(mockApplicationProperties.getHolisticsMemberDashboardUrl()).thenReturn("https://secure.holistics.io/embed/member");
-        Mockito.when(mockApplicationProperties.getHolisticsMemberDashboardSecret()).thenReturn("some-long-holistics-member-dashboard-secret");
-        Mockito.when(mockApplicationProperties.getHolisticsAffiliationDashboardUrl()).thenReturn("https://secure.holistics.io/embed/affiliation");
-        Mockito.when(mockApplicationProperties.getHolisticsAffiliationDashboardSecret()).thenReturn("some-long-holistics-affiliation-dashboard-secret");
-        Mockito.when(mockApplicationProperties.getHolisticsIntegrationDashboardUrl()).thenReturn("https://secure.holistics.io/embed/integration");
-        Mockito.when(mockApplicationProperties.getHolisticsIntegrationDashboardSecret()).thenReturn("some-long-holistics-integration-dashboard-secret");
+        Mockito.when(mockApplicationProperties.getHolisticsConsortiaDashboardUrl()).thenReturn(CONSORTIA_DASHBOARD_URL);
+        Mockito.when(mockApplicationProperties.getHolisticsConsortiaDashboardSecret()).thenReturn(CONSORTIA_DASHBOARD_SECRET);
+        Mockito.when(mockApplicationProperties.getHolisticsMemberDashboardUrl()).thenReturn(MEMBER_DASHBOARD_URL);
+        Mockito.when(mockApplicationProperties.getHolisticsMemberDashboardSecret()).thenReturn(MEMBER_DASHBOARD_SECRET);
+        Mockito.when(mockApplicationProperties.getHolisticsAffiliationDashboardUrl()).thenReturn(AFFILIATION_DASHBOARD_URL);
+        Mockito.when(mockApplicationProperties.getHolisticsAffiliationDashboardSecret()).thenReturn(AFFILIATION_DASHBOARD_SECRET);
+        Mockito.when(mockApplicationProperties.getHolisticsIntegrationDashboardUrl()).thenReturn(INTEGRATION_DASHBOARD_URL);
+        Mockito.when(mockApplicationProperties.getHolisticsIntegrationDashboardSecret()).thenReturn(INTEGRATION_DASHBOARD_SECRET);
     }
 
     @Test
@@ -52,9 +75,15 @@ public class ReportServiceTest {
         ReportInfo reportInfo = reportService.getMemberReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
-        assertThat(reportInfo.getUrl()).isEqualTo("https://secure.holistics.io/embed/member");
+        assertThat(reportInfo.getUrl()).isEqualTo(MEMBER_DASHBOARD_URL);
         assertThat(reportInfo.getJwt()).isNotNull();
         assertThat(reportInfo.getJwt()).isNotEmpty();
+        
+        Assertions.assertThrows(SignatureException.class, () -> {
+            checkCommonClaims(reportInfo.getJwt(), MEMBER_DASHBOARD_URL); // wrong secret
+        });
+        
+        checkCommonClaims(reportInfo.getJwt(), MEMBER_DASHBOARD_SECRET);
 
         Mockito.verify(mockApplicationProperties).getHolisticsMemberDashboardUrl();
         Mockito.verify(mockApplicationProperties).getHolisticsMemberDashboardSecret();
@@ -69,9 +98,15 @@ public class ReportServiceTest {
         ReportInfo reportInfo = reportService.getAffiliationReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
-        assertThat(reportInfo.getUrl()).isEqualTo("https://secure.holistics.io/embed/affiliation");
+        assertThat(reportInfo.getUrl()).isEqualTo(AFFILIATION_DASHBOARD_URL);
         assertThat(reportInfo.getJwt()).isNotNull();
         assertThat(reportInfo.getJwt()).isNotEmpty();
+        
+        Assertions.assertThrows(SignatureException.class, () -> {
+            checkCommonClaims(reportInfo.getJwt(), AFFILIATION_DASHBOARD_URL); // wrong secret
+        });
+        
+        checkCommonClaims(reportInfo.getJwt(), AFFILIATION_DASHBOARD_SECRET);
 
         Mockito.verify(mockApplicationProperties).getHolisticsAffiliationDashboardUrl();
         Mockito.verify(mockApplicationProperties).getHolisticsAffiliationDashboardSecret();
@@ -86,15 +121,22 @@ public class ReportServiceTest {
         ReportInfo reportInfo = reportService.getIntegrationReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
-        assertThat(reportInfo.getUrl()).isEqualTo("https://secure.holistics.io/embed/integration");
+        assertThat(reportInfo.getUrl()).isEqualTo(INTEGRATION_DASHBOARD_URL);
         assertThat(reportInfo.getJwt()).isNotNull();
         assertThat(reportInfo.getJwt()).isNotEmpty();
+        
+        Assertions.assertThrows(SignatureException.class, () -> {
+            checkCommonClaims(reportInfo.getJwt(), INTEGRATION_DASHBOARD_URL); // wrong secret
+        });
+        
+        checkCommonClaims(reportInfo.getJwt(), INTEGRATION_DASHBOARD_SECRET);
 
         Mockito.verify(mockApplicationProperties).getHolisticsIntegrationDashboardUrl();
         Mockito.verify(mockApplicationProperties).getHolisticsIntegrationDashboardSecret();
         Mockito.verify(mockUserService).getLoggedInUser();
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testGetConsortiaReportInfo() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
@@ -103,14 +145,28 @@ public class ReportServiceTest {
         ReportInfo reportInfo = reportService.getConsortiaReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
-        assertThat(reportInfo.getUrl()).isEqualTo("https://secure.holistics.io/embed/consortia");
+        assertThat(reportInfo.getUrl()).isEqualTo(CONSORTIA_DASHBOARD_URL);
         assertThat(reportInfo.getJwt()).isNotNull();
         assertThat(reportInfo.getJwt()).isNotEmpty();
+        
+        Assertions.assertThrows(SignatureException.class, () -> {
+            checkCommonClaims(reportInfo.getJwt(), CONSORTIA_DASHBOARD_URL); // wrong secret
+        });
+        
+        checkCommonClaims(reportInfo.getJwt(), CONSORTIA_DASHBOARD_SECRET);
 
+        Claims claims = parseClaims(reportInfo.getJwt(), "some-long-holistics-consortia-dashboard-secret");
+        assertThat(claims.get(ReportService.DRILLTHROUGHS_PARAM)).isNotNull();
+        
+        Map<String, Object> drillthroughs = (Map<String, Object>) claims.get(ReportService.DRILLTHROUGHS_PARAM);
+        assertThat(drillthroughs.get(ReportService.CONSORTIA_DRILLTHROUGH_KEY)).isNotNull();
+        
         Mockito.verify(mockApplicationProperties).getHolisticsConsortiaDashboardUrl();
         Mockito.verify(mockApplicationProperties).getHolisticsConsortiaDashboardSecret();
         Mockito.verify(mockUserService, Mockito.times(3)).getLoggedInUser();
         Mockito.verify(mockMemberService).getMember(Mockito.eq("salesforce-id"));
+        
+        
     }
 
     @Test
@@ -178,6 +234,18 @@ public class ReportServiceTest {
         member.setParentSalesforceId("parent");
         member.setIsConsortiumLead(false);
         return member;
+    }
+    
+    private void checkCommonClaims(String jwt, String secret) {
+        Claims claims = parseClaims(jwt, secret);
+        assertThat(claims.get(ReportService.SETTINGS_PARAM)).isNotNull();
+        assertThat(claims.get(ReportService.PERMISSIONS_PARAM)).isNotNull();
+        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
+        assertThat(claims.get(ReportService.EXP_PARAM)).isNotNull();
+    }
+    
+    private Claims parseClaims(String jwt, String secret) {
+        return Jwts.parser().setSigningKey(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8))).parseClaimsJws(jwt).getBody();
     }
 
 }

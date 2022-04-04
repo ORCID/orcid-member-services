@@ -24,7 +24,8 @@
       "report": {
         "member": { "string": "メンバーレポート" },
         "integration": { "string": "統合レポート" },
-        "consortium": { "string": "コンソーシアムレポート" }
+        "consortium": { "string": "コンソーシアムレポート" },
+        "affiliation": { "string": "アフィリエーションレポート" }
       },
       "account": {
         "main": { "string": "アカウント" },

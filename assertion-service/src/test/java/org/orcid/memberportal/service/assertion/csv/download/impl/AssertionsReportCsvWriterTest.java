@@ -24,6 +24,7 @@ import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.OrcidToken;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
@@ -100,8 +101,8 @@ public class AssertionsReportCsvWriterTest {
 
     private void checkValues(String[] values, int i) {
         assertEquals(i + "@test.com", values[0].trim());
-        assertEquals("orcid-" + i + "@test.com", values[1].trim());
-        assertEquals("Pending retry in ORCID", values[2].trim());
+        assertEquals("orcid-" + i, values[1].trim());
+        assertEquals("Pending", values[2].trim());
         assertEquals(String.valueOf(i), values[3].trim());
         assertNotNull(values[4].trim());
         assertNotNull(values[5].trim());
@@ -177,7 +178,7 @@ public class AssertionsReportCsvWriterTest {
         assertion.setOrgRegion("region-" + i);
         assertion.setOwnerId("what?" + i);
         assertion.setRoleTitle("role-" + i);
-        assertion.setStatus("status-" + i);
+        assertion.setStatus(AssertionStatus.PENDING.name());
         assertion.setUpdatedInORCID(Instant.now());
         assertion.setOrcidId("orcid-" + i);
         assertion.setPutCode(String.valueOf(i));
@@ -195,7 +196,7 @@ public class AssertionsReportCsvWriterTest {
         record.setEmail(email);
         record.setId("id");
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken", null, null);
+        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
         tokens.add(newToken);
         record.setTokens(tokens);
         record.setLastNotified(Instant.now());

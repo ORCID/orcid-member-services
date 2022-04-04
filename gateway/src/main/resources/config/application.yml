@@ -99,6 +99,10 @@ management:
         auto-time-requests: true
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
   application:
     name: gateway
   jmx:
@@ -139,6 +143,7 @@ server:
     session:
       cookie:
         http-only: true
+        secure: true
 
 # Properties to be exposed on the /info management endpoint
 info:

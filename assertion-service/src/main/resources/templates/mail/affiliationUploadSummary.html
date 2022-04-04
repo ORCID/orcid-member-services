@@ -58,6 +58,19 @@
 	        	duplicates
 	        </span>
 	    </p>
+	    <span th:if="${not #lists.isEmpty(summary.registryDeleteFailures)}">
+	    	<p>
+		    	<span th:text="#{email.affiliationUploadSummary.deleteFailures}">
+		        	There were errors deleting the following affiliations in the registry:
+		        </span>
+		        <span th:each="id: ${summary.registryDeleteFailures}">
+		        	<span th:text="${id}">
+				        x
+				    </span>
+				    <br />
+		        </span>
+	    	</p>
+	    </span>
     </span>
     <span th:if="${not #lists.isEmpty(summary.errors)}">
 	    <p>

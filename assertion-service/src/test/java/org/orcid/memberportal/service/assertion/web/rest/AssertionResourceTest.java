@@ -18,8 +18,6 @@ import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,7 +63,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
-class AssertionServiceResourceTest {
+class AssertionResourceTest {
 
     private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
 
@@ -94,7 +92,7 @@ class AssertionServiceResourceTest {
     private GridOrgValidator gridOrgValidator;
 
     @InjectMocks
-    private AssertionServiceResource assertionServiceResource;
+    private AssertionResource assertionServiceResource;
 
     @BeforeEach
     public void setUp() {
@@ -116,30 +114,13 @@ class AssertionServiceResourceTest {
     }
 
     @Test
-    void testDeleteAssertionFromOrcidSuccessful() throws JSONException, JAXBException {
-        Mockito.when(assertionService.deleteAssertionFromOrcidRegistry(Mockito.eq("assertionId"), Mockito.any(AssertionServiceUser.class))).thenReturn(Boolean.TRUE);
-        ResponseEntity<String> response = assertionServiceResource.deleteAssertionFromOrcid("assertionId");
-        String body = response.getBody();
-        assertEquals("{\"deleted\":true}", body);
-    }
-
-    @Test
-    void testDeleteAssertionFromOrcidFailure() throws JSONException, JAXBException {
-        Mockito.when(assertionService.deleteAssertionFromOrcidRegistry(Mockito.eq("assertionId"), Mockito.any(AssertionServiceUser.class))).thenReturn(Boolean.FALSE);
-        Mockito.when(assertionService.findById(Mockito.eq("assertionId"))).thenReturn(getAssertionWithError());
-        ResponseEntity<String> response = assertionServiceResource.deleteAssertionFromOrcid("assertionId");
-        String body = response.getBody();
-        assertEquals("{\"deleted\":false,\"error\":\"not found\",\"statusCode\":404}", body);
-    }
-
-    @Test
     void testGetOrcidRecord() throws IOException, org.codehaus.jettison.json.JSONException {
         String email = "email@email.com";
         String encrypted = encryptUtil.encrypt(DEFAULT_SALESFORCE_ID + "&&" + email);
 
         OrcidRecord record = new OrcidRecord();
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken", null, null);
+        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
         tokens.add(newToken);
         record.setTokens(tokens);
 
@@ -310,7 +291,7 @@ class AssertionServiceResourceTest {
         Mockito.verify(assertionService, Mockito.never()).postAssertionToOrcid(Mockito.any(Assertion.class));
         Mockito.verify(assertionService, Mockito.never()).putAssertionInOrcid(Mockito.any(Assertion.class));
         Mockito.verify(assertionService, Mockito.never()).updateAssertion(Mockito.any(Assertion.class), Mockito.any(AssertionServiceUser.class));
-        Mockito.verify(assertionService).updateOrcidIdsForEmail(Mockito.eq(email));
+        Mockito.verify(assertionService).updateOrcidIdsForEmailAndSalesforceId(Mockito.eq(email), Mockito.eq(DEFAULT_SALESFORCE_ID));
     }
 
     @Test
@@ -381,16 +362,6 @@ class AssertionServiceResourceTest {
         assertion.setDisambiguatedOrgId("something");
         assertion.setDisambiguationSource(Constants.RINGGOLD_ORG_SOURCE);
         assertion.setEmail(email);
-        return assertion;
-    }
-
-    private Assertion getAssertionWithError() {
-        Assertion assertion = getAssertion("error@error.com");
-        assertion.setId("assertionId");
-        JSONObject error = new JSONObject();
-        error.put("statusCode", 404);
-        error.put("error", "not found");
-        assertion.setOrcidError(error.toString());
         return assertion;
     }
 

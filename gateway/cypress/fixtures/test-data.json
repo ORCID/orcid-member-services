@@ -1,6 +1,5 @@
 {
-  "testString": "  !@#$%^&*()-=_  é航 2022-04-04t15-25-23  ",
-  ***REMOVED***,
+  "testString": "  !@#$%^&*()-=_  密漏 2022-04-04t16-20-02  ",
   "invalidEmail": "@test@email.com",
   "member": {
     "id": "619cc62aa7b11b00085b5bf8",
@@ -14,7 +13,7 @@
       },
       "newUser": {
         "id": "",
-        "email": "qa+mp_cy_2022-04-04t15-25-23@orcid.org"
+        "email": "qa+mp_cy_2022-04-04t16-20-02@orcid.org"
       }
     }
   },

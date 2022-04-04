@@ -14,11 +14,28 @@
         "createOrEditLabel": { "string": "Adicionar ou editar afiliação" },
         "notFound": { "string": "Não foram encontradas afiliações" },
         "uploadLabel": { "string": "Importar afiliações de CSV" },
-        "getLinks": { "string": "Transferir ligações de permissão" },
-        "generateReport": { "string": "Transferir relatório do estado de afiliação" },
-        "exportForEdit": { "string": "Descarregar afiliações para edição" },
         "forHelpTroubleshooting": {
           "string": "Se precisar de ajuda a resolver este erro, por favor contacte o seu líder de consórcio ou membership@orcid.org. Por favor inclua uma captura de ecrã da mensagem de erro em baixo."
+        }
+      },
+      "reports": {
+        "links": {
+          "button": { "string": "Solicitar hiperligações de permissão" },
+          "confirmation": {
+            "string": "O seu ficheiro de hiperligações de permissão ser-lhe-á enviado por e-mail brevemente. Se não receber o seu ficheiro, contacte-nos através do e-mail membership@orcid.org."
+          }
+        },
+        "affiliationsReport": {
+          "button": { "string": "Solicitar relatório de estado de afiliação" },
+          "confirmation": {
+            "string": "O seu ficheiro de relatório de estado de afiliação ser-lhe-á enviado por e-mail brevemente. Se não receber o seu ficheiro, contacte-nos através do e-mail membership@orcid.org."
+          }
+        },
+        "affiliationsForEdit": {
+          "button": { "string": "Solicitar afiliações para editar" },
+          "confirmation": {
+            "string": "As suas afiliações para editar o ficheiro ser-lhe-ão enviadas por e-mail brevemente. Se não receber o seu ficheiro, contacte-nos através do e-mail membership@orcid.org."
+          }
         }
       },
       "delete": {
@@ -40,7 +57,9 @@
         "title": { "string": "Importar afiliações" },
         "label": { "string": "Selecione um ficheiro CRV para carregar" },
         "filePath": { "string": "Caminho de ficheiro" },
-        "success": { "string": "O seu CSV foi carregado para processamento." },
+        "successMessage": {
+          "string": "O seu CSV foi carregado para processamento. Avisá-lo-emos por e-mail assim que o ficheiro tiver sido processado."
+        },
         "failure": { "string": "Ocorreu um problema ao carregar o seu CSV para processamento." }
       },
       "addedToOrcid": { "string": "Adicionado ao ORCID" },

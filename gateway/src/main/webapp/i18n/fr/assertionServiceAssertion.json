@@ -14,11 +14,28 @@
         "createOrEditLabel": { "string": "Ajouter ou modifier une affiliation" },
         "notFound": { "string": "Aucune affiliation trouvée" },
         "uploadLabel": { "string": "Importer des affiliations à partir d'un CSV" },
-        "getLinks": { "string": "Liens d'autorisation de téléchargement" },
-        "generateReport": { "string": "Télécharger le rapport de situation de l'affiliation" },
-        "exportForEdit": { "string": "Télécharger les affiliations afin de les modifier" },
         "forHelpTroubleshooting": {
           "string": "Pour obtenir de l'aide en cas de problème, veuillez contacter l'équipe du portail des membres et copier-coller ci-dessous le message d'erreur ou en joindre une capture d'écran."
+        }
+      },
+      "reports": {
+        "links": {
+          "button": { "string": "Demander des liens d'autorisation" },
+          "confirmation": {
+            "string": "Votre fichier de liens d'autorisation vous sera envoyé sous peu. Si vous ne recevez pas votre fichier, veuillez nous contacter à membership@orcid.org."
+          }
+        },
+        "affiliationsReport": {
+          "button": { "string": "Demander un rapport sur l'état de l'affiliation" },
+          "confirmation": {
+            "string": "Votre fichier de rapport d'état d'affiliation vous sera envoyé sous peu. Si vous ne recevez pas votre fichier, veuillez nous contacter à membership@orcid.org."
+          }
+        },
+        "affiliationsForEdit": {
+          "button": { "string": "Demander des affiliations pour modification" },
+          "confirmation": {
+            "string": "Vos affiliations pour le fichier d'édition vous seront envoyées sous peu. Si vous ne recevez pas votre fichier, veuillez nous contacter à membership@orcid.org."
+          }
         }
       },
       "delete": {
@@ -40,7 +57,9 @@
         "title": { "string": "Importer les affiliations" },
         "label": { "string": "Veuillez sélectionner un fichier CSV à télécharger." },
         "filePath": { "string": "Chemin du fichier" },
-        "success": { "string": "Votre CSV a été téléchargé pour traitement." },
+        "successMessage": {
+          "string": "Votre CSV a été téléchargé pour traitement. Nous vous informerons par e-mail une fois le dossier traité."
+        },
         "failure": { "string": "Problème lors du téléchargement de votre CSV pour traitement." }
       },
       "addedToOrcid": { "string": "Ajouté à ORCID" },

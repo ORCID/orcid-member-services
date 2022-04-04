@@ -231,7 +231,6 @@ class AssertionsCsvReaderTest {
         assertNull(upload.getAssertions().get(3).getAddedToORCID());
         assertNull(upload.getAssertions().get(3).getAffiliationSection());
         assertNull(upload.getAssertions().get(3).getCreated());
-        assertNull(upload.getAssertions().get(3).getDeletedFromORCID());
     }
 
     @Test

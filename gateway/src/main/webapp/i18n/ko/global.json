@@ -24,7 +24,8 @@
       "report": {
         "member": { "string": "회원 보고서" },
         "integration": { "string": "통합 보고서" },
-        "consortium": { "string": "컨소시엄 보고서" }
+        "consortium": { "string": "컨소시엄 보고서" },
+        "affiliation": { "string": "제휴 보고서" }
       },
       "account": {
         "main": { "string": "계정" },

@@ -14,11 +14,28 @@
         "createOrEditLabel": { "string": "新增或編輯機關" },
         "notFound": { "string": "找不到任何機關" },
         "uploadLabel": { "string": "從 CSV 匯入所屬單位" },
-        "getLinks": { "string": "下載許可連結" },
-        "generateReport": { "string": "下載機關狀態報告" },
-        "exportForEdit": { "string": "下載機關以編輯" },
         "forHelpTroubleshooting": {
           "string": "如果您需要協助疑難排解此錯誤，請連絡您的聯盟領導人或 membership@orcid.org。請在下方附上錯誤訊息的螢幕擷取畫面。"
+        }
+      },
+      "reports": {
+        "links": {
+          "button": { "string": "要求權限連結" },
+          "confirmation": {
+            "string": "您的權限連結檔案稍後將寄送給您。若您未收到，請透過 membership@orcid.org 與我們聯繫。"
+          }
+        },
+        "affiliationsReport": {
+          "button": { "string": "要求聯盟狀態報告" },
+          "confirmation": {
+            "string": "您的聯盟狀態報告檔案稍後將寄送給您。若您未收到，請透過 membership@orcid.org 與我們聯繫。"
+          }
+        },
+        "affiliationsForEdit": {
+          "button": { "string": "要求編輯的聯盟關係" },
+          "confirmation": {
+            "string": "您的編輯聯盟關係檔案稍後將寄送給您。若您未收到，請透過 membership@orcid.org 與我們聯繫。"
+          }
         }
       },
       "delete": {
@@ -40,7 +57,9 @@
         "title": { "string": "匯入機關" },
         "label": { "string": "請選擇欲上傳的 CSV 檔案" },
         "filePath": { "string": "檔案路徑" },
-        "success": { "string": "您的 CSV 已上傳進行處理。" },
+        "successMessage": {
+          "string": "您的 CSV 已上傳進行處理。檔案處理完成後，我們將寄信告知您。"
+        },
         "failure": { "string": "在上傳您要處理的 CSV 檔案時發生問題。" }
       },
       "addedToOrcid": { "string": "已新增至 ORCID" },

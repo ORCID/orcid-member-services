@@ -3,7 +3,6 @@ let newUser = () => {
   let testString = '  !@#$%^&*()-=_  ' + randomString() + ' ' + date + '  '
   return {
     email: 'qa' + '+mp_cy_' + date + '@orcid.org',
-    password: 'test1234',
     testString
   }
 }

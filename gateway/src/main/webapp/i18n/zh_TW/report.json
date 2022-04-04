@@ -9,6 +9,9 @@
       },
       "consortia": {
         "title": { "string": "新增為重新導向的網址" }
+      },
+      "affiliation": {
+        "title": { "string": "聯盟關係報告" }
       }
     }
   }
