@@ -94,7 +94,8 @@ public class MemberValidator {
     private void validateConsortiumLeadAndParentSalesforceId(Member member, MemberServiceUser user, List<String> errors) {
         if (member.getIsConsortiumLead() == null) {
             errors.add(getError("missingConsortiumLead", user));
-        } else if (member.getIsConsortiumLead() && !StringUtils.isBlank(member.getParentSalesforceId())) {
+        } else if (member.getIsConsortiumLead() && !StringUtils.isBlank(member.getParentSalesforceId())
+                && !member.getParentSalesforceId().equals(member.getSalesforceId())) {
             errors.add(getError("parentSalesforceIdNotAllowed", user));
         }
     }
@@ -106,21 +107,21 @@ public class MemberValidator {
             errors.add(getError("invalidAssertionsEnabled", user));
         }
     }
-    
+
     private void validateType(Member member, MemberServiceUser user, List<String> errors) {
         if (member.getType() != null) {
             if (!MEMBER_TYPE_BASIC.equals(member.getType()) && !MEMBER_TYPE_PREMIUM.equals(member.getType())) {
                 errors.add(getError("invalidMemberType", user));
             }
-        } 
+        }
     }
-    
+
     private void validateStatus(Member member, MemberServiceUser user, List<String> errors) {
         if (member.getStatus() != null) {
             if (!MEMBER_STATUS_ACTIVE.equals(member.getStatus()) && !MEMBER_STATUS_DEACTIVATED.equals(member.getStatus())) {
                 errors.add(getError("invalidMemberStatus", user));
             }
-        } 
+        }
     }
 
     private String getError(String code, MemberServiceUser user) {
