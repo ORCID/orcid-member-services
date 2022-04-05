@@ -30,10 +30,9 @@ describe('Add new user', () => {
     // check "Organization owner"
     cy.get('#field_mainContact').click();
     // save
-    cy.pause();
     cy.get('#save-entity').click();
     cy.get('.alert-success').should('exist');
-    cy.pause();
+
     // check org owner update email
     const date = new Date()
     cy.checkInbox(data.outbox.ownerUpdateSubject, date);
