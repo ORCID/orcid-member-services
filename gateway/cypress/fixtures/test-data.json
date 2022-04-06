@@ -26,6 +26,10 @@
       "owner": {
         "id": "624583472ab79c0008809b89",
         "email": "qa+mp_cy_test_account@orcid.org"
+      },
+      "user": {
+        "id": "624d5a402ab79c000880a3ce",
+        "email": "qa+mp_cy_test_user@orcid.org"
       }
     }
   },
