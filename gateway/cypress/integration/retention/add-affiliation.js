@@ -75,6 +75,10 @@ describe('Add and remove affiliation', () => {
   it('Grant permission and check ORCID record for added affiliation', () => {
     // Get permission link
     cy.visit('/assertion');
+    cy.get('tbody').children().first().children().eq(1).contains(record.email);
+    cy.get('tbody').children().first().children().eq(2).should('not.contain', record.id);
+    cy.get('tbody').children().first().children().eq(3).contains(record.affiliation.type);
+    cy.get('tbody').children().first().children().eq(4).contains('Pending');
     cy.get('tbody')
       .children()
       .last()
@@ -141,6 +145,12 @@ describe('Add and remove affiliation', () => {
       }
     );
   });
+
+  it('Confirm UI changes on the assertion page', () => {
+    cy.visit('/assertion');
+    cy.get('tbody').children().first().children().eq(2).contains(record.id);
+    cy.get('tbody').children().first().children().eq(4).contains('In ORCID');
+  })
 
   it('Delete affiliation', () => {
     cy.visit('/assertion');
