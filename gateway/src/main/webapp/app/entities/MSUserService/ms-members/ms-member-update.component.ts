@@ -12,15 +12,15 @@ import { BASE_URL, ORCID_BASE_URL } from 'app/app.constants';
 import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
 import { JhiAlertService } from 'ng-jhipster';
 
-function consortiumLeadValidator(): ValidatorFn {
+function parentSalesforceIdValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
-    if (control.value !== undefined && control.parent !== undefined) {
-      const isConsortiumLead = control.value;
-      if (isConsortiumLead) {
-        control.parent.get('parentSalesforceId').disable();
-        control.parent.get('parentSalesforceId').setValue(null);
-      } else {
-        control.parent.get('parentSalesforceId').enable();
+    if (control.parent !== undefined && control.value !== undefined && isNaN(control.value)) {
+      const parentSalesforceId = control.value;
+      const isConsortiumLead = control.parent.get('isConsortiumLead').value;
+      const salesforceId = control.parent.get('salesforceId').value;
+
+      if (isConsortiumLead && parentSalesforceId !== salesforceId) {
+        return { validParentSalesforceIdValue: false };
       }
     }
     return null;
@@ -78,8 +78,8 @@ export class MSMemberUpdateComponent implements OnInit {
     clientId: new FormControl(null, [clientIdValidator()]),
     clientName: [null, [Validators.required]],
     salesforceId: [null, [Validators.required]],
-    parentSalesforceId: [],
-    isConsortiumLead: [null, [Validators.required, consortiumLeadValidator()]],
+    parentSalesforceId: [null, [parentSalesforceIdValidator()]],
+    isConsortiumLead: [null, [Validators.required]],
     assertionServiceEnabled: [],
     createdBy: [],
     createdDate: [],

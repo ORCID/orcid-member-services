@@ -175,6 +175,19 @@ public class MemberValidatorTest {
         Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.parentSalesforceIdNotAllowed", propertyName);
+        
+        member.setSalesforceId("legal");
+        member.setParentSalesforceId("legal");
+        validation = memberValidator.validate(member, getUser());
+        assertTrue(validation.isValid());
+        errors = validation.getErrors();
+        assertEquals(0, errors.size());
+        
+        member.setParentSalesforceId(null);
+        validation = memberValidator.validate(member, getUser());
+        assertTrue(validation.isValid());
+        errors = validation.getErrors();
+        assertEquals(0, errors.size());
     }
 
     @Test
