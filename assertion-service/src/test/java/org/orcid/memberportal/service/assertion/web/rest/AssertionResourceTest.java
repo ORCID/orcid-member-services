@@ -105,12 +105,46 @@ class AssertionResourceTest {
     }
     
     @Test
-    void testGetAssertion() throws BadRequestAlertException, org.codehaus.jettison.json.JSONException {
-        Mockito.when(assertionService.findById(Mockito.eq("test"))).thenReturn(new Assertion());
+    void testGetAssertionOfPendingStatus() {
+        Assertion pendingAssertion = new Assertion();
+        pendingAssertion.setStatus(AssertionStatus.PENDING.name());
+        Mockito.when(assertionService.findById(Mockito.eq("test"))).thenReturn(pendingAssertion);
         Mockito.doNothing().when(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
         assertionServiceResource.getAssertion("test");
         Mockito.verify(assertionService).findById(Mockito.eq("test"));
         Mockito.verify(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
+    }
+    
+    @Test
+    void testGetAssertionOfDeniedAccessStatus() {
+        Assertion pendingAssertion = new Assertion();
+        pendingAssertion.setStatus(AssertionStatus.USER_DENIED_ACCESS.name());
+        Mockito.when(assertionService.findById(Mockito.eq("test"))).thenReturn(pendingAssertion);
+        Mockito.doNothing().when(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
+        assertionServiceResource.getAssertion("test");
+        Mockito.verify(assertionService).findById(Mockito.eq("test"));
+        Mockito.verify(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
+    }
+    
+    @Test
+    void testGetAssertionOfRevokedAccessStatus() {
+        Assertion pendingAssertion = new Assertion();
+        pendingAssertion.setStatus(AssertionStatus.USER_REVOKED_ACCESS.name());
+        Mockito.when(assertionService.findById(Mockito.eq("test"))).thenReturn(pendingAssertion);
+        Mockito.doNothing().when(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
+        assertionServiceResource.getAssertion("test");
+        Mockito.verify(assertionService).findById(Mockito.eq("test"));
+        Mockito.verify(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
+    }
+    
+    @Test
+    void testGetAssertionOfInOrcidStatus() {
+        Assertion pendingAssertion = new Assertion();
+        pendingAssertion.setStatus(AssertionStatus.IN_ORCID.name());
+        Mockito.when(assertionService.findById(Mockito.eq("test"))).thenReturn(pendingAssertion);
+        assertionServiceResource.getAssertion("test");
+        Mockito.verify(assertionService).findById(Mockito.eq("test"));
+        Mockito.verify(assertionService, Mockito.never()).populatePermissionLink(Mockito.any(Assertion.class));
     }
 
     @Test

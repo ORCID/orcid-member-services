@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import org.orcid.memberportal.service.assertion.config.Constants;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.domain.validation.OrcidUrlValidator;
 import org.orcid.memberportal.service.assertion.domain.validation.org.impl.GridOrgValidator;
@@ -130,7 +131,9 @@ public class AssertionResource {
     public ResponseEntity<Assertion> getAssertion(@PathVariable String id) {
         LOG.debug("REST request to fetch assertion {} from user {}", id, SecurityUtils.getCurrentUserLogin().get());
         Assertion assertion = assertionService.findById(id);
-        assertionService.populatePermissionLink(assertion);
+        if (populatePermissionLink(assertion)) {
+            assertionService.populatePermissionLink(assertion);
+        }
         return ResponseEntity.ok().body(assertion);
     }
 
@@ -308,6 +311,12 @@ public class AssertionResource {
         LOG.info("CSV for editing requested by {}", userLogin);
         assertionService.generateAssertionsCSV();
         return ResponseEntity.ok().build();
+    }
+    
+    private boolean populatePermissionLink(Assertion assertion) {
+        return AssertionStatus.PENDING.name().equals(assertion.getStatus()) || 
+                AssertionStatus.USER_REVOKED_ACCESS.name().equals(assertion.getStatus()) || 
+                AssertionStatus.USER_DENIED_ACCESS.name().equals(assertion.getStatus());
     }
 
     private void validateAssertion(Assertion assertion) {
