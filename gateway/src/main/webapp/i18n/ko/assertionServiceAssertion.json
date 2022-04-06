@@ -39,7 +39,9 @@
         }
       },
       "delete": {
-        "question": { "string": "{{ email }}에 대한 이 제휴를 정말 삭제하시겠습니까?" },
+        "question": {
+          "string": "{{ email }}에 대한 이 제휴를 삭제하시겠습니까? 포털과 레지스트리에서 제휴가 삭제됩니다. 사용자가 조직에 대한 권한을 취소했으므로, 항목을 추가하거나 편집하려면 권한을 다시 요청해야 합니다."
+        },
         "note": { "string": "이 제휴는 사용자의 ORCID 기록에서도 삭제됩니다." },
         "noteRevoked": {
           "string": "이 제휴는 회원 포털에서 삭제되지만 ORCID에는 유지됩니다. 사용자가 자신의 ORCID 기록에 대한 액세스 권한을 취소하여 귀하에게는 더 이상 ORCID 기록에서 이 항목을 삭제할 권한이 없습니다."
@@ -125,7 +127,8 @@
     "affiliation": {
       "created": { "string": "제휴 생성됨" },
       "updated": { "string": "제휴 업데이트됨" },
-      "deleted": { "string": "제휴 삭제됨" }
+      "deleted": { "string": "제휴 삭제됨" },
+      "problemDeleting": { "string": "제휴를 삭제하는 동안 문제가 발생했습니다." }
     }
   }
 }

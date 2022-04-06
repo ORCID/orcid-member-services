@@ -39,7 +39,9 @@
         }
       },
       "delete": {
-        "question": { "string": "确定要删除 {{ email }} 的机构吗？" },
+        "question": {
+          "string": "您确定要删除 {{ email }}的此从属关系吗？该从属关系将从门户网站和注册表中删除。由于用户已撤销给贵组织的权限，您需要重新请求权限才能添加或编辑任何项目。"
+        },
         "note": { "string": "此机构还将从用户的 ORCID 记录中删除。" },
         "noteRevoked": {
           "string": "此机构将从会员门户中删除，但仍会保留在 ORCID 中。 用户已撤销对其 ORCID 记录的访问权限，您不再有权从其 ORCID 记录中删除此项目。"
@@ -125,7 +127,8 @@
     "affiliation": {
       "created": { "string": "机构已创建" },
       "updated": { "string": "机构已更新" },
-      "deleted": { "string": "机构已删除" }
+      "deleted": { "string": "机构已删除" },
+      "problemDeleting": { "string": "删除从属关系时出现问题" }
     }
   }
 }

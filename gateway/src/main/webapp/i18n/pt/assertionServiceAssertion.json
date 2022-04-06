@@ -39,7 +39,9 @@
         }
       },
       "delete": {
-        "question": { "string": "Tem a certeza que quer apagar esta afiliação para {{ email }}?" },
+        "question": {
+          "string": "Tem a certeza de que deseja eliminar esta afiliação para {{{ email }}? A afiliação será eliminada do portal e do registo. Dado que o utilizador revogou a permissão da sua organização, terá de pedir novamente permissão para adicionar ou editar quaisquer itens.\n"
+        },
         "note": { "string": "Esta afiliação também será apagada do registo ORCID do utilizador." },
         "noteRevoked": {
           "string": "Esta afiliação será apagada do Portal de Membros, mas permanecerá no ORCID. O utilizador revogou o acesso ao respetivo registo do ORCID, pelo que já não tem permissão para apagar este item desse registo."
@@ -125,7 +127,8 @@
     "affiliation": {
       "created": { "string": "Afiliação criada" },
       "updated": { "string": "Afiliação atualizada" },
-      "deleted": { "string": "Afiliação excluída" }
+      "deleted": { "string": "Afiliação excluída" },
+      "problemDeleting": { "string": "Ocorreu um problema ao eliminar a afiliação" }
     }
   }
 }

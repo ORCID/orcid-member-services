@@ -39,7 +39,9 @@
         }
       },
       "delete": {
-        "question": { "string": "Jste si jisti, že chcete pro zrušit toto přidružení pro {{ email }}?" },
+        "question": {
+          "string": "Určitě si přejete odstranit toto přidružení pro {{ email }}? Přidružení bude odstraněno z portálu i z registru. Jelikož uživatel odebral vaší organizaci oprávnění, v případě potřeby přidat či upravit jakékoliv položky budete muset zažádat o oprávnění znovu."
+        },
         "note": { "string": "Toto přidružení bude také vymazáno ze záznamu ORCID daného uživatele." },
         "noteRevoked": {
           "string": "Toto přidružení bude smazáno z členského portálu, ale zůstane v ORCID. Uživatel zrušil přístup ke svým záznamům v ORCID a vy již nemáte oprávnění pro to, abyste mohli tuto položku ze záznamů ORCID smazat."
@@ -125,7 +127,8 @@
     "affiliation": {
       "created": { "string": "Přidružení vytvořeno" },
       "updated": { "string": "Přidružení aktualizováno" },
-      "deleted": { "string": "Afiliace smazána" }
+      "deleted": { "string": "Afiliace smazána" },
+      "problemDeleting": { "string": "Při odstraňování tohoto přidružení se vyskytl problém" }
     }
   }
 }

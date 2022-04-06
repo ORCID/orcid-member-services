@@ -39,7 +39,9 @@
         }
       },
       "delete": {
-        "question": { "string": "Êtes-vous sûr de vouloir supprimer cette affiliation pour {{ email }} ?" },
+        "question": {
+          "string": "Êtes-vous sûr de vouloir supprimer cette affiliation pour {{ email }} ? L'affiliation sera supprimée du portail et du registre. Comme l'utilisateur a révoqué l'autorisation de votre organisation, vous devrez à nouveau demander cette autorisation pour ajouter ou modifier des éléments."
+        },
         "note": { "string": "Cette affiliation sera également supprimée du dossier ORCID de l'utilisateur." },
         "noteRevoked": {
           "string": "Cette affiliation sera supprimée du Portail des membres mais restera dans ORCID. L'utilisateur a révoqué l'accès à son dossier ORCID et vous n'avez plus la permission de supprimer cet élément de son dossier ORCID."
@@ -125,7 +127,8 @@
     "affiliation": {
       "created": { "string": "Affiliation créée" },
       "updated": { "string": "Affiliation mise à jour" },
-      "deleted": { "string": "Affiliation supprimée" }
+      "deleted": { "string": "Affiliation supprimée" },
+      "problemDeleting": { "string": "Il y a eu un problème lors de la suppression de l'affiliation" }
     }
   }
 }
