@@ -23,8 +23,6 @@ public class ReportService {
 
     static final String FILTERS_PARAM = "filters";
     
-    static final String FILTER_PARAM = "filter";
-    
     static final String DRILLTHROUGHS_PARAM = "drillthroughs";
 
     static final String SETTINGS_PARAM = "settings";
@@ -146,7 +144,7 @@ public class ReportService {
     private Map<String, Object> getClaimsWithDrillthrough(Map<String, Object> permissions, String drillthroughKey) {
         Map<String, Object> claims = getClaims(permissions);
         Map<String, Object> drillthroughFilter = new HashMap<>();
-        drillthroughFilter.put(FILTER_PARAM, getMemberNameFilter());
+        drillthroughFilter.put(FILTERS_PARAM, getMemberNameFilter());
         Map<String, Object> drillthroughs = new HashMap<>();
         drillthroughs.put(drillthroughKey, drillthroughFilter);
         claims.put(DRILLTHROUGHS_PARAM, drillthroughs);

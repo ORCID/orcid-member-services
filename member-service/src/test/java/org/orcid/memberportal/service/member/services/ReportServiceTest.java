@@ -173,9 +173,9 @@ public class ReportServiceTest {
         assertThat(drillthroughs.get(ReportService.CONSORTIA_DRILLTHROUGH_KEY)).isNotNull();
         
         Map<String, Object> consortiaDrillthrough = (Map<String, Object>) drillthroughs.get(ReportService.CONSORTIA_DRILLTHROUGH_KEY);
-        assertThat(consortiaDrillthrough.get(ReportService.FILTER_PARAM)).isNotNull();
+        assertThat(consortiaDrillthrough.get(ReportService.FILTERS_PARAM)).isNotNull();
 
-        Map<String, Object> consortiaDrillthroughFilter = (Map<String, Object>) consortiaDrillthrough.get(ReportService.FILTER_PARAM);
+        Map<String, Object> consortiaDrillthroughFilter = (Map<String, Object>) consortiaDrillthrough.get(ReportService.FILTERS_PARAM);
         assertThat(consortiaDrillthroughFilter.get(ReportService.MEMBER_NAME_FILTER)).isNotNull();
         
         Map<String, Object> memberNameFilter = (Map<String, Object>) consortiaDrillthroughFilter.get(ReportService.MEMBER_NAME_FILTER);
