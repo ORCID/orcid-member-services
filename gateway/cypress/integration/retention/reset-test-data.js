@@ -5,10 +5,7 @@ import credentials from '../../fixtures/credentials.json';
 describe('Add new user', () => {
   it('Reset organization owner', () => {
     cy.programmaticSignin(credentials.adminEmail, credentials.adminPassword)
-    cy.visit(`/ms-user/${data.member.users.owner.id}/edit`)
-    cy.get("#field_mainContact").click()
-    cy.get('#save-entity').click()
-    cy.get('.alert-success').should('exist');
+    cy.changeOrgOwner()
   })
 
   it('Remove all affiliations from test group', function () {

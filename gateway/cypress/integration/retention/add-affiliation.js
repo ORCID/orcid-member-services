@@ -89,7 +89,7 @@ describe('Add and remove affiliation', () => {
         .filter('[jhitranslate="gatewayApp.assertionServiceAssertion.copyClipboard.string"]')
         .click()
     );
-    cy.pause();
+    //cy.pause();
     cy.task('getClipboard').then(data => {
       cy.visit(data);
     });

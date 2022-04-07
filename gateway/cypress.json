@@ -1,4 +1,5 @@
 {
   "baseUrl": "https://member-portal.qa.orcid.org",
-  "taskTimeout": 180000
+  "taskTimeout": 180000,
+  "ignoreTestFiles": "reset-test-data.js"
 }
