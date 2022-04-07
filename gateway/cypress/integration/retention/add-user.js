@@ -55,14 +55,7 @@ describe('Add new user', () => {
 
   it('Change organisation owner back to the original user', function() {
     cy.programmaticSignin(data.member.users.newUser.email, credentials.password);
-
-    cy.visit(`/ms-user/${data.member.users.owner.id}/edit`);
-
-    // check "Organization owner"
-    cy.get('#field_mainContact').click();
-    // save
-    cy.get('#save-entity').click();
-    cy.programmaticSignout();
+    cy.changeOrgOwner()
   });
 
   it('Remove added user', function() {
