@@ -19,7 +19,12 @@ describe('Add new user', () => {
     // email input field should have warning label
     cy.get('#field_email')
       .should('have.class', 'ng-invalid')
-      // correct email address
+      // enter existing email address
+      .clear()
+      .type(data.member.users.owner.email);
+    cy.get('#save-entity2').click();
+    cy.get('.validation-errors').children().should('have.length', 1)
+    cy.get('#field_email')
       .clear()
       .type(data.member.users.newUser.email);
     // check "Organization owner"
