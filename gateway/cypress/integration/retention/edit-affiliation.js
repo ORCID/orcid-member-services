@@ -7,19 +7,33 @@ import { recurse } from 'cypress-recurse';
 const testString = helpers.newUser.testString;
 
 describe('Edit an affiliation', () => {
-  it('Edit affiliation in the member portal', function() {
+  beforeEach(() => {
     cy.programmaticSignin(data.populatedMember.users.owner.email, credentials.password);
+  })
+  it('Edit affiliation in the member portal', function() {
+    cy.visit('/assertion')
     cy.visit(`/assertion/${record.affiliation.id}/edit`);
 
-    cy.get('#field_orgName').clear().type(testString);
-    cy.get('#field_orgCity').clear().type(testString);
-    cy.get('#field_departmentName').clear().type(testString);
-    cy.get('#field_roleTitle').clear().type(testString);
-
-    cy.get('#save-entity')
-      .click();
-    cy.get('.alert-success').should('exist');
+    cy.get('#field_orgName')
+      .clear()
+      .type(testString);
+    cy.get('#field_orgCity')
+      .clear()
+      .type(testString);
+    cy.get('#field_departmentName')
+      .clear()
+      .type(testString);
+    cy.get('#field_roleTitle')
+      .clear()
+      .type(testString);
+    cy.get('#save-entity').click();
     
+    cy.get('tbody')
+      .children()
+      .first()
+      .children()
+      .eq(4)
+      .contains('Pending retry in ORCID');
   });
 
   it('Confirm the affiliation has been updated in the registry', () => {
@@ -45,5 +59,12 @@ describe('Edit an affiliation', () => {
         delay: 30000 // delay before next iteration, ms
       }
     );
+    cy.visit('assertion')
+    cy.get('tbody')
+      .children()
+      .first()
+      .children()
+      .eq(4)
+      .contains('In ORCID');
   });
 });
