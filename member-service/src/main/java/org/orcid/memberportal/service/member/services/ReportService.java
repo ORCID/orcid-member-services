@@ -57,7 +57,7 @@ public class ReportService {
     
     static final String CONSORTIA_DRILLTHROUGH_KEY = "34687";
     
-    static final String MEMBER_NAME_FILTER = "client_model.public_sf_members.member_name";
+    static final String MEMBER_NAME_FILTER = "member_name";
     
     static final String HIDDEN_PARAM = "hidden";
 
