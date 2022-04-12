@@ -176,8 +176,9 @@
             <artifactId>logstash-logback-encoder</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.mongobee</groupId>
-            <artifactId>mongobee</artifactId>
+            <groupId>com.github.dalet-oss</groupId>
+	        <artifactId>mongobee</artifactId>
+	        <version>1.0.4</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
