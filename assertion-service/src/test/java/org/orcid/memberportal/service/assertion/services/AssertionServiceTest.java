@@ -261,13 +261,13 @@ class AssertionServiceTest {
                 Object[] args = invocation.getArguments();
                 Assertion assertion = (Assertion) args[0];
                 assertion.setId("12345");
-                assertion.setStatus("PENDING");
                 return assertion;
             }
         });
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithIdToken());
         a = assertionService.updateAssertion(a, getUser());
         assertNotNull(a.getStatus());
+        assertEquals(AssertionStatus.PENDING_RETRY.name(), a.getStatus());
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
         Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
     }

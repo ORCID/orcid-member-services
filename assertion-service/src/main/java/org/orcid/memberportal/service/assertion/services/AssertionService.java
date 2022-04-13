@@ -217,7 +217,7 @@ public class AssertionService {
 
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(assertion.getEmail());
         AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
-        assertion.setStatus(tokenDeniedStatus != null ? tokenDeniedStatus.name() : AssertionStatus.PENDING_RETRY.name());
+        existingAssertion.setStatus(tokenDeniedStatus != null ? tokenDeniedStatus.name() : AssertionStatus.PENDING_RETRY.name());
         assertion = assertionRepository.save(existingAssertion);
         setPrettyStatus(assertion);
         return assertion;
