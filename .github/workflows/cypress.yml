@@ -13,4 +13,3 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           working-directory: gateway
-          build: npm run build
