@@ -47,7 +47,6 @@ import org.orcid.memberportal.service.assertion.domain.StoredFile;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
-import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
@@ -325,30 +324,6 @@ class AssertionServiceTest {
     }
 
     @Test
-    void checkErrorWhereNoEmailInAssertion() {
-        // assertion with no email
-        Assertion a = new Assertion();
-        a.setId("1");
-        a.setOwnerId(DEFAULT_JHI_USER_ID);
-        a.setSalesforceId(DEFAULT_SALESFORCE_ID);
-
-        Mockito.when(assertionsRepository.findById("1")).thenReturn(Optional.of(a));
-        Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
-            @Override
-            public Assertion answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                Assertion assertion = (Assertion) args[0];
-                assertion.setId("12345");
-                return assertion;
-            }
-        });
-
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            assertionService.updateAssertion(a, getUser());
-        });
-    }
-
-    @Test
     void testPostAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
         Mockito.when(assertionsRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class)))
                 .thenReturn(getAssertionsForCreatingInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE))
@@ -414,8 +389,6 @@ class AssertionServiceTest {
     void testPostAssertionToOrcid_statusPendingToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
-        assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
-        assertEquals(AssertionStatus.PENDING.name(), assertion.getStatus());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
         Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
@@ -433,8 +406,6 @@ class AssertionServiceTest {
     void testPostAssertionToOrcid_statusPendingToUserRevokedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
-        assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
-        assertEquals(AssertionStatus.PENDING.name(), assertion.getStatus());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
         Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
@@ -468,7 +439,6 @@ class AssertionServiceTest {
         orcidRecord.setTokens(Arrays.asList(token));
 
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
-        assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
 
@@ -483,8 +453,6 @@ class AssertionServiceTest {
     void testPostAssertionToOrcid_statusPendingToErrorAddingToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
-        assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
-        assertEquals(AssertionStatus.PENDING.name(), assertion.getStatus());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
         Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
@@ -507,8 +475,7 @@ class AssertionServiceTest {
         Instant addedToOrcidAttempt = Instant.now();
         assertion.setLastSyncAttempt(addedToOrcidAttempt.minusMillis(10000l));
         assertion.setModified(Instant.now());
-        assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
-        assertEquals(AssertionStatus.PENDING_RETRY.name(), assertion.getStatus());
+        assertion.setStatus(AssertionStatus.PENDING_RETRY.name());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
         Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
@@ -549,8 +516,7 @@ class AssertionServiceTest {
 
         assertionService.putAssertionsInOrcid();
 
-        // findByEmail called for each assertion examined then again to calculate status of each posted (5 in this case)
-        Mockito.verify(orcidRecordService, Mockito.times((int) (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5) + 5)).findOneByEmail(Mockito.anyString());
+        Mockito.verify(orcidRecordService, Mockito.times((int) (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5))).findOneByEmail(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(), assertionCaptor.capture());
 
@@ -567,8 +533,7 @@ class AssertionServiceTest {
         assertion.setAddedToORCID(addedToOrcid);
         assertion.setLastSyncAttempt(addedToOrcid);
         assertion.setModified(Instant.now());
-        assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
-        assertEquals(AssertionStatus.PENDING_RETRY.name(), assertion.getStatus());
+        assertion.setStatus(AssertionStatus.PENDING_RETRY.name());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
         Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
@@ -590,8 +555,7 @@ class AssertionServiceTest {
         assertion.setAddedToORCID(addedToOrcid);
         assertion.setLastSyncAttempt(addedToOrcid);
         assertion.setModified(Instant.now());
-        assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
-        assertEquals(AssertionStatus.PENDING_RETRY.name(), assertion.getStatus());
+        assertion.setStatus(AssertionStatus.PENDING_RETRY.name());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
         Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
@@ -612,8 +576,7 @@ class AssertionServiceTest {
         assertion.setAddedToORCID(addedToOrcid);
         assertion.setLastSyncAttempt(addedToOrcid);
         assertion.setModified(Instant.now());
-        assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
-        assertEquals(AssertionStatus.PENDING_RETRY.name(), assertion.getStatus());
+        assertion.setStatus(AssertionStatus.PENDING_RETRY.name());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
         Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
@@ -646,7 +609,7 @@ class AssertionServiceTest {
         orcidRecord.setTokens(Arrays.asList(token));
 
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
-        assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
+        assertion.setStatus(AssertionStatus.PENDING_RETRY.name());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
 
@@ -666,8 +629,7 @@ class AssertionServiceTest {
         assertion.setAddedToORCID(addedToOrcid);
         assertion.setLastSyncAttempt(addedToOrcid);
         assertion.setModified(Instant.now());
-        assertion.setStatus(AssertionUtils.getAssertionStatus(assertion, orcidRecord, AssertionStatus.ERROR_ADDING_TO_ORCID.name()));
-        assertEquals(AssertionStatus.PENDING_RETRY.name(), assertion.getStatus());
+        assertion.setStatus(AssertionStatus.PENDING_RETRY.name());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
         Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
