@@ -94,15 +94,15 @@ Cypress.Commands.add('programmaticSignout', () => {
   });
 });
 
-Cypress.Commands.add('processPasswordForm', () => {
+Cypress.Commands.add('processPasswordForm', (newPasswordFieldId) => {
   cy.get('button')
     .filter('[type="submit"]')
     // make sure you can't activate account without providing a password
     .invoke('attr', 'disabled')
     .should('exist');
   // type invalid passwords
-  cy.get('#password').type(credentials.shortPassword);
-  cy.get('#confirmPassword').type(credentials.shortConfirmationPassword);
+  cy.get(newPasswordFieldId).clear().type(credentials.shortPassword);
+  cy.get('#confirmPassword').clear().type(credentials.shortConfirmationPassword);
   // check for min length error messages
   cy.get('small')
     .filter('[jhitranslate="global.messages.validate.newpassword.minlength.string"]')
@@ -111,7 +111,7 @@ Cypress.Commands.add('processPasswordForm', () => {
     .filter('[jhitranslate="global.messages.validate.confirmpassword.minlength.string"]')
     .should('exist');
   // fix password
-  cy.get('#password')
+  cy.get(newPasswordFieldId)
     .clear()
     .type(credentials.password);
   // enter invalid confirmation password
