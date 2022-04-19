@@ -43,7 +43,7 @@ describe('Add new user', () => {
     });
 
 
-    cy.processPasswordForm();
+    cy.processPasswordForm('#password');
     // check success message
     cy.get('.alert-success').within(() => {
       cy.get('a')
