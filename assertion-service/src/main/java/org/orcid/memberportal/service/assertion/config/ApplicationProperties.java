@@ -47,7 +47,9 @@ public class ApplicationProperties {
     private String csvReportsDirectory;
     
     private String removeStoredFilesDelay;
-
+    
+    private String notificationAccessToken;
+    
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
     }
@@ -200,8 +202,14 @@ public class ApplicationProperties {
         this.csvReportsDirectory = csvReportsDirectory;
     }
 
+    public String getNotificationAccessToken() {
+        return notificationAccessToken;
+    }
 
-
+    public void setNotificationAccessToken(String notificationAccessToken) {
+        this.notificationAccessToken = notificationAccessToken;
+    }
+    
     public static class TokenExchange {
         private String endpoint;
         private String grantType;
