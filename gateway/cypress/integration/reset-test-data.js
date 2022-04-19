@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
-import data from '../../fixtures/test-data.json';
-import credentials from '../../fixtures/credentials.json';
+import data from '../fixtures/test-data.json';
+import credentials from '../fixtures/credentials.json';
 
 describe('Add new user', () => {
   it('Reset organization owner', () => {

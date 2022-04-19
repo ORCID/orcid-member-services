@@ -151,3 +151,5 @@ Desktop.ini
 /cypress/plugins/credentials_qa.json
 /cypress/plugins/token_qa.json
 /cypress/fixtures/credentials.json
+/cypress/videos
+/cypress/screenshots
