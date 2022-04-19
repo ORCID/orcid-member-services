@@ -22,7 +22,7 @@ import org.orcid.jaxb.model.v3.release.record.Qualification;
 import org.orcid.jaxb.model.v3.release.record.Service;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 
-public class OrcidAffiliationAdapter {
+public class AffiliationAdapter {
 
     public static Affiliation toOrcidAffiliation(Assertion assertion) {
         Affiliation orcidAffiliation;
