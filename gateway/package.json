@@ -122,6 +122,8 @@
     "build": "npm run webpack:prod",
     "test": "npm run lint && jest --coverage --logHeapUsage -w=2 --config src/test/javascript/jest.conf.js",
     "test:watch": "npm run test -- --watch",
+    "cy:run": "cypress run --spec \"cypress/integration/retention/*.js\"",
+    "cy:reset": "cypress run --spec \"cypress/integration/reset-test-data.js\"",
     "webpack:dev": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --env.stats=minimal",
     "webpack:dev-verbose": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --profile --progress --env.stats=normal",
     "webpack:build:main": "npm run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",

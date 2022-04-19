@@ -40,7 +40,7 @@ jobs:
           name: cypress-screenshots
           path: gateway/cypress/screenshots
       - uses: actions/upload-artifact@v2
-        if: always()
+        if: failure()
         with:
           name: cypress-videos
           path: gateway/cypress/videos
