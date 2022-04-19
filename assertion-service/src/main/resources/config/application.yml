@@ -195,6 +195,7 @@ application:
     generateMemberAssertionStatsCron: ${MEMBER_ASSERTION_STATS_CRON}
     processAssertionUploadsDelay: 180000
     removeStoredFilesDelay: 300000
+    notificationAccessToken: ${APPLICATION_NOTIFICATION_ACCESS_TOKEN}
     tokenExchange:
         endpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}
         grantType: ${APPLICATION_TOKEN_EXCHANGE_GRANT_TYPE}
