@@ -202,7 +202,6 @@ class AssertionServiceTest {
         a.setSalesforceId(DEFAULT_SALESFORCE_ID);
         
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getOptionalOrcidRecordWithIdToken());
-
         Mockito.when(assertionsRepository.insert(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
             @Override
             public Assertion answer(InvocationOnMock invocation) throws Throwable {
@@ -228,8 +227,37 @@ class AssertionServiceTest {
         a.setId("1");
         a.setEmail("email");
         a.setOwnerId(DEFAULT_JHI_USER_ID);
+        a.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        
+        OrcidRecord recordWithTokenPlaceholder = getOrcidRecord("1");
+        recordWithTokenPlaceholder.setTokens(Arrays.asList(new OrcidToken(DEFAULT_SALESFORCE_ID, null)));
 
-        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getOptionalOrcidRecordWithoutIdToken());
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(Optional.of(recordWithTokenPlaceholder));
+        Mockito.when(assertionsRepository.insert(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
+            @Override
+            public Assertion answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                Assertion assertion = (Assertion) args[0];
+                assertion.setId("12345");
+                return assertion;
+            }
+        });
+
+        assertionService.createAssertion(a, getUser());
+        Mockito.verify(assertionsRepository, Mockito.times(1)).insert(assertionCaptor.capture());
+        
+        Assertion inserted = assertionCaptor.getValue();
+        assertNull(inserted.getOrcidId());
+    }
+    
+    @Test
+    void testCreateAssertionNoOrcidRecord() {
+        Assertion a = new Assertion();
+        a.setId("1");
+        a.setEmail("email");
+        a.setOwnerId(DEFAULT_JHI_USER_ID);
+
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(Optional.empty());
 
         Mockito.when(assertionsRepository.insert(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
             @Override
@@ -237,14 +265,15 @@ class AssertionServiceTest {
                 Object[] args = invocation.getArguments();
                 Assertion assertion = (Assertion) args[0];
                 assertion.setId("12345");
-                assertion.setStatus("PENDING");
                 return assertion;
             }
         });
 
         assertionService.createAssertion(a, getUser());
-        Mockito.verify(assertionsRepository, Mockito.times(1)).insert(Mockito.eq(a));
-
+        Mockito.verify(assertionsRepository, Mockito.times(1)).insert(assertionCaptor.capture());
+        
+        Assertion inserted = assertionCaptor.getValue();
+        assertNull(inserted.getOrcidId());
     }
 
     @Test

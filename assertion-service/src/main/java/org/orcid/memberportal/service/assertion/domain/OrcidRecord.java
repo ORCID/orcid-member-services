@@ -124,9 +124,19 @@ public class OrcidRecord {
     public void setModified(Instant modified) {
         this.modified = modified;
     }
+    
+    public boolean tokenExists(String salesforceId) {
+        if (tokens != null) {
+            for (OrcidToken token : tokens) {
+                if (StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public String getToken(String salesforceId, boolean includeRevoked) {
-        List<OrcidToken> tokens = this.getTokens();
         if (tokens != null) {
             for (OrcidToken token : tokens) {
                 if (StringUtils.equals(token.getSalesforceId(), salesforceId)) {

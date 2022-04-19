@@ -162,6 +162,7 @@ public class AssertionService {
         assertion.setModified(now);
         assertion.setLastModifiedBy(owner.getEmail());
         assertion.setSalesforceId(owner.getSalesforceId());
+        assertion.setStatus(AssertionStatus.PENDING.name());
 
         String email = assertion.getEmail();
 
@@ -170,33 +171,26 @@ public class AssertionService {
             orcidRecordService.createOrcidRecord(email, now, assertion.getSalesforceId());
         } else {
             OrcidRecord record = optionalRecord.get();
-            List<OrcidToken> tokens = record.getTokens();
-            boolean createToken = true;
-            if (tokens == null || tokens.size() == 0) {
-                tokens = new ArrayList<OrcidToken>();
-                createToken = true;
-            } else {
-                for (OrcidToken token : tokens) {
-                    if (StringUtils.equals(token.getSalesforceId().trim(), assertion.getSalesforceId().trim())) {
-                        createToken = false;
-                        break;
-                    }
+            if (record.getTokens() == null || record.getTokens().isEmpty() || !record.tokenExists(assertion.getSalesforceId())) {
+                if (record.getTokens() == null) {
+                    record.setTokens(new ArrayList<>());
                 }
-            }
-
-            if (createToken) {
-                tokens.add(new OrcidToken(assertion.getSalesforceId(), null));
-                record.setTokens(tokens);
+                record.getTokens().add(new OrcidToken(assertion.getSalesforceId(), null));
                 record.setModified(Instant.now());
                 orcidRecordService.updateOrcidRecord(record);
             } else {
-                assertion.setOrcidId(record.getOrcid());
+                AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
+                if (tokenDeniedStatus != null) {
+                    assertion.setStatus(tokenDeniedStatus.name());
+                } else {
+                    String activeToken = record.getToken(assertion.getSalesforceId(), false);
+                    if (activeToken != null && !activeToken.isBlank()) {
+                        assertion.setOrcidId(record.getOrcid());
+                    }
+                }
             }
-
         }
 
-        AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
-        assertion.setStatus(tokenDeniedStatus != null ? tokenDeniedStatus.name() : AssertionStatus.PENDING.name());
         assertion = assertionRepository.insert(assertion);
         setPrettyStatus(assertion);
         return assertion;
@@ -349,7 +343,7 @@ public class AssertionService {
     public void postAssertionToOrcid(Assertion assertion) throws JAXBException {
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
         AssertionStatus deniedStatus = checkForTokenDeniedStatus(record, assertion);
-        
+
         if (tokenAndOrcidIdAvailable(record, assertion) && deniedStatus == null) {
             OrcidRecord orcidRecord = record.get();
             String idToken = orcidRecord.getToken(assertion.getSalesforceId(), false);
@@ -399,7 +393,7 @@ public class AssertionService {
     public void putAssertionInOrcid(Assertion assertion) throws JAXBException {
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
         AssertionStatus deniedStatus = checkForTokenDeniedStatus(record, assertion);
-        
+
         if (tokenAndOrcidIdAvailable(record, assertion) && !StringUtils.isBlank(assertion.getPutCode()) && deniedStatus == null) {
             OrcidRecord orcidRecord = record.get();
             String orcid = orcidRecord.getOrcid();
