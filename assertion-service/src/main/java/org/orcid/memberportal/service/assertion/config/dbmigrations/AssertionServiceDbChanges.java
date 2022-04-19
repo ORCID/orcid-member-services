@@ -88,4 +88,29 @@ public class AssertionServiceDbChanges {
         mongoTemplate.indexOps("orcid_record").ensureIndex(new Index("email", Direction.ASC).unique().named("email_unique_idx"));
     }
 
+    @ChangeSet(order = "06", author = "George Nash", id = "06-removeOrcidIdsFromAssertionsWithNoTokenAssociated")
+    public void removeOrcidIdsFromAssertionsWithNoTokenAssociated(MongoTemplate mongoTemplate) {
+        Query assertionsQuery = new Query();
+        assertionsQuery.addCriteria(Criteria.where("orcid_id").exists(true));
+        List<Assertion> assertionsWithOrcidId = mongoTemplate.find(assertionsQuery, Assertion.class, "assertion");
+        
+        LOG.info("Found {} assertions with orcid id populated", assertionsWithOrcidId.size());
+        int numRemoved = 0;
+        
+        for (Assertion a : assertionsWithOrcidId) {
+            Query orcidRecordQuery = new Query();
+            orcidRecordQuery.addCriteria(Criteria.where("email").is(a.getEmail()));
+            OrcidRecord orcidRecord = mongoTemplate.findOne(orcidRecordQuery, OrcidRecord.class, "orcid_record");
+            if (orcidRecord.getTokens() == null || orcidRecord.getTokens().isEmpty() || orcidRecord.getToken(a.getSalesforceId(), false) == null) {
+                // either no token or token is revoked / denied etc, remove orcid id from assertion
+                LOG.info("Removing orcid id from affiliation {}", a.getId());
+                a.setOrcidId(null);
+                mongoTemplate.save(a);
+                numRemoved++;
+            }
+        }
+        
+        LOG.info("{} orcid ids removed from affiliations", numRemoved);
+    }
+
 }
