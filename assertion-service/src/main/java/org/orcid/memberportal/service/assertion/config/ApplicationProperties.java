@@ -50,6 +50,8 @@ public class ApplicationProperties {
     
     private String notificationAccessToken;
     
+    private String processCsvReportsDelay;
+    
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
     }
@@ -210,6 +212,14 @@ public class ApplicationProperties {
         this.notificationAccessToken = notificationAccessToken;
     }
     
+    public String getProcessCsvReportsDelay() {
+        return processCsvReportsDelay;
+    }
+
+    public void setProcessCsvReportsDelay(String processCsvReportsDelay) {
+        this.processCsvReportsDelay = processCsvReportsDelay;
+    }
+
     public static class TokenExchange {
         private String endpoint;
         private String grantType;

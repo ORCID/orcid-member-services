@@ -193,7 +193,8 @@ application:
     memberAssertionStatsRecipient: ${MEMBER_ASSERTION_STATS_RECIPIENT}
     syncAffiliationsDelay: 60000
     generateMemberAssertionStatsCron: ${MEMBER_ASSERTION_STATS_CRON}
-    processAssertionUploadsDelay: 180000
+    processAssertionUploadsDelay: 120000
+    processCsvReportsDelay: 120000
     removeStoredFilesDelay: 300000
     notificationAccessToken: ${APPLICATION_NOTIFICATION_ACCESS_TOKEN}
     tokenExchange:
