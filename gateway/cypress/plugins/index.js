@@ -11,7 +11,7 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-const gmail_tester = require('gmail-tester-extended')
+const gmail_tester = require('gmail-tester')
 const path = require('path')
 const tokenFileName = 'token_qa.json' //token file is inside plugins/ directory
 const credentialsFileName = 'credentials_qa.json' //credentials is inside plugins/ directory
@@ -28,11 +28,6 @@ module.exports = (on, config) => {
       const email = await gmail_tester.check_inbox(
         path.resolve(__dirname, credentialsFileName),
         path.resolve(__dirname, tokenFileName),
-        subject,
-        from,
-        to,
-        15, // Poll interval (in seconds)
-        60 * 3, // Maximum poll interval (in seconds). If reached, return null, indicating the completion of the task().
         args.options
         )
         return email //this task returns one email (JSON object)

@@ -35,10 +35,10 @@ describe('Add new user', () => {
 
     // check org owner update email
     const date = new Date()
-    cy.checkInbox(data.outbox.ownerUpdateSubject, date);
+    cy.checkInbox(data.outbox.ownerUpdateSubject, data.member.users.newUser.email, date);
 
     // check activation email and follow the provided url
-    cy.checkInbox(data.outbox.activationSubject, date).then(email => {
+    cy.checkInbox(data.outbox.activationSubject, data.member.users.newUser.email, date).then(email => {
       cy.visitLinkFromEmail(email);
     });
 

@@ -23,6 +23,7 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+import 'cypress-file-upload';
 import data from '../fixtures/test-data.json';
 import credentials from '../fixtures/credentials.json';
 
@@ -145,12 +146,12 @@ Cypress.Commands.add('visitLinkFromEmail', (email) => {
   cy.visit(href)
 });
 
-Cypress.Commands.add('checkInbox', (subject, date) => {
+Cypress.Commands.add('checkInbox', (subject, recipient, date) => {
   cy.task('checkInbox', {
     options: {
       from: data.outbox.email,
-      to: data.member.users.newUser.email,
-      subject: data.outbox.activationSubject,
+      to: recipient,
+      subject,
       include_body: true,
       after: date
     }
@@ -168,5 +169,28 @@ Cypress.Commands.add('changeOrgOwner', () => {
   cy.get('#save-entity').click()
   cy.get('.alert-success').should('exist');
   cy.programmaticSignout()
+})
+
+Cypress.Commands.add('readCsv', (data) => {
+  var lines=data.split("\n");
+  var result = [];
+  var headers=lines[0].split(",");
+  for(var i=1;i<lines.length;i++){
+
+      var obj = {};
+      var currentline=lines[i].split(",");
+
+      for(var j=0;j<headers.length;j++){
+          obj[headers[j]] = currentline[j];
+      }
+      result.push(obj);
+  }
+  return result
+})
+
+Cypress.Commands.add('uploadCsv', (path) => {
+  cy.get('#jh-upload-entities').click()
+  cy.get('#field_filePath').attachFile(path)
+  cy.get('#jhi-confirm-csv-upload').click()
 })
 

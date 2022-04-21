@@ -6,7 +6,9 @@
     "email": "info@member-portal.qa.orcid.org",
     "activationSubject": "ORCID Member Portal activation",
     "resetPasswordSubject": "ORCID Member Portal password reset",
-    "ownerUpdateSubject": "ORCID Member Portal organization owner updated"
+    "ownerUpdateSubject": "ORCID Member Portal organization owner updated",
+    "csvUpload": "Your affiliation CSV upload",
+    "csvDownload": "Your affiliations for edit file"
   },
   "member": {
     "id": "619cc62aa7b11b00085b5bf8",
@@ -49,10 +51,6 @@
       "owner": {
         "id": "624583472ab79c0008809b89",
         "email": "qa+mp_cy_csv_member_owner@orcid.org"
-      },
-      "user": {
-        "id": "624d5a402ab79c000880a3ce",
-        "email": "qa+mp_cy_test_user@orcid.org"
       }
     }
   }
