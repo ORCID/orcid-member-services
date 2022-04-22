@@ -64,6 +64,7 @@ Cypress.Commands.add('programmaticSignin', (username, password) => {
         .getCookie('XSRF-TOKEN')
         .then(() => cy.programmaticSignin(username, password));
     } else {
+      cy.log(csrfCookie.value)
       cy.request({
         method: 'POST',
         url: '/auth/login',
@@ -83,6 +84,7 @@ Cypress.Commands.add('programmaticSignin', (username, password) => {
 
 Cypress.Commands.add('programmaticSignout', () => {
   cy.getCookie('XSRF-TOKEN').then(csrfCookie => {
+    cy.log(csrfCookie.value)
     cy.request({
       method: 'POST',
       url: '/auth/logout',

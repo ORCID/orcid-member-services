@@ -25,6 +25,10 @@ describe('Add and remove affiliation', () => {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
   });
 
+  afterEach(() => {
+    cy.programmaticSignout(data.member.users.owner.email, credentials.password);
+  });
+
   it('Add affiliation', function() {
     cy.visit('/assertion/new');
 
