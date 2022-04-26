@@ -21,16 +21,13 @@ describe('Test the password reset functionality', () => {
       .click();
 
     cy.task('checkInbox', {
-      options: {
-        from: data.outbox.email,
         to: data.member.users.owner.email,
         subject: data.outbox.resetPasswordSubject,
-        include_body: true,
-        after: Date.now()
-      }
+        after: Date.now(),
     }).then(email => {
       cy.visitLinkFromEmail(email);
     });
+    
     cy.processPasswordForm('#password');
 
     cy.get('.alert-success').within(() => {
