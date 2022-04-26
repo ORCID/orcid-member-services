@@ -34,6 +34,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           working-directory: gateway
+          spec: cypress/integration/retention/*
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
