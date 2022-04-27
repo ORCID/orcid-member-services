@@ -95,4 +95,5 @@ application:
     syncAffiliationsDelay: 300000
     processAssertionUploadsDelay: 300000
     removeStoredFilesDelay: 300000
+    processCsvReportsDelay: 300000
     generateMemberAssertionStatsCron: 0 30 * * * ?

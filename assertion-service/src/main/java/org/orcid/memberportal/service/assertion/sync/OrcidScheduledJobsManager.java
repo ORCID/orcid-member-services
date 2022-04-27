@@ -64,7 +64,7 @@ public class OrcidScheduledJobsManager {
         LOG.info("Old files removed");
     }
     
-    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.removeStoredFilesDelay}")
+    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.processCsvReportsDelay}")
     @SchedulerLock(name = "processCsvReports", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void sendCSVReports() throws IOException  {
         LOG.info("Running cron to process CSV reports");
