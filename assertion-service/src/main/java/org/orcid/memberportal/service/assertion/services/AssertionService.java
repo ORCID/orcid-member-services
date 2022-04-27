@@ -531,11 +531,11 @@ public class AssertionService {
         return orcidAPIClient.postAffiliation(orcid, accessToken, assertion);
     }
 
-    private boolean putInOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, JAXBException, ClientProtocolException, IOException {
+    private void putInOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, JAXBException, ClientProtocolException, IOException {
         LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
         String accessToken = orcidAPIClient.exchangeToken(idToken);
         LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
-        return orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
+        orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
     }
 
     private boolean checkRegistryDeletePreconditions(Optional<OrcidRecord> record, Assertion assertion) {
