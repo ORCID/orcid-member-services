@@ -1,0 +1,19 @@
+<form name="notificationForm" (ngSubmit)="send()">
+    <div class="modal-header">
+        <h4 class="modal-title" jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.title.string">Send permission notifications</h4>
+        <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <p id="jhi-delete-msUser-heading" jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.label.string">Are you sure you would like to send permission notifications to your researchers that have an ORCID iD?</p>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="close()">
+            <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
+        </button>
+        <button id="jhi-confirm-csv-upload" type="submit" class="btn btn-primary">
+            <fa-icon [icon]="faPaperPlane"></fa-icon>&nbsp;<span jhiTranslate="entity.action.ok.string">OK</span>
+        </button>
+    </div>
+</form>

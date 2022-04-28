@@ -3,7 +3,7 @@ import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/ht
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
-import { faChartBar, faFileDownload, faFileImport, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faFileDownload, faFileImport, faTimes, faSearch, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 import { AccountService } from 'app/core';
@@ -45,6 +45,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
   faFileImport = faFileImport;
   faTimes = faTimes;
   faSearch = faSearch;
+  faPaperPlane = faPaperPlane;
   searchTerm: string;
   submittedSearchTerm: string;
   showEditReportPendingMessage: boolean;

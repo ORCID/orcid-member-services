@@ -12,6 +12,8 @@ import {
   AssertionDeleteDialogComponent,
   AssertionImportPopupComponent,
   AssertionImportDialogComponent,
+  SendNotificationsPopupComponent,
+  SendNotificationsDialogComponent,
   assertionRoute,
   assertionPopupRoute
 } from './';
@@ -27,7 +29,9 @@ const ENTITY_STATES = [...assertionRoute, ...assertionPopupRoute];
     AssertionDeleteDialogComponent,
     AssertionDeletePopupComponent,
     AssertionImportPopupComponent,
-    AssertionImportDialogComponent
+    AssertionImportDialogComponent,
+    SendNotificationsPopupComponent,
+    SendNotificationsDialogComponent
   ],
   entryComponents: [
     AssertionComponent,
@@ -35,7 +39,9 @@ const ENTITY_STATES = [...assertionRoute, ...assertionPopupRoute];
     AssertionDeleteDialogComponent,
     AssertionDeletePopupComponent,
     AssertionImportPopupComponent,
-    AssertionImportDialogComponent
+    AssertionImportDialogComponent,
+    SendNotificationsPopupComponent,
+    SendNotificationsDialogComponent
   ],
   providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
