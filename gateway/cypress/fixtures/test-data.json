@@ -53,5 +53,17 @@
         "email": "qa+mp_cy_csv_member_owner@orcid.org"
       }
     }
+  },
+  "csvPopulatedMember": {
+    "id": "626ab07a30c49e0008669c9c",
+    "clientName": "CYPRESS CSV EDIT TEST",
+    "clientId": "APP-3KN4PG7TU5YV8H0J",
+    "salesforceId": "CYPRESS CSV EDIT TEST",
+    "users": {
+      "owner": {
+        "id": "626ab07a30c49e0008669c9c",
+        "email": "qa+mp_cy_csv_populated_member_owner@orcid.org"
+      }
+    }
   }
 }

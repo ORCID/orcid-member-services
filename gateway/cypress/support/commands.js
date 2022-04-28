@@ -26,7 +26,8 @@
 import 'cypress-file-upload';
 import data from '../fixtures/test-data.json';
 import credentials from '../fixtures/credentials.json';
-
+import record from '../fixtures/orcid-record.json';
+  
 Cypress.Commands.add('signin', (email, password) => {
   cy.get('#username')
     .clear()
@@ -194,5 +195,39 @@ Cypress.Commands.add('uploadCsv', (path) => {
   cy.get('#jh-upload-entities').click()
   cy.get('#field_filePath').attachFile(path)
   cy.get('#jhi-confirm-csv-upload').click()
+})
+
+Cypress.Commands.add('fetchLinkAndGrantPermission', () => {
+  // get perimssion link from first affiliation in the list
+  cy.get('tbody')
+    .children()
+    .last()
+    .within(() => {
+      cy.get('a')
+        .filter('[jhitranslate="gatewayApp.assertionServiceAssertion.details.string"]')
+        .click();
+    });
+  cy.get('.jh-entity-details').within(() =>
+  cy
+    .get('button')
+    .filter('[jhitranslate="gatewayApp.assertionServiceAssertion.copyClipboard.string"]')
+    .click()
+  );
+  cy.task('getClipboard').then(link => {
+    cy.visit(link);
+  });
+  // Grant permission
+  cy.get('#username')
+    .clear()
+    .type(record.email);
+  cy.get('#password').type(credentials.password);
+  cy.get('#signin-button').click();
+
+  // *ADD ID
+  cy.get('.mt-5').within(() => {
+    cy.get('h2')
+      .filter('[jhitranslate="landingPage.success.thanks.string"]')
+      .should('exist');
+  });
 })
 

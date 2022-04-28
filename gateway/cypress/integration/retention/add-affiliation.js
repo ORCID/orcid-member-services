@@ -86,38 +86,8 @@ describe('Add and remove affiliation', () => {
     cy.get('tbody').children().first().children().eq(2).should('not.contain', record.id);
     cy.get('tbody').children().first().children().eq(3).contains(record.affiliation.type);
     cy.get('tbody').children().first().children().eq(4).contains('Pending');
-    cy.get('tbody')
-      .children()
-      .last()
-      .within(() => {
-        cy.get('a')
-          .filter('[jhitranslate="gatewayApp.assertionServiceAssertion.details.string"]')
-          .click();
-      });
-    cy.get('.jh-entity-details').within(() =>
-      cy
-        .get('button')
-        .filter('[jhitranslate="gatewayApp.assertionServiceAssertion.copyClipboard.string"]')
-        .click()
-    );
-    //cy.pause();
-    cy.task('getClipboard').then(data => {
-      cy.programmaticSignout();
-      cy.visit(data);
-    });
-    // Grant permission
-    cy.get('#username')
-      .clear()
-      .type(record.email);
-    cy.get('#password').type(credentials.password);
-    cy.get('#signin-button').click();
-
-    // *ADD ID
-    cy.get('.mt-5').within(() => {
-      cy.get('h2')
-        .filter('[jhitranslate="landingPage.success.thanks.string"]')
-        .should('exist');
-    });
+    
+    cy.fetchLinkAndGrantPermission();
 
     recurse(
       () =>

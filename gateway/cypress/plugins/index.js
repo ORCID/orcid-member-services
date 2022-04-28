@@ -35,9 +35,9 @@ module.exports = (on, config) => {
           max_wait_time_sec: 300,
           include_body: true,
           include_attachments: true,
+          after: new Date(),
           to,
           subject,
-          after
         }
       )
         return email //this task returns one email (JSON object)
