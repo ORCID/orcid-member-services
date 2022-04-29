@@ -2,6 +2,9 @@ package org.orcid.memberportal.service.assertion.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -15,7 +18,6 @@ import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
-import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.UserService;
@@ -23,6 +25,7 @@ import org.orcid.memberportal.service.assertion.web.rest.errors.ExceptionTransla
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -80,11 +83,12 @@ public class AssertionResourceIT {
         Mockito.when(mockedUserService.getLoggedInUser()).thenReturn(getLoggedInUser());
         Mockito.when(mockedUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
         ReflectionTestUtils.setField(assertionService, "assertionsUserService", mockedUserService);
+        ReflectionTestUtils.setField(assertionResource, "userService", mockedUserService);
     }
 
     @Test
     @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
-    public void getAssertions() throws Exception {
+    public void testGetAssertions() throws Exception {
         // test only the 30 assertions for default salesforce id come back
         MvcResult result = restUserMockMvc
                 .perform(get("/api/assertions").param("size", "50").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
@@ -125,6 +129,16 @@ public class AssertionResourceIT {
         assertThat(assertions.size()).isEqualTo(3); // 1@orcid.org, 11@orcid.org, 21@orcid.org
 
     }
+    
+    @Test
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    public void testSendNotifications() throws Exception {
+        restUserMockMvc.perform(post("/api/assertion/notifications")).andExpect(status().isOk());
+        
+        List<Assertion> updatedAssertions = assertionRepository.findBySalesforceId(DEFAULT_SALESFORCE_ID);
+        updatedAssertions.forEach(a -> assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_REQUESTED.name()));
+    }
+    
 
     private void createAssertions(String salesforceId, int quantity) {
         for (int i = 0; i < quantity; i++) {

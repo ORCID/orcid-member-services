@@ -145,6 +145,13 @@ class AssertionServiceTest {
         user.setLangKey("en");
         return user;
     }
+    
+    @Test
+    void testMarkPendingAssertionsAsNotificationRequested() {
+        Mockito.doNothing().when(assertionsRepository).updateStatusPendingToNotificationRequested(Mockito.eq("salesforce"));
+        assertionService.markPendingAssertionsAsNotificationRequested("salesforce");
+        Mockito.verify(assertionsRepository).updateStatusPendingToNotificationRequested(Mockito.eq("salesforce"));
+    }
 
     @Test
     void testUpdateOrcidIdsForEmailAndSalesforceId() {

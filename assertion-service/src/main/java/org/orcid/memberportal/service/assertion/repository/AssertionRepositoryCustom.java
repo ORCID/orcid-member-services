@@ -14,4 +14,6 @@ public interface AssertionRepositoryCustom {
 
     List<MemberAssertionStatusCount> getMemberAssertionStatusCounts();
 
+    void updateStatusPendingToNotificationRequested(String salesforceId);
+
 }
