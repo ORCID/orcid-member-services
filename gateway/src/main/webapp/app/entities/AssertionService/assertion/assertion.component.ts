@@ -31,6 +31,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
   success: any;
   eventSubscriber: Subscription;
   importEventSubscriber: Subscription;
+  notificationSubscription: Subscription;
   routeData: Subscription;
   links: any;
   totalItems: any;
@@ -75,6 +76,9 @@ export class AssertionComponent implements OnInit, OnDestroy {
       this.loadAll();
     });
     this.importEventSubscriber = this.eventManager.subscribe('importAssertions', () => {
+      this.loadAll();
+    });
+    this.notificationSubscription = this.eventManager.subscribe('sendNotifications', () => {
       this.loadAll();
     });
     this.routeData = this.activatedRoute.data.subscribe(data => {
