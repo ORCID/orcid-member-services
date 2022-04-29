@@ -50,7 +50,6 @@ describe('Edit an affiliation', () => {
         expect(education['role-title']).to.eq(testString);
         expect(education['organization']['address']['city']).to.eq(testString);
         expect(education['organization']['name']).to.eq(testString);
-        expect(education['department-name']).to.eq(testString);
       },
       {
         log: true,

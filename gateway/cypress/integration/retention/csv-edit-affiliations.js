@@ -1,111 +1,54 @@
 /// <reference types="cypress" />
 import data from '../../fixtures/test-data.json';
 import credentials from '../../fixtures/credentials.json';
-import record from '../../fixtures/orcid-record.json';
+import record from '../../fixtures/csv-populated-orcid-record.json';
+import helpers from '../../helpers/helpers.js';
 import { recurse } from 'cypress-recurse';
+const testString = helpers.newUser.testString;
 
 describe('Test sign in form', () => {
   beforeEach(() => {
-    cy.programmaticSignin(data.csvMember.users.owner.email, credentials.password);
+    cy.programmaticSignin(data.csvPopulatedMember.users.owner.email, credentials.password);
     cy.visit('/assertion');
-  })
-  
-  it('Upload CSV and check inbox for the confirmation email', function() {
-    cy.uploadCsv('../fixtures/affiliations.csv');
-    cy.task('checkInbox', {
-      subject: data.outbox.csvUpload,
-      to: data.csvMember.users.owner.email,
-    }).then(email => {
-      const body = email[0].body.html;
-      expect(body).to.have.string('The CSV upload was successfully processed with the following results:');
-      expect(body).to.have.string('<span>7</span>\r\n\t        &nbsp;\r\n\t        <span>affiliations added');
-      expect(body).to.have.string('<span>0</span>\r\n\t        &nbsp;\r\n\t        <span>affiliations updated');
-      expect(body).to.have.string('<span>0</span>\r\n\t        &nbsp;\r\n\t        <span>affiliations deleted');
-      expect(body).to.have.string('<span>2</span>\r\n\t        &nbsp;\r\n\t        <span>duplicate(s) ignored');
-    });
   });
 
-  it('Grant permission and confirm that the affiliations were added to the UI and the registry', function() {
-    cy.get('tbody').within(() => {
-      cy.get('tr').each(($e) => {
-        cy.wrap($e).children().eq(1).contains(record.email);
-        cy.wrap($e).children().eq(2).should('not.contain', record.id);
-        cy.wrap($e).children().eq(4).contains('Pending');
-      })
-    })
-    cy.fetchLinkAndGrantPermission();
-
-    recurse(
-      () =>
-        cy.request({
-          url: `https://pub.qa.orcid.org/v3.0/${record.id}/activities`,
-          headers: { Accept: 'application/json' }
-        }),
-      res => {
-        expect(res.body['distinctions']['affiliation-group']).to.not.be.null;
-        expect(res.body['educations']['affiliation-group']).to.not.be.null;
-        expect(res.body['employments']['affiliation-group']).to.not.be.null;
-        expect(res.body['invited-positions']['affiliation-group']).to.not.be.null;
-        expect(res.body['memberships']['affiliation-group']).to.not.be.null;
-        expect(res.body['qualifications']['affiliation-group']).to.not.be.null;
-        expect(res.body['services']['affiliation-group']).to.not.be.null;
-      },
-      {
-        log: true,
-        limit: 10, // max number of iterations
-        timeout: 180000, // time limit in ms
-        delay: 30000 // delay before next iteration, ms
-      }
-    );   
-  }); 
-
-  it ('Check that the statuses of the affiliations have changed to "In ORCID"', function() {
-    cy.get('tbody').within(() => {
-      cy.get('tr').each(($e) => {
-        cy.wrap($e).children().eq(2).contains(record.id);
-        cy.wrap($e).children().eq(4).contains('In ORCID');
-      })
-    })
-  })
-
-  it('Download the CSV and edit the contents to have the affiliations removed', function() {
-    cy.get('#jh-generate-csv').click();
-    cy.task('checkInbox', {
-      to: data.csvMember.users.owner.email,
-      subject: data.outbox.csvDownload,
-      include_attachments: true,
-    }).then(csv => {
-      const csvContents = Buffer.from(csv[0].attachments[0].data, 'base64')
-        .toString('ascii')
-        .trim();
-      const lines = csvContents.split('\n');
-      console.log(lines);
+  it('Edit the contents of the existing CSV file', function() {
+    let editSections = ['department-name', 'org-city', 'org-name', 'role-title'];
+    let result = '';
+    cy.readFile('./cypress/fixtures/editAffiliations.csv').then(csv => {
+      console.log(csv);
+      let lines = csv.trim().split('\n');
+      let headers = lines[0].split(',');
+      result = lines[0] + '\n';
       for (var i = 1; i < lines.length; i++) {
-        lines[i] = ',,,,,,,,,,,,,,,' + lines[i].slice(lines[i].lastIndexOf(','));
+        let currentline = lines[i].split(',');
+        for (var j = 0; j < headers.length; j++) {
+          if (editSections.includes(headers[j])) currentline[j] = `"${testString}"`;
+        }
+        result += currentline.join(',') + '\n';
       }
-      const data = lines.join('\n');
-      cy.writeFile('./cypress/fixtures/downloadedAffiliations.csv', data);
-    });  
+      console.log(result);
+      cy.writeFile('./cypress/fixtures/editAffiliations.csv', result);
+    })
+
   });
 
-  it('Upload second CSV and check inbox for the confirmation email', function() {
-    cy.pause();
-    cy.uploadCsv('../fixtures/downloadedAffiliations.csv'); 
+  it('Upload CSV and check inbox for the confirmation email', function() {
+    cy.uploadCsv('../fixtures/editAffiliations.csv');
     cy.task('checkInbox', {
       subject: data.outbox.csvUpload,
-      to: data.csvMember.users.owner.email,
-    }).then(email => {
+      to: data.csvPopulatedMember.users.owner.email
+    }).then(email => {  
       const body = email[0].body.html;
       expect(body).to.have.string('The CSV upload was successfully processed with the following results:');
       expect(body).to.have.string('<span>0</span>\r\n\t        &nbsp;\r\n\t        <span>affiliations added');
-      expect(body).to.have.string('<span>0</span>\r\n\t        &nbsp;\r\n\t        <span>affiliations updated');
-      expect(body).to.have.string('<span>7</span>\r\n\t        &nbsp;\r\n\t        <span>affiliations deleted');
+      expect(body).to.have.string('<span>7</span>\r\n\t        &nbsp;\r\n\t        <span>affiliations updated');
+      expect(body).to.have.string('<span>0</span>\r\n\t        &nbsp;\r\n\t        <span>affiliations deleted');
       expect(body).to.have.string('<span>0</span>\r\n\t        &nbsp;\r\n\t        <span>duplicate(s) ignored');
     });
   });
 
-  it ('Confirm that the affiliations have been removed from the UI and the registry', function() {
-    cy.get('.alert-warning').contains(' No affiliations found')
+  it('Confirm the changes in the registry', function() {
     recurse(
       () =>
         cy.request({
@@ -113,13 +56,23 @@ describe('Test sign in form', () => {
           headers: { Accept: 'application/json' }
         }),
       res => {
-        expect(res.body['distinctions']['affiliation-group']).to.be.null;
-        expect(res.body['educations']['affiliation-group']).to.be.null;
-        expect(res.body['employments']['affiliation-group']).to.be.null;
-        expect(res.body['invited-positions']['affiliation-group']).to.be.null;
-        expect(res.body['memberships']['affiliation-group']).to.be.null;
-        expect(res.body['qualifications']['affiliation-group']).to.be.null;
-        expect(res.body['services']['affiliation-group']).to.be.null;
+        const distinction = res.body['distinctions']['affiliation-group'][0]['summaries'][0]['distinction-summary'];
+        const education = res.body['educations']['affiliation-group'][0]['summaries'][0]['education-summary'];
+        const employment = res.body['employments']['affiliation-group'][0]['summaries'][0]['employment-summary'];
+        const invitedPosition = res.body['invited-positions']['affiliation-group'][0]['summaries'][0]['invited-position-summary'];
+        const membership = res.body['memberships']['affiliation-group'][0]['summaries'][0]['membership-summary'];
+        const qualification = res.body['qualifications']['affiliation-group'][0]['summaries'][0]['qualification-summary'];
+        const service = res.body['services']['affiliation-group'][0]['summaries'][0]['service-summary'];
+        const trimmedString = testString.trim();
+        // Ask George whether readability is worth a duplicated assertion
+        expect(distinction['department-name']).to.eq(trimmedString);
+        cy.checkAffiliationChanges(distinction, trimmedString);
+        cy.checkAffiliationChanges(education, trimmedString);
+        cy.checkAffiliationChanges(employment, trimmedString);
+        cy.checkAffiliationChanges(invitedPosition, trimmedString);
+        cy.checkAffiliationChanges(membership, trimmedString);
+        cy.checkAffiliationChanges(qualification, trimmedString);
+        cy.checkAffiliationChanges(service, trimmedString);
       },
       {
         log: true,

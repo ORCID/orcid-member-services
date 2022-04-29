@@ -231,3 +231,9 @@ Cypress.Commands.add('fetchLinkAndGrantPermission', () => {
   });
 })
 
+Cypress.Commands.add('checkAffiliationChanges', (affiliation, value) => {
+  expect(affiliation['department-name']).to.eq(value);
+  expect(affiliation['role-title']).to.eq(value);
+  expect(affiliation['organization']['address']['city']).to.eq(value);
+  expect(affiliation['organization']['name']).to.eq(value);
+})
