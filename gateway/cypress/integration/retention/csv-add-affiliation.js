@@ -4,7 +4,7 @@ import credentials from '../../fixtures/credentials.json';
 import record from '../../fixtures/orcid-record.json';
 import { recurse } from 'cypress-recurse';
 
-describe('Test sign in form', () => {
+describe('Test adding affiliations via CSV', () => {
   beforeEach(() => {
     cy.programmaticSignin(data.csvMember.users.owner.email, credentials.password);
     cy.visit('/assertion');
@@ -42,18 +42,18 @@ describe('Test sign in form', () => {
           headers: { Accept: 'application/json' }
         }),
       res => {
-        expect(res.body['distinctions']['affiliation-group']).to.not.be.null;
-        expect(res.body['educations']['affiliation-group']).to.not.be.null;
-        expect(res.body['employments']['affiliation-group']).to.not.be.null;
-        expect(res.body['invited-positions']['affiliation-group']).to.not.be.null;
-        expect(res.body['memberships']['affiliation-group']).to.not.be.null;
-        expect(res.body['qualifications']['affiliation-group']).to.not.be.null;
-        expect(res.body['services']['affiliation-group']).to.not.be.null;
+        expect(res.body['distinctions']['affiliation-group']).to.have.length(1);
+        expect(res.body['educations']['affiliation-group']).to.have.length(1);
+        expect(res.body['employments']['affiliation-group']).to.have.length(1);
+        expect(res.body['invited-positions']['affiliation-group']).to.have.length(1);
+        expect(res.body['memberships']['affiliation-group']).to.have.length(1);
+        expect(res.body['qualifications']['affiliation-group']).to.have.length(1);
+        expect(res.body['services']['affiliation-group']).to.have.length(1);
       },
       {
         log: true,
-        limit: 10, // max number of iterations
-        timeout: 180000, // time limit in ms
+        limit: 20, // max number of iterations
+        timeout: 600000, // time limit in ms
         delay: 30000 // delay before next iteration, ms
       }
     );   
@@ -105,7 +105,6 @@ describe('Test sign in form', () => {
   });
 
   it ('Confirm that the affiliations have been removed from the UI and the registry', function() {
-    cy.get('.alert-warning').contains(' No affiliations found')
     recurse(
       () =>
         cy.request({
@@ -113,18 +112,18 @@ describe('Test sign in form', () => {
           headers: { Accept: 'application/json' }
         }),
       res => {
-        expect(res.body['distinctions']['affiliation-group']).to.be.null;
-        expect(res.body['educations']['affiliation-group']).to.be.null;
-        expect(res.body['employments']['affiliation-group']).to.be.null;
-        expect(res.body['invited-positions']['affiliation-group']).to.be.null;
-        expect(res.body['memberships']['affiliation-group']).to.be.null;
-        expect(res.body['qualifications']['affiliation-group']).to.be.null;
-        expect(res.body['services']['affiliation-group']).to.be.null;
+        expect(res.body['distinctions']['affiliation-group']).to.have.length(0);
+        expect(res.body['educations']['affiliation-group']).to.have.length(0);
+        expect(res.body['employments']['affiliation-group']).to.have.length(0);
+        expect(res.body['invited-positions']['affiliation-group']).to.have.length(0);
+        expect(res.body['memberships']['affiliation-group']).to.have.length(0);
+        expect(res.body['qualifications']['affiliation-group']).to.have.length(0);
+        expect(res.body['services']['affiliation-group']).to.have.length(0);
       },
       {
         log: true,
-        limit: 10, // max number of iterations
-        timeout: 180000, // time limit in ms
+        limit: 20, // max number of iterations
+        timeout: 600000, // time limit in ms
         delay: 30000 // delay before next iteration, ms
       }
     ); 

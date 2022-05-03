@@ -40,14 +40,12 @@ describe('Add new user', () => {
     cy.task('checkInbox', {
       subject: data.outbox.ownerUpdateSubject,
       to: data.member.users.newUser.email,
-      after: date
     });
 
     // check activation email and follow the provided url
     cy.task('checkInbox', {
       subject: data.outbox.activationSubject,
       to: data.member.users.newUser.email,
-      after: date
     }).then(email => {
       cy.visitLinkFromEmail(email);
     });

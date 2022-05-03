@@ -92,7 +92,7 @@ Cypress.Commands.add('programmaticSignout', () => {
       headers: { 'X-XSRF-TOKEN': csrfCookie.value },
       failOnStatusCode: false // dont fail so we can make assertions
     }).then(r => {
-      cy.log(r);
+      cy.log(r);  
       // expect(r.status).to.eq(204);
     });
   });
@@ -139,8 +139,8 @@ Cypress.Commands.add('processPasswordForm', (newPasswordFieldId) => {
 });
 
 Cypress.Commands.add('visitLinkFromEmail', (email) => {
-  assert.isNotNull(email)
-  const emailBody = email.body.html
+  const emailBody = email[0].body.html
+  assert.isNotNull(emailBody)
   cy.log('>>>>>>>>>Email body is: ' + JSON.stringify(email.body))
   //convert string to DOM
   const htmlDom = new DOMParser().parseFromString(emailBody, 'text/html')

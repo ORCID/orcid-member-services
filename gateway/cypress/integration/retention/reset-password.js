@@ -22,8 +22,7 @@ describe('Test the password reset functionality', () => {
 
     cy.task('checkInbox', {
         to: data.member.users.owner.email,
-        subject: data.outbox.resetPasswordSubject,
-        after: Date.now(),
+        subject: data.outbox.resetPasswordSubject
     }).then(email => {
       cy.visitLinkFromEmail(email);
     });

@@ -35,7 +35,7 @@ module.exports = (on, config) => {
           max_wait_time_sec: 300,
           include_body: true,
           include_attachments: true,
-          after: new Date(),
+          after: new Date( Date.now() - 1000 * 60 ),
           to,
           subject,
         }

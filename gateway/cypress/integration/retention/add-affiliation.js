@@ -117,8 +117,8 @@ describe('Add and remove affiliation', () => {
       },
       {
         log: true,
-        limit: 10, // max number of iterations
-        timeout: 180000, // time limit in ms
+        limit: 20, // max number of iterations
+        timeout: 600000, // time limit in ms
         delay: 30000 // delay before next iteration, ms
       }
     );    
@@ -154,8 +154,8 @@ describe('Add and remove affiliation', () => {
       },
       {
         log: true,
-        limit: 10, // max number of iterations
-        timeout: 180000, // time limit in ms
+        limit: 20, // max number of iterations
+        timeout: 600000, // time limit in ms
         delay: 30000 // delay before next iteration, ms
       }
     );

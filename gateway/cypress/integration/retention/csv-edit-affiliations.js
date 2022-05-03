@@ -6,7 +6,7 @@ import helpers from '../../helpers/helpers.js';
 import { recurse } from 'cypress-recurse';
 const testString = helpers.newUser.testString;
 
-describe('Test sign in form', () => {
+describe('Test updating affiliations via CSV', () => {
   beforeEach(() => {
     cy.programmaticSignin(data.csvPopulatedMember.users.owner.email, credentials.password);
     cy.visit('/assertion');
@@ -76,8 +76,8 @@ describe('Test sign in form', () => {
       },
       {
         log: true,
-        limit: 10, // max number of iterations
-        timeout: 180000, // time limit in ms
+        limit: 20, // max number of iterations
+        timeout: 600000, // time limit in ms
         delay: 30000 // delay before next iteration, ms
       }
     ); 
