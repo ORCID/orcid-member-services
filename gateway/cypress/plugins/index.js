@@ -11,7 +11,8 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-const gmail_tester = require('gmail-tester-extended')
+const data = require('../fixtures/test-data.json');
+const gmail_tester = require('gmail-tester')
 const path = require('path')
 const tokenFileName = 'token_qa.json' //token file is inside plugins/ directory
 const credentialsFileName = 'credentials_qa.json' //credentials is inside plugins/ directory
@@ -24,17 +25,21 @@ const clipboardy = require('clipboardy')
 module.exports = (on, config) => {
   on('task', {
     checkInbox: async (args) => { 
-      const { from, to, subject } = args.options
+      const { include_body, include_attachments, subject, after, to } = args;
       const email = await gmail_tester.check_inbox(
         path.resolve(__dirname, credentialsFileName),
         path.resolve(__dirname, tokenFileName),
-        subject,
-        from,
-        to,
-        15, // Poll interval (in seconds)
-        60 * 3, // Maximum poll interval (in seconds). If reached, return null, indicating the completion of the task().
-        args.options
-        )
+        {
+          from: data.outbox.email,
+          wait_time_sec: 15,
+          max_wait_time_sec: 300,
+          include_body: true,
+          include_attachments: true,
+          after: new Date( Date.now() - 1000 * 60 ),
+          to,
+          subject,
+        }
+      )
         return email //this task returns one email (JSON object)
       },    
     });

@@ -21,11 +21,16 @@ const months = {
 const { country, countryCode, url, invalidUrl, startDate, endDate, type } = record.affiliation;
 const { ringgold, grid, ror } = record.affiliation.org;
 describe('Add and remove affiliation', () => {
-  beforeEach(() => {
+ /* beforeEach(() => {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
   });
 
+  afterEach(() => {
+    cy.programmaticSignout();
+  });*/
+
   it('Add affiliation', function() {
+    cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     cy.visit('/assertion/new');
 
     cy.get('#field_email').type(record.invalidEmail);
@@ -70,46 +75,19 @@ describe('Add and remove affiliation', () => {
       .get('#save-entity')
       .click();
     cy.get('.alert-success').should('exist');
+    cy.programmaticSignout();
   });
 
   it('Grant permission and check ORCID record for added affiliation', () => {
+    cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     // Get permission link
     cy.visit('/assertion');
     cy.get('tbody').children().first().children().eq(1).contains(record.email);
     cy.get('tbody').children().first().children().eq(2).should('not.contain', record.id);
     cy.get('tbody').children().first().children().eq(3).contains(record.affiliation.type);
     cy.get('tbody').children().first().children().eq(4).contains('Pending');
-    cy.get('tbody')
-      .children()
-      .last()
-      .within(() => {
-        cy.get('a')
-          .filter('[jhitranslate="gatewayApp.assertionServiceAssertion.details.string"]')
-          .click();
-      });
-    cy.get('.jh-entity-details').within(() =>
-      cy
-        .get('button')
-        .filter('[jhitranslate="gatewayApp.assertionServiceAssertion.copyClipboard.string"]')
-        .click()
-    );
-    //cy.pause();
-    cy.task('getClipboard').then(data => {
-      cy.visit(data);
-    });
-    // Grant permission
-    cy.get('#username')
-      .clear()
-      .type(record.email);
-    cy.get('#password').type(credentials.password);
-    cy.get('#signin-button').click();
-
-    // *ADD ID
-    cy.get('.mt-5').within(() => {
-      cy.get('h2')
-        .filter('[jhitranslate="landingPage.success.thanks.string"]')
-        .should('exist');
-    });
+    
+    cy.fetchLinkAndGrantPermission();
 
     recurse(
       () =>
@@ -139,20 +117,23 @@ describe('Add and remove affiliation', () => {
       },
       {
         log: true,
-        limit: 10, // max number of iterations
-        timeout: 180000, // time limit in ms
+        limit: 20, // max number of iterations
+        timeout: 600000, // time limit in ms
         delay: 30000 // delay before next iteration, ms
       }
-    );
+    );    
   });
 
   it('Confirm UI changes on the assertion page', () => {
+    cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     cy.visit('/assertion');
     cy.get('tbody').children().first().children().eq(2).contains(record.id);
     cy.get('tbody').children().first().children().eq(4).contains('In ORCID');
+    cy.programmaticSignout();
   })
 
   it('Delete affiliation', () => {
+    cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     cy.visit('/assertion');
     cy.get('.btn-group').each($e => {
       cy.wrap($e)
@@ -173,10 +154,11 @@ describe('Add and remove affiliation', () => {
       },
       {
         log: true,
-        limit: 10, // max number of iterations
-        timeout: 180000, // time limit in ms
+        limit: 20, // max number of iterations
+        timeout: 600000, // time limit in ms
         delay: 30000 // delay before next iteration, ms
       }
     );
+    cy.programmaticSignout();
   });
 });

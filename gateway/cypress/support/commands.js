@@ -23,9 +23,11 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+import 'cypress-file-upload';
 import data from '../fixtures/test-data.json';
 import credentials from '../fixtures/credentials.json';
-
+import record from '../fixtures/orcid-record.json';
+  
 Cypress.Commands.add('signin', (email, password) => {
   cy.get('#username')
     .clear()
@@ -63,6 +65,7 @@ Cypress.Commands.add('programmaticSignin', (username, password) => {
         .getCookie('XSRF-TOKEN')
         .then(() => cy.programmaticSignin(username, password));
     } else {
+      cy.log(csrfCookie.value)
       cy.request({
         method: 'POST',
         url: '/auth/login',
@@ -82,13 +85,14 @@ Cypress.Commands.add('programmaticSignin', (username, password) => {
 
 Cypress.Commands.add('programmaticSignout', () => {
   cy.getCookie('XSRF-TOKEN').then(csrfCookie => {
+    cy.log(csrfCookie.value)
     cy.request({
       method: 'POST',
       url: '/auth/logout',
       headers: { 'X-XSRF-TOKEN': csrfCookie.value },
       failOnStatusCode: false // dont fail so we can make assertions
     }).then(r => {
-      cy.log(r);
+      cy.log(r);  
       // expect(r.status).to.eq(204);
     });
   });
@@ -135,8 +139,8 @@ Cypress.Commands.add('processPasswordForm', (newPasswordFieldId) => {
 });
 
 Cypress.Commands.add('visitLinkFromEmail', (email) => {
-  assert.isNotNull(email)
-  const emailBody = email.body.html
+  const emailBody = email[0].body.html
+  assert.isNotNull(emailBody)
   cy.log('>>>>>>>>>Email body is: ' + JSON.stringify(email.body))
   //convert string to DOM
   const htmlDom = new DOMParser().parseFromString(emailBody, 'text/html')
@@ -145,12 +149,12 @@ Cypress.Commands.add('visitLinkFromEmail', (email) => {
   cy.visit(href)
 });
 
-Cypress.Commands.add('checkInbox', (subject, date) => {
+Cypress.Commands.add('checkInbox', (subject, recipient, date) => {
   cy.task('checkInbox', {
     options: {
       from: data.outbox.email,
-      to: data.member.users.newUser.email,
-      subject: data.outbox.activationSubject,
+      to: recipient,
+      subject,
       include_body: true,
       after: date
     }
@@ -170,3 +174,66 @@ Cypress.Commands.add('changeOrgOwner', () => {
   cy.programmaticSignout()
 })
 
+Cypress.Commands.add('readCsv', (data) => {
+  var lines=data.split("\n");
+  var result = [];
+  var headers=lines[0].split(",");
+  for(var i=1;i<lines.length;i++){
+
+      var obj = {};
+      var currentline=lines[i].split(",");
+
+      for(var j=0;j<headers.length;j++){
+          obj[headers[j]] = currentline[j];
+      }
+      result.push(obj);
+  }
+  return result
+})
+
+Cypress.Commands.add('uploadCsv', (path) => {
+  cy.get('#jh-upload-entities').click()
+  cy.get('#field_filePath').attachFile(path)
+  cy.get('#jhi-confirm-csv-upload').click()
+})
+
+Cypress.Commands.add('fetchLinkAndGrantPermission', () => {
+  // get perimssion link from first affiliation in the list
+  cy.get('tbody')
+    .children()
+    .last()
+    .within(() => {
+      cy.get('a')
+        .filter('[jhitranslate="gatewayApp.assertionServiceAssertion.details.string"]')
+        .click();
+    });
+  cy.get('.jh-entity-details').within(() =>
+  cy
+    .get('button')
+    .filter('[jhitranslate="gatewayApp.assertionServiceAssertion.copyClipboard.string"]')
+    .click()
+  );
+  cy.task('getClipboard').then(link => {
+    cy.visit(link);
+  });
+  // Grant permission
+  cy.get('#username')
+    .clear()
+    .type(record.email);
+  cy.get('#password').type(credentials.password);
+  cy.get('#signin-button').click();
+
+  // *ADD ID
+  cy.get('.mt-5').within(() => {
+    cy.get('h2')
+      .filter('[jhitranslate="landingPage.success.thanks.string"]')
+      .should('exist');
+  });
+})
+
+Cypress.Commands.add('checkAffiliationChanges', (affiliation, value) => {
+  expect(affiliation['department-name']).to.eq(value);
+  expect(affiliation['role-title']).to.eq(value);
+  expect(affiliation['organization']['address']['city']).to.eq(value);
+  expect(affiliation['organization']['name']).to.eq(value);
+})
