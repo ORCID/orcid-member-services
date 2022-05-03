@@ -15,14 +15,15 @@ import org.apache.http.Consts;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -43,7 +44,6 @@ import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.Notification;
 import org.orcid.memberportal.service.assertion.domain.adapter.AffiliationAdapter;
 import org.orcid.memberportal.service.assertion.domain.adapter.NotificationAdapter;
-import org.orcid.memberportal.service.assertion.web.rest.AssertionResource;
 import org.orcid.memberportal.service.assertion.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,11 +52,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OrcidAPIClient {
-    private final Logger log = LoggerFactory.getLogger(AssertionResource.class);
+    private final Logger log = LoggerFactory.getLogger(OrcidAPIClient.class);
 
     private final Marshaller jaxbMarshaller;
     
-    private HttpClient httpClient;
+    private CloseableHttpClient httpClient;
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -124,7 +124,7 @@ public class OrcidAPIClient {
         return null;
     }
 
-    public boolean putAffiliation(String orcid, String accessToken, Assertion assertion) throws JSONException, JAXBException {
+    public void putAffiliation(String orcid, String accessToken, Assertion assertion) throws JAXBException, IOException {
         Affiliation orcidAffiliation = AffiliationAdapter.toOrcidAffiliation(assertion);
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
         log.info("Updating affiliation with put code {} for {}", assertion.getPutCode(), orcid);
@@ -135,46 +135,42 @@ public class OrcidAPIClient {
         StringEntity entity = getStringEntity(orcidAffiliation);
         httpPut.setEntity(entity);
 
+        CloseableHttpResponse response = null;
         try {
-            HttpResponse response = httpClient.execute(httpPut);
+            response = httpClient.execute(httpPut);
             if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
                 log.error("Unable to update {} with putcode {} for {}. Status code: {}, error {}", affType, assertion.getPutCode(), orcid,
                         response.getStatusLine().getStatusCode(), responseString);
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
-            return true;
-        } catch (ClientProtocolException e) {
-            log.error("Unable to update affiliation in ORCID", e);
-        } catch (IOException e) {
-            log.error("Unable to update affiliation in ORCID", e);
+        } finally {
+            response.close();
         }
-        return false;
     }
 
-    public void deleteAffiliation(String orcid, String accessToken, Assertion assertion) {
+    public void deleteAffiliation(String orcid, String accessToken, Assertion assertion) throws IOException {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
         log.info("Deleting affiliation with putcode {} for {}", assertion.getPutCode(), orcid);
 
         HttpDelete httpDelete = new HttpDelete(applicationProperties.getOrcidAPIEndpoint() + orcid + '/' + affType + '/' + assertion.getPutCode());
         setHeaders(httpDelete, accessToken);
 
+        CloseableHttpResponse response = null;
         try {
-            HttpResponse response = httpClient.execute(httpDelete);
+            response = httpClient.execute(httpDelete);
             if (response.getStatusLine().getStatusCode() != Status.NO_CONTENT.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
                 log.error("Unable to delete {} with putcode {} for {}. Status code: {}, error {}", affType, assertion.getPutCode(), orcid,
                         response.getStatusLine().getStatusCode(), responseString);
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
-        } catch (ClientProtocolException e) {
-            log.error("Unable to update affiliation in ORCID", e);
-        } catch (IOException e) {
-            log.error("Unable to update affiliation in ORCID", e);
+        } finally {
+            response.close();
         }
     }
     
-    public String postNotification(Notification notification) throws JAXBException {
+    public String postNotification(Notification notification) throws JAXBException, IOException {
         NotificationPermission notificationPermission = NotificationAdapter.toNotificationPermission(notification);
         
         HttpPost httpPost = new HttpPost(applicationProperties.getOrcidAPIEndpoint() + notification.getOrcidId() + "/notification-permission");
@@ -183,8 +179,9 @@ public class OrcidAPIClient {
         StringEntity entity = getStringEntity(notificationPermission);
         httpPost.setEntity(entity);
         
+        CloseableHttpResponse response = null;
         try {
-            HttpResponse response = httpClient.execute(httpPost);
+            response = httpClient.execute(httpPost);
             if (response.getStatusLine().getStatusCode() != Status.CREATED.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
                 log.error("Unable to create notification for {}. Status code: {}, error {}", notification.getOrcidId(), response.getStatusLine().getStatusCode(), responseString);
@@ -192,12 +189,9 @@ public class OrcidAPIClient {
             }
             String location = response.getFirstHeader("location").getValue();
             return location.substring(location.lastIndexOf('/') + 1);
-        } catch (ClientProtocolException e) {
-            log.error("Unable to create affiliation in ORCID", e);
-        } catch (IOException e) {
-            log.error("Unable to create affiliation in ORCID", e);
+        } finally {
+            response.close();
         }
-        return null;
     }
     
     private void setHeaders(HttpRequestBase request, String accessToken) {
@@ -212,4 +206,5 @@ public class OrcidAPIClient {
         String xmlObject = sw.toString();
         return new StringEntity(xmlObject, ContentType.create("text/xml", Consts.UTF_8));
     }
+    
 }
