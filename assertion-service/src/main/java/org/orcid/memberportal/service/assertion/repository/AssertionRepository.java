@@ -21,6 +21,8 @@ public interface AssertionRepository extends MongoRepository<Assertion, String>,
     List<Assertion> findAllByOwnerId(String ownerId, Sort sort);
 
     Page<Assertion> findBySalesforceId(String salesforceId, Pageable pageable);
+    
+    Page<Assertion> findByStatus(String status, Pageable pageable);
 
     Page<Assertion> findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
             Pageable pageable, String salesforceId1, String affiliationSection, String salesforceId2, String departmentName, String salesforceId3, String orcName,
