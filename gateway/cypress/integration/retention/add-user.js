@@ -23,7 +23,9 @@ describe('Add new user', () => {
       .clear()
       .type(data.member.users.owner.email);
     cy.get('#save-entity2').click();
-    cy.get('.validation-errors').children().should('have.length', 1)
+    cy.get('.validation-errors')
+      .children()
+      .should('have.length', 1);
     cy.get('#field_email')
       .clear()
       .type(data.member.users.newUser.email);
@@ -34,14 +36,19 @@ describe('Add new user', () => {
     cy.get('.alert-success').should('exist');
 
     // check org owner update email
-    const date = new Date()
-    cy.checkInbox(data.outbox.ownerUpdateSubject, date);
-
-    // check activation email and follow the provided url
-    cy.checkInbox(data.outbox.activationSubject, date).then(email => {
-      cy.visitLinkFromEmail(email);
+    const date = new Date();
+    cy.task('checkInbox', {
+      subject: data.outbox.ownerUpdateSubject,
+      to: data.member.users.newUser.email,
     });
 
+    // check activation email and follow the provided url
+    cy.task('checkInbox', {
+      subject: data.outbox.activationSubject,
+      to: data.member.users.newUser.email,
+    }).then(email => {
+      cy.visitLinkFromEmail(email);
+    });
 
     cy.processPasswordForm('#password');
     // check success message
@@ -51,20 +58,24 @@ describe('Add new user', () => {
         .click();
     });
     // sign in and confirm the activation was successful
-  })
+  });
 
   it('Change organisation owner back to the original user', function() {
     cy.programmaticSignin(data.member.users.newUser.email, credentials.password);
-    cy.changeOrgOwner()
+    cy.changeOrgOwner();
   });
 
   it('Remove added user', function() {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
-    cy.visit('/ms-user')
+    cy.visit('/ms-user');
     cy.get('.btn-group').each($e => {
-      cy.wrap($e).children().last().invoke('attr', 'disabled').then((disabled) => {
-        disabled ? cy.log("Skipping user, button is disabled") : cy.removeAffiliation($e)
-      })
-    })
-  });  
+      cy.wrap($e)
+        .children()
+        .last()
+        .invoke('attr', 'disabled')
+        .then(disabled => {
+          disabled ? cy.log('Skipping user, button is disabled') : cy.removeAffiliation($e);
+        });
+    });
+  });
 });

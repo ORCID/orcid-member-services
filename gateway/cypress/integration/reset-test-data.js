@@ -24,13 +24,23 @@ describe('Add new user', () => {
     cy.programmaticSignout()    
   })
 
-  it('Remove all affiliations from test group', function () {
+  it('Remove all affiliations from test member', function () {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password)
     cy.visit('/ms-user')
     cy.get('.btn-group').each($e => {
       cy.wrap($e).children().last().invoke('attr', 'disabled').then((disabled) => {
         disabled ? cy.log("Skipping user, button is disabled") : cy.removeAffiliation($e)
       })
+    })
+    cy.programmaticSignout()    
+  })
+
+  it('Remove all affiliations from csv test member', function () {
+    cy.programmaticSignin(data.csvMember.users.owner.email, credentials.password)
+    cy.visit('/assertion')
+    cy.get('.btn-group').each($e => {
+      cy.wrap($e).children().last().click()
+      cy.get('#jhi-confirm-delete-assertion').click()
     })
     cy.programmaticSignout()    
   })

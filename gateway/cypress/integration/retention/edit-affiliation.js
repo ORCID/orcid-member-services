@@ -50,12 +50,11 @@ describe('Edit an affiliation', () => {
         expect(education['role-title']).to.eq(testString);
         expect(education['organization']['address']['city']).to.eq(testString);
         expect(education['organization']['name']).to.eq(testString);
-        expect(education['department-name']).to.eq(testString);
       },
       {
         log: true,
-        limit: 10, // max number of iterations
-        timeout: 180000, // time limit in ms
+        limit: 20, // max number of iterations
+        timeout: 600000, // time limit in ms
         delay: 30000 // delay before next iteration, ms
       }
     );
