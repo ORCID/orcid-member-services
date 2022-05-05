@@ -14,6 +14,7 @@
         "createOrEditLabel": { "string": "Add or edit affiliation" },
         "notFound": { "string": "No affiliations found" },
         "uploadLabel": { "string": "Import affiliations from CSV" },
+        "permissionNotificationsLabel": { "string": "Send permission notifications" },
         "forHelpTroubleshooting": {
           "string": "If you require help troubleshooting this error, please contact your consortium lead or membership@orcid.org. Please include a screenshot of the error message below."
         }
@@ -63,6 +64,10 @@
           "string": "Your CSV has been uploaded for processing. We will let you know via email once the file has been processed."
         },
         "failure": { "string": "There was a problem uploading your CSV for processing." }
+      },
+      "notifications": {
+        "title": { "string": "Send permission notifications" },
+        "label": { "string": "Are you sure you would like to send permission notifications to your researchers that have an ORCID iD?" }
       },
       "addedToOrcid": { "string": "Added To ORCID" },
       "updatedInOrcid": { "string": "Updated In ORCID" },

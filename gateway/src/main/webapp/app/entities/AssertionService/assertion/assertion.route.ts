@@ -12,6 +12,7 @@ import { AssertionDetailComponent } from './assertion-detail.component';
 import { AssertionUpdateComponent } from './assertion-update.component';
 import { AssertionDeletePopupComponent } from './assertion-delete-dialog.component';
 import { AssertionImportPopupComponent } from './assertion-import-dialog.component';
+import { SendNotificationsPopupComponent } from './send-notifications-dialog.component';
 import { IAssertion } from 'app/shared/model/AssertionService/assertion.model';
 
 @Injectable({ providedIn: 'root' })
@@ -99,6 +100,19 @@ export const assertionPopupRoute: Routes = [
   {
     path: 'import',
     component: AssertionImportPopupComponent,
+    resolve: {
+      assertion: AssertionResolve
+    },
+    data: {
+      authorities: ['ASSERTION_SERVICE_ENABLED'],
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string'
+    },
+    canActivate: [UserRouteAccessService],
+    outlet: 'popup'
+  },
+  {
+    path: 'notifications',
+    component: SendNotificationsPopupComponent,
     resolve: {
       assertion: AssertionResolve
     },
