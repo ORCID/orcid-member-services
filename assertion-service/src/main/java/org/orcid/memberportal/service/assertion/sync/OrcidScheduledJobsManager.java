@@ -76,7 +76,7 @@ public class OrcidScheduledJobsManager {
         LOG.info("CSV reports processed");
     }
     
-    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.sendPermissionLinkNotifications}")
+    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.sendPermissionLinkNotificationsDelay}")
     @SchedulerLock(name = "sendPermissionLinkNotifications", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void sendPermissionLinkNotifications() throws IOException  {
         LOG.info("Running cron to send permission link notifications");

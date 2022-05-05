@@ -196,6 +196,7 @@ application:
     processAssertionUploadsDelay: 120000
     processCsvReportsDelay: 120000
     removeStoredFilesDelay: 300000
+    sendPermissionLinkNotificationsDelay: 120000
     notificationAccessToken: ${APPLICATION_NOTIFICATION_ACCESS_TOKEN}
     tokenExchange:
         endpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}
