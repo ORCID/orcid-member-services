@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +18,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
-import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
-import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
@@ -55,16 +52,7 @@ public class PermissionLinksCsvWriterTest {
         when(applicationProperties.getLandingPageUrl()).thenReturn("https://member-portal.com");
         when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
         when(orcidRecordService.getRecordsWithoutTokens(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(getListOfOrcidRecords());
-        when(assertionsRepository.findByEmailAndSalesforceId(Mockito.anyString(), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenAnswer(new Answer<List<Assertion>>() {
-
-            @Override
-            public List<Assertion> answer(InvocationOnMock invocation) throws Throwable {
-                String email = (String) invocation.getArgument(0);
-                return getListOfAsserions(email);
-            }
-
-        });
-
+        when(assertionsRepository.countByEmailAndSalesforceId(Mockito.anyString(), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(10l);
         when(encryptUtil.encrypt(Mockito.anyString())).thenAnswer(new Answer<String>() {
             // just return unencrypted arg
             @Override
@@ -115,49 +103,6 @@ public class PermissionLinksCsvWriterTest {
     private void checkHeaders(String[] headers) {
         assertEquals("email", headers[0].trim());
         assertEquals("link", headers[1].trim());
-    }
-
-    private List<Assertion> getListOfAsserions(String email) {
-        List<Assertion> assertions = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            assertions.add(getDummyAssertion(i, email));
-        }
-        return assertions;
-    }
-
-    private Assertion getDummyAssertion(int i, String email) {
-        Assertion assertion = new Assertion();
-        assertion.setAddedToORCID(Instant.now());
-        assertion.setModified(Instant.now());
-        assertion.setDepartmentName("department-" + i);
-        assertion.setAffiliationSection(AffiliationSection.values()[i]);
-        assertion.setEmail(email);
-        assertion.setEndDay("1");
-        assertion.setEndMonth("12");
-        assertion.setEndYear("2015");
-        assertion.setStartDay("1");
-        assertion.setStartMonth("12");
-        assertion.setStartYear("2010");
-        assertion.setExternalId("123" + i);
-        assertion.setExternalIdUrl("http://externalid/" + i);
-        assertion.setId(String.valueOf(i));
-        assertion.setModified(Instant.now());
-        assertion.setOrgCity("city-" + i);
-        assertion.setOrgCountry("US");
-        assertion.setOrgName("org-" + i);
-        assertion.setOrgRegion("region-" + i);
-        assertion.setOwnerId("what?" + i);
-        assertion.setRoleTitle("role-" + i);
-        assertion.setStatus("not sure");
-        assertion.setUpdatedInORCID(Instant.now());
-        assertion.setDisambiguationSource("source-" + i);
-        assertion.setDisambiguatedOrgId("id-" + i);
-        assertion.setExternalId("extId-" + i);
-        assertion.setExternalIdType("extIdType-" + i);
-        assertion.setExternalIdUrl("extIdUrl-" + i);
-        assertion.setUrl("url-" + i);
-        assertion.setId("affiliation-id-" + i);
-        return assertion;
     }
 
 }

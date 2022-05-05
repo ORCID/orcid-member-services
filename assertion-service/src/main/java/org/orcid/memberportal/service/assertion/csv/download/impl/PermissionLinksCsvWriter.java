@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
 import org.orcid.memberportal.service.assertion.csv.download.CsvDownloadWriter;
-import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
@@ -39,8 +38,8 @@ public class PermissionLinksCsvWriter extends CsvDownloadWriter {
 
         for (OrcidRecord record : records) {
             String email = record.getEmail();
-            List<Assertion> assertions = assertionsRepository.findByEmailAndSalesforceId(email, salesforceId);
-            if (assertions.size() > 0) {
+            long count = assertionsRepository.countByEmailAndSalesforceId(email, salesforceId);
+            if (count > 0) {
                 String encrypted = encryptUtil.encrypt(salesforceId + "&&" + email);
                 String link = landingPageUrl + "?state=" + encrypted;
 
