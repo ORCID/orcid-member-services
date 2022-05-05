@@ -638,6 +638,10 @@ public class AssertionService {
         List<StoredFile> pendingUploads = storedFileService.getUnprocessedStoredFilesByType(StoredFileService.ASSERTIONS_CSV_FILE_TYPE);
         pendingUploads.forEach(this::processAssertionsUploadFile);
     }
+    
+    public void markPendingAssertionsAsNotificationRequested(String salesforceId) {
+        assertionRepository.updateStatusPendingToNotificationRequested(salesforceId);
+    }
 
     private void processAssertionsUploadFile(StoredFile uploadFile) {
         File file = new File(uploadFile.getFileLocation());

@@ -11,7 +11,9 @@ public enum AssertionStatus {
     ERROR_UPDATING_TO_ORCID("Error updating in ORCID"), 
     PENDING_RETRY("Pending retry in ORCID"), 
     UNKNOWN("Unknown"), 
-    ERROR_DELETING_IN_ORCID("Error deleting in ORCID");
+    ERROR_DELETING_IN_ORCID("Error deleting in ORCID"),
+    NOTIFICATION_REQUESTED("Notification requested");
+    
 
     private final String value;
 

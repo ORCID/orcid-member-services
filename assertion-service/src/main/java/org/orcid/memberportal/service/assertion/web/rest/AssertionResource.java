@@ -87,7 +87,7 @@ public class AssertionResource {
     private JWTUtil jwtUtil;
 
     @Autowired
-    private UserService assertionsUserService;
+    private UserService userService;
 
     @Autowired
     private RinggoldOrgValidator ringgoldOrgValidator;
@@ -144,11 +144,17 @@ public class AssertionResource {
         assertionService.generatePermissionLinks();
         return ResponseEntity.ok().build();
     }
+    
+    @PostMapping("/assertion/notifications")
+    public ResponseEntity<Void> sendNotifications() {
+        assertionService.markPendingAssertionsAsNotificationRequested(userService.getLoggedInUserSalesforceId());
+        return ResponseEntity.ok().build();
+    }
 
     @PutMapping("/assertion")
     public ResponseEntity<Assertion> updateAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
         validateAssertion(assertion);
-        Assertion existingAssertion = assertionService.updateAssertion(assertion, assertionsUserService.getLoggedInUser());
+        Assertion existingAssertion = assertionService.updateAssertion(assertion, userService.getLoggedInUser());
         LOG.info("{} updated assertion {}", SecurityUtils.getCurrentUserLogin().get(), assertion.getId());
         return ResponseEntity.ok().body(existingAssertion);
     }
@@ -157,7 +163,7 @@ public class AssertionResource {
     public ResponseEntity<Assertion> createAssertion(@Valid @RequestBody Assertion assertion) throws BadRequestAlertException, URISyntaxException {
         LOG.debug("REST request to create assertion : {}", assertion);
         validateAssertion(assertion);
-        assertion = assertionService.createAssertion(assertion, assertionsUserService.getLoggedInUser());
+        assertion = assertionService.createAssertion(assertion, userService.getLoggedInUser());
         LOG.info("{} created assertion {}", SecurityUtils.getCurrentUserLogin().get(), assertion.getId());
         return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId())).body(assertion);
     }
@@ -177,7 +183,7 @@ public class AssertionResource {
     @DeleteMapping("/assertion/{id}")
     public ResponseEntity<AssertionDeletion> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
         try {
-            assertionService.deleteById(id, assertionsUserService.getLoggedInUser());
+            assertionService.deleteById(id, userService.getLoggedInUser());
             LOG.info("{} deleted assertion {}", SecurityUtils.getCurrentUserLogin().get(), id);
             return ResponseEntity.ok().body(new AssertionDeletion(true));
         } catch (RegistryDeleteFailureException e) {
@@ -198,7 +204,7 @@ public class AssertionResource {
         String email = encryptUtil.decrypt(encryptedEmail);
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
         if (record.isPresent()) {
-            return ResponseEntity.ok().body(assertionsUserService.getLoggedInUserId());
+            return ResponseEntity.ok().body(userService.getLoggedInUserId());
         } else {
             return ResponseEntity.notFound().build();
         }

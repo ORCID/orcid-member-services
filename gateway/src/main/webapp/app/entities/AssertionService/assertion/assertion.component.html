@@ -26,6 +26,12 @@
                 Import affiliations from CSV
                 </span>
             </button>
+             <button id="jh-upload-entities" class="btn btn-primary float-right send-notifications ml-1" [routerLink]="['/', 'assertion', { outlets: { popup: 'notifications'} }]">
+                <fa-icon [icon]="faPaperPlane"></fa-icon>
+                <span  jhiTranslate="gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string">
+                Send permission notifications
+                </span>
+            </button>
             <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-assertion ml-1" [routerLink]="['/assertion/new']">
                 <fa-icon [icon]="'plus'"></fa-icon>
                 <span  jhiTranslate="gatewayApp.assertionServiceAssertion.home.createLabel.string">

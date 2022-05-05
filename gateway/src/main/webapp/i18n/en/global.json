@@ -118,6 +118,7 @@
       "save": { "string": "Save" },
       "continue": { "string": "Continue" },
       "upload": { "string": "Upload" },
+      "ok": { "string": "OK" },
       "activate": { "string": "Resend Activation Email" },
       "view": { "string": "View" }
     },

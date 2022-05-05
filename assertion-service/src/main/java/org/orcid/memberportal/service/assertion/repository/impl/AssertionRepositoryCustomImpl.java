@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
+import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import org.springframework.data.mongodb.core.aggregation.SkipOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -32,8 +34,9 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
     @Override
     public List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable) {
-        ProjectionOperation timeModifiedAfterSync = Aggregation.project("added_to_orcid", "updated_in_orcid", "modified", "created").andExpression("modified - added_to_orcid")
-                .as("timeModifiedAfterAddingToOrcid").andExpression("modified - updated_in_orcid").as("timeModifiedAfterUpdatingInOrcid");
+        ProjectionOperation timeModifiedAfterSync = Aggregation.project("added_to_orcid", "updated_in_orcid", "modified", "created")
+                .andExpression("modified - added_to_orcid").as("timeModifiedAfterAddingToOrcid").andExpression("modified - updated_in_orcid")
+                .as("timeModifiedAfterUpdatingInOrcid");
 
         Criteria addedToOrcidSet = new Criteria();
         addedToOrcidSet.andOperator(Criteria.where("added_to_orcid").exists(true), Criteria.where("added_to_orcid").ne(null));
@@ -52,14 +55,14 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
         Criteria needsUpdatingInOrcid = new Criteria();
         needsUpdatingInOrcid.orOperator(modifiedAfterUpdateInOrcid, modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet);
-        
+
         MatchOperation matchUpdatedAfterSync = Aggregation.match(needsUpdatingInOrcid);
-        
+
         // pagination aggregation operations
         SortOperation sort = new SortOperation(pageable.getSort());
         SkipOperation skip = new SkipOperation(pageable.getOffset());
         LimitOperation limit = new LimitOperation(pageable.getPageSize());
-        
+
         Aggregation aggregation = Aggregation.newAggregation(timeModifiedAfterSync, matchUpdatedAfterSync, sort, skip, limit);
         AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
 
@@ -83,6 +86,16 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         Query query = new Query(criteria);
         query.with(pageable);
         return mongoTemplate.find(query, Assertion.class);
+    }
+
+    @Override
+    public void updateStatusPendingToNotificationRequested(String salesforceId) {
+        Query query = new Query();
+        query.addCriteria(Criteria
+                        .where("salesforceId").is(salesforceId).and("status").is(AssertionStatus.PENDING.name()));
+        Update update = new Update();
+        update.set("status", AssertionStatus.NOTIFICATION_REQUESTED.name());
+        mongoTemplate.updateMulti(query, update, Assertion.class, "assertion");
     }
 
 }
