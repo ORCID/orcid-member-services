@@ -97,5 +97,15 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         update.set("status", AssertionStatus.NOTIFICATION_REQUESTED.name());
         mongoTemplate.updateMulti(query, update, Assertion.class, "assertion");
     }
+    
+    @Override
+    public List<Assertion> findEmailAndSalesforceIdsWithNotificationRequested() {
+        ProjectionOperation project = Aggregation.project("email", "salesforce_id", "status");
+        MatchOperation match = Aggregation.match(Criteria.where("status").is(AssertionStatus.NOTIFICATION_REQUESTED.name()));
+        GroupOperation group = Aggregation.group("email", "salesforce_id");
+        Aggregation aggregation = Aggregation.newAggregation(project, match, group);
+        AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
+        return results.getMappedResults();
+    }
 
 }

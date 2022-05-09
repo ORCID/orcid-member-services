@@ -48,9 +48,13 @@ public class ApplicationProperties {
     
     private String removeStoredFilesDelay;
     
-    private String notificationAccessToken;
+    private String internalRegistryAccessToken;
     
     private String processCsvReportsDelay;
+    
+    private String internalRegistryApiEndpoint;
+    
+    private String sendPermissionLinkNotificationsDelay;
     
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
@@ -204,20 +208,36 @@ public class ApplicationProperties {
         this.csvReportsDirectory = csvReportsDirectory;
     }
 
-    public String getNotificationAccessToken() {
-        return notificationAccessToken;
+    public String getInternalRegistryAccessToken() {
+        return internalRegistryAccessToken;
     }
 
-    public void setNotificationAccessToken(String notificationAccessToken) {
-        this.notificationAccessToken = notificationAccessToken;
+    public void setInternalRegistryAccessToken(String internalRegistryAccessToken) {
+        this.internalRegistryAccessToken = internalRegistryAccessToken;
     }
-    
+
     public String getProcessCsvReportsDelay() {
         return processCsvReportsDelay;
     }
 
     public void setProcessCsvReportsDelay(String processCsvReportsDelay) {
         this.processCsvReportsDelay = processCsvReportsDelay;
+    }
+    
+    public String getInternalRegistryApiEndpoint() {
+        return internalRegistryApiEndpoint;
+    }
+
+    public void setInternalRegistryApiEndpoint(String internalRegistryApiEndpoint) {
+        this.internalRegistryApiEndpoint = internalRegistryApiEndpoint;
+    }
+    
+    public String getSendPermissionLinkNotificationsDelay() {
+        return sendPermissionLinkNotificationsDelay;
+    }
+
+    public void setSendPermissionLinkNotificationsDelay(String sendPermissionLinkNotificationsDelay) {
+        this.sendPermissionLinkNotificationsDelay = sendPermissionLinkNotificationsDelay;
     }
 
     public static class TokenExchange {

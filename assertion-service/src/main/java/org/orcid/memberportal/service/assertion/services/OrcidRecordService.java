@@ -114,13 +114,17 @@ public class OrcidRecordService {
     }
 
     public String generateLinkForEmail(String email) {
+        String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
+        return generateLinkForEmailAndSalesforceId(email, salesforceId);
+    }
+    
+    public String generateLinkForEmailAndSalesforceId(String email, String salesforceId) {
         String landingPageUrl = applicationProperties.getLandingPageUrl();
-        String salesForceId = assertionsUserService.getLoggedInUserSalesforceId();
         Optional<OrcidRecord> record = orcidRecordRepository.findOneByEmail(email);
         if (!record.isPresent()) {
-            createOrcidRecord(email, Instant.now(), salesForceId);
+            createOrcidRecord(email, Instant.now(), salesforceId);
         }
-        return landingPageUrl + "?state=" + encryptUtil.encrypt(salesForceId + "&&" + email);
+        return landingPageUrl + "?state=" + encryptUtil.encrypt(salesforceId + "&&" + email);
     }
 
     public OrcidRecord updateOrcidRecord(OrcidRecord orcidRecord) {

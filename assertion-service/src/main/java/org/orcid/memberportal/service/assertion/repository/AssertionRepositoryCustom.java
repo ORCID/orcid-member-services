@@ -16,4 +16,6 @@ public interface AssertionRepositoryCustom {
 
     void updateStatusPendingToNotificationRequested(String salesforceId);
 
+    List<Assertion> findEmailAndSalesforceIdsWithNotificationRequested();
+
 }
