@@ -52,6 +52,10 @@ public class ApplicationProperties {
     
     private String processCsvReportsDelay;
     
+    private String internalRegistryApiEndpoint;
+    
+    private String sendPermissionLinkNotificationsDelay;
+    
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
     }
@@ -218,6 +222,22 @@ public class ApplicationProperties {
 
     public void setProcessCsvReportsDelay(String processCsvReportsDelay) {
         this.processCsvReportsDelay = processCsvReportsDelay;
+    }
+    
+    public String getInternalRegistryApiEndpoint() {
+        return internalRegistryApiEndpoint;
+    }
+
+    public void setInternalRegistryApiEndpoint(String internalRegistryApiEndpoint) {
+        this.internalRegistryApiEndpoint = internalRegistryApiEndpoint;
+    }
+    
+    public String getSendPermissionLinkNotificationsDelay() {
+        return sendPermissionLinkNotificationsDelay;
+    }
+
+    public void setSendPermissionLinkNotificationsDelay(String sendPermissionLinkNotificationsDelay) {
+        this.sendPermissionLinkNotificationsDelay = sendPermissionLinkNotificationsDelay;
     }
 
     public static class TokenExchange {

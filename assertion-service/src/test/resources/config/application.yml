@@ -97,3 +97,4 @@ application:
     removeStoredFilesDelay: 300000
     processCsvReportsDelay: 300000
     generateMemberAssertionStatsCron: 0 30 * * * ?
+    sendPermissionLinkNotificationsDelay: 120000

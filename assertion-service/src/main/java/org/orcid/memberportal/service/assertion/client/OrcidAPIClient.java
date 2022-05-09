@@ -3,7 +3,9 @@ package org.orcid.memberportal.service.assertion.client;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response.Status;
@@ -11,6 +13,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Consts;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -41,21 +44,23 @@ import org.orcid.jaxb.model.v3.release.record.Qualification;
 import org.orcid.jaxb.model.v3.release.record.Service;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
-import org.orcid.memberportal.service.assertion.domain.Notification;
 import org.orcid.memberportal.service.assertion.domain.adapter.AffiliationAdapter;
-import org.orcid.memberportal.service.assertion.domain.adapter.NotificationAdapter;
 import org.orcid.memberportal.service.assertion.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jose.util.Base64;
+
 @Component
 public class OrcidAPIClient {
     private final Logger log = LoggerFactory.getLogger(OrcidAPIClient.class);
 
     private final Marshaller jaxbMarshaller;
-    
+
     private CloseableHttpClient httpClient;
 
     @Autowired
@@ -103,7 +108,7 @@ public class OrcidAPIClient {
 
         HttpPost httpPost = new HttpPost(applicationProperties.getOrcidAPIEndpoint() + orcid + '/' + affType);
         setHeaders(httpPost, accessToken);
-       
+
         StringEntity entity = getStringEntity(orcidAffiliation);
         httpPost.setEntity(entity);
 
@@ -169,22 +174,21 @@ public class OrcidAPIClient {
             response.close();
         }
     }
-    
-    public String postNotification(Notification notification) throws JAXBException, IOException {
-        NotificationPermission notificationPermission = NotificationAdapter.toNotificationPermission(notification);
-        
-        HttpPost httpPost = new HttpPost(applicationProperties.getOrcidAPIEndpoint() + notification.getOrcidId() + "/notification-permission");
-        setHeaders(httpPost, applicationProperties.getNotificationAccessToken());
-        
+
+    public String postNotification(NotificationPermission notificationPermission, String orcidId) throws JAXBException, IOException {
+        HttpPost httpPost = new HttpPost(applicationProperties.getOrcidAPIEndpoint() + orcidId + "/notification-permission");
+        setHeaders(httpPost, applicationProperties.getInternalRegistryAccessToken());
+
         StringEntity entity = getStringEntity(notificationPermission);
         httpPost.setEntity(entity);
-        
+
         CloseableHttpResponse response = null;
         try {
             response = httpClient.execute(httpPost);
             if (response.getStatusLine().getStatusCode() != Status.CREATED.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
-                log.error("Unable to create notification for {}. Status code: {}, error {}", notification.getOrcidId(), response.getStatusLine().getStatusCode(), responseString);
+                log.error("Unable to create notification for {}. Status code: {}, error {}", orcidId, response.getStatusLine().getStatusCode(),
+                        responseString);
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
             String location = response.getFirstHeader("location").getValue();
@@ -193,18 +197,37 @@ public class OrcidAPIClient {
             response.close();
         }
     }
-    
+
+    public String getOrcidIdForEmail(String email) throws IOException {
+        HttpPost httpGet = new HttpPost(applicationProperties.getInternalRegistryApiEndpoint() + "/orcid/" + Base64.encode(email) + "/email");
+        httpGet.setHeader(HttpHeaders.ACCEPT, "application/json");
+        setHeaders(httpGet, applicationProperties.getInternalRegistryAccessToken());
+
+        CloseableHttpResponse response = null;
+        try {
+            response = httpClient.execute(httpGet);
+            Map<String, String> responseMap = new ObjectMapper().readValue(response.getEntity().getContent(), new TypeReference<HashMap<String, String>>() {});
+            String orcidId = responseMap.get("orcid");
+            if (!StringUtils.isBlank(orcidId)) {
+                return orcidId;
+            }
+        } finally {
+            response.close();
+        }
+        return null;
+    }
+
     private void setHeaders(HttpRequestBase request, String accessToken) {
         request.setHeader(HttpHeaders.ACCEPT, "application/xml");
         request.setHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
         request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
     }
-    
+
     private StringEntity getStringEntity(Object entity) throws JAXBException {
         StringWriter sw = new StringWriter();
         jaxbMarshaller.marshal(entity, sw);
         String xmlObject = sw.toString();
         return new StringEntity(xmlObject, ContentType.create("text/xml", Consts.UTF_8));
     }
-    
+
 }
