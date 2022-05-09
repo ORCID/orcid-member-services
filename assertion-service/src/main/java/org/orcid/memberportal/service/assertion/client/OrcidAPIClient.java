@@ -2,6 +2,7 @@ package org.orcid.memberportal.service.assertion.client;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -57,7 +59,8 @@ import com.nimbusds.jose.util.Base64;
 
 @Component
 public class OrcidAPIClient {
-    private final Logger log = LoggerFactory.getLogger(OrcidAPIClient.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(OrcidAPIClient.class);
 
     private final Marshaller jaxbMarshaller;
 
@@ -91,7 +94,7 @@ public class OrcidAPIClient {
 
         if (statusCode != Status.OK.getStatusCode()) {
             String responseString = EntityUtils.toString(response.getEntity());
-            log.error("Unable to exchange id_token: {}", responseString);
+            LOG.error("Unable to exchange id_token: {}", responseString);
             throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
         }
 
@@ -104,7 +107,7 @@ public class OrcidAPIClient {
     public String postAffiliation(String orcid, String accessToken, Assertion assertion) throws JAXBException {
         Affiliation orcidAffiliation = AffiliationAdapter.toOrcidAffiliation(assertion);
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
-        log.info("Creating {} for {} with role title {}", affType, orcid, orcidAffiliation.getRoleTitle());
+        LOG.info("Creating {} for {} with role title {}", affType, orcid, orcidAffiliation.getRoleTitle());
 
         HttpPost httpPost = new HttpPost(applicationProperties.getOrcidAPIEndpoint() + orcid + '/' + affType);
         setXmlHeaders(httpPost, accessToken);
@@ -116,15 +119,15 @@ public class OrcidAPIClient {
             HttpResponse response = httpClient.execute(httpPost);
             if (response.getStatusLine().getStatusCode() != Status.CREATED.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
-                log.error("Unable to create {} for {}. Status code: {}, error {}", affType, orcid, response.getStatusLine().getStatusCode(), responseString);
+                LOG.error("Unable to create {} for {}. Status code: {}, error {}", affType, orcid, response.getStatusLine().getStatusCode(), responseString);
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
             String location = response.getFirstHeader("location").getValue();
             return location.substring(location.lastIndexOf('/') + 1);
         } catch (ClientProtocolException e) {
-            log.error("Unable to create affiliation in ORCID", e);
+            LOG.error("Unable to create affiliation in ORCID", e);
         } catch (IOException e) {
-            log.error("Unable to create affiliation in ORCID", e);
+            LOG.error("Unable to create affiliation in ORCID", e);
         }
         return null;
     }
@@ -132,7 +135,7 @@ public class OrcidAPIClient {
     public void putAffiliation(String orcid, String accessToken, Assertion assertion) throws JAXBException, IOException {
         Affiliation orcidAffiliation = AffiliationAdapter.toOrcidAffiliation(assertion);
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
-        log.info("Updating affiliation with put code {} for {}", assertion.getPutCode(), orcid);
+        LOG.info("Updating affiliation with put code {} for {}", assertion.getPutCode(), orcid);
 
         HttpPut httpPut = new HttpPut(applicationProperties.getOrcidAPIEndpoint() + orcid + '/' + affType + '/' + assertion.getPutCode());
         setXmlHeaders(httpPut, accessToken);
@@ -145,7 +148,7 @@ public class OrcidAPIClient {
             response = httpClient.execute(httpPut);
             if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
-                log.error("Unable to update {} with putcode {} for {}. Status code: {}, error {}", affType, assertion.getPutCode(), orcid,
+                LOG.error("Unable to update {} with putcode {} for {}. Status code: {}, error {}", affType, assertion.getPutCode(), orcid,
                         response.getStatusLine().getStatusCode(), responseString);
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
@@ -156,7 +159,7 @@ public class OrcidAPIClient {
 
     public void deleteAffiliation(String orcid, String accessToken, Assertion assertion) throws IOException {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
-        log.info("Deleting affiliation with putcode {} for {}", assertion.getPutCode(), orcid);
+        LOG.info("Deleting affiliation with putcode {} for {}", assertion.getPutCode(), orcid);
 
         HttpDelete httpDelete = new HttpDelete(applicationProperties.getOrcidAPIEndpoint() + orcid + '/' + affType + '/' + assertion.getPutCode());
         setXmlHeaders(httpDelete, accessToken);
@@ -166,7 +169,7 @@ public class OrcidAPIClient {
             response = httpClient.execute(httpDelete);
             if (response.getStatusLine().getStatusCode() != Status.NO_CONTENT.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
-                log.error("Unable to delete {} with putcode {} for {}. Status code: {}, error {}", affType, assertion.getPutCode(), orcid,
+                LOG.error("Unable to delete {} with putcode {} for {}. Status code: {}, error {}", affType, assertion.getPutCode(), orcid,
                         response.getStatusLine().getStatusCode(), responseString);
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
@@ -187,8 +190,7 @@ public class OrcidAPIClient {
             response = httpClient.execute(httpPost);
             if (response.getStatusLine().getStatusCode() != Status.CREATED.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
-                log.error("Unable to create notification for {}. Status code: {}, error {}", orcidId, response.getStatusLine().getStatusCode(),
-                        responseString);
+                LOG.error("Unable to create notification for {}. Status code: {}, error {}", orcidId, response.getStatusLine().getStatusCode(), responseString);
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
             String location = response.getFirstHeader("location").getValue();
@@ -199,16 +201,24 @@ public class OrcidAPIClient {
     }
 
     public String getOrcidIdForEmail(String email) throws IOException {
-        HttpPost httpGet = new HttpPost(applicationProperties.getInternalRegistryApiEndpoint() + "/orcid/" + Base64.encode(email) + "/email");
+        HttpGet httpGet = new HttpGet(applicationProperties.getInternalRegistryApiEndpoint() + "orcid/" + Base64.encode(email) + "/email");
         setJsonHeaders(httpGet, applicationProperties.getInternalRegistryAccessToken());
 
         CloseableHttpResponse response = null;
         try {
             response = httpClient.execute(httpGet);
-            Map<String, String> responseMap = new ObjectMapper().readValue(response.getEntity().getContent(), new TypeReference<HashMap<String, String>>() {});
-            String orcidId = responseMap.get("orcid");
-            if (!StringUtils.isBlank(orcidId)) {
-                return orcidId;
+            if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
+                LOG.warn("Received non-200 response trying to find orcid id for email {}", email);
+                String responseString = new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+                LOG.warn("Response received:");
+                LOG.warn(responseString);
+            } else {
+                Map<String, String> responseMap = new ObjectMapper().readValue(response.getEntity().getContent(), new TypeReference<HashMap<String, String>>() {
+                });
+                String orcidId = responseMap.get("orcid");
+                if (!StringUtils.isBlank(orcidId)) {
+                    return orcidId;
+                }
             }
         } finally {
             response.close();
@@ -221,7 +231,7 @@ public class OrcidAPIClient {
         request.setHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
         request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
     }
-    
+
     private void setJsonHeaders(HttpRequestBase request, String accessToken) {
         request.setHeader(HttpHeaders.ACCEPT, "application/json");
         request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");

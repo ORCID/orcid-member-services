@@ -14,12 +14,16 @@ import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NotificationService {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(NotificationService.class);
 
     @Autowired
     private AssertionRepository assertionRepository;
@@ -60,6 +64,7 @@ public class NotificationService {
                 });
             }
         } catch (Exception e) {
+            LOG.warn("Error sending notification to {} on behalf of {}", new Object[] { assertion.getEmail(), assertion.getOrgName() }, e);
             throw new RuntimeException("Error sending notification to " + assertion.getEmail(), e);
         }
     }
