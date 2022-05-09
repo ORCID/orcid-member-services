@@ -48,7 +48,6 @@ public class NotificationService {
         try {
             String email = assertion.getEmail();
             String salesforceId = assertion.getSalesforceId();
-            String orgName = assertion.getOrgName();
             String orcidId = orcidApiClient.getOrcidIdForEmail(email);
             if (orcidId == null) {
                 allAssertionsForEmailAndMember.forEach(a -> {
@@ -56,7 +55,7 @@ public class NotificationService {
                     assertionRepository.save(a);
                 });
             } else {
-                NotificationPermission notification = getPermissionLinkNotification(allAssertionsForEmailAndMember, email, salesforceId, orgName);
+                NotificationPermission notification = getPermissionLinkNotification(allAssertionsForEmailAndMember, email, salesforceId);
                 orcidApiClient.postNotification(notification, orcidId);
                 allAssertionsForEmailAndMember.forEach(a -> {
                     a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
@@ -69,7 +68,8 @@ public class NotificationService {
         }
     }
 
-    private NotificationPermission getPermissionLinkNotification(List<Assertion> assertions, String email, String salesforceId, String orgName) {
+    private NotificationPermission getPermissionLinkNotification(List<Assertion> assertions, String email, String salesforceId) {
+        String orgName = assertions.get(0).getOrgName(); // take org name from first assertion
         NotificationPermission notificationPermission = new NotificationPermission();
         notificationPermission.setNotificationIntro(messageSource.getMessage("assertion.notifications.intro", null, Locale.getDefault()));
         notificationPermission.setNotificationSubject(messageSource.getMessage("assertion.notifications.subject", new Object[] { orgName }, Locale.getDefault()));
