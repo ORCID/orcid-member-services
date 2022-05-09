@@ -107,7 +107,7 @@ public class OrcidAPIClient {
         log.info("Creating {} for {} with role title {}", affType, orcid, orcidAffiliation.getRoleTitle());
 
         HttpPost httpPost = new HttpPost(applicationProperties.getOrcidAPIEndpoint() + orcid + '/' + affType);
-        setHeaders(httpPost, accessToken);
+        setXmlHeaders(httpPost, accessToken);
 
         StringEntity entity = getStringEntity(orcidAffiliation);
         httpPost.setEntity(entity);
@@ -135,7 +135,7 @@ public class OrcidAPIClient {
         log.info("Updating affiliation with put code {} for {}", assertion.getPutCode(), orcid);
 
         HttpPut httpPut = new HttpPut(applicationProperties.getOrcidAPIEndpoint() + orcid + '/' + affType + '/' + assertion.getPutCode());
-        setHeaders(httpPut, accessToken);
+        setXmlHeaders(httpPut, accessToken);
 
         StringEntity entity = getStringEntity(orcidAffiliation);
         httpPut.setEntity(entity);
@@ -159,7 +159,7 @@ public class OrcidAPIClient {
         log.info("Deleting affiliation with putcode {} for {}", assertion.getPutCode(), orcid);
 
         HttpDelete httpDelete = new HttpDelete(applicationProperties.getOrcidAPIEndpoint() + orcid + '/' + affType + '/' + assertion.getPutCode());
-        setHeaders(httpDelete, accessToken);
+        setXmlHeaders(httpDelete, accessToken);
 
         CloseableHttpResponse response = null;
         try {
@@ -177,7 +177,7 @@ public class OrcidAPIClient {
 
     public String postNotification(NotificationPermission notificationPermission, String orcidId) throws JAXBException, IOException {
         HttpPost httpPost = new HttpPost(applicationProperties.getOrcidAPIEndpoint() + orcidId + "/notification-permission");
-        setHeaders(httpPost, applicationProperties.getInternalRegistryAccessToken());
+        setXmlHeaders(httpPost, applicationProperties.getInternalRegistryAccessToken());
 
         StringEntity entity = getStringEntity(notificationPermission);
         httpPost.setEntity(entity);
@@ -200,8 +200,7 @@ public class OrcidAPIClient {
 
     public String getOrcidIdForEmail(String email) throws IOException {
         HttpPost httpGet = new HttpPost(applicationProperties.getInternalRegistryApiEndpoint() + "/orcid/" + Base64.encode(email) + "/email");
-        httpGet.setHeader(HttpHeaders.ACCEPT, "application/json");
-        setHeaders(httpGet, applicationProperties.getInternalRegistryAccessToken());
+        setJsonHeaders(httpGet, applicationProperties.getInternalRegistryAccessToken());
 
         CloseableHttpResponse response = null;
         try {
@@ -217,9 +216,15 @@ public class OrcidAPIClient {
         return null;
     }
 
-    private void setHeaders(HttpRequestBase request, String accessToken) {
+    private void setXmlHeaders(HttpRequestBase request, String accessToken) {
         request.setHeader(HttpHeaders.ACCEPT, "application/xml");
         request.setHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
+        request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+    }
+    
+    private void setJsonHeaders(HttpRequestBase request, String accessToken) {
+        request.setHeader(HttpHeaders.ACCEPT, "application/json");
+        request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
         request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
     }
 

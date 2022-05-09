@@ -44,6 +44,7 @@ public class NotificationService {
         try {
             String email = assertion.getEmail();
             String salesforceId = assertion.getSalesforceId();
+            String orgName = assertion.getOrgName();
             String orcidId = orcidApiClient.getOrcidIdForEmail(email);
             if (orcidId == null) {
                 allAssertionsForEmailAndMember.forEach(a -> {
@@ -51,7 +52,7 @@ public class NotificationService {
                     assertionRepository.save(a);
                 });
             } else {
-                NotificationPermission notification = getPermissionLinkNotification(allAssertionsForEmailAndMember, email, salesforceId);
+                NotificationPermission notification = getPermissionLinkNotification(allAssertionsForEmailAndMember, email, salesforceId, orgName);
                 orcidApiClient.postNotification(notification, orcidId);
                 allAssertionsForEmailAndMember.forEach(a -> {
                     a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
@@ -63,10 +64,10 @@ public class NotificationService {
         }
     }
 
-    private NotificationPermission getPermissionLinkNotification(List<Assertion> assertions, String email, String salesforceId) {
+    private NotificationPermission getPermissionLinkNotification(List<Assertion> assertions, String email, String salesforceId, String orgName) {
         NotificationPermission notificationPermission = new NotificationPermission();
         notificationPermission.setNotificationIntro(messageSource.getMessage("assertion.notifications.intro", null, Locale.getDefault()));
-        notificationPermission.setNotificationSubject(messageSource.getMessage("assertion.notifications.subject", null, Locale.getDefault()));
+        notificationPermission.setNotificationSubject(messageSource.getMessage("assertion.notifications.subject", new Object[] { orgName }, Locale.getDefault()));
         notificationPermission.setNotificationType(NotificationType.PERMISSION);
         notificationPermission.setAuthorizationUrl(new AuthorizationUrl(orcidRecordService.generateLinkForEmailAndSalesforceId(email, salesforceId)));
         
