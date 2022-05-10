@@ -15,7 +15,7 @@ describe('Add new user', () => {
       cy.wrap($e).children().last().click()
       cy.get('#jhi-confirm-delete-assertion').click()
     })
-    cy.visit('/ms-user')
+    cy.visit('/user')
     cy.get('.btn-group').each($e => {
       cy.wrap($e).children().last().invoke('attr', 'disabled').then((disabled) => {
         disabled ? cy.log("Skipping user, button is disabled") : cy.removeAffiliation($e)
@@ -26,7 +26,7 @@ describe('Add new user', () => {
 
   it('Remove all affiliations from test member', function () {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password)
-    cy.visit('/ms-user')
+    cy.visit('/user')
     cy.get('.btn-group').each($e => {
       cy.wrap($e).children().last().invoke('attr', 'disabled').then((disabled) => {
         disabled ? cy.log("Skipping user, button is disabled") : cy.removeAffiliation($e)

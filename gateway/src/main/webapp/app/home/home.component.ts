@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { AccountService } from 'app/core';
-import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
+import { IMSUser } from 'app/shared/model/user.model';
 
 @Component({
   selector: 'jhi-home',

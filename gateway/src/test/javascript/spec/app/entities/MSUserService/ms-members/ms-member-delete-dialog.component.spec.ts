@@ -5,8 +5,8 @@ import { Observable, of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { MSMemberDeleteDialogComponent } from 'app/entities/MSUserService/ms-members/ms-member-delete-dialog.component';
-import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
+import { MSMemberDeleteDialogComponent } from 'app/entities/member/member-delete-dialog.component';
+import { MSMemberService } from 'app/entities/member/member.service';
 
 describe('Component Tests', () => {
   describe('MSMember Management Delete Component', () => {

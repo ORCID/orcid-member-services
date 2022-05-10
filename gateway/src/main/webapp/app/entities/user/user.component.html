@@ -1,0 +1,127 @@
+<div>
+    <h1 id="page-heading" class="mt-3" jhiTranslate="gatewayApp.msUserServiceMSUser.home.title.string">Manage users</h1>
+    <div class="row justify-content-end">
+        <div class="col-md-12 mb-2">
+            <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity ml-1" [routerLink]="['/user/new']">
+                <fa-icon [icon]="'plus'"></fa-icon>
+                <span  jhiTranslate="gatewayApp.msUserServiceMSUser.home.createLabel.string">
+                Add user
+                </span>
+            </button>
+            <button *jhiHasAnyAuthority="'ROLE_ADMIN'" id="jh-upload-entities" class="btn btn-primary float-right jh-create-entity create-ms-user ml-1" [routerLink]="['/', 'user', { outlets: { popup: 'import'} }]">
+                <fa-icon [icon]="'plus'"></fa-icon>
+                <span  jhiTranslate="gatewayApp.msUserServiceMSUser.home.uploadLabel.string">
+                Import users from CSV
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="input-group filter-group justify-content-end">
+            	<div class="filter-input">
+			     	<input type="text" (keyup.enter)="submitSearch()" [(ngModel)]="searchTerm" placeholder="{{'global.form.search.string' | translate}}" ng-model="selected" class="form-control">
+			    	<button *ngIf="submittedSearchTerm" class="reset" (click)="resetSearch()"><fa-icon aria-hidden="true" [icon]="faTimes" [styles]="{'color': '#2e7f9f'}"></fa-icon></button>
+		    	</div>
+	    		<button class="search" (click)="submitSearch()"><fa-icon aria-hidden="true" [icon]="faSearch" [styles]="{'color': '#2e7f9f'}"></fa-icon></button>
+		    </div>
+    	</div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <jhi-alert></jhi-alert>
+            <div class="alert alert-warning" *ngIf="msUser?.length === 0">
+                <span jhiTranslate="gatewayApp.msUserServiceMSUser.home.notFound.string">No users to show</span>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive" *ngIf="msUser?.length > 0">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th></th>
+            <th jhiSortBy="email"><span jhiTranslate="gatewayApp.msUserServiceMSUser.email.string">Email</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="firstName"><span jhiTranslate="gatewayApp.msUserServiceMSUser.firstName.string">First Name</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="lastName"><span jhiTranslate="gatewayApp.msUserServiceMSUser.lastName.string">Last Name</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="mainContact"><span jhiTranslate="gatewayApp.msUserServiceMSUser.mainContact.string">Main Contact</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="salesforceId"><span jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId.string">Organization</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="activated"><span jhiTranslate="gatewayApp.msUserServiceMSUser.activated.string">Activated</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="isAdmin"><span jhiTranslate="gatewayApp.msUserServiceMSUser.isAdmin.string">Admin</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="gatewayApp.msUserServiceMSUser.lastModifiedDate.string">Last Modified</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let msUser of msUser ;trackBy: trackId">
+                <td>
+                <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit"
+                                (click) = "switchUser(msUser.email)"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm ml-1"
+                                [disabled]="disableImpersonate(msUser)"
+                            >
+                            <fa-icon [icon]="'sign-in-alt'"></fa-icon>
+                        </button>
+                </td>
+                <td><a [routerLink]="['/user', msUser.id, 'view' ]">{{msUser.email}}</a></td>
+                <td>{{msUser.firstName}}</td>
+                <td>{{msUser.lastName}}</td>
+                <td class="text-center">
+                    <span class="sr-only">{{msUser.mainContact}}</span>
+                    <fa-icon aria-hidden="true" *ngIf="msUser.mainContact" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                    <fa-icon aria-hidden="true" *ngIf="!msUser.mainContact" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                </td>
+                <td>{{msUser.memberName}}</td>
+                <td class="text-center">
+                    <span class="sr-only">{{msUser.activated}}</span>
+                    <fa-icon aria-hidden="true" *ngIf="msUser.activated" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                    <fa-icon aria-hidden="true" *ngIf="!msUser.activated" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                </td>
+                <td class="text-center">
+                    <span class="sr-only">{{msUser.isAdmin}}</span>
+                    <fa-icon aria-hidden="true" *ngIf="msUser.isAdmin" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                    <fa-icon aria-hidden="true" *ngIf="!msUser.isAdmin" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                </td>
+                <td>{{msUser.lastModifiedDate | date:'medium'}}</td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button *ngIf="!msUser.activated" type="button"
+                                (click)="sendActivate(msUser)"
+                                class="btn btn-primary btn-sm ml-1"
+                        >
+                            <fa-icon [icon]="faCheckCircle"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.activate.string">Activate</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/user', msUser.id, 'edit']"
+                                class="btn btn-primary btn-sm ml-1"
+                                [disabled]="isDefaultAdmin(msUser)"
+                        >
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit.string">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', 'user', { outlets: { popup: msUser.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm ml-1"
+                                [disabled]="isDefaultAdmin(msUser) || isUserLoggedIn(msUser)"
+                            >
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete.string">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div [hidden]="msUser?.length === 0">
+        <div class="row justify-content-center">
+            <p>{{ itemCount }}</p>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

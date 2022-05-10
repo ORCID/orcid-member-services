@@ -6,7 +6,7 @@ const { salesforceId, clientName, clientId } = data.member;
 describe('Manage members menu', () => {
   it('Test edit member form', function() {
     cy.programmaticSignin(credentials.adminEmail, credentials.adminPassword)
-    cy.visit(`/ms-member/${data.member.id}/edit`)
+    cy.visit(`/member/${data.member.id}/edit`)
     // Shouldn't be able to save without a salesforce id
     cy.get('#field_salesforceId').clear()
     cy.get('#save-entity').invoke('attr', 'disabled').should('exist')
