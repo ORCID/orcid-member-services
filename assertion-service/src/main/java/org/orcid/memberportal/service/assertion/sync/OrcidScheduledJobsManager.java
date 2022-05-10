@@ -6,6 +6,7 @@ import javax.xml.bind.JAXBException;
 
 import org.orcid.memberportal.service.assertion.services.AssertionService;
 import org.orcid.memberportal.service.assertion.services.CsvReportService;
+import org.orcid.memberportal.service.assertion.services.NotificationService;
 import org.orcid.memberportal.service.assertion.services.StoredFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,9 @@ public class OrcidScheduledJobsManager {
     
     @Autowired
     private CsvReportService csvReportService;
+    
+    @Autowired
+    private NotificationService notificationService;
 
     @Scheduled(initialDelay = 90000, fixedDelayString = "${application.syncAffiliationsDelay}")
     @SchedulerLock(name = "syncAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "2m")
@@ -70,5 +74,13 @@ public class OrcidScheduledJobsManager {
         LOG.info("Running cron to process CSV reports");
         csvReportService.processCsvReports();
         LOG.info("CSV reports processed");
+    }
+    
+    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.sendPermissionLinkNotificationsDelay}")
+    @SchedulerLock(name = "sendPermissionLinkNotifications", lockAtMostFor = "60m", lockAtLeastFor = "2m")
+    public void sendPermissionLinkNotifications() throws IOException  {
+        LOG.info("Running cron to send permission link notifications");
+        notificationService.sendPermissionLinkNotifications();
+        LOG.info("Permission link notifications sent");
     }
 }

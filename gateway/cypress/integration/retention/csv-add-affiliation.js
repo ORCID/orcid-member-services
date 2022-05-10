@@ -89,7 +89,6 @@ describe('Test adding affiliations via CSV', () => {
   });
 
   it('Upload second CSV and check inbox for the confirmation email', function() {
-    cy.pause();
     cy.uploadCsv('../fixtures/downloadedAffiliations.csv'); 
     cy.task('checkInbox', {
       subject: data.outbox.csvUpload,
