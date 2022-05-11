@@ -5,7 +5,7 @@ import credentials from '../../fixtures/credentials.json';
 describe('Test the edit user form', () => {
   it('Edit user', function() {
     cy.programmaticSignin(data.populatedMember.users.owner.email, credentials.password);
-    cy.visit(`/ms-user/${data.populatedMember.users.owner.id}/edit`);
+    cy.visit(`/user/${data.populatedMember.users.owner.id}/edit`);
     // Clear first name input field
     cy.get('#field_firstName').clear();
     // Shouldn't be possible to save with an empty name field

@@ -5,9 +5,9 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Data } from '@angular/router';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { MSMemberComponent } from 'app/entities/MSUserService/ms-members/ms-member.component';
-import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
-import { MSMember } from 'app/shared/model/MSUserService/ms-member.model';
+import { MSMemberComponent } from 'app/entities/member/member.component';
+import { MSMemberService } from 'app/entities/member/member.service';
+import { MSMember } from 'app/shared/model/member.model';
 
 describe('Component Tests', () => {
   describe('MSMember Management Component', () => {

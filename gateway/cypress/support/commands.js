@@ -167,7 +167,7 @@ Cypress.Commands.add('removeAffiliation', ($e) => {
 })
 
 Cypress.Commands.add('changeOrgOwner', () => {
-  cy.visit(`/ms-user/${data.member.users.owner.id}/edit`)
+  cy.visit(`/user/${data.member.users.owner.id}/edit`)
   cy.get("#field_mainContact").click()
   cy.get('#save-entity').click()
   cy.get('.alert-success').should('exist');

@@ -9,8 +9,8 @@ import { Observable } from 'rxjs';
 import { VERSION } from 'app/app.constants';
 import { JhiLanguageHelper, AccountService, LoginModalService, LoginService, Account } from 'app/core';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service.ts';
-import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
+import { MSMemberService } from 'app/entities/member/member.service';
+import { IMSMember } from 'app/shared/model/member.model';
 import { SERVER_API_URL } from 'app/app.constants';
 
 type EntityResponseType = HttpResponse<IMSMember>;

@@ -6,8 +6,8 @@ import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
-import { IMSMember, MSMember } from 'app/shared/model/MSUserService/ms-member.model';
+import { MSMemberService } from 'app/entities/member/member.service';
+import { IMSMember, MSMember } from 'app/shared/model/member.model';
 
 describe('Service Tests', () => {
   describe('MSMember Service', () => {

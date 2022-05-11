@@ -5,9 +5,9 @@ import { FormBuilder } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { MSUserUpdateComponent } from 'app/entities/MSUserService/ms-users/ms-user-update.component';
-import { MSUserService } from 'app/entities/MSUserService/ms-users/ms-user.service';
-import { MSUser } from 'app/shared/model/MSUserService/ms-user.model';
+import { MSUserUpdateComponent } from 'app/entities/user/user-update.component';
+import { MSUserService } from 'app/entities/user/user.service';
+import { MSUser } from 'app/shared/model/user.model';
 
 describe('Component Tests', () => {
   describe('MSUser Management Update Component', () => {

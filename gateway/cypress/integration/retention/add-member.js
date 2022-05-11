@@ -6,7 +6,7 @@ const { salesforceId, clientName, clientId } = data.member;
 describe('Test "Add member" functionality', () => {
   it('Add member', function() {
     cy.programmaticSignin(credentials.adminEmail, credentials.adminPassword);
-    cy.visit('/ms-member/new');
+    cy.visit('/member/new');
     // Check required field flags
     cy.get('#field_salesforceId').should('have.class', 'ng-invalid');
     cy.get('#field_clientName').should('have.class', 'ng-invalid');

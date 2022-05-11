@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { MSUserDetailComponent } from 'app/entities/MSUserService/ms-users/ms-user-detail.component';
-import { MSUser } from 'app/shared/model/MSUserService/ms-user.model';
+import { MSUserDetailComponent } from 'app/entities/user/user-detail.component';
+import { MSUser } from 'app/shared/model/user.model';
 
 describe('Component Tests', () => {
   describe('MSUser Management Detail Component', () => {

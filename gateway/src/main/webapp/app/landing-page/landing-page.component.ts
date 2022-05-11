@@ -7,8 +7,8 @@ import { interval, Subscription } from 'rxjs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { KEYUTIL, KJUR } from 'jsrsasign';
 import { LandingPageService } from './landing-page.service';
-import { IMSMember } from 'app/shared/model/MSUserService/ms-member.model';
-import { MSMemberService } from 'app/entities/MSUserService/ms-members/ms-member.service';
+import { IMSMember } from 'app/shared/model/member.model';
+import { MSMemberService } from 'app/entities/member/member.service';
 import { BASE_URL, ORCID_BASE_URL } from 'app/app.constants';
 
 @Component({

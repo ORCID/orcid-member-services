@@ -4,8 +4,8 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { take, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { MSUserService } from 'app/entities/MSUserService/ms-users/ms-user.service';
-import { IMSUser, MSUser } from 'app/shared/model/MSUserService/ms-user.model';
+import { MSUserService } from 'app/entities/user/user.service';
+import { IMSUser, MSUser } from 'app/shared/model/user.model';
 
 describe('Service Tests', () => {
   describe('Member service users service', () => {

@@ -5,9 +5,9 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Data } from '@angular/router';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { MSUserComponent } from 'app/entities/MSUserService/ms-users/ms-user.component';
-import { MSUserService } from 'app/entities/MSUserService/ms-users/ms-user.service';
-import { MSUser } from 'app/shared/model/MSUserService/ms-user.model';
+import { MSUserComponent } from 'app/entities/user/user.component';
+import { MSUserService } from 'app/entities/user/user.service';
+import { MSUser } from 'app/shared/model/user.model';
 
 describe('Component Tests', () => {
   describe('MSUser Management Component', () => {

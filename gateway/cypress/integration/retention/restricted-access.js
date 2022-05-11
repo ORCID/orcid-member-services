@@ -9,21 +9,21 @@ describe('Test restricted access', () => {
 
   it('Regular users should not be able to access the Manage Members menu', function() {
     cy.programmaticSignin(data.populatedMember.users.user.email, credentials.password);
-    cy.visit('/ms-member');
+    cy.visit('/member');
     cy.get('h1').filter('[jhitranslate="error.title.string"]').contains('Your request cannot be processed')
     cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')
   });
 
   it('Regular users should not be able to access the Manage Users menu', function() {
     cy.programmaticSignin(data.populatedMember.users.user.email, credentials.password);
-    cy.visit('/ms-user');
+    cy.visit('/user');
     cy.get('h1').filter('[jhitranslate="error.title.string"]').contains('Your request cannot be processed')
     cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')
   });
 
   it('Org owners should not be able to access the Manage Members menu', function() {
     cy.programmaticSignin(data.populatedMember.users.owner.email, credentials.password);
-    cy.visit('/ms-member');
+    cy.visit('/member');
     cy.get('h1').filter('[jhitranslate="error.title.string"]').contains('Your request cannot be processed')
     cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')
   });

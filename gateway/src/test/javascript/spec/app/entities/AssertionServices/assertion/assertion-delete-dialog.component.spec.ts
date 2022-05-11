@@ -5,8 +5,8 @@ import { Observable, of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { AssertionDeleteDialogComponent } from 'app/entities/AssertionService/assertion/assertion-delete-dialog.component';
-import { AssertionService } from 'app/entities/AssertionService/assertion/assertion.service';
+import { AssertionDeleteDialogComponent } from 'app/entities/assertion/assertion-delete-dialog.component';
+import { AssertionService } from 'app/entities/assertion/assertion.service';
 
 describe('Component Tests', () => {
   describe('Assertion Management Delete Component', () => {

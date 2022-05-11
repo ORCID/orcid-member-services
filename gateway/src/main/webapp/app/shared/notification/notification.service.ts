@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AssertionService } from '../../entities/AssertionService/assertion/assertion.service';
+import { AssertionService } from '../../entities/assertion/assertion.service';
 
 @Injectable()
 export class NotificationService {

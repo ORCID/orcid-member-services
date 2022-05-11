@@ -19,8 +19,8 @@ describe('Test header for appropriate drop down menus', () => {
     cy.visit('/');
     cy.get('#admin-menu').should('exist');
     cy.get('#entity-menu').should('exist');
-    cy.get('a').filter('[href="/ms-user"]').should('exist');
-    cy.get('a').filter('[href="/ms-member"]').should('not.exist');
+    cy.get('a').filter('[href="/user"]').should('exist');
+    cy.get('a').filter('[href="/member"]').should('not.exist');
   });
 
   it('Test admin account', function() {
@@ -28,7 +28,7 @@ describe('Test header for appropriate drop down menus', () => {
     cy.visit('/');
     cy.get('#admin-menu').should('exist');
     cy.get('#entity-menu').should('exist')
-    cy.get('a').filter('[href="/ms-user"]').should('exist');
-    cy.get('a').filter('[href="/ms-member"]').should('exist');
+    cy.get('a').filter('[href="/user"]').should('exist');
+    cy.get('a').filter('[href="/member"]').should('exist');
   });
 });

@@ -6,7 +6,7 @@ import { Observable, Subject } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/user/account.model';
-import { IMSUser } from 'app/shared/model/MSUserService/ms-user.model';
+import { IMSUser } from 'app/shared/model/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {

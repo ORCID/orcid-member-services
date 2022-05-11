@@ -5,9 +5,9 @@ import { FormBuilder } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 
 import { GatewayTestModule } from '../../../../test.module';
-import { AssertionUpdateComponent } from 'app/entities/AssertionService/assertion/assertion-update.component';
-import { AssertionService } from 'app/entities/AssertionService/assertion/assertion.service';
-import { Assertion } from 'app/shared/model/AssertionService/assertion.model';
+import { AssertionUpdateComponent } from 'app/entities/assertion/assertion-update.component';
+import { AssertionService } from 'app/entities/assertion/assertion.service';
+import { Assertion } from 'app/shared/model/assertion.model';
 
 describe('Component Tests', () => {
   describe('Assertion Management Update Component', () => {
