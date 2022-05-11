@@ -1,5 +1,6 @@
 {
   "baseUrl": "https://member-portal.qa.orcid.org",
   "taskTimeout": 300000,
-  "defaultCommandTimeout": 10000
+  "defaultCommandTimeout": 10000,
+  "video": false
 }
