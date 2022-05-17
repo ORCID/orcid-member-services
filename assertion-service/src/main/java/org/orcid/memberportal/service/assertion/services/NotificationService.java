@@ -63,7 +63,8 @@ public class NotificationService {
                 });
             }
         } catch (Exception e) {
-            LOG.warn("Error sending notification to {} on behalf of {}", new Object[] { assertion.getEmail(), assertion.getOrgName() }, e);
+            LOG.warn("Error sending notification to {} on behalf of {}", assertion.getEmail(), assertion.getOrgName());
+            LOG.warn("Error sending notification", e);
             throw new RuntimeException("Error sending notification to " + assertion.getEmail(), e);
         }
     }
