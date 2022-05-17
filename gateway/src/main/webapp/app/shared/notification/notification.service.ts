@@ -8,10 +8,14 @@ export class NotificationService {
   resourceUrl: string;
 
   constructor(private http: HttpClient, private assertionService: AssertionService) {
-    this.resourceUrl = this.assertionService.resourceUrl + '/notifications';
+    this.resourceUrl = this.assertionService.resourceUrl + '/notification-request';
   }
 
   updateStatuses(): Observable<HttpResponse<any>> {
     return this.http.post<any>(this.resourceUrl, { observe: 'response' });
+  }
+
+  requestInProgress(): Observable<HttpResponse<any>> {
+    return this.http.get<any>(this.resourceUrl, { observe: 'response' });
   }
 }
