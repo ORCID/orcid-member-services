@@ -19,9 +19,9 @@ import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 
 @Component
 @EnableScheduling
-public class OrcidScheduledJobsManager {
+public class ScheduledJobsManager {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OrcidScheduledJobsManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScheduledJobsManager.class);
 
     @Autowired
     private AssertionService assertionsService;

@@ -134,13 +134,6 @@ public class NotificationServiceIT {
     
     @Test
     @WithMockUser(username = "any@orcid.org", authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "password")
-    public void testFindActiveRequests() throws Exception {
-        List<SendNotificationsRequest> requests = notificationService.findActiveRequests();
-        assertThat(requests.size()).isEqualTo(5);
-    }
-    
-    @Test
-    @WithMockUser(username = "any@orcid.org", authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "password")
     public void testRequestInProgress() throws Exception {
         boolean requestInProgress = notificationService.requestInProgress("salesforceId1");
         assertThat(requestInProgress).isTrue();
@@ -151,21 +144,8 @@ public class NotificationServiceIT {
     
     @Test
     @WithMockUser(username = "any@orcid.org", authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "password")
-    public void testMarkRequestCompleted() throws Exception {
-        List<SendNotificationsRequest> requests = notificationService.findActiveRequests();
-        SendNotificationsRequest first = requests.get(0);
-        notificationService.markRequestCompleted(first);
-        requests = notificationService.findActiveRequests();
-        assertThat(requests.size()).isEqualTo(4);
-    }
-    
-    @Test
-    @WithMockUser(username = "any@orcid.org", authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "password")
     public void testCreateSendNotificationsRequest() throws Exception {
         notificationService.createSendNotificationsRequest("email6", "salesforceId6");
-        List<SendNotificationsRequest> requests = notificationService.findActiveRequests();
-        assertThat(requests.size()).isEqualTo(6);
-        
         boolean requestInProgress = notificationService.requestInProgress("salesforceId6");
         assertThat(requestInProgress).isTrue();
     }
@@ -204,7 +184,6 @@ public class NotificationServiceIT {
         assertion.setOrgCountry("some country");
         assertion.setDisambiguatedOrgId("some org id");
         assertion.setDisambiguationSource("some source");
-        
         return assertion;
     }
 
