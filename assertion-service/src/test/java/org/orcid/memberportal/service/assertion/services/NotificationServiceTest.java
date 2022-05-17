@@ -3,6 +3,7 @@ package org.orcid.memberportal.service.assertion.services;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Locale;
 
 import javax.xml.bind.JAXBException;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -24,9 +26,11 @@ import org.orcid.jaxb.model.v3.release.notification.permission.ItemType;
 import org.orcid.jaxb.model.v3.release.notification.permission.NotificationPermission;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.SendNotificationsRequest;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
+import org.orcid.memberportal.service.assertion.repository.SendNotificationsRequestRepository;
 import org.springframework.context.MessageSource;
 
 class NotificationServiceTest {
@@ -51,6 +55,12 @@ class NotificationServiceTest {
     
     @InjectMocks
     private NotificationService notificationService;
+    
+    @Mock
+    private SendNotificationsRequestRepository sendNotificationsRequestRepository;
+
+    @Captor
+    private ArgumentCaptor<SendNotificationsRequest> requestCaptor;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -134,6 +144,76 @@ class NotificationServiceTest {
         checkNotificationPermissionObject(notificationPermission, "4", 7);
         
         Mockito.verify(orcidApiClient, Mockito.never()).postNotification(notificationPermissionCaptor.capture(), Mockito.eq("orcid5"));
+    }
+    
+    @Test
+    void testCreateSendNotificationsRequest() {
+        Mockito.when(sendNotificationsRequestRepository.findActiveRequestBySalesforceId(Mockito.eq("somethingElse"))).thenReturn(new ArrayList<>());
+        Mockito.when(sendNotificationsRequestRepository.insert(Mockito.any(SendNotificationsRequest.class))).thenReturn(null);
+        notificationService.createSendNotificationsRequest("email", "salesforceId");
+        Mockito.verify(sendNotificationsRequestRepository).insert(requestCaptor.capture());
+
+        SendNotificationsRequest captured = requestCaptor.getValue();
+        assertThat(captured.getDateRequested()).isNotNull();
+        assertThat(captured.getEmail()).isEqualTo("email");
+        assertThat(captured.getSalesforceId()).isEqualTo("salesforceId");
+    }
+    
+    @Test
+    void testCreateSendNotificationsRequest_requestInProgress() {
+        Mockito.when(sendNotificationsRequestRepository.findActiveRequestBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(getListOfOneRequest());
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            notificationService.createSendNotificationsRequest("email", "salesforceId");
+        });
+    }
+
+    @Test
+    void testRequestInProgress() {
+        Mockito.when(sendNotificationsRequestRepository.findActiveRequestBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(getListOfOneRequest());
+        Mockito.when(sendNotificationsRequestRepository.findActiveRequestBySalesforceId(Mockito.eq("somethingElse"))).thenReturn(new ArrayList<>());
+        
+        boolean inProgress = notificationService.requestInProgress("salesforceId");
+        assertThat(inProgress).isEqualTo(true);
+        
+        inProgress = notificationService.requestInProgress("somethingElse");
+        assertThat(inProgress).isEqualTo(false);
+    }
+    
+    @Test
+    void testMarkRequestCompleted() {
+        Mockito.when(sendNotificationsRequestRepository.save(Mockito.any(SendNotificationsRequest.class))).thenReturn(null);
+        
+        SendNotificationsRequest request = getRequest();
+        notificationService.markRequestCompleted(request);
+        
+        Mockito.verify(sendNotificationsRequestRepository).save(requestCaptor.capture());
+        
+        SendNotificationsRequest captured = requestCaptor.getValue();
+        assertThat(captured.getDateCompleted()).isNotNull();
+    }
+    
+    @Test
+    void testFindActiveRequests() {
+        Mockito.when(sendNotificationsRequestRepository.findActiveRequests()).thenReturn(getListOfManyRequests());
+        List<SendNotificationsRequest> activeRequests = notificationService.findActiveRequests();
+        assertThat(activeRequests).isNotNull();
+        assertThat(activeRequests.size()).isEqualTo(4);
+    }
+
+    private List<SendNotificationsRequest> getListOfManyRequests() {
+        return Arrays.asList(getRequest(), getRequest(), getRequest(), getRequest());
+    }
+
+    private List<SendNotificationsRequest> getListOfOneRequest() {
+        return Arrays.asList(getRequest());
+    }
+    
+    private SendNotificationsRequest getRequest() {
+        SendNotificationsRequest request = new SendNotificationsRequest();
+        request.setEmail("email");
+        request.setSalesforceId("salesforceId");
+        request.setDateRequested(Instant.now());
+        return request;
     }
     
     private void checkNotificationPermissionObject(NotificationPermission notificationPermission, String variant, int expectedNumberOfItems) {
