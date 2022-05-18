@@ -97,12 +97,6 @@ source_file = gateway/src/main/webapp/i18n/en/settings.json
 source_lang = en
 type = STRUCTURED_JSON
 
-[member-portal.user-management]
-file_filter = gateway/src/main/webapp/i18n/<lang>/user-management.json
-source_file = gateway/src/main/webapp/i18n/en/user-management.json
-source_lang = en
-type = STRUCTURED_JSON
-
 [member-portal.report]
 file_filter = gateway/src/main/webapp/i18n/<lang>/report.json
 source_file = gateway/src/main/webapp/i18n/en/report.json
