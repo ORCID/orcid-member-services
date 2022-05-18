@@ -139,6 +139,7 @@ class NotificationServiceTest {
                 assertThat(a.getStatus()).isEqualTo(AssertionStatus.PENDING.name());
             } else {
                 assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_SENT.name());
+                assertThat(a.getNotificationSentDate()).isNotNull();
             }
         });
         

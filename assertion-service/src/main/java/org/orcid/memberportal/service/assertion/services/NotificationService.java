@@ -94,6 +94,7 @@ public class NotificationService {
                 orcidApiClient.postNotification(notification, orcidId);
                 allAssertionsForEmailAndMember.forEach(a -> {
                     a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
+                    a.setNotificationSentDate(Instant.now());
                     assertionRepository.save(a);
                 });
             }
