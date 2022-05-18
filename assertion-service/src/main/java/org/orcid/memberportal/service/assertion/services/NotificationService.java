@@ -94,14 +94,16 @@ public class NotificationService {
                 orcidApiClient.postNotification(notification, orcidId);
                 allAssertionsForEmailAndMember.forEach(a -> {
                     a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
-                    a.setNotificationSentDate(Instant.now());
+                    a.setNotificationSent(Instant.now());
                     assertionRepository.save(a);
                 });
             }
         } catch (Exception e) {
             LOG.warn("Error sending notification to {} on behalf of {}", email, salesforceId);
-            LOG.warn("Error sending notification", e);
-            throw new RuntimeException("Error sending notification to " + salesforceId, e);
+            allAssertionsForEmailAndMember.forEach(a -> {
+                a.setStatus(AssertionStatus.NOTIFICATION_FAILED.name());
+                assertionRepository.save(a);
+            });
         }
     }
 

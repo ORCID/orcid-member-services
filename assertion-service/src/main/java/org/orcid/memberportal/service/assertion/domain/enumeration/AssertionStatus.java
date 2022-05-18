@@ -13,7 +13,8 @@ public enum AssertionStatus {
     UNKNOWN("Unknown"), 
     ERROR_DELETING_IN_ORCID("Error deleting in ORCID"),
     NOTIFICATION_REQUESTED("Notification requested"),
-    NOTIFICATION_SENT("Notification sent");
+    NOTIFICATION_SENT("Notification sent"),
+    NOTIFICATION_FAILED("Notification failed"),;
     
 
     private final String value;
