@@ -42,11 +42,6 @@ public class ClientForwardControllerIT {
         perform.andExpect(status().isOk()).andExpect(forwardedUrl("/"));
     }
 
-    @Test
-    public void getNestedClientEndpoint() throws Exception {
-        restMockMvc.perform(get("/member")).andExpect(status().isOk()).andExpect(forwardedUrl("/"));
-    }
-
     @RestController
     public static class TestController {
 
