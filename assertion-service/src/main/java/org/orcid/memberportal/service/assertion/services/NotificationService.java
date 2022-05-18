@@ -1,6 +1,8 @@
 package org.orcid.memberportal.service.assertion.services;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,8 +14,10 @@ import org.orcid.jaxb.model.v3.release.notification.permission.Items;
 import org.orcid.jaxb.model.v3.release.notification.permission.NotificationPermission;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.SendNotificationsRequest;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
+import org.orcid.memberportal.service.assertion.repository.SendNotificationsRequestRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,18 +40,49 @@ public class NotificationService {
 
     @Autowired
     private OrcidAPIClient orcidApiClient;
-
-    public void sendPermissionLinkNotifications() {
-        List<Assertion> notificationRequestedEmailsAndSalesforceIds = assertionRepository.findEmailAndSalesforceIdsWithNotificationRequested();
-        notificationRequestedEmailsAndSalesforceIds.forEach(this::findAssertionsAndAttemptSend);
+    
+    @Autowired
+    private SendNotificationsRequestRepository sendNotificationsRequestRepository;
+    
+    public boolean requestInProgress(String salesforceId) {
+        return findActiveRequestBySalesforceId(salesforceId) != null;
     }
 
-    private void findAssertionsAndAttemptSend(Assertion assertion) {
-        List<Assertion> allAssertionsForEmailAndMember = assertionRepository.findByEmailAndSalesforceIdAndStatus(assertion.getEmail(), assertion.getSalesforceId(),
+    public void createSendNotificationsRequest(String userEmail, String salesforceId) {
+        if (findActiveRequestBySalesforceId(salesforceId) != null) {
+            throw new RuntimeException("Send notifications request already active for " + salesforceId);
+        }
+        
+        SendNotificationsRequest request = new SendNotificationsRequest();
+        request.setEmail(userEmail);
+        request.setSalesforceId(salesforceId);
+        request.setDateRequested(Instant.now());
+        sendNotificationsRequestRepository.insert(request);
+    }
+    
+    public void sendPermissionLinkNotifications() {
+        List<SendNotificationsRequest> requests = sendNotificationsRequestRepository.findActiveRequests();
+        requests.forEach(r -> {
+            processRequest(r);
+            markRequestCompleted(r);
+        });
+    }
+    
+    private void markRequestCompleted(SendNotificationsRequest request) {
+        LOG.info("Marking SendNotificationsRequest from user {} (salesforce ID {}) as complete", request.getEmail(), request.getSalesforceId());
+        request.setDateCompleted(Instant.now());
+        sendNotificationsRequestRepository.save(request);
+    }
+    
+    private void processRequest(SendNotificationsRequest request) {
+        Iterator<String> emailsWithNotificationsRequested = assertionRepository.findDistinctEmailsWithNotificationRequested(request.getSalesforceId());
+        emailsWithNotificationsRequested.forEachRemaining(e -> findAssertionsAndAttemptSend(e, request.getSalesforceId()));
+    }
+
+    private void findAssertionsAndAttemptSend(String email, String salesforceId) {
+        List<Assertion> allAssertionsForEmailAndMember = assertionRepository.findByEmailAndSalesforceIdAndStatus(email, salesforceId,
                 AssertionStatus.NOTIFICATION_REQUESTED.name());
         try {
-            String email = assertion.getEmail();
-            String salesforceId = assertion.getSalesforceId();
             String orcidId = orcidApiClient.getOrcidIdForEmail(email);
             if (orcidId == null) {
                 allAssertionsForEmailAndMember.forEach(a -> {
@@ -63,8 +98,9 @@ public class NotificationService {
                 });
             }
         } catch (Exception e) {
-            LOG.warn("Error sending notification to {} on behalf of {}", new Object[] { assertion.getEmail(), assertion.getOrgName() }, e);
-            throw new RuntimeException("Error sending notification to " + assertion.getEmail(), e);
+            LOG.warn("Error sending notification to {} on behalf of {}", email, salesforceId);
+            LOG.warn("Error sending notification", e);
+            throw new RuntimeException("Error sending notification to " + salesforceId, e);
         }
     }
 
@@ -112,6 +148,12 @@ public class NotificationService {
 
         notificationPermission.setItems(new Items(items));
         return notificationPermission;
+    }
+    
+    private SendNotificationsRequest findActiveRequestBySalesforceId(String salesforceId) {
+        List<SendNotificationsRequest> requests = sendNotificationsRequestRepository.findActiveRequestBySalesforceId(salesforceId);
+        assert requests.size() <= 1;
+        return requests.size() == 1 ? requests.get(0) : null;
     }
     
 }

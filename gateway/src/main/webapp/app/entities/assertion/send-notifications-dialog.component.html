@@ -4,8 +4,10 @@
         <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
     </div>
     <div class="modal-body">
-        <jhi-alert-error></jhi-alert-error>
-        <p id="jhi-delete-msUser-heading" jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.label.string">Are you sure you would like to send permission notifications to your researchers that have an ORCID iD?</p>
+        <div class="alert alert-danger" *ngIf="requestAlreadyInProgress" jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.alreadyInProgress.string">
+            A request to send notifications to your users is already in progress. Please try again later.
+        </div>
+        <p jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.label.string">Are you sure you would like to send permission notifications to your researchers that have an ORCID iD?</p>
     </div>
 
     <div class="modal-footer">

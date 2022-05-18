@@ -1,5 +1,6 @@
 package org.orcid.memberportal.service.assertion.repository.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.orcid.memberportal.service.assertion.domain.Assertion;
@@ -21,6 +22,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
+
+import com.mongodb.client.DistinctIterable;
+import com.mongodb.client.model.Filters;
 
 @Repository
 public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom {
@@ -91,21 +95,17 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
     @Override
     public void updateStatusPendingToNotificationRequested(String salesforceId) {
         Query query = new Query();
-        query.addCriteria(Criteria
-                        .where("salesforceId").is(salesforceId).and("status").is(AssertionStatus.PENDING.name()));
+        query.addCriteria(Criteria.where("salesforceId").is(salesforceId).and("status").is(AssertionStatus.PENDING.name()));
         Update update = new Update();
         update.set("status", AssertionStatus.NOTIFICATION_REQUESTED.name());
         mongoTemplate.updateMulti(query, update, Assertion.class, "assertion");
     }
-    
+
     @Override
-    public List<Assertion> findEmailAndSalesforceIdsWithNotificationRequested() {
-        ProjectionOperation project = Aggregation.project("email", "salesforce_id", "status");
-        MatchOperation match = Aggregation.match(Criteria.where("status").is(AssertionStatus.NOTIFICATION_REQUESTED.name()));
-        GroupOperation group = Aggregation.group("email", "salesforce_id");
-        Aggregation aggregation = Aggregation.newAggregation(project, match, group);
-        AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
-        return results.getMappedResults();
+    public Iterator<String> findDistinctEmailsWithNotificationRequested(String salesforceId) {
+        DistinctIterable<String> distinctIterable = mongoTemplate.getCollection("assertion").distinct("email",
+                Filters.and(Filters.eq("status", AssertionStatus.NOTIFICATION_REQUESTED.name()), Filters.eq("salesforce_id", salesforceId)), String.class);
+        return distinctIterable.iterator();
     }
 
 }

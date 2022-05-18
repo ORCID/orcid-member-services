@@ -19,6 +19,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.memberportal.service.assertion.config.Constants;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.utils.AssertionUtils;
@@ -31,11 +32,13 @@ import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.security.JWTUtil;
 import org.orcid.memberportal.service.assertion.security.SecurityUtils;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
+import org.orcid.memberportal.service.assertion.services.NotificationService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.orcid.memberportal.service.assertion.web.rest.errors.RegistryDeleteFailureException;
 import org.orcid.memberportal.service.assertion.web.rest.vm.AssertionDeletion;
+import org.orcid.memberportal.service.assertion.web.rest.vm.NotificationRequestInProgress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +100,10 @@ public class AssertionResource {
 
     @Autowired
     private RorOrgValidator rorOrgValidator;
-
+    
+    @Autowired
+    private NotificationService notificationService;
+    
     private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
     String[] urlValschemes = { "http", "https", "ftp" }; // DEFAULT schemes =
@@ -145,10 +151,18 @@ public class AssertionResource {
         return ResponseEntity.ok().build();
     }
     
-    @PostMapping("/assertion/notifications")
+    @PostMapping("/assertion/notification-request")
     public ResponseEntity<Void> sendNotifications() {
-        assertionService.markPendingAssertionsAsNotificationRequested(userService.getLoggedInUserSalesforceId());
+        AssertionServiceUser user = userService.getLoggedInUser();
+        notificationService.createSendNotificationsRequest(user.getEmail(), user.getSalesforceId());
+        assertionService.markPendingAssertionsAsNotificationRequested(user.getSalesforceId());
         return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping("/assertion/notification-request")
+    public ResponseEntity<NotificationRequestInProgress> getNotificationRequestInProgress() {
+        boolean notificationRequestInProgress = notificationService.requestInProgress(userService.getLoggedInUserSalesforceId());
+        return ResponseEntity.ok().body(new NotificationRequestInProgress(notificationRequestInProgress));
     }
 
     @PutMapping("/assertion")

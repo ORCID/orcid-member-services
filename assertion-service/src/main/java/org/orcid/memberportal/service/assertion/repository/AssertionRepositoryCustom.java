@@ -1,5 +1,6 @@
 package org.orcid.memberportal.service.assertion.repository;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.orcid.memberportal.service.assertion.domain.Assertion;
@@ -16,6 +17,6 @@ public interface AssertionRepositoryCustom {
 
     void updateStatusPendingToNotificationRequested(String salesforceId);
 
-    List<Assertion> findEmailAndSalesforceIdsWithNotificationRequested();
+    Iterator<String> findDistinctEmailsWithNotificationRequested(String salesforceId);
 
 }

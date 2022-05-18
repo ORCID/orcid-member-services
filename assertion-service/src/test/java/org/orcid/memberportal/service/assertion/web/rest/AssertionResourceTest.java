@@ -1,6 +1,7 @@
 package org.orcid.memberportal.service.assertion.web.rest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -39,9 +40,11 @@ import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.security.JWTUtil;
 import org.orcid.memberportal.service.assertion.security.MockSecurityContext;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
+import org.orcid.memberportal.service.assertion.services.NotificationService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.assertion.web.rest.vm.NotificationRequestInProgress;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -81,6 +84,9 @@ class AssertionResourceTest {
 
     @Mock
     private RorOrgValidator rorOrgValidator;
+    
+    @Mock
+    private NotificationService notificationService;
 
     @Mock
     private UserService assertionsUserService;
@@ -149,10 +155,34 @@ class AssertionResourceTest {
     
     @Test
     void testSendNotifications() {
-        Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce");
+        Mockito.when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.doNothing().when(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
         Mockito.doNothing().when(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq("salesforce"));
         assertionResource.sendNotifications();
-        Mockito.verify(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq("salesforce"));
+        Mockito.verify(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
+        Mockito.verify(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq(DEFAULT_SALESFORCE_ID));
+    }
+    
+    @Test
+    void testGetNotificationRequestInProgress_inProgressIsTrue() {
+        Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
+        Mockito.when(notificationService.requestInProgress(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(true);
+        
+        ResponseEntity<NotificationRequestInProgress> response = assertionResource.getNotificationRequestInProgress();
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().getInProgress());
+    }
+    
+    @Test
+    void testGetNotificationRequestInProgress_inProgressIsFalse() {
+        Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
+        Mockito.when(notificationService.requestInProgress(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(false);
+        
+        ResponseEntity<NotificationRequestInProgress> response = assertionResource.getNotificationRequestInProgress();
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+        assertNotNull(response.getBody());
+        assertFalse(response.getBody().getInProgress());
     }
 
     @Test

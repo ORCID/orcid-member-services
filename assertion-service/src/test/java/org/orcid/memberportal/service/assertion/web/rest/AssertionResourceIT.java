@@ -41,7 +41,6 @@ public class AssertionResourceIT {
     private static final String OTHER_SALESFORCE_ID = "other-salesforce-id";
     private static final String LOGGED_IN_PASSWORD = "0123456789";
     private static final String LOGGED_IN_EMAIL = "loggedin@orcid.org";
-    private static final String LOGGED_IN_SALESFORCE_ID = "salesforceId";
     private static final String DEFAULT_LANGKEY = "en";
 
     @Autowired
@@ -130,7 +129,7 @@ public class AssertionResourceIT {
     @Test
     @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void testSendNotifications() throws Exception {
-        restUserMockMvc.perform(post("/api/assertion/notifications")).andExpect(status().isOk());
+        restUserMockMvc.perform(post("/api/assertion/notification-request")).andExpect(status().isOk());
         
         List<Assertion> updatedAssertions = assertionRepository.findBySalesforceId(DEFAULT_SALESFORCE_ID);
         updatedAssertions.forEach(a -> assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_REQUESTED.name()));
@@ -163,7 +162,7 @@ public class AssertionResourceIT {
         AssertionServiceUser user = new AssertionServiceUser();
         user.setEmail(LOGGED_IN_EMAIL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setSalesforceId(LOGGED_IN_SALESFORCE_ID);
+        user.setSalesforceId(DEFAULT_SALESFORCE_ID);
         return user;
     }
 

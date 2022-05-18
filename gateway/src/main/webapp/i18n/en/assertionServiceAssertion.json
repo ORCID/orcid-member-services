@@ -67,7 +67,8 @@
       },
       "notifications": {
         "title": { "string": "Send permission notifications" },
-        "label": { "string": "Are you sure you would like to send permission notifications to your researchers that have an ORCID iD?" }
+        "label": { "string": "Are you sure you would like to send permission notifications to your researchers that have an ORCID iD?" },
+        "alreadyInProgress": { "string": "A request to send notifications to your users is already in progress. Please try again later." }
       },
       "addedToOrcid": { "string": "Added To ORCID" },
       "updatedInOrcid": { "string": "Updated In ORCID" },

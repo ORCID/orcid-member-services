@@ -3,6 +3,7 @@ package org.orcid.memberportal.service.assertion.services;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +21,11 @@ import org.orcid.jaxb.model.v3.release.notification.permission.NotificationPermi
 import org.orcid.memberportal.service.assertion.AssertionServiceApp;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.SendNotificationsRequest;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
+import org.orcid.memberportal.service.assertion.repository.SendNotificationsRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -36,6 +39,9 @@ public class NotificationServiceIT {
 
     @Autowired
     private NotificationService notificationService;
+    
+    @Autowired
+    private SendNotificationsRequestRepository sendNotificationsRequestRepository;
 
     @Captor
     private ArgumentCaptor<NotificationPermission> notificationPermissionCaptor;
@@ -76,11 +82,18 @@ public class NotificationServiceIT {
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("8@orcid.org"))).thenReturn(null);
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("9@orcid.org"))).thenReturn("orcid9");
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("10@orcid.org"))).thenReturn("orcid10");
+        
+        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email1", "salesforceId1"));
+        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email2", "salesforceId2"));
+        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email3", "salesforceId3"));
+        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email4", "salesforceId4"));
+        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email5", "salesforceId5"));
     }
     
     @AfterEach
     public void tearDown() {
         persistedAssertions.forEach(assertionRepository::delete);
+        sendNotificationsRequestRepository.deleteAll();
     }
 
     @Test
@@ -118,6 +131,32 @@ public class NotificationServiceIT {
        notificationPermission = notificationPermissionCaptor.getValue();
        checkNotificationPermissionObject(notificationPermission, "10", 1);
     }
+    
+    @Test
+    @WithMockUser(username = "any@orcid.org", authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "password")
+    public void testRequestInProgress() throws Exception {
+        boolean requestInProgress = notificationService.requestInProgress("salesforceId1");
+        assertThat(requestInProgress).isTrue();
+        
+        requestInProgress = notificationService.requestInProgress("salesforceId6");
+        assertThat(requestInProgress).isFalse();
+    }
+    
+    @Test
+    @WithMockUser(username = "any@orcid.org", authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = "password")
+    public void testCreateSendNotificationsRequest() throws Exception {
+        notificationService.createSendNotificationsRequest("email6", "salesforceId6");
+        boolean requestInProgress = notificationService.requestInProgress("salesforceId6");
+        assertThat(requestInProgress).isTrue();
+    }
+
+    private SendNotificationsRequest getSendNotificationsRequest(String email, String salesforceId) {
+        SendNotificationsRequest request = new SendNotificationsRequest();
+        request.setEmail(email);
+        request.setSalesforceId(salesforceId);
+        request.setDateRequested(Instant.now());
+        return request;
+    }
 
     private void checkNotificationPermissionObject(NotificationPermission notificationPermission, String variant, int expectedNumberOfItems) {
         assertThat(notificationPermission.getNotificationSubject()).isEqualTo("affiliation");
@@ -145,7 +184,6 @@ public class NotificationServiceIT {
         assertion.setOrgCountry("some country");
         assertion.setDisambiguatedOrgId("some org id");
         assertion.setDisambiguationSource("some source");
-        
         return assertion;
     }
 
