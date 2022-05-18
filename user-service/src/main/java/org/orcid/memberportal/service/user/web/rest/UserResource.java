@@ -117,8 +117,6 @@ public class UserResource {
      *            the user to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      *         body the updated user.
-     * @throws EmailAlreadyUsedException
-     *             {@code 400 (Bad Request)} if the email is already in use.
      * @throws LoginAlreadyUsedException
      *             {@code 400 (Bad Request)} if the login is already in use.
      */

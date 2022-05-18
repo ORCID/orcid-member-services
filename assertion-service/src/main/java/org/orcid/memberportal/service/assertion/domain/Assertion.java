@@ -121,6 +121,9 @@ public class Assertion implements Serializable {
 
     @Field("orcid_error")
     private String orcidError;
+    
+    @Field("notification_sent")
+    private Instant notificationSent;
 
     @Field("orcid_id")
     private String orcidId;
@@ -414,6 +417,14 @@ public class Assertion implements Serializable {
     public void setPrettyStatus(String prettyStatus) {
         this.prettyStatus = prettyStatus;
     }
+    
+    public Instant getNotificationSent() {
+        return notificationSent;
+    }
+
+    public void setNotificationSent(Instant notificationSent) {
+        this.notificationSent = notificationSent;
+    }
 
     @Override
     public int hashCode() {
@@ -451,6 +462,7 @@ public class Assertion implements Serializable {
         result = prime * result + ((url == null) ? 0 : url.hashCode());
         result = prime * result + ((updatedInORCID == null) ? 0 : updatedInORCID.hashCode());
         result = prime * result + ((orcidId == null) ? 0 : orcidId.hashCode());
+        result = prime * result + ((notificationSent == null) ? 0 : notificationSent.hashCode());
         return result;
     }
 
@@ -619,6 +631,11 @@ public class Assertion implements Serializable {
             if (other.orcidId != null)
                 return false;
         } else if (!orcidId.equals(other.orcidId))
+            return false;
+        if (notificationSent == null) {
+            if (other.notificationSent != null)
+                return false;
+        } else if (!notificationSent.equals(other.notificationSent))
             return false;
         return true;
     }

@@ -31,6 +31,7 @@ import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSe
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.repository.SendNotificationsRequestRepository;
+import org.orcid.memberportal.service.assertion.web.rest.errors.ORCIDAPIException;
 import org.springframework.context.MessageSource;
 
 class NotificationServiceTest {
@@ -65,7 +66,10 @@ class NotificationServiceTest {
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        
+    }
+
+    @Test
+    void testSendPermissionLinkNotifications() throws IOException, JAXBException {
         Mockito.when(sendNotificationsRequestRepository.findActiveRequests()).thenReturn(getListOfManyRequests());
         
         Mockito.when(assertionRepository.findDistinctEmailsWithNotificationRequested(Mockito.eq("salesforceId1"))).thenReturn(Arrays.asList("email1").iterator());
@@ -99,10 +103,7 @@ class NotificationServiceTest {
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email4"))).thenReturn("orcid4");
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email5"))).thenReturn(null);
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email6"))).thenReturn("orcid6");
-    }
-
-    @Test
-    void testSendPermissionLinkNotifications() throws IOException, JAXBException {
+        
         notificationService.sendPermissionLinkNotifications();
         
         Mockito.verify(sendNotificationsRequestRepository).findActiveRequests();
@@ -139,6 +140,7 @@ class NotificationServiceTest {
                 assertThat(a.getStatus()).isEqualTo(AssertionStatus.PENDING.name());
             } else {
                 assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_SENT.name());
+                assertThat(a.getNotificationSent()).isNotNull();
             }
         });
         
@@ -163,6 +165,35 @@ class NotificationServiceTest {
         Mockito.verify(orcidApiClient).postNotification(notificationPermissionCaptor.capture(), Mockito.eq("orcid6"));
         notificationPermission = notificationPermissionCaptor.getValue();
         checkNotificationPermissionObject(notificationPermission, "6", 4);
+    }
+    
+    @Test
+    void testSendPermissionLinkNotifications_apiError() throws IOException, JAXBException {
+        Mockito.when(sendNotificationsRequestRepository.findActiveRequests()).thenReturn(getListOfOneRequest("salesforceId1"));
+        Mockito.when(assertionRepository.findDistinctEmailsWithNotificationRequested(Mockito.eq("salesforceId1"))).thenReturn(Arrays.asList("email1").iterator());
+        Mockito.when(assertionRepository.findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()))).thenReturn(getListOfAssertionsForNotification(1, "email1", "salesforceId1"));
+        Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
+        
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class))).thenReturn("subject");
+        
+        Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn("orcid1");
+        Mockito.when(orcidApiClient.postNotification(Mockito.any(NotificationPermission.class), Mockito.eq("orcid1"))).thenThrow(new ORCIDAPIException(400, "bad request"));
+        
+        notificationService.sendPermissionLinkNotifications();
+        
+        Mockito.verify(sendNotificationsRequestRepository).findActiveRequests();
+        Mockito.verify(assertionRepository).findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()));
+        Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email1"));
+        
+        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class));
+        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class));
+        
+        Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
+        
+        Mockito.verify(assertionRepository).save(assertionCaptor.capture()); 
+        Assertion a = assertionCaptor.getValue();
+        assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_FAILED.name());
     }
     
     @Test

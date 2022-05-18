@@ -284,12 +284,38 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testUpdateAssertion() {
+    void testUpdateAssertion_notPreviouslyAddedToRegistry() {
         Assertion a = new Assertion();
         a.setId("1");
         a.setEmail("email");
         a.setOwnerId(DEFAULT_JHI_USER_ID);
         a.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        Mockito.when(assertionsRepository.findById("1")).thenReturn(Optional.of(a));
+        Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
+            @Override
+            public Assertion answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                Assertion assertion = (Assertion) args[0];
+                assertion.setId("12345");
+                return assertion;
+            }
+        });
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithIdToken());
+        a = assertionService.updateAssertion(a, getUser());
+        assertNotNull(a.getStatus());
+        assertEquals(AssertionStatus.PENDING.name(), a.getStatus());
+        Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
+        Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
+    }
+    
+    @Test
+    void testUpdateAssertion_previouslyAddedToRegistry() {
+        Assertion a = new Assertion();
+        a.setId("1");
+        a.setEmail("email");
+        a.setOwnerId(DEFAULT_JHI_USER_ID);
+        a.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        a.setAddedToORCID(Instant.now());
         Mockito.when(assertionsRepository.findById("1")).thenReturn(Optional.of(a));
         Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
             @Override
