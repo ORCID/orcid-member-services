@@ -1,7 +1,6 @@
 package org.orcid.memberportal.service.gateway.web.rest;
 
 import org.orcid.memberportal.service.gateway.GatewayApp;
-import org.orcid.memberportal.service.gateway.web.rest.ClientForwardController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,7 +44,7 @@ public class ClientForwardControllerIT {
 
     @Test
     public void getNestedClientEndpoint() throws Exception {
-        restMockMvc.perform(get("/admin/user-management")).andExpect(status().isOk()).andExpect(forwardedUrl("/"));
+        restMockMvc.perform(get("/member")).andExpect(status().isOk()).andExpect(forwardedUrl("/"));
     }
 
     @RestController
