@@ -102,6 +102,7 @@
       "deletedFromORCID": { "string": "Deleted From ORCID" },
       "sent": { "string": "Sent" },
       "adminId": { "string": "Admin Id" },
+      "notificationSent": { "string": "Notification Sent" },
       "email": { "string": "User Email" },
       "orcidId": { "string": "ORCID iD" },
       "year": { "string": "Year" },
