@@ -47,6 +47,7 @@ export interface IAssertion {
   lastModifiedBy?: string;
   permissionLink?: string;
   prettyStatus?: string;
+  notificationSent?: Moment;
 }
 
 export class Assertion implements IAssertion {
@@ -86,7 +87,8 @@ export class Assertion implements IAssertion {
     public url?: string,
     public lastModifiedBy?: string,
     public permissionLink?: string,
-    public prettyStatus?: string
+    public prettyStatus?: string,
+    public notificationSent?: Moment
   ) {
     this.addedToORCID = this.addedToORCID || null;
     this.updated = this.updated || null;

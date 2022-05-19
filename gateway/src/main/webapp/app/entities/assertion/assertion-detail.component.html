@@ -79,6 +79,10 @@
                     <dd class="col-md-9">
                         {{ownerId}}
                     </dd>
+                    <dt *ngIf="assertion.notificationSent" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.notificationSent.string">Notification Sent</dt>
+                    <dd *ngIf="assertion.notificationSent" class="col-md-9">
+                        {{assertion.notificationSent | date:'medium'}}
+                    </dd>
                 </dl>
             </div>
             <hr>
