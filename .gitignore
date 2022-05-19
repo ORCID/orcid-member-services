@@ -5,3 +5,5 @@ log-data/*
 .classpath
 .settings/
 assertion-service/files/
+gateway/yarn.lock
+
