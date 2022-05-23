@@ -33,7 +33,7 @@ describe('Edit an affiliation', () => {
       .first()
       .children()
       .eq(4)
-      .contains('Pending retry in ORCID');
+      .contains('Pending');
   });
 
   it('Confirm the affiliation has been updated in the registry', () => {
