@@ -65,5 +65,17 @@
         "email": "qa+mp_cy_csv_populated_member_owner@orcid.org"
       }
     }
+  },
+  "paginationMember": {
+    "id": "628b508030c49e00082f2a25",
+    "clientName": "PAGINATION TEST",
+    "clientId": "APP-3KN4PG7TU5YV8H0J",
+    "salesforceId": "PAGINATION TEST",
+    "users": {
+      "owner": {
+        "id": "628b5552adbe1d0008d89d6e",
+        "email": "qa+mp_cy_pagination1@orcid.org"
+      }
+    }
   }
 }
