@@ -24,6 +24,8 @@ describe('Test "Add member" functionality', () => {
       .should('exist');
     // Enter existing salesforce id to generate an error
     cy.get('#field_salesforceId').type(salesforceId);
+    cy.get('#field_parentSalesforceId')
+      .type(clientName);
     // Enter invalid client name to generate an error
     cy.get('#field_clientName')
       .type(data.invalidString)
@@ -48,12 +50,26 @@ describe('Test "Add member" functionality', () => {
       .should('exist');
     // Check the enable assertions checkbox
     cy.get('#field_assertionServiceEnabled').check();
-    cy.get('#field_clientId').clear().type(clientId);
-    cy.get('#field_clientName').clear().type(clientName);
+    cy.get('#field_clientId')
+      .clear()
+      .type(clientId);
+    cy.get('#field_clientName')
+      .clear()
+      .type(clientName);
     // Checkbox should be unchecked after clearing client id field
     cy.get('#field_assertionServiceEnabled')
       .should('not.be.checked')
       .check();
+    // Parent salesforce id for consortium lead members must match salesforce id or be blank
+    cy.get('#field_isConsortiumLead')
+      .should('not.be.checked')
+      .check();
+    cy.get('#save-entity')
+      .invoke('attr', 'disabled')
+      .should('exist');
+    cy.get('#field_parentSalesforceId')
+      .clear()
+      .type(salesforceId);
     // Save button should be clickable
     cy.get('#save-entity')
       .invoke('attr', 'disabled')
