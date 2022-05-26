@@ -119,7 +119,7 @@ public class NotificationService {
         List<Item> items = new ArrayList<>();
         assertions.forEach(a -> {
             Item item = new Item();
-            item.setItemName(a.getOrgName() + " : " + a.getRoleTitle());
+            item.setItemName(a.getOrgName() + (a.getRoleTitle() != null ? " : " + a.getRoleTitle() : ""));
 
             switch (a.getAffiliationSection()) {
             case DISTINCTION:

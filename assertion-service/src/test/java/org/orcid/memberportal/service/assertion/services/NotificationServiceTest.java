@@ -168,6 +168,32 @@ class NotificationServiceTest {
     }
     
     @Test
+    void testSendPermissionLinkNotifications_emptyRoleTitle() throws IOException, JAXBException {
+        Mockito.when(sendNotificationsRequestRepository.findActiveRequests()).thenReturn(getListOfOneRequest("salesforceId1"));
+        Mockito.when(assertionRepository.findDistinctEmailsWithNotificationRequested(Mockito.eq("salesforceId1"))).thenReturn(Arrays.asList("email1").iterator());
+        Mockito.when(assertionRepository.findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()))).thenReturn(Arrays.asList(getAssertionWithNoRoleTitle()));
+        Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class))).thenReturn("subject");
+        Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn("orcid1");
+        
+        notificationService.sendPermissionLinkNotifications();
+        
+        Mockito.verify(sendNotificationsRequestRepository).findActiveRequests();
+        Mockito.verify(assertionRepository).findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()));
+        Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email1"));
+        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class));
+        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class));
+        Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
+        Mockito.verify(assertionRepository).save(Mockito.any(Assertion.class));
+        Mockito.verify(orcidApiClient).postNotification(notificationPermissionCaptor.capture(), Mockito.eq("orcid1"));
+        NotificationPermission notificationPermission = notificationPermissionCaptor.getValue();
+        assertThat(notificationPermission).isNotNull();
+        assertThat(notificationPermission.getItems().getItems().size()).isEqualTo(1);
+        assertThat(notificationPermission.getItems().getItems().get(0).getItemName()).isEqualTo("org name"); // check no role title in name
+    }
+    
+    @Test
     void testSendPermissionLinkNotifications_apiError() throws IOException, JAXBException {
         Mockito.when(sendNotificationsRequestRepository.findActiveRequests()).thenReturn(getListOfOneRequest("salesforceId1"));
         Mockito.when(assertionRepository.findDistinctEmailsWithNotificationRequested(Mockito.eq("salesforceId1"))).thenReturn(Arrays.asList("email1").iterator());
@@ -271,6 +297,16 @@ class NotificationServiceTest {
             assertions.add(a);
         }
         return assertions;
+    }
+    
+    private Assertion getAssertionWithNoRoleTitle() {
+        Assertion a = new Assertion();
+        a.setSalesforceId("salesforceId1");
+        a.setEmail("email1");
+        a.setStatus(AssertionStatus.NOTIFICATION_REQUESTED.name());
+        a.setOrgName("org name");
+        a.setAffiliationSection(AffiliationSection.EDUCATION);
+        return a;
     }
 
 }
