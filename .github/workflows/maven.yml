@@ -15,9 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up JDK 11
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v3
       with:
         java-version: 11
     - name: Build Gateway service
@@ -30,13 +30,13 @@ jobs:
       run: mvn -B verify -Pprod --file member-service/pom.xml
     - name: Build Discovery service
       run: mvn -B verify -Pprod --file discovery-service/pom.xml
-    - uses: actions/checkout@v1
-    - name: Use Node.js 10.16.0
-      uses: actions/setup-node@v1
+    - uses: actions/checkout@v3
+    - name: Use Node.js v16.13.2
+      uses: actions/setup-node@v3
       with:
-        node-version: 10.16.0
+        node-version: v16.13.2
     - name: Install dependencies
-      run: npm install
+      run: npm ci
       working-directory: ./gateway
     - name: Build
       run: npm run webpack:qa:main
