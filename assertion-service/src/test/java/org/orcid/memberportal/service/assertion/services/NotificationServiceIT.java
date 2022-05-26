@@ -19,8 +19,10 @@ import org.orcid.jaxb.model.v3.release.notification.permission.Item;
 import org.orcid.jaxb.model.v3.release.notification.permission.ItemType;
 import org.orcid.jaxb.model.v3.release.notification.permission.NotificationPermission;
 import org.orcid.memberportal.service.assertion.AssertionServiceApp;
+import org.orcid.memberportal.service.assertion.client.MemberServiceClient;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceMember;
 import org.orcid.memberportal.service.assertion.domain.SendNotificationsRequest;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
@@ -28,6 +30,7 @@ import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.repository.SendNotificationsRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -42,6 +45,9 @@ public class NotificationServiceIT {
     
     @Autowired
     private SendNotificationsRequestRepository sendNotificationsRequestRepository;
+    
+    @Autowired
+    private MemberService memberService;
 
     @Captor
     private ArgumentCaptor<NotificationPermission> notificationPermissionCaptor;
@@ -49,11 +55,15 @@ public class NotificationServiceIT {
     @Mock
     private OrcidAPIClient orcidApiClient;
     
+    @Mock
+    private MemberServiceClient memberServiceClient;
+    
     private List<Assertion> persistedAssertions;
 
     @BeforeEach
     public void setup() throws IOException {
         ReflectionTestUtils.setField(notificationService, "orcidApiClient", orcidApiClient);
+        ReflectionTestUtils.setField(memberService, "memberServiceClient", memberServiceClient);
         
         persistedAssertions = new ArrayList<>();
         persistedAssertions.add(getNotificationRequestedAssertion("1", "0", "salesforceId1"));
@@ -82,6 +92,12 @@ public class NotificationServiceIT {
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("8@orcid.org"))).thenReturn(null);
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("9@orcid.org"))).thenReturn("orcid9");
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("10@orcid.org"))).thenReturn("orcid10");
+        
+        Mockito.when(memberServiceClient.getMember(Mockito.eq("salesforceId1"))).thenReturn(ResponseEntity.ok(getMember("member 1")));
+        Mockito.when(memberServiceClient.getMember(Mockito.eq("salesforceId2"))).thenReturn(ResponseEntity.ok(getMember("member 2")));
+        Mockito.when(memberServiceClient.getMember(Mockito.eq("salesforceId3"))).thenReturn(ResponseEntity.ok(getMember("member 3")));
+        Mockito.when(memberServiceClient.getMember(Mockito.eq("salesforceId4"))).thenReturn(ResponseEntity.ok(getMember("member 4")));
+        Mockito.when(memberServiceClient.getMember(Mockito.eq("salesforceId5"))).thenReturn(ResponseEntity.ok(getMember("member 5")));
         
         sendNotificationsRequestRepository.save(getSendNotificationsRequest("email1", "salesforceId1"));
         sendNotificationsRequestRepository.save(getSendNotificationsRequest("email2", "salesforceId2"));
@@ -187,4 +203,9 @@ public class NotificationServiceIT {
         return assertion;
     }
 
+    private AssertionServiceMember getMember(String name) {
+        AssertionServiceMember member = new AssertionServiceMember();
+        member.setClientName(name);
+        return member;
+    }
 }
