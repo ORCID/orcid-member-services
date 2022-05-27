@@ -14,7 +14,7 @@
     "id": "619cc62aa7b11b00085b5bf8",
     "clientName": "!@#$%^&*()-=   проверка   test 2",
     "clientId": "APP-9GN1GYLRUONIPZRE",
-    "salesforceId": "321",
+    "salesforceId": "TestSalesforceId",
     "users": {
       "owner": {
         "id": "62264e8badbe1d0008bc0c31",

@@ -30,14 +30,4 @@ jobs:
       run: mvn -B verify -Pprod --file member-service/pom.xml
     - name: Build Discovery service
       run: mvn -B verify -Pprod --file discovery-service/pom.xml
-    - uses: actions/checkout@v1
-    - name: Use Node.js 10.16.0
-      uses: actions/setup-node@v1
-      with:
-        node-version: 10.16.0
-    - name: Install dependencies
-      run: npm install
-      working-directory: ./gateway
-    - name: Build
-      run: npm run webpack:qa:main
-      working-directory: ./gateway
+
