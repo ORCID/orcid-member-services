@@ -32,5 +32,22 @@ describe('Test pagination', () => {
 
   it('Test the "Affiliations" page', function() {
     // Pip to-do
+    cy.visit('/assertion');
+    /*
+    cy.get('.container-fluid').within(() => {
+      cy.get('p')
+      .contains('Showing 1 - 20 of 22 items')
+    })*/
+    cy.get('tbody').children().should('have.length', 20);
+    cy.get('.pagination').contains("1");
+    cy.get('.pagination').contains("2");
+    cy.get('.pagination').contains("3");
+    cy.get('.pagination').contains("4").should('not.exist');
+    cy.get('.pagination').contains("3").click();
+    cy.get('tbody').children().should('have.length', 2);
+    cy.get('tbody').within(() => {
+      cy.get('td').contains('Psychology 5').should('not.exist');
+      cy.get('td').contains('Psychology 6');
+    })
   });
 });
