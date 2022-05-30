@@ -76,6 +76,9 @@
         "id": "628b5552adbe1d0008d89d6e",
         "email": "qa+mp_cy_pagination1@orcid.org"
       }
-    }
+    },
+    "assertionEmail1": "20@orcid.org",
+    "assertionEmail2": "21@orcid.org",
+    "assertionEmail3": "22@orcid.org"
   }
 }

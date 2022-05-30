@@ -20,14 +20,13 @@ describe('Test pagination', () => {
     })*/
     cy.get('tbody').children().should('have.length', 20);
     cy.get('.pagination').contains("1");
-    cy.get('.pagination').contains("2");
     cy.get('.pagination').contains("3").should('not.exist');
     cy.get('.pagination').contains("2").click();
     cy.get('tbody').children().should('have.length', 2);
     cy.get('tbody').within(() => {
-      cy.get('td').contains('20@orcid.org').should('not.exist');
-      cy.get('td').contains('21@orcid.org');
-      cy.get('td').contains('22@orcid.org');
+      cy.get('td').contains(data.paginationMember.assertionEmail1).should('not.exist');
+      cy.get('td').contains(data.paginationMember.assertionEmail2);
+      cy.get('td').contains(data.paginationMember.assertionEmail3);
     })
   });
 
