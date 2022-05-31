@@ -96,6 +96,7 @@ public class NotificationService {
         try {
             String orcidId = orcidApiClient.getOrcidIdForEmail(email);
             if (orcidId == null) {
+                LOG.info("No ORCID id found for {}. Sending email invitation instead.");
                 mailService.sendInvitationEmail(userService.getUserById(email), orgName, orcidRecordService.generateLinkForEmailAndSalesforceId(email, request.getSalesforceId()));
                 request.setEmailsSent(request.getEmailsSent() + 1);
                 allAssertionsForEmailAndMember.forEach(a -> {
@@ -104,6 +105,7 @@ public class NotificationService {
                     assertionRepository.save(a);
                 });
             } else {
+                LOG.info("ORCID id found for {}. Sending notification." );
                 NotificationPermission notification = getPermissionLinkNotification(allAssertionsForEmailAndMember, email, request.getSalesforceId(), orgName);
                 orcidApiClient.postNotification(notification, orcidId);
                 allAssertionsForEmailAndMember.forEach(a -> {
@@ -115,6 +117,7 @@ public class NotificationService {
             }
         } catch (Exception e) {
             LOG.warn("Error sending notification to {} on behalf of {}", email, request.getSalesforceId());
+            LOG.warn("Could not send notification", e);
             allAssertionsForEmailAndMember.forEach(a -> {
                 a.setStatus(AssertionStatus.NOTIFICATION_FAILED.name());
                 assertionRepository.save(a);
