@@ -21,8 +21,10 @@ import org.orcid.jaxb.model.v3.release.notification.permission.NotificationPermi
 import org.orcid.memberportal.service.assertion.AssertionServiceApp;
 import org.orcid.memberportal.service.assertion.client.MemberServiceClient;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
+import org.orcid.memberportal.service.assertion.client.UserServiceClient;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceMember;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.SendNotificationsRequest;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
@@ -55,6 +57,12 @@ public class NotificationServiceIT {
     @Mock
     private OrcidAPIClient orcidApiClient;
     
+    @Autowired
+    private UserService userService;
+    
+    @Mock
+    private UserServiceClient userServiceClient;
+    
     @Mock
     private MemberServiceClient memberServiceClient;
     
@@ -64,6 +72,7 @@ public class NotificationServiceIT {
     public void setup() throws IOException {
         ReflectionTestUtils.setField(notificationService, "orcidApiClient", orcidApiClient);
         ReflectionTestUtils.setField(memberService, "memberServiceClient", memberServiceClient);
+        ReflectionTestUtils.setField(userService, "userServiceClient", userServiceClient);
         
         persistedAssertions = new ArrayList<>();
         persistedAssertions.add(getNotificationRequestedAssertion("1", "0", "salesforceId1"));
@@ -104,6 +113,8 @@ public class NotificationServiceIT {
         sendNotificationsRequestRepository.save(getSendNotificationsRequest("email3", "salesforceId3"));
         sendNotificationsRequestRepository.save(getSendNotificationsRequest("email4", "salesforceId4"));
         sendNotificationsRequestRepository.save(getSendNotificationsRequest("email5", "salesforceId5"));
+        
+        Mockito.when(userServiceClient.getUser(Mockito.anyString())).thenReturn(getUser());
     }
     
     @AfterEach
@@ -207,5 +218,13 @@ public class NotificationServiceIT {
         AssertionServiceMember member = new AssertionServiceMember();
         member.setClientName(name);
         return member;
+    }
+    
+    private ResponseEntity<AssertionServiceUser> getUser() {
+        AssertionServiceUser user = new AssertionServiceUser();
+        user.setEmail("notifications@orcid.org");
+        user.setLangKey("en");
+        user.setSalesforceId("salesforceId1");
+        return ResponseEntity.ok(user);
     }
 }
