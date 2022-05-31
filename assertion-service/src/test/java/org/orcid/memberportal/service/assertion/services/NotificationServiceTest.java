@@ -217,8 +217,8 @@ class NotificationServiceTest {
         Mockito.verify(mailService, Mockito.times(5)).sendNotificationsSummary(Mockito.any(AssertionServiceUser.class), Mockito.anyInt(), Mockito.anyInt());
         
         // check email5 was sent invitation on behalf of two orgs
-        Mockito.verify(mailService).sendInvitationEmail(Mockito.any(AssertionServiceUser.class), Mockito.eq("Member 4"), Mockito.anyString());
-        Mockito.verify(mailService).sendInvitationEmail(Mockito.any(AssertionServiceUser.class), Mockito.eq("Member 5"), Mockito.anyString());
+        Mockito.verify(mailService).sendInvitationEmail(Mockito.eq("email5"), Mockito.eq("Member 4"), Mockito.anyString());
+        Mockito.verify(mailService).sendInvitationEmail(Mockito.eq("email5"), Mockito.eq("Member 5"), Mockito.anyString());
     }
     
     @Test

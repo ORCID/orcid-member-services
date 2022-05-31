@@ -99,17 +99,16 @@ public class MailService {
         }
     }
 
-    public void sendInvitationEmail(AssertionServiceUser user, String orgName, String permissionLink) {
-        Locale locale = LocaleUtils.getLocale(user.getLangKey());
-        Context context = new Context(locale);
+    public void sendInvitationEmail(String email, String orgName, String permissionLink) {
+        Context context = new Context(Locale.ENGLISH);
         context.setVariable("orgName", orgName);
         context.setVariable("permissionLink", permissionLink);
         String content = templateEngine.process("mail/invitation", context);
-        String subject = messageSource.getMessage("email.invitation.title", new Object[] { orgName }, locale);
+        String subject = messageSource.getMessage("email.invitation.title", new Object[] { orgName }, Locale.ENGLISH);
         try {
-            mailgunClient.sendMail(user.getEmail(), subject, content);
+            mailgunClient.sendMail(email, subject, content);
         } catch (MailException e) {
-            LOGGER.error("Error sending invitation email to {}", user.getEmail(), e);
+            LOGGER.error("Error sending invitation email to {}", email, e);
         }
     }
 

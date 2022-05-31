@@ -97,7 +97,7 @@ public class NotificationService {
             String orcidId = orcidApiClient.getOrcidIdForEmail(email);
             if (orcidId == null) {
                 LOG.info("No ORCID id found for {}. Sending email invitation instead.", email);
-                mailService.sendInvitationEmail(userService.getUserById(email), orgName, orcidRecordService.generateLinkForEmailAndSalesforceId(email, request.getSalesforceId()));
+                mailService.sendInvitationEmail(email, orgName, orcidRecordService.generateLinkForEmailAndSalesforceId(email, request.getSalesforceId()));
                 request.setEmailsSent(request.getEmailsSent() + 1);
                 allAssertionsForEmailAndMember.forEach(a -> {
                     a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
