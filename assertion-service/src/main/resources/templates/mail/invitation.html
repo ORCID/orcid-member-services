@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.invitation.title}">
+        X would like to add a validated affiliation to your ORCID record
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body
+    style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+<div style="padding: 20px; padding-top: 10px; margin: auto;">
+    <div th:insert="~{mail/common :: emailHeader}"></div>
+    <p>
+        <span th:text="#{email.invitation.hi}">
+        	Hi
+        </span>
+    </p>
+    <p>
+        <span th:text="#{email.invitation.para1(${orgName})}">
+        	By allowing X to add your research information to your ORCID record, you can spend more time conducting your research and less time managing it! We\u2019ll need your permission first though, so click on the link below to get started. You will get redirected to ORCID, after signing in, click on \u201Cauthorize access\u201D to allow {0} to add information to your record.
+        </span>
+    </p>
+    
+    <form action="#" th:action="(@{|${permissionLink}|})">
+    	<button type="submit" 
+    	  style="background-color: #2e7f9f; color: #fff; margin: 32px 0; box-sizing: border-box; position: relative; box-sizing: border-box; position: relative; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; cursor: pointer; outline: none; border: none; -webkit-tap-highlight-color: transparent; display: inline-block; white-space: nowrap; text-decoration: none; vertical-align: baseline; text-align: center; min-width: 64px; line-height: 36px; padding: 0 16px; border-radius: 4px; overflow: visible; transform: translate3d(0, 0, 0); transition: background 400ms cubic-bezier(0.25, 0.8, 0.25, 1),box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);">
+	    	  <span th:text="#{email.invitation.buttonText}">
+	        	Grant Permission
+	          </span>
+        </button>
+    </form>
+    
+    <p>
+        <span th:text="#{email.invitation.para2}">
+        	After granting permission, an affiliation entry will be added to your ORCID record. Please note that it may take up to 5 minutes for your ORCID record to be updated.
+        </span>
+    </p>
+    
+    <p>
+        <span th:text="#{email.invitation.para3(${orgName})}">
+        	Why should I allow X to update my ORCID record?
+        </span>
+    </p>
+    
+    <ul>
+      	<li>
+        	<span th:text="#{email.invitation.para3.bullet1}">When data in your ORCID record has been added by an organization you trust, you can be assured that it can be reused with a high degree of confidence in a number of different workflows, for example, when automatically filling out a growing number of manuscript submission or grant application forms.</span>
+      	</li>
+    </ul>
+    
+    <p>
+        <span th:text="#{email.invitation.para4}">
+        	What else should I know?
+        </span>
+    </p>
+    
+    <ul>
+      	<li>
+      		<span th:text="#{email.invitation.para4.bullet1(${orgName})}">Although X will only add affiliation information to your ORCID record at this time, the permission you grant us now will allow us to add other information to your ORCID record (such as publications) in the future. We will notify you if we plan to do this.</span>
+      	</li>
+      	<li>
+      		<span th:text="#{email.invitation.para4.bullet2.part1(${orgName})}">Researcher control is central to everything ORCID does. If you no longer want X to edit your ORCID record, you can revoke permission at any time. See </span><a href="https://support.orcid.org/hc/en-us/articles/360006973893-Trusted-organizations#03"><span th:text="#{email.invitation.para4.bullet2.linkText}">Revoking Permission</span></a><span th:text="#{email.invitation.para4.bullet2.part2}"> for instructions.</span>
+      	</li>
+      	<li>
+      		<span th:text="#{email.invitation.para4.bullet3.part1}">Affiliation information added to your ORCID record is subject to </span><a href="https://orcid.org/privacy-policy"><span th:text="#{email.invitation.para4.bullet3.linkText1}">ORCID's Privacy Policy</span></a><span th:text="#{email.invitation.para4.bullet3.part2}">. Per this policy, </span><a href="https://orcid.org/privacy-policy#Choices"><span th:text="#{email.invitation.para4.bullet3.linkText2}">you can control the visibility of this information in ORCID</span></a><span th:text="#{email.invitation.para4.bullet3.part3(${orgName})}">. The source data, however, is controlled by X and is subject to their own privacy policy.</span>
+      	</li>
+    </ul>
+    
+    <p>
+        <span th:text="#{email.common.warmRegards}">Warm Regards,</span> <br />
+        <span th:text="#{email.common.signature}">The ORCID Member Portal Team</span> <br />
+        <a href="mailto:membership@orcid.org">membership@orcid.org</a>
+    </p>
+    <p th:text="#{email.common.youHaveReceived}">You have received
+        this email as a service announcement related to your ORCID Member Portal account.</p>
+   	<div th:insert="~{mail/common :: emailFooter}"></div>
+</div>
+</body>
+</html>

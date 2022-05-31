@@ -95,7 +95,20 @@ public class MailService {
         try {
             mailgunClient.sendMail(user.getEmail(), subject, content);
         } catch (MailException e) {
-            LOGGER.error("Error sending csv upload summary email to {}", user.getEmail(), e);
+            LOGGER.error("Error sending notifications summary email to {}", user.getEmail(), e);
+        }
+    }
+
+    public void sendInvitationEmail(String email, String orgName, String permissionLink) {
+        Context context = new Context(Locale.ENGLISH);
+        context.setVariable("orgName", orgName);
+        context.setVariable("permissionLink", permissionLink);
+        String content = templateEngine.process("mail/invitation", context);
+        String subject = messageSource.getMessage("email.invitation.title", new Object[] { orgName }, Locale.ENGLISH);
+        try {
+            mailgunClient.sendMail(email, subject, content);
+        } catch (MailException e) {
+            LOGGER.error("Error sending invitation email to {}", email, e);
         }
     }
 
