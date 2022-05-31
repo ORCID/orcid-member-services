@@ -52,6 +52,7 @@ class MailServiceIT {
         mailService = new MailService(getTestApplicationProperties(), messageSource, templateEngine, mailgunClient);
         Mockito.when(messageSource.getMessage(Mockito.eq("email.memberAssertionStats.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("member stats");
         Mockito.when(messageSource.getMessage(Mockito.eq("email.affiliationUploadSummary.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("summary");
+        Mockito.when(messageSource.getMessage(Mockito.eq("email.notificationsSummary.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("notifications summary");
     }
     
     @Test
@@ -84,6 +85,15 @@ class MailServiceIT {
         Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
         assertThat(recipientCaptor.getValue()).isEqualTo("summary@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo("summary");
+    }
+    
+    @Test
+    void testSendNotificationsSummaryMail() throws MailException {
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.eq("summary@orcid.org"), Mockito.eq("summary"), Mockito.eq("something"));
+        mailService.sendNotificationsSummary(getUser(), 10, 5);
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
+        assertThat(recipientCaptor.getValue()).isEqualTo("summary@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo("notifications summary");
     }
 
     private AssertionServiceUser getUser() {

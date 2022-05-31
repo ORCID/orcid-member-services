@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.notificationsSummary.title}">
+        ORCID Member Portal Notifications sent
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body
+    style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+<div style="padding: 20px; padding-top: 10px; margin: auto;">
+    <div th:insert="~{mail/common :: emailHeader}"></div>
+    <p>
+        <span th:text="#{email.notificationsSummary.thankYou}">
+        	Thank you for choosing to use the permission notification process.
+        </span>
+    </p>
+    <p>
+        <span th:text="#{email.notificationsSummary.sent}">
+        	We have sent the following to your researchers:
+        </span>
+    </p>
+    <p>
+        <span th:text="(@{|${notificationsSent}|})">
+            x
+        </span>
+        &nbsp;
+        <span th:text="#{email.notificationsSummary.orcidInboxNotifications}">
+        	ORCID inbox notifications
+        </span>
+    </p>
+     <p>
+        <span th:text="(@{|${emailsSent}|})">
+            x
+        </span>
+        &nbsp;
+        <span th:text="#{email.notificationsSummary.emails}">
+        	emails
+        </span>
+    </p>
+    <p>
+        <span th:text="#{email.common.warmRegards}">Warm Regards,</span> <br />
+        <span th:text="#{email.common.signature}">The ORCID Member Portal Team</span> <br />
+        <a href="mailto:membership@orcid.org">membership@orcid.org</a>
+    </p>
+    <p th:text="#{email.common.youHaveReceived}">You have received
+        this email as a service announcement related to your ORCID Member Portal account.</p>
+   	<div th:insert="~{mail/common :: emailFooter}"></div>
+</div>
+</body>
+</html>
