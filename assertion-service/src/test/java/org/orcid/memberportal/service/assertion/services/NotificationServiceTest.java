@@ -26,6 +26,7 @@ import org.orcid.jaxb.model.v3.release.notification.permission.ItemType;
 import org.orcid.jaxb.model.v3.release.notification.permission.NotificationPermission;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
+import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.SendNotificationsRequest;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
@@ -48,6 +49,12 @@ class NotificationServiceTest {
     @Mock
     private MessageSource messageSource;
     
+    @Mock
+    private MailService mailService;
+    
+    @Mock
+    private UserService userService;
+    
     @Captor
     private ArgumentCaptor<Assertion> assertionCaptor;
     
@@ -69,6 +76,7 @@ class NotificationServiceTest {
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        Mockito.when(userService.getUserById(Mockito.anyString())).thenReturn(getDummyUser());
     }
 
     @Test
@@ -180,6 +188,25 @@ class NotificationServiceTest {
         Mockito.verify(orcidApiClient).postNotification(notificationPermissionCaptor.capture(), Mockito.eq("orcid6"));
         notificationPermission = notificationPermissionCaptor.getValue();
         checkNotificationPermissionObject(notificationPermission, "6", 4);
+        
+        Mockito.verify(sendNotificationsRequestRepository, Mockito.times(5)).save(requestCaptor.capture());
+        List<SendNotificationsRequest> savedRequests = requestCaptor.getAllValues();
+        savedRequests.forEach(r -> {
+            assertThat(r.getDateCompleted()).isNotNull();
+            if (r.getSalesforceId().equals("salesforceId1")) {
+                assertThat(r.getNotificationsSent() == 1);
+            } else if (r.getSalesforceId().equals("salesforceId2")) {
+                assertThat(r.getNotificationsSent() == 1);
+            } else if (r.getSalesforceId().equals("salesforceId3")) {
+                assertThat(r.getNotificationsSent() == 1);
+            } else if (r.getSalesforceId().equals("salesforceId4")) {
+                assertThat(r.getNotificationsSent() == 1);
+            } else if (r.getSalesforceId().equals("salesforceId5")) {
+                assertThat(r.getNotificationsSent() == 1);
+            }
+        });
+        
+        Mockito.verify(mailService, Mockito.times(5)).sendNotificationsSummary(Mockito.any(AssertionServiceUser.class), Mockito.anyInt(), Mockito.anyInt());
     }
     
     @Test
@@ -237,6 +264,8 @@ class NotificationServiceTest {
         Mockito.verify(assertionRepository).save(assertionCaptor.capture()); 
         Assertion a = assertionCaptor.getValue();
         assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_FAILED.name());
+        
+        Mockito.verify(mailService).sendNotificationsSummary(Mockito.any(), Mockito.eq(0), Mockito.anyInt());
     }
     
     @Test
@@ -324,6 +353,12 @@ class NotificationServiceTest {
         a.setOrgName("org name");
         a.setAffiliationSection(AffiliationSection.EDUCATION);
         return a;
+    }
+    
+    private AssertionServiceUser getDummyUser() {
+        AssertionServiceUser user = new AssertionServiceUser();
+        user.setEmail("dummy@orcid.org");
+        return user;
     }
 
 }

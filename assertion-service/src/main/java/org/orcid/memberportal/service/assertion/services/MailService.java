@@ -85,4 +85,18 @@ public class MailService {
         }
     }
 
+    public void sendNotificationsSummary(AssertionServiceUser user, Integer notificationsSent, Integer emailsSent) {
+        Locale locale = LocaleUtils.getLocale(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable("notificationsSent", notificationsSent);
+        context.setVariable("emailsSent", emailsSent);
+        String content = templateEngine.process("mail/notificationsSummary", context);
+        String subject = messageSource.getMessage("email.notificationsSummary.title", null, locale);
+        try {
+            mailgunClient.sendMail(user.getEmail(), subject, content);
+        } catch (MailException e) {
+            LOGGER.error("Error sending csv upload summary email to {}", user.getEmail(), e);
+        }
+    }
+
 }

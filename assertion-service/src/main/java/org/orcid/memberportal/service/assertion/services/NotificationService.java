@@ -47,6 +47,12 @@ public class NotificationService {
     @Autowired
     private MemberService memberService;
     
+    @Autowired
+    private MailService mailService;
+    
+    @Autowired
+    private UserService userService;
+    
     public boolean requestInProgress(String salesforceId) {
         return findActiveRequestBySalesforceId(salesforceId) != null;
     }
@@ -74,16 +80,17 @@ public class NotificationService {
     private void markRequestCompleted(SendNotificationsRequest request) {
         LOG.info("Marking SendNotificationsRequest from user {} (salesforce ID {}) as complete", request.getEmail(), request.getSalesforceId());
         request.setDateCompleted(Instant.now());
+        mailService.sendNotificationsSummary(userService.getUserById(request.getEmail()), request.getNotificationsSent(), request.getEmailsSent());
         sendNotificationsRequestRepository.save(request);
     }
     
     private void processRequest(SendNotificationsRequest request) {
         Iterator<String> emailsWithNotificationsRequested = assertionRepository.findDistinctEmailsWithNotificationRequested(request.getSalesforceId());
         String orgName = memberService.getMemberName(request.getSalesforceId());
-        emailsWithNotificationsRequested.forEachRemaining(e -> findAssertionsAndAttemptSend(e, request.getSalesforceId(), orgName));
+        emailsWithNotificationsRequested.forEachRemaining(e -> findAssertionsAndAttemptSend(e, request.getSalesforceId(), orgName, request));
     }
 
-    private void findAssertionsAndAttemptSend(String email, String salesforceId, String orgName) {
+    private void findAssertionsAndAttemptSend(String email, String salesforceId, String orgName, SendNotificationsRequest request) {
         List<Assertion> allAssertionsForEmailAndMember = assertionRepository.findByEmailAndSalesforceIdAndStatus(email, salesforceId,
                 AssertionStatus.NOTIFICATION_REQUESTED.name());
         try {
@@ -99,6 +106,7 @@ public class NotificationService {
                 allAssertionsForEmailAndMember.forEach(a -> {
                     a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
                     a.setNotificationSent(Instant.now());
+                    request.setNotificationsSent(request.getNotificationsSent() + 1);
                     assertionRepository.save(a);
                 });
             }
