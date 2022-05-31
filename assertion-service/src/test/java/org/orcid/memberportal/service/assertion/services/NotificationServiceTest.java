@@ -151,8 +151,8 @@ class NotificationServiceTest {
         Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email2"), Mockito.eq("salesforceId2"));
         Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email3"), Mockito.eq("salesforceId3"));
         Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email4"), Mockito.eq("salesforceId4"));
-        Mockito.verify(orcidRecordService, Mockito.never()).generateLinkForEmailAndSalesforceId(Mockito.eq("email5"), Mockito.eq("salesforceId4"));
-        Mockito.verify(orcidRecordService, Mockito.never()).generateLinkForEmailAndSalesforceId(Mockito.eq("email5"), Mockito.eq("salesforceId5"));
+        Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email5"), Mockito.eq("salesforceId4"));
+        Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email5"), Mockito.eq("salesforceId5"));
         Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email6"), Mockito.eq("salesforceId5"));
         
         Mockito.verify(assertionRepository, Mockito.times(31)).save(assertionCaptor.capture()); // 31 total assertions updated (1 + 3 + 5 + 7 + 2 + 9 + 4)
@@ -160,10 +160,13 @@ class NotificationServiceTest {
         assertionsUpdated.forEach(a -> {
             if (a.getEmail().equals("email5")) {
                 // no orcid id was available for email5
-                assertThat(a.getStatus()).isEqualTo(AssertionStatus.PENDING.name());
+                assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_SENT.name());
+                assertThat(a.getInvitationSent()).isNotNull();
+                assertThat(a.getNotificationSent()).isNull();
             } else {
                 assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_SENT.name());
                 assertThat(a.getNotificationSent()).isNotNull();
+                assertThat(a.getInvitationSent()).isNull();
             }
         });
         
@@ -195,18 +198,27 @@ class NotificationServiceTest {
             assertThat(r.getDateCompleted()).isNotNull();
             if (r.getSalesforceId().equals("salesforceId1")) {
                 assertThat(r.getNotificationsSent() == 1);
+                assertThat(r.getEmailsSent() == 0);
             } else if (r.getSalesforceId().equals("salesforceId2")) {
                 assertThat(r.getNotificationsSent() == 1);
+                assertThat(r.getEmailsSent() == 0);
             } else if (r.getSalesforceId().equals("salesforceId3")) {
                 assertThat(r.getNotificationsSent() == 1);
+                assertThat(r.getEmailsSent() == 0);
             } else if (r.getSalesforceId().equals("salesforceId4")) {
                 assertThat(r.getNotificationsSent() == 1);
+                assertThat(r.getEmailsSent() == 1);
             } else if (r.getSalesforceId().equals("salesforceId5")) {
                 assertThat(r.getNotificationsSent() == 1);
+                assertThat(r.getEmailsSent() == 1);
             }
         });
         
         Mockito.verify(mailService, Mockito.times(5)).sendNotificationsSummary(Mockito.any(AssertionServiceUser.class), Mockito.anyInt(), Mockito.anyInt());
+        
+        // check email5 was sent invitation on behalf of two orgs
+        Mockito.verify(mailService).sendInvitationEmail(Mockito.any(AssertionServiceUser.class), Mockito.eq("Member 4"), Mockito.anyString());
+        Mockito.verify(mailService).sendInvitationEmail(Mockito.any(AssertionServiceUser.class), Mockito.eq("Member 5"), Mockito.anyString());
     }
     
     @Test

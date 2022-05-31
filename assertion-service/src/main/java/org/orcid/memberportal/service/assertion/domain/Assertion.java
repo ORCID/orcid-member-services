@@ -124,6 +124,9 @@ public class Assertion implements Serializable {
     
     @Field("notification_sent")
     private Instant notificationSent;
+    
+    @Field("invitation_sent")
+    private Instant invitationSent;
 
     @Field("orcid_id")
     private String orcidId;
@@ -424,6 +427,14 @@ public class Assertion implements Serializable {
 
     public void setNotificationSent(Instant notificationSent) {
         this.notificationSent = notificationSent;
+    }
+    
+    public Instant getInvitationSent() {
+        return invitationSent;
+    }
+
+    public void setInvitationSent(Instant invitationSent) {
+        this.invitationSent = invitationSent;
     }
 
     @Override

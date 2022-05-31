@@ -26,33 +26,33 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class NotificationService {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(NotificationService.class);
 
     @Autowired
     private AssertionRepository assertionRepository;
-    
+
     @Autowired
     private OrcidRecordService orcidRecordService;
-    
+
     @Autowired
     private MessageSource messageSource;
 
     @Autowired
     private OrcidAPIClient orcidApiClient;
-    
+
     @Autowired
     private SendNotificationsRequestRepository sendNotificationsRequestRepository;
-    
+
     @Autowired
     private MemberService memberService;
-    
+
     @Autowired
     private MailService mailService;
-    
+
     @Autowired
     private UserService userService;
-    
+
     public boolean requestInProgress(String salesforceId) {
         return findActiveRequestBySalesforceId(salesforceId) != null;
     }
@@ -61,14 +61,14 @@ public class NotificationService {
         if (findActiveRequestBySalesforceId(salesforceId) != null) {
             throw new RuntimeException("Send notifications request already active for " + salesforceId);
         }
-        
+
         SendNotificationsRequest request = new SendNotificationsRequest();
         request.setEmail(userEmail);
         request.setSalesforceId(salesforceId);
         request.setDateRequested(Instant.now());
         sendNotificationsRequestRepository.insert(request);
     }
-    
+
     public void sendPermissionLinkNotifications() {
         List<SendNotificationsRequest> requests = sendNotificationsRequestRepository.findActiveRequests();
         requests.forEach(r -> {
@@ -76,32 +76,35 @@ public class NotificationService {
             markRequestCompleted(r);
         });
     }
-    
+
     private void markRequestCompleted(SendNotificationsRequest request) {
         LOG.info("Marking SendNotificationsRequest from user {} (salesforce ID {}) as complete", request.getEmail(), request.getSalesforceId());
         request.setDateCompleted(Instant.now());
         mailService.sendNotificationsSummary(userService.getUserById(request.getEmail()), request.getNotificationsSent(), request.getEmailsSent());
         sendNotificationsRequestRepository.save(request);
     }
-    
+
     private void processRequest(SendNotificationsRequest request) {
         Iterator<String> emailsWithNotificationsRequested = assertionRepository.findDistinctEmailsWithNotificationRequested(request.getSalesforceId());
         String orgName = memberService.getMemberName(request.getSalesforceId());
-        emailsWithNotificationsRequested.forEachRemaining(e -> findAssertionsAndAttemptSend(e, request.getSalesforceId(), orgName, request));
+        emailsWithNotificationsRequested.forEachRemaining(e -> findAssertionsAndAttemptSend(e, orgName, request));
     }
 
-    private void findAssertionsAndAttemptSend(String email, String salesforceId, String orgName, SendNotificationsRequest request) {
-        List<Assertion> allAssertionsForEmailAndMember = assertionRepository.findByEmailAndSalesforceIdAndStatus(email, salesforceId,
+    private void findAssertionsAndAttemptSend(String email, String orgName, SendNotificationsRequest request) {
+        List<Assertion> allAssertionsForEmailAndMember = assertionRepository.findByEmailAndSalesforceIdAndStatus(email, request.getSalesforceId(),
                 AssertionStatus.NOTIFICATION_REQUESTED.name());
         try {
             String orcidId = orcidApiClient.getOrcidIdForEmail(email);
             if (orcidId == null) {
+                mailService.sendInvitationEmail(userService.getUserById(email), orgName, orcidRecordService.generateLinkForEmailAndSalesforceId(email, request.getSalesforceId()));
+                request.setEmailsSent(request.getEmailsSent() + 1);
                 allAssertionsForEmailAndMember.forEach(a -> {
-                    a.setStatus(AssertionStatus.PENDING.name());
+                    a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
+                    a.setInvitationSent(Instant.now());
                     assertionRepository.save(a);
                 });
             } else {
-                NotificationPermission notification = getPermissionLinkNotification(allAssertionsForEmailAndMember, email, salesforceId, orgName);
+                NotificationPermission notification = getPermissionLinkNotification(allAssertionsForEmailAndMember, email, request.getSalesforceId(), orgName);
                 orcidApiClient.postNotification(notification, orcidId);
                 allAssertionsForEmailAndMember.forEach(a -> {
                     a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
@@ -111,7 +114,7 @@ public class NotificationService {
                 });
             }
         } catch (Exception e) {
-            LOG.warn("Error sending notification to {} on behalf of {}", email, salesforceId);
+            LOG.warn("Error sending notification to {} on behalf of {}", email, request.getSalesforceId());
             allAssertionsForEmailAndMember.forEach(a -> {
                 a.setStatus(AssertionStatus.NOTIFICATION_FAILED.name());
                 assertionRepository.save(a);
@@ -125,7 +128,6 @@ public class NotificationService {
         notificationPermission.setNotificationSubject(messageSource.getMessage("assertion.notifications.subject", new Object[] { orgName }, Locale.getDefault()));
         notificationPermission.setNotificationType(NotificationType.PERMISSION);
         notificationPermission.setAuthorizationUrl(new AuthorizationUrl(orcidRecordService.generateLinkForEmailAndSalesforceId(email, salesforceId)));
-        
 
         List<Item> items = new ArrayList<>();
         assertions.forEach(a -> {
@@ -163,11 +165,11 @@ public class NotificationService {
         notificationPermission.setItems(new Items(items));
         return notificationPermission;
     }
-    
+
     private SendNotificationsRequest findActiveRequestBySalesforceId(String salesforceId) {
         List<SendNotificationsRequest> requests = sendNotificationsRequestRepository.findActiveRequestBySalesforceId(salesforceId);
         assert requests.size() <= 1;
         return requests.size() == 1 ? requests.get(0) : null;
     }
-    
+
 }
