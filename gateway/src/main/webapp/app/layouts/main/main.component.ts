@@ -9,7 +9,7 @@ import { JhiLanguageHelper } from 'app/core';
   templateUrl: './main.component.html'
 })
 export class JhiMainComponent implements OnInit {
-  PROD_BASE_URL: string = 'https://member-portal.orcid.org';
+  PROD_BASE_URL = 'https://member-portal.orcid.org';
   baseUrl: string = BASE_URL;
   orcidBaseUrl: string = ORCID_BASE_URL;
   hideNav: Boolean = false;
@@ -27,7 +27,7 @@ export class JhiMainComponent implements OnInit {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.jhiLanguageHelper.updateTitle(this.getPageTitle(this.router.routerState.snapshot.root));
-        if(event.url.indexOf('landing-page') > -1) {
+        if (event.url.indexOf('landing-page') > -1) {
           this.hideNav = true;
         }
       }

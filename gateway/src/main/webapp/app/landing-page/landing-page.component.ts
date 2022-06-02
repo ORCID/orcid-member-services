@@ -37,7 +37,7 @@ export class LandingPageComponent implements OnInit {
   givenName: string;
   familyName: string;
   progressbarValue = 100;
-  curSec: number = 0;
+  curSec = 0;
 
   constructor(
     private eventManager: JhiEventManager,
@@ -47,13 +47,13 @@ export class LandingPageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    let id_token_fragment = this.getFragmentParameterByName('id_token');
-    let access_token_fragment = this.getFragmentParameterByName('access_token');
-    let state_param = this.getQueryParameterByName('state');
+    const id_token_fragment = this.getFragmentParameterByName('id_token');
+    const access_token_fragment = this.getFragmentParameterByName('access_token');
+    const state_param = this.getQueryParameterByName('state');
 
     this.landingPageService.getOrcidConnectionRecord(state_param).subscribe(
-      (res: HttpResponse<any>) => {
-        this.orcidRecord = res.body;
+      (result: HttpResponse<any>) => {
+        this.orcidRecord = result.body;
         this.landingPageService.getMemberInfo(state_param).subscribe(
           (res: HttpResponse<IMSMember>) => {
             this.clientName = res.body.clientName;
@@ -68,13 +68,13 @@ export class LandingPageComponent implements OnInit {
               '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
               state_param;
             // Check if id token exists in URL (user just granted permission)
-            if (id_token_fragment != null && id_token_fragment != '') {
+            if (id_token_fragment != null && id_token_fragment !== '') {
               this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment);
             } else {
-              let error = this.getFragmentParameterByName('error');
+              const error = this.getFragmentParameterByName('error');
               // Check if user denied permission
-              if (error != null && error != '') {
-                if (error == 'access_denied') {
+              if (error != null && error !== '') {
+                if (error === 'access_denied') {
                   this.submitUserDenied(state_param);
                 } else {
                   this.showErrorElement();
@@ -99,14 +99,14 @@ export class LandingPageComponent implements OnInit {
 
   getFragmentParameterByName(name: string): string {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    let regex = new RegExp('[\\#&]' + name + '=([^&#]*)'),
+    const regex = new RegExp('[\\#&]' + name + '=([^&#]*)'),
       results = regex.exec(window.location.hash);
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
   }
 
   getQueryParameterByName(name: string): string {
     name = name.replace(/[\[\]]/g, '\\$&');
-    let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
       results = regex.exec(window.location.href);
     if (!results) {
       return null;
@@ -120,19 +120,19 @@ export class LandingPageComponent implements OnInit {
   checkSubmitToken(id_token: string, state: string, access_token: string) {
     this.landingPageService.getPublicKey().subscribe(
       res => {
-        let pubKey = KEYUTIL.getKey(res.keys[0]);
-        let response = KJUR.jws.JWS.verifyJWT(id_token, pubKey, {
+        const pubKey = KEYUTIL.getKey(res.keys[0]);
+        const response = KJUR.jws.JWS.verifyJWT(id_token, pubKey, {
           alg: ['RS256'],
           iss: [this.issuer],
           aud: this.clientId,
           gracePeriod: 15 * 60 // 15 mins skew allowed
         });
         if (response === true) {
-          //check if existing token belongs to a different user
+          // check if existing token belongs to a different user
 
-          this.landingPageService.submitUserResponse({ id_token: id_token, state: state, salesforce_id: this.salesforceId }).subscribe(
+          this.landingPageService.submitUserResponse({ id_token, state, salesforce_id: this.salesforceId }).subscribe(
             res => {
-              var data = res;
+              const data = res;
               if (data) {
                 if (data.isDifferentUser) {
                   this.showConnectionExistsDifferentUserElement();
@@ -144,8 +144,8 @@ export class LandingPageComponent implements OnInit {
                 }
               }
               this.landingPageService.getUserInfo(access_token).subscribe(
-                (res: HttpResponse<any>) => {
-                  this.signedInIdToken = res;
+                (result: HttpResponse<any>) => {
+                  this.signedInIdToken = result;
                   this.givenName = '';
                   if (this.signedInIdToken.given_name) {
                     this.givenName = this.signedInIdToken.given_name;
@@ -177,7 +177,7 @@ export class LandingPageComponent implements OnInit {
   }
 
   submitIdTokenData(id_token: string, state: string, access_token: string) {
-    this.landingPageService.submitUserResponse({ id_token: id_token, state: state }).subscribe(
+    this.landingPageService.submitUserResponse({ id_token, state }).subscribe(
       () => {
         this.landingPageService.getUserInfo(access_token).subscribe(
           (res: HttpResponse<any>) => {
@@ -196,7 +196,7 @@ export class LandingPageComponent implements OnInit {
   }
 
   submitUserDenied(state: string) {
-    this.landingPageService.submitUserResponse({ denied: true, state: state }).subscribe(
+    this.landingPageService.submitUserResponse({ denied: true, state }).subscribe(
       () => {
         this.showDeniedElement();
       },

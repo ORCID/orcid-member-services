@@ -7,9 +7,7 @@ import { AccountService } from 'app/core';
   styleUrls: ['footer.scss']
 })
 export class FooterComponent {
-  constructor(
-    private accountService: AccountService,
-  ){}
+  constructor(private accountService: AccountService) {}
 
   isAuthenticated() {
     return this.accountService.isAuthenticated();

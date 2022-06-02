@@ -70,9 +70,9 @@ export class MSUserComponent implements OnInit, OnDestroy {
   }
 
   generateItemCountString() {
-    const first = (this.page - 1) * this.itemsPerPage == 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1;
+    const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1;
     const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems;
-    return this.translate.instant('global.item-count.string', { first: first, second: second, total: this.totalItems });
+    return this.translate.instant('global.item-count.string', { first, second, total: this.totalItems });
   }
 
   loadAll() {
