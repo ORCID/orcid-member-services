@@ -251,7 +251,7 @@ public class AssertionService {
     }
 
     public boolean isDuplicate(Assertion assertion) {
-        List<Assertion> assertions = assertionRepository.findByEmail(assertion.getEmail());
+        List<Assertion> assertions = assertionRepository.findByEmailAndSalesforceId(assertion.getEmail(), assertion.getSalesforceId());
         for (Assertion a : assertions) {
             if (duplicates(a, assertion)) {
                 return true;
