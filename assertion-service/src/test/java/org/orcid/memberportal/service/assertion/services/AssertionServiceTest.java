@@ -1067,11 +1067,8 @@ class AssertionServiceTest {
         Assertion d = getAssertionWithoutIdForEmail("email");
         d.setAffiliationSection(AffiliationSection.EMPLOYMENT);
 
-        Assertion comparison = getAssertionWithoutIdForEmail("email"); // duplicate
-                                                                       // of
-                                                                       // assertion
-                                                                       // a
-        Mockito.when(assertionsRepository.findByEmail(Mockito.eq("email"))).thenReturn(Arrays.asList(b, c, a, d));
+        Assertion comparison = getAssertionWithoutIdForEmail("email"); // duplicate of assertion a
+        Mockito.when(assertionsRepository.findByEmailAndSalesforceId(Mockito.eq("email"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(Arrays.asList(b, c, a, d));
         assertTrue(assertionService.isDuplicate(comparison));
 
         a.setUrl("something-different");
@@ -1556,7 +1553,7 @@ class AssertionServiceTest {
         Assertion alreadyPersisted1 = getAssertionWithEmail("1@email.com");
         alreadyPersisted1.setDepartmentName("not a duplicate");
         Assertion alreadyPersisted2 = getAssertionWithEmail("1@email.com");
-        Mockito.when(assertionsRepository.findByEmail(Mockito.eq("1@email.com"))).thenReturn(Arrays.asList(alreadyPersisted1, alreadyPersisted2));
+        Mockito.when(assertionsRepository.findByEmailAndSalesforceId(Mockito.eq("1@email.com"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(Arrays.asList(alreadyPersisted1, alreadyPersisted2));
 
         AssertionsUpload upload = new AssertionsUpload();
         upload.addAssertion(getAssertionWithEmail("1@email.com"));
@@ -1628,6 +1625,7 @@ class AssertionServiceTest {
         a.setExternalIdType("extIdType");
         a.setExternalIdUrl("extIdUrl");
         a.setUrl("url");
+        a.setSalesforceId(DEFAULT_SALESFORCE_ID);
         return a;
     }
 
