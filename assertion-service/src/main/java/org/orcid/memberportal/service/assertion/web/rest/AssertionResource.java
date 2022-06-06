@@ -377,7 +377,7 @@ public class AssertionResource {
             throw new IllegalArgumentException("invalid org id");
         }
 
-        if (assertionService.isDuplicate(assertion)) {
+        if (assertionService.isDuplicate(assertion, userService.getLoggedInUserSalesforceId())) {
             throw new BadRequestAlertException("This assertion already exists", "assertion", "assertion.validation.duplicate.string");
         }
 

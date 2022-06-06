@@ -250,8 +250,8 @@ public class AssertionService {
         return assertionRepository.findByEmail(email);
     }
 
-    public boolean isDuplicate(Assertion assertion) {
-        List<Assertion> assertions = assertionRepository.findByEmailAndSalesforceId(assertion.getEmail(), assertion.getSalesforceId());
+    public boolean isDuplicate(Assertion assertion, String salesforceId) {
+        List<Assertion> assertions = assertionRepository.findByEmailAndSalesforceId(assertion.getEmail(), salesforceId);
         for (Assertion a : assertions) {
             if (duplicates(a, assertion)) {
                 return true;
@@ -686,7 +686,7 @@ public class AssertionService {
         List<String> registryDeleteFailures = new ArrayList<>();
 
         for (Assertion a : upload.getAssertions()) {
-            if (!isDuplicate(a)) {
+            if (!isDuplicate(a, user.getSalesforceId())) {
                 if (a.getId() == null || a.getId().isEmpty()) {
                     createAssertion(a, user);
                     created++;
