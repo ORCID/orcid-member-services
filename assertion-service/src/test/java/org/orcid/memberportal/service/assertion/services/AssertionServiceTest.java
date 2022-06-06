@@ -1069,153 +1069,153 @@ class AssertionServiceTest {
 
         Assertion comparison = getAssertionWithoutIdForEmail("email"); // duplicate of assertion a
         Mockito.when(assertionsRepository.findByEmailAndSalesforceId(Mockito.eq("email"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(Arrays.asList(b, c, a, d));
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setUrl("something-different");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setUrl(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setUrl("url");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         comparison.setUrl(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         comparison.setUrl("url");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setUrl(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setUrl("url");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         comparison.setUrl("");
         a.setUrl(null);
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         comparison.setUrl("url");
         a.setUrl("url");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setStartMonth("08");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setStartMonth(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setStartMonth("01");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         comparison.setStartMonth(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         comparison.setStartMonth("01");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setStartYear("1981");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setStartYear(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setStartYear("2020");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setEndDay("02");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setEndDay(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setEndDay("01");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setEndMonth("06");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setEndMonth(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setEndMonth("01");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setEndYear("1981");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setEndYear(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setEndYear("2021");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setOrgName("something-different");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setOrgName(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setOrgName("org");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setOrgCity("something-different");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setOrgCity(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setOrgCity("city");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setDisambiguationSource("something-different");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setDisambiguationSource(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setDisambiguationSource("RINGGOLD");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setDisambiguatedOrgId("something-different");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setDisambiguatedOrgId(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setDisambiguatedOrgId("id");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setExternalId("something-different");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setExternalId(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setExternalId("extId");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setExternalIdType("something-different");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setExternalIdType(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setExternalIdType("extIdType");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setExternalIdUrl("something-different");
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setExternalIdUrl(null);
-        assertFalse(assertionService.isDuplicate(comparison));
+        assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         a.setExternalIdUrl("extIdUrl");
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
         comparison.setId("not-null"); // id should be ignored
-        assertTrue(assertionService.isDuplicate(comparison));
+        assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
     }
 
     @Test
