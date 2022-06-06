@@ -25,12 +25,12 @@ export class LandingPageService {
   }
 
   getOrcidConnectionRecord(state: String): Observable<any> {
-    let requestUrl = this.recordConnectionUri + state;
+    const requestUrl = this.recordConnectionUri + state;
     return this.http.get(requestUrl, { observe: 'response' });
   }
 
   getMemberInfo(state: String): Observable<any> {
-    let requestUrl = this.memberInfoUri + state;
+    const requestUrl = this.memberInfoUri + state;
     return this.http.get(requestUrl, { observe: 'response' });
   }
 
@@ -39,7 +39,7 @@ export class LandingPageService {
       Authorization: 'Bearer ' + access_token,
       'Content-Type': 'application/json'
     });
-    return this.http.post(this.userInfoUri, {}, { headers: headers });
+    return this.http.post(this.userInfoUri, {}, { headers });
   }
 
   getPublicKey(): Observable<any> {
