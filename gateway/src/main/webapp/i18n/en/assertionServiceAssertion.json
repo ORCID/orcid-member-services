@@ -40,6 +40,12 @@
         }
       },
       "delete": {
+        "fromPortal": {
+          "string": "Are you sure you want to delete this affiliation from the portal?"
+        },
+        "fromPortalAndRegistry": {
+          "string": "Are you sure you want to delete this affiliation for {{ email }}? The affiliation will be deleted from the portal and the user's ORCID record."
+        },
         "question": {
           "string": "Are you sure you want to delete this affiliation for {{ email }}? The affiliation will be deleted from the portal and the registry. As the user has revoked permission to your organisation you will need to request permission again to add or edit any items."
         },
