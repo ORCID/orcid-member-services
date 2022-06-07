@@ -18,7 +18,6 @@ export class AssertionDeleteDialogComponent {
   inOrcid: string = ASSERTION_STATUS.IN_ORCID;
   userRevokedAccess: string = ASSERTION_STATUS.USER_REVOKED_ACCESS;
   assertion: IAssertion;
-  errorDeletingFromOrcid: boolean;
   errorUserRevoked = false;
 
   constructor(
@@ -26,15 +25,12 @@ export class AssertionDeleteDialogComponent {
     public activeModal: NgbActiveModal,
     protected eventManager: JhiEventManager,
     private alertService: JhiAlertService
-  ) {
-    this.errorDeletingFromOrcid = false;
-  }
+  ) {}
   clear() {
     this.activeModal.dismiss(true);
   }
 
   confirmDelete() {
-    this.errorDeletingFromOrcid = false;
     this.assertionService.delete(this.assertion.id).subscribe(response => {
       if (response.body.deleted) {
         this.eventManager.broadcast({
