@@ -100,7 +100,7 @@ class MailServiceIT {
     @Test
     void testSendInvitationEmail() throws MailException {
         Mockito.doNothing().when(mailgunClient).sendMail(Mockito.eq("summary@orcid.org"), Mockito.eq("summary"), Mockito.eq("something"));
-        mailService.sendInvitationEmail("summary@orcid.org", "some org", "permission link");
+        mailService.sendInvitationEmail("summary@orcid.org", "some org", "some/base/address?state=some-state-value");
         Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
         assertThat(recipientCaptor.getValue()).isEqualTo("summary@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo("someone wants to add something to your record");
