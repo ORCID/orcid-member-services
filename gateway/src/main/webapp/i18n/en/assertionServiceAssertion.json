@@ -40,16 +40,11 @@
         }
       },
       "delete": {
-        "question": {
-          "string": "Are you sure you want to delete this affiliation for {{ email }}? The affiliation will be deleted from the portal and the registry. As the user has revoked permission to your organisation you will need to request permission again to add or edit any items."
+        "fromPortal": {
+          "string": "Are you sure you want to delete this affiliation from the portal?"
         },
-        "note": { "string": "This affiliation will also be deleted from the user's ORCID record." },
-        "noteRevoked": {
-          "string": "This affiliation will be deleted from the Member Portal but will remain in ORCID. The user has revoked access to their ORCID record and you no longer have permission to delete this item from their ORCID record."
-        },
-        "error": { "string": "Sorry, this affiliation could not be deleted." },
-        "userRevokedAccess": {
-          "string": "The user has revoked access to their ORCID record and you no longer have permission to edit or delete this item in ORCID."
+        "fromPortalAndRegistry": {
+          "string": "Are you sure you want to delete this affiliation for {{ email }}? The affiliation will be deleted from the portal and the user's ORCID record."
         }
       },
       "detail": {
