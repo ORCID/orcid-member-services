@@ -329,7 +329,7 @@ class AssertionServiceTest {
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(getOptionalOrcidRecordWithIdToken());
         a = assertionService.updateAssertion(a, getUser());
         assertNotNull(a.getStatus());
-        assertEquals(AssertionStatus.PENDING_RETRY.name(), a.getStatus());
+        assertEquals(AssertionStatus.PENDING_UPDATE.name(), a.getStatus());
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
         Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
     }
