@@ -208,19 +208,25 @@ public class AssertionService {
         copyFieldsToUpdate(assertion, existingAssertion);
         existingAssertion.setModified(Instant.now());
         existingAssertion.setLastModifiedBy(user.getEmail());
-
-        Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(assertion.getEmail());
-        AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
-        if (tokenDeniedStatus != null) {
-            existingAssertion.setStatus(tokenDeniedStatus.name());
-        } else if (assertion.getAddedToORCID() == null) {
-            existingAssertion.setStatus(AssertionStatus.PENDING.name());
-        } else {
-            existingAssertion.setStatus(AssertionStatus.PENDING_RETRY.name());
-        }
+        existingAssertion.setStatus(getStatusForUpdatedAssertion(assertion));
         assertion = assertionRepository.save(existingAssertion);
         setPrettyStatus(assertion);
         return assertion;
+    }
+
+    private String getStatusForUpdatedAssertion(Assertion assertion) {
+        Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(assertion.getEmail());
+        AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
+        if (tokenDeniedStatus != null) {
+            return tokenDeniedStatus.name();
+        } else if (assertion.getAddedToORCID() == null) {
+            return AssertionStatus.PENDING.name();
+        } else if (AssertionStatus.ERROR_ADDING_TO_ORCID.name().equals(assertion.getStatus()) ||
+                AssertionStatus.ERROR_ADDING_TO_ORCID.name().equals(assertion.getStatus())) {
+            return AssertionStatus.PENDING_RETRY.name();
+        } else {
+            return AssertionStatus.PENDING_UPDATE.name();
+        }
     }
 
     public Assertion updateAssertionSalesforceId(Assertion assertion, String salesForceId) {
