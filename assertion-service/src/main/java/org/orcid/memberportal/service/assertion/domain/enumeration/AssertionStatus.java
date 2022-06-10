@@ -14,7 +14,8 @@ public enum AssertionStatus {
     ERROR_DELETING_IN_ORCID("Error deleting in ORCID"),
     NOTIFICATION_REQUESTED("Notification requested"),
     NOTIFICATION_SENT("Notification sent"),
-    NOTIFICATION_FAILED("Notification failed"),;
+    NOTIFICATION_FAILED("Notification failed"),
+    PENDING_UPDATE("Pending update in ORCID");
     
 
     private final String value;
