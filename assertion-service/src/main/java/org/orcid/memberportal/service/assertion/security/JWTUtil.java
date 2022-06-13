@@ -44,6 +44,7 @@ public class JWTUtil {
     }
 
     public SignedJWT getSignedJWT(String jwt) {
+        LOG.info("Signing JWT {}", jwt);
         try {
             SignedJWT s = SignedJWT.parse(jwt);
             if (s.verify(verifier)) {
@@ -51,6 +52,7 @@ public class JWTUtil {
             }
             throw new IllegalArgumentException("The provided JWT is not signed");
         } catch (Exception e) {
+            LOG.error("Error signing JWT", e);
             throw new RuntimeException(e);
         }
     }
