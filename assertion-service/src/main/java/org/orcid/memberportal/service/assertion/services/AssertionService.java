@@ -159,10 +159,10 @@ public class AssertionService {
         Instant now = Instant.now();
         assertion.setOwnerId(owner.getId());
         assertion.setCreated(now);
-        assertion.setModified(now);
+        assertion.setModified(now);     
         assertion.setLastModifiedBy(owner.getEmail());
         assertion.setSalesforceId(owner.getSalesforceId());
-        assertion.setStatus(AssertionStatus.PENDING.name());
+        assertion.setStatus(getAssertionStatus(assertion));
 
         String email = assertion.getEmail();
 
@@ -180,9 +180,7 @@ public class AssertionService {
                 orcidRecordService.updateOrcidRecord(record);
             } else {
                 AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
-                if (tokenDeniedStatus != null) {
-                    assertion.setStatus(tokenDeniedStatus.name());
-                } else {
+                if (tokenDeniedStatus == null) {
                     String activeToken = record.getToken(assertion.getSalesforceId(), false);
                     if (activeToken != null && !activeToken.isBlank()) {
                         assertion.setOrcidId(record.getOrcid());
@@ -208,23 +206,34 @@ public class AssertionService {
         copyFieldsToUpdate(assertion, existingAssertion);
         existingAssertion.setModified(Instant.now());
         existingAssertion.setLastModifiedBy(user.getEmail());
-        existingAssertion.setStatus(getStatusForUpdatedAssertion(assertion));
+        existingAssertion.setStatus(getAssertionStatus(assertion));
         assertion = assertionRepository.save(existingAssertion);
         setPrettyStatus(assertion);
         return assertion;
     }
 
-    private String getStatusForUpdatedAssertion(Assertion assertion) {
+    private String getAssertionStatus(Assertion assertion) {
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findOneByEmail(assertion.getEmail());
         AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
         if (tokenDeniedStatus != null) {
             return tokenDeniedStatus.name();
+        } else if (AssertionStatus.ERROR_ADDING_TO_ORCID.name().equals(assertion.getStatus()) ||
+                AssertionStatus.ERROR_UPDATING_TO_ORCID.name().equals(assertion.getStatus())) {
+            return AssertionStatus.PENDING_RETRY.name();
+        } else if (AssertionStatus.ERROR_DELETING_IN_ORCID.name().equals(assertion.getStatus())) {
+            return AssertionStatus.ERROR_DELETING_IN_ORCID.name();
+        } else if (AssertionStatus.PENDING.name().equals(assertion.getStatus())) {
+            return AssertionStatus.PENDING.name();
+        } else if (AssertionStatus.NOTIFICATION_SENT.name().equals(assertion.getStatus())) {
+            return AssertionStatus.NOTIFICATION_SENT.name();
+        } else if (AssertionStatus.NOTIFICATION_REQUESTED.name().equals(assertion.getStatus())) {
+            return AssertionStatus.NOTIFICATION_REQUESTED.name();
+        } else if (AssertionStatus.NOTIFICATION_FAILED.name().equals(assertion.getStatus())) {
+            return AssertionStatus.NOTIFICATION_FAILED.name();
         } else if (assertion.getAddedToORCID() == null) {
             return AssertionStatus.PENDING.name();
-        } else if (AssertionStatus.ERROR_ADDING_TO_ORCID.name().equals(assertion.getStatus()) ||
-                AssertionStatus.ERROR_ADDING_TO_ORCID.name().equals(assertion.getStatus())) {
-            return AssertionStatus.PENDING_RETRY.name();
         } else {
+            // for IN_ORCID or PENDING_UPDATE switch to PENDING_UPDATE status
             return AssertionStatus.PENDING_UPDATE.name();
         }
     }

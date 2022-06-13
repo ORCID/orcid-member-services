@@ -333,7 +333,64 @@ class AssertionServiceTest {
         Mockito.verify(assertionsRepository, Mockito.times(1)).save(Mockito.eq(a));
         Mockito.verify(assertionNormalizer, Mockito.times(1)).normalize(Mockito.eq(a));
     }
+    
+    @Test
+    void testUpdateAssertion_checkStatuses() {
+        Assertion a = new Assertion();
+        a.setId("1");
+        a.setEmail("email");
+        a.setOwnerId(DEFAULT_JHI_USER_ID);
+        a.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        a.setAddedToORCID(null);
 
+        testUpdateStatus(a, AssertionStatus.PENDING.name(), getOptionalOrcidRecordWithoutIdToken());
+        
+        a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
+        testUpdateStatus(a, AssertionStatus.NOTIFICATION_SENT.name(), getOptionalOrcidRecordWithoutIdToken());
+        
+        a.setStatus(AssertionStatus.NOTIFICATION_REQUESTED.name());
+        testUpdateStatus(a, AssertionStatus.NOTIFICATION_REQUESTED.name(), getOptionalOrcidRecordWithoutIdToken());
+        
+        a.setStatus(AssertionStatus.NOTIFICATION_FAILED.name());
+        testUpdateStatus(a, AssertionStatus.NOTIFICATION_FAILED.name(), getOptionalOrcidRecordWithoutIdToken());
+        
+        a.setStatus(AssertionStatus.ERROR_ADDING_TO_ORCID.name());
+        testUpdateStatus(a, AssertionStatus.PENDING_RETRY.name(), getOptionalOrcidRecordWithIdToken());
+        
+        a.setStatus(AssertionStatus.PENDING.name());
+        testUpdateStatus(a, AssertionStatus.PENDING.name(), getOptionalOrcidRecordWithIdToken());
+        
+        a.setAddedToORCID(Instant.now());
+        a.setStatus(AssertionStatus.ERROR_UPDATING_TO_ORCID.name());
+        testUpdateStatus(a, AssertionStatus.PENDING_RETRY.name(), getOptionalOrcidRecordWithIdToken());
+        
+        a.setStatus(AssertionStatus.ERROR_DELETING_IN_ORCID.name());
+        testUpdateStatus(a, AssertionStatus.ERROR_DELETING_IN_ORCID.name(), getOptionalOrcidRecordWithIdToken());
+        
+        a.setStatus(AssertionStatus.IN_ORCID.name());
+        testUpdateStatus(a, AssertionStatus.PENDING_UPDATE.name(), getOptionalOrcidRecordWithIdToken());
+        
+        a.setStatus(AssertionStatus.PENDING_UPDATE.name());
+        testUpdateStatus(a, AssertionStatus.PENDING_UPDATE.name(), getOptionalOrcidRecordWithIdToken());
+        
+        testUpdateStatus(a, AssertionStatus.USER_REVOKED_ACCESS.name(), Optional.of(getOrcidRecordWithRevokedToken()));
+        testUpdateStatus(a, AssertionStatus.USER_DENIED_ACCESS.name(), Optional.of(getOrcidRecordWithDeniedToken()));
+    }
+    
+    @Test
+    void testCreateAssertion_checkStatuses() {
+        Assertion a = new Assertion();
+        a.setId("1");
+        a.setEmail("email");
+        a.setOwnerId(DEFAULT_JHI_USER_ID);
+        a.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        a.setAddedToORCID(null);
+
+        testCreateStatus(a, AssertionStatus.PENDING.name(), getOptionalOrcidRecordWithoutIdToken());
+        testCreateStatus(a, AssertionStatus.USER_REVOKED_ACCESS.name(), Optional.of(getOrcidRecordWithRevokedToken()));
+        testCreateStatus(a, AssertionStatus.USER_DENIED_ACCESS.name(), Optional.of(getOrcidRecordWithDeniedToken()));
+    }
+    
     @Test
     void testUpdateAssertionNoIdToken() {
         Assertion a = new Assertion();
@@ -1666,6 +1723,18 @@ class AssertionServiceTest {
         record.setTokens(tokens);
         return record;
     }
+    
+    private OrcidRecord getOrcidRecordWithDeniedToken() {
+        OrcidRecord record = new OrcidRecord();
+        record.setOrcid("orcid");
+
+        List<OrcidToken> tokens = new ArrayList<OrcidToken>();
+        OrcidToken token = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
+        token.setDeniedDate(Instant.now());
+        tokens.add(token);
+        record.setTokens(tokens);
+        return record;
+    }
 
     private List<Assertion> getAssertionsForCreatingInOrcid(int min, int max) {
         List<Assertion> assertions = new ArrayList<>();
@@ -1730,4 +1799,38 @@ class AssertionServiceTest {
         return Optional.of(record);
     }
 
+    private void testUpdateStatus(Assertion assertion, String expectedStatus, Optional<OrcidRecord> optionalRecord) {
+        Mockito.when(assertionsRepository.findById("1")).thenReturn(Optional.of(assertion));
+        Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
+            @Override
+            public Assertion answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                Assertion assertion = (Assertion) args[0];
+                assertion.setId("1");
+                return assertion;
+            }
+        });
+        
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(optionalRecord);
+        assertion = assertionService.updateAssertion(assertion, getUser());
+        assertNotNull(assertion.getStatus());
+        assertEquals(expectedStatus, assertion.getStatus());
+    }
+    
+    private void testCreateStatus(Assertion assertion, String expectedStatus, Optional<OrcidRecord> optionalRecord) {
+        Mockito.when(assertionsRepository.insert(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
+            @Override
+            public Assertion answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                Assertion assertion = (Assertion) args[0];
+                assertion.setId("1");
+                return assertion;
+            }
+        });
+        
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(optionalRecord);
+        assertion = assertionService.createAssertion(assertion, getUser());
+        assertNotNull(assertion.getStatus());
+        assertEquals(expectedStatus, assertion.getStatus());
+    }
 }
