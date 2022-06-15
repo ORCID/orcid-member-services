@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -29,7 +30,13 @@ public class SalesforceClient {
     private ApplicationProperties applicationProperties;
 
     public MemberDetails getMemberDetails(String salesforceId) throws IOException {
-        HttpGet httpGet = new HttpGet(applicationProperties.getSalesforceClientEndpoint() + "member/" + salesforceId + "/details");
+        String endpoint = applicationProperties.getSalesforceClientEndpoint();
+        if (StringUtils.isBlank(endpoint)) {
+            LOG.warn("No salesforce client endpoint, not fetching member details");
+            return null;
+        }
+        
+        HttpGet httpGet = new HttpGet(endpoint + "member/" + salesforceId + "/details");
         httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + applicationProperties.getSalesforceClientToken());
 
         CloseableHttpResponse response = null;

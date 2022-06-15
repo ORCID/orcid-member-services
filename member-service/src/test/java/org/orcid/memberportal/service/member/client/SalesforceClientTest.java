@@ -87,6 +87,13 @@ public class SalesforceClientTest {
         Mockito.verify(applicationProperties).getSalesforceClientToken();
 
     }
+    
+    @Test
+    void testGetMemberDetails_noEndpoint() throws IOException  {
+        Mockito.when(applicationProperties.getSalesforceClientEndpoint()).thenReturn(null);
+        assertThat(client.getMemberDetails("salesforceId")).isNull();
+        Mockito.verify(applicationProperties).getSalesforceClientEndpoint();
+    }
 
     private HttpEntity getMemberDetailsEntity() throws JsonProcessingException, UnsupportedEncodingException {
         MemberDetails memberDetails = new MemberDetails();

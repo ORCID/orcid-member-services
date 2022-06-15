@@ -1,5 +1,6 @@
 package org.orcid.memberportal.service.member.services;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -20,6 +21,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.orcid.memberportal.service.member.client.SalesforceClient;
+import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
 import org.orcid.memberportal.service.member.security.EncryptUtil;
@@ -51,6 +54,9 @@ class MemberServiceTest {
 
     @Mock
     private MemberValidator memberValidator;
+    
+    @Mock
+    private SalesforceClient salesforceClient;
 
     @InjectMocks
     private MemberService memberService;
@@ -232,7 +238,47 @@ class MemberServiceTest {
         Mockito.verify(memberRepository, Mockito.times(1)).findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
                 Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Pageable.class));
     }
+    
+    @Test
+    void testGetCurrentMemberDetails() throws IOException {
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(salesforceClient.getMemberDetails(Mockito.eq("salesforceId"))).thenReturn(getMemberDetails());
+        
+        MemberDetails memberDetails = memberService.getCurrentMemberDetails();
+        assertThat(memberDetails).isNotNull();
+        assertThat(memberDetails.getName()).isEqualTo("test member details");
+        assertThat(memberDetails.getPublicDisplayName()).isEqualTo("public display name");
+        assertThat(memberDetails.getWebsite()).isEqualTo("https://website.com");
+        assertThat(memberDetails.getMembershipStartDateString()).isEqualTo("2022-01-01");
+        assertThat(memberDetails.getMembershipEndDateString()).isEqualTo("2027-01-01");
+        assertThat(memberDetails.getPublicDisplayEmail()).isEqualTo("orcid@testmember.com");
+        assertThat(memberDetails.getConsortiaLeadId()).isNull();
+        assertThat(memberDetails.isConsortiaMember()).isFalse();
+        assertThat(memberDetails.getPublicDisplayDescriptionHtml()).isEqualTo("<p>public display description</p>");
+        assertThat(memberDetails.getMemberType()).isEqualTo("Research Institute");
+        assertThat(memberDetails.getLogoUrl()).isEqualTo("some/url/for/a/logo");
+        assertThat(memberDetails.getBillingCountry()).isEqualTo("Denmark");
+        assertThat(memberDetails.getId()).isEqualTo("id");
+    }
 
+    private MemberDetails getMemberDetails() {
+        MemberDetails memberDetails = new MemberDetails();
+        memberDetails.setBillingCountry("Denmark");
+        memberDetails.setConsortiaLeadId(null);
+        memberDetails.setConsortiaMember(false);
+        memberDetails.setId("id");
+        memberDetails.setLogoUrl("some/url/for/a/logo");
+        memberDetails.setMemberType("Research Institute");
+        memberDetails.setName("test member details");
+        memberDetails.setPublicDisplayDescriptionHtml("<p>public display description</p>");
+        memberDetails.setPublicDisplayEmail("orcid@testmember.com");
+        memberDetails.setPublicDisplayName("public display name");
+        memberDetails.setMembershipStartDateString("2022-01-01");
+        memberDetails.setMembershipEndDateString("2027-01-01");
+        memberDetails.setWebsite("https://website.com");
+        return memberDetails;
+    }
+    
     private MemberUpload getMemberUpload() {
         Member one = getMember();
         one.setSalesforceId("one");
@@ -261,6 +307,7 @@ class MemberServiceTest {
         MemberServiceUser user = new MemberServiceUser();
         user.setEmail("logged-in-user@orcid.org");
         user.setLangKey("en");
+        user.setSalesforceId("salesforceId");
         return user;
     }
 
