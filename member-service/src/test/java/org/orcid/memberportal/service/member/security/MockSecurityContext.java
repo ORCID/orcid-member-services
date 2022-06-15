@@ -1,4 +1,4 @@
-package org.orcid.member.security;
+package org.orcid.memberportal.service.member.security;
 
 import java.util.Collection;
 

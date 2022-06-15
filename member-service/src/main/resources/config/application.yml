@@ -190,3 +190,5 @@ application:
     holisticsIntegrationDashboardSecret: ${holistics.integration.secret}
     holisticsConsortiaDashboardUrl: ${holistics.consortia.url}
     holisticsConsortiaDashboardSecret: ${holistics.consortia.secret}
+    salesforceClientToken: ${salesforce.client.token}
+    salesforceClientEndpoint: ${salesforce.client.endpoint}

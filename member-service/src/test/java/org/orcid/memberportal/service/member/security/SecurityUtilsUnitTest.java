@@ -1,4 +1,4 @@
-package org.orcid.member.security;
+package org.orcid.memberportal.service.member.security;
 
 import org.junit.jupiter.api.Test;
 import org.orcid.memberportal.service.member.security.AuthoritiesConstants;
