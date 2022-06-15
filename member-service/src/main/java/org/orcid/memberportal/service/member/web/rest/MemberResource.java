@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
+import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.upload.MemberUpload;
@@ -164,6 +165,19 @@ public class MemberResource {
         return ResponseEntity.ok().body(member);
     }
 
+    /**
+     * {@code GET  /member-details} : get details of member to which current user belongs
+     *
+     *
+     * @return the {@link MemberDetails} 
+     */
+    @GetMapping("/member-details")
+    public ResponseEntity<MemberDetails> getMemberDetails() {
+        LOG.debug("REST request to get member details");
+        MemberDetails memberDetails = memberService.getCurrentMemberDetails();
+        return ResponseEntity.ok(memberDetails);
+    }
+    
     /**
      * {@code GET  /members} : get all members.
      *

@@ -33,6 +33,10 @@ public class ApplicationProperties {
     
     private String holisticsAffiliationDashboardSecret;
     
+    private String salesforceClientToken;
+    
+    private String salesforceClientEndpoint;
+    
     public String getOrcidOrgClientId() {
         return orcidOrgClientId;
     }
@@ -111,6 +115,22 @@ public class ApplicationProperties {
 
     public void setHolisticsAffiliationDashboardSecret(String holisticsAffiliationDashboardSecret) {
         this.holisticsAffiliationDashboardSecret = holisticsAffiliationDashboardSecret;
+    }
+
+    public String getSalesforceClientToken() {
+        return salesforceClientToken;
+    }
+
+    public void setSalesforceClientToken(String salesforceClientToken) {
+        this.salesforceClientToken = salesforceClientToken;
+    }
+
+    public String getSalesforceClientEndpoint() {
+        return salesforceClientEndpoint;
+    }
+
+    public void setSalesforceClientEndpoint(String salesforceClientEndpoint) {
+        this.salesforceClientEndpoint = salesforceClientEndpoint;
     }
     
 }
