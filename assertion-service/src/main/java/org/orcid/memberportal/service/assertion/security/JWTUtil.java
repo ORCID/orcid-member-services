@@ -44,7 +44,6 @@ public class JWTUtil {
     }
 
     public SignedJWT getSignedJWT(String jwt) {
-        LOG.info("Signing JWT {}", jwt);
         try {
             SignedJWT s = SignedJWT.parse(jwt);
             if (s.verify(verifier)) {
