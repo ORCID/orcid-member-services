@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 import org.slf4j.Logger;
@@ -28,6 +29,10 @@ public class SalesforceClient {
 
     @Autowired
     private ApplicationProperties applicationProperties;
+    
+    public SalesforceClient() {
+        this.httpClient = HttpClients.createDefault();
+    }
 
     public MemberDetails getMemberDetails(String salesforceId) throws IOException {
         String endpoint = applicationProperties.getSalesforceClientEndpoint();
