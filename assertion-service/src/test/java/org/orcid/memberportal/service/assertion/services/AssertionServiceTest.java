@@ -336,45 +336,51 @@ class AssertionServiceTest {
     
     @Test
     void testUpdateAssertion_checkStatuses() {
-        Assertion a = new Assertion();
-        a.setId("1");
-        a.setEmail("email");
-        a.setOwnerId(DEFAULT_JHI_USER_ID);
-        a.setSalesforceId(DEFAULT_SALESFORCE_ID);
-        a.setAddedToORCID(null);
-
-        testUpdateStatus(a, AssertionStatus.PENDING.name(), getOptionalOrcidRecordWithoutIdToken());
+        Assertion skeleton = new Assertion();
+        skeleton.setId("1");
+        skeleton.setEmail("email");
+        skeleton.setOwnerId(DEFAULT_JHI_USER_ID);
+        skeleton.setSalesforceId(DEFAULT_SALESFORCE_ID);
         
-        a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
-        testUpdateStatus(a, AssertionStatus.NOTIFICATION_SENT.name(), getOptionalOrcidRecordWithoutIdToken());
+        Assertion full = new Assertion();
+        full.setId("1");
+        full.setEmail("email");
+        full.setOwnerId(DEFAULT_JHI_USER_ID);
+        full.setSalesforceId(DEFAULT_SALESFORCE_ID);
         
-        a.setStatus(AssertionStatus.NOTIFICATION_REQUESTED.name());
-        testUpdateStatus(a, AssertionStatus.NOTIFICATION_REQUESTED.name(), getOptionalOrcidRecordWithoutIdToken());
+        full.setAddedToORCID(null);
+        testUpdateStatus(skeleton, full, AssertionStatus.PENDING.name(), getOptionalOrcidRecordWithoutIdToken());
         
-        a.setStatus(AssertionStatus.NOTIFICATION_FAILED.name());
-        testUpdateStatus(a, AssertionStatus.NOTIFICATION_FAILED.name(), getOptionalOrcidRecordWithoutIdToken());
+        full.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
+        testUpdateStatus(skeleton, full, AssertionStatus.NOTIFICATION_SENT.name(), getOptionalOrcidRecordWithoutIdToken());
         
-        a.setStatus(AssertionStatus.ERROR_ADDING_TO_ORCID.name());
-        testUpdateStatus(a, AssertionStatus.PENDING_RETRY.name(), getOptionalOrcidRecordWithIdToken());
+        full.setStatus(AssertionStatus.NOTIFICATION_REQUESTED.name());
+        testUpdateStatus(skeleton, full, AssertionStatus.NOTIFICATION_REQUESTED.name(), getOptionalOrcidRecordWithoutIdToken());
         
-        a.setStatus(AssertionStatus.PENDING.name());
-        testUpdateStatus(a, AssertionStatus.PENDING.name(), getOptionalOrcidRecordWithIdToken());
+        full.setStatus(AssertionStatus.NOTIFICATION_FAILED.name());
+        testUpdateStatus(skeleton, full, AssertionStatus.NOTIFICATION_FAILED.name(), getOptionalOrcidRecordWithoutIdToken());
         
-        a.setAddedToORCID(Instant.now());
-        a.setStatus(AssertionStatus.ERROR_UPDATING_TO_ORCID.name());
-        testUpdateStatus(a, AssertionStatus.PENDING_RETRY.name(), getOptionalOrcidRecordWithIdToken());
+        full.setStatus(AssertionStatus.ERROR_ADDING_TO_ORCID.name());
+        testUpdateStatus(skeleton, full, AssertionStatus.PENDING_RETRY.name(), getOptionalOrcidRecordWithIdToken());
         
-        a.setStatus(AssertionStatus.ERROR_DELETING_IN_ORCID.name());
-        testUpdateStatus(a, AssertionStatus.ERROR_DELETING_IN_ORCID.name(), getOptionalOrcidRecordWithIdToken());
+        full.setStatus(AssertionStatus.PENDING.name());
+        testUpdateStatus(skeleton, full, AssertionStatus.PENDING.name(), getOptionalOrcidRecordWithIdToken());
         
-        a.setStatus(AssertionStatus.IN_ORCID.name());
-        testUpdateStatus(a, AssertionStatus.PENDING_UPDATE.name(), getOptionalOrcidRecordWithIdToken());
+        full.setAddedToORCID(Instant.now());
+        full.setStatus(AssertionStatus.ERROR_UPDATING_TO_ORCID.name());
+        testUpdateStatus(skeleton, full, AssertionStatus.PENDING_RETRY.name(), getOptionalOrcidRecordWithIdToken());
         
-        a.setStatus(AssertionStatus.PENDING_UPDATE.name());
-        testUpdateStatus(a, AssertionStatus.PENDING_UPDATE.name(), getOptionalOrcidRecordWithIdToken());
+        full.setStatus(AssertionStatus.ERROR_DELETING_IN_ORCID.name());
+        testUpdateStatus(skeleton, full, AssertionStatus.ERROR_DELETING_IN_ORCID.name(), getOptionalOrcidRecordWithIdToken());
         
-        testUpdateStatus(a, AssertionStatus.USER_REVOKED_ACCESS.name(), Optional.of(getOrcidRecordWithRevokedToken()));
-        testUpdateStatus(a, AssertionStatus.USER_DENIED_ACCESS.name(), Optional.of(getOrcidRecordWithDeniedToken()));
+        full.setStatus(AssertionStatus.IN_ORCID.name());
+        testUpdateStatus(skeleton, full, AssertionStatus.PENDING_UPDATE.name(), getOptionalOrcidRecordWithIdToken());
+        
+        full.setStatus(AssertionStatus.PENDING_UPDATE.name());
+        testUpdateStatus(skeleton, full, AssertionStatus.PENDING_UPDATE.name(), getOptionalOrcidRecordWithIdToken());
+        
+        testUpdateStatus(skeleton, full, AssertionStatus.USER_REVOKED_ACCESS.name(), Optional.of(getOrcidRecordWithRevokedToken()));
+        testUpdateStatus(skeleton, full, AssertionStatus.USER_DENIED_ACCESS.name(), Optional.of(getOrcidRecordWithDeniedToken()));
     }
     
     @Test
@@ -1799,22 +1805,17 @@ class AssertionServiceTest {
         return Optional.of(record);
     }
 
-    private void testUpdateStatus(Assertion assertion, String expectedStatus, Optional<OrcidRecord> optionalRecord) {
-        Mockito.when(assertionsRepository.findById("1")).thenReturn(Optional.of(assertion));
-        Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
-            @Override
-            public Assertion answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                Assertion assertion = (Assertion) args[0];
-                assertion.setId("1");
-                return assertion;
-            }
-        });
-        
+    private void testUpdateStatus(Assertion skeleton, Assertion full, String expectedStatus, Optional<OrcidRecord> optionalRecord) {
+        Mockito.when(assertionsRepository.findById("1")).thenReturn(Optional.of(full));
+        Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenReturn(full);
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("email"))).thenReturn(optionalRecord);
-        assertion = assertionService.updateAssertion(assertion, getUser());
-        assertNotNull(assertion.getStatus());
-        assertEquals(expectedStatus, assertion.getStatus());
+        
+        assertionService.updateAssertion(skeleton, getUser());
+        
+        Mockito.verify(assertionsRepository, Mockito.atLeastOnce()).save(assertionCaptor.capture());
+        Assertion updated = assertionCaptor.getValue();
+        assertNotNull(updated.getStatus());
+        assertEquals(expectedStatus, updated.getStatus());
     }
     
     private void testCreateStatus(Assertion assertion, String expectedStatus, Optional<OrcidRecord> optionalRecord) {
