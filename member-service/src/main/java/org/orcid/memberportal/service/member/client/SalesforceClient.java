@@ -57,8 +57,8 @@ public class SalesforceClient {
             } else {
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-                objectMapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
-                MemberDetails memberDetails = objectMapper.readValue(response.getEntity().getContent(), MemberDetails.class);
+                JsonNode root = objectMapper.readTree(response.getEntity().getContent());
+                MemberDetails memberDetails = objectMapper.treeToValue(root.at("/member"), MemberDetails.class);
                 return memberDetails;
             }
         } finally {
