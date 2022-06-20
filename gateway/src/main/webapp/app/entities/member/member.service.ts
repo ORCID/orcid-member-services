@@ -16,10 +16,12 @@ type EntityArrayResponseType = HttpResponse<IMSMember[]>;
 @Injectable({ providedIn: 'root' })
 export class MSMemberService {
   public resourceUrl = SERVER_API_URL + 'services/memberservice/api/members';
+  public resourceUrl2 = SERVER_API_URL + 'services/memberservice/api/member-details';
   public allMembers$: Observable<EntityArrayResponseType>;
   public orgNameMap: any;
 
   constructor(protected http: HttpClient) {
+    console.log(SERVER_API_URL);
     this.allMembers$ = this.getAllMembers().pipe(share());
     this.orgNameMap = new Object();
   }
@@ -62,6 +64,12 @@ export class MSMemberService {
     return this.http
       .get<IMSMember[]>(`${this.resourceUrl}/list/all`, { observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
+  getMember(): Observable<EntityResponseType> {
+    return this.http
+      .get(`${this.resourceUrl2}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   delete(id: string): Observable<HttpResponse<any>> {
