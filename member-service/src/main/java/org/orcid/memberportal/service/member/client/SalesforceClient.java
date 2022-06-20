@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
@@ -53,7 +55,10 @@ public class SalesforceClient {
                 LOG.warn("Response received:");
                 LOG.warn(responseString);
             } else {
-                MemberDetails memberDetails = new ObjectMapper().readValue(response.getEntity().getContent(), MemberDetails.class);
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+                JsonNode root = objectMapper.readTree(response.getEntity().getContent());
+                MemberDetails memberDetails = objectMapper.treeToValue(root.at("/member"), MemberDetails.class);
                 return memberDetails;
             }
         } finally {
