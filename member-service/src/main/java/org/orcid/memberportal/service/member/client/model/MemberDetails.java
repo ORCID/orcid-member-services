@@ -1,7 +1,9 @@
 package org.orcid.memberportal.service.member.client.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
+@JsonRootName(value="member")
 public class MemberDetails {
     
     @JsonProperty("Id")

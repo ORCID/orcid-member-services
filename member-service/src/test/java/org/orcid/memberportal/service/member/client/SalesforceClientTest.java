@@ -21,7 +21,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicStatusLine;
-import org.apache.http.params.HttpParams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -35,6 +34,7 @@ import org.orcid.memberportal.service.member.config.ApplicationProperties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class SalesforceClientTest {
 
@@ -111,7 +111,9 @@ public class SalesforceClientTest {
         memberDetails.setMembershipEndDateString("2027-01-01");
         memberDetails.setWebsite("https://website.com");
         
-        String jsonString = new ObjectMapper().writeValueAsString(memberDetails);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
+        String jsonString = objectMapper.writeValueAsString(memberDetails);
         return new StringEntity(jsonString);
     }
 
