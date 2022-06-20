@@ -35,6 +35,7 @@ import org.orcid.memberportal.service.member.config.ApplicationProperties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class SalesforceClientTest {
 
@@ -111,7 +112,9 @@ public class SalesforceClientTest {
         memberDetails.setMembershipEndDateString("2027-01-01");
         memberDetails.setWebsite("https://website.com");
         
-        String jsonString = new ObjectMapper().writeValueAsString(memberDetails);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
+        String jsonString = objectMapper.writeValueAsString(memberDetails);
         return new StringEntity(jsonString);
     }
 
