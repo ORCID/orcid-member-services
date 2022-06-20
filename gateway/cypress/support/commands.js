@@ -29,6 +29,7 @@ import credentials from '../fixtures/credentials.json';
 import record from '../fixtures/orcid-record.json';
   
 Cypress.Commands.add('signin', (email, password) => {
+  cy.visit('./');
   cy.get('#username')
     .clear()
     .type(email)
@@ -76,8 +77,9 @@ Cypress.Commands.add('programmaticSignin', (username, password) => {
           password
         }
       }).then(r => {
-        cy.log(r);
-        expect(r.status).to.eq(200);
+        if (r.status != 200) {
+          cy.signin(username, password);
+        };
       });
     }
   });
