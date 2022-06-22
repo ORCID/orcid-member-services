@@ -9,17 +9,20 @@ import { map } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { IMSMember } from 'app/shared/model/member.model';
+import { ISFMemberData, ISFRawMemberData, SFMemberData } from 'app/shared/model/salesforce.member.data.model';
 
 type EntityResponseType = HttpResponse<IMSMember>;
 type EntityArrayResponseType = HttpResponse<IMSMember[]>;
+type SalesforceEntityResponseType = HttpResponse<ISFRawMemberData>;
 
 @Injectable({ providedIn: 'root' })
 export class MSMemberService {
-  public resourceUrl = SERVER_API_URL + 'services/memberservice/api/members';
+  public resourceUrl = SERVER_API_URL + 'services/memberservice/api';
   public allMembers$: Observable<EntityArrayResponseType>;
   public orgNameMap: any;
 
   constructor(protected http: HttpClient) {
+    console.log(SERVER_API_URL);
     this.allMembers$ = this.getAllMembers().pipe(share());
     this.orgNameMap = new Object();
   }
@@ -27,45 +30,51 @@ export class MSMemberService {
   create(msMember: IMSMember): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(msMember);
     return this.http
-      .post<IMSMember>(this.resourceUrl, copy, { observe: 'response' })
+      .post<IMSMember>(`${this.resourceUrl}/members`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   update(msMember: IMSMember): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(msMember);
     return this.http
-      .put<IMSMember>(this.resourceUrl, copy, { observe: 'response' })
+      .put<IMSMember>(`${this.resourceUrl}/members`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   validate(msMember: IMSMember): Observable<any> {
     const copy = this.convertDateFromClient(msMember);
     return this.http
-      .post<IMSMember>(this.resourceUrl + '/validate', copy, { observe: 'response' })
+      .post<IMSMember>(`${this.resourceUrl}/members/validate`, copy, { observe: 'response' })
       .pipe(map((res: any) => this.convertDateFromServer(res)));
   }
 
   find(id: string): Observable<EntityResponseType> {
     return this.http
-      .get<IMSMember>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .get<IMSMember>(`${this.resourceUrl}/members/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IMSMember[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .get<IMSMember[]>(`${this.resourceUrl}/members`, { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   getAllMembers(): Observable<EntityArrayResponseType> {
     return this.http
-      .get<IMSMember[]>(`${this.resourceUrl}/list/all`, { observe: 'response' })
+      .get<IMSMember[]>(`${this.resourceUrl}/members/list/all`, { observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
+  getMember(): Observable<SFMemberData> {
+    return this.http
+      .get<ISFRawMemberData>(`${this.resourceUrl}/member-details`, { observe: 'response' })
+      .pipe(map((res: SalesforceEntityResponseType) => this.convertToSalesforceMemberData(res)));
+  }
+
   delete(id: string): Observable<HttpResponse<any>> {
-    return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    return this.http.delete<any>(`${this.resourceUrl}/members/${id}`, { observe: 'response' });
   }
 
   protected convertDateFromClient(msMember: IMSMember): IMSMember {
@@ -92,5 +101,26 @@ export class MSMemberService {
       });
     }
     return res;
+  }
+
+  protected convertToSalesforceMemberData(res: SalesforceEntityResponseType): SFMemberData {
+    if (res.body) {
+      return {
+        ...new SFMemberData(),
+        id: res.body.Id,
+        consortiaMember: res.body.Consortia_Member__c,
+        consortiaLeadId: res.body.Consortium_Lead__c,
+        name: res.body.Name,
+        publicDisplayName: res.body.Public_Display_Name__c,
+        website: res.body.Website,
+        billingCountry: res.body.BillingCountry,
+        memberType: res.body.Research_Community__c,
+        publicDisplayDescriptionHtml: res.body.Public_Display_Description__c,
+        logoUrl: res.body.Logo_Description__c,
+        publicDisplayEmail: res.body.Public_Display_Email__c,
+        membershipStartDateString: res.body.Last_membership_start_date__c,
+        membershipEndDateString: res.body.Last_membership_end_date__c
+      };
+    }
   }
 }
