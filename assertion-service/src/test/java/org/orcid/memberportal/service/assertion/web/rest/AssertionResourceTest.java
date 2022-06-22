@@ -123,6 +123,17 @@ class AssertionResourceTest {
     }
     
     @Test
+    void testGetAssertionOfNotificationSentStatus() {
+        Assertion pendingAssertion = new Assertion();
+        pendingAssertion.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
+        Mockito.when(assertionService.findById(Mockito.eq("test"))).thenReturn(pendingAssertion);
+        Mockito.doNothing().when(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
+        assertionResource.getAssertion("test");
+        Mockito.verify(assertionService).findById(Mockito.eq("test"));
+        Mockito.verify(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
+    }
+    
+    @Test
     void testGetAssertionOfDeniedAccessStatus() {
         Assertion pendingAssertion = new Assertion();
         pendingAssertion.setStatus(AssertionStatus.USER_DENIED_ACCESS.name());
