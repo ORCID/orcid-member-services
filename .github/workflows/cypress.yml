@@ -31,7 +31,7 @@ jobs:
             json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}' 
             dir: 'gateway/cypress/plugins'
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           working-directory: gateway
           spec: cypress/integration/retention/*
