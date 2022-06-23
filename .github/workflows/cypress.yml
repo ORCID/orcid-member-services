@@ -33,6 +33,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
+          install: false
           working-directory: gateway
           spec: cypress/integration/retention/*
       - uses: actions/upload-artifact@v2
