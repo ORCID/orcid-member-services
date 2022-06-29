@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParameterCodec } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -38,7 +38,7 @@ export interface HealthDetails {
 export class HealthService {
   separator: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private httpParamCodec: HttpParameterCodec) {
     this.separator = '.';
   }
 
@@ -49,7 +49,9 @@ export class HealthService {
   // get the instance's health
   checkInstanceHealth(instance: Route | undefined): Observable<Health> {
     if (instance && instance.prefix && instance.prefix.length > 0) {
-      return this.http.get<Health>(SERVER_API_URL + instance.prefix + '/management/health');
+      const url = SERVER_API_URL + instance.prefix + '/management/health';
+      const encodedUrl = this.httpParamCodec.encodeValue(url);
+      return this.http.get<Health>(SERVER_API_URL + '/health/check/' + encodedUrl);
     }
     return this.checkHealth();
   }
