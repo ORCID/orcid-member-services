@@ -13,10 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.actuate.health.Status;
 
 import io.github.jhipster.registry.client.HealthClient;
-import io.github.jhipster.registry.health.HealthStatus;
-import io.github.jhipster.registry.health.Health;
+import io.github.jhipster.registry.service.dto.HealthDTO;
 
 public class HealthServiceTest {
 
@@ -33,13 +33,14 @@ public class HealthServiceTest {
 
     @Test
     void testCheckHealth() throws IOException {
-        Health health = new Health();
-        health.setStatus(HealthStatus.UP);
+        HealthDTO health = new HealthDTO(Status.UP);
         Mockito.when(healthClient.getHealth(Mockito.eq("url"))).thenReturn(health);
         
-        Health checkedHealth = healthService.checkHealth("url");
+        HealthDTO checkedHealth = healthService.checkHealth("url");
         assertThat(checkedHealth).isNotNull();
-        assertThat(checkedHealth.getStatus()).isEqualTo(HealthStatus.UP);
+        assertThat(checkedHealth.getStatus()).isEqualTo(Status.UP);
+        assertThat(checkedHealth.getComponents().size()).isEqualTo(1);
+        assertThat(checkedHealth.getComponents().get(HealthDTO.SERVICE_LABEL)).isEqualTo(Status.UP);
         
         Mockito.verify(healthClient).getHealth(Mockito.eq("url"));
     }

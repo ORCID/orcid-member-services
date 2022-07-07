@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.github.jhipster.registry.client.HealthClient;
-import io.github.jhipster.registry.health.Health;
+import io.github.jhipster.registry.service.dto.HealthDTO;
 
 @Service
 public class HealthService {
@@ -14,7 +14,7 @@ public class HealthService {
     @Autowired
     private HealthClient healthClient;
 
-    public Health checkHealth(String healthCheckUrl) throws IOException {
+    public HealthDTO checkHealth(String healthCheckUrl) throws IOException {
         return healthClient.getHealth(healthCheckUrl);
     }
 

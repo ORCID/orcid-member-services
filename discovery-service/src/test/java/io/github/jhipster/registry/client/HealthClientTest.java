@@ -23,15 +23,14 @@ import org.apache.http.message.BasicStatusLine;
 import org.apache.http.params.HttpParams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.Status;
 
-import io.github.jhipster.registry.health.HealthStatus;
-import io.github.jhipster.registry.health.Health;
+import io.github.jhipster.registry.service.dto.HealthDTO;
 
 public class HealthClientTest {
 
@@ -55,9 +54,9 @@ public class HealthClientTest {
         response.setEntity(orcidIdEntity);
         Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenReturn(response);
         
-        Health health = client.getHealth("some-url");
+        HealthDTO health = client.getHealth("some-url");
         assertThat(health).isNotNull();
-        assertThat(health.getStatus()).isEqualTo(HealthStatus.UP);
+        assertThat(health.getStatus()).isEqualTo(Status.UP);
     }
     
     @Test
@@ -66,9 +65,9 @@ public class HealthClientTest {
         response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 500, "Internal Server Error"));
         Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenReturn(response);
         
-        Health health = client.getHealth("some-url");
+        HealthDTO health = client.getHealth("some-url");
         assertThat(health).isNotNull();
-        assertThat(health.getStatus()).isEqualTo(HealthStatus.UNKNOWN);
+        assertThat(health.getStatus()).isEqualTo(Status.UNKNOWN);
     }
     
     private class OrcidCloseableHttpResponse implements CloseableHttpResponse {

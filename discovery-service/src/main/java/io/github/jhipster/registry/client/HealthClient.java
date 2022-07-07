@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.github.jhipster.registry.health.HealthStatus;
-import io.github.jhipster.registry.health.Health;
+import io.github.jhipster.registry.service.dto.HealthDTO;
 
 @Component
 public class HealthClient {
@@ -29,7 +28,7 @@ public class HealthClient {
         this.httpClient = HttpClients.createDefault();
     }
 
-    public Health getHealth(String url) throws IOException {
+    public HealthDTO getHealth(String url) throws IOException {
         HttpGet httpGet = new HttpGet(url);
         CloseableHttpResponse response = null;
 
@@ -42,12 +41,9 @@ public class HealthClient {
                     LOG.warn("Response received:");
                     LOG.warn(responseString);
                 }
-                Health health = new Health();
-                health.setStatus(HealthStatus.UNKNOWN);
-                return health;
+                return new HealthDTO(org.springframework.boot.actuate.health.Status.UNKNOWN);
             } else {
-                Health health = new ObjectMapper().readValue(response.getEntity().getContent(), Health.class);
-                return health;
+                return new ObjectMapper().readValue(response.getEntity().getContent(), HealthDTO.class);
             }
         } finally {
             if (response != null) {
