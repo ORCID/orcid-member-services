@@ -1,4 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { GatewaySharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective } from './';
 
 @NgModule({

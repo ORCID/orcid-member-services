@@ -33,7 +33,7 @@
     "ngx-clipboard": "12.1.1",
     "ngx-cookie": "4.0.2",
     "ngx-infinite-scroll": "7.2.0",
-    "ngx-webstorage": "4.0.1",
+    "ngx-webstorage": "4.0.2",
     "nodemailer": "^6.7.2",
     "rxjs": "6.5.2",
     "swagger-ui": "^4.1.3",
