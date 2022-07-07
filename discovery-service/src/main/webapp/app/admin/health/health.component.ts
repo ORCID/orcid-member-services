@@ -33,7 +33,6 @@ export class HealthCheckComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(
           health => {
-            console.log('found this for health: ' + JSON.stringify(health));
             this.health = health;
           },
           error => {
