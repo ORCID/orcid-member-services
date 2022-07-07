@@ -49,7 +49,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log('THIS SHOULD NOT BE AN ERROR ON TS LINTssssssss');
     this.appService.getVersion().subscribe(response => {
       this.version = response.body.version;
     });
