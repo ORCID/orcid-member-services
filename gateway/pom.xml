@@ -34,6 +34,7 @@
         <!-- Build properties -->
 	<maven.version>3.0.0</maven.version>
         <java.version>11</java.version>
+        
         <node.version>v16.13.2</node.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
