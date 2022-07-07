@@ -66,7 +66,8 @@ export class AssertionImportDialogComponent {
 
   close() {
     this.eventManager.broadcast({
-      name: 'importAssertions'
+      name: 'importAssertions',
+      content: ''
     });
     this.activeModal.dismiss(true);
   }

@@ -15,7 +15,6 @@ const commonConfig = require('./webpack.common.js');
 const ENV = 'development';
 
 module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
-    devtool: 'eval-source-map',
     devServer: {
         contentBase: './target/classes/static/',
         proxy: [{
@@ -61,21 +60,21 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
             test: /\.ts$/,
             use: [
                 'angular2-template-loader',
-                {
-                    loader: 'cache-loader',
-                    options: {
-                      cacheDirectory: path.resolve('target/cache-loader')
-                    }
-                },
-                {
-                    loader: 'thread-loader',
-                    options: {
-                        // There should be 1 cpu for the fork-ts-checker-webpack-plugin.
-                        // The value may need to be adjusted (e.g. to 1) in some CI environments,
-                        // as cpus() may report more cores than what are available to the build.
-                        workers: require('os').cpus().length - 1
-                    }
-                },
+                // {
+                //     loader: 'cache-loader',
+                //     options: {
+                //       cacheDirectory: path.resolve('target/cache-loader')
+                //     }
+                // },
+                // {
+                //     loader: 'thread-loader',
+                //     options: {
+                //         // There should be 1 cpu for the fork-ts-checker-webpack-plugin.
+                //         // The value may need to be adjusted (e.g. to 1) in some CI environments,
+                //         // as cpus() may report more cores than what are available to the build.
+                //         workers: require('os').cpus().length - 1
+                //     }
+                // },
                 {
                     loader: 'ts-loader',
                     options: {
