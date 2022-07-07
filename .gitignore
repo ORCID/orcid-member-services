@@ -6,4 +6,3 @@ log-data/*
 .settings/
 assertion-service/files/
 gateway/yarn.lock
-
