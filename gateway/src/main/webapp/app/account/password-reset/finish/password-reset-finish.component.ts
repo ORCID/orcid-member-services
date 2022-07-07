@@ -47,8 +47,8 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
       this.invalidKey = res.body.invalidKey;
       this.showPasswordForm = !this.invalidKey && !this.expiredKey;
       if (this.expiredKey) {
-        this.passwordResetFinishService.resendActivationEmail({ key: this.key }).subscribe(res => {
-          this.activationEmailResent = res.body.resent;
+        this.passwordResetFinishService.resendActivationEmail({ key: this.key }).subscribe(result => {
+          this.activationEmailResent = result.body.resent;
         });
       }
     });

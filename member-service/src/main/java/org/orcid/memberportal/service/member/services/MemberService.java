@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.orcid.memberportal.service.member.client.SalesforceClient;
+import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
 import org.orcid.memberportal.service.member.security.AuthoritiesConstants;
@@ -51,6 +53,9 @@ public class MemberService {
 
     @Autowired
     private EncryptUtil encryptUtil;
+    
+    @Autowired
+    private SalesforceClient salesforceClient;
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -228,6 +233,16 @@ public class MemberService {
         String[] stateTokens = decryptState.split("&&");
         return getMember(stateTokens[0]);
 
+    }
+
+    public MemberDetails getCurrentMemberDetails() {
+        String salesforceId = userService.getLoggedInUser().getSalesforceId();
+        try {
+            return salesforceClient.getMemberDetails(salesforceId);
+        } catch (IOException e) {
+            LOG.error("Error fetching member details from salesforce client", e);
+            throw new RuntimeException(e);
+        }
     }
 
 }

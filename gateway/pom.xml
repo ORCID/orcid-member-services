@@ -34,7 +34,7 @@
         <!-- Build properties -->
 	<maven.version>3.0.0</maven.version>
         <java.version>11</java.version>
-        <node.version>v16.0.0</node.version>
+        <node.version>v16.13.2</node.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
@@ -540,7 +540,7 @@
                     <version>${jib-maven-plugin.version}</version>
                     <configuration>
                         <from>
-                            <image>eclipse-temurin:11</image>
+                            <image>eclipse-temurin:11-jre-focal</image>
                         </from>
                         <to>
                             <image>${DOCKER_REG}/gateway:${release.tag}-${angular.env}</image>

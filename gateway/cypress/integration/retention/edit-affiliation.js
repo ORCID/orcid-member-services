@@ -33,7 +33,7 @@ describe('Edit an affiliation', () => {
       .first()
       .children()
       .eq(4)
-      .contains('Pending');
+      .contains('Pending update in ORCID');
   });
 
   it('Confirm the affiliation has been updated in the registry', () => {

@@ -85,4 +85,39 @@ public class MailService {
         }
     }
 
+    public void sendNotificationsSummary(AssertionServiceUser user, Integer notificationsSent, Integer emailsSent) {
+        Locale locale = LocaleUtils.getLocale(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable("notificationsSent", notificationsSent);
+        context.setVariable("emailsSent", emailsSent);
+        String content = templateEngine.process("mail/notificationsSummary", context);
+        String subject = messageSource.getMessage("email.notificationsSummary.title", null, locale);
+        try {
+            mailgunClient.sendMail(user.getEmail(), subject, content);
+        } catch (MailException e) {
+            LOGGER.error("Error sending notifications summary email to {}", user.getEmail(), e);
+        }
+    }
+
+    public void sendInvitationEmail(String email, String orgName, String permissionLink) {
+        String[] linkParts = permissionLink.split("\\?");
+        String action = linkParts[0];
+        String stateParamAndValue = linkParts[1];
+        String[] paramAndValueArray = stateParamAndValue.split("=");
+        String state = paramAndValueArray[1];
+
+        Context context = new Context(Locale.ENGLISH);
+        context.setVariable("orgName", orgName);
+        context.setVariable("action", action);
+        context.setVariable("state", state);
+
+        String content = templateEngine.process("mail/invitation", context);
+        String subject = messageSource.getMessage("email.invitation.title", new Object[] { orgName }, Locale.ENGLISH);
+        try {
+            mailgunClient.sendMail(email, subject, content);
+        } catch (MailException e) {
+            LOGGER.error("Error sending invitation email to {}", email, e);
+        }
+    }
+
 }

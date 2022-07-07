@@ -534,7 +534,7 @@
                     <version>${jib-maven-plugin.version}</version>
                     <configuration>
                         <from>
-                            <image>adoptopenjdk:11-jre-hotspot</image>
+                            <image>eclipse-temurin:11-jre-focal</image>
                         </from>
                         <to>
                             <image>${DOCKER_REG}/discoveryservice:${release.tag}</image>
@@ -857,12 +857,12 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>npm install</id>
+                                <id>npm ci</id>
                                 <goals>
                                     <goal>npm</goal>
                                 </goals>
                                 <configuration>
-                                    <arguments>install</arguments>
+                                    <arguments>ci</arguments>
                                 </configuration>
                             </execution>
                             <execution>

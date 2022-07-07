@@ -27,6 +27,12 @@ public class SendNotificationsRequest implements Serializable {
     @Field("date_completed")
     private Instant dateCompleted;
     
+    @Field("notifications_sent")
+    private int notificationsSent;
+    
+    @Field("emails_sent")
+    private int emailsSent;
+    
     public String getId() {
         return id;
     }
@@ -66,4 +72,21 @@ public class SendNotificationsRequest implements Serializable {
     public void setSalesforceId(String salesforceId) {
         this.salesforceId = salesforceId;
     }
+
+    public int getNotificationsSent() {
+        return notificationsSent;
+    }
+
+    public void setNotificationsSent(int notificationsSent) {
+        this.notificationsSent = notificationsSent;
+    }
+
+    public int getEmailsSent() {
+        return emailsSent;
+    }
+
+    public void setEmailsSent(int emailsSent) {
+        this.emailsSent = emailsSent;
+    }
+    
 }

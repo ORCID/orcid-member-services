@@ -1,5 +1,6 @@
 package org.orcid.memberportal.service.member.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,10 +16,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
-import org.orcid.memberportal.service.member.web.rest.MemberResource;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,30 @@ public class MemberResourceTest {
         assertEquals(200, validationResponse.getStatusCodeValue());
         assertTrue(validationResponse.getBody().isValid());
         assertEquals(1, validationResponse.getBody().getErrors().size());
+    }
+   
+    @Test
+    public void testGetMemberDetails() {
+        Mockito.when(memberService.getCurrentMemberDetails()).thenReturn(getMemberDetails());
+        ResponseEntity<MemberDetails> entity = memberResource.getMemberDetails();
+        assertEquals(200, entity.getStatusCodeValue());
+        
+        MemberDetails memberDetails = entity.getBody();
+        
+        assertThat(memberDetails).isNotNull();
+        assertThat(memberDetails.getName()).isEqualTo("test member details");
+        assertThat(memberDetails.getPublicDisplayName()).isEqualTo("public display name");
+        assertThat(memberDetails.getWebsite()).isEqualTo("https://website.com");
+        assertThat(memberDetails.getMembershipStartDateString()).isEqualTo("2022-01-01");
+        assertThat(memberDetails.getMembershipEndDateString()).isEqualTo("2027-01-01");
+        assertThat(memberDetails.getPublicDisplayEmail()).isEqualTo("orcid@testmember.com");
+        assertThat(memberDetails.getConsortiaLeadId()).isNull();
+        assertThat(memberDetails.isConsortiaMember()).isFalse();
+        assertThat(memberDetails.getPublicDisplayDescriptionHtml()).isEqualTo("<p>public display description</p>");
+        assertThat(memberDetails.getMemberType()).isEqualTo("Research Institute");
+        assertThat(memberDetails.getLogoUrl()).isEqualTo("some/url/for/a/logo");
+        assertThat(memberDetails.getBillingCountry()).isEqualTo("Denmark");
+        assertThat(memberDetails.getId()).isEqualTo("id");
     }
 
     @Test
@@ -87,5 +112,23 @@ public class MemberResourceTest {
         member.setSalesforceId("two");
         member.setParentSalesforceId("some parent");
         return member;
+    }
+    
+    private MemberDetails getMemberDetails() {
+        MemberDetails memberDetails = new MemberDetails();
+        memberDetails.setBillingCountry("Denmark");
+        memberDetails.setConsortiaLeadId(null);
+        memberDetails.setConsortiaMember(false);
+        memberDetails.setId("id");
+        memberDetails.setLogoUrl("some/url/for/a/logo");
+        memberDetails.setMemberType("Research Institute");
+        memberDetails.setName("test member details");
+        memberDetails.setPublicDisplayDescriptionHtml("<p>public display description</p>");
+        memberDetails.setPublicDisplayEmail("orcid@testmember.com");
+        memberDetails.setPublicDisplayName("public display name");
+        memberDetails.setMembershipStartDateString("2022-01-01");
+        memberDetails.setMembershipEndDateString("2027-01-01");
+        memberDetails.setWebsite("https://website.com");
+        return memberDetails;
     }
 }

@@ -137,7 +137,7 @@ public class AssertionResource {
     public ResponseEntity<Assertion> getAssertion(@PathVariable String id) {
         LOG.debug("REST request to fetch assertion {} from user {}", id, SecurityUtils.getCurrentUserLogin().get());
         Assertion assertion = assertionService.findById(id);
-        if (populatePermissionLink(assertion)) {
+        if (permissionLinkRequired(assertion)) {
             assertionService.populatePermissionLink(assertion);
         }
         return ResponseEntity.ok().body(assertion);
@@ -333,10 +333,11 @@ public class AssertionResource {
         return ResponseEntity.ok().build();
     }
     
-    private boolean populatePermissionLink(Assertion assertion) {
+    private boolean permissionLinkRequired(Assertion assertion) {
         return AssertionStatus.PENDING.name().equals(assertion.getStatus()) || 
                 AssertionStatus.USER_REVOKED_ACCESS.name().equals(assertion.getStatus()) || 
-                AssertionStatus.USER_DENIED_ACCESS.name().equals(assertion.getStatus());
+                AssertionStatus.USER_DENIED_ACCESS.name().equals(assertion.getStatus()) ||
+                AssertionStatus.NOTIFICATION_SENT.name().equals(assertion.getStatus());
     }
 
     private void validateAssertion(Assertion assertion) {
@@ -377,7 +378,7 @@ public class AssertionResource {
             throw new IllegalArgumentException("invalid org id");
         }
 
-        if (assertionService.isDuplicate(assertion)) {
+        if (assertionService.isDuplicate(assertion, userService.getLoggedInUserSalesforceId())) {
             throw new BadRequestAlertException("This assertion already exists", "assertion", "assertion.validation.duplicate.string");
         }
 

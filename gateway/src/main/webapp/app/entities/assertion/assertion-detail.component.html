@@ -79,9 +79,13 @@
                     <dd class="col-md-9">
                         {{ownerId}}
                     </dd>
-                    <dt *ngIf="assertion.notificationSent" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.notificationSent.string">Notification Sent</dt>
+                    <dt *ngIf="assertion.notificationSent" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.notificationLastSent.string">Notification Last Sent</dt>
                     <dd *ngIf="assertion.notificationSent" class="col-md-9">
                         {{assertion.notificationSent | date:'medium'}}
+                    </dd>
+                    <dt *ngIf="assertion.invitationSent" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.notificationLastSent.string">Notification Last Sent</dt>
+                    <dd *ngIf="assertion.invitationSent" class="col-md-9">
+                        {{assertion.invitationSent | date:'medium'}}
                     </dd>
                 </dl>
             </div>

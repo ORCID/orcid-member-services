@@ -51,6 +51,7 @@ public class JWTUtil {
             }
             throw new IllegalArgumentException("The provided JWT is not signed");
         } catch (Exception e) {
+            LOG.error("Error signing JWT", e);
             throw new RuntimeException(e);
         }
     }

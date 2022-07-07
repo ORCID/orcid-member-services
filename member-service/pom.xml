@@ -358,6 +358,11 @@
 		    <artifactId>jersey-common</artifactId>
 		    <version>2.0-m03</version>
 		</dependency>  
+		<dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -548,7 +553,7 @@
                     <version>${jib-maven-plugin.version}</version>
                     <configuration>
                         <from>
-                            <image>eclipse-temurin:11</image>
+                            <image>eclipse-temurin:11-jre-focal</image>
                         </from>
                         <to>
                             <image>${DOCKER_REG}/memberservice:${release.tag}</image>

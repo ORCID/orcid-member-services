@@ -15,7 +15,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 })
 export class SendNotificationsDialogComponent {
   faPaperPlane = faPaperPlane;
-  requestAlreadyInProgress: boolean = false;
+  requestAlreadyInProgress = false;
 
   constructor(
     protected notificationService: NotificationService,
@@ -33,7 +33,7 @@ export class SendNotificationsDialogComponent {
       if (res.body.inProgress) {
         this.requestAlreadyInProgress = true;
       } else {
-        this.notificationService.updateStatuses().subscribe(res => {
+        this.notificationService.updateStatuses().subscribe(() => {
           this.close();
         });
       }

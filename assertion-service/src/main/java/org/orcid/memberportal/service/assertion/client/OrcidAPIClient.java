@@ -221,7 +221,11 @@ public class OrcidAPIClient {
                 }
             }
         } finally {
-            response.close();
+            if (response != null) {
+                response.close();
+            } else {
+                LOG.warn("Network error asking registry for orcid id");
+            }
         }
         return null;
     }
