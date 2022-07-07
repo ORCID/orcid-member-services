@@ -42,7 +42,8 @@ export class SendNotificationsDialogComponent {
 
   close() {
     this.eventManager.broadcast({
-      name: 'sendNotifications'
+      name: 'sendNotifications',
+      content: ''
     });
     this.activeModal.dismiss(true);
   }
