@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.github.jhipster.registry.service.EurekaService;
 import io.github.jhipster.registry.service.HealthService;
-import io.github.jhipster.registry.service.dto.HealthDTO;
+import io.github.jhipster.registry.service.dto.CompositeHealthDTO;
+import io.github.jhipster.registry.service.dto.SimpleHealthDTO;
 
 /**
  * REST controller for fetching health data for microservice instances
@@ -42,7 +43,7 @@ public class HealthResource {
      * @throws IOException 
      */
     @GetMapping(path = "/health/{appName}/{serviceId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HealthDTO> healthCheck(@PathVariable("appName") String appName, @PathVariable("serviceId") String serviceId) throws IOException {
+    public ResponseEntity<CompositeHealthDTO> healthCheck(@PathVariable("appName") String appName, @PathVariable("serviceId") String serviceId) throws IOException {
         appName = URLDecoder.decode(appName, "UTF-8");
         serviceId = URLDecoder.decode(serviceId, "UTF-8");
         
@@ -61,8 +62,11 @@ public class HealthResource {
         
         String healthCheckUrl = (String) selectedInstance.get("healthCheckUrl");
         try {
-            HealthDTO health = healthService.checkHealth(healthCheckUrl);
-            return ResponseEntity.ok(health);
+            SimpleHealthDTO health = healthService.checkHealth(healthCheckUrl);
+            CompositeHealthDTO compositeHealth = new CompositeHealthDTO();
+            compositeHealth.setStatus(health.getStatus());
+            compositeHealth.getComponents().put(appName, health.getStatus());
+            return ResponseEntity.ok(compositeHealth);
         } catch (IOException e) {
             LOG.error("Error checking conducting health check", e);
             throw e;

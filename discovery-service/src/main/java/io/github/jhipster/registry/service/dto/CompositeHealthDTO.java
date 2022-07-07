@@ -6,12 +6,9 @@ import java.util.Map;
 import org.springframework.boot.actuate.health.Status;
 
 /**
- * Bean for holding spring boot actuator health info, a DTO that can be
- * deserialized by using jackson
+ * Bean for holding spring boot actuator health info for multiple components with added details
  */
-public final class HealthDTO {
-
-    public static final String SERVICE_LABEL = "Service";
+public final class CompositeHealthDTO {
 
     private Status status;
 
@@ -19,26 +16,12 @@ public final class HealthDTO {
 
     private Map<String, Object> components = new HashMap<>();
 
-    public HealthDTO() {
-    }
-
-    public HealthDTO(Status status, Map<String, Object> components, Map<String, Object> details) {
-        this.status = status;
-        this.components = components;
-        this.details = details;
-    }
-
-    public HealthDTO(Status status) {
-        this.status = status;
-    }
-
     public Status getStatus() {
         return status;
     }
 
     public void setStatus(Status status) {
         this.status = status;
-        components.put(SERVICE_LABEL, status);
     }
 
     public Map<String, Object> getDetails() {

@@ -20,7 +20,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import io.github.jhipster.registry.service.EurekaService;
 import io.github.jhipster.registry.service.HealthService;
-import io.github.jhipster.registry.service.dto.HealthDTO;
+import io.github.jhipster.registry.service.dto.CompositeHealthDTO;
+import io.github.jhipster.registry.service.dto.SimpleHealthDTO;
 
 public class HealthResourceTest {
 
@@ -43,13 +44,13 @@ public class HealthResourceTest {
     @Test
     @WithMockUser(username = "test", roles = "ADMIN")
     public void testHealthCheck() throws Exception {
-        ResponseEntity<HealthDTO> health = healthResource.healthCheck("app-1", "instance-2");
+        ResponseEntity<CompositeHealthDTO> health = healthResource.healthCheck("app-1", "instance-2");
         assertThat(health).isNotNull();
         assertThat(health.getStatusCodeValue()).isEqualTo(200);
         assertThat(health.getBody()).isNotNull();
         assertThat(health.getBody().getStatus()).isEqualTo(Status.UP);
         assertThat(health.getBody().getComponents().size()).isEqualTo(1);
-        assertThat(health.getBody().getComponents().get(HealthDTO.SERVICE_LABEL)).isEqualTo(Status.UP);
+        assertThat(health.getBody().getComponents().get("app-1")).isEqualTo(Status.UP);
     }
 
     private List<Map<String, Object>> getApplications() {
@@ -92,8 +93,8 @@ public class HealthResourceTest {
         return apps;
     }
 
-    private HealthDTO getHealth() {
-        HealthDTO health = new HealthDTO(Status.UP);
+    private SimpleHealthDTO getHealth() {
+        SimpleHealthDTO health = new SimpleHealthDTO(Status.UP);
         return health;
     }
 }
