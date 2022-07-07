@@ -3,7 +3,7 @@ package org.orcid.memberportal.service.gateway.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,29 +35,69 @@ public class HealthServiceTest {
     }
 
     @Test
-    void testCheckHealth() throws IOException {
-        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-        SimpleHealthDTO health = new SimpleHealthDTO(Status.UP);
-        Mockito.when(healthClient.getHealth(Mockito.eq("url"))).thenReturn(health);
+    void testCheckGlobalHealth_notAllHealthy() throws IOException {
+        Mockito.when(healthClient.getHealth(Mockito.eq("http://localhost:8080/services/userservice/management/health"))).thenReturn(healthy());
+        Mockito.when(healthClient.getHealth(Mockito.eq("http://localhost:8080/services/assertionservice/management/health"))).thenReturn(healthy());
+        Mockito.when(healthClient.getHealth(Mockito.eq("http://localhost:8080/services/memberservice/management/health"))).thenReturn(unhealthy());
+        Mockito.when(healthClient.getHealth(Mockito.eq("http://localhost:8080/management/health"))).thenReturn(healthy());
         
-        CompositeHealthDTO checkedHealth = healthService.checkGlobalHealth(getRoutes(), request);
+        CompositeHealthDTO checkedHealth = healthService.checkGlobalHealth(getRoutes(), getMockHttpServletRequest());
+        assertThat(checkedHealth).isNotNull();
+        assertThat(checkedHealth.getStatus()).isEqualTo(Status.DOWN);
+        
+        Mockito.verify(healthClient, Mockito.times(4)).getHealth(Mockito.anyString()); // includes call to get gateway health
+    }
+    
+    @Test
+    void testCheckGlobalHealth_allHealthy() throws IOException {
+        Mockito.when(healthClient.getHealth(Mockito.anyString())).thenReturn(healthy());
+        
+        CompositeHealthDTO checkedHealth = healthService.checkGlobalHealth(getRoutes(), getMockHttpServletRequest());
         assertThat(checkedHealth).isNotNull();
         assertThat(checkedHealth.getStatus()).isEqualTo(Status.UP);
         
-        Mockito.verify(healthClient).getHealth(Mockito.eq("url"));
+        Mockito.verify(healthClient, Mockito.times(4)).getHealth(Mockito.anyString()); // includes call to get gateway health
     }
     
-//    @Test
-//    void testCheckHealthWithError() throws IOException {
-//        Mockito.when(healthClient.getHealth(Mockito.eq("url"))).thenThrow(new IOException());
-//        
-//        Assertions.assertThrows(IOException.class, () -> {
-//            healthService.checkHealth("url");
-//        });
-//    }
+    @Test
+    void testCheckGlobalHealth_WithError() throws IOException {
+        Mockito.when(healthClient.getHealth(Mockito.eq("http://localhost:8080/services/userservice/management/health"))).thenReturn(healthy());
+        Mockito.when(healthClient.getHealth(Mockito.eq("http://localhost:8080/services/assertionservice/management/health"))).thenReturn(healthy());
+        Mockito.when(healthClient.getHealth(Mockito.eq("http://localhost:8080/services/memberservice/management/health"))).thenReturn(healthy());
+        Mockito.when(healthClient.getHealth(Mockito.eq("http://localhost:8080/management/health"))).thenThrow(new IOException("overall status should be DOWN"));
+        
+        CompositeHealthDTO checkedHealth = healthService.checkGlobalHealth(getRoutes(), getMockHttpServletRequest());
+        assertThat(checkedHealth).isNotNull();
+        assertThat(checkedHealth.getStatus()).isEqualTo(Status.DOWN);
+        
+        Mockito.verify(healthClient, Mockito.times(4)).getHealth(Mockito.anyString()); // includes call to get gateway health
+    }
     
     private List<Route> getRoutes() {
-        return new ArrayList<>();
+        Route userService = new Route("userservice", null, null, "/services/userservice", false, null);
+        Route memberService = new Route("memberservice", null, null, "/services/memberservice", false, null);
+        Route assertionService = new Route("assertionservice", null, null, "/services/assertionservice", false, null);
+        return Arrays.asList(userService, memberService, assertionService);
     }
+    
+    private HttpServletRequest getMockHttpServletRequest() {
+        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+        Mockito.when(request.getServerName()).thenReturn("localhost");
+        Mockito.when(request.getServerPort()).thenReturn(8080);
+        Mockito.when(request.getProtocol()).thenReturn("http");
+        Mockito.when(request.getScheme()).thenReturn("http");
+        Mockito.when(request.getContextPath()).thenReturn("");
+        return request;
+    }
+    
+    private SimpleHealthDTO healthy() {
+        return new SimpleHealthDTO(Status.UP);
+    }
+    
+    private SimpleHealthDTO unhealthy() {
+        return new SimpleHealthDTO(Status.DOWN);
+    }
+    
+    
 
 }

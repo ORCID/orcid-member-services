@@ -39,6 +39,7 @@ public class HealthResource {
      */
     @GetMapping(path = "/health/global", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CompositeHealthDTO> healthCheck(HttpServletRequest request) throws IOException {
+        LOG.debug("Global health check request");
         CompositeHealthDTO globalHealth = healthService.checkGlobalHealth(routeLocator.getRoutes(), request);
         return ResponseEntity.ok(globalHealth);
     }
