@@ -103,7 +103,6 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/management/info").permitAll()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
