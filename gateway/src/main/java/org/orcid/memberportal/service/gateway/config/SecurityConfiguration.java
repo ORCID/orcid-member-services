@@ -38,9 +38,9 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().ignoringAntMatchers("/h2-console/**").csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .addFilterBefore(corsFilter, CsrfFilter.class).headers().frameOptions().sameOrigin().and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests().antMatchers("/api/**").authenticated().antMatchers("/management/health")
-                .permitAll().antMatchers("/management/info").permitAll().antMatchers("/management/prometheus").permitAll().antMatchers("/management/**")
-                .hasAuthority(AuthoritiesConstants.ADMIN);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests().antMatchers("/api/health/global").permitAll().antMatchers("/api/**")
+                .authenticated().antMatchers("/management/health").permitAll().antMatchers("/management/info").permitAll().antMatchers("/management/prometheus")
+                .permitAll().antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
     }
 
     @Bean

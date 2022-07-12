@@ -48,8 +48,10 @@ export class HealthService {
 
   // get the instance's health
   checkInstanceHealth(instance: Route | undefined): Observable<Health> {
-    if (instance && instance.prefix && instance.prefix.length > 0) {
-      return this.http.get<Health>(SERVER_API_URL + instance.prefix + '/management/health');
+    if (instance && instance.appName && instance.appName.length > 0 && instance.serviceId && instance.serviceId.length > 0) {
+      return this.http.get<Health>(
+        SERVER_API_URL + '/api/health/' + encodeURIComponent(instance.appName) + '/' + encodeURIComponent(instance.serviceId)
+      );
     }
     return this.checkHealth();
   }

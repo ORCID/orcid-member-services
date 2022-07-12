@@ -4,13 +4,13 @@ public enum AffiliationSection {
     EMPLOYMENT("employment"), EDUCATION("education"), QUALIFICATION("qualification"), INVITED_POSITION("invited-position"), DISTINCTION("distinction"), MEMBERSHIP(
             "membership"), SERVICE("service");
 
-    private final String orcidEndpoint;
+    private final String value;
 
     private AffiliationSection(String v) {
-        this.orcidEndpoint = v;
+        this.value = v;
     }
 
     public String getOrcidEndpoint() {
-        return orcidEndpoint;
+        return value;
     }
 }

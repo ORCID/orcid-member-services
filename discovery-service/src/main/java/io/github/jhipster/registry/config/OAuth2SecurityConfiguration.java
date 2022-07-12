@@ -105,6 +105,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/v2/api-docs/**").permitAll()
             .antMatchers("/swagger-resources/configuration/**").permitAll()
