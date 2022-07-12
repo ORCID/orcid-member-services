@@ -36,7 +36,7 @@ pre {
 }
 
 .container-fluid {
-  min-height: calc(100% - 103px);
+  flex: 1;
 }
 
 .dropdown-item:hover {

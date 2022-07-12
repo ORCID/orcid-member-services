@@ -1,69 +1,140 @@
-<div class="row">
+<div class="row h-100">
     <div class="col-md-12">
-        <div [ngSwitch]="isAuthenticated()">
-            <div *ngSwitchCase="true">
-                <div class="alert alert-success mt-3">
-                    <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message.string"
-                        [translateValues]="{username: account.email}"> You are logged in as user "{{account.email}}". </span>
+        <div [ngSwitch]="isAuthenticated()" class="h-100">
+            <div *ngSwitchCase="true" class="h-100">
+                <div class="d-flex flex-column h-100">
+                    <div class="alert alert-success mt-3">
+                        <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message.string"
+                            [translateValues]="{username: account.email}"> You are logged in as user "{{account.email}}". </span>
+                    </div>
+                    <div class="d-flex h-100 mb-3 home-container">
+                        <div class="side-bar">
+                            <div class="logo-container">
+                                <img src="{{ memberData.logoUrl }}" alt="Member logo"/>
+                            </div>
+                            <div *ngIf="isActive()">
+                                <h5>Public details</h5>
+                                <hr>
+                                <div class="mb-3 side-bar-subsection">
+                                    <h6>Website</h6>
+                                    <div *ngIf="memberData.website"><a href="{{ memberData.website }}">{{ memberData.website }}</a></div>
+                                    <div *ngIf="!memberData.website">No website added</div>
+                                </div>
+                                <div class="mb-3 side-bar-subsection">
+                                    <h6>Email</h6>
+                                    <div *ngIf="memberData.publicDisplayEmail"><a href="mailto:{{ memberData.publicDisplayEmail }}">{{ memberData.publicDisplayEmail }}</a></div>
+                                    <div *ngIf="!memberData.publicDisplayEmail">No email added</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="main-section">
+                            <div *ngIf="!memberData.consortiaMember || memberData.consortiaLeadId !== null">
+                                <div class="row d-flex ml-0">
+                                    <div class="font-weight-bold mr-1">Consortium/Parent organization:</div>
+                                    <div>
+                                        {{memberData.consortiaLeadId}}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row d-flex ml-0">
+                                    <div class="font-weight-bold mr-1">Membership:</div>
+                                    <div *ngIf="isActive()" style="color:#7FAA26;">
+                                        Active
+                                    </div>
+                                    <div *ngIf="!isActive()" style="color:#D32F2F;">
+                                        Inactive
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="memberData.consortiaMember && memberData.consortiaLeadId === null">
+                                <div class="row d-flex ml-0">
+                                    <div class="font-weight-bold mr-1">Consortium lead</div>
+                                </div>
+                                <hr>
+                            </div>
+                            <div class="row ml-0 mb-4 mt-4">
+                                <h2 class="mb-0">{{ memberData.name }}</h2>
+                            </div>
+                            <div *ngIf="!isActive()">
+                                Your ORCID membership is currently inactive. Please contact your consortium lead or ORCID to reinstate your membership.
+                            </div>
+                            <div *ngIf="isActive()">
+                                <div class="row ml-0">
+                                    <div [innerHTML]="memberData.publicDisplayDescriptionHtml"></div>
+                                </div>
+                            </div>
+                            <!--
+                            <div class="main-contacts">
+                                <h5 class="mb-4">Contacts</h5>
+                                <div class="row d-flex ml-0">
+                                    <h6 class="flex-grow-1">Name</h6>
+                                    <h6 class="flex-grow-1">Roles</h6>
+                                    <h6 class="flex-grow-1">Email</h6>
+                                </div>
+                                <hr>
+                            </div>
+                            -->
+                        </div>
+                    </div>
                 </div>
                 <!--This section is temporary for the pilot and will not be translated-->
-                <div class="article">
+                <!-- 
+                <hr *ngIf="memberData"> 
+                <div class="row">
+                    <dt class="col-md-3" *ngIf="memberData && memberData.name">Name</dt>
+                    <dd class="col-md-9" *ngIf="memberData && memberData.name">
+                        {{memberData.name}}
+                    </dd>
+                    <dt class="col-md-3" *ngIf="memberData && memberData.Public_Display_Name__c">Name</dt>
+                    <dd class="col-md-9" *ngIf="memberData && memberData.Public_Display_Name__c">
+                        {{memberData.publicDisplayName}}
+                    </dd>
+                    <dt class="col-md-3" *ngIf="memberData && memberData.type">Type</dt>
+                    <dd class="col-md-9" *ngIf="memberData && memberData.type">
+                        {{memberData.type}}
+                    </dd>
+                    <dt class="col-md-3" *ngIf="memberData && memberData.billingCountry">Country</dt>
+                    <dd class="col-md-9" *ngIf="memberData && memberData.billingCountry">
+                        {{memberData.billingCountry}}
+                    </dd>
+                    <dt class="col-md-3" *ngIf="memberData && memberData.website">Website</dt>
+                    <dd class="col-md-9" *ngIf="memberData && memberData.website">
+                        {{memberData.website}}
+                    </dd>
+                    <dt class="col-md-3" *ngIf="memberData && memberData.publicDisplayDescriptionHtml">Description</dt>
+                    <dd class="col-md-9" *ngIf="memberData && memberData.publicDisplayDescriptionHtml">
+                        {{memberData.publicDisplayDescriptionHtml}}
+                    </dd>
+                    <dt class="col-md-3" *ngIf="memberData && memberData.consortiaMember !== null">Consortia member</dt>
+                    <dd class="col-md-9" *ngIf="memberData && memberData.consortiaMember !== null">
+                        {{memberData.consortiaMember}}
+                    </dd>
+                    <dt class="col-md-3" *ngIf="memberData && memberData.consortiaLeadId">Consortium lead id</dt>
+                    <dd class="col-md-9" *ngIf="memberData && memberData.consortiaLeadId">
+                        {{memberData.consortiaLeadId}}
+                    </dd>
+                    <dt class="col-md-3" *ngIf="memberData && memberData.membershipStartDateString">Membership start date</dt>
+                    <dd class="col-md-9" *ngIf="memberData && memberData.membershipStartDateString">
+                        {{memberData.membershipStartDateString}}
+                    </dd>
+                    <dt class="col-md-3" *ngIf="memberData && memberData.membershipEndDateString">Membership end date</dt>
+                    <dd class="col-md-9" *ngIf="memberData && memberData.membershipEndDateString">
+                        {{memberData.membershipEndDateString}}
+                    </dd>
+                    <dt class="col-md-3" *ngIf="memberData && memberData.publicDisplayEmail">Email</dt>
+                    <dd class="col-md-9" *ngIf="memberData && memberData.publicDisplayEmail">
+                        {{memberData.publicDisplayEmail}}
+                    </dd>
+                    <dt class="col-md-3" *ngIf="memberData && memberData.logoUrl">Email</dt>
+                    <dd class="col-md-9" *ngIf="memberData && memberData.logoUrl">
+                        {{memberData.logoUrl}}
+                    </dd>
+                </div>
+                <hr *ngIf="memberData">
+                 -->
+               <!-- <div class="article">
                     <h1 jhiTranslate="home.heading.string">Welcome to the ORCID Member Portal</h1> 
                     
-                    <!-- 
-                    <hr *ngIf="memberData"> 
-                    <div class="row">
-                        <dt class="col-md-3" *ngIf="memberData && memberData.name">Name</dt>
-                        <dd class="col-md-9" *ngIf="memberData && memberData.name">
-                            {{memberData.name}}
-                        </dd>
-                        <dt class="col-md-3" *ngIf="memberData && memberData.Public_Display_Name__c">Name</dt>
-                        <dd class="col-md-9" *ngIf="memberData && memberData.Public_Display_Name__c">
-                            {{memberData.publicDisplayName}}
-                        </dd>
-                        <dt class="col-md-3" *ngIf="memberData && memberData.type">Type</dt>
-                        <dd class="col-md-9" *ngIf="memberData && memberData.type">
-                            {{memberData.type}}
-                        </dd>
-                        <dt class="col-md-3" *ngIf="memberData && memberData.billingCountry">Country</dt>
-                        <dd class="col-md-9" *ngIf="memberData && memberData.billingCountry">
-                            {{memberData.billingCountry}}
-                        </dd>
-                        <dt class="col-md-3" *ngIf="memberData && memberData.website">Website</dt>
-                        <dd class="col-md-9" *ngIf="memberData && memberData.website">
-                            {{memberData.website}}
-                        </dd>
-                        <dt class="col-md-3" *ngIf="memberData && memberData.publicDisplayDescriptionHtml">Description</dt>
-                        <dd class="col-md-9" *ngIf="memberData && memberData.publicDisplayDescriptionHtml">
-                            {{memberData.publicDisplayDescriptionHtml}}
-                        </dd>
-                        <dt class="col-md-3" *ngIf="memberData && memberData.consortiaMember !== null">Consortia member</dt>
-                        <dd class="col-md-9" *ngIf="memberData && memberData.consortiaMember !== null">
-                            {{memberData.consortiaMember}}
-                        </dd>
-                        <dt class="col-md-3" *ngIf="memberData && memberData.consortiaLeadId">Consortium lead id</dt>
-                        <dd class="col-md-9" *ngIf="memberData && memberData.consortiaLeadId">
-                            {{memberData.consortiaLeadId}}
-                        </dd>
-                        <dt class="col-md-3" *ngIf="memberData && memberData.membershipStartDateString">Membership start date</dt>
-                        <dd class="col-md-9" *ngIf="memberData && memberData.membershipStartDateString">
-                            {{memberData.membershipStartDateString}}
-                        </dd>
-                        <dt class="col-md-3" *ngIf="memberData && memberData.membershipEndDateString">Membership end date</dt>
-                        <dd class="col-md-9" *ngIf="memberData && memberData.membershipEndDateString">
-                            {{memberData.membershipEndDateString}}
-                        </dd>
-                        <dt class="col-md-3" *ngIf="memberData && memberData.publicDisplayEmail">Email</dt>
-                        <dd class="col-md-9" *ngIf="memberData && memberData.publicDisplayEmail">
-                            {{memberData.publicDisplayEmail}}
-                        </dd>
-                        <dt class="col-md-3" *ngIf="memberData && memberData.logoUrl">Email</dt>
-                        <dd class="col-md-9" *ngIf="memberData && memberData.logoUrl">
-                            {{memberData.logoUrl}}
-                        </dd>
-                    </div>
-                    <hr *ngIf="memberData">
-                     -->
                     <p jhiTranslate="home.mainContent.section1.text.string">The ORCID Member Portal is a suite of tools that help institutions make the most of their ORCID membership. We already have some tools available and are actively developing others that allow our Members to:</p>
                     <ul>
                         <li jhiTranslate="home.mainContent.section1.bullet1.string">Add/update data on researchers' ORCID records</li>
@@ -106,6 +177,7 @@
                         <li><span jhiTranslate="home.mainContent.section4.bullet2.text.string">Or email: </span><a href="mailto:membership@orcid.org" target="_blank" jhiTranslate="home.mainContent.section4.bullet2.email.string">membership@orcid.org</a></li>
                     </ul>
                 </div>
+            -->
             </div>
             <div *ngSwitchCase="false">
                 <div class="alert alert-info mt-3 mb-5">
