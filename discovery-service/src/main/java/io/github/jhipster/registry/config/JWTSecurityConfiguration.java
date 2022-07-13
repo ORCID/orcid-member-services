@@ -127,7 +127,6 @@ public class JWTSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/version").permitAll()
             .antMatchers("/api/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/management/info").permitAll()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/v2/api-docs/**").permitAll()

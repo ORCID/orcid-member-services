@@ -32,7 +32,9 @@ export class HealthCheckComponent implements OnInit, OnDestroy {
         .checkInstanceHealth(this.activeRoute)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(
-          health => (this.health = health),
+          health => {
+            this.health = health;
+          },
           error => {
             if (error.status === 503 || error.status === 500 || error.status === 404) {
               this.health = error.error;
