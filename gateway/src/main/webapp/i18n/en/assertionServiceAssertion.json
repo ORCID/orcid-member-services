@@ -94,6 +94,7 @@
       "externalIdUrl": { "string": "External ID Url" },
       "putCode": { "string": "Put Code" },
       "created": { "string": "Created" },
+      "dateCreated": { "string": "Date created" },
       "modified": { "string": "Modified" },
       "status": { "string": "Status" },
       "deletedFromORCID": { "string": "Deleted From ORCID" },
