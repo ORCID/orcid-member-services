@@ -19,8 +19,8 @@
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <fa-icon icon="wrench"></fa-icon>
-                        <span jhiTranslate="global.menu.entities.main.string">
-                            Member Tools
+                        <span jhiTranslate="global.menu.tools.main.string">
+                            Tools
                         </span>
                     </span>
                 </a>
@@ -28,7 +28,7 @@
                     <li *jhiHasAnyAuthority="'ASSERTION_SERVICE_ENABLED'">
                         <a class="dropdown-item" routerLink="assertion" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon [icon]="faAddressCard" fixedWidth="true"></fa-icon>
-                            <span jhiTranslate="global.menu.entities.assertionServiceAffiliationManager.string">Affiliation Manager</span>
+                            <span jhiTranslate="global.menu.tools.assertionServiceAffiliationManager.string">Affiliation Manager</span>
                         </a>
                     </li>
                     <li>
@@ -87,6 +87,7 @@
                             <span jhiTranslate="global.menu.resources.applyForAffiliationManagerCreds.string">Apply for Affiliation Manager Credentials</span>
                         </a>
                     </li>
+
                 </ul>
             </li>
             <li *ngIf="this.isAuthenticated() && (this.isOrganizationOwner() || this.hasRoleAdmin() || consortiumLead)" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
