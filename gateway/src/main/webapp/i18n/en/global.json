@@ -38,10 +38,10 @@
         "logoutAs": { "string": "Logout as" },
         "register": { "string": "Register" }
       },
-      "admin": {
-        "main": { "string": "Administration" },
-        "msUserServiceMSUser": { "string": "Manage users" },
-        "msUserServiceMSMember": { "string": "Manage members" },
+      "adminMenu": {
+        "main": { "string": "Admin" },
+        "manageUsers": { "string": "Manage users" },
+        "manageMembers": { "string": "Manage members" },
         "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
       },
       "resources": {
