@@ -1,9 +1,9 @@
 <div class="text-center" *ngIf="this.isLoggedAs()">
-   <fa-icon icon="user"></fa-icon> <span jhiTranslate="global.menu.account.loggedInAs.string"></span> <b>{{ this.getUserName()}}</b> | 
+   <fa-icon icon="user"></fa-icon> <span jhiTranslate="global.menu.account.loggedInAs.string"></span> <b>{{ this.getUserName()}}</b> |
    <span jhiTranslate="global.menu.account.logoutAs.string"></span><a (click)="logoutAs()" id="logoutAs.string">
                            {{ this.getUserName() }} <fa-icon icon="sign-out-alt" fixedWidth="true"></fa-icon>
-                        </a> 
-    
+                        </a>
+
 </div>
 <nav class="navbar navbar-dark navbar-expand-md bg-dark">
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()"><span class="logo logo-img"><img src="/content/images/orcid-logo.svg" width="120px" alt="ORCID logo"></span></a>
@@ -54,7 +54,39 @@
                             <fa-icon [icon]="faChartPie" fixedWidth="true"></fa-icon>
                             <span jhiTranslate="global.menu.report.affiliation.string">Affiliation report</span>
                         </a>
-                    </li>                    
+                    </li>
+                </ul>
+            </li>
+            <li *jhiHasAnyAuthority="'ROLE_USER'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+                    <span>
+                        <fa-icon [icon]="faLightbulb"></fa-icon>
+                        <span jhiTranslate="global.menu.resources.main.string">
+                            Resources
+                        </span>
+                    </span>
+                </a>
+                <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+                    <li>
+                        <a class="dropdown-item" target="_blank" href="https://info.orcid.org/documentation/member-portal/account-management/" (click)="collapseNavbar()">
+                            <span jhiTranslate="global.menu.resources.accountManagementGuide.string">Account Management Guide</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" target="_blank" href="https://info.orcid.org/documentation/member-portal/member-portal-organizational-admin-guide/" (click)="collapseNavbar()">
+                            <span jhiTranslate="global.menu.resources.affiliationManagerGuide.string">Affiliation Manager Guide</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" target="_blank" href="https://info.orcid.org/documentation/member-portal/member-reporting/" (click)="collapseNavbar()">
+                            <span jhiTranslate="global.menu.resources.memberReportingGuide.string">Member Reporting Guide</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" target="_blank" href="https://info.orcid.org/affiliation-manager-production-credentials-request-form/" (click)="collapseNavbar()">
+                            <span jhiTranslate="global.menu.resources.applyForAffiliationManagerCreds.string">Apply for Affiliation Manager Credentials</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li *ngIf="this.isAuthenticated() && (this.isOrganizationOwner() || this.hasRoleAdmin() || consortiumLead)" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">

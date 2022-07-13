@@ -44,6 +44,13 @@
         "msUserServiceMSMember": { "string": "Manage members" },
         "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
       },
+      "resources": {
+        "main": { "string": "Resources" },
+        "accountManagementGuide": { "string": "Account Management Guide" },
+        "affiliationManagerGuide": { "string": "Affiliation Manager Guide" },
+        "memberReportingGuide": { "string": "Member Reporting Guide" },
+        "applyForAffiliationManagerCreds": { "string": "Apply for Affiliation Manager Credentials" }
+      },
       "language": { "string": "Language" }
     },
     "form": {

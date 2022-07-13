@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
-import { faAddressCard, faUniversity, faChartPie } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faUniversity, faChartPie, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { VERSION } from 'app/app.constants';
@@ -38,6 +38,7 @@ export class NavbarComponent implements OnInit {
   faAddressCard = faAddressCard;
   faUniversity = faUniversity;
   faChartPie = faChartPie;
+  faLightbulb = faLightbulb;
 
   constructor(
     private loginService: LoginService,
