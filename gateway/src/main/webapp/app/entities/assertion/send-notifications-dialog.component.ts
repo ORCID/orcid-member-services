@@ -31,14 +31,14 @@ export class SendNotificationsDialogComponent {
 
   send() {
     this.notificationService.requestInProgress().subscribe(res => {
-      // if (res.body.inProgress) {
-      //   this.requestAlreadyInProgress = true;
-      // } else {
-      //   this.notificationService.updateStatuses().subscribe(() => {
-      this.jhiAlertService.success('gatewayApp.assertionServiceAssertion.notifications.notificationInProgress.string', null, null);
-      this.close();
-      // });
-      // }
+      if (res.body.inProgress) {
+        this.requestAlreadyInProgress = true;
+      } else {
+        this.notificationService.updateStatuses().subscribe(() => {
+          this.jhiAlertService.success('gatewayApp.assertionServiceAssertion.notifications.notificationInProgress.string', null, null);
+          this.close();
+        });
+      }
     });
   }
 
