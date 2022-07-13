@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
 
 import { NotificationService } from 'app/shared/notification/notification.service';
 
@@ -20,7 +20,8 @@ export class SendNotificationsDialogComponent {
   constructor(
     protected notificationService: NotificationService,
     public activeModal: NgbActiveModal,
-    protected eventManager: JhiEventManager
+    protected eventManager: JhiEventManager,
+    protected jhiAlertService: JhiAlertService
   ) {}
 
   clear() {
@@ -30,13 +31,14 @@ export class SendNotificationsDialogComponent {
 
   send() {
     this.notificationService.requestInProgress().subscribe(res => {
-      if (res.body.inProgress) {
-        this.requestAlreadyInProgress = true;
-      } else {
-        this.notificationService.updateStatuses().subscribe(() => {
-          this.close();
-        });
-      }
+      // if (res.body.inProgress) {
+      //   this.requestAlreadyInProgress = true;
+      // } else {
+      //   this.notificationService.updateStatuses().subscribe(() => {
+      this.jhiAlertService.success('gatewayApp.assertionServiceAssertion.notifications.notificationInProgress.string', null, null);
+      this.close();
+      // });
+      // }
     });
   }
 
