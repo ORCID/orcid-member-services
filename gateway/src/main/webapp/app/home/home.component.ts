@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
   }
 
   isActive() {
-    if (new Date(this.memberData.membershipEndDateString) > new Date()) return true;
+    if (this.memberData && new Date(this.memberData.membershipEndDateString) > new Date()) return true;
     else return false;
   }
 }

@@ -6,7 +6,8 @@ import { JhiLanguageHelper } from 'app/core';
 
 @Component({
   selector: 'jhi-main',
-  templateUrl: './main.component.html'
+  templateUrl: './main.component.html',
+  styles: [':host {display:flex; flex-direction: column; height:100%;}']
 })
 export class JhiMainComponent implements OnInit {
   PROD_BASE_URL = 'https://member-portal.orcid.org';

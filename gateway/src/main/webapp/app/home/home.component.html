@@ -7,10 +7,10 @@
                         <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message.string"
                             [translateValues]="{username: account.email}"> You are logged in as user "{{account.email}}". </span>
                     </div>
-                    <div class="d-flex h-100 mb-3 home-container">
+                    <div *ngIf="memberData" class="d-flex h-100 mb-3 home-container">
                         <div class="side-bar">
                             <div class="logo-container">
-                                <img src="{{ memberData.logoUrl }}" alt="Member logo"/>
+                                <img src="{{ memberData.logoUrl }}" onerror="this.src='../content/images/member-logo-placeholder.svg'" alt="Member logo"/>
                             </div>
                             <div *ngIf="isActive()">
                                 <h5>Public details</h5>
@@ -29,6 +29,7 @@
                         </div>
                         <div class="main-section">
                             <div *ngIf="!memberData.consortiaMember || memberData.consortiaLeadId !== null">
+                                <!--
                                 <div class="row d-flex ml-0">
                                     <div class="font-weight-bold mr-1">Consortium/Parent organization:</div>
                                     <div>
@@ -36,6 +37,7 @@
                                     </div>
                                 </div>
                                 <hr>
+                                -->
                                 <div class="row d-flex ml-0">
                                     <div class="font-weight-bold mr-1">Membership:</div>
                                     <div *ngIf="isActive()" style="color:#7FAA26;">
@@ -60,7 +62,8 @@
                             </div>
                             <div *ngIf="isActive()">
                                 <div class="row ml-0">
-                                    <div [innerHTML]="memberData.publicDisplayDescriptionHtml"></div>
+                                    <div *ngIf="memberData.publicDisplayDescriptionHtml" [innerHTML]="memberData.publicDisplayDescriptionHtml"></div>
+                                    <div class="main-section-empty-description" *ngIf="!memberData.publicDisplayDescriptionHtml">No organisation description added</div>
                                 </div>
                             </div>
                             <!-- HTML for once the salesforce endpoint provides more data 
