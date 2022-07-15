@@ -7,12 +7,12 @@ import { MSMemberService } from 'app/entities/member';
 
 @Component({
   selector: 'jhi-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
+  memberDataLoaded: boolean;
 
   constructor(private accountService: AccountService, private eventManager: JhiEventManager, private memberService: MSMemberService) {}
 
@@ -24,6 +24,8 @@ export class HomeComponent implements OnInit {
   }
 
   initializeAccount() {
+    this.memberDataLoaded = false;
+    console.log('asdasd');
     this.accountService.identity().then((account: IMSUser) => {
       this.account = account;
       this.memberService
@@ -31,16 +33,12 @@ export class HomeComponent implements OnInit {
         .pipe()
         .subscribe(res => {
           this.memberData = res;
+          this.memberDataLoaded = true;
         });
     });
   }
 
   isAuthenticated() {
     return this.accountService.isAuthenticated();
-  }
-
-  isActive() {
-    if (this.memberData && new Date(this.memberData.membershipEndDateString) > new Date()) return true;
-    else return false;
   }
 }
