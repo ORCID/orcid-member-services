@@ -81,7 +81,6 @@
         <table class="table table-striped">
             <thead>
                     <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-                    <th><span jhiTranslate="gatewayApp.assertionServiceAssertion.id.string">ID</span></th>
                     <th jhiSortBy="email"><span jhiTranslate="gatewayApp.assertionServiceAssertion.email.string">Email</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
                     <th jhiSortBy="orcidId"><span jhiTranslate="gatewayApp.assertionServiceAssertion.orcidId.string">ORCID iD</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
                     <th jhiSortBy="affiliationSection" width="30%" ><span jhiTranslate="gatewayApp.assertionServiceAssertion.affiliationData.string">Affiliation Data</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
@@ -92,7 +91,6 @@
             </thead>
             <tbody>
             <tr *ngFor="let assertion of assertions ;trackBy: trackId">
-            	<td>{{assertion.id}}</td>
                 <td>{{assertion.email}}</td>
                 <td><span *ngIf="assertion.orcidId"><a href="{{orcidBaseUrl}}/{{assertion.orcidId}}" target="_blank">{{orcidBaseUrl}}/{{assertion.orcidId}}</a></span></td>
                 <td>
@@ -104,7 +102,7 @@
                     <span *ngIf="assertion.endYear">{{assertion.endYear}}</span><span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endDay">-{{assertion.endDay}} </span>
                     <br><a jhiTranslate="gatewayApp.assertionServiceAssertion.details.string" [routerLink]="['/assertion', assertion.id, 'view' ]">View details</a>
                 </td>
-                <td>{{assertion.created | date:'shortDate'}}</td>
+                <td>{{assertion.created | date:'medium'}}</td>
                 <td>{{assertion.prettyStatus}}
                     <div *ngIf="assertion.prettyStatus == errorAddingToOrcid || assertion.prettyStatus == errorUpdatingInOrcid || assertion.prettyStatus == errorDeletingInOrcid">
                         <p class="note" jhiTranslate="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string">For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below.</p>
