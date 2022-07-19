@@ -7,6 +7,7 @@ export interface ISFMemberData {
   website?: string;
   billingCountry?: string;
   memberType?: string;
+  recordTypeId?: string;
   publicDisplayDescriptionHtml?: string;
   logoUrl?: string;
   publicDisplayEmail?: string;
@@ -23,6 +24,7 @@ export interface ISFRawMemberData {
   Website?: string;
   BillingCountry?: string;
   Research_Community__c?: string;
+  RecordTypeId?: string;
   Public_Display_Description__c?: string;
   Logo_Description__c?: string;
   Public_Display_Email__c?: string;
@@ -40,6 +42,7 @@ export class SFMemberData implements ISFMemberData {
     public website?: string,
     public billingCountry?: string,
     public memberType?: string,
+    public recordTypeId?: string,
     public publicDisplayDescriptionHtml?: string,
     public logoUrl?: string,
     public publicDisplayEmail?: string,

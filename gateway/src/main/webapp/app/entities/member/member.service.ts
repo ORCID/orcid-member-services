@@ -115,6 +115,7 @@ export class MSMemberService {
         website: res.body.Website,
         billingCountry: res.body.BillingCountry,
         memberType: res.body.Research_Community__c,
+        recordTypeId: res.body.RecordTypeId,
         publicDisplayDescriptionHtml: res.body.Public_Display_Description__c,
         logoUrl: res.body.Logo_Description__c,
         publicDisplayEmail: res.body.Public_Display_Email__c,

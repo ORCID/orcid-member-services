@@ -30,6 +30,9 @@ public class MemberDetails {
     @JsonProperty("Research_Community__c")
     private String memberType;
     
+    @JsonProperty("RecordTypeId")
+    private String recordTypeId;
+    
     @JsonProperty("Public_Display_Description__c")
     private String publicDisplayDescriptionHtml;
     
@@ -107,6 +110,14 @@ public class MemberDetails {
 
     public void setMemberType(String memberType) {
         this.memberType = memberType;
+    }
+
+    public String getRecordTypeId() {
+        return recordTypeId;
+    }
+
+    public void setRecordTypeId(String recordTypeId) {
+        this.recordTypeId = recordTypeId;
     }
 
     public String getPublicDisplayDescriptionHtml() {
