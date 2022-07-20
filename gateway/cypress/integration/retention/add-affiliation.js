@@ -82,9 +82,9 @@ describe('Add and remove affiliation', () => {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     // Get permission link
     cy.visit('/assertion');
-    cy.get('tbody').children().first().children().eq(1).contains(record.email);
-    cy.get('tbody').children().first().children().eq(2).should('not.contain', record.id);
-    cy.get('tbody').children().first().children().eq(3).contains(record.affiliation.type);
+    cy.get('tbody').children().first().children().eq(0).contains(record.email);
+    cy.get('tbody').children().first().children().eq(1).should('not.contain', record.id);
+    cy.get('tbody').children().first().children().eq(2).contains(record.affiliation.type);
     cy.get('tbody').children().first().children().eq(4).contains('Pending');
     
     cy.fetchLinkAndGrantPermission();
@@ -127,7 +127,7 @@ describe('Add and remove affiliation', () => {
   it('Confirm UI changes on the assertion page', () => {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     cy.visit('/assertion');
-    cy.get('tbody').children().first().children().eq(2).contains(record.id);
+    cy.get('tbody').children().first().children().eq(1).contains(record.id);
     cy.get('tbody').children().first().children().eq(4).contains('In ORCID');
     cy.programmaticSignout();
   })

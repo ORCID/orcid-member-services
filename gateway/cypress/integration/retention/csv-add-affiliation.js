@@ -28,8 +28,8 @@ describe('Test adding affiliations via CSV', () => {
   it('Grant permission and confirm that the affiliations were added to the UI and the registry', function() {
     cy.get('tbody').within(() => {
       cy.get('tr').each(($e) => {
-        cy.wrap($e).children().eq(1).contains(record.email);
-        cy.wrap($e).children().eq(2).should('not.contain', record.id);
+        cy.wrap($e).children().eq(0).contains(record.email);
+        cy.wrap($e).children().eq(1).should('not.contain', record.id);
         cy.wrap($e).children().eq(4).contains('Pending');
       })
     })
@@ -62,7 +62,7 @@ describe('Test adding affiliations via CSV', () => {
   it ('Check that the statuses of the affiliations have changed to "In ORCID"', function() {
     cy.get('tbody').within(() => {
       cy.get('tr').each(($e) => {
-        cy.wrap($e).children().eq(2).contains(record.id);
+        cy.wrap($e).children().eq(1).contains(record.id);
         cy.wrap($e).children().eq(4).contains('In ORCID');
       })
     })
