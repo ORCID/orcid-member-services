@@ -13,9 +13,9 @@ import { MSMemberService } from 'app/entities/member';
 export class HomeComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
-  CONSORTIUM_LEAD_RECORD_TYPE = '0122i00000022zVAAQ';
-  COSONRTIUM_MEMBER_RECORD_TYPE = '0122i00000022zfAAA';
-  DIRECT_MEMBER_RECORD_TYPE = '0122i00000022zkAAA';
+  CONSORTIUM_LEAD_RECORD_TYPE = '';
+  COSONRTIUM_MEMBER_RECORD_TYPE = '';
+  DIRECT_MEMBER_RECORD_TYPE = '';
 
   constructor(private accountService: AccountService, private eventManager: JhiEventManager, private memberService: MSMemberService) {}
 

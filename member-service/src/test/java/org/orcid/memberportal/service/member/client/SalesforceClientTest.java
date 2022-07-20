@@ -80,7 +80,6 @@ public class SalesforceClientTest {
         assertThat(memberDetails.isConsortiaMember()).isFalse();
         assertThat(memberDetails.getPublicDisplayDescriptionHtml()).isEqualTo("<p>public display description</p>");
         assertThat(memberDetails.getMemberType()).isEqualTo("Research Institute");
-        assertThat(memberDetails.getRecordTypeId()).isEqualTo("0122i00000022zVAAQ");
         assertThat(memberDetails.getLogoUrl()).isEqualTo("some/url/for/a/logo");
         assertThat(memberDetails.getBillingCountry()).isEqualTo("Denmark");
         assertThat(memberDetails.getId()).isEqualTo("id");
@@ -105,7 +104,6 @@ public class SalesforceClientTest {
         memberDetails.setId("id");
         memberDetails.setLogoUrl("some/url/for/a/logo");
         memberDetails.setMemberType("Research Institute");
-        memberDetails.setRecordTypeId("0122i00000022zVAAQ");
         memberDetails.setName("test member details");
         memberDetails.setPublicDisplayDescriptionHtml("<p>public display description</p>");
         memberDetails.setPublicDisplayEmail("orcid@testmember.com");
