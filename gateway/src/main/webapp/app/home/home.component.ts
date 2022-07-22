@@ -26,7 +26,6 @@ export class HomeComponent implements OnInit {
 
   initializeAccount() {
     this.memberDataLoaded = false;
-    console.log('asdasd');
     this.accountService.identity().then((account: IMSUser) => {
       this.account = account;
       this.memberService
