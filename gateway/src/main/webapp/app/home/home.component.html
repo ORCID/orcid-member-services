@@ -7,8 +7,10 @@
                         <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message.string"
                             [translateValues]="{username: account.email}"> You are logged in as user "{{account.email}}". </span>
                     </div>
-                    <jhi-member-info-landing *ngIf="memberDataLoaded && memberData" [memberData]="memberData" class="h-100 mb-3"></jhi-member-info-landing>
-                    <jhi-generic-landing *ngIf="memberDataLoaded && !memberData"></jhi-generic-landing>
+                    <div class="h-100 home-container mb-3">
+                        <jhi-member-info-landing *ngIf="memberDataLoaded && memberData" [memberData]="memberData" class="d-flex h-100"></jhi-member-info-landing>
+                        <jhi-generic-landing *ngIf="memberDataLoaded && !memberData" class="p-4 d-flex"></jhi-generic-landing>
+                    </div>
                 </div>
             </div>
             <div *ngSwitchCase="false">
