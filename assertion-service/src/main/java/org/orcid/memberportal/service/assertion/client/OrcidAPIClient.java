@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response.Status;
@@ -65,6 +66,8 @@ public class OrcidAPIClient {
     private final Marshaller jaxbMarshaller;
 
     private CloseableHttpClient httpClient;
+
+    private String notificationAccessToken;
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -179,6 +182,54 @@ public class OrcidAPIClient {
     }
 
     public String postNotification(NotificationPermission notificationPermission, String orcidId) throws JAXBException, IOException {
+        return internalPost(() -> {
+            try {
+                return postNotificationPermission(notificationPermission, orcidId);
+            } catch (Exception e) {
+                LOG.error("Error posting notification permission", e);
+                return null;
+            }
+        });
+    }
+
+    public String getOrcidIdForEmail(String email) throws IOException {
+        return internalPost(() -> {
+            try {
+                return getOrcidIdFromRegistry(email);
+            } catch (Exception e) {
+                LOG.error("Error getting orcid id from registry");
+                return null;
+            }
+        });
+    }
+
+    private <T> T internalPost(Supplier<T> function) {
+        initInternalAccessToken();
+        try {
+            return function.get();
+        } catch (Exception e) {
+            LOG.info("Refreshing internal access token");
+            createInternalAccessToken();
+            return function.get();
+        }
+    }
+
+    private void initInternalAccessToken() {
+        if (notificationAccessToken == null) {
+            createInternalAccessToken();
+        }
+    }
+
+    private void createInternalAccessToken() {
+        try {
+            notificationAccessToken = getNotificationAccessToken();
+        } catch (Exception e) {
+            LOG.error("Failed to create internal access token", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String postNotificationPermission(NotificationPermission notificationPermission, String orcidId) throws JAXBException, ClientProtocolException, IOException {
         HttpPost httpPost = new HttpPost(applicationProperties.getOrcidAPIEndpoint() + orcidId + "/notification-permission");
         setXmlHeaders(httpPost, applicationProperties.getInternalRegistryAccessToken());
 
@@ -200,7 +251,7 @@ public class OrcidAPIClient {
         }
     }
 
-    public String getOrcidIdForEmail(String email) throws IOException {
+    private String getOrcidIdFromRegistry(String email) throws UnsupportedOperationException, IOException {
         HttpGet httpGet = new HttpGet(applicationProperties.getInternalRegistryApiEndpoint() + "orcid/" + Base64.encode(email) + "/email");
         setJsonHeaders(httpGet, applicationProperties.getInternalRegistryAccessToken());
 
@@ -228,6 +279,31 @@ public class OrcidAPIClient {
             }
         }
         return null;
+    }
+
+    private String getNotificationAccessToken() throws JSONException, ClientProtocolException, IOException {
+        HttpPost httpPost = new HttpPost(applicationProperties.getInternalRegistryApiEndpoint() + "/oauth/token");
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("client_id", applicationProperties.getTokenExchange().getClientId()));
+        params.add(new BasicNameValuePair("client_secret", applicationProperties.getTokenExchange().getClientSecret()));
+        params.add(new BasicNameValuePair("scope", "/premium-notification /orcid-internal"));
+        params.add(new BasicNameValuePair("grant_type", "client_credentials"));
+        httpPost.setEntity(new UrlEncodedFormEntity(params));
+
+        HttpResponse response = httpClient.execute(httpPost);
+        Integer statusCode = response.getStatusLine().getStatusCode();
+
+        if (statusCode != Status.OK.getStatusCode()) {
+            String responseString = EntityUtils.toString(response.getEntity());
+            LOG.error("Failed to obtain internal access token: {}", responseString);
+            throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
+        }
+
+        String responseString = EntityUtils.toString(response.getEntity());
+        JSONObject json = new JSONObject(responseString);
+
+        return json.get("access_token").toString();
     }
 
     private void setXmlHeaders(HttpRequestBase request, String accessToken) {
