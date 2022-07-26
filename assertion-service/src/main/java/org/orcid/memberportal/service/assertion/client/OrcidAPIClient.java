@@ -67,7 +67,7 @@ public class OrcidAPIClient {
 
     private CloseableHttpClient httpClient;
 
-    private String notificationAccessToken;
+    private String internalAccessToken;
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -215,14 +215,14 @@ public class OrcidAPIClient {
     }
 
     private void initInternalAccessToken() {
-        if (notificationAccessToken == null) {
+        if (internalAccessToken == null) {
             createInternalAccessToken();
         }
     }
 
     private void createInternalAccessToken() {
         try {
-            notificationAccessToken = getNotificationAccessToken();
+            internalAccessToken = getNotificationAccessToken();
         } catch (Exception e) {
             LOG.error("Failed to create internal access token", e);
             throw new RuntimeException(e);
@@ -231,7 +231,7 @@ public class OrcidAPIClient {
 
     private String postNotificationPermission(NotificationPermission notificationPermission, String orcidId) throws JAXBException, ClientProtocolException, IOException {
         HttpPost httpPost = new HttpPost(applicationProperties.getOrcidAPIEndpoint() + orcidId + "/notification-permission");
-        setXmlHeaders(httpPost, applicationProperties.getInternalRegistryAccessToken());
+        setXmlHeaders(httpPost, internalAccessToken);
 
         StringEntity entity = getStringEntity(notificationPermission);
         httpPost.setEntity(entity);
@@ -253,7 +253,7 @@ public class OrcidAPIClient {
 
     private String getOrcidIdFromRegistry(String email) throws UnsupportedOperationException, IOException {
         HttpGet httpGet = new HttpGet(applicationProperties.getInternalRegistryApiEndpoint() + "orcid/" + Base64.encode(email) + "/email");
-        setJsonHeaders(httpGet, applicationProperties.getInternalRegistryAccessToken());
+        setJsonHeaders(httpGet, internalAccessToken);
 
         CloseableHttpResponse response = null;
         try {
