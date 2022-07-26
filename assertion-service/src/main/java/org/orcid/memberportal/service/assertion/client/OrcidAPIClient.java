@@ -183,23 +183,13 @@ public class OrcidAPIClient {
 
     public String postNotification(NotificationPermission notificationPermission, String orcidId) throws JAXBException, IOException {
         return internalPost(() -> {
-            try {
-                return postNotificationPermission(notificationPermission, orcidId);
-            } catch (Exception e) {
-                LOG.error("Error posting notification permission", e);
-                return null;
-            }
+            return postNotificationPermission(notificationPermission, orcidId);
         });
     }
 
     public String getOrcidIdForEmail(String email) throws IOException {
         return internalPost(() -> {
-            try {
-                return getOrcidIdFromRegistry(email);
-            } catch (Exception e) {
-                LOG.error("Error getting orcid id from registry");
-                return null;
-            }
+            return getOrcidIdFromRegistry(email);
         });
     }
 
@@ -229,16 +219,14 @@ public class OrcidAPIClient {
         }
     }
 
-    private String postNotificationPermission(NotificationPermission notificationPermission, String orcidId) throws JAXBException, ClientProtocolException, IOException {
+    private String postNotificationPermission(NotificationPermission notificationPermission, String orcidId) {
         HttpPost httpPost = new HttpPost(applicationProperties.getOrcidAPIEndpoint() + orcidId + "/notification-permission");
         setXmlHeaders(httpPost, internalAccessToken);
 
         StringEntity entity = getStringEntity(notificationPermission);
         httpPost.setEntity(entity);
 
-        CloseableHttpResponse response = null;
-        try {
-            response = httpClient.execute(httpPost);
+        try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             if (response.getStatusLine().getStatusCode() != Status.CREATED.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
                 LOG.error("Unable to create notification for {}. Status code: {}, error {}", orcidId, response.getStatusLine().getStatusCode(), responseString);
@@ -246,18 +234,17 @@ public class OrcidAPIClient {
             }
             String location = response.getFirstHeader("location").getValue();
             return location.substring(location.lastIndexOf('/') + 1);
-        } finally {
-            response.close();
+        } catch (Exception e) {
+            LOG.error("Error posting notification permission", e);
+            throw new RuntimeException(e);
         }
     }
 
-    private String getOrcidIdFromRegistry(String email) throws UnsupportedOperationException, IOException {
+    private String getOrcidIdFromRegistry(String email) {
         HttpGet httpGet = new HttpGet(applicationProperties.getInternalRegistryApiEndpoint() + "orcid/" + Base64.encode(email) + "/email");
         setJsonHeaders(httpGet, internalAccessToken);
 
-        CloseableHttpResponse response = null;
-        try {
-            response = httpClient.execute(httpGet);
+        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                 LOG.warn("Received non-200 response trying to find orcid id for email {}", email);
                 String responseString = new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
@@ -271,12 +258,9 @@ public class OrcidAPIClient {
                     return orcidId;
                 }
             }
-        } finally {
-            if (response != null) {
-                response.close();
-            } else {
-                LOG.warn("Network error asking registry for orcid id");
-            }
+        } catch (Exception e) {
+            LOG.error("Error getting orcid id for {}", email, e);
+            throw new RuntimeException(e);
         }
         return null;
     }
@@ -318,9 +302,14 @@ public class OrcidAPIClient {
         request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
     }
 
-    private StringEntity getStringEntity(Object entity) throws JAXBException {
+    private StringEntity getStringEntity(Object entity) {
         StringWriter sw = new StringWriter();
-        jaxbMarshaller.marshal(entity, sw);
+        try {
+            jaxbMarshaller.marshal(entity, sw);
+        } catch (JAXBException e) {
+            LOG.error("Error marshalling string entity", e);
+            throw new RuntimeException(e);
+        }
         String xmlObject = sw.toString();
         return new StringEntity(xmlObject, ContentType.create("text/xml", Consts.UTF_8));
     }
