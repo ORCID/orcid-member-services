@@ -21,17 +21,13 @@ export class PasswordResetInitComponent implements AfterViewInit {
     private elementRef: ElementRef,
     private renderer: Renderer,
     private fb: FormBuilder
-  ) {
-    console.log('OK WE BUILDING');
-  }
+  ) {}
 
   ngAfterViewInit() {
-    console.log('OK WE HERE!');
     this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#email'), 'focus', []);
   }
 
   requestReset() {
-    console.log('requestReset');
     this.error = null;
     this.errorEmailNotExists = null;
 

@@ -24,7 +24,6 @@ export class HomeComponent implements OnInit {
   }
 
   initializeAccount() {
-    'BEFORE THE CALL';
     this.accountService.identity().then((account: IMSUser) => {
       this.account = account;
       this.memberService
