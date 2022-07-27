@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import { JhiEventManager } from 'ng-jhipster';
 import { AccountService } from 'app/core';
 import { IMSUser } from 'app/shared/model/user.model';
@@ -15,30 +15,24 @@ export class HomeComponent implements OnInit {
   memberData: ISFMemberData;
   memberDataLoaded: boolean;
 
-  constructor(private accountService: AccountService, private eventManager: JhiEventManager, private memberService: MSMemberService) {}
+  constructor(private accountService: AccountService, private memberService: MSMemberService) {}
 
   ngOnInit() {
-    this.initializeAccount();
-    this.eventManager.subscribe('authenticationSuccess', message => {
-      this.initializeAccount();
-    });
-  }
-
-  initializeAccount() {
-    this.memberDataLoaded = false;
     this.accountService.identity().then((account: IMSUser) => {
       this.account = account;
-      this.memberService
-        .getMember()
-        .pipe()
-        .subscribe(res => {
-          this.memberData = res;
-          this.memberDataLoaded = true;
-        });
     });
-  }
-
-  isAuthenticated() {
-    return this.accountService.isAuthenticated();
+    this.accountService.getAuthenticationState().subscribe(account => {
+      this.account = account;
+      if (account === null) {
+        this.memberData = null;
+      } else {
+        this.memberService
+          .getMember()
+          .pipe()
+          .subscribe(res => {
+            this.memberData = res;
+          });
+      }
+    });
   }
 }

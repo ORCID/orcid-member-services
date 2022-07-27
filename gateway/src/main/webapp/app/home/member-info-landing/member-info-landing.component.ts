@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ISFMemberData } from 'app/shared/model/salesforce.member.data.model';
 
 @Component({
-  selector: 'jhi-member-info-landing',
+  selector: 'app-member-info-landing',
   templateUrl: './member-info-landing.component.html',
   styleUrls: ['member-info-landing.component.scss']
 })
