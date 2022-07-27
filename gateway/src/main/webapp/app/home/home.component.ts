@@ -1,5 +1,4 @@
-import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
-import { JhiEventManager } from 'ng-jhipster';
+import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'app/core';
 import { IMSUser } from 'app/shared/model/user.model';
 import { ISFMemberData } from 'app/shared/model/salesforce.member.data.model';
