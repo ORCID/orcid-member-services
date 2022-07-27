@@ -13,7 +13,7 @@ import { MSMemberService } from 'app/entities/member';
 export class HomeComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
-  memberDataLoaded: boolean;
+  memberDataLoaded = false;
 
   constructor(private accountService: AccountService, private memberService: MSMemberService) {}
 
@@ -24,12 +24,14 @@ export class HomeComponent implements OnInit {
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
       if (account === null) {
+        this.memberDataLoaded = false;
         this.memberData = null;
       } else {
         this.memberService
           .getMember()
           .pipe()
           .subscribe(res => {
+            this.memberDataLoaded = true;
             this.memberData = res;
           });
       }
