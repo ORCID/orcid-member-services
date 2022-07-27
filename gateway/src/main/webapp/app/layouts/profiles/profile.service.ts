@@ -13,6 +13,8 @@ export class ProfileService {
   constructor(private http: HttpClient) {}
 
   getProfileInfo(): Promise<ProfileInfo> {
+    console.log('getProfileInfo');
+
     if (!this.profileInfo) {
       this.profileInfo = this.http
         .get<ProfileInfo>(this.infoUrl, { observe: 'response' })

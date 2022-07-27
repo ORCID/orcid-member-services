@@ -23,7 +23,14 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
               if (this.loginService.isAuthenticated()) {
                 this.loginService.logoutDirectly();
                 this.loginModalService.open();
-              } else if (!this.NON_CHECKED_URLS.find(x => x === this.router.url)) {
+              } else if (
+                !this.NON_CHECKED_URLS.find(x => {
+                  console.log(x);
+                  return this.router.url.startsWith(x);
+                })
+              ) {
+                console.log('REDIRECT!');
+
                 this.loginService.logout();
                 this.router.navigate(['/']);
               }
