@@ -197,7 +197,6 @@ application:
     processCsvReportsDelay: 120000
     removeStoredFilesDelay: 300000
     sendPermissionLinkNotificationsDelay: 120000
-    internalRegistryAccessToken: ${APPLICATION_INTERNAL_ACCESS_TOKEN}
     internalRegistryApiEndpoint: ${APPLICATION_INTERNAL_API_ENDPOINT}
     tokenExchange:
         endpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}

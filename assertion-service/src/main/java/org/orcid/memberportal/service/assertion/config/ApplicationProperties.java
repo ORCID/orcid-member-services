@@ -48,8 +48,6 @@ public class ApplicationProperties {
     
     private String removeStoredFilesDelay;
     
-    private String internalRegistryAccessToken;
-    
     private String processCsvReportsDelay;
     
     private String internalRegistryApiEndpoint;
@@ -206,14 +204,6 @@ public class ApplicationProperties {
 
     public void setCsvReportsDirectory(String csvReportsDirectory) {
         this.csvReportsDirectory = csvReportsDirectory;
-    }
-
-    public String getInternalRegistryAccessToken() {
-        return internalRegistryAccessToken;
-    }
-
-    public void setInternalRegistryAccessToken(String internalRegistryAccessToken) {
-        this.internalRegistryAccessToken = internalRegistryAccessToken;
     }
 
     public String getProcessCsvReportsDelay() {
