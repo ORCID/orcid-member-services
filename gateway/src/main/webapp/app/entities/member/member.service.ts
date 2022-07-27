@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Observable, Subject, ReplaySubject } from 'rxjs';
-import { share, shareReplay } from 'rxjs/operators';
+import { Observable, Subject, ReplaySubject, of } from 'rxjs';
+import { catchError, share, shareReplay } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { map } from 'rxjs/operators';
@@ -68,9 +68,12 @@ export class MSMemberService {
   }
 
   getMember(): Observable<SFMemberData> {
-    return this.http
-      .get<ISFRawMemberData>(`${this.resourceUrl}/member-details`, { observe: 'response' })
-      .pipe(map((res: SalesforceEntityResponseType) => this.convertToSalesforceMemberData(res)));
+    return this.http.get<ISFRawMemberData>(`${this.resourceUrl}/member-details`, { observe: 'response' }).pipe(
+      map((res: SalesforceEntityResponseType) => this.convertToSalesforceMemberData(res)),
+      catchError(() => {
+        return of(null);
+      })
+    );
   }
 
   delete(id: string): Observable<HttpResponse<any>> {

@@ -7,77 +7,9 @@
                         <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message.string"
                             [translateValues]="{username: account.email}"> You are logged in as user "{{account.email}}". </span>
                     </div>
-                    <div *ngIf="memberData" class="d-flex h-100 mb-3 home-container">
-                        <div class="side-bar">
-                            <div class="logo-container">
-                                <img src="{{ memberData.logoUrl }}" onerror="this.src='../content/images/member-logo-placeholder.svg'" alt="Member logo"/>
-                            </div>
-                            <div *ngIf="isActive()">
-                                <h5>Public details</h5>
-                                <hr>
-                                <div class="mb-3 side-bar-subsection">
-                                    <h6>Website</h6>
-                                    <div *ngIf="memberData.website"><a href="{{ memberData.website }}">{{ memberData.website }}</a></div>
-                                    <div *ngIf="!memberData.website">No website added</div>
-                                </div>
-                                <div class="mb-3 side-bar-subsection">
-                                    <h6>Email</h6>
-                                    <div *ngIf="memberData.publicDisplayEmail"><a href="mailto:{{ memberData.publicDisplayEmail }}">{{ memberData.publicDisplayEmail }}</a></div>
-                                    <div *ngIf="!memberData.publicDisplayEmail">No email added</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="main-section">
-                            <div *ngIf="!memberData.consortiaMember || memberData.consortiaLeadId !== null">
-                                <!--
-                                <div class="row d-flex ml-0">
-                                    <div class="font-weight-bold mr-1">Consortium/Parent organization:</div>
-                                    <div>
-                                        {{memberData.consortiaLeadId}}
-                                    </div>
-                                </div>
-                                <hr>
-                                -->
-                                <div class="row d-flex ml-0">
-                                    <div class="font-weight-bold mr-1">Membership:</div>
-                                    <div *ngIf="isActive()" style="color:#7FAA26;">
-                                        Active
-                                    </div>
-                                    <div *ngIf="!isActive()" style="color:#D32F2F;">
-                                        Inactive
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf="memberData.consortiaMember && memberData.consortiaLeadId === null">
-                                <div class="row d-flex ml-0">
-                                    <div class="font-weight-bold mr-1">Consortium lead</div>
-                                </div>
-                                <hr>
-                            </div>
-                            <div class="row ml-0 mb-4 mt-4">
-                                <h2 class="mb-0">{{ memberData.name }}</h2>
-                            </div>
-                            <div *ngIf="!isActive()">
-                                Your ORCID membership is currently inactive. Please contact your consortium lead or ORCID to reinstate your membership.
-                            </div>
-                            <div *ngIf="isActive()">
-                                <div class="row ml-0">
-                                    <div *ngIf="memberData.publicDisplayDescriptionHtml" [innerHTML]="memberData.publicDisplayDescriptionHtml"></div>
-                                    <div class="main-section-empty-description" *ngIf="!memberData.publicDisplayDescriptionHtml">No organisation description added</div>
-                                </div>
-                            </div>
-                            <!-- HTML for once the salesforce endpoint provides more data 
-                            <div class="main-contacts">
-                                <h5 class="mb-4">Contacts</h5>
-                                <div class="row d-flex ml-0">
-                                    <h6 class="flex-grow-1">Name</h6>
-                                    <h6 class="flex-grow-1">Roles</h6>
-                                    <h6 class="flex-grow-1">Email</h6>
-                                </div>
-                                <hr>
-                            </div>
-                            -->
-                        </div>
+                    <div class="h-100 home-container mb-3">
+                        <jhi-member-info-landing *ngIf="memberDataLoaded && memberData" [memberData]="memberData" class="d-flex h-100"></jhi-member-info-landing>
+                        <jhi-generic-landing *ngIf="memberDataLoaded && !memberData" class="p-4 d-flex"></jhi-generic-landing>
                     </div>
                 </div>
             </div>
