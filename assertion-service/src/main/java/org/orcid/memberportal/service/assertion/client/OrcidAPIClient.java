@@ -212,7 +212,7 @@ public class OrcidAPIClient {
 
     private void createInternalAccessToken() {
         try {
-            internalAccessToken = getNotificationAccessToken();
+            internalAccessToken = getInternalAccessToken();
         } catch (Exception e) {
             LOG.error("Failed to create internal access token", e);
             throw new RuntimeException(e);
@@ -265,7 +265,7 @@ public class OrcidAPIClient {
         return null;
     }
 
-    private String getNotificationAccessToken() throws JSONException, ClientProtocolException, IOException {
+    private String getInternalAccessToken() throws JSONException, ClientProtocolException, IOException {
         HttpPost httpPost = new HttpPost(applicationProperties.getInternalRegistryApiEndpoint() + "/oauth/token");
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
