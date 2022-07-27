@@ -9,6 +9,8 @@ import { LoginService } from 'app/core/login/login.service';
 
 @Injectable()
 export class AuthExpiredInterceptor implements HttpInterceptor {
+  NON_CHECKED_URLS = ['/', '/reset/request', '/reset/finish'];
+
   constructor(private loginModalService: LoginModalService, private router: Router, private loginService: LoginService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -21,7 +23,7 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
               if (this.loginService.isAuthenticated()) {
                 this.loginService.logoutDirectly();
                 this.loginModalService.open();
-              } else {
+              } else if (!this.NON_CHECKED_URLS.find(x => x === this.router.url)) {
                 this.loginService.logout();
                 this.router.navigate(['/']);
               }
