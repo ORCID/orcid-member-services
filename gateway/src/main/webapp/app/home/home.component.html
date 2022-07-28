@@ -1,15 +1,15 @@
 <div class="row h-100">
     <div class="col-md-12">
-        <div [ngSwitch]="isAuthenticated()" class="h-100">
+        <div [ngSwitch]="account !== null" class="h-100">
             <div *ngSwitchCase="true" class="h-100">
                 <div class="d-flex flex-column h-100">
                     <div class="alert alert-success mt-3">
                         <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message.string"
                             [translateValues]="{username: account.email}"> You are logged in as user "{{account.email}}". </span>
                     </div>
-                    <div class="h-100 home-container mb-3">
-                        <jhi-member-info-landing *ngIf="memberDataLoaded && memberData" [memberData]="memberData" class="d-flex h-100"></jhi-member-info-landing>
-                        <jhi-generic-landing *ngIf="memberDataLoaded && !memberData" class="p-4 d-flex"></jhi-generic-landing>
+                    <div *ngIf="memberDataLoaded" class="h-100 home-container mb-3">
+                        <app-member-info-landing *ngIf="memberData" [memberData]="memberData" class="d-flex h-100"></app-member-info-landing>
+                        <app-generic-landing *ngIf="!memberData" class="p-4 d-flex"></app-generic-landing>
                     </div>
                 </div>
             </div>
