@@ -165,15 +165,15 @@ export class AccountService {
     return this.isAuthenticated() && this.userIdentity ? this.userIdentity.salesforceId : null;
   }
 
-  getCurrentMemberData(): BehaviorSubject<ISFMemberData> {
+  async getCurrentMemberData(): Promise<BehaviorSubject<ISFMemberData>> {
     if (this.memberData.value === null) {
-      this.memberService
+      await this.memberService
         .getMember()
         .toPromise()
-        .then(res => {
+        .then(async res => {
           this.memberData.next(res);
           if (res && res.consortiaLeadId) {
-            this.memberService
+            await this.memberService
               .find(res.consortiaLeadId)
               .toPromise()
               .then(r => {

@@ -27,15 +27,14 @@ export class HomeComponent implements OnInit {
   }
 
   getMemberData() {
-    if (this.account === null) this.memberDataLoaded = false;
-    else if (this.account !== null && !this.memberData) {
-      this.accountService
-        .getCurrentMemberData()
-        .pipe()
-        .subscribe(res => {
-          this.memberData = res;
-          if (this.memberData || this.memberData === undefined) this.memberDataLoaded = true;
-        });
+    if (this.account === null) {
+      this.memberDataLoaded = false;
+      this.memberData = null;
+    } else if (this.account !== null && !this.memberData) {
+      this.accountService.getCurrentMemberData().then(res => {
+        this.memberData = res.value;
+        if (this.memberData || this.memberData === undefined) this.memberDataLoaded = true;
+      });
     }
   }
 }

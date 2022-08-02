@@ -19,15 +19,15 @@
 </div>
 <div class="main-section">
     <div *ngIf="!memberData.consortiaMember || memberData.consortiaLeadId !== null">
-        <!--
-        <div class="row d-flex ml-0">
-            <div class="font-weight-bold mr-1">Consortium/Parent organization:</div>
-            <div>
-                {{memberData.consortiaLeadId}}
+        <div *ngIf="memberData.consortiumLeadName">
+            <div class="row d-flex ml-0">
+                <div class="font-weight-bold mr-1">Consortium/Parent organization:</div>
+                <div>
+                    {{memberData.consortiumLeadName}}
+                </div>
             </div>
+            <hr>
         </div>
-        <hr>
-        -->
         <div class="row d-flex ml-0">
             <div class="font-weight-bold mr-1">Membership:</div>
             <div *ngIf="isActive()" style="color:#7FAA26;">
