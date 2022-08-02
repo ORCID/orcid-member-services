@@ -18,7 +18,7 @@
     </div>
 </div>
 <div class="main-section">
-    <div *ngIf="!memberData.consortiaMember || memberData.consortiaLeadId !== null">
+    <div *ngIf="!memberData.isConsortiumLead">
         <div *ngIf="memberData.consortiumLeadName">
             <div class="row d-flex ml-0">
                 <div class="font-weight-bold mr-1">Consortium/Parent organization:</div>
@@ -38,7 +38,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="memberData.consortiaMember && memberData.consortiaLeadId === null">
+    <div *ngIf="memberData.isConsortiumLead">
         <div class="row d-flex ml-0">
             <div class="font-weight-bold mr-1">Consortium lead</div>
         </div>
