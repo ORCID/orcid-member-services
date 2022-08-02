@@ -166,7 +166,7 @@ export class AccountService {
   }
 
   async getCurrentMemberData(): Promise<BehaviorSubject<ISFMemberData>> {
-    if (this.memberData.value === null) {
+    if (this.memberData.value === null && this.userIdentity) {
       await this.memberService
         .getMember()
         .toPromise()
@@ -180,6 +180,12 @@ export class AccountService {
                 if (r && r.body) this.memberData.value.consortiumLeadName = r.body.clientName;
               });
           }
+          await this.memberService
+            .find(this.userIdentity.salesforceId)
+            .toPromise()
+            .then(r => {
+              if (r && r.body) this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
+            });
         });
     }
     return this.memberData;

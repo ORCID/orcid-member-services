@@ -2,6 +2,7 @@ export interface ISFMemberData {
   id?: string;
   consortiaMember?: boolean;
   consortiaLeadId?: string;
+  isConsortiumLead?: boolean;
   name?: string;
   publicDisplayName?: string;
   website?: string;
@@ -36,6 +37,7 @@ export class SFMemberData implements ISFMemberData {
     public id?: string,
     public consortiaMember?: boolean,
     public consortiaLeadId?: string,
+    public isConsortiumLead?: boolean,
     public name?: string,
     public publicDisplayName?: string,
     public website?: string,
