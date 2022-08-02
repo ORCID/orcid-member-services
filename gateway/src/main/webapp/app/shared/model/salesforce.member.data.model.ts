@@ -12,6 +12,7 @@ export interface ISFMemberData {
   publicDisplayEmail?: string;
   membershipStartDateString?: string;
   membershipEndDateString?: string;
+  consortiumLeadName?: string;
 }
 
 export interface ISFRawMemberData {
@@ -44,6 +45,7 @@ export class SFMemberData implements ISFMemberData {
     public logoUrl?: string,
     public publicDisplayEmail?: string,
     public membershipStartDateString?: string,
-    public membershipEndDateString?: string
+    public membershipEndDateString?: string,
+    public consortiumLeadName?: string
   ) {}
 }
