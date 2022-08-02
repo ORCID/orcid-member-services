@@ -2,20 +2,28 @@ import { Injectable } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/user/account.model';
 import { IMSUser } from 'app/shared/model/user.model';
+import { MSMemberService } from 'app/entities/member/member.service';
+import { ISFMemberData } from 'app/shared/model/salesforce.member.data.model';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
   private userIdentity: any;
+  private memberData: BehaviorSubject<ISFMemberData> = new BehaviorSubject<ISFMemberData>(null);
   private authenticated = false;
   private authenticationState = new Subject<any>();
   private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
 
-  constructor(private languageService: JhiLanguageService, private sessionStorage: SessionStorageService, private http: HttpClient) {}
+  constructor(
+    private languageService: JhiLanguageService,
+    private sessionStorage: SessionStorageService,
+    private http: HttpClient,
+    private memberService: MSMemberService
+  ) {}
 
   fetch(): Observable<HttpResponse<Account>> {
     return this.http.get<Account>(SERVER_API_URL + 'services/userservice/api/account', { observe: 'response' });
@@ -76,6 +84,7 @@ export class AccountService {
   identity(force?: boolean): Promise<IMSUser> {
     if (force) {
       this.userIdentity = undefined;
+      this.memberData.next(null);
     }
 
     // check and see if we have retrieved the userIdentity data from the server.
@@ -99,6 +108,7 @@ export class AccountService {
             this.languageService.changeLanguage(langKey);
           }
         } else {
+          this.memberData.next(null);
           this.userIdentity = null;
           this.authenticated = false;
         }
@@ -107,6 +117,7 @@ export class AccountService {
       })
       .catch(err => {
         this.userIdentity = null;
+        this.memberData.next(null);
         this.authenticated = false;
         this.authenticationState.next(this.userIdentity);
         return null;
@@ -152,6 +163,26 @@ export class AccountService {
 
   getSalesforceId(): string {
     return this.isAuthenticated() && this.userIdentity ? this.userIdentity.salesforceId : null;
+  }
+
+  getCurrentMemberData(): BehaviorSubject<ISFMemberData> {
+    if (this.memberData.value === null) {
+      this.memberService
+        .getMember()
+        .toPromise()
+        .then(res => {
+          this.memberData.next(res);
+          if (res && res.consortiaLeadId) {
+            this.memberService
+              .find(res.consortiaLeadId)
+              .toPromise()
+              .then(r => {
+                if (r && r.body) this.memberData.value.consortiumLeadName = r.body.clientName;
+              });
+          }
+        });
+    }
+    return this.memberData;
   }
 
   isOrganizationOwner(): string {

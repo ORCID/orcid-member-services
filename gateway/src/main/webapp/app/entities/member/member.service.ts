@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Observable, Subject, ReplaySubject, of } from 'rxjs';
-import { catchError, share, shareReplay } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError, share } from 'rxjs/operators';
 import * as moment from 'moment';
-import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption } from 'app/shared';
+import { createRequestOption } from 'app/shared/util/request-util';
 import { IMSMember } from 'app/shared/model/member.model';
 import { ISFMemberData, ISFRawMemberData, SFMemberData } from 'app/shared/model/salesforce.member.data.model';
 
@@ -20,9 +19,9 @@ export class MSMemberService {
   public resourceUrl = SERVER_API_URL + 'services/memberservice/api';
   public allMembers$: Observable<EntityArrayResponseType>;
   public orgNameMap: any;
+  public memberData: ISFMemberData;
 
   constructor(protected http: HttpClient) {
-    console.log(SERVER_API_URL);
     this.allMembers$ = this.getAllMembers().pipe(share());
     this.orgNameMap = new Object();
   }
@@ -49,9 +48,12 @@ export class MSMemberService {
   }
 
   find(id: string): Observable<EntityResponseType> {
-    return this.http
-      .get<IMSMember>(`${this.resourceUrl}/members/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+    return this.http.get<IMSMember>(`${this.resourceUrl}/members/${id}`, { observe: 'response' }).pipe(
+      map((res: EntityResponseType) => this.convertDateFromServer(res)),
+      catchError(err => {
+        return of(err);
+      })
+    );
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
@@ -70,8 +72,8 @@ export class MSMemberService {
   getMember(): Observable<SFMemberData> {
     return this.http.get<ISFRawMemberData>(`${this.resourceUrl}/member-details`, { observe: 'response' }).pipe(
       map((res: SalesforceEntityResponseType) => this.convertToSalesforceMemberData(res)),
-      catchError(() => {
-        return of(null);
+      catchError(err => {
+        return of(err);
       })
     );
   }
