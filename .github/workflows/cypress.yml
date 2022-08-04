@@ -33,7 +33,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          install-command: npm install --legacy-peer-deps
+          install-command: npm install
           working-directory: gateway
           spec: cypress/integration/retention/*
       - uses: actions/upload-artifact@v2
