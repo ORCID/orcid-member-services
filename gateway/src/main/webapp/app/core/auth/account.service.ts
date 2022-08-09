@@ -170,22 +170,26 @@ export class AccountService {
       await this.memberService
         .getMember()
         .toPromise()
-        .then(async res => {
-          this.memberData.next(res);
-          if (res && res.consortiaLeadId) {
-            await this.memberService
-              .find(res.consortiaLeadId)
-              .toPromise()
-              .then(r => {
-                if (r && r.body) this.memberData.value.consortiumLeadName = r.body.clientName;
-              });
+        .then(res => {
+          if (res) {
+            this.memberData.next(res);
+            if (res && res.consortiaLeadId) {
+              this.memberService
+                .find(res.consortiaLeadId)
+                .toPromise()
+                .then(r => {
+                  if (r && r.body) this.memberData.value.consortiumLeadName = r.body.clientName;
+                });
+            }
+            if (this.userIdentity.salesforceId) {
+              this.memberService
+                .find(this.userIdentity.salesforceId)
+                .toPromise()
+                .then(r => {
+                  if (r && r.body) this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
+                });
+            }
           }
-          await this.memberService
-            .find(this.userIdentity.salesforceId)
-            .toPromise()
-            .then(r => {
-              if (r && r.body) this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
-            });
         });
     }
     return this.memberData;

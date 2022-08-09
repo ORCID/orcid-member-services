@@ -126,6 +126,6 @@ export class MSMemberService {
         membershipStartDateString: res.body.Last_membership_start_date__c,
         membershipEndDateString: res.body.Last_membership_end_date__c
       };
-    }
+    } else return new SFMemberData();
   }
 }

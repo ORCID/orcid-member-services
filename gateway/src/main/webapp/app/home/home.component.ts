@@ -32,8 +32,10 @@ export class HomeComponent implements OnInit {
       this.memberData = null;
     } else if (this.account !== null && !this.memberData) {
       this.accountService.getCurrentMemberData().then(res => {
-        this.memberData = res.value;
-        if (this.memberData || this.memberData === undefined) this.memberDataLoaded = true;
+        if (res && res.value.id) {
+          this.memberData = res.value;
+          this.memberDataLoaded = true;
+        } else this.memberDataLoaded = true;
       });
     }
   }
