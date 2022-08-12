@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import javax.xml.bind.JAXBException;
@@ -30,6 +32,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.orcid.memberportal.service.member.client.model.ConsortiumLeadDetails;
+import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 
@@ -61,7 +65,7 @@ public class SalesforceClientTest {
         Mockito.when(applicationProperties.getSalesforceClientEndpoint()).thenReturn("microservice/");
         Mockito.when(applicationProperties.getSalesforceClientToken()).thenReturn("access-token");
         
-        OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+        MockCloseableHttpResponse response = new MockCloseableHttpResponse();
         response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
         response.setEntity(getMemberDetailsEntity());
         
@@ -90,10 +94,79 @@ public class SalesforceClientTest {
     }
     
     @Test
-    void testGetMemberDetails_noEndpoint() throws IOException  {
-        Mockito.when(applicationProperties.getSalesforceClientEndpoint()).thenReturn(null);
-        assertThat(client.getMemberDetails("salesforceId")).isNull();
+    void testGetConsortiumLeadDetails() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(applicationProperties.getSalesforceClientEndpoint()).thenReturn("microservice/");
+        Mockito.when(applicationProperties.getSalesforceClientToken()).thenReturn("access-token");
+        
+        MockCloseableHttpResponse response = new MockCloseableHttpResponse();
+        response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+        response.setEntity(getConsortiumLeadDetailsEntity());
+        
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenReturn(response);
+
+        ConsortiumLeadDetails consortiumLeadDetails = client.getConsortiumLeadDetails("salesforceId");
+        
+        assertThat(consortiumLeadDetails).isNotNull();
+        assertThat(consortiumLeadDetails.getName()).isEqualTo("test consortium lead details");
+        assertThat(consortiumLeadDetails.getPublicDisplayName()).isEqualTo("public display name");
+        assertThat(consortiumLeadDetails.getWebsite()).isEqualTo("https://website.com");
+        assertThat(consortiumLeadDetails.getMembershipStartDateString()).isEqualTo("2022-01-01");
+        assertThat(consortiumLeadDetails.getMembershipEndDateString()).isEqualTo("2027-01-01");
+        assertThat(consortiumLeadDetails.getPublicDisplayEmail()).isEqualTo("orcid@testmember.com");
+        assertThat(consortiumLeadDetails.getConsortiaLeadId()).isNull();
+        assertThat(consortiumLeadDetails.isConsortiaMember()).isFalse();
+        assertThat(consortiumLeadDetails.getPublicDisplayDescriptionHtml()).isEqualTo("<p>public display description</p>");
+        assertThat(consortiumLeadDetails.getMemberType()).isEqualTo("Research Institute");
+        assertThat(consortiumLeadDetails.getLogoUrl()).isEqualTo("some/url/for/a/logo");
+        assertThat(consortiumLeadDetails.getBillingCountry()).isEqualTo("Denmark");
+        assertThat(consortiumLeadDetails.getId()).isEqualTo("id");
+        assertThat(consortiumLeadDetails.getConsortiumMembers().size()).isEqualTo(2);
+        assertThat(consortiumLeadDetails.getConsortiumMembers().get(0).getSalesforceId()).isEqualTo("member1");
+        assertThat(consortiumLeadDetails.getConsortiumMembers().get(0).getMetadata().getName()).isEqualTo("member 1");
+        assertThat(consortiumLeadDetails.getConsortiumMembers().get(1).getSalesforceId()).isEqualTo("member2");
+        assertThat(consortiumLeadDetails.getConsortiumMembers().get(1).getMetadata().getName()).isEqualTo("member 2");
+        
         Mockito.verify(applicationProperties).getSalesforceClientEndpoint();
+        Mockito.verify(applicationProperties).getSalesforceClientToken();
+
+    }
+    
+    private HttpEntity getConsortiumLeadDetailsEntity() throws JsonProcessingException, UnsupportedEncodingException {
+        ConsortiumLeadDetails consortiumLeadDetails = new ConsortiumLeadDetails();
+        consortiumLeadDetails.setBillingCountry("Denmark");
+        consortiumLeadDetails.setConsortiaLeadId(null);
+        consortiumLeadDetails.setConsortiaMember(false);
+        consortiumLeadDetails.setId("id");
+        consortiumLeadDetails.setLogoUrl("some/url/for/a/logo");
+        consortiumLeadDetails.setMemberType("Research Institute");
+        consortiumLeadDetails.setName("test consortium lead details");
+        consortiumLeadDetails.setPublicDisplayDescriptionHtml("<p>public display description</p>");
+        consortiumLeadDetails.setPublicDisplayEmail("orcid@testmember.com");
+        consortiumLeadDetails.setPublicDisplayName("public display name");
+        consortiumLeadDetails.setMembershipStartDateString("2022-01-01");
+        consortiumLeadDetails.setMembershipEndDateString("2027-01-01");
+        consortiumLeadDetails.setWebsite("https://website.com");
+        
+        MemberDetailsResponseEntity response = new MemberDetailsResponseEntity();
+        response.setMember(consortiumLeadDetails);
+
+        ConsortiumMember member1 = new ConsortiumMember();
+        member1.setSalesforceId("member1");
+        ConsortiumMember.Metadata metadata1 = member1.new Metadata();
+        metadata1.setName("member 1");
+        member1.setMetadata(metadata1);
+        
+        ConsortiumMember member2 = new ConsortiumMember();
+        member2.setSalesforceId("member2");
+        ConsortiumMember.Metadata metadata2 = member2.new Metadata();
+        metadata2.setName("member 2");
+        member2.setMetadata(metadata2);
+        
+        response.setConsortiumMembers(Arrays.asList(member1, member2));
+        
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(response);
+        return new StringEntity(jsonString);
     }
 
     private HttpEntity getMemberDetailsEntity() throws JsonProcessingException, UnsupportedEncodingException {
@@ -112,180 +185,12 @@ public class SalesforceClientTest {
         memberDetails.setMembershipEndDateString("2027-01-01");
         memberDetails.setWebsite("https://website.com");
         
+        MemberDetailsResponseEntity response = new MemberDetailsResponseEntity();
+        response.setMember(memberDetails);
+        
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
-        String jsonString = objectMapper.writeValueAsString(memberDetails);
+        String jsonString = objectMapper.writeValueAsString(response);
         return new StringEntity(jsonString);
     }
-
-    private class OrcidCloseableHttpResponse implements CloseableHttpResponse {
-        
-        private HttpEntity entity;
-        
-        private StatusLine statusLine;
-
-        @Override
-        public void setStatusLine(ProtocolVersion ver, int code) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void setStatusLine(ProtocolVersion ver, int code, String reason) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void setStatusCode(int code) throws IllegalStateException {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void setReasonPhrase(String reason) throws IllegalStateException {
-            // TODO Auto-generated method stub
-
-        }
-
-        public HttpEntity getEntity() {
-            return entity;
-        }
-
-        public void setEntity(HttpEntity entity) {
-            this.entity = entity;
-        }
-
-        public StatusLine getStatusLine() {
-            return statusLine;
-        }
-
-        public void setStatusLine(StatusLine statusLine) {
-            this.statusLine = statusLine;
-        }
-
-        @Override
-        public Locale getLocale() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public void setLocale(Locale loc) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public ProtocolVersion getProtocolVersion() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public boolean containsHeader(String name) {
-            // TODO Auto-generated method stub
-            return false;
-        }
-
-        @Override
-        public Header[] getHeaders(String name) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public Header getFirstHeader(String name) {
-            if (name != null && name.equals("location")) {
-                return new BasicHeader("location", "somewhere/put-code");
-            }
-            return null;
-        }
-
-        @Override
-        public Header getLastHeader(String name) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public Header[] getAllHeaders() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public void addHeader(Header header) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void addHeader(String name, String value) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void setHeader(Header header) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void setHeader(String name, String value) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void setHeaders(Header[] headers) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void removeHeader(Header header) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void removeHeaders(String name) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public HeaderIterator headerIterator() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public HeaderIterator headerIterator(String name) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public HttpParams getParams() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public void setParams(HttpParams params) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void close() throws IOException {
-            // TODO Auto-generated method stub
-
-        }
-
-    }
-
+    
 }

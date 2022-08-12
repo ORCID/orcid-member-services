@@ -22,6 +22,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.orcid.memberportal.service.member.client.SalesforceClient;
+import org.orcid.memberportal.service.member.client.model.ConsortiumLeadDetails;
+import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
@@ -242,6 +244,7 @@ class MemberServiceTest {
     @Test
     void testGetCurrentMemberDetails() throws IOException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
         Mockito.when(salesforceClient.getMemberDetails(Mockito.eq("salesforceId"))).thenReturn(getMemberDetails());
         
         MemberDetails memberDetails = memberService.getCurrentMemberDetails();
@@ -260,6 +263,34 @@ class MemberServiceTest {
         assertThat(memberDetails.getBillingCountry()).isEqualTo("Denmark");
         assertThat(memberDetails.getId()).isEqualTo("id");
     }
+    
+    @Test
+    void testGetCurrentMemberDetails_consortiumLead() throws IOException {
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(salesforceClient.getConsortiumLeadDetails(Mockito.eq("salesforceId"))).thenReturn(getConsortiumLeadDetails());
+        
+        ConsortiumLeadDetails consortiumLeadDetails = (ConsortiumLeadDetails) memberService.getCurrentMemberDetails();
+        assertThat(consortiumLeadDetails).isNotNull();
+        assertThat(consortiumLeadDetails.getName()).isEqualTo("test member details");
+        assertThat(consortiumLeadDetails.getPublicDisplayName()).isEqualTo("public display name");
+        assertThat(consortiumLeadDetails.getWebsite()).isEqualTo("https://website.com");
+        assertThat(consortiumLeadDetails.getMembershipStartDateString()).isEqualTo("2022-01-01");
+        assertThat(consortiumLeadDetails.getMembershipEndDateString()).isEqualTo("2027-01-01");
+        assertThat(consortiumLeadDetails.getPublicDisplayEmail()).isEqualTo("orcid@testmember.com");
+        assertThat(consortiumLeadDetails.getConsortiaLeadId()).isNull();
+        assertThat(consortiumLeadDetails.isConsortiaMember()).isFalse();
+        assertThat(consortiumLeadDetails.getPublicDisplayDescriptionHtml()).isEqualTo("<p>public display description</p>");
+        assertThat(consortiumLeadDetails.getMemberType()).isEqualTo("Research Institute");
+        assertThat(consortiumLeadDetails.getLogoUrl()).isEqualTo("some/url/for/a/logo");
+        assertThat(consortiumLeadDetails.getBillingCountry()).isEqualTo("Denmark");
+        assertThat(consortiumLeadDetails.getId()).isEqualTo("id");
+        assertThat(consortiumLeadDetails.getConsortiumMembers().size()).isEqualTo(2);
+        assertThat(consortiumLeadDetails.getConsortiumMembers().get(0).getSalesforceId()).isEqualTo("member1");
+        assertThat(consortiumLeadDetails.getConsortiumMembers().get(0).getMetadata().getName()).isEqualTo("member 1");
+        assertThat(consortiumLeadDetails.getConsortiumMembers().get(1).getSalesforceId()).isEqualTo("member2");
+        assertThat(consortiumLeadDetails.getConsortiumMembers().get(1).getMetadata().getName()).isEqualTo("member 2");
+    }
 
     private MemberDetails getMemberDetails() {
         MemberDetails memberDetails = new MemberDetails();
@@ -277,6 +308,38 @@ class MemberServiceTest {
         memberDetails.setMembershipEndDateString("2027-01-01");
         memberDetails.setWebsite("https://website.com");
         return memberDetails;
+    }
+    
+    private ConsortiumLeadDetails getConsortiumLeadDetails() {
+        ConsortiumLeadDetails consortiumLeadDetails = new ConsortiumLeadDetails();
+        consortiumLeadDetails.setBillingCountry("Denmark");
+        consortiumLeadDetails.setConsortiaLeadId(null);
+        consortiumLeadDetails.setConsortiaMember(false);
+        consortiumLeadDetails.setId("id");
+        consortiumLeadDetails.setLogoUrl("some/url/for/a/logo");
+        consortiumLeadDetails.setMemberType("Research Institute");
+        consortiumLeadDetails.setName("test member details");
+        consortiumLeadDetails.setPublicDisplayDescriptionHtml("<p>public display description</p>");
+        consortiumLeadDetails.setPublicDisplayEmail("orcid@testmember.com");
+        consortiumLeadDetails.setPublicDisplayName("public display name");
+        consortiumLeadDetails.setMembershipStartDateString("2022-01-01");
+        consortiumLeadDetails.setMembershipEndDateString("2027-01-01");
+        consortiumLeadDetails.setWebsite("https://website.com");
+        
+        ConsortiumMember member1 = new ConsortiumMember();
+        member1.setSalesforceId("member1");
+        ConsortiumMember.Metadata metadata1 = member1.new Metadata();
+        metadata1.setName("member 1");
+        member1.setMetadata(metadata1);
+        
+        ConsortiumMember member2 = new ConsortiumMember();
+        member2.setSalesforceId("member2");
+        ConsortiumMember.Metadata metadata2 = member2.new Metadata();
+        metadata2.setName("member 2");
+        member2.setMetadata(metadata2);
+        
+        consortiumLeadDetails.setConsortiumMembers(Arrays.asList(member1, member2));
+        return consortiumLeadDetails;
     }
     
     private MemberUpload getMemberUpload() {
@@ -319,6 +382,16 @@ class MemberServiceTest {
         member.setIsConsortiumLead(false);
         member.setSalesforceId("two");
         member.setParentSalesforceId("some parent");
+        return member;
+    }
+    
+    private Member getConsortiumLeadMember() {
+        Member member = new Member();
+        member.setAssertionServiceEnabled(true);
+        member.setClientId("XXXX-XXXX-XXXX-XXXX");
+        member.setClientName("clientname");
+        member.setIsConsortiumLead(true);
+        member.setSalesforceId("two");
         return member;
     }
 
