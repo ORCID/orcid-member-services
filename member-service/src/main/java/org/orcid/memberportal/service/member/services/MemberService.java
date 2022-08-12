@@ -237,8 +237,14 @@ public class MemberService {
 
     public MemberDetails getCurrentMemberDetails() {
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
+        Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
+        
         try {
-            return salesforceClient.getMemberDetails(salesforceId);
+            if (Boolean.TRUE.equals(member.getIsConsortiumLead())) {
+                return salesforceClient.getConsortiumLeadDetails(salesforceId);
+            } else {
+                return salesforceClient.getMemberDetails(salesforceId);
+            }
         } catch (IOException e) {
             LOG.error("Error fetching member details from salesforce client", e);
             throw new RuntimeException(e);
