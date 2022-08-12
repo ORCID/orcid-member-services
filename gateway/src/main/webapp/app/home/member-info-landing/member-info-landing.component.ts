@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ISFMemberData } from 'app/shared/model/salesforce.member.data.model';
+import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 
 @Component({
   selector: 'app-member-info-landing',
@@ -10,7 +10,6 @@ export class MemberInfoLandingComponent {
   @Input() memberData: ISFMemberData;
 
   isActive() {
-    if (this.memberData && new Date(this.memberData.membershipEndDateString) > new Date()) return true;
-    else return false;
+    return this.memberData && new Date(this.memberData.membershipEndDateString) > new Date();
   }
 }

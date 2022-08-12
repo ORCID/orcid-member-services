@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'app/core';
 import { IMSUser } from 'app/shared/model/user.model';
-import { ISFMemberData } from 'app/shared/model/salesforce.member.data.model';
+import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 
 @Component({
   selector: 'jhi-home',
@@ -35,7 +35,9 @@ export class HomeComponent implements OnInit {
         if (res && res.value.id) {
           this.memberData = res.value;
           this.memberDataLoaded = true;
-        } else this.memberDataLoaded = true;
+        } else {
+          this.memberDataLoaded = true;
+        }
       });
     }
   }

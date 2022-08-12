@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { IMSMember } from 'app/shared/model/member.model';
-import { ISFMemberData, ISFRawMemberData, SFMemberData } from 'app/shared/model/salesforce.member.data.model';
+import { ISFMemberData, ISFRawMemberData, SFMemberData } from 'app/shared/model/salesforce-member-data.model';
 
 type EntityResponseType = HttpResponse<IMSMember>;
 type EntityArrayResponseType = HttpResponse<IMSMember[]>;
@@ -126,6 +126,8 @@ export class MSMemberService {
         membershipStartDateString: res.body.Last_membership_start_date__c,
         membershipEndDateString: res.body.Last_membership_end_date__c
       };
-    } else return new SFMemberData();
+    } else {
+      return new SFMemberData();
+    }
   }
 }

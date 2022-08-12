@@ -8,7 +8,7 @@ import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/user/account.model';
 import { IMSUser } from 'app/shared/model/user.model';
 import { MSMemberService } from 'app/entities/member/member.service';
-import { ISFMemberData } from 'app/shared/model/salesforce.member.data.model';
+import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -42,7 +42,6 @@ export class AccountService {
   }
 
   disableMfa(): Observable<HttpResponse<any>> {
-    console.log('disabling mfa');
     return this.http.post(SERVER_API_URL + 'services/userservice/api/account/mfa/off', null, { observe: 'response' });
   }
 
@@ -178,7 +177,9 @@ export class AccountService {
                 .find(res.consortiaLeadId)
                 .toPromise()
                 .then(r => {
-                  if (r && r.body) this.memberData.value.consortiumLeadName = r.body.clientName;
+                  if (r && r.body) {
+                    this.memberData.value.consortiumLeadName = r.body.clientName;
+                  }
                 });
             }
             if (this.userIdentity.salesforceId) {
@@ -186,7 +187,9 @@ export class AccountService {
                 .find(this.userIdentity.salesforceId)
                 .toPromise()
                 .then(r => {
-                  if (r && r.body) this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
+                  if (r && r.body) {
+                    this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
+                  }
                 });
             }
           }
