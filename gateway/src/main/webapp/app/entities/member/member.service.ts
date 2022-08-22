@@ -8,7 +8,13 @@ import { map } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { IMSMember } from 'app/shared/model/member.model';
-import { ISFMemberData, ISFRawMemberData, SFMemberData } from 'app/shared/model/salesforce-member-data.model';
+import {
+  ISFMemberData,
+  ISFRawMemberData,
+  SFMemberData,
+  ISFRawConsortiumMemberData,
+  SFConsortiumMemberData
+} from 'app/shared/model/salesforce-member-data.model';
 
 type EntityResponseType = HttpResponse<IMSMember>;
 type EntityArrayResponseType = HttpResponse<IMSMember[]>;
@@ -124,10 +130,26 @@ export class MSMemberService {
         logoUrl: res.body.Logo_Description__c,
         publicDisplayEmail: res.body.Public_Display_Email__c,
         membershipStartDateString: res.body.Last_membership_start_date__c,
-        membershipEndDateString: res.body.Last_membership_end_date__c
+        membershipEndDateString: res.body.Last_membership_end_date__c,
+        consortiumMembers: res.body.consortiumOpportunities ? this.convertToConsortiumMembers(res.body.consortiumOpportunities) : null
       };
     } else {
       return new SFMemberData();
     }
+  }
+
+  protected convertToConsortiumMembers(consortiumOpportunities: [ISFRawConsortiumMemberData]): [SFConsortiumMemberData] {
+    let consortiumMembers: [SFConsortiumMemberData];
+    for (const consortiumOpportunity of consortiumOpportunities) {
+      consortiumMembers.push(this.convertToConsortiumMember(consortiumOpportunity));
+    }
+    return consortiumMembers;
+  }
+
+  protected convertToConsortiumMember(consortiumOpportunity: ISFRawConsortiumMemberData): SFConsortiumMemberData {
+    const consortiumMember: SFConsortiumMemberData = new SFConsortiumMemberData();
+    consortiumMember.name = consortiumOpportunity.Account.Public_Display_Name__c;
+    consortiumMember.salesforceId = consortiumOpportunity.AccountId;
+    return consortiumMember;
   }
 }
