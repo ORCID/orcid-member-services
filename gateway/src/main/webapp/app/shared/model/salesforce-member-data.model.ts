@@ -14,10 +14,11 @@ export interface ISFMemberData {
   membershipStartDateString?: string;
   membershipEndDateString?: string;
   consortiumLeadName?: string;
-  consortiumMembers?: [ISFConsortiumMemberData];
+  consortiumMembers?: ISFConsortiumMemberData[];
 }
 
 export interface ISFConsortiumMemberData {
+  name?: string;
   salesforceId?: string;
   metadata?: ISFConsortiumMemberMetadata;
 }
@@ -69,11 +70,10 @@ export class SFMemberData implements ISFMemberData {
     public membershipStartDateString?: string,
     public membershipEndDateString?: string,
     public consortiumLeadName?: string,
-    public consortiumMembers?: [SFConsortiumMemberData]
+    public consortiumMembers?: SFConsortiumMemberData[]
   ) {}
 }
 
 export class SFConsortiumMemberData implements ISFConsortiumMemberData {
-  salesforceId?: string;
-  name?: string;
+  constructor(public salesforceId?: string, public name?: string) {}
 }

@@ -138,8 +138,8 @@ export class MSMemberService {
     }
   }
 
-  protected convertToConsortiumMembers(consortiumOpportunities: [ISFRawConsortiumMemberData]): [SFConsortiumMemberData] {
-    let consortiumMembers: [SFConsortiumMemberData];
+  protected convertToConsortiumMembers(consortiumOpportunities: ISFRawConsortiumMemberData[]): SFConsortiumMemberData[] {
+    let consortiumMembers: SFConsortiumMemberData[] = [];
     for (const consortiumOpportunity of consortiumOpportunities) {
       consortiumMembers.push(this.convertToConsortiumMember(consortiumOpportunity));
     }
