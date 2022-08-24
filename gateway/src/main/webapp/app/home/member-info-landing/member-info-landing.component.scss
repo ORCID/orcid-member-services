@@ -1,3 +1,5 @@
+@use '../../../content/scss/bootstrap-variables' as global;
+
 $color_1: rgba(0, 0, 0, 0.6);
 $background-color_1: #fafafa;
 
@@ -8,25 +10,15 @@ $background-color_1: #fafafa;
   flex: 1;
   background-color: $background-color_1;
   border-right: 2px solid #eeeeee;
-  h5 {
-    margin-top: 40px;
-    font-weight: bold;
-  }
 }
 .main-section {
   flex: 1;
   padding: 20px 40px 20px 40px;
 }
 .side-bar-subsection {
-  * {
-    font-size: 14px;
-  }
   div {
+    font-size: 14px;
     color: $color_1;
-  }
-  h6 {
-    font-weight: bold;
-    margin-bottom: 0.2rem;
   }
 }
 .main-contacts {
@@ -45,4 +37,16 @@ $background-color_1: #fafafa;
   height: 208px;
   display: flex;
   justify-content: center;
+}
+h6 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+h5 {
+  margin-top: 40px;
+  font-weight: bold;
+}
+.green-hr {
+  border: 1px solid global.$secondary;
 }

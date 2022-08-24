@@ -57,9 +57,14 @@
         </div>
     </div>
     <div *ngIf="isActive() && memberData.isConsortiumLead">
-        <div>Consortium Members</div>
-        <div *ngFor="let consortiumMember of memberData.consortiumMembers" class="row ml-0">
-            {{ consortiumMember.name }}
+        <h5 class="mb-4">Consortium Members 
+            <span class="font-weight-normal">({{memberData.consortiumMembers.length}})</span> 
+        </h5>
+        <h6>Member name</h6>
+        <hr class="green-hr">
+        <div *ngFor="let consortiumMember of memberData.consortiumMembers; let i = index">
+            <div>{{ consortiumMember.name }}</div>
+            <hr *ngIf="i + 1 < memberData.consortiumMembers.length">        
         </div>
     </div>
 </div>
