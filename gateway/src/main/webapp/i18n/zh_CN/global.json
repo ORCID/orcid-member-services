@@ -15,9 +15,9 @@
       "memberPortal": { "string": "会员门户" },
       "beta": { "string": "Beta 版" },
       "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
-      "entities": {
-        "main": { "string": "会员工具" },
-        "assertionServiceAffiliationManager": { "string": "机构管理器" },
+      "tools": {
+        "main": { "string": "工具" },
+        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
         "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
         "member": { "string": "会员" }
       },
@@ -38,11 +38,18 @@
         "logoutAs": { "string": "注销身份" },
         "register": { "string": "注册" }
       },
-      "admin": {
-        "main": { "string": "管理" },
-        "msUserServiceMSUser": { "string": "管理用户" },
-        "msUserServiceMSMember": { "string": "管理会员" },
+      "adminMenu": {
+        "main": { "string": "管理员" },
+        "manageUsers": { "string": "管理用户" },
+        "manageMembers": { "string": "管理会员" },
         "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "resources": {
+        "main": { "string": "资源" },
+        "accountManagementGuide": { "string": "账户管理指南" },
+        "affiliationManagerGuide": { "string": "Affiliation Manager 指南" },
+        "memberReportingGuide": { "string": "会员报告指南" },
+        "applyForAffiliationManagerCreds": { "string": "申请 Affiliation Manager 凭证" }
       },
       "language": { "string": "语言" }
     },
@@ -118,6 +125,7 @@
       "save": { "string": "保存" },
       "continue": { "string": "继续" },
       "upload": { "string": "上传" },
+      "ok": { "string": "确认" },
       "activate": { "string": "重新发送激活电子邮件" },
       "view": { "string": "查看" }
     },

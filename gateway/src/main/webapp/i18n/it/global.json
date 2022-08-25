@@ -15,10 +15,10 @@
       "memberPortal": { "string": "Portale membri" },
       "beta": { "string": "Beta" },
       "jhipster-needle-menu-add-element": { "string": "JHipster aggiungerà ulteriori voci del menu qui (non tradurre!)" },
-      "entities": {
-        "main": { "string": "Strumenti per i membri" },
-        "assertionServiceAffiliationManager": { "string": "Responsabile dell'affiliazione\n" },
-        "jhipster-needle-menu-add-entry": { "string": "JHipster aggiungerà altre entità qui (non tradurre!)" },
+      "tools": {
+        "main": { "string": "Strumenti" },
+        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
         "member": { "string": "Membro" }
       },
       "report": {
@@ -38,11 +38,18 @@
         "logoutAs": { "string": "Disconnettiti come" },
         "register": { "string": "Registrati" }
       },
-      "admin": {
-        "main": { "string": "Amministrazione\n" },
-        "msUserServiceMSUser": { "string": "Gestisci utenti" },
-        "msUserServiceMSMember": { "string": "Gestisci i membri" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster aggiungerà ulteriori voci di menu qui (non tradurre!)" }
+      "adminMenu": {
+        "main": { "string": "Amministratore" },
+        "manageUsers": { "string": "Gestisci gli utenti" },
+        "manageMembers": { "string": "Gestisci i membri" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "resources": {
+        "main": { "string": "Risorse" },
+        "accountManagementGuide": { "string": "Guida alla gestione degli account" },
+        "affiliationManagerGuide": { "string": "Guida ad Affiliation Manager" },
+        "memberReportingGuide": { "string": "Guida alla segnalazione dei membri" },
+        "applyForAffiliationManagerCreds": { "string": "Richiedi le credenziali di Affiliation Manager" }
       },
       "language": { "string": "Lingua" }
     },
@@ -118,6 +125,7 @@
       "save": { "string": "Salva\n" },
       "continue": { "string": "Continua\n" },
       "upload": { "string": "Carica\n" },
+      "ok": { "string": "OK" },
       "activate": { "string": "Invia nuovamente l'email di attivazione" },
       "view": { "string": "Visualizza" }
     },

@@ -15,9 +15,9 @@
       "memberPortal": { "string": "Portal para miembros" },
       "beta": { "string": "Beta" },
       "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
-      "entities": {
-        "main": { "string": "Herramientas para miembros" },
-        "assertionServiceAffiliationManager": { "string": "Gestor de afiliación" },
+      "tools": {
+        "main": { "string": "Herramientas" },
+        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
         "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
         "member": { "string": "Miembro" }
       },
@@ -38,11 +38,18 @@
         "logoutAs": { "string": "Cerrar sesión como" },
         "register": { "string": "Registrarse" }
       },
-      "admin": {
-        "main": { "string": "Administración" },
-        "msUserServiceMSUser": { "string": "Gestionar usuarios" },
-        "msUserServiceMSMember": { "string": "Gestionar miembros" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster agregará entradas de menú adicionales aquí (¡no traducir!)" }
+      "adminMenu": {
+        "main": { "string": "Administrador" },
+        "manageUsers": { "string": "Gestionar usuarios" },
+        "manageMembers": { "string": "Gestionar miembros" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "resources": {
+        "main": { "string": "Recursos" },
+        "accountManagementGuide": { "string": "Guía de gestión de cuentas" },
+        "affiliationManagerGuide": { "string": "Guía de Affiliation Manager" },
+        "memberReportingGuide": { "string": "Guía de informes de los miembros" },
+        "applyForAffiliationManagerCreds": { "string": "Solicitar las credenciales de Affiliation Manager" }
       },
       "language": { "string": "Idioma" }
     },
@@ -118,6 +125,7 @@
       "save": { "string": "Guardar" },
       "continue": { "string": "Continuar " },
       "upload": { "string": "Subir" },
+      "ok": { "string": "Aceptar" },
       "activate": { "string": "Volver a enviar correo electrónico de activación" },
       "view": { "string": "Ver" }
     },

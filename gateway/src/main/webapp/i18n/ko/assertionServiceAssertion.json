@@ -14,6 +14,7 @@
         "createOrEditLabel": { "string": "제휴 추가 또는 편집" },
         "notFound": { "string": "제휴를 찾을 수 없습니다" },
         "uploadLabel": { "string": "CSV에서 제휴 가져오기" },
+        "permissionNotificationsLabel": { "string": "권한 알림 전송" },
         "forHelpTroubleshooting": {
           "string": "이 오류를 해결하는 데 도움이 필요한 경우 컨소시엄 리드 또는 membership@orcid.org에 문의해 주세요. 아래 오류 메시지 스크린샷을 포함해 주세요."
         }
@@ -39,16 +40,11 @@
         }
       },
       "delete": {
-        "question": {
-          "string": "{{ email }}에 대한 이 제휴를 삭제하시겠습니까? 포털과 레지스트리에서 제휴가 삭제됩니다. 사용자가 조직에 대한 권한을 취소했으므로, 항목을 추가하거나 편집하려면 권한을 다시 요청해야 합니다."
+        "fromPortal": {
+          "string": "포털에서 이 제휴를 삭제하시겠습니까?"
         },
-        "note": { "string": "이 제휴는 사용자의 ORCID 기록에서도 삭제됩니다." },
-        "noteRevoked": {
-          "string": "이 제휴는 회원 포털에서 삭제되지만 ORCID에는 유지됩니다. 사용자가 자신의 ORCID 기록에 대한 액세스 권한을 취소하여 귀하에게는 더 이상 ORCID 기록에서 이 항목을 삭제할 권한이 없습니다."
-        },
-        "error": { "string": "죄송하지만, 이 제휴는 삭제할 수 없습니다." },
-        "userRevokedAccess": {
-          "string": "해당 사용자가 자신의 ORCID 기록에 대한 액세스 권한을 취소하여 귀하에겐 더 이상 ORCID에서 이 항목을 편집하거나 삭제할 수 있는 권한이 없습니다."
+        "fromPortalAndRegistry": {
+          "string": "{{ email }}에 대한 이 제휴를 정말 삭제하시겠습니까? 포털 및 사용자의 ORCID 기록에서 제휴가 삭제됩니다."
         }
       },
       "detail": {
@@ -63,6 +59,16 @@
           "string": "처리를 위해 CSV를 업로드했습니다. 파일을 처리한 후 이메일로 알려 드리겠습니다."
         },
         "failure": { "string": "처리를 위해 CSV를 업로드하는 중에 문제가 발생했습니다." }
+      },
+      "notifications": {
+        "title": { "string": "권한 알림 전송" },
+        "confirmation": {
+          "string": "대기 중인 제휴에 대한 권한 링크를 귀하의 연구원들에게 ORCID가 전송해도 되겠습니까?"
+        },
+        "alreadyInProgress": { "string": "귀하의 사용자에게 알림 전송 요청이 이미 진행 중입니다. 나중에 다시 시도해 주세요." },
+        "notificationInProgress": {
+          "string": "지금 알림 프로세스가 시작되었습니다. 프로세스가 완료되면 이메일을 보내 드리겠습니다."
+        }
       },
       "addedToOrcid": { "string": "ORCID에 추가됨" },
       "updatedInOrcid": { "string": "ORCID에서 업데이트됨" },
@@ -91,11 +97,13 @@
       "externalIdUrl": { "string": "외부 ID URL" },
       "putCode": { "string": "코드 입력" },
       "created": { "string": "생성됨" },
+      "dateCreated": { "string": "만든 날짜" },
       "modified": { "string": "수정됨" },
       "status": { "string": "상태" },
       "deletedFromORCID": { "string": "ORCID에서 삭제됨" },
       "sent": { "string": "전송" },
       "adminId": { "string": "관리자 ID" },
+      "notificationLastSent": { "string": "알림 마지막으로 전송됨" },
       "email": { "string": "사용자 이메일" },
       "orcidId": { "string": "ORCID ID" },
       "year": { "string": "연도" },

@@ -15,9 +15,9 @@
       "memberPortal": { "string": "회원 포털" },
       "beta": { "string": "베타" },
       "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
-      "entities": {
-        "main": { "string": "회원 도구" },
-        "assertionServiceAffiliationManager": { "string": "제휴 관리자" },
+      "tools": {
+        "main": { "string": "도구" },
+        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
         "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
         "member": { "string": "회원" }
       },
@@ -38,11 +38,18 @@
         "logoutAs": { "string": "다음 계정으로 로그아웃" },
         "register": { "string": "등록" }
       },
-      "admin": {
-        "main": { "string": "관리" },
-        "msUserServiceMSUser": { "string": "사용자 관리" },
-        "msUserServiceMSMember": { "string": "회원 관리" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster는 여기에 추가 메뉴 항목을 추가합니다(바꾸지 마십시오!)" }
+      "adminMenu": {
+        "main": { "string": "관리자" },
+        "manageUsers": { "string": "사용자 관리" },
+        "manageMembers": { "string": "회원 관리" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "resources": {
+        "main": { "string": "리소스" },
+        "accountManagementGuide": { "string": "계정 관리 가이드" },
+        "affiliationManagerGuide": { "string": "Affiliation Manager 가이드" },
+        "memberReportingGuide": { "string": "회원 보고 안내" },
+        "applyForAffiliationManagerCreds": { "string": "Affiliation Manager 자격 증명 신청" }
       },
       "language": { "string": "언어" }
     },
@@ -118,6 +125,7 @@
       "save": { "string": "저장" },
       "continue": { "string": "계속" },
       "upload": { "string": "업로드" },
+      "ok": { "string": "확인" },
       "activate": { "string": "활성화 이메일 재전송" },
       "view": { "string": "보기" }
     },

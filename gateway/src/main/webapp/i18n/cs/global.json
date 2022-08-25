@@ -15,11 +15,11 @@
       "memberPortal": { "string": "Členský portál" },
       "beta": { "string": "Beta" },
       "jhipster-needle-menu-add-element": { "string": "Sem přidá JHipster další položky menu (nepřekládat!)" },
-      "entities": {
-        "main": { "string": "Členské nástroje" },
-        "assertionServiceAffiliationManager": { "string": "Manažer přidružení" },
+      "tools": {
+        "main": { "string": "Tools" },
+        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
         "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
-        "member": { "string": "Člen" }
+        "member": { "string": "Member" }
       },
       "report": {
         "member": { "string": "Členská zpráva" },
@@ -38,11 +38,18 @@
         "logoutAs": { "string": "Odhlásit se jako" },
         "register": { "string": "Registrovat" }
       },
-      "admin": {
-        "main": { "string": "Správa" },
-        "msUserServiceMSUser": { "string": "Spravovat uživatele" },
-        "msUserServiceMSMember": { "string": "Spravovat členy" },
+      "adminMenu": {
+        "main": { "string": "Admin" },
+        "manageUsers": { "string": "Manage users" },
+        "manageMembers": { "string": "Manage members" },
         "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "resources": {
+        "main": { "string": "Resources" },
+        "accountManagementGuide": { "string": "Account Management Guide" },
+        "affiliationManagerGuide": { "string": "Affiliation Manager Guide" },
+        "memberReportingGuide": { "string": "Member Reporting Guide" },
+        "applyForAffiliationManagerCreds": { "string": "Apply for Affiliation Manager Credentials" }
       },
       "language": { "string": "Jazyk" }
     },
@@ -118,6 +125,7 @@
       "save": { "string": "Uložit" },
       "continue": { "string": "Pokračovat" },
       "upload": { "string": "Nahrát" },
+      "ok": { "string": "OK" },
       "activate": { "string": "Odeslat aktivační e-mail znovu" },
       "view": { "string": "Zobrazit" }
     },
