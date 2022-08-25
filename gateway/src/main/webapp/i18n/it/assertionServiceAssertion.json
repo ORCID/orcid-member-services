@@ -14,6 +14,7 @@
         "createOrEditLabel": { "string": "Aggiungi o modifica affiliazione" },
         "notFound": { "string": "Nessuna affiliazione trovata" },
         "uploadLabel": { "string": "Importa affiliazioni da CSV" },
+        "permissionNotificationsLabel": { "string": "Invia le notifiche dei permessi" },
         "forHelpTroubleshooting": {
           "string": "Se hai bisogno di aiuto per risolvere questo problema, contatta il tuo responsabile di consorzio oppure usa l'indirizzo membership@orcid.org. Allega uno screenshot del messaggio di errore qui sotto."
         }
@@ -39,16 +40,11 @@
         }
       },
       "delete": {
-        "question": {
-          "string": "Sei sicuro di voler eliminare questa affiliazione per {{ email }}? L'affiliazione verrà eliminata dal portale e dal registro. Poiché l'utente ha revocato il permesso alla tua azienda, dovrai richiedere nuovamente il permesso per aggiungere o modificare qualsiasi elemento."
+        "fromPortal": {
+          "string": "Vuoi davvero eliminare questa affiliazione dal portale?"
         },
-        "note": { "string": "Questa affiliazione verrà eliminata anche dal record ORCID dell'utente." },
-        "noteRevoked": {
-          "string": "Questa affiliazione verrà eliminata dal Portale membri ma rimarrà in ORCID. L'utente ha revocato l'accesso al proprio record ORCID e non disponi più dell'autorizzazione per eliminare questo elemento dal suo record ORCID."
-        },
-        "error": { "string": "Spiacenti, questa affiliazione non può essere eliminata." },
-        "userRevokedAccess": {
-          "string": "Questo utente ha revocato l'accesso al proprio record ORCID e non hai più il permesso di modificare o eliminare questo elemento in ORCID"
+        "fromPortalAndRegistry": {
+          "string": "Vuoi davvero eliminare questa affiliazione per {{ email }}? L’affiliazione verrà eliminata dal portale e dal record ORCID dell’utente."
         }
       },
       "detail": {
@@ -63,6 +59,16 @@
           "string": "Il tuo CSV è stato caricato per l'elaborazione. Ti comunicheremo via email l'avvenuta elaborazione."
         },
         "failure": { "string": "Si è verificato un problema nel caricamento del tuo CSV che deve essere elaborato." }
+      },
+      "notifications": {
+        "title": { "string": "Invia le notifiche dei permessi" },
+        "confirmation": {
+          "string": "Vuoi davvero che ORCID invii i link dei permessi ai tuoi ricercatori per le affiliazioni in sospeso?"
+        },
+        "alreadyInProgress": { "string": "È già in corso una richiesta per inviare notifiche agli utenti. Riprova più tardi." },
+        "notificationInProgress": {
+          "string": "La procedura di notifica è stata avviata. Ti scriveremo non appena sarà completata."
+        }
       },
       "addedToOrcid": { "string": "Aggiunto a ORCID\n" },
       "updatedInOrcid": { "string": "Aggiornato in ORCID" },
@@ -91,11 +97,13 @@
       "externalIdUrl": { "string": "URL ID esterno\n" },
       "putCode": { "string": "Inserisci il codice" },
       "created": { "string": "Creato" },
+      "dateCreated": { "string": "Data di creazione" },
       "modified": { "string": "Modificato" },
       "status": { "string": "Stato" },
       "deletedFromORCID": { "string": "Eliminato da ORCID\n" },
       "sent": { "string": "Inviato\n" },
       "adminId": { "string": "ID amministratore" },
+      "notificationLastSent": { "string": "Ultima notifica inviata" },
       "email": { "string": "E-mail utente" },
       "orcidId": { "string": "iD ORCID" },
       "year": { "string": "Anno" },

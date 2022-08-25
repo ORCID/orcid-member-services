@@ -14,6 +14,7 @@
         "createOrEditLabel": { "string": "Přidat nebo upravit přidružení" },
         "notFound": { "string": "Nenalezena žádná přidružení" },
         "uploadLabel": { "string": "Importujte afiliace z CSV" },
+        "permissionNotificationsLabel": { "string": "Odeslat oznámení oprávnění" },
         "forHelpTroubleshooting": {
           "string": "Pokud potřebujete pomoc s řešením této chyby, obraťte se prosím na své vedení konsorcia nebo na member@orcid.org. Níže přiložte snímek obrazovky s chybovou zprávou."
         }
@@ -39,16 +40,11 @@
         }
       },
       "delete": {
-        "question": {
-          "string": "Určitě si přejete odstranit toto přidružení pro {{ email }}? Přidružení bude odstraněno z portálu i z registru. Jelikož uživatel odebral vaší organizaci oprávnění, v případě potřeby přidat či upravit jakékoliv položky budete muset zažádat o oprávnění znovu."
+        "fromPortal": {
+          "string": "Jste si jisti, že chcete pro odstranit toto přidružení z portálu?"
         },
-        "note": { "string": "Toto přidružení bude také vymazáno ze záznamu ORCID daného uživatele." },
-        "noteRevoked": {
-          "string": "Toto přidružení bude smazáno z členského portálu, ale zůstane v ORCID. Uživatel zrušil přístup ke svým záznamům v ORCID a vy již nemáte oprávnění pro to, abyste mohli tuto položku ze záznamů ORCID smazat."
-        },
-        "error": { "string": "Omlouváme se, toto přidružení nemůže být vymazáno." },
-        "userRevokedAccess": {
-          "string": "Uživatel zrušil přístup ke svému záznamu ORCID a vy již nemáte oprávnění tuto položku v ORCID upravovat nebo mazat."
+        "fromPortalAndRegistry": {
+          "string": "Jste si jisti, že chcete zrušit toto přidružení pro {{ email }}? Přidružení bude odstraněno z portálu a uživatelského záznamu ORCID."
         }
       },
       "detail": {
@@ -63,6 +59,16 @@
           "string": "Váš soubor CSV byl nahrán ke zpracování. Jakmile bude soubor zpracován, dáme vám vědět e-mailem."
         },
         "failure": { "string": "Při nahrávání vašeho CSV souboru ke zpracování došlo k problému." }
+      },
+      "notifications": {
+        "title": { "string": "Odeslat oznámení povolení" },
+        "confirmation": {
+          "string": "Jste si jistí, že má ORCID posílat vašim výzkumníkům odkazy na oprávnění pro přidružení, která čekají na vyřízení?"
+        },
+        "alreadyInProgress": { "string": "Žádost zasílat oznámení vašim uživatelům už se zpracovává. Zkuste to znovu později" },
+        "notificationInProgress": {
+          "string": "Notification process has now started. We will email you as soon as the process has completed."
+        }
       },
       "addedToOrcid": { "string": "Přidáno do ORCID" },
       "updatedInOrcid": { "string": "Aktualizováno v ORCID" },
@@ -91,11 +97,13 @@
       "externalIdUrl": { "string": "Adresa URL externího ID" },
       "putCode": { "string": "Vložte kód" },
       "created": { "string": "Vytvořeno" },
+      "dateCreated": { "string": "Date created" },
       "modified": { "string": "Upraveno" },
       "status": { "string": "Postavení" },
       "deletedFromORCID": { "string": "Vymazáno z ORCID" },
       "sent": { "string": "Odesláno" },
       "adminId": { "string": "Identifikace správce" },
+      "notificationLastSent": { "string": "Oznámení naposledy odesláno" },
       "email": { "string": "E-mail uživatele" },
       "orcidId": { "string": "ORCID iD" },
       "year": { "string": "Rok" },

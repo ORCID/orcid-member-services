@@ -15,10 +15,10 @@
       "memberPortal": { "string": "Portail des membres" },
       "beta": { "string": "Béta" },
       "jhipster-needle-menu-add-element": { "string": "JHipster ajoutera des entrées de menu supplémentaires ici (ne pas traduire !)" },
-      "entities": {
-        "main": { "string": "Outils pour les membres" },
-        "assertionServiceAffiliationManager": { "string": "Gestionnaire d'affiliation" },
-        "jhipster-needle-menu-add-entry": { "string": "JHipster ajoutera des entités supplémentaires ici (ne pas traduire !)" },
+      "tools": {
+        "main": { "string": "Outils" },
+        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
         "member": { "string": "Membre" }
       },
       "report": {
@@ -38,13 +38,18 @@
         "logoutAs": { "string": "Se déconnecter en tant que" },
         "register": { "string": "S'inscrire" }
       },
-      "admin": {
-        "main": { "string": "Administration" },
-        "msUserServiceMSUser": { "string": "Gérer les utilisateurs" },
-        "msUserServiceMSMember": { "string": "Gérer les membres" },
-        "jhipster-needle-menu-add-admin-element": {
-          "string": "JHipster ajoutera des entrées de menu supplémentaires ici (ne pas traduire !)"
-        }
+      "adminMenu": {
+        "main": { "string": "Administrateur" },
+        "manageUsers": { "string": "Gérer les utilisateurs" },
+        "manageMembers": { "string": "Gérer les membres" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "resources": {
+        "main": { "string": "Ressources" },
+        "accountManagementGuide": { "string": "Guide de gestion de compte" },
+        "affiliationManagerGuide": { "string": "Guide Affiliation Manager" },
+        "memberReportingGuide": { "string": "Guide de signalement de membres" },
+        "applyForAffiliationManagerCreds": { "string": "Demander des identifiants Affiliation Manager" }
       },
       "language": { "string": "Langue" }
     },
@@ -120,6 +125,7 @@
       "save": { "string": "Enregistrer" },
       "continue": { "string": "Continuer" },
       "upload": { "string": "Transférer" },
+      "ok": { "string": "OK" },
       "activate": { "string": "Renvoyer l'e-mail d'activation" },
       "view": { "string": "Afficher" }
     },

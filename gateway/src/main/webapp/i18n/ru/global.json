@@ -15,9 +15,9 @@
       "memberPortal": { "string": "Портал для участников" },
       "beta": { "string": "Бета-версия" },
       "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
-      "entities": {
-        "main": { "string": "Инструменты участников" },
-        "assertionServiceAffiliationManager": { "string": "Менеджер принадлежностей" },
+      "tools": {
+        "main": { "string": "Инструменты" },
+        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
         "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
         "member": { "string": "Участник" }
       },
@@ -38,11 +38,18 @@
         "logoutAs": { "string": "Выйти как" },
         "register": { "string": "Зарегистрироваться" }
       },
-      "admin": {
-        "main": { "string": "Администрация" },
-        "msUserServiceMSUser": { "string": "Настроить пользователей" },
-        "msUserServiceMSMember": { "string": "Настроить участников" },
+      "adminMenu": {
+        "main": { "string": "Администратор" },
+        "manageUsers": { "string": "Управление пользователями" },
+        "manageMembers": { "string": "Управление участниками" },
         "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "resources": {
+        "main": { "string": "Ресурсы" },
+        "accountManagementGuide": { "string": "Руководство по управлению аккаунтом" },
+        "affiliationManagerGuide": { "string": "Руководство по работе с Affiliation Manager" },
+        "memberReportingGuide": { "string": "Руководство по отчетам об участниках" },
+        "applyForAffiliationManagerCreds": { "string": "Получить учетные данные Affiliation Manager" }
       },
       "language": { "string": "Язык" }
     },
@@ -118,6 +125,7 @@
       "save": { "string": "Сохранить" },
       "continue": { "string": "Продолжить" },
       "upload": { "string": "Загрузить" },
+      "ok": { "string": "ОК" },
       "activate": { "string": "Отправить повторно электронное письмо для активации" },
       "view": { "string": "Просмотреть" }
     },

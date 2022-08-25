@@ -14,6 +14,7 @@
         "createOrEditLabel": { "string": "新增或編輯機關" },
         "notFound": { "string": "找不到任何機關" },
         "uploadLabel": { "string": "從 CSV 匯入所屬單位" },
+        "permissionNotificationsLabel": { "string": "傳送權限通知" },
         "forHelpTroubleshooting": {
           "string": "如果您需要協助疑難排解此錯誤，請連絡您的聯盟領導人或 membership@orcid.org。請在下方附上錯誤訊息的螢幕擷取畫面。"
         }
@@ -39,16 +40,11 @@
         }
       },
       "delete": {
-        "question": {
-          "string": "您確定要刪除 {{ email }} 的此隸屬關係？隸屬關係將 從入口網站和登錄刪除。由於使用者已撤回給貴組織的許可，您得重新要求權限才能新增或編輯任何項目。"
+        "fromPortal": {
+          "string": "是否確定要從入口網站刪除這個所屬單位？"
         },
-        "note": { "string": "此所屬單位也將從用戶的 ORCID 記錄中刪除。" },
-        "noteRevoked": {
-          "string": "此機關將會自成員入口刪除，但仍會保留於 ORCID中。使用者已撤銷您對他們 ORCID 紀錄的存取權限，您已不再擁有自他們的 ORCID 紀錄上刪除此物件的許可。"
-        },
-        "error": { "string": "抱歉，此所屬單位無法刪除。" },
-        "userRevokedAccess": {
-          "string": "使用者已撤銷您對他們 ORCID 紀錄的存取權限，您已不再擁有在 ORCID 上編輯或刪除此物件的許可。"
+        "fromPortalAndRegistry": {
+          "string": "是否確定要為 {{ email }} 刪除這個所屬單位？該所屬單位會從入口網站和使用者 ORCID 記錄中刪除。"
         }
       },
       "detail": {
@@ -63,6 +59,16 @@
           "string": "您的 CSV 已上傳進行處理。檔案處理完成後，我們將寄信告知您。"
         },
         "failure": { "string": "在上傳您要處理的 CSV 檔案時發生問題。" }
+      },
+      "notifications": {
+        "title": { "string": "傳送權限通知" },
+        "confirmation": {
+          "string": "是否確定要 ORCID 傳送權限連結給待處理所屬單位的研究人員？"
+        },
+        "alreadyInProgress": { "string": "您提出傳送通知給使用者的要求，系統目前已在處理中，請稍後再試。" },
+        "notificationInProgress": {
+          "string": "通知程序已啟動。程序完成後，系統會儘快透過電子郵件通知您。"
+        }
       },
       "addedToOrcid": { "string": "已新增至 ORCID" },
       "updatedInOrcid": { "string": "已於 ORCID 中更新" },
@@ -91,11 +97,13 @@
       "externalIdUrl": { "string": "外部編碼網址" },
       "putCode": { "string": "放置代碼" },
       "created": { "string": "已創建" },
+      "dateCreated": { "string": "建立日期" },
       "modified": { "string": "已修改" },
       "status": { "string": "狀態" },
       "deletedFromORCID": { "string": "從 ORCID 中刪除" },
       "sent": { "string": "已寄出" },
       "adminId": { "string": "管理者編碼" },
+      "notificationLastSent": { "string": "最近一次傳送通知" },
       "email": { "string": "使用者電子郵件地址" },
       "orcidId": { "string": "ORCID 編碼" },
       "year": { "string": "年份" },

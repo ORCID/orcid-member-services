@@ -14,6 +14,7 @@
         "createOrEditLabel": { "string": "所属を追加または編集" },
         "notFound": { "string": "所属が見つかりません" },
         "uploadLabel": { "string": "CSVから所属をインポート" },
+        "permissionNotificationsLabel": { "string": "許可通知を送信" },
         "forHelpTroubleshooting": {
           "string": "このエラーのトラブルシューティングについてサポートが必要な場合は、コンソーシアムの責任者またはmembership@orcid.orgにお問い合わせください。以下のエラーメッセージのスクリーンショットを含めてください。"
         }
@@ -39,16 +40,11 @@
         }
       },
       "delete": {
-        "question": {
-          "string": "{{ email }}のこのアフィリエーションを削除してもよろしいですか？アフィリエーションはポータルとレジストリから削除されます。このユーザーがあなたの組織に対する許可を取り消したので、アイテムを追加または編集するには、再度許可を求める必要があります。"
+        "fromPortal": {
+          "string": "ポータルからこのアフィリエーションを削除しますか？"
         },
-        "note": { "string": "このアフィリエーションは、ユーザーのORCIDレコードからも削除されます。" },
-        "noteRevoked": {
-          "string": "このアフィリエーションはメンバーポータルから削除されますが、ORCIDには残ります。ユーザーがORCIDレコードへのアクセスを取り消したため、あなたがこのアイテムをORCIDレコードから削除する権限がなくなりました。"
-        },
-        "error": { "string": "申し訳ありませんが、このアフィリエーションは削除できませんでした。" },
-        "userRevokedAccess": {
-          "string": "ユーザーがORCIDレコードへのアクセスを取り消したため、ORCIDでこのアイテムを編集または削除する権限がなくなりました。"
+        "fromPortalAndRegistry": {
+          "string": "{{ email }}のこのアフィリエーション を削除しますか？ポータルとユーザーのORCIDレコードからアフィリエーション が削除されます。"
         }
       },
       "detail": {
@@ -63,6 +59,16 @@
           "string": "あなたのCSVが処理用にアップロードされました。ファイルの処理が完了次第、メールでお知らせします。"
         },
         "failure": { "string": "処理するためにCSVをアップロードする際に問題が発生しました。" }
+      },
+      "notifications": {
+        "title": { "string": "許可通知を送信" },
+        "confirmation": {
+          "string": "保留中のアフィリエーションについて、ORCIDから研究者に許可リンクを送信してよろしいですか？"
+        },
+        "alreadyInProgress": { "string": "ユーザーへの通知送信リクエストを実行中です。後でもう一度お試しください。" },
+        "notificationInProgress": {
+          "string": "現在、通知処理を開始しています。手続きが完了し次第、メールでお知らせします。"
+        }
       },
       "addedToOrcid": { "string": "ORCIDに追加されました" },
       "updatedInOrcid": { "string": "ORCID で更新されました" },
@@ -91,11 +97,13 @@
       "externalIdUrl": { "string": "外部 ID の Url" },
       "putCode": { "string": "コードを入力する" },
       "created": { "string": "作成されました" },
+      "dateCreated": { "string": "作成日" },
       "modified": { "string": "変更しました" },
       "status": { "string": "ステータス" },
       "deletedFromORCID": { "string": "ORCIDから削除されました" },
       "sent": { "string": "送信されました" },
       "adminId": { "string": "管理者ID" },
+      "notificationLastSent": { "string": "最終送信通知" },
       "email": { "string": "ユーザーのEメール" },
       "orcidId": { "string": "ORCID iD" },
       "year": { "string": "年" },

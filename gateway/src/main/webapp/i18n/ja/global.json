@@ -15,10 +15,10 @@
       "memberPortal": { "string": "メンバーポータル" },
       "beta": { "string": "ベータ" },
       "jhipster-needle-menu-add-element": { "string": "JHipsterはここにメニューエントリーを追加します（翻訳しないでください！）" },
-      "entities": {
-        "main": { "string": "メンバーツール" },
-        "assertionServiceAffiliationManager": { "string": "アフィリエーションマネージャー" },
-        "jhipster-needle-menu-add-entry": { "string": "JHipster はこちらにエンティティをさらに追加します ( 翻訳しないで下さい )" },
+      "tools": {
+        "main": { "string": "ツール" },
+        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
         "member": { "string": "メンバー" }
       },
       "report": {
@@ -38,11 +38,18 @@
         "logoutAs": { "string": "以下としてログアウト：" },
         "register": { "string": "登録する" }
       },
-      "admin": {
-        "main": { "string": "管理" },
-        "msUserServiceMSUser": { "string": "ユーザーを管理する" },
-        "msUserServiceMSMember": { "string": "メンバーを管理する" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipsterはここにメニューエントリを追加します（翻訳しないでください！）" }
+      "adminMenu": {
+        "main": { "string": "管理者" },
+        "manageUsers": { "string": "ユーザーを管理する" },
+        "manageMembers": { "string": "メンバーを管理する" },
+        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "resources": {
+        "main": { "string": "リソース" },
+        "accountManagementGuide": { "string": "アカウント管理ガイド" },
+        "affiliationManagerGuide": { "string": "Affiliation Managerガイド" },
+        "memberReportingGuide": { "string": "メンバーレポートガイド" },
+        "applyForAffiliationManagerCreds": { "string": "Affiliation Managerの資格取得を申請する" }
       },
       "language": { "string": "言語" }
     },
@@ -118,6 +125,7 @@
       "save": { "string": "保存する" },
       "continue": { "string": "継続する" },
       "upload": { "string": "アップロード" },
+      "ok": { "string": "OK" },
       "activate": { "string": "有効化Eメールを再送する" },
       "view": { "string": "見る" }
     },

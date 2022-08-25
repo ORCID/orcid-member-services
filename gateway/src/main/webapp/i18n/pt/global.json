@@ -15,9 +15,9 @@
       "memberPortal": { "string": "Portal de Membros" },
       "beta": { "string": "Beta" },
       "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
-      "entities": {
-        "main": { "string": "Ferramentas de Membro" },
-        "assertionServiceAffiliationManager": { "string": "Gestor de Afiliação" },
+      "tools": {
+        "main": { "string": "Ferramentas" },
+        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
         "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
         "member": { "string": "Membro" }
       },
@@ -38,11 +38,18 @@
         "logoutAs": { "string": "Terminar sessão como" },
         "register": { "string": "Registo" }
       },
-      "admin": {
-        "main": { "string": "Administração" },
-        "msUserServiceMSUser": { "string": "Gerir utilizadores" },
-        "msUserServiceMSMember": { "string": "Gerir membros" },
+      "adminMenu": {
+        "main": { "string": "Administrador" },
+        "manageUsers": { "string": "Gerenciar usuários" },
+        "manageMembers": { "string": "Gerenciar membros" },
         "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "resources": {
+        "main": { "string": "Recursos" },
+        "accountManagementGuide": { "string": "Guia de gerenciamento de conta" },
+        "affiliationManagerGuide": { "string": "Guia do Affiliation Manager" },
+        "memberReportingGuide": { "string": "Guia de relatórios de membro" },
+        "applyForAffiliationManagerCreds": { "string": "Solicitar credenciais do Affiliation Manager" }
       },
       "language": { "string": "Língua" }
     },
@@ -118,6 +125,7 @@
       "save": { "string": "Guardar" },
       "continue": { "string": "Continuar" },
       "upload": { "string": "Carregar" },
+      "ok": { "string": "OK" },
       "activate": { "string": "Reenviar Email de Ativação" },
       "view": { "string": "Visualizar" }
     },

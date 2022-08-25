@@ -15,11 +15,11 @@
       "memberPortal": { "string": "會員入口網站" },
       "beta": { "string": "測試版" },
       "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
-      "entities": {
-        "main": { "string": "會員工具" },
-        "assertionServiceAffiliationManager": { "string": "機關管理者" },
-        "jhipster-needle-menu-add-entry": { "string": "JHipster 會在此處新增額外的物件（不要翻譯！）" },
-        "member": { "string": "成員" }
+      "tools": {
+        "main": { "string": "工具" },
+        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
+        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "member": { "string": "會員" }
       },
       "report": {
         "member": { "string": "會員報告" },
@@ -38,11 +38,18 @@
         "logoutAs": { "string": "登出為" },
         "register": { "string": "註冊" }
       },
-      "admin": {
-        "main": { "string": "管理" },
-        "msUserServiceMSUser": { "string": "管理用戶" },
-        "msUserServiceMSMember": { "string": "管理成員" },
+      "adminMenu": {
+        "main": { "string": "管理員" },
+        "manageUsers": { "string": "管理使用者" },
+        "manageMembers": { "string": "管理會員" },
         "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+      },
+      "resources": {
+        "main": { "string": "資源" },
+        "accountManagementGuide": { "string": "帳號管理指南" },
+        "affiliationManagerGuide": { "string": "Affiliation Manager 指南" },
+        "memberReportingGuide": { "string": "會員通報指南" },
+        "applyForAffiliationManagerCreds": { "string": "申請 Affiliation Manager 憑證" }
       },
       "language": { "string": "語言" }
     },
@@ -118,6 +125,7 @@
       "save": { "string": "儲存" },
       "continue": { "string": "繼續" },
       "upload": { "string": "上傳" },
+      "ok": { "string": "確定" },
       "activate": { "string": "重新發送啟用電子郵件" },
       "view": { "string": "瀏覽" }
     },
