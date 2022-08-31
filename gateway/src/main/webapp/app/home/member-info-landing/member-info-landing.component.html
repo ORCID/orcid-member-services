@@ -56,15 +56,15 @@
             <div class="main-section-empty-description" *ngIf="!memberData.publicDisplayDescriptionHtml">No organisation description added</div>
         </div>
     </div>
-    <!-- HTML for once the salesforce endpoint provides more data 
-    <div class="main-contacts">
-        <h5 class="mb-4">Contacts</h5>
-        <div class="row d-flex ml-0">
-            <h6 class="flex-grow-1">Name</h6>
-            <h6 class="flex-grow-1">Roles</h6>
-            <h6 class="flex-grow-1">Email</h6>
+    <div *ngIf="isActive() && memberData.isConsortiumLead">
+        <h5 class="mb-4">Consortium Members 
+            <span class="font-weight-normal">({{memberData.consortiumMembers.length}})</span> 
+        </h5>
+        <h6>Member name</h6>
+        <hr class="green-hr">
+        <div *ngFor="let consortiumMember of memberData.consortiumMembers; let i = index">
+            <div>{{ consortiumMember.name }}</div>
+            <hr *ngIf="i + 1 < memberData.consortiumMembers.length">        
         </div>
-        <hr>
     </div>
-    -->
 </div>

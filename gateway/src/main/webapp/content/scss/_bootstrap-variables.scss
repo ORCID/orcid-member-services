@@ -1,4 +1,4 @@
-@import 'noto-sans';
+@use 'noto-sans';
 /*
 * Bootstrap overrides https://getbootstrap.com/docs/4.0/getting-started/theming/
 * All values defined in bootstrap source
@@ -42,13 +42,13 @@ $body-color: rgba(0, 0, 0, 0.87);
 // Typography:
 // Font, line-height, and color for body text, headings, and more.
 
-$font-family-sans-serif: "Noto Sans", san-serif;
+$font-family-sans-serif: 'Noto Sans', san-serif;
 
 $font-size-base: 1rem;
 
-$h3-font-size:                $font-size-base * 1.5;
-$h4-font-size:                $font-size-base * 1.25;
-$h5-font-size:                $font-size-base * 1.17;
-$h6-font-size:                $font-size-base * 1.12;
+$h3-font-size: $font-size-base * 1.5;
+$h4-font-size: $font-size-base * 1.25;
+$h5-font-size: $font-size-base * 1.17;
+$h6-font-size: $font-size-base * 1.12;
 
 $link-hover-color: $primary;

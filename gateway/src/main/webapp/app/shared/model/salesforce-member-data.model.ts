@@ -14,6 +14,17 @@ export interface ISFMemberData {
   membershipStartDateString?: string;
   membershipEndDateString?: string;
   consortiumLeadName?: string;
+  consortiumMembers?: ISFConsortiumMemberData[];
+}
+
+export interface ISFConsortiumMemberData {
+  name?: string;
+  salesforceId?: string;
+  metadata?: ISFConsortiumMemberMetadata;
+}
+
+export interface ISFConsortiumMemberMetadata {
+  name?: string;
 }
 
 export interface ISFRawMemberData {
@@ -30,6 +41,16 @@ export interface ISFRawMemberData {
   Public_Display_Email__c?: string;
   Last_membership_start_date__c?: string;
   Last_membership_end_date__c?: string;
+  consortiumOpportunities: [ISFRawConsortiumMemberData];
+}
+
+export interface ISFRawConsortiumMemberData {
+  AccountId?: string;
+  Account?: ISFRawConsortiumMemberMetadata;
+}
+
+export interface ISFRawConsortiumMemberMetadata {
+  Public_Display_Name__c?: string;
 }
 
 export class SFMemberData implements ISFMemberData {
@@ -48,6 +69,11 @@ export class SFMemberData implements ISFMemberData {
     public publicDisplayEmail?: string,
     public membershipStartDateString?: string,
     public membershipEndDateString?: string,
-    public consortiumLeadName?: string
+    public consortiumLeadName?: string,
+    public consortiumMembers?: SFConsortiumMemberData[]
   ) {}
+}
+
+export class SFConsortiumMemberData implements ISFConsortiumMemberData {
+  constructor(public salesforceId?: string, public name?: string) {}
 }
