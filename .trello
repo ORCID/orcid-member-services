@@ -1,0 +1,14 @@
+trello_board="Member Portal: Current development"
+
+trello_backlog_list="Sprint Backlog"
+trello_backlog_list_id="5db70d089b8483606a41d143"
+
+trello_in_progress_list="In progress"
+trello_in_progress_list_id="5db70d0d001d0c455528c266"
+
+trello_submitted_list="Submitted"
+trello_submitted_list_id="5db70d10c4ea5b17d19b3ad5"
+
+github_poke_slack_channel=team-tech
+
+gitub_pr_default_reviewers=ORCID/orcid-core-ost-open-source-team
