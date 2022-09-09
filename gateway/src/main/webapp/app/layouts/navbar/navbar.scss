@@ -35,7 +35,7 @@ Logo styles
 .logo-img {
   display: inline-block;
   vertical-align: middle;
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 }
 
 .navbar-title {
@@ -43,6 +43,7 @@ Logo styles
   vertical-align: bottom;
   font-size: 1.5rem;
   font-weight: normal;
+  margin-right: 2px;
 }
 
 .navbar-beta {
@@ -52,7 +53,7 @@ Logo styles
   text-transform: uppercase;
 }
 
-@media screen and (max-width:767px) {
+@media screen and (max-width: 767px) {
   .logo-img,
   .navbar-title {
     display: block;

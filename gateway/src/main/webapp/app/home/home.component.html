@@ -4,8 +4,8 @@
             <div *ngSwitchCase="true" class="h-100">
                 <div class="d-flex flex-column h-100">
                     <div class="alert alert-success mt-3">
-                        <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message.string"
-                            [translateValues]="{username: account.email}"> You are logged in as user "{{account.email}}". </span>
+                        <span *ngIf="account" id="home-logged-message" jhiTranslate="home.loggedIn.message.string"
+                            [translateValues]="{username: account.email}"> You are logged in as user <strong>{{account.name}}</strong></span>
                     </div>
                     <div *ngIf="memberDataLoaded" class="h-100 home-container mb-3">
                         <app-member-info-landing *ngIf="memberData" [memberData]="memberData" class="d-flex h-100"></app-member-info-landing>

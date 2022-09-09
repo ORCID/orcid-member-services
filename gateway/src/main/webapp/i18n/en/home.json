@@ -64,8 +64,8 @@
       },
       "signIntoOrcid": { "string": "sign into your ORCID record" }
     },
-    "logged": {
-      "message": { "string": "You are logged in as user \"{{username}}\"." }
+    "loggedIn": {
+      "message": { "string": "You are logged in as user <strong>{{username}}</strong>" }
     }
   }
 }
