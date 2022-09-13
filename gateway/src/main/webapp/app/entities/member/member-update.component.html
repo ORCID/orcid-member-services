@@ -16,7 +16,7 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.salesforceId.string" for="field_salesforceId.string">Salesforce Id</label>
                     <input type="text" class="form-control" name="salesforceId" id="field_salesforceId"
-                           formControlName="salesforceId"/>
+                           formControlName="salesforceId" [attr.disabled]="editForm.get('id').value !== undefined ? true : null"/>
                     <div *ngIf="editForm.get('salesforceId').invalid && (editForm.get('salesforceId').dirty || editForm.get('salesforceId').touched)">
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('salesforceId').errors.required" jhiTranslate="entity.validation.required.string">
