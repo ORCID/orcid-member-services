@@ -6,3 +6,4 @@ log-data/*
 .settings/
 assertion-service/files/
 gateway/yarn.lock
+gateway/cypress/fixtures/editAffiliations.csv

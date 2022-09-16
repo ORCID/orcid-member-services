@@ -10,15 +10,8 @@ describe('Manage members menu', () => {
     cy.get('#field_isConsortiumLead')
       .should('be.checked')
       .uncheck();
-    // Shouldn't be able to save without a salesforce id
-    cy.get('#field_salesforceId').clear();
-    cy.get('#save-entity')
-      .invoke('attr', 'disabled')
-      .should('exist');
-    cy.get('small')
-      .filter('[jhitranslate="entity.validation.required.string"]')
-      .should('exist');
-    cy.get('#field_salesforceId').type(salesforceId);
+    cy.get('#field_salesforceId').invoke('attr', 'disabled')
+    .should('exist');
     cy.get('#field_parentSalesforceId')
       .clear()
       .type(clientName);
