@@ -10,10 +10,8 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  build-gateway:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
@@ -22,12 +20,48 @@ jobs:
         java-version: 11
     - name: Build Gateway service
       run: mvn -B verify -Dangular.env=qa -Pprod --file gateway/pom.xml 
+      
+  build-user-service:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
     - name: Build User service
       run: mvn -B verify  -Pprod --file user-service/pom.xml
+      
+  build-assertion-service:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
     - name: Build Assertion service
       run: mvn -B verify -Pprod --file assertion-service/pom.xml
+      
+  build-member-service:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
     - name: Build Member service
       run: mvn -B verify -Pprod --file member-service/pom.xml
+      
+  build-discovery-service:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
     - name: Build Discovery service
       run: mvn -B verify -Pprod --file discovery-service/pom.xml
 
