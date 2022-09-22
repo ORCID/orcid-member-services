@@ -90,7 +90,7 @@ jobs:
         with:
           name: cypress-videos
           path: gateway/cypress/videos
-   test-group-three:
+  test-group-three:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
