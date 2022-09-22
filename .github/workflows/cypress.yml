@@ -31,6 +31,7 @@ jobs:
             json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}' 
             dir: 'gateway/cypress/plugins'
   csv-add-affiliations:
+    runs-on: ubuntu-latest
     needs: setup
     steps:
       - name: Cypress run
@@ -50,6 +51,7 @@ jobs:
           name: cypress-videos
           path: gateway/cypress/videos
   test-group-one:
+    runs-on: ubuntu-latest
     needs: setup
     steps:
       - name: Cypress run
