@@ -39,7 +39,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          install-command: npm install cypress
+          install-command: npm install cypress --legacy-peer-deps
           working-directory: gateway
           spec: cypress/integration/retention/csv-add-affiliation.js
       - uses: actions/upload-artifact@v2
@@ -61,7 +61,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          install-command: npm install cypress
+          install-command: npm install cypress --legacy-peer-deps
           working-directory: gateway
           spec: |
             cypress/integration/retention/add-affiliation.js
