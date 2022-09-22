@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   
 jobs:
-  cypress-run:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,12 +30,36 @@ jobs:
             name: "token_qa.json"
             json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}' 
             dir: 'gateway/cypress/plugins'
+  csv-add-affiliations:
+    needs: setup
+    steps:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          install-command: npm install --legacy-peer-deps
+          install-command: npm install cypress
           working-directory: gateway
-          spec: cypress/integration/retention/*
+          spec: cypress/integration/retention/csv-add-affiliation.js
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: gateway/cypress/screenshots
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-videos
+          path: gateway/cypress/videos
+  test-group-one:
+    needs: setup
+    steps:
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          install-command: npm install cypress
+          working-directory: gateway
+          spec: |
+            cypress/integration/retention/add-affiliation.js
+            cypress/integration/retention/csv-edit-affiliations.js
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
