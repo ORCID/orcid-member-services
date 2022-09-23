@@ -64,8 +64,8 @@
       },
       "signIntoOrcid": { "string": "登入您的 ORCID 紀錄" }
     },
-    "logged": {
-      "message": { "string": "您已以「{{username}}」使用者身分登入。" }
+    "loggedIn": {
+      "message": { "string": "您已以使用者「<strong>{{username}}</strong>」的身分登入" }
     }
   }
 }

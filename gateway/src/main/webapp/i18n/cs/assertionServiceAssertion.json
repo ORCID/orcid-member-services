@@ -67,7 +67,7 @@
         },
         "alreadyInProgress": { "string": "Žádost zasílat oznámení vašim uživatelům už se zpracovává. Zkuste to znovu později" },
         "notificationInProgress": {
-          "string": "Notification process has now started. We will email you as soon as the process has completed."
+          "string": "Proces oznámení byl zahájen. Jakmile bude dokončen, zašleme vám e-mail."
         }
       },
       "addedToOrcid": { "string": "Přidáno do ORCID" },
@@ -97,7 +97,7 @@
       "externalIdUrl": { "string": "Adresa URL externího ID" },
       "putCode": { "string": "Vložte kód" },
       "created": { "string": "Vytvořeno" },
-      "dateCreated": { "string": "Date created" },
+      "dateCreated": { "string": "Datum vytvoření" },
       "modified": { "string": "Upraveno" },
       "status": { "string": "Postavení" },
       "deletedFromORCID": { "string": "Vymazáno z ORCID" },

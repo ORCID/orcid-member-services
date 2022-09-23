@@ -64,8 +64,8 @@
       },
       "signIntoOrcid": { "string": "あなたのORCIDレコードにサインインします" }
     },
-    "logged": {
-      "message": { "string": "あなたは、ユーザー「{{username}}」としてログインしています。" }
+    "loggedIn": {
+      "message": { "string": "あなたは、ユーザー「<strong>{{username}}</strong>」としてログインしています。" }
     }
   }
 }

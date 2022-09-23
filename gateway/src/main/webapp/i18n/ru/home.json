@@ -64,8 +64,8 @@
       },
       "signIntoOrcid": { "string": "войдите в свой профиль ORCID" }
     },
-    "logged": {
-      "message": { "string": "Вы вошли в систему как пользователь \"{{username}}\"." }
+    "loggedIn": {
+      "message": { "string": "Вы вошли как <strong>{{username}}</strong>" }
     }
   }
 }

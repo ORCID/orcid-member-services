@@ -64,8 +64,8 @@
       },
       "signIntoOrcid": { "string": "登录您的 ORCID 记录" }
     },
-    "logged": {
-      "message": { "string": "您已以“{{username}}”用户身份登录。" }
+    "loggedIn": {
+      "message": { "string": "您是以用户 <strong>{{username}}</strong> 的身份登录的" }
     }
   }
 }

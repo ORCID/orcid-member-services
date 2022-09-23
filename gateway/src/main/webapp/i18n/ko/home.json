@@ -64,8 +64,8 @@
       },
       "signIntoOrcid": { "string": "ORCID 기록에 로그인" }
     },
-    "logged": {
-      "message": { "string": "\"{{username}}\" 사용자로 로그인했습니다." }
+    "loggedIn": {
+      "message": { "string": "로그인한 사용자 <strong>{{username}}</strong>" }
     }
   }
 }
