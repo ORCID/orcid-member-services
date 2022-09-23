@@ -64,8 +64,8 @@
       },
       "signIntoOrcid": { "string": "přihlaste se do svého záznamu ORCID" }
     },
-    "logged": {
-      "message": { "string": "Jste přihlášení jako uživatel „{{username}}“." }
+    "loggedIn": {
+      "message": { "string": "Jste přihlášeni jako uživatel <strong>{{uživatelské jméno}}</strong>" }
     }
   }
 }

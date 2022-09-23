@@ -64,8 +64,8 @@
       },
       "signIntoOrcid": { "string": "accedi al tuo archivio ORCID" }
     },
-    "logged": {
-      "message": { "string": "Hai effettuato l'accesso come \"{{username}}\"." }
+    "loggedIn": {
+      "message": { "string": "Hai effettuato l’accesso come <strong>{{username}}</strong>" }
     }
   }
 }

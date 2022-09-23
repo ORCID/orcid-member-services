@@ -16,10 +16,10 @@
       "beta": { "string": "Beta" },
       "jhipster-needle-menu-add-element": { "string": "Sem přidá JHipster další položky menu (nepřekládat!)" },
       "tools": {
-        "main": { "string": "Tools" },
+        "main": { "string": "Nástroje" },
         "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
         "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
-        "member": { "string": "Member" }
+        "member": { "string": "Člen" }
       },
       "report": {
         "member": { "string": "Členská zpráva" },
@@ -39,17 +39,17 @@
         "register": { "string": "Registrovat" }
       },
       "adminMenu": {
-        "main": { "string": "Admin" },
-        "manageUsers": { "string": "Manage users" },
-        "manageMembers": { "string": "Manage members" },
+        "main": { "string": "Správce" },
+        "manageUsers": { "string": "Správa uživatelských účtů" },
+        "manageMembers": { "string": "Správa členů" },
         "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
       },
       "resources": {
-        "main": { "string": "Resources" },
-        "accountManagementGuide": { "string": "Account Management Guide" },
-        "affiliationManagerGuide": { "string": "Affiliation Manager Guide" },
-        "memberReportingGuide": { "string": "Member Reporting Guide" },
-        "applyForAffiliationManagerCreds": { "string": "Apply for Affiliation Manager Credentials" }
+        "main": { "string": "Zdroje" },
+        "accountManagementGuide": { "string": "Průvodce pro správu účtu" },
+        "affiliationManagerGuide": { "string": "Průvodce pro aplikaci Affiliation Manager" },
+        "memberReportingGuide": { "string": "Průvodce pro nahlašování členů" },
+        "applyForAffiliationManagerCreds": { "string": "Požádat o přihlašovací údaje k aplikaci Affiliation Manager" }
       },
       "language": { "string": "Jazyk" }
     },

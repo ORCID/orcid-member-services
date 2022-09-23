@@ -64,8 +64,8 @@
       },
       "signIntoOrcid": { "string": "inicie sessão no seu registo ORCID" }
     },
-    "logged": {
-      "message": { "string": "Tem a sessão iniciada como utilizador \"{{username}}\"." }
+    "loggedIn": {
+      "message": { "string": "Sessão iniciada como <strong>{{username}}</strong>" }
     }
   }
 }
