@@ -10,7 +10,7 @@
                 <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication.string">
                     <strong>Failed to sign in!</strong> Please check your credentials and try again.
                 </div>
-                <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
+                <form id="signin-form" class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
                     <div class="form-group">
                         <label class="username-label" for="username" jhiTranslate="global.form.email.label.string">Email</label>
                         <input type="text" class="form-control" name="username" id="username" placeholder="{{'global.form.email.placeholder.string' | translate}}"
@@ -37,7 +37,7 @@
                             <span jhiTranslate="login.form.rememberme.string">Remember me</span>
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary" jhiTranslate="login.form.button.string">Sign in</button>
+                    <button id="signin-button" type="submit" class="btn btn-primary" jhiTranslate="login.form.button.string">Sign in</button>
                 </form>
                 <p></p>
                 <div class="alert alert-warning">
