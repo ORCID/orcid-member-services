@@ -100,16 +100,9 @@ public class MailService {
     }
 
     public void sendInvitationEmail(String email, String orgName, String permissionLink) {
-        String[] linkParts = permissionLink.split("\\?");
-        String action = linkParts[0];
-        String stateParamAndValue = linkParts[1];
-        String[] paramAndValueArray = stateParamAndValue.split("=");
-        String state = paramAndValueArray[1];
-
         Context context = new Context(Locale.ENGLISH);
         context.setVariable("orgName", orgName);
-        context.setVariable("action", action);
-        context.setVariable("state", state);
+        context.setVariable("permissionLink", permissionLink);
 
         String content = templateEngine.process("mail/invitation", context);
         String subject = messageSource.getMessage("email.invitation.title", new Object[] { orgName }, Locale.ENGLISH);
