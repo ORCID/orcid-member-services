@@ -60,6 +60,7 @@ describe('Test homepage', () => {
     cy.get('.side-bar').contains("Email")
     cy.get('.side-bar').contains("canadapost.ca")
     cy.get('.side-bar').contains("support@orcid.org")
+    cy.get('.main-section').contains("Consortium/Parent organization: The Concord of Kinship")
     cy.get('.main-section').contains("Membership: Active")
     cy.get('.main-section').contains("Grateful Frogs")
   });
