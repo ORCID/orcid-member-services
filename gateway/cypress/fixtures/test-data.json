@@ -82,5 +82,13 @@
     "assertionEmail3": "22@orcid.org",
     "assertionData1": "Psychology 5",
     "assertionData2": "Psychology 6"
+  },
+  "homepageTestMembers": {
+    "directMemberEmail": "qa+cy_mp_flyandmighty@orcid.org",
+    "consortiumLeadEmail": "qa+cy_mp_mambono5@orcid.org",
+    "consortiumMemberEmail": "qa+cy_mp_almondsforest@orcid.org",
+    "consortiumMemberEmail2": "qa+cy_mp_gratefulfrogs@orcid.org",
+    "consortiumLeadAndMemberEmail": "qa+cy_mp_theharvestascendancy@orcid.org",
+    "inactiveConsortiumMemberEmail": "qa+cy_mp_considineandsons@orcid.org" 
   }
 }
