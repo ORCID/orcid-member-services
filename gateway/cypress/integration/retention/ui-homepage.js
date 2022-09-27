@@ -81,7 +81,7 @@ describe('Test homepage', () => {
     cy.get('.main-section').contains("The Harvest Ascendancy")
   });
 
-  it('Consortium member and lead', function() {
+  it('Inactive member', function() {
     cy.programmaticSignin(data.homepageTestMembers.inactiveConsortiumMemberEmail, credentials.password);
     cy.visit('/');
     cy.get('app-generic-landing').contains('Something has gone wrong...')
