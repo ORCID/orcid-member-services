@@ -33,9 +33,13 @@ public class ApplicationProperties {
     
     private String holisticsAffiliationDashboardSecret;
     
-    private String salesforceClientToken;
-    
     private String salesforceClientEndpoint;
+    
+    private String orcidApiClientId;
+    
+    private String orcidApiClientSecret;
+    
+    private String orcidApiTokenEndpoint;
     
     public String getOrcidOrgClientId() {
         return orcidOrgClientId;
@@ -117,14 +121,6 @@ public class ApplicationProperties {
         this.holisticsAffiliationDashboardSecret = holisticsAffiliationDashboardSecret;
     }
 
-    public String getSalesforceClientToken() {
-        return salesforceClientToken;
-    }
-
-    public void setSalesforceClientToken(String salesforceClientToken) {
-        this.salesforceClientToken = salesforceClientToken;
-    }
-
     public String getSalesforceClientEndpoint() {
         return salesforceClientEndpoint;
     }
@@ -132,5 +128,29 @@ public class ApplicationProperties {
     public void setSalesforceClientEndpoint(String salesforceClientEndpoint) {
         this.salesforceClientEndpoint = salesforceClientEndpoint;
     }
+
+	public String getOrcidApiClientId() {
+		return orcidApiClientId;
+	}
+
+	public void setOrcidApiClientId(String orcidApiClientId) {
+		this.orcidApiClientId = orcidApiClientId;
+	}
+
+	public String getOrcidApiClientSecret() {
+		return orcidApiClientSecret;
+	}
+
+	public void setOrcidApiClientSecret(String orcidApiClientSecret) {
+		this.orcidApiClientSecret = orcidApiClientSecret;
+	}
+
+	public String getOrcidApiTokenEndpoint() {
+		return orcidApiTokenEndpoint;
+	}
+
+	public void setOrcidApiTokenEndpoint(String orcidApiTokenEndpoint) {
+		this.orcidApiTokenEndpoint = orcidApiTokenEndpoint;
+	}
     
 }
