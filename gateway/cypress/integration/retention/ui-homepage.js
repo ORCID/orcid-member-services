@@ -14,8 +14,7 @@ describe('Test homepage', () => {
     cy.get('.side-bar').contains("https://orcid.org")
     cy.get('.side-bar').contains("orcid@orcid.org")
     cy.get('.main-section').contains("Membership: Active")
-    cy.get('.main-section').contains("ORCID")
-    cy.get('.main-section').contains('Fly and Mighty').should('not.exist')
+    cy.get('.main-section').contains('Fly and Mighty')
   });
 
   it('Consortium lead', function() {
