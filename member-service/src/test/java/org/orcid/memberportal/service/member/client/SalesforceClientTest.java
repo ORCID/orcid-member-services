@@ -6,24 +6,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.http.Header;
-import org.apache.http.HeaderIterator;
 import org.apache.http.HttpEntity;
 import org.apache.http.ProtocolVersion;
-import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicStatusLine;
-import org.apache.http.params.HttpParams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -32,6 +25,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.orcid.memberportal.service.member.client.model.ConsortiumLeadDetails;
 import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
@@ -39,7 +34,6 @@ import org.orcid.memberportal.service.member.config.ApplicationProperties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class SalesforceClientTest {
 
@@ -58,18 +52,35 @@ public class SalesforceClientTest {
     @BeforeEach
     public void setUp() throws JAXBException {
         MockitoAnnotations.initMocks(this);
+        Mockito.when(applicationProperties.getOrcidApiTokenEndpoint()).thenReturn("orcid.org/oauth/token/");
     }
 
     @Test
     void testGetMemberDetails() throws JAXBException, ClientProtocolException, IOException {
         Mockito.when(applicationProperties.getSalesforceClientEndpoint()).thenReturn("microservice/");
-        Mockito.when(applicationProperties.getSalesforceClientToken()).thenReturn("access-token");
         
-        MockCloseableHttpResponse response = new MockCloseableHttpResponse();
-        response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
-        response.setEntity(getMemberDetailsEntity());
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+            	MockCloseableHttpResponse response = new MockCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+            	MockCloseableHttpResponse response = new MockCloseableHttpResponse();
+            	response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                response.setEntity(getMemberDetailsEntity());
+                return response;
+            }
+        });
         
-        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenReturn(response);
 
         MemberDetails memberDetails = client.getMemberDetails("salesforceId");
         
@@ -89,21 +100,35 @@ public class SalesforceClientTest {
         assertThat(memberDetails.getId()).isEqualTo("id");
         
         Mockito.verify(applicationProperties).getSalesforceClientEndpoint();
-        Mockito.verify(applicationProperties).getSalesforceClientToken();
 
     }
     
     @Test
     void testGetConsortiumLeadDetails() throws JAXBException, ClientProtocolException, IOException {
         Mockito.when(applicationProperties.getSalesforceClientEndpoint()).thenReturn("microservice/");
-        Mockito.when(applicationProperties.getSalesforceClientToken()).thenReturn("access-token");
-        
-        MockCloseableHttpResponse response = new MockCloseableHttpResponse();
-        response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
-        response.setEntity(getConsortiumLeadDetailsEntity());
-        
-        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenReturn(response);
 
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+            	MockCloseableHttpResponse response = new MockCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+            	MockCloseableHttpResponse response = new MockCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                response.setEntity(getConsortiumLeadDetailsEntity());
+                return response;
+            }
+        });
+        
         ConsortiumLeadDetails consortiumLeadDetails = client.getConsortiumLeadDetails("salesforceId");
         
         assertThat(consortiumLeadDetails).isNotNull();
@@ -127,8 +152,6 @@ public class SalesforceClientTest {
         assertThat(consortiumLeadDetails.getConsortiumMembers().get(1).getMetadata().getName()).isEqualTo("member 2");
         
         Mockito.verify(applicationProperties).getSalesforceClientEndpoint();
-        Mockito.verify(applicationProperties).getSalesforceClientToken();
-
     }
     
     private HttpEntity getConsortiumLeadDetailsEntity() throws JsonProcessingException, UnsupportedEncodingException {

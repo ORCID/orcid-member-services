@@ -2,19 +2,31 @@ package org.orcid.memberportal.service.member.client;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.orcid.memberportal.service.member.client.model.ConsortiumLeadDetails;
 import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
+import org.orcid.memberportal.service.member.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +44,8 @@ public class SalesforceClient {
     private static final Logger LOG = LoggerFactory.getLogger(SalesforceClient.class);
 
     private CloseableHttpClient httpClient;
+    
+    private String accessToken;
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -39,8 +53,20 @@ public class SalesforceClient {
     public SalesforceClient() {
         this.httpClient = HttpClients.createDefault();
     }
-
+    
     public MemberDetails getMemberDetails(String salesforceId) throws IOException {
+    	return request(() -> {
+            return getSFMemberDetails(salesforceId);
+        });
+    }
+    
+    public ConsortiumLeadDetails getConsortiumLeadDetails(String salesforceId) throws IOException {
+    	return request(() -> {
+            return getSFConsortiumLeadDetails(salesforceId);
+        });
+    }
+    
+    private MemberDetails getSFMemberDetails(String salesforceId) {
         try (CloseableHttpResponse response = getMemberDetailsResponse(salesforceId)) {
             if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                 logError(salesforceId, response);
@@ -50,11 +76,14 @@ public class SalesforceClient {
                 JsonNode root = objectMapper.readTree(response.getEntity().getContent());
                 return objectMapper.treeToValue(root.at("/member"), MemberDetails.class);
             }
+        } catch (IOException e) {
+        	LOG.error("Error getting member details from salesforce", e);
+        	throw new RuntimeException(e);
         }
         return null;
     }
     
-    public ConsortiumLeadDetails getConsortiumLeadDetails(String salesforceId) throws IOException {
+    private ConsortiumLeadDetails getSFConsortiumLeadDetails(String salesforceId) {
         try (CloseableHttpResponse response = getMemberDetailsResponse(salesforceId)) {
             if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                 logError(salesforceId, response);
@@ -69,6 +98,9 @@ public class SalesforceClient {
                 consortiumLeadDetails.setConsortiumMembers(consortiumMembers);
                 return consortiumLeadDetails;
             }
+        } catch (IOException e) {
+        	LOG.error("Error getting consortium member details from salesforce", e);
+        	throw new RuntimeException(e);
         }
         return null;
     }
@@ -83,8 +115,61 @@ public class SalesforceClient {
     private CloseableHttpResponse getMemberDetailsResponse(String salesforceId) throws IOException {
         String endpoint = applicationProperties.getSalesforceClientEndpoint();
         HttpGet httpGet = new HttpGet(endpoint + "member/" + salesforceId + "/details");
-        httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + applicationProperties.getSalesforceClientToken());
+        httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         return httpClient.execute(httpGet);
+    }
+    
+    private <T> T request(Supplier<T> function) {
+        initAccessToken();
+        try {
+            return function.get();
+        } catch (Exception e) {
+            LOG.info("Refreshing access token");
+            createAccessToken();
+            return function.get();
+        }
+    }
+
+    private void initAccessToken() {
+        if (accessToken == null) {
+            createAccessToken();
+        }
+    }
+
+    private void createAccessToken() {
+        try {
+            accessToken = getAccessToken();
+        } catch (Exception e) {
+            LOG.error("Failed to create internal access token", e);
+            throw new RuntimeException(e);
+        }
+    }
+    
+    private String getAccessToken() throws JSONException, ClientProtocolException, IOException {
+    	LOG.info("Acquiring access token...");
+        HttpPost httpPost = new HttpPost(applicationProperties.getOrcidApiTokenEndpoint());
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("client_id", applicationProperties.getOrcidApiClientId()));
+        params.add(new BasicNameValuePair("client_secret", applicationProperties.getOrcidApiClientSecret()));
+        params.add(new BasicNameValuePair("scope", "/member-list/full-access /member-list/read"));
+        params.add(new BasicNameValuePair("grant_type", "client_credentials"));
+        httpPost.setEntity(new UrlEncodedFormEntity(params));
+
+        HttpResponse response = httpClient.execute(httpPost);
+        Integer statusCode = response.getStatusLine().getStatusCode();
+
+        if (statusCode != Status.OK.getStatusCode()) {
+            String responseString = EntityUtils.toString(response.getEntity());
+            LOG.error("Failed to obtain salesforce client access token: {}", responseString);
+            throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
+        }
+
+        LOG.info("Access token acquired");
+        String responseString = EntityUtils.toString(response.getEntity());
+        JSONObject json = new JSONObject(responseString);
+
+        return json.get("access_token").toString();
     }
     
 }
