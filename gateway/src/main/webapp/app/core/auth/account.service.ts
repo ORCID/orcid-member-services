@@ -191,6 +191,16 @@ export class AccountService {
                     this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
                   }
                 });
+
+              console.log('fetching member contacts');
+              this.memberService
+                .getMemberContacts()
+                .toPromise()
+                .then(res => {
+                  if (res) {
+                    console.log(JSON.stringify(res));
+                  }
+                });
             }
           }
         });

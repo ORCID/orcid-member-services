@@ -84,6 +84,15 @@ export class MSMemberService {
     );
   }
 
+  getMemberContacts(): Observable<any> {
+    return this.http.get<ISFRawMemberData>(`${this.resourceUrl}/member-contacts`, { observe: 'response' }).pipe(
+      map((res: SalesforceEntityResponseType) => this.convertToSalesforceMemberData(res)),
+      catchError(err => {
+        return of(err);
+      })
+    );
+  }
+
   delete(id: string): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/members/${id}`, { observe: 'response' });
   }
