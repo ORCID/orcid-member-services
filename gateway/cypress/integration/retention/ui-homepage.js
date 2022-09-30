@@ -6,7 +6,7 @@ describe('Test homepage', () => {
   it('Direct member', function() {
     cy.programmaticSignin(data.homepageTestMembers.directMemberEmail, credentials.password);
     cy.visit('/');
-    cy.get('app-member-info-landing')
+    cy.get('app-member-info-landing', {timeout: 20000})
     cy.get('app-generic-landing').should('not.exist')
     cy.get('.side-bar').contains("Public details")
     cy.get('.side-bar').contains("Website")
@@ -20,7 +20,7 @@ describe('Test homepage', () => {
   it('Consortium lead', function() {
     cy.programmaticSignin(data.homepageTestMembers.consortiumLeadEmail, credentials.password);
     cy.visit('/');
-    cy.get('app-member-info-landing')
+    cy.get('app-member-info-landing', {timeout: 20000})
     cy.get('app-generic-landing').should('not.exist')
     cy.get('.side-bar').contains("Public details")
     cy.get('.side-bar').contains("Website")
@@ -37,7 +37,7 @@ describe('Test homepage', () => {
   it('Consortium member', function() {
     cy.programmaticSignin(data.homepageTestMembers.consortiumMemberEmail, credentials.password);
     cy.visit('/');
-    cy.get('app-member-info-landing')
+    cy.get('app-member-info-landing', {timeout: 20000})
     cy.get('app-generic-landing').should('not.exist')
     cy.get('.side-bar').contains("Public details")
     cy.get('.side-bar').contains("Website")
@@ -52,7 +52,7 @@ describe('Test homepage', () => {
   it('Consortium member 2', function() {
     cy.programmaticSignin(data.homepageTestMembers.consortiumMemberEmail2, credentials.password);
     cy.visit('/');
-    cy.get('app-member-info-landing')
+    cy.get('app-member-info-landing', {timeout: 20000})
     cy.get('app-generic-landing').should('not.exist')
     cy.get('.side-bar').contains("Public details")
     cy.get('.side-bar').contains("Website")
@@ -67,7 +67,7 @@ describe('Test homepage', () => {
   it('Consortium member and lead', function() {
     cy.programmaticSignin(data.homepageTestMembers.consortiumLeadAndMemberEmail, credentials.password);
     cy.visit('/');
-    cy.get('app-member-info-landing')
+    cy.get('app-member-info-landing', {timeout: 20000})
     cy.get('app-generic-landing').should('not.exist')
     cy.get('.side-bar').contains("Public details")
     cy.get('.side-bar').contains("Website")
@@ -84,7 +84,7 @@ describe('Test homepage', () => {
   it('Inactive member', function() {
     cy.programmaticSignin(data.homepageTestMembers.inactiveConsortiumMemberEmail, credentials.password);
     cy.visit('/');
-    cy.get('app-generic-landing').contains('Something has gone wrong...')
+    cy.get('app-generic-landing', {timeout: 20000}).contains('Something has gone wrong...')
     cy.get('app-member-info-landing').should('not.exist')
   });
 });
