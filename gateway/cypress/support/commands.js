@@ -206,7 +206,7 @@ Cypress.Commands.add('uploadCsv', (path) => {
   })
 })
 
-Cypress.Commands.add('fetchLinkAndGrantPermission', () => {
+Cypress.Commands.add('fetchLinkAndGrantPermission', (email) => {
   // get permission link from first affiliation in the list
   cy.get('tbody')
     .children()
@@ -228,7 +228,7 @@ Cypress.Commands.add('fetchLinkAndGrantPermission', () => {
   // Grant permission
   cy.get('#username')
     .clear()
-    .type(record.email);
+    .type(email);
   cy.get('#password').type(credentials.password);
   cy.get('#signin-button').click();
 

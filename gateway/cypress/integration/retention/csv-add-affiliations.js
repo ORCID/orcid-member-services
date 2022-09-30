@@ -33,7 +33,7 @@ describe('Test adding affiliations via CSV', () => {
         cy.wrap($e).children().eq(4).contains('Pending');
       })
     })
-    cy.fetchLinkAndGrantPermission();
+    cy.fetchLinkAndGrantPermission(record.email);
 
     recurse(
       () =>

@@ -87,7 +87,7 @@ describe('Add and remove affiliation', () => {
     cy.get('tbody').children().first().children().eq(2).contains(record.affiliation.type);
     cy.get('tbody').children().first().children().eq(4).contains('Pending');
     
-    cy.fetchLinkAndGrantPermission();
+    cy.fetchLinkAndGrantPermission(record.email);
 
     recurse(
       () =>
