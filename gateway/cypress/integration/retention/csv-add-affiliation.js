@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import data from '../../fixtures/test-data.json';
 import credentials from '../../fixtures/credentials.json';
-import record from '../../fixtures/orcid-record.json';
+import record from '../../fixtures/csv-orcid-record.json';
 import { recurse } from 'cypress-recurse';
 
 describe('Test adding affiliations via CSV', () => {
