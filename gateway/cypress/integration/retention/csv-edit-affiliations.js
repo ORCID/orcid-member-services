@@ -64,8 +64,14 @@ describe('Test updating affiliations via CSV', () => {
         const qualification = res.body['qualifications']['affiliation-group'][0]['summaries'][0]['qualification-summary'];
         const service = res.body['services']['affiliation-group'][0]['summaries'][0]['service-summary'];
         const trimmedString = testString.trim();
-        // Ask George whether readability is worth a duplicated assertion
+        // cy.checkAffiliationChanges will not retry on fail, which is why we make sure all sections got updated before asserting everything
         expect(distinction['department-name']).to.eq(trimmedString);
+        expect(education['department-name']).to.eq(trimmedString);
+        expect(employment['department-name']).to.eq(trimmedString);
+        expect(invitedPosition['department-name']).to.eq(trimmedString);
+        expect(membership['department-name']).to.eq(trimmedString);
+        expect(qualification['department-name']).to.eq(trimmedString);
+        expect(service['department-name']).to.eq(trimmedString);
         cy.checkAffiliationChanges(distinction, trimmedString);
         cy.checkAffiliationChanges(education, trimmedString);
         cy.checkAffiliationChanges(employment, trimmedString);

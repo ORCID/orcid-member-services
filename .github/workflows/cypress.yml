@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   
 jobs:
-  test-group-one:
+  csv-add-affiliations:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,7 +35,7 @@ jobs:
         with:
           install-command: npm install cypress --legacy-peer-deps
           working-directory: gateway
-          spec: cypress/integration/retention/csv-add-affiliation.js
+          spec: cypress/integration/retention/csv-add-affiliations.js
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
@@ -46,7 +46,7 @@ jobs:
         with:
           name: cypress-videos
           path: gateway/cypress/videos
-  test-group-two:
+  csv-edit-affiliations:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -89,7 +89,7 @@ jobs:
         with:
           name: cypress-videos
           path: gateway/cypress/videos
-  test-group-three:
+  add-affiliation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -132,7 +132,7 @@ jobs:
         with:
           name: cypress-videos
           path: gateway/cypress/videos
-  test-group-four:
+  other-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

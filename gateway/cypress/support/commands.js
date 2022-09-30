@@ -196,11 +196,18 @@ Cypress.Commands.add('readCsv', (data) => {
 Cypress.Commands.add('uploadCsv', (path) => {
   cy.get('#jh-upload-entities').click()
   cy.get('#field_filePath').attachFile(path)
+  cy.intercept('https://member-portal.qa.orcid.org/services/assertionservice/api/assertion/upload').as('upload')
   cy.get('#jhi-confirm-csv-upload').click()
+  // Occasionally, trying to upload the csv results in a 403 code due to an invalid CSRF token, in which case we retry
+  cy.wait('@upload').then((int) => {
+    if (int.response.statusCode !== 200) {
+      cy.get('#jhi-confirm-csv-upload').click()
+    }
+  })
 })
 
-Cypress.Commands.add('fetchLinkAndGrantPermission', () => {
-  // get perimssion link from first affiliation in the list
+Cypress.Commands.add('fetchLinkAndGrantPermission', (email) => {
+  // get permission link from first affiliation in the list
   cy.get('tbody')
     .children()
     .last()
@@ -221,7 +228,7 @@ Cypress.Commands.add('fetchLinkAndGrantPermission', () => {
   // Grant permission
   cy.get('#username')
     .clear()
-    .type(record.email);
+    .type(email);
   cy.get('#password').type(credentials.password);
   cy.get('#signin-button').click();
 

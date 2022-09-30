@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import data from '../../fixtures/test-data.json';
 import credentials from '../../fixtures/credentials.json';
-import record from '../../fixtures/orcid-record.json';
+import record from '../../fixtures/csv-orcid-record.json';
 import { recurse } from 'cypress-recurse';
 
 describe('Test adding affiliations via CSV', () => {
@@ -33,7 +33,7 @@ describe('Test adding affiliations via CSV', () => {
         cy.wrap($e).children().eq(4).contains('Pending');
       })
     })
-    cy.fetchLinkAndGrantPermission();
+    cy.fetchLinkAndGrantPermission(record.email);
 
     recurse(
       () =>
@@ -69,7 +69,14 @@ describe('Test adding affiliations via CSV', () => {
   })
 
   it('Download the CSV and edit the contents to have the affiliations removed', function() {
+    cy.intercept('https://member-portal.qa.orcid.org/services/assertionservice/api/assertion/csv').as('generateCsv')
     cy.get('#jh-generate-csv').click();
+    // Occasionally, trying to download the csv results in a 403 code due to an invalid CSRF token, in which case we retry
+    cy.wait('@generateCsv').then((int) => {
+      if (int.response.statusCode !== 200) {
+        cy.get('#jh-generate-csv').click();
+      }
+    })
     cy.task('checkInbox', {
       to: data.csvMember.users.owner.email,
       subject: data.outbox.csvDownload,
