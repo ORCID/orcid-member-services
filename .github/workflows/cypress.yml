@@ -35,7 +35,7 @@ jobs:
         with:
           install-command: npm install cypress --legacy-peer-deps
           working-directory: gateway
-          spec: cypress/integration/retention/csv-add-affiliation.js
+          spec: cypress/integration/retention/csv-add-affiliations.js
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
