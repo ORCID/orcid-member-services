@@ -69,7 +69,14 @@ describe('Test adding affiliations via CSV', () => {
   })
 
   it('Download the CSV and edit the contents to have the affiliations removed', function() {
+    cy.intercept('https://member-portal.qa.orcid.org/services/assertionservice/api/assertion/csv').as('generateCsv')
     cy.get('#jh-generate-csv').click();
+    // Occasionally, trying to download the csv results in a 403 code due to an invalid CSRF token, in which case we retry
+    cy.wait('@generateCsv').then((int) => {
+      if (int.response.statusCode !== 200) {
+        cy.get('#jh-generate-csv').click();
+      }
+    })
     cy.task('checkInbox', {
       to: data.csvMember.users.owner.email,
       subject: data.outbox.csvDownload,
