@@ -24,6 +24,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.memberportal.service.member.client.model.ConsortiumLeadDetails;
 import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
+import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 import org.orcid.memberportal.service.member.web.rest.errors.ORCIDAPIException;
@@ -60,6 +61,12 @@ public class SalesforceClient {
         });
     }
     
+    public MemberContacts getMemberContacts(String salesforceId) throws IOException {
+    	return request(() -> {
+            return getSFMemberContacts(salesforceId);
+        });
+    }
+    
     public ConsortiumLeadDetails getConsortiumLeadDetails(String salesforceId) throws IOException {
     	return request(() -> {
             return getSFConsortiumLeadDetails(salesforceId);
@@ -78,6 +85,22 @@ public class SalesforceClient {
             }
         } catch (IOException e) {
         	LOG.error("Error getting member details from salesforce", e);
+        	throw new RuntimeException(e);
+        }
+        return null;
+    }
+    
+    private MemberContacts getSFMemberContacts(String salesforceId) {
+        try (CloseableHttpResponse response = getMemberContactsResponse(salesforceId)) {
+            if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
+                logError(salesforceId, response);
+            } else {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+                return objectMapper.readValue(response.getEntity().getContent(), MemberContacts.class);
+            }
+        } catch (IOException e) {
+        	LOG.error("Error getting member contacts from salesforce", e);
         	throw new RuntimeException(e);
         }
         return null;
@@ -112,10 +135,18 @@ public class SalesforceClient {
         LOG.warn(responseString);
     }
     
+    private CloseableHttpResponse getMemberContactsResponse(String salesforceId) throws IOException {
+        return sfGet("member/" + salesforceId + "/contacts");
+    }
+    
     private CloseableHttpResponse getMemberDetailsResponse(String salesforceId) throws IOException {
-        String endpoint = applicationProperties.getSalesforceClientEndpoint();
-        HttpGet httpGet = new HttpGet(endpoint + "member/" + salesforceId + "/details");
-        httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+        return sfGet("member/" + salesforceId + "/details");
+    }
+    
+    private CloseableHttpResponse sfGet(String path) throws IOException {
+    	String endpoint = applicationProperties.getSalesforceClientEndpoint();
+    	HttpGet httpGet = new HttpGet(endpoint + path);
+    	httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         return httpClient.execute(httpGet);
     }
     

@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
+import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
@@ -176,6 +177,19 @@ public class MemberResource {
         LOG.debug("REST request to get member details");
         MemberDetails memberDetails = memberService.getCurrentMemberDetails();
         return ResponseEntity.ok(memberDetails);
+    }
+    
+    /**
+     * {@code GET  /member-details} : get contacts of member to which current user belongs
+     *
+     *
+     * @return the {@link MemberDetails} 
+     */
+    @GetMapping("/member-contacts")
+    public ResponseEntity<MemberContacts> getMemberContacts() {
+        LOG.debug("REST request to get member contacts");
+        MemberContacts memberContacts = memberService.getCurrentMemberContacts();
+        return ResponseEntity.ok(memberContacts);
     }
     
     /**

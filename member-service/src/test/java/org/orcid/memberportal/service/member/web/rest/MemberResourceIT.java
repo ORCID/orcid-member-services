@@ -16,7 +16,6 @@ import org.orcid.memberportal.service.member.repository.MemberRepository;
 import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.services.UserService;
-import org.orcid.memberportal.service.member.web.rest.MemberResource;
 import org.orcid.memberportal.service.member.web.rest.errors.ExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

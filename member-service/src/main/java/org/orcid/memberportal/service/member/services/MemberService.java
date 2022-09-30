@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.orcid.memberportal.service.member.client.SalesforceClient;
+import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
@@ -249,6 +250,16 @@ public class MemberService {
             LOG.error("Error fetching member details from salesforce client", e);
             throw new RuntimeException(e);
         }
+    }
+    
+    public MemberContacts getCurrentMemberContacts() {
+        String salesforceId = userService.getLoggedInUser().getSalesforceId();
+        try {
+			return salesforceClient.getMemberContacts(salesforceId);
+		} catch (IOException e) {
+			LOG.error("Error fetching member contacts from salesforce client", e);
+            throw new RuntimeException(e);
+		}
     }
 
 }
