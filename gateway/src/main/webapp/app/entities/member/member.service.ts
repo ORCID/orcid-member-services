@@ -151,13 +151,13 @@ export class MSMemberService {
 
   protected convertToSalesforceMemberContacts(res: SalesforceContactsResponseType): SFMemberContact[] {
     let contacts: SFMemberContact[] = [];
-    if (res.body && res.body.records) {
+    if (res.body && res.body.records.length > 0) {
       for (const contact of res.body.records) {
         contacts.push(this.convertToSalesforceMemberContact(contact));
       }
       return contacts;
     } else {
-      return contacts;
+      return null;
     }
   }
 
