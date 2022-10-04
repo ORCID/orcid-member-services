@@ -9,6 +9,7 @@ import { Account } from 'app/core/user/account.model';
 import { IMSUser } from 'app/shared/model/user.model';
 import { MSMemberService } from 'app/entities/member/member.service';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
+import { SFMemberContact } from 'app/shared/model/salesforce-member-contact.model copy';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -172,6 +173,14 @@ export class AccountService {
         .then(res => {
           if (res) {
             this.memberData.next(res);
+            this.memberService
+              .getMemberContacts()
+              .toPromise()
+              .then(res => {
+                if (res) {
+                  this.memberData.value.contacts = res;
+                }
+              });
             if (res && res.consortiaLeadId) {
               this.memberService
                 .find(res.consortiaLeadId)
@@ -189,16 +198,6 @@ export class AccountService {
                 .then(r => {
                   if (r && r.body) {
                     this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
-                  }
-                });
-
-              console.log('fetching member contacts');
-              this.memberService
-                .getMemberContacts()
-                .toPromise()
-                .then(res => {
-                  if (res) {
-                    console.log(JSON.stringify(res));
                   }
                 });
             }

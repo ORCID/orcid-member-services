@@ -52,4 +52,22 @@ h5 {
 }
 .green-hr {
   border: 1px solid global.$secondary;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.contact {
+  div,
+  h6,
+  a {
+    width: 10%;
+    text-align: left;
+    flex-grow: 1;
+    max-width: 200px;
+    font-size: 14px;
+  }
+  .voting-contact {
+    text-align: center;
+    flex-grow: 0;
+  }
 }
