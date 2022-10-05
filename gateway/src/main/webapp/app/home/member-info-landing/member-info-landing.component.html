@@ -55,16 +55,37 @@
             <div *ngIf="memberData.publicDisplayDescriptionHtml" [innerHTML]="memberData.publicDisplayDescriptionHtml"></div>
             <div class="main-section-empty-description" *ngIf="!memberData.publicDisplayDescriptionHtml">No organisation description added</div>
         </div>
-    </div>
-    <div *ngIf="isActive() && memberData.isConsortiumLead">
-        <h5 class="mb-4">Consortium Members 
-            <span class="font-weight-normal">({{memberData.consortiumMembers.length}})</span> 
-        </h5>
-        <h6>Member name</h6>
-        <hr class="green-hr">
-        <div *ngFor="let consortiumMember of memberData.consortiumMembers; let i = index">
-            <div>{{ consortiumMember.name }}</div>
-            <hr *ngIf="i + 1 < memberData.consortiumMembers.length">        
+        <div *ngIf="memberData.contacts">
+            <h5 class="mb-4">Contacts</h5>
+            <div class="row ml-0 d-flex justify-content-between contact">
+                <h6>Name</h6>
+                <h6>Roles</h6>
+                <h6>Email</h6>
+                <h6 class="voting-contact">Voting</h6>
+            </div>
+            <hr class="green-hr">
+            <ul class="ml-0 pl-0" *ngFor="let contact of memberData.contacts; let i = index">
+                <li class="row ml-0 d-flex justify-content-between contact">
+                    <div>{{contact.name}}</div>
+                    <div>{{contact.memberOrgRole}}</div>
+                    <a href="mailto:{{ contact.contactEmail }}">{{contact.contactEmail}}</a>
+                    <div class="voting-contact">
+                        <img *ngIf="contact.votingContact" src="./../../../content/images/checkmark.svg" alt="Yes"/>                        
+                    </div>
+                </li>
+                <hr *ngIf="i + 1 < memberData.contacts.length">
+            </ul>
+        </div>
+        <div *ngIf="memberData.isConsortiumLead">
+            <h5 class="mb-4">Consortium Members 
+                <span class="font-weight-normal">({{memberData.consortiumMembers.length}})</span> 
+            </h5>
+            <h6>Member name</h6>
+            <hr class="green-hr">
+            <div *ngFor="let consortiumMember of memberData.consortiumMembers; let i = index">
+                <div>{{ consortiumMember.name }}</div>
+                <hr *ngIf="i + 1 < memberData.consortiumMembers.length">        
+            </div>
         </div>
     </div>
 </div>

@@ -12,21 +12,25 @@ export class HomeComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
   memberDataLoaded = false;
+  fetchingMemberData = false;
 
   constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-    this.accountService.identity().then((account: IMSUser) => {
-      this.account = account;
-      this.getMemberData();
-    });
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
       this.getMemberData();
     });
+    this.accountService.identity().then((account: IMSUser) => {
+      this.account = account;
+      if (!this.fetchingMemberData) {
+        this.getMemberData();
+      }
+    });
   }
 
   getMemberData() {
+    this.fetchingMemberData = true;
     if (this.account === null) {
       this.memberDataLoaded = false;
       this.memberData = null;

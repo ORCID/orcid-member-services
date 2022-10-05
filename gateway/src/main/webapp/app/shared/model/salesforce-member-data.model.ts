@@ -1,3 +1,5 @@
+import { SFMemberContact } from './salesforce-member-contact.model copy';
+
 export interface ISFMemberData {
   id?: string;
   consortiaMember?: boolean;
@@ -15,6 +17,7 @@ export interface ISFMemberData {
   membershipEndDateString?: string;
   consortiumLeadName?: string;
   consortiumMembers?: ISFConsortiumMemberData[];
+  contacts?: SFMemberContact[];
 }
 
 export interface ISFConsortiumMemberData {
@@ -70,7 +73,8 @@ export class SFMemberData implements ISFMemberData {
     public membershipStartDateString?: string,
     public membershipEndDateString?: string,
     public consortiumLeadName?: string,
-    public consortiumMembers?: SFConsortiumMemberData[]
+    public consortiumMembers?: SFConsortiumMemberData[],
+    public contacts?: SFMemberContact[]
   ) {}
 }
 
