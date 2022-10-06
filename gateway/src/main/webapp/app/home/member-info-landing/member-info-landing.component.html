@@ -68,7 +68,9 @@
                 <li class="row ml-0 d-flex justify-content-between contact">
                     <div>{{contact.name}}</div>
                     <div>{{contact.memberOrgRole}}</div>
-                    <a href="mailto:{{ contact.contactEmail }}">{{contact.contactEmail}}</a>
+                    <div>
+                        <a href="mailto:{{ contact.contactEmail }}">{{contact.contactEmail}}</a>
+                    </div>
                     <div class="voting-contact">
                         <img *ngIf="contact.votingContact" src="./../../../content/images/checkmark.svg" alt="Yes"/>                        
                     </div>
