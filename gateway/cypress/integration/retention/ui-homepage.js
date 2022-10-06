@@ -15,6 +15,9 @@ describe('Test homepage', () => {
     cy.get('.side-bar').contains("orcid@orcid.org")
     cy.get('.main-section').contains("Membership: Active")
     cy.get('.main-section').contains('Fly and Mighty')
+    cy.get('.main-section').contains('Contacts')
+    cy.get('.main-section').contains('Main relationship contact (OFFICIAL)')
+    cy.get('.main-section').contains('h.hanger@testingthisemail.com')
   });
 
   it('Consortium lead', function() {
@@ -32,6 +35,9 @@ describe('Test homepage', () => {
     cy.get('.main-section').contains("Consortium Members (1)")
     cy.get('.main-section').contains("Member name")
     cy.get('.main-section').contains("Almonds Forest")
+    cy.get('.main-section').contains('Contacts')
+    cy.get('.main-section').contains('Main relationship contact (OFFICIAL)')
+    cy.get('.main-section').contains('first.last@orcid.org')
   });
 
   it('Consortium member', function() {
@@ -47,6 +53,9 @@ describe('Test homepage', () => {
     cy.get('.main-section').contains("Consortium/Parent organization: Mambo No 5")
     cy.get('.main-section').contains("Membership: Active")
     cy.get('.main-section').contains("Almonds Forest")
+    cy.get('.main-section').contains('Contacts')
+    cy.get('.main-section').contains('Agreement signatory (OFFICIAL)')
+    cy.get('.main-section').contains('last@orcid.org')
   });
 
   it('Consortium member 2', function() {
@@ -62,6 +71,7 @@ describe('Test homepage', () => {
     cy.get('.main-section').contains("Consortium/Parent organization: The Concord of Kinship")
     cy.get('.main-section').contains("Membership: Active")
     cy.get('.main-section').contains("Grateful Frogs")
+    cy.get('.main-section').contains('Contacts').should('not.exist')
   });
 
   it('Consortium member and lead', function() {
@@ -79,6 +89,9 @@ describe('Test homepage', () => {
     cy.get('.main-section').contains("Member name")
     cy.get('.main-section').contains("Yellow member")
     cy.get('.main-section').contains("The Harvest Ascendancy")
+    cy.get('.main-section').contains('Contacts')
+    cy.get('.main-section').contains('Product Contact')
+    cy.get('.main-section').contains('testingagain@orcid.org')
   });
 
   it('Inactive member', function() {
