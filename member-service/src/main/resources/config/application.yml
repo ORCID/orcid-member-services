@@ -194,3 +194,4 @@ application:
     orcidApiClientId: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_ID} 
     orcidApiClientSecret: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET}
     orcidApiTokenEndpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}
+    salesforceRequestTimeout: ${APPLICATION_SALESFORCE_REQUEST_TIMEOUT}

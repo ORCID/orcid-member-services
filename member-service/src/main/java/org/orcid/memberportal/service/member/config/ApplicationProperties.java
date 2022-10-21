@@ -40,6 +40,8 @@ public class ApplicationProperties {
     private String orcidApiClientSecret;
     
     private String orcidApiTokenEndpoint;
+
+    private String salesforceRequestTimeout;
     
     public String getOrcidOrgClientId() {
         return orcidOrgClientId;
@@ -152,5 +154,12 @@ public class ApplicationProperties {
 	public void setOrcidApiTokenEndpoint(String orcidApiTokenEndpoint) {
 		this.orcidApiTokenEndpoint = orcidApiTokenEndpoint;
 	}
-    
+
+    public String getSalesforceRequestTimeout() {
+        return salesforceRequestTimeout;
+    }
+
+    public void setSalesforceRequestTimeout(String salesforceRequestTimeout) {
+        this.salesforceRequestTimeout = salesforceRequestTimeout;
+    }
 }

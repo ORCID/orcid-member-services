@@ -167,10 +167,12 @@ export class AccountService {
 
   async getCurrentMemberData(): Promise<BehaviorSubject<ISFMemberData>> {
     if (this.memberData.value === null && this.userIdentity) {
+      console.log('getCurrentMemberData(): running', new Date().toLocaleString());
       await this.memberService
         .getMember()
         .toPromise()
         .then(res => {
+          console.log('getCurrentMemberData(): done', new Date().toLocaleString());
           if (res) {
             this.memberData.next(res);
             this.memberService

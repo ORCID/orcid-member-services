@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response.Status;
 
@@ -17,7 +18,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jettison.json.JSONException;
@@ -40,6 +42,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
 @Component
+
 public class SalesforceClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(SalesforceClient.class);
@@ -52,7 +55,13 @@ public class SalesforceClient {
     private ApplicationProperties applicationProperties;
     
     public SalesforceClient() {
-        this.httpClient = HttpClients.createDefault();
+    }
+    
+    @PostConstruct
+    private void initializeHttpClient() {
+        Integer timeout = Integer.parseInt(applicationProperties.getSalesforceRequestTimeout());
+        RequestConfig config = RequestConfig.custom().setConnectTimeout(timeout).setConnectionRequestTimeout(timeout).setSocketTimeout(timeout).build();
+        this.httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
     }
     
     public MemberDetails getMemberDetails(String salesforceId) throws IOException {
@@ -74,13 +83,16 @@ public class SalesforceClient {
     }
     
     private MemberDetails getSFMemberDetails(String salesforceId) {
+        LOG.info("*** getSFMemberDetails(): running ***");
         try (CloseableHttpResponse response = getMemberDetailsResponse(salesforceId)) {
             if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                 logError(salesforceId, response);
             } else {
+                LOG.info("*** getSFMemberDetails(): response received ***");
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
                 JsonNode root = objectMapper.readTree(response.getEntity().getContent());
+                LOG.info("*** getSFMemberDetails(): response processed ***");
                 return objectMapper.treeToValue(root.at("/member"), MemberDetails.class);
             }
         } catch (IOException e) {
@@ -144,10 +156,13 @@ public class SalesforceClient {
     }
     
     private CloseableHttpResponse sfGet(String path) throws IOException {
+        LOG.info("*** sfGet(): running ***");
     	String endpoint = applicationProperties.getSalesforceClientEndpoint();
     	HttpGet httpGet = new HttpGet(endpoint + path);
     	httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-        return httpClient.execute(httpGet);
+        CloseableHttpResponse res = httpClient.execute(httpGet);
+        LOG.info("*** sfGet(): execute complete ***");
+        return res;
     }
     
     private <T> T request(Supplier<T> function) {

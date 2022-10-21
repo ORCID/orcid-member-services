@@ -14,7 +14,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 ribbon:
-  ReadTimeout: 15000
+  ReadTimeout: 150000
   ConnectTimeout: 15000
 logging:
   path: logs
