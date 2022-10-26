@@ -13,13 +13,13 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jettison.json.JSONException;
@@ -28,6 +28,7 @@ import org.orcid.memberportal.service.member.client.model.ConsortiumLeadDetails;
 import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
+import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 import org.orcid.memberportal.service.member.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
@@ -42,46 +43,51 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
 @Component
-
 public class SalesforceClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(SalesforceClient.class);
 
     private CloseableHttpClient httpClient;
-    
+
     private String accessToken;
 
     @Autowired
     private ApplicationProperties applicationProperties;
-    
+
     public SalesforceClient() {
     }
-    
+
     @PostConstruct
     private void initializeHttpClient() {
         Integer timeout = Integer.parseInt(applicationProperties.getSalesforceRequestTimeout());
         RequestConfig config = RequestConfig.custom().setConnectTimeout(timeout).setConnectionRequestTimeout(timeout).setSocketTimeout(timeout).build();
         this.httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
     }
-    
+
     public MemberDetails getMemberDetails(String salesforceId) throws IOException {
-    	return request(() -> {
+        return request(() -> {
             return getSFMemberDetails(salesforceId);
         });
     }
-    
+
     public MemberContacts getMemberContacts(String salesforceId) throws IOException {
-    	return request(() -> {
+        return request(() -> {
             return getSFMemberContacts(salesforceId);
         });
     }
     
+    public MemberOrgIds getMemberOrgIds(String salesforceId) throws IOException {
+        return request(() -> {
+            return getSFMemberOrgIds(salesforceId);
+        });
+    }
+
     public ConsortiumLeadDetails getConsortiumLeadDetails(String salesforceId) throws IOException {
-    	return request(() -> {
+        return request(() -> {
             return getSFConsortiumLeadDetails(salesforceId);
         });
     }
-    
+
     private MemberDetails getSFMemberDetails(String salesforceId) {
         LOG.info("*** getSFMemberDetails(): running ***");
         try (CloseableHttpResponse response = getMemberDetailsResponse(salesforceId)) {
@@ -96,12 +102,12 @@ public class SalesforceClient {
                 return objectMapper.treeToValue(root.at("/member"), MemberDetails.class);
             }
         } catch (IOException e) {
-        	LOG.error("Error getting member details from salesforce", e);
-        	throw new RuntimeException(e);
+            LOG.error("Error getting member details from salesforce", e);
+            throw new RuntimeException(e);
         }
         return null;
     }
-    
+
     private MemberContacts getSFMemberContacts(String salesforceId) {
         try (CloseableHttpResponse response = getMemberContactsResponse(salesforceId)) {
             if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
@@ -112,12 +118,28 @@ public class SalesforceClient {
                 return objectMapper.readValue(response.getEntity().getContent(), MemberContacts.class);
             }
         } catch (IOException e) {
-        	LOG.error("Error getting member contacts from salesforce", e);
-        	throw new RuntimeException(e);
+            LOG.error("Error getting member contacts from salesforce", e);
+            throw new RuntimeException(e);
         }
         return null;
     }
-    
+
+    private MemberOrgIds getSFMemberOrgIds(String salesforceId) {
+        try (CloseableHttpResponse response = getMemberOrgIdsResponse(salesforceId)) {
+            if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
+                logError(salesforceId, response);
+            } else {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+                return objectMapper.readValue(response.getEntity().getContent(), MemberOrgIds.class);
+            }
+        } catch (IOException e) {
+            LOG.error("Error getting member org ids from salesforce", e);
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
     private ConsortiumLeadDetails getSFConsortiumLeadDetails(String salesforceId) {
         try (CloseableHttpResponse response = getMemberDetailsResponse(salesforceId)) {
             if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
@@ -127,15 +149,16 @@ public class SalesforceClient {
                 objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
                 JsonNode root = objectMapper.readTree(response.getEntity().getContent());
                 ConsortiumLeadDetails consortiumLeadDetails = objectMapper.treeToValue(root.at("/member"), ConsortiumLeadDetails.class);
-                
-                ObjectReader reader = objectMapper.readerFor(new TypeReference<List<ConsortiumMember>>(){});
+
+                ObjectReader reader = objectMapper.readerFor(new TypeReference<List<ConsortiumMember>>() {
+                });
                 List<ConsortiumMember> consortiumMembers = reader.readValue(root.at("/consortiumOpportunities"));
                 consortiumLeadDetails.setConsortiumMembers(consortiumMembers);
                 return consortiumLeadDetails;
             }
         } catch (IOException e) {
-        	LOG.error("Error getting consortium member details from salesforce", e);
-        	throw new RuntimeException(e);
+            LOG.error("Error getting consortium member details from salesforce", e);
+            throw new RuntimeException(e);
         }
         return null;
     }
@@ -146,25 +169,29 @@ public class SalesforceClient {
         LOG.warn("Response received:");
         LOG.warn(responseString);
     }
-    
+
     private CloseableHttpResponse getMemberContactsResponse(String salesforceId) throws IOException {
         return sfGet("member/" + salesforceId + "/contacts");
     }
-    
+
+    private CloseableHttpResponse getMemberOrgIdsResponse(String salesforceId) throws IOException {
+        return sfGet("member/" + salesforceId + "/org-ids");
+    }
+
     private CloseableHttpResponse getMemberDetailsResponse(String salesforceId) throws IOException {
         return sfGet("member/" + salesforceId + "/details");
     }
-    
+
     private CloseableHttpResponse sfGet(String path) throws IOException {
         LOG.info("*** sfGet(): running ***");
-    	String endpoint = applicationProperties.getSalesforceClientEndpoint();
-    	HttpGet httpGet = new HttpGet(endpoint + path);
-    	httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+        String endpoint = applicationProperties.getSalesforceClientEndpoint();
+        HttpGet httpGet = new HttpGet(endpoint + path);
+        httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         CloseableHttpResponse res = httpClient.execute(httpGet);
         LOG.info("*** sfGet(): execute complete ***");
         return res;
     }
-    
+
     private <T> T request(Supplier<T> function) {
         initAccessToken();
         try {
@@ -190,9 +217,9 @@ public class SalesforceClient {
             throw new RuntimeException(e);
         }
     }
-    
+
     private String getAccessToken() throws JSONException, ClientProtocolException, IOException {
-    	LOG.info("Acquiring access token...");
+        LOG.info("Acquiring access token...");
         HttpPost httpPost = new HttpPost(applicationProperties.getOrcidApiTokenEndpoint());
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -217,5 +244,5 @@ public class SalesforceClient {
 
         return json.get("access_token").toString();
     }
-    
+
 }

@@ -19,6 +19,8 @@ import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.member.client.model.MemberContact;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
+import org.orcid.memberportal.service.member.client.model.MemberOrgId;
+import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
@@ -101,6 +103,23 @@ public class MemberResourceTest {
         assertThat(memberContacts.getRecords().get(1).getSalesforceId()).isEqualTo("salesforce-id");
         assertThat(memberContacts.getRecords().get(1).isVotingContact()).isEqualTo(true);
     }
+    
+    @Test
+    public void testGetMemberOrgIds() {
+        Mockito.when(memberService.getCurrentMemberOrgIds()).thenReturn(getMemberOrgIds());
+        ResponseEntity<MemberOrgIds> entity = memberResource.getMemberOrgIds();
+        assertEquals(200, entity.getStatusCodeValue());
+
+        MemberOrgIds memberOrgIds = memberService.getCurrentMemberOrgIds();
+        assertThat(memberOrgIds).isNotNull();
+        assertThat(memberOrgIds.getTotalSize()).isEqualTo(2);
+        assertThat(memberOrgIds.getRecords()).isNotNull();
+        assertThat(memberOrgIds.getRecords().size()).isEqualTo(2);
+        assertThat(memberOrgIds.getRecords().get(0).getType()).isEqualTo("Ringgold ID");
+        assertThat(memberOrgIds.getRecords().get(0).getValue()).isEqualTo("9988776655");
+        assertThat(memberOrgIds.getRecords().get(1).getType()).isEqualTo("GRID");
+        assertThat(memberOrgIds.getRecords().get(1).getValue()).isEqualTo("grid.238252");
+    }
 
     @Test
     public void testGetAllMembers() {
@@ -177,6 +196,22 @@ public class MemberResourceTest {
         memberContacts.setRecords(Arrays.asList(contact1, contact2));
 
         return memberContacts;
+    }
+    
+    private MemberOrgIds getMemberOrgIds() {
+        MemberOrgId orgId1 = new MemberOrgId();
+        orgId1.setType("Ringgold ID");
+        orgId1.setValue("9988776655");
+
+        MemberOrgId orgId2 = new MemberOrgId();
+        orgId2.setType("GRID");
+        orgId2.setValue("grid.238252");
+        
+        MemberOrgIds memberOrgIds = new MemberOrgIds();
+        memberOrgIds.setTotalSize(2);
+        memberOrgIds.setRecords(Arrays.asList(orgId1, orgId2));
+        
+        return memberOrgIds;
     }
 
 }

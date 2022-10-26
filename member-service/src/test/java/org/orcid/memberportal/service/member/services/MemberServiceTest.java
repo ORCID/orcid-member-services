@@ -27,6 +27,8 @@ import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
 import org.orcid.memberportal.service.member.client.model.MemberContact;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
+import org.orcid.memberportal.service.member.client.model.MemberOrgId;
+import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
 import org.orcid.memberportal.service.member.security.EncryptUtil;
@@ -288,6 +290,23 @@ class MemberServiceTest {
         assertThat(memberContacts.getRecords().get(1).getSalesforceId()).isEqualTo("salesforce-id");
         assertThat(memberContacts.getRecords().get(1).isVotingContact()).isEqualTo(true);
     }
+    
+    @Test
+    void testGetCurrentMemberOrgIds() throws IOException {
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(salesforceClient.getMemberOrgIds(Mockito.eq("salesforceId"))).thenReturn(getMemberOrgIds());
+
+        MemberOrgIds memberOrgIds = memberService.getCurrentMemberOrgIds();
+        assertThat(memberOrgIds).isNotNull();
+        assertThat(memberOrgIds.getTotalSize()).isEqualTo(2);
+        assertThat(memberOrgIds.getRecords()).isNotNull();
+        assertThat(memberOrgIds.getRecords().size()).isEqualTo(2);
+        assertThat(memberOrgIds.getRecords().get(0).getType()).isEqualTo("Ringgold ID");
+        assertThat(memberOrgIds.getRecords().get(0).getValue()).isEqualTo("9988776655");
+        assertThat(memberOrgIds.getRecords().get(1).getType()).isEqualTo("GRID");
+        assertThat(memberOrgIds.getRecords().get(1).getValue()).isEqualTo("grid.238252");
+    }
 
     @Test
     void testGetCurrentMemberDetails_consortiumLead() throws IOException {
@@ -315,6 +334,22 @@ class MemberServiceTest {
         assertThat(consortiumLeadDetails.getConsortiumMembers().get(0).getMetadata().getName()).isEqualTo("member 1");
         assertThat(consortiumLeadDetails.getConsortiumMembers().get(1).getSalesforceId()).isEqualTo("member2");
         assertThat(consortiumLeadDetails.getConsortiumMembers().get(1).getMetadata().getName()).isEqualTo("member 2");
+    }
+    
+    private MemberOrgIds getMemberOrgIds() {
+        MemberOrgId orgId1 = new MemberOrgId();
+        orgId1.setType("Ringgold ID");
+        orgId1.setValue("9988776655");
+
+        MemberOrgId orgId2 = new MemberOrgId();
+        orgId2.setType("GRID");
+        orgId2.setValue("grid.238252");
+        
+        MemberOrgIds memberOrgIds = new MemberOrgIds();
+        memberOrgIds.setTotalSize(2);
+        memberOrgIds.setRecords(Arrays.asList(orgId1, orgId2));
+        
+        return memberOrgIds;
     }
 
     private MemberContacts getMemberContacts() {
