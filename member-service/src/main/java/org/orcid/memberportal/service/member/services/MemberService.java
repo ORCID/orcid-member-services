@@ -238,13 +238,22 @@ public class MemberService {
     }
 
     public MemberDetails getCurrentMemberDetails() {
+        LOG.info("Finding current member details...");
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
+        
+        LOG.info("Current member sf id: {}", salesforceId);
         Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
+
+        
+        LOG.info("Fpund member {}", member.getClientName());
+        LOG.info("Member is consortium lead: {}", member.getIsConsortiumLead());
 
         try {
             if (Boolean.TRUE.equals(member.getIsConsortiumLead())) {
+                LOG.info("getting consortium lead details for sfid {}", salesforceId);
                 return salesforceClient.getConsortiumLeadDetails(salesforceId);
             } else {
+                LOG.info("getting member details for sfid {}", salesforceId);
                 return salesforceClient.getMemberDetails(salesforceId);
             }
         } catch (IOException e) {
