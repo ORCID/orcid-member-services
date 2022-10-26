@@ -54,7 +54,7 @@ public class MemberService {
 
     @Autowired
     private EncryptUtil encryptUtil;
-    
+
     @Autowired
     private SalesforceClient salesforceClient;
 
@@ -239,7 +239,7 @@ public class MemberService {
     public MemberDetails getCurrentMemberDetails() {
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
         Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
-        
+
         try {
             if (Boolean.TRUE.equals(member.getIsConsortiumLead())) {
                 return salesforceClient.getConsortiumLeadDetails(salesforceId);
@@ -251,15 +251,15 @@ public class MemberService {
             throw new RuntimeException(e);
         }
     }
-    
+
     public MemberContacts getCurrentMemberContacts() {
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
         try {
-			return salesforceClient.getMemberContacts(salesforceId);
-		} catch (IOException e) {
-			LOG.error("Error fetching member contacts from salesforce client", e);
+            return salesforceClient.getMemberContacts(salesforceId);
+        } catch (IOException e) {
+            LOG.error("Error fetching member contacts from salesforce client", e);
             throw new RuntimeException(e);
-		}
+        }
     }
 
 }
