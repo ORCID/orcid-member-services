@@ -244,8 +244,7 @@ public class MemberService {
         LOG.info("Current member sf id: {}", salesforceId);
         Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
 
-        
-        LOG.info("Fpund member {}", member.getClientName());
+        LOG.info("Found member {}", member.getClientName());
         LOG.info("Member is consortium lead: {}", member.getIsConsortiumLead());
 
         try {

@@ -25,8 +25,10 @@ public class UserService {
     // add cache to this
     public MemberServiceUser getLoggedInUser() {
         String login = SecurityUtils.getCurrentUserLogin().get();
+        LOG.info("Logged in user is {}", login);
         ResponseEntity<MemberServiceUser> userResponse = userServiceClient.getUser(login);
         if (userResponse.getStatusCode().is2xxSuccessful()) {
+            LOG.info("User account for {} is {}", login, userResponse.getBody().getEmail() + " / " + userResponse.getBody().getSalesforceId());
             return userResponse.getBody();
         }
         LOG.error("No user found in user service for logged in user {}", login);
