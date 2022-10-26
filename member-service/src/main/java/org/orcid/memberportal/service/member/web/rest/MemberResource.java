@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
+import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.upload.MemberUpload;
@@ -180,7 +181,7 @@ public class MemberResource {
     }
     
     /**
-     * {@code GET  /member-details} : get contacts of member to which current user belongs
+     * {@code GET  /member-contacts} : get contacts of member to which current user belongs
      *
      *
      * @return the {@link MemberDetails} 
@@ -190,6 +191,19 @@ public class MemberResource {
         LOG.debug("REST request to get member contacts");
         MemberContacts memberContacts = memberService.getCurrentMemberContacts();
         return ResponseEntity.ok(memberContacts);
+    }
+    
+    /**
+     * {@code GET  /member-org-ids} : get org ids of member to which current user belongs
+     *
+     *
+     * @return the {@link MemberDetails} 
+     */
+    @GetMapping("/member-org-ids")
+    public ResponseEntity<MemberOrgIds> getMemberOrgIds() {
+        LOG.debug("REST request to get member org ids");
+        MemberOrgIds memberOrgIds = memberService.getCurrentMemberOrgIds();
+        return ResponseEntity.ok(memberOrgIds);
     }
     
     /**

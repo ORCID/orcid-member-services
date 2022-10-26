@@ -4,13 +4,13 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MemberContacts {
+public class MemberOrgIds {
 
     @JsonProperty("totalSize")
     private int totalSize;
 
     @JsonProperty("records")
-    private List<MemberContact> records;
+    private List<MemberOrgId> records;
 
     public int getTotalSize() {
         return totalSize;
@@ -20,11 +20,11 @@ public class MemberContacts {
         this.totalSize = totalSize;
     }
 
-    public List<MemberContact> getRecords() {
+    public List<MemberOrgId> getRecords() {
         return records;
     }
 
-    public void setRecords(List<MemberContact> records) {
+    public void setRecords(List<MemberOrgId> records) {
         this.records = records;
     }
 
