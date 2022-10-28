@@ -183,6 +183,14 @@ export class AccountService {
                   this.memberData.value.contacts = res;
                 }
               });
+            this.memberService
+              .getMemberOrgIds()
+              .toPromise()
+              .then(res => {
+                if (res) {
+                  this.memberData.value.orgIds = res;
+                }
+              });
             if (res && res.consortiaLeadId) {
               this.memberService
                 .find(res.consortiaLeadId)

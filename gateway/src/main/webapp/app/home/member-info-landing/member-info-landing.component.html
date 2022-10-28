@@ -1,93 +1,124 @@
 <div class="side-bar">
-    <div class="logo-container">
-        <img src="{{ memberData.logoUrl }}" onerror="this.src='../content/images/member-logo-placeholder.svg'" alt="Member logo"/>
+  <div class="logo-container">
+    <img src="{{ memberData.logoUrl }}" onerror="this.src='../content/images/member-logo-placeholder.svg'" alt="Member logo" />
+  </div>
+  <div *ngIf="isActive()">
+    <h5>Public details</h5>
+    <hr />
+    <div class="mb-3 side-bar-subsection">
+      <h6>Website</h6>
+      <div *ngIf="memberData.website">
+        <a href="{{ memberData.website }}">{{ memberData.website }}</a>
+      </div>
+      <div *ngIf="!memberData.website" class="empty">No website added</div>
     </div>
-    <div *ngIf="isActive()">
-        <h5>Public details</h5>
-        <hr>
-        <div class="mb-3 side-bar-subsection">
-            <h6>Website</h6>
-            <div *ngIf="memberData.website"><a href="{{ memberData.website }}">{{ memberData.website }}</a></div>
-            <div *ngIf="!memberData.website">No website added</div>
-        </div>
-        <div class="mb-3 side-bar-subsection">
-            <h6>Email</h6>
-            <div *ngIf="memberData.publicDisplayEmail"><a href="mailto:{{ memberData.publicDisplayEmail }}">{{ memberData.publicDisplayEmail }}</a></div>
-            <div *ngIf="!memberData.publicDisplayEmail">No email added</div>
-        </div>
+    <div class="mb-3 side-bar-subsection">
+      <h6>Email</h6>
+      <div *ngIf="memberData.publicDisplayEmail">
+        <a href="mailto:{{ memberData.publicDisplayEmail }}">{{ memberData.publicDisplayEmail }}</a>
+      </div>
+      <div *ngIf="!memberData.publicDisplayEmail" class="empty">No email added</div>
     </div>
+    <h5>Identifiers</h5>
+    <hr />
+    <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['ROR'].length > 0">
+      <h6>ROR</h6>
+      <div *ngFor="let id of memberData.orgIds['ROR']">
+        <a href="{{ id }}">{{ id }}</a>
+      </div>
+    </div>
+    <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['GRID'].length > 0">
+      <h6>GRID</h6>
+      <div *ngFor="let id of memberData.orgIds['GRID']">
+        {{ id }}
+      </div>
+    </div>
+    <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['Ringgold'].length > 0">
+      <h6>Ringgold ID</h6>
+      <div *ngFor="let id of memberData.orgIds['Ringgold']">
+        {{ id }}
+      </div>
+    </div>
+    <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['Fundref'].length > 0">
+      <h6>Crossref Funder ID</h6>
+      <div *ngFor="let id of memberData.orgIds['Fundref']">
+        <a href="{{ id }}">{{ id }}</a>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="main-section">
-    <div *ngIf="!memberData.isConsortiumLead">
-        <div *ngIf="memberData.consortiumLeadName">
-            <div class="row d-flex ml-0">
-                <div class="font-weight-bold mr-1">Consortium/Parent organization:</div>
-                <div>
-                    {{memberData.consortiumLeadName}}
-                </div>
-            </div>
-            <hr>
+  <div *ngIf="!memberData.isConsortiumLead">
+    <div *ngIf="memberData.consortiumLeadName">
+      <div class="row d-flex ml-0">
+        <div class="font-weight-bold mr-1">Consortium/Parent organization:</div>
+        <div>
+          {{ memberData.consortiumLeadName }}
         </div>
-        <div class="row d-flex ml-0">
-            <div class="font-weight-bold mr-1">Membership:</div>
-            <div *ngIf="isActive()" style="color:#7FAA26;">
-                Active
-            </div>
-            <div *ngIf="!isActive()" style="color:#D32F2F;">
-                Inactive
-            </div>
-        </div>
+      </div>
+      <hr />
+    </div>
+    <div class="row d-flex ml-0">
+      <div class="font-weight-bold mr-1">Membership:</div>
+      <div *ngIf="isActive()" style="color:#7FAA26;">
+        Active
+      </div>
+      <div *ngIf="!isActive()" style="color:#D32F2F;">
+        Inactive
+      </div>
+    </div>
+  </div>
+  <div *ngIf="memberData.isConsortiumLead">
+    <div class="row d-flex ml-0">
+      <div class="font-weight-bold mr-1">Consortium lead</div>
+    </div>
+    <hr />
+  </div>
+  <div class="row ml-0 mb-4 mt-4">
+    <h2 class="mb-0">{{ memberData.publicDisplayName }}</h2>
+  </div>
+  <div *ngIf="!isActive()">
+    Your ORCID membership is currently inactive. Please contact your consortium lead or ORCID to reinstate your membership.
+  </div>
+  <div *ngIf="isActive()">
+    <div class="row ml-0">
+      <div *ngIf="memberData.publicDisplayDescriptionHtml" [innerHTML]="memberData.publicDisplayDescriptionHtml"></div>
+      <div class="main-section-empty-description" *ngIf="!memberData.publicDisplayDescriptionHtml">No organisation description added</div>
+    </div>
+    <div *ngIf="memberData.contacts">
+      <h5 class="mb-4">Contacts</h5>
+      <div class="row ml-0 d-flex justify-content-between contact">
+        <h6>Name</h6>
+        <h6>Roles</h6>
+        <h6>Email</h6>
+        <h6 class="voting-contact">Voting</h6>
+      </div>
+      <hr class="green-hr" />
+      <ul class="ml-0 pl-0" *ngFor="let contact of memberData.contacts; let i = index">
+        <li class="row ml-0 d-flex justify-content-between contact">
+          <div>{{ contact.name }}</div>
+          <div>{{ contact.memberOrgRole }}</div>
+          <div>
+            <a href="mailto:{{ contact.contactEmail }}">{{ contact.contactEmail }}</a>
+          </div>
+          <div class="voting-contact">
+            <img *ngIf="contact.votingContact" src="./../../../content/images/checkmark.svg" alt="Yes" />
+          </div>
+        </li>
+        <hr *ngIf="i + 1 < memberData.contacts.length" />
+      </ul>
     </div>
     <div *ngIf="memberData.isConsortiumLead">
-        <div class="row d-flex ml-0">
-            <div class="font-weight-bold mr-1">Consortium lead</div>
-        </div>
-        <hr>
+      <h5 class="mb-4">
+        Consortium Members
+        <span class="font-weight-normal">({{ memberData.consortiumMembers.length }})</span>
+      </h5>
+      <h6>Member name</h6>
+      <hr class="green-hr" />
+      <div *ngFor="let consortiumMember of memberData.consortiumMembers; let i = index">
+        <div>{{ consortiumMember.name }}</div>
+        <hr *ngIf="i + 1 < memberData.consortiumMembers.length" />
+      </div>
     </div>
-    <div class="row ml-0 mb-4 mt-4">
-        <h2 class="mb-0">{{ memberData.publicDisplayName }}</h2>
-    </div>
-    <div *ngIf="!isActive()">
-        Your ORCID membership is currently inactive. Please contact your consortium lead or ORCID to reinstate your membership.
-    </div>
-    <div *ngIf="isActive()">
-        <div class="row ml-0">
-            <div *ngIf="memberData.publicDisplayDescriptionHtml" [innerHTML]="memberData.publicDisplayDescriptionHtml"></div>
-            <div class="main-section-empty-description" *ngIf="!memberData.publicDisplayDescriptionHtml">No organisation description added</div>
-        </div>
-        <div *ngIf="memberData.contacts">
-            <h5 class="mb-4">Contacts</h5>
-            <div class="row ml-0 d-flex justify-content-between contact">
-                <h6>Name</h6>
-                <h6>Roles</h6>
-                <h6>Email</h6>
-                <h6 class="voting-contact">Voting</h6>
-            </div>
-            <hr class="green-hr">
-            <ul class="ml-0 pl-0" *ngFor="let contact of memberData.contacts; let i = index">
-                <li class="row ml-0 d-flex justify-content-between contact">
-                    <div>{{contact.name}}</div>
-                    <div>{{contact.memberOrgRole}}</div>
-                    <div>
-                        <a href="mailto:{{ contact.contactEmail }}">{{contact.contactEmail}}</a>
-                    </div>
-                    <div class="voting-contact">
-                        <img *ngIf="contact.votingContact" src="./../../../content/images/checkmark.svg" alt="Yes"/>                        
-                    </div>
-                </li>
-                <hr *ngIf="i + 1 < memberData.contacts.length">
-            </ul>
-        </div>
-        <div *ngIf="memberData.isConsortiumLead">
-            <h5 class="mb-4">Consortium Members 
-                <span class="font-weight-normal">({{memberData.consortiumMembers.length}})</span> 
-            </h5>
-            <h6>Member name</h6>
-            <hr class="green-hr">
-            <div *ngFor="let consortiumMember of memberData.consortiumMembers; let i = index">
-                <div>{{ consortiumMember.name }}</div>
-                <hr *ngIf="i + 1 < memberData.consortiumMembers.length">        
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
