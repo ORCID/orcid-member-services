@@ -12,4 +12,8 @@ export class MemberInfoLandingComponent {
   isActive() {
     return this.memberData && new Date(this.memberData.membershipEndDateString) > new Date();
   }
+
+  filterCRFID(id) {
+    return id.replace(/^.*dx.doi.org\//g, '');
+  }
 }

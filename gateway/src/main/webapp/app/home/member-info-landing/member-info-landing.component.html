@@ -42,7 +42,7 @@
     <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['Fundref'].length > 0">
       <h6>Crossref Funder ID</h6>
       <div *ngFor="let id of memberData.orgIds['Fundref']">
-        <a href="{{ id }}">{{ id }}</a>
+        <a href="{{ id }}">{{ filterCRFID(id) }}</a>
       </div>
     </div>
   </div>
