@@ -16,11 +16,13 @@ import {
   SFConsortiumMemberData
 } from 'app/shared/model/salesforce-member-data.model';
 import { ISFRawMemberContact, ISFRawMemberContacts, SFMemberContact } from 'app/shared/model/salesforce-member-contact.model copy';
+import { ISFRawMemberOrgIds, SFMemberOrgId } from 'app/shared/model/salesforce-member-org-id.model copy';
 
 type EntityResponseType = HttpResponse<IMSMember>;
 type EntityArrayResponseType = HttpResponse<IMSMember[]>;
 type SalesforceDataResponseType = HttpResponse<ISFRawMemberData>;
 type SalesforceContactsResponseType = HttpResponse<ISFRawMemberContacts>;
+type SalesforceOrgIdResponseType = HttpResponse<ISFRawMemberOrgIds>;
 
 @Injectable({ providedIn: 'root' })
 export class MSMemberService {
@@ -86,9 +88,18 @@ export class MSMemberService {
     );
   }
 
-  getMemberContacts(): Observable<any> {
+  getMemberContacts(): Observable<SFMemberContact[]> {
     return this.http.get<ISFRawMemberContacts>(`${this.resourceUrl}/member-contacts`, { observe: 'response' }).pipe(
       map((res: SalesforceContactsResponseType) => this.convertToSalesforceMemberContacts(res)),
+      catchError(err => {
+        return of(err);
+      })
+    );
+  }
+
+  getMemberOrgIds(): Observable<SFMemberOrgId> {
+    return this.http.get<ISFRawMemberOrgIds>(`${this.resourceUrl}/member-org-ids`, { observe: 'response' }).pipe(
+      map((res: SalesforceOrgIdResponseType) => this.convertToMemberOrgIds(res)),
       catchError(err => {
         return of(err);
       })
@@ -150,7 +161,7 @@ export class MSMemberService {
   }
 
   protected convertToSalesforceMemberContacts(res: SalesforceContactsResponseType): SFMemberContact[] {
-    let contacts: SFMemberContact[] = [];
+    const contacts: SFMemberContact[] = [];
     if (res.body && res.body.records.length > 0) {
       for (const contact of res.body.records) {
         contacts.push(this.convertToSalesforceMemberContact(contact));
@@ -170,6 +181,39 @@ export class MSMemberService {
       memberOrgRole: res.Member_Org_Role__c,
       contactEmail: res.Contact_Curr_Email__c
     };
+  }
+
+  protected convertToMemberOrgIds(res: SalesforceOrgIdResponseType): SFMemberOrgId {
+    if (res.body && res.body.records.length > 0) {
+      const ids = res.body.records;
+      const ROR = [],
+        GRID = [],
+        Ringgold = [],
+        Fundref = [];
+      for (var i = 0; i < ids.length; i++) {
+        if (ids[i].Identifier_Type__c === 'ROR') {
+          ROR.push(ids[i].Name);
+        }
+        if (ids[i].Identifier_Type__c === 'GRID') {
+          GRID.push(ids[i].Name);
+        }
+        if (ids[i].Identifier_Type__c === 'Ringgold ID') {
+          Ringgold.push(ids[i].Name);
+        }
+        if (ids[i].Identifier_Type__c === 'FundRef ID') {
+          Fundref.push(ids[i].Name);
+        }
+      }
+      return {
+        ...new SFMemberOrgId(),
+        ROR,
+        GRID,
+        Ringgold,
+        Fundref
+      };
+    } else {
+      return null;
+    }
   }
 
   protected convertToConsortiumMembers(consortiumOpportunities: ISFRawConsortiumMemberData[]): SFConsortiumMemberData[] {

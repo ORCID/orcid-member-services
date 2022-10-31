@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'app/core';
 import { IMSUser } from 'app/shared/model/user.model';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'jhi-home',
@@ -9,6 +10,7 @@ import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  subject: BehaviorSubject<ISFMemberData>;
   account: IMSUser;
   memberData: ISFMemberData;
   memberDataLoaded = false;

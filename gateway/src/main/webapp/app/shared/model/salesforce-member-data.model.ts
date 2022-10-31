@@ -1,4 +1,5 @@
 import { SFMemberContact } from './salesforce-member-contact.model copy';
+import { SFMemberOrgId } from './salesforce-member-org-id.model copy';
 
 export interface ISFMemberData {
   id?: string;
@@ -18,6 +19,7 @@ export interface ISFMemberData {
   consortiumLeadName?: string;
   consortiumMembers?: ISFConsortiumMemberData[];
   contacts?: SFMemberContact[];
+  orgIds?: SFMemberOrgId;
 }
 
 export interface ISFConsortiumMemberData {
@@ -74,7 +76,8 @@ export class SFMemberData implements ISFMemberData {
     public membershipEndDateString?: string,
     public consortiumLeadName?: string,
     public consortiumMembers?: SFConsortiumMemberData[],
-    public contacts?: SFMemberContact[]
+    public contacts?: SFMemberContact[],
+    public orgIds?: SFMemberOrgId
   ) {}
 }
 
