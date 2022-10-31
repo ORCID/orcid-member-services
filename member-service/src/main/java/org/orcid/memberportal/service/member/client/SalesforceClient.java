@@ -19,7 +19,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jettison.json.JSONException;
@@ -60,8 +61,10 @@ public class SalesforceClient {
     @PostConstruct
     private void initializeHttpClient() {
         Integer timeout = Integer.parseInt(applicationProperties.getSalesforceRequestTimeout());
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+        connectionManager.setValidateAfterInactivity(10000);
         RequestConfig config = RequestConfig.custom().setConnectTimeout(timeout).setConnectionRequestTimeout(timeout).setSocketTimeout(timeout).build();
-        this.httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
+        this.httpClient = HttpClients.custom().setDefaultRequestConfig(config).setConnectionManager(connectionManager).build();
     }
 
     public MemberDetails getMemberDetails(String salesforceId) throws IOException {
