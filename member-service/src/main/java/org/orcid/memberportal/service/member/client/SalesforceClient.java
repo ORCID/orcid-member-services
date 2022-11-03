@@ -54,21 +54,6 @@ public class SalesforceClient {
     @Autowired
     private ApplicationProperties applicationProperties;
 
-<<<<<<< Updated upstream
-    public SalesforceClient() {
-    }
-
-    @PostConstruct
-    private void initializeHttpClient() {
-        Integer timeout = Integer.parseInt(applicationProperties.getSalesforceRequestTimeout());
-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setValidateAfterInactivity(10000);
-        RequestConfig config = RequestConfig.custom().setConnectTimeout(timeout).setConnectionRequestTimeout(timeout).setSocketTimeout(timeout).build();
-        this.httpClient = HttpClients.custom().setDefaultRequestConfig(config).setConnectionManager(connectionManager).build();
-    }
-
-=======
->>>>>>> Stashed changes
     public MemberDetails getMemberDetails(String salesforceId) throws IOException {
         return request(() -> {
             return getSFMemberDetails(salesforceId);
