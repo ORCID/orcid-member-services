@@ -29,7 +29,7 @@ services:
       - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
       - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
       - SPRING_DATA_MONGODB_DATABASE=userservice
-      - JHIPSTER_SLEEP=30 # wait for jhipster-registry to start
+      - JHIPSTER_SLEEP=60 # wait for jhipster-registry to start
       - JHIPSTER_REGISTRY_PASSWORD=admin
       - APPLICATION_MAIL_DOMAIN=${MAIL_DOMAIN}
       - APPLICATION_MAIL_API_KEY=${MAIL_API_KEY}
@@ -60,7 +60,7 @@ services:
       - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
       - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
       - SPRING_DATA_MONGODB_DATABASE=assertionservice
-      - JHIPSTER_SLEEP=60 # wait for jhipster-registry and user service to start
+      - JHIPSTER_SLEEP=90 # wait for jhipster-registry and user service to start
       - JHIPSTER_REGISTRY_PASSWORD=admin
       - 'APPLICATION_ORCIDAPIENDPOINT=${ORCID_API_ENDPOINT}'
       - 'APPLICATION_JWT_SIGNATURE_URL=${JWT_SIGNATURE_URL}'
@@ -101,7 +101,7 @@ services:
       - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
       - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
       - SPRING_DATA_MONGODB_DATABASE=memberservice
-      - JHIPSTER_SLEEP=90 # wait for jhipster-registry, user service, and assertion service to start
+      - JHIPSTER_SLEEP=90 # wait for jhipster-registry and user service to start
       - JHIPSTER_REGISTRY_PASSWORD=admin
       - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
       - 'APPLICATION_ORCIDORGCLIENTID=${ORCID_ORG_CLIENTID}'
@@ -122,7 +122,7 @@ services:
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     depends_on:
-      - "assertionservice-app"
+      - "userservice-app"
 
   gateway-app:
     restart: unless-stopped
@@ -135,7 +135,7 @@ services:
       - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
       - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
       - SPRING_DATA_MONGODB_DATABASE=gateway
-      - JHIPSTER_SLEEP=120 # wait for jhipster-registry, user service, assertion service, and member-service to start
+      - JHIPSTER_SLEEP=90 # wait for jhipster-registry and user service to start
       - JHIPSTER_REGISTRY_PASSWORD=admin
       - BASE_URL=${BASE_URL}
       - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
@@ -145,7 +145,7 @@ services:
     ports:
       - '8080:8080'
     depends_on:
-      - "memberservice-app"
+      - "userservice-app"
 
   r7insight_docker:
     restart: unless-stopped

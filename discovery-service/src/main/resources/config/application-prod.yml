@@ -72,9 +72,6 @@ server:
 eureka:
   instance:
     prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: http://admin:${spring.security.user.password}@localhost:8761/eureka/
 
 # ===================================================================
 # JHipster specific properties

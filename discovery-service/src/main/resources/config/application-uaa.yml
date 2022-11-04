@@ -10,7 +10,3 @@ spring:
             client-id: internal
             client-secret: internal
             authorization-grant-type: client_credentials
-
-eureka:
-  client:
-    fetch-registry: true
