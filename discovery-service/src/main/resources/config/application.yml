@@ -144,6 +144,8 @@ eureka:
   client:
     fetch-registry: false
     register-with-eureka: false
+    service-url:
+      defaultZone: http://admin:${spring.security.user.password:admin}@localhost:${server.port}/eureka/
   server:
     # see discussion about enable-self-preservation:
     # https://github.com/jhipster/generator-jhipster/issues/3654
