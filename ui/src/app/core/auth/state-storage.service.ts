@@ -1,5 +1,17 @@
 import { Injectable } from '@angular/core';
+import { Data, Params } from '@angular/router';
 import { SessionStorageService } from 'ngx-webstorage';
+
+type destinationStateParams = {
+  destination: {
+    name: string,
+    data: Data
+  },
+  params: Params,
+  from: {
+    name: string
+  }
+}
 
 @Injectable({ providedIn: 'root' })
 export class StateStorageService {
@@ -13,7 +25,7 @@ export class StateStorageService {
     this.$sessionStorage.clear('previousState');
   }
 
-  storePreviousState(previousStateName, previousStateParams) {
+  storePreviousState(previousStateName: string, previousStateParams: string) {
     const previousState = { name: previousStateName, params: previousStateParams };
     this.$sessionStorage.store('previousState', previousState);
   }
@@ -22,7 +34,7 @@ export class StateStorageService {
     return this.$sessionStorage.retrieve('destinationState');
   }
 
-  storeUrl(url: string) {
+  storeUrl(url: string | null) {
     this.$sessionStorage.store('previousUrl', url);
   }
 
@@ -30,17 +42,7 @@ export class StateStorageService {
     return this.$sessionStorage.retrieve('previousUrl');
   }
 
-  storeDestinationState(destinationState, destinationStateParams, fromState) {
-    const destinationInfo = {
-      destination: {
-        name: destinationState.name,
-        data: destinationState.data
-      },
-      params: destinationStateParams,
-      from: {
-        name: fromState.name
-      }
-    };
+  storeDestinationState (destinationInfo: destinationStateParams)  {
     this.$sessionStorage.store('destinationState', destinationInfo);
   }
 }

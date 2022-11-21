@@ -2,17 +2,16 @@ import { AfterViewInit, Component, ElementRef, OnInit, Renderer2 } from '@angula
 import { FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
-import { JhiEventManager } from 'ng-jhipster';
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/core/login/login.service';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './login.component.html'
+  templateUrl: './home.component.html'
 })
 export class HomeComponent implements AfterViewInit, OnInit {
-  authenticationError: boolean;
+  authenticationError!: boolean;
   isModal = false;
   showMfa = false;
   mfaSent = false;
@@ -26,10 +25,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
   });
 
   constructor(
-    private eventManager: JhiEventManager,
     private loginService: LoginService,
     private stateStorageService: StateStorageService,
-    private elementRef: ElementRef,
     private renderer: Renderer2,
     private router: Router,
     private accountService: AccountService,
@@ -38,7 +35,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
   ) {}
 
   ngAfterViewInit() {
-    setTimeout(() => this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#username'), 'focus', []), 0);
+    this.renderer.selectRootElement('#username').focus();
   }
 
   cancel() {
@@ -55,7 +52,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   login() {
     this.mfaError = false;
-    const mfaCode = this.loginForm.get('mfaCode').value;
+    const mfaCode = this.loginForm.get('mfaCode')!.value;
 
     if (this.showMfa && !mfaCode) {
       this.mfaError = true;
@@ -66,10 +63,10 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
       this.loginService
         .login({
-          username: this.loginForm.get('username').value,
-          password: this.loginForm.get('password').value,
-          rememberMe: this.loginForm.get('rememberMe').value,
-          mfaCode: this.loginForm.get('mfaCode').value
+          username: this.loginForm.get('username')!.value,
+          password: this.loginForm.get('password')!.value,
+          rememberMe: this.loginForm.get('rememberMe')!.value,
+          mfaCode: this.loginForm.get('mfaCode')!.value
         })
         .subscribe(
           data => {
@@ -99,11 +96,11 @@ export class HomeComponent implements AfterViewInit, OnInit {
     if (this.router.url === '/register' || /^\/activate\//.test(this.router.url) || /^\/reset\//.test(this.router.url)) {
       this.router.navigate(['']);
     }
-
-    this.eventManager.broadcast({
+    // TO-DO: RESTORE EVENT MANAGER
+    /*this.eventManager.broadcast({
       name: 'authenticationSuccess',
       content: 'Sending Authentication Success'
-    });
+    });*/
 
     // previousState was set in the authExpiredInterceptor before being redirected to login modal.
     // since login is successful, go to stored previousState and clear previousState

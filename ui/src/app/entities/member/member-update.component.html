@@ -1,0 +1,86 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h1 id="jhi-ms-member-heading" class="mt-5" jhiTranslate="gatewayApp.msUserServiceMSMember.home.createOrEditLabel.string">Add or edit member</h1>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="alerts top right" role="alert" *ngIf="validation.errors && validation.errors.length > 0">
+					<ngb-alert class="alert alert-danger alert-dismissible" role="alert" ng-reflect-type="danger" (close)="validation.errors = null">
+					    <ul class="validation-errors">
+				    		<li *ngFor="let error of validation.errors">
+				    			{{ error }}
+				       		</li>
+					    </ul>
+				    </ngb-alert>
+				</div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.salesforceId.string" for="field_salesforceId.string">Salesforce Id</label>
+                    <input type="text" class="form-control" name="salesforceId" id="field_salesforceId"
+                           formControlName="salesforceId" [attr.disabled]="editForm.get('id').value !== undefined ? true : null"/>
+                    <div *ngIf="editForm.get('salesforceId').invalid && (editForm.get('salesforceId').dirty || editForm.get('salesforceId').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('salesforceId').errors.required" jhiTranslate="entity.validation.required.string">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.parentSalesforceId.string" for="field_parentSalesforceId.string">Parent Salesforce Id</label>
+                    <input type="text" class="form-control" name="parentSalesforceId" id="field_parentSalesforceId"
+                           formControlName="parentSalesforceId" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.clientName.string" for="field_clientName.string">Member Name</label>
+                    <input type="text" class="form-control" name="clientName" id="field_clientName"
+                           formControlName="clientName"/>
+                     <div *ngIf="editForm.get('clientName').invalid && (editForm.get('clientName').dirty || editForm.get('clientName').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('clientName').errors.required" jhiTranslate="entity.validation.required.string">
+                        This field is required.
+                        </small>
+                        
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.label.string" for="field_clientId.string">Client ID</label>
+                    <p><em><span jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.note.string">Note: Client ID must have User OBO enabled AND</span> <a href="{{baseUrl}}">{{baseUrl}}</a> <span jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.addedAsRedirect.string">added as a Redirect URI in</span> <a href="{{orcidBaseUrl}}/manage-members.string">{{orcidBaseUrl}}/manage-members</a></em></p>
+                    <input type="text" class="form-control" name="clientId" id="field_clientId"
+                           formControlName="clientId" />
+                    <div *ngIf="editForm.get('clientId').invalid && (editForm.get('clientId').dirty || editForm.get('clientId').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('clientId').errors.required" jhiTranslate="entity.validation.required.string">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="!editForm.validClientId" >
+                        Client Id should be in the format XXXX-XXXX-XXXX-XXXX or APP-XXXXXXXXXXXXXXXX. X can be a digit or an uppercase character."
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.isConsortiumLead.string" for="field_isConsortiumLead.string">Is Consortium Lead</label>
+                    <input type="checkbox" class="form-control" name="isConsortiumLead" id="field_isConsortiumLead"
+                           formControlName="isConsortiumLead"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string" for="field_assertionServiceEnabled.string">Assertion Service Enabled</label>
+                    <input type="checkbox" class="form-control" name="assertionServiceEnabled" id="field_assertionServiceEnabled"
+                           formControlName="assertionServiceEnabled"/>
+                </div>
+            </div>
+            <div *ngIf="isSaving" class="progress progress-striped">
+                <div class="progress-bar indeterminate" role="progressbar"></div>
+            </div>
+            <br>
+            <div class="form-group">
+                <button type="button" id="cancel-save" class="btn btn-outline-primary"  (click)="navigateToMembersList()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save.string">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

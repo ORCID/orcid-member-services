@@ -1,0 +1,71 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="msMember">
+            <h1 class="mt-5" jhiTranslate="gatewayApp.msUserServiceMSMember.detail.title.string">Member details</h1>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <div class="row">
+                <dl class="jh-entity-details">
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.salesforceId.string">Salesforce Id</dt>
+                    <dd class="col-md-9">
+                        {{msMember.salesforceId}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.parentSalesforceId.string">Parent Salesforce Id</dt>
+                    <dd class="col-md-9">
+                        {{msMember.parentSalesforceId}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.clientName.string">Member Name</dt>
+                    <dd class="col-md-9">
+                        {{msMember.clientName}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.label.string">Client ID</dt>
+                    <dd class="col-md-9">
+                        {{msMember.clientId}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.type.string">Type</dt>
+                    <dd class="col-md-9">
+                        {{msMember.type}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.isConsortiumLead.string">Is Consortium Lead</dt>
+                    <dd class="col-md-9">
+                        <span class="sr-only">{{msMember.isConsortiumLead}}</span>
+                        <fa-icon aria-hidden="true" *ngIf="msMember.isConsortiumLead" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                        <fa-icon aria-hidden="true" *ngIf="!msMember.isConsortiumLead" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string">Assertion Service Enabled</dt>
+                    <dd class="col-md-9">
+                        <span class="sr-only">{{msMember.assertionServiceEnabled}}</span>
+                        <fa-icon aria-hidden="true" *ngIf="msMember.assertionServiceEnabled" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                        <fa-icon aria-hidden="true" *ngIf="!msMember.assertionServiceEnabled" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.status.string">Status</dt>
+                    <dd class="col-md-9">
+                        {{msMember.status}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.createdDate.string">Created Date</dt>
+                    <dd class="col-md-9">
+                        {{msMember.createdDate}} <i><span jhiTranslate="global.by.string">by</span> {{msMember.createdBy}}</i>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.msUserServiceMSMember.lastModifiedDate.string">Last Modified Date</dt>
+                    <dd class="col-md-9">
+                        {{msMember.lastModifiedDate}} <i><span jhiTranslate="global.by.string">by</span> {{msMember.lastModifiedBy}}</i>
+                    </dd>
+                </dl>
+            </div>
+            <hr>
+            <div>
+                <button type="submit"
+                        (click)="previousState()"
+                        class="btn btn-outline-primary
+                        ">
+                    <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back.string"> Back</span>
+                </button>
+                <button type="button"
+                        [routerLink]="['/member', msMember.id, 'edit']"
+                        class="btn btn-primary">
+                    <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit.string"> Edit</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

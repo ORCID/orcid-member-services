@@ -1,0 +1,43 @@
+<form name="uploadForm" (ngSubmit)="upload()">
+    <div class="modal-header">
+        <h4 class="modal-title" jhiTranslate="gatewayApp.assertionServiceAssertion.import.title.string">Import users</h4>
+        <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
+    </div>
+    <div class="modal-body">
+    	<div class="alert alert-success" *ngIf="uploaded && success">
+			<div class="row">
+				<div class="col-md-12">
+	            	<span jhiTranslate="gatewayApp.assertionServiceAssertion.import.successMessage.string">Your CSV has been uploaded for processing. We will let you know via email once the file has been processed.</span>
+	            </div>
+	        </div>
+		</div>
+        <jhi-alert-error></jhi-alert-error>
+        <div class="alerts top right" role="alert" *ngIf="uploaded && !success">
+			<ngb-alert class="alert alert-danger alert-dismissible" role="alert" ng-reflect-type="danger" (close)="csvErrors = null">
+			    <p jhiTranslate="gatewayApp.assertionServiceAssertion.import.failure.string">There was a problem uploading your CSV for processing.</p>
+		    </ngb-alert>
+		</div>
+        <p id="jhi-delete-msUser-heading" jhiTranslate="gatewayApp.assertionServiceAssertion.import.label.string">Please select the CSV file to upload</p>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.import.filePath.string" for="field_filePath.string">File Path</label>
+            <input type="file" class="form-control" name="filePath" id="field_filePath" accept=".csv"
+                   onclick="this.value=null" (change)="selectFile($event)"/>
+        </div>
+        <p><em><span jhiTranslate="gatewayApp.assertionServiceAssertion.uploadNote.string">Please do not forget to download and send permission links to your researchers once the upload has completed.</span></em></p>
+    </div>
+    <div *ngIf="loading" class="progress progress-striped">
+        <div class="progress-bar indeterminate" role="progressbar"></div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="close()">
+            <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
+        </button>
+        <button id="jhi-confirm-csv-upload" type="submit" class="btn btn-primary" *ngIf="!uploaded">
+            <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.upload.string">Upload</span>
+        </button>
+        <button id="close-dialog" class="btn btn-primary" (click)="close()" *ngIf="uploaded">
+            <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.close.string">Close</span>
+        </button>
+    </div>
+</form>

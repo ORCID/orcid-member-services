@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { JhiLanguageService } from 'ng-jhipster';
+//import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -14,13 +14,14 @@ import { SFMemberContact } from 'app/shared/model/salesforce-member-contact.mode
 @Injectable({ providedIn: 'root' })
 export class AccountService {
   private userIdentity: any;
-  private memberData: BehaviorSubject<ISFMemberData> = new BehaviorSubject<ISFMemberData>(null);
+  private memberData: BehaviorSubject<ISFMemberData | null> = new BehaviorSubject<ISFMemberData | null>(null);
   private authenticated = false;
   private authenticationState = new Subject<any>();
   private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
 
   constructor(
-    private languageService: JhiLanguageService,
+    // TO-DO
+    //private languageService: JhiLanguageService,
     private sessionStorage: SessionStorageService,
     private http: HttpClient,
     private memberService: MSMemberService
@@ -46,7 +47,8 @@ export class AccountService {
     return this.http.post(SERVER_API_URL + 'services/userservice/api/account/mfa/off', null, { observe: 'response' });
   }
 
-  authenticate(identity) {
+  // TO-DO: SETUP TYPE
+  authenticate(identity: any) {
     this.userIdentity = identity;
     this.authenticated = identity !== null;
     this.authenticationState.next(this.userIdentity);
@@ -66,7 +68,7 @@ export class AccountService {
     return false;
   }
 
-  hasAuthority(authority: string): Promise<boolean> {
+  hasAuthority(authority: string): Promise<boolean | undefined> {
     if (!this.authenticated) {
       return Promise.resolve(false);
     }
@@ -96,8 +98,8 @@ export class AccountService {
     // retrieve the userIdentity data from the server, update the identity object, and then resolve.
     return this.fetch()
       .toPromise()
-      .then(response => {
-        const account: Account = response.body;
+      .then((response: HttpResponse<Account> | undefined) => {
+        const account: Account | null | undefined = response?.body;
         if (account) {
           this.userIdentity = account;
           this.authenticated = true;
@@ -105,7 +107,8 @@ export class AccountService {
           // the user's preferred language configured in the account setting
           if (this.userIdentity.langKey) {
             const langKey = this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
-            this.languageService.changeLanguage(langKey);
+            // TODO
+            //this.languageService.changeLanguage(langKey);
           }
         } else {
           this.memberData.next(null);
@@ -140,8 +143,8 @@ export class AccountService {
     return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
   }
 
-  getUserName(): string {
-    let userName: string;
+  getUserName(): string | undefined {
+    let userName: string | undefined;
 
     if (this.isIdentityResolved()) {
       if (this.userIdentity.firstName) {
@@ -165,7 +168,7 @@ export class AccountService {
     return this.isAuthenticated() && this.userIdentity ? this.userIdentity.salesforceId : null;
   }
 
-  async getCurrentMemberData(): Promise<BehaviorSubject<ISFMemberData>> {
+  async getCurrentMemberData(): Promise<BehaviorSubject<ISFMemberData | null>> {
     if (this.memberData.value === null && this.userIdentity) {
       console.log('getCurrentMemberData(): running', new Date().toLocaleString());
       await this.memberService
@@ -180,7 +183,7 @@ export class AccountService {
               .toPromise()
               .then(res => {
                 if (res) {
-                  this.memberData.value.contacts = res;
+                  this.memberData.value!.contacts = res;
                 }
               });
             this.memberService
@@ -188,7 +191,7 @@ export class AccountService {
               .toPromise()
               .then(res => {
                 if (res) {
-                  this.memberData.value.orgIds = res;
+                  this.memberData.value!.orgIds = res;
                 }
               });
             if (res && res.consortiaLeadId) {
@@ -197,7 +200,7 @@ export class AccountService {
                 .toPromise()
                 .then(r => {
                   if (r && r.body) {
-                    this.memberData.value.consortiumLeadName = r.body.clientName;
+                    this.memberData.value!.consortiumLeadName = r.body.clientName;
                   }
                 });
             }
@@ -207,7 +210,7 @@ export class AccountService {
                 .toPromise()
                 .then(r => {
                   if (r && r.body) {
-                    this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
+                    this.memberData.value!.isConsortiumLead = r.body.isConsortiumLead;
                   }
                 });
             }

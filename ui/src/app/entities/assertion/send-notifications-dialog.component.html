@@ -1,0 +1,21 @@
+<form name="notificationForm" (ngSubmit)="send()">
+    <div class="modal-header">
+        <h4 class="modal-title" jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.title.string">Send permission notifications</h4>
+        <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
+    </div>
+    <div class="modal-body">
+        <div class="alert alert-danger" *ngIf="requestAlreadyInProgress" jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.alreadyInProgress.string">
+            A request to send notifications to your users is already in progress. Please try again later.
+        </div>
+        <p jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.confirmation.string">Are you sure that you would like ORCID to send permission links to your researchers for the affiliations that are pending?</p>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="close()">
+            <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
+        </button>
+        <button id="jhi-confirm-csv-upload" type="submit" class="btn btn-primary">
+            <fa-icon [icon]="faPaperPlane"></fa-icon>&nbsp;<span jhiTranslate="entity.action.ok.string">OK</span>
+        </button>
+    </div>
+</form>

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 export class LoginService {
   constructor(private accountService: AccountService, private authServerProvider: AuthServerProvider) {}
 
-  login(credentials): Observable<any> {
+  login(credentials: any): Observable<any> {
     return this.authServerProvider.login(credentials);
   }
 

@@ -1,0 +1,108 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="assertion">
+            <h1 class="mt-5" jhiTranslate="gatewayApp.assertionServiceAssertion.detail.title.string">Affiliation details</h1>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <div class="row">
+                <dl class="jh-entity-details">
+                 	<dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.id.string">ID</dt>
+                    <dd class="col-md-9">
+                        {{assertion.id}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.email.string">Email</dt>
+                    <dd class="col-md-9">
+                        {{assertion.email}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.status.string">Status</dt>
+                    <dd class="col-md-9">
+                        {{assertion.prettyStatus}}
+                    </dd>
+                    <dt *ngIf="assertion.permissionLink" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.permissionLink.string">Permission link</dt>
+                    <dd *ngIf="assertion.permissionLink" class="col-md-9">
+                        <button class="btn btn-outline-primary" type="button" [ngxClipboard] [cbContent]="assertion.permissionLink" (cbOnSuccess)="successMessage()" jhiTranslate="gatewayApp.assertionServiceAssertion.copyClipboard.string">Copy to clipboard</button>
+                    </dd>
+                    <dt *ngIf="assertion.orcidId" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.orcidId.string">ORCID iD</dt>
+                    <dd *ngIf="assertion.orcidId" class="col-md-9">
+                        <a href="{{orcidBaseUrl}}/{{assertion.orcidId}}" target="_blank">{{orcidBaseUrl}}/{{assertion.orcidId}}</a>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.affiliationSection.string">Affiliation Section</dt>
+                    <dd class="col-md-9">
+                        <span jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.affiliationSection + '.string'}}">{{assertion.affiliationSection}}</span>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.detail.org.string">Organization</dt>
+                    <dd class="col-md-9">
+                        {{assertion.orgName}}: <span *ngIf="assertion.orgCity">{{assertion.orgCity}}</span><span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCountry">, {{assertion.orgCountry}}</span><br>
+                        {{assertion.disambiguationSource}} {{assertion.disambiguatedOrgId}}
+                    </dd>
+                    <dt *ngIf="assertion.departmentName" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.departmentName.string">Department Name</dt>
+                    <dd *ngIf="assertion.departmentName" class="col-md-9">
+                        {{assertion.departmentName}}
+                    </dd>
+                    <dt *ngIf="assertion.roleTitle" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.roleTitle.string">Role Title</dt>
+                    <dd *ngIf="assertion.roleTitle" class="col-md-9">
+                        {{assertion.roleTitle}}
+                    </dd>
+                    <dt *ngIf="assertion.url" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.url.string">Url</dt>
+                    <dd *ngIf="assertion.url" class="col-md-9">
+                        <a href="{{assertion.url}}">{{assertion.url}}</a>
+                    </dd>
+                    <dt *ngIf="assertion.startYear" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.startDate.string">Start Date</dt>
+                    <dd *ngIf="assertion.startYear" class="col-md-9">
+                        {{assertion.startYear}}<span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startMonth&&assertion.startDay">-{{assertion.startDay}}</span>
+                    </dd>
+                    <dt *ngIf="assertion.endYear" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.endDate.string">End Date</dt>
+                    <dd *ngIf="assertion.endYear" class="col-md-9">
+                        {{assertion.endYear}}<span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endMonth&&assertion.endDay">-{{assertion.endDay}}</span>
+                    </dd>
+                    <dt *ngIf="assertion.externalId" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.externalId.string">External Id</dt>
+                    <dd *ngIf="assertion.externalId" class="col-md-9">
+                        {{assertion.externalIdType}} <a *ngIf="assertion.externalIdUrl" href="{{assertion.externalIdUrl}}">{{assertion.externalId}}</a> <span *ngIf="!assertion.externalIdUrl">{{assertion.externalId}}</span>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.created.string">Created</dt>
+                    <dd class="col-md-9">
+                        {{assertion.created | date:'medium'}}
+                    </dd>
+                    <dt *ngIf="assertion.addedToORCID" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.addedToOrcid.string">Added To ORCID</dt>
+                    <dd *ngIf="assertion.addedToORCID" class="col-md-9">
+                        {{assertion.addedToORCID | date:'medium'}}
+                    </dd>
+                    <dt *ngIf="assertion.updatedInORCID" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.updatedInOrcid.string">Updated In ORCID</dt>
+                    <dd *ngIf="assertion.updatedInORCID" class="col-md-9">
+                        {{assertion.updatedInORCID | date:'medium'}}
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.modified.string">Modified</dt>
+                    <dd class="col-md-9">
+                        {{assertion.modified | date:'medium'}} <i><span jhiTranslate="global.by.string">by</span> {{assertion.lastModifiedBy}}</i>
+                    </dd>
+                    <dt class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.adminId.string">Admin Id</dt>
+                    <dd class="col-md-9">
+                        {{ownerId}}
+                    </dd>
+                    <dt *ngIf="assertion.notificationSent" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.notificationLastSent.string">Notification Last Sent</dt>
+                    <dd *ngIf="assertion.notificationSent" class="col-md-9">
+                        {{assertion.notificationSent | date:'medium'}}
+                    </dd>
+                    <dt *ngIf="assertion.invitationSent" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.notificationLastSent.string">Notification Last Sent</dt>
+                    <dd *ngIf="assertion.invitationSent" class="col-md-9">
+                        {{assertion.invitationSent | date:'medium'}}
+                    </dd>
+                </dl>
+            </div>
+            <hr>
+            <div class="mb-3">
+                <button type="submit"
+                        (click)="previousState()"
+                        class="btn btn-outline-primary">
+                    <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back.string"> Back</span>
+                </button>
+
+                <button type="button"
+                        [routerLink]="['/assertion', assertion.id, 'edit']"
+                        class="btn btn-primary">
+                    <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit.string"> Edit</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

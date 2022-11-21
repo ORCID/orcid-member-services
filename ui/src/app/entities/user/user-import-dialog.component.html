@@ -1,0 +1,44 @@
+<form name="uploadForm" (ngSubmit)="upload()" >
+    <div class="modal-header">
+        <h4 class="modal-title" jhiTranslate="gatewayApp.msUserServiceMSUser.import.title.string">Import users</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="alerts top right" role="alert" *ngIf="csvErrors && csvErrors.length > 0">
+			<ngb-alert class="alert alert-danger alert-dismissible" role="alert" ng-reflect-type="danger" (close)="csvErrors = null">
+				<p jhiTranslate="gatewayApp.msUserServiceMSUser.import.errors.label.string">Oops! There was a problem processing your data. Pleases fix the errors below and try again</p>
+			    <table>
+			    	<thead>
+			    		<th>Errors</th>
+			    	</thead>
+			    	<tbody>
+			    		<tr *ngFor="let error of csvErrors">
+			        		<td>Row {{error['index']}}</td>
+			        		<td>{{error['message']}}</td>
+			       		</tr>
+			    	</tbody>
+			    </table>
+			</ngb-alert>
+		</div>
+        <p id="jhi-delete-msUser-heading" jhiTranslate="gatewayApp.msUserServiceMSUser.import.label.string">Please select a CSV file to upload</p>
+
+        <div class="form-group">
+            <label class="form-control-label sr-only" jhiTranslate="gatewayApp.msUserServiceMSUser.import.filePath.string" for="field_filePath.string">File Path</label>
+            <input type="file" class="form-control" name="filePath" id="field_filePath" accept=".csv"
+                   onclick="this.value=null" (change)="selectFile($event)"/>
+        </div>
+    </div>
+    <div *ngIf="loading" class="progress progress-striped">
+        <div class="progress-bar indeterminate" role="progressbar"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">
+            <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
+        </button>
+        <button id="jhi-confirm-delete-msUser" type="submit" class="btn btn-primary" >
+            <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.upload.string">Upload</span>
+        </button>
+    </div>
+</form>

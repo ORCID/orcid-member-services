@@ -12,8 +12,8 @@ export class AuthServerProvider {
   getToken() {
     return null;
   }
-
-  login(credentials): Observable<any> {
+  // TODO
+  login(credentials:any): Observable<any> {
     const data = {
       username: credentials.username,
       password: credentials.password,
@@ -22,8 +22,8 @@ export class AuthServerProvider {
     };
     return this.http.post(SERVER_API_URL + 'auth/login', data, {});
   }
-
-  loginWithToken(jwt, rememberMe) {
+  // TODO
+  loginWithToken(jwt:any, rememberMe:any) {
     if (jwt) {
       this.storeAuthenticationToken(jwt, rememberMe);
       return Promise.resolve(jwt);
@@ -31,8 +31,8 @@ export class AuthServerProvider {
       return Promise.reject('auth-jwt-service Promise reject'); // Put appropriate error message here
     }
   }
-
-  storeAuthenticationToken(jwt, rememberMe) {}
+  // TODO
+  storeAuthenticationToken(jwt:any, rememberMe:any) {}
 
   logout(): Observable<any> {
     return this.http.post(SERVER_API_URL + 'auth/logout', null);
