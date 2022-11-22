@@ -23,7 +23,6 @@ import org.orcid.memberportal.service.user.upload.UserUpload;
 import org.orcid.memberportal.service.user.validation.UserValidation;
 import org.orcid.memberportal.service.user.validation.UserValidator;
 import org.orcid.memberportal.service.user.web.rest.errors.BadRequestAlertException;
-import org.orcid.memberportal.service.user.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.memberportal.service.user.web.rest.errors.LoginAlreadyUsedException;
 import org.orcid.memberportal.service.user.web.rest.vm.ResendActivationResponseVM;
 import org.slf4j.Logger;
@@ -434,14 +433,14 @@ public class UserResource {
      */
     @PutMapping("/users/{salesforceId}/{newSalesforceId}")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> updateUserSalesforceOrAssertion(@PathVariable String salesforceId, @PathVariable String newSalesforceId) {
-        LOG.debug("REST request to update Users by salesforce : {}", salesforceId);
-        List<UserDTO> usersBelongingToMember = userService.getAllUsersBySalesforceId(salesforceId);
-        for (UserDTO user : usersBelongingToMember) {
-            user.setSalesforceId(newSalesforceId);
-            userService.updateUser(user);
+    public ResponseEntity<Void> updateUsersSalesforceId(@PathVariable String salesforceId, @PathVariable String newSalesforceId) {
+        LOG.debug("REST request to update users' salesforce id from {} to {}", salesforceId, newSalesforceId);
+        boolean success = userService.updateUsersSalesforceId(salesforceId, newSalesforceId);
+        if (success) {
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", salesforceId)).build();
+        } else {
+            return ResponseEntity.status(500).build();
         }
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", salesforceId)).build();
     }
 
     /**

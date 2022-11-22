@@ -25,7 +25,6 @@ import org.orcid.memberportal.service.user.services.UserService;
 import org.orcid.memberportal.service.user.upload.UserUpload;
 import org.orcid.memberportal.service.user.validation.UserValidation;
 import org.orcid.memberportal.service.user.validation.UserValidator;
-import org.orcid.memberportal.service.user.web.rest.UserResource;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -72,6 +71,20 @@ class UserResourceTest {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+    }
+    
+    @Test
+    void testUpdateSalesforceId() {
+        Mockito.when(userService.updateUsersSalesforceId(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(true);
+        ResponseEntity<Void> response = userResource.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+    }
+    
+    @Test
+    void testUpdateSalesforceIdWithError() {
+        Mockito.when(userService.updateUsersSalesforceId(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(false);
+        ResponseEntity<Void> response = userResource.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
+        assertTrue(response.getStatusCode().is5xxServerError());
     }
 
     @Test
