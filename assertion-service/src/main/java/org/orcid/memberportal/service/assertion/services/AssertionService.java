@@ -264,8 +264,8 @@ public class AssertionService {
                     return false;
                 } else {
                     LOG.error("Failed to reset assertions from '{}' to '{}'", new Object[] { to, from });
-                    LOG.warn(
-                            "Operation to update assertions from '{}' to '{}' has failed but there may be assertions with new sf id of '{}'",
+                    LOG.error(
+                            "Operation to update assertion salesforce ids from '{}' to '{}' has failed but there may be assertions with new sf id of '{}' in the database!",
                             new Object[] { from, to, to });
                     return false;
                 }
