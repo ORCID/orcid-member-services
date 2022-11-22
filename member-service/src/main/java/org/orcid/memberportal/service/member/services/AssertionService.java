@@ -43,13 +43,10 @@ public class AssertionService {
             if (!response.getStatusCode().is2xxSuccessful()) {
                 LOG.warn("Error updating assertions for  salesforceId {} to the new salesforceId {}, response code {}", salesforceId, newSalesforceId,
                         response.getStatusCodeValue());
-                throw new BadRequestAlertException("Unable to update assertions for salesforceId " + salesforceId + " to the new salesforceId " + newSalesforceId,
-                        "member", "updateAssertionsSalesforceId.string");
+                throw new RuntimeException("Error updating assertions' salesforce ids");
             }
         } catch (Exception e) {
-            LOG.error("Error updating assertions for  salesforceId {} to the new salesforceId {}", salesforceId, newSalesforceId, e);
-            throw new BadRequestAlertException("Unable to update assertions for salesforceId " + salesforceId + " to the new salesforceId " + newSalesforceId, "member",
-                    "updateAssertionsSalesforceId.string");
+            throw new RuntimeException("Error updating assertions' salesforce ids");
         }
     }
 

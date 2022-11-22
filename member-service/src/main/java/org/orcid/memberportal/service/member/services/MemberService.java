@@ -145,16 +145,23 @@ public class MemberService {
 
         // Check if salesforceId changed
         if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
-            Optional<Member> optionalSalesForceId = memberRepository.findBySalesforceId(member.getSalesforceId());
-            if (optionalSalesForceId.isPresent()) {
+            Optional<Member> optionalSalesforceId = memberRepository.findBySalesforceId(member.getSalesforceId());
+            if (optionalSalesforceId.isPresent()) {
                 throw new BadRequestAlertException("Invalid salesForceId", "member", "salesForceIdUsed.string");
             }
-            // update affiliations associated with the member
-            String oldSalesForceId = existingMember.getSalesforceId();
-            existingMember.setSalesforceId(member.getSalesforceId());
-            member = memberRepository.save(existingMember);
-            assertionService.updateAssertionsSalesforceId(oldSalesForceId, member.getSalesforceId());
-            userService.updateUserSalesforceIdOrAssertion(oldSalesForceId, member.getSalesforceId());
+
+            String oldSalesforceId = existingMember.getSalesforceId();
+            String newSalesforceId = member.getSalesforceId();
+            
+            try {
+                // update affiliations and users associated with the member
+                assertionService.updateAssertionsSalesforceId(oldSalesforceId, newSalesforceId);
+                userService.updateUserSalesforceIdOrAssertion(oldSalesforceId, newSalesforceId);
+                existingMember.setSalesforceId(member.getSalesforceId());
+                member = memberRepository.save(existingMember);
+            } catch (Exception e) { 
+                LOG.error("Error updating salesforce ids");
+            }
         }
 
         if (!existingMember.getAssertionServiceEnabled().equals(member.getAssertionServiceEnabled())) {
