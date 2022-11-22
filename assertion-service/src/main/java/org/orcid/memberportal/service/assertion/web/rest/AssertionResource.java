@@ -118,7 +118,7 @@ public class AssertionResource {
         LOG.debug("REST request to fetch assertions from user {}", SecurityUtils.getCurrentUserLogin().get());
         Page<Assertion> affiliations = null;
         if (StringUtils.isBlank(filter)) {
-            affiliations = assertionService.findBySalesforceId(pageable);
+            affiliations = assertionService.findByCurrentSalesforceId(pageable);
         } else {
             affiliations = assertionService.findBySalesforceId(pageable, filter);
         }
@@ -443,12 +443,9 @@ public class AssertionResource {
      */
     @PutMapping("/assertion/update/{salesforceId}/{newSalesforceId}")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> updateUserSalesforceOrAssertion(@PathVariable String salesforceId, @PathVariable String newSalesforceId) {
+    public ResponseEntity<Void> updateSalesforceId(@PathVariable String salesforceId, @PathVariable String newSalesforceId) {
         LOG.debug("REST request to update Assertions by salesforce : {}", salesforceId);
-        List<Assertion> assertionsBySalesforceId = assertionService.getAssertionsBySalesforceId(salesforceId);
-        for (Assertion assertion : assertionsBySalesforceId) {
-            assertionService.updateAssertionSalesforceId(assertion, newSalesforceId);
-        }
+        assertionService.updateAssertionsSalesforceId(salesforceId, newSalesforceId);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "assertion", salesforceId)).build();
     }
     

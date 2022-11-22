@@ -380,7 +380,7 @@ class AssertionResourceTest {
 
     @Test
     void testGetAssertions() throws BadRequestAlertException, org.codehaus.jettison.json.JSONException {
-        Mockito.when(assertionService.findBySalesforceId(Mockito.any(Pageable.class))).thenReturn(getMockPage());
+        Mockito.when(assertionService.findByCurrentSalesforceId(Mockito.any(Pageable.class))).thenReturn(getMockPage());
         ResponseEntity<List<Assertion>> page = assertionResource.getAssertions(Mockito.mock(Pageable.class), new HttpHeaders(), UriComponentsBuilder.newInstance(), "");
         assertNotNull(page.getBody());
     }
