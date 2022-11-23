@@ -1,4 +1,4 @@
-import './vendor.ts';
+//import './vendor.ts';
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -11,8 +11,8 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
-import { GatewaySharedModule } from 'app/shared';
-import { GatewayCoreModule } from 'app/core';
+import { GatewaySharedModule } from './shared';
+import { GatewayCoreModule } from './core';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeModule, HomeComponent } from './home';
 /*import { GatewayLandingPageModule } from './landing-page/landing-page.module';
@@ -20,6 +20,9 @@ import { GatewayAccountModule } from './account/account.module';
 import { GatewayEntityModule } from './entities/entity.module';
 import { GatewayReportModule } from './report/report.module';*/
 import * as moment from 'moment';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { AppComponent } from './app.component';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 //import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
 
@@ -36,8 +39,9 @@ import * as moment from 'moment';
       defaultI18nLang: 'en'
     }), */
     GatewaySharedModule.forRoot(),
+    TranslateModule.forRoot(),
     GatewayCoreModule,
-    HomeModule,
+    //HomeModule,
    /* GatewayLandingPageModule,
     GatewayAccountModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
@@ -45,8 +49,8 @@ import * as moment from 'moment';
     GatewayReportModule,*/
     AppRoutingModule
   ],
-  //declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
-  /*providers: [
+  declarations: [AppComponent/*JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent*/],
+  providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthExpiredInterceptor,
@@ -63,8 +67,8 @@ import * as moment from 'moment';
       multi: true
     },
     NgbActiveModal
-  ],*/
-  bootstrap: [HomeComponent]
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private dpConfig: NgbDatepickerConfig) {

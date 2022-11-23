@@ -1,16 +1,11 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { GatewaySharedModule } from 'app/shared';
 import { HOME_ROUTE, HomeComponent } from './';
-import { RouterModule } from '@angular/router';
 @NgModule({
   imports: [
     GatewaySharedModule,
-    RouterModule.forChild([HOME_ROUTE]),
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule
+    RouterModule.forChild([HOME_ROUTE])
   ],
   declarations: [
     HomeComponent

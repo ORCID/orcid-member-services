@@ -31,5 +31,7 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "include": ["src/app"],
+  "exclude": ["node_modules"]
 }

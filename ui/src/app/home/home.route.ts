@@ -5,8 +5,8 @@ import { HomeComponent } from './';
 export const HOME_ROUTE: Route = {
   path: '',
   component: HomeComponent,
-  data: {
+  /*data: {
     authorities: [],
     pageTitle: 'home.title.string'
-  }
+  }*/
 };
