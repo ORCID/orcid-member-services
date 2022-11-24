@@ -1,0 +1,17 @@
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\client\HealthClientTest.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\security\oauth2\OAuth2AuthenticationServiceTest.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\service\HealthServiceTest.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\web\rest\HealthResourceTest.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\web\rest\TestUtil.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\config\SecurityBeanOverrideConfiguration.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\security\oauth2\OAuth2CookieHelperTest.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\web\rest\ClientForwardControllerIT.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\config\WebConfigurerTestController.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\gateway\responserewriting\SwaggerBasePathRewritingFilterTest.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\web\rest\errors\ExceptionTranslatorTestController.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\security\SecurityUtilsUnitTest.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\config\WebConfigurerTest.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\security\oauth2\CookieTokenExtractorTest.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\web\rest\errors\ExceptionTranslatorIT.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\security\oauth2\CookieCollectionTest.java
+C:\prgr\orcid-member-services\gateway\src\test\java\org\orcid\memberportal\service\gateway\security\OAuth2TokenMockUtil.java

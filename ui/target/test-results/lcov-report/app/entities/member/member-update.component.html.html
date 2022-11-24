@@ -1,0 +1,343 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for app/entities/member/member-update.component.html</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">app/entities/member</a> member-update.component.html</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input oninput="onInput()" type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;div class="row justify-content-center"&gt;
+    &lt;div class="col-8"&gt;
+        &lt;form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm"&gt;
+            &lt;h1 id="jhi-ms-member-heading" class="mt-5" jhiTranslate="gatewayApp.msUserServiceMSMember.home.createOrEditLabel.string"&gt;Add or edit member&lt;/h1&gt;
+            &lt;div&gt;
+                &lt;jhi-alert-error&gt;&lt;/jhi-alert-error&gt;
+                &lt;div class="alerts top right" role="alert" *ngIf="validation.errors &amp;&amp; validation.errors.length &gt; 0"&gt;
+					&lt;ngb-alert class="alert alert-danger alert-dismissible" role="alert" ng-reflect-type="danger" (close)="validation.errors = null"&gt;
+					    &lt;ul class="validation-errors"&gt;
+				    		&lt;li *ngFor="let error of validation.errors"&gt;
+				    			{{ error }}
+				       		&lt;/li&gt;
+					    &lt;/ul&gt;
+				    &lt;/ngb-alert&gt;
+				&lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    &lt;label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.salesforceId.string" for="field_salesforceId.string"&gt;Salesforce Id&lt;/label&gt;
+                    &lt;input type="text" class="form-control" name="salesforceId" id="field_salesforceId"
+                           formControlName="salesforceId"/&gt;
+                    &lt;div *ngIf="editForm.get('salesforceId').invalid &amp;&amp; (editForm.get('salesforceId').dirty || editForm.get('salesforceId').touched)"&gt;
+                        &lt;small class="form-text text-danger"
+                               *ngIf="editForm.get('salesforceId').errors.required" jhiTranslate="entity.validation.required.string"&gt;
+                        This field is required.
+                        &lt;/small&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    &lt;label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.parentSalesforceId.string" for="field_parentSalesforceId.string"&gt;Parent Salesforce Id&lt;/label&gt;
+                    &lt;input type="text" class="form-control" name="parentSalesforceId" id="field_parentSalesforceId"
+                           formControlName="parentSalesforceId" /&gt;
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    &lt;label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.clientName.string" for="field_clientName.string"&gt;Member Name&lt;/label&gt;
+                    &lt;input type="text" class="form-control" name="clientName" id="field_clientName"
+                           formControlName="clientName"/&gt;
+                     &lt;div *ngIf="editForm.get('clientName').invalid &amp;&amp; (editForm.get('clientName').dirty || editForm.get('clientName').touched)"&gt;
+                        &lt;small class="form-text text-danger"
+                               *ngIf="editForm.get('clientName').errors.required" jhiTranslate="entity.validation.required.string"&gt;
+                        This field is required.
+                        &lt;/small&gt;
+                        
+                    &lt;/div&gt;
+&nbsp;
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    &lt;label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.label.string" for="field_clientId.string"&gt;Client ID&lt;/label&gt;
+                    &lt;p&gt;&lt;em&gt;&lt;span jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.note.string"&gt;Note: Client ID must have User OBO enabled AND&lt;/span&gt; &lt;a href="{{baseUrl}}"&gt;{{baseUrl}}&lt;/a&gt; &lt;span jhiTranslate="gatewayApp.msUserServiceMSMember.clientId.addedAsRedirect.string"&gt;added as a Redirect URI in&lt;/span&gt; &lt;a href="{{orcidBaseUrl}}/manage-members.string"&gt;{{orcidBaseUrl}}/manage-members&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+                    &lt;input type="text" class="form-control" name="clientId" id="field_clientId"
+                           formControlName="clientId" /&gt;
+                    &lt;div *ngIf="editForm.get('clientId').invalid &amp;&amp; (editForm.get('clientId').dirty || editForm.get('clientId').touched)"&gt;
+                        &lt;small class="form-text text-danger"
+                               *ngIf="editForm.get('clientId').errors.required" jhiTranslate="entity.validation.required.string"&gt;
+                        This field is required.
+                        &lt;/small&gt;
+                        &lt;small class="form-text text-danger"
+                               *ngIf="!editForm.validClientId" &gt;
+                        Client Id should be in the format XXXX-XXXX-XXXX-XXXX or APP-XXXXXXXXXXXXXXXX. X can be a digit or an uppercase character."
+                        &lt;/small&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    &lt;label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.isConsortiumLead.string" for="field_isConsortiumLead.string"&gt;Is Consortium Lead&lt;/label&gt;
+                    &lt;input type="checkbox" class="form-control" name="isConsortiumLead" id="field_isConsortiumLead"
+                           formControlName="isConsortiumLead"/&gt;
+                &lt;/div&gt;
+                &lt;div class="form-group"&gt;
+                    &lt;label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string" for="field_assertionServiceEnabled.string"&gt;Assertion Service Enabled&lt;/label&gt;
+                    &lt;input type="checkbox" class="form-control" name="assertionServiceEnabled" id="field_assertionServiceEnabled"
+                           formControlName="assertionServiceEnabled"/&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div *ngIf="isSaving" class="progress progress-striped"&gt;
+                &lt;div class="progress-bar indeterminate" role="progressbar"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;br&gt;
+            &lt;div class="form-group"&gt;
+                &lt;button type="button" id="cancel-save" class="btn btn-outline-primary"  (click)="navigateToMembersList()"&gt;
+                    &lt;fa-icon [icon]="'ban'"&gt;&lt;/fa-icon&gt;&amp;nbsp;&lt;span jhiTranslate="entity.action.cancel.string"&gt;Cancel&lt;/span&gt;
+                &lt;/button&gt;
+                &lt;button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary"&gt;
+                    &lt;fa-icon [icon]="'save'"&gt;&lt;/fa-icon&gt;&amp;nbsp;&lt;span jhiTranslate="entity.action.save.string"&gt;Save&lt;/span&gt;
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at Tue Jun 14 2022 14:39:39 GMT+0300 (Eastern European Summer Time)
+            </div>
+        <script src="../../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
+    </body>
+</html>
+    

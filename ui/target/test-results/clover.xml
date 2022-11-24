@@ -1,0 +1,2464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1655206780665" clover="3.2.0">
+  <project timestamp="1655206780665" name="All files">
+    <metrics statements="2023" coveredstatements="1209" conditionals="627" coveredconditionals="252" methods="554" coveredmethods="215" elements="3204" coveredelements="1676" complexity="0" loc="2023" ncloc="2023" packages="31" files="114" classes="114"/>
+    <package name="app">
+      <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="app.constants.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\app.constants.ts">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="33" type="stmt"/>
+        <line num="6" count="33" type="stmt"/>
+        <line num="7" count="33" type="stmt"/>
+        <line num="8" count="33" type="stmt"/>
+        <line num="9" count="33" type="stmt"/>
+        <line num="10" count="33" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.account.activate">
+      <metrics statements="20" coveredstatements="18" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="6"/>
+      <file name="activate.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\activate\activate.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="activate.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\activate\activate.component.ts">
+        <metrics statements="13" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="5"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
+        <line num="20" count="3" type="stmt"/>
+        <line num="21" count="3" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+      </file>
+      <file name="activate.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\activate\activate.service.ts">
+        <metrics statements="6" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="3" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.account.password">
+      <metrics statements="70" coveredstatements="56" conditionals="24" coveredconditionals="19" methods="13" coveredmethods="9"/>
+      <file name="password-strength-bar.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\password\password-strength-bar.component.ts">
+        <metrics statements="42" coveredstatements="32" conditionals="22" coveredconditionals="17" methods="5" coveredmethods="4"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="3" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
+        <line num="25" count="10" type="stmt"/>
+        <line num="26" count="10" type="stmt"/>
+        <line num="27" count="10" type="stmt"/>
+        <line num="28" count="10" type="stmt"/>
+        <line num="29" count="10" type="stmt"/>
+        <line num="30" count="10" type="stmt"/>
+        <line num="32" count="10" type="stmt"/>
+        <line num="33" count="10" type="stmt"/>
+        <line num="34" count="40" type="stmt"/>
+        <line num="37" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="38" count="10" type="stmt"/>
+        <line num="41" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="45" count="10" type="cond" truecount="1" falsecount="1"/>
+        <line num="46" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="48" count="10" type="stmt"/>
+        <line num="52" count="7" type="stmt"/>
+        <line num="53" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="54" count="3" type="stmt"/>
+        <line num="55" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="59" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="64" count="7" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="69" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+      </file>
+      <file name="password.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\password\password.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="password.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\password\password.component.ts">
+        <metrics statements="21" coveredstatements="18" conditionals="2" coveredconditionals="2" methods="6" coveredmethods="4"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="33" count="4" type="stmt"/>
+        <line num="34" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="39" count="3" type="stmt"/>
+        <line num="40" count="3" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+      </file>
+      <file name="password.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\password\password.service.ts">
+        <metrics statements="6" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="4" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.account.password-reset.finish">
+      <metrics statements="45" coveredstatements="36" conditionals="6" coveredconditionals="3" methods="14" coveredmethods="9"/>
+      <file name="password-reset-finish.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\password-reset\finish\password-reset-finish.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="password-reset-finish.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\password-reset\finish\password-reset-finish.component.ts">
+        <metrics statements="36" coveredstatements="29" conditionals="6" coveredconditionals="3" methods="10" coveredmethods="7"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="26" count="10" type="stmt"/>
+        <line num="32" count="10" type="stmt"/>
+        <line num="33" count="10" type="stmt"/>
+        <line num="34" count="10" type="stmt"/>
+        <line num="35" count="10" type="stmt"/>
+        <line num="36" count="10" type="stmt"/>
+        <line num="37" count="10" type="stmt"/>
+        <line num="41" count="6" type="stmt"/>
+        <line num="42" count="6" type="stmt"/>
+        <line num="44" count="6" type="stmt"/>
+        <line num="45" count="6" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="49" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="58" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="64" count="3" type="stmt"/>
+        <line num="65" count="3" type="stmt"/>
+        <line num="66" count="3" type="stmt"/>
+        <line num="67" count="3" type="stmt"/>
+        <line num="68" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="71" count="2" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+      </file>
+      <file name="password-reset-finish.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\password-reset\finish\password-reset-finish.service.ts">
+        <metrics statements="8" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="16" count="6" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.account.password-reset.init">
+      <metrics statements="26" coveredstatements="25" conditionals="4" coveredconditionals="4" methods="7" coveredmethods="6"/>
+      <file name="password-reset-init.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\password-reset\init\password-reset-init.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="password-reset-init.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\password-reset\init\password-reset-init.component.ts">
+        <metrics statements="19" coveredstatements="19" conditionals="4" coveredconditionals="4" methods="5" coveredmethods="5"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="15" count="5" type="stmt"/>
+        <line num="20" count="5" type="stmt"/>
+        <line num="21" count="5" type="stmt"/>
+        <line num="22" count="5" type="stmt"/>
+        <line num="23" count="5" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="31" count="3" type="stmt"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="40" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+      </file>
+      <file name="password-reset-init.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\password-reset\init\password-reset-init.service.ts">
+        <metrics statements="6" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.account.settings">
+      <metrics statements="66" coveredstatements="29" conditionals="8" coveredconditionals="0" methods="22" coveredmethods="9"/>
+      <file name="settings.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\settings\settings.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="settings.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\account\settings\settings.component.ts">
+        <metrics statements="65" coveredstatements="28" conditionals="8" coveredconditionals="0" methods="22" coveredmethods="9"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="23" count="3" type="stmt"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="39" count="3" type="stmt"/>
+        <line num="40" count="3" type="stmt"/>
+        <line num="41" count="3" type="stmt"/>
+        <line num="42" count="3" type="stmt"/>
+        <line num="43" count="3" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="83" count="3" type="stmt"/>
+        <line num="84" count="3" type="stmt"/>
+        <line num="86" count="2" type="stmt"/>
+        <line num="87" count="2" type="stmt"/>
+        <line num="88" count="2" type="stmt"/>
+        <line num="89" count="2" type="stmt"/>
+        <line num="90" count="2" type="stmt"/>
+        <line num="92" count="2" type="stmt"/>
+        <line num="93" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="99" count="1" type="stmt"/>
+        <line num="100" count="1" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="107" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="138" count="3" type="stmt"/>
+        <line num="139" count="3" type="stmt"/>
+        <line num="152" count="3" type="stmt"/>
+        <line num="164" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.admin">
+      <metrics statements="30" coveredstatements="30" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="admin.route.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\admin.route.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+      </file>
+      <file name="index.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\index.ts">
+        <metrics statements="26" coveredstatements="26" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.admin.audits">
+      <metrics statements="68" coveredstatements="60" conditionals="8" coveredconditionals="4" methods="18" coveredmethods="13"/>
+      <file name="audit-data.model.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\audits\audit-data.model.ts">
+        <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+      </file>
+      <file name="audit.model.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\audits\audit.model.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+      </file>
+      <file name="audits.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\audits\audits.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+      </file>
+      <file name="audits.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\audits\audits.component.ts">
+        <metrics statements="49" coveredstatements="42" conditionals="8" coveredconditionals="4" methods="14" coveredmethods="10"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="29" count="6" type="stmt"/>
+        <line num="30" count="6" type="stmt"/>
+        <line num="31" count="6" type="stmt"/>
+        <line num="32" count="6" type="stmt"/>
+        <line num="33" count="6" type="stmt"/>
+        <line num="34" count="6" type="stmt"/>
+        <line num="36" count="6" type="stmt"/>
+        <line num="37" count="6" type="stmt"/>
+        <line num="38" count="6" type="stmt"/>
+        <line num="39" count="6" type="stmt"/>
+        <line num="40" count="6" type="stmt"/>
+        <line num="41" count="6" type="stmt"/>
+        <line num="46" count="2" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="48" count="2" type="stmt"/>
+        <line num="52" count="5" type="stmt"/>
+        <line num="56" count="3" type="stmt"/>
+        <line num="57" count="3" type="stmt"/>
+        <line num="59" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="62" count="3" type="stmt"/>
+        <line num="65" count="3" type="stmt"/>
+        <line num="69" count="3" type="stmt"/>
+        <line num="71" count="3" type="stmt"/>
+        <line num="72" count="3" type="stmt"/>
+        <line num="73" count="3" type="stmt"/>
+        <line num="74" count="3" type="stmt"/>
+        <line num="78" count="2" type="stmt"/>
+        <line num="86" count="1" type="stmt"/>
+        <line num="90" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="91" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="92" count="1" type="stmt"/>
+        <line num="94" count="4" type="stmt"/>
+        <line num="98" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="111" count="0" type="stmt"/>
+        <line num="115" count="1" type="stmt"/>
+        <line num="116" count="1" type="stmt"/>
+        <line num="117" count="1" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
+      </file>
+      <file name="audits.route.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\audits\audits.route.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+      </file>
+      <file name="audits.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\audits\audits.service.ts">
+        <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="11" count="9" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="20" count="4" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.admin.configuration">
+      <metrics statements="52" coveredstatements="50" conditionals="11" coveredconditionals="7" methods="12" coveredmethods="11"/>
+      <file name="configuration.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\configuration\configuration.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+      </file>
+      <file name="configuration.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\configuration\configuration.component.ts">
+        <metrics statements="18" coveredstatements="18" conditionals="3" coveredconditionals="3" methods="5" coveredmethods="5"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="11" count="3" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
+        <line num="18" count="3" type="stmt"/>
+        <line num="19" count="3" type="stmt"/>
+        <line num="20" count="3" type="stmt"/>
+        <line num="21" count="3" type="stmt"/>
+        <line num="25" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+      </file>
+      <file name="configuration.route.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\configuration\configuration.route.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+      </file>
+      <file name="configuration.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\configuration\configuration.service.ts">
+        <metrics statements="31" coveredstatements="29" conditionals="8" coveredconditionals="4" methods="7" coveredmethods="6"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="9" count="3" type="stmt"/>
+        <line num="10" count="6" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="32" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="37" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.admin.docs">
+      <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="docs.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\docs\docs.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="docs.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\docs\docs.component.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+      </file>
+      <file name="docs.route.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\docs\docs.route.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.admin.gateway">
+      <metrics statements="20" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="0"/>
+      <file name="gateway-route.model.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\gateway\gateway-route.model.ts">
+        <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+      </file>
+      <file name="gateway-routes.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\gateway\gateway-routes.service.ts">
+        <metrics statements="6" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+      </file>
+      <file name="gateway.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\gateway\gateway.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="gateway.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\gateway\gateway.component.ts">
+        <metrics statements="9" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+      </file>
+      <file name="gateway.route.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\gateway\gateway.route.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.admin.health">
+      <metrics statements="105" coveredstatements="88" conditionals="41" coveredconditionals="34" methods="25" coveredmethods="17"/>
+      <file name="health-modal.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\health\health-modal.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+      </file>
+      <file name="health-modal.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\health\health-modal.component.ts">
+        <metrics statements="15" coveredstatements="4" conditionals="5" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+      </file>
+      <file name="health.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\health\health.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+      </file>
+      <file name="health.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\health\health.component.ts">
+        <metrics statements="22" coveredstatements="19" conditionals="3" coveredconditionals="3" methods="11" coveredmethods="8"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="15" count="12" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="26" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="42" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="64" count="2" type="stmt"/>
+      </file>
+      <file name="health.route.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\health\health.route.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+      </file>
+      <file name="health.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\health\health.service.ts">
+        <metrics statements="64" coveredstatements="61" conditionals="33" coveredconditionals="31" methods="10" coveredmethods="9"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="11" count="12" type="stmt"/>
+        <line num="12" count="12" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="20" count="5" type="stmt"/>
+        <line num="21" count="5" type="stmt"/>
+        <line num="22" count="5" type="stmt"/>
+        <line num="26" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="33" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="37" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="17" type="stmt"/>
+        <line num="47" count="17" type="stmt"/>
+        <line num="48" count="17" type="stmt"/>
+        <line num="50" count="17" type="stmt"/>
+        <line num="51" count="46" type="cond" truecount="1" falsecount="0"/>
+        <line num="52" count="46" type="stmt"/>
+        <line num="53" count="46" type="cond" truecount="4" falsecount="0"/>
+        <line num="54" count="25" type="stmt"/>
+        <line num="56" count="21" type="cond" truecount="1" falsecount="0"/>
+        <line num="57" count="15" type="stmt"/>
+        <line num="58" count="15" type="stmt"/>
+        <line num="65" count="17" type="cond" truecount="1" falsecount="0"/>
+        <line num="66" count="11" type="stmt"/>
+        <line num="70" count="17" type="cond" truecount="4" falsecount="0"/>
+        <line num="71" count="16" type="stmt"/>
+        <line num="73" count="17" type="stmt"/>
+        <line num="77" count="8" type="stmt"/>
+        <line num="78" count="26" type="cond" truecount="1" falsecount="0"/>
+        <line num="79" count="26" type="stmt"/>
+        <line num="80" count="26" type="cond" truecount="1" falsecount="0"/>
+        <line num="81" count="17" type="cond" truecount="2" falsecount="0"/>
+        <line num="82" count="3" type="stmt"/>
+        <line num="83" count="3" type="stmt"/>
+        <line num="85" count="14" type="stmt"/>
+        <line num="90" count="8" type="stmt"/>
+        <line num="95" count="20" type="cond" truecount="4" falsecount="0"/>
+        <line num="96" count="6" type="stmt"/>
+        <line num="97" count="14" type="cond" truecount="1" falsecount="1"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="14" type="cond" truecount="1" falsecount="1"/>
+        <line num="100" count="14" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="104" count="20" type="stmt"/>
+        <line num="108" count="17" type="stmt"/>
+        <line num="110" count="17" type="stmt"/>
+        <line num="111" count="46" type="cond" truecount="1" falsecount="0"/>
+        <line num="112" count="46" type="stmt"/>
+        <line num="113" count="46" type="cond" truecount="3" falsecount="0"/>
+        <line num="114" count="6" type="stmt"/>
+        <line num="118" count="17" type="stmt"/>
+        <line num="122" count="47" type="stmt"/>
+        <line num="124" count="47" type="stmt"/>
+        <line num="125" count="294" type="cond" truecount="1" falsecount="0"/>
+        <line num="126" count="294" type="cond" truecount="1" falsecount="0"/>
+        <line num="127" count="23" type="stmt"/>
+        <line num="131" count="47" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.admin.logs">
+      <metrics statements="24" coveredstatements="24" conditionals="0" coveredconditionals="0" methods="12" coveredmethods="12"/>
+      <file name="log.model.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\logs\log.model.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+      </file>
+      <file name="logs.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\logs\logs.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="logs.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\logs\logs.component.ts">
+        <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="8"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="16" count="3" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
+        <line num="18" count="3" type="stmt"/>
+        <line num="19" count="3" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+      </file>
+      <file name="logs.route.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\logs\logs.route.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+      </file>
+      <file name="logs.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\logs\logs.service.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.admin.metrics">
+      <metrics statements="28" coveredstatements="24" conditionals="4" coveredconditionals="0" methods="10" coveredmethods="7"/>
+      <file name="metrics.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\metrics\metrics.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+      </file>
+      <file name="metrics.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\metrics\metrics.component.ts">
+        <metrics statements="18" coveredstatements="14" conditionals="4" coveredconditionals="0" methods="7" coveredmethods="4"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
+      </file>
+      <file name="metrics.route.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\metrics\metrics.route.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+      </file>
+      <file name="metrics.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\admin\metrics\metrics.service.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
+        <line num="9" count="4" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.core">
+      <metrics statements="22" coveredstatements="21" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="core.module.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\core.module.ts">
+        <metrics statements="9" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="26" type="stmt"/>
+        <line num="2" count="26" type="stmt"/>
+        <line num="3" count="26" type="stmt"/>
+        <line num="4" count="26" type="stmt"/>
+        <line num="5" count="26" type="stmt"/>
+        <line num="7" count="26" type="stmt"/>
+        <line num="8" count="26" type="stmt"/>
+        <line num="24" count="26" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+      </file>
+      <file name="index.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\index.ts">
+        <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="26" type="stmt"/>
+        <line num="2" count="26" type="stmt"/>
+        <line num="3" count="26" type="stmt"/>
+        <line num="4" count="26" type="stmt"/>
+        <line num="5" count="26" type="stmt"/>
+        <line num="6" count="26" type="stmt"/>
+        <line num="7" count="26" type="stmt"/>
+        <line num="8" count="26" type="stmt"/>
+        <line num="9" count="26" type="stmt"/>
+        <line num="10" count="26" type="stmt"/>
+        <line num="11" count="26" type="stmt"/>
+        <line num="12" count="26" type="stmt"/>
+        <line num="13" count="26" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.core.auth">
+      <metrics statements="127" coveredstatements="52" conditionals="43" coveredconditionals="10" methods="43" coveredmethods="8"/>
+      <file name="account.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\auth\account.service.ts">
+        <metrics statements="71" coveredstatements="36" conditionals="34" coveredconditionals="10" methods="23" coveredmethods="8"/>
+        <line num="1" count="30" type="stmt"/>
+        <line num="2" count="30" type="stmt"/>
+        <line num="3" count="30" type="stmt"/>
+        <line num="4" count="30" type="stmt"/>
+        <line num="5" count="30" type="stmt"/>
+        <line num="7" count="30" type="stmt"/>
+        <line num="12" count="30" type="stmt"/>
+        <line num="14" count="8" type="stmt"/>
+        <line num="15" count="8" type="stmt"/>
+        <line num="16" count="8" type="stmt"/>
+        <line num="18" count="8" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="42" count="4" type="stmt"/>
+        <line num="43" count="4" type="stmt"/>
+        <line num="44" count="4" type="stmt"/>
+        <line num="48" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="53" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="62" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="66" count="2" type="stmt"/>
+        <line num="68" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="77" count="5" type="cond" truecount="0" falsecount="1"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="83" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="84" count="3" type="stmt"/>
+        <line num="88" count="2" type="stmt"/>
+        <line num="91" count="1" type="stmt"/>
+        <line num="92" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="93" count="1" type="stmt"/>
+        <line num="94" count="1" type="stmt"/>
+        <line num="97" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="98" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="105" count="1" type="stmt"/>
+        <line num="106" count="1" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="111" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="129" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="135" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="136" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="137" count="0" type="stmt"/>
+        <line num="139" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="140" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="141" count="0" type="stmt"/>
+        <line num="143" count="0" type="stmt"/>
+        <line num="146" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="147" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="154" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="158" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="162" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="166" count="0" type="stmt"/>
+        <line num="167" count="0" type="stmt"/>
+        <line num="168" count="0" type="stmt"/>
+      </file>
+      <file name="auth-jwt.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\auth\auth-jwt.service.ts">
+        <metrics statements="13" coveredstatements="4" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="1" count="30" type="stmt"/>
+        <line num="2" count="30" type="stmt"/>
+        <line num="6" count="30" type="stmt"/>
+        <line num="9" count="30" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+      </file>
+      <file name="csrf.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\auth\csrf.service.ts">
+        <metrics statements="5" coveredstatements="3" conditionals="1" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="1" count="26" type="stmt"/>
+        <line num="2" count="26" type="stmt"/>
+        <line num="5" count="26" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+      </file>
+      <file name="state-storage.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\auth\state-storage.service.ts">
+        <metrics statements="13" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <line num="1" count="30" type="stmt"/>
+        <line num="2" count="30" type="stmt"/>
+        <line num="5" count="30" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+      </file>
+      <file name="user-route-access-service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\auth\user-route-access-service.ts">
+        <metrics statements="25" coveredstatements="6" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="1" count="26" type="stmt"/>
+        <line num="2" count="26" type="stmt"/>
+        <line num="4" count="26" type="stmt"/>
+        <line num="5" count="26" type="stmt"/>
+        <line num="6" count="26" type="stmt"/>
+        <line num="9" count="26" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="31" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="36" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.core.language">
+      <metrics statements="29" coveredstatements="8" conditionals="8" coveredconditionals="0" methods="8" coveredmethods="0"/>
+      <file name="language.constants.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\language\language.constants.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="26" type="stmt"/>
+      </file>
+      <file name="language.helper.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\language\language.helper.ts">
+        <metrics statements="28" coveredstatements="7" conditionals="8" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <line num="1" count="26" type="stmt"/>
+        <line num="2" count="26" type="stmt"/>
+        <line num="3" count="26" type="stmt"/>
+        <line num="4" count="26" type="stmt"/>
+        <line num="5" count="26" type="stmt"/>
+        <line num="7" count="26" type="stmt"/>
+        <line num="10" count="26" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="41" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="60" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="63" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.core.login">
+      <metrics statements="25" coveredstatements="8" conditionals="3" coveredconditionals="0" methods="10" coveredmethods="0"/>
+      <file name="login-modal.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\login\login-modal.service.ts">
+        <metrics statements="14" coveredstatements="4" conditionals="1" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="1" count="26" type="stmt"/>
+        <line num="2" count="26" type="stmt"/>
+        <line num="4" count="26" type="stmt"/>
+        <line num="7" count="26" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+      </file>
+      <file name="login.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\login\login.service.ts">
+        <metrics statements="11" coveredstatements="4" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="1" count="30" type="stmt"/>
+        <line num="2" count="30" type="stmt"/>
+        <line num="3" count="30" type="stmt"/>
+        <line num="7" count="30" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.core.user">
+      <metrics statements="50" coveredstatements="35" conditionals="24" coveredconditionals="12" methods="9" coveredmethods="4"/>
+      <file name="account.model.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\user\account.model.ts">
+        <metrics statements="11" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="26" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+      </file>
+      <file name="user.model.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\user\user.model.ts">
+        <metrics statements="25" coveredstatements="25" conditionals="24" coveredconditionals="12" methods="1" coveredmethods="1"/>
+        <line num="16" count="26" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="31" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="32" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="33" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="34" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="35" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="36" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="37" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="38" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="39" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="40" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="41" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="42" count="1" type="cond" truecount="1" falsecount="1"/>
+      </file>
+      <file name="user.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\core\user\user.service.ts">
+        <metrics statements="14" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="3"/>
+        <line num="1" count="26" type="stmt"/>
+        <line num="2" count="26" type="stmt"/>
+        <line num="5" count="26" type="stmt"/>
+        <line num="6" count="26" type="stmt"/>
+        <line num="10" count="26" type="stmt"/>
+        <line num="11" count="5" type="stmt"/>
+        <line num="13" count="5" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.entities.assertion">
+      <metrics statements="301" coveredstatements="136" conditionals="146" coveredconditionals="47" methods="94" coveredmethods="31"/>
+      <file name="assertion-delete-dialog.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion-delete-dialog.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="assertion-delete-dialog.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion-delete-dialog.component.ts">
+        <metrics statements="35" coveredstatements="17" conditionals="2" coveredconditionals="0" methods="11" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+      </file>
+      <file name="assertion-detail.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion-detail.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="assertion-detail.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion-detail.component.ts">
+        <metrics statements="14" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+      </file>
+      <file name="assertion-update.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion-update.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="assertion-update.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion-update.component.ts">
+        <metrics statements="117" coveredstatements="58" conditionals="93" coveredconditionals="25" methods="25" coveredmethods="15"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
+        <line num="23" count="3" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="25" count="3" type="stmt"/>
+        <line num="26" count="3" type="stmt"/>
+        <line num="27" count="3" type="stmt"/>
+        <line num="29" count="3" type="cond" truecount="0" falsecount="1"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="56" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="58" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="63" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="71" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="74" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="76" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="86" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="88" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="93" count="3" type="stmt"/>
+        <line num="98" count="9" type="cond" truecount="4" falsecount="0"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="108" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="115" count="1" type="stmt"/>
+        <line num="116" count="2" type="stmt"/>
+        <line num="117" count="2" type="stmt"/>
+        <line num="118" count="2" type="stmt"/>
+        <line num="127" count="2" type="stmt"/>
+        <line num="160" count="2" type="stmt"/>
+        <line num="161" count="2" type="stmt"/>
+        <line num="162" count="2" type="stmt"/>
+        <line num="163" count="2" type="stmt"/>
+        <line num="164" count="2" type="stmt"/>
+        <line num="168" count="0" type="stmt"/>
+        <line num="169" count="0" type="stmt"/>
+        <line num="170" count="0" type="stmt"/>
+        <line num="171" count="0" type="stmt"/>
+        <line num="172" count="0" type="stmt"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="175" count="0" type="stmt"/>
+        <line num="176" count="0" type="stmt"/>
+        <line num="179" count="0" type="stmt"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="184" count="0" type="stmt"/>
+        <line num="186" count="0" type="stmt"/>
+        <line num="187" count="0" type="stmt"/>
+        <line num="189" count="0" type="stmt"/>
+        <line num="190" count="0" type="stmt"/>
+        <line num="191" count="0" type="stmt"/>
+        <line num="196" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="197" count="1" type="stmt"/>
+        <line num="227" count="1" type="stmt"/>
+        <line num="228" count="1" type="stmt"/>
+        <line num="233" count="2" type="stmt"/>
+        <line num="237" count="2" type="stmt"/>
+        <line num="238" count="2" type="stmt"/>
+        <line num="239" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="240" count="1" type="stmt"/>
+        <line num="242" count="1" type="stmt"/>
+        <line num="243" count="1" type="stmt"/>
+        <line num="245" count="0" type="stmt"/>
+        <line num="248" count="1" type="stmt"/>
+        <line num="250" count="1" type="stmt"/>
+        <line num="251" count="1" type="stmt"/>
+        <line num="253" count="0" type="stmt"/>
+        <line num="259" count="2" type="stmt"/>
+        <line num="295" count="2" type="stmt"/>
+        <line num="296" count="2" type="stmt"/>
+        <line num="300" count="0" type="stmt"/>
+        <line num="304" count="1" type="stmt"/>
+        <line num="305" count="1" type="stmt"/>
+        <line num="308" count="1" type="cond" truecount="1" falsecount="2"/>
+        <line num="309" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="310" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="313" count="0" type="stmt"/>
+        <line num="322" count="1" type="stmt"/>
+        <line num="323" count="1" type="cond" truecount="1" falsecount="2"/>
+        <line num="324" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="325" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="326" count="0" type="stmt"/>
+      </file>
+      <file name="assertion.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="assertion.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion.component.ts">
+        <metrics statements="85" coveredstatements="12" conditionals="17" coveredconditionals="0" methods="32" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="107" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="108" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="138" count="0" type="stmt"/>
+        <line num="142" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="143" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="144" count="0" type="stmt"/>
+        <line num="146" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="153" count="0" type="stmt"/>
+        <line num="155" count="0" type="stmt"/>
+        <line num="161" count="0" type="stmt"/>
+        <line num="164" count="0" type="stmt"/>
+        <line num="166" count="0" type="stmt"/>
+        <line num="172" count="0" type="stmt"/>
+        <line num="175" count="0" type="stmt"/>
+        <line num="177" count="0" type="stmt"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="184" count="0" type="stmt"/>
+        <line num="185" count="0" type="stmt"/>
+        <line num="186" count="0" type="stmt"/>
+        <line num="190" count="0" type="stmt"/>
+        <line num="191" count="0" type="stmt"/>
+        <line num="192" count="0" type="stmt"/>
+        <line num="196" count="0" type="stmt"/>
+        <line num="197" count="0" type="stmt"/>
+        <line num="198" count="0" type="stmt"/>
+        <line num="199" count="0" type="stmt"/>
+        <line num="203" count="0" type="stmt"/>
+        <line num="207" count="0" type="stmt"/>
+        <line num="208" count="0" type="stmt"/>
+      </file>
+      <file name="assertion.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion.service.ts">
+        <metrics statements="46" coveredstatements="39" conditionals="34" coveredconditionals="22" methods="20" coveredmethods="14"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="7" count="4" type="stmt"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
+        <line num="17" count="13" type="stmt"/>
+        <line num="19" count="13" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="76" count="2" type="stmt"/>
+        <line num="82" count="2" type="stmt"/>
+        <line num="86" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="87" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="88" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="89" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="90" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="91" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="93" count="3" type="stmt"/>
+        <line num="97" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="98" count="1" type="stmt"/>
+        <line num="99" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="100" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="101" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="102" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="103" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="106" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.entities.member">
+      <metrics statements="252" coveredstatements="124" conditionals="98" coveredconditionals="31" methods="78" coveredmethods="30"/>
+      <file name="member-delete-dialog.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\member\member-delete-dialog.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="member-delete-dialog.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\member\member-delete-dialog.component.ts">
+        <metrics statements="32" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="12" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+      </file>
+      <file name="member-detail.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\member\member-detail.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="member-detail.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\member\member-detail.component.ts">
+        <metrics statements="14" coveredstatements="13" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="24" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+      </file>
+      <file name="member-update.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\member\member-update.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="member-update.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\member\member-update.component.ts">
+        <metrics statements="96" coveredstatements="41" conditionals="59" coveredconditionals="15" methods="25" coveredmethods="8"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="17" count="4" type="cond" truecount="2" falsecount="2"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="26" count="4" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="32" count="4" type="cond" truecount="2" falsecount="2"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="52" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="53" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="57" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="58" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="59" count="2" type="stmt"/>
+        <line num="62" count="2" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="2" type="stmt"/>
+        <line num="72" count="2" type="stmt"/>
+        <line num="76" count="2" type="stmt"/>
+        <line num="91" count="2" type="stmt"/>
+        <line num="92" count="2" type="stmt"/>
+        <line num="93" count="2" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
+        <line num="95" count="2" type="stmt"/>
+        <line num="96" count="2" type="stmt"/>
+        <line num="98" count="2" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
+        <line num="118" count="0" type="stmt"/>
+        <line num="119" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="120" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
+        <line num="124" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
+        <line num="134" count="2" type="stmt"/>
+        <line num="147" count="2" type="stmt"/>
+        <line num="148" count="2" type="cond" truecount="2" falsecount="3"/>
+        <line num="149" count="2" type="stmt"/>
+        <line num="150" count="2" type="stmt"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="157" count="0" type="stmt"/>
+        <line num="161" count="2" type="stmt"/>
+        <line num="162" count="2" type="stmt"/>
+        <line num="163" count="2" type="stmt"/>
+        <line num="164" count="0" type="stmt"/>
+        <line num="165" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="166" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="167" count="0" type="stmt"/>
+        <line num="169" count="0" type="stmt"/>
+        <line num="172" count="0" type="stmt"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="179" count="2" type="stmt"/>
+        <line num="200" count="0" type="stmt"/>
+        <line num="204" count="0" type="stmt"/>
+        <line num="205" count="0" type="stmt"/>
+        <line num="206" count="0" type="stmt"/>
+        <line num="210" count="0" type="stmt"/>
+        <line num="214" count="0" type="stmt"/>
+        <line num="215" count="0" type="stmt"/>
+        <line num="216" count="0" type="stmt"/>
+        <line num="220" count="0" type="stmt"/>
+      </file>
+      <file name="member.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\member\member.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="member.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\member\member.component.ts">
+        <metrics statements="66" coveredstatements="9" conditionals="19" coveredconditionals="0" methods="19" coveredmethods="0"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="73" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="127" count="0" type="stmt"/>
+        <line num="131" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="132" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
+        <line num="140" count="0" type="stmt"/>
+        <line num="141" count="0" type="stmt"/>
+        <line num="142" count="0" type="stmt"/>
+        <line num="146" count="0" type="stmt"/>
+        <line num="147" count="0" type="stmt"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="153" count="0" type="stmt"/>
+        <line num="154" count="0" type="stmt"/>
+        <line num="155" count="0" type="stmt"/>
+        <line num="159" count="0" type="stmt"/>
+        <line num="163" count="0" type="stmt"/>
+      </file>
+      <file name="member.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\member\member.service.ts">
+        <metrics statements="40" coveredstatements="38" conditionals="18" coveredconditionals="14" methods="18" coveredmethods="16"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="5" type="stmt"/>
+        <line num="7" count="5" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="17" count="5" type="stmt"/>
+        <line num="18" count="16" type="stmt"/>
+        <line num="22" count="16" type="stmt"/>
+        <line num="23" count="16" type="stmt"/>
+        <line num="24" count="16" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="62" count="16" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="72" count="4" type="stmt"/>
+        <line num="76" count="4" type="stmt"/>
+        <line num="80" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="81" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="82" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="84" count="3" type="stmt"/>
+        <line num="88" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="89" count="1" type="stmt"/>
+        <line num="90" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="91" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="94" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.entities.user">
+      <metrics statements="335" coveredstatements="114" conditionals="104" coveredconditionals="16" methods="116" coveredmethods="23"/>
+      <file name="user-delete-dialog.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\user\user-delete-dialog.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="user-delete-dialog.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\user\user-delete-dialog.component.ts">
+        <metrics statements="28" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="11" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+      </file>
+      <file name="user-detail.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\user\user-detail.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="user-detail.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\user\user-detail.component.ts">
+        <metrics statements="23" coveredstatements="14" conditionals="3" coveredconditionals="0" methods="7" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+      </file>
+      <file name="user-update.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\user\user-update.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="user-update.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\user\user-update.component.ts">
+        <metrics statements="132" coveredstatements="33" conditionals="51" coveredconditionals="2" methods="42" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="49" count="2" type="stmt"/>
+        <line num="50" count="2" type="stmt"/>
+        <line num="53" count="2" type="stmt"/>
+        <line num="54" count="2" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="56" count="2" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="58" count="2" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
+        <line num="60" count="2" type="stmt"/>
+        <line num="62" count="2" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="75" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="80" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="97" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="98" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="111" count="0" type="stmt"/>
+        <line num="119" count="2" type="stmt"/>
+        <line num="134" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="136" count="0" type="stmt"/>
+        <line num="139" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="140" count="0" type="stmt"/>
+        <line num="142" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="143" count="0" type="stmt"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="152" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="153" count="0" type="stmt"/>
+        <line num="154" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="155" count="0" type="stmt"/>
+        <line num="158" count="0" type="stmt"/>
+        <line num="160" count="0" type="stmt"/>
+        <line num="164" count="0" type="stmt"/>
+        <line num="168" count="0" type="stmt"/>
+        <line num="172" count="0" type="stmt"/>
+        <line num="176" count="0" type="stmt"/>
+        <line num="180" count="0" type="stmt"/>
+        <line num="181" count="0" type="stmt"/>
+        <line num="182" count="0" type="stmt"/>
+        <line num="183" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="184" count="0" type="stmt"/>
+        <line num="186" count="0" type="stmt"/>
+        <line num="190" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="191" count="0" type="stmt"/>
+        <line num="193" count="0" type="stmt"/>
+        <line num="198" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="199" count="0" type="stmt"/>
+        <line num="200" count="0" type="stmt"/>
+        <line num="202" count="0" type="stmt"/>
+        <line num="203" count="0" type="stmt"/>
+        <line num="204" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="205" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="206" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="207" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="208" count="0" type="stmt"/>
+        <line num="210" count="0" type="stmt"/>
+        <line num="212" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="213" count="0" type="stmt"/>
+        <line num="215" count="0" type="stmt"/>
+        <line num="218" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="219" count="0" type="stmt"/>
+        <line num="221" count="0" type="stmt"/>
+        <line num="225" count="0" type="stmt"/>
+        <line num="226" count="0" type="stmt"/>
+        <line num="233" count="0" type="stmt"/>
+        <line num="234" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="235" count="0" type="stmt"/>
+        <line num="237" count="0" type="stmt"/>
+        <line num="239" count="0" type="stmt"/>
+        <line num="244" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="245" count="0" type="stmt"/>
+        <line num="246" count="0" type="stmt"/>
+        <line num="247" count="0" type="stmt"/>
+        <line num="249" count="0" type="stmt"/>
+        <line num="253" count="0" type="stmt"/>
+        <line num="274" count="0" type="stmt"/>
+        <line num="278" count="0" type="stmt"/>
+        <line num="282" count="0" type="stmt"/>
+        <line num="286" count="0" type="stmt"/>
+        <line num="290" count="0" type="stmt"/>
+        <line num="291" count="0" type="stmt"/>
+        <line num="292" count="0" type="stmt"/>
+        <line num="296" count="0" type="stmt"/>
+        <line num="297" count="0" type="stmt"/>
+        <line num="298" count="0" type="stmt"/>
+        <line num="302" count="0" type="stmt"/>
+        <line num="303" count="0" type="stmt"/>
+        <line num="304" count="0" type="stmt"/>
+        <line num="308" count="0" type="stmt"/>
+        <line num="309" count="0" type="stmt"/>
+        <line num="310" count="0" type="stmt"/>
+        <line num="314" count="0" type="stmt"/>
+        <line num="318" count="0" type="stmt"/>
+      </file>
+      <file name="user.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\user\user.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="user.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\user\user.component.ts">
+        <metrics statements="90" coveredstatements="10" conditionals="28" coveredconditionals="0" methods="31" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="73" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="74" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="79" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="85" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="129" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="138" count="0" type="stmt"/>
+        <line num="142" count="0" type="stmt"/>
+        <line num="146" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="147" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="154" count="0" type="stmt"/>
+        <line num="155" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="156" count="0" type="stmt"/>
+        <line num="158" count="0" type="stmt"/>
+        <line num="164" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="165" count="0" type="stmt"/>
+        <line num="167" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="168" count="0" type="stmt"/>
+        <line num="170" count="0" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
+        <line num="178" count="0" type="stmt"/>
+        <line num="182" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="185" count="0" type="stmt"/>
+        <line num="189" count="0" type="stmt"/>
+        <line num="193" count="0" type="stmt"/>
+        <line num="197" count="0" type="stmt"/>
+        <line num="198" count="0" type="stmt"/>
+        <line num="203" count="0" type="stmt"/>
+        <line num="204" count="0" type="stmt"/>
+        <line num="205" count="0" type="stmt"/>
+        <line num="206" count="0" type="stmt"/>
+        <line num="210" count="0" type="stmt"/>
+        <line num="211" count="0" type="stmt"/>
+        <line num="212" count="0" type="stmt"/>
+        <line num="216" count="0" type="stmt"/>
+        <line num="217" count="0" type="stmt"/>
+        <line num="218" count="0" type="stmt"/>
+        <line num="219" count="0" type="stmt"/>
+        <line num="223" count="0" type="stmt"/>
+        <line num="227" count="0" type="stmt"/>
+      </file>
+      <file name="user.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\user\user.service.ts">
+        <metrics statements="58" coveredstatements="37" conditionals="22" coveredconditionals="14" methods="25" coveredmethods="14"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="6" count="5" type="stmt"/>
+        <line num="8" count="5" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="16" count="5" type="stmt"/>
+        <line num="17" count="15" type="stmt"/>
+        <line num="18" count="15" type="stmt"/>
+        <line num="20" count="15" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
+        <line num="98" count="2" type="stmt"/>
+        <line num="102" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="103" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="104" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="105" count="3" type="stmt"/>
+        <line num="106" count="3" type="cond" truecount="0" falsecount="1"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="108" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="114" count="3" type="stmt"/>
+        <line num="118" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="119" count="1" type="stmt"/>
+        <line num="120" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="121" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="122" count="1" type="stmt"/>
+        <line num="123" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="125" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="132" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.shared">
+      <metrics statements="30" coveredstatements="28" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <file name="index.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\index.ts">
+        <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="17" type="stmt"/>
+        <line num="2" count="17" type="stmt"/>
+        <line num="3" count="17" type="stmt"/>
+        <line num="4" count="17" type="stmt"/>
+        <line num="5" count="17" type="stmt"/>
+        <line num="6" count="17" type="stmt"/>
+        <line num="7" count="17" type="stmt"/>
+        <line num="8" count="17" type="stmt"/>
+        <line num="9" count="17" type="stmt"/>
+        <line num="10" count="17" type="stmt"/>
+        <line num="11" count="17" type="stmt"/>
+        <line num="12" count="17" type="stmt"/>
+        <line num="13" count="17" type="stmt"/>
+      </file>
+      <file name="shared-common.module.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\shared-common.module.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="17" type="stmt"/>
+        <line num="3" count="17" type="stmt"/>
+        <line num="10" count="17" type="stmt"/>
+      </file>
+      <file name="shared-libs.module.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\shared-libs.module.ts">
+        <metrics statements="10" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="17" type="stmt"/>
+        <line num="2" count="17" type="stmt"/>
+        <line num="3" count="17" type="stmt"/>
+        <line num="4" count="17" type="stmt"/>
+        <line num="5" count="17" type="stmt"/>
+        <line num="6" count="17" type="stmt"/>
+        <line num="7" count="17" type="stmt"/>
+        <line num="8" count="17" type="stmt"/>
+        <line num="14" count="17" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+      </file>
+      <file name="shared.module.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\shared.module.ts">
+        <metrics statements="4" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="17" type="stmt"/>
+        <line num="2" count="17" type="stmt"/>
+        <line num="11" count="17" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.shared.alert">
+      <metrics statements="62" coveredstatements="53" conditionals="36" coveredconditionals="34" methods="11" coveredmethods="6"/>
+      <file name="alert-error.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\alert\alert-error.component.ts">
+        <metrics statements="55" coveredstatements="50" conditionals="36" coveredconditionals="34" methods="7" coveredmethods="6"/>
+        <line num="1" count="18" type="stmt"/>
+        <line num="2" count="18" type="stmt"/>
+        <line num="3" count="18" type="stmt"/>
+        <line num="18" count="18" type="stmt"/>
+        <line num="22" count="7" type="stmt"/>
+        <line num="24" count="7" type="stmt"/>
+        <line num="26" count="7" type="stmt"/>
+        <line num="28" count="8" type="stmt"/>
+        <line num="29" count="8" type="cond" truecount="4" falsecount="0"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="36" count="4" type="stmt"/>
+        <line num="37" count="4" type="stmt"/>
+        <line num="38" count="4" type="stmt"/>
+        <line num="39" count="4" type="stmt"/>
+        <line num="40" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="42" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="46" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="49" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="53" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="61" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="64" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="73" count="3" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="80" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="81" count="1" type="stmt"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="97" count="6" type="cond" truecount="3" falsecount="0"/>
+        <line num="98" count="6" type="stmt"/>
+        <line num="99" count="6" type="stmt"/>
+        <line num="104" count="7" type="cond" truecount="4" falsecount="0"/>
+        <line num="106" count="7" type="stmt"/>
+        <line num="114" count="7" type="stmt"/>
+        <line num="118" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="119" count="0" type="stmt"/>
+        <line num="120" count="0" type="stmt"/>
+        <line num="122" count="1" type="stmt"/>
+      </file>
+      <file name="alert.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\alert\alert.component.ts">
+        <metrics statements="7" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="1" count="17" type="stmt"/>
+        <line num="2" count="17" type="stmt"/>
+        <line num="16" count="17" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.shared.auth">
+      <metrics statements="12" coveredstatements="4" conditionals="3" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <file name="has-any-authority.directive.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\auth\has-any-authority.directive.ts">
+        <metrics statements="12" coveredstatements="4" conditionals="3" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="1" count="17" type="stmt"/>
+        <line num="2" count="17" type="stmt"/>
+        <line num="18" count="17" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="24" count="17" type="stmt"/>
+        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="35" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.shared.constants">
+      <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="error.constants.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\constants\error.constants.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="17" type="stmt"/>
+        <line num="2" count="17" type="stmt"/>
+        <line num="3" count="17" type="stmt"/>
+        <line num="4" count="17" type="stmt"/>
+      </file>
+      <file name="input.constants.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\constants\input.constants.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="17" type="stmt"/>
+        <line num="2" count="17" type="stmt"/>
+      </file>
+      <file name="orcid-api.constants.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\constants\orcid-api.constants.ts">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="16" count="3" type="stmt"/>
+        <line num="268" count="3" type="stmt"/>
+        <line num="270" count="3" type="stmt"/>
+        <line num="272" count="3" type="stmt"/>
+      </file>
+      <file name="pagination.constants.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\constants\pagination.constants.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="17" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.shared.errorHandler">
+      <metrics statements="9" coveredstatements="3" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="1"/>
+      <file name="error-handler.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\errorHandler\error-handler.service.ts">
+        <metrics statements="9" coveredstatements="3" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="1"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.shared.language">
+      <metrics statements="4" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <file name="find-language-from-key.pipe.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\language\find-language-from-key.pipe.ts">
+        <metrics statements="4" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="1" count="17" type="stmt"/>
+        <line num="4" count="17" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.shared.login">
+      <metrics statements="60" coveredstatements="37" conditionals="16" coveredconditionals="3" methods="12" coveredmethods="5"/>
+      <file name="login.component.html" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\login\login.component.html">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="30" type="stmt"/>
+      </file>
+      <file name="login.component.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\login\login.component.ts">
+        <metrics statements="59" coveredstatements="36" conditionals="16" coveredconditionals="3" methods="12" coveredmethods="5"/>
+        <line num="1" count="30" type="stmt"/>
+        <line num="2" count="30" type="stmt"/>
+        <line num="3" count="30" type="stmt"/>
+        <line num="4" count="30" type="stmt"/>
+        <line num="5" count="30" type="stmt"/>
+        <line num="6" count="30" type="stmt"/>
+        <line num="7" count="30" type="stmt"/>
+        <line num="8" count="30" type="stmt"/>
+        <line num="14" count="30" type="stmt"/>
+        <line num="16" count="5" type="stmt"/>
+        <line num="17" count="5" type="stmt"/>
+        <line num="18" count="5" type="stmt"/>
+        <line num="19" count="5" type="stmt"/>
+        <line num="21" count="5" type="stmt"/>
+        <line num="29" count="5" type="stmt"/>
+        <line num="30" count="5" type="stmt"/>
+        <line num="31" count="5" type="stmt"/>
+        <line num="32" count="5" type="stmt"/>
+        <line num="33" count="5" type="stmt"/>
+        <line num="34" count="5" type="stmt"/>
+        <line num="35" count="5" type="stmt"/>
+        <line num="36" count="5" type="stmt"/>
+        <line num="37" count="5" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="51" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="58" count="2" type="stmt"/>
+        <line num="60" count="2" type="cond" truecount="2" falsecount="2"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="63" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="67" count="2" type="stmt"/>
+        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="96" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="99" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="111" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="118" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="119" count="0" type="stmt"/>
+        <line num="121" count="1" type="stmt"/>
+        <line num="125" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="128" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.shared.model">
+      <metrics statements="81" coveredstatements="81" conditionals="22" coveredconditionals="22" methods="3" coveredmethods="3"/>
+      <file name="assertion.model.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\model\assertion.model.ts">
+        <metrics statements="42" coveredstatements="42" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
+        <line num="53" count="4" type="stmt"/>
+        <line num="55" count="11" type="stmt"/>
+        <line num="56" count="11" type="stmt"/>
+        <line num="57" count="11" type="stmt"/>
+        <line num="58" count="11" type="stmt"/>
+        <line num="59" count="11" type="stmt"/>
+        <line num="60" count="11" type="stmt"/>
+        <line num="61" count="11" type="stmt"/>
+        <line num="62" count="11" type="stmt"/>
+        <line num="63" count="11" type="stmt"/>
+        <line num="64" count="11" type="stmt"/>
+        <line num="65" count="11" type="stmt"/>
+        <line num="66" count="11" type="stmt"/>
+        <line num="67" count="11" type="stmt"/>
+        <line num="68" count="11" type="stmt"/>
+        <line num="69" count="11" type="stmt"/>
+        <line num="70" count="11" type="stmt"/>
+        <line num="71" count="11" type="stmt"/>
+        <line num="72" count="11" type="stmt"/>
+        <line num="73" count="11" type="stmt"/>
+        <line num="74" count="11" type="stmt"/>
+        <line num="75" count="11" type="stmt"/>
+        <line num="76" count="11" type="stmt"/>
+        <line num="77" count="11" type="stmt"/>
+        <line num="78" count="11" type="stmt"/>
+        <line num="79" count="11" type="stmt"/>
+        <line num="80" count="11" type="stmt"/>
+        <line num="81" count="11" type="stmt"/>
+        <line num="82" count="11" type="stmt"/>
+        <line num="83" count="11" type="stmt"/>
+        <line num="84" count="11" type="stmt"/>
+        <line num="85" count="11" type="stmt"/>
+        <line num="86" count="11" type="stmt"/>
+        <line num="87" count="11" type="stmt"/>
+        <line num="88" count="11" type="stmt"/>
+        <line num="89" count="11" type="stmt"/>
+        <line num="90" count="11" type="stmt"/>
+        <line num="91" count="11" type="stmt"/>
+        <line num="93" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="94" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="95" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="96" count="11" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="member.model.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\model\member.model.ts">
+        <metrics statements="19" coveredstatements="19" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
+        <line num="21" count="4" type="stmt"/>
+        <line num="23" count="11" type="stmt"/>
+        <line num="24" count="11" type="stmt"/>
+        <line num="25" count="11" type="stmt"/>
+        <line num="26" count="11" type="stmt"/>
+        <line num="27" count="11" type="stmt"/>
+        <line num="28" count="11" type="stmt"/>
+        <line num="29" count="11" type="stmt"/>
+        <line num="30" count="11" type="stmt"/>
+        <line num="31" count="11" type="stmt"/>
+        <line num="32" count="11" type="stmt"/>
+        <line num="33" count="11" type="stmt"/>
+        <line num="34" count="11" type="stmt"/>
+        <line num="35" count="11" type="stmt"/>
+        <line num="36" count="11" type="stmt"/>
+        <line num="37" count="11" type="stmt"/>
+        <line num="39" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="40" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="41" count="11" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="user.model.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\model\user.model.ts">
+        <metrics statements="20" coveredstatements="20" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
+        <line num="29" count="4" type="stmt"/>
+        <line num="31" count="9" type="stmt"/>
+        <line num="32" count="9" type="stmt"/>
+        <line num="33" count="9" type="stmt"/>
+        <line num="34" count="9" type="stmt"/>
+        <line num="35" count="9" type="stmt"/>
+        <line num="36" count="9" type="stmt"/>
+        <line num="37" count="9" type="stmt"/>
+        <line num="38" count="9" type="stmt"/>
+        <line num="39" count="9" type="stmt"/>
+        <line num="40" count="9" type="stmt"/>
+        <line num="41" count="9" type="stmt"/>
+        <line num="42" count="9" type="stmt"/>
+        <line num="43" count="9" type="stmt"/>
+        <line num="44" count="9" type="stmt"/>
+        <line num="45" count="9" type="stmt"/>
+        <line num="47" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="48" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="49" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="50" count="9" type="cond" truecount="2" falsecount="0"/>
+      </file>
+    </package>
+    <package name="app.shared.util">
+      <metrics statements="46" coveredstatements="28" conditionals="16" coveredconditionals="6" methods="9" coveredmethods="5"/>
+      <file name="app-validators.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\util\app-validators.ts">
+        <metrics statements="4" coveredstatements="3" conditionals="3" coveredconditionals="1" methods="1" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="5" count="4" type="cond" truecount="1" falsecount="2"/>
+        <line num="6" count="0" type="stmt"/>
+      </file>
+      <file name="date-util.service.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\util\date-util.service.ts">
+        <metrics statements="23" coveredstatements="10" conditionals="4" coveredconditionals="2" methods="3" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="30" count="2" type="cond" truecount="2" falsecount="2"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="37" count="60" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+      </file>
+      <file name="datepicker-adapter.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\util\datepicker-adapter.ts">
+        <metrics statements="8" coveredstatements="4" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="4" count="30" type="stmt"/>
+        <line num="5" count="30" type="stmt"/>
+        <line num="7" count="30" type="stmt"/>
+        <line num="10" count="30" type="stmt"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
+      </file>
+      <file name="request-util.ts" path="C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\util\request-util.ts">
+        <metrics statements="11" coveredstatements="11" conditionals="3" coveredconditionals="3" methods="3" coveredmethods="3"/>
+        <line num="1" count="30" type="stmt"/>
+        <line num="3" count="30" type="stmt"/>
+        <line num="4" count="7" type="stmt"/>
+        <line num="5" count="7" type="cond" truecount="1" falsecount="0"/>
+        <line num="6" count="7" type="stmt"/>
+        <line num="7" count="76" type="cond" truecount="1" falsecount="0"/>
+        <line num="8" count="75" type="stmt"/>
+        <line num="11" count="7" type="cond" truecount="1" falsecount="0"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="17" count="7" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

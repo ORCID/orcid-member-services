@@ -12,7 +12,7 @@ module.exports = (options) => ({
         extensions: ['.ts', '.js'],
         modules: ['node_modules'],
         alias: {
-            app: utils.root('src/main/webapp/app/'),
+            app: utils.root('src/app/'),
            // ...rxPaths()
         }
     },
@@ -67,38 +67,38 @@ module.exports = (options) => ({
                 SERVER_API_URL: `''`
             }
         }),
-        new CopyWebpackPlugin([
+        new CopyWebpackPlugin({patterns:[
             { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
             { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
             { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
-            { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
-            { from: './src/main/webapp/content/', to: 'content' },
-            { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
-            { from: './src/main/webapp/manifest.webapp', to: 'manifest.webapp' },
+            { from: './src/swagger-ui/', to: 'swagger-ui' },
+            { from: './src/content/', to: 'content' },
+            { from: './src/favicon.ico', to: 'favicon.ico' },
+            { from: './src/manifest.webapp', to: 'manifest.webapp' },
             // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-            { from: './src/main/webapp/robots.txt', to: 'robots.txt' }
-        ]),
+            { from: './src/robots.txt', to: 'robots.txt' }
+        ]}),
         new MergeJsonWebpackPlugin({
             output: {
                 groupBy: [
-                    { pattern: "./src/main/webapp/i18n/en/*.json", fileName: "./i18n/en.json" },
-                    { pattern: "./src/main/webapp/i18n/es/*.json", fileName: "./i18n/es.json" },
-                    { pattern: "./src/main/webapp/i18n/fr/*.json", fileName: "./i18n/fr.json" },
-                    { pattern: "./src/main/webapp/i18n/ja/*.json", fileName: "./i18n/ja.json" },
-                    { pattern: "./src/main/webapp/i18n/zh_TW/*.json", fileName: "./i18n/zh_TW.json" },
-                    { pattern: "./src/main/webapp/i18n/zh_CN/*.json", fileName: "./i18n/zh_CN.json" },
-                    { pattern: "./src/main/webapp/i18n/cs/*.json", fileName: "./i18n/cs.json" },
-                    { pattern: "./src/main/webapp/i18n/it/*.json", fileName: "./i18n/it.json" },
-                    { pattern: "./src/main/webapp/i18n/ko/*.json", fileName: "./i18n/ko.json" },
-                    { pattern: "./src/main/webapp/i18n/pt/*.json", fileName: "./i18n/pt.json" },
-                    { pattern: "./src/main/webapp/i18n/ru/*.json", fileName: "./i18n/ru.json" },
-                    { pattern: "./src/main/webapp/i18n/xx/*.json", fileName: "./i18n/xx.json" }
+                    { pattern: "./src/i18n/en/*.json", fileName: "./i18n/en.json" },
+                    { pattern: "./src/i18n/es/*.json", fileName: "./i18n/es.json" },
+                    { pattern: "./src/i18n/fr/*.json", fileName: "./i18n/fr.json" },
+                    { pattern: "./src/i18n/ja/*.json", fileName: "./i18n/ja.json" },
+                    { pattern: "./src/i18n/zh_TW/*.json", fileName: "./i18n/zh_TW.json" },
+                    { pattern: "./src/i18n/zh_CN/*.json", fileName: "./i18n/zh_CN.json" },
+                    { pattern: "./src/i18n/cs/*.json", fileName: "./i18n/cs.json" },
+                    { pattern: "./src/i18n/it/*.json", fileName: "./i18n/it.json" },
+                    { pattern: "./src/i18n/ko/*.json", fileName: "./i18n/ko.json" },
+                    { pattern: "./src/i18n/pt/*.json", fileName: "./i18n/pt.json" },
+                    { pattern: "./src/i18n/ru/*.json", fileName: "./i18n/ru.json" },
+                    { pattern: "./src/i18n/xx/*.json", fileName: "./i18n/xx.json" }
                     // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
                 ]
             }
         }),
         new HtmlWebpackPlugin({
-            template: './src/main/webapp/index.html',
+            template: './src/index.html',
             chunks: ['polyfills', 'main', 'global'],
             chunksSortMode: 'manual',
             inject: 'body'

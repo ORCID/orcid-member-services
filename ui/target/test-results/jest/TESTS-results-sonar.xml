@@ -1,0 +1,1572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion.service.spec.ts">
+    <testCase name="Service Tests Assertion Service Service methods should find an element" duration="33"/>
+    <testCase name="Service Tests Assertion Service Service methods should create a Assertion" duration="31"/>
+    <testCase name="Service Tests Assertion Service Service methods should update a Assertion" duration="12"/>
+    <testCase name="Service Tests Assertion Service Service methods should return a list of Assertion" duration="10"/>
+    <testCase name="Service Tests Assertion Service Service methods should delete a Assertion" duration="7"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\admin\health\health.component.spec.ts">
+    <testCase name="Component Tests JhiHealthCheckComponent baseName and subSystemName should return the basename when it has no sub system" duration="59"/>
+    <testCase name="Component Tests JhiHealthCheckComponent baseName and subSystemName should return the basename when it has sub systems" duration="18"/>
+    <testCase name="Component Tests JhiHealthCheckComponent baseName and subSystemName should return the sub system name" duration="20"/>
+    <testCase name="Component Tests JhiHealthCheckComponent baseName and subSystemName should return the subsystem when it has multiple keys" duration="15"/>
+    <testCase name="Component Tests JhiHealthCheckComponent transformHealthData should flatten empty health data" duration="16"/>
+    <testCase name="Component Tests JhiHealthCheckComponent transformHealthData should flatten health data with no subsystems" duration="12"/>
+    <testCase name="Component Tests JhiHealthCheckComponent transformHealthData should flatten health data with subsystems at level 1, main system has no additional information" duration="18"/>
+    <testCase name="Component Tests JhiHealthCheckComponent transformHealthData should flatten health data with subsystems at level 1, main system has additional information" duration="16"/>
+    <testCase name="Component Tests JhiHealthCheckComponent transformHealthData should flatten health data with subsystems at level 1, main system has additional error" duration="17"/>
+    <testCase name="Component Tests JhiHealthCheckComponent getBadgeClass should get badge class" duration="15"/>
+    <testCase name="Component Tests JhiHealthCheckComponent refresh should call refresh on init" duration="17"/>
+    <testCase name="Component Tests JhiHealthCheckComponent refresh should handle a 503 on refreshing health data" duration="14"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\shared\login\login.component.spec.ts">
+    <testCase name="Component Tests LoginComponent should authenticate the user upon login when previous state was set" duration="113">
+      <failure message="TypeError: this.loginService.login(...).subscribe is not a function"><![CDATA[TypeError: this.loginService.login(...).subscribe is not a function
+    at JhiLoginModalComponent.login (C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\login\login.component.ts:74:10)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\shared\login\login.component.spec.ts:73:14
+    at C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\fake-async-test.js:793:22
+    at TestBedViewEngine.execute (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3386:17)
+    at C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3619:24
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41]]></failure>
+    </testCase>
+    <testCase name="Component Tests LoginComponent should authenticate the user upon login when previous state was not set" duration="18">
+      <failure message="TypeError: this.loginService.login(...).subscribe is not a function"><![CDATA[TypeError: this.loginService.login(...).subscribe is not a function
+    at JhiLoginModalComponent.login (C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\login\login.component.ts:74:10)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\shared\login\login.component.spec.ts:105:14
+    at C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\fake-async-test.js:793:22
+    at TestBedViewEngine.execute (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3386:17)
+    at C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3619:24
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41]]></failure>
+    </testCase>
+    <testCase name="Component Tests LoginComponent should empty the credentials upon cancel" duration="16"/>
+    <testCase name="Component Tests LoginComponent should redirect user when register" duration="15">
+      <failure message="Error: expect(spy).toHaveBeenCalledWith(...expected)"><![CDATA[Error: expect(spy).toHaveBeenCalledWith(...expected)
+
+Expected: "to state register"
+
+Number of calls: 0
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\shared\login\login.component.spec.ts:149:42
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41]]></failure>
+    </testCase>
+    <testCase name="Component Tests LoginComponent should redirect user when request password" duration="16">
+      <failure message="Error: expect(spy).toHaveBeenCalledWith(...expected)"><![CDATA[Error: expect(spy).toHaveBeenCalledWith(...expected)
+
+Expected: "to state requestReset"
+
+Number of calls: 0
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\shared\login\login.component.spec.ts:158:42
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41]]></failure>
+    </testCase>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.service.spec.ts">
+    <testCase name="Service Tests Member service users service Service methods should find an element" duration="31"/>
+    <testCase name="Service Tests Member service users service Service methods should create a MSUserService" duration="30"/>
+    <testCase name="Service Tests Member service users service Service methods should update a MSUserService" duration="10"/>
+    <testCase name="Service Tests Member service users service Service methods should return a list of MSUserService" duration="9"/>
+    <testCase name="Service Tests Member service users service Service methods should delete a MSUserService" duration="6"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.service.spec.ts">
+    <testCase name="Service Tests MSMember Service Service methods should find an element" duration="34"/>
+    <testCase name="Service Tests MSMember Service Service methods should create a MSMember" duration="11"/>
+    <testCase name="Service Tests MSMember Service Service methods should update a MSMember" duration="8"/>
+    <testCase name="Service Tests MSMember Service Service methods should return a list of MSMember" duration="12"/>
+    <testCase name="Service Tests MSMember Service Service methods should delete a MSMember" duration="8"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\shared\alert\alert-error.component.spec.ts">
+    <testCase name="Component Tests Alert Error Component Error Handling Should display an alert on status 0" duration="58"/>
+    <testCase name="Component Tests Alert Error Component Error Handling Should display an alert on status 404" duration="21"/>
+    <testCase name="Component Tests Alert Error Component Error Handling Should display an alert on generic error" duration="15"/>
+    <testCase name="Component Tests Alert Error Component Error Handling Should display an alert on status 400 for generic error" duration="14"/>
+    <testCase name="Component Tests Alert Error Component Error Handling Should display an alert on status 400 for generic error without message" duration="24">
+      <failure message="Error: expect(received).toBe(expected) // Object.is equality"><![CDATA[Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 1
+Received: 0
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\shared\alert\alert-error.component.spec.ts:92:36
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41]]></failure>
+    </testCase>
+    <testCase name="Component Tests Alert Error Component Error Handling Should display an alert on status 400 for invalid parameters" duration="49">
+      <failure message="SyntaxError: Unexpected token B in JSON at position 0"><![CDATA[SyntaxError: Unexpected token B in JSON at position 0
+    at JSON.parse (<anonymous>)
+    at SafeSubscriber._next (C:\prgr\orcid-member-services\gateway\src\main\webapp\app\shared\alert\alert-error.component.ts:65:46)
+    at SafeSubscriber.__tryOrUnsub (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\Subscriber.js:269:10)
+    at SafeSubscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\Subscriber.js:198:14)
+    at Subscriber._next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:193:9)
+    at Subscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:153:3)
+    at FilterSubscriber._next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\operators\filter.js:77:24)
+    at FilterSubscriber.Subscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:153:3)
+    at RefCountSubscriber.Subscriber._next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:193:9)
+    at RefCountSubscriber.Subscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:153:3)
+    at Subject.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subject.ts:106:10)
+    at ConnectableSubscriber.Subscriber._next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:193:9)
+    at ConnectableSubscriber.Subscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:153:3)
+    at JhiEventManager.broadcast (C:\prgr\orcid-member-services\gateway\node_modules\ng-jhipster\bundles\ng-jhipster.umd.js:1953:23)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\shared\alert\alert-error.component.spec.ts:90:22
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41]]></failure>
+    </testCase>
+    <testCase name="Component Tests Alert Error Component Error Handling Should display an alert on status 400 for error headers" duration="15"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\admin\audits\audits.component.spec.ts">
+    <testCase name="Component Tests AuditsComponent today function  should set toDate to current date" duration="58"/>
+    <testCase name="Component Tests AuditsComponent previousMonth function  should set fromDate to current date" duration="19"/>
+    <testCase name="Component Tests AuditsComponent By default, on init should set all default values correctly" duration="18"/>
+    <testCase name="Component Tests AuditsComponent OnInit Should call load all on init" duration="15"/>
+    <testCase name="Component Tests AuditsComponent Create sort object Should sort only by id asc" duration="28"/>
+    <testCase name="Component Tests AuditsComponent Create sort object Should sort by timestamp asc then by id" duration="29"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\account\password-reset\finish\password-reset-finish.component.spec.ts">
+    <testCase name="Component Tests PasswordResetFinishComponent should define its initial state" duration="54"/>
+    <testCase name="Component Tests PasswordResetFinishComponent sets focus after the view has been initialized" duration="15"/>
+    <testCase name="Component Tests PasswordResetFinishComponent should ensure the two passwords entered match" duration="13"/>
+    <testCase name="Component Tests PasswordResetFinishComponent should update success to OK after resetting password" duration="13"/>
+    <testCase name="Component Tests PasswordResetFinishComponent should notify of generic error" duration="13"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\account\password-reset\init\password-reset-init.component.spec.ts">
+    <testCase name="Component Tests PasswordResetInitComponent should define its initial state" duration="50"/>
+    <testCase name="Component Tests PasswordResetInitComponent sets focus after the view has been initialized" duration="18"/>
+    <testCase name="Component Tests PasswordResetInitComponent notifies of success upon successful requestReset" duration="12"/>
+    <testCase name="Component Tests PasswordResetInitComponent notifies of unknown email upon email address not registered/400" duration="11"/>
+    <testCase name="Component Tests PasswordResetInitComponent notifies of error upon error response" duration="13"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts">
+    <testCase name="Component Tests MSMember Management Component Should call load all on init" duration="298">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[MSMemberComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[MSMemberComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[MSMemberComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="Error: &lt;spyOn&gt; : could not find an object to spy upon for query()"><![CDATA[Error: <spyOn> : could not find an object to spy upon for query()
+Usage: spyOn(<object>, <methodName>)
+    at SpyRegistry.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\spyRegistry.js:72:15)
+    at Env.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\Env.js:369:36)
+    at spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\jasmineLight.js:160:18)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts:51:7
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests MSMember Management Component should load a page" duration="30">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[MSMemberComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[MSMemberComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[MSMemberComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="Error: &lt;spyOn&gt; : could not find an object to spy upon for query()"><![CDATA[Error: <spyOn> : could not find an object to spy upon for query()
+Usage: spyOn(<object>, <methodName>)
+    at SpyRegistry.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\spyRegistry.js:72:15)
+    at Env.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\Env.js:369:36)
+    at spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\jasmineLight.js:160:18)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts:71:7
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests MSMember Management Component should not load a page is the page is the same as the previous page" duration="18">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[MSMemberComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[MSMemberComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[MSMemberComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="Error: &lt;spyOn&gt; : could not find an object to spy upon for query()"><![CDATA[Error: <spyOn> : could not find an object to spy upon for query()
+Usage: spyOn(<object>, <methodName>)
+    at SpyRegistry.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\spyRegistry.js:72:15)
+    at Env.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\Env.js:369:36)
+    at spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\jasmineLight.js:160:18)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts:89:7
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests MSMember Management Component should re-initialize the page" duration="19">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[MSMemberComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[MSMemberComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[MSMemberComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="Error: &lt;spyOn&gt; : could not find an object to spy upon for query()"><![CDATA[Error: <spyOn> : could not find an object to spy upon for query()
+Usage: spyOn(<object>, <methodName>)
+    at SpyRegistry.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\spyRegistry.js:72:15)
+    at Env.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\Env.js:369:36)
+    at spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\jasmineLight.js:160:18)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts:101:7
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests MSMember Management Component should calculate the sort attribute for an id" duration="25">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[MSMemberComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[MSMemberComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[MSMemberComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="TypeError: Cannot read properties of undefined (reading &apos;sort&apos;)"><![CDATA[TypeError: Cannot read properties of undefined (reading 'sort')
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts:121:27
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests MSMember Management Component should calculate the sort attribute for a non-id attribute" duration="22">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[MSMemberComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[MSMemberComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[MSMemberComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="TypeError: Cannot set properties of undefined (setting &apos;predicate&apos;)"><![CDATA[TypeError: Cannot set properties of undefined (setting 'predicate')
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member.component.spec.ts:129:21
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts">
+    <testCase name="Component Tests MSUser Management Component Should call load all on init" duration="306">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[MSUserComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[MSUserComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[MSUserComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="Error: &lt;spyOn&gt; : could not find an object to spy upon for query()"><![CDATA[Error: <spyOn> : could not find an object to spy upon for query()
+Usage: spyOn(<object>, <methodName>)
+    at SpyRegistry.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\spyRegistry.js:72:15)
+    at Env.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\Env.js:369:36)
+    at spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\jasmineLight.js:160:18)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts:51:7
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests MSUser Management Component should load a page" duration="24">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[MSUserComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[MSUserComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[MSUserComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="Error: &lt;spyOn&gt; : could not find an object to spy upon for query()"><![CDATA[Error: <spyOn> : could not find an object to spy upon for query()
+Usage: spyOn(<object>, <methodName>)
+    at SpyRegistry.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\spyRegistry.js:72:15)
+    at Env.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\Env.js:369:36)
+    at spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\jasmineLight.js:160:18)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts:71:7
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests MSUser Management Component should not load a page is the page is the same as the previous page" duration="23">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[MSUserComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[MSUserComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[MSUserComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="Error: &lt;spyOn&gt; : could not find an object to spy upon for query()"><![CDATA[Error: <spyOn> : could not find an object to spy upon for query()
+Usage: spyOn(<object>, <methodName>)
+    at SpyRegistry.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\spyRegistry.js:72:15)
+    at Env.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\Env.js:369:36)
+    at spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\jasmineLight.js:160:18)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts:89:7
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests MSUser Management Component should re-initialize the page" duration="42">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[MSUserComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[MSUserComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[MSUserComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="Error: &lt;spyOn&gt; : could not find an object to spy upon for query()"><![CDATA[Error: <spyOn> : could not find an object to spy upon for query()
+Usage: spyOn(<object>, <methodName>)
+    at SpyRegistry.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\spyRegistry.js:72:15)
+    at Env.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\Env.js:369:36)
+    at spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\jasmineLight.js:160:18)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts:101:7
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests MSUser Management Component should calculate the sort attribute for an id" duration="30">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[MSUserComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[MSUserComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[MSUserComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="TypeError: Cannot read properties of undefined (reading &apos;sort&apos;)"><![CDATA[TypeError: Cannot read properties of undefined (reading 'sort')
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts:121:27
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests MSUser Management Component should calculate the sort attribute for a non-id attribute" duration="23">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[MSUserComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[MSUserComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[MSUserComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="TypeError: Cannot set properties of undefined (setting &apos;predicate&apos;)"><![CDATA[TypeError: Cannot set properties of undefined (setting 'predicate')
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user.component.spec.ts:129:21
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\core\user\account.service.spec.ts">
+    <testCase name="Service Tests Account Service Service methods should call /account if user is undefined" duration="31"/>
+    <testCase name="Service Tests Account Service Service methods should call /account only once" duration="9"/>
+    <testCase name="Service Tests Account Service Service methods hasAuthority should return false if user is not logged" duration="8"/>
+    <testCase name="Service Tests Account Service Service methods hasAuthority should return false if user is logged and has not authority" duration="7"/>
+    <testCase name="Service Tests Account Service Service methods hasAuthority should return true if user is logged and has authority" duration="13"/>
+    <testCase name="Service Tests Account Service Service methods hasAnyAuthority should return false if user is not logged" duration="6"/>
+    <testCase name="Service Tests Account Service Service methods hasAnyAuthority should return false if user is logged and has not authority" duration="6"/>
+    <testCase name="Service Tests Account Service Service methods hasAnyAuthority should return true if user is logged and has authority" duration="6"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion.component.spec.ts">
+    <testCase name="Component Tests Assertion Management Component Should call load all on init" duration="331">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[AssertionComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[AssertionComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[AssertionComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="Error: &lt;spyOn&gt; : could not find an object to spy upon for query()"><![CDATA[Error: <spyOn> : could not find an object to spy upon for query()
+Usage: spyOn(<object>, <methodName>)
+    at SpyRegistry.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\spyRegistry.js:72:15)
+    at Env.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\Env.js:369:36)
+    at spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\jasmineLight.js:160:18)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion.component.spec.ts:51:7
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests Assertion Management Component should load a page" duration="19">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[AssertionComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[AssertionComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[AssertionComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="Error: &lt;spyOn&gt; : could not find an object to spy upon for query()"><![CDATA[Error: <spyOn> : could not find an object to spy upon for query()
+Usage: spyOn(<object>, <methodName>)
+    at SpyRegistry.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\spyRegistry.js:72:15)
+    at Env.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\Env.js:369:36)
+    at spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\jasmineLight.js:160:18)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion.component.spec.ts:71:7
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests Assertion Management Component should re-initialize the page" duration="25">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[AssertionComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[AssertionComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[AssertionComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="Error: &lt;spyOn&gt; : could not find an object to spy upon for query()"><![CDATA[Error: <spyOn> : could not find an object to spy upon for query()
+Usage: spyOn(<object>, <methodName>)
+    at SpyRegistry.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\spyRegistry.js:72:15)
+    at Env.spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\Env.js:369:36)
+    at spyOn (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmine\jasmineLight.js:160:18)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion.component.spec.ts:84:7
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests Assertion Management Component should calculate the sort attribute for an id" duration="18">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[AssertionComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[AssertionComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[AssertionComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="TypeError: Cannot read properties of undefined (reading &apos;sort&apos;)"><![CDATA[TypeError: Cannot read properties of undefined (reading 'sort')
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion.component.spec.ts:102:27
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests Assertion Management Component should calculate the sort attribute for a non-id attribute" duration="20">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[AssertionComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[AssertionComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[AssertionComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1137)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion.component.spec.ts:43:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="TypeError: Cannot set properties of undefined (setting &apos;predicate&apos;)"><![CDATA[TypeError: Cannot set properties of undefined (setting 'predicate')
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion.component.spec.ts:110:21
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\account\password\password.component.spec.ts">
+    <testCase name="Component Tests PasswordComponent should show error if passwords do not match" duration="72"/>
+    <testCase name="Component Tests PasswordComponent should call Auth.changePassword when passwords match" duration="23"/>
+    <testCase name="Component Tests PasswordComponent should set success to OK upon success" duration="14"/>
+    <testCase name="Component Tests PasswordComponent should notify of error if change password fails" duration="16"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\admin\configuration\configuration.component.spec.ts">
+    <testCase name="Component Tests JhiConfigurationComponent OnInit should set all default values correctly" duration="46"/>
+    <testCase name="Component Tests JhiConfigurationComponent OnInit Should call load all on init" duration="29"/>
+    <testCase name="Component Tests JhiConfigurationComponent keys method should return the keys of an Object" duration="14"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\admin\logs\logs.component.spec.ts">
+    <testCase name="Component Tests LogsComponent OnInit should set all default values correctly" duration="44"/>
+    <testCase name="Component Tests LogsComponent OnInit Should call load all on init" duration="16"/>
+    <testCase name="Component Tests LogsComponent change log level should change log level correctly" duration="19"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\account\settings\settings.component.spec.ts">
+    <testCase name="Component Tests SettingsComponent should send the current identity upon save" duration="52"/>
+    <testCase name="Component Tests SettingsComponent should notify of success upon successful save" duration="24"/>
+    <testCase name="Component Tests SettingsComponent should notify of error upon failed save" duration="16"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion-update.component.spec.ts">
+    <testCase name="Component Tests Assertion Management Update Component save Should call update service on save for existing entity" duration="102">
+      <failure message="TypeError: Cannot read properties of null (reading &apos;success&apos;)"><![CDATA[TypeError: Cannot read properties of null (reading 'success')
+    at SafeSubscriber._next (C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion-update.component.ts:243:29)
+    at SafeSubscriber.__tryOrUnsub (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\Subscriber.js:269:10)
+    at SafeSubscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\Subscriber.js:198:14)
+    at Subscriber._next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:193:9)
+    at Subscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:153:3)
+    at Observable._subscribe (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\util\subscribeToArray.js:10:18)
+    at Observable._trySubscribe (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Observable.ts:250:4)
+    at Observable.subscribe (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Observable.ts:232:17)
+    at AssertionUpdateComponent.save (C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion-update.component.ts:240:47)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion-update.component.spec.ts:39:14
+    at C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\fake-async-test.js:793:22
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests Assertion Management Update Component save Should call create service on save for new entity" duration="24">
+      <failure message="TypeError: Cannot read properties of null (reading &apos;success&apos;)"><![CDATA[TypeError: Cannot read properties of null (reading 'success')
+    at SafeSubscriber._next (C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion-update.component.ts:251:29)
+    at SafeSubscriber.__tryOrUnsub (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\Subscriber.js:269:10)
+    at SafeSubscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\Subscriber.js:198:14)
+    at Subscriber._next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:193:9)
+    at Subscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:153:3)
+    at Observable._subscribe (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\util\subscribeToArray.js:10:18)
+    at Observable._trySubscribe (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Observable.ts:250:4)
+    at Observable.subscribe (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Observable.ts:232:17)
+    at AssertionUpdateComponent.save (C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion-update.component.ts:248:47)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion-update.component.spec.ts:53:14
+    at C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\fake-async-test.js:793:22
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\admin\configuration\configuration.service.spec.ts">
+    <testCase name="Service Tests Logs Service Service methods should call correct URL" duration="29"/>
+    <testCase name="Service Tests Logs Service Service methods should get the config" duration="8"/>
+    <testCase name="Service Tests Logs Service Service methods should get the env" duration="8"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\core\user\user.service.spec.ts">
+    <testCase name="Service Tests User Service Service methods should call correct URL" duration="29"/>
+    <testCase name="Service Tests User Service Service methods should return User" duration="12">
+      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
+
+Expected: "user"
+Received: null
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\core\user\user.service.spec.ts:44:32
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Service Tests User Service Service methods should return Authorities" duration="8"/>
+    <testCase name="Service Tests User Service Service methods should propagate not found response" duration="11"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member-update.component.spec.ts">
+    <testCase name="Component Tests MSMember Management Update Component save Should call update service on save for existing entity" duration="67">
+      <failure message="Error: expect(spy).toHaveBeenCalledWith(...expected)"><![CDATA[Error: expect(spy).toHaveBeenCalledWith(...expected)
+
+Expected: {"assertionServiceEnabled": false, "clientId": undefined, "clientName": undefined, "clientSecret": undefined, "createdBy": undefined, "createdDate": undefined, "id": "123", "isConsortiumLead": false, "lastModifiedBy": undefined, "lastModifiedDate": undefined, "parentSalesforceId": undefined, "salesforceId": undefined, "status": undefined, "superadminEnabled": false, "type": undefined}
+
+Number of calls: 0
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member-update.component.spec.ts:43:32
+    at C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\fake-async-test.js:793:22
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests MSMember Management Update Component save Should call create service on save for new entity" duration="38">
+      <failure message="Error: expect(spy).toHaveBeenCalledWith(...expected)"><![CDATA[Error: expect(spy).toHaveBeenCalledWith(...expected)
+
+Expected: {"assertionServiceEnabled": false, "clientId": undefined, "clientName": undefined, "clientSecret": undefined, "createdBy": undefined, "createdDate": undefined, "id": undefined, "isConsortiumLead": false, "lastModifiedBy": undefined, "lastModifiedDate": undefined, "parentSalesforceId": undefined, "salesforceId": undefined, "status": undefined, "superadminEnabled": false, "type": undefined}
+
+Number of calls: 0
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member-update.component.spec.ts:57:32
+    at C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\fake-async-test.js:793:22
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\account\activate\activate.component.spec.ts">
+    <testCase name="Component Tests ActivateComponent calls activate.get with the key from params" duration="53"/>
+    <testCase name="Component Tests ActivateComponent should set set success to OK upon successful activation" duration="15"/>
+    <testCase name="Component Tests ActivateComponent should set set error to ERROR upon activation failure" duration="19"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user-update.component.spec.ts">
+    <testCase name="Component Tests MSUser Management Update Component save Should call update service on save for existing entity" duration="62">
+      <failure message="Error: expect(spy).toHaveBeenCalledWith(...expected)"><![CDATA[Error: expect(spy).toHaveBeenCalledWith(...expected)
+
+Expected: {"activated": false, "createdBy": undefined, "createdDate": undefined, "email": undefined, "firstName": undefined, "id": "123", "isAdmin": false, "lastModifiedBy": undefined, "lastModifiedDate": undefined, "lastName": undefined, "mainContact": false, "memberName": undefined, "mfaEnabled": false, "parentSalesforceId": undefined, "salesforceId": undefined}
+
+Number of calls: 0
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user-update.component.spec.ts:43:32
+    at C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\fake-async-test.js:793:22
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="Component Tests MSUser Management Update Component save Should call create service on save for new entity" duration="36">
+      <failure message="Error: expect(spy).toHaveBeenCalledWith(...expected)"><![CDATA[Error: expect(spy).toHaveBeenCalledWith(...expected)
+
+Expected: {"activated": false, "createdBy": undefined, "createdDate": undefined, "email": undefined, "firstName": undefined, "id": undefined, "isAdmin": false, "lastModifiedBy": undefined, "lastModifiedDate": undefined, "lastName": undefined, "mainContact": false, "memberName": undefined, "mfaEnabled": false, "parentSalesforceId": undefined, "salesforceId": undefined}
+
+Number of calls: 0
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user-update.component.spec.ts:57:32
+    at C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\fake-async-test.js:793:22
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\account\password\password-strength-bar.component.spec.ts">
+    <testCase name="Component Tests PasswordStrengthBarComponent PasswordStrengthBarComponents should initialize with default values" duration="60"/>
+    <testCase name="Component Tests PasswordStrengthBarComponent PasswordStrengthBarComponents should increase strength upon password value change" duration="18"/>
+    <testCase name="Component Tests PasswordStrengthBarComponent PasswordStrengthBarComponents should change the color based on strength" duration="15"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\admin\audits\audits.service.spec.ts">
+    <testCase name="Service Tests Audits Service Service methods should call correct URL" duration="35"/>
+    <testCase name="Service Tests Audits Service Service methods should return Audits" duration="8"/>
+    <testCase name="Service Tests Audits Service Service methods should propagate not found response" duration="8"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member-delete-dialog.component.spec.ts">
+    <testCase name="Component Tests MSMember Management Delete Component confirmDelete Should call delete service on confirmDelete" duration="105">
+      <failure message="TypeError: Cannot read properties of null (reading &apos;success&apos;)"><![CDATA[TypeError: Cannot read properties of null (reading 'success')
+    at SafeSubscriber._next (C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\member\member-delete-dialog.component.ts:41:27)
+    at SafeSubscriber.__tryOrUnsub (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\Subscriber.js:269:10)
+    at SafeSubscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\Subscriber.js:198:14)
+    at Subscriber._next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:193:9)
+    at Subscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:153:3)
+    at Observable._subscribe (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\util\subscribeToArray.js:10:18)
+    at Observable._trySubscribe (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Observable.ts:250:4)
+    at Observable.subscribe (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Observable.ts:232:17)
+    at MSMemberDeleteDialogComponent.confirmDelete (C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\member\member-delete-dialog.component.ts:33:37)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member-delete-dialog.component.spec.ts:41:16
+    at C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\fake-async-test.js:793:22
+    at TestBedViewEngine.execute (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3386:17)
+    at C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3619:24
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion-delete-dialog.component.spec.ts">
+    <testCase name="Component Tests Assertion Management Delete Component confirmDelete Should call delete service on confirmDelete" duration="105">
+      <failure message="TypeError: Cannot read properties of undefined (reading &apos;id&apos;)"><![CDATA[TypeError: Cannot read properties of undefined (reading 'id')
+    at AssertionDeleteDialogComponent.confirmDelete (C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\assertion\assertion-delete-dialog.component.ts:34:49)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion-delete-dialog.component.spec.ts:41:16
+    at C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\fake-async-test.js:793:22
+    at TestBedViewEngine.execute (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3386:17)
+    at C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3619:24
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\admin\metrics\metrics.service.spec.ts">
+    <testCase name="Service Tests Logs Service Service methods should call correct URL" duration="27"/>
+    <testCase name="Service Tests Logs Service Service methods should return Metrics" duration="12"/>
+    <testCase name="Service Tests Logs Service Service methods should return Thread Dump" duration="7"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user-delete-dialog.component.spec.ts">
+    <testCase name="Component Tests MSUser Management Delete Component confirmDelete Should call delete service on confirmDelete" duration="108">
+      <failure message="TypeError: Cannot read properties of null (reading &apos;success&apos;)"><![CDATA[TypeError: Cannot read properties of null (reading 'success')
+    at SafeSubscriber._next (C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\user\user-delete-dialog.component.ts:37:25)
+    at SafeSubscriber.__tryOrUnsub (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\Subscriber.js:269:10)
+    at SafeSubscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\Subscriber.js:198:14)
+    at Subscriber._next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:193:9)
+    at Subscriber.next (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Subscriber.ts:153:3)
+    at Observable._subscribe (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\internal\util\subscribeToArray.js:10:18)
+    at Observable._trySubscribe (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Observable.ts:250:4)
+    at Observable.subscribe (C:\prgr\orcid-member-services\gateway\node_modules\rxjs\src\internal\Observable.ts:232:17)
+    at MSUserDeleteDialogComponent.confirmDelete (C:\prgr\orcid-member-services\gateway\src\main\webapp\app\entities\user\user-delete-dialog.component.ts:31:35)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user-delete-dialog.component.spec.ts:41:16
+    at C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\fake-async-test.js:793:22
+    at TestBedViewEngine.execute (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3386:17)
+    at C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3619:24
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\admin\metrics\metrics.component.spec.ts">
+    <testCase name="Component Tests JhiMetricsMonitoringComponent refresh should call refresh on init" duration="45"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\admin\logs\logs.service.spec.ts">
+    <testCase name="Service Tests Logs Service Service methods should call correct URL" duration="31"/>
+    <testCase name="Service Tests Logs Service Service methods should change log level" duration="13"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-members\ms-member-detail.component.spec.ts">
+    <testCase name="Component Tests MSMember Management Detail Component OnInit Should call load all on init" duration="57"/>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion-detail.component.spec.ts">
+    <testCase name="Component Tests Assertion Management Detail Component OnInit Should call load all on init" duration="316">
+      <failure message="NullInjectorError: StaticInjectorError(DynamicTestModule)[AssertionDetailComponent -&gt; TranslateService]: "><![CDATA[NullInjectorError: StaticInjectorError(DynamicTestModule)[AssertionDetailComponent -> TranslateService]: 
+  StaticInjectorError(Platform: core)[AssertionDetailComponent -> TranslateService]: 
+    NullInjectorError: No provider for TranslateService!
+    at NullInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:427:11)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveToken (C:\prgr\orcid-member-services\packages\core\src\di\forward_ref.ts:41:52)
+    at tryResolveToken (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:460:366)
+    at StaticInjector.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:452:1048)
+    at resolveNgModuleDep (C:\prgr\orcid-member-services\packages\core\src\sanitization\sanitization.ts:43:4)
+    at NgModuleRef_.get (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6801:10891)
+    at resolveDep (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6842:55)
+    at createClass (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6818:1011)
+    at createDirectiveInstance (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6817:14)
+    at createViewNodes (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:2757)
+    at createRootView (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9103:277)
+    at callWithDebugContext (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:9156:1244)
+    at Object.debugCreateRootView [as createRootView] (C:\prgr\orcid-member-services\packages\core\src\render3\node_selector_matcher.ts:53:2)
+    at ComponentFactory_.create (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core.umd.js:6799:318)
+    at initComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3532:45)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Object.onInvoke (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:965:6)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at NgZone.run (C:\prgr\orcid-member-services\packages\core\src\render3\styling\class_and_style_bindings.ts:933:71)
+    at TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3536:56)
+    at Function.TestBedViewEngine.createComponent (C:\prgr\orcid-member-services\gateway\node_modules\@angular\core\bundles\core-testing.umd.js:3068:38)
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion-detail.component.spec.ts:24:25
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestLifecycle (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:53:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+      <failure message="TypeError: Cannot read properties of undefined (reading &apos;ngOnInit&apos;)"><![CDATA[TypeError: Cannot read properties of undefined (reading 'ngOnInit')
+    at C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\AssertionServices\assertion\assertion-detail.component.spec.ts:33:14
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:160)
+    at ProxyZoneSpec.onInvoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\proxy.js:151:35)
+    at ZoneDelegate.invoke (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:440:48)
+    at Zone.run (C:\prgr\orcid-member-services\gateway\node_modules\zone.js\dist\zone.js:167:37)
+    at Object.<anonymous> (C:\prgr\orcid-member-services\gateway\node_modules\jest-preset-angular\zone-patch\index.js:51:54)
+    at Object.asyncJestTest (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:100:37)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\prgr\orcid-member-services\gateway\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+  </file>
+  <file path="C:\prgr\orcid-member-services\gateway\src\test\javascript\spec\app\entities\MSUserService\ms-users\ms-user-detail.component.spec.ts">
+    <testCase name="Component Tests MSUser Management Detail Component OnInit Should call load all on init" duration="49"/>
+  </file>
+</testExecutions>

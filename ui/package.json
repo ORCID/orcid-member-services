@@ -7,7 +7,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "start": "npm run webpack:dev",
-    "webpack:dev": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --hot --port=9060",
+    "webpack:dev": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --port=9060",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js"
   },
   "private": true,

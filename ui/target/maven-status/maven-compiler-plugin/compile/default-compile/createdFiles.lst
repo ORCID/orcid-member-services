@@ -1,0 +1,5 @@
+org\orcid\memberportal\service\gateway\web\rest\HealthResource.class
+org\orcid\memberportal\service\gateway\service\dto\SimpleHealthDTO.class
+org\orcid\memberportal\service\gateway\client\HealthClient.class
+org\orcid\memberportal\service\gateway\service\dto\CompositeHealthDTO.class
+org\orcid\memberportal\service\gateway\service\HealthService.class

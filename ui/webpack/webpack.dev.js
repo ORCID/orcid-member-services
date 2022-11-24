@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const writeFilePlugin = require('write-file-webpack-plugin');
-const webpackMerge = require('webpack-merge');
+const webpackMerge = require('webpack-merge').merge;
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
@@ -12,11 +12,13 @@ const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
 const ENV = 'development';
-
+// devserver - contentbase to devserver - static
+// stats replaced by middleware
+// watchFiles appeared
 module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     devtool: 'eval-source-map',
     devServer: {
-        contentBase: './target/classes/static/',
+        static: './target/classes/static/',
         proxy: [{
             context: [
                 '/api',
@@ -31,17 +33,19 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
             secure: false,
             changeOrigin: options.tls
         }],
-        stats: options.stats,
-        watchOptions: {
-            ignored: /node_modules/
+        devMiddleware: {
+            stats: options.stats
+        },
+        watchFiles: {
+            paths: './node_modules'
         },
         https: options.tls,
         historyApiFallback: true
     },
     entry: {
-        polyfills: './src/main/webapp/app/polyfills',
-        global: './src/main/webapp/content/scss/global.scss',
-        main: './src/main/webapp/app/app.main'
+        polyfills: './src/app/polyfills',
+        global: './src/content/scss/global.scss',
+        main: './src/app/app.main'
     },
     output: {
         path: utils.root('target/classes/static/'),
@@ -135,12 +139,12 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         }),
         new webpack.ContextReplacementPlugin(
             /angular(\\|\/)core(\\|\/)/,
-            path.resolve(__dirname, './src/main/webapp/')
+            path.resolve(__dirname, './src')
         ),
         new writeFilePlugin(),
-        new webpack.WatchIgnorePlugin([
+        new webpack.WatchIgnorePlugin({paths:[
             utils.root('src/test'),
-        ]),
+        ]}),
         new WebpackNotifierPlugin({
             title: 'JHipster',
             contentImage: path.join(__dirname, 'logo-jhipster.png')

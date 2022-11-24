@@ -1,0 +1,4 @@
+org\orcid\memberportal\service\gateway\service\HealthServiceTest.class
+org\orcid\memberportal\service\gateway\client\HealthClientTest.class
+org\orcid\memberportal\service\gateway\client\HealthClientTest$OrcidCloseableHttpResponse.class
+org\orcid\memberportal\service\gateway\web\rest\HealthResourceTest.class
