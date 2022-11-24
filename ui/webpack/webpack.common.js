@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const rxPaths = require('rxjs/_esm5/path-mapping');
+//const rxPaths = require('rxjs/_esm5/path-mapping');
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 
 const utils = require('./utils.js');
@@ -13,7 +13,7 @@ module.exports = (options) => ({
         modules: ['node_modules'],
         alias: {
             app: utils.root('src/main/webapp/app/'),
-            ...rxPaths()
+           // ...rxPaths()
         }
     },
     stats: {
