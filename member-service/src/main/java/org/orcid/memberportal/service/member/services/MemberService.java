@@ -134,6 +134,7 @@ public class MemberService {
         existingMember.setParentSalesforceId(member.getParentSalesforceId());
         existingMember.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
         existingMember.setLastModifiedDate(Instant.now());
+        existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
 
         // Check if name changed
         if (!existingMember.getClientName().equals(member.getClientName())) {
@@ -152,23 +153,39 @@ public class MemberService {
 
             String oldSalesforceId = existingMember.getSalesforceId();
             String newSalesforceId = member.getSalesforceId();
-            
+
             try {
                 // update affiliations and users associated with the member
                 assertionService.updateAssertionsSalesforceId(oldSalesforceId, newSalesforceId);
-                userService.updateUserSalesforceIdOrAssertion(oldSalesforceId, newSalesforceId);
-                existingMember.setSalesforceId(member.getSalesforceId());
-                member = memberRepository.save(existingMember);
-            } catch (Exception e) { 
-                LOG.error("Error updating salesforce ids");
-            }
-        }
 
-        if (!existingMember.getAssertionServiceEnabled().equals(member.getAssertionServiceEnabled())) {
-            existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
-            member = memberRepository.save(existingMember);
-            userService.updateUserSalesforceIdOrAssertion(existingMember.getSalesforceId(), member.getSalesforceId());
-            return member;
+                try {
+                    userService.updateUsersSalesforceId(oldSalesforceId, newSalesforceId);
+                } catch (Exception e) {
+                    LOG.error("Error updating users' salesforce id from {} to {}", oldSalesforceId, newSalesforceId);
+                    LOG.info("Attempting to perform salesforce id rollback on affiliations");
+                    assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
+                    LOG.info("Affiliation salesforce id rollback successfull");
+                    throw new RuntimeException(e);
+                }
+                existingMember.setSalesforceId(member.getSalesforceId());
+                
+                try {
+                    return memberRepository.save(existingMember);
+                } catch (Exception e) {
+                    LOG.error("Error updating member's salesforce id from {} to {}", oldSalesforceId, newSalesforceId);
+                    LOG.info("Attempting to perform salesforce id rollback on affiliations");
+                    assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
+                    LOG.info("Affiliation salesforce id rollback successfull");
+                    
+                    LOG.info("Attempting to perform salesforce id rollback on users");
+                    userService.updateUsersSalesforceId(newSalesforceId, oldSalesforceId);
+                    LOG.info("User salesforce id rollback successfull");
+                    throw new RuntimeException(e);
+                }
+            } catch (Exception e) {
+                LOG.error("Error updating salesforce ids");
+                throw new RuntimeException(e);
+            }
         }
         return memberRepository.save(existingMember);
     }
@@ -247,7 +264,7 @@ public class MemberService {
     public MemberDetails getCurrentMemberDetails() {
         LOG.info("Finding current member details...");
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
-        
+
         LOG.info("Current member sf id: {}", salesforceId);
         Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
 
@@ -277,7 +294,7 @@ public class MemberService {
             throw new RuntimeException(e);
         }
     }
-    
+
     public MemberOrgIds getCurrentMemberOrgIds() {
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
         try {

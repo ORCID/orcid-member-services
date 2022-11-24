@@ -64,7 +64,7 @@ public class UserService {
         }
     }
 
-    public void updateUserSalesforceIdOrAssertion(String salesforceId, String newSalesforceId) {
+    public void updateUsersSalesforceId(String salesforceId, String newSalesforceId) {
         ResponseEntity<String> response = userServiceClient.updateUsersSalesforceId(salesforceId, newSalesforceId);
         if (!response.getStatusCode().is2xxSuccessful()) {
             LOG.warn("Error updating users {}, response code {}", salesforceId, response.getStatusCodeValue());

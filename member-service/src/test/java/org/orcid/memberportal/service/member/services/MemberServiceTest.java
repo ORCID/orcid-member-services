@@ -15,6 +15,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -69,6 +71,9 @@ class MemberServiceTest {
 
     @Mock
     private EncryptUtil encryptUtil;
+    
+    @Captor
+    private ArgumentCaptor<Member> memberCaptor;
 
     @BeforeEach
     public void setUp() {
@@ -136,7 +141,112 @@ class MemberServiceTest {
         assertEquals(member.getAssertionServiceEnabled(), updated.getAssertionServiceEnabled());
         assertEquals(member.getIsConsortiumLead(), updated.getIsConsortiumLead());
     }
+    
+    @Test
+    void testUpdateMemberWithSalesforceIdUpdateFailure_assertionFailure() {
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
+        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+            @Override
+            public Member answer(InvocationOnMock invocation) throws Throwable {
+                return (Member) invocation.getArgument(0);
+            }
+        });
+        Mockito.doThrow(new RuntimeException()).when(assertionService).updateAssertionsSalesforceId(Mockito.eq("two"), Mockito.eq("three"));
+        
+        Member member = getMember();
+        member.setId("id");
+        member.setSalesforceId("three");
+        
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            memberService.updateMember(member);
+        });
+        
+        Mockito.verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
+        Mockito.verify(userService, Mockito.never()).updateUsersSalesforceId(Mockito.anyString(), Mockito.anyString());
+    }
+    
+    @Test
+    void testUpdateMemberWithSalesforceIdUpdateFailure_userFailure() {
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
+        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+            @Override
+            public Member answer(InvocationOnMock invocation) throws Throwable {
+                return (Member) invocation.getArgument(0);
+            }
+        });
+        
+        Mockito.doThrow(new RuntimeException()).when(userService).updateUsersSalesforceId(Mockito.eq("two"), Mockito.eq("three"));
+        
+        Member member = getMember();
+        member.setId("id");
+        member.setSalesforceId("three");
 
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            memberService.updateMember(member);
+        });
+        
+        Mockito.verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
+        
+        // check assertion changes rolled back
+        Mockito.verify(assertionService, Mockito.times(1)).updateAssertionsSalesforceId(Mockito.eq("two"), Mockito.eq("three"));
+        Mockito.verify(assertionService, Mockito.times(1)).updateAssertionsSalesforceId(Mockito.eq("three"), Mockito.eq("two"));
+        Mockito.verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
+    }
+    
+    @Test
+    void testUpdateMemberWithSalesforceIdUpdateWithMemberFailure() {
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
+        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+            @Override
+            public Member answer(InvocationOnMock invocation) throws Throwable {
+                return (Member) invocation.getArgument(0);
+            }
+        });
+        
+        Mockito.doThrow(new RuntimeException()).when(memberRepository).save(Mockito.any(Member.class));
+        
+        Member member = getMember();
+        member.setId("id");
+        member.setSalesforceId("three");
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            memberService.updateMember(member);
+        });
+        
+        // check assertion and user changes rolled back
+        Mockito.verify(assertionService, Mockito.times(1)).updateAssertionsSalesforceId(Mockito.eq("two"), Mockito.eq("three"));
+        Mockito.verify(assertionService, Mockito.times(1)).updateAssertionsSalesforceId(Mockito.eq("three"), Mockito.eq("two"));
+        Mockito.verify(userService, Mockito.times(1)).updateUsersSalesforceId(Mockito.eq("two"), Mockito.eq("three"));
+        Mockito.verify(userService, Mockito.times(1)).updateUsersSalesforceId(Mockito.eq("three"), Mockito.eq("two"));
+    }
+    
+    @Test
+    void testUpdateMemberWithSalesforceIdUpdate() {
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
+        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+            @Override
+            public Member answer(InvocationOnMock invocation) throws Throwable {
+                return (Member) invocation.getArgument(0);
+            }
+        });
+        Member member = getMember();
+        member.setId("id");
+        member.setSalesforceId("three");
+        memberService.updateMember(member);
+        
+        // check assertion and user changes rolled back
+        Mockito.verify(assertionService, Mockito.times(1)).updateAssertionsSalesforceId(Mockito.eq("two"), Mockito.eq("three"));
+        Mockito.verify(userService, Mockito.times(1)).updateUsersSalesforceId(Mockito.eq("two"), Mockito.eq("three"));
+        Mockito.verify(memberRepository, Mockito.times(1)).save(memberCaptor.capture());
+        
+        Member saved = memberCaptor.getValue();
+        assertThat(saved.getSalesforceId()).isEqualTo("three");
+    }
+    
     @Test
     void testUpdateNonExistentMember() {
         Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
