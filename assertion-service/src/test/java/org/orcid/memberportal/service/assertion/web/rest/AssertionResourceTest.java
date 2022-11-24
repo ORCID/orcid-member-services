@@ -380,9 +380,23 @@ class AssertionResourceTest {
 
     @Test
     void testGetAssertions() throws BadRequestAlertException, org.codehaus.jettison.json.JSONException {
-        Mockito.when(assertionService.findBySalesforceId(Mockito.any(Pageable.class))).thenReturn(getMockPage());
+        Mockito.when(assertionService.findByCurrentSalesforceId(Mockito.any(Pageable.class))).thenReturn(getMockPage());
         ResponseEntity<List<Assertion>> page = assertionResource.getAssertions(Mockito.mock(Pageable.class), new HttpHeaders(), UriComponentsBuilder.newInstance(), "");
         assertNotNull(page.getBody());
+    }
+    
+    @Test
+    void testUpdateSalesforceId() {
+        Mockito.when(assertionService.updateAssertionsSalesforceId(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(true);
+        ResponseEntity<Void> response = assertionResource.updateSalesforceId("salesforce-id", "new-salesforce-id");
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+    }
+    
+    @Test
+    void testUpdateSalesforceIdWithError() {
+        Mockito.when(assertionService.updateAssertionsSalesforceId(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(false);
+        ResponseEntity<Void> response = assertionResource.updateSalesforceId("salesforce-id", "new-salesforce-id");
+        assertTrue(response.getStatusCode().is5xxServerError());
     }
 
     private Page<Assertion> getMockPage() {

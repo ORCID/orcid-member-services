@@ -14,6 +14,9 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+ribbon:
+  ReadTimeout: 150000
+  ConnectTimeout: 15000
 logging:
   path: logs
 eureka:
@@ -39,14 +42,6 @@ eureka:
       git-version: ${git.commit.id.describe:}
       git-commit: ${git.commit.id.abbrev:}
       git-branch: ${git.branch:}
-feign:
-  hystrix:
-    enabled: true
-  # client:
-  #     config:
-  #         default:
-  #             connectTimeout: 5000
-  #             readTimeout: 5000
 
 management:
   endpoints:

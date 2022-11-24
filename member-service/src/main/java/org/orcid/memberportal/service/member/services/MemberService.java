@@ -134,6 +134,7 @@ public class MemberService {
         existingMember.setParentSalesforceId(member.getParentSalesforceId());
         existingMember.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
         existingMember.setLastModifiedDate(Instant.now());
+        existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
 
         // Check if name changed
         if (!existingMember.getClientName().equals(member.getClientName())) {
@@ -145,23 +146,48 @@ public class MemberService {
 
         // Check if salesforceId changed
         if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
-            Optional<Member> optionalSalesForceId = memberRepository.findBySalesforceId(member.getSalesforceId());
-            if (optionalSalesForceId.isPresent()) {
+            Optional<Member> optionalSalesforceId = memberRepository.findBySalesforceId(member.getSalesforceId());
+            if (optionalSalesforceId.isPresent()) {
                 throw new BadRequestAlertException("Invalid salesForceId", "member", "salesForceIdUsed.string");
             }
-            // update affiliations associated with the member
-            String oldSalesForceId = existingMember.getSalesforceId();
-            existingMember.setSalesforceId(member.getSalesforceId());
-            member = memberRepository.save(existingMember);
-            assertionService.updateAssertionsSalesforceId(oldSalesForceId, member.getSalesforceId());
-            userService.updateUserSalesforceIdOrAssertion(oldSalesForceId, member.getSalesforceId());
-        }
 
-        if (!existingMember.getAssertionServiceEnabled().equals(member.getAssertionServiceEnabled())) {
-            existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
-            member = memberRepository.save(existingMember);
-            userService.updateUserSalesforceIdOrAssertion(existingMember.getSalesforceId(), member.getSalesforceId());
-            return member;
+            String oldSalesforceId = existingMember.getSalesforceId();
+            String newSalesforceId = member.getSalesforceId();
+
+            try {
+                // update affiliations and users associated with the member
+                assertionService.updateAssertionsSalesforceId(oldSalesforceId, newSalesforceId);
+            } catch (Exception e) {
+                LOG.error("Error updating assertion salesforce ids", e);
+                throw new RuntimeException(e);
+            }
+
+            try {
+                userService.updateUsersSalesforceId(oldSalesforceId, newSalesforceId);
+            } catch (Exception e) {
+                LOG.error("Error updating users's salesforce id", e);
+                LOG.error("Error updating users' salesforce id from {} to {}", oldSalesforceId, newSalesforceId);
+                LOG.info("Attempting to perform salesforce id rollback on affiliations");
+                assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
+                LOG.info("Affiliation salesforce id rollback successfull");
+                throw new RuntimeException(e);
+            }
+            existingMember.setSalesforceId(member.getSalesforceId());
+            
+            try {
+                return memberRepository.save(existingMember);
+            } catch (Exception e) {
+                LOG.error("Error updating member", e);
+                LOG.error("Error updating member's salesforce id from {} to {}", oldSalesforceId, newSalesforceId);
+                LOG.info("Attempting to perform salesforce id rollback on affiliations");
+                assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
+                LOG.info("Affiliation salesforce id rollback successfull");
+                
+                LOG.info("Attempting to perform salesforce id rollback on users");
+                userService.updateUsersSalesforceId(newSalesforceId, oldSalesforceId);
+                LOG.info("User salesforce id rollback successfull");
+                throw new RuntimeException(e);
+            }
         }
         return memberRepository.save(existingMember);
     }
@@ -240,7 +266,7 @@ public class MemberService {
     public MemberDetails getCurrentMemberDetails() {
         LOG.info("Finding current member details...");
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
-        
+
         LOG.info("Current member sf id: {}", salesforceId);
         Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
 
@@ -270,7 +296,7 @@ public class MemberService {
             throw new RuntimeException(e);
         }
     }
-    
+
     public MemberOrgIds getCurrentMemberOrgIds() {
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
         try {

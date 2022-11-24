@@ -100,10 +100,10 @@ public class AssertionResource {
 
     @Autowired
     private RorOrgValidator rorOrgValidator;
-    
+
     @Autowired
     private NotificationService notificationService;
-    
+
     private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
     String[] urlValschemes = { "http", "https", "ftp" }; // DEFAULT schemes =
@@ -118,7 +118,7 @@ public class AssertionResource {
         LOG.debug("REST request to fetch assertions from user {}", SecurityUtils.getCurrentUserLogin().get());
         Page<Assertion> affiliations = null;
         if (StringUtils.isBlank(filter)) {
-            affiliations = assertionService.findBySalesforceId(pageable);
+            affiliations = assertionService.findByCurrentSalesforceId(pageable);
         } else {
             affiliations = assertionService.findBySalesforceId(pageable, filter);
         }
@@ -150,7 +150,7 @@ public class AssertionResource {
         assertionService.generatePermissionLinks();
         return ResponseEntity.ok().build();
     }
-    
+
     @PostMapping("/assertion/notification-request")
     public ResponseEntity<Void> sendNotifications() {
         AssertionServiceUser user = userService.getLoggedInUser();
@@ -158,7 +158,7 @@ public class AssertionResource {
         assertionService.markPendingAssertionsAsNotificationRequested(user.getSalesforceId());
         return ResponseEntity.ok().build();
     }
-    
+
     @GetMapping("/assertion/notification-request")
     public ResponseEntity<NotificationRequestInProgress> getNotificationRequestInProgress() {
         boolean notificationRequestInProgress = notificationService.requestInProgress(userService.getLoggedInUserSalesforceId());
@@ -190,7 +190,7 @@ public class AssertionResource {
             return ResponseEntity.ok().body(Boolean.TRUE);
         } catch (IOException e) {
             LOG.error("Error uploading user csv file", e);
-            return ResponseEntity.ok().body(Boolean.FALSE); 
+            return ResponseEntity.ok().body(Boolean.FALSE);
         }
     }
 
@@ -279,14 +279,16 @@ public class AssertionResource {
             Optional<OrcidRecord> optional = orcidRecordService.findOneByEmail(stateTokens[1]);
             if (optional.isPresent()) {
                 OrcidRecord record = optional.get();
-                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0], false)) && !StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
+                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0], false))
+                        && !StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
                     responseData.put("isDifferentUser", true);
                     responseData.put("isSameUserThatAlreadyGranted", false);
                     return ResponseEntity.ok().body(responseData.toString());
                 }
                 // still need to store the token in case the used had denied
                 // access before
-                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0], false)) && StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
+                if (!StringUtils.isBlank(orcidIdInJWT) && !StringUtils.isBlank(record.getToken(stateTokens[0], false))
+                        && StringUtils.equals(record.getOrcid(), orcidIdInJWT)) {
                     responseData.put("isDifferentUser", false);
                     responseData.put("isSameUserThatAlreadyGranted", true);
                 } else {
@@ -332,12 +334,10 @@ public class AssertionResource {
         assertionService.generateAssertionsCSV();
         return ResponseEntity.ok().build();
     }
-    
+
     private boolean permissionLinkRequired(Assertion assertion) {
-        return AssertionStatus.PENDING.name().equals(assertion.getStatus()) || 
-                AssertionStatus.USER_REVOKED_ACCESS.name().equals(assertion.getStatus()) || 
-                AssertionStatus.USER_DENIED_ACCESS.name().equals(assertion.getStatus()) ||
-                AssertionStatus.NOTIFICATION_SENT.name().equals(assertion.getStatus());
+        return AssertionStatus.PENDING.name().equals(assertion.getStatus()) || AssertionStatus.USER_REVOKED_ACCESS.name().equals(assertion.getStatus())
+                || AssertionStatus.USER_DENIED_ACCESS.name().equals(assertion.getStatus()) || AssertionStatus.NOTIFICATION_SENT.name().equals(assertion.getStatus());
     }
 
     private void validateAssertion(Assertion assertion) {
@@ -443,13 +443,14 @@ public class AssertionResource {
      */
     @PutMapping("/assertion/update/{salesforceId}/{newSalesforceId}")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> updateUserSalesforceOrAssertion(@PathVariable String salesforceId, @PathVariable String newSalesforceId) {
+    public ResponseEntity<Void> updateSalesforceId(@PathVariable String salesforceId, @PathVariable String newSalesforceId) {
         LOG.debug("REST request to update Assertions by salesforce : {}", salesforceId);
-        List<Assertion> assertionsBySalesforceId = assertionService.getAssertionsBySalesforceId(salesforceId);
-        for (Assertion assertion : assertionsBySalesforceId) {
-            assertionService.updateAssertionSalesforceId(assertion, newSalesforceId);
+        boolean success = assertionService.updateAssertionsSalesforceId(salesforceId, newSalesforceId);
+        if (success) {
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "assertion", salesforceId)).build();
+        } else {
+            return ResponseEntity.status(500).build();
         }
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "assertion", salesforceId)).build();
     }
-    
+
 }

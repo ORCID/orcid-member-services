@@ -108,10 +108,8 @@ public class AssertionService {
         return assertionRepository.findAllByOwnerId(assertionsUserService.getLoggedInUserId(), SORT);
     }
 
-    public Page<Assertion> findBySalesforceId(Pageable pageable) {
-        Page<Assertion> assertions = assertionRepository.findBySalesforceId(assertionsUserService.getLoggedInUserSalesforceId(), pageable);
-        setPrettyStatus(assertions);
-        return assertions;
+    public Page<Assertion> findByCurrentSalesforceId(Pageable pageable) {
+        return findBySalesforceId(assertionsUserService.getLoggedInUserSalesforceId(), pageable);
     }
 
     public Page<Assertion> findBySalesforceId(Pageable pageable, String filter) {
@@ -159,7 +157,7 @@ public class AssertionService {
         Instant now = Instant.now();
         assertion.setOwnerId(owner.getId());
         assertion.setCreated(now);
-        assertion.setModified(now);     
+        assertion.setModified(now);
         assertion.setLastModifiedBy(owner.getEmail());
         assertion.setSalesforceId(owner.getSalesforceId());
         assertion.setStatus(getAssertionStatus(assertion));
@@ -217,8 +215,8 @@ public class AssertionService {
         AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
         if (tokenDeniedStatus != null) {
             return tokenDeniedStatus.name();
-        } else if (AssertionStatus.ERROR_ADDING_TO_ORCID.name().equals(assertion.getStatus()) ||
-                AssertionStatus.ERROR_UPDATING_TO_ORCID.name().equals(assertion.getStatus())) {
+        } else if (AssertionStatus.ERROR_ADDING_TO_ORCID.name().equals(assertion.getStatus())
+                || AssertionStatus.ERROR_UPDATING_TO_ORCID.name().equals(assertion.getStatus())) {
             return AssertionStatus.PENDING_RETRY.name();
         } else if (AssertionStatus.ERROR_DELETING_IN_ORCID.name().equals(assertion.getStatus())) {
             return AssertionStatus.ERROR_DELETING_IN_ORCID.name();
@@ -238,10 +236,42 @@ public class AssertionService {
         }
     }
 
-    public Assertion updateAssertionSalesforceId(Assertion assertion, String salesForceId) {
-        assertion.setSalesforceId(salesForceId);
-        assertion.setModified(Instant.now());
-        return assertionRepository.save(assertion);
+    public boolean updateAssertionsSalesforceId(String from, String to) {
+        return updateAssertionsSalesforceId(from, to, true);
+    }
+
+    private boolean updateAssertionsSalesforceId(String from, String to, boolean rollback) {
+        try {
+            Pageable pageable = getPageableForRegistrySync();
+            Page<Assertion> page = assertionRepository.findBySalesforceId(from, pageable);
+            while (!page.isEmpty()) {
+                page.forEach(a -> {
+                    a.setSalesforceId(to);
+                    a.setModified(Instant.now());
+                    assertionRepository.save(a);
+                });
+                
+                // repeat until no more left in db with old sf id
+                page = assertionRepository.findBySalesforceId(from, pageable);
+            }
+        } catch (Exception e) {
+            LOG.error("Error bulk updating assertions from salesforce '" + from + "' to salesforce '" + to + "'", e);
+            if (rollback) {
+                LOG.info("Attempting to RESET assertion salesforce ids from '{}' to '{}'", new Object[] { to, from });
+                boolean success = updateAssertionsSalesforceId(to, from, false);
+                if (success) {
+                    LOG.info("Succeeded in RESETTING assertion salesforce ids from '{}' to '{}'", new Object[] { to, from });
+                    return false;
+                } else {
+                    LOG.error("Failed to reset assertions from '{}' to '{}'", new Object[] { to, from });
+                    LOG.error(
+                            "Operation to update assertion salesforce ids from '{}' to '{}' has failed but there may be assertions with new sf id of '{}' in the database!",
+                            new Object[] { from, to, to });
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public void deleteById(String id, AssertionServiceUser user) throws RegistryDeleteFailureException {
@@ -659,9 +689,19 @@ public class AssertionService {
         List<StoredFile> pendingUploads = storedFileService.getUnprocessedStoredFilesByType(StoredFileService.ASSERTIONS_CSV_FILE_TYPE);
         pendingUploads.forEach(this::processAssertionsUploadFile);
     }
-    
+
     public void markPendingAssertionsAsNotificationRequested(String salesforceId) {
         assertionRepository.updateStatusPendingToNotificationRequested(salesforceId);
+    }
+
+    public void updateOrcidIdsForEmailAndSalesforceId(String email, String salesforceId) {
+        Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
+        final String orcid = record.get().getOrcid();
+        List<Assertion> assertions = assertionRepository.findAllByEmail(email);
+        assertions.stream().filter(a -> a.getOrcidId() == null && salesforceId.equals(a.getSalesforceId())).forEach(a -> {
+            a.setOrcidId(orcid);
+            assertionRepository.save(a);
+        });
     }
 
     private void processAssertionsUploadFile(StoredFile uploadFile) {
@@ -750,14 +790,10 @@ public class AssertionService {
         return upload;
     }
 
-    public void updateOrcidIdsForEmailAndSalesforceId(String email, String salesforceId) {
-        Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
-        final String orcid = record.get().getOrcid();
-        List<Assertion> assertions = assertionRepository.findAllByEmail(email);
-        assertions.stream().filter(a -> a.getOrcidId() == null && salesforceId.equals(a.getSalesforceId())).forEach(a -> {
-            a.setOrcidId(orcid);
-            assertionRepository.save(a);
-        });
+    private Page<Assertion> findBySalesforceId(String salesforceId, Pageable pageable) {
+        Page<Assertion> assertions = assertionRepository.findBySalesforceId(salesforceId, pageable);
+        setPrettyStatus(assertions);
+        return assertions;
     }
 
     private void setPrettyStatus(Iterable<Assertion> affiliations) {

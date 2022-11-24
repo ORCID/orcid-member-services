@@ -609,6 +609,63 @@ class UserServiceTest {
             assertThat(c).startsWith("encoded-"); // check code has been hashed
         });
     }
+    
+    @Test
+    void testUpdateUsersSalesforceId() {
+        List<User> firstPage = getAssertionsForSalesforceId("salesforce-id", 0, UserService.BATCH_SIZE);
+        List<User> secondPage = getAssertionsForSalesforceId("salesforce-id", UserService.BATCH_SIZE,
+                UserService.BATCH_SIZE * 2);
+        List<User> thirdPage = getAssertionsForSalesforceId("salesforce-id", UserService.BATCH_SIZE * 2,
+                (UserService.BATCH_SIZE * 3) - 10);
+        ;
+        Mockito.when(userRepository.findBySalesforceIdAndDeletedIsFalse(Mockito.any(Pageable.class), Mockito.eq("salesforce-id"))).thenReturn(new PageImpl<User>(firstPage))
+                .thenReturn(new PageImpl<User>(secondPage)).thenReturn(new PageImpl<User>(thirdPage)).thenReturn(new PageImpl<User>(new ArrayList<>()));
+        boolean success = userService.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
+        assertThat(success).isTrue();
+
+        Mockito.verify(userRepository, Mockito.times((UserService.BATCH_SIZE * 3) - 10)).save(userCaptor.capture());
+        List<User> saved = userCaptor.getAllValues();
+        saved.forEach(u -> assertThat(u.getSalesforceId()).isEqualTo("new-salesforce-id"));
+    }
+
+    @Test
+    void testUpdateUsersSalesforceIdWithFailure() {
+        List<User> firstPage = getAssertionsForSalesforceId("salesforce-id", 0, UserService.BATCH_SIZE);
+        Mockito.when(userRepository.findBySalesforceIdAndDeletedIsFalse(Mockito.any(Pageable.class), Mockito.eq("salesforce-id"))).thenReturn(new PageImpl<User>(firstPage));
+        
+        // representing updated assertions that need to be rolled back
+        Mockito.when(userRepository.findBySalesforceIdAndDeletedIsFalse(Mockito.any(Pageable.class), Mockito.eq("new-salesforce-id")))
+                .thenReturn(new PageImpl<User>(Arrays.asList(new User(), new User(), new User()))).thenReturn(new PageImpl<User>(new ArrayList<>())); 
+
+        // 3 successful updates before error, followed by rollback
+        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(new User()).thenReturn(new User()).thenReturn(new User())
+                .thenThrow(new RuntimeException("some random problem")).thenReturn(new User()).thenReturn(new User()).thenReturn(new User());
+
+        boolean success = userService.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
+        assertThat(success).isFalse();
+
+        // 3 updates followed by 1 failure and 3 rollbacks 
+        Mockito.verify(userRepository, Mockito.times(7)).save(userCaptor.capture()); 
+        List<User> saved = userCaptor.getAllValues();
+        assertThat(saved.get(0).getSalesforceId()).isEqualTo("new-salesforce-id");
+        assertThat(saved.get(1).getSalesforceId()).isEqualTo("new-salesforce-id");
+        assertThat(saved.get(2).getSalesforceId()).isEqualTo("new-salesforce-id");
+        assertThat(saved.get(3).getSalesforceId()).isEqualTo("new-salesforce-id");
+        assertThat(saved.get(4).getSalesforceId()).isEqualTo("salesforce-id");
+        assertThat(saved.get(5).getSalesforceId()).isEqualTo("salesforce-id");
+        assertThat(saved.get(6).getSalesforceId()).isEqualTo("salesforce-id");
+    }
+    
+    private List<User> getAssertionsForSalesforceId(String salesforceId, int from, int to) {
+        List<User> users = new ArrayList<>();
+        for (int i = from; i < to; i++) {
+            User user = new User();
+            user.setSalesforceId(salesforceId);
+            users.add(user);
+        }
+        return users;
+    }
+
 
     private User getUserUsingMfa() {
         User user = getUser("username");

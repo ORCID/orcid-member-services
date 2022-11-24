@@ -18,7 +18,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.aerogear.security.otp.Totp;
 import org.jboss.aerogear.security.otp.api.Base32;
-import org.orcid.memberportal.service.user.config.ApplicationProperties;
 import org.orcid.memberportal.service.user.config.Constants;
 import org.orcid.memberportal.service.user.domain.ActivationReminder;
 import org.orcid.memberportal.service.user.domain.Authority;
@@ -49,6 +48,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -77,6 +78,8 @@ public class UserService {
      */
     private static final int[] ACTIVATION_REMINDER_DAYS = new int[] { 7, 30 };
 
+    public static final int BATCH_SIZE = 100;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -99,10 +102,45 @@ public class UserService {
     private UserMapper userMapper;
 
     @Autowired
-    private ApplicationProperties applicationProperties;
-
-    @Autowired
     private EncryptUtil encryptUtil;
+    
+    public boolean updateUsersSalesforceId(String from, String to) {
+        return updateUsersSalesforceId(from, to, true);
+    }
+    
+    private boolean updateUsersSalesforceId(String from, String to, boolean rollback) {
+        try {
+            Pageable pageable = PageRequest.of(0, BATCH_SIZE, new Sort(Direction.ASC, "created"));
+            Page<User> page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, from);
+            while (!page.isEmpty()) {
+                page.forEach(u -> {
+                    u.setSalesforceId(to);
+                    u.setLastModifiedDate(Instant.now());
+                    userRepository.save(u);
+                });
+                
+                // repeat until no more left in db with old sf id
+                page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, from);
+            }
+        } catch (Exception e) {
+            LOG.error("Error bulk updating users from salesforce '" + from + "' to salesforce '" + to + "'", e);
+            if (rollback) {
+                LOG.info("Attempting to RESET user salesforce ids from '{}' to '{}'", new Object[] { to, from });
+                boolean success = updateUsersSalesforceId(to, from, false);
+                if (success) {
+                    LOG.info("Succeeded in RESETTING user salesforce ids from '{}' to '{}'", new Object[] { to, from });
+                    return false;
+                } else {
+                    LOG.error("Failed to reset users from '{}' to '{}'", new Object[] { to, from });
+                    LOG.error(
+                            "Operation to update users salesforce ids from '{}' to '{}' has failed but there may be users with new sf id of '{}' in the database!",
+                            new Object[] { from, to, to });
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     public void completePasswordReset(String newPassword, String key) throws ExpiredKeyException, InvalidKeyException {
         LOG.debug("Reset user password for reset key {}", key);
@@ -666,5 +704,7 @@ public class UserService {
             return false;
         }
     }
+
+    
 
 }

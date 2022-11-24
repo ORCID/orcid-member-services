@@ -64,11 +64,11 @@ public class UserService {
         }
     }
 
-    public void updateUserSalesforceIdOrAssertion(String salesforceId, String newSalesforceId) {
-        ResponseEntity<String> response = userServiceClient.updateUserSalesforceIdOrAssertion(salesforceId, newSalesforceId);
+    public void updateUsersSalesforceId(String salesforceId, String newSalesforceId) {
+        ResponseEntity<String> response = userServiceClient.updateUsersSalesforceId(salesforceId, newSalesforceId);
         if (!response.getStatusCode().is2xxSuccessful()) {
             LOG.warn("Error updating users {}, response code {}", salesforceId, response.getStatusCodeValue());
-            throw new BadRequestAlertException("Unable to update users", "User", null);
+            throw new RuntimeException("Failed to update users' salesforce id");
         }
     }
 
