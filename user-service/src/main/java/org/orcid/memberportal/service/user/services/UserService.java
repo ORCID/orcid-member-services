@@ -18,7 +18,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.aerogear.security.otp.Totp;
 import org.jboss.aerogear.security.otp.api.Base32;
-import org.orcid.memberportal.service.user.config.ApplicationProperties;
 import org.orcid.memberportal.service.user.config.Constants;
 import org.orcid.memberportal.service.user.domain.ActivationReminder;
 import org.orcid.memberportal.service.user.domain.Authority;
@@ -103,9 +102,6 @@ public class UserService {
     private UserMapper userMapper;
 
     @Autowired
-    private ApplicationProperties applicationProperties;
-
-    @Autowired
     private EncryptUtil encryptUtil;
     
     public boolean updateUsersSalesforceId(String from, String to) {
@@ -113,26 +109,26 @@ public class UserService {
     }
     
     private boolean updateUsersSalesforceId(String from, String to, boolean rollback) {
-        List<User> updated = new ArrayList<User>();
         try {
             Pageable pageable = PageRequest.of(0, BATCH_SIZE, new Sort(Direction.ASC, "created"));
-            Page<User> users = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, from);
-            while (users != null && !users.isEmpty()) {
-                for (User user : users) {
-                    user.setSalesforceId(to);
-                    user.setLastModifiedDate(Instant.now());
-                    updated.add(userRepository.save(user));
-                }
-                pageable = pageable.next();
-                users = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, from);
+            Page<User> page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, from);
+            while (!page.isEmpty()) {
+                page.forEach(u -> {
+                    u.setSalesforceId(to);
+                    u.setLastModifiedDate(Instant.now());
+                    userRepository.save(u);
+                });
+                
+                // repeat until no more left in db with old sf id
+                page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, from);
             }
         } catch (Exception e) {
             LOG.error("Error bulk updating users from salesforce '" + from + "' to salesforce '" + to + "'", e);
             if (rollback) {
-                LOG.info("Attempting to RESET {} user salesforce ids from '{}' to '{}'", new Object[] { updated.size(), to, from });
+                LOG.info("Attempting to RESET user salesforce ids from '{}' to '{}'", new Object[] { to, from });
                 boolean success = updateUsersSalesforceId(to, from, false);
                 if (success) {
-                    LOG.info("Succeeded in RESETTING {} user salesforce ids from '{}' to '{}'", new Object[] { updated.size(), to, from });
+                    LOG.info("Succeeded in RESETTING user salesforce ids from '{}' to '{}'", new Object[] { to, from });
                     return false;
                 } else {
                     LOG.error("Failed to reset users from '{}' to '{}'", new Object[] { to, from });

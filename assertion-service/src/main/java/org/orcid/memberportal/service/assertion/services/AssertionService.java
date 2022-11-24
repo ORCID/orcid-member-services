@@ -241,26 +241,26 @@ public class AssertionService {
     }
 
     private boolean updateAssertionsSalesforceId(String from, String to, boolean rollback) {
-        List<Assertion> updated = new ArrayList<Assertion>();
         try {
             Pageable pageable = getPageableForRegistrySync();
-            Page<Assertion> assertions = findBySalesforceId(from, pageable);
-            while (assertions != null && !assertions.isEmpty()) {
-                for (Assertion assertion : assertions) {
-                    assertion.setSalesforceId(to);
-                    assertion.setModified(Instant.now());
-                    updated.add(assertionRepository.save(assertion));
-                }
-                pageable = pageable.next();
-                assertions = assertionRepository.findBySalesforceId(from, pageable);
+            Page<Assertion> page = assertionRepository.findBySalesforceId(from, pageable);
+            while (!page.isEmpty()) {
+                page.forEach(a -> {
+                    a.setSalesforceId(to);
+                    a.setModified(Instant.now());
+                    assertionRepository.save(a);
+                });
+                
+                // repeat until no more left in db with old sf id
+                page = assertionRepository.findBySalesforceId(from, pageable);
             }
         } catch (Exception e) {
             LOG.error("Error bulk updating assertions from salesforce '" + from + "' to salesforce '" + to + "'", e);
             if (rollback) {
-                LOG.info("Attempting to RESET {} assertion salesforce ids from '{}' to '{}'", new Object[] { updated.size(), to, from });
+                LOG.info("Attempting to RESET assertion salesforce ids from '{}' to '{}'", new Object[] { to, from });
                 boolean success = updateAssertionsSalesforceId(to, from, false);
                 if (success) {
-                    LOG.info("Succeeded in RESETTING {} assertion salesforce ids from '{}' to '{}'", new Object[] { updated.size(), to, from });
+                    LOG.info("Succeeded in RESETTING assertion salesforce ids from '{}' to '{}'", new Object[] { to, from });
                     return false;
                 } else {
                     LOG.error("Failed to reset assertions from '{}' to '{}'", new Object[] { to, from });

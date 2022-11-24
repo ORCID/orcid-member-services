@@ -157,33 +157,35 @@ public class MemberService {
             try {
                 // update affiliations and users associated with the member
                 assertionService.updateAssertionsSalesforceId(oldSalesforceId, newSalesforceId);
-
-                try {
-                    userService.updateUsersSalesforceId(oldSalesforceId, newSalesforceId);
-                } catch (Exception e) {
-                    LOG.error("Error updating users' salesforce id from {} to {}", oldSalesforceId, newSalesforceId);
-                    LOG.info("Attempting to perform salesforce id rollback on affiliations");
-                    assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
-                    LOG.info("Affiliation salesforce id rollback successfull");
-                    throw new RuntimeException(e);
-                }
-                existingMember.setSalesforceId(member.getSalesforceId());
-                
-                try {
-                    return memberRepository.save(existingMember);
-                } catch (Exception e) {
-                    LOG.error("Error updating member's salesforce id from {} to {}", oldSalesforceId, newSalesforceId);
-                    LOG.info("Attempting to perform salesforce id rollback on affiliations");
-                    assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
-                    LOG.info("Affiliation salesforce id rollback successfull");
-                    
-                    LOG.info("Attempting to perform salesforce id rollback on users");
-                    userService.updateUsersSalesforceId(newSalesforceId, oldSalesforceId);
-                    LOG.info("User salesforce id rollback successfull");
-                    throw new RuntimeException(e);
-                }
             } catch (Exception e) {
-                LOG.error("Error updating salesforce ids");
+                LOG.error("Error updating assertion salesforce ids", e);
+                throw new RuntimeException(e);
+            }
+
+            try {
+                userService.updateUsersSalesforceId(oldSalesforceId, newSalesforceId);
+            } catch (Exception e) {
+                LOG.error("Error updating users's salesforce id", e);
+                LOG.error("Error updating users' salesforce id from {} to {}", oldSalesforceId, newSalesforceId);
+                LOG.info("Attempting to perform salesforce id rollback on affiliations");
+                assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
+                LOG.info("Affiliation salesforce id rollback successfull");
+                throw new RuntimeException(e);
+            }
+            existingMember.setSalesforceId(member.getSalesforceId());
+            
+            try {
+                return memberRepository.save(existingMember);
+            } catch (Exception e) {
+                LOG.error("Error updating member", e);
+                LOG.error("Error updating member's salesforce id from {} to {}", oldSalesforceId, newSalesforceId);
+                LOG.info("Attempting to perform salesforce id rollback on affiliations");
+                assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
+                LOG.info("Affiliation salesforce id rollback successfull");
+                
+                LOG.info("Attempting to perform salesforce id rollback on users");
+                userService.updateUsersSalesforceId(newSalesforceId, oldSalesforceId);
+                LOG.info("User salesforce id rollback successfull");
                 throw new RuntimeException(e);
             }
         }
