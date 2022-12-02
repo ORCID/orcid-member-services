@@ -1,6 +1,8 @@
+<div class="row">Back to {{ memberData.publicDisplayName }}</div>
+<hr>
 <div class="side-bar">
   <div class="logo-container">
-    <img src="{{ memberData.logoUrl }}" onerror="this.src='../content/images/member-logo-placeholder.svg'" alt="Member logo" />
+    <img src="{{ memberData.logoUrl }}" onerror="this.src='../../content/images/member-logo-placeholder.svg'" alt="Member logo" />
   </div>
   <div *ngIf="isActive()">
     <h5>Public details</h5>
@@ -76,7 +78,7 @@
   </div>
   <div class="row ml-0 mb-4 mt-4 d-flex justify-content-between">
     <h2 class="mb-0">{{ memberData.publicDisplayName }}</h2>
-    <button class="btn btn-primary edit-button mr-3" routerLink="/edit">Edit Organization</button>
+    <button class="btn btn-primary edit-button mr-3">Edit Organization</button>
   </div>
   <div *ngIf="!isActive()">
     Your ORCID membership is currently inactive. Please contact your consortium lead or ORCID to reinstate your membership.
@@ -95,15 +97,15 @@
         <h6 class="voting-contact">Voting</h6>
       </div>
       <hr class="green-hr" />
-      <ul class="ml-0 pl-0" *ngFor="let contact of memberData.contacts; let i = index">
+      <ul class="ml-0 pl-0" *ngFor="let contact of memberData.contacts; let i = index"> 
         <li class="row ml-0 d-flex justify-content-between contact">
-          <div>{{ contact.name }}</div>
+          <div>{{ contact.name }}</div> 
           <div>{{ contact.memberOrgRole }}</div>
           <div>
             <a href="mailto:{{ contact.contactEmail }}">{{ contact.contactEmail }}</a>
           </div>
           <div class="voting-contact">
-            <img *ngIf="contact.votingContact" src="./../../../content/images/checkmark.svg" alt="Yes" />
+            <img *ngIf="contact.votingContact" src="./../../../../content/images/checkmark.svg" alt="Yes" />
           </div>
         </li>
         <hr *ngIf="i + 1 < memberData.contacts.length" />

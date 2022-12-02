@@ -72,3 +72,15 @@ h5 {
     flex-grow: 0;
   }
 }
+
+.edit-button {
+  &:active {
+    color: black !important;
+    background-color: white !important;
+  }
+  background: #ffffff;
+  border: 1px solid #a6ce39;
+  border-radius: 5px;
+  color: black;
+  padding: 12px 16px;
+}

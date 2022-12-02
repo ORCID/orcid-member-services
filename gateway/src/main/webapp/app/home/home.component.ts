@@ -14,11 +14,14 @@ export class HomeComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
   memberDataLoaded = false;
-  fetchingMemberData = false;
+  fetchingMemberData: boolean = undefined;
 
   constructor(private accountService: AccountService) {}
 
   ngOnInit() {
+    this.accountService.getFetchingMemberDataState().subscribe(fetchingMemberData => {
+      this.fetchingMemberData = fetchingMemberData;
+    });
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
       this.getMemberData();
@@ -32,17 +35,14 @@ export class HomeComponent implements OnInit {
   }
 
   getMemberData() {
-    this.fetchingMemberData = true;
     if (this.account === null) {
       this.memberDataLoaded = false;
       this.memberData = null;
     } else if (this.account !== null && !this.memberData) {
       this.accountService.getCurrentMemberData().then(res => {
+        this.memberDataLoaded = true;
         if (res && res.value.id) {
           this.memberData = res.value;
-          this.memberDataLoaded = true;
-        } else {
-          this.memberDataLoaded = true;
         }
       });
     }

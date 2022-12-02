@@ -17,6 +17,7 @@ export class AccountService {
   private memberData: BehaviorSubject<ISFMemberData> = new BehaviorSubject<ISFMemberData>(null);
   private authenticated = false;
   private authenticationState = new Subject<any>();
+  private fetchingMemberDataState: Subject<boolean> = new Subject<false>();
   private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
 
   constructor(
@@ -165,9 +166,14 @@ export class AccountService {
     return this.isAuthenticated() && this.userIdentity ? this.userIdentity.salesforceId : null;
   }
 
+  getFetchingMemberDataState(): Observable<boolean> {
+    return this.fetchingMemberDataState.asObservable();
+  }
+
   async getCurrentMemberData(): Promise<BehaviorSubject<ISFMemberData>> {
     if (this.memberData.value === null && this.userIdentity) {
       console.log('getCurrentMemberData(): running', new Date().toLocaleString());
+      this.fetchingMemberDataState.next(true);
       await this.memberService
         .getMember()
         .toPromise()
@@ -214,6 +220,7 @@ export class AccountService {
           }
         });
     }
+    this.fetchingMemberDataState.next(false);
     return this.memberData;
   }
 
