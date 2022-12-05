@@ -17,7 +17,7 @@ export class AccountService {
   private memberData: BehaviorSubject<ISFMemberData> = new BehaviorSubject<ISFMemberData>(null);
   private authenticated = false;
   private authenticationState = new Subject<any>();
-  private fetchingMemberDataState: Subject<boolean> = new Subject<false>();
+  private fetchingMemberDataState: Subject<boolean> = new Subject<undefined>();
   private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
 
   constructor(
@@ -179,7 +179,7 @@ export class AccountService {
         .toPromise()
         .then(res => {
           console.log('getCurrentMemberData(): done', new Date().toLocaleString());
-          if (res) {
+          if (res && res.id) {
             this.memberData.next(res);
             this.memberService
               .getMemberContacts()

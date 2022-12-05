@@ -1,4 +1,4 @@
-<div class="side-bar">
+<div *ngIf="memberData" class="side-bar">
   <div class="logo-container">
     <img src="{{ memberData.logoUrl }}" onerror="this.src='../content/images/member-logo-placeholder.svg'" alt="Member logo" />
   </div>
@@ -47,7 +47,7 @@
     </div>
   </div>
 </div>
-<div class="main-section">
+<div *ngIf="memberData" class="main-section">
   <div *ngIf="!memberData.isConsortiumLead">
     <div *ngIf="memberData.consortiumLeadName">
       <div class="row d-flex ml-0">
