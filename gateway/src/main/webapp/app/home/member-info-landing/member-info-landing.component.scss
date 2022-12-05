@@ -1,14 +1,11 @@
 @use '../../../content/scss/bootstrap-variables' as global;
 
-$color_1: rgba(0, 0, 0, 0.6);
-$background-color_1: #fafafa;
-
 .side-bar {
   max-width: 250px;
   height: 100%;
   padding: 20px 22px 20px 20px;
   flex: 1;
-  background-color: $background-color_1;
+  background-color: global.$gray-2;
   border-right: 2px solid #eeeeee;
 }
 .main-section {
@@ -23,14 +20,14 @@ $background-color_1: #fafafa;
     font-weight: normal;
   }
   .empty {
-    color: $color_1;
+    color: global.$black-transparent;
   }
 }
 .main-contacts {
   font-size: 14px;
 }
 .main-section-empty-description {
-  color: $color_1;
+  color: global.$black-transparent;
 }
 .logo-container {
   img {

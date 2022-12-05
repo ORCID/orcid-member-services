@@ -11,24 +11,26 @@ import { IMSUser } from 'app/shared/model/user.model';
 export class MemberInfoEditComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
-  // memberDataLoaded = false;
   fetchingMemberData: boolean = undefined;
+  MEMBER_LIST_URL: string = 'https://orcid.org/members';
 
   constructor(private accountService: AccountService) {}
   ngOnInit() {
-    this.accountService.getFetchingMemberDataState().subscribe(fetchingMemberData => {
-      this.fetchingMemberData = fetchingMemberData;
-    });
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
       this.getMemberData();
     });
+    // TODO add fetchingMemberData check to the account service
     this.accountService.identity().then((account: IMSUser) => {
       if (!this.fetchingMemberData) {
         this.account = account;
         this.getMemberData();
       }
     });
+  }
+
+  filterCRFID(id) {
+    return id.replace(/^.*dx.doi.org\//g, '');
   }
 
   getMemberData() {

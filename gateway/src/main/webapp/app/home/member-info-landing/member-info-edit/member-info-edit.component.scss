@@ -1,0 +1,33 @@
+@use '../../../../content/scss/bootstrap-variables' as global;
+//@import "../member-info-landing.component";
+
+.go-back {
+  a {
+    text-decoration: underline;
+    font-weight: normal;
+  }
+  font-size: 14px;
+}
+
+.side-bar {
+  max-width: 250px;
+  height: 100%;
+  padding: 20px 22px 20px 20px;
+  flex: 1;
+}
+
+.logo-container {
+  img {
+    width: 200px;
+    height: auto;
+    align-self: center;
+  }
+  width: 208px;
+  height: 208px;
+  display: flex;
+  justify-content: center;
+}
+.edit-org-label {
+  font-size: 18px;
+  color: global.$black-transparent;
+}
