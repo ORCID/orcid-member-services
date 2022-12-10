@@ -9,7 +9,8 @@ import { Account } from 'app/core/user/account.model';
 import { IMSUser } from 'app/shared/model/user.model';
 import { MSMemberService } from 'app/entities/member/member.service';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
-import { SFMemberContact } from 'app/shared/model/salesforce-member-contact.model copy';
+import { SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
+import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -168,6 +169,13 @@ export class AccountService {
 
   getFetchingMemberDataState(): Observable<boolean> {
     return this.fetchingMemberDataState.asObservable();
+  }
+
+  updatePublicDetails(data: SFPublicDetails) {
+    this.memberData.value.publicDisplayName = data.name;
+    this.memberData.value.publicDisplayDescriptionHtml = data.description;
+    this.memberData.value.website = data.website;
+    this.memberData.value.publicDisplayEmail = data.email;
   }
 
   async getCurrentMemberData(): Promise<BehaviorSubject<ISFMemberData>> {

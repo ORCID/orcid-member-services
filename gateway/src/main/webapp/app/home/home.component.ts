@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
   // memberDataLoaded = false;
-  fetchingMemberData: boolean = undefined;
+  fetchingMemberData: boolean;
 
   constructor(private accountService: AccountService) {}
 

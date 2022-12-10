@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
 import { AccountService } from 'app/core';
-import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
+import { ISFMemberData, SFMemberData } from 'app/shared/model/salesforce-member-data.model';
+import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
 import { IMSUser } from 'app/shared/model/user.model';
 
 @Component({
@@ -12,34 +16,70 @@ export class MemberInfoEditComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
   fetchingMemberData: boolean = undefined;
+  objectKeys = Object.keys;
+  // TODO move to constants
   MEMBER_LIST_URL: string = 'https://orcid.org/members';
+  isSaving: boolean;
 
-  constructor(private accountService: AccountService) {}
+  editForm = this.fb.group({
+    name: [null, [Validators.required]],
+    description: [null],
+    website: [null, [Validators.pattern(URL_REGEXP)]],
+    email: [null, [Validators.pattern(EMAIL_REGEXP)]]
+  });
+
+  constructor(
+    private accountService: AccountService,
+    private fb: FormBuilder,
+    protected activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {}
+
   ngOnInit() {
-    this.accountService.getAuthenticationState().subscribe(account => {
-      this.account = account;
-      this.getMemberData();
+    this.activatedRoute.data.subscribe(({ data }) => {
+      this.memberData = data;
+      this.updateForm(data);
     });
-    // TODO add fetchingMemberData check to the account service
-    this.accountService.identity().then((account: IMSUser) => {
-      if (!this.fetchingMemberData) {
-        this.account = account;
-        this.getMemberData();
-      }
-    });
+  }
+
+  updateForm(data: SFMemberData) {
+    if (data && data.id) {
+      this.editForm.patchValue({
+        name: data.publicDisplayName,
+        description: data.publicDisplayDescriptionHtml,
+        website: data.website,
+        email: data.publicDisplayEmail
+      });
+    }
   }
 
   filterCRFID(id) {
     return id.replace(/^.*dx.doi.org\//g, '');
   }
 
-  getMemberData() {
-    if (this.account === null) {
-      this.memberData = null;
-    } else if (this.account !== null && !this.memberData) {
-      this.accountService.getCurrentMemberData().then(res => {
-        this.memberData = res.value;
-      });
-    }
+  createDetailsFromForm(): SFPublicDetails {
+    return {
+      ...new SFPublicDetails(),
+      name: this.editForm.get(['name']).value,
+      description: this.editForm.get(['description']).value,
+      website: this.editForm.get(['website']).value,
+      email: this.editForm.get(['email']).value
+    };
+  }
+
+  save() {
+    this.isSaving = true;
+    const details = this.createDetailsFromForm();
+    this.accountService.updatePublicDetails(details);
+    this.onSaveSuccess();
+  }
+
+  onSaveSuccess() {
+    this.isSaving = false;
+    this.router.navigate(['']);
+  }
+
+  onSaveError() {
+    this.isSaving = false;
   }
 }

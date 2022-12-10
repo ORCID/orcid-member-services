@@ -420,3 +420,25 @@ p.mfaSecret {
 div.success {
   color: green;
 }
+
+.wide-text {
+  letter-spacing: 0.5px;
+}
+
+.small-text {
+  font-size: 0.75rem;
+}
+
+.green-hr {
+  border: 1px solid $secondary;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.w-66 {
+  width: 66% !important;
+}
+
+.w-33 {
+  width: 33% !important;
+}
