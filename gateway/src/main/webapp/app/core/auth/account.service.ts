@@ -9,7 +9,6 @@ import { Account } from 'app/core/user/account.model';
 import { IMSUser } from 'app/shared/model/user.model';
 import { MSMemberService } from 'app/entities/member/member.service';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
-import { SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
 import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
 
 @Injectable({ providedIn: 'root' })
@@ -18,7 +17,7 @@ export class AccountService {
   private memberData: BehaviorSubject<ISFMemberData> = new BehaviorSubject<ISFMemberData>(null);
   private authenticated = false;
   private authenticationState = new Subject<any>();
-  private fetchingMemberDataState: Subject<boolean> = new Subject<undefined>();
+  private fetchingMemberDataState = new BehaviorSubject<boolean>(undefined);
   private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
 
   constructor(
@@ -179,57 +178,61 @@ export class AccountService {
   }
 
   async getCurrentMemberData(): Promise<BehaviorSubject<ISFMemberData>> {
-    if (this.memberData.value === null && this.userIdentity) {
-      console.log('getCurrentMemberData(): running', new Date().toLocaleString());
-      this.fetchingMemberDataState.next(true);
-      await this.memberService
-        .getMember()
-        .toPromise()
-        .then(res => {
-          console.log('getCurrentMemberData(): done', new Date().toLocaleString());
-          if (res && res.id) {
-            this.memberData.next(res);
-            this.memberService
-              .getMemberContacts()
-              .toPromise()
-              .then(res => {
-                if (res) {
-                  this.memberData.value.contacts = res;
-                }
-              });
-            this.memberService
-              .getMemberOrgIds()
-              .toPromise()
-              .then(res => {
-                if (res) {
-                  this.memberData.value.orgIds = res;
-                }
-              });
-            if (res && res.consortiaLeadId) {
+    if (!this.fetchingMemberDataState.value) {
+      if (this.memberData.value === null && this.userIdentity) {
+        console.log('getCurrentMemberData(): running', new Date().toLocaleString());
+        this.fetchingMemberDataState.next(true);
+        await this.memberService
+          .getMember()
+          .toPromise()
+          .then(res => {
+            console.log('getCurrentMemberData(): done', new Date().toLocaleString());
+            if (res && res.id) {
+              this.memberData.next(res);
               this.memberService
-                .find(res.consortiaLeadId)
+                .getMemberContacts()
                 .toPromise()
-                .then(r => {
-                  if (r && r.body) {
-                    this.memberData.value.consortiumLeadName = r.body.clientName;
+                .then(res => {
+                  if (res) {
+                    this.memberData.value.contacts = res;
                   }
                 });
-            }
-            if (this.userIdentity.salesforceId) {
               this.memberService
-                .find(this.userIdentity.salesforceId)
+                .getMemberOrgIds()
                 .toPromise()
-                .then(r => {
-                  if (r && r.body) {
-                    this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
+                .then(res => {
+                  if (res) {
+                    this.memberData.value.orgIds = res;
                   }
                 });
+              if (res && res.consortiaLeadId) {
+                this.memberService
+                  .find(res.consortiaLeadId)
+                  .toPromise()
+                  .then(r => {
+                    if (r && r.body) {
+                      this.memberData.value.consortiumLeadName = r.body.clientName;
+                    }
+                  });
+              }
+              if (this.userIdentity.salesforceId) {
+                this.memberService
+                  .find(this.userIdentity.salesforceId)
+                  .toPromise()
+                  .then(r => {
+                    if (r && r.body) {
+                      this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
+                    }
+                  });
+              }
             }
-          }
-        });
+          });
+        this.fetchingMemberDataState.next(false);
+        return this.memberData;
+      } else {
+        return this.memberData;
+      }
     }
-    this.fetchingMemberDataState.next(false);
-    return this.memberData;
   }
 
   isOrganizationOwner(): string {

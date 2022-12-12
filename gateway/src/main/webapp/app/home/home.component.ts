@@ -11,33 +11,33 @@ import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 export class HomeComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
-  // memberDataLoaded = false;
-  fetchingMemberData: boolean;
+  memberDataLoaded: boolean = false;
 
   constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-    this.accountService.getFetchingMemberDataState().subscribe(fetchingMemberData => {
-      this.fetchingMemberData = fetchingMemberData;
-    });
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
       this.getMemberData();
     });
     this.accountService.identity().then((account: IMSUser) => {
-      if (!this.fetchingMemberData) {
-        this.account = account;
-        this.getMemberData();
-      }
+      this.account = account;
+      this.getMemberData();
     });
   }
 
   getMemberData() {
     if (this.account === null) {
-      this.memberData = null;
+      this.memberData = undefined;
+      this.memberDataLoaded = false;
     } else if (this.account !== null && !this.memberData) {
       this.accountService.getCurrentMemberData().then(res => {
-        this.memberData = res.value;
+        this.memberDataLoaded = true;
+        if (res && res.value) {
+          this.memberData = res.value;
+        } else if (res && res.value === null) {
+          this.memberData = null;
+        }
       });
     }
   }

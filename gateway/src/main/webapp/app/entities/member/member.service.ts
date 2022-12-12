@@ -17,6 +17,7 @@ import {
 } from 'app/shared/model/salesforce-member-data.model';
 import { ISFRawMemberContact, ISFRawMemberContacts, SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from 'app/shared/model/salesforce-member-org-id.model';
+import { ISFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
 
 type EntityResponseType = HttpResponse<IMSMember>;
 type EntityArrayResponseType = HttpResponse<IMSMember[]>;
@@ -108,6 +109,10 @@ export class MSMemberService {
 
   delete(id: string): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/members/${id}`, { observe: 'response' });
+  }
+
+  updatePublicDetails(publicDetails: ISFPublicDetails): Observable<HttpResponse<any>> {
+    return this.http.post(`${this.resourceUrl}/public-details`, publicDetails, { observe: 'response' });
   }
 
   protected convertDateFromClient(msMember: IMSMember): IMSMember {

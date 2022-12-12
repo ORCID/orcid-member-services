@@ -20,30 +20,32 @@
         </div>
         <div *ngIf="!memberData.publicDisplayEmail" class="empty">No email added</div>
       </div>
-      <h5>Identifiers</h5>
-      <hr />
-      <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['ROR'].length > 0">
-        <h6>ROR</h6>
-        <div *ngFor="let id of memberData.orgIds['ROR']">
-          <a href="{{ id }}">{{ id }}</a>
+      <div *ngIf="memberData.orgIds">
+        <h5>Identifiers</h5>
+        <hr />
+        <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['ROR'].length > 0">
+          <h6>ROR</h6>
+          <div *ngFor="let id of memberData.orgIds['ROR']">
+            <a href="{{ id }}">{{ id }}</a>
+          </div>
         </div>
-      </div>
-      <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['GRID'].length > 0">
-        <h6>GRID</h6>
-        <div *ngFor="let id of memberData.orgIds['GRID']">
-          {{ id }}
+        <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['GRID'].length > 0">
+          <h6>GRID</h6>
+          <div *ngFor="let id of memberData.orgIds['GRID']">
+            {{ id }}
+          </div>
         </div>
-      </div>
-      <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['Ringgold'].length > 0">
-        <h6>Ringgold ID</h6>
-        <div *ngFor="let id of memberData.orgIds['Ringgold']">
-          {{ id }}
+        <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['Ringgold'].length > 0">
+          <h6>Ringgold ID</h6>
+          <div *ngFor="let id of memberData.orgIds['Ringgold']">
+            {{ id }}
+          </div>
         </div>
-      </div>
-      <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['Fundref'].length > 0">
-        <h6>Crossref Funder ID</h6>
-        <div *ngFor="let id of memberData.orgIds['Fundref']">
-          <a href="{{ id }}">{{ filterCRFID(id) }}</a>
+        <div class="mb-3 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['Fundref'].length > 0">
+          <h6>Crossref Funder ID</h6>
+          <div *ngFor="let id of memberData.orgIds['Fundref']">
+            <a href="{{ id }}">{{ filterCRFID(id) }}</a>
+          </div>
         </div>
       </div>
     </div>

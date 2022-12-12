@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
 import { AccountService } from 'app/core';
+import { MSMemberService } from 'app/entities/member';
 import { ISFMemberData, SFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
 import { IMSUser } from 'app/shared/model/user.model';
@@ -15,7 +16,6 @@ import { IMSUser } from 'app/shared/model/user.model';
 export class MemberInfoEditComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
-  fetchingMemberData: boolean = undefined;
   objectKeys = Object.keys;
   // TODO move to constants
   MEMBER_LIST_URL: string = 'https://orcid.org/members';
@@ -30,6 +30,7 @@ export class MemberInfoEditComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
+    private memberService: MSMemberService,
     private fb: FormBuilder,
     protected activatedRoute: ActivatedRoute,
     private router: Router
@@ -70,8 +71,16 @@ export class MemberInfoEditComponent implements OnInit {
   save() {
     this.isSaving = true;
     const details = this.createDetailsFromForm();
-    this.accountService.updatePublicDetails(details);
-    this.onSaveSuccess();
+    this.memberService.updatePublicDetails(details).subscribe(
+      res => {
+        this.accountService.updatePublicDetails(details);
+        this.onSaveSuccess();
+      },
+      err => {
+        console.error(err);
+        this.onSaveError();
+      }
+    );
   }
 
   onSaveSuccess() {

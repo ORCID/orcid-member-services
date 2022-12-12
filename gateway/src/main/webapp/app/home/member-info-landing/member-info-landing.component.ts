@@ -11,7 +11,6 @@ import { IMSUser } from 'app/shared/model/user.model';
 export class MemberInfoLandingComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
-  fetchingMemberData: boolean = undefined;
 
   constructor(private accountService: AccountService) {}
 
@@ -24,30 +23,24 @@ export class MemberInfoLandingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.accountService.getFetchingMemberDataState().subscribe(fetchingMemberData => {
-      this.fetchingMemberData = fetchingMemberData;
-    });
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
       this.getMemberData();
     });
     this.accountService.identity().then((account: IMSUser) => {
-      if (!this.fetchingMemberData) {
-        this.account = account;
-        this.getMemberData();
-      }
+      this.account = account;
+      this.getMemberData();
     });
   }
 
   getMemberData() {
     if (this.account === null) {
       this.memberData = null;
-      console.log('a');
     } else if (this.account !== null && !this.memberData) {
-      console.log('a');
       this.accountService.getCurrentMemberData().then(res => {
-        console.log(res);
-        this.memberData = res.value;
+        if (res && res.value) {
+          this.memberData = res.value;
+        }
       });
     }
   }
