@@ -33,11 +33,17 @@ export const HOME_ROUTE: Route = {
   children: [
     {
       path: '',
-      component: MemberInfoLandingComponent
+      component: MemberInfoLandingComponent,
+      data: {
+        pageTitle: 'home.title.string'
+      }
     },
     {
       path: 'edit',
       component: MemberInfoEditComponent,
+      data: {
+        pageTitle: 'home.title.string'
+      },
       resolve: {
         data: MemberDataResolve
       },

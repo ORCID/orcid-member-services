@@ -22,11 +22,28 @@
     </div>
     <div class="main-section">
       <form (ngSubmit)="save()" name="editForm" role="form" [formGroup]="editForm">
+        <div *ngIf="invalidForm" class="warning d-flex w-75 p-3 mb-3">
+          <img src="./../../../../content/images/warning-sign.svg" alt="Warning sign" class="p-2" />
+          <div>
+            <div class="mb-2 small-text wide-text font-weight-bold">
+              Your changes cannot be saved
+            </div>
+            <div class="small-text wide-text">
+              Please fix the issues with the public details before trying to save again
+            </div>
+          </div>
+        </div>
         <h3 class="mb-3 wide-text">Public details</h3>
         <div class="form mb-5">
           <div class="form-group w-50">
-            <label class="wide-text small-text">Organization name</label>
-            <input type="text" class="form-control" name="name" formControlName="name" />
+            <label class="wide-text small-text" [ngClass]="{ 'text-danger': editForm.get('name').invalid }">Organization name</label>
+            <input
+              type="text"
+              class="form-control"
+              name="name"
+              formControlName="name"
+              [ngClass]="{ 'text-danger': editForm.get('name').invalid }"
+            />
             <div *ngIf="editForm.get('name').invalid && (editForm.get('name').dirty || editForm.get('name').touched)">
               <small class="wide-text small-text form-text text-danger" *ngIf="editForm.get('name').errors.required">
                 The organization name cannot be empty
@@ -47,21 +64,38 @@
             ></textarea>
           </div>
           <div class="form-group w-50">
-            <label class="wide-text small-text">Website</label>
-            <input type="text" class="form-control" name="website" formControlName="website" />
+            <label class="wide-text small-text" [ngClass]="{ 'text-danger': editForm.get('website').invalid }">Website</label>
+            <input
+              type="text"
+              class="form-control"
+              name="website"
+              formControlName="website"
+              [ngClass]="{ 'text-danger': editForm.get('website').invalid }"
+            />
             <ng-template #validWebsite>
               <small class="wide-text small-text input-prompt">Links should be in the full URL format e.g. http://www.website.com</small>
             </ng-template>
-            <div *ngIf="editForm.get('website').invalid && (editForm.get('website').dirty || editForm.get('website').touched); else validWebsite">
+            <div
+              *ngIf="
+                editForm.get('website').invalid && (editForm.get('website').dirty || editForm.get('website').touched);
+                else validWebsite
+              "
+            >
               <small class="wide-text small-text text-danger" *ngIf="editForm.get('website').errors.pattern">
                 Please enter a valid website URL, for example http://www.website.com
               </small>
             </div>
           </div>
           <div class="form-group mb-4 w-50">
-            <label class="wide-text small-text">Email</label>
-            <input type="text" class="form-control" name="email" formControlName="email" />
-            <ng-template  #validEmail>
+            <label [ngClass]="{ 'text-danger': editForm.get('email').invalid }" class="wide-text small-text">Email</label>
+            <input
+              type="text"
+              class="form-control"
+              name="email"
+              formControlName="email"
+              [ngClass]="{ 'text-danger': editForm.get('email').invalid }"
+            />
+            <ng-template #validEmail>
               <small class="wide-text small-text input-prompt">Emails should be in the standard format e.g. contactus@website.com</small>
             </ng-template>
             <div *ngIf="editForm.get('email').invalid && (editForm.get('email').dirty || editForm.get('email').touched); else validEmail">
@@ -70,7 +104,7 @@
               </small>
             </div>
           </div>
-          <button type="submit" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">Save changes</button>
+          <button type="submit" [disabled]="isSaving" class="btn btn-primary">Save changes</button>
           <button type="button" class="btn btn-outline-primary" routerLink="">Cancel</button>
         </div>
       </form>

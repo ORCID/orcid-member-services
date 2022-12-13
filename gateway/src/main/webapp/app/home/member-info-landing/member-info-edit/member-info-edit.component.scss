@@ -99,3 +99,17 @@ input {
 .lockpad {
   margin-top: -4px;
 }
+
+.ng-invalid:not(form) {
+  border: 1px solid #d32f2f;
+  border-radius: 2px;
+}
+
+.warning {
+  img {
+    padding: 0 16px 0 8px !important;
+    margin-top: -1.75rem;
+  }
+  border: 2px solid #b71c1c;
+  border-radius: 4px;
+}

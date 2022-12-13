@@ -20,6 +20,7 @@ export class MemberInfoEditComponent implements OnInit {
   // TODO move to constants
   MEMBER_LIST_URL: string = 'https://orcid.org/members';
   isSaving: boolean;
+  invalidForm: boolean;
 
   editForm = this.fb.group({
     name: [null, [Validators.required]],
@@ -40,6 +41,11 @@ export class MemberInfoEditComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ data }) => {
       this.memberData = data;
       this.updateForm(data);
+    });
+    this.editForm.valueChanges.subscribe(() => {
+      if (this.editForm.status === 'VALID') {
+        this.invalidForm = false;
+      }
     });
   }
 
@@ -69,18 +75,23 @@ export class MemberInfoEditComponent implements OnInit {
   }
 
   save() {
-    this.isSaving = true;
-    const details = this.createDetailsFromForm();
-    this.memberService.updatePublicDetails(details).subscribe(
-      res => {
-        this.accountService.updatePublicDetails(details);
-        this.onSaveSuccess();
-      },
-      err => {
-        console.error(err);
-        this.onSaveError();
-      }
-    );
+    if (this.editForm.status === 'INVALID') {
+      this.invalidForm = true;
+    } else {
+      this.invalidForm = false;
+      this.isSaving = true;
+      const details = this.createDetailsFromForm();
+      this.memberService.updatePublicDetails(details).subscribe(
+        res => {
+          this.accountService.updatePublicDetails(details);
+          this.onSaveSuccess();
+        },
+        err => {
+          console.error(err);
+          this.onSaveError();
+        }
+      );
+    }
   }
 
   onSaveSuccess() {
