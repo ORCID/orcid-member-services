@@ -28,12 +28,8 @@
             <label class="wide-text small-text">Organization name</label>
             <input type="text" class="form-control" name="name" formControlName="name" />
             <div *ngIf="editForm.get('name').invalid && (editForm.get('name').dirty || editForm.get('name').touched)">
-              <small
-                class="form-text text-danger"
-                *ngIf="editForm.get('name').errors.required"
-                jhiTranslate="entity.validation.required.string"
-              >
-                This field is required.
+              <small class="wide-text small-text form-text text-danger" *ngIf="editForm.get('name').errors.required">
+                The organization name cannot be empty
               </small>
             </div>
           </div>
@@ -53,12 +49,26 @@
           <div class="form-group w-50">
             <label class="wide-text small-text">Website</label>
             <input type="text" class="form-control" name="website" formControlName="website" />
-            <small class="wide-text small-text input-prompt">Links should be in the full URL format e.g. http://www.website.com</small>
+            <ng-template #validWebsite>
+              <small class="wide-text small-text input-prompt">Links should be in the full URL format e.g. http://www.website.com</small>
+            </ng-template>
+            <div *ngIf="editForm.get('website').invalid && (editForm.get('website').dirty || editForm.get('website').touched); else validWebsite">
+              <small class="wide-text small-text text-danger" *ngIf="editForm.get('website').errors.pattern">
+                Please enter a valid website URL, for example http://www.website.com
+              </small>
+            </div>
           </div>
           <div class="form-group mb-4 w-50">
             <label class="wide-text small-text">Email</label>
             <input type="text" class="form-control" name="email" formControlName="email" />
-            <small class="wide-text small-text input-prompt">Emails should be in the standard format e.g. contactus@website.com</small>
+            <ng-template  #validEmail>
+              <small class="wide-text small-text input-prompt">Emails should be in the standard format e.g. contactus@website.com</small>
+            </ng-template>
+            <div *ngIf="editForm.get('email').invalid && (editForm.get('email').dirty || editForm.get('email').touched); else validEmail">
+              <small class="wide-text small-text text-danger" *ngIf="editForm.get('email').errors.pattern">
+                Please enter a valid email address, for example contactus@website.com
+              </small>
+            </div>
           </div>
           <button type="submit" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">Save changes</button>
           <button type="button" class="btn btn-outline-primary" routerLink="">Cancel</button>
@@ -83,7 +93,7 @@
               <div class="w-66">{{ orgId }}</div>
               <div class="w-33">{{ orgIdType }}</div>
             </li>
-            <hr *ngIf="!((i == objectKeys(memberData.orgIds).length - 1) && (ii == memberData.orgIds[orgIdType].length - 1))" />
+            <hr *ngIf="!(i == objectKeys(memberData.orgIds).length - 1 && ii == memberData.orgIds[orgIdType].length - 1)" />
           </div>
         </ul>
       </div>
