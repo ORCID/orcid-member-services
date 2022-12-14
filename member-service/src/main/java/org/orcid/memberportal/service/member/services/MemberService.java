@@ -7,10 +7,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.orcid.memberportal.service.member.client.SalesforceClient;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
+import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
 import org.orcid.memberportal.service.member.security.AuthoritiesConstants;
@@ -286,6 +289,11 @@ public class MemberService {
             throw new RuntimeException(e);
         }
     }
+    
+    public void updatePublicMemberDetails(@Valid PublicMemberDetails publicMemberDetails) {
+        // TODO Auto-generated method stub
+        
+    }
 
     public MemberContacts getCurrentMemberContacts() {
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
@@ -306,5 +314,6 @@ public class MemberService {
             throw new RuntimeException(e);
         }
     }
+
 
 }

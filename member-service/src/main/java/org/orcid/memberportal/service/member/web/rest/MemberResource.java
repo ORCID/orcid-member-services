@@ -12,6 +12,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
+import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.upload.MemberUpload;
@@ -168,7 +169,20 @@ public class MemberResource {
     }
 
     /**
-     * {@code GET  /member-details} : get details of member to which current user belongs
+     * {@code PUT  /public-details} : get details of member to which current user belongs
+     *
+     *
+     * @return the {@link PublicMemberDetails} 
+     */
+    @PutMapping("/public-details")
+    public ResponseEntity<Void> updatePublicMemberDetails(@Valid @RequestBody PublicMemberDetails publicMemberDetails) {
+        LOG.debug("REST request to update member public details");
+        memberService.updatePublicMemberDetails(publicMemberDetails);
+        return ResponseEntity.ok().build();
+    }
+    
+    /**
+     * {@code PUT  /member-details} : get details of member to which current user belongs
      *
      *
      * @return the {@link MemberDetails} 
