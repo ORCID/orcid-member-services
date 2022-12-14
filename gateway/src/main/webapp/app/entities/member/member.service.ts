@@ -112,7 +112,7 @@ export class MSMemberService {
   }
 
   updatePublicDetails(publicDetails: ISFPublicDetails): Observable<HttpResponse<any>> {
-    return this.http.post(`${this.resourceUrl}/public-details`, publicDetails, { observe: 'response' });
+    return this.http.put(`${this.resourceUrl}/public-details`, publicDetails, { observe: 'response' });
   }
 
   protected convertDateFromClient(msMember: IMSMember): IMSMember {
