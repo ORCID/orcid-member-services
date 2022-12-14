@@ -176,7 +176,11 @@ public class MemberResource {
      */
     @PutMapping("/public-details")
     public ResponseEntity<PublicMemberDetails> updatePublicMemberDetails(@Valid @RequestBody PublicMemberDetails publicMemberDetails) {
-        LOG.debug("REST request to update member public details");
+        LOG.info("REST request to update member public details");
+        if (StringUtils.isBlank(publicMemberDetails.getName())) {
+            LOG.info("Null name in request to update public details");
+            return ResponseEntity.badRequest().build();
+        }
         publicMemberDetails = memberService.updatePublicMemberDetails(publicMemberDetails);
         return ResponseEntity.ok(publicMemberDetails);
     }

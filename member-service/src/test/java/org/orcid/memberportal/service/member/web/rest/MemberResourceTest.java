@@ -90,6 +90,16 @@ public class MemberResourceTest {
         assertEquals(200, response.getStatusCodeValue());
         Mockito.verify(memberService).updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
     }
+    
+    @Test
+    public void testUpdatePublicMemberDetailsWithEmptyName() {
+        Mockito.when(memberService.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(null);
+        PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
+        publicMemberDetails.setName("");
+        ResponseEntity<PublicMemberDetails> response = memberResource.updatePublicMemberDetails(publicMemberDetails);
+        assertTrue(response.getStatusCode().is4xxClientError());
+        Mockito.verify(memberService, Mockito.never()).updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
+    }
 
     @Test
     public void testGetMemberContacts() {
