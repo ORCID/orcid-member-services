@@ -15,8 +15,9 @@ import {
   ISFRawConsortiumMemberData,
   SFConsortiumMemberData
 } from 'app/shared/model/salesforce-member-data.model';
-import { ISFRawMemberContact, ISFRawMemberContacts, SFMemberContact } from 'app/shared/model/salesforce-member-contact.model copy';
-import { ISFRawMemberOrgIds, SFMemberOrgId } from 'app/shared/model/salesforce-member-org-id.model copy';
+import { ISFRawMemberContact, ISFRawMemberContacts, SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
+import { ISFRawMemberOrgIds, SFMemberOrgIds } from 'app/shared/model/salesforce-member-org-id.model';
+import { ISFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
 
 type EntityResponseType = HttpResponse<IMSMember>;
 type EntityArrayResponseType = HttpResponse<IMSMember[]>;
@@ -97,7 +98,7 @@ export class MSMemberService {
     );
   }
 
-  getMemberOrgIds(): Observable<SFMemberOrgId> {
+  getMemberOrgIds(): Observable<SFMemberOrgIds> {
     return this.http.get<ISFRawMemberOrgIds>(`${this.resourceUrl}/member-org-ids`, { observe: 'response' }).pipe(
       map((res: SalesforceOrgIdResponseType) => this.convertToMemberOrgIds(res)),
       catchError(err => {
@@ -108,6 +109,10 @@ export class MSMemberService {
 
   delete(id: string): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/members/${id}`, { observe: 'response' });
+  }
+
+  updatePublicDetails(publicDetails: ISFPublicDetails): Observable<HttpResponse<any>> {
+    return this.http.put(`${this.resourceUrl}/public-details`, publicDetails, { observe: 'response' });
   }
 
   protected convertDateFromClient(msMember: IMSMember): IMSMember {
@@ -183,7 +188,7 @@ export class MSMemberService {
     };
   }
 
-  protected convertToMemberOrgIds(res: SalesforceOrgIdResponseType): SFMemberOrgId {
+  protected convertToMemberOrgIds(res: SalesforceOrgIdResponseType): SFMemberOrgIds {
     if (res.body && res.body.records.length > 0) {
       const ids = res.body.records;
       const ROR = [],
@@ -205,7 +210,7 @@ export class MSMemberService {
         }
       }
       return {
-        ...new SFMemberOrgId(),
+        ...new SFMemberOrgIds(),
         ROR,
         GRID,
         Ringgold,
