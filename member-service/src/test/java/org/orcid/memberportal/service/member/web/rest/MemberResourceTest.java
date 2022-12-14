@@ -84,9 +84,9 @@ public class MemberResourceTest {
     
     @Test
     public void testUpdatePublicMemberDetails() {
-        Mockito.doNothing().when(memberService).updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
+        Mockito.when(memberService.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(null);
         PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
-        ResponseEntity<Void> response = memberResource.updatePublicMemberDetails(publicMemberDetails);
+        ResponseEntity<PublicMemberDetails> response = memberResource.updatePublicMemberDetails(publicMemberDetails);
         assertEquals(200, response.getStatusCodeValue());
         Mockito.verify(memberService).updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
     }

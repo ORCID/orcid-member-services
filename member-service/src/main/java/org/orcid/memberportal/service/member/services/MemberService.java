@@ -290,9 +290,14 @@ public class MemberService {
         }
     }
     
-    public void updatePublicMemberDetails(@Valid PublicMemberDetails publicMemberDetails) {
-        // TODO Auto-generated method stub
-        
+    public PublicMemberDetails updatePublicMemberDetails(@Valid PublicMemberDetails publicMemberDetails) {
+        String salesforceId = userService.getLoggedInUser().getSalesforceId();
+        try {
+            return salesforceClient.updatePublicMemberDetails(salesforceId, publicMemberDetails);
+        } catch (IOException e) {
+            LOG.error("Error updating member contacts", e);
+            throw new RuntimeException(e);
+        }
     }
 
     public MemberContacts getCurrentMemberContacts() {

@@ -17,6 +17,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -29,6 +30,7 @@ import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
+import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 import org.orcid.memberportal.service.member.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
@@ -60,6 +62,12 @@ public class SalesforceClient {
         });
     }
 
+    public PublicMemberDetails updatePublicMemberDetails(String salesforceId, PublicMemberDetails publicMemberDetails) throws IOException {
+        return request(() -> {
+            return updateSFPublicMemberDetails(salesforceId, publicMemberDetails);
+        });
+    }
+
     public MemberContacts getMemberContacts(String salesforceId) throws IOException {
         return request(() -> {
             return getSFMemberContacts(salesforceId);
@@ -76,6 +84,26 @@ public class SalesforceClient {
         return request(() -> {
             return getSFConsortiumLeadDetails(salesforceId);
         });
+    }
+
+    private PublicMemberDetails updateSFPublicMemberDetails(String salesforceId, PublicMemberDetails publicMemberDetails) {
+        LOG.info("Updating public details for salesforce id {}", salesforceId);
+        try (CloseableHttpClient httpClient = getHttpClient()) {
+            HttpPut httpPut = getPutRequest("member/" + salesforceId + "/public-details");
+            try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
+                if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
+                    logError(salesforceId, response);
+                    EntityUtils.consume(response.getEntity());
+                } else {
+                    LOG.info("Public details for salesforce id {} updated", salesforceId);
+                    return publicMemberDetails;
+                }
+            }
+        } catch (IOException e) {
+            LOG.error("HttpClient error", e);
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
     private MemberDetails getSFMemberDetails(String salesforceId) {
@@ -130,7 +158,7 @@ public class SalesforceClient {
 
     private MemberOrgIds getSFMemberOrgIds(String salesforceId) {
         try (CloseableHttpClient httpClient = getHttpClient()) {
-            HttpGet httpGet = getGetRequest( "member/" + salesforceId + "/org-ids");
+            HttpGet httpGet = getGetRequest("member/" + salesforceId + "/org-ids");
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                     logError(salesforceId, response);
@@ -186,6 +214,13 @@ public class SalesforceClient {
         HttpGet httpGet = new HttpGet(endpoint + path);
         httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         return httpGet;
+    }
+
+    private HttpPut getPutRequest(String path) {
+        String endpoint = applicationProperties.getSalesforceClientEndpoint();
+        HttpPut httpPut = new HttpPut(endpoint + path);
+        httpPut.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+        return httpPut;
     }
 
     private CloseableHttpClient getHttpClient() {
@@ -255,9 +290,10 @@ public class SalesforceClient {
     }
 
     private void logError(String salesforceId, CloseableHttpResponse response) throws IOException {
-        LOG.warn("Received non-200 response trying to find member details for {}", salesforceId);
+        LOG.warn("Received non-200 response from salesforce client for salesforce id {}", salesforceId);
         String responseString = new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
         LOG.warn("Response received:");
         LOG.warn(responseString);
     }
+
 }

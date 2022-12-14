@@ -33,6 +33,7 @@ import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgId;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
+import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -106,6 +107,36 @@ public class SalesforceClientTest {
     }
 
     @Test
+    void testUpdatePublicMemberDetails() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(applicationProperties.getSalesforceClientEndpoint()).thenReturn("microservice/");
+
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                MockCloseableHttpResponse response = new MockCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                MockCloseableHttpResponse response = new MockCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                return response;
+            }
+        });
+
+        PublicMemberDetails memberDetails = client.updatePublicMemberDetails("salesforceId", getPublicMemberDetails());
+        assertThat(memberDetails).isNotNull();
+        Mockito.verify(applicationProperties).getSalesforceClientEndpoint();
+    }
+
+    @Test
     void testGetMemberContacts() throws JAXBException, ClientProtocolException, IOException {
         Mockito.when(applicationProperties.getSalesforceClientEndpoint()).thenReturn("microservice/");
 
@@ -150,7 +181,7 @@ public class SalesforceClientTest {
 
         Mockito.verify(applicationProperties).getSalesforceClientEndpoint();
     }
-    
+
     @Test
     void testGetMemberOrgIds() throws JAXBException, ClientProtocolException, IOException {
         Mockito.when(applicationProperties.getSalesforceClientEndpoint()).thenReturn("microservice/");
@@ -328,7 +359,7 @@ public class SalesforceClientTest {
         String jsonString = objectMapper.writeValueAsString(memberContacts);
         return new StringEntity(jsonString);
     }
-    
+
     private HttpEntity getMemberOrgIdsEntity() throws JsonProcessingException, UnsupportedEncodingException {
         MemberOrgId orgId1 = new MemberOrgId();
         orgId1.setType("Ringgold ID");
@@ -337,7 +368,7 @@ public class SalesforceClientTest {
         MemberOrgId orgId2 = new MemberOrgId();
         orgId2.setType("GRID");
         orgId2.setValue("grid.238252");
-        
+
         MemberOrgIds memberOrgIds = new MemberOrgIds();
         memberOrgIds.setTotalSize(2);
         memberOrgIds.setRecords(Arrays.asList(orgId1, orgId2));
@@ -347,4 +378,12 @@ public class SalesforceClientTest {
         return new StringEntity(jsonString);
     }
 
+    private PublicMemberDetails getPublicMemberDetails() {
+        PublicMemberDetails publicMemberDetails = new PublicMemberDetails();
+        publicMemberDetails.setName("test member details");
+        publicMemberDetails.setWebsite("https://website.com");
+        publicMemberDetails.setDescription("test");
+        publicMemberDetails.setEmail("email@orcid.org");
+        return publicMemberDetails;
+    }
 }

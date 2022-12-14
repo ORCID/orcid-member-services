@@ -175,10 +175,10 @@ public class MemberResource {
      * @return the {@link PublicMemberDetails} 
      */
     @PutMapping("/public-details")
-    public ResponseEntity<Void> updatePublicMemberDetails(@Valid @RequestBody PublicMemberDetails publicMemberDetails) {
+    public ResponseEntity<PublicMemberDetails> updatePublicMemberDetails(@Valid @RequestBody PublicMemberDetails publicMemberDetails) {
         LOG.debug("REST request to update member public details");
-        memberService.updatePublicMemberDetails(publicMemberDetails);
-        return ResponseEntity.ok().build();
+        publicMemberDetails = memberService.updatePublicMemberDetails(publicMemberDetails);
+        return ResponseEntity.ok(publicMemberDetails);
     }
     
     /**

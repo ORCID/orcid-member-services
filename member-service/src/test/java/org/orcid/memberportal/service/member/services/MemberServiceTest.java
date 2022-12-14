@@ -31,6 +31,7 @@ import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgId;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
+import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
 import org.orcid.memberportal.service.member.security.EncryptUtil;
@@ -444,6 +445,28 @@ class MemberServiceTest {
         assertThat(consortiumLeadDetails.getConsortiumMembers().get(0).getMetadata().getName()).isEqualTo("member 1");
         assertThat(consortiumLeadDetails.getConsortiumMembers().get(1).getSalesforceId()).isEqualTo("member2");
         assertThat(consortiumLeadDetails.getConsortiumMembers().get(1).getMetadata().getName()).isEqualTo("member 2");
+    }
+    
+    @Test
+    void testUpdatePublicMemberDetails() throws IOException {
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(salesforceClient.updatePublicMemberDetails(Mockito.eq("salesforceId"), Mockito.any(PublicMemberDetails.class))).thenReturn(new PublicMemberDetails());
+        
+        PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
+        publicMemberDetails = memberService.updatePublicMemberDetails(publicMemberDetails);
+        assertThat(publicMemberDetails).isNotNull();
+        
+        Mockito.verify(salesforceClient).updatePublicMemberDetails(Mockito.eq("salesforceId"), Mockito.any(PublicMemberDetails.class));
+    }
+    
+    private PublicMemberDetails getPublicMemberDetails() {
+        PublicMemberDetails publicMemberDetails = new PublicMemberDetails();
+        publicMemberDetails.setName("test member details");
+        publicMemberDetails.setWebsite("https://website.com");
+        publicMemberDetails.setDescription("test");
+        publicMemberDetails.setEmail("email@orcid.org");
+        return publicMemberDetails;
     }
     
     private MemberOrgIds getMemberOrgIds() {
