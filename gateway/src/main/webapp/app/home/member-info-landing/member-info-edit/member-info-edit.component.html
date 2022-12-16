@@ -48,9 +48,11 @@
               <small class="wide-text small-text form-text text-danger" *ngIf="editForm.get('name').errors.required">
                 The organization name cannot be empty
               </small>
-              <small class="wide-text small-text form-text text-danger" *ngIf="editForm.get('name').errors.maxlength">
-                Organization name is too long. Please use 255 characters or less.
-              </small>
+              <div>
+                <small class="wide-text small-text form-text text-danger" *ngIf="editForm.get('name').errors.maxlength">
+                  Organization name is too long. Please use 255 characters or less.
+                </small>
+              </div>
             </div>
           </div>
           <div class="form-group">
@@ -65,8 +67,8 @@
               cdkAutosizeMaxRows="5"
               placeholder="A brief description of the organization"
             ></textarea>
-            <div *ngIf="editForm.get('website').invalid && (editForm.get('website').dirty || editForm.get('website').touched)">
-              <small class="wide-text small-text form-text text-danger" *ngIf="editForm.get('website').errors.maxlength">
+            <div *ngIf="editForm.get('description').invalid && (editForm.get('description').dirty || editForm.get('description').touched)">
+              <small class="wide-text small-text form-text text-danger" *ngIf="editForm.get('description').errors.maxlength">
                 Organization description is too long. Please use 5000 characters or less.
               </small>
             </div>
@@ -92,9 +94,11 @@
               <small class="wide-text small-text text-danger" *ngIf="editForm.get('website').errors.pattern">
                 Please enter a valid website URL, for example http://www.website.com
               </small>
-              <small class="wide-text small-text text-danger" *ngIf="editForm.get('website').errors.maxlength">
-                Website is too long. Please use 255 characters or less.
-              </small>
+              <div>
+                <small class="wide-text small-text text-danger" *ngIf="editForm.get('website').errors.maxlength">
+                  Website is too long. Please use 255 characters or less.
+                </small>
+              </div>
             </div>
           </div>
           <div class="form-group mb-4 w-50">
@@ -113,9 +117,11 @@
               <small class="wide-text small-text text-danger" *ngIf="editForm.get('email').errors.pattern">
                 Please enter a valid email address, for example contactus@website.com
               </small>
-              <small class="wide-text small-text text-danger" *ngIf="editForm.get('email').errors.pattern">
-                Email is too long. Please use 80 characters or less.
-              </small>
+              <div>
+                <small class="wide-text small-text text-danger" *ngIf="editForm.get('email').errors.maxlength">
+                  Email is too long. Please use 80 characters or less.
+                </small>
+              </div>
             </div>
           </div>
           <button type="submit" [disabled]="isSaving" class="btn btn-primary">Save changes</button>
