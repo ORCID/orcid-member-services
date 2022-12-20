@@ -23,10 +23,10 @@ export class MemberInfoEditComponent implements OnInit {
   invalidForm: boolean;
 
   editForm = this.fb.group({
-    name: [null, [Validators.required]],
-    description: [null],
-    website: [null, [Validators.pattern(URL_REGEXP)]],
-    email: [null, [Validators.pattern(EMAIL_REGEXP)]]
+    name: [null, [Validators.required, Validators.maxLength(255)]],
+    description: [null, [Validators.maxLength(5000)]],
+    website: [null, [Validators.pattern(URL_REGEXP), Validators.maxLength(255)]],
+    email: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]]
   });
 
   constructor(
