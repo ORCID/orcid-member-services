@@ -75,6 +75,9 @@ class MemberServiceTest {
     
     @Captor
     private ArgumentCaptor<Member> memberCaptor;
+    
+    @Captor
+    private ArgumentCaptor<PublicMemberDetails> publicMemberDetailsCaptor;
 
     @BeforeEach
     public void setUp() {
@@ -451,13 +454,19 @@ class MemberServiceTest {
     void testUpdatePublicMemberDetails() throws IOException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
-        Mockito.when(salesforceClient.updatePublicMemberDetails(Mockito.eq("salesforceId"), Mockito.any(PublicMemberDetails.class))).thenReturn(new PublicMemberDetails());
+        Mockito.when(salesforceClient.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(new PublicMemberDetails());
         
         PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
-        publicMemberDetails = memberService.updatePublicMemberDetails(publicMemberDetails);
-        assertThat(publicMemberDetails).isNotNull();
+        memberService.updatePublicMemberDetails(publicMemberDetails);
         
-        Mockito.verify(salesforceClient).updatePublicMemberDetails(Mockito.eq("salesforceId"), Mockito.any(PublicMemberDetails.class));
+        Mockito.verify(salesforceClient).updatePublicMemberDetails(publicMemberDetailsCaptor.capture());
+        PublicMemberDetails details = publicMemberDetailsCaptor.getValue();
+        assertThat(details).isNotNull();
+        assertThat(details.getSalesforceId()).isEqualTo("salesforceId");
+        assertThat(details.getName()).isEqualTo(publicMemberDetails.getName());
+        assertThat(details.getDescription()).isEqualTo(publicMemberDetails.getDescription());
+        assertThat(details.getWebsite()).isEqualTo(publicMemberDetails.getWebsite());
+        assertThat(details.getEmail()).isEqualTo(publicMemberDetails.getEmail());
     }
     
     private PublicMemberDetails getPublicMemberDetails() {

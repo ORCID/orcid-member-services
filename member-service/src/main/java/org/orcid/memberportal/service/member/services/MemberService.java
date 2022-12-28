@@ -292,8 +292,9 @@ public class MemberService {
     
     public PublicMemberDetails updatePublicMemberDetails(@Valid PublicMemberDetails publicMemberDetails) {
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
+        publicMemberDetails.setSalesforceId(salesforceId);
         try {
-            return salesforceClient.updatePublicMemberDetails(salesforceId, publicMemberDetails);
+            return salesforceClient.updatePublicMemberDetails(publicMemberDetails);
         } catch (IOException e) {
             LOG.error("Error updating member contacts", e);
             throw new RuntimeException(e);

@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -18,6 +19,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -38,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -62,9 +66,9 @@ public class SalesforceClient {
         });
     }
 
-    public PublicMemberDetails updatePublicMemberDetails(String salesforceId, PublicMemberDetails publicMemberDetails) throws IOException {
+    public PublicMemberDetails updatePublicMemberDetails(PublicMemberDetails publicMemberDetails) throws IOException {
         return request(() -> {
-            return updateSFPublicMemberDetails(salesforceId, publicMemberDetails);
+            return updateSFPublicMemberDetails(publicMemberDetails);
         });
     }
 
@@ -86,16 +90,16 @@ public class SalesforceClient {
         });
     }
 
-    private PublicMemberDetails updateSFPublicMemberDetails(String salesforceId, PublicMemberDetails publicMemberDetails) {
-        LOG.info("Updating public details for salesforce id {}", salesforceId);
+    private PublicMemberDetails updateSFPublicMemberDetails(PublicMemberDetails publicMemberDetails) {
+        LOG.info("Updating public details for salesforce id {}", publicMemberDetails.getSalesforceId());
         try (CloseableHttpClient httpClient = getHttpClient()) {
-            HttpPut httpPut = getPutRequest("member/" + salesforceId + "/public-details");
+            HttpPut httpPut = getPutRequest("member/" + publicMemberDetails.getSalesforceId() + "/public-details", publicMemberDetails);
             try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
                 if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
-                    logError(salesforceId, response);
+                    logError(publicMemberDetails.getSalesforceId(), response);
                     EntityUtils.consume(response.getEntity());
                 } else {
-                    LOG.info("Public details for salesforce id {} updated", salesforceId);
+                    LOG.info("Public details for salesforce id {} updated", publicMemberDetails.getSalesforceId());
                     return publicMemberDetails;
                 }
             }
@@ -216,11 +220,18 @@ public class SalesforceClient {
         return httpGet;
     }
 
-    private HttpPut getPutRequest(String path) {
+    private HttpPut getPutRequest(String path, PublicMemberDetails publicMemberDetails) throws JsonProcessingException {
         String endpoint = applicationProperties.getSalesforceClientEndpoint();
         HttpPut httpPut = new HttpPut(endpoint + path);
         httpPut.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+        httpPut.setEntity(getHttpEntity(publicMemberDetails));
         return httpPut;
+    }
+
+    private HttpEntity getHttpEntity(PublicMemberDetails publicMemberDetails) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(publicMemberDetails);
+        return new StringEntity(json, ContentType.APPLICATION_JSON);
     }
 
     private CloseableHttpClient getHttpClient() {

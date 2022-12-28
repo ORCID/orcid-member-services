@@ -9,6 +9,8 @@ public class PublicMemberDetails {
     private String website;
     
     private String email;
+    
+    private String salesforceId;
 
     public String getName() {
         return name;
@@ -41,7 +43,13 @@ public class PublicMemberDetails {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    
 
+    public String getSalesforceId() {
+        return salesforceId;
+    }
+
+    public void setSalesforceId(String salesforceId) {
+        this.salesforceId = salesforceId;
+    }
+    
 }

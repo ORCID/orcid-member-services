@@ -131,7 +131,7 @@ public class SalesforceClientTest {
             }
         });
 
-        PublicMemberDetails memberDetails = client.updatePublicMemberDetails("salesforceId", getPublicMemberDetails());
+        PublicMemberDetails memberDetails = client.updatePublicMemberDetails(getPublicMemberDetails());
         assertThat(memberDetails).isNotNull();
         Mockito.verify(applicationProperties).getSalesforceClientEndpoint();
     }
