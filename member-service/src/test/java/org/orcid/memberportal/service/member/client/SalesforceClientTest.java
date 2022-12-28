@@ -127,12 +127,16 @@ public class SalesforceClientTest {
             public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
                 MockCloseableHttpResponse response = new MockCloseableHttpResponse();
                 response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String responseJson = "{\"success\":\"true\"}";
+                StringEntity entity = new StringEntity(responseJson, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
                 return response;
             }
         });
 
-        PublicMemberDetails memberDetails = client.updatePublicMemberDetails(getPublicMemberDetails());
-        assertThat(memberDetails).isNotNull();
+        Boolean success = client.updatePublicMemberDetails(getPublicMemberDetails());
+        assertThat(success).isTrue();
         Mockito.verify(applicationProperties).getSalesforceClientEndpoint();
     }
 

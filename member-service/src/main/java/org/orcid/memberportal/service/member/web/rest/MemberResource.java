@@ -175,14 +175,14 @@ public class MemberResource {
      * @return the {@link PublicMemberDetails} 
      */
     @PutMapping("/public-details")
-    public ResponseEntity<PublicMemberDetails> updatePublicMemberDetails(@Valid @RequestBody PublicMemberDetails publicMemberDetails) {
+    public ResponseEntity<Boolean> updatePublicMemberDetails(@Valid @RequestBody PublicMemberDetails publicMemberDetails) {
         LOG.info("REST request to update member public details");
         if (StringUtils.isBlank(publicMemberDetails.getName())) {
             LOG.info("Null name in request to update public details");
             return ResponseEntity.badRequest().build();
         }
-        publicMemberDetails = memberService.updatePublicMemberDetails(publicMemberDetails);
-        return ResponseEntity.ok(publicMemberDetails);
+        boolean success = memberService.updatePublicMemberDetails(publicMemberDetails);
+        return ResponseEntity.ok(success);
     }
     
     /**

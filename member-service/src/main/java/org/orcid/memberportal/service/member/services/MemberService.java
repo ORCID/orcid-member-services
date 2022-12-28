@@ -290,7 +290,7 @@ public class MemberService {
         }
     }
     
-    public PublicMemberDetails updatePublicMemberDetails(@Valid PublicMemberDetails publicMemberDetails) {
+    public Boolean updatePublicMemberDetails(@Valid PublicMemberDetails publicMemberDetails) {
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
         publicMemberDetails.setSalesforceId(salesforceId);
         try {

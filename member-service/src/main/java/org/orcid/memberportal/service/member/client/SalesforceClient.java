@@ -66,7 +66,7 @@ public class SalesforceClient {
         });
     }
 
-    public PublicMemberDetails updatePublicMemberDetails(PublicMemberDetails publicMemberDetails) throws IOException {
+    public Boolean updatePublicMemberDetails(PublicMemberDetails publicMemberDetails) throws IOException {
         return request(() -> {
             return updateSFPublicMemberDetails(publicMemberDetails);
         });
@@ -90,7 +90,7 @@ public class SalesforceClient {
         });
     }
 
-    private PublicMemberDetails updateSFPublicMemberDetails(PublicMemberDetails publicMemberDetails) {
+    private Boolean updateSFPublicMemberDetails(PublicMemberDetails publicMemberDetails) {
         LOG.info("Updating public details for salesforce id {}", publicMemberDetails.getSalesforceId());
         try (CloseableHttpClient httpClient = getHttpClient()) {
             HttpPut httpPut = getPutRequest("member/" + publicMemberDetails.getSalesforceId() + "/public-details", publicMemberDetails);
@@ -100,7 +100,11 @@ public class SalesforceClient {
                     EntityUtils.consume(response.getEntity());
                 } else {
                     LOG.info("Public details for salesforce id {} updated", publicMemberDetails.getSalesforceId());
-                    return publicMemberDetails;
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+                    JsonNode root = objectMapper.readTree(response.getEntity().getContent());
+                    Boolean success = root.get("success").asBoolean();
+                    return success;
                 }
             }
         } catch (IOException e) {

@@ -454,7 +454,7 @@ class MemberServiceTest {
     void testUpdatePublicMemberDetails() throws IOException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
-        Mockito.when(salesforceClient.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(new PublicMemberDetails());
+        Mockito.when(salesforceClient.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(Boolean.TRUE);
         
         PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
         memberService.updatePublicMemberDetails(publicMemberDetails);

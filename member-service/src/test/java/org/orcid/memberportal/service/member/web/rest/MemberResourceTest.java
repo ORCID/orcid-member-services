@@ -84,19 +84,19 @@ public class MemberResourceTest {
     
     @Test
     public void testUpdatePublicMemberDetails() {
-        Mockito.when(memberService.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(null);
+        Mockito.when(memberService.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(Boolean.TRUE);
         PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
-        ResponseEntity<PublicMemberDetails> response = memberResource.updatePublicMemberDetails(publicMemberDetails);
+        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(publicMemberDetails);
         assertEquals(200, response.getStatusCodeValue());
         Mockito.verify(memberService).updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
     }
     
     @Test
     public void testUpdatePublicMemberDetailsWithEmptyName() {
-        Mockito.when(memberService.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(null);
+        Mockito.when(memberService.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(Boolean.FALSE);
         PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
         publicMemberDetails.setName("");
-        ResponseEntity<PublicMemberDetails> response = memberResource.updatePublicMemberDetails(publicMemberDetails);
+        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(publicMemberDetails);
         assertTrue(response.getStatusCode().is4xxClientError());
         Mockito.verify(memberService, Mockito.never()).updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
     }
