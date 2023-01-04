@@ -552,11 +552,6 @@
                     <artifactId>jib-maven-plugin</artifactId>
                     <version>${jib-maven-plugin.version}</version>
                     <configuration>
-                        <extraDirectories>
-                            <paths>
-                              <path>${project.basedir}/extra-directory/</path>
-                            </paths>
-                        </extraDirectories>
                         <from>
                             <image>eclipse-temurin:11-jre-focal</image>
                         </from>
