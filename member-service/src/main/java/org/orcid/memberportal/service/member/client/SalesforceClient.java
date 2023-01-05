@@ -92,6 +92,8 @@ public class SalesforceClient {
                     objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
                     JsonNode root = objectMapper.readTree(response.getEntity().getContent());
                     LOG.info("*** getSFMemberDetails(): response processed ***");
+                    LOG.info("Root is {}", root);
+                    LOG.info("Response received: {} ", root.asText());
                     return objectMapper.treeToValue(root.at("/member"), MemberDetails.class);
                 }
             } catch (IOException e) {
