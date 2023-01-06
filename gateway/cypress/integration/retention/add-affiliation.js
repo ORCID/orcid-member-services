@@ -34,6 +34,11 @@ describe('Add and remove affiliation', () => {
     cy.visit('/assertion/new');
 
     cy.get('#field_email').type(record.invalidEmail);
+    cy.get('small.text-danger').should('exist');
+    cy.get('#field_email')
+      .clear()
+      .type(record.email);
+    cy.get('small.text-danger').should('not.exist');
     cy.get('#field_affiliationSection').select(type);
     cy.get('#field_orgName').type(data.testString);
     cy.get('#field_orgCity').type(data.testString);
@@ -62,9 +67,7 @@ describe('Add and remove affiliation', () => {
     cy.get('.alerts')
       .children()
       .should('have.length', 1);
-    cy.get('#field_email')
-      .clear()
-      .type(record.email);
+    
     cy.get('#save-entity').click();
     cy.get('.alerts')
       .children()

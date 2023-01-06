@@ -43,19 +43,17 @@ Cypress.Commands.add('signin', (email, password) => {
 
 Cypress.Commands.add('checkOrgId', (org, invalidId, id) => {
   cy.get('#field_disambiguationSource').select(org);
-  cy.get('small')
-    .filter('[jhitranslate="entity.validation.disambiguatedOrgId.string"]')
+  cy.get('small.text-danger')
     .should('exist');
   cy.get('#field_disambiguatedOrgId')
     .clear()
     .type(invalidId);
-  cy.get('small')
-    .filter('[jhitranslate="entity.validation.disambiguatedOrgId.string"]')
+  cy.get('small.text-danger')
     .should('exist');
   cy.get('#field_disambiguatedOrgId')
     .clear()
     .type(id);
-  cy.get('small').should('not.exist');
+  cy.get('small.text-danger').should('not.exist');
 });
 
 Cypress.Commands.add('programmaticSignin', (username, password) => {
