@@ -174,7 +174,6 @@ export class AssertionUpdateComponent implements OnInit {
     this.isSaving = false;
 
     this.activatedRoute.data.subscribe(({ assertion }) => {
-      console.log(assertion);
       this.updateForm(assertion);
     });
 
@@ -198,7 +197,7 @@ export class AssertionUpdateComponent implements OnInit {
     if (assertion.id) {
       this.editForm.patchValue({
         id: assertion.id,
-        email: assertion.email,
+        email: assertion.email.trim(),
         affiliationSection: assertion.affiliationSection,
         departmentName: assertion.departmentName,
         roleTitle: assertion.roleTitle,
