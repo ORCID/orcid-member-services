@@ -16,6 +16,7 @@ import {
   DEFAULT_EARLIEST_YEAR,
   DEFAULT_LATEST_YEAR_INCREMENT
 } from 'app/shared/constants/orcid-api.constants';
+import { EMAIL_REGEXP } from 'app/app.constants';
 
 function dateValidator() {
   return (formGroup: FormGroup) => {
@@ -127,7 +128,7 @@ export class AssertionUpdateComponent implements OnInit {
   editForm = this.fb.group(
     {
       id: [],
-      email: [null, [Validators.pattern('.*@.*..*'), Validators.required]],
+      email: [null, [Validators.pattern(EMAIL_REGEXP), Validators.required]],
       affiliationSection: [null, [Validators.required]],
       departmentName: [null, [Validators.maxLength(4000)]],
       roleTitle: [null, [Validators.maxLength(4000)]],
@@ -173,6 +174,7 @@ export class AssertionUpdateComponent implements OnInit {
     this.isSaving = false;
 
     this.activatedRoute.data.subscribe(({ assertion }) => {
+      console.log(assertion);
       this.updateForm(assertion);
     });
 

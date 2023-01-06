@@ -21,6 +21,7 @@ import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgId;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
+import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
@@ -79,6 +80,25 @@ public class MemberResourceTest {
         assertThat(memberDetails.getLogoUrl()).isEqualTo("some/url/for/a/logo");
         assertThat(memberDetails.getBillingCountry()).isEqualTo("Denmark");
         assertThat(memberDetails.getId()).isEqualTo("id");
+    }
+    
+    @Test
+    public void testUpdatePublicMemberDetails() {
+        Mockito.when(memberService.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(Boolean.TRUE);
+        PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
+        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(publicMemberDetails);
+        assertEquals(200, response.getStatusCodeValue());
+        Mockito.verify(memberService).updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
+    }
+    
+    @Test
+    public void testUpdatePublicMemberDetailsWithEmptyName() {
+        Mockito.when(memberService.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(Boolean.FALSE);
+        PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
+        publicMemberDetails.setName("");
+        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(publicMemberDetails);
+        assertTrue(response.getStatusCode().is4xxClientError());
+        Mockito.verify(memberService, Mockito.never()).updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
     }
 
     @Test
@@ -173,6 +193,15 @@ public class MemberResourceTest {
         memberDetails.setMembershipEndDateString("2027-01-01");
         memberDetails.setWebsite("https://website.com");
         return memberDetails;
+    }
+
+    private PublicMemberDetails getPublicMemberDetails() {
+        PublicMemberDetails publicMemberDetails = new PublicMemberDetails();
+        publicMemberDetails.setName("test member details");
+        publicMemberDetails.setWebsite("https://website.com");
+        publicMemberDetails.setDescription("test");
+        publicMemberDetails.setEmail("email@orcid.org");
+        return publicMemberDetails;
     }
 
     private MemberContacts getMemberContacts() {
