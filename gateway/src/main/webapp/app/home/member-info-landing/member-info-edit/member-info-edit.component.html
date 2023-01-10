@@ -151,7 +151,7 @@
           </div>
         </ul>
       </div>
-      <div *ngIf="memberData.contacts">
+      <div *ngIf="memberData.contacts" class="contacts">
         <div class="d-flex mb-2">
           <h3 class="mb-0 mr-2">Contacts</h3>
           <img class="lockpad" src="./../../../../content/images/lockpad.svg" alt="Locked" />
@@ -181,10 +181,10 @@
         </ul>
       </div>
       <div *ngIf="memberData.isConsortiumLead">
-        <h5 class="mb-4">
+        <h3 class="mb-4 font-weight-bold">
           Consortium Members
           <span class="font-weight-normal">({{ memberData.consortiumMembers.length }})</span>
-        </h5>
+        </h3>
         <h6>Member name</h6>
         <hr class="green-hr" />
         <div *ngFor="let consortiumMember of memberData.consortiumMembers; let i = index">
