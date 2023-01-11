@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'app/core';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { IMSUser } from 'app/shared/model/user.model';
@@ -11,6 +11,7 @@ import { IMSUser } from 'app/shared/model/user.model';
 export class MemberInfoLandingComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
+  websiteHref: string;
 
   constructor(private accountService: AccountService) {}
 
@@ -20,6 +21,14 @@ export class MemberInfoLandingComponent implements OnInit {
 
   filterCRFID(id) {
     return id.replace(/^.*dx.doi.org\//g, '');
+  }
+
+  validateUrl() {
+    if (!/(http(s?)):\/\//i.test(this.memberData.website)) {
+      this.websiteHref = '//' + this.memberData.website;
+    } else {
+      this.websiteHref = this.memberData.website;
+    }
   }
 
   ngOnInit() {
@@ -40,6 +49,7 @@ export class MemberInfoLandingComponent implements OnInit {
       this.accountService.getCurrentMemberData().then(res => {
         if (res && res.value) {
           this.memberData = res.value;
+          this.validateUrl();
         }
       });
     }

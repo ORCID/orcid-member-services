@@ -9,7 +9,7 @@
       <div class="mb-3 side-bar-subsection">
         <h6>Website</h6>
         <div *ngIf="memberData.website">
-          <a href="{{ memberData.website }}">{{ memberData.website }}</a>
+          <a href="{{ websiteHref }}">{{ memberData.website }}</a>
         </div>
         <div *ngIf="!memberData.website" class="empty">No website added</div>
       </div>
