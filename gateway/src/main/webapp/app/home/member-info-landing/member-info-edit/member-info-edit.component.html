@@ -44,7 +44,7 @@
               formControlName="name"
               [ngClass]="{ 'text-danger': editForm.get('name').invalid }"
             />
-            <div *ngIf="editForm.get('name').invalid && (editForm.get('name').dirty || editForm.get('name').touched)">
+            <div *ngIf="editForm.get('name').invalid">
               <small class="wide-text small-text form-text text-danger" *ngIf="editForm.get('name').errors.required">
                 The organization name cannot be empty
               </small>
@@ -67,7 +67,7 @@
               cdkAutosizeMaxRows="5"
               placeholder="A brief description of the organization"
             ></textarea>
-            <div *ngIf="editForm.get('description').invalid && (editForm.get('description').dirty || editForm.get('description').touched)">
+            <div *ngIf="editForm.get('description').invalid">
               <small class="wide-text small-text form-text text-danger" *ngIf="editForm.get('description').errors.maxlength">
                 Organization description is too long. Please use 5000 characters or less.
               </small>
@@ -87,7 +87,7 @@
             </ng-template>
             <div
               *ngIf="
-                editForm.get('website').invalid && (editForm.get('website').dirty || editForm.get('website').touched);
+                editForm.get('website').invalid;
                 else validWebsite
               "
             >
@@ -113,7 +113,7 @@
             <ng-template #validEmail>
               <small class="wide-text small-text input-prompt">Emails should be in the standard format e.g. contactus@website.com</small>
             </ng-template>
-            <div *ngIf="editForm.get('email').invalid && (editForm.get('email').dirty || editForm.get('email').touched); else validEmail">
+            <div *ngIf="editForm.get('email').invalid; else validEmail">
               <small class="wide-text small-text text-danger" *ngIf="editForm.get('email').errors.pattern">
                 Please enter a valid email address, for example contactus@website.com
               </small>
