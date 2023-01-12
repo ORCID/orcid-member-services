@@ -11,7 +11,6 @@ import { IMSUser } from 'app/shared/model/user.model';
 export class MemberInfoLandingComponent implements OnInit {
   account: IMSUser;
   memberData: ISFMemberData;
-  websiteHref: string;
 
   constructor(private accountService: AccountService) {}
 
@@ -25,9 +24,7 @@ export class MemberInfoLandingComponent implements OnInit {
 
   validateUrl() {
     if (!/(http(s?)):\/\//i.test(this.memberData.website)) {
-      this.websiteHref = '//' + this.memberData.website;
-    } else {
-      this.websiteHref = this.memberData.website;
+      this.memberData.website = 'http://' + this.memberData.website;
     }
   }
 
