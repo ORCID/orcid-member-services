@@ -1,7 +1,7 @@
 export interface ISFMemberContact {
   memberId?: string;
   votingContant?: boolean;
-  memberOrgRole?: string;
+  memberOrgRole?: string[];
   name?: string;
   contactEmail?: string;
 }
@@ -23,8 +23,10 @@ export class SFMemberContact implements ISFMemberContact {
   constructor(
     public memberId?: string,
     public votingContact?: boolean,
-    public memberOrgRole?: string,
+    public memberOrgRole?: string[],
     public name?: string,
     public contactEmail?: string
-  ) {}
+  ) {
+    this.memberOrgRole = [];
+  }
 }

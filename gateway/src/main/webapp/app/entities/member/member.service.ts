@@ -166,12 +166,16 @@ export class MSMemberService {
   }
 
   protected convertToSalesforceMemberContacts(res: SalesforceContactsResponseType): SFMemberContact[] {
-    const contacts: SFMemberContact[] = [];
+    const contacts = {};
     if (res.body && res.body.records.length > 0) {
       for (const contact of res.body.records) {
-        contacts.push(this.convertToSalesforceMemberContact(contact));
+        // Merge contacts with different roles to a single entry if they have a matching email
+        if (!contacts[contact.Contact_Curr_Email__c]) {
+          contacts[contact.Contact_Curr_Email__c] = this.convertToSalesforceMemberContact(contact);
+        }
+        contacts[contact.Contact_Curr_Email__c].memberOrgRole.push(contact.Member_Org_Role__c);
       }
-      return contacts;
+      return Object.values(contacts);
     } else {
       return null;
     }
@@ -183,7 +187,6 @@ export class MSMemberService {
       memberId: res.Organization__c,
       votingContact: res.Voting_Contact__c,
       name: res.Name,
-      memberOrgRole: res.Member_Org_Role__c,
       contactEmail: res.Contact_Curr_Email__c
     };
   }
