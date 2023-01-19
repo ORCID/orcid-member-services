@@ -69,7 +69,7 @@ public class UserService {
     static final int BACKUP_CODE_BATCH_SIZE = 14;
 
     public static final int RESET_KEY_LIFESPAN_IN_SECONDS = 86400;
-    
+
     private static final String MFA_QR_CODE_ACCOUNT_NAME = "ORCID Member Portal";
 
     /**
@@ -103,11 +103,11 @@ public class UserService {
 
     @Autowired
     private EncryptUtil encryptUtil;
-    
+
     public boolean updateUsersSalesforceId(String from, String to) {
         return updateUsersSalesforceId(from, to, true);
     }
-    
+
     private boolean updateUsersSalesforceId(String from, String to, boolean rollback) {
         try {
             Pageable pageable = PageRequest.of(0, BATCH_SIZE, new Sort(Direction.ASC, "created"));
@@ -118,7 +118,7 @@ public class UserService {
                     u.setLastModifiedDate(Instant.now());
                     userRepository.save(u);
                 });
-                
+
                 // repeat until no more left in db with old sf id
                 page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, from);
             }
@@ -132,8 +132,7 @@ public class UserService {
                     return false;
                 } else {
                     LOG.error("Failed to reset users from '{}' to '{}'", new Object[] { to, from });
-                    LOG.error(
-                            "Operation to update users salesforce ids from '{}' to '{}' has failed but there may be users with new sf id of '{}' in the database!",
+                    LOG.error("Operation to update users salesforce ids from '{}' to '{}' has failed but there may be users with new sf id of '{}' in the database!",
                             new Object[] { from, to, to });
                     return false;
                 }
@@ -210,7 +209,8 @@ public class UserService {
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
-        newUser.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
+        newUser.setAuthorities(
+                getAuthoritiesForUser(userDTO.getSalesforceId(), userDTO.getMainContact() != null && userDTO.getMainContact().booleanValue(), userDTO.getIsAdmin()));
         userRepository.save(newUser);
         LOG.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -225,7 +225,8 @@ public class UserService {
     }
 
     public User createUser(UserDTO userDTO) {
-        userDTO.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
+        userDTO.setAuthorities(
+                getAuthoritiesForUser(userDTO.getSalesforceId(), userDTO.getMainContact() != null && userDTO.getMainContact().booleanValue(), userDTO.getIsAdmin()));
 
         User user = userMapper.toUser(userDTO);
         user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
@@ -300,7 +301,8 @@ public class UserService {
         user.setMemberName(memberService.getMemberNameBySalesforce(userDTO.getSalesforceId()));
         user.setLoginAs(userDTO.getLoginAs());
         user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
-        user.setAuthorities(getAuthoritiesForUser(userDTO, userDTO.getIsAdmin()));
+        user.setAuthorities(
+                getAuthoritiesForUser(userDTO.getSalesforceId(), userDTO.getMainContact() != null && userDTO.getMainContact().booleanValue(), userDTO.getIsAdmin()));
 
         if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
             user.setSalesforceId(userDTO.getSalesforceId());
@@ -557,22 +559,22 @@ public class UserService {
         mailService.sendActivationEmail(user);
     }
 
-    private Set<String> getAuthoritiesForUser(UserDTO userDTO, boolean isAdmin) {
+    private Set<String> getAuthoritiesForUser(String salesforceId, boolean mainContact, boolean isAdmin) {
         Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
-        if (!org.apache.commons.lang3.StringUtils.isBlank(userDTO.getSalesforceId())) {
-            if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(userDTO.getSalesforceId())) {
+        if (!org.apache.commons.lang3.StringUtils.isBlank(salesforceId)) {
+            if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(salesforceId)) {
                 authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
             }
-            if (memberService.memberIsConsortiumLead(userDTO.getSalesforceId())) {
+
+            if (memberService.memberIsConsortiumLead(salesforceId)) {
                 authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
             }
         }
 
-        if (userDTO.getMainContact() != null) {
-            if (userDTO.getMainContact()) {
-                authorities.add(AuthoritiesConstants.ORG_OWNER);
-            }
+        if (mainContact) {
+            authorities.add(AuthoritiesConstants.ORG_OWNER);
         }
+
         if (isAdmin) {
             authorities.add(AuthoritiesConstants.ADMIN);
         }
@@ -606,8 +608,7 @@ public class UserService {
 
     public MfaSetup getMfaSetup() {
         String secret = Base32.random();
-        String qrCode = String.format("otpauth://totp/%s?secret=%s&issuer=%s", SecurityUtils.getCurrentUserLogin().get(), secret,
-                MFA_QR_CODE_ACCOUNT_NAME);
+        String qrCode = String.format("otpauth://totp/%s?secret=%s&issuer=%s", SecurityUtils.getCurrentUserLogin().get(), secret, MFA_QR_CODE_ACCOUNT_NAME);
         MfaSetup mfaSetup = new MfaSetup();
         mfaSetup.setSecret(secret);
         mfaSetup.setQrCode(QRCode.from(qrCode).withSize(250, 250).stream().toByteArray());
@@ -684,6 +685,28 @@ public class UserService {
         }
     }
 
+    public boolean refreshAuthorities(String salesforceId) {
+        LOG.info("Refreshing user authorities for salesforce id {}", salesforceId);
+        try {
+            Pageable pageable = PageRequest.of(0, BATCH_SIZE, new Sort(Direction.ASC, "created"));
+            Page<User> page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId);
+            while (!page.isEmpty()) {
+                page.forEach(u -> {
+                    u.setAuthorities(getAuthoritiesForUser(u.getSalesforceId(), u.getMainContact() != null && u.getMainContact().booleanValue(),
+                            u.getAuthorities().contains(AuthoritiesConstants.ADMIN)));
+                    u.setLastModifiedDate(Instant.now());
+                    userRepository.save(u);
+                });
+
+                page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable.next(), salesforceId);
+            }
+            return true;
+        } catch (Exception e) {
+            LOG.error("Error refreshing user authorities for salesforce id {}", salesforceId, e);
+            return false;
+        }
+    }
+
     private List<String> hashBackupCodes(List<String> backupCodes) {
         return backupCodes.stream().map(passwordEncoder::encode).collect(Collectors.toList());
     }
@@ -704,7 +727,5 @@ public class UserService {
             return false;
         }
     }
-
-    
 
 }

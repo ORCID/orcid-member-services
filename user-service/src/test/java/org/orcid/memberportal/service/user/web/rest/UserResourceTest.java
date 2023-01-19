@@ -86,6 +86,20 @@ class UserResourceTest {
         ResponseEntity<Void> response = userResource.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
         assertTrue(response.getStatusCode().is5xxServerError());
     }
+    
+    @Test
+    void testRefreshAuthorities() {
+        Mockito.when(userService.refreshAuthorities(Mockito.eq("salesforce-id"))).thenReturn(true);
+        ResponseEntity<Void> response = userResource.refreshAuthorities("salesforce-id");
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+    }
+    
+    @Test
+    void testRefreshAuthoritiesWithError() {
+        Mockito.when(userService.refreshAuthorities(Mockito.eq("salesforce-id"))).thenReturn(false);
+        ResponseEntity<Void> response = userResource.refreshAuthorities("salesforce-id");
+        assertTrue(response.getStatusCode().is5xxServerError());
+    }
 
     @Test
     public void testResendActivation() {

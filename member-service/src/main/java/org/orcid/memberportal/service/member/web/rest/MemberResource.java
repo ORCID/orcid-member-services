@@ -164,7 +164,6 @@ public class MemberResource {
             throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
         }
         member = memberService.updateMember(member);
-        memberService.updateUsersOnConsortiumLeadChange(member, existentMember.get());
         return ResponseEntity.ok().body(member);
     }
 

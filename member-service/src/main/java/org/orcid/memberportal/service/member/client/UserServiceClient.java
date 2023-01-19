@@ -36,6 +36,10 @@ public interface UserServiceClient {
     @RequestMapping(method = RequestMethod.PUT, value = "/api/users/{salesforceId}/{newSalesforceId}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "50000")
     ResponseEntity<String> updateUsersSalesforceId(@PathVariable("salesforceId") String salesforceId, @PathVariable("newSalesforceId") String newSalesforceId);
+    
+    @RequestMapping(method = RequestMethod.PUT, value = "/api/users/refreshAuthorities/{salesforceId}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
+    @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "50000")
+    ResponseEntity<String> refreshUserAuthorities(@PathVariable("salesforceId") String salesforceId);
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/api/users/{loginOrId}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "5000")
