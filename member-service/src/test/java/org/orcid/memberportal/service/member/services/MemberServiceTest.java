@@ -252,6 +252,62 @@ class MemberServiceTest {
     }
     
     @Test
+    void testUpdateMemberWithAssertionEnabledUpdate() {
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
+        Mockito.doNothing().when(userService).refreshUserAuthorities(Mockito.anyString());
+        
+        Member existingMember = getMember();
+        existingMember.setAssertionServiceEnabled(false);
+        existingMember.setSalesforceId("salesforce-id");
+        
+        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(existingMember));
+        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+            @Override
+            public Member answer(InvocationOnMock invocation) throws Throwable {
+                return (Member) invocation.getArgument(0);
+            }
+        });
+        
+        Member member = getMember();
+        member.setId("id");
+        member.setSalesforceId("salesforce-id");
+        member.setAssertionServiceEnabled(true);
+        memberService.updateMember(member);
+        
+        Mockito.verify(memberRepository, Mockito.times(1)).save(Mockito.any(Member.class));
+        Mockito.verify(userService).refreshUserAuthorities(Mockito.anyString());
+    }
+    
+    @Test
+    void testUpdateMemberWithCLUpdate() {
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
+        Mockito.doNothing().when(userService).refreshUserAuthorities(Mockito.anyString());
+        
+        Member existingMember = getMember();
+        existingMember.setAssertionServiceEnabled(false);
+        existingMember.setIsConsortiumLead(false);
+        existingMember.setSalesforceId("salesforce-id");
+        
+        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(existingMember));
+        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+            @Override
+            public Member answer(InvocationOnMock invocation) throws Throwable {
+                return (Member) invocation.getArgument(0);
+            }
+        });
+        
+        Member member = getMember();
+        member.setId("id");
+        member.setSalesforceId("salesforce-id");
+        member.setAssertionServiceEnabled(false);
+        member.setIsConsortiumLead(true);
+        memberService.updateMember(member);
+        
+        Mockito.verify(memberRepository, Mockito.times(1)).save(Mockito.any(Member.class));
+        Mockito.verify(userService).refreshUserAuthorities(Mockito.anyString());
+    }
+    
+    @Test
     void testUpdateNonExistentMember() {
         Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
         Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());

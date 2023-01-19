@@ -133,18 +133,26 @@ public class MemberService {
         Member existingMember = optional.get();
         existingMember.setClientId(member.getClientId());
         existingMember.setClientName(member.getClientName());
-        existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
         existingMember.setParentSalesforceId(member.getParentSalesforceId());
         existingMember.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
         existingMember.setLastModifiedDate(Instant.now());
-        existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
-
+        
         // Check if name changed
         if (!existingMember.getClientName().equals(member.getClientName())) {
             Optional<Member> optionalMember = memberRepository.findByClientName(member.getClientName());
             if (optionalMember.isPresent()) {
                 throw new BadRequestAlertException("Invalid member name", "member", "memberNameUsed.string");
             }
+        }
+        
+        if (!existingMember.getAssertionServiceEnabled().equals(member.getAssertionServiceEnabled())) {
+            existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
+            userService.refreshUserAuthorities(existingMember.getSalesforceId());
+        }
+        
+        if (!existingMember.getIsConsortiumLead().equals(member.getIsConsortiumLead())) {
+            existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
+            userService.refreshUserAuthorities(existingMember.getSalesforceId());
         }
 
         // Check if salesforceId changed
