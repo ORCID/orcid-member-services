@@ -206,7 +206,7 @@ public class MemberService {
         
         // refresh after saving member as user service will ask for up to date member details
         if (authoritiesRefreshRequired) {
-            userService.refreshUserAuthorities(existingMember.getSalesforceId());
+            userService.refreshUserAuthorities(updated.getSalesforceId());
         }
         
         return updated;
