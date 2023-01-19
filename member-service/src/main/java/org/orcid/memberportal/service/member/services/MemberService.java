@@ -145,14 +145,16 @@ public class MemberService {
             }
         }
         
+        boolean authoritiesRefreshRequired = false;
+        
         if (!existingMember.getAssertionServiceEnabled().equals(member.getAssertionServiceEnabled())) {
             existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
-            userService.refreshUserAuthorities(existingMember.getSalesforceId());
+            authoritiesRefreshRequired = true;
         }
         
         if (!existingMember.getIsConsortiumLead().equals(member.getIsConsortiumLead())) {
             existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
-            userService.refreshUserAuthorities(existingMember.getSalesforceId());
+            authoritiesRefreshRequired = true;
         }
 
         // Check if salesforceId changed
@@ -200,7 +202,14 @@ public class MemberService {
                 throw new RuntimeException(e);
             }
         }
-        return memberRepository.save(existingMember);
+        Member updated = memberRepository.save(existingMember);
+        
+        // refresh after saving member as user service will ask for up to date member details
+        if (authoritiesRefreshRequired) {
+            userService.refreshUserAuthorities(existingMember.getSalesforceId());
+        }
+        
+        return updated;
     }
 
     public MemberValidation validateMember(Member member) {
