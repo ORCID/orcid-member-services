@@ -10,6 +10,10 @@ Navbar
   color: $navbar-dark-color;
 }
 
+.bg-dark {
+  background-color: #202428 !important;
+}
+
 .profile-image {
   height: 1.75em;
   width: 1.75em;
@@ -33,6 +37,11 @@ Navbar
 Logo styles
 ========================================================================== */
 .logo-img {
+  img {
+    max-height: 1.875rem;
+    position: relative;
+    top: -0.25rem;
+  }
   display: inline-block;
   vertical-align: middle;
   margin-right: 0.5rem;
@@ -41,7 +50,7 @@ Logo styles
 .navbar-title {
   line-height: 28px;
   vertical-align: bottom;
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   font-weight: normal;
   margin-right: 2px;
 }
@@ -51,6 +60,10 @@ Logo styles
   font-size: 1rem;
   font-weight: 400;
   text-transform: uppercase;
+}
+
+.org-name {
+  text-decoration: underline;
 }
 
 @media screen and (max-width: 767px) {

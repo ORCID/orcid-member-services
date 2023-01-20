@@ -79,7 +79,7 @@ export class NavbarComponent implements OnInit {
           .then(
             (res: HttpResponse<IMSMember>) => {
               if (res.body) {
-                this.organizationName = ' | ' + res.body.clientName;
+                this.organizationName = res.body.clientName;
                 this.consortiumLead = res.body.isConsortiumLead;
                 this.consortiumMember = res.body.parentSalesforceId != null;
               }
