@@ -1,14 +1,8 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@use '../../../content/scss/bootstrap-variables' as global;
 
 /* ==========================================================================
 Navbar
 ========================================================================== */
-
-.navbar-version {
-  font-size: 0.65em;
-  color: $navbar-dark-color;
-}
 
 .bg-dark {
   background-color: #202428 !important;
@@ -63,7 +57,15 @@ Logo styles
 }
 
 .org-name {
+  &:hover {
+    cursor: pointer;
+    color: global.$secondary;
+  }
   text-decoration: underline;
+}
+
+.pipe {
+  color: global.$secondary;
 }
 
 @media screen and (max-width: 767px) {
