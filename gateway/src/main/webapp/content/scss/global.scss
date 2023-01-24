@@ -442,3 +442,16 @@ div.success {
 .w-33 {
   width: 33% !important;
 }
+
+// innerHtml styling for the public member description
+.main-section-description {
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-bottom: 0;
+  }
+}

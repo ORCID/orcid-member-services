@@ -50,7 +50,7 @@ module.exports = (options) => ({
                 }
             },
             // Ignore warnings about System.import in Angular
-            { test: /[\/\\]@angular[\/\\].+\.js$/, parser: { system: true } },
+            { test: /[\/\\]@angular[\/\\].+\.js$/, parser: { system: true } }
         ]
     },
     plugins: [
@@ -73,6 +73,8 @@ module.exports = (options) => ({
             { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
             { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
             { from: './src/main/webapp/content/', to: 'content' },
+            { from: './node_modules/quill/dist/quill.core.css', to: 'content/css/quill.core.css' },
+            { from: './node_modules/quill/dist/quill.snow.css', to: 'content/css/quill.snow.css' },
             { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
             { from: './src/main/webapp/manifest.webapp', to: 'manifest.webapp' },
             // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array

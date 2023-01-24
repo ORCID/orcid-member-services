@@ -57,16 +57,15 @@
           </div>
           <div class="form-group">
             <label class="wide-text small-text">Organization description</label>
-            <textarea
-              type="text"
-              class="form-control w-75"
-              name="description"
+            <quill-editor
+              class="d-block w-75"
               formControlName="description"
-              cdkTextareaAutosize
-              cdkAutosizeMinRows="1"
-              cdkAutosizeMaxRows="5"
-              placeholder="A brief description of the organization"
-            ></textarea>
+              format="html"
+              [styles]="quillStyles"
+              [modules]="quillConfig"
+              [placeholder]="'A brief description of the organization'"
+            >
+            </quill-editor>
             <div *ngIf="editForm.get('description').invalid">
               <small class="wide-text small-text form-text text-danger" *ngIf="editForm.get('description').errors.maxlength">
                 Organization description is too long. Please use 5000 characters or less.
@@ -85,12 +84,7 @@
             <ng-template #validWebsite>
               <small class="wide-text small-text input-prompt">Links should be in the full URL format e.g. http://www.website.com</small>
             </ng-template>
-            <div
-              *ngIf="
-                editForm.get('website').invalid;
-                else validWebsite
-              "
-            >
+            <div *ngIf="editForm.get('website').invalid; else validWebsite">
               <small class="wide-text small-text text-danger" *ngIf="editForm.get('website').errors.pattern">
                 Please enter a valid website URL, for example http://www.website.com
               </small>

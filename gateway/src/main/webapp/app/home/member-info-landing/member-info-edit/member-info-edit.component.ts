@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
@@ -21,6 +21,15 @@ export class MemberInfoEditComponent implements OnInit {
   MEMBER_LIST_URL: string = 'https://orcid.org/members';
   isSaving: boolean;
   invalidForm: boolean;
+  quillConfig = {
+    toolbar: [['bold', 'italic'], [{ list: 'ordered' }, { list: 'bullet' }], ['link']]
+  };
+  quillStyles = {
+    fontFamily: 'inherit',
+    fontSize: '14px',
+    letterSpacing: '0.25px',
+    marginRight: '0'
+  };
 
   editForm = this.fb.group({
     name: [null, [Validators.required, Validators.maxLength(255)]],

@@ -7,9 +7,10 @@ import { GenericLandingComponent } from './generic-landing/generic-landing.compo
 import { MemberInfoLandingComponent } from './member-info-landing/member-info-landing.component';
 import { MemberInfoEditComponent } from './member-info-landing/member-info-edit/member-info-edit.component';
 import { TextFieldModule } from '@angular/cdk/text-field';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
-  imports: [GatewaySharedModule, RouterModule.forChild([HOME_ROUTE]), TextFieldModule],
+  imports: [GatewaySharedModule, RouterModule.forChild([HOME_ROUTE]), TextFieldModule, QuillModule.forRoot()],
   declarations: [HomeComponent, GenericLandingComponent, MemberInfoLandingComponent, MemberInfoEditComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
