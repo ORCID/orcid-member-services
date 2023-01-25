@@ -101,7 +101,7 @@
         <ul class="ml-0 pl-0" *ngFor="let contact of memberData.contacts; let i = index">
           <li class="row ml-0 d-flex justify-content-between contact">
             <div>{{ contact.name }}</div>
-            <div>{{ contact.memberOrgRole }}</div>
+            <div>{{ contact.memberOrgRole.join(', ') }}</div>
             <div>
               <a href="mailto:{{ contact.contactEmail }}">{{ contact.contactEmail }}</a>
             </div>
