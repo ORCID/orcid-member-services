@@ -23,6 +23,7 @@ import { GatewayReportModule } from './report/report.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
     // jhipster-needle-angular-add-module JHipster will add new module here
     GatewayEntityModule,
     GatewayReportModule,
-    GatewayAppRoutingModule
+    GatewayAppRoutingModule,
+    QuillModule.forRoot()
   ],
   declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
   providers: [
