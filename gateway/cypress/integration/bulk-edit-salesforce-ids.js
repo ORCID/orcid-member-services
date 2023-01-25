@@ -50,9 +50,15 @@ describe('Bulk edit invalid salesforce ids', () => {
               .children()
               .eq(-2)
               .click();
+              cy.wait(200);
           }
         })
         .then(() => {
+          cy.get('tbody')
+              .children()
+              .each($e => {
+                mpIds.push($e[0].children[0].textContent);
+              });
           // create list of salesforce ids not used in the portal
           let filteredIds = [];
           for (var i = 0; i < sfIds.length; i += 1) {
@@ -98,7 +104,7 @@ describe('Bulk edit invalid salesforce ids', () => {
                             .eq(-2)
                             .click();
                         }
-                        cy.wait(100);
+                        cy.wait(200);
                       }
                     }
                   }
