@@ -28,7 +28,7 @@ describe('Test homepage', () => {
     cy.get('.side-bar').contains("Public details")
     cy.get('.side-bar').contains("Website")
     cy.get('.side-bar').contains("Email")
-    cy.get('.side-bar').contains("http://www.testtest.com")
+    cy.get('.side-bar').contains("http://testtest.com")
     cy.get('.side-bar').contains("No email added")
     cy.get('.main-section').contains("Consortium lead")
     cy.get('.main-section').contains("Mambo No 5")
