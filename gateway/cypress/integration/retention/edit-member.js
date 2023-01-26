@@ -58,7 +58,6 @@ describe('Manage members menu', () => {
     cy.get('#save-entity')
       .invoke('attr', 'disabled')
       .should('exist');
-
     cy.get('#field_salesforceId')
       .invoke('val')
       .then(id => {
