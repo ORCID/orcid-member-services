@@ -10,8 +10,9 @@ describe('Manage members menu', () => {
     cy.get('#field_isConsortiumLead')
       .should('be.checked')
       .uncheck();
-   // cy.get('#field_salesforceId').invoke('attr', 'disabled')
-   // .should('exist');
+    cy.get('#field_salesforceId')
+      .invoke('attr', 'disabled')
+      .should('exist');
     cy.get('#field_parentSalesforceId')
       .clear()
       .type(clientName);
@@ -54,6 +55,16 @@ describe('Manage members menu', () => {
     cy.get('#field_parentSalesforceId')
       .clear()
       .type(salesforceId);
-    cy.get('#save-entity').click();
+    cy.get('#save-entity')
+      .invoke('attr', 'disabled')
+      .should('exist');
+    cy.get('#field_salesforceId')
+      .invoke('val')
+      .then(id => {
+        cy.get('#field_parentSalesforceId')
+          .clear()
+          .type(id);
+        cy.get('#save-entity').click();
+      });
   });
 });
