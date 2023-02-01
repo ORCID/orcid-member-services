@@ -101,7 +101,13 @@ public class NotificationService {
                 request.setEmailsSent(request.getEmailsSent() + 1);
                 allAssertionsForEmailAndMember.forEach(a -> {
                     a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
-                    a.setInvitationSent(Instant.now());
+                    
+                    Instant now = Instant.now();
+                    if (a.getInvitationSent() == null) {
+                        // first invitation sent
+                        a.setInvitationSent(now);
+                    }
+                    a.setInvitationLastSent(now);
                     assertionRepository.save(a);
                 });
             } else {
@@ -110,11 +116,17 @@ public class NotificationService {
                 orcidApiClient.postNotification(notification, orcidId);
                 allAssertionsForEmailAndMember.forEach(a -> {
                     a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
-                    a.setNotificationSent(Instant.now());
-                    request.setNotificationsSent(request.getNotificationsSent() + 1);
+                    
+                    Instant now = Instant.now();
+                    if (a.getNotificationSent() == null && a.getInvitationSent() == null) {
+                        // invitation / notification not previously sent
+                        a.setNotificationSent(now);
+                    }
+                    a.setNotificationLastSent(now);
                     assertionRepository.save(a);
                 });
             }
+            request.setNotificationsSent(request.getNotificationsSent() + 1);
         } catch (Exception e) {
             LOG.warn("Error sending notification to {} on behalf of {}", email, request.getSalesforceId());
             LOG.warn("Could not send notification", e);

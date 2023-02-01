@@ -127,6 +127,12 @@ public class Assertion implements Serializable {
     
     @Field("invitation_sent")
     private Instant invitationSent;
+    
+    @Field("notification_last_sent")
+    private Instant notificationLastSent;
+    
+    @Field("invitation_last_sent")
+    private Instant invitationLastSent;
 
     @Field("orcid_id")
     private String orcidId;
@@ -421,6 +427,11 @@ public class Assertion implements Serializable {
         this.prettyStatus = prettyStatus;
     }
     
+    /**
+     * Returns the date the notification was first sent to the orcid user associated with this affiliation
+     * 
+     * @return the Instant representing the invitation date
+     */
     public Instant getNotificationSent() {
         return notificationSent;
     }
@@ -429,12 +440,43 @@ public class Assertion implements Serializable {
         this.notificationSent = notificationSent;
     }
     
+    /**
+     * Returns the date the invitation was first sent to the email associated with this affiliation
+     * 
+     * @return the Instant representing the invitation date
+     */
     public Instant getInvitationSent() {
         return invitationSent;
     }
 
     public void setInvitationSent(Instant invitationSent) {
         this.invitationSent = invitationSent;
+    }
+    
+    /**
+     * Returns the date the notification was last sent to the orcid user associated with this affiliation
+     * 
+     * @return the Instant representing the invitation date
+     */
+    public Instant getNotificationLastSent() {
+        return notificationLastSent;
+    }
+
+    public void setNotificationLastSent(Instant notificationLastSent) {
+        this.notificationLastSent = notificationLastSent;
+    }
+
+    /**
+     * Returns the date the invitation was last sent to the email associated with this affiliation
+     * 
+     * @return the Instant representing the invitation date
+     */
+    public Instant getInvitationLastSent() {
+        return invitationLastSent;
+    }
+
+    public void setInvitationLastSent(Instant invitationLastSent) {
+        this.invitationLastSent = invitationLastSent;
     }
 
     @Override

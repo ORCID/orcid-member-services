@@ -162,10 +162,12 @@ class NotificationServiceTest {
                 // no orcid id was available for email5
                 assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_SENT.name());
                 assertThat(a.getInvitationSent()).isNotNull();
+                assertThat(a.getInvitationLastSent()).isNotNull();
                 assertThat(a.getNotificationSent()).isNull();
             } else {
                 assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_SENT.name());
                 assertThat(a.getNotificationSent()).isNotNull();
+                assertThat(a.getNotificationLastSent()).isNotNull();
                 assertThat(a.getInvitationSent()).isNull();
             }
         });
@@ -281,6 +283,120 @@ class NotificationServiceTest {
     }
     
     @Test
+    void testSendPermissionLinkNotifications_notificationForAssertion_previouslySent() throws IOException, JAXBException {
+        Assertion assertionForWhichNotificationPreviouslySent = getAssertion();
+        Instant notificationFirstSent = Instant.now();
+        assertionForWhichNotificationPreviouslySent.setNotificationSent(notificationFirstSent);
+        
+        Mockito.when(sendNotificationsRequestRepository.findActiveRequests()).thenReturn(getListOfOneRequest("salesforceId1"));
+        Mockito.when(assertionRepository.findDistinctEmailsWithNotificationRequested(Mockito.eq("salesforceId1"))).thenReturn(Arrays.asList("email1").iterator());
+        Mockito.when(assertionRepository.findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()))).thenReturn(Arrays.asList(assertionForWhichNotificationPreviouslySent));
+        Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class))).thenReturn("subject");
+        Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn("orcid1");
+        
+        notificationService.sendPermissionLinkNotifications();
+        
+        Mockito.verify(sendNotificationsRequestRepository).findActiveRequests();
+        Mockito.verify(assertionRepository).findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()));
+        Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email1"));
+        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class));
+        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class));
+        Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
+        Mockito.verify(orcidApiClient).postNotification(Mockito.any(NotificationPermission.class), Mockito.eq("orcid1"));
+        Mockito.verify(assertionRepository).save(assertionCaptor.capture()); 
+        Assertion a = assertionCaptor.getValue();
+        assertThat(a.getNotificationSent()).isEqualTo(notificationFirstSent);
+        assertThat(a.getNotificationLastSent()).isNotNull();
+        assertThat(a.getInvitationLastSent()).isNull();
+        assertThat(a.getInvitationSent()).isNull();
+    }
+    
+    @Test
+    void testSendPermissionLinkNotifications_notificationForAssertion_notPreviouslySent() throws IOException, JAXBException {
+        Assertion assertionForWhichNotificationPreviouslySent = getAssertion();
+        
+        Mockito.when(sendNotificationsRequestRepository.findActiveRequests()).thenReturn(getListOfOneRequest("salesforceId1"));
+        Mockito.when(assertionRepository.findDistinctEmailsWithNotificationRequested(Mockito.eq("salesforceId1"))).thenReturn(Arrays.asList("email1").iterator());
+        Mockito.when(assertionRepository.findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()))).thenReturn(Arrays.asList(assertionForWhichNotificationPreviouslySent));
+        Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class))).thenReturn("subject");
+        Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn("orcid1");
+        
+        notificationService.sendPermissionLinkNotifications();
+        
+        Mockito.verify(sendNotificationsRequestRepository).findActiveRequests();
+        Mockito.verify(assertionRepository).findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()));
+        Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email1"));
+        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class));
+        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class));
+        Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
+        Mockito.verify(orcidApiClient).postNotification(Mockito.any(NotificationPermission.class), Mockito.eq("orcid1"));
+        Mockito.verify(assertionRepository).save(assertionCaptor.capture()); 
+        Assertion a = assertionCaptor.getValue();
+        assertThat(a.getNotificationSent()).isNotNull();
+        assertThat(a.getNotificationLastSent()).isNotNull();
+        assertThat(a.getInvitationLastSent()).isNull();
+        assertThat(a.getInvitationSent()).isNull();
+    }
+    
+    @Test
+    void testSendPermissionLinkNotifications_invitationForAssertion_previouslySent() throws IOException, JAXBException {
+        Assertion assertionForWhichInvitationPreviouslySent = getAssertion();
+        Instant invitationFirstSent = Instant.now();
+        assertionForWhichInvitationPreviouslySent.setInvitationSent(invitationFirstSent);
+        
+        Mockito.when(sendNotificationsRequestRepository.findActiveRequests()).thenReturn(getListOfOneRequest("salesforceId1"));
+        Mockito.when(assertionRepository.findDistinctEmailsWithNotificationRequested(Mockito.eq("salesforceId1"))).thenReturn(Arrays.asList("email1").iterator());
+        Mockito.when(assertionRepository.findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()))).thenReturn(Arrays.asList(assertionForWhichInvitationPreviouslySent));
+        Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
+        Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn(null);
+        Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId1"))).thenReturn("member 1");
+        
+        notificationService.sendPermissionLinkNotifications();
+        
+        Mockito.verify(sendNotificationsRequestRepository).findActiveRequests();
+        Mockito.verify(assertionRepository).findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()));
+        Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email1"));
+        Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
+        Mockito.verify(mailService).sendInvitationEmail(Mockito.eq("email1"), Mockito.eq("member 1"), Mockito.anyString());
+        Mockito.verify(assertionRepository).save(assertionCaptor.capture()); 
+        Assertion a = assertionCaptor.getValue();
+        assertThat(a.getInvitationSent()).isEqualTo(invitationFirstSent);
+        assertThat(a.getInvitationLastSent()).isNotNull();
+        assertThat(a.getNotificationLastSent()).isNull();
+        assertThat(a.getNotificationSent()).isNull();
+    }
+
+    @Test
+    void testSendPermissionLinkNotifications_invitationForAssertion_notPreviouslySent() throws IOException, JAXBException {
+        Assertion assertionForWhichInvitationPreviouslySent = getAssertion();
+        
+        Mockito.when(sendNotificationsRequestRepository.findActiveRequests()).thenReturn(getListOfOneRequest("salesforceId1"));
+        Mockito.when(assertionRepository.findDistinctEmailsWithNotificationRequested(Mockito.eq("salesforceId1"))).thenReturn(Arrays.asList("email1").iterator());
+        Mockito.when(assertionRepository.findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()))).thenReturn(Arrays.asList(assertionForWhichInvitationPreviouslySent));
+        Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
+        Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn(null);
+        Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId1"))).thenReturn("member 1");
+        
+        notificationService.sendPermissionLinkNotifications();
+        
+        Mockito.verify(sendNotificationsRequestRepository).findActiveRequests();
+        Mockito.verify(assertionRepository).findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()));
+        Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email1"));
+        Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
+        Mockito.verify(mailService).sendInvitationEmail(Mockito.eq("email1"), Mockito.eq("member 1"), Mockito.anyString());
+        Mockito.verify(assertionRepository).save(assertionCaptor.capture()); 
+        Assertion a = assertionCaptor.getValue();
+        assertThat(a.getInvitationSent()).isNotNull();
+        assertThat(a.getInvitationLastSent()).isNotNull();
+        assertThat(a.getNotificationLastSent()).isNull();
+        assertThat(a.getNotificationSent()).isNull();
+    }
+    
+    @Test
     void testCreateSendNotificationsRequest() {
         Mockito.when(sendNotificationsRequestRepository.findActiveRequestBySalesforceId(Mockito.eq("somethingElse"))).thenReturn(new ArrayList<>());
         Mockito.when(sendNotificationsRequestRepository.insert(Mockito.any(SendNotificationsRequest.class))).thenReturn(null);
@@ -358,14 +474,23 @@ class NotificationServiceTest {
     }
     
     private Assertion getAssertionWithNoRoleTitle() {
+        Assertion a = getAssertion();
+        a.setRoleTitle(null);
+        return a;
+    }
+    
+    private Assertion getAssertion() {
         Assertion a = new Assertion();
         a.setSalesforceId("salesforceId1");
         a.setEmail("email1");
         a.setStatus(AssertionStatus.NOTIFICATION_REQUESTED.name());
         a.setOrgName("org name");
         a.setAffiliationSection(AffiliationSection.EDUCATION);
+        a.setRoleTitle("role");
         return a;
     }
+    
+    
     
     private AssertionServiceUser getDummyUser() {
         AssertionServiceUser user = new AssertionServiceUser();
