@@ -198,6 +198,8 @@ application:
     removeStoredFilesDelay: 300000
     sendPermissionLinkNotificationsDelay: 120000
     internalRegistryApiEndpoint: ${APPLICATION_INTERNAL_API_ENDPOINT}
+    resendNotificationDays: ${APPLICATION_RESEND_NOTIFICATION_DAYS}
+    resendNotificationsCron: ${APPLICATION_RESEND_NOTIFICATION_CRON}
     tokenExchange:
         endpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}
         grantType: ${APPLICATION_TOKEN_EXCHANGE_GRANT_TYPE}

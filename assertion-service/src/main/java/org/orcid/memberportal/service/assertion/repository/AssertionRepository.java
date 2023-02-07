@@ -48,4 +48,7 @@ public interface AssertionRepository extends MongoRepository<Assertion, String>,
 
     List<Assertion> findByEmailAndSalesforceIdAndStatus(String email, String salesforceId, String status);
 
+    @Query("{ addedToORCID: { $exists: false }, $or: [ { notificationSent: { $exists: true } }, { invitationSent: { $exists: true } } ] }")
+    Page<Assertion> findNotificationResendCandidates(Pageable pageable);
+
 }

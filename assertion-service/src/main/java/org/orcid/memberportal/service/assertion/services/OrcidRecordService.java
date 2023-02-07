@@ -178,5 +178,14 @@ public class OrcidRecordService {
             }
         }
     }
+    
+    public boolean userHasGrantedOrDeniedPermission(String email, String salesforceId) {
+        Optional<OrcidRecord> orcidRecordOptional = findOneByEmail(email);
+        if (orcidRecordOptional.isEmpty()) {
+            return false;
+        }
+        
+        return !StringUtils.isBlank(orcidRecordOptional.get().getToken(salesforceId, true));
+    }
 
 }

@@ -1745,7 +1745,7 @@ class AssertionServiceTest {
         assertThat(saved.get(5).getSalesforceId()).isEqualTo("salesforce-id");
         assertThat(saved.get(6).getSalesforceId()).isEqualTo("salesforce-id");
     }
-
+    
     private List<MemberAssertionStatusCount> getDummyAssertionStatusCounts() {
         List<MemberAssertionStatusCount> counts = new ArrayList<>();
         counts.add(new MemberAssertionStatusCount("salesforceId1", "PENDING", 4));

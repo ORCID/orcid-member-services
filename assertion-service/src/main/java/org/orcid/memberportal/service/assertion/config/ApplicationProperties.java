@@ -54,6 +54,10 @@ public class ApplicationProperties {
     
     private String sendPermissionLinkNotificationsDelay;
     
+    private int[] resendNotificationDays;
+    
+    private String resendNotificationsCron;
+    
     public String getJwtSignatureUrl() {
         return jwtSignatureUrl;
     }
@@ -229,6 +233,24 @@ public class ApplicationProperties {
     public void setSendPermissionLinkNotificationsDelay(String sendPermissionLinkNotificationsDelay) {
         this.sendPermissionLinkNotificationsDelay = sendPermissionLinkNotificationsDelay;
     }
+    
+    public int[] getResendNotificationDays() {
+        return resendNotificationDays;
+    }
+
+    public void setResendNotificationDays(int[] resendNotificationDays) {
+        this.resendNotificationDays = resendNotificationDays;
+    }
+    
+    public String getResendNotificationsCron() {
+        return resendNotificationsCron;
+    }
+
+    public void setResendNotificationsCron(String resendNotificationsCron) {
+        this.resendNotificationsCron = resendNotificationsCron;
+    }
+
+
 
     public static class TokenExchange {
         private String endpoint;
