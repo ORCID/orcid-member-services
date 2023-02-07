@@ -92,7 +92,7 @@ public class AssertionService {
 
     @Autowired
     private CsvReportService csvReportService;
-
+    
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault())
             .withZone(ZoneId.systemDefault());
 

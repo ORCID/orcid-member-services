@@ -1,7 +1,9 @@
 package org.orcid.memberportal.service.assertion.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.time.Instant;
@@ -219,6 +221,18 @@ class OrcidRecordServiceTest {
         assertEquals("new token", captured.getTokens().get(0).getTokenId());
     }
     
+    @Test
+    void testUserHasGrantedOrDeniedPermission() {
+        OrcidRecord responded = getOrcidRecordWithToken("responded", new OrcidToken(DEFAULT_SALESFORCE_ID, "token"));
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("responded"))).thenReturn(Optional.of(responded));
+        
+        OrcidRecord notResponded = getOrcidRecordWithToken("not responded", new OrcidToken(DEFAULT_SALESFORCE_ID, null));
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("not responded"))).thenReturn(Optional.of(notResponded));
+        
+        assertTrue(orcidRecordService.userHasGrantedOrDeniedPermission("responded", DEFAULT_SALESFORCE_ID));
+        assertFalse(orcidRecordService.userHasGrantedOrDeniedPermission("not responded", DEFAULT_SALESFORCE_ID));
+    }
+    
 
     /*
      * @Test void testUpdateNonExistentOrcidRecord() {
@@ -260,6 +274,16 @@ class OrcidRecordServiceTest {
         record.setTokens(tokens);
         record.setId("xyz");
         record.setOrcid("orcid");
+        return record;
+    }
+    
+    private OrcidRecord getOrcidRecordWithToken(String email, OrcidToken token) {
+        OrcidRecord record = new OrcidRecord();
+        record.setCreated(Instant.now());
+        record.setEmail(email);
+        List<OrcidToken> tokens = new ArrayList<OrcidToken>();
+        tokens.add(token);
+        record.setTokens(tokens);
         return record;
     }
 

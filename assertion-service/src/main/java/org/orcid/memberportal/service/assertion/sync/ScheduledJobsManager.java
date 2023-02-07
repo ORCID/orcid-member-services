@@ -83,4 +83,14 @@ public class ScheduledJobsManager {
         notificationService.sendPermissionLinkNotifications();
         LOG.info("Permission link notifications sent");
     }
+    
+    @Scheduled(cron = "${application.resendNotificationsCron}")
+    @SchedulerLock(name = "resendNotifications", lockAtMostFor = "60m", lockAtLeastFor = "10m")
+    public void resendNotifications() throws IOException  {
+        LOG.info("Running cron to resend notifications");
+        notificationService.resendNotifications();
+        LOG.info("Notifications resent");
+    }
+    
+    
 }

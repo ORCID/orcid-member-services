@@ -1,9 +1,9 @@
 package org.orcid.memberportal.service.assertion.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 import java.io.IOException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +25,7 @@ import org.orcid.jaxb.model.v3.release.notification.permission.Item;
 import org.orcid.jaxb.model.v3.release.notification.permission.ItemType;
 import org.orcid.jaxb.model.v3.release.notification.permission.NotificationPermission;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
+import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
 import org.orcid.memberportal.service.assertion.domain.SendNotificationsRequest;
@@ -34,6 +35,9 @@ import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.repository.SendNotificationsRequestRepository;
 import org.orcid.memberportal.service.assertion.web.rest.errors.ORCIDAPIException;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 class NotificationServiceTest {
     
@@ -66,6 +70,9 @@ class NotificationServiceTest {
     
     @Mock
     private SendNotificationsRequestRepository sendNotificationsRequestRepository;
+    
+    @Mock
+    private ApplicationProperties applicationProperies;
     
     @Mock
     private MemberService memberService;
@@ -429,6 +436,165 @@ class NotificationServiceTest {
         assertThat(inProgress).isEqualTo(false);
     }
     
+    @Test
+    void testResendNotifications_notificationsAlreadyResent() throws IOException, JAXBException {
+        // build page of assertions, all have just had notification sent so nothing should be sent now
+        Page<Assertion> pageOfAssertions = getPageOfAssertions();
+        pageOfAssertions.forEach(a -> {
+            a.setNotificationSent(Instant.now());
+            a.setNotificationLastSent(Instant.now());
+        });
+        
+        Mockito.when(assertionRepository.findNotificationResendCandidates(Mockito.any(Pageable.class))).thenReturn(pageOfAssertions).thenReturn(null);
+        Mockito.when(orcidRecordService.userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
+        Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
+        
+        notificationService.resendNotifications();
+        
+        // check nothing happens other than checks
+        Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.never()).getOrcidIdForEmail(Mockito.anyString());
+        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.never()).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
+    }
+    
+    @Test
+    void testResendNotifications_invitationsAlreadyResent() throws IOException, JAXBException {
+        // build page of assertions, all have just had invitation sent so nothing should be sent now
+        Page<Assertion> pageOfAssertions = getPageOfAssertions();
+        pageOfAssertions.forEach(a -> {
+            a.setInvitationSent(Instant.now());
+            a.setInvitationLastSent(Instant.now());
+        });
+        
+        Mockito.when(assertionRepository.findNotificationResendCandidates(Mockito.any(Pageable.class))).thenReturn(pageOfAssertions).thenReturn(null);
+        Mockito.when(orcidRecordService.userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
+        Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
+        
+        notificationService.resendNotifications();
+        
+        // check nothing happens other than checks
+        Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.never()).getOrcidIdForEmail(Mockito.anyString());
+        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.never()).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
+    }
+    
+    @Test
+    void testResendNotifications_firstNotificationResendDue() throws IOException, JAXBException {
+        // build page of assertions, all have just had invitation sent so nothing should be sent now
+        Page<Assertion> pageOfAssertions = getPageOfAssertions();
+        pageOfAssertions.forEach(a -> {
+            Instant sent = Instant.now().minus(8, ChronoUnit.DAYS);
+            a.setNotificationSent(sent);
+            a.setNotificationLastSent(sent);
+        });
+        
+        Mockito.when(assertionRepository.findNotificationResendCandidates(Mockito.any(Pageable.class))).thenReturn(pageOfAssertions).thenReturn(null);
+        Mockito.when(orcidRecordService.userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
+        Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.anyString())).thenReturn("orcid");
+        Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
+        
+        notificationService.resendNotifications();
+        
+        // check nothing happens other than checks
+        Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.times(10)).getOrcidIdForEmail(Mockito.anyString());
+        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.times(10)).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
+    }
+    
+    @Test
+    void testResendNotifications_secondNotificationResendDue() throws IOException, JAXBException {
+        // build page of assertions, all have just had invitation sent so nothing should be sent now
+        Page<Assertion> pageOfAssertions = getPageOfAssertions();
+        pageOfAssertions.forEach(a -> {
+            // first sent a month ago, first resent a week later, second resend now due
+            a.setNotificationSent(Instant.now().minus(31, ChronoUnit.DAYS));
+            a.setNotificationLastSent(Instant.now().minus(24, ChronoUnit.DAYS));
+        });
+        
+        Mockito.when(assertionRepository.findNotificationResendCandidates(Mockito.any(Pageable.class))).thenReturn(pageOfAssertions).thenReturn(null);
+        Mockito.when(orcidRecordService.userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
+        Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.anyString())).thenReturn("orcid");
+        Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
+        
+        notificationService.resendNotifications();
+        
+        // check nothing happens other than checks
+        Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.times(10)).getOrcidIdForEmail(Mockito.anyString());
+        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.times(10)).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
+    }
+    
+    @Test
+    void testResendNotifications_firstInvitationResendDue() throws IOException, JAXBException {
+        Page<Assertion> pageOfAssertions = getPageOfAssertions();
+        pageOfAssertions.forEach(a -> {
+            Instant sent = Instant.now().minus(8, ChronoUnit.DAYS);
+            a.setInvitationSent(sent);
+            a.setInvitationLastSent(sent);
+        });
+        
+        Mockito.when(assertionRepository.findNotificationResendCandidates(Mockito.any(Pageable.class))).thenReturn(pageOfAssertions).thenReturn(null);
+        Mockito.when(orcidRecordService.userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
+        Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.anyString())).thenReturn(null);
+        Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
+        Mockito.when(memberService.getMemberName(Mockito.anyString())).thenReturn("member name");
+        Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.anyString(), Mockito.anyString())).thenReturn("link");
+        
+        notificationService.resendNotifications();
+        
+        // check nothing happens other than checks
+        Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.times(10)).getOrcidIdForEmail(Mockito.anyString());
+        Mockito.verify(mailService, Mockito.times(10)).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.never()).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
+    }
+    
+    @Test
+    void testResendNotifications_secondInvitationResendDue() throws IOException, JAXBException {
+        Page<Assertion> pageOfAssertions = getPageOfAssertions();
+        pageOfAssertions.forEach(a -> {
+            // first sent a month ago, first resent a week later, second resend now due
+            a.setInvitationSent(Instant.now().minus(31, ChronoUnit.DAYS));
+            a.setInvitationLastSent(Instant.now().minus(24, ChronoUnit.DAYS));
+        });
+        
+        Mockito.when(assertionRepository.findNotificationResendCandidates(Mockito.any(Pageable.class))).thenReturn(pageOfAssertions).thenReturn(null);
+        Mockito.when(orcidRecordService.userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
+        Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.anyString())).thenReturn(null);
+        Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
+        Mockito.when(memberService.getMemberName(Mockito.anyString())).thenReturn("member name");
+        Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.anyString(), Mockito.anyString())).thenReturn("link");
+        
+        notificationService.resendNotifications();
+        
+        // check nothing happens other than checks
+        Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.times(10)).getOrcidIdForEmail(Mockito.anyString());
+        Mockito.verify(mailService, Mockito.times(10)).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.never()).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
+    }
+    
+    @Test
+    void testResendNotifications_usersHaveRespondedToInvitation() throws IOException, JAXBException {
+        Page<Assertion> pageOfAssertions = getPageOfAssertions();
+        
+        Mockito.when(assertionRepository.findNotificationResendCandidates(Mockito.any(Pageable.class))).thenReturn(pageOfAssertions).thenReturn(null);
+        Mockito.when(orcidRecordService.userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
+        
+        notificationService.resendNotifications();
+        
+        // check nothing happens other than checks
+        Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.never()).getOrcidIdForEmail(Mockito.anyString());
+        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidApiClient, Mockito.never()).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
+    }
+    
     private List<SendNotificationsRequest> getListOfManyRequests() {
         return Arrays.asList(getRequest("salesforceId1"), getRequest("salesforceId2"), getRequest("salesforceId3"), getRequest("salesforceId4"), getRequest("salesforceId5"));
     }
@@ -490,7 +656,21 @@ class NotificationServiceTest {
         return a;
     }
     
-    
+    private Page<Assertion> getPageOfAssertions() {
+        List<Assertion> assertions = new ArrayList<>();
+        for (int x = 0; x < 10; x++) {
+            Assertion a = new Assertion();
+            a.setSalesforceId("salesforceId");
+            a.setEmail("email" + x);
+            a.setStatus(AssertionStatus.NOTIFICATION_REQUESTED.name());
+            a.setRoleTitle("role " + x);
+            a.setOrgName("org name " + x);
+            a.setAffiliationSection(AffiliationSection.EDUCATION);
+            assertions.add(a);
+        }
+        
+        return new PageImpl<>(assertions);
+    }
     
     private AssertionServiceUser getDummyUser() {
         AssertionServiceUser user = new AssertionServiceUser();
