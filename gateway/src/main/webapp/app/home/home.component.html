@@ -7,7 +7,7 @@
                         <span *ngIf="account" id="home-logged-message" jhiTranslate="home.loggedIn.message.string"
                             [translateValues]="{username: account.email}"> You are logged in as user <strong>{{account.name}}</strong></span>
                     </div>
-                    <div *ngIf="memberDataLoaded === true" class="h-100 home-container mb-3">
+                    <div *ngIf="memberData || memberData === null" class="h-100 home-container mb-3">
                         <router-outlet *ngIf="memberData"></router-outlet>
                         <app-generic-landing *ngIf="memberData === null" class="p-4 d-flex"></app-generic-landing>
                     </div>

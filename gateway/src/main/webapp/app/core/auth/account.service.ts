@@ -14,11 +14,11 @@ import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.mode
 @Injectable({ providedIn: 'root' })
 export class AccountService {
   private userIdentity: any;
-  private memberData: BehaviorSubject<ISFMemberData> = new BehaviorSubject<ISFMemberData>(null);
   private authenticated = false;
   private authenticationState = new Subject<any>();
   private fetchingMemberDataState = new BehaviorSubject<boolean>(undefined);
   private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
+  memberData: BehaviorSubject<ISFMemberData> = new BehaviorSubject<ISFMemberData>(undefined);
 
   constructor(
     private languageService: JhiLanguageService,
@@ -85,7 +85,7 @@ export class AccountService {
   identity(force?: boolean): Promise<IMSUser> {
     if (force) {
       this.userIdentity = undefined;
-      this.memberData.next(null);
+      this.memberData.next(undefined);
     }
 
     // check and see if we have retrieved the userIdentity data from the server.
@@ -102,6 +102,7 @@ export class AccountService {
         if (account) {
           this.userIdentity = account;
           this.authenticated = true;
+          this.fetchMemberData();
           // After retrieve the account info, the language will be changed to
           // the user's preferred language configured in the account setting
           if (this.userIdentity.langKey) {
@@ -109,7 +110,7 @@ export class AccountService {
             this.languageService.changeLanguage(langKey);
           }
         } else {
-          this.memberData.next(null);
+          this.memberData.next(undefined);
           this.userIdentity = null;
           this.authenticated = false;
         }
@@ -118,7 +119,7 @@ export class AccountService {
       })
       .catch(err => {
         this.userIdentity = null;
-        this.memberData.next(null);
+        this.memberData.next(undefined);
         this.authenticated = false;
         this.authenticationState.next(this.userIdentity);
         return null;
@@ -166,10 +167,6 @@ export class AccountService {
     return this.isAuthenticated() && this.userIdentity ? this.userIdentity.salesforceId : null;
   }
 
-  getFetchingMemberDataState(): Observable<boolean> {
-    return this.fetchingMemberDataState.asObservable();
-  }
-
   updatePublicDetails(data: SFPublicDetails) {
     this.memberData.value.publicDisplayName = data.name;
     this.memberData.value.publicDisplayDescriptionHtml = data.description;
@@ -177,60 +174,54 @@ export class AccountService {
     this.memberData.value.publicDisplayEmail = data.email;
   }
 
-  async getCurrentMemberData(): Promise<BehaviorSubject<ISFMemberData>> {
+  fetchMemberData() {
     if (!this.fetchingMemberDataState.value) {
-      if (this.memberData.value === null && this.userIdentity) {
-        console.log('getCurrentMemberData(): running', new Date().toLocaleString());
+      if (!this.memberData.value && this.userIdentity) {
         this.fetchingMemberDataState.next(true);
-        await this.memberService
-          .getMember()
-          .toPromise()
-          .then(res => {
-            console.log('getCurrentMemberData(): done', new Date().toLocaleString());
-            if (res && res.id) {
-              this.memberData.next(res);
+        this.memberService.getMember().subscribe((res: ISFMemberData) => {
+          if (res && res.id) {
+            this.memberService
+              .getMemberContacts()
+              .toPromise()
+              .then(res => {
+                if (res) {
+                  this.memberData.value.contacts = res;
+                }
+              });
+            this.memberService
+              .getMemberOrgIds()
+              .toPromise()
+              .then(res => {
+                if (res) {
+                  this.memberData.value.orgIds = res;
+                }
+              });
+            if (res && res.consortiaLeadId) {
               this.memberService
-                .getMemberContacts()
+                .find(res.consortiaLeadId)
                 .toPromise()
-                .then(res => {
-                  if (res) {
-                    this.memberData.value.contacts = res;
+                .then(r => {
+                  if (r && r.body) {
+                    this.memberData.value.consortiumLeadName = r.body.clientName;
                   }
                 });
-              this.memberService
-                .getMemberOrgIds()
-                .toPromise()
-                .then(res => {
-                  if (res) {
-                    this.memberData.value.orgIds = res;
-                  }
-                });
-              if (res && res.consortiaLeadId) {
-                this.memberService
-                  .find(res.consortiaLeadId)
-                  .toPromise()
-                  .then(r => {
-                    if (r && r.body) {
-                      this.memberData.value.consortiumLeadName = r.body.clientName;
-                    }
-                  });
-              }
-              if (this.userIdentity.salesforceId) {
-                this.memberService
-                  .find(this.userIdentity.salesforceId)
-                  .toPromise()
-                  .then(r => {
-                    if (r && r.body) {
-                      this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
-                    }
-                  });
-              }
             }
-          });
+            if (this.userIdentity.salesforceId) {
+              this.memberService
+                .find(this.userIdentity.salesforceId)
+                .toPromise()
+                .then(r => {
+                  if (r && r.body) {
+                    this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
+                  }
+                });
+            }
+            this.memberData.next(res);
+          } else {
+            this.memberData.next(null);
+          }
+        });
         this.fetchingMemberDataState.next(false);
-        return this.memberData;
-      } else {
-        return this.memberData;
       }
     }
   }
