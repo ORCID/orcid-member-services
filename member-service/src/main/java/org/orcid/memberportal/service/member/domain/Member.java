@@ -58,6 +58,9 @@ public class Member implements Serializable {
     @Field("last_modified_date")
     private Instant lastModifiedDate;
     
+    @Field("default_language")
+    private String defaultLanguage;
+    
     @Field
     private String type;
     
@@ -179,6 +182,14 @@ public class Member implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    public String getDefaultLanguage() {
+        return defaultLanguage;
+    }
+
+    public void setDefaultLanguage(String defaultLanguage) {
+        this.defaultLanguage = defaultLanguage;
+    }
 
     @Override
     public int hashCode() {
@@ -198,6 +209,7 @@ public class Member implements Serializable {
         result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         result = prime * result + ((status == null) ? 0 : status.hashCode());
+        result = prime * result + ((defaultLanguage == null) ? 0 : defaultLanguage.hashCode());
         return result;
     }
 
@@ -280,6 +292,11 @@ public class Member implements Serializable {
                 return false;
         } else if (!status.equals(other.status))
             return false;
+        if (defaultLanguage == null) {
+            if (other.defaultLanguage != null)
+                return false;
+        } else if (!defaultLanguage.equals(other.defaultLanguage))
+            return false;
         return true;
     }
 
@@ -288,6 +305,6 @@ public class Member implements Serializable {
         return "Member [id=" + id + ", clientId=" + clientId + ", salesforceId=" + salesforceId + ", parentSalesforceId=" + parentSalesforceId + ", clientName="
                 + clientName + ", isConsortiumLead=" + isConsortiumLead + ", assertionServiceEnabled=" + assertionServiceEnabled + ", superadminEnabled="
                 + superadminEnabled + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate="
-                + lastModifiedDate + ", type=" + type  + ", status=" + status + "]";
+                + lastModifiedDate + ", type=" + type  + ", status=" + status + ", defaultLanguage=" + defaultLanguage + "]";
     }
 }

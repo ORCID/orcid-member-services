@@ -32,6 +32,7 @@ import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.security.JWTUtil;
 import org.orcid.memberportal.service.assertion.security.SecurityUtils;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
+import org.orcid.memberportal.service.assertion.services.MemberService;
 import org.orcid.memberportal.service.assertion.services.NotificationService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
@@ -104,6 +105,9 @@ public class AssertionResource {
 
     @Autowired
     private NotificationService notificationService;
+    
+    @Autowired
+    private MemberService memberService;
 
     private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
@@ -155,7 +159,7 @@ public class AssertionResource {
     @PostMapping("/assertion/notification-request")
     public ResponseEntity<Void> sendNotifications(@RequestBody NotificationRequest notificationRequest) {
         AssertionServiceUser user = userService.getLoggedInUser();
-        // update language in member
+        memberService.updateMemberDefaultLanguage(user.getSalesforceId(), notificationRequest.getLanguage());
         notificationService.createSendNotificationsRequest(user.getEmail(), user.getSalesforceId());
         assertionService.markPendingAssertionsAsNotificationRequested(user.getSalesforceId());
         return ResponseEntity.ok().build();
