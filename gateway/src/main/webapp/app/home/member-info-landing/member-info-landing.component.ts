@@ -31,24 +31,15 @@ export class MemberInfoLandingComponent implements OnInit {
   ngOnInit() {
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
-      this.getMemberData();
     });
     this.accountService.identity().then((account: IMSUser) => {
       this.account = account;
-      this.getMemberData();
     });
-  }
-
-  getMemberData() {
-    if (this.account === null) {
-      this.memberData = null;
-    } else if (this.account !== null && !this.memberData) {
-      this.accountService.getCurrentMemberData().then(res => {
-        if (res && res.value) {
-          this.memberData = res.value;
-          this.validateUrl();
-        }
-      });
-    }
+    this.accountService.memberData.subscribe(res => {
+      if (res) {
+        this.memberData = res;
+        this.validateUrl();
+      }
+    });
   }
 }

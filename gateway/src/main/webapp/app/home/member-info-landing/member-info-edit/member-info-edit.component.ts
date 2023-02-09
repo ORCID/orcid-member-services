@@ -47,7 +47,7 @@ export class MemberInfoEditComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.data.subscribe(({ data }) => {
+    this.accountService.memberData.subscribe(data => {
       this.memberData = data;
       this.updateForm(data);
     });
