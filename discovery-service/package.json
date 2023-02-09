@@ -48,7 +48,7 @@
     "array-slice": "1.1.0",
     "autoprefixer": "9.7.3",
     "base-href-webpack-plugin": "2.0.0",
-    "browser-sync": "2.27.7",
+    "browser-sync": "2.27.11",
     "browser-sync-webpack-plugin": "2.3.0",
     "cache-loader": "4.1.0",
     "codelyzer": "5.2.0",
