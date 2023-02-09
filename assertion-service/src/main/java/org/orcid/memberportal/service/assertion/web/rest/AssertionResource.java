@@ -38,6 +38,7 @@ import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.orcid.memberportal.service.assertion.web.rest.errors.RegistryDeleteFailureException;
 import org.orcid.memberportal.service.assertion.web.rest.vm.AssertionDeletion;
+import org.orcid.memberportal.service.assertion.web.rest.vm.NotificationRequest;
 import org.orcid.memberportal.service.assertion.web.rest.vm.NotificationRequestInProgress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,7 +153,7 @@ public class AssertionResource {
     }
 
     @PostMapping("/assertion/notification-request")
-    public ResponseEntity<Void> sendNotifications() {
+    public ResponseEntity<Void> sendNotifications(@RequestBody NotificationRequest notificationRequest) {
         AssertionServiceUser user = userService.getLoggedInUser();
         notificationService.createSendNotificationsRequest(user.getEmail(), user.getSalesforceId());
         assertionService.markPendingAssertionsAsNotificationRequested(user.getSalesforceId());
