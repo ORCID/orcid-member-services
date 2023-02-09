@@ -227,7 +227,7 @@ public class NotificationService {
 
     private NotificationPermission getPermissionLinkNotification(List<Assertion> assertions, String email, String salesforceId, String orgName) {
         NotificationPermission notificationPermission = new NotificationPermission();
-        notificationPermission.setNotificationIntro(messageSource.getMessage("assertion.notifications.intro", null, Locale.getDefault()));
+        notificationPermission.setNotificationIntro(messageSource.getMessage("assertion.notifications.introduction", null, Locale.getDefault()));
         notificationPermission.setNotificationSubject(messageSource.getMessage("assertion.notifications.subject", new Object[] { orgName }, Locale.getDefault()));
         notificationPermission.setNotificationType(NotificationType.PERMISSION);
         notificationPermission.setAuthorizationUrl(new AuthorizationUrl(orcidRecordService.generateLinkForEmailAndSalesforceId(email, salesforceId)));
