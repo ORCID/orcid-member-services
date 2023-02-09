@@ -44,6 +44,7 @@ import org.orcid.memberportal.service.assertion.services.NotificationService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.assertion.web.rest.vm.NotificationRequest;
 import org.orcid.memberportal.service.assertion.web.rest.vm.NotificationRequestInProgress;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -170,7 +171,7 @@ class AssertionResourceTest {
         Mockito.when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
         Mockito.doNothing().when(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
         Mockito.doNothing().when(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq("salesforce"));
-        assertionResource.sendNotifications();
+        assertionResource.sendNotifications(getNotificationRequest());
         Mockito.verify(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
         Mockito.verify(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq(DEFAULT_SALESFORCE_ID));
     }
@@ -472,4 +473,10 @@ class AssertionResourceTest {
         return user;
     }
 
+    private NotificationRequest getNotificationRequest() {
+        NotificationRequest request = new NotificationRequest();
+        request.setLanguage("en");
+        return request;
+    }
+    
 }

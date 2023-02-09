@@ -155,6 +155,7 @@ public class AssertionResource {
     @PostMapping("/assertion/notification-request")
     public ResponseEntity<Void> sendNotifications(@RequestBody NotificationRequest notificationRequest) {
         AssertionServiceUser user = userService.getLoggedInUser();
+        // update language in member
         notificationService.createSendNotificationsRequest(user.getEmail(), user.getSalesforceId());
         assertionService.markPendingAssertionsAsNotificationRequested(user.getSalesforceId());
         return ResponseEntity.ok().build();
