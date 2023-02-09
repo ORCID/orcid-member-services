@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
+import javax.ws.rs.BadRequestException;
 
 import org.orcid.memberportal.service.member.client.SalesforceClient;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
@@ -338,5 +339,15 @@ public class MemberService {
         }
     }
 
+    public void updateMemberDefaultLanguage(String salesforceId, String language) {
+        Optional<Member> optional = memberRepository.findBySalesforceId(salesforceId);
+        if (optional.isPresent()) {
+            Member member = optional.get();
+            member.setDefaultLanguage(language);
+            memberRepository.save(member);
+        } else {
+            throw new BadRequestException("Member not found");
+        }
+    }
 
 }

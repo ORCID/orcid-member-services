@@ -158,6 +158,13 @@ public class MemberResourceTest {
         assertEquals(2, members.size());
         Mockito.verify(memberService, Mockito.times(1)).getMembers(Mockito.any(Pageable.class), Mockito.anyString());
     }
+    
+    @Test
+    public void testUpdateMemberDefaultLanguage() {
+        ResponseEntity<Void> response = memberResource.updateMemberDefaultLanguage("salesforceId", "en");
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+        Mockito.verify(memberService).updateMemberDefaultLanguage(Mockito.eq("salesforceId"), Mockito.eq("en"));
+    }
 
     private MemberValidation getMemberValidation() {
         MemberValidation validation = new MemberValidation();

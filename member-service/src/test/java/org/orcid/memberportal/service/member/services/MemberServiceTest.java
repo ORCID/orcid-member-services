@@ -525,6 +525,29 @@ class MemberServiceTest {
         assertThat(details.getEmail()).isEqualTo(publicMemberDetails.getEmail());
     }
     
+    @Test
+    void testUpdateMemberDefaultLanguage() {
+        Member member = getMember();
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(member));
+        memberService.updateMemberDefaultLanguage("two", "en");
+        Mockito.verify(memberRepository).save(memberCaptor.capture());
+        Member captured = memberCaptor.getValue();
+        assertThat(captured.getAssertionServiceEnabled()).isEqualTo(member.getAssertionServiceEnabled());
+        assertThat(captured.getClientId()).isEqualTo(member.getClientId());
+        assertThat(captured.getClientName()).isEqualTo(member.getClientName());
+        assertThat(captured.getCreatedBy()).isEqualTo(member.getCreatedBy());
+        assertThat(captured.getCreatedDate()).isEqualTo(member.getCreatedDate());
+        assertThat(captured.getIsConsortiumLead()).isEqualTo(member.getIsConsortiumLead());
+        assertThat(captured.getLastModifiedBy()).isEqualTo(member.getLastModifiedBy());
+        assertThat(captured.getLastModifiedDate()).isEqualTo(member.getLastModifiedDate());
+        assertThat(captured.getParentSalesforceId()).isEqualTo(member.getParentSalesforceId());
+        assertThat(captured.getSalesforceId()).isEqualTo(member.getSalesforceId());
+        assertThat(captured.getSuperadminEnabled()).isEqualTo(member.getSuperadminEnabled());
+        assertThat(captured.getType()).isEqualTo(member.getType());
+        
+        assertThat(captured.getDefaultLanguage()).isEqualTo("en");
+    }
+    
     private PublicMemberDetails getPublicMemberDetails() {
         PublicMemberDetails publicMemberDetails = new PublicMemberDetails();
         publicMemberDetails.setName("test member details");

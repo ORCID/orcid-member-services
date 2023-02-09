@@ -23,4 +23,11 @@ public class MemberService {
         throw new RuntimeException("Error contacting member service");
     }
 
+    public void updateMemberDefaultLanguage(String salesforceId, String language) {
+        ResponseEntity<Void> response = memberServiceClient.updateMemberDefaultLanguage(salesforceId, language);
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("Error updating member default language");
+        }
+    }
+
 }

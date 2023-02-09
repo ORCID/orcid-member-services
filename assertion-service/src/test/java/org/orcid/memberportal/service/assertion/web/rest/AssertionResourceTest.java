@@ -40,6 +40,7 @@ import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.security.JWTUtil;
 import org.orcid.memberportal.service.assertion.security.MockSecurityContext;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
+import org.orcid.memberportal.service.assertion.services.MemberService;
 import org.orcid.memberportal.service.assertion.services.NotificationService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
@@ -85,6 +86,9 @@ class AssertionResourceTest {
 
     @Mock
     private RorOrgValidator rorOrgValidator;
+    
+    @Mock
+    private MemberService memberService;
     
     @Mock
     private NotificationService notificationService;
@@ -174,6 +178,7 @@ class AssertionResourceTest {
         assertionResource.sendNotifications(getNotificationRequest());
         Mockito.verify(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
         Mockito.verify(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq(DEFAULT_SALESFORCE_ID));
+        Mockito.verify(memberService).updateMemberDefaultLanguage(Mockito.eq("salesforce"), Mockito.eq("en"));
     }
     
     @Test
