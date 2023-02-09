@@ -478,10 +478,4 @@ class AssertionResourceTest {
         return user;
     }
 
-    private NotificationRequest getNotificationRequest() {
-        NotificationRequest request = new NotificationRequest();
-        request.setLanguage("en");
-        return request;
-    }
-    
 }
