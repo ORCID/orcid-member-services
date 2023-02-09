@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
-import javax.ws.rs.BadRequestException;
 
 import org.orcid.memberportal.service.member.client.SalesforceClient;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
@@ -346,7 +345,7 @@ public class MemberService {
             member.setDefaultLanguage(language);
             memberRepository.save(member);
         } else {
-            throw new BadRequestException("Member not found");
+            throw new RuntimeException("Member not found");
         }
     }
 

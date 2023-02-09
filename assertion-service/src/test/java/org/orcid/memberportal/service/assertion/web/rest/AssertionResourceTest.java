@@ -174,11 +174,11 @@ class AssertionResourceTest {
     void testSendNotifications() {
         Mockito.when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
         Mockito.doNothing().when(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
-        Mockito.doNothing().when(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq("salesforce"));
+        Mockito.doNothing().when(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq(DEFAULT_SALESFORCE_ID));
         assertionResource.sendNotifications(getNotificationRequest());
         Mockito.verify(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
         Mockito.verify(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq(DEFAULT_SALESFORCE_ID));
-        Mockito.verify(memberService).updateMemberDefaultLanguage(Mockito.eq("salesforce"), Mockito.eq("en"));
+        Mockito.verify(memberService).updateMemberDefaultLanguage(Mockito.eq(DEFAULT_SALESFORCE_ID), Mockito.eq("en"));
     }
     
     @Test
@@ -477,5 +477,12 @@ class AssertionResourceTest {
         user.setLangKey("en");
         return user;
     }
+    
+    private NotificationRequest getNotificationRequest() {
+        NotificationRequest request = new NotificationRequest();
+        request.setLanguage("en");
+        return request;
+    }
+
 
 }

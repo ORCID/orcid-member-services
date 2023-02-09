@@ -529,7 +529,7 @@ class MemberServiceTest {
     void testUpdateMemberDefaultLanguage() {
         Member member = getMember();
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(member));
-        memberService.updateMemberDefaultLanguage("two", "en");
+        memberService.updateMemberDefaultLanguage("salesforceId", "en");
         Mockito.verify(memberRepository).save(memberCaptor.capture());
         Member captured = memberCaptor.getValue();
         assertThat(captured.getAssertionServiceEnabled()).isEqualTo(member.getAssertionServiceEnabled());
