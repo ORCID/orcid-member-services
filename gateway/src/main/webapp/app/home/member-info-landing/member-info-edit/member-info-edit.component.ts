@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
@@ -7,13 +7,15 @@ import { MSMemberService } from 'app/entities/member';
 import { ISFMemberData, SFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
 import { IMSUser } from 'app/shared/model/user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-member-info-edit',
   templateUrl: './member-info-edit.component.html',
   styleUrls: ['./member-info-edit.component.scss']
 })
-export class MemberInfoEditComponent implements OnInit {
+export class MemberInfoEditComponent implements OnInit, OnDestroy {
+  memberDataSubscription: Subscription;
   account: IMSUser;
   memberData: ISFMemberData;
   objectKeys = Object.keys;
@@ -47,7 +49,7 @@ export class MemberInfoEditComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.accountService.memberData.subscribe(data => {
+    this.memberDataSubscription = this.accountService.memberData.subscribe(data => {
       this.memberData = data;
       this.updateForm(data);
     });
@@ -56,6 +58,10 @@ export class MemberInfoEditComponent implements OnInit {
         this.invalidForm = false;
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.memberDataSubscription.unsubscribe();
   }
 
   updateForm(data: SFMemberData) {

@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AccountService } from 'app/core';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { IMSUser } from 'app/shared/model/user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-member-info-landing',
   templateUrl: './member-info-landing.component.html',
   styleUrls: ['member-info-landing.component.scss']
 })
-export class MemberInfoLandingComponent implements OnInit {
+export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   account: IMSUser;
   memberData: ISFMemberData;
+  authenticationStateSubscription: Subscription;
+  memberDataSubscription: Subscription;
 
   constructor(private accountService: AccountService) {}
 
@@ -29,17 +32,22 @@ export class MemberInfoLandingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.accountService.getAuthenticationState().subscribe(account => {
+    this.authenticationStateSubscription = this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
     });
-    this.accountService.identity().then((account: IMSUser) => {
-      this.account = account;
-    });
-    this.accountService.memberData.subscribe(res => {
+    this.memberDataSubscription = this.accountService.memberData.subscribe(res => {
       if (res) {
         this.memberData = res;
         this.validateUrl();
       }
     });
+    this.accountService.identity().then((account: IMSUser) => {
+      this.account = account;
+    });
+  }
+
+  ngOnDestroy() {
+    this.authenticationStateSubscription.unsubscribe();
+    this.memberDataSubscription.unsubscribe();
   }
 }
