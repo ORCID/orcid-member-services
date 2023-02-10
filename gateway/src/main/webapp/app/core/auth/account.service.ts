@@ -168,11 +168,13 @@ export class AccountService {
   }
 
   updatePublicDetails(data: SFPublicDetails) {
-    // TODO: call this.memberData.next(...) instead
-    this.memberData.value.publicDisplayName = data.name;
-    this.memberData.value.publicDisplayDescriptionHtml = data.description;
-    this.memberData.value.website = data.website;
-    this.memberData.value.publicDisplayEmail = data.email;
+    this.memberData.next({
+      ...this.memberData.value,
+      publicDisplayDescriptionHtml: data.description,
+      publicDisplayName: data.name,
+      publicDisplayEmail: data.email,
+      website: data.website
+    });
   }
 
   updateDefaultLanguage(defaultLanguage: string) {
@@ -185,13 +187,14 @@ export class AccountService {
         this.fetchingMemberDataState.next(true);
         this.memberService.getMember().subscribe((res: ISFMemberData) => {
           if (res && res.id) {
-            // TODO: call this.memberData.next(...) on each update
+            this.memberData.next(res);
+            // TODO: change promises to subscriptions or implement forkjoin
             this.memberService
               .getMemberContacts()
               .toPromise()
               .then(res => {
                 if (res) {
-                  this.memberData.value.contacts = res;
+                  this.memberData.next({ ...this.memberData.value, contacts: res });
                 }
               });
             this.memberService
@@ -199,7 +202,7 @@ export class AccountService {
               .toPromise()
               .then(res => {
                 if (res) {
-                  this.memberData.value.orgIds = res;
+                  this.memberData.next({ ...this.memberData.value, orgIds: res });
                 }
               });
             if (res && res.consortiaLeadId) {
@@ -208,7 +211,7 @@ export class AccountService {
                 .toPromise()
                 .then(r => {
                   if (r && r.body) {
-                    this.memberData.value.consortiumLeadName = r.body.clientName;
+                    this.memberData.next({ ...this.memberData.value, consortiumLeadName: r.body.clientName });
                   }
                 });
             }
@@ -218,12 +221,11 @@ export class AccountService {
                 .toPromise()
                 .then(r => {
                   if (r && r.body) {
-                    this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
-                    this.memberData.value.defaultLanguage = r.body.defaultLanguage;
+                    const { isConsortiumLead, defaultLanguage } = r.body;
+                    this.memberData.next({ ...this.memberData.value, isConsortiumLead, defaultLanguage });
                   }
                 });
             }
-            this.memberData.next(res);
           } else {
             this.memberData.next(null);
           }
