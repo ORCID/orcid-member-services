@@ -8,9 +8,9 @@
             A request to send notifications to your users is already in progress. Please try again later.
         </div>
         <p jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.description.string">Are you sure that you would like ORCID to send permission links to your researchers for the affiliations that are pending?</p>
-        <h5 jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.languageHeader.string">Notification language</h5>
+        <h6 class="mb-1 font-weight-bold" jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.languageHeader.string">Notification language</h6>
         <p jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.languageDescription.string">What language should the notification be sent in?</p>
-        <select class="form-control" id="langKey" name="langKey" [(ngModel)]="language">
+        <select class="form-control w-66" id="langKey" name="langKey" [(ngModel)]="language">
             <option *ngFor="let lang of languages" [ngValue]="lang">{{lang | findLanguageFromKey}}</option>
         </select>
     </div>
