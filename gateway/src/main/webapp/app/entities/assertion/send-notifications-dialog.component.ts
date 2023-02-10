@@ -7,22 +7,47 @@ import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
 import { NotificationService } from 'app/shared/notification/notification.service';
 
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { JhiLanguageHelper } from 'app/core/language/language.helper';
+import { AccountService } from 'app/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'send-notifications-import-dialog',
   templateUrl: './send-notifications-dialog.component.html',
   providers: [NotificationService]
 })
-export class SendNotificationsDialogComponent {
+export class SendNotificationsDialogComponent implements OnInit {
   faPaperPlane = faPaperPlane;
   requestAlreadyInProgress = false;
+  languages: string[];
+  language: string;
+  memberDataSubscription: Subscription;
 
   constructor(
     protected notificationService: NotificationService,
     public activeModal: NgbActiveModal,
     protected eventManager: JhiEventManager,
-    protected jhiAlertService: JhiAlertService
+    protected jhiAlertService: JhiAlertService,
+    private languageHelper: JhiLanguageHelper,
+    private accountService: AccountService
   ) {}
+
+  ngOnInit() {
+    this.languageHelper.getAll().then(languages => {
+      this.languages = languages;
+    });
+    this.memberDataSubscription = this.accountService.memberData.subscribe(data => {
+      if (data) {
+        this.language = data.defaultLanguage || 'en';
+      } else {
+        this.language = 'en';
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.memberDataSubscription.unsubscribe();
+  }
 
   clear() {
     this.activeModal.dismiss(true);
@@ -34,7 +59,8 @@ export class SendNotificationsDialogComponent {
       if (res.body.inProgress) {
         this.requestAlreadyInProgress = true;
       } else {
-        this.notificationService.updateStatuses().subscribe(() => {
+        this.notificationService.updateStatuses(this.language).subscribe(() => {
+          this.accountService.updateDefaultLanguage(this.language);
           this.jhiAlertService.success('gatewayApp.assertionServiceAssertion.notifications.notificationInProgress.string', null, null);
           this.close();
         });

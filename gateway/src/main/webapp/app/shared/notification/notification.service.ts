@@ -11,8 +11,8 @@ export class NotificationService {
     this.resourceUrl = this.assertionService.resourceUrl + '/notification-request';
   }
 
-  updateStatuses(): Observable<HttpResponse<any>> {
-    return this.http.post<any>(this.resourceUrl, { observe: 'response' });
+  updateStatuses(language: string): Observable<HttpResponse<any>> {
+    return this.http.post<any>(this.resourceUrl, { language }, { observe: 'response' });
   }
 
   requestInProgress(): Observable<HttpResponse<any>> {

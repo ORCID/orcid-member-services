@@ -62,9 +62,6 @@
       },
       "notifications": {
         "title": { "string": "发送权限通知" },
-        "confirmation": {
-          "string": "是否确定从 ORCID 向您的研究人员发送许可链接，以获得待定中的附属关系？"
-        },
         "alreadyInProgress": { "string": "向用户发送通知的请求已经在进行中。请稍后再试。" },
         "notificationInProgress": {
           "string": "通知流程已启动。系统将尽快通过电子邮件通知您。"
