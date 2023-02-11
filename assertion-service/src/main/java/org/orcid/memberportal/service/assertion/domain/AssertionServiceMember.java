@@ -24,6 +24,9 @@ public class AssertionServiceMember {
 
     @Field("is_consortium_lead")
     private Boolean isConsortiumLead;
+    
+    @Field("default_language")
+    private String defaultLanguage;
 
     public Boolean getIsConsortiumLead() {
         return isConsortiumLead;
@@ -77,4 +80,12 @@ public class AssertionServiceMember {
         return superadminEnabled;
     }
 
+    public String getDefaultLanguage() {
+        return defaultLanguage;
+    }
+
+    public void setDefaultLanguage(String defaultLanguage) {
+        this.defaultLanguage = defaultLanguage;
+    }
+    
 }

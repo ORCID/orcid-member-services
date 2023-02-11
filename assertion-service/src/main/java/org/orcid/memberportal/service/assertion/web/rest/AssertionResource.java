@@ -32,12 +32,14 @@ import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.security.JWTUtil;
 import org.orcid.memberportal.service.assertion.security.SecurityUtils;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
+import org.orcid.memberportal.service.assertion.services.MemberService;
 import org.orcid.memberportal.service.assertion.services.NotificationService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
 import org.orcid.memberportal.service.assertion.web.rest.errors.RegistryDeleteFailureException;
 import org.orcid.memberportal.service.assertion.web.rest.vm.AssertionDeletion;
+import org.orcid.memberportal.service.assertion.web.rest.vm.NotificationRequest;
 import org.orcid.memberportal.service.assertion.web.rest.vm.NotificationRequestInProgress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,6 +105,9 @@ public class AssertionResource {
 
     @Autowired
     private NotificationService notificationService;
+    
+    @Autowired
+    private MemberService memberService;
 
     private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
@@ -152,8 +157,9 @@ public class AssertionResource {
     }
 
     @PostMapping("/assertion/notification-request")
-    public ResponseEntity<Void> sendNotifications() {
+    public ResponseEntity<Void> sendNotifications(@RequestBody NotificationRequest notificationRequest) {
         AssertionServiceUser user = userService.getLoggedInUser();
+        memberService.updateMemberDefaultLanguage(user.getSalesforceId(), notificationRequest.getLanguage());
         notificationService.createSendNotificationsRequest(user.getEmail(), user.getSalesforceId());
         assertionService.markPendingAssertionsAsNotificationRequested(user.getSalesforceId());
         return ResponseEntity.ok().build();

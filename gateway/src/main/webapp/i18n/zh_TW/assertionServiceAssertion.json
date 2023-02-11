@@ -62,9 +62,6 @@
       },
       "notifications": {
         "title": { "string": "傳送權限通知" },
-        "confirmation": {
-          "string": "是否確定要 ORCID 傳送權限連結給待處理所屬單位的研究人員？"
-        },
         "alreadyInProgress": { "string": "您提出傳送通知給使用者的要求，系統目前已在處理中，請稍後再試。" },
         "notificationInProgress": {
           "string": "通知程序已啟動。程序完成後，系統會儘快透過電子郵件通知您。"

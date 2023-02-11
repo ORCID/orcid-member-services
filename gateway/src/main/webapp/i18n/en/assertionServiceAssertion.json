@@ -62,12 +62,21 @@
       },
       "notifications": {
         "title": { "string": "Send permission notifications" },
-        "confirmation": {
-          "string": "Are you sure that you would like ORCID to send permission links to your researchers for the affiliations that are pending?"
+        "description": {
+          "string": "Permission notifications will be sent for all your researchers that have an affiliation item which has a 'Pending' status."
+        },
+        "languageHeader": {
+          "string": "Notification language"
+        },
+        "languageDescription": {
+          "string": "What language should the notifications be sent in?"
         },
         "alreadyInProgress": { "string": "A request to send notifications to your users is already in progress. Please try again later." },
         "notificationInProgress": {
           "string": "Notification process has now started. We will email you as soon as the process has completed."
+        },
+        "sendNotifications": {
+          "string": "Send notifications"
         }
       },
       "addedToOrcid": { "string": "Added To ORCID" },

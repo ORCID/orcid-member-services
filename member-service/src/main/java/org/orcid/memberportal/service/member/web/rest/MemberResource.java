@@ -167,6 +167,25 @@ public class MemberResource {
         return ResponseEntity.ok().body(member);
     }
 
+    
+    /**
+     * {@code POST  /members/:id/language/:language } : Updates an existing member's default language.
+     *
+     * @param memberLanguage - the salesforceId of the member to update and the specified language
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)}, 
+     *         or with status {@code 400 (Bad Request)}
+     *         if the member is not valid, or with status
+     *         {@code 500 (Internal Server Error)} if the member couldn't be
+     *         updated.
+     */
+    @PostMapping("/members/{salesforceId}/language/{language}")
+    public ResponseEntity<Void> updateMemberDefaultLanguage(@PathVariable String salesforceId, @PathVariable String language) {
+        LOG.debug("REST request to update member default language : {}", salesforceId);
+        memberService.updateMemberDefaultLanguage(salesforceId, language);
+        return ResponseEntity.ok().build();
+    }
+
+    
     /**
      * {@code PUT  /public-details} : get details of member to which current user belongs
      *

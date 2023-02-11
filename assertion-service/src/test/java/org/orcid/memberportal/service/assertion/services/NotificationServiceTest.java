@@ -128,6 +128,8 @@ class NotificationServiceTest {
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email5"))).thenReturn(null);
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email6"))).thenReturn("orcid6");
         
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.anyString())).thenReturn("en");
+        
         notificationService.sendPermissionLinkNotifications();
         
         Mockito.verify(sendNotificationsRequestRepository).findActiveRequests();
@@ -226,8 +228,8 @@ class NotificationServiceTest {
         Mockito.verify(mailService, Mockito.times(5)).sendNotificationsSummary(Mockito.any(AssertionServiceUser.class), Mockito.anyInt(), Mockito.anyInt());
         
         // check email5 was sent invitation on behalf of two orgs
-        Mockito.verify(mailService).sendInvitationEmail(Mockito.eq("email5"), Mockito.eq("Member 4"), Mockito.anyString());
-        Mockito.verify(mailService).sendInvitationEmail(Mockito.eq("email5"), Mockito.eq("Member 5"), Mockito.anyString());
+        Mockito.verify(mailService).sendInvitationEmail(Mockito.eq("email5"), Mockito.eq("Member 4"), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(mailService).sendInvitationEmail(Mockito.eq("email5"), Mockito.eq("Member 5"), Mockito.anyString(), Mockito.anyString());
     }
     
     @Test
@@ -239,6 +241,8 @@ class NotificationServiceTest {
         Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
         Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class))).thenReturn("subject");
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn("orcid1");
+        Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId1"))).thenReturn("Member 1");
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId1"))).thenReturn("en");
         
         notificationService.sendPermissionLinkNotifications();
         
@@ -262,6 +266,7 @@ class NotificationServiceTest {
         Mockito.when(assertionRepository.findDistinctEmailsWithNotificationRequested(Mockito.eq("salesforceId1"))).thenReturn(Arrays.asList("email1").iterator());
         Mockito.when(assertionRepository.findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()))).thenReturn(getListOfAssertionsForNotification(1, "email1", "salesforceId1"));
         Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId1"))).thenReturn("Member 1");
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId1"))).thenReturn("en");
         Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
         
         Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
@@ -302,6 +307,8 @@ class NotificationServiceTest {
         Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
         Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class))).thenReturn("subject");
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn("orcid1");
+        Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId1"))).thenReturn("Member 1");
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId1"))).thenReturn("en");
         
         notificationService.sendPermissionLinkNotifications();
         
@@ -331,6 +338,8 @@ class NotificationServiceTest {
         Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
         Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class))).thenReturn("subject");
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn("orcid1");
+        Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId1"))).thenReturn("Member 1");
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId1"))).thenReturn("en");
         
         notificationService.sendPermissionLinkNotifications();
         
@@ -361,6 +370,7 @@ class NotificationServiceTest {
         Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn(null);
         Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId1"))).thenReturn("member 1");
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId1"))).thenReturn("en");
         
         notificationService.sendPermissionLinkNotifications();
         
@@ -368,7 +378,7 @@ class NotificationServiceTest {
         Mockito.verify(assertionRepository).findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()));
         Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email1"));
         Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
-        Mockito.verify(mailService).sendInvitationEmail(Mockito.eq("email1"), Mockito.eq("member 1"), Mockito.anyString());
+        Mockito.verify(mailService).sendInvitationEmail(Mockito.eq("email1"), Mockito.eq("member 1"), Mockito.anyString(), Mockito.eq("en"));
         Mockito.verify(assertionRepository).save(assertionCaptor.capture()); 
         Assertion a = assertionCaptor.getValue();
         assertThat(a.getInvitationSent()).isEqualTo(invitationFirstSent);
@@ -387,6 +397,7 @@ class NotificationServiceTest {
         Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn(null);
         Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId1"))).thenReturn("member 1");
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId1"))).thenReturn("en");
         
         notificationService.sendPermissionLinkNotifications();
         
@@ -394,7 +405,7 @@ class NotificationServiceTest {
         Mockito.verify(assertionRepository).findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()));
         Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email1"));
         Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
-        Mockito.verify(mailService).sendInvitationEmail(Mockito.eq("email1"), Mockito.eq("member 1"), Mockito.anyString());
+        Mockito.verify(mailService).sendInvitationEmail(Mockito.eq("email1"), Mockito.eq("member 1"), Mockito.anyString(), Mockito.eq("en"));
         Mockito.verify(assertionRepository).save(assertionCaptor.capture()); 
         Assertion a = assertionCaptor.getValue();
         assertThat(a.getInvitationSent()).isNotNull();
@@ -454,7 +465,7 @@ class NotificationServiceTest {
         // check nothing happens other than checks
         Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.never()).getOrcidIdForEmail(Mockito.anyString());
-        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.never()).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
     }
     
@@ -476,7 +487,7 @@ class NotificationServiceTest {
         // check nothing happens other than checks
         Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.never()).getOrcidIdForEmail(Mockito.anyString());
-        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.never()).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
     }
     
@@ -494,13 +505,15 @@ class NotificationServiceTest {
         Mockito.when(orcidRecordService.userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.anyString())).thenReturn("orcid");
         Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
+        Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId"))).thenReturn("Member 1");
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId"))).thenReturn("en");
         
         notificationService.resendNotifications();
         
         // check nothing happens other than checks
         Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.times(10)).getOrcidIdForEmail(Mockito.anyString());
-        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.times(10)).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
     }
     
@@ -518,13 +531,15 @@ class NotificationServiceTest {
         Mockito.when(orcidRecordService.userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.anyString())).thenReturn("orcid");
         Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
+        Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId"))).thenReturn("Member 1");
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId"))).thenReturn("en");
         
         notificationService.resendNotifications();
         
         // check nothing happens other than checks
         Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.times(10)).getOrcidIdForEmail(Mockito.anyString());
-        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.times(10)).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
     }
     
@@ -542,6 +557,7 @@ class NotificationServiceTest {
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.anyString())).thenReturn(null);
         Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
         Mockito.when(memberService.getMemberName(Mockito.anyString())).thenReturn("member name");
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.anyString())).thenReturn("en");
         Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.anyString(), Mockito.anyString())).thenReturn("link");
         
         notificationService.resendNotifications();
@@ -549,7 +565,7 @@ class NotificationServiceTest {
         // check nothing happens other than checks
         Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.times(10)).getOrcidIdForEmail(Mockito.anyString());
-        Mockito.verify(mailService, Mockito.times(10)).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(mailService, Mockito.times(10)).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.never()).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
     }
     
@@ -567,6 +583,7 @@ class NotificationServiceTest {
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.anyString())).thenReturn(null);
         Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
         Mockito.when(memberService.getMemberName(Mockito.anyString())).thenReturn("member name");
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.anyString())).thenReturn("en");
         Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.anyString(), Mockito.anyString())).thenReturn("link");
         
         notificationService.resendNotifications();
@@ -574,7 +591,7 @@ class NotificationServiceTest {
         // check nothing happens other than checks
         Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.times(10)).getOrcidIdForEmail(Mockito.anyString());
-        Mockito.verify(mailService, Mockito.times(10)).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(mailService, Mockito.times(10)).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.never()).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
     }
     
@@ -591,7 +608,7 @@ class NotificationServiceTest {
         // check nothing happens other than checks
         Mockito.verify(orcidRecordService, Mockito.times(10)).userHasGrantedOrDeniedPermission(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.never()).getOrcidIdForEmail(Mockito.anyString());
-        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.never()).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
     }
     

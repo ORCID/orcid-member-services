@@ -62,9 +62,6 @@
       },
       "notifications": {
         "title": { "string": "許可通知を送信" },
-        "confirmation": {
-          "string": "保留中のアフィリエーションについて、ORCIDから研究者に許可リンクを送信してよろしいですか？"
-        },
         "alreadyInProgress": { "string": "ユーザーへの通知送信リクエストを実行中です。後でもう一度お試しください。" },
         "notificationInProgress": {
           "string": "現在、通知処理を開始しています。手続きが完了し次第、メールでお知らせします。"

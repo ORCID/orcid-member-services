@@ -7,7 +7,12 @@
         <div class="alert alert-danger" *ngIf="requestAlreadyInProgress" jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.alreadyInProgress.string">
             A request to send notifications to your users is already in progress. Please try again later.
         </div>
-        <p jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.confirmation.string">Are you sure that you would like ORCID to send permission links to your researchers for the affiliations that are pending?</p>
+        <p jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.description.string">Are you sure that you would like ORCID to send permission links to your researchers for the affiliations that are pending?</p>
+        <h6 class="mb-1 font-weight-bold" jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.languageHeader.string">Notification language</h6>
+        <p jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.languageDescription.string">What language should the notification be sent in?</p>
+        <select class="form-control w-66" id="langKey" name="langKey" [(ngModel)]="language">
+            <option *ngFor="let lang of languages" [ngValue]="lang">{{lang | findLanguageFromKey}}</option>
+        </select>
     </div>
 
     <div class="modal-footer">
@@ -15,7 +20,7 @@
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
         </button>
         <button id="jhi-confirm-csv-upload" type="submit" class="btn btn-primary">
-            <fa-icon [icon]="faPaperPlane"></fa-icon>&nbsp;<span jhiTranslate="entity.action.ok.string">OK</span>
+            <fa-icon [icon]="faPaperPlane"></fa-icon>&nbsp;<span jhiTranslate="gatewayApp.assertionServiceAssertion.notifications.sendNotifications.string">Send notifications</span>
         </button>
     </div>
 </form>

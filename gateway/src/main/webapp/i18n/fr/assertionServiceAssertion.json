@@ -62,9 +62,6 @@
       },
       "notifications": {
         "title": { "string": "Envoyer des notifications d'autorisation" },
-        "confirmation": {
-          "string": "Voulez-vous vraiment qu'ORCID envoie des liens d'autorisation à vos chercheurs pour les affiliations en attente ?"
-        },
         "alreadyInProgress": {
           "string": "Une demande pour envoyer des notifications à vos utilisateurs est déjà en cours. Veuillez réessayer ultérieurement."
         },

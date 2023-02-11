@@ -25,4 +25,6 @@ export class HomeComponent implements OnInit {
       this.memberData = data;
     });
   }
+
+  // TODO: destroy subscriptions
 }

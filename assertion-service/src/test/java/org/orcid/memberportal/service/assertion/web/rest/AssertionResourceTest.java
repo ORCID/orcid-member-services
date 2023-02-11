@@ -40,10 +40,12 @@ import org.orcid.memberportal.service.assertion.security.EncryptUtil;
 import org.orcid.memberportal.service.assertion.security.JWTUtil;
 import org.orcid.memberportal.service.assertion.security.MockSecurityContext;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
+import org.orcid.memberportal.service.assertion.services.MemberService;
 import org.orcid.memberportal.service.assertion.services.NotificationService;
 import org.orcid.memberportal.service.assertion.services.OrcidRecordService;
 import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.assertion.web.rest.vm.NotificationRequest;
 import org.orcid.memberportal.service.assertion.web.rest.vm.NotificationRequestInProgress;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -84,6 +86,9 @@ class AssertionResourceTest {
 
     @Mock
     private RorOrgValidator rorOrgValidator;
+    
+    @Mock
+    private MemberService memberService;
     
     @Mock
     private NotificationService notificationService;
@@ -169,10 +174,11 @@ class AssertionResourceTest {
     void testSendNotifications() {
         Mockito.when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
         Mockito.doNothing().when(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
-        Mockito.doNothing().when(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq("salesforce"));
-        assertionResource.sendNotifications();
+        Mockito.doNothing().when(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq(DEFAULT_SALESFORCE_ID));
+        assertionResource.sendNotifications(getNotificationRequest());
         Mockito.verify(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
         Mockito.verify(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq(DEFAULT_SALESFORCE_ID));
+        Mockito.verify(memberService).updateMemberDefaultLanguage(Mockito.eq(DEFAULT_SALESFORCE_ID), Mockito.eq("en"));
     }
     
     @Test
@@ -471,5 +477,12 @@ class AssertionResourceTest {
         user.setLangKey("en");
         return user;
     }
+    
+    private NotificationRequest getNotificationRequest() {
+        NotificationRequest request = new NotificationRequest();
+        request.setLanguage("en");
+        return request;
+    }
+
 
 }

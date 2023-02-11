@@ -62,9 +62,6 @@
       },
       "notifications": {
         "title": { "string": "Odeslat oznámení povolení" },
-        "confirmation": {
-          "string": "Jste si jistí, že má ORCID posílat vašim výzkumníkům odkazy na oprávnění pro přidružení, která čekají na vyřízení?"
-        },
         "alreadyInProgress": { "string": "Žádost zasílat oznámení vašim uživatelům už se zpracovává. Zkuste to znovu později" },
         "notificationInProgress": {
           "string": "Proces oznámení byl zahájen. Jakmile bude dokončen, zašleme vám e-mail."

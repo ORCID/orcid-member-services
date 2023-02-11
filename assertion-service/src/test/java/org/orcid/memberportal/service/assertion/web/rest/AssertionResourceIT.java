@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
+import javax.ws.rs.core.MediaType;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -18,6 +20,7 @@ import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSe
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.services.AssertionService;
+import org.orcid.memberportal.service.assertion.services.MemberService;
 import org.orcid.memberportal.service.assertion.services.UserService;
 import org.orcid.memberportal.service.assertion.web.rest.errors.ExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +66,9 @@ public class AssertionResourceIT {
 
     @Mock
     private UserService mockedUserService;
+    
+    @Mock
+    private MemberService mockedMemberService;
 
     private MockMvc restUserMockMvc;
 
@@ -78,8 +84,10 @@ public class AssertionResourceIT {
                 .setControllerAdvice(exceptionTranslator).setMessageConverters(jacksonMessageConverter).build();
         Mockito.when(mockedUserService.getLoggedInUser()).thenReturn(getLoggedInUser());
         Mockito.when(mockedUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
+        Mockito.when(mockedMemberService.getMemberDefaultLanguage(Mockito.anyString())).thenReturn("en");
         ReflectionTestUtils.setField(assertionService, "assertionsUserService", mockedUserService);
         ReflectionTestUtils.setField(assertionResource, "userService", mockedUserService);
+        ReflectionTestUtils.setField(assertionResource, "memberService", mockedMemberService);
     }
 
     @Test
@@ -129,13 +137,11 @@ public class AssertionResourceIT {
     @Test
     @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void testSendNotifications() throws Exception {
-        restUserMockMvc.perform(post("/api/assertion/notification-request")).andExpect(status().isOk());
-        
+        restUserMockMvc.perform(post("/api/assertion/notification-request").content("{ \"language\":\"en\" }").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
         List<Assertion> updatedAssertions = assertionRepository.findBySalesforceId(DEFAULT_SALESFORCE_ID);
         updatedAssertions.forEach(a -> assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_REQUESTED.name()));
     }
     
-
     private void createAssertions(String salesforceId, int quantity) {
         for (int i = 0; i < quantity; i++) {
             assertionRepository.save(getAssertion(String.valueOf(i), salesforceId));

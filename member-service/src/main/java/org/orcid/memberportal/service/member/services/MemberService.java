@@ -338,5 +338,15 @@ public class MemberService {
         }
     }
 
+    public void updateMemberDefaultLanguage(String salesforceId, String language) {
+        Optional<Member> optional = memberRepository.findBySalesforceId(salesforceId);
+        if (optional.isPresent()) {
+            Member member = optional.get();
+            member.setDefaultLanguage(language);
+            memberRepository.save(member);
+        } else {
+            throw new RuntimeException("Member not found");
+        }
+    }
 
 }
