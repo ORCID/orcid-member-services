@@ -26,7 +26,11 @@ public class MemberService {
     public String getMemberDefaultLanguage(String salesforceId) {
         ResponseEntity<AssertionServiceMember> response = memberServiceClient.getMember(salesforceId);
         if (response.getStatusCode().is2xxSuccessful()) {
-            return response.getBody().getDefaultLanguage();
+            if (response.getBody().getDefaultLanguage() == null) {
+                return "en_US";
+            } else {
+                return response.getBody().getDefaultLanguage();
+            }
         }
         if (response.getStatusCodeValue() == 404) {
             return null;

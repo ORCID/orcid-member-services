@@ -62,9 +62,6 @@
       },
       "notifications": {
         "title": { "string": "권한 알림 전송" },
-        "confirmation": {
-          "string": "대기 중인 제휴에 대한 권한 링크를 귀하의 연구원들에게 ORCID가 전송해도 되겠습니까?"
-        },
         "alreadyInProgress": { "string": "귀하의 사용자에게 알림 전송 요청이 이미 진행 중입니다. 나중에 다시 시도해 주세요." },
         "notificationInProgress": {
           "string": "지금 알림 프로세스가 시작되었습니다. 프로세스가 완료되면 이메일을 보내 드리겠습니다."

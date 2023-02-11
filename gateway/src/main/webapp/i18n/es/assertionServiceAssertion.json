@@ -62,9 +62,6 @@
       },
       "notifications": {
         "title": { "string": "Enviar notificaciones de permiso" },
-        "confirmation": {
-          "string": "¿Está seguro de que desea que ORCID envíe enlaces de permiso a sus investigadores para las afiliaciones que están pendientes?"
-        },
         "alreadyInProgress": {
           "string": "Ya hay una solicitud en progreso para enviar notificaciones a sus usuarios. Vuelva a intentarlo más tarde."
         },

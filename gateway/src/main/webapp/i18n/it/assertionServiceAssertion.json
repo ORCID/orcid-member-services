@@ -62,9 +62,6 @@
       },
       "notifications": {
         "title": { "string": "Invia le notifiche dei permessi" },
-        "confirmation": {
-          "string": "Vuoi davvero che ORCID invii i link dei permessi ai tuoi ricercatori per le affiliazioni in sospeso?"
-        },
         "alreadyInProgress": { "string": "È già in corso una richiesta per inviare notifiche agli utenti. Riprova più tardi." },
         "notificationInProgress": {
           "string": "La procedura di notifica è stata avviata. Ti scriveremo non appena sarà completata."

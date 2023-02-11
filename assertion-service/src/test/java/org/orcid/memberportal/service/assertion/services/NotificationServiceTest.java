@@ -118,7 +118,7 @@ class NotificationServiceTest {
         Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email5"), Mockito.eq("salesforceId5"))).thenReturn("link5");
         Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email6"), Mockito.eq("salesforceId5"))).thenReturn("link6");
         
-        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
         Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class))).thenReturn("subject");
         
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn("orcid1");
@@ -153,7 +153,7 @@ class NotificationServiceTest {
         Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email4"));
         Mockito.verify(orcidApiClient, Mockito.times(2)).getOrcidIdForEmail(Mockito.eq("email5"));
         
-        Mockito.verify(messageSource, Mockito.times(5)).getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class));
+        Mockito.verify(messageSource, Mockito.times(5)).getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class));
         Mockito.verify(messageSource, Mockito.times(5)).getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class));
         
         Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
@@ -238,7 +238,7 @@ class NotificationServiceTest {
         Mockito.when(assertionRepository.findDistinctEmailsWithNotificationRequested(Mockito.eq("salesforceId1"))).thenReturn(Arrays.asList("email1").iterator());
         Mockito.when(assertionRepository.findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()))).thenReturn(Arrays.asList(getAssertionWithNoRoleTitle()));
         Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
-        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
         Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class))).thenReturn("subject");
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn("orcid1");
         Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId1"))).thenReturn("Member 1");
@@ -249,7 +249,7 @@ class NotificationServiceTest {
         Mockito.verify(sendNotificationsRequestRepository).findActiveRequests();
         Mockito.verify(assertionRepository).findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()));
         Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email1"));
-        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class));
+        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class));
         Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class));
         Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
         Mockito.verify(assertionRepository).save(Mockito.any(Assertion.class));
@@ -269,7 +269,7 @@ class NotificationServiceTest {
         Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId1"))).thenReturn("en");
         Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
         
-        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
         Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class))).thenReturn("subject");
         
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn("orcid1");
@@ -282,7 +282,7 @@ class NotificationServiceTest {
         Mockito.verify(memberService).getMemberName(Mockito.eq("salesforceId1"));
         Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email1"));
         
-        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class));
+        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class));
         Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class));
         
         Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
@@ -304,7 +304,7 @@ class NotificationServiceTest {
         Mockito.when(assertionRepository.findDistinctEmailsWithNotificationRequested(Mockito.eq("salesforceId1"))).thenReturn(Arrays.asList("email1").iterator());
         Mockito.when(assertionRepository.findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()))).thenReturn(Arrays.asList(assertionForWhichNotificationPreviouslySent));
         Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
-        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
         Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class))).thenReturn("subject");
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn("orcid1");
         Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId1"))).thenReturn("Member 1");
@@ -315,7 +315,7 @@ class NotificationServiceTest {
         Mockito.verify(sendNotificationsRequestRepository).findActiveRequests();
         Mockito.verify(assertionRepository).findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()));
         Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email1"));
-        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class));
+        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class));
         Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class));
         Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
         Mockito.verify(orcidApiClient).postNotification(Mockito.any(NotificationPermission.class), Mockito.eq("orcid1"));
@@ -335,7 +335,7 @@ class NotificationServiceTest {
         Mockito.when(assertionRepository.findDistinctEmailsWithNotificationRequested(Mockito.eq("salesforceId1"))).thenReturn(Arrays.asList("email1").iterator());
         Mockito.when(assertionRepository.findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()))).thenReturn(Arrays.asList(assertionForWhichNotificationPreviouslySent));
         Mockito.when(orcidRecordService.generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"))).thenReturn("link1");
-        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
+        Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("intro");
         Mockito.when(messageSource.getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class))).thenReturn("subject");
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("email1"))).thenReturn("orcid1");
         Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId1"))).thenReturn("Member 1");
@@ -346,7 +346,7 @@ class NotificationServiceTest {
         Mockito.verify(sendNotificationsRequestRepository).findActiveRequests();
         Mockito.verify(assertionRepository).findByEmailAndSalesforceIdAndStatus(Mockito.eq("email1"), Mockito.eq("salesforceId1"), Mockito.eq(AssertionStatus.NOTIFICATION_REQUESTED.name()));
         Mockito.verify(orcidApiClient).getOrcidIdForEmail(Mockito.eq("email1"));
-        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.intro"), Mockito.isNull(), Mockito.any(Locale.class));
+        Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.any(Locale.class));
         Mockito.verify(messageSource).getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.isNotNull(), Mockito.any(Locale.class));
         Mockito.verify(orcidRecordService).generateLinkForEmailAndSalesforceId(Mockito.eq("email1"), Mockito.eq("salesforceId1"));
         Mockito.verify(orcidApiClient).postNotification(Mockito.any(NotificationPermission.class), Mockito.eq("orcid1"));

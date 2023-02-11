@@ -168,10 +168,15 @@ export class AccountService {
   }
 
   updatePublicDetails(data: SFPublicDetails) {
+    // TODO: call this.memberData.next(...) instead
     this.memberData.value.publicDisplayName = data.name;
     this.memberData.value.publicDisplayDescriptionHtml = data.description;
     this.memberData.value.website = data.website;
     this.memberData.value.publicDisplayEmail = data.email;
+  }
+
+  updateDefaultLanguage(defaultLanguage: string) {
+    this.memberData.next({ ...this.memberData.value, defaultLanguage });
   }
 
   fetchMemberData() {
@@ -180,6 +185,7 @@ export class AccountService {
         this.fetchingMemberDataState.next(true);
         this.memberService.getMember().subscribe((res: ISFMemberData) => {
           if (res && res.id) {
+            // TODO: call this.memberData.next(...) on each update
             this.memberService
               .getMemberContacts()
               .toPromise()
@@ -213,6 +219,7 @@ export class AccountService {
                 .then(r => {
                   if (r && r.body) {
                     this.memberData.value.isConsortiumLead = r.body.isConsortiumLead;
+                    this.memberData.value.defaultLanguage = r.body.defaultLanguage;
                   }
                 });
             }
