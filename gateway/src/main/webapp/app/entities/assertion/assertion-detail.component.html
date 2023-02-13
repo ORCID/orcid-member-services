@@ -79,13 +79,21 @@
                     <dd class="col-md-9">
                         {{ownerId}}
                     </dd>
-                    <dt *ngIf="assertion.notificationSent" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.notificationLastSent.string">Notification Last Sent</dt>
-                    <dd *ngIf="assertion.notificationSent" class="col-md-9">
+                    <dt *ngIf="(!assertion.invitationSent && assertion.notificationSent) || (assertion.notificationSent && assertion.notificationSent < assertion.invitationSent)" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.notificationFirstSent.string">Notification First Sent</dt>
+                    <dd *ngIf="(!assertion.invitationSent && assertion.notificationSent) || (assertion.notificationSent && assertion.notificationSent < assertion.invitationSent)" class="col-md-9">
                         {{assertion.notificationSent | date:'medium'}}
                     </dd>
-                    <dt *ngIf="assertion.invitationSent" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.notificationLastSent.string">Notification Last Sent</dt>
-                    <dd *ngIf="assertion.invitationSent" class="col-md-9">
+                    <dt *ngIf="(!assertion.notificationSent && assertion.invitationSent) || (assertion.invitationSent && assertion.invitationSent < assertion.notificationSent)" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.notificationFirstSent.string">Notification First Sent</dt>
+                    <dd *ngIf="(!assertion.notificationSent && assertion.invitationSent) || (assertion.invitationSent && assertion.invitationSent < assertion.notificationSent)" class="col-md-9">
                         {{assertion.invitationSent | date:'medium'}}
+                    </dd>
+                    <dt *ngIf="(!assertion.invitationLastSent && assertion.notificationLastSent) || (assertion.notificationLastSent && assertion.notificationLastSent > assertion.invitationLastSent)" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.notificationLastSent.string">Notification Last Sent</dt>
+                    <dd *ngIf="(!assertion.invitationLastSent && assertion.notificationLastSent) || (assertion.notificationLastSent && assertion.notificationLastSent > assertion.invitationLastSent)" class="col-md-9">
+                        {{assertion.notificationLastSent | date:'medium'}}
+                    </dd>
+                    <dt *ngIf="(!assertion.notificationLastSent && assertion.invitationLastSent) || (assertion.invitationLastSent && assertion.invitationLastSent > assertion.notificationLastSent)" class="col-md-3" jhiTranslate="gatewayApp.assertionServiceAssertion.notificationLastSent.string">Notification Last Sent</dt>
+                    <dd *ngIf="(!assertion.notificationLastSent && assertion.invitationLastSent) || (assertion.invitationLastSent && assertion.invitationLastSent > assertion.notificationLastSent)" class="col-md-9">
+                        {{assertion.invitationLastSent | date:'medium'}}
                     </dd>
                 </dl>
             </div>

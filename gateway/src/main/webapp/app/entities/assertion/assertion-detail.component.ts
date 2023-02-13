@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
 import { IAssertion } from 'app/shared/model/assertion.model';
 import { ORCID_BASE_URL } from 'app/app.constants';
 import { UserService } from 'app/core';
-import { ClipboardModule } from 'ngx-clipboard';
 import { TranslateService } from '@ngx-translate/core';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 
 @Component({
   selector: 'jhi-assertion-detail',
