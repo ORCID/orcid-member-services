@@ -67,7 +67,7 @@ module.exports = (options) => ({
                 SERVER_API_URL: `''`
             }
         }),
-        new CopyWebpackPlugin({patterns:[
+      /*  new CopyWebpackPlugin({patterns:[
             { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
             { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
             { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
@@ -77,8 +77,8 @@ module.exports = (options) => ({
             { from: './src/manifest.webapp', to: 'manifest.webapp' },
             // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
             { from: './src/robots.txt', to: 'robots.txt' }
-        ]}),
-        new MergeJsonWebpackPlugin({
+        ]}),*/
+       /* new MergeJsonWebpackPlugin({
             output: {
                 groupBy: [
                     { pattern: "./src/i18n/en/*.json", fileName: "./i18n/en.json" },
@@ -96,7 +96,7 @@ module.exports = (options) => ({
                     // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
                 ]
             }
-        }),
+        }),*/
         new HtmlWebpackPlugin({
             template: './src/index.html',
             chunks: ['polyfills', 'main', 'global'],

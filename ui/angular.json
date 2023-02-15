@@ -15,7 +15,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:dev-server",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/gateway",
             "index": "src/index.html",
