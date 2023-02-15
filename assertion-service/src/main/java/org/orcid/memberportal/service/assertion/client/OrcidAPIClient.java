@@ -245,12 +245,13 @@ public class OrcidAPIClient {
         setJsonHeaders(httpGet, internalAccessToken);
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-            if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
-                LOG.warn("Received non-200 response trying to find orcid id for email {}", email);
+            if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode() && response.getStatusLine().getStatusCode() != Status.NOT_FOUND.getStatusCode()) {
+                LOG.warn("Received non-200 / non-404 response trying to find orcid id for email {}", email);
                 String responseString = new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
                 LOG.warn("Response received:");
                 LOG.warn(responseString);
-            } else {
+                throw new RuntimeException("Received non-200 / non-404 response trying to find orcid id for email");
+            } else if (response.getStatusLine().getStatusCode() != Status.NOT_FOUND.getStatusCode()) {
                 Map<String, String> responseMap = new ObjectMapper().readValue(response.getEntity().getContent(), new TypeReference<HashMap<String, String>>() {
                 });
                 String orcidId = responseMap.get("orcid");
