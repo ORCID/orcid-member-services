@@ -62,9 +62,21 @@
       },
       "notifications": {
         "title": { "string": "許可通知を送信" },
+        "description": {
+          "string": "ステータスが「保留中」のアフィリエーションアイテムを持つすべての研究者に許可通知が送信されます。"
+        },
+        "languageHeader": {
+          "string": "通知の言語"
+        },
+        "languageDescription": {
+          "string": "どの言語で通知を送信しますか？"
+        },
         "alreadyInProgress": { "string": "ユーザーへの通知送信リクエストを実行中です。後でもう一度お試しください。" },
         "notificationInProgress": {
           "string": "現在、通知処理を開始しています。手続きが完了し次第、メールでお知らせします。"
+        },
+        "sendNotifications": {
+          "string": "通知を送信"
         }
       },
       "addedToOrcid": { "string": "ORCIDに追加されました" },
@@ -100,6 +112,7 @@
       "deletedFromORCID": { "string": "ORCIDから削除されました" },
       "sent": { "string": "送信されました" },
       "adminId": { "string": "管理者ID" },
+      "notificationFirstSent": { "string": "初回通知を送信しました" },
       "notificationLastSent": { "string": "最終送信通知" },
       "email": { "string": "ユーザーのEメール" },
       "orcidId": { "string": "ORCID iD" },

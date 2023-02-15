@@ -62,9 +62,21 @@
       },
       "notifications": {
         "title": { "string": "Odeslat oznámení povolení" },
+        "description": {
+          "string": "Oznámení souhlasu budou zaslána všem vašim výzkumníkům, kteří disponují položkou přidružení se stavem „Čeká na vyřízení“. "
+        },
+        "languageHeader": {
+          "string": "Jazyk oznámení"
+        },
+        "languageDescription": {
+          "string": "V jakém jazyce by měla být oznámení odeslána?"
+        },
         "alreadyInProgress": { "string": "Žádost zasílat oznámení vašim uživatelům už se zpracovává. Zkuste to znovu později" },
         "notificationInProgress": {
           "string": "Proces oznámení byl zahájen. Jakmile bude dokončen, zašleme vám e-mail."
+        },
+        "sendNotifications": {
+          "string": "Odeslat oznámení"
         }
       },
       "addedToOrcid": { "string": "Přidáno do ORCID" },
@@ -100,6 +112,7 @@
       "deletedFromORCID": { "string": "Vymazáno z ORCID" },
       "sent": { "string": "Odesláno" },
       "adminId": { "string": "Identifikace správce" },
+      "notificationFirstSent": { "string": "Oznámení odeslané jako první" },
       "notificationLastSent": { "string": "Oznámení naposledy odesláno" },
       "email": { "string": "E-mail uživatele" },
       "orcidId": { "string": "ORCID iD" },

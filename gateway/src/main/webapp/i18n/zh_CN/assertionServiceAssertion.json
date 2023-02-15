@@ -62,9 +62,21 @@
       },
       "notifications": {
         "title": { "string": "发送权限通知" },
+        "description": {
+          "string": "只要研究员有状态为“待处理”的从属项目，系统就会向他们发送权限通知。"
+        },
+        "languageHeader": {
+          "string": "通知语言"
+        },
+        "languageDescription": {
+          "string": "通知应以哪种语言发送？"
+        },
         "alreadyInProgress": { "string": "向用户发送通知的请求已经在进行中。请稍后再试。" },
         "notificationInProgress": {
           "string": "通知流程已启动。系统将尽快通过电子邮件通知您。"
+        },
+        "sendNotifications": {
+          "string": "发送通知"
         }
       },
       "addedToOrcid": { "string": "已添加至 ORCID" },
@@ -100,6 +112,7 @@
       "deletedFromORCID": { "string": "从 ORCID 中删除" },
       "sent": { "string": "已发送" },
       "adminId": { "string": "Admin ID" },
+      "notificationFirstSent": { "string": "首次发送的通知" },
       "notificationLastSent": { "string": "最后发送的通知" },
       "email": { "string": "用户电子邮件" },
       "orcidId": { "string": "ORCID iD" },
