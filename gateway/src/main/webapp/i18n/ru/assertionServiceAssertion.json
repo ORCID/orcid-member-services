@@ -62,9 +62,21 @@
       },
       "notifications": {
         "title": { "string": "Отправить уведомления о разрешении" },
+        "description": {
+          "string": "Уведомления о разрешении будут отправлены всем вашим научным сотрудникам со статусом аффилиации «Ожидает»."
+        },
+        "languageHeader": {
+          "string": "Язык уведомлений"
+        },
+        "languageDescription": {
+          "string": "На каком языке отправлять уведомления?"
+        },
         "alreadyInProgress": { "string": "Запрос об отправке уведомлений пользователям уже обрабатывается. Повторите попытку позже." },
         "notificationInProgress": {
           "string": "Отправка уведомлений началась. Мы сообщим вам об окончании этого процесса по электронной почте."
+        },
+        "sendNotifications": {
+          "string": "Отправлять уведомления"
         }
       },
       "addedToOrcid": { "string": "Добавлено в ORCID" },
@@ -100,6 +112,7 @@
       "deletedFromORCID": { "string": "Удалено из ORCID" },
       "sent": { "string": "Отправлено" },
       "adminId": { "string": "Идентификатор администратора" },
+      "notificationFirstSent": { "string": "Первое отправленное уведомление" },
       "notificationLastSent": { "string": "Последнее отправленное уведомление" },
       "email": { "string": "Эл. адрес пользователя" },
       "orcidId": { "string": "Идентификатор ORCID" },

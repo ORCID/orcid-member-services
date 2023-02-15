@@ -62,11 +62,23 @@
       },
       "notifications": {
         "title": { "string": "Enviar notificaciones de permiso" },
+        "description": {
+          "string": "Las notificaciones de permisos se enviarán a todos los investigadores que tengan algún elemento de afiliación con el estado 'Pendiente'."
+        },
+        "languageHeader": {
+          "string": "Idioma de la notificación"
+        },
+        "languageDescription": {
+          "string": "¿En qué idioma deberían enviarse las notificaciones?"
+        },
         "alreadyInProgress": {
           "string": "Ya hay una solicitud en progreso para enviar notificaciones a sus usuarios. Vuelva a intentarlo más tarde."
         },
         "notificationInProgress": {
           "string": "Se ha iniciado el proceso de notificación. Le enviaremos un correo electrónico tan pronto como se haya completado."
+        },
+        "sendNotifications": {
+          "string": "Enviar notificaciones"
         }
       },
       "addedToOrcid": { "string": "Añadido a ORCID" },
@@ -102,6 +114,7 @@
       "deletedFromORCID": { "string": "Eliminado de ORCID" },
       "sent": { "string": "Enviado" },
       "adminId": { "string": "Identificación de administrador" },
+      "notificationFirstSent": { "string": "Primer envío de notificación" },
       "notificationLastSent": { "string": "Última notificación enviada" },
       "email": { "string": "Correo del usuario" },
       "orcidId": { "string": "ORCID iD" },

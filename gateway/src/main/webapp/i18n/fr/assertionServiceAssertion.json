@@ -62,11 +62,23 @@
       },
       "notifications": {
         "title": { "string": "Envoyer des notifications d'autorisation" },
+        "description": {
+          "string": "Des notifications d'autorisation seront envoyées à tous vos chercheurs ayant un élément d'affiliation avec comme statut « En attente »."
+        },
+        "languageHeader": {
+          "string": "Langue des notifications"
+        },
+        "languageDescription": {
+          "string": "Dans quelle langue les notifications doivent-elles être envoyées ?"
+        },
         "alreadyInProgress": {
           "string": "Une demande pour envoyer des notifications à vos utilisateurs est déjà en cours. Veuillez réessayer ultérieurement."
         },
         "notificationInProgress": {
           "string": "Le processus de notification a démarré. Nous vous enverrons un e-mail dès que le processus sera terminé."
+        },
+        "sendNotifications": {
+          "string": "Envoyer des notifications"
         }
       },
       "addedToOrcid": { "string": "Ajouté à ORCID" },
@@ -102,6 +114,7 @@
       "deletedFromORCID": { "string": "Supprimé d'ORCID" },
       "sent": { "string": "Envoyé" },
       "adminId": { "string": "Identifiant de l'administrateur" },
+      "notificationFirstSent": { "string": "Première notification envoyée" },
       "notificationLastSent": { "string": "Dernière notification envoyée" },
       "email": { "string": "Adresse e-mail de l'utilisateur" },
       "orcidId": { "string": "Identifiant ORCID" },
