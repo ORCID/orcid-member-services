@@ -506,7 +506,7 @@ class NotificationServiceTest {
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.anyString())).thenReturn("orcid");
         Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
         Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId"))).thenReturn("Member 1");
-        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId"))).thenReturn("en");
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId"))).thenReturn("zh_TW");
         
         notificationService.resendNotifications();
         
@@ -515,6 +515,8 @@ class NotificationServiceTest {
         Mockito.verify(orcidApiClient, Mockito.times(10)).getOrcidIdForEmail(Mockito.anyString());
         Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.times(10)).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
+        Mockito.verify(messageSource, Mockito.times(10)).getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.eq(Locale.TRADITIONAL_CHINESE));
+        Mockito.verify(messageSource, Mockito.times(10)).getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.any(), Mockito.eq(Locale.TRADITIONAL_CHINESE));
     }
     
     @Test
@@ -532,7 +534,7 @@ class NotificationServiceTest {
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.anyString())).thenReturn("orcid");
         Mockito.when(applicationProperies.getResendNotificationDays()).thenReturn(new int[] { 7, 30 });
         Mockito.when(memberService.getMemberName(Mockito.eq("salesforceId"))).thenReturn("Member 1");
-        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId"))).thenReturn("en");
+        Mockito.when(memberService.getMemberDefaultLanguage(Mockito.eq("salesforceId"))).thenReturn("zh_TW");
         
         notificationService.resendNotifications();
         
@@ -541,6 +543,8 @@ class NotificationServiceTest {
         Mockito.verify(orcidApiClient, Mockito.times(10)).getOrcidIdForEmail(Mockito.anyString());
         Mockito.verify(mailService, Mockito.never()).sendInvitationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidApiClient, Mockito.times(10)).postNotification(Mockito.any(NotificationPermission.class), Mockito.anyString());
+        Mockito.verify(messageSource, Mockito.times(10)).getMessage(Mockito.eq("assertion.notifications.introduction"), Mockito.isNull(), Mockito.eq(Locale.TRADITIONAL_CHINESE));
+        Mockito.verify(messageSource, Mockito.times(10)).getMessage(Mockito.eq("assertion.notifications.subject"), Mockito.any(), Mockito.eq(Locale.TRADITIONAL_CHINESE));
     }
     
     @Test
