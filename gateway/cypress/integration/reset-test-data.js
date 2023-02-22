@@ -44,4 +44,14 @@ describe('Add new user', () => {
     })
     cy.programmaticSignout()    
   })
+
+  it('Remove all affiliations from the notifications member', function() {
+    cy.programmaticSignin(data.notificationsMember.users.owner.email, credentials.password);
+    cy.visit('/assertion')
+    cy.get('.btn-group').each($e => {
+      cy.wrap($e).children().last().click()
+      cy.get('#jhi-confirm-delete-assertion').click()
+    })
+    cy.programmaticSignout() 
+  });
 })
