@@ -36,8 +36,8 @@
                         <fa-icon aria-hidden="true" *ngIf="msUser.activated" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
                         <fa-icon aria-hidden="true" *ngIf="!msUser.activated" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
                     </dd>
-                    <dt class="col-md-2" jhiTranslate="gatewayApp.msUserServiceMSUser.isAdmin.string">Admin</dt>
-                    <dd class="col-md-10">
+                    <dt *ngIf="superAdmin" class="col-md-2" jhiTranslate="gatewayApp.msUserServiceMSUser.isAdmin.string">Admin</dt>
+                    <dd *ngIf="superAdmin" class="col-md-10">
                         <span class="sr-only" *ngIf="msUser.isAdmin" jhiTranslate="global.true.string">True</span>
                         <span class="sr-only" *ngIf="!msUser.isAdmin" jhiTranslate="global.false.string">False</span>
                         <fa-icon aria-hidden="true" *ngIf="msUser.isAdmin" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>

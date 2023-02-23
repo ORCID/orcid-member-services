@@ -4,6 +4,7 @@ import { faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { IMSUser } from 'app/shared/model/user.model';
 import { MSUserService } from './user.service';
 import { JhiAlertService } from 'ng-jhipster';
+import { MSMemberService } from '../member';
 
 @Component({
   selector: 'jhi-ms-user-detail',
@@ -14,16 +15,23 @@ export class MSUserDetailComponent implements OnInit {
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
   DEFAULT_ADMIN = 'admin';
+  superAdmin = false;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
     protected msUserService: MSUserService,
-    protected jhiAlertService: JhiAlertService
+    protected jhiAlertService: JhiAlertService,
+    protected memberService: MSMemberService
   ) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ msUser }) => {
       this.msUser = msUser;
+      this.memberService.find(msUser.salesforceId).subscribe(member => {
+        if (member && member.body) {
+          this.superAdmin = member.body.superadminEnabled;
+        }
+      });
     });
   }
 
