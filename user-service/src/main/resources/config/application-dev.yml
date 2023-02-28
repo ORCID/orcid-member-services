@@ -81,6 +81,12 @@ jhipster:
       token-service-id: userservice
       client-id: internal
       client-secret: internal
+    authentication:
+      jwt:
+        # Access Token is valid for 2 hours
+        token-validity-in-seconds: 600
+        # Refresh Token is valid for 2 hours
+        token-validity-in-seconds-for-remember-me: 600
   mail: # specific JHipster mail property, for standard properties see MailProperties
     from: userservice@localhost
     base-url: http://127.0.0.1:8080

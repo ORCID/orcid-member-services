@@ -76,10 +76,10 @@ jhipster:
       client-secret: internal
     authentication:
       jwt:
-        # Access Token is valid for 5 mins
-        token-validity-in-seconds: 300
-        # Refresh Token is valid for 7 days
-        token-validity-in-seconds-for-remember-me: 252000
+        # Access Token is valid for 2 hours
+        token-validity-in-seconds: 7200
+        # Refresh Token is valid for 2 hours
+        token-validity-in-seconds-for-remember-me: 7200
   mail: # specific JHipster mail property, for standard properties see MailProperties
     from: userservice@localhost
     base-url: http://my-server-url-to-change # Modify according to your server's URL
