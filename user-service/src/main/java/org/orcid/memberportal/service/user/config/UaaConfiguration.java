@@ -144,6 +144,8 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
         defaultTokenServices.setTokenStore(tokenStore());
         defaultTokenServices.setSupportRefreshToken(true);
         defaultTokenServices.setTokenEnhancer(jwtAccessTokenConverter());
+        defaultTokenServices.setAccessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds());
+        defaultTokenServices.setRefreshTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe());
         return defaultTokenServices;
     }
 
