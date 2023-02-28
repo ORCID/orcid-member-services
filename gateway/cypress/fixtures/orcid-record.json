@@ -1,6 +1,7 @@
 {
   "id": "0000-0002-4386-4349",
   "email": "qa+cy_mp_test@orcid.org",
+  "nonregisteredEmail": "qa+cy_mp_nonexistent@orcid.org",
   "invalidEmail": "@test@email.com",
   "affiliation": {
     "type": "SERVICE",

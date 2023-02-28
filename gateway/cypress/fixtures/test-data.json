@@ -2,13 +2,19 @@
   "testString": "  !@#$%^&*()-=_  密漏 2022-04-04t16-20-02  ",
   "invalidEmail": "@test@email.com",
   "invalidString": "a",
+  "italianLanguageCode": "7: it",
   "outbox": {
     "email": "info@member-portal.qa.orcid.org",
+    "updateEmail": "update@notify.orcid.org",
     "activationSubject": "ORCID Member Portal activation",
     "resetPasswordSubject": "ORCID Member Portal password reset",
     "ownerUpdateSubject": "ORCID Member Portal organization owner updated",
     "csvUpload": "Your affiliation CSV upload",
-    "csvDownload": "Your affiliations for edit file"
+    "csvDownload": "Your affiliations for edit file",
+    "notificationConfirmation": "ORCID Member Portal Notifications sent",
+    "notificationRegisteredUser": "[ORCID] Cypress Test Record you have new notifications",
+    "notificationNonRegisteredUser": "NOTIFICATIONS TEST would like to add a validated affiliation to your ORCID record",
+    "notificationNonRegisteredUserItalian": "NOTIFICATIONS TEST vorrebbe aggiungere un’affiliazione convalidata al tuo record ORCID"
   },
   "member": {
     "id": "619cc62aa7b11b00085b5bf8",
@@ -55,7 +61,7 @@
     }
   },
   "csvPopulatedMember": {
-    "id": "626ab07a30c49e0008669c9c",
+    "id": "626ab042b3cb1f00087f07c3",
     "clientName": "CYPRESS CSV EDIT TEST",
     "clientId": "APP-3KN4PG7TU5YV8H0J",
     "salesforceId": "CYPRESS CSV EDIT TEST",
@@ -82,6 +88,17 @@
     "assertionEmail3": "22@orcid.org",
     "assertionData1": "Psychology 5",
     "assertionData2": "Psychology 6"
+  },
+  "notificationsMember": {
+    "id": "636986e7b3cb1f00091c3f31",
+    "clientName": "NOTIFICATIONS TEST",
+    "salesforceId": "0012i00000h6xnUAAQ",
+    "users": {
+      "owner": {
+        "id": "63f50e8ba7b11b000885d6e4",
+        "email": "qa+mp_cy_notifications@orcid.org"
+      }
+    }
   },
   "homepageTestMembers": {
     "directMemberEmail": "qa+cy_mp_flyandmighty@orcid.org",

@@ -25,12 +25,12 @@ const clipboardy = require('clipboardy')
 module.exports = (on, config) => {
   on('task', {
     checkInbox: async (args) => { 
-      const { include_body, include_attachments, subject, after, to } = args;
+      const { include_body, include_attachments, subject, after, to, from = data.outbox.email } = args;
       const email = await gmail_tester.check_inbox(
         path.resolve(__dirname, credentialsFileName),
         path.resolve(__dirname, tokenFileName),
         {
-          from: data.outbox.email,
+          from,
           wait_time_sec: 15,
           max_wait_time_sec: 300,
           include_body: true,
