@@ -101,6 +101,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Field("mfa_backup_codes")
     private List<String> mfaBackupCodes;
     
+    @Field("admin")
+    private Boolean admin = false;
+    
     public String getLoginAs() {
         return loginAs;
     }
@@ -278,6 +281,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setMfaBackupCodes(List<String> mfaBackupCodes) {
         this.mfaBackupCodes = mfaBackupCodes;
+    }
+    
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
 
     @Override

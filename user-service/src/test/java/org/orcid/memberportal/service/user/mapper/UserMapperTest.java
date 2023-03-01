@@ -10,7 +10,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.dto.UserDTO;
-import org.orcid.memberportal.service.user.mapper.UserMapper;
 import org.orcid.memberportal.service.user.services.MemberService;
 
 public class UserMapperTest {
@@ -37,6 +36,7 @@ public class UserMapperTest {
         assertThat(user.getMemberName()).isEqualTo("member 1");
         assertThat(user.getImageUrl()).isEqualTo("http://placehold.it/50x50");
         assertThat(user.getLangKey()).isEqualTo("en");
+        assertThat(user.getAdmin()).isTrue();
     }
 
     @Test
@@ -51,6 +51,7 @@ public class UserMapperTest {
         assertThat(user.getLangKey()).isEqualTo("en");
         assertThat(user.getCreatedBy()).isEqualTo("someone");
         assertThat(user.getLastModifiedBy()).isEqualTo("some@email.com");
+        assertThat(user.getIsAdmin()).isFalse();
     }
 
     public UserDTO getUserDTO() {
@@ -65,6 +66,7 @@ public class UserMapperTest {
         userDTO.setLangKey("en");
         userDTO.setCreatedBy("someone");
         userDTO.setLastModifiedBy("hello@orcid.org");
+        userDTO.setIsAdmin(true);
         return userDTO;
     }
 
@@ -81,6 +83,7 @@ public class UserMapperTest {
         user.setCreatedBy("someone");
         user.setLastModifiedBy("some@email.com");
         user.setMemberName("member 2");
+        user.setAdmin(false);
         return user;
     }
 

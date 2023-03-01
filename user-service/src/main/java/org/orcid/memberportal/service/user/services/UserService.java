@@ -209,6 +209,8 @@ public class UserService {
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
+        newUser.setAdmin(userDTO.getIsAdmin());
+        
         newUser.setAuthorities(
                 getAuthoritiesForUser(userDTO.getSalesforceId(), userDTO.getMainContact() != null && userDTO.getMainContact().booleanValue(), userDTO.getIsAdmin()));
         userRepository.save(newUser);
@@ -234,6 +236,7 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(false);
+        user.setAdmin(userDTO.getIsAdmin());
         userRepository.save(user);
 
         mailService.sendActivationEmail(user);
@@ -301,6 +304,8 @@ public class UserService {
         user.setMemberName(memberService.getMemberNameBySalesforce(userDTO.getSalesforceId()));
         user.setLoginAs(userDTO.getLoginAs());
         user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
+        user.setAdmin(userDTO.getIsAdmin());
+        
         user.setAuthorities(
                 getAuthoritiesForUser(userDTO.getSalesforceId(), userDTO.getMainContact() != null && userDTO.getMainContact().booleanValue(), userDTO.getIsAdmin()));
 
