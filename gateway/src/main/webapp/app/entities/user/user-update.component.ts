@@ -97,25 +97,17 @@ export class MSUserUpdateComponent implements OnInit {
       if (this.hasRoleAdmin()) {
         if (selectedOrg) {
           this.showIsAdminCheckbox = selectedOrg.superadminEnabled;
-          this.editForm.patchValue({
-            isAdmin: false
-          });
         } else {
           this.showIsAdminCheckbox = false;
-          this.editForm.patchValue({
-            isAdmin: false
-          });
         }
       } else {
         this.showIsAdminCheckbox = false;
-        this.editForm.patchValue({
-          isAdmin: false
-        });
       }
     });
   }
 
   updateForm(msUser: IMSUser) {
+    console.log('updating form, admin is ' + msUser.isAdmin);
     this.editForm.patchValue({
       id: msUser.id,
       email: msUser.email,

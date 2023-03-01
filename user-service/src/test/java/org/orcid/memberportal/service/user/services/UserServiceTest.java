@@ -200,6 +200,7 @@ class UserServiceTest {
         UserDTO userDTO = getUserDTO();
         userDTO.setId("id");
         userDTO.setMainContact(false);
+        userDTO.setIsAdmin(false);
         userService.updateUser(userDTO);
 
         Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
@@ -211,6 +212,7 @@ class UserServiceTest {
         assertEquals(userDTO.getEmail(), user.getEmail());
         assertTrue(user.getAuthorities().contains(AuthoritiesConstants.USER));
         assertTrue(user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
+        assertFalse(user.getAdmin());
     }
 
     @Test
@@ -236,6 +238,7 @@ class UserServiceTest {
         userDTO.setId("id");
         userDTO.setEmail("email@orcid.org");
         userDTO.setMainContact(false);
+        userDTO.setIsAdmin(true);
         userService.updateUser(userDTO);
 
         Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
@@ -246,6 +249,7 @@ class UserServiceTest {
         assertEquals(userDTO.getLastName(), user.getLastName());
         assertEquals(userDTO.getEmail(), user.getEmail());
         assertTrue(user.getAuthorities().contains(AuthoritiesConstants.USER));
+        assertTrue(user.getAdmin());
         assertFalse(user.getAuthorities().contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED));
     }
 
