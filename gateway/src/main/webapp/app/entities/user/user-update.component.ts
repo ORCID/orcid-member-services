@@ -107,7 +107,6 @@ export class MSUserUpdateComponent implements OnInit {
   }
 
   updateForm(msUser: IMSUser) {
-    console.log('updating form, admin is ' + msUser.isAdmin);
     this.editForm.patchValue({
       id: msUser.id,
       email: msUser.email,
