@@ -52,6 +52,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
   showEditReportPendingMessage: boolean;
   showStatusReportPendingMessage: boolean;
   showLinksReportPendingMessage: boolean;
+  paginationHeaderSubscription: Subscription;
 
   constructor(
     protected assertionService: AssertionService,
@@ -101,12 +102,6 @@ export class AssertionComponent implements OnInit, OnDestroy {
         (res: HttpResponse<IAssertion[]>) => this.paginateAssertions(res.body, res.headers),
         (res: HttpErrorResponse) => this.onError(res.message)
       );
-  }
-
-  generateItemCountString() {
-    const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1;
-    const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems;
-    return this.translate.instant('global.item-count.string', { first, second, total: this.totalItems });
   }
 
   transition() {
@@ -196,7 +191,11 @@ export class AssertionComponent implements OnInit, OnDestroy {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
     this.assertions = data;
-    this.itemCount = this.generateItemCountString();
+    const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1;
+    const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems;
+    this.paginationHeaderSubscription = this.translate
+      .get('global.item-count.string', { first, second, total: this.totalItems })
+      .subscribe(paginationHeader => (this.itemCount = paginationHeader));
   }
 
   protected onError(errorMessage: string) {
@@ -206,5 +205,6 @@ export class AssertionComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.eventManager.destroy(this.eventSubscriber);
     this.routeData.unsubscribe();
+    this.paginationHeaderSubscription.unsubscribe();
   }
 }

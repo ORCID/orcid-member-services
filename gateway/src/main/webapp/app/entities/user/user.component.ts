@@ -34,6 +34,7 @@ export class MSUserComponent implements OnInit, OnDestroy {
   faSearch = faSearch;
   searchTerm: string;
   submittedSearchTerm: string;
+  paginationHeaderSubscription: Subscription;
 
   faTimesCircle = faTimesCircle;
   faCheckCircle = faCheckCircle;
@@ -67,12 +68,6 @@ export class MSUserComponent implements OnInit, OnDestroy {
       this.submittedSearchTerm = '';
       this.loadAll();
     });
-  }
-
-  generateItemCountString() {
-    const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1;
-    const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems;
-    return this.translate.instant('global.item-count.string', { first, second, total: this.totalItems });
   }
 
   loadAll() {
@@ -216,7 +211,11 @@ export class MSUserComponent implements OnInit, OnDestroy {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
     this.msUser = data;
-    this.itemCount = this.generateItemCountString();
+    const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1;
+    const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems;
+    this.paginationHeaderSubscription = this.translate
+      .get('global.item-count.string', { first, second, total: this.totalItems })
+      .subscribe(paginationHeader => (this.itemCount = paginationHeader));
   }
 
   protected onError(errorMessage: string) {
@@ -225,5 +224,6 @@ export class MSUserComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.eventManager.destroy(this.eventSubscriber);
+    this.paginationHeaderSubscription.unsubscribe();
   }
 }
