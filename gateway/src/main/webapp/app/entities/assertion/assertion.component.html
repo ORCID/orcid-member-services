@@ -98,7 +98,7 @@
                         {{assertion.orgName}}: <span *ngIf="assertion.orgCity">{{assertion.orgCity}}</span><span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCountry">, {{assertion.orgCountry}}</span><br>
                         <span *ngIf="assertion.departmentName">{{assertion.departmentName}}</span><span *ngIf="assertion.roleTitle"> ({{assertion.roleTitle}})</span><br>
                         <span *ngIf="assertion.startYear">{{assertion.startYear}}</span><span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startDay">-{{assertion.startDay}}</span>
-                        <span *ngIf="assertion.startYear && assertion.endYear">&nbsp;to&nbsp;</span>
+                        <span *ngIf="assertion.startYear && assertion.endYear" jhiTranslate="gatewayApp.assertionServiceAssertion.dateRange.string">to</span>
                         <span *ngIf="assertion.endYear">{{assertion.endYear}}</span><span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endDay">-{{assertion.endDay}} </span>
                         <br><a jhiTranslate="gatewayApp.assertionServiceAssertion.details.string" [routerLink]="['/assertion', assertion.id, 'view' ]">View details</a>
                     </td>

@@ -129,6 +129,9 @@
       },
       "uploadNote": {
         "string": "Note: Please do not forget to download and send permission links to your researchers once the upload has completed."
+      },
+      "dateRange": {
+        "string": "to"
       }
     },
     "assertion": {
