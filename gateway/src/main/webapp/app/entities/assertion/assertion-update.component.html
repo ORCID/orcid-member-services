@@ -68,7 +68,7 @@
                     <div class="col-md-4 float-left pr-0">
                         <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgCountry.string" for="field_orgCountry">Org Country</label>
                         <select class="form-control" name="orgCountry" id="field_orgCountry" formControlName="orgCountry">
-                               <option *ngFor="let country of COUNTRIES | keyvalue" [ngValue]="country.value" >{{country.key}}</option>
+                               <option *ngFor="let country of COUNTRIES | keyvalue" [ngValue]="country.value" jhiTranslate="{{'country.' + country.value}}" >{{country.key}}</option>
                         </select>
                         <div *ngIf="editForm.get('orgCountry').invalid && (editForm.get('orgCountry').dirty || editForm.get('orgCountry').touched)">
                             <small class="form-text text-danger"
