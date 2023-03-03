@@ -9,7 +9,8 @@ import { NotificationService } from 'app/shared/notification/notification.servic
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { JhiLanguageHelper } from 'app/core/language/language.helper';
 import { AccountService } from 'app/core';
-import { Subscription } from 'rxjs';
+import { MSMemberService } from '../member';
+import { IMSUser } from 'app/shared/model/user.model';
 
 @Component({
   selector: 'send-notifications-import-dialog',
@@ -21,7 +22,7 @@ export class SendNotificationsDialogComponent implements OnInit {
   requestAlreadyInProgress = false;
   languages: string[];
   language: string;
-  memberDataSubscription: Subscription;
+  account: IMSUser;
 
   constructor(
     protected notificationService: NotificationService,
@@ -29,6 +30,7 @@ export class SendNotificationsDialogComponent implements OnInit {
     protected eventManager: JhiEventManager,
     protected jhiAlertService: JhiAlertService,
     private languageHelper: JhiLanguageHelper,
+    private memberService: MSMemberService,
     private accountService: AccountService
   ) {}
 
@@ -36,17 +38,16 @@ export class SendNotificationsDialogComponent implements OnInit {
     this.languageHelper.getAll().then(languages => {
       this.languages = languages;
     });
-    this.memberDataSubscription = this.accountService.memberData.subscribe(data => {
-      if (data) {
-        this.language = data.defaultLanguage || 'en';
-      } else {
-        this.language = 'en';
-      }
+    this.accountService.identity().then(account => {
+      this.memberService.find(account.salesforceId).subscribe(member => {
+        console.log(member);
+        if (member && member.body) {
+          this.language = member.body.defaultLanguage || 'en';
+        } else {
+          this.language = 'en';
+        }
+      });
     });
-  }
-
-  ngOnDestroy() {
-    this.memberDataSubscription.unsubscribe();
   }
 
   clear() {
@@ -60,7 +61,6 @@ export class SendNotificationsDialogComponent implements OnInit {
         this.requestAlreadyInProgress = true;
       } else {
         this.notificationService.updateStatuses(this.language).subscribe(() => {
-          this.accountService.updateDefaultLanguage(this.language);
           this.jhiAlertService.success('gatewayApp.assertionServiceAssertion.notifications.notificationInProgress.string', null, null);
           this.close();
         });

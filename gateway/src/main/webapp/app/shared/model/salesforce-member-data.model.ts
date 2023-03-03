@@ -20,7 +20,6 @@ export interface ISFMemberData {
   consortiumMembers?: ISFConsortiumMemberData[];
   contacts?: SFMemberContact[];
   orgIds?: SFMemberOrgIds;
-  defaultLanguage?: string;
 }
 
 export interface ISFConsortiumMemberData {
@@ -78,8 +77,7 @@ export class SFMemberData implements ISFMemberData {
     public consortiumLeadName?: string,
     public consortiumMembers?: SFConsortiumMemberData[],
     public contacts?: SFMemberContact[],
-    public orgIds?: SFMemberOrgIds,
-    public defaultLanguage?: string
+    public orgIds?: SFMemberOrgIds
   ) {}
 }
 
