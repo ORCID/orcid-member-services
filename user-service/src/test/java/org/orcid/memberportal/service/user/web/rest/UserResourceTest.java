@@ -88,20 +88,6 @@ class UserResourceTest {
     }
     
     @Test
-    void testRefreshAuthorities() {
-        Mockito.when(userService.refreshAuthorities(Mockito.eq("salesforce-id"))).thenReturn(true);
-        ResponseEntity<Void> response = userResource.refreshAuthorities("salesforce-id");
-        assertTrue(response.getStatusCode().is2xxSuccessful());
-    }
-    
-    @Test
-    void testRefreshAuthoritiesWithError() {
-        Mockito.when(userService.refreshAuthorities(Mockito.eq("salesforce-id"))).thenReturn(false);
-        ResponseEntity<Void> response = userResource.refreshAuthorities("salesforce-id");
-        assertTrue(response.getStatusCode().is5xxServerError());
-    }
-
-    @Test
     public void testResendActivation() {
         Mockito.doNothing().when(userService).resendActivationEmail(Mockito.anyString());
         userResource.resendActivation("key");

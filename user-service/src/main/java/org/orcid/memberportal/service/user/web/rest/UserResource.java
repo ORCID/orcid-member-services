@@ -442,26 +442,6 @@ public class UserResource {
             return ResponseEntity.status(500).build();
         }
     }
-    
-    /**
-     * {@code PUT /users/refreshAuthorities/{salesforceId} : Refreshes authorities for users with specified salesforceId
-     *
-     * @param salesforceId
-     *            the salesforceId of the users to update.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
-     */
-    @PutMapping("/users/refreshAuthorities/{salesforceId}")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> refreshAuthorities(@PathVariable String salesforceId) {
-        LOG.debug("REST request to refresh users' authorities for salesforce id {}", salesforceId);
-        boolean success = userService.refreshAuthorities(salesforceId);
-        if (success) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(500).build();
-        }
-    }
 
     /**
      * {@code GET /users/:saleforceId}/owner : get the "login" user.

@@ -136,6 +136,8 @@ public class MemberService {
         existingMember.setParentSalesforceId(member.getParentSalesforceId());
         existingMember.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
         existingMember.setLastModifiedDate(Instant.now());
+        existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
+        existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
         
         // Check if name changed
         if (!existingMember.getClientName().equals(member.getClientName())) {
@@ -145,18 +147,6 @@ public class MemberService {
             }
         }
         
-        boolean authoritiesRefreshRequired = false;
-        
-        if (!existingMember.getAssertionServiceEnabled().equals(member.getAssertionServiceEnabled())) {
-            existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
-            authoritiesRefreshRequired = true;
-        }
-        
-        if (!existingMember.getIsConsortiumLead().equals(member.getIsConsortiumLead())) {
-            existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
-            authoritiesRefreshRequired = true;
-        }
-
         // Check if salesforceId changed
         if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
             Optional<Member> optionalSalesforceId = memberRepository.findBySalesforceId(member.getSalesforceId());
@@ -202,14 +192,7 @@ public class MemberService {
                 throw new RuntimeException(e);
             }
         }
-        Member updated = memberRepository.save(existingMember);
-        
-        // refresh after saving member as user service will ask for up to date member details
-        if (authoritiesRefreshRequired) {
-            userService.refreshUserAuthorities(updated.getSalesforceId());
-        }
-        
-        return updated;
+        return memberRepository.save(existingMember);
     }
 
     public MemberValidation validateMember(Member member) {

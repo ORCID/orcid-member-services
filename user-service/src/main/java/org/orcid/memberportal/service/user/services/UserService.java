@@ -210,9 +210,6 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         newUser.setAdmin(userDTO.getIsAdmin());
-        
-        newUser.setAuthorities(
-                getAuthoritiesForUser(userDTO.getSalesforceId(), userDTO.getMainContact() != null && userDTO.getMainContact().booleanValue(), userDTO.getIsAdmin()));
         userRepository.save(newUser);
         LOG.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -227,16 +224,12 @@ public class UserService {
     }
 
     public User createUser(UserDTO userDTO) {
-        userDTO.setAuthorities(
-                getAuthoritiesForUser(userDTO.getSalesforceId(), userDTO.getMainContact() != null && userDTO.getMainContact().booleanValue(), userDTO.getIsAdmin()));
-
         User user = userMapper.toUser(userDTO);
         user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         user.setPassword("placeholder");
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(false);
-        user.setAdmin(userDTO.getIsAdmin());
         userRepository.save(user);
 
         mailService.sendActivationEmail(user);
@@ -306,8 +299,6 @@ public class UserService {
         user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
         user.setAdmin(userDTO.getIsAdmin());
         
-        user.setAuthorities(
-                getAuthoritiesForUser(userDTO.getSalesforceId(), userDTO.getMainContact() != null && userDTO.getMainContact().booleanValue(), userDTO.getIsAdmin()));
 
         if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
             user.setSalesforceId(userDTO.getSalesforceId());
@@ -564,23 +555,23 @@ public class UserService {
         mailService.sendActivationEmail(user);
     }
 
-    private Set<String> getAuthoritiesForUser(String salesforceId, boolean mainContact, boolean isAdmin) {
+    public Set<String> getAuthoritiesForUser(User user) {
         Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
-        if (!org.apache.commons.lang3.StringUtils.isBlank(salesforceId)) {
-            if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(salesforceId)) {
+        if (!org.apache.commons.lang3.StringUtils.isBlank(user.getSalesforceId())) {
+            if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(user.getSalesforceId())) {
                 authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
             }
 
-            if (memberService.memberIsConsortiumLead(salesforceId)) {
+            if (memberService.memberIsConsortiumLead(user.getSalesforceId())) {
                 authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
             }
         }
 
-        if (mainContact) {
+        if (user.getMainContact() != null && user.getMainContact().booleanValue()) {
             authorities.add(AuthoritiesConstants.ORG_OWNER);
         }
 
-        if (isAdmin) {
+        if (user.getAdmin() != null && user.getAdmin().booleanValue() && memberService.memberIsAdminEnabled(user.getSalesforceId())) {
             authorities.add(AuthoritiesConstants.ADMIN);
         }
         return authorities;
@@ -687,28 +678,6 @@ public class UserService {
         } else {
             Boolean mfaEnabled = user.get().getMfaEnabled();
             return mfaEnabled != null ? mfaEnabled.booleanValue() : false;
-        }
-    }
-
-    public boolean refreshAuthorities(String salesforceId) {
-        LOG.info("Refreshing user authorities for salesforce id {}", salesforceId);
-        try {
-            Pageable pageable = PageRequest.of(0, BATCH_SIZE, new Sort(Direction.ASC, "created"));
-            Page<User> page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId);
-            while (!page.isEmpty()) {
-                page.forEach(u -> {
-                    u.setAuthorities(getAuthoritiesForUser(u.getSalesforceId(), u.getMainContact() != null && u.getMainContact().booleanValue(),
-                            u.getAuthorities().contains(AuthoritiesConstants.ADMIN)));
-                    u.setLastModifiedDate(Instant.now());
-                    userRepository.save(u);
-                });
-
-                page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable.next(), salesforceId);
-            }
-            return true;
-        } catch (Exception e) {
-            LOG.error("Error refreshing user authorities for salesforce id {}", salesforceId, e);
-            return false;
         }
     }
 

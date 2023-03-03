@@ -3,6 +3,7 @@ package org.orcid.memberportal.service.user.mapper;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.dto.UserDTO;
 import org.orcid.memberportal.service.user.services.MemberService;
+import org.orcid.memberportal.service.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,9 @@ public class UserMapper {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private UserService userService;
 
     public User toUser(UserDTO userDTO) {
         User user = new User();
@@ -24,7 +28,6 @@ public class UserMapper {
         user.setMainContact(userDTO.getMainContact());
         user.setLangKey(userDTO.getLangKey());
         user.setActivated(userDTO.isActivated());
-        user.setAuthorities(userDTO.getAuthorities());
         user.setAdmin(userDTO.getIsAdmin());
         user.setMainContact(user.getMainContact());
         user.setId(userDTO.getId());
@@ -44,7 +47,7 @@ public class UserMapper {
         userDTO.setCreatedDate(user.getCreatedDate());
         userDTO.setLastModifiedBy(user.getLastModifiedBy());
         userDTO.setLastModifiedDate(user.getLastModifiedDate());
-        userDTO.setAuthorities(user.getAuthorities());
+        userDTO.setAuthorities(userService.getAuthoritiesForUser(user));
         userDTO.setSalesforceId(user.getSalesforceId());
         userDTO.setMemberName(user.getMemberName());
         userDTO.setMainContact(user.getMainContact());

@@ -1,5 +1,4 @@
 package org.orcid.memberportal.service.user.web.rest;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -12,12 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.Instant;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,7 +22,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.user.UserServiceApp;
 import org.orcid.memberportal.service.user.config.Constants;
-import org.orcid.memberportal.service.user.domain.Authority;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.dto.PasswordChangeDTO;
 import org.orcid.memberportal.service.user.dto.UserDTO;
@@ -35,7 +31,6 @@ import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
 import org.orcid.memberportal.service.user.services.MailService;
 import org.orcid.memberportal.service.user.services.MemberService;
 import org.orcid.memberportal.service.user.services.UserService;
-import org.orcid.memberportal.service.user.web.rest.AccountResource;
 import org.orcid.memberportal.service.user.web.rest.errors.ExceptionTranslator;
 import org.orcid.memberportal.service.user.web.rest.vm.KeyAndPasswordVM;
 import org.orcid.memberportal.service.user.web.rest.vm.KeyVM;
@@ -98,9 +93,12 @@ public class AccountResourceIT {
         doNothing().when(mockMailService).sendActivationEmail(any());
 
         Mockito.when(mockMemberService.memberExistsWithSalesforceId(Mockito.anyString())).thenReturn(Boolean.TRUE);
+        Mockito.when(mockMemberService.memberIsAdminEnabled(Mockito.anyString())).thenReturn(Boolean.TRUE);
         Mockito.when(mockMemberService.getMemberNameBySalesforce(Mockito.anyString())).thenReturn("member");
+        
         ReflectionTestUtils.setField(userMapper, "memberService", mockMemberService);
-
+        ReflectionTestUtils.setField(userService, "memberService", mockMemberService);
+        
         AccountResource accountResource = new AccountResource(userRepository, userService, mockMailService, userMapper);
 
         AccountResource accountUserMockResource = new AccountResource(userRepository, mockUserService, mockMailService, userMapper);
@@ -123,25 +121,21 @@ public class AccountResourceIT {
 
     @Test
     public void testGetExistingAccount() throws Exception {
-        Set<Authority> authorities = new HashSet<>();
-        Authority authority = new Authority();
-        authority.setName(AuthoritiesConstants.ADMIN);
-        authorities.add(authority);
-
         User user = new User();
         user.setFirstName("john");
         user.setLastName("doe");
         user.setEmail("john.doe@jhipster.com");
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
-        user.setAuthorities(authorities.stream().map(a -> a.getName()).collect(Collectors.toSet()));
+        user.setSalesforceId("salesforceId");
+        user.setAdmin(true);
         when(mockUserService.getUserWithAuthorities()).thenReturn(Optional.of(user));
 
         restUserMockMvc.perform(get("/api/account").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$.firstName").value("john"))
                 .andExpect(jsonPath("$.lastName").value("doe")).andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
                 .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50")).andExpect(jsonPath("$.langKey").value("en"))
-                .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
+                .andExpect(jsonPath("$.authorities", Matchers.containsInAnyOrder(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
     }
 
     @Test
