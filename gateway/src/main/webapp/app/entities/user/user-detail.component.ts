@@ -5,6 +5,7 @@ import { IMSUser } from 'app/shared/model/user.model';
 import { MSUserService } from './user.service';
 import { JhiAlertService } from 'ng-jhipster';
 import { MSMemberService } from '../member';
+import { switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-ms-user-detail',
@@ -25,14 +26,19 @@ export class MSUserDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.data.subscribe(({ msUser }) => {
-      this.msUser = msUser;
-      this.memberService.find(msUser.salesforceId).subscribe(member => {
-        if (member && member.body) {
-          this.superAdmin = member.body.superadminEnabled;
-        }
-      });
-    });
+    this.activatedRoute.data
+      .pipe(
+        tap(({ msUser }) => {
+          this.msUser = msUser;
+        }),
+        switchMap(({ msUser }) => this.memberService.find(msUser.salesforceId)),
+        tap(member => {
+          if (member && member.body) {
+            this.superAdmin = member.body.superadminEnabled;
+          }
+        })
+      )
+      .subscribe();
   }
 
   sendActivate() {
