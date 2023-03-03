@@ -254,7 +254,6 @@ class MemberServiceTest {
     @Test
     void testUpdateMemberWithAssertionEnabledUpdate() {
         Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
-        Mockito.doNothing().when(userService).refreshUserAuthorities(Mockito.anyString());
         
         Member existingMember = getMember();
         existingMember.setAssertionServiceEnabled(false);
@@ -275,13 +274,11 @@ class MemberServiceTest {
         memberService.updateMember(member);
         
         Mockito.verify(memberRepository, Mockito.times(1)).save(Mockito.any(Member.class));
-        Mockito.verify(userService).refreshUserAuthorities(Mockito.anyString());
     }
     
     @Test
     void testUpdateMemberWithCLUpdate() {
         Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
-        Mockito.doNothing().when(userService).refreshUserAuthorities(Mockito.anyString());
         
         Member existingMember = getMember();
         existingMember.setAssertionServiceEnabled(false);
@@ -304,7 +301,6 @@ class MemberServiceTest {
         memberService.updateMember(member);
         
         Mockito.verify(memberRepository, Mockito.times(1)).save(Mockito.any(Member.class));
-        Mockito.verify(userService).refreshUserAuthorities(Mockito.anyString());
     }
     
     @Test

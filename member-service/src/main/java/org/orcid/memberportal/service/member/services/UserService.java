@@ -72,14 +72,6 @@ public class UserService {
         }
     }
     
-    public void refreshUserAuthorities(String salesforceId) {
-        ResponseEntity<String> response = userServiceClient.refreshUserAuthorities(salesforceId);
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            LOG.warn("Error refreshing user authorities for salesforce id {}, response code {}", salesforceId, response.getStatusCodeValue());
-            throw new RuntimeException("Failed to refresh user authorities");
-        }
-    }
-
     public String getSalesforceIdForUser(String userId) {
         ResponseEntity<MemberServiceUser> response = userServiceClient.getUser(userId);
         if (response.getStatusCode().is2xxSuccessful()) {
