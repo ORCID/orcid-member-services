@@ -556,11 +556,6 @@ public class UserService {
     }
 
     public Set<String> getAuthoritiesForUser(User user) {
-        LOG.info("Calculating authorities for user {}", user.getEmail());
-        LOG.info("User salesforce id: {}", user.getSalesforceId());
-        LOG.info("Main contact: {}", user.getMainContact() != null && user.getMainContact().booleanValue());
-        LOG.info("Admin: {}", user.getAdmin() != null && user.getAdmin().booleanValue());
-        
         Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
         if (!org.apache.commons.lang3.StringUtils.isBlank(user.getSalesforceId())) {
             if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(user.getSalesforceId())) {
