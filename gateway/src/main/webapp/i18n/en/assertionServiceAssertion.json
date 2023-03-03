@@ -79,6 +79,7 @@
           "string": "Send notifications"
         }
       },
+
       "addedToOrcid": { "string": "Added To ORCID" },
       "updatedInOrcid": { "string": "Updated In ORCID" },
       "affiliationData": { "string": "Affiliation Data" },
@@ -128,6 +129,9 @@
       },
       "uploadNote": {
         "string": "Note: Please do not forget to download and send permission links to your researchers once the upload has completed."
+      },
+      "dateRange": {
+        "string": "to"
       }
     },
     "assertion": {
@@ -139,6 +143,36 @@
       "orgCity": { "string": "organization city" },
       "orgName": { "string": "organization name" },
       "disambiguatedOrgId": { "string": "organization id" }
+    },
+    "assertionStatus": {
+      "userDeniedAccess": { "string": "User denied access" },
+      "pending": { "string": "Pending" },
+      "inOrcid": { "string": "In ORCID" },
+      "userGrantedAccess": { "string": "User granted access" },
+      "UserDeletedFromOrcid": { "string": "User deleted from ORCID" },
+      "userRevokedAccess": { "string": "User revoked access" },
+      "errorAddingToOrcid": { "string": "Error adding to ORCID" },
+      "errorUpdatingInOrcid": { "string": "Error updating in ORCID" },
+      "pendingRetryInOrcid": { "string": "Pending retry in ORCID" },
+      "errorDeletingInOrcid": { "string": "Error deleting in ORCID" },
+      "notificationRequested": { "string": "Notification requested" },
+      "notificationSent": { "string": "Notification sent" },
+      "notificationFailed": { "string": "Notification failed" },
+      "pendingUpdateInOrcid": { "string": "Pending update in ORCID" }
+    },
+    "month": {
+      "january": { "string": "January" },
+      "february": { "string": "February" },
+      "march": { "string": "March" },
+      "april": { "string": "April" },
+      "may": { "string": "May" },
+      "june": { "string": "June" },
+      "july": { "string": "July" },
+      "august": { "string": "August" },
+      "september": { "string": "September" },
+      "october": { "string": "October" },
+      "november": { "string": "November" },
+      "december": { "string": "December" }
     }
   },
   "assertionServiceApp": {

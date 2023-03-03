@@ -90,20 +90,20 @@
                 </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let assertion of assertions ;trackBy: trackId">
-                <td>{{assertion.email}}</td>
-                <td><span *ngIf="assertion.orcidId"><a href="{{orcidBaseUrl}}/{{assertion.orcidId}}" target="_blank">{{orcidBaseUrl}}/{{assertion.orcidId}}</a></span></td>
-                <td>
-                    <span jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.affiliationSection + '.string'}}">{{assertion.affiliationSection}}</span><br>
-                    {{assertion.orgName}}: <span *ngIf="assertion.orgCity">{{assertion.orgCity}}</span><span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCountry">, {{assertion.orgCountry}}</span><br>
-                    <span *ngIf="assertion.departmentName">{{assertion.departmentName}}</span><span *ngIf="assertion.roleTitle"> ({{assertion.roleTitle}})</span><br>
-                    <span *ngIf="assertion.startYear">{{assertion.startYear}}</span><span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startDay">-{{assertion.startDay}}</span>
-                    <span *ngIf="assertion.startYear && assertion.endYear">&nbsp;to&nbsp;</span>
-                    <span *ngIf="assertion.endYear">{{assertion.endYear}}</span><span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endDay">-{{assertion.endDay}} </span>
-                    <br><a jhiTranslate="gatewayApp.assertionServiceAssertion.details.string" [routerLink]="['/assertion', assertion.id, 'view' ]">View details</a>
-                </td>
+                <tr *ngFor="let assertion of assertions ;trackBy: trackId">
+                    <td>{{assertion.email}}</td>
+                    <td><span *ngIf="assertion.orcidId"><a href="{{orcidBaseUrl}}/{{assertion.orcidId}}" target="_blank">{{orcidBaseUrl}}/{{assertion.orcidId}}</a></span></td>
+                    <td>
+                        <span jhiTranslate="{{'gatewayApp.AffiliationSection.' + assertion.affiliationSection + '.string'}}">{{assertion.affiliationSection}}</span><br>
+                        {{assertion.orgName}}: <span *ngIf="assertion.orgCity">{{assertion.orgCity}}</span><span *ngIf="assertion.orgRegion">, {{assertion.orgRegion}}</span><span *ngIf="assertion.orgCountry">, {{assertion.orgCountry}}</span><br>
+                        <span *ngIf="assertion.departmentName">{{assertion.departmentName}}</span><span *ngIf="assertion.roleTitle"> ({{assertion.roleTitle}})</span><br>
+                        <span *ngIf="assertion.startYear">{{assertion.startYear}}</span><span *ngIf="assertion.startMonth">-{{assertion.startMonth}}</span><span *ngIf="assertion.startDay">-{{assertion.startDay}}</span>
+                        <span *ngIf="assertion.startYear && assertion.endYear" jhiTranslate="gatewayApp.assertionServiceAssertion.dateRange.string">to</span>
+                        <span *ngIf="assertion.endYear">{{assertion.endYear}}</span><span *ngIf="assertion.endMonth">-{{assertion.endMonth}}</span><span *ngIf="assertion.endDay">-{{assertion.endDay}} </span>
+                        <br><a jhiTranslate="gatewayApp.assertionServiceAssertion.details.string" [routerLink]="['/assertion', assertion.id, 'view' ]">View details</a>
+                    </td>
                 <td>{{assertion.created | date:'medium'}}</td>
-                <td>{{assertion.prettyStatus}}
+                <td jhiTranslate="{{'gatewayApp.assertionStatus.' + (assertion.prettyStatus | camelcase) + '.string'}}">{{assertion.prettyStatus}}
                     <div *ngIf="assertion.prettyStatus == errorAddingToOrcid || assertion.prettyStatus == errorUpdatingInOrcid || assertion.prettyStatus == errorDeletingInOrcid">
                         <p class="note" jhiTranslate="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string">For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below.</p>
                         <div  class="alert alert-warning">

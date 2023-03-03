@@ -24,7 +24,9 @@
                     <select class="form-control" name="affiliationSection" formControlName="affiliationSection" id="field_affiliationSection">
                         <option *ngFor="let type of AFFILIATION_TYPES" [ngValue]="type" >{{('gatewayApp.AffiliationSection.' + type + '.string') | translate}}</option>
                     </select>
-                    <small class="form-text text-danger" *ngIf="editForm.get('affiliationSection').touched && editForm.get('affiliationSection').errors && editForm.get('affiliationSection').errors.required">This field is required.</small>
+                    <small class="form-text text-danger" 
+                    *ngIf="editForm.get('affiliationSection').touched && editForm.get('affiliationSection').errors && editForm.get('affiliationSection').errors.required" 
+                    jhiTranslate="entity.validation.required.string">This field is required.</small>
                     <div class="alert alert-warning" *ngIf="AFFILIATION_TYPES.length === 0">
                         <span jhiTranslate="gatewayApp.assertionServiceAssertion.home.notFound.string">No affiliations to show</span>
                     </div>
@@ -66,7 +68,7 @@
                     <div class="col-md-4 float-left pr-0">
                         <label class="form-control-label" jhiTranslate="gatewayApp.assertionServiceAssertion.orgCountry.string" for="field_orgCountry">Org Country</label>
                         <select class="form-control" name="orgCountry" id="field_orgCountry" formControlName="orgCountry">
-                               <option *ngFor="let country of COUNTRIES | keyvalue" [ngValue]="country.value" >{{country.key}}</option>
+                               <option *ngFor="let country of COUNTRIES | keyvalue" [ngValue]="country.value" jhiTranslate="{{'country.' + country.value}}" >{{country.key}}</option>
                         </select>
                         <div *ngIf="editForm.get('orgCountry').invalid && (editForm.get('orgCountry').dirty || editForm.get('orgCountry').touched)">
                             <small class="form-text text-danger"
@@ -82,7 +84,9 @@
                         <select class="form-control" name="disambiguationSource" id="field_disambiguationSource" formControlName="disambiguationSource">
                             <option *ngFor="let type of ORG_ID_TYPES" [ngValue]="type" >{{type}}</option>
                         </select>
-                        <small class="form-text text-danger" *ngIf="editForm.get('disambiguationSource').touched && editForm.get('disambiguationSource').errors && editForm.get('disambiguationSource').errors.required">This field is required.</small>
+                        <small class="form-text text-danger" 
+                        *ngIf="editForm.get('disambiguationSource').touched && editForm.get('disambiguationSource').errors && editForm.get('disambiguationSource').errors.required"
+                        jhiTranslate="entity.validation.required.string">This field is required.</small>
                         <div class="alert alert-warning" *ngIf="ORG_ID_TYPES.length === 0">
                             <span jhiTranslate="gatewayApp.assertionServiceAssertion.home.notFound.string">No disambiguation sources to show</span>
                         </div>
@@ -154,7 +158,7 @@
                                 formControlName="startMonth"
                                 (change)='onStartDateSelected(true)'>
                             <option jhiTranslate="gatewayApp.assertionServiceAssertion.month.string" [ngValue]="null">Month</option>
-                            <option *ngFor="let month of monthsList" [ngValue]="month[0]" >{{month[1]}}</option>
+                            <option *ngFor="let month of monthsList" [ngValue]="month[0]" jhiTranslate="{{'gatewayApp.month.' + month[1].toLowerCase() + '.string'}}">{{month[1]}}</option>
                         </select>
                     </div>
                     <div class="col-md-4 float-left pr-0">
