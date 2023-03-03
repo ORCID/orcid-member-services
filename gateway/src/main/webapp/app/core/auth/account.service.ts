@@ -102,7 +102,6 @@ export class AccountService {
         if (account) {
           this.userIdentity = account;
           this.authenticated = true;
-          this.fetchMemberData();
           // After retrieve the account info, the language will be changed to
           // the user's preferred language configured in the account setting
           if (this.userIdentity.langKey) {
@@ -177,10 +176,6 @@ export class AccountService {
     });
   }
 
-  updateDefaultLanguage(defaultLanguage: string) {
-    this.memberData.next({ ...this.memberData.value, defaultLanguage });
-  }
-
   fetchMemberData() {
     if (!this.fetchingMemberDataState.value) {
       if (!this.memberData.value && this.userIdentity) {
@@ -221,8 +216,8 @@ export class AccountService {
                 .toPromise()
                 .then(r => {
                   if (r && r.body) {
-                    const { isConsortiumLead, defaultLanguage } = r.body;
-                    this.memberData.next({ ...this.memberData.value, isConsortiumLead, defaultLanguage });
+                    const { isConsortiumLead } = r.body;
+                    this.memberData.next({ ...this.memberData.value, isConsortiumLead });
                   }
                 });
             }
