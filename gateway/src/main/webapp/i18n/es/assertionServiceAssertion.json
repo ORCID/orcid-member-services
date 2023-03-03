@@ -114,7 +114,7 @@
       "deletedFromORCID": { "string": "Eliminado de ORCID" },
       "sent": { "string": "Enviado" },
       "adminId": { "string": "Identificación de administrador" },
-      "notificationFirstSent": { "string": "Primer envío de notificación" },
+      "notificationFirstSent": { "string": "Primera notificación enviada" },
       "notificationLastSent": { "string": "Última notificación enviada" },
       "email": { "string": "Correo del usuario" },
       "orcidId": { "string": "ORCID iD" },
