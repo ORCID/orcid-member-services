@@ -10,9 +10,11 @@ import { IMSUser } from 'app/shared/model/user.model';
 import { MSMemberService } from 'app/entities/member/member.service';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
+import { takeUntil } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
+  private stopFetchingMemberData = new Subject();
   private userIdentity: any;
   private authenticated = false;
   private authenticationState = new Subject<any>();
@@ -84,6 +86,7 @@ export class AccountService {
 
   identity(force?: boolean): Promise<IMSUser> {
     if (force) {
+      this.stopFetchingMemberData.next();
       this.userIdentity = undefined;
       this.memberData.next(undefined);
     }
@@ -186,16 +189,16 @@ export class AccountService {
             // TODO: change promises to subscriptions or implement forkjoin
             this.memberService
               .getMemberContacts()
-              .toPromise()
-              .then(res => {
+              .pipe(takeUntil(this.stopFetchingMemberData))
+              .subscribe(res => {
                 if (res) {
                   this.memberData.next({ ...this.memberData.value, contacts: res });
                 }
               });
             this.memberService
               .getMemberOrgIds()
-              .toPromise()
-              .then(res => {
+              .pipe(takeUntil(this.stopFetchingMemberData))
+              .subscribe(res => {
                 if (res) {
                   this.memberData.next({ ...this.memberData.value, orgIds: res });
                 }
