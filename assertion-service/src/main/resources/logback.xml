@@ -35,6 +35,7 @@
     <logger name="org.orcid" level="INFO"/>
     <logger name="net.javacrumbs.shedlock" level="INFO"/>
     <logger name="jdk.event.security" level="WARN" />
+    <logger name="feign.template.Template" level="WARN" />
 
     <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
