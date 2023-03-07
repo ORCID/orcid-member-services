@@ -79,6 +79,7 @@
           "string": "发送通知"
         }
       },
+
       "addedToOrcid": { "string": "已添加至 ORCID" },
       "updatedInOrcid": { "string": "已在 ORCID 中更新" },
       "affiliationData": { "string": "机构数据" },
@@ -128,6 +129,9 @@
       },
       "uploadNote": {
         "string": "注意：上传完成后，别忘了下载权限链接并将其发送给研究人员。"
+      },
+      "dateRange": {
+        "string": "至"
       }
     },
     "assertion": {
@@ -139,6 +143,36 @@
       "orgCity": { "string": "组织城市" },
       "orgName": { "string": "组织名称" },
       "disambiguatedOrgId": { "string": "组织 ID" }
+    },
+    "assertionStatus": {
+      "userDeniedAccess": { "string": "用户被拒绝访问" },
+      "pending": { "string": "待处理 " },
+      "inOrcid": { "string": "在 ORCID 中" },
+      "userGrantedAccess": { "string": "用户被授予访问权限" },
+      "UserDeletedFromOrcid": { "string": "从 ORCID 中删除的用户" },
+      "userRevokedAccess": { "string": "用户被撤销访问权限" },
+      "errorAddingToOrcid": { "string": "添加到 ORCID 时出错" },
+      "errorUpdatingInOrcid": { "string": "在 ORCID 中更新时出错" },
+      "pendingRetryInOrcid": { "string": " ORCID 中的待处理重试" },
+      "errorDeletingInOrcid": { "string": "在 ORCID 中删除时出错" },
+      "notificationRequested": { "string": "已要求通知" },
+      "notificationSent": { "string": "通知已发送" },
+      "notificationFailed": { "string": "通知失败" },
+      "pendingUpdateInOrcid": { "string": "在 ORCID 中待处理的更新" }
+    },
+    "month": {
+      "january": { "string": "一月" },
+      "february": { "string": "二月" },
+      "march": { "string": "三月" },
+      "april": { "string": "四月" },
+      "may": { "string": "五月" },
+      "june": { "string": "六月" },
+      "july": { "string": "七月" },
+      "august": { "string": "八月" },
+      "september": { "string": "九月" },
+      "october": { "string": "十月" },
+      "november": { "string": "十一月" },
+      "december": { "string": "十二月" }
     }
   },
   "assertionServiceApp": {
