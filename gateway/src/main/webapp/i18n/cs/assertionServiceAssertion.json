@@ -79,6 +79,7 @@
           "string": "Odeslat oznámení"
         }
       },
+
       "addedToOrcid": { "string": "Přidáno do ORCID" },
       "updatedInOrcid": { "string": "Aktualizováno v ORCID" },
       "affiliationData": { "string": "Data o přidružení" },
@@ -128,6 +129,9 @@
       },
       "uploadNote": {
         "string": "Poznámka: Po dokončení nahrávání si nezapomeňte stáhnout a odeslat odkazy na povolení svým výzkumníkům."
+      },
+      "dateRange": {
+        "string": "do"
       }
     },
     "assertion": {
@@ -139,6 +143,36 @@
       "orgCity": { "string": "město organizace" },
       "orgName": { "string": "název organizace" },
       "disambiguatedOrgId": { "string": "ID organizace" }
+    },
+    "assertionStatus": {
+      "userDeniedAccess": { "string": "Uživatel odepřel přístup" },
+      "pending": { "string": "Čeká na vyřízení" },
+      "inOrcid": { "string": "V ORCID" },
+      "userGrantedAccess": { "string": "Uživatel udělil přístup" },
+      "UserDeletedFromOrcid": { "string": "Uživatelský účet byl odstraněn z ORCID" },
+      "userRevokedAccess": { "string": "Uživatel odvolal přístup" },
+      "errorAddingToOrcid": { "string": "Chyba při přidávání do ORCID" },
+      "errorUpdatingInOrcid": { "string": "Chyba při aktualizaci v ORCID" },
+      "pendingRetryInOrcid": { "string": "Čeká na opakování v ORCID" },
+      "errorDeletingInOrcid": { "string": "Chyba při odstraňování v ORCID" },
+      "notificationRequested": { "string": "Oznámení požadováno" },
+      "notificationSent": { "string": "Oznámení bylo odesláno" },
+      "notificationFailed": { "string": "Odeslání oznámení selhalo" },
+      "pendingUpdateInOrcid": { "string": "Čeká na aktualizaci v ORCID" }
+    },
+    "month": {
+      "january": { "string": "leden" },
+      "february": { "string": "únor" },
+      "march": { "string": "březen" },
+      "april": { "string": "duben" },
+      "may": { "string": "květen" },
+      "june": { "string": "červen" },
+      "july": { "string": "červenec" },
+      "august": { "string": "srpen" },
+      "september": { "string": "září" },
+      "october": { "string": "říjen" },
+      "november": { "string": "listopad" },
+      "december": { "string": "prosinec" }
     }
   },
   "assertionServiceApp": {

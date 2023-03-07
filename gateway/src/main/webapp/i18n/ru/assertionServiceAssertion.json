@@ -79,6 +79,7 @@
           "string": "Отправлять уведомления"
         }
       },
+
       "addedToOrcid": { "string": "Добавлено в ORCID" },
       "updatedInOrcid": { "string": "Обновлено в ORCID" },
       "affiliationData": { "string": "Данные о принадлежности" },
@@ -128,6 +129,9 @@
       },
       "uploadNote": {
         "string": "Примечание: после завершения загрузки не забудьте загрузить и отправить своим исследователям ссылки с разрешениями."
+      },
+      "dateRange": {
+        "string": "по"
       }
     },
     "assertion": {
@@ -139,6 +143,36 @@
       "orgCity": { "string": "город организации" },
       "orgName": { "string": "название организации" },
       "disambiguatedOrgId": { "string": "идентификатор организации" }
+    },
+    "assertionStatus": {
+      "userDeniedAccess": { "string": "Пользователь ограничил доступ" },
+      "pending": { "string": "Ожидает" },
+      "inOrcid": { "string": "В ORCID" },
+      "userGrantedAccess": { "string": "Пользователь предоставил доступ" },
+      "UserDeletedFromOrcid": { "string": "Пользователь удалил аффилиацию из ORCID" },
+      "userRevokedAccess": { "string": "Пользователь отменил доступ" },
+      "errorAddingToOrcid": { "string": "Ошибка при добавлении в ORCID" },
+      "errorUpdatingInOrcid": { "string": "Ошибка при обновлении в ORCID" },
+      "pendingRetryInOrcid": { "string": "Ожидает отправки в ORCID" },
+      "errorDeletingInOrcid": { "string": "Ошибка при удалении из ORCID" },
+      "notificationRequested": { "string": "Уведомление запрошено" },
+      "notificationSent": { "string": "Уведомление отправлено" },
+      "notificationFailed": { "string": "Ошибка при отправке уведомления" },
+      "pendingUpdateInOrcid": { "string": "Ожидает обновления в ORCID" }
+    },
+    "month": {
+      "january": { "string": "Январь" },
+      "february": { "string": "Февраль" },
+      "march": { "string": "Март" },
+      "april": { "string": "Апрель" },
+      "may": { "string": "Май" },
+      "june": { "string": "Июнь" },
+      "july": { "string": "Июль" },
+      "august": { "string": "Август" },
+      "september": { "string": "Сентябрь" },
+      "october": { "string": "Октябрь" },
+      "november": { "string": "Ноябрь" },
+      "december": { "string": "Декабрь" }
     }
   },
   "assertionServiceApp": {

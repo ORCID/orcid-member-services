@@ -79,6 +79,7 @@
           "string": "通知を送信"
         }
       },
+
       "addedToOrcid": { "string": "ORCIDに追加されました" },
       "updatedInOrcid": { "string": "ORCID で更新されました" },
       "affiliationData": { "string": "アフィリエーション データ" },
@@ -128,6 +129,9 @@
       },
       "uploadNote": {
         "string": "ご注意：アップロードが完了したら、許可リンクをダウンロードして研究者に送信することを忘れないでください。"
+      },
+      "dateRange": {
+        "string": ":"
       }
     },
     "assertion": {
@@ -139,6 +143,36 @@
       "orgCity": { "string": "組織の都市" },
       "orgName": { "string": "組織名" },
       "disambiguatedOrgId": { "string": "組織 id" }
+    },
+    "assertionStatus": {
+      "userDeniedAccess": { "string": "ユーザーがアクセスを拒否しました" },
+      "pending": { "string": "保留中" },
+      "inOrcid": { "string": "ORCID内" },
+      "userGrantedAccess": { "string": "ユーザーがアクセスを許可しました" },
+      "UserDeletedFromOrcid": { "string": "ユーザーがORCIDから削除されました" },
+      "userRevokedAccess": { "string": "ユーザーがアクセスを取り消しました" },
+      "errorAddingToOrcid": { "string": "ORCIDへの追加時にエラーが発生しました" },
+      "errorUpdatingInOrcid": { "string": "ORCIDの更新中にエラーが発生しました" },
+      "pendingRetryInOrcid": { "string": "ORCIDでの再試行を待機中です" },
+      "errorDeletingInOrcid": { "string": "ORCIDでの削除時にエラーが発生しました" },
+      "notificationRequested": { "string": "通知をリクエストしました" },
+      "notificationSent": { "string": "通知を送信しました" },
+      "notificationFailed": { "string": "通知の送信に失敗しました" },
+      "pendingUpdateInOrcid": { "string": "ORCIDでの更新を待機中です" }
+    },
+    "month": {
+      "january": { "string": "1月" },
+      "february": { "string": "2月" },
+      "march": { "string": "3月" },
+      "april": { "string": "4月" },
+      "may": { "string": "5月" },
+      "june": { "string": "6月" },
+      "july": { "string": "7月" },
+      "august": { "string": "8月" },
+      "september": { "string": "9月" },
+      "october": { "string": "10月" },
+      "november": { "string": "11月" },
+      "december": { "string": "12月" }
     }
   },
   "assertionServiceApp": {
