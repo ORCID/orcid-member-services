@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, share } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, share, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 import { map } from 'rxjs/operators';
 
@@ -82,9 +82,16 @@ export class MSMemberService {
 
   getMember(): Observable<SFMemberData> {
     return this.http.get<ISFRawMemberData>(`${this.resourceUrl}/member-details`, { observe: 'response' }).pipe(
-      map((res: SalesforceDataResponseType) => this.convertToSalesforceMemberData(res)),
       catchError(err => {
         return of(err);
+      }),
+      map((res: SalesforceDataResponseType) => this.convertToSalesforceMemberData(res)),
+      switchMap(value => {
+        if (value && !value.id) {
+          return of(value);
+        } else {
+          return throwError(value);
+        }
       })
     );
   }

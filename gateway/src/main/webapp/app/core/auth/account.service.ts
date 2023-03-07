@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, Subject } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/user/account.model';
@@ -10,7 +10,7 @@ import { IMSUser } from 'app/shared/model/user.model';
 import { MSMemberService } from 'app/entities/member/member.service';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
-import { takeUntil } from 'rxjs/operators';
+import { catchError, catchError, takeUntil, tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -183,6 +183,20 @@ export class AccountService {
     if (!this.fetchingMemberDataState.value) {
       if (!this.memberData.value && this.userIdentity) {
         this.fetchingMemberDataState.next(true);
+
+        this.memberService
+          .getMember()
+          .pipe(
+            tap(res => {
+              this.memberData.next(res);
+            }),
+            catchError(() => {
+              this.memberData.next(null);
+              return EMPTY;
+            })
+          )
+          .subscribe();
+
         this.memberService.getMember().subscribe((res: ISFMemberData) => {
           if (res && res.id) {
             this.memberData.next(res);
