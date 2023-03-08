@@ -219,6 +219,7 @@ jobs:
             cypress/integration/retention/ui-login.js
             cypress/integration/retention/ui-pagination.js
             cypress/integration/retention/ui-homepage.js
+            cypress/integration/retention/ui-homepage-edit.js
       - uses: actions/upload-artifact@v2
         if: failure()
         with:

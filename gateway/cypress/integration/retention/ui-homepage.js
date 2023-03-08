@@ -41,7 +41,7 @@ describe('Test homepage', () => {
   });
 
   it('Consortium member', function() {
-    cy.programmaticSignin(data.homepageTestMembers.consortiumMemberEmail, credentials.password);
+    cy.programmaticSignin(data.homepageTestMembers.consortiumMember.email, credentials.password);
     cy.visit('/');
     cy.get('app-member-info-landing', {timeout: 20000})
     cy.get('app-generic-landing').should('not.exist')
