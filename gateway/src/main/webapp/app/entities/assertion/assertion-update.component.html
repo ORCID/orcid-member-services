@@ -191,7 +191,7 @@
                                 formControlName="endMonth"
                                 (change)='onEndDateSelected(true)'>
                             <option jhiTranslate="gatewayApp.assertionServiceAssertion.month.string" [ngValue]="null">Month</option>
-                            <option *ngFor="let month of monthsList" [ngValue]="month[0]" >{{month[1]}}</option>
+                            <option *ngFor="let month of monthsList" [ngValue]="month[0]" jhiTranslate="{{'gatewayApp.month.' + month[1].toLowerCase() + '.string'}}">{{month[1]}}</option>
                         </select>
                     </div>
                     <div class="col-md-4 float-left pr-0">
