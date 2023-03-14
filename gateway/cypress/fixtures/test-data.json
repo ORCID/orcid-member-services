@@ -1,6 +1,7 @@
 {
   "testString": "  !@#$%^&*()-=_  密漏 2022-04-04t16-20-02  ",
   "invalidEmail": "@test@email.com",
+  "invalidWebsite": "orcid.org",
   "invalidString": "a",
   "italianLanguageCode": "7: it",
   "outbox": {
@@ -103,7 +104,7 @@
   "homepageTestMembers": {
     "directMemberEmail": "qa+cy_mp_flyandmighty@orcid.org",
     "consortiumLeadEmail": "qa+cy_mp_mambono5@orcid.org",
-    "consortiumMemberEmail": "qa+cy_mp_almondsforest@orcid.org",
+    "consortiumMember": {"email": "qa+cy_mp_almondsforest@orcid.org", "name": "Almonds Forest"},
     "consortiumMemberEmail2": "qa+cy_mp_gratefulfrogs@orcid.org",
     "consortiumLeadAndMemberEmail": "qa+cy_mp_theharvestascendancy@orcid.org",
     "inactiveConsortiumMemberEmail": "qa+cy_mp_considineandsons@orcid.org" 
