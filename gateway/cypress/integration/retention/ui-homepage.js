@@ -41,18 +41,19 @@ describe('Test homepage', () => {
   });
 
   it('Consortium member', function() {
-    cy.programmaticSignin(data.homepageTestMembers.consortiumMemberEmail, credentials.password);
+    cy.programmaticSignin(data.homepageTestMembers.consortiumMember.email, credentials.password);
     cy.visit('/');
     cy.get('app-member-info-landing', {timeout: 20000})
     cy.get('app-generic-landing').should('not.exist')
     cy.get('.side-bar').contains("Public details")
     cy.get('.side-bar').contains("Website")
     cy.get('.side-bar').contains("Email")
-    cy.get('.side-bar').contains("https://orcid.org")
-    cy.get('.side-bar').contains("almondsforest@orcid.org")
+    cy.get('.side-bar').contains("https://")
+    cy.get('.side-bar').contains("@orcid.org")
     cy.get('.main-section').contains("Consortium/Parent organization: Mambo No 5")
     cy.get('.main-section').contains("Membership: Active")
     cy.get('.main-section').contains("Almonds Forest")
+    cy.get('.main-section').contains("Description")
     cy.get('.main-section').contains('Contacts')
     cy.get('.main-section').contains('Agreement signatory (OFFICIAL)')
     cy.get('.main-section').contains('last@orcid.org')

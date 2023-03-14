@@ -79,6 +79,7 @@
           "string": "알림 전송"
         }
       },
+
       "addedToOrcid": { "string": "ORCID에 추가됨" },
       "updatedInOrcid": { "string": "ORCID에서 업데이트됨" },
       "affiliationData": { "string": "제휴 데이터" },
@@ -128,6 +129,9 @@
       },
       "uploadNote": {
         "string": "참고: 업로드가 완료되면 권한 링크를 다운로드하여 연구원에게  보내는 것을 잊지 마세요."
+      },
+      "dateRange": {
+        "string": "~"
       }
     },
     "assertion": {
@@ -139,6 +143,36 @@
       "orgCity": { "string": "조직 도시" },
       "orgName": { "string": "조직 이름" },
       "disambiguatedOrgId": { "string": "조직 ID" }
+    },
+    "assertionStatus": {
+      "userDeniedAccess": { "string": "사용자가 액세스 거부함" },
+      "pending": { "string": "대기 중" },
+      "inOrcid": { "string": "ORCID 내" },
+      "userGrantedAccess": { "string": "사용자가 액세스 부여함" },
+      "UserDeletedFromOrcid": { "string": "사용자가 ORCID에서 삭제함" },
+      "userRevokedAccess": { "string": "사용자가 액세스 철회함" },
+      "errorAddingToOrcid": { "string": "ORCID로 추가 중 오류" },
+      "errorUpdatingInOrcid": { "string": "ORCID에서 업데이트 중 오류" },
+      "pendingRetryInOrcid": { "string": "ORCID에서 재시도 대기 중" },
+      "errorDeletingInOrcid": { "string": "ORCID에서 삭제 중 오류" },
+      "notificationRequested": { "string": "알림 요청됨" },
+      "notificationSent": { "string": "알림 전송됨" },
+      "notificationFailed": { "string": "알림 실패" },
+      "pendingUpdateInOrcid": { "string": "ORCID에서 업데이트 대기 중" }
+    },
+    "month": {
+      "january": { "string": "1월" },
+      "february": { "string": "2월" },
+      "march": { "string": "3월" },
+      "april": { "string": "4월" },
+      "may": { "string": "5월" },
+      "june": { "string": "6월" },
+      "july": { "string": "7월" },
+      "august": { "string": "8월" },
+      "september": { "string": "9월" },
+      "october": { "string": "10월" },
+      "november": { "string": "11월" },
+      "december": { "string": "12월" }
     }
   },
   "assertionServiceApp": {
