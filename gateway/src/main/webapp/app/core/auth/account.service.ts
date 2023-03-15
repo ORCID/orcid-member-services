@@ -10,17 +10,14 @@ import { IMSUser } from 'app/shared/model/user.model';
 import { MSMemberService } from 'app/entities/member/member.service';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
-import { catchError, catchError, takeUntil, tap } from 'rxjs/operators';
+import { catchError, takeUntil, tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private stopFetchingMemberData = new Subject();
   private userIdentity: any;
   private authenticated = false;
   private authenticationState = new Subject<any>();
-  private fetchingMemberDataState = new BehaviorSubject<boolean>(undefined);
   private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
-  memberData: BehaviorSubject<ISFMemberData> = new BehaviorSubject<ISFMemberData>(undefined);
 
   constructor(
     private languageService: JhiLanguageService,
@@ -86,9 +83,9 @@ export class AccountService {
 
   identity(force?: boolean): Promise<IMSUser> {
     if (force) {
-      this.stopFetchingMemberData.next();
+      this.memberService.stopFetchingMemberData.next();
       this.userIdentity = undefined;
-      this.memberData.next(undefined);
+      this.memberService.memberData.next(undefined);
     }
 
     // check and see if we have retrieved the userIdentity data from the server.
@@ -112,7 +109,7 @@ export class AccountService {
             this.languageService.changeLanguage(langKey);
           }
         } else {
-          this.memberData.next(undefined);
+          this.memberService.memberData.next(undefined);
           this.userIdentity = null;
           this.authenticated = false;
         }
@@ -121,7 +118,7 @@ export class AccountService {
       })
       .catch(err => {
         this.userIdentity = null;
-        this.memberData.next(undefined);
+        this.memberService.memberData.next(undefined);
         this.authenticated = false;
         this.authenticationState.next(this.userIdentity);
         return null;
@@ -167,84 +164,6 @@ export class AccountService {
 
   getSalesforceId(): string {
     return this.isAuthenticated() && this.userIdentity ? this.userIdentity.salesforceId : null;
-  }
-
-  updatePublicDetails(data: SFPublicDetails) {
-    this.memberData.next({
-      ...this.memberData.value,
-      publicDisplayDescriptionHtml: data.description,
-      publicDisplayName: data.name,
-      publicDisplayEmail: data.email,
-      website: data.website
-    });
-  }
-
-  fetchMemberData() {
-    if (!this.fetchingMemberDataState.value) {
-      if (!this.memberData.value && this.userIdentity) {
-        this.fetchingMemberDataState.next(true);
-
-        this.memberService
-          .getMember()
-          .pipe(
-            tap(res => {
-              this.memberData.next(res);
-            }),
-            catchError(() => {
-              this.memberData.next(null);
-              return EMPTY;
-            })
-          )
-          .subscribe();
-
-        this.memberService.getMember().subscribe((res: ISFMemberData) => {
-          if (res && res.id) {
-            this.memberData.next(res);
-            // TODO: change promises to subscriptions or implement forkjoin
-            this.memberService
-              .getMemberContacts()
-              .pipe(takeUntil(this.stopFetchingMemberData))
-              .subscribe(res => {
-                if (res) {
-                  this.memberData.next({ ...this.memberData.value, contacts: res });
-                }
-              });
-            this.memberService
-              .getMemberOrgIds()
-              .pipe(takeUntil(this.stopFetchingMemberData))
-              .subscribe(res => {
-                if (res) {
-                  this.memberData.next({ ...this.memberData.value, orgIds: res });
-                }
-              });
-            if (res && res.consortiaLeadId) {
-              this.memberService
-                .find(res.consortiaLeadId)
-                .toPromise()
-                .then(r => {
-                  if (r && r.body) {
-                    this.memberData.next({ ...this.memberData.value, consortiumLeadName: r.body.clientName });
-                  }
-                });
-            }
-            if (this.userIdentity.salesforceId) {
-              this.memberService
-                .find(this.userIdentity.salesforceId)
-                .toPromise()
-                .then(r => {
-                  if (r && r.body) {
-                    const { isConsortiumLead } = r.body;
-                    this.memberData.next({ ...this.memberData.value, isConsortiumLead });
-                  }
-                });
-            }
-          } else {
-            this.memberData.next(null);
-          }
-        });
-        this.fetchingMemberDataState.next(false);
-      }
-    }
   }
 
   isOrganizationOwner(): string {
