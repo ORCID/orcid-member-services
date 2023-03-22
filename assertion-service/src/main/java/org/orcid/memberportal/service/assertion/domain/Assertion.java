@@ -91,6 +91,7 @@ public class Assertion implements Serializable {
     @Field("put_code")
     private String putCode;
 
+    @Indexed
     @Field("created")
     private Instant created;
 
@@ -110,6 +111,7 @@ public class Assertion implements Serializable {
     @Field("salesforce_id")
     private String salesforceId;
 
+    @Indexed
     @Field("added_to_orcid")
     private Instant addedToORCID;
 
