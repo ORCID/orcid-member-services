@@ -93,7 +93,7 @@ public class SalesforceClient {
     private Boolean updateSFPublicMemberDetails(PublicMemberDetails publicMemberDetails) {
         LOG.info("Updating public details for salesforce id {}", publicMemberDetails.getSalesforceId());
         try (CloseableHttpClient httpClient = getHttpClient()) {
-            HttpPut httpPut = getPutRequest("member/" + publicMemberDetails.getSalesforceId() + "/public-details", publicMemberDetails);
+            HttpPut httpPut = getPutRequest("member/" + publicMemberDetails.getSalesforceId() + "/member-data", publicMemberDetails);
             try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
                 if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                     logError(publicMemberDetails.getSalesforceId(), response);
