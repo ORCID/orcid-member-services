@@ -16,33 +16,37 @@ public class ApplicationProperties {
     private String orcidOrgClientId;
 
     private String orcidOrgSalesForceId;
-    
+
     private String holisticsMemberDashboardUrl;
-    
+
     private String holisticsMemberDashboardSecret;
-    
+
     private String holisticsIntegrationDashboardUrl;
-    
+
     private String holisticsIntegrationDashboardSecret;
-    
+
     private String holisticsConsortiaDashboardUrl;
-    
+
     private String holisticsConsortiaDashboardSecret;
-    
+
     private String holisticsAffiliationDashboardUrl;
-    
+
     private String holisticsAffiliationDashboardSecret;
-    
+
+    private String holisticsConsortiaMemberAffiliationsDashboardUrl;
+
+    private String holisticsConsortiaMemberAffiliationsDashboardSecret;
+
     private String salesforceClientEndpoint;
-    
+
     private String orcidApiClientId;
-    
+
     private String orcidApiClientSecret;
-    
+
     private String orcidApiTokenEndpoint;
 
     private String salesforceRequestTimeout;
-    
+
     public String getOrcidOrgClientId() {
         return orcidOrgClientId;
     }
@@ -131,29 +135,29 @@ public class ApplicationProperties {
         this.salesforceClientEndpoint = salesforceClientEndpoint;
     }
 
-	public String getOrcidApiClientId() {
-		return orcidApiClientId;
-	}
+    public String getOrcidApiClientId() {
+        return orcidApiClientId;
+    }
 
-	public void setOrcidApiClientId(String orcidApiClientId) {
-		this.orcidApiClientId = orcidApiClientId;
-	}
+    public void setOrcidApiClientId(String orcidApiClientId) {
+        this.orcidApiClientId = orcidApiClientId;
+    }
 
-	public String getOrcidApiClientSecret() {
-		return orcidApiClientSecret;
-	}
+    public String getOrcidApiClientSecret() {
+        return orcidApiClientSecret;
+    }
 
-	public void setOrcidApiClientSecret(String orcidApiClientSecret) {
-		this.orcidApiClientSecret = orcidApiClientSecret;
-	}
+    public void setOrcidApiClientSecret(String orcidApiClientSecret) {
+        this.orcidApiClientSecret = orcidApiClientSecret;
+    }
 
-	public String getOrcidApiTokenEndpoint() {
-		return orcidApiTokenEndpoint;
-	}
+    public String getOrcidApiTokenEndpoint() {
+        return orcidApiTokenEndpoint;
+    }
 
-	public void setOrcidApiTokenEndpoint(String orcidApiTokenEndpoint) {
-		this.orcidApiTokenEndpoint = orcidApiTokenEndpoint;
-	}
+    public void setOrcidApiTokenEndpoint(String orcidApiTokenEndpoint) {
+        this.orcidApiTokenEndpoint = orcidApiTokenEndpoint;
+    }
 
     public String getSalesforceRequestTimeout() {
         return salesforceRequestTimeout;
@@ -162,4 +166,21 @@ public class ApplicationProperties {
     public void setSalesforceRequestTimeout(String salesforceRequestTimeout) {
         this.salesforceRequestTimeout = salesforceRequestTimeout;
     }
+
+    public String getHolisticsConsortiaMemberAffiliationsDashboardUrl() {
+        return holisticsConsortiaMemberAffiliationsDashboardUrl;
+    }
+
+    public void setHolisticsConsortiaMemberAffiliationsDashboardUrl(String holisticsConsortiaMemberAffiliationsDashboardUrl) {
+        this.holisticsConsortiaMemberAffiliationsDashboardUrl = holisticsConsortiaMemberAffiliationsDashboardUrl;
+    }
+
+    public String getHolisticsConsortiaMemberAffiliationsDashboardSecret() {
+        return holisticsConsortiaMemberAffiliationsDashboardSecret;
+    }
+
+    public void setHolisticsConsortiaMemberAffiliationsDashboardSecret(String holisticsConsortiaMemberAffiliationsDashboardSecret) {
+        this.holisticsConsortiaMemberAffiliationsDashboardSecret = holisticsConsortiaMemberAffiliationsDashboardSecret;
+    }
+    
 }

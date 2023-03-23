@@ -62,6 +62,15 @@ public class ReportResourceTest {
     }
     
     @Test
+    public void testGetConsortiaMemberAffiliationsReport() {
+        Mockito.when(mockReportService.getConsortiaMemberAffiliationsReportInfo()).thenReturn(getReportInfo());
+        ResponseEntity<ReportInfo> response = reportResource.getConsortiaMemberAffiliationsReport();
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
+        assertThat(response.getBody()).isNotNull();
+    }
+    
+    @Test
     public void testGetAffiliationReport() {
         Mockito.when(mockReportService.getAffiliationReportInfo()).thenReturn(getReportInfo());
         ResponseEntity<ReportInfo> response = reportResource.getAffiliationReport();
