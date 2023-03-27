@@ -50,16 +50,13 @@ h6 {
 }
 
 .contact {
-  div,
+  > div,
   h6 {
     width: 10%;
     text-align: left;
     flex-grow: 1;
+    max-width: 200px;
     font-size: 14px;
-  }
-  .voting-contact {
-    text-align: center;
-    flex-grow: 0;
   }
   word-wrap: break-word;
 }

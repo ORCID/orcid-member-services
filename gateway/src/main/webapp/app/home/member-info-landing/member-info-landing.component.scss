@@ -19,9 +19,6 @@
   a {
     font-weight: normal;
   }
-  .empty {
-    color: global.$black-transparent;
-  }
   word-wrap: break-word;
 }
 .main-contacts {
@@ -52,7 +49,7 @@ h5 {
 }
 
 .contact {
-  div,
+  > div,
   h6 {
     width: 10%;
     text-align: left;
@@ -60,10 +57,7 @@ h5 {
     max-width: 200px;
     font-size: 14px;
   }
-  .voting-contact {
-    text-align: center;
-    flex-grow: 0;
-  }
+  word-wrap: break-word;
 }
 
 .edit-button {

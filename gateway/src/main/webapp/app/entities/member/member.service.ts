@@ -173,7 +173,10 @@ export class MSMemberService {
         if (!contacts[contact.Contact_Curr_Email__c]) {
           contacts[contact.Contact_Curr_Email__c] = this.convertToSalesforceMemberContact(contact);
         }
-        contacts[contact.Contact_Curr_Email__c].memberOrgRole.push(contact.Member_Org_Role__c);
+        if (contact.Voting_Contact__c) {
+          contacts[contact.Contact_Curr_Email__c].memberOrgRole.push('Voting contact');
+        }
+        contacts[contact.Contact_Curr_Email__c].memberOrgRole.unshift(contact.Member_Org_Role__c);
       }
       return Object.values(contacts);
     } else {
@@ -187,7 +190,9 @@ export class MSMemberService {
       memberId: res.Organization__c,
       votingContact: res.Voting_Contact__c,
       name: res.Name,
-      contactEmail: res.Contact_Curr_Email__c
+      contactEmail: res.Contact_Curr_Email__c,
+      phone: res.Phone,
+      title: res.Title
     };
   }
 
