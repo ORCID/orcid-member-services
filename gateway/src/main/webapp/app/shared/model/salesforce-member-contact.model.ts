@@ -4,6 +4,8 @@ export interface ISFMemberContact {
   memberOrgRole?: string[];
   name?: string;
   contactEmail?: string;
+  title?: string;
+  phone?: string;
 }
 
 export interface ISFRawMemberContact {
@@ -12,6 +14,8 @@ export interface ISFRawMemberContact {
   Contact_Curr_Email__c?: string;
   Member_Org_Role__c?: string;
   Name?: string;
+  Title?: string;
+  Phone?: string;
 }
 
 export interface ISFRawMemberContacts {
@@ -25,7 +29,9 @@ export class SFMemberContact implements ISFMemberContact {
     public votingContact?: boolean,
     public memberOrgRole?: string[],
     public name?: string,
-    public contactEmail?: string
+    public contactEmail?: string,
+    public title?: string,
+    public phone?: string
   ) {
     this.memberOrgRole = [];
   }
