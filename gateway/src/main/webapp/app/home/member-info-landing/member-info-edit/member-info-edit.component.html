@@ -82,7 +82,7 @@
               [ngClass]="{ 'text-danger': editForm.get('website').invalid }"
             />
             <ng-template #validWebsite>
-              <small class="wide-text small-text gray">Links should be in the full URL format e.g. http://www.website.com</small>
+              <small class="wide-text small-text color-gray">Links should be in the full URL format e.g. http://www.website.com</small>
             </ng-template>
             <div *ngIf="editForm.get('website').invalid; else validWebsite">
               <small class="wide-text small-text text-danger" *ngIf="editForm.get('website').errors.pattern">
@@ -105,7 +105,7 @@
               [ngClass]="{ 'text-danger': editForm.get('email').invalid }"
             />
             <ng-template #validEmail>
-              <small class="wide-text small-text gray">Emails should be in the standard format e.g. contactus@website.com</small>
+              <small class="wide-text small-text color-gray">Emails should be in the standard format e.g. contactus@website.com</small>
             </ng-template>
             <div *ngIf="editForm.get('email').invalid; else validEmail">
               <small class="wide-text small-text text-danger" *ngIf="editForm.get('email').errors.pattern">
@@ -163,7 +163,7 @@
           <li class="row ml-0 d-flex justify-content-between contact">
             <div>
               <div>{{ contact.name }}</div>
-              <div class="gray small-text">{{ contact.title }}</div>
+              <div class="color-gray small-text">{{ contact.title }}</div>
             </div>
             <div>{{ contact.memberOrgRole.join(', ') }}</div>
             <div>
