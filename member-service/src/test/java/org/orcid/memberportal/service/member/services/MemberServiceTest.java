@@ -446,11 +446,15 @@ class MemberServiceTest {
         assertThat(memberContacts.getRecords()).isNotNull();
         assertThat(memberContacts.getRecords().size()).isEqualTo(2);
         assertThat(memberContacts.getRecords().get(0).getName()).isEqualTo("contact 1");
+        assertThat(memberContacts.getRecords().get(0).getTitle()).isEqualTo("Dr");
+        assertThat(memberContacts.getRecords().get(0).getPhone()).isEqualTo("123456789");
         assertThat(memberContacts.getRecords().get(0).getEmail()).isEqualTo("contact1@orcid.org");
         assertThat(memberContacts.getRecords().get(0).getRole()).isEqualTo("contact one role");
         assertThat(memberContacts.getRecords().get(0).getSalesforceId()).isEqualTo("salesforce-id");
         assertThat(memberContacts.getRecords().get(0).isVotingContact()).isEqualTo(false);
         assertThat(memberContacts.getRecords().get(1).getName()).isEqualTo("contact 2");
+        assertThat(memberContacts.getRecords().get(1).getTitle()).isNull();
+        assertThat(memberContacts.getRecords().get(1).getPhone()).isNull();
         assertThat(memberContacts.getRecords().get(1).getEmail()).isEqualTo("contact2@orcid.org");
         assertThat(memberContacts.getRecords().get(1).getRole()).isEqualTo("contact two role");
         assertThat(memberContacts.getRecords().get(1).getSalesforceId()).isEqualTo("salesforce-id");
@@ -574,6 +578,8 @@ class MemberServiceTest {
 
         MemberContact contact1 = new MemberContact();
         contact1.setName("contact 1");
+        contact1.setTitle("Dr");
+        contact1.setPhone("123456789");
         contact1.setEmail("contact1@orcid.org");
         contact1.setRole("contact one role");
         contact1.setSalesforceId("salesforce-id");
