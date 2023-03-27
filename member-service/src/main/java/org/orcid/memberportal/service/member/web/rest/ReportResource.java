@@ -59,4 +59,13 @@ public class ReportResource {
         return ResponseEntity.ok(affiliationReportInfo);
     }
 
+    @GetMapping("/reports/consortia-member-affiliations")
+    public ResponseEntity<ReportInfo> getConsortiaMemberAffiliationsReport() {
+        MemberServiceUser user = userService.getLoggedInUser();
+        LOG.info("Generating consortia member affiliations report for user {} of {}", user.getEmail(), user.getMemberName());
+        ReportInfo reportInfo = reportService.getConsortiaMemberAffiliationsReportInfo();
+        return ResponseEntity.ok(reportInfo);
+    }
+
+    
 }

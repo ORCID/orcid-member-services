@@ -56,6 +56,14 @@
                             <span jhiTranslate="global.menu.report.affiliation.string">Affiliation report</span>
                         </a>
                     </li>
+                    <li *ngIf="consortiumLead"><a class="dropdown-item"
+						routerLink="report/consortia-member-affiliations" routerLinkActive="active"
+						[routerLinkActiveOptions]="{ exact: true }"
+						(click)="collapseNavbar()"> <fa-icon [icon]="faChartPie"
+								fixedWidth="true"></fa-icon> <span
+							jhiTranslate="global.menu.report.consortiumMemberAffiliations.string">Consortium
+								report</span>
+					</a></li>
                 </ul>
             </li>
             <li *jhiHasAnyAuthority="'ROLE_USER'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">

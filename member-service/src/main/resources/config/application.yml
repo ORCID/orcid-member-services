@@ -185,6 +185,8 @@ application:
     holisticsIntegrationDashboardSecret: ${holistics.integration.secret}
     holisticsConsortiaDashboardUrl: ${holistics.consortia.url}
     holisticsConsortiaDashboardSecret: ${holistics.consortia.secret}
+    holisticsConsortiaMemberAffiliationsDashboardUrl: ${holistics.memberaffiliations.url}
+    holisticsConsortiaMemberAffiliationsDashboardSecret: ${holistics.memberaffiliations.secret}
     salesforceClientEndpoint: ${salesforce.client.endpoint}
     orcidApiClientId: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_ID} 
     orcidApiClientSecret: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET}
