@@ -11,8 +11,13 @@ import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.service.reports.ReportInfo;
 import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,6 +25,8 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class ReportService {
+    
+    private final Logger LOG = LoggerFactory.getLogger(ReportService.class);
 
     static final String FILTERS_PARAM = "filters";
     
@@ -119,7 +126,15 @@ public class ReportService {
         checkConsortiaLeadAccess();
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsConsortiaMemberAffiliationsDashboardUrl());
-        info.setJwt(getJwt(getClaimsWithDrillthrough(getConsortiaMemberAffiliationsReportPermissions(), CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY, new HashMap<>()), applicationProperties.getHolisticsConsortiaMemberAffiliationsDashboardSecret()));
+        
+        Map<String, Object> claims = getClaimsWithDrillthrough(getConsortiaMemberAffiliationsReportPermissions(), CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY, new HashMap<>());
+        try {
+            LOG.info("report claims are {}", new ObjectMapper().writeValueAsString(claims));
+        } catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        info.setJwt(getJwt(claims, applicationProperties.getHolisticsConsortiaMemberAffiliationsDashboardSecret()));
         return info;
     }
 
