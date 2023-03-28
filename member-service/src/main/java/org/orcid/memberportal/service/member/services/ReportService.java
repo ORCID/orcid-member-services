@@ -25,11 +25,13 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class ReportService {
-    
+
     private final Logger LOG = LoggerFactory.getLogger(ReportService.class);
 
     static final String FILTERS_PARAM = "filters";
-    
+
+    static final String FILTER_PARAM = "filter";
+
     static final String DRILLTHROUGHS_PARAM = "drillthroughs";
 
     static final String SETTINGS_PARAM = "settings";
@@ -59,27 +61,27 @@ public class ReportService {
     static final String CONSORTIA_REPORT_PATH = "client_model.public_sf_consortia.account_id";
 
     static final String CONSORTIA_FILTER_PATH = "consortia_country_code_model.public_sf_consortia.account_id";
-    
+
     static final String CONSORTIA_DRILLTHROUGH_KEY = "34687";
-    
+
     static final String MEMBER_NAME_FILTER = "member_name";
-    
+
     static final String HIDDEN_PARAM = "hidden";
-    
+
     static final String DATASET_PARAM = "dataset";
-    
+
     static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_DATASET = "org_id_centric";
-    
+
     static final String MODEL_PARAM = "dataset";
-    
+
     static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_MODEL = "public_sf_consortia";
-    
+
     static final String FIELD_PARAM = "field";
-    
+
     static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_FIELD = "account_id";
-    
+
     static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY = "38081";
-    
+
     static final String OPERATOR = "is";
 
     @Autowired
@@ -109,7 +111,7 @@ public class ReportService {
         checkConsortiaLeadAccess();
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsConsortiaDashboardUrl());
-        Map<String, Object> claims = getClaimsWithDrillthrough(getConsortiaReportPermissions(), CONSORTIA_DRILLTHROUGH_KEY, getMemberNameFilter());
+        Map<String, Object> claims = getClaimsWithDrillthrough(getConsortiaReportPermissions(), CONSORTIA_DRILLTHROUGH_KEY, FILTERS_PARAM, getMemberNameFilter());
         info.setJwt(getJwt(claims, applicationProperties.getHolisticsConsortiaDashboardSecret()));
         return info;
     }
@@ -121,13 +123,14 @@ public class ReportService {
         info.setJwt(getJwt(getClaims(getAffiliationReportPermissions()), applicationProperties.getHolisticsAffiliationDashboardSecret()));
         return info;
     }
-    
+
     public ReportInfo getConsortiaMemberAffiliationsReportInfo() {
         checkConsortiaLeadAccess();
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsConsortiaMemberAffiliationsDashboardUrl());
-        
-        Map<String, Object> claims = getClaimsWithDrillthrough(getConsortiaMemberAffiliationsReportPermissions(), CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY, new HashMap<>());
+
+        Map<String, Object> claims = getClaimsWithDrillthrough(getConsortiaMemberAffiliationsReportPermissions(), CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY,
+                FILTER_PARAM, new HashMap<>());
         try {
             LOG.info("report claims are {}", new ObjectMapper().writeValueAsString(claims));
         } catch (JsonProcessingException e) {
@@ -171,17 +174,17 @@ public class ReportService {
 
         return claims;
     }
-    
+
     private Map<String, Object> getClaimsWithFilters(Map<String, Object> permissions, Map<String, Object> filters) {
         Map<String, Object> claims = getClaims(permissions);
         claims.put(FILTERS_PARAM, filters);
         return claims;
     }
 
-    private Map<String, Object> getClaimsWithDrillthrough(Map<String, Object> permissions, String drillthroughKey, Map<String, Object> filter) {
+    private Map<String, Object> getClaimsWithDrillthrough(Map<String, Object> permissions, String drillthroughKey, String filterParam, Map<String, Object> filter) {
         Map<String, Object> claims = getClaims(permissions);
         Map<String, Object> drillthroughFilter = new HashMap<>();
-        drillthroughFilter.put(FILTERS_PARAM, filter);
+        drillthroughFilter.put(filterParam, filter);
         Map<String, Object> drillthroughs = new HashMap<>();
         drillthroughs.put(drillthroughKey, drillthroughFilter);
         claims.put(DRILLTHROUGHS_PARAM, drillthroughs);
@@ -234,16 +237,16 @@ public class ReportService {
         wrapper.put(ROW_BASED_PARAM, new Object[] { config });
         return wrapper;
     }
-    
+
     private Map<String, Object> getConsortiaMemberAffiliationsReportPermissions() {
         Map<String, Object> config = getRowBasedConfigBase();
         config.put(PATH_PARAM, getConsortiaMemberAffiliationsReportPathObject());
-        
+
         Map<String, Object> wrapper = new HashMap<>();
         wrapper.put(ROW_BASED_PARAM, new Object[] { config });
         return wrapper;
     }
-    
+
     private Map<String, String> getConsortiaMemberAffiliationsReportPathObject() {
         Map<String, String> path = new HashMap<>();
         path.put(DATASET_PARAM, CONSORTIUM_MEMBER_AFFILIATION_REPORT_DATASET);
@@ -255,7 +258,7 @@ public class ReportService {
     private Map<String, Object> getMemberNameFilter() {
         Map<String, Object> hiddenConfig = new HashMap<>();
         hiddenConfig.put(HIDDEN_PARAM, true);
-        
+
         Map<String, Object> filters = new HashMap<>();
         filters.put(MEMBER_NAME_FILTER, hiddenConfig);
         return filters;
