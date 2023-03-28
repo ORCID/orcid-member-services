@@ -222,7 +222,7 @@ public class ReportServiceTest {
         assertThat(drillthroughs.get(ReportService.CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY)).isNotNull();
         
         Map<String, Object> drillthrough = (Map<String, Object>) drillthroughs.get(ReportService.CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY);
-        assertThat(drillthrough.get(ReportService.FILTERS_PARAM)).isNotNull();
+        assertThat(drillthrough.get(ReportService.FILTER_PARAM)).isNotNull();
 
         Mockito.verify(mockApplicationProperties).getHolisticsConsortiaMemberAffiliationsDashboardUrl();
         Mockito.verify(mockApplicationProperties).getHolisticsConsortiaMemberAffiliationsDashboardSecret();
