@@ -25,7 +25,8 @@
         "member": { "string": "Member report" },
         "integration": { "string": "Integration report" },
         "consortium": { "string": "Consortium report" },
-        "affiliation": { "string": "Affiliation report" }
+        "affiliation": { "string": "Affiliation report" },
+        "consortiumMemberAffiliations": { "string": "Consortia Member Affiliations" }
       },
       "account": {
         "main": { "string": "Account" },

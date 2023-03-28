@@ -11,14 +11,14 @@
         <div *ngIf="memberData.website">
           <a href="{{ memberData.website }}">{{ memberData.website }}</a>
         </div>
-        <div *ngIf="!memberData.website" class="empty">No website added</div>
+        <div *ngIf="!memberData.website" class="color-gray">No website added</div>
       </div>
       <div class="mb-3 side-bar-subsection">
         <h6>Email</h6>
         <div *ngIf="memberData.publicDisplayEmail">
           <a href="mailto:{{ memberData.publicDisplayEmail }}">{{ memberData.publicDisplayEmail }}</a>
         </div>
-        <div *ngIf="!memberData.publicDisplayEmail" class="empty">No email added</div>
+        <div *ngIf="!memberData.publicDisplayEmail" class="color-gray">No email added</div>
       </div>
       <div *ngIf="memberData.orgIds">
         <h5>Identifiers</h5>
@@ -93,20 +93,26 @@
         <h5 class="mb-4">Contacts</h5>
         <div class="row ml-0 d-flex justify-content-between contact">
           <h6>Name</h6>
-          <h6>Roles</h6>
+          <h6>Member roles</h6>
           <h6>Email</h6>
-          <h6 class="voting-contact">Voting</h6>
+          <h6>Phone</h6>
         </div>
         <hr class="green-hr" />
         <ul class="ml-0 pl-0" *ngFor="let contact of memberData.contacts; let i = index">
           <li class="row ml-0 d-flex justify-content-between contact">
-            <div>{{ contact.name }}</div>
+            <div>
+              <div>{{ contact.name }}</div>
+              <div class="color-gray small-text">{{ contact.title }}</div>
+            </div>
             <div>{{ contact.memberOrgRole.join(', ') }}</div>
             <div>
               <a href="mailto:{{ contact.contactEmail }}">{{ contact.contactEmail }}</a>
             </div>
-            <div class="voting-contact">
-              <img *ngIf="contact.votingContact" src="./../../../content/images/checkmark.svg" alt="Yes" />
+            <div *ngIf="contact.phone">
+              {{ contact.phone }}
+            </div>
+            <div *ngIf="!contact.phone">
+              -
             </div>
           </li>
           <hr *ngIf="i + 1 < memberData.contacts.length" />
