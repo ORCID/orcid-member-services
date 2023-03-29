@@ -254,7 +254,8 @@ public class ReportService {
         config.put(OPTIONS_PARAM, null);
         
         Map<String, Object> wrapper = new HashMap<>();
-        wrapper.put(ROW_BASED_PARAM, new Object[] { config });
+//        wrapper.put(ROW_BASED_PARAM, new Object[] { config });
+        wrapper.put(ROW_BASED_PARAM, new Object[0]);
         return wrapper;
     }
 
