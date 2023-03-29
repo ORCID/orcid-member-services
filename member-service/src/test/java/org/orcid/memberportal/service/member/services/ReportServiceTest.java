@@ -87,13 +87,12 @@ public class ReportServiceTest {
         assertThat(reportInfo.getJwt()).isNotEmpty();
         
         Assertions.assertThrows(SignatureException.class, () -> {
-            checkCommonClaims(reportInfo.getJwt(), MEMBER_DASHBOARD_URL); // wrong secret
+            parseClaims(reportInfo.getJwt(), MEMBER_DASHBOARD_URL); // wrong secret
         });
-        
-        checkCommonClaims(reportInfo.getJwt(), MEMBER_DASHBOARD_SECRET);
         
         Claims claims = parseClaims(reportInfo.getJwt(), MEMBER_DASHBOARD_SECRET);
         assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
+        checkCommonClaims(claims);
 
         Map<String, Object> filter = (Map<String, Object>) claims.get(ReportService.FILTERS_PARAM);
         assertThat(filter.get(ReportService.MEMBER_NAME_FILTER)).isNotNull();
@@ -120,10 +119,12 @@ public class ReportServiceTest {
         assertThat(reportInfo.getJwt()).isNotEmpty();
         
         Assertions.assertThrows(SignatureException.class, () -> {
-            checkCommonClaims(reportInfo.getJwt(), AFFILIATION_DASHBOARD_URL); // wrong secret
+            parseClaims(reportInfo.getJwt(), AFFILIATION_DASHBOARD_URL); // wrong secret
         });
         
-        checkCommonClaims(reportInfo.getJwt(), AFFILIATION_DASHBOARD_SECRET);
+        Claims claims = parseClaims(reportInfo.getJwt(), AFFILIATION_DASHBOARD_SECRET);
+        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
+        checkCommonClaims(claims);
 
         Mockito.verify(mockApplicationProperties).getHolisticsAffiliationDashboardUrl();
         Mockito.verify(mockApplicationProperties).getHolisticsAffiliationDashboardSecret();
@@ -143,10 +144,12 @@ public class ReportServiceTest {
         assertThat(reportInfo.getJwt()).isNotEmpty();
         
         Assertions.assertThrows(SignatureException.class, () -> {
-            checkCommonClaims(reportInfo.getJwt(), INTEGRATION_DASHBOARD_URL); // wrong secret
+            parseClaims(reportInfo.getJwt(), INTEGRATION_DASHBOARD_URL); // wrong secret
         });
         
-        checkCommonClaims(reportInfo.getJwt(), INTEGRATION_DASHBOARD_SECRET);
+        Claims claims = parseClaims(reportInfo.getJwt(), INTEGRATION_DASHBOARD_SECRET);
+        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
+        checkCommonClaims(claims);
 
         Mockito.verify(mockApplicationProperties).getHolisticsIntegrationDashboardUrl();
         Mockito.verify(mockApplicationProperties).getHolisticsIntegrationDashboardSecret();
@@ -167,12 +170,13 @@ public class ReportServiceTest {
         assertThat(reportInfo.getJwt()).isNotEmpty();
         
         Assertions.assertThrows(SignatureException.class, () -> {
-            checkCommonClaims(reportInfo.getJwt(), CONSORTIA_DASHBOARD_URL); // wrong secret
+            parseClaims(reportInfo.getJwt(), CONSORTIA_DASHBOARD_URL); // wrong secret
         });
         
-        checkCommonClaims(reportInfo.getJwt(), CONSORTIA_DASHBOARD_SECRET);
-
         Claims claims = parseClaims(reportInfo.getJwt(), CONSORTIA_DASHBOARD_SECRET);
+        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
+        checkCommonClaims(claims);
+
         Map<String, Object> drillthroughs = (Map<String, Object>) claims.get(ReportService.DRILLTHROUGHS_PARAM);
 
         assertThat(drillthroughs).isNotNull();
@@ -210,12 +214,13 @@ public class ReportServiceTest {
         assertThat(reportInfo.getJwt()).isNotEmpty();
         
         Assertions.assertThrows(SignatureException.class, () -> {
-            checkCommonClaims(reportInfo.getJwt(), CONSORTIA_MEMBER_AFFILIATIONS_DASHBOARD_URL); // wrong secret
+            parseClaims(reportInfo.getJwt(), CONSORTIA_MEMBER_AFFILIATIONS_DASHBOARD_URL); // wrong secret
         });
         
-        checkCommonClaims(reportInfo.getJwt(), CONSORTIA_MEMBER_AFFILIATIONS_DASHBOARD_SECRET);
-
         Claims claims = parseClaims(reportInfo.getJwt(), CONSORTIA_MEMBER_AFFILIATIONS_DASHBOARD_SECRET);
+        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNull();
+        checkCommonClaims(claims);
+
         Map<String, Object> drillthroughs = (Map<String, Object>) claims.get(ReportService.DRILLTHROUGHS_PARAM);
 
         assertThat(drillthroughs).isNotNull();
@@ -297,11 +302,9 @@ public class ReportServiceTest {
         return member;
     }
     
-    private void checkCommonClaims(String jwt, String secret) {
-        Claims claims = parseClaims(jwt, secret);
+    private void checkCommonClaims(Claims claims) {
         assertThat(claims.get(ReportService.SETTINGS_PARAM)).isNotNull();
         assertThat(claims.get(ReportService.PERMISSIONS_PARAM)).isNotNull();
-        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
         assertThat(claims.get(ReportService.EXP_PARAM)).isNotNull();
     }
     
