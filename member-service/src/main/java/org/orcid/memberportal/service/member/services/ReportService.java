@@ -74,7 +74,7 @@ public class ReportService {
 
     static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_DATASET = "org_id_centric";
 
-    static final String DATA_MODEL_PARAM = "model";
+    static final String DATA_MODEL_PARAM = "data_model";
 
     static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_MODEL = "public_sf_consortia";
 
