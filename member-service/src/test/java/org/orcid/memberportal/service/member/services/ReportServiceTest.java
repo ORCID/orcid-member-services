@@ -91,7 +91,6 @@ public class ReportServiceTest {
         });
         
         Claims claims = parseClaims(reportInfo.getJwt(), MEMBER_DASHBOARD_SECRET);
-        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
         checkCommonClaims(claims);
 
         Map<String, Object> filter = (Map<String, Object>) claims.get(ReportService.FILTERS_PARAM);
@@ -123,7 +122,6 @@ public class ReportServiceTest {
         });
         
         Claims claims = parseClaims(reportInfo.getJwt(), AFFILIATION_DASHBOARD_SECRET);
-        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
         checkCommonClaims(claims);
 
         Mockito.verify(mockApplicationProperties).getHolisticsAffiliationDashboardUrl();
@@ -148,7 +146,6 @@ public class ReportServiceTest {
         });
         
         Claims claims = parseClaims(reportInfo.getJwt(), INTEGRATION_DASHBOARD_SECRET);
-        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
         checkCommonClaims(claims);
 
         Mockito.verify(mockApplicationProperties).getHolisticsIntegrationDashboardUrl();
@@ -174,7 +171,6 @@ public class ReportServiceTest {
         });
         
         Claims claims = parseClaims(reportInfo.getJwt(), CONSORTIA_DASHBOARD_SECRET);
-        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
         checkCommonClaims(claims);
 
         Map<String, Object> drillthroughs = (Map<String, Object>) claims.get(ReportService.DRILLTHROUGHS_PARAM);
@@ -218,7 +214,6 @@ public class ReportServiceTest {
         });
         
         Claims claims = parseClaims(reportInfo.getJwt(), CONSORTIA_MEMBER_AFFILIATIONS_DASHBOARD_SECRET);
-        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNull();
         checkCommonClaims(claims);
 
         Map<String, Object> drillthroughs = (Map<String, Object>) claims.get(ReportService.DRILLTHROUGHS_PARAM);
@@ -306,6 +301,7 @@ public class ReportServiceTest {
         assertThat(claims.get(ReportService.SETTINGS_PARAM)).isNotNull();
         assertThat(claims.get(ReportService.PERMISSIONS_PARAM)).isNotNull();
         assertThat(claims.get(ReportService.EXP_PARAM)).isNotNull();
+        assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
     }
     
     private Claims parseClaims(String jwt, String secret) {
