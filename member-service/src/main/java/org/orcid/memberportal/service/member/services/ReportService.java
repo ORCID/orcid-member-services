@@ -107,7 +107,7 @@ public class ReportService {
 
     public ReportInfo getIntegrationReportInfo() {
         Map<String, Object> claims = getClaims(getIntegrationReportPermissions());
-        claims.put(FILTERS_PARAM, new HashMap<String, Object>());
+        
 
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsIntegrationDashboardUrl());
@@ -119,7 +119,7 @@ public class ReportService {
         checkConsortiaLeadAccess();
         
         Map<String, Object> claims = getClaimsWithDrillthrough(getConsortiaReportPermissions(), CONSORTIA_DRILLTHROUGH_KEY, FILTERS_PARAM, getMemberNameFilter());
-        claims.put(FILTERS_PARAM, new HashMap<String, Object>());
+        
 
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsConsortiaDashboardUrl());
@@ -131,7 +131,7 @@ public class ReportService {
         checkAffiliationReportAccess();
 
         Map<String, Object> claims = getClaims(getAffiliationReportPermissions());
-        claims.put(FILTERS_PARAM, new HashMap<String, Object>());
+        
         
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsAffiliationDashboardUrl());
@@ -186,6 +186,7 @@ public class ReportService {
         claims.put(SETTINGS_PARAM, settings);
         claims.put(PERMISSIONS_PARAM, permissions);
         claims.put(EXP_PARAM, exp);
+        claims.put(FILTERS_PARAM, new HashMap<String, Object>());
 
         return claims;
     }
