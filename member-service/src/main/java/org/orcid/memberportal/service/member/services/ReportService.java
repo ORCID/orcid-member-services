@@ -74,7 +74,7 @@ public class ReportService {
 
     static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_DATASET = "org_id_centric";
 
-    static final String DATA_MODEL_PARAM = "data_model";
+    static final String MODEL_PARAM = "model";
 
     static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_MODEL = "public_sf_consortia";
 
@@ -261,7 +261,7 @@ public class ReportService {
     private Map<String, String> getConsortiaMemberAffiliationsReportPathObject() {
         Map<String, String> path = new HashMap<>();
         path.put(DATASET_PARAM, CONSORTIUM_MEMBER_AFFILIATION_REPORT_DATASET);
-        path.put(DATA_MODEL_PARAM, CONSORTIUM_MEMBER_AFFILIATION_REPORT_MODEL);
+        path.put(MODEL_PARAM, CONSORTIUM_MEMBER_AFFILIATION_REPORT_MODEL);
         path.put(FIELD_PARAM, CONSORTIUM_MEMBER_AFFILIATION_REPORT_FIELD);
         return path;
     }
