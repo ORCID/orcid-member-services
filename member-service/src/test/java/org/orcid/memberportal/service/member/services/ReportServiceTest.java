@@ -25,25 +25,25 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 
 public class ReportServiceTest {
-    
+
     private static final String CONSORTIA_DASHBOARD_URL = "https://secure.holistics.io/embed/consortia";
-    
+
     private static final String INTEGRATION_DASHBOARD_URL = "https://secure.holistics.io/embed/integration";
-    
+
     private static final String AFFILIATION_DASHBOARD_URL = "https://secure.holistics.io/embed/affiliation";
-    
+
     private static final String MEMBER_DASHBOARD_URL = "https://secure.holistics.io/embed/member";
 
     private static final String CONSORTIA_MEMBER_AFFILIATIONS_DASHBOARD_URL = "https://secure.holistics.io/embed/consortia-member-affiliations";
-    
+
     private static final String CONSORTIA_DASHBOARD_SECRET = "some-long-holistics-consortia-dashboard-secret";
-    
+
     private static final String INTEGRATION_DASHBOARD_SECRET = "some-long-holistics-integration-dashboard-secret";
-    
+
     private static final String AFFILIATION_DASHBOARD_SECRET = "some-long-holistics-affiliation-dashboard-secret";
-    
+
     private static final String MEMBER_DASHBOARD_SECRET = "some-long-holistics-member-dashboard-secret";
-    
+
     private static final String CONSORTIA_MEMBER_AFFILIATIONS_DASHBOARD_SECRET = "https://secure.holistics.io/embed/consortia-member-affiliations-secret";
 
     @Mock
@@ -78,24 +78,24 @@ public class ReportServiceTest {
     public void testGetMemberReportInfo() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
-        
+
         ReportInfo reportInfo = reportService.getMemberReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
         assertThat(reportInfo.getUrl()).isEqualTo(MEMBER_DASHBOARD_URL);
         assertThat(reportInfo.getJwt()).isNotNull();
         assertThat(reportInfo.getJwt()).isNotEmpty();
-        
+
         Assertions.assertThrows(SignatureException.class, () -> {
             parseClaims(reportInfo.getJwt(), MEMBER_DASHBOARD_URL); // wrong secret
         });
-        
+
         Claims claims = parseClaims(reportInfo.getJwt(), MEMBER_DASHBOARD_SECRET);
         checkCommonClaims(claims);
 
         Map<String, Object> filter = (Map<String, Object>) claims.get(ReportService.FILTERS_PARAM);
         assertThat(filter.get(ReportService.MEMBER_NAME_FILTER)).isNotNull();
-        
+
         Map<String, Object> memberNameFilter = (Map<String, Object>) filter.get(ReportService.MEMBER_NAME_FILTER);
         assertThat(memberNameFilter.get(ReportService.HIDDEN_PARAM)).isNotNull();
         assertThat((boolean) memberNameFilter.get(ReportService.HIDDEN_PARAM)).isTrue();
@@ -104,47 +104,47 @@ public class ReportServiceTest {
         Mockito.verify(mockApplicationProperties).getHolisticsMemberDashboardSecret();
         Mockito.verify(mockUserService).getLoggedInUser();
     }
-    
+
     @Test
     public void testGetAffiliationReportInfo() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumMember()));
-        
+
         ReportInfo reportInfo = reportService.getAffiliationReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
         assertThat(reportInfo.getUrl()).isEqualTo(AFFILIATION_DASHBOARD_URL);
         assertThat(reportInfo.getJwt()).isNotNull();
         assertThat(reportInfo.getJwt()).isNotEmpty();
-        
+
         Assertions.assertThrows(SignatureException.class, () -> {
             parseClaims(reportInfo.getJwt(), AFFILIATION_DASHBOARD_URL); // wrong secret
         });
-        
+
         Claims claims = parseClaims(reportInfo.getJwt(), AFFILIATION_DASHBOARD_SECRET);
         checkCommonClaims(claims);
 
         Mockito.verify(mockApplicationProperties).getHolisticsAffiliationDashboardUrl();
         Mockito.verify(mockApplicationProperties).getHolisticsAffiliationDashboardSecret();
-        Mockito.verify(mockUserService, Mockito.times(2)).getLoggedInUser();
+        Mockito.verify(mockUserService).getLoggedInUser();
     }
 
     @Test
     public void testGetIntegrationReportInfo() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
-        
+
         ReportInfo reportInfo = reportService.getIntegrationReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
         assertThat(reportInfo.getUrl()).isEqualTo(INTEGRATION_DASHBOARD_URL);
         assertThat(reportInfo.getJwt()).isNotNull();
         assertThat(reportInfo.getJwt()).isNotEmpty();
-        
+
         Assertions.assertThrows(SignatureException.class, () -> {
             parseClaims(reportInfo.getJwt(), INTEGRATION_DASHBOARD_URL); // wrong secret
         });
-        
+
         Claims claims = parseClaims(reportInfo.getJwt(), INTEGRATION_DASHBOARD_SECRET);
         checkCommonClaims(claims);
 
@@ -158,18 +158,18 @@ public class ReportServiceTest {
     public void testGetConsortiaReportInfo() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
-        
+
         ReportInfo reportInfo = reportService.getConsortiaReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
         assertThat(reportInfo.getUrl()).isEqualTo(CONSORTIA_DASHBOARD_URL);
         assertThat(reportInfo.getJwt()).isNotNull();
         assertThat(reportInfo.getJwt()).isNotEmpty();
-        
+
         Assertions.assertThrows(SignatureException.class, () -> {
             parseClaims(reportInfo.getJwt(), CONSORTIA_DASHBOARD_URL); // wrong secret
         });
-        
+
         Claims claims = parseClaims(reportInfo.getJwt(), CONSORTIA_DASHBOARD_SECRET);
         checkCommonClaims(claims);
 
@@ -177,42 +177,42 @@ public class ReportServiceTest {
 
         assertThat(drillthroughs).isNotNull();
         assertThat(drillthroughs.get(ReportService.CONSORTIA_DRILLTHROUGH_KEY)).isNotNull();
-        
+
         Map<String, Object> consortiaDrillthrough = (Map<String, Object>) drillthroughs.get(ReportService.CONSORTIA_DRILLTHROUGH_KEY);
         assertThat(consortiaDrillthrough.get(ReportService.FILTERS_PARAM)).isNotNull();
 
         Map<String, Object> consortiaDrillthroughFilter = (Map<String, Object>) consortiaDrillthrough.get(ReportService.FILTERS_PARAM);
         assertThat(consortiaDrillthroughFilter.get(ReportService.MEMBER_NAME_FILTER)).isNotNull();
-        
+
         Map<String, Object> memberNameFilter = (Map<String, Object>) consortiaDrillthroughFilter.get(ReportService.MEMBER_NAME_FILTER);
         assertThat(memberNameFilter.get(ReportService.HIDDEN_PARAM)).isNotNull();
         assertThat((boolean) memberNameFilter.get(ReportService.HIDDEN_PARAM)).isTrue();
-        
+
         Mockito.verify(mockApplicationProperties).getHolisticsConsortiaDashboardUrl();
         Mockito.verify(mockApplicationProperties).getHolisticsConsortiaDashboardSecret();
         Mockito.verify(mockUserService, Mockito.times(3)).getLoggedInUser();
         Mockito.verify(mockMemberService).getMember(Mockito.eq("salesforce-id"));
-        
-        
+
+
     }
-    
+
     @SuppressWarnings("unchecked")
     @Test
     public void testGetConsortiaMemberAffiliationsReportInfo() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
-        
+
         ReportInfo reportInfo = reportService.getConsortiaMemberAffiliationsReportInfo();
         assertThat(reportInfo).isNotNull();
         assertThat(reportInfo.getUrl()).isNotNull();
         assertThat(reportInfo.getUrl()).isEqualTo(CONSORTIA_MEMBER_AFFILIATIONS_DASHBOARD_URL);
         assertThat(reportInfo.getJwt()).isNotNull();
         assertThat(reportInfo.getJwt()).isNotEmpty();
-        
+
         Assertions.assertThrows(SignatureException.class, () -> {
             parseClaims(reportInfo.getJwt(), CONSORTIA_MEMBER_AFFILIATIONS_DASHBOARD_URL); // wrong secret
         });
-        
+
         Claims claims = parseClaims(reportInfo.getJwt(), CONSORTIA_MEMBER_AFFILIATIONS_DASHBOARD_SECRET);
         checkCommonClaims(claims);
 
@@ -220,7 +220,7 @@ public class ReportServiceTest {
 
         assertThat(drillthroughs).isNotNull();
         assertThat(drillthroughs.get(ReportService.CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY)).isNotNull();
-        
+
         Map<String, Object> drillthrough = (Map<String, Object>) drillthroughs.get(ReportService.CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY);
         assertThat(drillthrough.get(ReportService.FILTER_PARAM)).isNotNull();
 
@@ -255,7 +255,7 @@ public class ReportServiceTest {
         user.setSalesforceId("salesforce-id");
         return user;
     }
-    
+
     private MemberServiceUser getOtherUser() {
         MemberServiceUser user = new MemberServiceUser();
         user.setSalesforceId("other-salesforce-id");
@@ -288,7 +288,7 @@ public class ReportServiceTest {
         member.setIsConsortiumLead(true);
         return member;
     }
-    
+
     private Member getConsortiumMember() {
         Member member = new Member();
         member.setSalesforceId("salesforce-id");
@@ -296,14 +296,14 @@ public class ReportServiceTest {
         member.setIsConsortiumLead(false);
         return member;
     }
-    
+
     private void checkCommonClaims(Claims claims) {
         assertThat(claims.get(ReportService.SETTINGS_PARAM)).isNotNull();
         assertThat(claims.get(ReportService.PERMISSIONS_PARAM)).isNotNull();
         assertThat(claims.get(ReportService.EXP_PARAM)).isNotNull();
         assertThat(claims.get(ReportService.FILTERS_PARAM)).isNotNull();
     }
-    
+
     private Claims parseClaims(String jwt, String secret) {
         return Jwts.parser().setSigningKey(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8))).parseClaimsJws(jwt).getBody();
     }

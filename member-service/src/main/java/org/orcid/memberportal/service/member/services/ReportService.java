@@ -43,7 +43,7 @@ public class ReportService {
     static final String PATH_PARAM = "path";
 
     static final String OPERATOR_PARAM = "operator";
-    
+
     static final String OPTIONS_PARAM = "options";
 
     static final String MODIFIER_PARAM = "modifier";
@@ -107,7 +107,7 @@ public class ReportService {
 
     public ReportInfo getIntegrationReportInfo() {
         Map<String, Object> claims = getClaims(getIntegrationReportPermissions());
-        
+
 
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsIntegrationDashboardUrl());
@@ -117,9 +117,9 @@ public class ReportService {
 
     public ReportInfo getConsortiaReportInfo() {
         checkConsortiaLeadAccess();
-        
+
         Map<String, Object> claims = getClaimsWithDrillthrough(getConsortiaReportPermissions(), CONSORTIA_DRILLTHROUGH_KEY, FILTERS_PARAM, getMemberNameFilter());
-        
+
 
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsConsortiaDashboardUrl());
@@ -128,11 +128,7 @@ public class ReportService {
     }
 
     public ReportInfo getAffiliationReportInfo() {
-        checkAffiliationReportAccess();
-
         Map<String, Object> claims = getClaims(getAffiliationReportPermissions());
-        
-        
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsAffiliationDashboardUrl());
         info.setJwt(getJwt(claims, applicationProperties.getHolisticsAffiliationDashboardSecret()));
@@ -150,18 +146,11 @@ public class ReportService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsConsortiaMemberAffiliationsDashboardUrl());
         info.setJwt(getJwt(claims, applicationProperties.getHolisticsConsortiaMemberAffiliationsDashboardSecret()));
         return info;
-    }
-
-    private void checkAffiliationReportAccess() {
-        Optional<Member> member = memberService.getMember(getLoggedInSalesforceId());
-        if (member.get().getParentSalesforceId() == null) {
-            throw new BadRequestAlertException("Only consortia members can view affiliation reports", null, null);
-        }
     }
 
     private void checkConsortiaLeadAccess() {
@@ -252,7 +241,7 @@ public class ReportService {
         Map<String, Object> config = getRowBasedConfigBase();
         config.put(PATH_PARAM, getConsortiaMemberAffiliationsReportPathObject());
         config.put(OPTIONS_PARAM, null);
-        
+
         Map<String, Object> wrapper = new HashMap<>();
         wrapper.put(ROW_BASED_PARAM, new Object[] { config });
         return wrapper;

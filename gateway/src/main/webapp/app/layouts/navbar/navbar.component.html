@@ -50,7 +50,7 @@
                             <span jhiTranslate="global.menu.report.consortium.string">Consortium report</span>
                         </a>
                     </li>
- 					<li *ngIf="consortiumMember">
+ 					<li>
                         <a class="dropdown-item" routerLink="report/affiliation" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon [icon]="faChartPie" fixedWidth="true"></fa-icon>
                             <span jhiTranslate="global.menu.report.affiliation.string">Affiliation report</span>
