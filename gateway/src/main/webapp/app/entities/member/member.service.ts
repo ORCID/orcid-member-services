@@ -170,9 +170,7 @@ export class MSMemberService {
                 this.getIsConsortiumLead(userIdentity.salesforceId)
               ]);
             }),
-            tap(res => {
-              console.log(res);
-              this.memberData.next();
+            tap(() => {
               this.fetchingMemberDataState.next(false);
             }),
             catchError(() => {
