@@ -51,6 +51,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.memberDataSubscription = this.accountService.memberData.subscribe(data => {
       this.memberData = data;
+      this.validateUrl();
       this.updateForm(data);
     });
     this.editForm.valueChanges.subscribe(() => {
@@ -62,6 +63,12 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.memberDataSubscription.unsubscribe();
+  }
+
+  validateUrl() {
+    if (!/(http(s?)):\/\//i.test(this.memberData.website)) {
+      this.memberData.website = 'http://' + this.memberData.website;
+    }
   }
 
   updateForm(data: SFMemberData) {
