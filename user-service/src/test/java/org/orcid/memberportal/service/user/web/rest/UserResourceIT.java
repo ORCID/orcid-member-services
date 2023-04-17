@@ -428,34 +428,34 @@ public class UserResourceIT {
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(1);
+        
+        result = restUserMockMvc
+                .perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "%2B").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
+                users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
+        });
+        assertThat(users.size()).isEqualTo(1);
 
+        result = restUserMockMvc
+                .perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "10%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
+        users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
+        });
+        assertThat(users.size()).isEqualTo(1);
+
+        result = restUserMockMvc
+                .perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "lastname+10%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
+        users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
+        });
+        assertThat(users.size()).isEqualTo(1);
+        
         // bad salesforce id
         result = restUserMockMvc.perform(get("/api/users/salesforce/salesforce-id-5/p").param("filter", "4@orcid.org").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(0);
-
-        result = restUserMockMvc
-                .perform(get("/api/users").param("filter", "%2B").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk()).andReturn();
-        users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
-        });
-        assertThat(users.size()).isEqualTo(1);
-
-        result = restUserMockMvc
-                .perform(get("/api/users").param("filter", "10%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk()).andReturn();
-        users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
-        });
-        assertThat(users.size()).isEqualTo(1);
-
-        result = restUserMockMvc
-                .perform(get("/api/users").param("filter", "lastname+10%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk()).andReturn();
-        users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
-        });
-        assertThat(users.size()).isEqualTo(1);
     }
 
     @Test
@@ -509,7 +509,7 @@ public class UserResourceIT {
         assertThat(users.size()).isEqualTo(3);
 
         result = restUserMockMvc
-                .perform(get("/api/users").param("filter", "10%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .perform(get("/api/users").param("filter", "10%2Btest@salesforce-id-1.org").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
@@ -520,7 +520,7 @@ public class UserResourceIT {
                 .andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
-        assertThat(users.size()).isEqualTo(1);
+        assertThat(users.size()).isEqualTo(3);
     }
 
     private void saveTenUsersWithSalesforceId(String salesforceId) {
