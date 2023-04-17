@@ -409,7 +409,7 @@ public class UserResourceIT {
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
-        assertThat(users.size()).isEqualTo(1);
+        assertThat(users.size()).isEqualTo(2);
 
         result = restUserMockMvc.perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "lastname 2").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
@@ -478,7 +478,7 @@ public class UserResourceIT {
                 .andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
-        assertThat(users.size()).isEqualTo(3);
+        assertThat(users.size()).isEqualTo(6);
 
         result = restUserMockMvc
                 .perform(get("/api/users").param("filter", "lastname 2").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
