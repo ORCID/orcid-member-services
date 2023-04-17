@@ -85,13 +85,13 @@ public class MemberResourceIT {
         
         List<Member> members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
         });
-        assertThat(members.size()).isEqualTo(30);
+        assertThat(members.size()).isEqualTo(31);
 
         result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "salesforceId").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
         members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
         });
-        assertThat(members.size()).isEqualTo(30);
+        assertThat(members.size()).isEqualTo(31);
 
         result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "salesforceId 4").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
@@ -110,7 +110,7 @@ public class MemberResourceIT {
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
         members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
         });
-        assertThat(members.size()).isEqualTo(30);
+        assertThat(members.size()).isEqualTo(31);
 
         result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "parent 1").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
@@ -118,12 +118,31 @@ public class MemberResourceIT {
         });
         assertThat(members.size()).isEqualTo(11); // parent 1, parent 10 - 19
 
+        result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "salesforceId+%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
+        });
+        assertThat(members.size()).isEqualTo(1);
+
+        result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "client+%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
+        });
+        assertThat(members.size()).isEqualTo(1);
+
+        result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "parent+%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
+        });
+        assertThat(members.size()).isEqualTo(1);
+
     }
 
     private void createMembers(int quantity) {
         for (int i = 0; i < quantity; i++) {
             memberRepository.save(getMember(String.valueOf(i)));
         }
+        memberRepository.save(getMember("+test"));
     }
 
     private Member getMember(String identifier) {
