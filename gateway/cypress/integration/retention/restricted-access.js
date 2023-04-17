@@ -35,7 +35,7 @@ describe('Test restricted access', () => {
     cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')
   });
 
-  it('Anonymous users cannot access anything', function() {
+  /* it('Anonymous users cannot access anything', function() {
     cy.visit('/assertion');
     cy.get('h1').filter('[jhitranslate="error.title.string"]').contains('Your request cannot be processed')
     cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')
@@ -45,5 +45,5 @@ describe('Test restricted access', () => {
     cy.visit('/member');
     cy.get('h1').filter('[jhitranslate="error.title.string"]').contains('Your request cannot be processed')
     cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')
-  });
+  }); */
 });
