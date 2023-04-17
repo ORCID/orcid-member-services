@@ -27,4 +27,24 @@ describe('Test restricted access', () => {
     cy.get('h1').filter('[jhitranslate="error.title.string"]').contains('Your request cannot be processed')
     cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')
   });
+
+  it('Cannot access the assertion menu if assertions are not enabled', function() {
+    cy.programmaticSignin(data.homepageTestMembers.consortiumLeadAndMemberEmail, credentials.password);
+    cy.visit('/assertion');
+    cy.get('h1').filter('[jhitranslate="error.title.string"]').contains('Your request cannot be processed')
+    cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')
+  });
+
+  it('Anonymous users cannot access anything', function() {
+    cy.programmaticSignin(data.homepageTestMembers.consortiumLeadAndMemberEmail, credentials.password);
+    cy.visit('/assertion');
+    cy.get('h1').filter('[jhitranslate="error.title.string"]').contains('Your request cannot be processed')
+    cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')
+    cy.visit('/user');
+    cy.get('h1').filter('[jhitranslate="error.title.string"]').contains('Your request cannot be processed')
+    cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')
+    cy.visit('/member');
+    cy.get('h1').filter('[jhitranslate="error.title.string"]').contains('Your request cannot be processed')
+    cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')
+  });
 });

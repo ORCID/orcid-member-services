@@ -215,7 +215,7 @@ jobs:
             cypress/integration/retention/edit-user.js
             cypress/integration/retention/reset-password.js
             cypress/integration/retention/restricted-access.js
-            cypress/integration/retention/ui-header-user.js
+            cypress/integration/retention/ui-authorities.js
             cypress/integration/retention/ui-login.js
             cypress/integration/retention/ui-pagination.js
             cypress/integration/retention/ui-homepage.js
