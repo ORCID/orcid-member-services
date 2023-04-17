@@ -138,7 +138,7 @@ export class MSMemberService {
         })
       );
     }
-    return of(null);
+    return EMPTY;
   }
 
   getIsConsortiumLead(salesforceId: string): Observable<EntityResponseType | never> {
