@@ -1,7 +1,10 @@
 package org.orcid.memberportal.service.member.web.rest;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -255,11 +258,19 @@ public class MemberResource {
     @GetMapping("/members")
     public ResponseEntity<List<Member>> getAllMembers(@RequestParam(required = false, name = "filter") String filter, Pageable pageable) {
         LOG.debug("REST request to get a page of Member");
+        String decodedFilter;
+        try {
+            decodedFilter = URLDecoder.decode(filter, StandardCharsets.UTF_8.name());
+        }
+        catch (UnsupportedEncodingException e) {
+            /* try without decoding if this ever happens */
+            decodedFilter = filter;
+        } 
         Page<Member> page = null;
-        if (StringUtils.isBlank(filter)) {
+        if (StringUtils.isBlank(decodedFilter)) {
             page = memberService.getMembers(pageable);
         } else {
-            page = memberService.getMembers(pageable, filter);
+            page = memberService.getMembers(pageable, decodedFilter);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());

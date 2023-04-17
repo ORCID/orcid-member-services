@@ -1,7 +1,10 @@
 package org.orcid.memberportal.service.user.web.rest;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -146,11 +149,19 @@ public class UserResource {
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams,
             @RequestParam(required = false, name = "filter") String filter, UriComponentsBuilder uriBuilder, Pageable pageable) {
+        String decodedFilter;
+        try {
+            decodedFilter = URLDecoder.decode(filter, StandardCharsets.UTF_8.name());
+        }
+        catch (UnsupportedEncodingException e) {
+            /* try without decoding if this ever happens */
+            decodedFilter = filter;
+        } 
         Page<UserDTO> page = null;
-        if (StringUtils.isBlank(filter)) {
+        if (StringUtils.isBlank(decodedFilter)) {
             page = userService.getAllManagedUsers(pageable);
         } else {
-            page = userService.getAllManagedUsers(pageable, filter);
+            page = userService.getAllManagedUsers(pageable, decodedFilter);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
