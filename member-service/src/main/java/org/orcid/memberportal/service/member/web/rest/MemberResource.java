@@ -258,18 +258,18 @@ public class MemberResource {
     @GetMapping("/members")
     public ResponseEntity<List<Member>> getAllMembers(@RequestParam(required = false, name = "filter") String filter, Pageable pageable) {
         LOG.debug("REST request to get a page of Member");
-        String decodedFilter;
-        try {
-            decodedFilter = URLDecoder.decode(filter, StandardCharsets.UTF_8.name());
-        }
-        catch (UnsupportedEncodingException e) {
-            /* try without decoding if this ever happens */
-            decodedFilter = filter;
-        } 
         Page<Member> page = null;
-        if (StringUtils.isBlank(decodedFilter)) {
+        if (StringUtils.isBlank(filter)) {
             page = memberService.getMembers(pageable);
         } else {
+            String decodedFilter;
+            try {
+                decodedFilter = URLDecoder.decode(filter, StandardCharsets.UTF_8.name());
+            }
+            catch (UnsupportedEncodingException e) {
+                /* try without decoding if this ever happens */
+                decodedFilter = filter;
+            } 
             page = memberService.getMembers(pageable, decodedFilter);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

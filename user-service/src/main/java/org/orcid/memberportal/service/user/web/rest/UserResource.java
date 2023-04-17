@@ -149,18 +149,18 @@ public class UserResource {
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams,
             @RequestParam(required = false, name = "filter") String filter, UriComponentsBuilder uriBuilder, Pageable pageable) {
-        String decodedFilter;
-        try {
-            decodedFilter = URLDecoder.decode(filter, StandardCharsets.UTF_8.name());
-        }
-        catch (UnsupportedEncodingException e) {
-            /* try without decoding if this ever happens */
-            decodedFilter = filter;
-        } 
         Page<UserDTO> page = null;
-        if (StringUtils.isBlank(decodedFilter)) {
+        if (StringUtils.isBlank(filter)) {
             page = userService.getAllManagedUsers(pageable);
         } else {
+            String decodedFilter;
+            try {
+                decodedFilter = URLDecoder.decode(filter, StandardCharsets.UTF_8.name());
+            }
+            catch (UnsupportedEncodingException e) {
+                /* try without decoding if this ever happens */
+                decodedFilter = filter;
+            } 
             page = userService.getAllManagedUsers(pageable, decodedFilter);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
@@ -207,7 +207,15 @@ public class UserResource {
         if (StringUtils.isBlank(filter)) {
             page = userService.getAllUsersBySalesforceId(pageable, salesforceId);
         } else {
-            page = userService.getAllUsersBySalesforceId(pageable, salesforceId, filter);
+            String decodedFilter;
+            try {
+                decodedFilter = URLDecoder.decode(filter, StandardCharsets.UTF_8.name());
+            }
+            catch (UnsupportedEncodingException e) {
+                /* try without decoding if this ever happens */
+                decodedFilter = filter;
+            } 
+            page = userService.getAllUsersBySalesforceId(pageable, salesforceId, decodedFilter);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
