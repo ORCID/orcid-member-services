@@ -36,7 +36,6 @@ describe('Test restricted access', () => {
   });
 
   it('Anonymous users cannot access anything', function() {
-    cy.programmaticSignin(data.homepageTestMembers.consortiumLeadAndMemberEmail, credentials.password);
     cy.visit('/assertion');
     cy.get('h1').filter('[jhitranslate="error.title.string"]').contains('Your request cannot be processed')
     cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')
