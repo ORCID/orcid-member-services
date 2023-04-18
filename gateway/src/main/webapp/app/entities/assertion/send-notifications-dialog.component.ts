@@ -40,7 +40,6 @@ export class SendNotificationsDialogComponent implements OnInit {
     });
     this.accountService.identity().then(account => {
       this.memberService.find(account.salesforceId).subscribe(member => {
-        console.log(member);
         if (member && member.body) {
           this.language = member.body.defaultLanguage || 'en';
         } else {

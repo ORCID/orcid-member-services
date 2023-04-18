@@ -12,6 +12,7 @@ import { ITEMS_PER_PAGE } from 'app/shared';
 import { MSUserService } from './user.service';
 
 import { TranslateService } from '@ngx-translate/core';
+import { MSMemberService } from '../member';
 
 @Component({
   selector: 'jhi-ms-user',
@@ -48,7 +49,8 @@ export class MSUserComponent implements OnInit, OnDestroy {
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected eventManager: JhiEventManager,
-    protected translate: TranslateService
+    protected translate: TranslateService,
+    protected memberService: MSMemberService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.routeData = this.activatedRoute.data.subscribe(data => {
@@ -205,6 +207,16 @@ export class MSUserComponent implements OnInit, OnDestroy {
     this.page = 1;
     this.submittedSearchTerm = this.searchTerm;
     this.loadAll();
+  }
+
+  viewMemberDetails(id) {
+    this.memberService.find(id).subscribe(member => {
+      if (member && member.body) {
+        this.router.navigate(['/member', member.body.id, 'view']);
+      } else {
+        console.error('Unable to find member', member);
+      }
+    });
   }
 
   protected paginateMSUser(data: IMSUser[], headers: HttpHeaders) {
