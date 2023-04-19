@@ -95,7 +95,7 @@ export class MSUserComponent implements OnInit, OnDestroy {
           page: this.page - 1,
           size: this.itemsPerPage,
           sort: this.sort(),
-          filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
+          filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : ''
         })
         .subscribe(
           (res: HttpResponse<IMSUser[]>) => this.paginateMSUser(res.body, res.headers),
