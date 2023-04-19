@@ -209,16 +209,6 @@ export class MSUserComponent implements OnInit, OnDestroy {
     this.loadAll();
   }
 
-  viewMemberDetails(id) {
-    this.memberService.find(id).subscribe(member => {
-      if (member && member.body) {
-        this.router.navigate(['/member', member.body.id, 'view']);
-      } else {
-        console.error('Unable to find member', member);
-      }
-    });
-  }
-
   protected paginateMSUser(data: IMSUser[], headers: HttpHeaders) {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
