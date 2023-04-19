@@ -1,7 +1,10 @@
 package org.orcid.memberportal.service.user.web.rest;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -150,7 +153,15 @@ public class UserResource {
         if (StringUtils.isBlank(filter)) {
             page = userService.getAllManagedUsers(pageable);
         } else {
-            page = userService.getAllManagedUsers(pageable, filter);
+            String decodedFilter;
+            try {
+                decodedFilter = URLDecoder.decode(filter, StandardCharsets.UTF_8.name());
+            }
+            catch (UnsupportedEncodingException e) {
+                /* try without decoding if this ever happens */
+                decodedFilter = filter;
+            } 
+            page = userService.getAllManagedUsers(pageable, decodedFilter);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -196,7 +207,15 @@ public class UserResource {
         if (StringUtils.isBlank(filter)) {
             page = userService.getAllUsersBySalesforceId(pageable, salesforceId);
         } else {
-            page = userService.getAllUsersBySalesforceId(pageable, salesforceId, filter);
+            String decodedFilter;
+            try {
+                decodedFilter = URLDecoder.decode(filter, StandardCharsets.UTF_8.name());
+            }
+            catch (UnsupportedEncodingException e) {
+                /* try without decoding if this ever happens */
+                decodedFilter = filter;
+            } 
+            page = userService.getAllUsersBySalesforceId(pageable, salesforceId, decodedFilter);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

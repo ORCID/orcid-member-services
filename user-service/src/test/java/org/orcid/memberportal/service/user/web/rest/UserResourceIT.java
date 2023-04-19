@@ -409,7 +409,7 @@ public class UserResourceIT {
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
-        assertThat(users.size()).isEqualTo(1);
+        assertThat(users.size()).isEqualTo(2);
 
         result = restUserMockMvc.perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "lastname 2").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
@@ -428,7 +428,28 @@ public class UserResourceIT {
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(1);
+        
+        result = restUserMockMvc
+                .perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "%2B").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
+                users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
+        });
+        assertThat(users.size()).isEqualTo(1);
 
+        result = restUserMockMvc
+                .perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "10%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
+        users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
+        });
+        assertThat(users.size()).isEqualTo(1);
+
+        result = restUserMockMvc
+                .perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "lastname+10%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
+        users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
+        });
+        assertThat(users.size()).isEqualTo(1);
+        
         // bad salesforce id
         result = restUserMockMvc.perform(get("/api/users/salesforce/salesforce-id-5/p").param("filter", "4@orcid.org").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
@@ -457,7 +478,7 @@ public class UserResourceIT {
                 .andExpect(status().isOk()).andReturn();
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
-        assertThat(users.size()).isEqualTo(3);
+        assertThat(users.size()).isEqualTo(6);
 
         result = restUserMockMvc
                 .perform(get("/api/users").param("filter", "lastname 2").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
@@ -479,26 +500,53 @@ public class UserResourceIT {
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(1);
+
+        result = restUserMockMvc
+                .perform(get("/api/users").param("filter", "%2B").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
+        users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
+        });
+        assertThat(users.size()).isEqualTo(3);
+
+        result = restUserMockMvc
+                .perform(get("/api/users").param("filter", "10%2Btest@salesforce-id-1.org").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
+        users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
+        });
+        assertThat(users.size()).isEqualTo(1);
+
+        result = restUserMockMvc
+                .perform(get("/api/users").param("filter", "lastname+10%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
+        users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
+        });
+        assertThat(users.size()).isEqualTo(3);
     }
 
     private void saveTenUsersWithSalesforceId(String salesforceId) {
-        for (int i = 0; i < 10; i++) {
-            User user = new User();
-            user.setPassword(RandomStringUtils.random(60));
-            user.setActivated(true);
-            user.setEmail(i + "@" + salesforceId + ".org");
-            user.setFirstName("firstname " + i);
-            user.setLastName("lastname " + i);
-            user.setMemberName("membername " + i);
-            user.setImageUrl(DEFAULT_IMAGEURL);
-            user.setLangKey(DEFAULT_LANGKEY);
-            user.setSalesforceId(salesforceId);
-            user.setMainContact(false);
-            user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
-            userRepository.save(user);
+        for (int i = 0; i < 9; i++) {
+            userRepository.save(createUser(String.valueOf(i), salesforceId));
         }
+        // Add one user with a special character
+        userRepository.save(createUser("10+test", salesforceId));
     }
 
+    private User createUser(String id, String salesforceId) {
+        User user = new User();
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+        user.setEmail(id + "@" + salesforceId + ".org");
+        user.setFirstName("firstname " + id);
+        user.setLastName("lastname " + id);
+        user.setMemberName("membername " + id);
+        user.setImageUrl(DEFAULT_IMAGEURL);
+        user.setLangKey(DEFAULT_LANGKEY);
+        user.setSalesforceId(salesforceId);
+        user.setMainContact(false);
+        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+        return user;
+    }
+ 
     @Test
     @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = LOGGED_IN_PASSWORD)
     public void updateUserWithRoleAdmin() throws Exception {
