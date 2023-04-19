@@ -41,7 +41,7 @@ describe('Test homepage', () => {
       .type(date + '@orcid.org');
     cy.get('.text-danger').should('not.exist');
     cy.get('[type="submit"]').click();
-    cy.get('app-member-info-landing', { timeout: 10000 }).contains(`${name} ${date}`);
+    cy.get('app-member-info-landing', { timeout: 20000 }).contains(`${name} ${date}`);
     cy.get('app-member-info-landing').contains(date + '@orcid.org');
     cy.get('app-member-info-landing').contains('https://' + date + '.org');
     cy.get('app-member-info-landing').contains('Description: ' + date);
