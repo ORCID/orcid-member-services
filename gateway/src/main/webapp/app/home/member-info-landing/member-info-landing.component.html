@@ -91,18 +91,23 @@
       </div>
       <div *ngIf="memberData.contacts">
         <h5 class="mb-4">Contacts</h5>
+        <a class="mb-4 font-weight-normal font-size-14 d-block">
+          <img src="../../../content/images/plus-circle.svg" class="add-new-contact-icon mr-1" alt="Add new">
+          <span>Add a new contact</span>
+        </a>
         <div class="row ml-0 d-flex justify-content-between contact">
           <h6>Name</h6>
           <h6>Member roles</h6>
           <h6>Email</h6>
           <h6>Phone</h6>
+          <h6 class="contacts-edit-column"></h6>
         </div>
         <hr class="green-hr" />
         <ul class="ml-0 pl-0" *ngFor="let contact of memberData.contacts; let i = index">
           <li class="row ml-0 d-flex justify-content-between contact">
             <div>
               <div>{{ contact.name }}</div>
-              <div class="color-gray small-text">{{ contact.title }}</div>
+              <div class="color-gray font-size-12">{{ contact.title }}</div>
             </div>
             <div>{{ contact.memberOrgRole.join(', ') }}</div>
             <div>
@@ -113,6 +118,10 @@
             </div>
             <div *ngIf="!contact.phone">
               -
+            </div>
+            <div class="contacts-edit-column">
+              <fa-icon [icon]="'pencil-alt'"></fa-icon>
+              Edit
             </div>
           </li>
           <hr *ngIf="i + 1 < memberData.contacts.length" />

@@ -113,7 +113,7 @@ oauth2:
     secret: changeit
     # Controls session expiration due to inactivity (ignored for remember-me).
     # Negative values disable session inactivity expiration.
-    session-timeout-in-seconds: 1800
+    session-timeout-in-seconds: 18000
     cookie-domain: ${gateway.cookie.domain}
 # ===================================================================
 # Application specific properties
