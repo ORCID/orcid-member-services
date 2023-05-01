@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./contact-edit.component.scss']
 })
 export class ContactEditComponent implements OnInit, OnDestroy {
+  routeData: any;
   memberDataSubscription: Subscription;
   account: IMSUser;
   memberData: ISFMemberData;
@@ -46,7 +47,9 @@ export class ContactEditComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     protected activatedRoute: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    this.routeData = this.activatedRoute.data.subscribe(data => console.log(data));
+  }
 
   ngOnInit() {
     this.memberDataSubscription = this.accountService.memberData.subscribe(data => {

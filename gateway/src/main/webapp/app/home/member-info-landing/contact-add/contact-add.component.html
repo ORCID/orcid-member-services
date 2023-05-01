@@ -24,7 +24,9 @@
         <h3 class="mb-3 wide-text">Contact details</h3>
         <div class="form mb-5">
           <div class="form-group w-50">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('firstName').invalid }">First or given name</label>
+            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('firstName').invalid }"
+              >First or given name</label
+            >
             <input
               type="text"
               class="form-control"
@@ -112,37 +114,21 @@
             </div>
           </div>
           <h3 class="mb-0 mr-2">Roles</h3>
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="mainRelationshipContact" formControlName="mainRelationshipContact" />
-            <label class="form-check-label">Main relationship contact</label>
-          </div>
-          
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="votingContact" formControlName="votingContact" />
-            <label class="form-check-label">Voting contact</label>
-          </div>
-
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="technicalContact" formControlName="technicalContact" />
-            <label class="form-check-label">Technical contact</label>
-          </div>
-          
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="invoiceContact" formControlName="invoiceContact" />
-            <label class="form-check-label">Invoice contact</label>
-          </div>
-
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="commsContact" formControlName="commsContact" />
-            <label class="form-check-label">Comms contact</label>
-          </div>
-          
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="productContact" formControlName="productContact" />
-            <label class="form-check-label">Product contact</label>
+          <div formArrayName="roles">
+            <div *ngFor="let myOption of roles.controls; let i = index">
+              <div formGroupName="{{ i }}">
+                <input type="checkbox" [formControl]="myOption.get('selected')" />
+                <label> {{ myOption.get('name').value }} </label>
+              </div>
+              <div *ngIf="editForm.get('roles').invalid">
+                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('roles').errors.required">
+                  Organization description is too long. Please use 5000 characters or less.
+                </small>
+              </div>
+            </div>
           </div>
           <button type="submit" [disabled]="isSaving" class="btn btn-primary">Save changes</button>
-          <button type="button" class="btn btn-outline-primary" routerLink="">Cancel</button>
+          <button type="button" class="btn btn-outline-primary" routerLink="/">Cancel</button>
         </div>
       </form>
 
@@ -151,7 +137,11 @@
           <h3 class="mb-0 mr-2">Identifiers</h3>
         </div>
         <div class="wide-text font-size-12 coming-soon">
-          <em>We did our best to register the right organization identifiers in our systems when you became an ORCID member. If you think any are missing (ROR, GRID, RINGGOLD or Funder Registry ID) <a href="mailto:membership@orcid.org">contact your engagement support lead</a> to register additional IDs</em>
+          <em
+            >We did our best to register the right organization identifiers in our systems when you became an ORCID member. If you think any
+            are missing (ROR, GRID, RINGGOLD or Funder Registry ID)
+            <a href="mailto:membership@orcid.org">contact your engagement support lead</a> to register additional IDs</em
+          >
         </div>
         <div class="row ml-0 d-flex justify-content-between contact">
           <h6 class="w-66">ID</h6>

@@ -3,6 +3,7 @@ export interface ISFMemberContact {
   votingContant?: boolean;
   memberOrgRole?: string[];
   name?: string;
+  lastName?: string;
   contactEmail?: string;
   title?: string;
   phone?: string;
@@ -29,6 +30,7 @@ export class SFMemberContact implements ISFMemberContact {
     public votingContact?: boolean,
     public memberOrgRole?: string[],
     public name?: string,
+    public lastName?: string,
     public contactEmail?: string,
     public title?: string,
     public phone?: string

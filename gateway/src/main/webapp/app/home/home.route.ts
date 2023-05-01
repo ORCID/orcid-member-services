@@ -1,5 +1,5 @@
 import { ActivatedRouteSnapshot, Resolve, Route, RouterStateSnapshot } from '@angular/router';
-import { UserRouteAccessService } from 'app/core';
+import { AccountService, UserRouteAccessService } from 'app/core';
 
 import { HomeComponent } from './';
 import { MemberInfoEditComponent } from './member-info-landing/member-info-edit/member-info-edit.component';
@@ -7,23 +7,32 @@ import { MemberInfoLandingComponent } from './member-info-landing/member-info-la
 import { ContactAddComponent } from './member-info-landing/contact-add/contact-add.component';
 import { ContactEditComponent } from './member-info-landing/contact-edit/contact-edit.component';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { ISFMemberContact, SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
+import { filter } from 'rxjs/operators';
 
-/* @Injectable({ providedIn: 'root' })
-export class ContactResolve implements Resolve<IMSMember> {
-  constructor(private service: MSMemberService) {}
+@Injectable({ providedIn: 'root' })
+export class ContactResolve implements Resolve<any> {
+  constructor(private service: AccountService) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IMSMember> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ISFMemberContact> {
     const id = route.params['id'] ? route.params['id'] : null;
+    console.log(id);
+
     if (id) {
-      return this.service.find(id).pipe(
-        filter((response: HttpResponse<MSMember>) => response.ok),
-        map((msMember: HttpResponse<MSMember>) => msMember.body)
-      );
+      this.service.memberData.subscribe(data => {
+        console.log(data);
+
+        if (data && data.contacts) {
+          console.log(data.contacts.find(contact => contact.contactEmail === data));
+
+          return data.contacts.find(contact => contact.contactEmail === data);
+        }
+      });
     }
-    return of(new MSMember());
+    return of(new SFMemberContact());
   }
-} */
+}
 
 export const HOME_ROUTE: Route = {
   path: '',
@@ -59,6 +68,9 @@ export const HOME_ROUTE: Route = {
     {
       path: 'contact/:id/edit',
       component: ContactEditComponent,
+      resolve: {
+        contact: ContactResolve
+      },
       data: {
         pageTitle: 'home.title.string'
       },

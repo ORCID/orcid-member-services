@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
 import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
+import { SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
 import { ISFMemberData, SFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
 import { IMSUser } from 'app/shared/model/user.model';
@@ -33,12 +34,16 @@ export class ContactAddComponent implements OnInit, OnDestroy {
     marginRight: '0'
   };
 
-  editForm = this.fb.group({
-    name: [null, [Validators.required, Validators.maxLength(255)]],
-    description: [null, [Validators.maxLength(5000)]],
-    website: [null, [Validators.pattern(URL_REGEXP), Validators.maxLength(255)]],
-    email: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]]
-  });
+  editForm: FormGroup;
+
+  rolesData = [
+    { id: 1, selected: false, name: 'Main relationship contact' },
+    { id: 2, selected: false, name: 'Voting contact' },
+    { id: 3, selected: false, name: 'Technical contact' },
+    { id: 4, selected: false, name: 'Invoice contact' },
+    { id: 5, selected: false, name: 'Comms contact' },
+    { id: 6, selected: false, name: 'Product contact' }
+  ];
 
   constructor(
     private accountService: AccountService,
@@ -46,7 +51,18 @@ export class ContactAddComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     protected activatedRoute: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    this.editForm = this.fb.group({
+      firstName: [null, [Validators.required, Validators.maxLength(255)]],
+      lastName: [null, [Validators.maxLength(5000)]],
+      phone: [null, [Validators.pattern(URL_REGEXP), Validators.maxLength(255)]],
+      email: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
+      title: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
+      roles: this.fb.array(
+        this.rolesData.map(val => this.fb.group({ id: val.id, selected: val.selected, name: val.name }, [[this.validateRoles]]))
+      )
+    });
+  }
 
   ngOnInit() {
     this.memberDataSubscription = this.accountService.memberData.subscribe(data => {
@@ -54,11 +70,24 @@ export class ContactAddComponent implements OnInit, OnDestroy {
       this.validateUrl();
       this.updateForm(data);
     });
+    console.log(this.roles.controls);
+
     this.editForm.valueChanges.subscribe(() => {
       if (this.editForm.status === 'VALID') {
+        this.editForm.controls.roles.setErrors(this.validateRoles(this.roles));
         this.invalidForm = false;
       }
     });
+  }
+
+  validateRoles(rolesArray: FormArray): ValidationErrors | null {
+    console.log(rolesArray);
+    const lastFiveRoles = rolesArray.controls.slice(-5);
+    const selectedRoles = lastFiveRoles.filter(control => control.value.selected);
+    if (selectedRoles.length < 1) {
+      return { atLeastOneRoleSelected: true };
+    }
+    return null;
   }
 
   ngOnDestroy(): void {
@@ -71,14 +100,18 @@ export class ContactAddComponent implements OnInit, OnDestroy {
     }
   }
 
+  get roles(): FormArray {
+    return this.editForm.get('roles') as FormArray;
+  }
+
   updateForm(data: SFMemberData) {
     if (data && data.id) {
-      this.editForm.patchValue({
+      /* this.editForm.patchValue({
         name: data.publicDisplayName,
         description: data.publicDisplayDescriptionHtml,
         website: data.website,
         email: data.publicDisplayEmail
-      });
+      }); */
     }
   }
 
@@ -86,13 +119,14 @@ export class ContactAddComponent implements OnInit, OnDestroy {
     return id.replace(/^.*dx.doi.org\//g, '');
   }
 
-  createDetailsFromForm(): SFPublicDetails {
+  createDetailsFromForm(): SFMemberContact {
     return {
-      ...new SFPublicDetails(),
-      name: this.editForm.get(['name']).value,
-      description: this.editForm.get(['description']).value,
-      website: this.editForm.get(['website']).value,
-      email: this.editForm.get(['email']).value
+      ...new SFMemberContact(),
+      name: this.editForm.get(['firstName']).value,
+      lastName: this.editForm.get(['lastName']).value,
+      contactEmail: this.editForm.get(['email']).value,
+      phone: this.editForm.get(['phone']).value,
+      memberOrgRole: this.editForm.get(['roles']).value
     };
   }
 
@@ -102,7 +136,7 @@ export class ContactAddComponent implements OnInit, OnDestroy {
     } else {
       this.invalidForm = false;
       this.isSaving = true;
-      const details = this.createDetailsFromForm();
+      /* const details = this.createDetailsFromForm();
       this.memberService.updatePublicDetails(details).subscribe(
         res => {
           this.accountService.updatePublicDetails(details);
@@ -112,7 +146,7 @@ export class ContactAddComponent implements OnInit, OnDestroy {
           console.error(err);
           this.onSaveError();
         }
-      );
+      ); */
     }
   }
 
