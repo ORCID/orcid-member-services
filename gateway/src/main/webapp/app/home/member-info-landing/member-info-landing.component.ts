@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AccountService } from 'app/core';
+import { MSMemberService } from 'app/entities/member';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { IMSUser } from 'app/shared/model/user.model';
 import { Subscription } from 'rxjs';
@@ -15,7 +16,7 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   authenticationStateSubscription: Subscription;
   memberDataSubscription: Subscription;
 
-  constructor(private accountService: AccountService) {}
+  constructor(private memberService: MSMemberService, private accountService: AccountService) {}
 
   isActive() {
     return this.memberData && new Date(this.memberData.membershipEndDateString) > new Date();
@@ -35,7 +36,7 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
     this.authenticationStateSubscription = this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
     });
-    this.memberDataSubscription = this.accountService.memberData.subscribe(res => {
+    this.memberDataSubscription = this.memberService.memberData.subscribe(res => {
       if (res) {
         this.memberData = res;
         this.validateUrl();

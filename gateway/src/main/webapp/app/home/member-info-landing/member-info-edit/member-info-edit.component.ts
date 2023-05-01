@@ -49,7 +49,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.memberDataSubscription = this.accountService.memberData.subscribe(data => {
+    this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
       this.memberData = data;
       this.validateUrl();
       this.updateForm(data);
@@ -105,7 +105,13 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
       const details = this.createDetailsFromForm();
       this.memberService.updatePublicDetails(details).subscribe(
         res => {
-          this.accountService.updatePublicDetails(details);
+          this.memberService.memberData.next({
+            ...this.memberService.memberData.value,
+            publicDisplayDescriptionHtml: details.description,
+            publicDisplayName: details.name,
+            publicDisplayEmail: details.email,
+            website: details.website
+          });
           this.onSaveSuccess();
         },
         err => {
