@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
 import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
-import { SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
+import { ISFMemberContact, SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
 import { ISFMemberData, SFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
 import { IMSUser } from 'app/shared/model/user.model';
@@ -53,35 +53,31 @@ export class ContactAddComponent implements OnInit, OnDestroy {
     private router: Router
   ) {
     this.editForm = this.fb.group({
-      firstName: [null, [Validators.required, Validators.maxLength(255)]],
-      lastName: [null, [Validators.maxLength(5000)]],
-      phone: [null, [Validators.pattern(URL_REGEXP), Validators.maxLength(255)]],
-      email: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
-      title: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
+      firstName: [null, [Validators.required, Validators.maxLength(40)]],
+      lastName: [null, [Validators.required, Validators.maxLength(40)]],
+      phone: [null, [Validators.maxLength(255)]],
+      email: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
+      title: [null, [Validators.maxLength(80)]],
       roles: this.fb.array(
-        this.rolesData.map(val => this.fb.group({ id: val.id, selected: val.selected, name: val.name }, [[this.validateRoles]]))
+        // add interface
+        this.rolesData.map(val => this.fb.group({ id: val.id, selected: val.selected, name: val.name }, [[this.validateContactRoles]]))
       )
     });
   }
 
   ngOnInit() {
-    this.memberDataSubscription = this.accountService.memberData.subscribe(data => {
+    this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
       this.memberData = data;
-      this.validateUrl();
-      this.updateForm(data);
     });
-    console.log(this.roles.controls);
-
     this.editForm.valueChanges.subscribe(() => {
       if (this.editForm.status === 'VALID') {
-        this.editForm.controls.roles.setErrors(this.validateRoles(this.roles));
+        this.editForm.controls.roles.setErrors(this.validateContactRoles(this.roles));
         this.invalidForm = false;
       }
     });
   }
 
-  validateRoles(rolesArray: FormArray): ValidationErrors | null {
-    console.log(rolesArray);
+  validateContactRoles(rolesArray: FormArray): ValidationErrors | null {
     const lastFiveRoles = rolesArray.controls.slice(-5);
     const selectedRoles = lastFiveRoles.filter(control => control.value.selected);
     if (selectedRoles.length < 1) {
@@ -94,39 +90,22 @@ export class ContactAddComponent implements OnInit, OnDestroy {
     this.memberDataSubscription.unsubscribe();
   }
 
-  validateUrl() {
-    if (!/(http(s?)):\/\//i.test(this.memberData.website)) {
-      this.memberData.website = 'http://' + this.memberData.website;
-    }
-  }
-
   get roles(): FormArray {
     return this.editForm.get('roles') as FormArray;
   }
 
-  updateForm(data: SFMemberData) {
-    if (data && data.id) {
-      /* this.editForm.patchValue({
-        name: data.publicDisplayName,
-        description: data.publicDisplayDescriptionHtml,
-        website: data.website,
-        email: data.publicDisplayEmail
-      }); */
-    }
-  }
-
-  filterCRFID(id) {
-    return id.replace(/^.*dx.doi.org\//g, '');
-  }
-
-  createDetailsFromForm(): SFMemberContact {
+  createContactFromForm(): SFMemberContact {
     return {
       ...new SFMemberContact(),
-      name: this.editForm.get(['firstName']).value,
-      lastName: this.editForm.get(['lastName']).value,
-      contactEmail: this.editForm.get(['email']).value,
-      phone: this.editForm.get(['phone']).value,
-      memberOrgRole: this.editForm.get(['roles']).value
+      name: this.editForm.get('firstName').value + ' ' + this.editForm.get('lastName').value,
+      contactEmail: this.editForm.get('email').value,
+      phone: this.editForm.get('phone').value,
+      title: this.editForm.get('title').value,
+      memberOrgRole: this.editForm
+        .get('roles')
+        // add interface
+        .value.filter(role => role.selected)
+        .map(role => role.name)
     };
   }
 
@@ -136,17 +115,20 @@ export class ContactAddComponent implements OnInit, OnDestroy {
     } else {
       this.invalidForm = false;
       this.isSaving = true;
-      /* const details = this.createDetailsFromForm();
-      this.memberService.updatePublicDetails(details).subscribe(
+      const contact = this.createContactFromForm();
+      this.memberService.createContact(contact).subscribe(
         res => {
-          this.accountService.updatePublicDetails(details);
+          console.log(res);
+
+          // update this.memberData object with the relevant changes
+          //
           this.onSaveSuccess();
         },
         err => {
           console.error(err);
           this.onSaveError();
         }
-      ); */
+      );
     }
   }
 

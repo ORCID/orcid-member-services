@@ -10,23 +10,19 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ISFMemberContact, SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
 import { filter } from 'rxjs/operators';
+import { MSMemberService } from 'app/entities/member';
 
 @Injectable({ providedIn: 'root' })
 export class ContactResolve implements Resolve<any> {
-  constructor(private service: AccountService) {}
+  constructor(private service: MSMemberService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ISFMemberContact> {
     const id = route.params['id'] ? route.params['id'] : null;
-    console.log(id);
-
+    // TODO: needs to be replaced with the upcoming /contact endpoint (get)
     if (id) {
-      this.service.memberData.subscribe(data => {
-        console.log(data);
-
-        if (data && data.contacts) {
-          console.log(data.contacts.find(contact => contact.contactEmail === data));
-
-          return data.contacts.find(contact => contact.contactEmail === data);
+      this.service.getMemberContacts().subscribe(data => {
+        if (data) {
+          return Object.values(data).find(contact => contact.contactEmail == id);
         }
       });
     }

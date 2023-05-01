@@ -15,7 +15,12 @@ import {
   ISFRawConsortiumMemberData,
   SFConsortiumMemberData
 } from 'app/shared/model/salesforce-member-data.model';
-import { ISFRawMemberContact, ISFRawMemberContacts, SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
+import {
+  ISFMemberContact,
+  ISFRawMemberContact,
+  ISFRawMemberContacts,
+  SFMemberContact
+} from 'app/shared/model/salesforce-member-contact.model';
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from 'app/shared/model/salesforce-member-org-id.model';
 import { ISFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
 
@@ -98,13 +103,51 @@ export class MSMemberService {
     );
   }
 
-  getMemberContacts(): Observable<SFMemberContact> {
+  getMemberContacts(): Observable<SFMemberContact[]> {
     return this.http.get<ISFRawMemberContacts>(`${this.resourceUrl}/member-contacts`, { observe: 'response' }).pipe(
       takeUntil(this.stopFetchingMemberData),
       map((res: SalesforceContactsResponseType) => this.convertToSalesforceMemberContacts(res)),
       tap(res => this.memberData.next({ ...this.memberData.value, contacts: res })),
       catchError(err => {
         return of(err);
+      })
+    );
+  }
+
+  getContact(id: ISFMemberContact): Observable<ISFMemberContact> {
+    return this.http.get<ISFRawMemberContact>(`${this.resourceUrl}/contact`, { observe: 'response' }).pipe(
+      map((res: HttpResponse<ISFRawMemberContact>) => this.convertToSalesforceMemberContact(res.body)),
+      catchError(err => {
+        return throwError(err);
+      })
+    );
+  }
+
+  createContact(contact: ISFMemberContact): Observable<ISFMemberContact> {
+    console.log('yeah babei', contact);
+
+    return this.http.post<ISFRawMemberContact>(`${this.resourceUrl}/contact`, contact, { observe: 'response' }).pipe(
+      map((res: HttpResponse<ISFRawMemberContact>) => this.convertToSalesforceMemberContact(res.body)),
+      catchError(err => {
+        return throwError(err);
+      })
+    );
+  }
+
+  updateContact(contact: ISFMemberContact): Observable<ISFMemberContact> {
+    return this.http.put<ISFRawMemberContact>(`${this.resourceUrl}/contact`, contact, { observe: 'response' }).pipe(
+      map((res: HttpResponse<ISFRawMemberContact>) => this.convertToSalesforceMemberContact(res.body)),
+      catchError(err => {
+        return throwError(err);
+      })
+    );
+  }
+
+  removeContact(contact: ISFMemberContact): Observable<ISFMemberContact> {
+    return this.http.delete<ISFRawMemberContact>(`${this.resourceUrl}/contact`, { observe: 'response' }).pipe(
+      map((res: HttpResponse<ISFRawMemberContact>) => this.convertToSalesforceMemberContact(res.body)),
+      catchError(err => {
+        return throwError(err);
       })
     );
   }
@@ -138,7 +181,7 @@ export class MSMemberService {
         })
       );
     }
-    return EMPTY;
+    return of(null);
   }
 
   getIsConsortiumLead(salesforceId: string): Observable<EntityResponseType | never> {
@@ -152,7 +195,7 @@ export class MSMemberService {
         })
       );
     }
-    return EMPTY;
+    return of(null);
   }
 
   fetchMemberData(userIdentity) {
@@ -170,7 +213,7 @@ export class MSMemberService {
                 this.getIsConsortiumLead(userIdentity.salesforceId)
               ]);
             }),
-            tap(() => {
+            tap(res => {
               this.fetchingMemberDataState.next(false);
             }),
             catchError(() => {

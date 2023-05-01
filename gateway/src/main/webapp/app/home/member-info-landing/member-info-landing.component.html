@@ -119,10 +119,10 @@
             <div *ngIf="!contact.phone">
               -
             </div>
-            <div class="contacts-edit-column">
+            <a routerLink="/contact/{{contact.contactEmail}}/edit" class="contacts-edit-column">
               <fa-icon [icon]="'pencil-alt'"></fa-icon>
               Edit
-            </div>
+            </a>
           </li>
           <hr *ngIf="i + 1 < memberData.contacts.length" />
         </ul>

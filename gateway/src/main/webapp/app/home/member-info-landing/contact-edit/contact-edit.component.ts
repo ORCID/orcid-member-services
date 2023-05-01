@@ -52,7 +52,7 @@ export class ContactEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.memberDataSubscription = this.accountService.memberData.subscribe(data => {
+    this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
       this.memberData = data;
       this.validateUrl();
       this.updateForm(data);
@@ -108,7 +108,7 @@ export class ContactEditComponent implements OnInit, OnDestroy {
       const details = this.createDetailsFromForm();
       this.memberService.updatePublicDetails(details).subscribe(
         res => {
-          this.accountService.updatePublicDetails(details);
+          this.memberService.updatePublicDetails(details);
           this.onSaveSuccess();
         },
         err => {
