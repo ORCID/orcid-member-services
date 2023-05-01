@@ -124,8 +124,6 @@ export class MSMemberService {
   }
 
   createContact(contact: ISFMemberContact): Observable<ISFMemberContact> {
-    console.log('yeah babei', contact);
-
     return this.http.post<ISFRawMemberContact>(`${this.resourceUrl}/contact`, contact, { observe: 'response' }).pipe(
       map((res: HttpResponse<ISFRawMemberContact>) => this.convertToSalesforceMemberContact(res.body)),
       catchError(err => {
