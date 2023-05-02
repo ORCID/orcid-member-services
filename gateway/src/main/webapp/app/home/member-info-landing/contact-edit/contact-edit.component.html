@@ -4,8 +4,8 @@
       Back to <a routerLink="">{{ memberData.publicDisplayName }}</a>
     </div>
     <hr class="mb-4" />
-    <div class="edit-org-label mb-3 font-size-18 color-gray">Add new contact</div>
-    <h1 class="mb-3 wide-text font-italic">New contact</h1>
+    <div class="edit-org-label mb-3 font-size-18 color-gray">Edit contact</div>
+    <h2 class="mb-3 wide-text font-weight-bold">{{editForm.get('firstName').value + ' ' + editForm.get('lastName').value}}</h2>
   </div>
   <div class="d-flex">
     <div class="main-section">
