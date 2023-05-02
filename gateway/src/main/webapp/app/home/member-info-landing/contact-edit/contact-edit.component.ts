@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
+import { EMAIL_REGEXP } from 'app/app.constants';
 import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
-import { ISFMemberData, SFMemberData } from 'app/shared/model/salesforce-member-data.model';
-import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
+import { ISFMemberContact, SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
+import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { IMSUser } from 'app/shared/model/user.model';
 import { Subscription } from 'rxjs';
 
@@ -15,31 +15,27 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./contact-edit.component.scss']
 })
 export class ContactEditComponent implements OnInit, OnDestroy {
-  routeData: any;
   memberDataSubscription: Subscription;
   account: IMSUser;
   memberData: ISFMemberData;
+  contact: ISFMemberContact;
   objectKeys = Object.keys;
   // TODO move to constants
   MEMBER_LIST_URL: string = 'https://orcid.org/members';
   isSaving: boolean;
   invalidForm: boolean;
-  quillConfig = {
-    toolbar: [['bold', 'italic'], [{ list: 'ordered' }, { list: 'bullet' }], ['link']]
-  };
-  quillStyles = {
-    fontFamily: 'inherit',
-    fontSize: '14px',
-    letterSpacing: '0.25px',
-    marginRight: '0'
-  };
 
-  editForm = this.fb.group({
-    name: [null, [Validators.required, Validators.maxLength(255)]],
-    description: [null, [Validators.maxLength(5000)]],
-    website: [null, [Validators.pattern(URL_REGEXP), Validators.maxLength(255)]],
-    email: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]]
-  });
+  editForm: FormGroup;
+  routeData: any;
+
+  rolesData = [
+    { id: 1, selected: false, name: 'Main relationship contact' },
+    { id: 2, selected: false, name: 'Voting contact' },
+    { id: 3, selected: false, name: 'Technical contact' },
+    { id: 4, selected: false, name: 'Invoice contact' },
+    { id: 5, selected: false, name: 'Comms contact' },
+    { id: 6, selected: false, name: 'Product contact' }
+  ];
 
   constructor(
     private accountService: AccountService,
@@ -48,54 +44,80 @@ export class ContactEditComponent implements OnInit, OnDestroy {
     protected activatedRoute: ActivatedRoute,
     private router: Router
   ) {
-    this.routeData = this.activatedRoute.data.subscribe(data => console.log(data));
+    this.editForm = this.fb.group({
+      firstName: [null, [Validators.required, Validators.maxLength(40)]],
+      lastName: [null, [Validators.required, Validators.maxLength(40)]],
+      phone: [null, [Validators.maxLength(255)]],
+      email: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
+      title: [null, [Validators.maxLength(80)]],
+      roles: this.fb.array(
+        // add interface
+        this.rolesData.map(val => this.fb.group({ id: val.id, selected: val.selected, name: val.name }, [[this.validateContactRoles]]))
+      )
+    });
+    this.routeData = this.activatedRoute.data.subscribe(data => {
+      console.log(data);
+
+      this.contact = data.contact;
+      console.log(this.contact);
+      this.updateForm(data.contact);
+    });
   }
 
   ngOnInit() {
     this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
       this.memberData = data;
-      this.validateUrl();
-      this.updateForm(data);
     });
     this.editForm.valueChanges.subscribe(() => {
       if (this.editForm.status === 'VALID') {
+        this.editForm.controls.roles.setErrors(this.validateContactRoles(this.roles));
         this.invalidForm = false;
       }
     });
+  }
+
+  updateForm(contact: ISFMemberContact) {
+    this.editForm.patchValue({
+      firstName: contact.name,
+      lastName: contact.name,
+      phone: contact.phone,
+      title: contact.title,
+      email: contact.contactEmail,
+      roles: contact.memberOrgRole.map(role => {
+        return { selected: true, name: role };
+      })
+    });
+  }
+
+  validateContactRoles(rolesArray: FormArray): ValidationErrors | null {
+    const lastFiveRoles = rolesArray.controls.slice(-5);
+    const selectedRoles = lastFiveRoles.filter(control => control.value.selected);
+    if (selectedRoles.length < 1) {
+      return { atLeastOneRoleSelected: true };
+    }
+    return null;
   }
 
   ngOnDestroy(): void {
     this.memberDataSubscription.unsubscribe();
   }
 
-  validateUrl() {
-    if (!/(http(s?)):\/\//i.test(this.memberData.website)) {
-      this.memberData.website = 'http://' + this.memberData.website;
-    }
+  get roles(): FormArray {
+    return this.editForm.get('roles') as FormArray;
   }
 
-  updateForm(data: SFMemberData) {
-    if (data && data.id) {
-      this.editForm.patchValue({
-        name: data.publicDisplayName,
-        description: data.publicDisplayDescriptionHtml,
-        website: data.website,
-        email: data.publicDisplayEmail
-      });
-    }
-  }
-
-  filterCRFID(id) {
-    return id.replace(/^.*dx.doi.org\//g, '');
-  }
-
-  createDetailsFromForm(): SFPublicDetails {
+  createContactFromForm(): SFMemberContact {
     return {
-      ...new SFPublicDetails(),
-      name: this.editForm.get(['name']).value,
-      description: this.editForm.get(['description']).value,
-      website: this.editForm.get(['website']).value,
-      email: this.editForm.get(['email']).value
+      ...new SFMemberContact(),
+      name: this.editForm.get('firstName').value + ' ' + this.editForm.get('lastName').value,
+      contactEmail: this.editForm.get('email').value,
+      phone: this.editForm.get('phone').value,
+      title: this.editForm.get('title').value,
+      memberOrgRole: this.editForm
+        .get('roles')
+        // add interface
+        .value.filter(role => role.selected)
+        .map(role => role.name)
     };
   }
 
@@ -105,10 +127,13 @@ export class ContactEditComponent implements OnInit, OnDestroy {
     } else {
       this.invalidForm = false;
       this.isSaving = true;
-      const details = this.createDetailsFromForm();
-      this.memberService.updatePublicDetails(details).subscribe(
+      const contact = this.createContactFromForm();
+      this.memberService.updateContact(contact).subscribe(
         res => {
-          this.memberService.updatePublicDetails(details);
+          console.log(res);
+
+          // update this.memberData object with the relevant changes
+          //
           this.onSaveSuccess();
         },
         err => {
@@ -117,6 +142,23 @@ export class ContactEditComponent implements OnInit, OnDestroy {
         }
       );
     }
+  }
+
+  delete() {
+    this.isSaving = true;
+    this.memberService.removeContact(this.contact.contactEmail).subscribe(
+      res => {
+        console.log(res);
+
+        // update this.memberData object with the relevant changes
+        //
+        this.onSaveSuccess();
+      },
+      err => {
+        console.error(err);
+        this.onSaveError();
+      }
+    );
   }
 
   onSaveSuccess() {

@@ -141,7 +141,7 @@ export class MSMemberService {
     );
   }
 
-  removeContact(contact: ISFMemberContact): Observable<ISFMemberContact> {
+  removeContact(id: string): Observable<ISFMemberContact> {
     return this.http.delete<ISFRawMemberContact>(`${this.resourceUrl}/contact`, { observe: 'response' }).pipe(
       map((res: HttpResponse<ISFRawMemberContact>) => this.convertToSalesforceMemberContact(res.body)),
       catchError(err => {
