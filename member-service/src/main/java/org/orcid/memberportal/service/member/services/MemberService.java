@@ -334,6 +334,11 @@ public class MemberService {
     }
 
     public void processMemberContact(MemberContactUpdate memberContactUpdate) {
+        MemberServiceUser user = userService.getLoggedInUser();
+        memberContactUpdate.setRequestedByEmail(user.getEmail());
+        memberContactUpdate.setRequestedByName(user.getFirstName() + " " + user.getLastName());
+        memberContactUpdate.setRequestedByMember(user.getMemberName());
+
         if (memberContactUpdate.getContactEmail() == null) {
             mailService.sendAddContactEmail(memberContactUpdate);
         } else if (memberContactUpdate.getContactNewEmail() == null

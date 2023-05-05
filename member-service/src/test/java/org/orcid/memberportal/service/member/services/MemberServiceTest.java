@@ -553,10 +553,11 @@ class MemberServiceTest {
     }
 
     @Test
-    void testProcessMemberContact() {
+    void testProcessMemberContact_add() {
         Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
         Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
         Mockito.doNothing().when(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
 
         MemberContactUpdate update = new MemberContactUpdate();
         update.setContactNewEmail("a.contact@email.com");
@@ -564,22 +565,40 @@ class MemberServiceTest {
         memberService.processMemberContact(update);
 
         Mockito.verify(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.verify(userService).getLoggedInUser();
+    }
 
-        update = new MemberContactUpdate();
+    @Test
+    void testProcessMemberContact_remove() {
+        Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+
+        MemberContactUpdate update = new MemberContactUpdate();
         update.setContactEmail("a.contact@email.com");
 
         memberService.processMemberContact(update);
 
         Mockito.verify(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.verify(userService).getLoggedInUser();
+    }
 
+    @Test
+    void testProcessMemberContact_update() {
+        Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
 
-        update = new MemberContactUpdate();
+        MemberContactUpdate update = new MemberContactUpdate();
         update.setContactEmail("a.contact@email.com");
         update.setContactNewEmail("a.new.contact@email.com");
 
         memberService.processMemberContact(update);
 
         Mockito.verify(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.verify(userService).getLoggedInUser();
     }
 
     private PublicMemberDetails getPublicMemberDetails() {
@@ -711,6 +730,7 @@ class MemberServiceTest {
         user.setEmail("logged-in-user@orcid.org");
         user.setLangKey("en");
         user.setSalesforceId("salesforceId");
+        user.setMemberName("member");
         return user;
     }
 
