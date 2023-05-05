@@ -19,7 +19,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
-import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.springframework.context.MessageSource;
 
 public class MemberValidatorTest {
@@ -175,14 +175,14 @@ public class MemberValidatorTest {
         Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.parentSalesforceIdNotAllowed", propertyName);
-        
+
         member.setSalesforceId("legal");
         member.setParentSalesforceId("legal");
         validation = memberValidator.validate(member, getUser());
         assertTrue(validation.isValid());
         errors = validation.getErrors();
         assertEquals(0, errors.size());
-        
+
         member.setParentSalesforceId(null);
         validation = memberValidator.validate(member, getUser());
         assertTrue(validation.isValid());
@@ -259,7 +259,7 @@ public class MemberValidatorTest {
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.nameAlreadyExists", propertyName);
     }
-    
+
     @Test
     public void testValidateMemberWithInvalidMemberType() {
         Member member = getMemberWithValidNewClientId();
@@ -273,19 +273,19 @@ public class MemberValidatorTest {
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.invalidMemberType", propertyName);
     }
-    
+
     @Test
     public void testValidateMemberWithValidMemberType() {
         Member member = getMemberWithValidNewClientId();
         member.setType("basic");
         MemberValidation validation = memberValidator.validate(member, getUser());
         assertTrue(validation.isValid());
-        
+
         member.setType("premium");
         validation = memberValidator.validate(member, getUser());
         assertTrue(validation.isValid());
     }
-    
+
     @Test
     public void testValidateMemberWithInvalidMemberStatus() {
         Member member = getMemberWithValidNewClientId();
@@ -299,14 +299,14 @@ public class MemberValidatorTest {
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.invalidMemberStatus", propertyName);
     }
-    
+
     @Test
     public void testValidateMemberWithValidMemberStatus() {
         Member member = getMemberWithValidNewClientId();
         member.setStatus("Active");
         MemberValidation validation = memberValidator.validate(member, getUser());
         assertTrue(validation.isValid());
-        
+
         member.setStatus("Deactivated");
         validation = memberValidator.validate(member, getUser());
         assertTrue(validation.isValid());

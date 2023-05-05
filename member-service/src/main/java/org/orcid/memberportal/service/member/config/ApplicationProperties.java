@@ -47,6 +47,10 @@ public class ApplicationProperties {
 
     private String salesforceRequestTimeout;
 
+    private String contactUpdateRecipient;
+
+    private boolean mailTestMode;
+
     public String getOrcidOrgClientId() {
         return orcidOrgClientId;
     }
@@ -182,5 +186,20 @@ public class ApplicationProperties {
     public void setHolisticsConsortiaMemberAffiliationsDashboardSecret(String holisticsConsortiaMemberAffiliationsDashboardSecret) {
         this.holisticsConsortiaMemberAffiliationsDashboardSecret = holisticsConsortiaMemberAffiliationsDashboardSecret;
     }
-    
+
+    public String getContactUpdateRecipient() {
+        return contactUpdateRecipient;
+    }
+
+    public void setContactUpdateRecipient(String contactUpdateRecipient) {
+        this.contactUpdateRecipient = contactUpdateRecipient;
+    }
+
+    public boolean isMailTestMode() {
+        return mailTestMode;
+    }
+
+    public void setMailTestMode(boolean mailTestMode) {
+        this.mailTestMode = mailTestMode;
+    }
 }

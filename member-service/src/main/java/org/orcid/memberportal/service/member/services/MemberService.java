@@ -16,7 +16,7 @@ import org.orcid.memberportal.service.member.repository.MemberRepository;
 import org.orcid.memberportal.service.member.security.AuthoritiesConstants;
 import org.orcid.memberportal.service.member.security.EncryptUtil;
 import org.orcid.memberportal.service.member.security.SecurityUtils;
-import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.upload.MemberUpload;
 import org.orcid.memberportal.service.member.upload.MembersUploadReader;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
@@ -59,6 +59,9 @@ public class MemberService {
 
     @Autowired
     private SalesforceClient salesforceClient;
+
+    @Autowired
+    private MailService mailService;
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -203,7 +206,7 @@ public class MemberService {
 
     public Page<Member> getMembers(Pageable pageable, String filter) {
         return memberRepository.findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(filter, filter, filter,
-                pageable);
+            pageable);
     }
 
     public List<Member> getAllMembers() {
@@ -331,5 +334,18 @@ public class MemberService {
     }
 
     public void processMemberContact(MemberContactUpdate memberContactUpdate) {
+        if (memberContactUpdate.getContactEmail() == null) {
+            mailService.sendAddContactEmail(memberContactUpdate);
+        } else if (memberContactUpdate.getContactNewEmail() == null
+            && memberContactUpdate.getContactNewFirstName() == null
+            && memberContactUpdate.getContactNewLastName() == null
+            && memberContactUpdate.getContactNewPhone() == null
+            && memberContactUpdate.getContactNewRoles() == null
+            && memberContactUpdate.getContactNewJobTitle() == null) {
+            // no new data, must be remove operation
+            mailService.sendRemoveContactEmail(memberContactUpdate);
+        } else {
+            mailService.sendUpdateContactEmail(memberContactUpdate);
+        }
     }
 }

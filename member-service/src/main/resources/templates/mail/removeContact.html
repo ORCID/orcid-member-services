@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.affiliationUploadSummary.title}">
+        Your affiliation CSV upload
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body
+    style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+<div style="padding: 20px; padding-top: 10px; margin: auto;">
+    <div th:insert="~{mail/common :: emailHeader}"></div>
+    <p><strong>REMOVE CONTACT</strong></p>
+    <p>
+        <strong>Requested by</strong>
+        <span th:text="(@{|${requestedByName}|})">Andrew User</span>
+        <span th:text="(@{|${requestedByEmail}|})">a.user@email.com</span>
+        <span th:text="(@{|${requestedByMember}|})">Oregon State University</span>
+    </p>
+    <p>
+        --------------------
+        <strong>Contact</strong>
+        --------------------
+    </p>
+
+    <p>
+        <span th:text="(@{|${currentName}|})">Andrew User</span>
+        <span th:text="(@{|${currentEmail}|})">a.user@email.com</span>
+        <span th:text="(@{|${currentMember}|})">Oregon State University</span>
+    </p>
+</div>
+</body>
+</html>

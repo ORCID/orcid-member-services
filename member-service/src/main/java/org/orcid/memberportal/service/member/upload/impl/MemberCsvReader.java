@@ -13,7 +13,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
 import org.orcid.memberportal.service.member.domain.Member;
-import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.upload.MemberUpload;
 import org.orcid.memberportal.service.member.upload.MembersUploadReader;
 import org.orcid.memberportal.service.member.validation.MemberValidation;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.orcid.memberportal.service.member.client.UserServiceClient;
 import org.orcid.memberportal.service.member.security.SecurityUtils;
-import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +71,7 @@ public class UserService {
             throw new RuntimeException("Failed to update users' salesforce id");
         }
     }
-    
+
     public String getSalesforceIdForUser(String userId) {
         ResponseEntity<MemberServiceUser> response = userServiceClient.getUser(userId);
         if (response.getStatusCode().is2xxSuccessful()) {

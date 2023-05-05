@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +36,7 @@ public interface UserServiceClient {
     @RequestMapping(method = RequestMethod.PUT, value = "/api/users/{salesforceId}/{newSalesforceId}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "50000")
     ResponseEntity<String> updateUsersSalesforceId(@PathVariable("salesforceId") String salesforceId, @PathVariable("newSalesforceId") String newSalesforceId);
-    
+
     @RequestMapping(method = RequestMethod.DELETE, value = "/api/users/{loginOrId}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "5000")
     ResponseEntity<Void> deleteUser(@PathVariable("loginOrId") String loginOrId,

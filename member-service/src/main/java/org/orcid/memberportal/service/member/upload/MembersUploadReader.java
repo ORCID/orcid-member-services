@@ -3,7 +3,7 @@ package org.orcid.memberportal.service.member.upload;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 
 public interface MembersUploadReader {
 
