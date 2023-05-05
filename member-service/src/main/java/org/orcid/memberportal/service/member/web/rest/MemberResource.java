@@ -1,15 +1,7 @@
 package org.orcid.memberportal.service.member.web.rest;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
@@ -21,6 +13,8 @@ import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.upload.MemberUpload;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
+import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdateResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,20 +25,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing members.
@@ -170,12 +162,13 @@ public class MemberResource {
         return ResponseEntity.ok().body(member);
     }
 
-    
+
     /**
      * {@code POST  /members/:id/language/:language } : Updates an existing member's default language.
      *
-     * @param memberLanguage - the salesforceId of the member to update and the specified language
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)}, 
+     * @param salesforceId - the salesforceId of the member to update
+     * @param language - the language of the member to update
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)},
      *         or with status {@code 400 (Bad Request)}
      *         if the member is not valid, or with status
      *         {@code 500 (Internal Server Error)} if the member couldn't be
@@ -188,12 +181,12 @@ public class MemberResource {
         return ResponseEntity.ok().build();
     }
 
-    
+
     /**
      * {@code PUT  /public-details} : get details of member to which current user belongs
      *
      *
-     * @return the {@link PublicMemberDetails} 
+     * @return the {@link PublicMemberDetails}
      */
     @PutMapping("/public-details")
     public ResponseEntity<Boolean> updatePublicMemberDetails(@Valid @RequestBody PublicMemberDetails publicMemberDetails) {
@@ -205,12 +198,12 @@ public class MemberResource {
         boolean success = memberService.updatePublicMemberDetails(publicMemberDetails);
         return ResponseEntity.ok(success);
     }
-    
+
     /**
      * {@code PUT  /member-details} : get details of member to which current user belongs
      *
      *
-     * @return the {@link MemberDetails} 
+     * @return the {@link MemberDetails}
      */
     @GetMapping("/member-details")
     public ResponseEntity<MemberDetails> getMemberDetails() {
@@ -218,12 +211,12 @@ public class MemberResource {
         MemberDetails memberDetails = memberService.getCurrentMemberDetails();
         return ResponseEntity.ok(memberDetails);
     }
-    
+
     /**
      * {@code GET  /member-contacts} : get contacts of member to which current user belongs
      *
      *
-     * @return the {@link MemberDetails} 
+     * @return the {@link MemberDetails}
      */
     @GetMapping("/member-contacts")
     public ResponseEntity<MemberContacts> getMemberContacts() {
@@ -231,12 +224,12 @@ public class MemberResource {
         MemberContacts memberContacts = memberService.getCurrentMemberContacts();
         return ResponseEntity.ok(memberContacts);
     }
-    
+
     /**
      * {@code GET  /member-org-ids} : get org ids of member to which current user belongs
      *
      *
-     * @return the {@link MemberDetails} 
+     * @return the {@link MemberDetails}
      */
     @GetMapping("/member-org-ids")
     public ResponseEntity<MemberOrgIds> getMemberOrgIds() {
@@ -244,7 +237,7 @@ public class MemberResource {
         MemberOrgIds memberOrgIds = memberService.getCurrentMemberOrgIds();
         return ResponseEntity.ok(memberOrgIds);
     }
-    
+
     /**
      * {@code GET  /members} : get all members.
      *
@@ -269,7 +262,7 @@ public class MemberResource {
             catch (UnsupportedEncodingException e) {
                 /* try without decoding if this ever happens */
                 decodedFilter = filter;
-            } 
+            }
             page = memberService.getMembers(pageable, decodedFilter);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -279,9 +272,6 @@ public class MemberResource {
     /**
      * {@code GET  /member} : get all the member.
      *
-     *
-     * @param pageable
-     *            the pagination information.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the
      *         list of member in body.
@@ -339,6 +329,13 @@ public class MemberResource {
         LOG.debug("REST request to delete Member : {}", id);
         memberService.deleteMember(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/members/contact-update")
+    public ResponseEntity<MemberContactUpdateResponse> processMemberContactUpdate(@RequestBody MemberContactUpdate memberContactUpdate) {
+        LOG.debug("REST request to create new member contact update");
+        memberService.processMemberContact(memberContactUpdate);
+        return ResponseEntity.ok(new MemberContactUpdateResponse(true));
     }
 
 }
