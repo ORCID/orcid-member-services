@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 import org.orcid.memberportal.service.member.MemberServiceApp;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
-import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.services.UserService;
 import org.orcid.memberportal.service.member.web.rest.errors.ExceptionTranslator;
@@ -82,7 +82,7 @@ public class MemberResourceIT {
         MvcResult result = restUserMockMvc
                 .perform(get("/api/members").param("size", "50").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk()).andReturn();
-        
+
         List<Member> members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
         });
         assertThat(members.size()).isEqualTo(31);

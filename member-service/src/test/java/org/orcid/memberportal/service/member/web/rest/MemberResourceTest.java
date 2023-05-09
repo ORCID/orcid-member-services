@@ -25,6 +25,7 @@ import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
+import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -81,7 +82,7 @@ public class MemberResourceTest {
         assertThat(memberDetails.getBillingCountry()).isEqualTo("Denmark");
         assertThat(memberDetails.getId()).isEqualTo("id");
     }
-    
+
     @Test
     public void testUpdatePublicMemberDetails() {
         Mockito.when(memberService.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(Boolean.TRUE);
@@ -90,7 +91,7 @@ public class MemberResourceTest {
         assertEquals(200, response.getStatusCodeValue());
         Mockito.verify(memberService).updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
     }
-    
+
     @Test
     public void testUpdatePublicMemberDetailsWithEmptyName() {
         Mockito.when(memberService.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(Boolean.FALSE);
@@ -125,7 +126,7 @@ public class MemberResourceTest {
         assertThat(memberContacts.getRecords().get(1).getSalesforceId()).isEqualTo("salesforce-id");
         assertThat(memberContacts.getRecords().get(1).isVotingContact()).isEqualTo(true);
     }
-    
+
     @Test
     public void testGetMemberOrgIds() {
         Mockito.when(memberService.getCurrentMemberOrgIds()).thenReturn(getMemberOrgIds());
@@ -160,12 +161,19 @@ public class MemberResourceTest {
         assertEquals(2, members.size());
         Mockito.verify(memberService, Mockito.times(1)).getMembers(Mockito.any(Pageable.class), Mockito.anyString());
     }
-    
+
     @Test
     public void testUpdateMemberDefaultLanguage() {
         ResponseEntity<Void> response = memberResource.updateMemberDefaultLanguage("salesforceId", "en");
         assertTrue(response.getStatusCode().is2xxSuccessful());
         Mockito.verify(memberService).updateMemberDefaultLanguage(Mockito.eq("salesforceId"), Mockito.eq("en"));
+    }
+
+    @Test
+    public void testProcessMemberContactUpdate() {
+        Mockito.doNothing().when(memberService).processMemberContact(Mockito.any(MemberContactUpdate.class));
+        memberResource.processMemberContactUpdate(new MemberContactUpdate());
+        Mockito.verify(memberService).processMemberContact(Mockito.any(MemberContactUpdate.class));
     }
 
     private MemberValidation getMemberValidation() {
@@ -237,7 +245,7 @@ public class MemberResourceTest {
 
         return memberContacts;
     }
-    
+
     private MemberOrgIds getMemberOrgIds() {
         MemberOrgId orgId1 = new MemberOrgId();
         orgId1.setType("Ringgold ID");
@@ -246,11 +254,11 @@ public class MemberResourceTest {
         MemberOrgId orgId2 = new MemberOrgId();
         orgId2.setType("GRID");
         orgId2.setValue("grid.238252");
-        
+
         MemberOrgIds memberOrgIds = new MemberOrgIds();
         memberOrgIds.setTotalSize(2);
         memberOrgIds.setRecords(Arrays.asList(orgId1, orgId2));
-        
+
         return memberOrgIds;
     }
 
