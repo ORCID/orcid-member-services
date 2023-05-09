@@ -4,8 +4,7 @@ import { UserRouteAccessService } from 'app/core';
 import { HomeComponent } from './';
 import { MemberInfoEditComponent } from './member-info-landing/member-info-edit/member-info-edit.component';
 import { MemberInfoLandingComponent } from './member-info-landing/member-info-landing.component';
-import { ContactAddComponent } from './member-info-landing/contact-add/contact-add.component';
-import { ContactEditComponent } from './member-info-landing/contact-edit/contact-edit.component';
+import { ContactUpdateComponent } from './member-info-landing/contact-update/contact-update.component';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ISFMemberContact, SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
@@ -59,7 +58,7 @@ export const HOME_ROUTE: Route = {
     },
     {
       path: 'contact/new',
-      component: ContactAddComponent,
+      component: ContactUpdateComponent,
       data: {
         authorities: ['ROLE_USER'],
         pageTitle: 'home.title.string'
@@ -68,7 +67,7 @@ export const HOME_ROUTE: Route = {
     },
     {
       path: 'contact/:id/edit',
-      component: ContactEditComponent,
+      component: ContactUpdateComponent,
       resolve: {
         contact: ContactResolve
       },

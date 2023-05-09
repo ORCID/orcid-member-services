@@ -17,6 +17,7 @@ import {
 } from 'app/shared/model/salesforce-member-data.model';
 import {
   ISFMemberContact,
+  ISFMemberContactUpdate,
   ISFRawMemberContact,
   ISFRawMemberContacts,
   SFMemberContact
@@ -114,36 +115,9 @@ export class MSMemberService {
     );
   }
 
-  getContact(id: ISFMemberContact): Observable<ISFMemberContact> {
-    return this.http.get<ISFRawMemberContact>(`${this.resourceUrl}/contact`, { observe: 'response' }).pipe(
-      map((res: HttpResponse<ISFRawMemberContact>) => this.convertToSalesforceMemberContact(res.body)),
-      catchError(err => {
-        return throwError(err);
-      })
-    );
-  }
-
-  createContact(contact: ISFMemberContact): Observable<ISFMemberContact> {
-    return this.http.post<ISFRawMemberContact>(`${this.resourceUrl}/contact`, contact, { observe: 'response' }).pipe(
-      map((res: HttpResponse<ISFRawMemberContact>) => this.convertToSalesforceMemberContact(res.body)),
-      catchError(err => {
-        return throwError(err);
-      })
-    );
-  }
-
-  updateContact(contact: ISFMemberContact): Observable<ISFMemberContact> {
-    return this.http.put<ISFRawMemberContact>(`${this.resourceUrl}/contact`, contact, { observe: 'response' }).pipe(
-      map((res: HttpResponse<ISFRawMemberContact>) => this.convertToSalesforceMemberContact(res.body)),
-      catchError(err => {
-        return throwError(err);
-      })
-    );
-  }
-
-  removeContact(id: string): Observable<ISFMemberContact> {
-    return this.http.delete<ISFRawMemberContact>(`${this.resourceUrl}/contact`, { observe: 'response' }).pipe(
-      map((res: HttpResponse<ISFRawMemberContact>) => this.convertToSalesforceMemberContact(res.body)),
+  updateContact(contact: ISFMemberContactUpdate): Observable<Boolean> {
+    return this.http.post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/contact-update`, contact, { observe: 'response' }).pipe(
+      map((res: HttpResponse<any>) => res.status === 200),
       catchError(err => {
         return throwError(err);
       })

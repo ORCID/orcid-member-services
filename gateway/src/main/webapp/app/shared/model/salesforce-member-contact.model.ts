@@ -36,3 +36,29 @@ export class SFMemberContact implements ISFMemberContact {
     this.memberOrgRole = [];
   }
 }
+
+export class ISFMemberContactUpdate {
+  contactEmail?: string;
+  contactMember?: string;
+  contactNewFirstName?: string;
+  contactNewLastName?: string;
+  contactNewEmail?: string;
+  contactNewJobTitle?: string;
+  contactNewPhone?: string;
+  contactNewRoles?: string[];
+}
+
+export class SFMemberContactUpdate implements ISFMemberContactUpdate {
+  constructor(
+    public contactEmail?: string,
+    public contactMember?: string,
+    public contactNewFirstName?: string,
+    public contactNewLastName?: string,
+    public contactNewEmail?: string,
+    public contactNewJobTitle?: string,
+    public contactNewPhone?: string,
+    public contactNewRoles?: string[]
+  ) {
+    this.contactNewRoles = [];
+  }
+}
