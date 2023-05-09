@@ -193,7 +193,6 @@ application:
     orcidApiTokenEndpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}
     salesforceRequestTimeout: ${APPLICATION_SALESFORCE_REQUEST_TIMEOUT}
     contactUpdateRecipient: ${APPLICATION_CONTACT_UPDATE_RECIPIENT}
-    mailTestMode: ${APPLICATION_MAIL_TEST_MODE}
     mailDomain: ${APPLICATION_MAIL_DOMAIN}
     mailApiKey: ${APPLICATION_MAIL_API_KEY}
     mailApiUrl: ${APPLICATION_MAIL_API_URL}
