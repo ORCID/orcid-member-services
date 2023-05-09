@@ -15,8 +15,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 import org.orcid.memberportal.service.member.domain.Member;
-import org.orcid.memberportal.service.member.service.reports.ReportInfo;
-import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
+import org.orcid.memberportal.service.member.services.pojo.ReportInfo;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
 
 import io.jsonwebtoken.Claims;

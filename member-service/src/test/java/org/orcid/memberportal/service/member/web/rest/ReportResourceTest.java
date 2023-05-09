@@ -10,8 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.orcid.memberportal.service.member.service.reports.ReportInfo;
-import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
+import org.orcid.memberportal.service.member.services.pojo.ReportInfo;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.services.ReportService;
 import org.orcid.memberportal.service.member.services.UserService;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
@@ -21,7 +21,7 @@ public class ReportResourceTest {
 
     @Mock
     private ReportService mockReportService;
-    
+
     @Mock
     private UserService mockUserService;
 
@@ -60,7 +60,7 @@ public class ReportResourceTest {
         assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
         assertThat(response.getBody()).isNotNull();
     }
-    
+
     @Test
     public void testGetConsortiaMemberAffiliationsReport() {
         Mockito.when(mockReportService.getConsortiaMemberAffiliationsReportInfo()).thenReturn(getReportInfo());
@@ -69,7 +69,7 @@ public class ReportResourceTest {
         assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
         assertThat(response.getBody()).isNotNull();
     }
-    
+
     @Test
     public void testGetAffiliationReport() {
         Mockito.when(mockReportService.getAffiliationReportInfo()).thenReturn(getReportInfo());
@@ -93,7 +93,7 @@ public class ReportResourceTest {
         info.setUrl("url");
         return info;
     }
-    
+
     private MemberServiceUser getUser() {
         MemberServiceUser user = new MemberServiceUser();
         user.setEmail("email@orcid.org");

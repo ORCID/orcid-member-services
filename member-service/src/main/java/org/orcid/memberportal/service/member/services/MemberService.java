@@ -10,21 +10,19 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.orcid.memberportal.service.member.client.SalesforceClient;
-import org.orcid.memberportal.service.member.client.model.MemberContacts;
-import org.orcid.memberportal.service.member.client.model.MemberDetails;
-import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
-import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
+import org.orcid.memberportal.service.member.client.model.*;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
 import org.orcid.memberportal.service.member.security.AuthoritiesConstants;
 import org.orcid.memberportal.service.member.security.EncryptUtil;
 import org.orcid.memberportal.service.member.security.SecurityUtils;
-import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.upload.MemberUpload;
 import org.orcid.memberportal.service.member.upload.MembersUploadReader;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
 import org.orcid.memberportal.service.member.validation.MemberValidator;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +59,9 @@ public class MemberService {
 
     @Autowired
     private SalesforceClient salesforceClient;
+
+    @Autowired
+    private MailService mailService;
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -138,7 +139,7 @@ public class MemberService {
         existingMember.setLastModifiedDate(Instant.now());
         existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
         existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
-        
+
         // Check if name changed
         if (!existingMember.getClientName().equals(member.getClientName())) {
             Optional<Member> optionalMember = memberRepository.findByClientName(member.getClientName());
@@ -146,7 +147,7 @@ public class MemberService {
                 throw new BadRequestAlertException("Invalid member name", "member", "memberNameUsed.string");
             }
         }
-        
+
         // Check if salesforceId changed
         if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
             Optional<Member> optionalSalesforceId = memberRepository.findBySalesforceId(member.getSalesforceId());
@@ -176,7 +177,7 @@ public class MemberService {
                 throw new RuntimeException(e);
             }
             existingMember.setSalesforceId(member.getSalesforceId());
-            
+
             try {
                 return memberRepository.save(existingMember);
             } catch (Exception e) {
@@ -185,7 +186,7 @@ public class MemberService {
                 LOG.info("Attempting to perform salesforce id rollback on affiliations");
                 assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
                 LOG.info("Affiliation salesforce id rollback successfull");
-                
+
                 LOG.info("Attempting to perform salesforce id rollback on users");
                 userService.updateUsersSalesforceId(newSalesforceId, oldSalesforceId);
                 LOG.info("User salesforce id rollback successfull");
@@ -205,7 +206,7 @@ public class MemberService {
 
     public Page<Member> getMembers(Pageable pageable, String filter) {
         return memberRepository.findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(filter, filter, filter,
-                pageable);
+            pageable);
     }
 
     public List<Member> getAllMembers() {
@@ -289,7 +290,7 @@ public class MemberService {
             throw new RuntimeException(e);
         }
     }
-    
+
     public Boolean updatePublicMemberDetails(@Valid PublicMemberDetails publicMemberDetails) {
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
         publicMemberDetails.setSalesforceId(salesforceId);
@@ -332,4 +333,24 @@ public class MemberService {
         }
     }
 
+    public void processMemberContact(MemberContactUpdate memberContactUpdate) {
+        MemberServiceUser user = userService.getLoggedInUser();
+        memberContactUpdate.setRequestedByEmail(user.getEmail());
+        memberContactUpdate.setRequestedByName(user.getFirstName() + " " + user.getLastName());
+        memberContactUpdate.setRequestedByMember(user.getMemberName());
+
+        if (memberContactUpdate.getContactEmail() == null) {
+            mailService.sendAddContactEmail(memberContactUpdate);
+        } else if (memberContactUpdate.getContactNewEmail() == null
+            && memberContactUpdate.getContactNewFirstName() == null
+            && memberContactUpdate.getContactNewLastName() == null
+            && memberContactUpdate.getContactNewPhone() == null
+            && memberContactUpdate.getContactNewRoles() == null
+            && memberContactUpdate.getContactNewJobTitle() == null) {
+            // no new data, must be remove operation
+            mailService.sendRemoveContactEmail(memberContactUpdate);
+        } else {
+            mailService.sendUpdateContactEmail(memberContactUpdate);
+        }
+    }
 }

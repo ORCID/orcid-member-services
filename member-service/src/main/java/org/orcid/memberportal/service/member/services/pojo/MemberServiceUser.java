@@ -1,4 +1,4 @@
-package org.orcid.memberportal.service.member.service.user;
+package org.orcid.memberportal.service.member.services.pojo;
 
 import java.time.Instant;
 import java.util.Set;
@@ -38,7 +38,7 @@ public class MemberServiceUser {
     private String langKey;
 
     private Set<String> authorities;
-    
+
     private String memberName;
 
     public String getLoginAs() {

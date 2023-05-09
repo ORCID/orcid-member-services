@@ -1,4 +1,4 @@
-package org.orcid.memberportal.service.member.service.reports;
+package org.orcid.memberportal.service.member.services.pojo;
 
 public class ReportInfo {
 

@@ -1,7 +1,7 @@
 package org.orcid.memberportal.service.member.web.rest;
 
-import org.orcid.memberportal.service.member.service.reports.ReportInfo;
-import org.orcid.memberportal.service.member.service.user.MemberServiceUser;
+import org.orcid.memberportal.service.member.services.pojo.ReportInfo;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.services.ReportService;
 import org.orcid.memberportal.service.member.services.UserService;
 import org.slf4j.Logger;
@@ -23,10 +23,10 @@ public class ReportResource {
 
     @Autowired
     private ReportService reportService;
-    
+
     @Autowired
     private UserService userService;
-    
+
     @GetMapping("/reports/member")
     public ResponseEntity<ReportInfo> getMemberReport() {
         MemberServiceUser user = userService.getLoggedInUser();
@@ -50,7 +50,7 @@ public class ReportResource {
         ReportInfo consortiumReportInfo = reportService.getConsortiaReportInfo();
         return ResponseEntity.ok(consortiumReportInfo);
     }
-    
+
     @GetMapping("/reports/affiliation")
     public ResponseEntity<ReportInfo> getAffiliationReport() {
         MemberServiceUser user = userService.getLoggedInUser();
@@ -67,5 +67,5 @@ public class ReportResource {
         return ResponseEntity.ok(reportInfo);
     }
 
-    
+
 }
