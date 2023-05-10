@@ -51,6 +51,16 @@ public class ApplicationProperties {
 
     private boolean mailTestMode;
 
+    private String mailApiUrl;
+
+    private String mailFromAddress;
+
+    private String mailFromName;
+
+    private String mailApiKey;
+
+    private String mailDomain;
+
     public String getOrcidOrgClientId() {
         return orcidOrgClientId;
     }
@@ -201,5 +211,45 @@ public class ApplicationProperties {
 
     public void setMailTestMode(boolean mailTestMode) {
         this.mailTestMode = mailTestMode;
+    }
+
+    public String getMailApiUrl() {
+        return mailApiUrl;
+    }
+
+    public void setMailApiUrl(String mailApiUrl) {
+        this.mailApiUrl = mailApiUrl;
+    }
+
+    public String getMailFromAddress() {
+        return mailFromAddress;
+    }
+
+    public void setMailFromAddress(String mailFromAddress) {
+        this.mailFromAddress = mailFromAddress;
+    }
+
+    public String getMailFromName() {
+        return mailFromName;
+    }
+
+    public void setMailFromName(String mailFromName) {
+        this.mailFromName = mailFromName;
+    }
+
+    public String getMailApiKey() {
+        return mailApiKey;
+    }
+
+    public void setMailApiKey(String mailApiKey) {
+        this.mailApiKey = mailApiKey;
+    }
+
+    public String getMailDomain() {
+        return mailDomain;
+    }
+
+    public void setMailDomain(String mailDomain) {
+        this.mailDomain = mailDomain;
     }
 }

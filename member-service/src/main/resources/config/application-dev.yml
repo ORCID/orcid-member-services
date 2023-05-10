@@ -116,3 +116,4 @@ oauth2:
 application:
     orcidOrgClientId: change-me
     orcidOrgSalesForceId: change-me
+    mailTestMode: true
