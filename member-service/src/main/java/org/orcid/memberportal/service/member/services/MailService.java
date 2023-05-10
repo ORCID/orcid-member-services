@@ -3,18 +3,15 @@ package org.orcid.memberportal.service.member.services;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 import org.orcid.memberportal.service.member.mail.MailException;
 import org.orcid.memberportal.service.member.mail.client.impl.MailgunClient;
-import org.orcid.memberportal.service.member.services.locale.LocaleUtils;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import java.io.File;
 import java.util.Locale;
 
 /**
@@ -49,8 +46,7 @@ public class MailService {
         context.setVariable("requestedByName", memberContactUpdate.getRequestedByName());
         context.setVariable("requestedByEmail", memberContactUpdate.getRequestedByEmail());
         context.setVariable("requestedByMember", memberContactUpdate.getRequestedByMember());
-        context.setVariable("firstName", memberContactUpdate.getContactNewFirstName());
-        context.setVariable("lastName", memberContactUpdate.getContactNewLastName());
+        context.setVariable("name", memberContactUpdate.getContactNewName());
         context.setVariable("email", memberContactUpdate.getContactNewEmail());
         context.setVariable("jobTitle", memberContactUpdate.getContactNewJobTitle());
         context.setVariable("phone", memberContactUpdate.getContactNewPhone());
@@ -90,8 +86,7 @@ public class MailService {
         context.setVariable("currentName", memberContactUpdate.getContactName());
         context.setVariable("currentEmail", memberContactUpdate.getContactEmail());
         context.setVariable("currentMember", memberContactUpdate.getContactMember());
-        context.setVariable("firstName", memberContactUpdate.getContactNewFirstName());
-        context.setVariable("lastName", memberContactUpdate.getContactNewLastName());
+        context.setVariable("name", memberContactUpdate.getContactNewName());
         context.setVariable("email", memberContactUpdate.getContactNewEmail());
         context.setVariable("jobTitle", memberContactUpdate.getContactNewJobTitle());
         context.setVariable("phone", memberContactUpdate.getContactNewPhone());

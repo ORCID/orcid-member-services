@@ -1,7 +1,5 @@
 package org.orcid.memberportal.service.member.web.rest.vm;
 
-import org.orcid.memberportal.service.member.client.model.MemberContact;
-
 import java.util.List;
 
 public class MemberContactUpdate {
@@ -12,9 +10,7 @@ public class MemberContactUpdate {
 
     private String contactMember;
 
-    private String contactNewFirstName;
-
-    private String contactNewLastName;
+    private String contactNewName;
 
     private String contactNewEmail;
 
@@ -54,20 +50,12 @@ public class MemberContactUpdate {
         this.contactMember = contactMember;
     }
 
-    public String getContactNewFirstName() {
-        return contactNewFirstName;
+    public String getContactNewName() {
+        return contactNewName;
     }
 
-    public void setContactNewFirstName(String contactNewFirstName) {
-        this.contactNewFirstName = contactNewFirstName;
-    }
-
-    public String getContactNewLastName() {
-        return contactNewLastName;
-    }
-
-    public void setContactNewLastName(String contactNewLastName) {
-        this.contactNewLastName = contactNewLastName;
+    public void setContactNewName(String contactNewName) {
+        this.contactNewName = contactNewName;
     }
 
     public String getContactNewEmail() {
