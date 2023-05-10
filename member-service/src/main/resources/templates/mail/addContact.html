@@ -51,8 +51,8 @@
     <p>
         <strong>Roles</strong>
         <ul>
-            <li th:each="role,index: ${roles}">
-                <span th:text="#{role}">Role</span>
+            <li th:each="role: ${roles}">
+                <span th:text="${role}">Role</span>
             </li>
         </ul>
     </p>
