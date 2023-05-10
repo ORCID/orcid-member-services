@@ -342,8 +342,7 @@ public class MemberService {
         if (memberContactUpdate.getContactEmail() == null) {
             mailService.sendAddContactEmail(memberContactUpdate);
         } else if (memberContactUpdate.getContactNewEmail() == null
-            && memberContactUpdate.getContactNewFirstName() == null
-            && memberContactUpdate.getContactNewLastName() == null
+            && memberContactUpdate.getContactNewName() == null
             && memberContactUpdate.getContactNewPhone() == null
             && memberContactUpdate.getContactNewRoles() == null
             && memberContactUpdate.getContactNewJobTitle() == null) {
