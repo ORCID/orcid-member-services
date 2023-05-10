@@ -13,43 +13,43 @@
     <div th:insert="~{mail/common :: emailHeader}"></div>
     <p><strong>ADD NEW CONTACT</strong></p>
     <p>
-        <strong>Requested by</strong>
-        <span th:text="(@{|${requestedByName}|})">Andrew User</span>
-        <span th:text="(@{|${requestedByEmail}|})">a.user@email.com</span>
+        <strong>Requested by</strong><br/>
+        <span th:text="(@{|${requestedByName}|})">Andrew User</span><br/>
+        <span th:text="(@{|${requestedByEmail}|})">a.user@email.com</span><br/>
         <span th:text="(@{|${requestedByMember}|})">Oregon State University</span>
     </p>
     <p>
-        <strong>Member organization name</strong>
+        <strong>Member organization name</strong><br/>
         <span th:text="(@{|${requestedByMember}|})">Oregon State University</span>
     </p>
 
     <p>
-        <strong>First or given name</strong>
+        <strong>First or given name</strong><br/>
         <span th:text="(@{|${firstName}|})">First name</span>
     </p>
 
     <p>
-        <strong>Last or family name</strong>
+        <strong>Last or family name</strong><br/>
         <span th:text="(@{|${lastName}|})">Last name</span>
     </p>
 
     <p>
-        <strong>Job title</strong>
+        <strong>Job title</strong><br/>
         <span th:text="(@{|${jobTitle}|})">Job title</span>
     </p>
 
     <p>
-        <strong>Email address</strong>
+        <strong>Email address</strong><br/>
         <span th:text="(@{|${email}|})">Email</span>
     </p>
 
     <p>
-        <strong>Phone</strong>
+        <strong>Phone</strong><br/>
         <span th:text="(@{|${phone}|})">Phone</span>
     </p>
 
     <p>
-        <strong>Roles</strong>
+        <strong>Roles</strong><br/>
         <ul>
             <li th:each="role: ${roles}">
                 <span th:text="${role}">Role</span>
