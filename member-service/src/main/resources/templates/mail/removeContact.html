@@ -13,20 +13,20 @@
     <div th:insert="~{mail/common :: emailHeader}"></div>
     <p><strong>REMOVE CONTACT</strong></p>
     <p>
-        <strong>Requested by</strong>
-        <span th:text="(@{|${requestedByName}|})">Andrew User</span>
-        <span th:text="(@{|${requestedByEmail}|})">a.user@email.com</span>
+        <strong>Requested by</strong><br/>
+        <span th:text="(@{|${requestedByName}|})">Andrew User</span><br/>
+        <span th:text="(@{|${requestedByEmail}|})">a.user@email.com</span><br/>
         <span th:text="(@{|${requestedByMember}|})">Oregon State University</span>
     </p>
     <p>
-        --------------------
+        <hr/>
         <strong>Contact</strong>
-        --------------------
+        <hr/>
     </p>
 
     <p>
-        <span th:text="(@{|${currentName}|})">Andrew User</span>
-        <span th:text="(@{|${currentEmail}|})">a.user@email.com</span>
+        <span th:text="(@{|${currentName}|})">Andrew User</span><br/>
+        <span th:text="(@{|${currentEmail}|})">a.user@email.com</span><br/>
         <span th:text="(@{|${currentMember}|})">Oregon State University</span>
     </p>
 </div>
