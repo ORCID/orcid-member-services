@@ -3,6 +3,7 @@
     <div class="logo-container">
       <img src="{{ memberData.logoUrl }}" onerror="this.src='../content/images/member-logo-placeholder.svg'" alt="Member logo" />
     </div>
+
     <div *ngIf="isActive()">
       <h5>Public details</h5>
       <hr />
@@ -86,13 +87,17 @@
     </div>
     <div *ngIf="isActive()">
       <div class="row ml-0">
-        <div class="main-section-description" *ngIf="memberData.publicDisplayDescriptionHtml" [innerHTML]="memberData.publicDisplayDescriptionHtml"></div>
+        <div
+          class="main-section-description"
+          *ngIf="memberData.publicDisplayDescriptionHtml"
+          [innerHTML]="memberData.publicDisplayDescriptionHtml"
+        ></div>
         <div class="main-section-empty-description" *ngIf="!memberData.publicDisplayDescriptionHtml">No organisation description added</div>
       </div>
       <div *ngIf="memberData.contacts">
         <h5 class="mb-4">Contacts</h5>
         <a routerLink="/contact/new" class="mb-4 font-weight-normal font-size-14 d-block">
-          <img src="../../../content/images/plus-circle.svg" class="add-new-contact-icon mr-1" alt="Add new">
+          <img src="../../../content/images/plus-circle.svg" class="add-new-contact-icon mr-1" alt="Add new" />
           <span>Add a new contact</span>
         </a>
         <div class="row ml-0 d-flex justify-content-between contact">
@@ -120,7 +125,7 @@
               -
             </div>
             <div class="contacts-edit-column">
-              <a routerLink="/contact/{{contact.contactEmail}}/edit" class="font-weight-normal">
+              <a routerLink="/contact/{{ contact.contactEmail }}/edit" class="font-weight-normal">
                 <fa-icon [icon]="'pencil-alt'"></fa-icon>
                 Edit
               </a>
@@ -142,5 +147,17 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+<div class="overlay" *ngIf="showContactUpdatePopup"></div>
+<div class="popup" *ngIf="showContactUpdatePopup">
+  <h3 class="font-weight-bold mb-4 d-flex">
+    <img src="../../../content/images/checkmark.svg" class="mr-2" alt="Done" />
+    <span class="mr-auto">Organization contact change</span>
+    <a (click)="hideContactChangePopup()"><img src="../../../content/images/close.svg" alt="Close"/></a>
+  </h3>
+  <div class="font-size-14">
+    Thank you for for requesting changes to your organization contacts. Our team has received your request and will process it as soon as
+    possible.
   </div>
 </div>

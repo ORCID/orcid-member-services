@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
-import { AccountService } from 'app/core';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { EMAIL_REGEXP } from 'app/app.constants';
 import { MSMemberService } from 'app/entities/member';
 import {
   ISFMemberContact,
@@ -10,8 +9,7 @@ import {
   SFMemberContact,
   SFMemberContactUpdate
 } from 'app/shared/model/salesforce-member-contact.model';
-import { ISFMemberData, SFMemberData } from 'app/shared/model/salesforce-member-data.model';
-import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
+import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { IMSUser } from 'app/shared/model/user.model';
 import { Subscription } from 'rxjs';
 
@@ -136,11 +134,12 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
       }
       this.memberService.updateContact(contact).subscribe(
         res => {
-          console.log('Updating contact response:', res);
-
-          // TODO: update this.memberData object with the relevant changes
-          //
-          this.onSaveSuccess();
+          if (res) {
+            this.onSaveSuccess();
+          } else {
+            console.error(res);
+            this.onSaveError();
+          }
         },
         err => {
           console.error(err);
@@ -160,11 +159,12 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
     }
     this.memberService.updateContact(contact).subscribe(
       res => {
-        console.log('Removing contact response:', res);
-
-        // update this.memberData object with the relevant changes
-        //
-        this.onSaveSuccess();
+        if (res) {
+          this.onSaveSuccess();
+        } else {
+          console.error(res);
+          this.onSaveError();
+        }
       },
       err => {
         console.error(err);
@@ -175,7 +175,10 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
 
   onSaveSuccess() {
     this.isSaving = false;
-    this.router.navigate(['']);
+    const navigationExtras: NavigationExtras = {
+      queryParams: { contactChange: 'true' }
+    };
+    this.router.navigate([''], navigationExtras);
   }
 
   onSaveError() {
