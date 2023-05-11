@@ -38,10 +38,10 @@ export class SFMemberContact implements ISFMemberContact {
 }
 
 export class ISFMemberContactUpdate {
+  contactName?: string;
   contactEmail?: string;
   contactMember?: string;
-  contactNewFirstName?: string;
-  contactNewLastName?: string;
+  contactNewName?: string;
   contactNewEmail?: string;
   contactNewJobTitle?: string;
   contactNewPhone?: string;
@@ -50,15 +50,13 @@ export class ISFMemberContactUpdate {
 
 export class SFMemberContactUpdate implements ISFMemberContactUpdate {
   constructor(
+    public contactName?: string,
     public contactEmail?: string,
     public contactMember?: string,
-    public contactNewFirstName?: string,
-    public contactNewLastName?: string,
+    public contactNewName?: string,
     public contactNewEmail?: string,
     public contactNewJobTitle?: string,
     public contactNewPhone?: string,
     public contactNewRoles?: string[]
-  ) {
-    this.contactNewRoles = [];
-  }
+  ) {}
 }

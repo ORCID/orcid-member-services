@@ -111,7 +111,7 @@
             </div>
             <div>{{ contact.memberOrgRole.join(', ') }}</div>
             <div>
-              <a href="mailto:{{ contact.contactEmail }}">{{ contact.contactEmail }}</a>
+              <a class="font-weight-normal" href="mailto:{{ contact.contactEmail }}">{{ contact.contactEmail }}</a>
             </div>
             <div *ngIf="contact.phone">
               {{ contact.phone }}
@@ -120,7 +120,7 @@
               -
             </div>
             <div class="contacts-edit-column">
-              <a routerLink="/contact/{{contact.contactEmail}}/edit">
+              <a routerLink="/contact/{{contact.contactEmail}}/edit" class="font-weight-normal">
                 <fa-icon [icon]="'pencil-alt'"></fa-icon>
                 Edit
               </a>

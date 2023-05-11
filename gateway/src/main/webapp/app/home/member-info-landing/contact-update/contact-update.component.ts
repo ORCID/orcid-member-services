@@ -25,23 +25,11 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   account: IMSUser;
   memberData: ISFMemberData;
   contact: ISFMemberContact;
-  objectKeys = Object.keys;
-  // TODO move to constants
-  MEMBER_LIST_URL: string = 'https://orcid.org/members';
   isSaving: boolean;
   invalidForm: boolean;
   routeData: any;
-  quillConfig = {
-    toolbar: [['bold', 'italic'], [{ list: 'ordered' }, { list: 'bullet' }], ['link']]
-  };
-  quillStyles = {
-    fontFamily: 'inherit',
-    fontSize: '14px',
-    letterSpacing: '0.25px',
-    marginRight: '0'
-  };
-
   editForm: FormGroup;
+  contactId: string;
 
   rolesData = [
     { id: 1, selected: false, name: 'Main relationship contact' },
@@ -53,42 +41,38 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    private accountService: AccountService,
     private memberService: MSMemberService,
     private fb: FormBuilder,
     protected activatedRoute: ActivatedRoute,
     private router: Router
-  ) {
+  ) {}
+
+  ngOnInit() {
+    this.activatedRoute.params.subscribe(params => {
+      if (params['id']) {
+        this.contactId = params['id'];
+      }
+    });
     this.editForm = this.fb.group({
-      firstName: [null, [Validators.required, Validators.maxLength(40)]],
-      lastName: [null, [Validators.required, Validators.maxLength(40)]],
-      phone: [null, [Validators.maxLength(255)]],
+      name: [null, [Validators.required, Validators.maxLength(80)]],
+      phone: [null, [Validators.maxLength(40)]],
       email: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
-      title: [null, [Validators.maxLength(80)]],
+      title: [null, [Validators.maxLength(128)]],
       roles: this.fb.array(
         // add interface
         this.rolesData.map(val => this.fb.group({ id: val.id, selected: val.selected, name: val.name })),
         [this.validateContactRoles]
       )
     });
-    this.routeData = this.activatedRoute.data.subscribe(data => {
-      console.log(data);
 
-      this.contact = data.contact;
-      console.log(this.contact);
-      this.updateForm(data.contact);
-    });
-  }
-
-  ngOnInit() {
     this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
       this.memberData = data;
+      if (data.contacts && this.contactId) {
+        this.contact = Object.values(data.contacts).find(contact => contact.contactEmail == this.contactId);
+        this.updateForm(this.contact);
+      }
     });
-    console.log(this.editForm);
     this.editForm.valueChanges.subscribe(() => {
-      console.log(this.editForm);
-      console.log(this.roles);
-
       if (this.editForm.status === 'VALID') {
         this.invalidForm = false;
       }
@@ -96,25 +80,16 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   }
 
   validateContactRoles(rolesArray: FormArray): ValidationErrors | null {
-    console.log(rolesArray);
-
-    const lastFiveRoles = rolesArray.controls.slice(-5);
-    const selectedRoles = lastFiveRoles.filter(control => control.value.selected);
-    console.log(selectedRoles);
-
+    const selectedRoles = rolesArray.controls.filter(control => control.value.selected);
     if (selectedRoles.length < 1) {
-      console.log('haha');
-      // rolesArray.updateValueAndValidity();
       return { oneRoleSelected: true };
     }
-    //rolesArray.updateValueAndValidity();
     return null;
   }
 
   updateForm(contact: ISFMemberContact) {
     this.editForm.patchValue({
-      firstName: contact.name,
-      lastName: contact.name,
+      name: contact.name,
       phone: contact.phone,
       title: contact.title,
       email: contact.contactEmail,
@@ -135,9 +110,8 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   createContactFromForm(): ISFMemberContactUpdate {
     return {
       ...new SFMemberContact(),
-      contactNewFirstName: this.editForm.get('firstName').value,
-      contactNewLastName: this.editForm.get('lastName').value,
-      contactEmail: this.editForm.get('email').value,
+      contactNewName: this.editForm.get('name').value,
+      contactNewEmail: this.editForm.get('email').value,
       contactNewPhone: this.editForm.get('phone').value,
       contactNewJobTitle: this.editForm.get('title').value,
       contactNewRoles: this.editForm
@@ -155,9 +129,14 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
       this.invalidForm = false;
       this.isSaving = true;
       const contact = this.createContactFromForm();
+      if (this.contactId) {
+        contact.contactEmail = this.contact.contactEmail;
+        contact.contactName = this.contact.name;
+        contact.contactMember = this.memberData.name;
+      }
       this.memberService.updateContact(contact).subscribe(
         res => {
-          console.log(res);
+          console.log('Updating contact response:', res);
 
           // TODO: update this.memberData object with the relevant changes
           //
@@ -173,9 +152,15 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
 
   delete() {
     this.isSaving = true;
-    this.memberService.updateContact(this.contact).subscribe(
+    const contact = new SFMemberContactUpdate();
+    if (this.contactId) {
+      contact.contactEmail = this.contact.contactEmail;
+      contact.contactName = this.contact.name;
+      contact.contactMember = this.memberData.name;
+    }
+    this.memberService.updateContact(contact).subscribe(
       res => {
-        console.log(res);
+        console.log('Removing contact response:', res);
 
         // update this.memberData object with the relevant changes
         //

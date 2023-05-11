@@ -19,8 +19,10 @@ export class ContactResolve implements Resolve<any> {
     const id = route.params['id'] ? route.params['id'] : null;
     // TODO: needs to be replaced with the upcoming /contact endpoint (get)
     if (id) {
-      return this.service.getMemberContacts().pipe(
+      return this.service.memberData.pipe(
         map(data => {
+          console.log('haha', data);
+
           if (data) {
             return Object.values(data).find(contact => contact.contactEmail == id);
           }
@@ -68,9 +70,7 @@ export const HOME_ROUTE: Route = {
     {
       path: 'contact/:id/edit',
       component: ContactUpdateComponent,
-      resolve: {
-        contact: ContactResolve
-      },
+
       data: {
         authorities: ['ROLE_USER'],
         pageTitle: 'home.title.string'

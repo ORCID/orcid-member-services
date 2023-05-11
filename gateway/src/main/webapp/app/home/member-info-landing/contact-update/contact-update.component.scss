@@ -98,12 +98,27 @@ input {
   border-radius: 2px;
 }
 
-.warning {
+.error-message {
   img {
     padding: 0 16px 0 8px !important;
     margin-top: -1.75rem;
   }
+  div {
+    font-size: 0.875rem;
+  }
   border: 2px solid #b71c1c;
+  border-radius: 4px;
+}
+
+.warning-message {
+  img {
+    padding: 0 16px 0 8px !important;
+    margin-top: -3rem;
+  }
+  div {
+    font-size: 0.875rem;
+  }
+  border: 2px solid #ff9c00;
   border-radius: 4px;
 }
 

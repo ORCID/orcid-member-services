@@ -84,9 +84,9 @@ jhipster:
     authentication:
       jwt:
         # Access Token is valid for 2 hours
-        token-validity-in-seconds: 600
+        token-validity-in-seconds: 72000
         # Refresh Token is valid for 2 hours
-        token-validity-in-seconds-for-remember-me: 600
+        token-validity-in-seconds-for-remember-me: 72000
   mail: # specific JHipster mail property, for standard properties see MailProperties
     from: userservice@localhost
     base-url: http://127.0.0.1:8080
