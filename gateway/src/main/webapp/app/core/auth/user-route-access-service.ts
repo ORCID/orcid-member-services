@@ -39,7 +39,7 @@ export class UserRouteAccessService implements CanActivate {
         this.router.navigate(['accessdenied']);
         return false;
       }
-
+      this.router.navigate(['/']);
       this.stateStorageService.storeUrl(url);
       return false;
     });

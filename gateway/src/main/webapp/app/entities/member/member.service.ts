@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, share } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, Observable, of, Subject, throwError, combineLatest } from 'rxjs';
+import { catchError, share, switchMap, takeUntil, tap } from 'rxjs/operators';
 import * as moment from 'moment';
 import { map } from 'rxjs/operators';
 
@@ -15,7 +15,13 @@ import {
   ISFRawConsortiumMemberData,
   SFConsortiumMemberData
 } from 'app/shared/model/salesforce-member-data.model';
-import { ISFRawMemberContact, ISFRawMemberContacts, SFMemberContact } from 'app/shared/model/salesforce-member-contact.model';
+import {
+  ISFMemberContact,
+  ISFMemberContactUpdate,
+  ISFRawMemberContact,
+  ISFRawMemberContacts,
+  SFMemberContact
+} from 'app/shared/model/salesforce-member-contact.model';
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from 'app/shared/model/salesforce-member-org-id.model';
 import { ISFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
 
@@ -30,7 +36,9 @@ export class MSMemberService {
   public resourceUrl = SERVER_API_URL + 'services/memberservice/api';
   public allMembers$: Observable<EntityArrayResponseType>;
   public orgNameMap: any;
-  public memberData: ISFMemberData;
+  public memberData = new BehaviorSubject<ISFMemberData>(undefined);
+  public fetchingMemberDataState = new BehaviorSubject<boolean>(undefined);
+  public stopFetchingMemberData = new Subject();
 
   constructor(protected http: HttpClient) {
     this.allMembers$ = this.getAllMembers().pipe(share());
@@ -82,25 +90,45 @@ export class MSMemberService {
 
   getMember(): Observable<SFMemberData> {
     return this.http.get<ISFRawMemberData>(`${this.resourceUrl}/member-details`, { observe: 'response' }).pipe(
-      map((res: SalesforceDataResponseType) => this.convertToSalesforceMemberData(res)),
       catchError(err => {
         return of(err);
+      }),
+      map((res: SalesforceDataResponseType) => this.convertToSalesforceMemberData(res)),
+      switchMap(value => {
+        if (value && !value.id) {
+          return throwError(value);
+        } else {
+          return of(value);
+        }
       })
     );
   }
 
   getMemberContacts(): Observable<SFMemberContact[]> {
     return this.http.get<ISFRawMemberContacts>(`${this.resourceUrl}/member-contacts`, { observe: 'response' }).pipe(
+      takeUntil(this.stopFetchingMemberData),
       map((res: SalesforceContactsResponseType) => this.convertToSalesforceMemberContacts(res)),
+      tap(res => this.memberData.next({ ...this.memberData.value, contacts: res })),
       catchError(err => {
         return of(err);
       })
     );
   }
 
+  updateContact(contact: ISFMemberContactUpdate): Observable<Boolean> {
+    return this.http.post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/contact-update`, contact, { observe: 'response' }).pipe(
+      map((res: HttpResponse<any>) => res.status === 200),
+      catchError(err => {
+        return throwError(err);
+      })
+    );
+  }
+
   getMemberOrgIds(): Observable<SFMemberOrgIds> {
     return this.http.get<ISFRawMemberOrgIds>(`${this.resourceUrl}/member-org-ids`, { observe: 'response' }).pipe(
+      takeUntil(this.stopFetchingMemberData),
       map((res: SalesforceOrgIdResponseType) => this.convertToMemberOrgIds(res)),
+      tap(res => this.memberData.next({ ...this.memberData.value, orgIds: res })),
       catchError(err => {
         return of(err);
       })
@@ -113,6 +141,62 @@ export class MSMemberService {
 
   updatePublicDetails(publicDetails: ISFPublicDetails): Observable<HttpResponse<any>> {
     return this.http.put(`${this.resourceUrl}/public-details`, publicDetails, { observe: 'response' });
+  }
+
+  getConsortiaLeadName(consortiaLeadId: string): Observable<EntityResponseType> {
+    if (consortiaLeadId) {
+      return this.find(consortiaLeadId).pipe(
+        tap(r => {
+          if (r && r.body) {
+            this.memberData.next({ ...this.memberData.value, consortiumLeadName: r.body.clientName });
+          }
+        })
+      );
+    }
+    return of(null);
+  }
+
+  getIsConsortiumLead(salesforceId: string): Observable<EntityResponseType | never> {
+    if (salesforceId) {
+      return this.find(salesforceId).pipe(
+        tap(r => {
+          if (r && r.body) {
+            const { isConsortiumLead } = r.body;
+            this.memberData.next({ ...this.memberData.value, isConsortiumLead });
+          }
+        })
+      );
+    }
+    return of(null);
+  }
+
+  fetchMemberData(userIdentity) {
+    if (!this.fetchingMemberDataState.value) {
+      if (!this.memberData.value && userIdentity) {
+        this.fetchingMemberDataState.next(true);
+        this.getMember()
+          .pipe(
+            switchMap(res => {
+              this.memberData.next(res);
+              return combineLatest([
+                this.getMemberContacts(),
+                this.getMemberOrgIds(),
+                this.getConsortiaLeadName(res.consortiumLeadName),
+                this.getIsConsortiumLead(userIdentity.salesforceId)
+              ]);
+            }),
+            tap(res => {
+              this.fetchingMemberDataState.next(false);
+            }),
+            catchError(() => {
+              this.memberData.next(null);
+              this.fetchingMemberDataState.next(false);
+              return EMPTY;
+            })
+          )
+          .subscribe();
+      }
+    }
   }
 
   protected convertDateFromClient(msMember: IMSMember): IMSMember {
