@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EMAIL_REGEXP } from 'app/app.constants';
 import { MSMemberService } from 'app/entities/member';
+import { AlertService } from 'app/shared';
 import {
   ISFMemberContact,
   ISFMemberContactUpdate,
@@ -41,8 +42,9 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   constructor(
     private memberService: MSMemberService,
     private fb: FormBuilder,
-    protected activatedRoute: ActivatedRoute,
-    private router: Router
+    private alertService: AlertService,
+    private router: Router,
+    protected activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -175,10 +177,8 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
 
   onSaveSuccess() {
     this.isSaving = false;
-    const navigationExtras: NavigationExtras = {
-      queryParams: { contactChange: 'true' }
-    };
-    this.router.navigate([''], navigationExtras);
+    this.alertService.contactUpdated.next(true);
+    this.router.navigate(['']);
   }
 
   onSaveError() {

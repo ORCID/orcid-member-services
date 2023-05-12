@@ -113,13 +113,13 @@
               [ngClass]="{ 'text-danger': editForm.get('phone').invalid && editForm.get('phone').dirty }"
             />
             <ng-template #validPhone>
-              <small class="wide-text font-size-12 color-gray">A direct contact phone for this person</small>
+              <small class="wide-text font-size-12 form-text color-gray">A direct contact phone for this person</small>
             </ng-template>
-            <div *ngIf="editForm.get('phone').invalid && editForm.get('phone').dirty; else validPhone">
+            <ng-container *ngIf="editForm.get('phone').invalid && editForm.get('phone').dirty; else validPhone">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('phone').errors.maxlength">
                 Phone number is too long. Please use 40 characters or less.
               </small>
-            </div>
+            </ng-container>
           </div>
           <h3 class="mb-4 mr-2 mt-4">Roles <span class="text-danger font-size-12 font-weight-normal">(Required)</span></h3>
           <div formArrayName="roles" class="border-0 mb-3">

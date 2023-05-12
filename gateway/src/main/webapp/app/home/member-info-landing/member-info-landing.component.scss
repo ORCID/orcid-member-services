@@ -81,30 +81,3 @@ h5 {
 .contacts-edit-column {
   max-width: 8% !important;
 }
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency as needed */
-  z-index: 9999; /* Make sure the overlay is above other elements */
-}
-
-.popup {
-  > h3 > img {
-    margin-bottom: -3px;
-  }
-  position: fixed;
-  max-width: 640px;
-  padding: 2rem;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  z-index: 10000; /* Make sure the popup is above the overlay */
-  border: 2px solid #212121;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-}
