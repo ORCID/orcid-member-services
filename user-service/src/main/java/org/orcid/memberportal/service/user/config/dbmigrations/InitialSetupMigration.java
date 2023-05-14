@@ -1,6 +1,5 @@
 package org.orcid.memberportal.service.user.config.dbmigrations;
 
-import org.orcid.memberportal.service.user.domain.Authority;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
 

@@ -12,15 +12,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.orcid.memberportal.service.user.UserServiceApp;
-import org.orcid.memberportal.service.user.domain.Authority;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.dto.UserDTO;
 import org.orcid.memberportal.service.user.mapper.UserMapper;
@@ -575,14 +572,6 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
-    public void getAllAuthorities() throws Exception {
-        restUserMockMvc.perform(get("/api/users/authorities").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
-    }
-
-    @Test
     public void testUserEquals() throws Exception {
         TestUtil.equalsVerifier(User.class);
         User user1 = new User();
@@ -596,26 +585,4 @@ public class UserResourceIT {
         assertThat(user1).isNotEqualTo(user2);
     }
 
-    @Test
-    public void testAuthorityEquals() {
-        Authority authorityA = new Authority();
-        assertThat(authorityA).isEqualTo(authorityA);
-        assertThat(authorityA).isNotEqualTo(null);
-        assertThat(authorityA).isNotEqualTo(new Object());
-        assertThat(authorityA.hashCode()).isEqualTo(0);
-        assertThat(authorityA.toString()).isNotNull();
-
-        Authority authorityB = new Authority();
-        assertThat(authorityA).isEqualTo(authorityB);
-
-        authorityB.setName(AuthoritiesConstants.ADMIN);
-        assertThat(authorityA).isNotEqualTo(authorityB);
-
-        authorityA.setName(AuthoritiesConstants.USER);
-        assertThat(authorityA).isNotEqualTo(authorityB);
-
-        authorityB.setName(AuthoritiesConstants.USER);
-        assertThat(authorityA).isEqualTo(authorityB);
-        assertThat(authorityA.hashCode()).isEqualTo(authorityB.hashCode());
-    }
 }
