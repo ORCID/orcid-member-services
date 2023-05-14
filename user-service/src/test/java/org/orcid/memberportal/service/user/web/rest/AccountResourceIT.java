@@ -95,10 +95,10 @@ public class AccountResourceIT {
         Mockito.when(mockMemberService.memberExistsWithSalesforceId(Mockito.anyString())).thenReturn(Boolean.TRUE);
         Mockito.when(mockMemberService.memberIsAdminEnabled(Mockito.anyString())).thenReturn(Boolean.TRUE);
         Mockito.when(mockMemberService.getMemberNameBySalesforce(Mockito.anyString())).thenReturn("member");
-        
+
         ReflectionTestUtils.setField(userMapper, "memberService", mockMemberService);
         ReflectionTestUtils.setField(userService, "memberService", mockMemberService);
-        
+
         AccountResource accountResource = new AccountResource(userRepository, userService, mockMailService, userMapper);
 
         AccountResource accountUserMockResource = new AccountResource(userRepository, mockUserService, mockMailService, userMapper);
@@ -129,7 +129,7 @@ public class AccountResourceIT {
         user.setLangKey("en");
         user.setSalesforceId("salesforceId");
         user.setAdmin(true);
-        when(mockUserService.getUserWithAuthorities()).thenReturn(Optional.of(user));
+        when(mockUserService.getCurrentUser()).thenReturn(user);
 
         restUserMockMvc.perform(get("/api/account").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$.firstName").value("john"))
@@ -140,7 +140,7 @@ public class AccountResourceIT {
 
     @Test
     public void testGetUnknownAccount() throws Exception {
-        when(mockUserService.getUserWithAuthorities()).thenReturn(Optional.empty());
+        when(mockUserService.getCurrentUser()).thenReturn(null);
 
         restUserMockMvc.perform(get("/api/account").accept(MediaType.APPLICATION_PROBLEM_JSON)).andExpect(status().isInternalServerError());
     }

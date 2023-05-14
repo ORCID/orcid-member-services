@@ -46,8 +46,6 @@ public class InitialSetupMigration {
         adminUser.setLangKey("en");
         adminUser.setCreatedBy("admin@orcid.org");
         adminUser.setCreatedDate(Instant.now());
-        adminUser.getAuthorities().add(adminAuthority.getName());
-        adminUser.getAuthorities().add(userAuthority.getName());
         mongoTemplate.save(adminUser);
     }
 }

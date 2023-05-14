@@ -26,14 +26,14 @@ public class UserServiceDbChanges {
         adminUser.setLastModifiedBy("system");
         mongoTemplate.save(adminUser);
     }
-    
+
     @ChangeSet(order = "02", author = "George Nash", id = "02-removeLoginField")
     public void removeLoginField(MongoTemplate mongoTemplate) {
         Update update = new Update();
         update.unset("login");
         mongoTemplate.updateMulti(new Query(), update, "jhi_user");
     }
-    
+
     @ChangeSet(order = "03", author = "George Nash", id = "03-updateAdminFlag")
     public void updateAdminFlag(MongoTemplate mongoTemplate) {
         Query query = new Query();
@@ -43,6 +43,20 @@ public class UserServiceDbChanges {
             u.setAdmin(true);
             mongoTemplate.save(u);
         }));
+    }
+
+    @ChangeSet(order = "04", author = "George Nash", id = "04-removeAuthoritiesField")
+    public void removeAuthorities(MongoTemplate mongoTemplate) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("authorities").exists(true));
+        Update update = new Update();
+        update.unset("authorities");
+        mongoTemplate.updateMulti(query, update, User.class);
+    }
+
+    @ChangeSet(order = "05", author = "George Nash", id = "05-removeAuthoritiesCollection")
+    public void removeAuthoritiesCollection(MongoTemplate mongoTemplate) {
+        mongoTemplate.dropCollection("jhi_authority");
     }
 
 }

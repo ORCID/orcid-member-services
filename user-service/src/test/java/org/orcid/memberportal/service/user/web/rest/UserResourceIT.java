@@ -140,7 +140,6 @@ public class UserResourceIT {
         user.setLangKey(DEFAULT_LANGKEY);
         user.setSalesforceId(LOGGED_IN_SALESFORCE_ID);
         user.setMemberName(LOGGED_IN_MEMBER_NAME);
-        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         userRepository.save(user);
     }
 
@@ -155,7 +154,6 @@ public class UserResourceIT {
         user.setLangKey(DEFAULT_LANGKEY);
         user.setSalesforceId(DEFAULT_SALESFORCE_ID);
         user.setMainContact(false);
-        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         return user;
     }
 
@@ -428,7 +426,7 @@ public class UserResourceIT {
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(1);
-        
+
         result = restUserMockMvc
                 .perform(get("/api/users/salesforce/salesforce-id-1/p").param("filter", "%2B").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk()).andReturn();
@@ -449,7 +447,7 @@ public class UserResourceIT {
         users = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<UserDTO>>() {
         });
         assertThat(users.size()).isEqualTo(1);
-        
+
         // bad salesforce id
         result = restUserMockMvc.perform(get("/api/users/salesforce/salesforce-id-5/p").param("filter", "4@orcid.org").accept(TestUtil.APPLICATION_JSON_UTF8)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
@@ -543,10 +541,9 @@ public class UserResourceIT {
         user.setLangKey(DEFAULT_LANGKEY);
         user.setSalesforceId(salesforceId);
         user.setMainContact(false);
-        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         return user;
     }
- 
+
     @Test
     @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USR" }, password = LOGGED_IN_PASSWORD)
     public void updateUserWithRoleAdmin() throws Exception {

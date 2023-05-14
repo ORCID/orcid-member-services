@@ -184,7 +184,6 @@ public class UserServiceIT {
         user.setLastName(DEFAULT_LASTNAME);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         return user;
     }
 
