@@ -166,41 +166,6 @@
           </div>
         </ul>
       </div>
-      <div *ngIf="memberData.contacts" class="contacts">
-        <div class="d-flex mb-2">
-          <h3 class="mb-0 mr-2">Contacts</h3>
-          <img class="lockpad" src="./../../../../content/images/lockpad.svg" alt="Locked" />
-        </div>
-        <div class="wide-text font-size-12 coming-soon">
-          <em>Editable contacts coming soon</em>
-        </div>
-        <div class="row ml-0 d-flex justify-content-between contact">
-          <h6>Name</h6>
-          <h6>Member roles</h6>
-          <h6>Email</h6>
-          <h6>Phone</h6>
-        </div>
-        <hr class="green-hr" />
-        <ul class="ml-0 pl-0" *ngFor="let contact of memberData.contacts; let i = index">
-          <li class="row ml-0 d-flex justify-content-between contact">
-            <div>
-              <div>{{ contact.name }}</div>
-              <div class="color-gray font-size-12">{{ contact.title }}</div>
-            </div>
-            <div>{{ contact.memberOrgRole.join(', ') }}</div>
-            <div>
-              <a href="mailto:{{ contact.contactEmail }}">{{ contact.contactEmail }}</a>
-            </div>
-            <div *ngIf="contact.phone">
-              {{ contact.phone }}
-            </div>
-            <div *ngIf="!contact.phone">
-              -
-            </div>
-          </li>
-          <hr *ngIf="i + 1 < memberData.contacts.length" />
-        </ul>
-      </div>
       <div *ngIf="memberData.isConsortiumLead">
         <h3 class="mb-4 font-weight-bold">
           Consortium Members
