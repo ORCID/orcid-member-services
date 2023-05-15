@@ -26,7 +26,9 @@
         <h3 class="mb-3 wide-text">Contact details</h3>
         <div class="form">
           <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('name').invalid && editForm.get('name').touched }"
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{ 'text-danger': editForm.get('name').invalid && editForm.get('name').touched }"
               >Name <span class="text-danger font-weight-normal">(Required)</span></label
             >
             <input
@@ -122,7 +124,13 @@
               </small>
             </ng-container>
           </div>
-          <h3 class="mb-4 mr-2 mt-4">Roles <span class="text-danger font-size-12 font-weight-normal">(Required)</span></h3>
+          <h3 class="mb-3 mr-2 mt-4">Roles <span class="text-danger font-size-12 font-weight-normal">(Required)</span></h3>
+          <small
+            class="wide-text font-size-12 form-text mb-4 color-gray"
+            [ngClass]="{ 'text-danger': editForm.get('roles').invalid && editForm.get('roles').dirty }"
+          >
+            Please assign at least one role to this contact
+          </small>
           <div formArrayName="roles" class="border-0 mb-3">
             <div *ngFor="let myOption of roles.controls; let i = index">
               <div formGroupName="{{ i }}">
@@ -142,7 +150,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" [disabled]="isSaving" class="btn btn-primary">Save changes</button>
+          <button type="submit" [disabled]="isSaving" class="btn btn-primary">{{contactId ? 'Submit contact change request' : 'Submit new contact'}}</button>
           <button type="button" class="btn btn-outline-primary" routerLink="/">Cancel</button>
           <button type="button" (click)="delete()" [disabled]="isSaving" class="btn btn-danger float-right" *ngIf="contactId">
             <fa-icon [icon]="'trash-alt'" class="mr-2"></fa-icon>Remove this contact
