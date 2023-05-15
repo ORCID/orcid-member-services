@@ -36,12 +36,13 @@ public class MailgunClient implements MailClient {
     private String fromAddress;
 
     @Override
-    public void sendMail(String to, String subject, String html) throws MailException {
+    public void sendMail(String to, String cc, String subject, String html) throws MailException {
         LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setCharset(StandardCharsets.UTF_8);
         builder.addTextBody("to", to);
+        builder.addTextBody("cc", cc);
         builder.addTextBody("from", getFrom());
         builder.addPart("subject", new StringBody(subject, ContentType.create("text/plain", StandardCharsets.UTF_8)));
         builder.addPart("html", new StringBody(html, ContentType.create("text/html", StandardCharsets.UTF_8)));
@@ -57,12 +58,13 @@ public class MailgunClient implements MailClient {
     }
 
     @Override
-    public void sendMailWithAttachment(String to, String subject, String html, File file) throws MailException {
+    public void sendMailWithAttachment(String to, String cc, String subject, String html, File file) throws MailException {
         LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setCharset(StandardCharsets.UTF_8);
         builder.addTextBody("to", to);
+        builder.addTextBody("cc", cc);
         builder.addTextBody("from", getFrom());
         builder.addPart("subject", new StringBody(subject, ContentType.create("text/plain", StandardCharsets.UTF_8)));
         builder.addPart("html", new StringBody(html, ContentType.create("text/html", StandardCharsets.UTF_8)));
