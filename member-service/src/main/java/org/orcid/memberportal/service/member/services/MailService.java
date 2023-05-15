@@ -54,7 +54,7 @@ public class MailService {
 
         String content = templateEngine.process("mail/addContact", context);
         try {
-            mailgunClient.sendMail(applicationProperties.getContactUpdateRecipient(), CONTACT_UPDATE_SUBJECT, content);
+            mailgunClient.sendMail(applicationProperties.getContactUpdateRecipient(), memberContactUpdate.getRequestedByEmail(), CONTACT_UPDATE_SUBJECT, content);
         } catch (MailException e) {
             LOGGER.error("Error sending add contact email to {}", applicationProperties.getContactUpdateRecipient(), e);
         }
@@ -71,7 +71,7 @@ public class MailService {
         context.setVariable("currentMember", memberContactUpdate.getContactMember());
         String content = templateEngine.process("mail/removeContact", context);
         try {
-            mailgunClient.sendMail(applicationProperties.getContactUpdateRecipient(), CONTACT_UPDATE_SUBJECT, content);
+            mailgunClient.sendMail(applicationProperties.getContactUpdateRecipient(), memberContactUpdate.getRequestedByEmail(), CONTACT_UPDATE_SUBJECT, content);
         } catch (MailException e) {
             LOGGER.error("Error sending remove contact email to {}", applicationProperties.getContactUpdateRecipient(), e);
         }
@@ -93,7 +93,7 @@ public class MailService {
         context.setVariable("roles", memberContactUpdate.getContactNewRoles());
         String content = templateEngine.process("mail/updateContact", context);
         try {
-            mailgunClient.sendMail(applicationProperties.getContactUpdateRecipient(), CONTACT_UPDATE_SUBJECT, content);
+            mailgunClient.sendMail(applicationProperties.getContactUpdateRecipient(), memberContactUpdate.getRequestedByEmail(), CONTACT_UPDATE_SUBJECT, content);
         } catch (MailException e) {
             LOGGER.error("Error sending update contact email to {}", applicationProperties.getContactUpdateRecipient(), e);
         }

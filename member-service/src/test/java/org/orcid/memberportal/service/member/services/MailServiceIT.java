@@ -8,18 +8,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.member.MemberServiceApp;
-import org.orcid.memberportal.service.member.client.model.MemberContact;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 import org.orcid.memberportal.service.member.mail.MailException;
 import org.orcid.memberportal.service.member.mail.client.impl.MailgunClient;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.MessageSource;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import java.io.File;
-import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,6 +38,9 @@ class MailServiceIT {
     private ArgumentCaptor<String> subjectCaptor;
 
     @Captor
+    private ArgumentCaptor<String> ccCaptor;
+
+    @Captor
     private ArgumentCaptor<File> fileCaptor;
 
     @BeforeEach
@@ -53,24 +53,28 @@ class MailServiceIT {
     void testSendAddContactEmail() throws MailException {
         MemberContactUpdate contactUpdate = new MemberContactUpdate();
         contactUpdate.setContactNewEmail("a.user@email.com");
+        contactUpdate.setRequestedByEmail("requesting-user@email.com");
 
-        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.any(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         mailService.sendAddContactEmail(contactUpdate);
-        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
         assertThat(recipientCaptor.getValue()).isEqualTo("contactUpdate@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo(MailService.CONTACT_UPDATE_SUBJECT);
+        assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
     }
 
     @Test
     void testSendRemoveContactEmail() throws MailException {
         MemberContactUpdate contactUpdate = new MemberContactUpdate();
         contactUpdate.setContactEmail("a.user@email.com");
+        contactUpdate.setRequestedByEmail("requesting-user@email.com");
 
-        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.any(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         mailService.sendRemoveContactEmail(contactUpdate);
-        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
         assertThat(recipientCaptor.getValue()).isEqualTo("contactUpdate@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo(MailService.CONTACT_UPDATE_SUBJECT);
+        assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
     }
 
     @Test
@@ -78,12 +82,14 @@ class MailServiceIT {
         MemberContactUpdate contactUpdate = new MemberContactUpdate();
         contactUpdate.setContactEmail("a.user@email.com");
         contactUpdate.setContactNewEmail("a.new.user@email.com");
+        contactUpdate.setRequestedByEmail("requesting-user@email.com");
 
-        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.any(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         mailService.sendUpdateContactEmail(contactUpdate);
-        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
         assertThat(recipientCaptor.getValue()).isEqualTo("contactUpdate@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo(MailService.CONTACT_UPDATE_SUBJECT);
+        assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
     }
 
     private ApplicationProperties getTestApplicationProperties() {
