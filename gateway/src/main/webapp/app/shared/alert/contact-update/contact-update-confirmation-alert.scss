@@ -9,9 +9,13 @@
 }
 
 .popup {
-  > h3 > img {
-    margin-bottom: -3px;
+  span {
+    margin-top: -2px;
   }
+  a {
+    margin-top: -2px;
+  }
+
   position: fixed;
   max-width: 640px;
   padding: 2rem;
