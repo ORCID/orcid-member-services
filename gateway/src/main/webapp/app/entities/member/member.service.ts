@@ -16,7 +16,6 @@ import {
   SFConsortiumMemberData
 } from 'app/shared/model/salesforce-member-data.model';
 import {
-  ISFMemberContact,
   ISFMemberContactUpdate,
   ISFRawMemberContact,
   ISFRawMemberContacts,

@@ -3,6 +3,8 @@ export * from './constants/pagination.constants';
 export * from './constants/input.constants';
 export * from './alert/alert.component';
 export * from './alert/alert-error.component';
+export * from './alert/alert.service';
+export * from './alert/contact-update/contact-update-confirmation-alert.component';
 export * from './auth/has-any-authority.directive';
 export * from './language/find-language-from-key.pipe';
 export * from './util/convert-to-camelcase-pipe';

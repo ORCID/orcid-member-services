@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
+import { AlertService } from 'app/shared/alert/alert.service';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { IMSUser } from 'app/shared/model/user.model';
 import { Subscription } from 'rxjs';
@@ -12,16 +13,17 @@ import { Subscription } from 'rxjs';
   styleUrls: ['member-info-landing.component.scss']
 })
 export class MemberInfoLandingComponent implements OnInit, OnDestroy {
+  @ViewChild('contactUpdateConfirmationAlert', { read: ViewContainerRef, static: true }) contactUpdateConfirmationAlert: ViewContainerRef;
   account: IMSUser;
   memberData: ISFMemberData;
   authenticationStateSubscription: Subscription;
   memberDataSubscription: Subscription;
-  showContactUpdatePopup: Boolean;
+  contactUpdatedSubscription: Subscription;
 
   constructor(
     private memberService: MSMemberService,
     private accountService: AccountService,
-    private router: Router,
+    private alertService: AlertService,
     protected activatedRoute: ActivatedRoute
   ) {}
 
@@ -40,9 +42,6 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe(params => {
-      if (params && params['contactChange']) this.showContactUpdatePopup = true;
-    });
     this.authenticationStateSubscription = this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
     });
@@ -55,20 +54,16 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
     this.accountService.identity().then((account: IMSUser) => {
       this.account = account;
     });
-  }
-
-  hideContactChangePopup() {
-    this.showContactUpdatePopup = false;
-    const navigationExtras: NavigationExtras = {
-      replaceUrl: true,
-      queryParams: { contactChange: null } // Set the 'submitted' parameter to null to remove it
-    };
-
-    this.router.navigate([], navigationExtras);
+    this.contactUpdatedSubscription = this.alertService.contactUpdated.subscribe(updated => {
+      if (updated) {
+        this.alertService.showContactUpdateConfirmationAlert(this.contactUpdateConfirmationAlert);
+      }
+    });
   }
 
   ngOnDestroy() {
     this.authenticationStateSubscription.unsubscribe();
     this.memberDataSubscription.unsubscribe();
+    this.contactUpdatedSubscription.unsubscribe();
   }
 }
