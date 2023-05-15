@@ -21,5 +21,6 @@ export class AlertService {
 
   hideContactUpdateConfirmationAlert(): void {
     this.contactUpdateConfirmationAlertRef.destroy();
+    this.contactUpdated.next(false);
   }
 }
