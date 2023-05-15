@@ -23,7 +23,7 @@
     <div class="main-section">
       <form (ngSubmit)="save()" name="editForm" role="form" [formGroup]="editForm">
         <div *ngIf="invalidForm" class="warning d-flex w-75 p-3 mb-3">
-          <img src="./../../../../content/images/warning-sign.svg" alt="Warning sign" class="p-2" />
+          <img src="./../../../../content/images/error-sign.svg" alt="Warning sign" class="p-2" />
           <div>
             <div class="mb-2 font-size-12 wide-text font-weight-bold">
               Your changes cannot be saved
@@ -73,18 +73,28 @@
             </div>
           </div>
           <div class="form-group w-50">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('website').invalid }">Website</label>
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{
+                'text-danger': editForm.get('website').invalid && editForm.get('website').touched
+              }"
+              >Website</label
+            >
             <input
               type="text"
               class="form-control"
               name="website"
+              (input)="editForm.get('website').markAsUntouched()"
               formControlName="website"
-              [ngClass]="{ 'text-danger': editForm.get('website').invalid }"
+              [ngClass]="{
+                'text-danger': editForm.get('website').invalid && editForm.get('website').touched,
+                'input-field-default-border': !editForm.get('website').touched
+              }"
             />
             <ng-template #validWebsite>
               <small class="wide-text font-size-12 color-gray">Links should be in the full URL format e.g. http://www.website.com</small>
             </ng-template>
-            <div *ngIf="editForm.get('website').invalid; else validWebsite">
+            <div *ngIf="editForm.get('website').invalid && editForm.get('website').touched; else validWebsite">
               <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('website').errors.pattern">
                 Please enter a valid website URL, for example http://www.website.com
               </small>
@@ -96,18 +106,26 @@
             </div>
           </div>
           <div class="form-group mb-4 w-50">
-            <label [ngClass]="{ 'text-danger': editForm.get('email').invalid }" class="wide-text font-size-12">Email</label>
+            <label
+              [ngClass]="{ 'text-danger': editForm.get('email').invalid && editForm.get('email').touched }"
+              class="wide-text font-size-12"
+              >Email</label
+            >
             <input
               type="text"
               class="form-control"
               name="email"
+              (input)="editForm.get('email').markAsUntouched()"
               formControlName="email"
-              [ngClass]="{ 'text-danger': editForm.get('email').invalid }"
+              [ngClass]="{
+                'text-danger': editForm.get('email').invalid && editForm.get('email').touched,
+                'input-field-default-border': !editForm.get('email').touched
+              }"
             />
             <ng-template #validEmail>
               <small class="wide-text font-size-12 color-gray">Emails should be in the standard format e.g. contactus@website.com</small>
             </ng-template>
-            <div *ngIf="editForm.get('email').invalid; else validEmail">
+            <div *ngIf="editForm.get('email').invalid && editForm.get('email').touched; else validEmail">
               <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('email').errors.pattern">
                 Please enter a valid email address, for example contactus@website.com
               </small>
@@ -127,7 +145,11 @@
           <h3 class="mb-0 mr-2">Identifiers</h3>
         </div>
         <div class="wide-text font-size-12 coming-soon">
-          <em>We did our best to register the right organization identifiers in our systems when you became an ORCID member. If you think any are missing (ROR, GRID, RINGGOLD or Funder Registry ID) <a href="mailto:membership@orcid.org">contact your engagement support lead</a> to register additional IDs</em>
+          <em
+            >We did our best to register the right organization identifiers in our systems when you became an ORCID member. If you think any
+            are missing (ROR, GRID, RINGGOLD or Funder Registry ID)
+            <a href="mailto:membership@orcid.org">contact your engagement support lead</a> to register additional IDs</em
+          >
         </div>
         <div class="row ml-0 d-flex justify-content-between contact">
           <h6 class="w-66">ID</h6>

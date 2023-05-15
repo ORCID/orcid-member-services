@@ -19,14 +19,14 @@
               Your changes cannot be saved
             </div>
             <div class="font-size-12 wide-text">
-              Please fix the issues with the public details before trying to save again
+              Please fix the issues with the contact form before trying to save again
             </div>
           </div>
         </div>
         <h3 class="mb-3 wide-text">Contact details</h3>
         <div class="form">
           <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('name').invalid && editForm.get('name').dirty }"
+            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('name').invalid && editForm.get('name').touched }"
               >Name <span class="text-danger font-weight-normal">(Required)</span></label
             >
             <input
@@ -36,10 +36,10 @@
               formControlName="name"
               [ngClass]="{
                 'text-danger': editForm.get('name').invalid && editForm.get('name').dorty,
-                'default-border': !editForm.get('name').dirty
+                'input-field-default-border': !editForm.get('name').touched
               }"
             />
-            <div *ngIf="editForm.get('name').invalid && editForm.get('name').dirty">
+            <div *ngIf="editForm.get('name').invalid && editForm.get('name').touched">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('name').errors.required">
                 Name cannot be empty
               </small>
@@ -67,7 +67,7 @@
           </div>
           <div class="form-group mb-3">
             <label
-              [ngClass]="{ 'text-danger': editForm.get('email').invalid && editForm.get('email').dirty }"
+              [ngClass]="{ 'text-danger': editForm.get('email').invalid && editForm.get('email').touched }"
               class="wide-text font-size-12"
               >Email <span class="text-danger font-weight-normal">(Required)</span></label
             >
@@ -76,15 +76,16 @@
               class="form-control"
               name="email"
               formControlName="email"
+              (input)="editForm.get('email').markAsUntouched()"
               [ngClass]="{
-                'text-danger': editForm.get('email').invalid && editForm.get('email').dirty,
-                'default-border': !editForm.get('email').dirty
+                'text-danger': editForm.get('email').invalid && editForm.get('email').touched,
+                'input-field-default-border': !editForm.get('email').touched
               }"
             />
             <ng-template #validEmail>
               <small class="wide-text font-size-12 color-gray">The contact email for this person</small>
             </ng-template>
-            <div *ngIf="editForm.get('email').invalid && editForm.get('email').dirty; else validEmail">
+            <div *ngIf="editForm.get('email').invalid && editForm.get('email').touched; else validEmail">
               <small
                 class="wide-text font-size-12 text-danger"
                 *ngIf="editForm.get('email').errors.pattern && !editForm.get('email').errors.maxlength"
@@ -102,7 +103,7 @@
           <div class="form-group">
             <label
               class="wide-text font-size-12"
-              [ngClass]="{ 'text-danger': editForm.get('phone').invalid && editForm.get('phone').dirty }"
+              [ngClass]="{ 'text-danger': editForm.get('phone').invalid && editForm.get('phone').touched }"
               >Phone</label
             >
             <input
@@ -110,12 +111,12 @@
               class="form-control"
               name="phone"
               formControlName="phone"
-              [ngClass]="{ 'text-danger': editForm.get('phone').invalid && editForm.get('phone').dirty }"
+              [ngClass]="{ 'text-danger': editForm.get('phone').invalid && editForm.get('phone').touched }"
             />
             <ng-template #validPhone>
               <small class="wide-text font-size-12 form-text color-gray">A direct contact phone for this person</small>
             </ng-template>
-            <ng-container *ngIf="editForm.get('phone').invalid && editForm.get('phone').dirty; else validPhone">
+            <ng-container *ngIf="editForm.get('phone').invalid && editForm.get('phone').touched; else validPhone">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('phone').errors.maxlength">
                 Phone number is too long. Please use 40 characters or less.
               </small>
