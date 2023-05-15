@@ -180,7 +180,7 @@ export class MSMemberService {
               return combineLatest([
                 this.getMemberContacts(),
                 this.getMemberOrgIds(),
-                this.getConsortiaLeadName(res.consortiumLeadName),
+                this.getConsortiaLeadName(res.consortiaLeadId),
                 this.getIsConsortiumLead(userIdentity.salesforceId)
               ]);
             }),
