@@ -25,20 +25,20 @@ describe('Test homepage', () => {
 
     cy.get('[name="website"]')
       .clear()
-      .type(data.invalidWebsite);
+      .type(data.invalidWebsite).blur();
     cy.get('.text-danger').should('have.length', 3);
     cy.get('[name="website"]')
       .clear()
-      .type('https://' + date + '.org');
+      .type('https://' + date + '.org').blur();
     cy.get('.text-danger').should('not.exist');
 
     cy.get('[name="email"]')
       .clear()
-      .type(data.invalidEmail);
+      .type(data.invalidEmail).blur();
     cy.get('.text-danger').should('have.length', 3);
     cy.get('[name="email"]')
       .clear()
-      .type(date + '@orcid.org');
+      .type(date + '@orcid.org').blur();
     cy.get('.text-danger').should('not.exist');
     cy.get('[type="submit"]').click();
     cy.get('app-member-info-landing', { timeout: 20000 }).contains(`${name} ${date}`);
