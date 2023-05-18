@@ -28,6 +28,7 @@ import org.orcid.memberportal.service.user.dto.UserDTO;
 import org.orcid.memberportal.service.user.mapper.UserMapper;
 import org.orcid.memberportal.service.user.repository.UserRepository;
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
+import org.orcid.memberportal.service.user.services.AuthorityService;
 import org.orcid.memberportal.service.user.services.MailService;
 import org.orcid.memberportal.service.user.services.MemberService;
 import org.orcid.memberportal.service.user.services.UserService;
@@ -79,6 +80,9 @@ public class AccountResourceIT {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private AuthorityService authorityService;
+
     @Mock
     private MemberService mockMemberService;
 
@@ -98,6 +102,7 @@ public class AccountResourceIT {
 
         ReflectionTestUtils.setField(userMapper, "memberService", mockMemberService);
         ReflectionTestUtils.setField(userService, "memberService", mockMemberService);
+        ReflectionTestUtils.setField(authorityService, "memberService", mockMemberService);
 
         AccountResource accountResource = new AccountResource(userRepository, userService, mockMailService, userMapper);
 

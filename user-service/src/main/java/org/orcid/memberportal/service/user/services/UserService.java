@@ -515,28 +515,6 @@ public class UserService {
         mailService.sendActivationEmail(user);
     }
 
-    public Set<String> getAuthoritiesForUser(User user) {
-        Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
-        if (!org.apache.commons.lang3.StringUtils.isBlank(user.getSalesforceId())) {
-            if (memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(user.getSalesforceId())) {
-                authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
-            }
-
-            if (memberService.memberIsConsortiumLead(user.getSalesforceId())) {
-                authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
-            }
-        }
-
-        if (user.getMainContact() != null && user.getMainContact().booleanValue()) {
-            authorities.add(AuthoritiesConstants.ORG_OWNER);
-        }
-
-        if (user.getAdmin() != null && user.getAdmin().booleanValue() && memberService.memberIsAdminEnabled(user.getSalesforceId())) {
-            authorities.add(AuthoritiesConstants.ADMIN);
-        }
-        return authorities;
-    }
-
     public boolean hasOwnerForSalesforceId(String salesforceId) {
         List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(salesforceId);
         if (owners.isEmpty()) {

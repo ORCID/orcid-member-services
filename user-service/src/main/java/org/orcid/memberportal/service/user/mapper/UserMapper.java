@@ -2,6 +2,7 @@ package org.orcid.memberportal.service.user.mapper;
 
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.dto.UserDTO;
+import org.orcid.memberportal.service.user.services.AuthorityService;
 import org.orcid.memberportal.service.user.services.MemberService;
 import org.orcid.memberportal.service.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class UserMapper {
     private MemberService memberService;
 
     @Autowired
-    private UserService userService;
+    private AuthorityService authorityService;
 
     public User toUser(UserDTO userDTO) {
         User user = new User();
@@ -47,7 +48,7 @@ public class UserMapper {
         userDTO.setCreatedDate(user.getCreatedDate());
         userDTO.setLastModifiedBy(user.getLastModifiedBy());
         userDTO.setLastModifiedDate(user.getLastModifiedDate());
-        userDTO.setAuthorities(userService.getAuthoritiesForUser(user));
+        userDTO.setAuthorities(authorityService.getAuthoritiesForUser(user));
         userDTO.setSalesforceId(user.getSalesforceId());
         userDTO.setMemberName(user.getMemberName());
         userDTO.setMainContact(user.getMainContact());
