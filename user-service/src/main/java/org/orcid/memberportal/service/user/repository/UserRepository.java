@@ -31,7 +31,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     List<User> findAllByEmailIgnoreCase(String email);
 
     List<User> findBySalesforceIdAndDeletedIsFalse(String salesforceId);
-    
+
     Page<User> findBySalesforceIdAndDeletedIsFalse(Pageable pageable, String salesforceId);
 
     Page<User> findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
@@ -45,12 +45,12 @@ public interface UserRepository extends MongoRepository<User, String> {
     List<User> findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(String salesforceId);
 
     List<User> findAllByMainContactIsTrueAndDeletedIsFalse();
-    
+
     List<User> findAllByActivatedIsFalseAndDeletedIsFalse();
 
     Optional<User> findOneBySalesforceIdAndMainContactIsTrue(String salesforceId);
 
-    List<User> findAllByAuthoritiesAndDeletedIsFalse(String role);
+    Long countByAdminIsTrue();
 
     Page<User> findByMemberName(Pageable pageable, String memberName);
 

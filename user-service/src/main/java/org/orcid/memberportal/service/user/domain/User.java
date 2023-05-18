@@ -65,7 +65,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Field("activation_date")
     private Instant activationDate = null;
-    
+
     @Field("activation_reminders")
     private List<ActivationReminder> activationReminders;
 
@@ -94,16 +94,16 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Field("mfa_enabled")
     private Boolean mfaEnabled;
-    
+
     @Field("mfa_encrypted_secret")
     private String mfaEncryptedSecret;
-    
+
     @Field("mfa_backup_codes")
     private List<String> mfaBackupCodes;
-    
+
     @Field("admin")
     private Boolean admin = false;
-    
+
     public String getLoginAs() {
         return loginAs;
     }
@@ -111,9 +111,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public void setLoginAs(String loginAs) {
         this.loginAs = loginAs;
     }
-
-    @JsonIgnore
-    private Set<String> authorities = new HashSet<>();
 
     public String getId() {
         return id;
@@ -211,14 +208,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.langKey = langKey;
     }
 
-    public Set<String> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(Set<String> authorities) {
-        this.authorities = authorities;
-    }
-
     public String getMemberName() {
         return memberName;
     }
@@ -250,7 +239,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
-    
+
     public List<ActivationReminder> getActivationReminders() {
         return activationReminders;
     }
@@ -258,7 +247,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public void setActivationReminders(List<ActivationReminder> activationReminders) {
         this.activationReminders = activationReminders;
     }
-    
+
     public Boolean getMfaEnabled() {
         return mfaEnabled;
     }
@@ -282,7 +271,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public void setMfaBackupCodes(List<String> mfaBackupCodes) {
         this.mfaBackupCodes = mfaBackupCodes;
     }
-    
+
     public Boolean getAdmin() {
         return admin;
     }

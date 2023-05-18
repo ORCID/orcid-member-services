@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -20,11 +19,9 @@ import org.jboss.aerogear.security.otp.Totp;
 import org.jboss.aerogear.security.otp.api.Base32;
 import org.orcid.memberportal.service.user.config.Constants;
 import org.orcid.memberportal.service.user.domain.ActivationReminder;
-import org.orcid.memberportal.service.user.domain.Authority;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.dto.UserDTO;
 import org.orcid.memberportal.service.user.mapper.UserMapper;
-import org.orcid.memberportal.service.user.repository.AuthorityRepository;
 import org.orcid.memberportal.service.user.repository.UserRepository;
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
 import org.orcid.memberportal.service.user.security.EncryptUtil;
@@ -85,9 +82,6 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthorityRepository authorityRepository;
 
     @Autowired
     private UserUploadReader usersUploadReader;
@@ -298,7 +292,7 @@ public class UserService {
         user.setLoginAs(userDTO.getLoginAs());
         user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
         user.setAdmin(userDTO.getIsAdmin());
-        
+
 
         if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
             user.setSalesforceId(userDTO.getSalesforceId());
@@ -339,7 +333,6 @@ public class UserService {
             User user = u.get();
             user.setActivated(false);
             user.setActivationKey(null);
-            user.setAuthorities(new HashSet<String>());
             user.setEmail(id + "@deleted.orcid.org");
             user.setFirstName(null);
             user.setImageUrl(null);
@@ -386,45 +379,21 @@ public class UserService {
                 .map(u -> userMapper.toUserDTO(u));
     }
 
-    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
-        return userRepository.findOneByEmailIgnoreCase(login);
+    public Optional<User> getUserByLogin(String email) {
+        return userRepository.findOneByEmailIgnoreCase(email);
     }
 
-    public Optional<User> getUserWithAuthorities(String id) {
+    public Optional<User> getUser(String id) {
         return userRepository.findById(id);
     }
 
-    public Optional<User> getUserWithAuthorities() {
-        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByEmailIgnoreCase);
-    }
-
-    public List<User> findAllByEmail(String login, String email) {
-        return userRepository.findAllByEmailIgnoreCase(email);
-    }
-
-    public void removeAuthorityFromUser(String id, String authority) {
-        Optional<User> existing = getUserWithAuthorities(id);
-        if (!existing.isPresent()) {
-            throw new BadRequestAlertException("User not present " + id, "user", null);
-        }
-
-        User user = existing.get();
-        if (user.getAuthorities() != null && !user.getAuthorities().isEmpty()) {
-            user.setAuthorities(user.getAuthorities().stream().filter(a -> !a.equals(authority)).collect(Collectors.toSet()));
-        }
-        userRepository.save(user);
-    }
-
     public void removeOwnershipFromUser(String id) {
-        Optional<User> existing = getUserWithAuthoritiesByLogin(id);
+        Optional<User> existing = getUserByLogin(id);
         if (!existing.isPresent()) {
             throw new BadRequestAlertException("User not present " + id, "user", null);
         }
 
         User user = existing.get();
-        if (user.getAuthorities() != null && !user.getAuthorities().isEmpty()) {
-            user.setAuthorities(user.getAuthorities().stream().filter(a -> !a.equals(AuthoritiesConstants.ORG_OWNER)).collect(Collectors.toSet()));
-        }
         user.setMainContact(false);
         userRepository.save(user);
     }
@@ -455,15 +424,6 @@ public class UserService {
         });
     }
 
-    /**
-     * Gets a list of all the authorities.
-     *
-     * @return a list of all the authorities.
-     */
-    public List<String> getAuthorities() {
-        return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
-    }
-
     public UserUpload uploadUserCSV(InputStream inputStream, User currentUser) {
         UserUpload usersUpload = null;
         try {
@@ -475,7 +435,7 @@ public class UserService {
 
         usersUpload.getUserDTOs().forEach(userDTO -> {
             String salesforceId = userDTO.getSalesforceId();
-            Optional<User> existing = getUserWithAuthoritiesByLogin(userDTO.getEmail());
+            Optional<User> existing = getUserByLogin(userDTO.getEmail());
             if (!existing.isPresent() && !userRepository.findOneBySalesforceIdAndMainContactIsTrue(salesforceId).isPresent()) {
                 userDTO.setMainContact(true);
                 createUser(userDTO);
@@ -588,7 +548,7 @@ public class UserService {
 
     /**
      * Returns the user currently logged in or being impersonated.
-     * 
+     *
      * @return
      */
     public User getCurrentUser() {
