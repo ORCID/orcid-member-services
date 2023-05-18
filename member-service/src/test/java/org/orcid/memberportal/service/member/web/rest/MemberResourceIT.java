@@ -146,6 +146,23 @@ public class MemberResourceIT {
             .andExpect(status().isForbidden()).andReturn();
     }
 
+    @Test
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    public void getMembersList() throws Exception {
+        MvcResult result = restUserMockMvc
+            .perform(get("/api//members/list/all").param("size", "50").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk()).andReturn();
+    }
+
+    @Test
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    public void getMembersList_missingRoleAdmin() throws Exception {
+        MvcResult result = restUserMockMvc
+            .perform(get("/api//members/list/all").param("size", "50").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isForbidden()).andReturn();
+    }
+
+
     private void createMembers(int quantity) {
         for (int i = 0; i < quantity; i++) {
             memberRepository.save(getMember(String.valueOf(i)));
