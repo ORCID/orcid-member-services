@@ -249,6 +249,7 @@ public class MemberResource {
      *         list of member in body.
      */
     @GetMapping("/members")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<List<Member>> getAllMembers(@RequestParam(required = false, name = "filter") String filter, Pageable pageable) {
         LOG.debug("REST request to get a page of Member");
         Page<Member> page = null;
