@@ -23,6 +23,7 @@ import org.orcid.memberportal.service.user.dto.UserDTO;
 import org.orcid.memberportal.service.user.mapper.UserMapper;
 import org.orcid.memberportal.service.user.repository.UserRepository;
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
+import org.orcid.memberportal.service.user.services.AuthorityService;
 import org.orcid.memberportal.service.user.services.MailService;
 import org.orcid.memberportal.service.user.services.MemberService;
 import org.orcid.memberportal.service.user.services.UserService;
@@ -98,6 +99,9 @@ public class UserResourceIT {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private AuthorityService authorityService;
+
     private MockMvc restUserMockMvc;
 
     private User user;
@@ -123,6 +127,7 @@ public class UserResourceIT {
         Mockito.when(mockedMemberService.getMemberNameBySalesforce(Mockito.eq(UPDATED_SALESFORCE_ID))).thenReturn(UPDATED_MEMBER_NAME);
         ReflectionTestUtils.setField(userService, "memberService", mockedMemberService);
         ReflectionTestUtils.setField(userMapper, "memberService", mockedMemberService);
+        ReflectionTestUtils.setField(authorityService, "memberService", mockedMemberService);
         ReflectionTestUtils.setField(userService, "mailService", Mockito.mock(MailService.class));
     }
 
