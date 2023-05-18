@@ -22,6 +22,7 @@ import org.orcid.memberportal.service.member.upload.MembersUploadReader;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
 import org.orcid.memberportal.service.member.validation.MemberValidator;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -351,5 +352,21 @@ public class MemberService {
         } else {
             mailService.sendUpdateContactEmail(memberContactUpdate);
         }
+    }
+
+    public void requestNewConsortiumMember(AddConsortiumMember addConsortiumMember) {
+        MemberServiceUser user = userService.getLoggedInUser();
+
+        Optional<Member> optionalMember = memberRepository.findBySalesforceId(user.getSalesforceId());
+        Member member = optionalMember.get();
+        if (!member.getIsConsortiumLead()) {
+            throw new RuntimeException("Requesting member is not a consortium lead");
+        }
+
+        addConsortiumMember.setRequestedByEmail(user.getEmail());
+        addConsortiumMember.setRequestedByName(user.getFirstName() + " " + user.getLastName());
+        addConsortiumMember.setConsortium(user.getMemberName());
+
+        mailService.sendAddConsortiumMemberEmail(addConsortiumMember);
     }
 }
