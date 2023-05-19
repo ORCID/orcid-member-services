@@ -1,0 +1,162 @@
+<div *ngIf="memberData" class="h-100">
+  <div class="p-3">
+    <div class="go-back">
+      Back to <a routerLink="">{{ memberData.publicDisplayName }}</a>
+    </div>
+    <hr class="mb-4" />
+    <div class="edit-org-label mb-2 font-size-18 color-gray" *ngIf="contactId">Edit contact</div>
+    <h1 class="mb-1 wide-text font-weight-bold" *ngIf="contactId && contact">{{ contact.name }}</h1>
+    <div class="edit-org-label mb-2 font-size-18 color-gray" *ngIf="!contactId">Add new contact</div>
+    <h1 class="mb-1 wide-text font-italic" *ngIf="!contactId">New contact</h1>
+  </div>
+  <div class="d-flex">
+    <div class="main-section">
+      <form (ngSubmit)="save()" name="editForm" role="form" [formGroup]="editForm" class="w-66">
+        <div *ngIf="invalidForm" class="error-message d-flex p-3 mb-3">
+          <img src="./../../../../content/images/error-sign.svg" alt="Warning sign" class="p-2" />
+          <div>
+            <div class="mb-2 font-size-12 wide-text font-weight-bold">
+              Your changes cannot be saved
+            </div>
+            <div class="font-size-12 wide-text">
+              Please fix the issues with the contact form before trying to save again
+            </div>
+          </div>
+        </div>
+        <h3 class="mb-3 wide-text">Contact details</h3>
+        <div class="form">
+          <div class="form-group">
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{ 'text-danger': editForm.get('name').invalid && editForm.get('name').touched }"
+              >Name <span class="text-danger font-weight-normal">(Required)</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="name"
+              formControlName="name"
+              [ngClass]="{
+                'text-danger': editForm.get('name').invalid && editForm.get('name').dorty,
+                'input-field-default-border': !editForm.get('name').touched
+              }"
+            />
+            <div *ngIf="editForm.get('name').invalid && editForm.get('name').touched">
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('name').errors.required">
+                Name cannot be empty
+              </small>
+              <div>
+                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('name').errors.maxlength">
+                  Name is too long. Please use 80 characters or less.
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('title').invalid }">Job title</label>
+            <input
+              type="text"
+              class="form-control"
+              name="title"
+              formControlName="title"
+              [ngClass]="{ 'text-danger': editForm.get('title').invalid }"
+            />
+            <div *ngIf="editForm.get('title').invalid">
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('title').errors.maxlength">
+                Job title is too long. Please use 128 characters or less.
+              </small>
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label
+              [ngClass]="{ 'text-danger': editForm.get('email').invalid && editForm.get('email').touched }"
+              class="wide-text font-size-12"
+              >Email <span class="text-danger font-weight-normal">(Required)</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="email"
+              formControlName="email"
+              (input)="editForm.get('email').markAsUntouched()"
+              [ngClass]="{
+                'text-danger': editForm.get('email').invalid && editForm.get('email').touched,
+                'input-field-default-border': !editForm.get('email').touched
+              }"
+            />
+            <ng-template #validEmail>
+              <small class="wide-text font-size-12 color-gray">The contact email for this person</small>
+            </ng-template>
+            <div *ngIf="editForm.get('email').invalid && editForm.get('email').touched; else validEmail">
+              <small
+                class="wide-text font-size-12 text-danger"
+                *ngIf="editForm.get('email').errors.pattern && !editForm.get('email').errors.maxlength"
+              >
+                Please enter a valid email address, for example contactus@website.com
+              </small>
+              <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('email').errors.maxlength">
+                Email is too long. Please use 80 characters or less.
+              </small>
+              <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('email').errors.required">
+                Email cannot be empty
+              </small>
+            </div>
+          </div>
+          <div class="form-group">
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{ 'text-danger': editForm.get('phone').invalid && editForm.get('phone').touched }"
+              >Phone</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="phone"
+              formControlName="phone"
+              [ngClass]="{ 'text-danger': editForm.get('phone').invalid && editForm.get('phone').touched }"
+            />
+            <ng-template #validPhone>
+              <small class="wide-text font-size-12 form-text color-gray">A direct contact phone for this person</small>
+            </ng-template>
+            <ng-container *ngIf="editForm.get('phone').invalid && editForm.get('phone').touched; else validPhone">
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('phone').errors.maxlength">
+                Phone number is too long. Please use 40 characters or less.
+              </small>
+            </ng-container>
+          </div>
+          <h3 class="mb-3 mr-2 mt-4">Roles <span class="text-danger font-size-12 font-weight-normal">(Required)</span></h3>
+          <small
+            class="wide-text font-size-12 form-text mb-4 color-gray"
+            [ngClass]="{ 'text-danger': editForm.get('roles').invalid && editForm.get('roles').dirty }"
+          >
+            Please assign at least one role to this contact
+          </small>
+          <div formArrayName="roles" class="border-0 mb-3">
+            <div *ngFor="let myOption of roles.controls; let i = index">
+              <div formGroupName="{{ i }}">
+                <input type="checkbox" [formControl]="myOption.get('selected')" class="role-checkbox" />
+                <label class="font-size-14 font-weight-normal mb-3"> {{ myOption.get('name').value }} </label>
+              </div>
+            </div>
+          </div>
+          <div class="warning-message d-flex p-3 mb-4">
+            <img src="./../../../../content/images/warning-sign.svg" alt="Warning sign" class="p-2" />
+            <div>
+              <div class="mb-2 font-size-12 wide-text font-weight-bold">
+                Please note
+              </div>
+              <div class="font-size-12 wide-text">
+                Changes made to organization contacts can take up to 48 hours to be reflected in the organization contact list.
+              </div>
+            </div>
+          </div>
+          <button type="submit" [disabled]="isSaving" class="btn btn-primary">{{contactId ? 'Submit contact change request' : 'Submit new contact'}}</button>
+          <button type="button" class="btn btn-outline-primary" routerLink="/">Cancel</button>
+          <button type="button" (click)="delete()" [disabled]="isSaving" class="btn btn-danger float-right" *ngIf="contactId">
+            <fa-icon [icon]="'trash-alt'" class="mr-2"></fa-icon>Remove this contact
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
