@@ -66,28 +66,33 @@ export class MSUserUpdateComponent implements OnInit {
     this.isSaving = false;
     this.isExistentMember = false;
     this.existentMSUser = null;
+    this.editForm.disable();
+    this.activatedRoute.data.subscribe(({ msUser }) => {
+      this.existentMSUser = msUser;
+      this.updateForm(msUser);
+    });
     this.accountService.identity().then(account => {
       this.currentAccount = account;
-    });
-    this.editForm.disable();
-
-    this.msMemberService.allMembers$.subscribe(res => {
-      if (res.body) {
-        this.membersList = [];
-        res.body.forEach((msMember: IMSMember) => {
-          this.membersList.push(msMember);
+      if (this.hasRoleAdmin()) {
+        this.msMemberService.getAllMembers().subscribe(res => {
+          if (res.body) {
+            this.membersList = [];
+            res.body.forEach((msMember: IMSMember) => {
+              this.membersList.push(msMember);
+            });
+          }
         });
-        if (this.membersList.length > 0) {
-          this.editForm.enable();
-          this.activatedRoute.data.subscribe(({ msUser }) => {
-            this.existentMSUser = msUser;
-            this.updateForm(msUser);
-          });
-          this.cdref.detectChanges();
-        }
+      } else {
+        this.msMemberService.find(account.salesforceId).subscribe(res => {
+          console.log(res);
+          if (res && res.body) {
+            this.membersList.push(res.body);
+          }
+        });
       }
+      this.editForm.enable();
     });
-
+    this.cdref.detectChanges();
     this.onChanges();
   }
 
