@@ -66,11 +66,10 @@ export class MSUserUpdateComponent implements OnInit {
     this.isSaving = false;
     this.isExistentMember = false;
     this.existentMSUser = null;
-    this.editForm.disable();
     this.activatedRoute.data.subscribe(({ msUser }) => {
       this.existentMSUser = msUser;
-      this.updateForm(msUser);
     });
+    this.editForm.disable();
     this.accountService.identity().then(account => {
       this.currentAccount = account;
       if (this.hasRoleAdmin()) {
@@ -91,6 +90,7 @@ export class MSUserUpdateComponent implements OnInit {
         });
       }
       this.editForm.enable();
+      this.updateForm(this.existentMSUser);
     });
     this.cdref.detectChanges();
     this.onChanges();
