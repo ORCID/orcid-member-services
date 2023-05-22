@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, EMPTY, Observable, of, Subject, throwError, combineLatest } from 'rxjs';
-import { catchError, share, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { catchError, switchMap, takeUntil, tap } from 'rxjs/operators';
 import * as moment from 'moment';
 import { map } from 'rxjs/operators';
 
@@ -33,14 +33,12 @@ type SalesforceOrgIdResponseType = HttpResponse<ISFRawMemberOrgIds>;
 @Injectable({ providedIn: 'root' })
 export class MSMemberService {
   public resourceUrl = SERVER_API_URL + 'services/memberservice/api';
-  public allMembers$: Observable<EntityArrayResponseType>;
   public orgNameMap: any;
   public memberData = new BehaviorSubject<ISFMemberData>(undefined);
   public fetchingMemberDataState = new BehaviorSubject<boolean>(undefined);
   public stopFetchingMemberData = new Subject();
 
   constructor(protected http: HttpClient) {
-    this.allMembers$ = this.getAllMembers().pipe(share());
     this.orgNameMap = new Object();
   }
 

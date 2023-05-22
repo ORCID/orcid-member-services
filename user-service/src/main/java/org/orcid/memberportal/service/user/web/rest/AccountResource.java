@@ -16,7 +16,6 @@ import org.orcid.memberportal.service.user.security.MfaAuthenticationFailureExce
 import org.orcid.memberportal.service.user.security.MfaSetup;
 import org.orcid.memberportal.service.user.services.MailService;
 import org.orcid.memberportal.service.user.services.UserService;
-import org.orcid.memberportal.service.user.web.rest.errors.AccountResourceException;
 import org.orcid.memberportal.service.user.web.rest.errors.EmailAlreadyUsedException;
 import org.orcid.memberportal.service.user.web.rest.errors.EmailNotFoundException;
 import org.orcid.memberportal.service.user.web.rest.errors.ExpiredKeyException;
@@ -65,8 +64,7 @@ public class AccountResource {
      * {@code GET  /authenticate} : check if the user is authenticated, and
      * return its login.
      *
-     * @param request
-     *            the HTTP request.
+     * @param request the HTTP request.
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
@@ -78,13 +76,10 @@ public class AccountResource {
     /**
      * {@code POST  /account} : update the current user information.
      *
-     * @param userDTO
-     *            the current user information.
-     * @throws EmailAlreadyUsedException
-     *             {@code 400 (Bad Request)} if the email is already used.
-     * @throws RuntimeException
-     *             {@code 500 (Internal Server Error)} if the user login wasn't
-     *             found.
+     * @param userDTO the current user information.
+     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
+     * @throws RuntimeException          {@code 500 (Internal Server Error)} if the user login wasn't
+     *                                   found.
      */
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
@@ -100,24 +95,19 @@ public class AccountResource {
      * {@code GET  /account} : get the current user.
      *
      * @return the current user.
-     * @throws RuntimeException
-     *             {@code 500 (Internal Server Error)} if the user couldn't be
-     *             returned.
+     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be
+     *                          returned.
      */
     @GetMapping("/account")
     public UserDTO getAccount() {
-        Optional<User> user = userService.getUserWithAuthorities();
-        if (user.isPresent()) {
-            UserDTO userDTO = userMapper.toUserDTO(user.get());
-            if (!StringUtils.isAllBlank(userDTO.getLoginAs())) {
-                Optional<User> loginAsUser = userService.getUserWithAuthoritiesByLogin(userDTO.getLoginAs());
-                userDTO = userMapper.toUserDTO(loginAsUser.get());
-                userDTO.setLoggedAs(true);
-            }
-            return userDTO;
-        } else {
-            throw new AccountResourceException("User could not be found");
+        User user = userService.getCurrentUser();
+        UserDTO userDTO = userMapper.toUserDTO(user);
+        if (!StringUtils.isAllBlank(userDTO.getLoginAs())) {
+            Optional<User> loginAsUser = userService.getUserByLogin(userDTO.getLoginAs());
+            userDTO = userMapper.toUserDTO(loginAsUser.get());
+            userDTO.setLoggedAs(true);
         }
+        return userDTO;
     }
 
     /**
@@ -136,15 +126,14 @@ public class AccountResource {
      * {@code POST  /account/mfa} : enables mfa for the current user, if the
      * supplied otp matches the secret
      *
-     * @param mfaSetup
-     *            - the otp and secret
+     * @param mfaSetup - the otp and secret
      */
     @PostMapping(path = "/account/mfa/on")
     public ResponseEntity<List<String>> switchOnMfa(@RequestBody MfaSetup mfaSetup) {
         if (mfaSetup == null || StringUtils.isBlank(mfaSetup.getOtp())) {
             return ResponseEntity.badRequest().build();
         }
-        
+
         try {
             List<String> backupCodes = userService.enableMfa(mfaSetup);
             return ResponseEntity.ok(backupCodes);
@@ -155,7 +144,6 @@ public class AccountResource {
 
     /**
      * {@code POST  /account/mfa} : disables mfa for the current user
-     *
      */
     @PostMapping(path = "/account/mfa/off")
     public ResponseEntity<Void> switchOffMfa() {
@@ -167,10 +155,8 @@ public class AccountResource {
      * {@code POST  /account/change-password} : changes the current user's
      * password.
      *
-     * @param passwordChangeDto
-     *            current and new password.
-     * @throws InvalidPasswordException
-     *             {@code 400 (Bad Request)} if the new password is incorrect.
+     * @param passwordChangeDto current and new password.
+     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new password is incorrect.
      */
     @PostMapping(path = "/account/change-password")
     public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
@@ -184,11 +170,9 @@ public class AccountResource {
      * {@code POST   /account/reset-password/init} : Send an email to reset the
      * password of the user.
      *
-     * @param mail
-     *            the mail of the user.
-     * @throws EmailNotFoundException
-     *             {@code 400 (Bad Request)} if the email address is not
-     *             registered.
+     * @param mail the mail of the user.
+     * @throws EmailNotFoundException {@code 400 (Bad Request)} if the email address is not
+     *                                registered.
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
@@ -199,13 +183,10 @@ public class AccountResource {
      * {@code POST   /account/reset-password/finish} : Finish to reset the
      * password of the user.
      *
-     * @param keyAndPassword
-     *            the generated key and the new password.
-     * @throws InvalidPasswordException
-     *             {@code 400 (Bad Request)} if the password is incorrect.
-     * @throws RuntimeException
-     *             {@code 500 (Internal Server Error)} if the password could not
-     *             be reset.
+     * @param keyAndPassword the generated key and the new password.
+     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
+     * @throws RuntimeException         {@code 500 (Internal Server Error)} if the password could not
+     *                                  be reset.
      */
     @PostMapping(path = "/account/reset-password/finish")
     public ResponseEntity<PasswordResetResultVM> finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
@@ -230,13 +211,10 @@ public class AccountResource {
      * {@code POST   /account/reset-password/key/validate} : validate a reset
      * password key
      *
-     * @param keyAndPassword
-     *            the generated key and the new password.
-     * @throws InvalidPasswordException
-     *             {@code 400 (Bad Request)} if the password is incorrect.
-     * @throws RuntimeException
-     *             {@code 500 (Internal Server Error)} if the password could not
-     *             be reset.
+     * @param keyAndPassword the generated key and the new password.
+     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
+     * @throws RuntimeException         {@code 500 (Internal Server Error)} if the password could not
+     *                                  be reset.
      */
     @PostMapping(path = "/account/reset-password/validate")
     public ResponseEntity<PasswordResetResultVM> validateKey(@RequestBody KeyVM key) {

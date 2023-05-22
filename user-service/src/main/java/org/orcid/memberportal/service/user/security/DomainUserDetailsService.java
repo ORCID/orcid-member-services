@@ -3,6 +3,8 @@ package org.orcid.memberportal.service.user.security;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
+import org.orcid.memberportal.service.user.services.AuthorityService;
+import org.orcid.memberportal.service.user.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,8 +27,11 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public DomainUserDetailsService(UserRepository userRepository) {
+    private final AuthorityService authorityService;
+
+    public DomainUserDetailsService(UserRepository userRepository, AuthorityService authorityService) {
         this.userRepository = userRepository;
+        this.authorityService = authorityService;
     }
 
     @Override
@@ -48,7 +53,11 @@ public class DomainUserDetailsService implements UserDetailsService {
         if (!user.getActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
-        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream().map(authority -> new SimpleGrantedAuthority(authority)).collect(Collectors.toList());
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user));
+    }
+
+    private List<GrantedAuthority> getGrantedAuthorities(User user) {
+        Set<String> authorities = authorityService.getAuthoritiesForUser(user);
+        return authorities.stream().map(s -> new SimpleGrantedAuthority(s)).collect(Collectors.toList());
     }
 }

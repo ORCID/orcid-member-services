@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/user/account.model';
@@ -13,7 +13,7 @@ import { MSMemberService } from 'app/entities/member/member.service';
 export class AccountService {
   private userIdentity: any;
   private authenticated = false;
-  private authenticationState = new Subject<any>();
+  private authenticationState = new BehaviorSubject<any>(null);
   private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
 
   constructor(

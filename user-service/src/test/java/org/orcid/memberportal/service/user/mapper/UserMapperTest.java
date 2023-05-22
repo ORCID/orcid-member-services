@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.dto.UserDTO;
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
+import org.orcid.memberportal.service.user.services.AuthorityService;
 import org.orcid.memberportal.service.user.services.MemberService;
 import org.orcid.memberportal.service.user.services.UserService;
 
@@ -21,9 +22,9 @@ public class UserMapperTest {
 
     @Mock
     private MemberService memberService;
-    
+
     @Mock
-    private UserService userService;
+    private AuthorityService authorityService;
 
     @InjectMocks
     private UserMapper userMapper;
@@ -32,7 +33,7 @@ public class UserMapperTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         Mockito.when(memberService.getMemberNameBySalesforce(Mockito.eq("salesforce1"))).thenReturn("member 1");
-        Mockito.when(userService.getAuthoritiesForUser(Mockito.any(User.class))).thenReturn(new HashSet<String>(Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER, AuthoritiesConstants.ORG_OWNER)));
+        Mockito.when(authorityService.getAuthoritiesForUser(Mockito.any(User.class))).thenReturn(new HashSet<String>(Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER, AuthoritiesConstants.ORG_OWNER)));
     }
 
     @Test
@@ -46,7 +47,6 @@ public class UserMapperTest {
         assertThat(user.getImageUrl()).isEqualTo("http://placehold.it/50x50");
         assertThat(user.getLangKey()).isEqualTo("en");
         assertThat(user.getAdmin()).isTrue();
-        assertThat(user.getAuthorities()).isEmpty();
     }
 
     @Test

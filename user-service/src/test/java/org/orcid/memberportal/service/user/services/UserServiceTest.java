@@ -1,26 +1,5 @@
 package org.orcid.memberportal.service.user.services;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.jboss.aerogear.security.otp.Totp;
 import org.jboss.aerogear.security.otp.api.Base32;
 import org.junit.jupiter.api.Assertions;
@@ -39,7 +18,6 @@ import org.orcid.memberportal.service.user.domain.ActivationReminder;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.dto.UserDTO;
 import org.orcid.memberportal.service.user.mapper.UserMapper;
-import org.orcid.memberportal.service.user.repository.AuthorityRepository;
 import org.orcid.memberportal.service.user.repository.UserRepository;
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
 import org.orcid.memberportal.service.user.security.EncryptUtil;
@@ -56,6 +34,22 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
 class UserServiceTest {
 
     @Mock
@@ -63,9 +57,6 @@ class UserServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
-
-    @Mock
-    private AuthorityRepository authorityRepository;
 
     @Mock
     private UserUploadReader usersUploadReader;
@@ -207,8 +198,6 @@ class UserServiceTest {
         assertEquals(userDTO.getFirstName(), user.getFirstName());
         assertEquals(userDTO.getLastName(), user.getLastName());
         assertEquals(userDTO.getEmail(), user.getEmail());
-        assertTrue(user.getAuthorities().isEmpty());
-        assertTrue(user.getAuthorities().isEmpty());
         assertFalse(user.getAdmin());
     }
 
@@ -244,7 +233,6 @@ class UserServiceTest {
         assertEquals(userDTO.getFirstName(), user.getFirstName());
         assertEquals(userDTO.getLastName(), user.getLastName());
         assertEquals(userDTO.getEmail(), user.getEmail());
-        assertTrue(user.getAuthorities().isEmpty());
         assertTrue(user.getAdmin());
     }
 
@@ -301,7 +289,6 @@ class UserServiceTest {
         user.setFirstName("old first name");
         user.setLastName("old last name");
         user.setEmail("some@email.com");
-        user.setAuthorities(new HashSet<>(Arrays.asList("ROLE_USER", "ROLE_ADMIN")));
         Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(user));
 
         userService.updateAccount("new first name", "new last name", "no@change.com", "en", "hmmmm");
@@ -314,11 +301,6 @@ class UserServiceTest {
         assertEquals("en", updatedUser.getLangKey());
         assertEquals("hmmmm", updatedUser.getImageUrl());
         assertEquals("some@email.com", updatedUser.getEmail());
-
-        String[] authorities = updatedUser.getAuthorities().toArray(new String[0]);
-        assertEquals(2, authorities.length); // no change to authorities
-        assertTrue(AuthoritiesConstants.ADMIN.equals(authorities[0]) || AuthoritiesConstants.ADMIN.equals(authorities[1]));
-        assertTrue(AuthoritiesConstants.USER.equals(authorities[0]) || AuthoritiesConstants.USER.equals(authorities[1]));
     }
 
     @Test
@@ -658,160 +640,6 @@ class UserServiceTest {
         assertThat(saved.get(4).getSalesforceId()).isEqualTo("salesforce-id");
         assertThat(saved.get(5).getSalesforceId()).isEqualTo("salesforce-id");
         assertThat(saved.get(6).getSalesforceId()).isEqualTo("salesforce-id");
-    }
-
-    @Test
-    void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadOrgOwnerAdminEnabled() {
-        Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"))).thenReturn(true);
-        Mockito.when(memberService.memberIsConsortiumLead(Mockito.eq("salesforce-id"))).thenReturn(true);
-        Mockito.when(memberService.memberIsAdminEnabled(Mockito.eq("salesforce-id"))).thenReturn(true);
-
-        User user = new User();
-        user.setSalesforceId("salesforce-id");
-        user.setAdmin(true);
-        user.setMainContact(true);
-        
-        Set<String> authorities = userService.getAuthoritiesForUser(user);
-        assertThat(authorities).isNotNull();
-        assertThat(authorities.size()).isEqualTo(5);
-        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.ADMIN)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.ORG_OWNER)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD)).isTrue();
-        
-        Mockito.verify(memberService).memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"));
-        Mockito.verify(memberService).memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-        Mockito.verify(memberService).memberIsAdminEnabled(Mockito.eq("salesforce-id"));
-    }
-    
-    @Test
-    void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadOrgOwnerAdminNotEnabledOnMember() {
-        Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"))).thenReturn(true);
-        Mockito.when(memberService.memberIsConsortiumLead(Mockito.eq("salesforce-id"))).thenReturn(true);
-        Mockito.when(memberService.memberIsAdminEnabled(Mockito.eq("salesforce-id"))).thenReturn(false);
-
-        User user = new User();
-        user.setSalesforceId("salesforce-id");
-        user.setAdmin(true);
-        user.setMainContact(true);
-        
-        Set<String> authorities = userService.getAuthoritiesForUser(user);
-        assertThat(authorities).isNotNull();
-        assertThat(authorities.size()).isEqualTo(4);
-        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.ORG_OWNER)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD)).isTrue();
-        
-        Mockito.verify(memberService).memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"));
-        Mockito.verify(memberService).memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-        Mockito.verify(memberService).memberIsAdminEnabled(Mockito.eq("salesforce-id"));
-    }
-    
-    @Test
-    void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadOrgOwnerAdminDisabledOnUser() {
-        Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"))).thenReturn(true);
-        Mockito.when(memberService.memberIsConsortiumLead(Mockito.eq("salesforce-id"))).thenReturn(true);
-
-        User user = new User();
-        user.setSalesforceId("salesforce-id");
-        user.setAdmin(false);
-        user.setMainContact(true);
-        
-        Set<String> authorities = userService.getAuthoritiesForUser(user);
-        assertThat(authorities).isNotNull();
-        assertThat(authorities.size()).isEqualTo(4);
-        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.ORG_OWNER)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD)).isTrue();
-        
-        Mockito.verify(memberService).memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"));
-        Mockito.verify(memberService).memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-    }
-    
-    @Test
-    void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadOrgOwnerAdminDisabledOnUserAndOrg() {
-        Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"))).thenReturn(true);
-        Mockito.when(memberService.memberIsConsortiumLead(Mockito.eq("salesforce-id"))).thenReturn(true);
-
-        User user = new User();
-        user.setSalesforceId("salesforce-id");
-        user.setAdmin(false);
-        user.setMainContact(true);
-        
-        Set<String> authorities = userService.getAuthoritiesForUser(user);
-        assertThat(authorities).isNotNull();
-        assertThat(authorities.size()).isEqualTo(4);
-        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.ORG_OWNER)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD)).isTrue();
-        
-        Mockito.verify(memberService).memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"));
-        Mockito.verify(memberService).memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-    }
-
-    @Test
-    void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadNotOrgOwner() {
-        Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"))).thenReturn(true);
-        Mockito.when(memberService.memberIsConsortiumLead(Mockito.eq("salesforce-id"))).thenReturn(true);
-
-        User user = new User();
-        user.setSalesforceId("salesforce-id");
-        user.setAdmin(false);
-        user.setMainContact(false);
-        
-        Set<String> authorities = userService.getAuthoritiesForUser(user);
-        assertThat(authorities).isNotNull();
-        assertThat(authorities.size()).isEqualTo(3);
-        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD)).isTrue();
-        
-        Mockito.verify(memberService).memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"));
-        Mockito.verify(memberService).memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-    }
-
-    @Test
-    void testGetAuthoritiesForUser_assertionsEnabledNotConsortiumLead() {
-        Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"))).thenReturn(true);
-        Mockito.when(memberService.memberIsConsortiumLead(Mockito.eq("salesforce-id"))).thenReturn(false);
-
-        User user = new User();
-        user.setSalesforceId("salesforce-id");
-        user.setAdmin(false);
-        user.setMainContact(false);
-        
-        Set<String> authorities = userService.getAuthoritiesForUser(user);
-        assertThat(authorities).isNotNull();
-        assertThat(authorities.size()).isEqualTo(2);
-        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
-        assertThat(authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)).isTrue();
-        
-        Mockito.verify(memberService).memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"));
-        Mockito.verify(memberService).memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-    }
-    
-
-    @Test
-    void testGetAuthoritiesForUser_noAssertionsEnabled() {
-        Mockito.when(memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"))).thenReturn(false);
-        Mockito.when(memberService.memberIsConsortiumLead(Mockito.eq("salesforce-id"))).thenReturn(false);
-
-        User user = new User();
-        user.setSalesforceId("salesforce-id");
-        user.setAdmin(false);
-        user.setMainContact(false);
-        
-        Set<String> authorities = userService.getAuthoritiesForUser(user);
-        assertThat(authorities).isNotNull();
-        assertThat(authorities.size()).isEqualTo(1);
-        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
-        
-        Mockito.verify(memberService).memberExistsWithSalesforceIdAndAssertionsEnabled(Mockito.eq("salesforce-id"));
-        Mockito.verify(memberService).memberIsConsortiumLead(Mockito.eq("salesforce-id"));
     }
 
     private List<User> getUsersForSalesforceId(String salesforceId, int from, int to) {
