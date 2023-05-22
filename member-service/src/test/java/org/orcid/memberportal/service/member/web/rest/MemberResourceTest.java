@@ -27,6 +27,7 @@ import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
 import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
+import org.orcid.memberportal.service.member.web.rest.vm.RemoveConsortiumMember;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -182,6 +183,13 @@ public class MemberResourceTest {
         Mockito.doNothing().when(memberService).requestNewConsortiumMember(Mockito.any(AddConsortiumMember.class));
         memberResource.requestNewConsortiumMember(new AddConsortiumMember());
         Mockito.verify(memberService).requestNewConsortiumMember(Mockito.any(AddConsortiumMember.class));
+    }
+
+    @Test
+    public void testRequestRemoveConsortiumMember() {
+        Mockito.doNothing().when(memberService).requestRemoveConsortiumMember(Mockito.any(RemoveConsortiumMember.class));
+        memberResource.requestRemoveConsortiumMember(new RemoveConsortiumMember());
+        Mockito.verify(memberService).requestRemoveConsortiumMember(Mockito.any(RemoveConsortiumMember.class));
     }
 
 

@@ -44,6 +44,7 @@ import org.orcid.memberportal.service.member.validation.MemberValidator;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
 import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
+import org.orcid.memberportal.service.member.web.rest.vm.RemoveConsortiumMember;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -614,6 +615,36 @@ class MemberServiceTest {
         memberService.requestNewConsortiumMember(addConsortiumMember);
 
         Mockito.verify(mailService).sendAddConsortiumMemberEmail(Mockito.any(AddConsortiumMember.class));
+        Mockito.verify(userService).getLoggedInUser();
+        Mockito.verify(memberRepository).findBySalesforceId(Mockito.eq("salesforceId"));
+    }
+
+    @Test
+    void testRemoveConsortiumMember_nonCL() {
+        Mockito.doNothing().when(mailService).sendRemoveConsortiumMemberEmail(Mockito.any(RemoveConsortiumMember.class));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+
+        RemoveConsortiumMember removeConsortiumMember = new RemoveConsortiumMember();
+        removeConsortiumMember.setOrgName("old org name");
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            memberService.requestRemoveConsortiumMember(removeConsortiumMember);
+        });
+    }
+
+    @Test
+    void testRemoveConsortiumMember() {
+        Mockito.doNothing().when(mailService).sendRemoveConsortiumMemberEmail(Mockito.any(RemoveConsortiumMember.class));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+
+        RemoveConsortiumMember removeConsortiumMember = new RemoveConsortiumMember();
+        removeConsortiumMember.setOrgName("old org name");
+
+        memberService.requestRemoveConsortiumMember(removeConsortiumMember);
+
+        Mockito.verify(mailService).sendRemoveConsortiumMemberEmail(Mockito.any(RemoveConsortiumMember.class));
         Mockito.verify(userService).getLoggedInUser();
         Mockito.verify(memberRepository).findBySalesforceId(Mockito.eq("salesforceId"));
     }

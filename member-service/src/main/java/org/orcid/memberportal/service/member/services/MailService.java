@@ -5,6 +5,7 @@ import org.orcid.memberportal.service.member.mail.MailException;
 import org.orcid.memberportal.service.member.mail.client.impl.MailgunClient;
 import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
+import org.orcid.memberportal.service.member.web.rest.vm.RemoveConsortiumMember;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
@@ -29,6 +32,8 @@ public class MailService {
     static final String CONTACT_UPDATE_SUBJECT = "Organization contact change";
 
     static final String ADD_ORG_SUBJECT = "New organization request";
+
+    static final String REMOVE_ORG_SUBJECT = "Remove member organization";
 
     @Autowired
     private SpringTemplateEngine templateEngine;
@@ -124,10 +129,34 @@ public class MailService {
 
         String content = templateEngine.process("mail/addConsortiumMember", context);
         try {
-            mailgunClient.sendMail(applicationProperties.getContactUpdateRecipient(), addConsortiumMember.getRequestedByEmail(), ADD_ORG_SUBJECT, content);
+            mailgunClient.sendMail(applicationProperties.getContactUpdateRecipient(), addConsortiumMember.getRequestedByEmail(), REMOVE_ORG_SUBJECT, content);
         } catch (MailException e) {
             LOGGER.error("Error sending add consortium member email to {}", applicationProperties.getContactUpdateRecipient(), e);
         }
+    }
+
+    public void sendRemoveConsortiumMemberEmail(RemoveConsortiumMember removeConsortiumMember) {
+        LOGGER.debug("Sending add consortium member email to '{}'", applicationProperties.getContactUpdateRecipient());
+        Context context = new Context(Locale.ENGLISH);
+        context.setVariable("requestedBy", removeConsortiumMember.getRequestedByName() + " (" + removeConsortiumMember.getRequestedByEmail() + ")");
+        context.setVariable("orgName", removeConsortiumMember.getOrgName());
+        context.setVariable("terminationDate", getTerminationDate(removeConsortiumMember.getTerminationMonth(), removeConsortiumMember.getTerminationYear()));
+
+        String content = templateEngine.process("mail/removeConsortiumMember", context);
+        try {
+            mailgunClient.sendMail(applicationProperties.getContactUpdateRecipient(), removeConsortiumMember.getRequestedByEmail(), REMOVE_ORG_SUBJECT, content);
+        } catch (MailException e) {
+            LOGGER.error("Error sending remove consortium member email to {}", applicationProperties.getContactUpdateRecipient(), e);
+        }
+    }
+
+    private String getTerminationDate(String terminationMonth, String terminationYear) {
+        String date = "01/" + terminationMonth + "/" + terminationYear;
+        LocalDate convertedDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        convertedDate = convertedDate.withDayOfMonth(
+            convertedDate.getMonth().length(convertedDate.isLeapYear()));
+        String formattedDateString = convertedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        return formattedDateString;
     }
 
 }

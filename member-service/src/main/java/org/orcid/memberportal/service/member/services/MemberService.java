@@ -24,6 +24,7 @@ import org.orcid.memberportal.service.member.validation.MemberValidator;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
 import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
+import org.orcid.memberportal.service.member.web.rest.vm.RemoveConsortiumMember;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -368,5 +369,20 @@ public class MemberService {
         addConsortiumMember.setConsortium(user.getMemberName());
 
         mailService.sendAddConsortiumMemberEmail(addConsortiumMember);
+    }
+
+    public void requestRemoveConsortiumMember(RemoveConsortiumMember removeConsortiumMember) {
+        MemberServiceUser user = userService.getLoggedInUser();
+
+        Optional<Member> optionalMember = memberRepository.findBySalesforceId(user.getSalesforceId());
+        Member member = optionalMember.get();
+        if (!member.getIsConsortiumLead()) {
+            throw new RuntimeException("Requesting member is not a consortium lead");
+        }
+
+        removeConsortiumMember.setRequestedByEmail(user.getEmail());
+        removeConsortiumMember.setRequestedByName(user.getFirstName() + " " + user.getLastName());
+
+        mailService.sendRemoveConsortiumMemberEmail(removeConsortiumMember);
     }
 }

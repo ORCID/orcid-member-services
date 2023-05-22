@@ -16,6 +16,7 @@ import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertExce
 import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdateResponse;
+import org.orcid.memberportal.service.member.web.rest.vm.RemoveConsortiumMember;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -349,5 +350,11 @@ public class MemberResource {
         return ResponseEntity.ok().build();
     }
 
-
+    @PreAuthorize("hasRole(\"ROLE_CONSORTIUM_LEAD\")")
+    @PostMapping("/members/remove-consortium-member")
+    public ResponseEntity<Void> requestRemoveConsortiumMember(@RequestBody RemoveConsortiumMember removeConsortiumMember) {
+        LOG.debug("REST request to request remove consortium member");
+        memberService.requestRemoveConsortiumMember(removeConsortiumMember);
+        return ResponseEntity.ok().build();
+    }
 }

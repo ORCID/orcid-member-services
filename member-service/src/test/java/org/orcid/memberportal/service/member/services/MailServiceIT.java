@@ -13,6 +13,7 @@ import org.orcid.memberportal.service.member.mail.MailException;
 import org.orcid.memberportal.service.member.mail.client.impl.MailgunClient;
 import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
+import org.orcid.memberportal.service.member.web.rest.vm.RemoveConsortiumMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -103,6 +104,21 @@ class MailServiceIT {
         Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
         assertThat(recipientCaptor.getValue()).isEqualTo("contactUpdate@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo(MailService.ADD_ORG_SUBJECT);
+        assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
+    }
+
+    @Test
+    void testSendRemoveConsortiumMemberEmail() throws MailException {
+        RemoveConsortiumMember removeConsortiumMember = new RemoveConsortiumMember();
+        removeConsortiumMember.setRequestedByEmail("requesting-user@email.com");
+        removeConsortiumMember.setTerminationMonth("12");
+        removeConsortiumMember.setTerminationYear("2024");
+
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        mailService.sendRemoveConsortiumMemberEmail(removeConsortiumMember);
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
+        assertThat(recipientCaptor.getValue()).isEqualTo("contactUpdate@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo(MailService.REMOVE_ORG_SUBJECT);
         assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
     }
 
