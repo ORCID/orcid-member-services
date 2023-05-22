@@ -51,7 +51,7 @@ export const HOME_ROUTE: Route = {
       canActivate: [UserRouteAccessService]
     },
     {
-      path: 'consortium-member/add',
+      path: 'consortium-member/new',
       component: ConsortiumMemberAddComponent,
       data: {
         authorities: ['ROLE_USER', 'ROLE_CONSORTIUM_LEAD'],

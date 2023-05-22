@@ -54,7 +54,7 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
       }
     });
     this.editForm = this.fb.group({
-      name: [null, [Validators.required, Validators.maxLength(80)]],
+      name: [null, [Validators.required, Validators.maxLength(41)]],
       phone: [null, [Validators.maxLength(40)]],
       email: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
       title: [null, [Validators.maxLength(128)]],
