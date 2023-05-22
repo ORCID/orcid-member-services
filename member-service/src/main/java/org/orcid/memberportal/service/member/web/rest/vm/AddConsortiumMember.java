@@ -26,9 +26,9 @@ public class AddConsortiumMember {
 
     private String trademarkLicense;
 
-    private int startMonth;
+    private String startMonth;
 
-    private int startYear;
+    private String startYear;
 
     private String contactGivenName;
 
@@ -126,19 +126,19 @@ public class AddConsortiumMember {
         this.trademarkLicense = trademarkLicense;
     }
 
-    public int getStartMonth() {
+    public String getStartMonth() {
         return startMonth;
     }
 
-    public void setStartMonth(int startMonth) {
+    public void setStartMonth(String startMonth) {
         this.startMonth = startMonth;
     }
 
-    public int getStartYear() {
+    public String getStartYear() {
         return startYear;
     }
 
-    public void setStartYear(int startYear) {
+    public void setStartYear(String startYear) {
         this.startYear = startYear;
     }
 
