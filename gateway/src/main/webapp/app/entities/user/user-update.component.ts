@@ -89,7 +89,6 @@ export class MSUserUpdateComponent implements OnInit {
     this.editForm.get('salesforceId').valueChanges.subscribe(val => {
       const selectedOrg = this.memberList.find(cm => cm.salesforceId === this.editForm.get(['salesforceId']).value);
       if (this.hasRoleAdmin()) {
-        console.log(selectedOrg, this.editForm.get(['salesforceId']).value, this.memberList);
         if (selectedOrg) {
           this.showIsAdminCheckbox = selectedOrg.superadminEnabled;
         } else {
