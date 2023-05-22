@@ -36,6 +36,8 @@ describe('Test the edit user form', () => {
     cy.get('#field_salesforceId')
       .invoke('attr', 'disabled')
       .should('exist');
+    // Admin checkbox should not exist
+    cy.get('#field_isAdmin').should('not.exist');
       // 'Activated' checkbox is missing the 'disabled' attr
     /*cy.get('#field_activated')
       .invoke('attr', 'disabled')

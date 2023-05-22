@@ -16,6 +16,7 @@ import { MSMemberService } from 'app/entities/member/member.service';
 import { emailValidator } from 'app/shared/util/app-validators';
 import { AccountService } from 'app/core';
 import { SERVER_API_URL } from 'app/app.constants';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-ms-user-update',
@@ -46,7 +47,7 @@ export class MSUserUpdateComponent implements OnInit {
     lastModifiedDate: []
   });
 
-  membersList = [] as IMSMember[];
+  memberList = [] as IMSMember[];
   hasOwner = false;
 
   constructor(
@@ -72,25 +73,13 @@ export class MSUserUpdateComponent implements OnInit {
     this.editForm.disable();
     this.accountService.identity().then(account => {
       this.currentAccount = account;
-      if (this.hasRoleAdmin()) {
-        this.msMemberService.getAllMembers().subscribe(res => {
-          if (res.body) {
-            this.membersList = [];
-            res.body.forEach((msMember: IMSMember) => {
-              this.membersList.push(msMember);
-            });
-          }
+      this.getMemberList().subscribe((list: IMSMember[]) => {
+        list.forEach((msMember: IMSMember) => {
+          this.memberList.push(msMember);
         });
-      } else {
-        this.msMemberService.find(account.salesforceId).subscribe(res => {
-          console.log(res);
-          if (res && res.body) {
-            this.membersList.push(res.body);
-          }
-        });
-      }
-      this.editForm.enable();
-      this.updateForm(this.existentMSUser);
+        this.editForm.enable();
+        this.updateForm(this.existentMSUser);
+      });
     });
     this.cdref.detectChanges();
     this.onChanges();
@@ -98,7 +87,7 @@ export class MSUserUpdateComponent implements OnInit {
 
   onChanges(): void {
     this.editForm.get('salesforceId').valueChanges.subscribe(val => {
-      const selectedOrg = this.membersList.find(cm => cm.salesforceId === this.editForm.get(['salesforceId']).value);
+      const selectedOrg = this.memberList.find(cm => cm.salesforceId === this.editForm.get(['salesforceId']).value);
       if (this.hasRoleAdmin()) {
         if (selectedOrg) {
           this.showIsAdminCheckbox = selectedOrg.superadminEnabled;
@@ -137,6 +126,26 @@ export class MSUserUpdateComponent implements OnInit {
     }
     if (msUser.email) {
       this.editForm.get('email').disable();
+    }
+  }
+
+  getMemberList(): Observable<IMSMember[]> {
+    if (this.hasRoleAdmin()) {
+      return this.msMemberService.getAllMembers().pipe(
+        map(res => {
+          if (res.body) {
+            return res.body;
+          }
+        })
+      );
+    } else {
+      return this.msMemberService.find(this.currentAccount.salesforceId).pipe(
+        map(res => {
+          if (res && res.body) {
+            return [res.body];
+          }
+        })
+      );
     }
   }
 
