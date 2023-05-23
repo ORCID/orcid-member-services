@@ -22,8 +22,8 @@
           </div>
         </div>
         <div class="form">
-          <h3 class="mb-3 wide-text">Organization details</h3>
-          <h5 class="mb-3 wide-text">Name & email domain</h5>
+          <h3 class="mb-4 wide-text">Organization details</h3>
+          <h5 class="mb-3 font-size-18 font-weight-bold">Name & email domain</h5>
           <div class="form-group">
             <label
               class="wide-text font-size-12"
@@ -91,7 +91,7 @@
               </small>
             </div>
           </div>
-          <h5 class="mb-3 wide-text">Billing address</h5>
+          <h5 class="mb-3 font-size-18 font-weight-bold">Billing address</h5>
           <div class="form-group">
             <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('street').invalid }">Street</label>
             <input
@@ -169,7 +169,7 @@
           </div>
           <h5
             [ngClass]="{ 'text-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').touched }"
-            class="font-weight-bold"
+            class="font-weight-bold font-size-18"
             >Trademark license <span class="font-size-12 text-danger font-weight-normal">(Required)</span></h5
           >
           <div class="form-group">
