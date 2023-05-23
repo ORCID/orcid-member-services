@@ -31,6 +31,8 @@ describe('Add new user', () => {
       .type(data.member.users.newUser.email);
     // check "Organization owner"
     cy.get('#field_mainContact').click();
+    // Admin checkbox should not exist
+    cy.get('#field_isAdmin').should('not.exist');
     // save
     cy.get('#save-entity').click();
     cy.get('.alert-success').should('exist');
