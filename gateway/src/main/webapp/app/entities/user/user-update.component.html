@@ -42,8 +42,8 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="gatewayApp.msUserServiceMSUser.salesforceId.string" for="field_salesforceId.string">Salesforce Id</label>
                     <fieldset [disabled]="disableSalesForceIdDD()">
-                    <select  *ngIf="membersList.length  > 0"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId" (change)="validateOrgOwners()">
-                      <option *ngFor="let member of membersList" [ngValue]="member.salesforceId">{{member.clientName}}</option>
+                    <select  *ngIf="memberList.length  > 0"  class="custom-select" name="salesforceId" id="field_salesforceId" formControlName="salesforceId" (change)="validateOrgOwners()">
+                      <option *ngFor="let member of memberList" [ngValue]="member.salesforceId">{{member.clientName}}</option>
                     </select>
                     </fieldset>
                     <fieldset [disabled]="true">
@@ -76,7 +76,7 @@
                     (else)="false"
                     type="submit"
                     id="save-entity"
-                    [disabled]="editForm.invalid || isSaving || membersList.length === 0"
+                    [disabled]="editForm.invalid || isSaving || memberList.length === 0"
                     class="btn btn-primary">
                      <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save.string">Save</span>
                 </button>
@@ -85,7 +85,7 @@
                   (click)="save()"
                   type="submit"
                   id="save-entity2"
-                  [disabled]="editForm.invalid || isSaving || membersList.length === 0"
+                  [disabled]="editForm.invalid || isSaving || memberList.length === 0"
                   class="btn btn-primary">
                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save.string">Save</span>
                 </button>

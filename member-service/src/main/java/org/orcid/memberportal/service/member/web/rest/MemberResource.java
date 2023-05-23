@@ -13,6 +13,7 @@ import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.upload.MemberUpload;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdateResponse;
 import org.slf4j.Logger;
@@ -339,5 +340,14 @@ public class MemberResource {
         memberService.processMemberContact(memberContactUpdate);
         return ResponseEntity.ok(new MemberContactUpdateResponse(true));
     }
+
+    @PreAuthorize("hasRole(\"ROLE_CONSORTIUM_LEAD\")")
+    @PostMapping("/members/add-consortium-member")
+    public ResponseEntity<Void> requestNewConsortiumMember(@RequestBody AddConsortiumMember addConsortiumMember) {
+        LOG.debug("REST request to request add new consortium member");
+        memberService.requestNewConsortiumMember(addConsortiumMember);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

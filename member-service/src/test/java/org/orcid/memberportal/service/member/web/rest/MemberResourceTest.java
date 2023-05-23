@@ -25,6 +25,7 @@ import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
+import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -175,6 +176,14 @@ public class MemberResourceTest {
         memberResource.processMemberContactUpdate(new MemberContactUpdate());
         Mockito.verify(memberService).processMemberContact(Mockito.any(MemberContactUpdate.class));
     }
+
+    @Test
+    public void testRequestNewConsortiumMember() {
+        Mockito.doNothing().when(memberService).requestNewConsortiumMember(Mockito.any(AddConsortiumMember.class));
+        memberResource.requestNewConsortiumMember(new AddConsortiumMember());
+        Mockito.verify(memberService).requestNewConsortiumMember(Mockito.any(AddConsortiumMember.class));
+    }
+
 
     private MemberValidation getMemberValidation() {
         MemberValidation validation = new MemberValidation();
