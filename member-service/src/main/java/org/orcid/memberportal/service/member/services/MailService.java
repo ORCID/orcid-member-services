@@ -129,7 +129,7 @@ public class MailService {
 
         String content = templateEngine.process("mail/addConsortiumMember", context);
         try {
-            mailgunClient.sendMail(applicationProperties.getContactUpdateRecipient(), addConsortiumMember.getRequestedByEmail(), REMOVE_ORG_SUBJECT, content);
+            mailgunClient.sendMail(applicationProperties.getContactUpdateRecipient(), addConsortiumMember.getRequestedByEmail(), ADD_ORG_SUBJECT, content);
         } catch (MailException e) {
             LOGGER.error("Error sending add consortium member email to {}", applicationProperties.getContactUpdateRecipient(), e);
         }
