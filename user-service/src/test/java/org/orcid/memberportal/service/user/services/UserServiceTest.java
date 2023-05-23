@@ -400,11 +400,8 @@ class UserServiceTest {
         Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("impersonated-user"))).thenReturn(Optional.of(impersonatedUser));
 
         User user = userService.getCurrentUser();
-        assertEquals("impersonated-user", user.getEmail());
-
-        impersonatingUser.setLoginAs(null);
-        user = userService.getCurrentUser();
         assertEquals("admin-user", user.getEmail());
+        assertEquals("impersonated-user", user.getLoginAs());
     }
 
     @Test

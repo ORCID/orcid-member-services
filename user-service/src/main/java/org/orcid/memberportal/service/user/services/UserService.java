@@ -525,7 +525,7 @@ public class UserService {
     }
 
     /**
-     * Returns the user currently logged in or being impersonated.
+     * Returns the user currently logged in.
      *
      * @return
      */
