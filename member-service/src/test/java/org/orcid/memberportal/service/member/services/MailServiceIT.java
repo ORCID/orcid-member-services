@@ -11,6 +11,7 @@ import org.orcid.memberportal.service.member.MemberServiceApp;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 import org.orcid.memberportal.service.member.mail.MailException;
 import org.orcid.memberportal.service.member.mail.client.impl.MailgunClient;
+import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -89,6 +90,19 @@ class MailServiceIT {
         Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
         assertThat(recipientCaptor.getValue()).isEqualTo("contactUpdate@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo(MailService.CONTACT_UPDATE_SUBJECT);
+        assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
+    }
+
+    @Test
+    void testSendAddConsortiumMemberEmail() throws MailException {
+        AddConsortiumMember addConsortiumMember = new AddConsortiumMember();
+        addConsortiumMember.setRequestedByEmail("requesting-user@email.com");
+
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        mailService.sendAddConsortiumMemberEmail(addConsortiumMember);
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
+        assertThat(recipientCaptor.getValue()).isEqualTo("contactUpdate@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo(MailService.ADD_ORG_SUBJECT);
         assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
     }
 

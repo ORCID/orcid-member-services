@@ -42,6 +42,7 @@ import org.orcid.memberportal.service.member.upload.MembersUploadReader;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
 import org.orcid.memberportal.service.member.validation.MemberValidator;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -599,6 +600,36 @@ class MemberServiceTest {
 
         Mockito.verify(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
         Mockito.verify(userService).getLoggedInUser();
+    }
+
+    @Test
+    void testAddConsortiumMember() {
+        Mockito.doNothing().when(mailService).sendAddConsortiumMemberEmail(Mockito.any(AddConsortiumMember.class));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+
+        AddConsortiumMember addConsortiumMember = new AddConsortiumMember();
+        addConsortiumMember.setOrgName("new org name");
+
+        memberService.requestNewConsortiumMember(addConsortiumMember);
+
+        Mockito.verify(mailService).sendAddConsortiumMemberEmail(Mockito.any(AddConsortiumMember.class));
+        Mockito.verify(userService).getLoggedInUser();
+        Mockito.verify(memberRepository).findBySalesforceId(Mockito.eq("salesforceId"));
+    }
+
+    @Test
+    void testAddConsortiumMember_nonCL() {
+        Mockito.doNothing().when(mailService).sendAddConsortiumMemberEmail(Mockito.any(AddConsortiumMember.class));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+
+        AddConsortiumMember addConsortiumMember = new AddConsortiumMember();
+        addConsortiumMember.setOrgName("new org name");
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            memberService.requestNewConsortiumMember(addConsortiumMember);
+        });
     }
 
     private PublicMemberDetails getPublicMemberDetails() {

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        (+) ADD NEW ORGANIZATION
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}"/>
+</head>
+<body
+    style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+<div style="padding: 20px; padding-top: 10px; margin: auto;">
+    <div th:insert="~{mail/common :: emailHeader}"></div>
+    <p><strong>(+) ADD NEW ORGANIZATION</strong></p>
+    <p>
+        <strong>Requested by</strong><br/>
+        <span th:text="(@{|${requestedBy}|})">Andrew User (a.user@aaf.edu.au)</span><br/>
+        <span th:text="(@{|${consortium}|})">Australian Access Federation - AAF</span>
+    </p>
+    <p>
+    <hr/>
+    <strong>Organization</strong>
+    <hr/>
+    </p>
+    <p>
+        <strong>Organization name</strong><br/>
+        <span th:text="(@{|${orgName}|})">Nature Valley University</span>
+    </p>
+
+    <p>
+        <strong>Consortium member?</strong><br/>
+        <span th:text="(@{|${consortiumMemberString}|})">Yes - Australian Access Federation</span>
+    </p>
+
+    <p>
+        <strong>Email domain</strong><br/>
+        <span th:text="(@{|${emailDomain}|})">naturevalley.edu.au</span>
+    </p>
+
+    <p>
+        <strong>Address</strong><br/>
+        <span th:text="(@{|${street}|})">98 Shirley Street</span><br/>
+        <span th:text="(@{|${city}|})">Pimpama</span><br/>
+        <span th:text="(@{|${state}|})">Queensland</span><br/>
+        <span th:text="(@{|${country}|})">Australia</span><br/>
+        <span th:text="(@{|${postcode}|})">QLD 4209</span><br/>
+    </p>
+
+    <p>
+        <strong>Trademark License</strong><br/>
+        <span th:text="(@{|${trademarkLicense}|})">Yes</span>
+    </p>
+
+    <p>
+        <strong>Membership start date</strong><br/>
+        <span th:text="(@{|${membershipStartDate}|})">Yes</span>
+    </p>
+
+    <p>
+    <hr/>
+    <strong>Main contact</strong>
+    <hr/>
+    </p>
+
+    <p>
+        <strong>First or given name</strong><br/>
+        <span th:text="(@{|${contactGivenName}|})">Dave</span>
+    </p>
+
+    <p>
+        <strong>Last or family name</strong><br/>
+        <span th:text="(@{|${contactFamilyName}|})">Lister</span>
+    </p>
+
+    <p>
+        <strong>Job title</strong><br/>
+        <span th:text="(@{|${contactJobTitle}|})">Lister</span>
+    </p>
+
+    <p>
+        <strong>Contact email</strong><br/>
+        <span th:text="(@{|${contactEmail}|})">Lister</span>
+    </p>
+
+    <p>
+        <strong>Roles</strong><br/>
+    <ul>
+        <li>Main relationship contact</li>
+        <li>Voting contact</li>
+    </ul>
+    </p>
+</div>
+</body>
+</html>
