@@ -23,6 +23,9 @@
         </div>
         <div class="form">
           <h3 class="mb-4 wide-text">Organization details</h3>
+
+          <!-- Name & email domain -->
+
           <h5 class="mb-3 font-size-18 font-weight-bold">Name & email domain</h5>
           <div class="form-group">
             <label
@@ -36,7 +39,7 @@
               name="orgName"
               formControlName="orgName"
               [ngClass]="{
-                'text-danger': editForm.get('orgName').invalid && editForm.get('orgName').dorty,
+                'text-danger': editForm.get('orgName').invalid && editForm.get('orgName').dirty,
                 'input-field-default-border': !editForm.get('orgName').touched
               }"
             />
@@ -57,40 +60,32 @@
             </div>
           </div>
           <div class="form-group mb-3">
-            <label
-              [ngClass]="{ 'text-danger': editForm.get('orgEmail').invalid && editForm.get('orgEmail').touched }"
-              class="wide-text font-size-12"
-              >Email <span class="text-danger font-weight-normal">(Required)</span></label
-            >
+            <label [ngClass]="{ 'text-danger': editForm.get('orgEmailDomain').invalid }" class="wide-text font-size-12">Email domain</label>
             <input
               type="text"
               class="form-control"
-              name="orgEmail"
-              formControlName="orgEmail"
-              (input)="editForm.get('orgEmail').markAsUntouched()"
+              name="orgEmailDomain"
+              formControlName="orgEmailDomain"
+              (input)="editForm.get('orgEmailDomain').markAsUntouched()"
               [ngClass]="{
-                'text-danger': editForm.get('orgEmail').invalid && editForm.get('orgEmail').touched,
-                'input-field-default-border': !editForm.get('orgEmail').touched
+                'text-danger': editForm.get('orgEmailDomain').invalid,
+                'input-field-default-border': !editForm.get('orgEmailDomain').touched
               }"
             />
-            <ng-template #validEmail>
-              <small class="wide-text font-size-12 color-gray">The contact email for this person</small>
-            </ng-template>
-            <div *ngIf="editForm.get('orgEmail').invalid && editForm.get('orgEmail').touched; else validEmail">
-              <small
-                class="wide-text font-size-12 text-danger"
-                *ngIf="editForm.get('orgEmail').errors.pattern && !editForm.get('orgEmail').errors.maxlength"
+            <ng-template #validOrgEmailDomain>
+              <small class="wide-text font-size-12 color-gray"
+                >The email domain is the remaining address after the @ symbol eg: orcid.org or website.com</small
               >
-                Please enter a valid email address, for example contactus@website.com
-              </small>
-              <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('orgEmail').errors.maxlength">
-                Email is too long. Please use 80 characters or less.
-              </small>
-              <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('orgEmail').errors.required">
-                Email cannot be empty
+            </ng-template>
+            <div *ngIf="editForm.get('orgEmailDomain').invalid; else validOrgEmailDomain">
+              <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('orgEmailDomain').errors.maxlength">
+                Email domain is too long. Please use 80 characters or less.
               </small>
             </div>
           </div>
+
+          <!-- Billing address -->
+
           <h5 class="mb-3 font-size-18 font-weight-bold">Billing address</h5>
           <div class="form-group">
             <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('street').invalid }">Street</label>
@@ -152,7 +147,7 @@
               </small>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group mb-4">
             <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('postcode').invalid }">ZIP/Postcode</label>
             <input
               type="text"
@@ -167,61 +162,164 @@
               </small>
             </div>
           </div>
+
+          <!-- Trademark license -->
+
           <h5
             [ngClass]="{ 'text-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').touched }"
-            class="font-weight-bold font-size-18"
-            >Trademark license <span class="font-size-12 text-danger font-weight-normal">(Required)</span></h5
+            class="font-weight-bold font-size-18 mb-3"
           >
-          <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('title').invalid }">Job title</label>
+            Trademark license <span class="font-size-12 text-danger font-weight-normal">(Required)</span>
+          </h5>
+          <div class="font-size-14 wide-text mb-4">
+            Can ORCID use this organization's trademarked name and logos?
+          </div>
+          <div class="form-group d-flex">
             <input
-              type="text"
-              class="form-control"
-              name="title"
-              formControlName="title"
-              [ngClass]="{ 'text-danger': editForm.get('title').invalid }"
+              type="radio"
+              class="form-control radio mr-2"
+              name="trademarkLicense"
+              value="Yes"
+              formControlName="trademarkLicense"
+              [ngClass]="{ 'text-danger': editForm.get('trademarkLicense').invalid }"
             />
-            <div *ngIf="editForm.get('title').invalid">
-              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('title').errors.maxlength">
+            <label
+              class="wide-text font-size-12 font-weight-normal"
+              [ngClass]="{ 'text-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').touched }"
+              ><strong>YES</strong> - ORCID can use this organization's trademarked name and logos</label
+            >
+            <div *ngIf="editForm.get('trademarkLicense').invalid">
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('trademarkLicense').errors.maxlength">
                 Job title is too long. Please use 128 characters or less.
               </small>
             </div>
           </div>
+          <div class="form-group d-flex mb-4">
+            <input
+              type="radio"
+              class="form-control radio mr-2"
+              name="trademarkLicense"
+              value="No"
+              formControlName="trademarkLicense"
+              [ngClass]="{ 'text-danger': editForm.get('trademarkLicense').invalid }"
+            />
+            <label
+              class="wide-text font-size-12 font-weight-normal"
+              [ngClass]="{ 'text-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').touched }"
+              ><strong>NO</strong> - ORCID cannot use this organization's trademarked name and logos</label
+            >
+            <div *ngIf="editForm.get('trademarkLicense').invalid">
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('trademarkLicense').errors.maxlength">
+                Job title is too long. Please use 128 characters or less.
+              </small>
+            </div>
+          </div>
+
+          <!-- Membership start date -->
+
+          <h5
+            [ngClass]="{
+              'text-danger':
+                (editForm.get('startMonth').invalid && editForm.get('startMonth').touched) ||
+                (editForm.get('startYear').invalid && editForm.get('startYear').touched)
+            }"
+            class="font-weight-bold font-size-18"
+          >
+            Membership start date <span class="font-size-12 text-danger font-weight-normal">(Required)</span>
+          </h5>
+          <div class="font-size-14 wide-text mb-3">
+            When does this organization’s ORCID membership start? All memberships begin on the 1st of the month.
+          </div>
+          <div class="form-group d-flex">
+            <select class="form-control date-dropdown mr-2" name="startMonth" formControlName="startMonth">
+              <option *ngFor="let month of monthList" [ngValue]="month[0]">{{ month[0] }}</option>
+            </select>
+            <select class="form-control date-dropdown" name="startYear" formControlName="startYear">
+              <option *ngFor="let year of yearList" [ngValue]="year">{{ year }}</option>
+            </select>
+          </div>
+          <div *ngIf="(editForm.hasError('invalidDate')) ">
+            <small class="form-text text-danger">
+                End date cannot be greater than the start date
+            </small>
+        </div>
+
+          <!-- Main contact -->
+
+          <h3 class="mb-4 wide-text">Main contact</h3>
+          <div class="font-size-14 wide-text mb-3">
+            Please provide details of the main point of contact for this organization. This person will automatically be assigned the
+            <strong>Main relationship</strong> and <strong>Voting contact</strong> roles for this organization.
+          </div>
           <div class="form-group">
             <label
               class="wide-text font-size-12"
-              [ngClass]="{ 'text-danger': editForm.get('phone').invalid && editForm.get('phone').touched }"
-              >Phone</label
+              [ngClass]="{ 'text-danger': editForm.get('contactName').invalid && editForm.get('contactName').touched }"
+              >Name</label
             >
             <input
               type="text"
               class="form-control"
-              name="phone"
-              formControlName="phone"
-              [ngClass]="{ 'text-danger': editForm.get('phone').invalid && editForm.get('phone').touched }"
+              name="contactName"
+              formControlName="contactName"
+              [ngClass]="{
+                'text-danger': editForm.get('contactName').invalid && editForm.get('contactName').touched,
+                'input-field-default-border': !editForm.get('contactName').touched
+              }"
             />
-            <ng-template #validPhone>
-              <small class="wide-text font-size-12 form-text color-gray">A direct contact phone for this person</small>
-            </ng-template>
-            <ng-container *ngIf="editForm.get('phone').invalid && editForm.get('phone').touched; else validPhone">
-              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('phone').errors.maxlength">
-                Phone number is too long. Please use 40 characters or less.
-              </small>
-            </ng-container>
-          </div>
-          <h3 class="mb-3 mr-2 mt-4">Roles <span class="text-danger font-size-12 font-weight-normal">(Required)</span></h3>
-          <small
-            class="wide-text font-size-12 form-text mb-4 color-gray"
-            [ngClass]="{ 'text-danger': editForm.get('roles').invalid && editForm.get('roles').dirty }"
-          >
-            Please assign at least one role to this contact
-          </small>
-          <div formArrayName="roles" class="border-0 mb-3">
-            <div *ngFor="let myOption of roles.controls; let i = index">
-              <div formGroupName="{{ i }}">
-                <input type="checkbox" [formControl]="myOption.get('selected')" class="role-checkbox" />
-                <label class="font-size-14 font-weight-normal mb-3"> {{ myOption.get('name').value }} </label>
+            <div *ngIf="editForm.get('contactName').invalid && editForm.get('name').touched">
+              <div>
+                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactName').errors.maxlength">
+                  Name is too long. Please use 80 characters or less.
+                </small>
               </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('contactJobTitle').invalid }">Job title</label>
+            <input
+              type="text"
+              class="form-control"
+              name="contactJobTitle"
+              formControlName="contactJobTitle"
+              [ngClass]="{ 'text-danger': editForm.get('contactJobTitle').invalid }"
+            />
+            <div *ngIf="editForm.get('contactJobTitle').invalid">
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactJobTitle').errors.maxlength">
+                Job title is too long. Please use 128 characters or less.
+              </small>
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label
+              [ngClass]="{ 'text-danger': editForm.get('contactEmail').invalid && editForm.get('contactEmail').touched }"
+              class="wide-text font-size-12"
+              >Email</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="contactEmail"
+              formControlName="contactEmail"
+              (input)="editForm.get('contactEmail').markAsUntouched()"
+              [ngClass]="{
+                'text-danger': editForm.get('contactEmail').invalid && editForm.get('contactEmail').touched,
+                'input-field-default-border': !editForm.get('contactEmail').touched
+              }"
+            />
+            <ng-template #validEmail>
+              <small class="wide-text font-size-12 color-gray">The contact email for this person</small>
+            </ng-template>
+            <div *ngIf="editForm.get('contactEmail').invalid && editForm.get('contactEmail').touched; else validEmail">
+              <small
+                class="wide-text font-size-12 text-danger"
+                *ngIf="editForm.get('contactEmail').errors.pattern && !editForm.get('contactEmail').errors.maxlength"
+              >
+                Please enter a valid email address, for example contactus@website.com
+              </small>
+              <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('contactEmail').errors.maxlength">
+                Email is too long. Please use 80 characters or less.
+              </small>
             </div>
           </div>
           <div class="warning-message d-flex p-3 mb-4">
@@ -231,12 +329,13 @@
                 Please note
               </div>
               <div class="font-size-12 wide-text">
-                Changes made to organization contacts can take up to 48 hours to be reflected in the organization contact list.
+                It can take up to 24 hours before a new organization is available in the Member Portal. Please contact your ORCID engagement
+                lead for more information.
               </div>
             </div>
           </div>
           <button type="submit" [disabled]="isSaving" class="btn btn-primary">
-            {{ contactId ? 'Submit contact change request' : 'Submit new contact' }}
+            Submit new organization request
           </button>
           <button type="button" class="btn btn-outline-primary" routerLink="/">Cancel</button>
           <button type="button" (click)="delete()" [disabled]="isSaving" class="btn btn-danger float-right" *ngIf="contactId">

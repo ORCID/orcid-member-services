@@ -37,7 +37,7 @@
               name="name"
               formControlName="name"
               [ngClass]="{
-                'text-danger': editForm.get('name').invalid && editForm.get('name').dorty,
+                'text-danger': editForm.get('name').invalid && editForm.get('name').dirty,
                 'input-field-default-border': !editForm.get('name').touched
               }"
             />

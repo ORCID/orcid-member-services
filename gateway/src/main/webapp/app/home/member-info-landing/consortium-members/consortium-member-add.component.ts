@@ -1,17 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EMAIL_REGEXP } from 'app/app.constants';
+import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
 import { MSMemberService } from 'app/entities/member';
 import { AlertService } from 'app/shared';
-import {
-  ISFMemberContact,
-  ISFMemberContactUpdate,
-  SFMemberContact,
-  SFMemberContactUpdate
-} from 'app/shared/model/salesforce-member-contact.model';
+
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
+import { ISFNewConsortiumMember, SFNewConsortiumMember } from 'app/shared/model/salesforce-new-consortium-member.model';
 import { IMSUser } from 'app/shared/model/user.model';
+import { DateUtilService } from 'app/shared/util/date-util.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -23,12 +20,14 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
   memberDataSubscription: Subscription;
   account: IMSUser;
   memberData: ISFMemberData;
-  contact: ISFMemberContact;
   isSaving: boolean;
   invalidForm: boolean;
   routeData: any;
   editForm: FormGroup;
-  contactId: string;
+  currentMonth: number;
+  currentYear: number;
+  monthList: string[];
+  yearList: string[];
 
   rolesData = [
     { id: 1, selected: false, name: 'Main relationship contact' },
@@ -44,33 +43,37 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private alertService: AlertService,
     private router: Router,
+    private dateUtilService: DateUtilService,
     protected activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
-      if (params['id']) {
-        this.contactId = params['id'];
-      }
-    });
-    this.editForm = this.fb.group({
-      name: [null, [Validators.required, Validators.maxLength(41)]],
-      phone: [null, [Validators.maxLength(40)]],
-      email: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
-      title: [null, [Validators.maxLength(128)]],
-      roles: this.fb.array(
-        // add interface
-        this.rolesData.map(val => this.fb.group({ id: val.id, selected: val.selected, name: val.name })),
-        [this.validateContactRoles]
-      )
-    });
+    this.currentMonth = this.dateUtilService.getCurrentMonthNumber();
+    this.currentYear = this.dateUtilService.getCurrentYear();
+    this.monthList = this.dateUtilService.getMonthsList();
+    this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(10);
+    this.editForm = this.fb.group(
+      {
+        orgName: [null, [Validators.required, Validators.maxLength(41)]],
+        orgEmailDomain: [null, [Validators.maxLength(80)]],
+        street: [null, [Validators.maxLength(40)]],
+        city: [null, [Validators.maxLength(40)]],
+        state: [null, [Validators.maxLength(40)]],
+        country: [null, [Validators.maxLength(40)]],
+        postcode: [null, [Validators.maxLength(40)]],
+        trademarkLicense: [null, [Validators.required]],
+        startMonth: [this.monthList[this.currentMonth - 1][0], [Validators.required]],
+        startYear: [this.yearList[0], [Validators.required]],
+        contactName: [null, [Validators.maxLength(40)]],
+        contactJobTitle: [null, [Validators.maxLength(128)]],
+        contactEmail: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(40)]],
+        contactPhone: [null, [Validators.maxLength(40)]]
+      },
+      { validator: this.dateValidator.bind(this) }
+    );
 
     this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
       this.memberData = data;
-      if (data.contacts && this.contactId) {
-        this.contact = Object.values(data.contacts).find(contact => contact.contactEmail == this.contactId);
-        this.updateForm(this.contact);
-      }
     });
     this.editForm.valueChanges.subscribe(() => {
       if (this.editForm.status === 'VALID') {
@@ -79,23 +82,32 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
     });
   }
 
-  validateContactRoles(rolesArray: FormArray): ValidationErrors | null {
-    const selectedRoles = rolesArray.controls.filter(control => control.value.selected);
-    if (selectedRoles.length < 1) {
-      return { oneRoleSelected: true };
+  dateValidator(form) {
+    const startMonth = form.controls['startMonth'].value;
+    const startYear = form.controls['startYear'].value;
+
+    if (startYear == this.currentYear && startMonth < this.currentMonth) {
+      return { invalidDate: true };
     }
     return null;
   }
 
-  updateForm(contact: ISFMemberContact) {
+  updateForm(consortiumMember: ISFNewConsortiumMember) {
     this.editForm.patchValue({
-      name: contact.name,
-      phone: contact.phone,
-      title: contact.title,
-      email: contact.contactEmail,
-      roles: contact.memberOrgRole.map(role => {
-        return { selected: true, name: role };
-      })
+      orgName: consortiumMember.orgName,
+      orgEmailDomain: consortiumMember.orgEmailDomain,
+      street: consortiumMember.street,
+      city: consortiumMember.city,
+      state: consortiumMember.state,
+      country: consortiumMember.country,
+      postcode: consortiumMember.postcode,
+      trademarkLicense: consortiumMember.trademarkLicense,
+      startMonth: consortiumMember.startMonth,
+      startYear: consortiumMember.startYear,
+      contactName: consortiumMember.contactName,
+      contactJobTitle: consortiumMember.contactJobTitle,
+      contactEmail: consortiumMember.contactEmail,
+      contactPhone: consortiumMember.contactPhone
     });
   }
 
@@ -103,23 +115,23 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
     this.memberDataSubscription.unsubscribe();
   }
 
-  get roles(): FormArray {
-    return this.editForm.get('roles') as FormArray;
-  }
-
-  createContactFromForm(): ISFMemberContactUpdate {
-    return {
-      ...new SFMemberContact(),
-      contactNewName: this.editForm.get('name').value,
-      contactNewEmail: this.editForm.get('email').value,
-      contactNewPhone: this.editForm.get('phone').value,
-      contactNewJobTitle: this.editForm.get('title').value,
-      contactNewRoles: this.editForm
-        .get('roles')
-        // add interface
-        .value.filter(role => role.selected)
-        .map(role => role.name)
-    };
+  createNewConsortiumMemberFromForm(): ISFNewConsortiumMember {
+    return new SFNewConsortiumMember(
+      this.editForm.get('orgName').value,
+      this.editForm.get('trademarkLicense').value,
+      this.editForm.get('startMonth').value,
+      this.editForm.get('startYear').value,
+      this.editForm.get('orgEmailDomain').value,
+      this.editForm.get('street').value,
+      this.editForm.get('city').value,
+      this.editForm.get('state').value,
+      this.editForm.get('country').value,
+      this.editForm.get('postcode').value,
+      this.editForm.get('contactName').value,
+      this.editForm.get('contactJobTitle').value,
+      this.editForm.get('contactEmail').value,
+      this.editForm.get('contactPhone').value
+    );
   }
 
   save() {
@@ -128,13 +140,9 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
     } else {
       this.invalidForm = false;
       this.isSaving = true;
-      const contact = this.createContactFromForm();
-      if (this.contactId) {
-        contact.contactEmail = this.contact.contactEmail;
-        contact.contactName = this.contact.name;
-        contact.contactMember = this.memberData.name;
-      }
-      this.memberService.updateContact(contact).subscribe(
+      const newConsortiumMember = this.createNewConsortiumMemberFromForm();
+
+      this.memberService.updateContact(newConsortiumMember).subscribe(
         res => {
           if (res) {
             this.onSaveSuccess();
@@ -149,30 +157,6 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
         }
       );
     }
-  }
-
-  delete() {
-    this.isSaving = true;
-    const contact = new SFMemberContactUpdate();
-    if (this.contactId) {
-      contact.contactEmail = this.contact.contactEmail;
-      contact.contactName = this.contact.name;
-      contact.contactMember = this.memberData.name;
-    }
-    this.memberService.updateContact(contact).subscribe(
-      res => {
-        if (res) {
-          this.onSaveSuccess();
-        } else {
-          console.error(res);
-          this.onSaveError();
-        }
-      },
-      err => {
-        console.error(err);
-        this.onSaveError();
-      }
-    );
   }
 
   onSaveSuccess() {
