@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from 
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMAIL_REGEXP } from 'app/app.constants';
 import { MSMemberService } from 'app/entities/member';
-import { AlertService } from 'app/shared';
+import { AlertService, ContactUpdateConfirmationAlert } from 'app/shared';
 import {
   ISFMemberContact,
   ISFMemberContactUpdate,
@@ -177,7 +177,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
 
   onSaveSuccess() {
     this.isSaving = false;
-    this.alertService.contactUpdated.next(true);
+    this.alertService.activeAlert.next(ContactUpdateConfirmationAlert);
     this.router.navigate(['']);
   }
 

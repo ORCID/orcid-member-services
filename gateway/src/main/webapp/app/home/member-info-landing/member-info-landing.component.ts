@@ -13,12 +13,12 @@ import { Subscription } from 'rxjs';
   styleUrls: ['member-info-landing.component.scss']
 })
 export class MemberInfoLandingComponent implements OnInit, OnDestroy {
-  @ViewChild('contactUpdateConfirmationAlert', { read: ViewContainerRef, static: true }) contactUpdateConfirmationAlert: ViewContainerRef;
+  @ViewChild('alert', { read: ViewContainerRef, static: true }) alert: ViewContainerRef;
   account: IMSUser;
   memberData: ISFMemberData;
   authenticationStateSubscription: Subscription;
   memberDataSubscription: Subscription;
-  contactUpdatedSubscription: Subscription;
+  alertSubscription: Subscription;
 
   constructor(
     private memberService: MSMemberService,
@@ -54,9 +54,9 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
     this.accountService.identity().then((account: IMSUser) => {
       this.account = account;
     });
-    this.contactUpdatedSubscription = this.alertService.contactUpdated.subscribe(updated => {
-      if (updated) {
-        this.alertService.showContactUpdateConfirmationAlert(this.contactUpdateConfirmationAlert);
+    this.alertSubscription = this.alertService.activeAlert.subscribe(modal => {
+      if (modal) {
+        this.alertService.showHomepageLightboxModal(this.alert);
       }
     });
   }
@@ -64,6 +64,6 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.authenticationStateSubscription.unsubscribe();
     this.memberDataSubscription.unsubscribe();
-    this.contactUpdatedSubscription.unsubscribe();
+    this.alertSubscription.unsubscribe();
   }
 }

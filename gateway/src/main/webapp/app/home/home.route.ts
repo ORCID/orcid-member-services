@@ -5,6 +5,7 @@ import { HomeComponent } from './';
 import { MemberInfoEditComponent } from './member-info-landing/member-info-edit/member-info-edit.component';
 import { MemberInfoLandingComponent } from './member-info-landing/member-info-landing.component';
 import { ContactUpdateComponent } from './member-info-landing/contact-update/contact-update.component';
+import { ConsortiumMemberAddComponent } from './member-info-landing/consortium-members/consortium-member-add.component';
 
 export const HOME_ROUTE: Route = {
   path: '',
@@ -43,9 +44,17 @@ export const HOME_ROUTE: Route = {
     {
       path: 'contact/:id/edit',
       component: ContactUpdateComponent,
-
       data: {
         authorities: ['ROLE_USER'],
+        pageTitle: 'home.title.string'
+      },
+      canActivate: [UserRouteAccessService]
+    },
+    {
+      path: 'consortium-member/new',
+      component: ConsortiumMemberAddComponent,
+      data: {
+        authorities: ['ROLE_USER', 'ROLE_CONSORTIUM_LEAD'],
         pageTitle: 'home.title.string'
       },
       canActivate: [UserRouteAccessService]

@@ -1,4 +1,4 @@
-<div #contactUpdateConfirmationAlert></div>
+<div #alert></div>
 <div class="d-flex h-100">
   <div *ngIf="memberData" class="side-bar">
     <div class="logo-container">
@@ -140,6 +140,10 @@
           Consortium Members
           <span class="font-weight-normal">({{ memberData.consortiumMembers.length }})</span>
         </h5>
+        <a routerLink="/consortium-member/new" class="mb-4 font-weight-normal font-size-14 d-block">
+          <img src="../../../content/images/plus-circle.svg" class="add-new-contact-icon mr-1" alt="Add new" />
+          <span>Add new consortium member</span>
+        </a>
         <h6>Member name</h6>
         <hr class="green-hr" />
         <div *ngFor="let consortiumMember of memberData.consortiumMembers; let i = index">
