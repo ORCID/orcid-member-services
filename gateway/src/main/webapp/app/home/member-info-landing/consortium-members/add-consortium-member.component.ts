@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
+import { EMAIL_REGEXP } from 'app/app.constants';
 import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
 import { AddConsortiumMemberConfirmationComponent, AlertService } from 'app/shared';
@@ -14,11 +14,11 @@ import { DateUtilService } from 'app/shared/util/date-util.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-consortium-member-add',
-  templateUrl: './consortium-member-add.component.html',
-  styleUrls: ['./consortium-member-add.scss']
+  selector: 'app-add-consortium-member',
+  templateUrl: './add-consortium-member.component.html',
+  styleUrls: ['./add-consortium-member.scss']
 })
-export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
+export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
   COUNTRIES = COUNTRIES;
   memberDataSubscription: Subscription;
   account: IMSUser;
@@ -90,7 +90,7 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
     });
   }
 
-  dateValidator(form) {
+  dateValidator(form: FormGroup) {
     const startMonth = form.controls['startMonth'].value;
     const startYear = form.controls['startYear'].value;
 
@@ -98,25 +98,6 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
       return { invalidDate: true };
     }
     return null;
-  }
-
-  updateForm(consortiumMember: ISFNewConsortiumMember) {
-    this.editForm.patchValue({
-      orgName: consortiumMember.orgName,
-      orgEmailDomain: consortiumMember.orgEmailDomain,
-      street: consortiumMember.street,
-      city: consortiumMember.city,
-      state: consortiumMember.state,
-      country: consortiumMember.country,
-      postcode: consortiumMember.postcode,
-      trademarkLicense: consortiumMember.trademarkLicense,
-      startMonth: consortiumMember.startMonth,
-      startYear: consortiumMember.startYear,
-      contactName: consortiumMember.contactName,
-      contactJobTitle: consortiumMember.contactJobTitle,
-      contactEmail: consortiumMember.contactEmail,
-      contactPhone: consortiumMember.contactPhone
-    });
   }
 
   ngOnDestroy(): void {
@@ -129,9 +110,6 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
       this.editForm.get('trademarkLicense').value,
       this.editForm.get('startMonth').value,
       this.editForm.get('startYear').value,
-      this.account.firstName + ' ' + this.account.lastName,
-      this.account.email,
-      this.memberData.name,
       this.editForm.get('orgEmailDomain').value,
       this.editForm.get('street').value,
       this.editForm.get('city').value,
