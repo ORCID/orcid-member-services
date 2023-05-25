@@ -2,8 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
+import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
-import { AlertService } from 'app/shared';
+import { AddConsortiumMemberConfirmationComponent, AlertService } from 'app/shared';
+import { COUNTRIES } from 'app/shared/constants/orcid-api.constants';
 
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { ISFNewConsortiumMember, SFNewConsortiumMember } from 'app/shared/model/salesforce-new-consortium-member.model';
@@ -17,6 +19,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./consortium-member-add.scss']
 })
 export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
+  COUNTRIES = COUNTRIES;
   memberDataSubscription: Subscription;
   account: IMSUser;
   memberData: ISFMemberData;
@@ -44,10 +47,15 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private router: Router,
     private dateUtilService: DateUtilService,
+    private accountService: AccountService,
     protected activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.accountService.identity().then(account => {
+      this.account = account;
+    });
+
     this.currentMonth = this.dateUtilService.getCurrentMonthNumber();
     this.currentYear = this.dateUtilService.getCurrentYear();
     this.monthList = this.dateUtilService.getMonthsList();
@@ -121,6 +129,9 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
       this.editForm.get('trademarkLicense').value,
       this.editForm.get('startMonth').value,
       this.editForm.get('startYear').value,
+      this.account.firstName + ' ' + this.account.lastName,
+      this.account.email,
+      this.memberData.name,
       this.editForm.get('orgEmailDomain').value,
       this.editForm.get('street').value,
       this.editForm.get('city').value,
@@ -136,13 +147,14 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
 
   save() {
     if (this.editForm.status === 'INVALID') {
+      this.editForm.markAllAsTouched();
       this.invalidForm = true;
     } else {
       this.invalidForm = false;
       this.isSaving = true;
       const newConsortiumMember = this.createNewConsortiumMemberFromForm();
 
-      this.memberService.updateContact(newConsortiumMember).subscribe(
+      this.memberService.addConsortiumMember(newConsortiumMember).subscribe(
         res => {
           if (res) {
             this.onSaveSuccess();
@@ -161,7 +173,7 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
 
   onSaveSuccess() {
     this.isSaving = false;
-    this.alertService.contactUpdated.next(true);
+    this.alertService.activeAlert.next(AddConsortiumMemberConfirmationComponent);
     this.router.navigate(['']);
   }
 
