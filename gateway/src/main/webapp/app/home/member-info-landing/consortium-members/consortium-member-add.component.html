@@ -59,7 +59,7 @@
               </div>
             </div>
           </div>
-          <div class="form-group mb-3">
+          <div class="form-group mb-4">
             <label [ngClass]="{ 'text-danger': editForm.get('orgEmailDomain').invalid }" class="wide-text font-size-12">Email domain</label>
             <input
               type="text"
@@ -98,7 +98,7 @@
             />
             <div *ngIf="editForm.get('street').invalid">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('street').errors.maxlength">
-                Job title is too long. Please use 128 characters or less.
+                Street name is too long. Please use 128 characters or less.
               </small>
             </div>
           </div>
@@ -113,7 +113,7 @@
             />
             <div *ngIf="editForm.get('city').invalid">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('city').errors.maxlength">
-                Job title is too long. Please use 128 characters or less.
+                City name is too long. Please use 128 characters or less.
               </small>
             </div>
           </div>
@@ -128,24 +128,20 @@
             />
             <div *ngIf="editForm.get('state').invalid">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('state').errors.maxlength">
-                Job title is too long. Please use 128 characters or less.
+                State/province name is too long. Please use 128 characters or less.
               </small>
             </div>
           </div>
           <div class="form-group">
             <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('country').invalid }">Country</label>
-            <input
-              type="text"
-              class="form-control"
-              name="country"
-              formControlName="country"
-              [ngClass]="{ 'text-danger': editForm.get('country').invalid }"
-            />
-            <div *ngIf="editForm.get('country').invalid">
-              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('country').errors.maxlength">
-                Job title is too long. Please use 128 characters or less.
-              </small>
-            </div>
+            <select class="form-control" name="orgCountry" id="field_orgCountry" formControlName="orgCountry">
+              <option
+                *ngFor="let country of COUNTRIES | keyvalue"
+                [ngValue]="country.value"
+                jhiTranslate="{{ 'country.' + country.value + '.string' }}"
+                >{{ country.key }}</option
+              >
+            </select>
           </div>
           <div class="form-group mb-4">
             <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('postcode').invalid }">ZIP/Postcode</label>
@@ -158,59 +154,35 @@
             />
             <div *ngIf="editForm.get('postcode').invalid">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('postcode').errors.maxlength">
-                Job title is too long. Please use 128 characters or less.
+                ZIP/Postcode is too long. Please use 128 characters or less.
               </small>
             </div>
           </div>
 
           <!-- Trademark license -->
 
-          <h5
-            [ngClass]="{ 'text-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').touched }"
-            class="font-weight-bold font-size-18 mb-3"
-          >
+          <h5 class="font-weight-bold font-size-18 mb-3">
             Trademark license <span class="font-size-12 text-danger font-weight-normal">(Required)</span>
           </h5>
-          <div class="font-size-14 wide-text mb-4">
+          <div class="font-size-14 wide-text mb-3">
             Can ORCID use this organization's trademarked name and logos?
           </div>
-          <div class="form-group d-flex">
-            <input
-              type="radio"
-              class="form-control radio mr-2"
-              name="trademarkLicense"
-              value="Yes"
-              formControlName="trademarkLicense"
-              [ngClass]="{ 'text-danger': editForm.get('trademarkLicense').invalid }"
-            />
-            <label
-              class="wide-text font-size-12 font-weight-normal"
-              [ngClass]="{ 'text-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').touched }"
-              ><strong>YES</strong> - ORCID can use this organization's trademarked name and logos</label
-            >
-            <div *ngIf="editForm.get('trademarkLicense').invalid">
-              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('trademarkLicense').errors.maxlength">
-                Job title is too long. Please use 128 characters or less.
-              </small>
+          <div class="mb-4">
+            <div class="form-group d-flex">
+              <input type="radio" class="form-control radio mr-2" name="trademarkLicense" value="Yes" formControlName="trademarkLicense" />
+              <label class="wide-text font-size-12 font-weight-normal"
+                ><strong>YES</strong> - ORCID can use this organization's trademarked name and logos</label
+              >
             </div>
-          </div>
-          <div class="form-group d-flex mb-4">
-            <input
-              type="radio"
-              class="form-control radio mr-2"
-              name="trademarkLicense"
-              value="No"
-              formControlName="trademarkLicense"
-              [ngClass]="{ 'text-danger': editForm.get('trademarkLicense').invalid }"
-            />
-            <label
-              class="wide-text font-size-12 font-weight-normal"
-              [ngClass]="{ 'text-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').touched }"
+            <div class="form-group d-flex">
+              <input type="radio" class="form-control radio mr-2" name="trademarkLicense" value="No" formControlName="trademarkLicense" />
+              <label class="wide-text font-size-12 font-weight-normal"
               ><strong>NO</strong> - ORCID cannot use this organization's trademarked name and logos</label
-            >
-            <div *ngIf="editForm.get('trademarkLicense').invalid">
-              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('trademarkLicense').errors.maxlength">
-                Job title is too long. Please use 128 characters or less.
+              >
+            </div>
+            <div *ngIf="editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').touched">
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('trademarkLicense').errors.required">
+                Please select a trademark license option
               </small>
             </div>
           </div>
@@ -228,46 +200,44 @@
             Membership start date <span class="font-size-12 text-danger font-weight-normal">(Required)</span>
           </h5>
           <div class="font-size-14 wide-text mb-3">
-            When does this organization’s ORCID membership start? All memberships begin on the 1st of the month.
+            When does this organization's ORCID membership start? All memberships begin on the 1st of the month.
           </div>
-          <div class="form-group d-flex">
-            <select class="form-control date-dropdown mr-2" name="startMonth" formControlName="startMonth">
-              <option *ngFor="let month of monthList" [ngValue]="month[0]">{{ month[0] }}</option>
-            </select>
-            <select class="form-control date-dropdown" name="startYear" formControlName="startYear">
-              <option *ngFor="let year of yearList" [ngValue]="year">{{ year }}</option>
-            </select>
+          <div class="form-group mb-4">
+            <div class="d-flex">
+              <select class="form-control date-dropdown mr-2" name="startMonth" formControlName="startMonth">
+                <option *ngFor="let month of monthList" [ngValue]="month[0]">{{ month[0] }}</option>
+              </select>
+              <select class="form-control date-dropdown" name="startYear" formControlName="startYear">
+                <option *ngFor="let year of yearList" [ngValue]="year">{{ year }}</option>
+              </select>
+            </div>
+            <div *ngIf="editForm.hasError('invalidDate')">
+              <small class="form-text text-danger mt-3">
+                Membership start date cannot precede current date
+              </small>
+            </div>
           </div>
-          <div *ngIf="(editForm.hasError('invalidDate')) ">
-            <small class="form-text text-danger">
-                End date cannot be greater than the start date
-            </small>
-        </div>
 
           <!-- Main contact -->
 
-          <h3 class="mb-4 wide-text">Main contact</h3>
+          <h3 class="mb-3 wide-text">Main contact</h3>
           <div class="font-size-14 wide-text mb-3">
             Please provide details of the main point of contact for this organization. This person will automatically be assigned the
             <strong>Main relationship</strong> and <strong>Voting contact</strong> roles for this organization.
           </div>
           <div class="form-group">
-            <label
-              class="wide-text font-size-12"
-              [ngClass]="{ 'text-danger': editForm.get('contactName').invalid && editForm.get('contactName').touched }"
-              >Name</label
-            >
+            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('contactName').invalid }">Name</label>
             <input
               type="text"
               class="form-control"
               name="contactName"
               formControlName="contactName"
               [ngClass]="{
-                'text-danger': editForm.get('contactName').invalid && editForm.get('contactName').touched,
+                'text-danger': editForm.get('contactName').invalid,
                 'input-field-default-border': !editForm.get('contactName').touched
               }"
             />
-            <div *ngIf="editForm.get('contactName').invalid && editForm.get('name').touched">
+            <div *ngIf="editForm.get('contactName').invalid">
               <div>
                 <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactName').errors.maxlength">
                   Name is too long. Please use 80 characters or less.
