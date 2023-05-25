@@ -1,26 +1,29 @@
 import { ComponentFactoryResolver, ComponentRef, Injectable, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ContactUpdateConfirmationAlert } from './..';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlertService {
-  contactUpdated: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  contactUpdateConfirmationAlertRef: ComponentRef<ContactUpdateConfirmationAlert>;
+  activeAlert: BehaviorSubject<any> = new BehaviorSubject(null);
+  alertRef: ComponentRef<any>;
 
   constructor(private resolver: ComponentFactoryResolver) {}
 
-  showContactUpdateConfirmationAlert(containerRef: ViewContainerRef): void {
-    const popupFactory = this.resolver.resolveComponentFactory(ContactUpdateConfirmationAlert);
-    this.contactUpdateConfirmationAlertRef = containerRef.createComponent(popupFactory);
-    this.contactUpdateConfirmationAlertRef.instance.hide = () => {
-      this.hideContactUpdateConfirmationAlert();
-    };
+  showHomepageLightboxModal(containerRef: ViewContainerRef): void {
+    console.log(this.activeAlert.value);
+
+    if (this.activeAlert.value) {
+      const popupFactory = this.resolver.resolveComponentFactory(this.activeAlert.value);
+      this.alertRef = containerRef.createComponent(popupFactory);
+      this.alertRef.instance.hide = () => {
+        this.hideHomepageLightboxModal();
+      };
+    }
   }
 
-  hideContactUpdateConfirmationAlert(): void {
-    this.contactUpdateConfirmationAlertRef.destroy();
-    this.contactUpdated.next(false);
+  hideHomepageLightboxModal(): void {
+    this.alertRef.destroy();
+    this.activeAlert.next(null);
   }
 }

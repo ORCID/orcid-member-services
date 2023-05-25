@@ -8,6 +8,7 @@ import {
   ConvertToCamelCasePipe,
   ContactUpdateConfirmationAlert
 } from './';
+import { AddConsortiumMemberConfirmationComponent } from './alert/add-consortium-member/add-consortium-member-confirmation.component';
 
 @NgModule({
   imports: [GatewaySharedLibsModule],
@@ -16,7 +17,8 @@ import {
     ConvertToCamelCasePipe,
     JhiAlertComponent,
     JhiAlertErrorComponent,
-    ContactUpdateConfirmationAlert
+    ContactUpdateConfirmationAlert,
+    AddConsortiumMemberConfirmationComponent
   ],
   exports: [
     GatewaySharedLibsModule,
@@ -24,8 +26,9 @@ import {
     ConvertToCamelCasePipe,
     JhiAlertComponent,
     JhiAlertErrorComponent,
-    ContactUpdateConfirmationAlert
+    ContactUpdateConfirmationAlert,
+    AddConsortiumMemberConfirmationComponent
   ],
-  entryComponents: [ContactUpdateConfirmationAlert]
+  entryComponents: [ContactUpdateConfirmationAlert, AddConsortiumMemberConfirmationComponent]
 })
 export class GatewaySharedCommonModule {}
