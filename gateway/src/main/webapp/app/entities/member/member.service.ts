@@ -23,6 +23,7 @@ import {
 } from 'app/shared/model/salesforce-member-contact.model';
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from 'app/shared/model/salesforce-member-org-id.model';
 import { ISFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
+import { ISFNewConsortiumMember } from 'app/shared/model/salesforce-new-consortium-member.model';
 
 type EntityResponseType = HttpResponse<IMSMember>;
 type EntityArrayResponseType = HttpResponse<IMSMember[]>;
@@ -99,6 +100,17 @@ export class MSMemberService {
         }
       })
     );
+  }
+
+  addConsortiumMember(consortiumMember: ISFNewConsortiumMember): Observable<Boolean> {
+    return this.http
+      .post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/add-consortium-member`, consortiumMember, { observe: 'response' })
+      .pipe(
+        map((res: HttpResponse<any>) => res.status === 200),
+        catchError(err => {
+          return throwError(err);
+        })
+      );
   }
 
   getMemberContacts(): Observable<SFMemberContact[]> {
