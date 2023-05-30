@@ -29,7 +29,7 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
   editForm: FormGroup;
   currentMonth: number;
   currentYear: number;
-  monthList: string[];
+  monthList: [number, string][];
   yearList: string[];
 
   rolesData = [
@@ -67,7 +67,7 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
         street: [null, [Validators.maxLength(40)]],
         city: [null, [Validators.maxLength(40)]],
         state: [null, [Validators.maxLength(40)]],
-        country: [null, [Validators.maxLength(40)]],
+        orgCountry: [null, [Validators.maxLength(40)]],
         postcode: [null, [Validators.maxLength(40)]],
         trademarkLicense: [null, [Validators.required]],
         startMonth: [this.monthList[this.currentMonth - 1][0], [Validators.required]],
@@ -114,7 +114,7 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
       this.editForm.get('street').value,
       this.editForm.get('city').value,
       this.editForm.get('state').value,
-      this.editForm.get('country').value,
+      this.editForm.get('orgCountry').value,
       this.editForm.get('postcode').value,
       this.editForm.get('contactName').value,
       this.editForm.get('contactJobTitle').value,
