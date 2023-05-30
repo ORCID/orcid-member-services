@@ -23,11 +23,11 @@ export interface ISFMemberData {
 }
 
 export interface ISFConsortiumMemberData {
-  name?: string;
+  orgName?: string;
   salesforceId?: string;
   metadata?: ISFConsortiumMemberMetadata;
-  endMonth?: string;
-  endYear?: string;
+  terminationMonth?: string;
+  terminationYear?: string;
 }
 
 export interface ISFConsortiumMemberMetadata {
@@ -84,5 +84,5 @@ export class SFMemberData implements ISFMemberData {
 }
 
 export class SFConsortiumMemberData implements ISFConsortiumMemberData {
-  constructor(public salesforceId?: string, public name?: string, public endMonth?: string, public endYear?: string) {}
+  constructor(public salesforceId?: string, public orgName?: string, public terminationMonth?: string, public terminationYear?: string) {}
 }

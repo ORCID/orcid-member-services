@@ -344,7 +344,7 @@ export class MSMemberService {
 
   protected convertToConsortiumMember(consortiumOpportunity: ISFRawConsortiumMemberData): SFConsortiumMemberData {
     const consortiumMember: SFConsortiumMemberData = new SFConsortiumMemberData();
-    consortiumMember.name = consortiumOpportunity.Account.Public_Display_Name__c;
+    consortiumMember.orgName = consortiumOpportunity.Account.Public_Display_Name__c;
     consortiumMember.salesforceId = consortiumOpportunity.AccountId;
     return consortiumMember;
   }
