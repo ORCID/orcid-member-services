@@ -33,7 +33,7 @@ export class MSMemberImportDialogComponent {
     private uploadService: FileUploadService
   ) {
     this.isSaving = false;
-    this.resourceUrl = this.msMemberService.resourceUrl + '/upload';
+    this.resourceUrl = this.msMemberService.resourceUrl + '/members/upload';
   }
 
   clear() {
