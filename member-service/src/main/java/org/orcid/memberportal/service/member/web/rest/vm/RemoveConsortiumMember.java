@@ -8,6 +8,8 @@ public class RemoveConsortiumMember {
 
     private String orgName;
 
+    private String consortium;
+
     private String terminationMonth;
 
     private String terminationYear;
@@ -34,6 +36,14 @@ public class RemoveConsortiumMember {
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
+    }
+
+    public String getConsortium() {
+        return consortium;
+    }
+
+    public void setConsortium(String consortium) {
+        this.consortium = consortium;
     }
 
     public String getTerminationMonth() {
