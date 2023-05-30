@@ -5,6 +5,7 @@ export * from './alert/alert.component';
 export * from './alert/alert-error.component';
 export * from './alert/alert.service';
 export * from './alert/contact-update/contact-update-confirmation-alert.component';
+export * from './alert/consortium-members/add-consortium-member-confirmation.component';
 export * from './alert/consortium-members/remove-consortium-member-confirmation.component';
 export * from './auth/has-any-authority.directive';
 export * from './language/find-language-from-key.pipe';
