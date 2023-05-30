@@ -28,17 +28,8 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
   consortiumMemberId: string;
   currentMonth: number;
   currentYear: number;
-  monthList: string[];
+  monthList: [number, string][];
   yearList: string[];
-
-  rolesData = [
-    { id: 1, selected: false, name: 'Main relationship contact' },
-    { id: 2, selected: false, name: 'Voting contact' },
-    { id: 3, selected: false, name: 'Technical contact' },
-    { id: 4, selected: false, name: 'Invoice contact' },
-    { id: 5, selected: false, name: 'Comms contact' },
-    { id: 6, selected: false, name: 'Product contact' }
-  ];
 
   constructor(
     private memberService: MSMemberService,
@@ -58,16 +49,12 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
 
     this.currentMonth = this.dateUtilService.getCurrentMonthNumber();
     this.currentYear = this.dateUtilService.getCurrentYear();
-    this.monthList = this.dateUtilService.getMonthsList();
-    this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(10);
-    this.editForm = this.fb.group(
-      {
-        orgName: [null, [Validators.required, Validators.maxLength(41)]],
-        endMonth: [this.monthList[this.currentMonth - 1][0], [Validators.required]],
-        endYear: [this.yearList[0], [Validators.required]]
-      },
-      { validator: this.dateValidator.bind(this) }
-    );
+    this.monthList = this.dateUtilService.getFutureMonthsList();
+    this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1);
+    this.editForm = this.fb.group({
+      terminationMonth: [this.monthList[0][0], [Validators.required]],
+      terminationYear: [this.yearList[0], [Validators.required]]
+    });
 
     this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
       this.memberData = data;
@@ -75,33 +62,30 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
         (member: ISFConsortiumMemberData) => member.salesforceId === this.consortiumMemberId
       );
     });
-    this.editForm.valueChanges.subscribe(() => {
+    this.editForm.valueChanges.subscribe(form => {
+      if (form['terminationYear'] === this.currentYear) {
+        this.monthList = this.dateUtilService.getFutureMonthsList();
+      } else {
+        this.monthList = this.dateUtilService.getMonthsList();
+      }
       if (this.editForm.status === 'VALID') {
         this.invalidForm = false;
       }
     });
   }
 
-  dateValidator(form: FormGroup) {
-    const startMonth = form.controls['startMonth'].value;
-    const startYear = form.controls['startYear'].value;
-
-    if (startYear == this.currentYear && startMonth < this.currentMonth) {
-      return { invalidDate: true };
-    }
-    return null;
-  }
-
   ngOnDestroy(): void {
-    this.memberDataSubscription.unsubscribe();
+    if (this.memberDataSubscription) {
+      this.memberDataSubscription.unsubscribe();
+    }
   }
 
   createConsortiumMemberFromForm(): ISFConsortiumMemberData {
     return {
       ...new SFConsortiumMemberData(),
-      name: this.editForm.get('orgName').value,
-      endMonth: this.editForm.get('endMonth').value,
-      endYear: this.editForm.get('endYear').value
+      terminationMonth: this.editForm.get('terminationMonth').value,
+      terminationYear: this.editForm.get('terminationYear').value,
+      orgName: this.consortiumMember.orgName
     };
   }
 
