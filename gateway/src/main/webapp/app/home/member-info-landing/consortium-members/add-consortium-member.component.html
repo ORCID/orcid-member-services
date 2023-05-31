@@ -17,21 +17,21 @@
               Your changes cannot be saved
             </div>
             <div class="font-size-12 wide-text">
-              Please fix the issues with the contact form before trying to save again
+              Please fix the issues with the form before trying to save again
             </div>
           </div>
         </div>
         <div class="form">
-          <h3 class="mb-4 wide-text">Organization details</h3>
+          <h2 class="mb-4 wide-text font-size-24">Organization details</h2>
 
-          <!-- Name & email domain -->
+          <!-- Organization name & email domain -->
 
-          <h5 class="mb-3 font-size-18 font-weight-bold">Name & email domain</h5>
+          <h3 class="mb-3 font-size-18 font-weight-bold">Name & email domain</h3>
           <div class="form-group">
             <label
               class="wide-text font-size-12"
-              [ngClass]="{ 'text-danger': editForm.get('orgName').invalid && editForm.get('orgName').touched }"
-              >Organization name <span class="text-danger font-weight-normal">(Required)</span></label
+              [ngClass]="{ 'text-danger': editForm.get('orgName').invalid && (editForm.get('orgName').touched || editForm.get('orgName').dirty) }"
+              >Organization name <span class="font-weight-normal">(Required)</span></label
             >
             <input
               type="text"
@@ -39,7 +39,7 @@
               name="orgName"
               formControlName="orgName"
               [ngClass]="{
-                'text-danger': editForm.get('orgName').invalid && editForm.get('orgName').dirty,
+                'text-danger': editForm.get('orgName').invalid && (editForm.get('orgName').touched || editForm.get('orgName').dirty),
                 'input-field-default-border': !editForm.get('orgName').touched
               }"
             />
@@ -48,7 +48,7 @@
                 >The legal or official name for this organization. Max 41 characters.</small
               >
             </ng-template>
-            <div *ngIf="editForm.get('orgName').invalid && editForm.get('orgName').touched; else validOrgName">
+            <div *ngIf="editForm.get('orgName').invalid && (editForm.get('orgName').touched || editForm.get('orgName').dirty); else validOrgName">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('orgName').errors.required">
                 Organization name cannot be empty
               </small>
@@ -86,7 +86,7 @@
 
           <!-- Billing address -->
 
-          <h5 class="mb-3 font-size-18 font-weight-bold">Billing address</h5>
+          <h3 class="mb-3 font-size-18 font-weight-bold">Billing address</h3>
           <div class="form-group">
             <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('street').invalid }">Street</label>
             <input
@@ -137,7 +137,7 @@
             <select class="form-control" name="country" formControlName="country">
               <option
                 *ngFor="let country of COUNTRIES | keyvalue"
-                [ngValue]="country.value"
+                [ngValue]="country.key"
                 >{{ country.key }}</option
               >
             </select>
@@ -160,9 +160,9 @@
 
           <!-- Trademark license -->
 
-          <h5 class="font-weight-bold font-size-18 mb-3">
-            Trademark license <span class="font-size-12 text-danger font-weight-normal">(Required)</span>
-          </h5>
+          <h3 class="font-weight-bold font-size-18 mb-3">
+            Trademark license <span class="font-size-12 font-weight-normal">(Required)</span>
+          </h3>
           <div class="font-size-14 wide-text mb-3">
             Can ORCID use this organization's trademarked name and logos?
           </div>
@@ -188,7 +188,7 @@
 
           <!-- Membership start date -->
 
-          <h5
+          <h3
             [ngClass]="{
               'text-danger':
                 (editForm.get('startMonth').invalid && editForm.get('startMonth').touched) ||
@@ -196,8 +196,8 @@
             }"
             class="font-weight-bold font-size-18"
           >
-            Membership start date <span class="font-size-12 text-danger font-weight-normal">(Required)</span>
-          </h5>
+            Membership start date <span class="font-size-12 font-weight-normal">(Required)</span>
+          </h3>
           <div class="font-size-14 wide-text mb-3">
             When does this organization's ORCID membership start? All memberships begin on the 1st of the month.
           </div>
@@ -219,29 +219,53 @@
 
           <!-- Main contact -->
 
-          <h3 class="mb-3 wide-text">Main contact</h3>
+          <h2 class="mb-3 wide-text font-size-24">Main contact</h2>
           <div class="font-size-14 wide-text mb-3">
             Please provide details of the main point of contact for this organization. This person will automatically be assigned the
             <strong>Main relationship</strong> and <strong>Voting contact</strong> roles for this organization.
           </div>
           <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('contactName').invalid }">Name</label>
+            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('contactGivenName').invalid && (editForm.get('contactGivenName').touched || editForm.get('contactGivenName').dirty)}">First or given name <span class="font-size-12 font-weight-normal">(Required)</span></label>
             <input
               type="text"
               class="form-control"
-              name="contactName"
-              formControlName="contactName"
+              name="contactGivenName"
+              formControlName="contactGivenName"
+              (input)="editForm.get('contactGivenName').markAsUntouched()"
               [ngClass]="{
-                'text-danger': editForm.get('contactName').invalid,
-                'input-field-default-border': !editForm.get('contactName').touched
+                'text-danger': editForm.get('contactGivenName').invalid && (editForm.get('contactGivenName').touched || editForm.get('contactGivenName').dirty),
+                'input-field-default-border': !editForm.get('contactGivenName').touched && !editForm.get('contactGivenName').dirty
               }"
             />
-            <div *ngIf="editForm.get('contactName').invalid">
-              <div>
-                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactName').errors.maxlength">
-                  Name is too long. Please use 80 characters or less.
+            <div *ngIf="editForm.get('contactGivenName').invalid && (editForm.get('contactGivenName').touched || editForm.get('contactGivenName').dirty)">
+                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactGivenName').errors.maxlength">
+                  First or given name is too long. Please use 80 characters or less.
                 </small>
-              </div>
+                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactGivenName').errors.required">
+                  Please provide a first or given name
+                </small>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('contactFamilyName').invalid && (editForm.get('contactFamilyName').touched || editForm.get('contactFamilyName').dirty) }">Last or family name <span class="font-size-12 font-weight-normal">(Required)</span></label>
+            <input
+              type="text"
+              class="form-control"
+              name="contactFamilyName"
+              formControlName="contactFamilyName"
+              (input)="editForm.get('contactFamilyName').markAsUntouched()"
+              [ngClass]="{
+                'text-danger': editForm.get('contactFamilyName').invalid && (editForm.get('contactFamilyName').touched || editForm.get('contactFamilyName').dirty),
+                'input-field-default-border': !editForm.get('contactFamilyName').dirty && !editForm.get('contactFamilyName').touched
+              }"
+            />
+            <div *ngIf="editForm.get('contactFamilyName').invalid && (editForm.get('contactFamilyName').touched || editForm.get('contactFamilyName').dirty)">
+                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactFamilyName').errors.maxlength">
+                  Last or family name is too long. Please use 80 characters or less.
+                </small>
+                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactFamilyName').errors.required">
+                  Please provide a last or family name
+                </small>
             </div>
           </div>
           <div class="form-group">
@@ -263,7 +287,7 @@
             <label
               [ngClass]="{ 'text-danger': editForm.get('contactEmail').invalid && editForm.get('contactEmail').touched }"
               class="wide-text font-size-12"
-              >Email</label
+              >Email <span class="font-size-12 font-weight-normal">(Required)</span></label
             >
             <input
               type="text"
@@ -288,6 +312,9 @@
               </small>
               <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('contactEmail').errors.maxlength">
                 Email is too long. Please use 80 characters or less.
+              </small>
+              <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('contactEmail').errors.required">
+                Please provide an email address
               </small>
             </div>
           </div>
