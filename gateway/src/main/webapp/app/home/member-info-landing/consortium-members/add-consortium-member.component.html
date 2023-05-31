@@ -60,25 +60,25 @@
             </div>
           </div>
           <div class="form-group mb-4">
-            <label [ngClass]="{ 'text-danger': editForm.get('orgEmailDomain').invalid }" class="wide-text font-size-12">Email domain</label>
+            <label [ngClass]="{ 'text-danger': editForm.get('emailDomain').invalid }" class="wide-text font-size-12">Email domain</label>
             <input
               type="text"
               class="form-control"
-              name="orgEmailDomain"
-              formControlName="orgEmailDomain"
-              (input)="editForm.get('orgEmailDomain').markAsUntouched()"
+              name="emailDomain"
+              formControlName="emailDomain"
+              (input)="editForm.get('emailDomain').markAsUntouched()"
               [ngClass]="{
-                'text-danger': editForm.get('orgEmailDomain').invalid,
-                'input-field-default-border': !editForm.get('orgEmailDomain').touched
+                'text-danger': editForm.get('emailDomain').invalid,
+                'input-field-default-border': !editForm.get('emailDomain').touched
               }"
             />
-            <ng-template #validOrgEmailDomain>
+            <ng-template #validEmailDomain>
               <small class="wide-text font-size-12 color-gray"
                 >The email domain is the remaining address after the @ symbol eg: orcid.org or website.com</small
               >
             </ng-template>
-            <div *ngIf="editForm.get('orgEmailDomain').invalid; else validOrgEmailDomain">
-              <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('orgEmailDomain').errors.maxlength">
+            <div *ngIf="editForm.get('emailDomain').invalid; else validEmailDomain">
+              <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('emailDomain').errors.maxlength">
                 Email domain is too long. Please use 80 characters or less.
               </small>
             </div>

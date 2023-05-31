@@ -63,7 +63,7 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
     this.editForm = this.fb.group(
       {
         orgName: [null, [Validators.required, Validators.maxLength(41)]],
-        orgEmailDomain: [null, [Validators.maxLength(80)]],
+        emailDomain: [null, [Validators.maxLength(80)]],
         street: [null, [Validators.maxLength(40)]],
         city: [null, [Validators.maxLength(40)]],
         state: [null, [Validators.maxLength(40)]],
@@ -110,7 +110,7 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
       this.editForm.get('trademarkLicense').value,
       this.editForm.get('startMonth').value,
       this.editForm.get('startYear').value,
-      this.editForm.get('orgEmailDomain').value,
+      this.editForm.get('emailDomain').value,
       this.editForm.get('street').value,
       this.editForm.get('city').value,
       this.editForm.get('state').value,
