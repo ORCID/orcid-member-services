@@ -9,7 +9,8 @@ export interface ISFNewConsortiumMember {
   state?: string;
   country?: string;
   postcode?: string;
-  contactName?: string;
+  contactGivenName?: string;
+  contactFamilyName?: string;
   contactJobTitle?: string;
   contactEmail?: string;
   contactPhone?: string;
@@ -27,7 +28,8 @@ export class SFNewConsortiumMember implements ISFNewConsortiumMember {
     public state?: string,
     public country?: string,
     public postcode?: string,
-    public contactName?: string,
+    public contactGivenName?: string,
+    public contactFamilyName?: string,
     public contactJobTitle?: string,
     public contactEmail?: string,
     public contactPhone?: string
