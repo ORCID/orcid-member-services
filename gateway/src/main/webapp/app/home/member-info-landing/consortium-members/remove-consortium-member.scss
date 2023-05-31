@@ -1,0 +1,139 @@
+@use '../../../../content/scss/bootstrap-variables' as global;
+//@import "../member-info-landing.component";
+
+button {
+  font-size: 14px;
+}
+
+.go-back {
+  a {
+    text-decoration: underline;
+    font-weight: normal;
+  }
+  font-size: 14px;
+}
+
+.side-bar {
+  max-width: 250px;
+  height: 100%;
+  padding: 1.25rem;
+  flex: 1;
+}
+
+.logo-container {
+  img {
+    width: 200px;
+    height: auto;
+    align-self: center;
+  }
+  width: 208px;
+  height: 208px;
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form {
+  width: 100%;
+}
+
+h6 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.contact {
+  > div,
+  h6 {
+    width: 10%;
+    text-align: left;
+    flex-grow: 1;
+    max-width: 200px;
+    font-size: 14px;
+  }
+  word-wrap: break-word;
+}
+
+.main-section {
+  label {
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+  flex: 1;
+  padding: 1.25rem;
+}
+
+.input-prompt {
+  color: global.$black-transparent;
+}
+
+textarea {
+  min-height: 9rem;
+  font-size: 14px;
+  letter-spacing: 0.25px;
+}
+
+input {
+  font-size: 14px;
+  letter-spacing: 0.25px;
+}
+
+.identifiers,
+.contacts {
+  margin-bottom: 2.5rem;
+}
+
+.coming-soon {
+  margin-bottom: 24px;
+}
+
+.lockpad {
+  margin-top: -4px;
+}
+
+.ng-invalid:not(form) {
+  border: 1px solid #d32f2f;
+  border-radius: 2px;
+}
+
+.error-message {
+  img {
+    padding: 0 16px 0 8px !important;
+    margin-top: -1.75rem;
+  }
+  div {
+    font-size: 0.875rem;
+  }
+  border: 2px solid #b71c1c;
+  border-radius: 4px;
+}
+
+.warning-message {
+  img {
+    padding: 0 16px 0 8px !important;
+    margin-top: -3rem;
+  }
+  div {
+    font-size: 0.875rem;
+  }
+  border: 2px solid #ff9c00;
+  border-radius: 4px;
+}
+
+.role-checkbox {
+  height: 1.125rem;
+  width: 1.125rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.radio {
+  height: 1.125rem;
+  width: 1.125rem;
+}
+
+.date-dropdown {
+  width: 7.5rem;
+}

@@ -5,7 +5,8 @@ import { GatewaySharedModule } from 'app/shared';
 import {
   HOME_ROUTE,
   HomeComponent,
-  ConsortiumMemberAddComponent,
+  AddConsortiumMemberComponent,
+  RemoveConsortiumMemberComponent,
   GenericLandingComponent,
   MemberInfoLandingComponent,
   MemberInfoEditComponent,
@@ -22,7 +23,8 @@ import { QuillModule } from 'ngx-quill';
     MemberInfoLandingComponent,
     MemberInfoEditComponent,
     ContactUpdateComponent,
-    ConsortiumMemberAddComponent
+    AddConsortiumMemberComponent,
+    RemoveConsortiumMemberComponent
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

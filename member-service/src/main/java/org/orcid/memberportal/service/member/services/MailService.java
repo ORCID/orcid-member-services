@@ -140,6 +140,7 @@ public class MailService {
         Context context = new Context(Locale.ENGLISH);
         context.setVariable("requestedBy", removeConsortiumMember.getRequestedByName() + " (" + removeConsortiumMember.getRequestedByEmail() + ")");
         context.setVariable("orgName", removeConsortiumMember.getOrgName());
+        context.setVariable("consortium", removeConsortiumMember.getConsortium());
         context.setVariable("terminationDate", getTerminationDate(removeConsortiumMember.getTerminationMonth(), removeConsortiumMember.getTerminationYear()));
 
         String content = templateEngine.process("mail/removeConsortiumMember", context);

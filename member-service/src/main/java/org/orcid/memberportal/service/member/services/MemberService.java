@@ -382,6 +382,8 @@ public class MemberService {
 
         removeConsortiumMember.setRequestedByEmail(user.getEmail());
         removeConsortiumMember.setRequestedByName(user.getFirstName() + " " + user.getLastName());
+        removeConsortiumMember.setConsortium(user.getMemberName());
+
 
         mailService.sendRemoveConsortiumMemberEmail(removeConsortiumMember);
     }

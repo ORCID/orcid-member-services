@@ -28,17 +28,28 @@ export class DateUtilService {
     const years = [];
     const yearStart: number = moment().year();
 
-    for (let i = 0; i < futureYears; i++) {
+    for (let i = 0; i < futureYears + 1; i++) {
       years.push(yearStart + i);
     }
     return years;
   }
 
-  getMonthsList() {
+  getMonthsList(): [number, string][] {
     const months = moment.months();
     const monthsArray = [];
     for (let _i = 1; _i <= months.length; _i++) {
       monthsArray.push([('0' + _i.toString()).slice(-2), months[_i - 1]]);
+    }
+    return monthsArray;
+  }
+
+  getFutureMonthsList(): [number, string][] {
+    const months = moment.months();
+    const monthsArray = [];
+    for (let _i = 1; _i <= months.length; _i++) {
+      if (_i > this.getCurrentMonthNumber()) {
+        monthsArray.push([('0' + _i.toString()).slice(-2), months[_i - 1]]);
+      }
     }
     return monthsArray;
   }

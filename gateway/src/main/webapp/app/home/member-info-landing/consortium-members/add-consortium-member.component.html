@@ -133,12 +133,11 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('country').invalid }">Country</label>
-            <select class="form-control" name="orgCountry" id="field_orgCountry" formControlName="orgCountry">
+            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('orgCountry').invalid }">Country</label>
+            <select class="form-control" name="orgCountry" formControlName="orgCountry">
               <option
                 *ngFor="let country of COUNTRIES | keyvalue"
                 [ngValue]="country.value"
-                jhiTranslate="{{ 'country.' + country.value + '.string' }}"
                 >{{ country.key }}</option
               >
             </select>
@@ -308,9 +307,6 @@
             Submit new organization request
           </button>
           <button type="button" class="btn btn-outline-primary" routerLink="/">Cancel</button>
-          <button type="button" (click)="delete()" [disabled]="isSaving" class="btn btn-danger float-right" *ngIf="contactId">
-            <fa-icon [icon]="'trash-alt'" class="mr-2"></fa-icon>Remove this contact
-          </button>
         </div>
       </form>
     </div>

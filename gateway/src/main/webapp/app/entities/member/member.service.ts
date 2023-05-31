@@ -13,7 +13,8 @@ import {
   ISFRawMemberData,
   SFMemberData,
   ISFRawConsortiumMemberData,
-  SFConsortiumMemberData
+  SFConsortiumMemberData,
+  ISFConsortiumMemberData
 } from 'app/shared/model/salesforce-member-data.model';
 import {
   ISFMemberContactUpdate,
@@ -105,6 +106,17 @@ export class MSMemberService {
   addConsortiumMember(consortiumMember: ISFNewConsortiumMember): Observable<Boolean> {
     return this.http
       .post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/add-consortium-member`, consortiumMember, { observe: 'response' })
+      .pipe(
+        map((res: HttpResponse<any>) => res.status === 200),
+        catchError(err => {
+          return throwError(err);
+        })
+      );
+  }
+
+  removeConsortiumMember(consortiumMember: ISFConsortiumMemberData): Observable<Boolean> {
+    return this.http
+      .post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/remove-consortium-member`, consortiumMember, { observe: 'response' })
       .pipe(
         map((res: HttpResponse<any>) => res.status === 200),
         catchError(err => {
@@ -332,7 +344,7 @@ export class MSMemberService {
 
   protected convertToConsortiumMember(consortiumOpportunity: ISFRawConsortiumMemberData): SFConsortiumMemberData {
     const consortiumMember: SFConsortiumMemberData = new SFConsortiumMemberData();
-    consortiumMember.name = consortiumOpportunity.Account.Public_Display_Name__c;
+    consortiumMember.orgName = consortiumOpportunity.Account.Public_Display_Name__c;
     consortiumMember.salesforceId = consortiumOpportunity.AccountId;
     return consortiumMember;
   }

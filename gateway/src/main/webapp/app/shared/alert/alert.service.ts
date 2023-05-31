@@ -1,3 +1,4 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { ComponentFactoryResolver, ComponentRef, Injectable, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -5,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AlertService {
-  activeAlert: BehaviorSubject<any> = new BehaviorSubject(null);
+  activeAlert: BehaviorSubject<ComponentType<any>> = new BehaviorSubject(null);
   alertRef: ComponentRef<any>;
 
   constructor(private resolver: ComponentFactoryResolver) {}

@@ -5,7 +5,8 @@ import { HomeComponent } from './';
 import { MemberInfoEditComponent } from './member-info-landing/member-info-edit/member-info-edit.component';
 import { MemberInfoLandingComponent } from './member-info-landing/member-info-landing.component';
 import { ContactUpdateComponent } from './member-info-landing/contact-update/contact-update.component';
-import { ConsortiumMemberAddComponent } from './member-info-landing/consortium-members/consortium-member-add.component';
+import { RemoveConsortiumMemberComponent } from './member-info-landing/consortium-members/remove-consortium-member.component';
+import { AddConsortiumMemberComponent } from './member-info-landing/consortium-members/add-consortium-member.component';
 
 export const HOME_ROUTE: Route = {
   path: '',
@@ -52,7 +53,16 @@ export const HOME_ROUTE: Route = {
     },
     {
       path: 'consortium-member/new',
-      component: ConsortiumMemberAddComponent,
+      component: AddConsortiumMemberComponent,
+      data: {
+        authorities: ['ROLE_USER', 'ROLE_CONSORTIUM_LEAD'],
+        pageTitle: 'home.title.string'
+      },
+      canActivate: [UserRouteAccessService]
+    },
+    {
+      path: 'consortium-member/:id/remove',
+      component: RemoveConsortiumMemberComponent,
       data: {
         authorities: ['ROLE_USER', 'ROLE_CONSORTIUM_LEAD'],
         pageTitle: 'home.title.string'

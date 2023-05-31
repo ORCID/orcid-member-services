@@ -5,4 +5,5 @@ export * from './generic-landing/generic-landing.component';
 export * from './member-info-landing/member-info-landing.component';
 export * from './member-info-landing/member-info-edit/member-info-edit.component';
 export * from './member-info-landing/contact-update/contact-update.component';
-export * from './member-info-landing/consortium-members/consortium-member-add.component';
+export * from './member-info-landing/consortium-members/add-consortium-member.component';
+export * from './member-info-landing/consortium-members/remove-consortium-member.component';

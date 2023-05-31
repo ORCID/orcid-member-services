@@ -147,7 +147,7 @@
         <h6>Member name</h6>
         <hr class="green-hr" />
         <div *ngFor="let consortiumMember of memberData.consortiumMembers; let i = index">
-          <div>{{ consortiumMember.name }}</div>
+          <div>{{ consortiumMember.orgName }} <a routerLink="consortium-member/{{ consortiumMember.salesforceId }}/remove"><fa-icon [icon]="'trash-alt'" class="float-right"></fa-icon></a></div>
           <hr *ngIf="i + 1 < memberData.consortiumMembers.length" />
         </div>
       </div>
