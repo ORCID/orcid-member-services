@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '@angular/router';
 import { BASE_URL, ORCID_BASE_URL } from 'app/app.constants';
 
 import { JhiLanguageHelper } from 'app/core';
+import { AlertService } from 'app/shared';
 
 @Component({
   selector: 'jhi-main',
@@ -14,7 +15,8 @@ export class JhiMainComponent implements OnInit {
   baseUrl: string = BASE_URL;
   orcidBaseUrl: string = ORCID_BASE_URL;
   hideNav: Boolean = false;
-  constructor(private jhiLanguageHelper: JhiLanguageHelper, private router: Router) {}
+  @ViewChild('alertTemplateRef', { read: ViewContainerRef, static: true }) alertTemplateRef: ViewContainerRef;
+  constructor(private jhiLanguageHelper: JhiLanguageHelper, private router: Router, private alertService: AlertService) {}
 
   private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
     let title: string = routeSnapshot.data && routeSnapshot.data['pageTitle'] ? routeSnapshot.data['pageTitle'] : 'gatewayApp';
@@ -35,6 +37,7 @@ export class JhiMainComponent implements OnInit {
       if (event instanceof NavigationError && event.error.status === 404) {
         this.router.navigate(['/404']);
       }
+      this.alertService.setupContainerRef(this.alertTemplateRef);
     });
   }
 }

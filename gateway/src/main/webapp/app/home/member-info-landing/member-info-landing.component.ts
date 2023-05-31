@@ -1,8 +1,7 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
-import { AlertService } from 'app/shared/alert/alert.service';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { IMSUser } from 'app/shared/model/user.model';
 import { Subscription } from 'rxjs';
@@ -13,19 +12,13 @@ import { Subscription } from 'rxjs';
   styleUrls: ['member-info-landing.component.scss']
 })
 export class MemberInfoLandingComponent implements OnInit, OnDestroy {
-  @ViewChild('alert', { read: ViewContainerRef, static: true }) alert: ViewContainerRef;
   account: IMSUser;
   memberData: ISFMemberData;
   authenticationStateSubscription: Subscription;
   memberDataSubscription: Subscription;
   alertSubscription: Subscription;
 
-  constructor(
-    private memberService: MSMemberService,
-    private accountService: AccountService,
-    private alertService: AlertService,
-    protected activatedRoute: ActivatedRoute
-  ) {}
+  constructor(private memberService: MSMemberService, private accountService: AccountService, protected activatedRoute: ActivatedRoute) {}
 
   isActive() {
     return this.memberData && new Date(this.memberData.membershipEndDateString) > new Date();
@@ -54,16 +47,10 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
     this.accountService.identity().then((account: IMSUser) => {
       this.account = account;
     });
-    this.alertSubscription = this.alertService.activeAlert.subscribe(modal => {
-      if (modal) {
-        this.alertService.showHomepageLightboxModal(this.alert);
-      }
-    });
   }
 
   ngOnDestroy() {
     this.authenticationStateSubscription.unsubscribe();
     this.memberDataSubscription.unsubscribe();
-    this.alertSubscription.unsubscribe();
   }
 }

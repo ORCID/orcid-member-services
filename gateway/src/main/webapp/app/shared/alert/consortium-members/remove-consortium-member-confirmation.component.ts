@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Inject } from '@angular/core';
 
 @Component({
   selector: 'remove-consortium-member-confirmation',
@@ -7,7 +7,10 @@ import { Component, HostListener } from '@angular/core';
 })
 export class RemoveConsortiumMemberConfirmationComponent {
   alerts: any[];
-  constructor() {}
+  orgName: string;
+  constructor(@Inject('config') config) {
+    this.orgName = config.data;
+  }
 
   @HostListener('document:keydown.escape', ['$event'])
   onEscapeKeydown() {
