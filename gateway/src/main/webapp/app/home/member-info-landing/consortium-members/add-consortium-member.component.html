@@ -133,8 +133,8 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('orgCountry').invalid }">Country</label>
-            <select class="form-control" name="orgCountry" formControlName="orgCountry">
+            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('country').invalid }">Country</label>
+            <select class="form-control" name="country" formControlName="country">
               <option
                 *ngFor="let country of COUNTRIES | keyvalue"
                 [ngValue]="country.value"

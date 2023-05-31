@@ -67,7 +67,7 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
         street: [null, [Validators.maxLength(40)]],
         city: [null, [Validators.maxLength(40)]],
         state: [null, [Validators.maxLength(40)]],
-        orgCountry: [null, [Validators.maxLength(40)]],
+        country: [null, [Validators.maxLength(40)]],
         postcode: [null, [Validators.maxLength(40)]],
         trademarkLicense: [null, [Validators.required]],
         startMonth: [this.monthList[this.currentMonth - 1][0], [Validators.required]],
@@ -105,22 +105,23 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
   }
 
   createNewConsortiumMemberFromForm(): ISFNewConsortiumMember {
-    return new SFNewConsortiumMember(
-      this.editForm.get('orgName').value,
-      this.editForm.get('trademarkLicense').value,
-      this.editForm.get('startMonth').value,
-      this.editForm.get('startYear').value,
-      this.editForm.get('emailDomain').value,
-      this.editForm.get('street').value,
-      this.editForm.get('city').value,
-      this.editForm.get('state').value,
-      this.editForm.get('orgCountry').value,
-      this.editForm.get('postcode').value,
-      this.editForm.get('contactName').value,
-      this.editForm.get('contactJobTitle').value,
-      this.editForm.get('contactEmail').value,
-      this.editForm.get('contactPhone').value
-    );
+    const consortiumMember: ISFNewConsortiumMember = {
+      orgName: this.editForm.get('orgName').value,
+      trademarkLicense: this.editForm.get('trademarkLicense').value,
+      startMonth: this.editForm.get('startMonth').value,
+      startYear: this.editForm.get('startYear').value,
+      emailDomain: this.editForm.get('emailDomain').value,
+      street: this.editForm.get('street').value,
+      city: this.editForm.get('city').value,
+      state: this.editForm.get('state').value,
+      country: this.editForm.get('country').value,
+      postcode: this.editForm.get('postcode').value,
+      contactName: this.editForm.get('contactName').value,
+      contactJobTitle: this.editForm.get('contactJobTitle').value,
+      contactEmail: this.editForm.get('contactEmail').value,
+      contactPhone: this.editForm.get('contactPhone').value
+    };
+    return consortiumMember;
   }
 
   save() {
