@@ -8,7 +8,7 @@ import { AddConsortiumMemberConfirmationComponent, AlertService } from 'app/shar
 import { COUNTRIES } from 'app/shared/constants/orcid-api.constants';
 
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
-import { ISFNewConsortiumMember, SFNewConsortiumMember } from 'app/shared/model/salesforce-new-consortium-member.model';
+import { ISFNewConsortiumMember } from 'app/shared/model/salesforce-new-consortium-member.model';
 import { IMSUser } from 'app/shared/model/user.model';
 import { DateUtilService } from 'app/shared/util/date-util.service';
 import { Subscription } from 'rxjs';
@@ -58,46 +58,38 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
 
     this.currentMonth = this.dateUtilService.getCurrentMonthNumber();
     this.currentYear = this.dateUtilService.getCurrentYear();
-    this.monthList = this.dateUtilService.getMonthsList();
-    this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(10);
-    this.editForm = this.fb.group(
-      {
-        orgName: [null, [Validators.required, Validators.maxLength(41)]],
-        orgEmailDomain: [null, [Validators.maxLength(80)]],
-        street: [null, [Validators.maxLength(40)]],
-        city: [null, [Validators.maxLength(40)]],
-        state: [null, [Validators.maxLength(40)]],
-        orgCountry: [null, [Validators.maxLength(40)]],
-        postcode: [null, [Validators.maxLength(40)]],
-        trademarkLicense: [null, [Validators.required]],
-        startMonth: [this.monthList[this.currentMonth - 1][0], [Validators.required]],
-        startYear: [this.yearList[0], [Validators.required]],
-        contactName: [null, [Validators.maxLength(40)]],
-        contactJobTitle: [null, [Validators.maxLength(128)]],
-        contactEmail: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(40)]],
-        contactPhone: [null, [Validators.maxLength(40)]]
-      },
-      { validator: this.dateValidator.bind(this) }
-    );
+    this.monthList = this.dateUtilService.getFutureMonthsList();
+    this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1);
+    this.editForm = this.fb.group({
+      orgName: [null, [Validators.required, Validators.maxLength(41)]],
+      emailDomain: [null, [Validators.maxLength(255)]],
+      street: [null, [Validators.maxLength(255)]],
+      city: [null, [Validators.maxLength(40)]],
+      state: [null, [Validators.maxLength(80)]],
+      country: [null, []],
+      postcode: [null, [Validators.maxLength(20)]],
+      trademarkLicense: [null, [Validators.required]],
+      startMonth: [this.monthList[0][0], [Validators.required]],
+      startYear: [this.yearList[0], [Validators.required]],
+      contactGivenName: [null, [Validators.required, Validators.maxLength(40)]],
+      contactFamilyName: [null, [Validators.required, Validators.maxLength(80)]],
+      contactJobTitle: [null, [Validators.maxLength(128)]],
+      contactEmail: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]]
+    });
 
     this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
       this.memberData = data;
     });
-    this.editForm.valueChanges.subscribe(() => {
+    this.editForm.valueChanges.subscribe(form => {
+      if (form['startYear'] === this.currentYear) {
+        this.monthList = this.dateUtilService.getFutureMonthsList();
+      } else {
+        this.monthList = this.dateUtilService.getMonthsList();
+      }
       if (this.editForm.status === 'VALID') {
         this.invalidForm = false;
       }
     });
-  }
-
-  dateValidator(form: FormGroup) {
-    const startMonth = form.controls['startMonth'].value;
-    const startYear = form.controls['startYear'].value;
-
-    if (startYear == this.currentYear && startMonth < this.currentMonth) {
-      return { invalidDate: true };
-    }
-    return null;
   }
 
   ngOnDestroy(): void {
@@ -105,22 +97,23 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
   }
 
   createNewConsortiumMemberFromForm(): ISFNewConsortiumMember {
-    return new SFNewConsortiumMember(
-      this.editForm.get('orgName').value,
-      this.editForm.get('trademarkLicense').value,
-      this.editForm.get('startMonth').value,
-      this.editForm.get('startYear').value,
-      this.editForm.get('orgEmailDomain').value,
-      this.editForm.get('street').value,
-      this.editForm.get('city').value,
-      this.editForm.get('state').value,
-      this.editForm.get('orgCountry').value,
-      this.editForm.get('postcode').value,
-      this.editForm.get('contactName').value,
-      this.editForm.get('contactJobTitle').value,
-      this.editForm.get('contactEmail').value,
-      this.editForm.get('contactPhone').value
-    );
+    const consortiumMember: ISFNewConsortiumMember = {
+      orgName: this.editForm.get('orgName').value,
+      trademarkLicense: this.editForm.get('trademarkLicense').value,
+      startMonth: this.editForm.get('startMonth').value,
+      startYear: this.editForm.get('startYear').value,
+      emailDomain: this.editForm.get('emailDomain').value,
+      street: this.editForm.get('street').value,
+      city: this.editForm.get('city').value,
+      state: this.editForm.get('state').value,
+      country: this.editForm.get('country').value,
+      postcode: this.editForm.get('postcode').value,
+      contactGivenName: this.editForm.get('contactGivenName').value,
+      contactFamilyName: this.editForm.get('contactFamilyName').value,
+      contactJobTitle: this.editForm.get('contactJobTitle').value,
+      contactEmail: this.editForm.get('contactEmail').value
+    };
+    return consortiumMember;
   }
 
   save() {

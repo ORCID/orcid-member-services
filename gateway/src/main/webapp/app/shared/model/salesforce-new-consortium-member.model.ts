@@ -3,16 +3,14 @@ export interface ISFNewConsortiumMember {
   trademarkLicense: string;
   startMonth: string;
   startYear: string;
-  requestedByName: string;
-  requestedByEmail: string;
-  consortium: string;
-  orgEmailDomain?: string;
+  emailDomain?: string;
   street?: string;
   city?: string;
   state?: string;
   country?: string;
   postcode?: string;
-  contactName?: string;
+  contactGivenName?: string;
+  contactFamilyName?: string;
   contactJobTitle?: string;
   contactEmail?: string;
   contactPhone?: string;
@@ -24,16 +22,14 @@ export class SFNewConsortiumMember implements ISFNewConsortiumMember {
     public trademarkLicense: string,
     public startMonth: string,
     public startYear: string,
-    public requestedByName: string,
-    public requestedByEmail: string,
-    public consortium: string,
-    public orgEmailDomain?: string,
+    public emailDomain?: string,
     public street?: string,
     public city?: string,
     public state?: string,
     public country?: string,
     public postcode?: string,
-    public contactName?: string,
+    public contactGivenName?: string,
+    public contactFamilyName?: string,
     public contactJobTitle?: string,
     public contactEmail?: string,
     public contactPhone?: string
