@@ -79,7 +79,7 @@
             </ng-template>
             <div *ngIf="editForm.get('emailDomain').invalid; else validEmailDomain">
               <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('emailDomain').errors.maxlength">
-                Email domain is too long. Please use 80 characters or less.
+                Email domain is too long. Please use 255 characters or less.
               </small>
             </div>
           </div>
@@ -98,7 +98,7 @@
             />
             <div *ngIf="editForm.get('street').invalid">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('street').errors.maxlength">
-                Street name is too long. Please use 128 characters or less.
+                Street name is too long. Please use 255 characters or less.
               </small>
             </div>
           </div>
@@ -113,7 +113,7 @@
             />
             <div *ngIf="editForm.get('city').invalid">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('city').errors.maxlength">
-                City name is too long. Please use 128 characters or less.
+                City name is too long. Please use 40 characters or less.
               </small>
             </div>
           </div>
@@ -128,7 +128,7 @@
             />
             <div *ngIf="editForm.get('state').invalid">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('state').errors.maxlength">
-                State/province name is too long. Please use 128 characters or less.
+                State/province name is too long. Please use 80 characters or less.
               </small>
             </div>
           </div>
@@ -153,7 +153,7 @@
             />
             <div *ngIf="editForm.get('postcode').invalid">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('postcode').errors.maxlength">
-                ZIP/Postcode is too long. Please use 128 characters or less.
+                ZIP/Postcode is too long. Please use 20 characters or less.
               </small>
             </div>
           </div>
@@ -239,7 +239,7 @@
             />
             <div *ngIf="editForm.get('contactGivenName').invalid && (editForm.get('contactGivenName').touched || editForm.get('contactGivenName').dirty)">
                 <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactGivenName').errors.maxlength">
-                  First or given name is too long. Please use 80 characters or less.
+                  First or given name is too long. Please use 40 characters or less.
                 </small>
                 <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactGivenName').errors.required">
                   Please provide a first or given name

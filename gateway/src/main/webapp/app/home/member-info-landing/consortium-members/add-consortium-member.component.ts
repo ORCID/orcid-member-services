@@ -62,19 +62,19 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
     this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1);
     this.editForm = this.fb.group({
       orgName: [null, [Validators.required, Validators.maxLength(41)]],
-      emailDomain: [null, [Validators.maxLength(80)]],
-      street: [null, [Validators.maxLength(40)]],
+      emailDomain: [null, [Validators.maxLength(255)]],
+      street: [null, [Validators.maxLength(255)]],
       city: [null, [Validators.maxLength(40)]],
-      state: [null, [Validators.maxLength(40)]],
-      country: [null, [Validators.maxLength(40)]],
-      postcode: [null, [Validators.maxLength(40)]],
+      state: [null, [Validators.maxLength(80)]],
+      country: [null, []],
+      postcode: [null, [Validators.maxLength(20)]],
       trademarkLicense: [null, [Validators.required]],
       startMonth: [this.monthList[0][0], [Validators.required]],
       startYear: [this.yearList[0], [Validators.required]],
       contactGivenName: [null, [Validators.required, Validators.maxLength(40)]],
-      contactFamilyName: [null, [Validators.required, Validators.maxLength(40)]],
+      contactFamilyName: [null, [Validators.required, Validators.maxLength(80)]],
       contactJobTitle: [null, [Validators.maxLength(128)]],
-      contactEmail: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(40)]]
+      contactEmail: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]]
     });
 
     this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
