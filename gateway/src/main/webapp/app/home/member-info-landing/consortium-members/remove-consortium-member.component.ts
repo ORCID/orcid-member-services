@@ -101,7 +101,7 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
       this.memberService.removeConsortiumMember(consortiumMember).subscribe(
         res => {
           if (res) {
-            this.onSaveSuccess();
+            this.onSaveSuccess(consortiumMember.orgName);
           } else {
             console.error(res);
             this.onSaveError();
@@ -115,9 +115,9 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSaveSuccess() {
+  onSaveSuccess(orgName: string) {
     this.isSaving = false;
-    this.alertService.activeAlert.next(RemoveConsortiumMemberConfirmationComponent);
+    this.alertService.showHomepageLightboxModal({ alertComponent: RemoveConsortiumMemberConfirmationComponent, data: orgName });
     this.router.navigate(['']);
   }
 

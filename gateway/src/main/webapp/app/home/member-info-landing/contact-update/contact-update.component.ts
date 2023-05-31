@@ -177,7 +177,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
 
   onSaveSuccess() {
     this.isSaving = false;
-    this.alertService.activeAlert.next(ContactUpdateConfirmationAlert);
+    this.alertService.showHomepageLightboxModal({ alertComponent: ContactUpdateConfirmationAlert });
     this.router.navigate(['']);
   }
 
