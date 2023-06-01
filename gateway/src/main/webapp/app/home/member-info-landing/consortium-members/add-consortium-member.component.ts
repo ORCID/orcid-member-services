@@ -58,7 +58,7 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
 
     this.currentMonth = this.dateUtilService.getCurrentMonthNumber();
     this.currentYear = this.dateUtilService.getCurrentYear();
-    this.monthList = this.dateUtilService.getFutureMonthsList();
+    this.monthList = this.dateUtilService.getMonthsList();
     this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1);
     this.editForm = this.fb.group({
       orgName: [null, [Validators.required, Validators.maxLength(41)]],
@@ -66,11 +66,11 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
       street: [null, [Validators.maxLength(255)]],
       city: [null, [Validators.maxLength(40)]],
       state: [null, [Validators.maxLength(80)]],
-      country: [null, []],
+      country: [null, [Validators.required]],
       postcode: [null, [Validators.maxLength(20)]],
       trademarkLicense: [null, [Validators.required]],
-      startMonth: [this.monthList[0][0], [Validators.required]],
-      startYear: [this.yearList[0], [Validators.required]],
+      startMonth: [null, [Validators.required]],
+      startYear: [null, [Validators.required]],
       contactGivenName: [null, [Validators.required, Validators.maxLength(40)]],
       contactFamilyName: [null, [Validators.required, Validators.maxLength(80)]],
       contactJobTitle: [null, [Validators.maxLength(128)]],
@@ -80,12 +80,7 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
     this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
       this.memberData = data;
     });
-    this.editForm.valueChanges.subscribe(form => {
-      if (form['startYear'] === this.currentYear) {
-        this.monthList = this.dateUtilService.getFutureMonthsList();
-      } else {
-        this.monthList = this.dateUtilService.getMonthsList();
-      }
+    this.editForm.valueChanges.subscribe(() => {
       if (this.editForm.status === 'VALID') {
         this.invalidForm = false;
       }
@@ -118,6 +113,9 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
 
   save() {
     if (this.editForm.status === 'INVALID') {
+      Object.keys(this.editForm.controls).forEach(key => {
+        this.editForm.get(key).markAsDirty();
+      });
       this.editForm.markAllAsTouched();
       this.invalidForm = true;
     } else {

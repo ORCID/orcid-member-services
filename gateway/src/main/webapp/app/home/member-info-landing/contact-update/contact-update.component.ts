@@ -125,6 +125,10 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   save() {
     if (this.editForm.status === 'INVALID') {
       this.invalidForm = true;
+      Object.keys(this.editForm.controls).forEach(key => {
+        this.editForm.get(key).markAsDirty();
+      });
+      this.editForm.markAllAsTouched();
     } else {
       this.invalidForm = false;
       this.isSaving = true;

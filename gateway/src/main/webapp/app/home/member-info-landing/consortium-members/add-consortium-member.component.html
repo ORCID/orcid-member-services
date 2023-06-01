@@ -30,7 +30,9 @@
           <div class="form-group">
             <label
               class="wide-text font-size-12"
-              [ngClass]="{ 'text-danger': editForm.get('orgName').invalid && (editForm.get('orgName').touched || editForm.get('orgName').dirty) }"
+              [ngClass]="{
+                'text-danger': editForm.get('orgName').invalid && editForm.get('orgName').touched && editForm.get('orgName').dirty
+              }"
               >Organization name <span class="font-weight-normal">(Required)</span></label
             >
             <input
@@ -38,9 +40,10 @@
               class="form-control"
               name="orgName"
               formControlName="orgName"
+              (input)="editForm.get('orgName').markAsUntouched()"
               [ngClass]="{
-                'text-danger': editForm.get('orgName').invalid && (editForm.get('orgName').touched || editForm.get('orgName').dirty),
-                'input-field-default-border': !editForm.get('orgName').touched
+                'text-danger': editForm.get('orgName').invalid && editForm.get('orgName').touched && editForm.get('orgName').dirty,
+                'input-field-default-border': !editForm.get('orgName').dirty || !editForm.get('orgName').touched
               }"
             />
             <ng-template #validOrgName>
@@ -48,7 +51,9 @@
                 >The legal or official name for this organization. Max 41 characters.</small
               >
             </ng-template>
-            <div *ngIf="editForm.get('orgName').invalid && (editForm.get('orgName').touched || editForm.get('orgName').dirty); else validOrgName">
+            <div
+              *ngIf="editForm.get('orgName').invalid && editForm.get('orgName').touched && editForm.get('orgName').dirty; else validOrgName"
+            >
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('orgName').errors.required">
                 Organization name cannot be empty
               </small>
@@ -60,7 +65,11 @@
             </div>
           </div>
           <div class="form-group mb-4">
-            <label [ngClass]="{ 'text-danger': editForm.get('emailDomain').invalid }" class="wide-text font-size-12">Email domain</label>
+            <label
+              [ngClass]="{ 'text-danger': editForm.get('emailDomain').invalid && editForm.get('emailDomain').touched }"
+              class="wide-text font-size-12"
+              >Email domain</label
+            >
             <input
               type="text"
               class="form-control"
@@ -68,7 +77,7 @@
               formControlName="emailDomain"
               (input)="editForm.get('emailDomain').markAsUntouched()"
               [ngClass]="{
-                'text-danger': editForm.get('emailDomain').invalid,
+                'text-danger': editForm.get('emailDomain').invalid && editForm.get('emailDomain').touched,
                 'input-field-default-border': !editForm.get('emailDomain').touched
               }"
             />
@@ -77,7 +86,7 @@
                 >The email domain is the remaining address after the @ symbol eg: orcid.org or website.com</small
               >
             </ng-template>
-            <div *ngIf="editForm.get('emailDomain').invalid; else validEmailDomain">
+            <div *ngIf="editForm.get('emailDomain').invalid && editForm.get('emailDomain').touched; else validEmailDomain">
               <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('emailDomain').errors.maxlength">
                 Email domain is too long. Please use 255 characters or less.
               </small>
@@ -88,70 +97,120 @@
 
           <h3 class="mb-3 font-size-18 font-weight-bold">Billing address</h3>
           <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('street').invalid }">Street</label>
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{ 'text-danger': editForm.get('street').invalid && editForm.get('street').touched }"
+              >Street</label
+            >
             <input
               type="text"
               class="form-control"
               name="street"
               formControlName="street"
-              [ngClass]="{ 'text-danger': editForm.get('street').invalid }"
+              (input)="editForm.get('street').markAsUntouched()"
+              [ngClass]="{
+                'text-danger': editForm.get('street').invalid && editForm.get('street').touched,
+                'input-field-default-border': !editForm.get('street').dirty || !editForm.get('street').touched
+              }"
             />
-            <div *ngIf="editForm.get('street').invalid">
+            <div *ngIf="editForm.get('street').invalid && editForm.get('street').touched">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('street').errors.maxlength">
                 Street name is too long. Please use 255 characters or less.
               </small>
             </div>
           </div>
           <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('city').invalid }">City</label>
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{ 'text-danger': editForm.get('city').invalid && editForm.get('city').touched }"
+              >City</label
+            >
             <input
               type="text"
               class="form-control"
               name="city"
               formControlName="city"
-              [ngClass]="{ 'text-danger': editForm.get('city').invalid }"
+              (input)="editForm.get('city').markAsUntouched()"
+              [ngClass]="{
+                'text-danger': editForm.get('city').invalid && editForm.get('city').touched,
+                'input-field-default-border': !editForm.get('city').dirty || !editForm.get('city').touched
+              }"
             />
-            <div *ngIf="editForm.get('city').invalid">
+            <div *ngIf="editForm.get('city').invalid && editForm.get('city').touched">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('city').errors.maxlength">
                 City name is too long. Please use 40 characters or less.
               </small>
             </div>
           </div>
           <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('state').invalid }">State/Province</label>
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{
+                'text-danger': editForm.get('state').invalid && editForm.get('state').touched
+              }"
+              >State/Province</label
+            >
             <input
               type="text"
               class="form-control"
               name="state"
               formControlName="state"
-              [ngClass]="{ 'text-danger': editForm.get('state').invalid }"
+              (input)="editForm.get('state').markAsUntouched()"
+              [ngClass]="{
+                'text-danger': editForm.get('state').invalid && editForm.get('state').touched,
+                'input-field-default-border': !editForm.get('state').dirty || !editForm.get('state').touched
+              }"
             />
-            <div *ngIf="editForm.get('state').invalid">
+            <div *ngIf="editForm.get('state').invalid && editForm.get('state').touched">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('state').errors.maxlength">
                 State/province name is too long. Please use 80 characters or less.
               </small>
             </div>
           </div>
           <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('country').invalid }">Country</label>
-            <select class="form-control font-size-14" name="country" formControlName="country">
-              <option
-                *ngFor="let country of COUNTRIES | keyvalue"
-                [ngValue]="country.key"
-                >{{ country.key }}</option
-              >
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{ 'text-danger': editForm.get('country').invalid && editForm.get('country').dirty }"
+              >Country <span class="font-size-12 font-weight-normal">(Required)</span></label
+            >
+            <select
+              class="form-control font-size-14"
+              name="country"
+              formControlName="country"
+              [ngClass]="{
+                'text-danger': editForm.get('country').invalid && editForm.get('country').dirty,
+                'input-field-default-border': !editForm.get('country').dirty
+              }"
+            >
+              <option hidden selected [ngValue]="null">Country</option>
+              <option *ngFor="let country of COUNTRIES | keyvalue" [ngValue]="country.key" class="form-field-text-color-default">{{
+                country.key
+              }}</option>
             </select>
+            <div *ngIf="editForm.get('country').invalid && editForm.get('country').dirty">
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('country').errors.required">
+                Please select a country
+              </small>
+            </div>
           </div>
           <div class="form-group mb-4">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('postcode').invalid }">ZIP/Postcode</label>
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{ 'text-danger': editForm.get('postcode').invalid && editForm.get('postcode').touched }"
+              >ZIP/Postcode</label
+            >
             <input
               type="text"
               class="form-control"
               name="postcode"
               formControlName="postcode"
-              [ngClass]="{ 'text-danger': editForm.get('postcode').invalid }"
+              (input)="editForm.get('postcode').markAsUntouched()"
+              [ngClass]="{
+                'text-danger': editForm.get('postcode').invalid && editForm.get('postcode').touched,
+                'input-field-default-border': !editForm.get('postcode').dirty || !editForm.get('postcode').touched
+              }"
             />
-            <div *ngIf="editForm.get('postcode').invalid">
+            <div *ngIf="editForm.get('postcode').invalid && editForm.get('postcode').touched">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('postcode').errors.maxlength">
                 ZIP/Postcode is too long. Please use 20 characters or less.
               </small>
@@ -168,18 +227,32 @@
           </div>
           <div class="mb-4">
             <div class="form-group d-flex">
-              <input type="radio" class="form-control radio mr-2" name="trademarkLicense" value="Yes" formControlName="trademarkLicense" />
+              <input
+                type="radio"
+                class="form-control radio mr-2"
+                name="trademarkLicense"
+                value="Yes"
+                formControlName="trademarkLicense"
+                [ngClass]="{ 'outline-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').dirty }"
+              />
               <label class="wide-text font-size-12 font-weight-normal"
                 ><strong>YES</strong> - ORCID can use this organization's trademarked name and logos</label
               >
             </div>
             <div class="form-group d-flex">
-              <input type="radio" class="form-control radio mr-2" name="trademarkLicense" value="No" formControlName="trademarkLicense" />
+              <input
+                type="radio"
+                class="form-control radio mr-2"
+                name="trademarkLicense"
+                value="No"
+                formControlName="trademarkLicense"
+                [ngClass]="{ 'outline-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').dirty }"
+              />
               <label class="wide-text font-size-12 font-weight-normal"
-              ><strong>NO</strong> - ORCID cannot use this organization's trademarked name and logos</label
+                ><strong>NO</strong> - ORCID cannot use this organization's trademarked name and logos</label
               >
             </div>
-            <div *ngIf="editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').touched">
+            <div *ngIf="editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').dirty">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('trademarkLicense').errors.required">
                 Please select a trademark license option
               </small>
@@ -188,14 +261,7 @@
 
           <!-- Membership start date -->
 
-          <h3
-            [ngClass]="{
-              'text-danger':
-                (editForm.get('startMonth').invalid && editForm.get('startMonth').touched) ||
-                (editForm.get('startYear').invalid && editForm.get('startYear').touched)
-            }"
-            class="font-weight-bold font-size-18"
-          >
+          <h3 class="font-weight-bold font-size-18">
             Membership start date <span class="font-size-12 font-weight-normal">(Required)</span>
           </h3>
           <div class="font-size-14 wide-text mb-3">
@@ -203,18 +269,61 @@
           </div>
           <div class="form-group mb-4">
             <div class="d-flex">
-              <select class="form-control date-dropdown mr-2" name="startMonth" formControlName="startMonth">
-                <option *ngFor="let month of monthList" [ngValue]="month[0]">{{ month[0] }}</option>
+              <select
+                class="form-control date-dropdown mr-2 font-size-14"
+                name="startMonth"
+                formControlName="startMonth"
+                [ngClass]="{
+                  'text-danger': editForm.get('startMonth').invalid && editForm.get('startMonth').dirty,
+                  'input-field-default-border': !editForm.get('startMonth').dirty
+                }"
+              >
+                <option hidden selected [ngValue]="null">Month</option>
+                <option *ngFor="let month of monthList" [ngValue]="month[0]" class="form-field-text-color-default">{{ month[0] }}</option>
               </select>
-              <select class="form-control date-dropdown" name="startYear" formControlName="startYear">
-                <option *ngFor="let year of yearList" [ngValue]="year">{{ year }}</option>
+              <select
+                class="form-control date-dropdown font-size-14"
+                name="startYear"
+                formControlName="startYear"
+                [ngClass]="{
+                  'text-danger': editForm.get('startYear').invalid && editForm.get('startYear').dirty,
+                  'input-field-default-border': !editForm.get('startYear').dirty
+                }"
+              >
+                <option hidden selected [ngValue]="null">Year</option>
+                <option *ngFor="let year of yearList" [ngValue]="year" class="form-field-text-color-default">{{ year }}</option>
               </select>
             </div>
-            <div *ngIf="editForm.hasError('invalidDate')">
-              <small class="form-text text-danger mt-3">
-                Membership start date cannot precede current date
-              </small>
-            </div>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                editForm.get('startMonth').invalid &&
+                editForm.get('startYear').invalid &&
+                (editForm.get('startMonth').dirty && editForm.get('startYear').dirty)
+              "
+            >
+              Please select the membership start date
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                editForm.get('startMonth').invalid &&
+                editForm.get('startYear').valid &&
+                (editForm.get('startMonth').dirty && editForm.get('startYear').dirty)
+              "
+            >
+              Please select the membership start month
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                editForm.get('startMonth').valid &&
+                editForm.get('startYear').invalid &&
+                (editForm.get('startMonth').dirty && editForm.get('startYear').dirty)
+              "
+            >
+              Please select the membership start year
+            </small>
           </div>
 
           <!-- Main contact -->
@@ -225,7 +334,15 @@
             <strong>Main relationship</strong> and <strong>Voting contact</strong> roles for this organization.
           </div>
           <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('contactGivenName').invalid && (editForm.get('contactGivenName').touched || editForm.get('contactGivenName').dirty)}">First or given name <span class="font-size-12 font-weight-normal">(Required)</span></label>
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{
+                'text-danger':
+                  editForm.get('contactGivenName').invalid &&
+                  (editForm.get('contactGivenName').dirty && editForm.get('contactGivenName').touched)
+              }"
+              >First or given name <span class="font-size-12 font-weight-normal">(Required)</span></label
+            >
             <input
               type="text"
               class="form-control"
@@ -233,21 +350,39 @@
               formControlName="contactGivenName"
               (input)="editForm.get('contactGivenName').markAsUntouched()"
               [ngClass]="{
-                'text-danger': editForm.get('contactGivenName').invalid && (editForm.get('contactGivenName').touched || editForm.get('contactGivenName').dirty),
-                'input-field-default-border': !editForm.get('contactGivenName').touched && !editForm.get('contactGivenName').dirty
+                'text-danger':
+                  editForm.get('contactGivenName').invalid &&
+                  editForm.get('contactGivenName').dirty &&
+                  editForm.get('contactGivenName').touched,
+                'input-field-default-border': !editForm.get('contactGivenName').dirty || !editForm.get('contactGivenName').touched
               }"
             />
-            <div *ngIf="editForm.get('contactGivenName').invalid && (editForm.get('contactGivenName').touched || editForm.get('contactGivenName').dirty)">
-                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactGivenName').errors.maxlength">
-                  First or given name is too long. Please use 40 characters or less.
-                </small>
-                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactGivenName').errors.required">
-                  Please provide a first or given name
-                </small>
+            <div
+              *ngIf="
+                editForm.get('contactGivenName').invalid &&
+                editForm.get('contactGivenName').dirty &&
+                editForm.get('contactGivenName').touched
+              "
+            >
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactGivenName').errors.maxlength">
+                First or given name is too long. Please use 40 characters or less.
+              </small>
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactGivenName').errors.required">
+                Please provide a first or given name
+              </small>
             </div>
           </div>
           <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('contactFamilyName').invalid && (editForm.get('contactFamilyName').touched || editForm.get('contactFamilyName').dirty) }">Last or family name <span class="font-size-12 font-weight-normal">(Required)</span></label>
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{
+                'text-danger':
+                  editForm.get('contactFamilyName').invalid &&
+                  editForm.get('contactFamilyName').dirty &&
+                  editForm.get('contactFamilyName').touched
+              }"
+              >Last or family name <span class="font-size-12 font-weight-normal">(Required)</span></label
+            >
             <input
               type="text"
               class="form-control"
@@ -255,29 +390,46 @@
               formControlName="contactFamilyName"
               (input)="editForm.get('contactFamilyName').markAsUntouched()"
               [ngClass]="{
-                'text-danger': editForm.get('contactFamilyName').invalid && (editForm.get('contactFamilyName').touched || editForm.get('contactFamilyName').dirty),
-                'input-field-default-border': !editForm.get('contactFamilyName').dirty && !editForm.get('contactFamilyName').touched
+                'text-danger':
+                  editForm.get('contactFamilyName').invalid &&
+                  editForm.get('contactFamilyName').dirty &&
+                  editForm.get('contactFamilyName').touched,
+                'input-field-default-border': !editForm.get('contactFamilyName').dirty || !editForm.get('contactFamilyName').touched
               }"
             />
-            <div *ngIf="editForm.get('contactFamilyName').invalid && (editForm.get('contactFamilyName').touched || editForm.get('contactFamilyName').dirty)">
-                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactFamilyName').errors.maxlength">
-                  Last or family name is too long. Please use 80 characters or less.
-                </small>
-                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactFamilyName').errors.required">
-                  Please provide a last or family name
-                </small>
+            <div
+              *ngIf="
+                editForm.get('contactFamilyName').invalid &&
+                editForm.get('contactFamilyName').dirty &&
+                editForm.get('contactFamilyName').touched
+              "
+            >
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactFamilyName').errors.maxlength">
+                Last or family name is too long. Please use 80 characters or less.
+              </small>
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactFamilyName').errors.required">
+                Please provide a last or family name
+              </small>
             </div>
           </div>
           <div class="form-group">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('contactJobTitle').invalid }">Job title</label>
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{ 'text-danger': editForm.get('contactJobTitle').invalid && editForm.get('contactJobTitle').touched }"
+              >Job title</label
+            >
             <input
               type="text"
               class="form-control"
               name="contactJobTitle"
               formControlName="contactJobTitle"
-              [ngClass]="{ 'text-danger': editForm.get('contactJobTitle').invalid }"
+              (input)="editForm.get('contactJobTitle').markAsUntouched()"
+              [ngClass]="{
+                'text-danger': editForm.get('contactJobTitle').invalid && editForm.get('contactJobTitle').touched,
+                'input-field-default-border': !editForm.get('contactJobTitle').dirty || !editForm.get('contactJobTitle').touched
+              }"
             />
-            <div *ngIf="editForm.get('contactJobTitle').invalid">
+            <div *ngIf="editForm.get('contactJobTitle').invalid && editForm.get('contactJobTitle').touched">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('contactJobTitle').errors.maxlength">
                 Job title is too long. Please use 128 characters or less.
               </small>
@@ -285,7 +437,10 @@
           </div>
           <div class="form-group mb-3">
             <label
-              [ngClass]="{ 'text-danger': editForm.get('contactEmail').invalid && editForm.get('contactEmail').touched }"
+              [ngClass]="{
+                'text-danger':
+                  editForm.get('contactEmail').invalid && editForm.get('contactEmail').dirty && editForm.get('contactEmail').touched
+              }"
               class="wide-text font-size-12"
               >Email <span class="font-size-12 font-weight-normal">(Required)</span></label
             >
@@ -296,14 +451,20 @@
               formControlName="contactEmail"
               (input)="editForm.get('contactEmail').markAsUntouched()"
               [ngClass]="{
-                'text-danger': editForm.get('contactEmail').invalid && editForm.get('contactEmail').touched,
-                'input-field-default-border': !editForm.get('contactEmail').touched
+                'text-danger':
+                  editForm.get('contactEmail').invalid && editForm.get('contactEmail').dirty && editForm.get('contactEmail').touched,
+                'input-field-default-border': !editForm.get('contactEmail').touched || !editForm.get('contactEmail').dirty
               }"
             />
             <ng-template #validEmail>
               <small class="wide-text font-size-12 color-gray">The contact email for this person</small>
             </ng-template>
-            <div *ngIf="editForm.get('contactEmail').invalid && editForm.get('contactEmail').touched; else validEmail">
+            <div
+              *ngIf="
+                editForm.get('contactEmail').invalid && editForm.get('contactEmail').dirty && editForm.get('contactEmail').touched;
+                else validEmail
+              "
+            >
               <small
                 class="wide-text font-size-12 text-danger"
                 *ngIf="editForm.get('contactEmail').errors.pattern && !editForm.get('contactEmail').errors.maxlength"
