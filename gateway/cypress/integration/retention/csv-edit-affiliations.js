@@ -12,7 +12,7 @@ describe('Test updating affiliations via CSV', () => {
     cy.visit('/assertion');
   });
 
-  it('Edit the contents of the existing CSV file', function() {
+  it('Edit the contents of the existing CSV file', function () {
     let editSections = ['department-name', 'org-city', 'org-name', 'role-title'];
     let result = '';
     cy.readFile('./cypress/fixtures/editAffiliations.csv').then(csv => {
@@ -29,16 +29,15 @@ describe('Test updating affiliations via CSV', () => {
       }
       console.log(result);
       cy.writeFile('./cypress/fixtures/editAffiliations.csv', result);
-    })
-
+    });
   });
 
-  it('Upload CSV and check inbox for the confirmation email', function() {
+  it('Upload CSV and check inbox for the confirmation email', function () {
     cy.uploadCsv('../fixtures/editAffiliations.csv');
     cy.task('checkInbox', {
       subject: data.outbox.csvUpload,
-      to: data.csvPopulatedMember.users.owner.email
-    }).then(email => {  
+      to: data.csvPopulatedMember.users.owner.email,
+    }).then(email => {
       const body = email[0].body.html;
       expect(body).to.have.string('The CSV upload was successfully processed with the following results:');
       expect(body).to.have.string('<span>0</span>\r\n\t        &nbsp;\r\n\t        <span>affiliations added');
@@ -48,12 +47,12 @@ describe('Test updating affiliations via CSV', () => {
     });
   });
 
-  it('Confirm the changes in the registry', function() {
+  it('Confirm the changes in the registry', function () {
     recurse(
       () =>
         cy.request({
           url: `https://pub.qa.orcid.org/v3.0/${record.id}/activities`,
-          headers: { Accept: 'application/json' }
+          headers: { Accept: 'application/json' },
         }),
       res => {
         const distinction = res.body['distinctions']['affiliation-group'][0]['summaries'][0]['distinction-summary'];
@@ -84,8 +83,8 @@ describe('Test updating affiliations via CSV', () => {
         log: true,
         limit: 20, // max number of iterations
         timeout: 600000, // time limit in ms
-        delay: 30000 // delay before next iteration, ms
+        delay: 30000, // delay before next iteration, ms
       }
-    ); 
-  })
+    );
+  });
 });

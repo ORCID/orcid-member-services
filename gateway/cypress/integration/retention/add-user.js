@@ -3,7 +3,7 @@ import data from '../../fixtures/test-data.json';
 import credentials from '../../fixtures/credentials.json';
 
 describe('Add new user', () => {
-  it('Add user', function() {
+  it('Add user', function () {
     // enter email
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     cy.visit('/user/new');
@@ -13,9 +13,7 @@ describe('Add new user', () => {
     cy.get('#field_firstName').type(data.testString);
     cy.get('#field_lastName').type(data.testString);
     // save button should be disabled
-    cy.get('#save-entity2')
-      .invoke('attr', 'disabled')
-      .should('exist');
+    cy.get('#save-entity2').invoke('attr', 'disabled').should('exist');
     // email input field should have warning label
     cy.get('#field_email')
       .should('have.class', 'ng-invalid')
@@ -23,12 +21,8 @@ describe('Add new user', () => {
       .clear()
       .type(data.member.users.owner.email);
     cy.get('#save-entity2').click();
-    cy.get('.validation-errors')
-      .children()
-      .should('have.length', 1);
-    cy.get('#field_email')
-      .clear()
-      .type(data.member.users.newUser.email);
+    cy.get('.validation-errors').children().should('have.length', 1);
+    cy.get('#field_email').clear().type(data.member.users.newUser.email);
     // check "Organization owner"
     cy.get('#field_mainContact').click();
     // Admin checkbox should not exist
@@ -55,19 +49,17 @@ describe('Add new user', () => {
     cy.processPasswordForm('#password');
     // check success message
     cy.get('.alert-success').within(() => {
-      cy.get('a')
-        .filter('[jhitranslate="global.messages.info.authenticated.link.string"]')
-        .click();
+      cy.get('a').filter('[jhitranslate="global.messages.info.authenticated.link.string"]').click();
     });
     // sign in and confirm the activation was successful
   });
 
-  it('Change organisation owner back to the original user', function() {
+  it('Change organisation owner back to the original user', function () {
     cy.programmaticSignin(data.member.users.newUser.email, credentials.password);
     cy.changeOrgOwner();
   });
 
-  it('Remove added user', function() {
+  it('Remove added user', function () {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     cy.visit('/user');
     cy.get('.btn-group').each($e => {

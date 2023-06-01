@@ -5,13 +5,11 @@ import credentials from '../../fixtures/credentials.json';
 const { email, name } = data.homepageTestMembers.consortiumMember;
 
 describe('Test homepage', () => {
-  it('Direct member', function() {
+  it('Direct member', function () {
     const date = Date.now();
     cy.programmaticSignin(email, credentials.password);
     cy.visit('/');
-    cy.get('app-member-info-landing')
-      .contains(date)
-      .should('not.exist');
+    cy.get('app-member-info-landing').contains(date).should('not.exist');
     cy.visit('/edit');
     cy.get('.text-danger').should('not.exist');
     cy.intercept('/services/memberservice/api/member-contacts').as('details');
@@ -23,22 +21,20 @@ describe('Test homepage', () => {
       .clear()
       .type('Description: ' + date);
 
-    cy.get('[name="website"]')
-      .clear()
-      .type(data.invalidWebsite).blur();
+    cy.get('[name="website"]').clear().type(data.invalidWebsite).blur();
     cy.get('.text-danger').should('have.length', 3);
     cy.get('[name="website"]')
       .clear()
-      .type('https://' + date + '.org').blur();
+      .type('https://' + date + '.org')
+      .blur();
     cy.get('.text-danger').should('not.exist');
 
-    cy.get('[name="email"]')
-      .clear()
-      .type(data.invalidEmail).blur();
+    cy.get('[name="email"]').clear().type(data.invalidEmail).blur();
     cy.get('.text-danger').should('have.length', 3);
     cy.get('[name="email"]')
       .clear()
-      .type(date + '@orcid.org').blur();
+      .type(date + '@orcid.org')
+      .blur();
     cy.get('.text-danger').should('not.exist');
     cy.get('[type="submit"]').click();
     cy.get('app-member-info-landing', { timeout: 20000 }).contains(`${name} ${date}`);

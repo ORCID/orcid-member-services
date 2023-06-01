@@ -8,9 +8,9 @@ describe('Test adding affiliations via CSV', () => {
   beforeEach(() => {
     cy.programmaticSignin(data.csvMember.users.owner.email, credentials.password);
     cy.visit('/assertion');
-  })
-  
-  it('Upload CSV and check inbox for the confirmation email', function() {
+  });
+
+  it('Upload CSV and check inbox for the confirmation email', function () {
     cy.uploadCsv('../fixtures/affiliations.csv');
     cy.task('checkInbox', {
       subject: data.outbox.csvUpload,
@@ -25,21 +25,21 @@ describe('Test adding affiliations via CSV', () => {
     });
   });
 
-  it('Grant permission and confirm that the affiliations were added to the UI and the registry', function() {
+  it('Grant permission and confirm that the affiliations were added to the UI and the registry', function () {
     cy.get('tbody').within(() => {
-      cy.get('tr').each(($e) => {
+      cy.get('tr').each($e => {
         cy.wrap($e).children().eq(0).contains(record.email);
         cy.wrap($e).children().eq(1).should('not.contain', record.id);
         cy.wrap($e).children().eq(4).contains('Pending');
-      })
-    })
+      });
+    });
     cy.fetchLinkAndGrantPermission(record.email);
 
     recurse(
       () =>
         cy.request({
           url: `https://pub.qa.orcid.org/v3.0/${record.id}/activities`,
-          headers: { Accept: 'application/json' }
+          headers: { Accept: 'application/json' },
         }),
       res => {
         expect(res.body['distinctions']['affiliation-group']).to.have.length(1);
@@ -54,37 +54,35 @@ describe('Test adding affiliations via CSV', () => {
         log: true,
         limit: 20, // max number of iterations
         timeout: 600000, // time limit in ms
-        delay: 30000 // delay before next iteration, ms
+        delay: 30000, // delay before next iteration, ms
       }
-    );   
-  }); 
+    );
+  });
 
-  it ('Check that the statuses of the affiliations have changed to "In ORCID"', function() {
+  it('Check that the statuses of the affiliations have changed to "In ORCID"', function () {
     cy.get('tbody').within(() => {
-      cy.get('tr').each(($e) => {
+      cy.get('tr').each($e => {
         cy.wrap($e).children().eq(1).contains(record.id);
         cy.wrap($e).children().eq(4).contains('In ORCID');
-      })
-    })
-  })
+      });
+    });
+  });
 
-  it('Download the CSV and edit the contents to have the affiliations removed', function() {
-    cy.intercept('https://member-portal.qa.orcid.org/services/assertionservice/api/assertion/csv').as('generateCsv')
+  it('Download the CSV and edit the contents to have the affiliations removed', function () {
+    cy.intercept('https://member-portal.qa.orcid.org/services/assertionservice/api/assertion/csv').as('generateCsv');
     cy.get('#jh-generate-csv').click();
     // Occasionally, trying to download the csv results in a 403 code due to an invalid CSRF token, in which case we retry
-    cy.wait('@generateCsv').then((int) => {
+    cy.wait('@generateCsv').then(int => {
       if (int.response.statusCode !== 200) {
         cy.get('#jh-generate-csv').click();
       }
-    })
+    });
     cy.task('checkInbox', {
       to: data.csvMember.users.owner.email,
       subject: data.outbox.csvDownload,
       include_attachments: true,
     }).then(csv => {
-      const csvContents = Buffer.from(csv[0].attachments[0].data, 'base64')
-        .toString('ascii')
-        .trim();
+      const csvContents = Buffer.from(csv[0].attachments[0].data, 'base64').toString('ascii').trim();
       const lines = csvContents.split('\n');
       console.log(lines);
       for (var i = 1; i < lines.length; i++) {
@@ -92,11 +90,11 @@ describe('Test adding affiliations via CSV', () => {
       }
       const data = lines.join('\n');
       cy.writeFile('./cypress/fixtures/downloadedAffiliations.csv', data);
-    });  
+    });
   });
 
-  it('Upload second CSV and check inbox for the confirmation email', function() {
-    cy.uploadCsv('../fixtures/downloadedAffiliations.csv'); 
+  it('Upload second CSV and check inbox for the confirmation email', function () {
+    cy.uploadCsv('../fixtures/downloadedAffiliations.csv');
     cy.task('checkInbox', {
       subject: data.outbox.csvUpload,
       to: data.csvMember.users.owner.email,
@@ -110,12 +108,12 @@ describe('Test adding affiliations via CSV', () => {
     });
   });
 
-  it ('Confirm that the affiliations have been removed from the UI and the registry', function() {
+  it('Confirm that the affiliations have been removed from the UI and the registry', function () {
     recurse(
       () =>
         cy.request({
           url: `https://pub.qa.orcid.org/v3.0/${record.id}/activities`,
-          headers: { Accept: 'application/json' }
+          headers: { Accept: 'application/json' },
         }),
       res => {
         expect(res.body['distinctions']['affiliation-group']).to.have.length(0);
@@ -130,8 +128,8 @@ describe('Test adding affiliations via CSV', () => {
         log: true,
         limit: 20, // max number of iterations
         timeout: 600000, // time limit in ms
-        delay: 30000 // delay before next iteration, ms
+        delay: 30000, // delay before next iteration, ms
       }
-    ); 
-  })
+    );
+  });
 });

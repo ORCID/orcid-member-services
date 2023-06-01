@@ -16,12 +16,12 @@ const months = {
   September: '09',
   October: '10',
   November: '11',
-  December: '12'
+  December: '12',
 };
 const { country, countryCode, url, invalidUrl, startDate, endDate, type } = record.affiliation;
 const { ringgold, grid, ror } = record.affiliation.org;
 describe('Add and remove affiliation', () => {
- /* beforeEach(() => {
+  /* beforeEach(() => {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
   });
 
@@ -29,15 +29,13 @@ describe('Add and remove affiliation', () => {
     cy.programmaticSignout();
   });*/
 
-  it('Add affiliation', function() {
+  it('Add affiliation', function () {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     cy.visit('/assertion/new');
 
     cy.get('#field_email').type(record.invalidEmail);
     cy.get('small.text-danger').should('exist');
-    cy.get('#field_email')
-      .clear()
-      .type(record.email);
+    cy.get('#field_email').clear().type(record.email);
     cy.get('small.text-danger').should('not.exist');
     cy.get('#field_affiliationSection').select(type);
     cy.get('#field_orgName').type(data.testString);
@@ -55,28 +53,16 @@ describe('Add and remove affiliation', () => {
     cy.get('#field_endYear').select(endDate.year);
     cy.get('#field_endMonth').select(endDate.month);
     cy.get('#field_endDay').select(endDate.day);
-    cy.get('small')
-      .filter('[jhitranslate="entity.validation.endDate.string"]')
-      .should('exist');
-    cy.get('#save-entity')
-      .invoke('attr', 'disabled')
-      .should('exist');
+    cy.get('small').filter('[jhitranslate="entity.validation.endDate.string"]').should('exist');
+    cy.get('#save-entity').invoke('attr', 'disabled').should('exist');
     cy.get('#field_startDay').select(startDate.day);
     cy.get('small').should('not.exist');
     cy.get('#save-entity').click();
-    cy.get('.alerts')
-      .children()
-      .should('have.length', 1);
-    
+    cy.get('.alerts').children().should('have.length', 1);
+
     cy.get('#save-entity').click();
-    cy.get('.alerts')
-      .children()
-      .should('have.length', 2);
-    cy.get('#field_url')
-      .clear()
-      .type(url)
-      .get('#save-entity')
-      .click();
+    cy.get('.alerts').children().should('have.length', 2);
+    cy.get('#field_url').clear().type(url).get('#save-entity').click();
     cy.get('.alert-success').should('exist');
     cy.programmaticSignout();
   });
@@ -89,14 +75,14 @@ describe('Add and remove affiliation', () => {
     cy.get('tbody').children().first().children().eq(1).should('not.contain', record.id);
     cy.get('tbody').children().first().children().eq(2).contains(record.affiliation.type);
     cy.get('tbody').children().first().children().eq(4).contains('Pending');
-    
+
     cy.fetchLinkAndGrantPermission(record.email);
 
     recurse(
       () =>
         cy.request({
           url: `https://pub.qa.orcid.org/v3.0/${record.id}/services`,
-          headers: { Accept: 'application/json' }
+          headers: { Accept: 'application/json' },
         }),
       res => {
         const service = res.body['affiliation-group'][0]['summaries'][0]['service-summary'];
@@ -122,9 +108,9 @@ describe('Add and remove affiliation', () => {
         log: true,
         limit: 20, // max number of iterations
         timeout: 600000, // time limit in ms
-        delay: 30000 // delay before next iteration, ms
+        delay: 30000, // delay before next iteration, ms
       }
-    );    
+    );
   });
 
   it('Confirm UI changes on the assertion page', () => {
@@ -133,23 +119,20 @@ describe('Add and remove affiliation', () => {
     cy.get('tbody').children().first().children().eq(1).contains(record.id);
     cy.get('tbody').children().first().children().eq(4).contains('In ORCID');
     cy.programmaticSignout();
-  })
+  });
 
   it('Delete affiliation', () => {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     cy.visit('/assertion');
     cy.get('.btn-group').each($e => {
-      cy.wrap($e)
-        .children()
-        .last()
-        .click();
+      cy.wrap($e).children().last().click();
       cy.get('#jhi-confirm-delete-assertion').click();
     });
     recurse(
       () =>
         cy.request({
           url: `https://pub.qa.orcid.org/v3.0/${record.id}/services`,
-          headers: { Accept: 'application/json' }
+          headers: { Accept: 'application/json' },
         }),
       res => {
         console.log(res);
@@ -159,7 +142,7 @@ describe('Add and remove affiliation', () => {
         log: true,
         limit: 20, // max number of iterations
         timeout: 600000, // time limit in ms
-        delay: 30000 // delay before next iteration, ms
+        delay: 30000, // delay before next iteration, ms
       }
     );
     cy.programmaticSignout();
