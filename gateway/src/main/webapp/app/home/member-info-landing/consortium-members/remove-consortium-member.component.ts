@@ -49,11 +49,11 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
 
     this.currentMonth = this.dateUtilService.getCurrentMonthNumber();
     this.currentYear = this.dateUtilService.getCurrentYear();
-    this.monthList = this.dateUtilService.getFutureMonthsList();
+    this.monthList = this.dateUtilService.getMonthsList();
     this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1);
     this.editForm = this.fb.group({
-      terminationMonth: [this.monthList[0][0], [Validators.required]],
-      terminationYear: [this.yearList[0], [Validators.required]]
+      terminationMonth: [null, [Validators.required]],
+      terminationYear: [null, [Validators.required]]
     });
 
     this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
@@ -62,12 +62,7 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
         (member: ISFConsortiumMemberData) => member.salesforceId === this.consortiumMemberId
       );
     });
-    this.editForm.valueChanges.subscribe(form => {
-      if (form['terminationYear'] === this.currentYear) {
-        this.monthList = this.dateUtilService.getFutureMonthsList();
-      } else {
-        this.monthList = this.dateUtilService.getMonthsList();
-      }
+    this.editForm.valueChanges.subscribe(() => {
       if (this.editForm.status === 'VALID') {
         this.invalidForm = false;
       }
@@ -92,6 +87,9 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
   save() {
     if (this.editForm.status === 'INVALID') {
       this.editForm.markAllAsTouched();
+      Object.keys(this.editForm.controls).forEach(key => {
+        this.editForm.get(key).markAsDirty();
+      });
       this.invalidForm = true;
     } else {
       this.invalidForm = false;

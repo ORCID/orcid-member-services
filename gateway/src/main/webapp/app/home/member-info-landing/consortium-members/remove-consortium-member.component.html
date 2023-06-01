@@ -19,28 +19,63 @@
           <div class="font-size-14 wide-text mb-3">
             When does this organization's ORCID membership end?
           </div>
-          <div class="form-group mb-5">
+          <div class="form-group mb-4">
             <div class="d-flex">
-              <select class="form-control date-dropdown mr-2" name="terminationMonth" formControlName="terminationMonth">
-                <option *ngFor="let month of monthList" [ngValue]="month[0]">{{ month[0] }}</option>
+              <select
+                class="form-control date-dropdown mr-2 font-size-14"
+                name="terminationMonth"
+                formControlName="terminationMonth"
+                [ngClass]="{
+                  'text-danger': editForm.get('terminationMonth').invalid && editForm.get('terminationMonth').dirty,
+                  'input-field-default-border': !editForm.get('terminationMonth').dirty
+                }"
+              >
+                <option hidden selected [ngValue]="null">Month</option>
+                <option *ngFor="let month of monthList" [ngValue]="month[0]" class="form-field-text-color-default">{{ month[0] }}</option>
               </select>
-              <select class="form-control date-dropdown" name="terminationYear" formControlName="terminationYear">
-                <option *ngFor="let year of yearList" [ngValue]="year">{{ year }}</option>
+              <select
+                class="form-control date-dropdown font-size-14"
+                name="terminationYear"
+                formControlName="terminationYear"
+                [ngClass]="{
+                  'text-danger': editForm.get('terminationYear').invalid && editForm.get('terminationYear').dirty,
+                  'input-field-default-border': !editForm.get('terminationYear').dirty
+                }"
+              >
+                <option hidden selected [ngValue]="null">Year</option>
+                <option *ngFor="let year of yearList" [ngValue]="year" class="form-field-text-color-default">{{ year }}</option>
               </select>
             </div>
-          </div>
-
-          <div class="warning-message d-flex p-3 mb-4">
-            <img src="./../../../../content/images/warning-sign.svg" alt="Warning sign" class="p-2" />
-            <div>
-              <div class="mb-2 font-size-12 wide-text font-weight-bold">
-                Please note
-              </div>
-              <div class="font-size-12 wide-text">
-                It can take up to 24 hours before a new organization is available in the Member Portal. Please contact your ORCID engagement
-                lead for more information.
-              </div>
-            </div>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                editForm.get('terminationMonth').invalid &&
+                editForm.get('terminationYear').invalid &&
+                (editForm.get('terminationMonth').dirty && editForm.get('terminationYear').dirty)
+              "
+            >
+              Please select the membership start date
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                editForm.get('terminationMonth').invalid &&
+                editForm.get('terminationYear').valid &&
+                (editForm.get('terminationMonth').dirty && editForm.get('terminationYear').dirty)
+              "
+            >
+              Please select the membership start month
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                editForm.get('terminationMonth').valid &&
+                editForm.get('terminationYear').invalid &&
+                (editForm.get('terminationMonth').dirty && editForm.get('terminationYear').dirty)
+              "
+            >
+              Please select the membership start year
+            </small>
           </div>
           <button type="submit" [disabled]="isSaving" class="btn btn-danger">
             Remove member from consortium
