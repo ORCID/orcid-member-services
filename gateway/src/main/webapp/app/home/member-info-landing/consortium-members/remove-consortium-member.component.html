@@ -1,88 +1,97 @@
-<div *ngIf="memberData" class="h-100">
-  <div class="p-3">
-    <div class="go-back">
-      Back to <a routerLink="">{{ memberData.publicDisplayName }}</a>
-    </div>
-    <hr class="mb-4" />
-    <div class="edit-org-label mb-2 font-size-18 color-gray" *ngIf="!contactId">Remove consortium member</div>
-    <h1 class="mb-1 wide-text font-weight-bold" *ngIf="!contactId">{{ consortiumMember.orgName }}</h1>
+<div *ngIf="memberData" class="h-100 p-16 line-height-normal">
+  <div class="font-size-14">
+    Back to <a routerLink="" class="font-weight-normal text-decoration-underline">{{ memberData.publicDisplayName }}</a>
   </div>
-  <div class="d-flex">
-    <div class="main-section">
-      <form (ngSubmit)="save()" name="editForm" role="form" [formGroup]="editForm" class="w-66">
-        <div class="form">
-          <!-- Membership start date -->
+  <hr class="mb-40" />
+  <div class="edit-org-label mb-8 font-size-18 color-gray" *ngIf="!contactId">Remove consortium member</div>
+  <h1 class="wide-text font-weight-bold mb-40" *ngIf="!contactId">{{ consortiumMember.orgName }}</h1>
 
-          <h5 class="font-weight-bold font-size-18">
-            Membership termination date
-          </h5>
-          <div class="font-size-14 wide-text mb-3">
-            When does this organization's ORCID membership end?
-          </div>
-          <div class="form-group mb-4">
-            <div class="d-flex">
-              <select
-                class="form-control date-dropdown mr-2 font-size-14"
-                name="terminationMonth"
-                formControlName="terminationMonth"
-                [ngClass]="{
-                  'text-danger': editForm.get('terminationMonth').invalid && editForm.get('terminationMonth').dirty,
-                  'input-field-default-border': !editForm.get('terminationMonth').dirty
-                }"
-              >
-                <option hidden selected [ngValue]="null">Month</option>
-                <option *ngFor="let month of monthList" [ngValue]="month[0]" class="form-field-text-color-default">{{ month[0] }}</option>
-              </select>
-              <select
-                class="form-control date-dropdown font-size-14"
-                name="terminationYear"
-                formControlName="terminationYear"
-                [ngClass]="{
-                  'text-danger': editForm.get('terminationYear').invalid && editForm.get('terminationYear').dirty,
-                  'input-field-default-border': !editForm.get('terminationYear').dirty
-                }"
-              >
-                <option hidden selected [ngValue]="null">Year</option>
-                <option *ngFor="let year of yearList" [ngValue]="year" class="form-field-text-color-default">{{ year }}</option>
-              </select>
-            </div>
-            <small
-              class="form-text text-danger"
-              *ngIf="
-                editForm.get('terminationMonth').invalid &&
-                editForm.get('terminationYear').invalid &&
-                (editForm.get('terminationMonth').dirty && editForm.get('terminationYear').dirty)
-              "
-            >
-              Please select the membership start date
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="
-                editForm.get('terminationMonth').invalid &&
-                editForm.get('terminationYear').valid &&
-                (editForm.get('terminationMonth').dirty && editForm.get('terminationYear').dirty)
-              "
-            >
-              Please select the membership start month
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="
-                editForm.get('terminationMonth').valid &&
-                editForm.get('terminationYear').invalid &&
-                (editForm.get('terminationMonth').dirty && editForm.get('terminationYear').dirty)
-              "
-            >
-              Please select the membership start year
-            </small>
-          </div>
-          <button type="submit" [disabled]="isSaving" class="btn btn-danger">
-            Remove member from consortium
-          </button>
-          <button type="button" class="btn btn-outline-primary" routerLink="/">Cancel</button>
+  <div class="d-flex">
+    <form (ngSubmit)="save()" name="editForm" role="form" [formGroup]="editForm" class="w-66">
+      <div class="form w-100">
+        <!-- Membership start date -->
+
+        <h2 class="font-weight-bold font-size-16">
+          Membership termination date
+        </h2>
+        <div class="font-size-14 wide-text mb-20">
+          When does this organization's ORCID membership end?
         </div>
-      </form>
-    </div>
+        <div class="form-group mb-40">
+          <div class="d-flex">
+            <select
+              class="form-control date-dropdown mr-8 font-size-14"
+              name="terminationMonth"
+              formControlName="terminationMonth"
+              [ngClass]="{
+                'text-danger': editForm.get('terminationMonth').invalid && editForm.get('terminationMonth').dirty,
+                'input-field-default-border': !editForm.get('terminationMonth').dirty
+              }"
+            >
+              <option hidden selected [ngValue]="null">Month</option>
+              <option *ngFor="let month of monthList" [ngValue]="month[0]" class="form-field-text-color-default">{{ month[0] }}</option>
+            </select>
+            <select
+              class="form-control date-dropdown font-size-14"
+              name="terminationYear"
+              formControlName="terminationYear"
+              [ngClass]="{
+                'text-danger': editForm.get('terminationYear').invalid && editForm.get('terminationYear').dirty,
+                'input-field-default-border': !editForm.get('terminationYear').dirty
+              }"
+            >
+              <option hidden selected [ngValue]="null">Year</option>
+              <option *ngFor="let year of yearList" [ngValue]="year" class="form-field-text-color-default">{{ year }}</option>
+            </select>
+          </div>
+          <small
+            class="form-text text-danger"
+            *ngIf="
+              editForm.get('terminationMonth').invalid &&
+              editForm.get('terminationYear').invalid &&
+              (editForm.get('terminationMonth').dirty && editForm.get('terminationYear').dirty)
+            "
+          >
+            Please select the membership termination date
+          </small>
+          <small
+            class="form-text text-danger"
+            *ngIf="
+              editForm.get('terminationMonth').invalid &&
+              editForm.get('terminationYear').valid &&
+              (editForm.get('terminationMonth').dirty && editForm.get('terminationYear').dirty)
+            "
+          >
+            Please select the membership termination month
+          </small>
+          <small
+            class="form-text text-danger"
+            *ngIf="
+              editForm.get('terminationMonth').valid &&
+              editForm.get('terminationYear').invalid &&
+              (editForm.get('terminationMonth').dirty && editForm.get('terminationYear').dirty)
+            "
+          >
+            Please select the membership termination year
+          </small>
+        </div>
+        <div class="warning-message d-flex p-16 mb-40">
+          <img src="./../../../../content/images/warning-sign.svg" alt="Warning sign" class="p-8" />
+          <div>
+            <div class="mb-8 font-size-12 wide-text font-weight-bold">
+              Please note
+            </div>
+            <div class="font-size-12 wide-text line-height-150">
+              It may take up to 24 hours before this organization is updated in the Member Portal. Please contact your ORCID engagement lead
+              for more information.
+            </div>
+          </div>
+        </div>
+        <button type="submit" [disabled]="isSaving" class="btn btn-danger font-size-14">
+          Remove member from consortium
+        </button>
+        <button type="button" class="btn btn-outline-primary font-size-14" routerLink="/">Cancel</button>
+      </div>
+    </form>
   </div>
 </div>
