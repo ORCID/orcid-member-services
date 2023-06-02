@@ -1,11 +1,22 @@
 <div class="overlay" (click)="hide()"></div>
 <div class="popup">
-  <h1 class="font-weight-bold mb-4 d-flex font-size-24">
-    <img src="../../../../content/images/checkmark.svg" class="mr-2" alt="Done" />
+  <h1 class="font-weight-bold mb-20 d-flex font-size-24 align-items-center">
+    <svg class="mr-8 checkmark" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="12" fill="#A6CE39"/>
+      <path d="M7.12879 12.6618L10.6164 16.7117L16.709 6.57626" stroke="white" stroke-width="3" stroke-linecap="round"/>
+      </svg>
     <span class="mr-auto">Organization contact change</span>
-    <a (click)="hide()"><img src="../../../../content/images/close.svg" alt="Close"/></a>
+    <a (click)="hide()"
+      ><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M16 1.61143L14.3886 0L8 6.38857L1.61143 0L0 1.61143L6.38857 8L0 14.3886L1.61143 16L8 9.61143L14.3886 16L16 14.3886L9.61143 8L16 1.61143Z"
+          fill="black"
+          fill-opacity="0.9"
+        />
+      </svg>
+    </a>
   </h1>
-  <div class="font-size-14">
+  <div class="font-size-14 wide-text-25">
     Thank you for for requesting changes to your organization contacts. Our team has received your request and will process it as soon as
     possible.
   </div>
