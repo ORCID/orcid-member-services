@@ -8,11 +8,11 @@
   z-index: 9999; /* Make sure the overlay is above other elements */
 }
 
-.popup {
-  a {
-    margin-top: -2px;
-  }
+.checkmark {
+  margin-top: 2px;
+}
 
+.popup {
   position: fixed;
   width: 640px;
   padding: 2rem;

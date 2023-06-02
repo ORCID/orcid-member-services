@@ -2,6 +2,7 @@
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import 'spacing';
 
 /* ==============================================================
 Bootstrap tweaks
@@ -429,12 +430,20 @@ div.success {
   letter-spacing: 0.5px;
 }
 
+.wide-text-25 {
+  letter-spacing: 0.25px;
+}
+
 .font-size-12 {
   font-size: 0.75rem;
 }
 
 .font-size-14 {
   font-size: 0.875rem;
+}
+
+.font-size-16 {
+  font-size: 1rem;
 }
 
 .font-size-18 {
@@ -482,4 +491,16 @@ div.success {
 
 .form-field-text-color-default {
   color: #495057;
+}
+
+.text-decoration-underline {
+  text-decoration: underline;
+}
+
+.line-height-normal {
+  line-height: normal;
+}
+
+.line-height-150 {
+  line-height: 150%;
 }
