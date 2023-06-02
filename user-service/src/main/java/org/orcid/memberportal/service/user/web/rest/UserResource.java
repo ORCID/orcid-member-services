@@ -171,7 +171,7 @@ public class UserResource {
     public ResponseEntity<List<UserDTO>> getUsersBySalesforceId(@PathVariable String salesforceId) {
         User currentUser = getCurrentUser();
         if (!currentUser.getSalesforceId().equals(salesforceId)) {
-            throw new BadRequestAlertException("Salesforce id doesn't match current user's memeber");
+            throw new BadRequestAlertException("Salesforce id doesn't match current user's memeber", "User", "badSalesforceId");
         }
         List<UserDTO> users = userService.getAllUsersBySalesforceId(salesforceId);
         return new ResponseEntity<>(users, HttpStatus.OK);
