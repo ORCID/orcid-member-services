@@ -32,7 +32,7 @@ describe('Test homepage', () => {
     cy.get('.side-bar').contains("No email added")
     cy.get('.main-section').contains("Consortium lead")
     cy.get('.main-section').contains("Mambo No 5")
-    cy.get('.main-section').contains("Consortium Members (4)")
+    cy.get('.main-section').contains("Consortium Members (1)")
     cy.get('.main-section').contains("Member name")
     cy.get('.main-section').contains("Almonds Forest")
     cy.get('.main-section').contains('Contacts')
