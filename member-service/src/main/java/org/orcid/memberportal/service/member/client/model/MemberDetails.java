@@ -5,45 +5,51 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonRootName(value="member")
 public class MemberDetails {
-    
+
     @JsonProperty("Id")
     private String id;
-    
+
     @JsonProperty("Consortia_Member__c")
     private boolean consortiaMember;
-    
+
     @JsonProperty("Consortium_Lead__c")
     private String consortiaLeadId;
-    
+
     @JsonProperty("Name")
     private String name;
-    
+
     @JsonProperty("Public_Display_Name__c")
     private String publicDisplayName;
-    
+
     @JsonProperty("Website")
     private String website;
-    
+
     @JsonProperty("BillingCountry")
     private String billingCountry;
-    
+
     @JsonProperty("Research_Community__c")
     private String memberType;
-    
+
     @JsonProperty("Public_Display_Description__c")
     private String publicDisplayDescriptionHtml;
-    
+
     @JsonProperty("Logo_Description__c")
     private String logoUrl;
-    
+
     @JsonProperty("Public_Display_Email__c")
     private String publicDisplayEmail;
-    
+
     @JsonProperty("Last_membership_start_date__c")
     private String membershipStartDateString;
-    
+
     @JsonProperty("Last_membership_end_date__c")
     private String membershipEndDateString;
+
+    @JsonProperty("Trademark_License__c")
+    private String trademarkLicense;
+
+    @JsonProperty("BillingAddress")
+    private BillingAddress billingAddress;
 
     public String getId() {
         return id;
@@ -148,5 +154,20 @@ public class MemberDetails {
     public void setMembershipEndDateString(String membershipEndDateString) {
         this.membershipEndDateString = membershipEndDateString;
     }
-    
+
+    public String getTrademarkLicense() {
+        return trademarkLicense;
+    }
+
+    public void setTrademarkLicense(String trademarkLicense) {
+        this.trademarkLicense = trademarkLicense;
+    }
+
+    public BillingAddress getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(BillingAddress billingAddress) {
+        this.billingAddress = billingAddress;
+    }
 }
