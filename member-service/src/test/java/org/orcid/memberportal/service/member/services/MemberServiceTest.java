@@ -31,7 +31,7 @@ import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgId;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
-import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
+import org.orcid.memberportal.service.member.client.model.MemberUpdateData;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
 import org.orcid.memberportal.service.member.security.EncryptUtil;
@@ -83,7 +83,7 @@ class MemberServiceTest {
     private ArgumentCaptor<Member> memberCaptor;
 
     @Captor
-    private ArgumentCaptor<PublicMemberDetails> publicMemberDetailsCaptor;
+    private ArgumentCaptor<MemberUpdateData> publicMemberDetailsCaptor;
 
     @BeforeEach
     public void setUp() {
@@ -516,19 +516,19 @@ class MemberServiceTest {
     void testUpdatePublicMemberDetails() throws IOException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
-        Mockito.when(salesforceClient.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(Boolean.TRUE);
+        Mockito.when(salesforceClient.updatePublicMemberDetails(Mockito.any(MemberUpdateData.class))).thenReturn(Boolean.TRUE);
 
-        PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
-        memberService.updatePublicMemberDetails(publicMemberDetails);
+        MemberUpdateData memberUpdateData = getPublicMemberDetails();
+        memberService.updateMemberData(memberUpdateData);
 
         Mockito.verify(salesforceClient).updatePublicMemberDetails(publicMemberDetailsCaptor.capture());
-        PublicMemberDetails details = publicMemberDetailsCaptor.getValue();
+        MemberUpdateData details = publicMemberDetailsCaptor.getValue();
         assertThat(details).isNotNull();
         assertThat(details.getSalesforceId()).isEqualTo("salesforceId");
-        assertThat(details.getName()).isEqualTo(publicMemberDetails.getName());
-        assertThat(details.getDescription()).isEqualTo(publicMemberDetails.getDescription());
-        assertThat(details.getWebsite()).isEqualTo(publicMemberDetails.getWebsite());
-        assertThat(details.getEmail()).isEqualTo(publicMemberDetails.getEmail());
+        assertThat(details.getName()).isEqualTo(memberUpdateData.getName());
+        assertThat(details.getDescription()).isEqualTo(memberUpdateData.getDescription());
+        assertThat(details.getWebsite()).isEqualTo(memberUpdateData.getWebsite());
+        assertThat(details.getEmail()).isEqualTo(memberUpdateData.getEmail());
     }
 
     @Test
@@ -663,13 +663,13 @@ class MemberServiceTest {
         });
     }
 
-    private PublicMemberDetails getPublicMemberDetails() {
-        PublicMemberDetails publicMemberDetails = new PublicMemberDetails();
-        publicMemberDetails.setName("test member details");
-        publicMemberDetails.setWebsite("https://website.com");
-        publicMemberDetails.setDescription("test");
-        publicMemberDetails.setEmail("email@orcid.org");
-        return publicMemberDetails;
+    private MemberUpdateData getPublicMemberDetails() {
+        MemberUpdateData memberUpdateData = new MemberUpdateData();
+        memberUpdateData.setName("test member details");
+        memberUpdateData.setWebsite("https://website.com");
+        memberUpdateData.setDescription("test");
+        memberUpdateData.setEmail("email@orcid.org");
+        return memberUpdateData;
     }
 
     private MemberOrgIds getMemberOrgIds() {
