@@ -199,7 +199,7 @@ public class MemberResource {
     }
 
     /**
-     * {@code PUT  /member-details} : get details of member to which current user belongs
+     * {@code PUT  /members/{salesforceId}/member-details} : get details of member specified by salesforceId param
      *
      * @return the {@link MemberDetails}
      */
@@ -215,7 +215,7 @@ public class MemberResource {
     }
 
     /**
-     * {@code GET  /member-contacts} : get contacts of member to which current user belongs
+     * {@code GET  /members/{salesforceId}/member-contacts} : get contacts of member specified by salesforceId param
      *
      * @return the {@link MemberDetails}
      */
@@ -231,7 +231,7 @@ public class MemberResource {
     }
 
     /**
-     * {@code GET  /member-org-ids} : get org ids of member to which current user belongs
+     * {@code GET  /members/{salesforceId}/member-org-ids} : get org ids of member specified by salesforceId param
      *
      * @return the {@link MemberDetails}
      */
