@@ -163,7 +163,7 @@ export class MSMemberService {
   }
 
   updatePublicDetails(publicDetails: ISFPublicDetails, salesforceId: string): Observable<HttpResponse<any>> {
-    return this.http.put(`${this.resourceUrl}/members/${salesforceId}/public-details`, publicDetails, { observe: 'response' });
+    return this.http.put(`${this.resourceUrl}/members/${salesforceId}/member-details`, publicDetails, { observe: 'response' });
   }
 
   getConsortiaLeadName(consortiaLeadId: string): Observable<EntityResponseType> {
