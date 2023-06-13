@@ -22,6 +22,7 @@ import org.orcid.memberportal.service.member.upload.MembersUploadReader;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
 import org.orcid.memberportal.service.member.validation.MemberValidator;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.member.web.rest.errors.UnauthorizedMemberAccessException;
 import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
 import org.orcid.memberportal.service.member.web.rest.vm.RemoveConsortiumMember;
@@ -269,22 +270,13 @@ public class MemberService {
 
     }
 
-    public MemberDetails getCurrentMemberDetails() {
-        LOG.info("Finding current member details...");
-        String salesforceId = userService.getLoggedInUser().getSalesforceId();
-
-        LOG.info("Current member sf id: {}", salesforceId);
+    public MemberDetails getCurrentMemberDetails(String salesforceId) throws UnauthorizedMemberAccessException {
+        validateUserAccess(salesforceId);
         Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
-
-        LOG.info("Found member {}", member.getClientName());
-        LOG.info("Member is consortium lead: {}", member.getIsConsortiumLead());
-
         try {
             if (Boolean.TRUE.equals(member.getIsConsortiumLead())) {
-                LOG.info("getting consortium lead details for sfid {}", salesforceId);
                 return salesforceClient.getConsortiumLeadDetails(salesforceId);
             } else {
-                LOG.info("getting member details for sfid {}", salesforceId);
                 return salesforceClient.getMemberDetails(salesforceId);
             }
         } catch (IOException e) {
@@ -293,8 +285,8 @@ public class MemberService {
         }
     }
 
-    public Boolean updateMemberData(@Valid MemberUpdateData memberUpdateData) {
-        String salesforceId = userService.getLoggedInUser().getSalesforceId();
+    public Boolean updateMemberData(MemberUpdateData memberUpdateData, String salesforceId) throws UnauthorizedMemberAccessException {
+        validateUserAccess(salesforceId);
         memberUpdateData.setSalesforceId(salesforceId);
         try {
             return salesforceClient.updatePublicMemberDetails(memberUpdateData);
@@ -304,8 +296,8 @@ public class MemberService {
         }
     }
 
-    public MemberContacts getCurrentMemberContacts() {
-        String salesforceId = userService.getLoggedInUser().getSalesforceId();
+    public MemberContacts getCurrentMemberContacts(String salesforceId) throws UnauthorizedMemberAccessException {
+        validateUserAccess(salesforceId);
         try {
             return salesforceClient.getMemberContacts(salesforceId);
         } catch (IOException e) {
@@ -314,8 +306,8 @@ public class MemberService {
         }
     }
 
-    public MemberOrgIds getCurrentMemberOrgIds() {
-        String salesforceId = userService.getLoggedInUser().getSalesforceId();
+    public MemberOrgIds getCurrentMemberOrgIds(String salesforceId) throws UnauthorizedMemberAccessException {
+        validateUserAccess(salesforceId);
         try {
             return salesforceClient.getMemberOrgIds(salesforceId);
         } catch (IOException e) {
@@ -335,7 +327,8 @@ public class MemberService {
         }
     }
 
-    public void processMemberContact(MemberContactUpdate memberContactUpdate) {
+    public void processMemberContact(MemberContactUpdate memberContactUpdate, String salesforceId) throws UnauthorizedMemberAccessException {
+        validateUserAccess(salesforceId);
         MemberServiceUser user = userService.getLoggedInUser();
         memberContactUpdate.setRequestedByEmail(user.getEmail());
         memberContactUpdate.setRequestedByName(user.getFirstName() + " " + user.getLastName());
@@ -386,5 +379,24 @@ public class MemberService {
 
 
         mailService.sendRemoveConsortiumMemberEmail(removeConsortiumMember);
+    }
+
+    /**
+     * validates whether current user can access member with specified salesforceId
+     *
+     * @param salesforceId
+     */
+    private void validateUserAccess(String salesforceId) throws UnauthorizedMemberAccessException {
+        MemberServiceUser user = userService.getLoggedInUser();
+        if (!user.getSalesforceId().equals(salesforceId)) {
+            // user not accessing own member
+
+            Optional<Member> member = memberRepository.findBySalesforceId(salesforceId);
+            if (!user.getSalesforceId().equals(member.get().getParentSalesforceId())) {
+                // member not part of user's consortium
+                LOG.warn("Illegal attempt by user {} to access member {}", user.getEmail(), salesforceId);
+                throw new UnauthorizedMemberAccessException(user.getEmail(), salesforceId);
+            }
+        }
     }
 }
