@@ -42,6 +42,7 @@ import org.orcid.memberportal.service.member.upload.MembersUploadReader;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
 import org.orcid.memberportal.service.member.validation.MemberValidator;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
+import org.orcid.memberportal.service.member.web.rest.errors.UnauthorizedMemberAccessException;
 import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
 import org.orcid.memberportal.service.member.web.rest.vm.RemoveConsortiumMember;
@@ -409,21 +410,21 @@ class MemberServiceTest {
         Mockito.verify(memberRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
 
         Mockito.when(memberRepository.findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(Mockito.anyString(),
-                Mockito.anyString(), Mockito.anyString(), Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember())));
+            Mockito.anyString(), Mockito.anyString(), Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember())));
         page = memberService.getMembers(Mockito.mock(Pageable.class), "test");
         assertNotNull(page);
         assertEquals(3, page.getTotalElements());
         Mockito.verify(memberRepository, Mockito.times(1)).findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
-                Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Pageable.class));
+            Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Pageable.class));
     }
 
     @Test
-    void testGetCurrentMemberDetails() throws IOException {
+    void testGetCurrentMemberDetails() throws IOException, UnauthorizedMemberAccessException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
         Mockito.when(salesforceClient.getMemberDetails(Mockito.eq("salesforceId"))).thenReturn(getMemberDetails());
 
-        MemberDetails memberDetails = memberService.getCurrentMemberDetails();
+        MemberDetails memberDetails = memberService.getCurrentMemberDetails("salesforceId");
         assertThat(memberDetails).isNotNull();
         assertThat(memberDetails.getName()).isEqualTo("test member details");
         assertThat(memberDetails.getPublicDisplayName()).isEqualTo("public display name");
@@ -441,12 +442,12 @@ class MemberServiceTest {
     }
 
     @Test
-    void testGetCurrentMemberContacts() throws IOException {
+    void testGetCurrentMemberContacts() throws IOException, UnauthorizedMemberAccessException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
         Mockito.when(salesforceClient.getMemberContacts(Mockito.eq("salesforceId"))).thenReturn(getMemberContacts());
 
-        MemberContacts memberContacts = memberService.getCurrentMemberContacts();
+        MemberContacts memberContacts = memberService.getCurrentMemberContacts("salesforceId");
         assertThat(memberContacts).isNotNull();
         assertThat(memberContacts.getTotalSize()).isEqualTo(2);
         assertThat(memberContacts.getRecords()).isNotNull();
@@ -468,12 +469,51 @@ class MemberServiceTest {
     }
 
     @Test
-    void testGetCurrentMemberOrgIds() throws IOException {
+    void testGetCurrentMemberContacts_forConsortiumMemberByConsortiumLead() throws IOException, UnauthorizedMemberAccessException {
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getCLUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(salesforceClient.getMemberContacts(Mockito.eq("salesforceId"))).thenReturn(getMemberContacts());
+
+        MemberContacts memberContacts = memberService.getCurrentMemberContacts("salesforceId");
+        assertThat(memberContacts).isNotNull();
+        assertThat(memberContacts.getTotalSize()).isEqualTo(2);
+        assertThat(memberContacts.getRecords()).isNotNull();
+        assertThat(memberContacts.getRecords().size()).isEqualTo(2);
+        assertThat(memberContacts.getRecords().get(0).getName()).isEqualTo("contact 1");
+        assertThat(memberContacts.getRecords().get(0).getTitle()).isEqualTo("Dr");
+        assertThat(memberContacts.getRecords().get(0).getPhone()).isEqualTo("123456789");
+        assertThat(memberContacts.getRecords().get(0).getEmail()).isEqualTo("contact1@orcid.org");
+        assertThat(memberContacts.getRecords().get(0).getRole()).isEqualTo("contact one role");
+        assertThat(memberContacts.getRecords().get(0).getSalesforceId()).isEqualTo("salesforce-id");
+        assertThat(memberContacts.getRecords().get(0).isVotingContact()).isEqualTo(false);
+        assertThat(memberContacts.getRecords().get(1).getName()).isEqualTo("contact 2");
+        assertThat(memberContacts.getRecords().get(1).getTitle()).isNull();
+        assertThat(memberContacts.getRecords().get(1).getPhone()).isNull();
+        assertThat(memberContacts.getRecords().get(1).getEmail()).isEqualTo("contact2@orcid.org");
+        assertThat(memberContacts.getRecords().get(1).getRole()).isEqualTo("contact two role");
+        assertThat(memberContacts.getRecords().get(1).getSalesforceId()).isEqualTo("salesforce-id");
+        assertThat(memberContacts.getRecords().get(1).isVotingContact()).isEqualTo(true);
+    }
+
+    @Test
+    void testGetCurrentMemberContacts_unauthorizedMemberAccess() throws IOException, UnauthorizedMemberAccessException {
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("differentSalesforceId"))).thenReturn(Optional.of(getMember()));
+
+        Assertions.assertThrows(UnauthorizedMemberAccessException.class, () -> {
+            MemberContacts memberContacts = memberService.getCurrentMemberContacts("differentSalesforceId");
+        });
+
+        Mockito.verify(salesforceClient, Mockito.never()).getMemberContacts(Mockito.anyString());
+    }
+
+    @Test
+    void testGetCurrentMemberOrgIds() throws IOException, UnauthorizedMemberAccessException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
         Mockito.when(salesforceClient.getMemberOrgIds(Mockito.eq("salesforceId"))).thenReturn(getMemberOrgIds());
 
-        MemberOrgIds memberOrgIds = memberService.getCurrentMemberOrgIds();
+        MemberOrgIds memberOrgIds = memberService.getCurrentMemberOrgIds("salesforceId");
         assertThat(memberOrgIds).isNotNull();
         assertThat(memberOrgIds.getTotalSize()).isEqualTo(2);
         assertThat(memberOrgIds.getRecords()).isNotNull();
@@ -485,12 +525,42 @@ class MemberServiceTest {
     }
 
     @Test
-    void testGetCurrentMemberDetails_consortiumLead() throws IOException {
+    void testGetCurrentMemberOrgIds_forConsortiumMemberByConsortiumLead() throws IOException, UnauthorizedMemberAccessException {
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getCLUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(salesforceClient.getMemberOrgIds(Mockito.eq("salesforceId"))).thenReturn(getMemberOrgIds());
+
+        MemberOrgIds memberOrgIds = memberService.getCurrentMemberOrgIds("salesforceId");
+        assertThat(memberOrgIds).isNotNull();
+        assertThat(memberOrgIds.getTotalSize()).isEqualTo(2);
+        assertThat(memberOrgIds.getRecords()).isNotNull();
+        assertThat(memberOrgIds.getRecords().size()).isEqualTo(2);
+        assertThat(memberOrgIds.getRecords().get(0).getType()).isEqualTo("Ringgold ID");
+        assertThat(memberOrgIds.getRecords().get(0).getValue()).isEqualTo("9988776655");
+        assertThat(memberOrgIds.getRecords().get(1).getType()).isEqualTo("GRID");
+        assertThat(memberOrgIds.getRecords().get(1).getValue()).isEqualTo("grid.238252");
+    }
+
+    @Test
+    void testGetCurrentMemberOrgIds_unauthorizedMemberAccess() throws IOException, UnauthorizedMemberAccessException {
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("differentSalesforceId"))).thenReturn(Optional.of(getMember()));
+
+        Assertions.assertThrows(UnauthorizedMemberAccessException.class, () -> {
+            MemberOrgIds memberOrgIds = memberService.getCurrentMemberOrgIds("differentSalesforceId");
+        });
+
+        Mockito.verify(salesforceClient, Mockito.never()).getMemberOrgIds(Mockito.anyString());
+
+    }
+
+    @Test
+    void testGetCurrentMemberDetails_consortiumLead() throws IOException, UnauthorizedMemberAccessException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
         Mockito.when(salesforceClient.getConsortiumLeadDetails(Mockito.eq("salesforceId"))).thenReturn(getConsortiumLeadDetails());
 
-        ConsortiumLeadDetails consortiumLeadDetails = (ConsortiumLeadDetails) memberService.getCurrentMemberDetails();
+        ConsortiumLeadDetails consortiumLeadDetails = (ConsortiumLeadDetails) memberService.getCurrentMemberDetails("salesforceId");
         assertThat(consortiumLeadDetails).isNotNull();
         assertThat(consortiumLeadDetails.getName()).isEqualTo("test member details");
         assertThat(consortiumLeadDetails.getPublicDisplayName()).isEqualTo("public display name");
@@ -513,13 +583,48 @@ class MemberServiceTest {
     }
 
     @Test
-    void testUpdatePublicMemberDetails() throws IOException {
+    void testGetCurrentMemberDetails_forConsortiumMemberByConsortiumLead() throws IOException, UnauthorizedMemberAccessException {
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getCLUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(salesforceClient.getMemberDetails(Mockito.eq("salesforceId"))).thenReturn(getMemberDetails());
+
+        MemberDetails memberDetails = memberService.getCurrentMemberDetails("salesforceId");
+        assertThat(memberDetails).isNotNull();
+        assertThat(memberDetails.getName()).isEqualTo("test member details");
+        assertThat(memberDetails.getPublicDisplayName()).isEqualTo("public display name");
+        assertThat(memberDetails.getWebsite()).isEqualTo("https://website.com");
+        assertThat(memberDetails.getMembershipStartDateString()).isEqualTo("2022-01-01");
+        assertThat(memberDetails.getMembershipEndDateString()).isEqualTo("2027-01-01");
+        assertThat(memberDetails.getPublicDisplayEmail()).isEqualTo("orcid@testmember.com");
+        assertThat(memberDetails.getConsortiaLeadId()).isNull();
+        assertThat(memberDetails.isConsortiaMember()).isFalse();
+        assertThat(memberDetails.getPublicDisplayDescriptionHtml()).isEqualTo("<p>public display description</p>");
+        assertThat(memberDetails.getMemberType()).isEqualTo("Research Institute");
+        assertThat(memberDetails.getLogoUrl()).isEqualTo("some/url/for/a/logo");
+        assertThat(memberDetails.getBillingCountry()).isEqualTo("Denmark");
+        assertThat(memberDetails.getId()).isEqualTo("id");
+    }
+
+    @Test
+    void testGetCurrentMemberDetails_unauthorizedMemberAccess() throws IOException, UnauthorizedMemberAccessException {
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("differentSalesforceId"))).thenReturn(Optional.of(getMember()));
+
+        Assertions.assertThrows(UnauthorizedMemberAccessException.class, () -> {
+            MemberDetails memberDetails = memberService.getCurrentMemberDetails("differentSalesforceId");
+        });
+
+        Mockito.verify(salesforceClient, Mockito.never()).getMemberDetails(Mockito.anyString());
+    }
+
+    @Test
+    void testUpdatePublicMemberDetails() throws IOException, UnauthorizedMemberAccessException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
         Mockito.when(salesforceClient.updatePublicMemberDetails(Mockito.any(MemberUpdateData.class))).thenReturn(Boolean.TRUE);
 
         MemberUpdateData memberUpdateData = getPublicMemberDetails();
-        memberService.updateMemberData(memberUpdateData);
+        memberService.updateMemberData(memberUpdateData, "salesforceId");
 
         Mockito.verify(salesforceClient).updatePublicMemberDetails(publicMemberDetailsCaptor.capture());
         MemberUpdateData details = publicMemberDetailsCaptor.getValue();
@@ -529,6 +634,39 @@ class MemberServiceTest {
         assertThat(details.getDescription()).isEqualTo(memberUpdateData.getDescription());
         assertThat(details.getWebsite()).isEqualTo(memberUpdateData.getWebsite());
         assertThat(details.getEmail()).isEqualTo(memberUpdateData.getEmail());
+    }
+
+    @Test
+    void testUpdatePublicMemberDetails_forConsortiumMemberByConsortiumLead() throws IOException, UnauthorizedMemberAccessException {
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getCLUser());
+        Mockito.when(salesforceClient.updatePublicMemberDetails(Mockito.any(MemberUpdateData.class))).thenReturn(Boolean.TRUE);
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+
+        MemberUpdateData memberUpdateData = getPublicMemberDetails();
+        memberService.updateMemberData(memberUpdateData, "salesforceId");
+
+        Mockito.verify(salesforceClient).updatePublicMemberDetails(publicMemberDetailsCaptor.capture());
+        MemberUpdateData details = publicMemberDetailsCaptor.getValue();
+        assertThat(details).isNotNull();
+        assertThat(details.getSalesforceId()).isEqualTo("salesforceId");
+        assertThat(details.getName()).isEqualTo(memberUpdateData.getName());
+        assertThat(details.getDescription()).isEqualTo(memberUpdateData.getDescription());
+        assertThat(details.getWebsite()).isEqualTo(memberUpdateData.getWebsite());
+        assertThat(details.getEmail()).isEqualTo(memberUpdateData.getEmail());
+    }
+
+    @Test
+    void testUpdatePublicMemberDetails_unauthorizedMemberAccess() throws IOException, UnauthorizedMemberAccessException {
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(salesforceClient.updatePublicMemberDetails(Mockito.any(MemberUpdateData.class))).thenReturn(Boolean.TRUE);
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("differentSalesforceId"))).thenReturn(Optional.of(getMember()));
+
+        MemberUpdateData memberUpdateData = getPublicMemberDetails();
+        Assertions.assertThrows(UnauthorizedMemberAccessException.class, () -> {
+            memberService.updateMemberData(memberUpdateData, "differentSalesforceId");
+        });
+
+        Mockito.verify(salesforceClient, Mockito.never()).updatePublicMemberDetails(Mockito.any());
     }
 
     @Test
@@ -555,7 +693,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void testProcessMemberContact_add() {
+    void testProcessMemberContact_add() throws UnauthorizedMemberAccessException {
         Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
         Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
         Mockito.doNothing().when(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
@@ -564,14 +702,49 @@ class MemberServiceTest {
         MemberContactUpdate update = new MemberContactUpdate();
         update.setContactNewEmail("a.contact@email.com");
 
-        memberService.processMemberContact(update);
+        memberService.processMemberContact(update, "salesforceId");
 
         Mockito.verify(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
-        Mockito.verify(userService).getLoggedInUser();
+        Mockito.verify(userService, Mockito.times(2)).getLoggedInUser();
     }
 
     @Test
-    void testProcessMemberContact_remove() {
+    void testProcessMemberContact_add_forConsortiumMemberByConsortiumLead() throws UnauthorizedMemberAccessException {
+        Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getCLUser());
+
+        MemberContactUpdate update = new MemberContactUpdate();
+        update.setContactNewEmail("a.contact@email.com");
+
+        memberService.processMemberContact(update, "salesforceId");
+
+        Mockito.verify(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.verify(userService, Mockito.times(2)).getLoggedInUser();
+    }
+
+    @Test
+    void testProcessMemberContact_add_unauthorizedMemberAccess() throws UnauthorizedMemberAccessException {
+        Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("differentSalesforceId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+
+        MemberContactUpdate update = new MemberContactUpdate();
+        update.setContactNewEmail("a.contact@email.com");
+
+        Assertions.assertThrows(UnauthorizedMemberAccessException.class, () -> {
+            memberService.processMemberContact(update, "differentSalesforceId");
+        });
+
+        Mockito.verify(mailService, Mockito.never()).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
+    }
+
+    @Test
+    void testProcessMemberContact_remove() throws UnauthorizedMemberAccessException {
         Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
         Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
         Mockito.doNothing().when(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
@@ -580,14 +753,49 @@ class MemberServiceTest {
         MemberContactUpdate update = new MemberContactUpdate();
         update.setContactEmail("a.contact@email.com");
 
-        memberService.processMemberContact(update);
+        memberService.processMemberContact(update, "salesforceId");
 
         Mockito.verify(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
-        Mockito.verify(userService).getLoggedInUser();
+        Mockito.verify(userService, Mockito.times(2)).getLoggedInUser();
     }
 
     @Test
-    void testProcessMemberContact_update() {
+    void testProcessMemberContact_remove_forConsortiumMemberByConsortiumLead() throws UnauthorizedMemberAccessException {
+        Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getCLUser());
+
+        MemberContactUpdate update = new MemberContactUpdate();
+        update.setContactEmail("a.contact@email.com");
+
+        memberService.processMemberContact(update, "salesforceId");
+
+        Mockito.verify(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.verify(userService, Mockito.times(2)).getLoggedInUser();
+    }
+
+    @Test
+    void testProcessMemberContact_remove_unauthorizedMemberAccess() throws UnauthorizedMemberAccessException {
+        Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("differentSalesforceId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+
+        MemberContactUpdate update = new MemberContactUpdate();
+        update.setContactEmail("a.contact@email.com");
+
+        Assertions.assertThrows(UnauthorizedMemberAccessException.class, () -> {
+            memberService.processMemberContact(update, "differentSalesforceId");
+        });
+
+        Mockito.verify(mailService, Mockito.never()).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
+    }
+
+    @Test
+    void testProcessMemberContact_update() throws UnauthorizedMemberAccessException {
         Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
         Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
         Mockito.doNothing().when(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
@@ -597,10 +805,47 @@ class MemberServiceTest {
         update.setContactEmail("a.contact@email.com");
         update.setContactNewEmail("a.new.contact@email.com");
 
-        memberService.processMemberContact(update);
+        memberService.processMemberContact(update, "salesforceId");
 
         Mockito.verify(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
-        Mockito.verify(userService).getLoggedInUser();
+        Mockito.verify(userService, Mockito.times(2)).getLoggedInUser();
+    }
+
+    @Test
+    void testProcessMemberContact_update_forConsortiumMemberByConsortiumLead() throws UnauthorizedMemberAccessException {
+        Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getCLUser());
+
+        MemberContactUpdate update = new MemberContactUpdate();
+        update.setContactEmail("a.contact@email.com");
+        update.setContactNewEmail("a.new.contact@email.com");
+
+        memberService.processMemberContact(update, "salesforceId");
+
+        Mockito.verify(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.verify(userService, Mockito.times(2)).getLoggedInUser();
+    }
+
+    @Test
+    void testProcessMemberContact_update_unauthorizedMemberAccess() throws UnauthorizedMemberAccessException {
+        Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(mailService).sendRemoveContactEmail(Mockito.any(MemberContactUpdate.class));
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("differentSalesforceId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+
+        MemberContactUpdate update = new MemberContactUpdate();
+        update.setContactEmail("a.contact@email.com");
+        update.setContactNewEmail("a.new.contact@email.com");
+
+        Assertions.assertThrows(UnauthorizedMemberAccessException.class, () -> {
+            memberService.processMemberContact(update, "differentSalesforceId");
+        });
+
+        Mockito.verify(mailService, Mockito.never()).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
     }
 
     @Test
@@ -796,6 +1041,15 @@ class MemberServiceTest {
         return user;
     }
 
+    private MemberServiceUser getCLUser() {
+        MemberServiceUser user = new MemberServiceUser();
+        user.setEmail("logged-in-user@orcid.org");
+        user.setLangKey("en");
+        user.setSalesforceId("parentSalesforceId");
+        user.setMemberName("member");
+        return user;
+    }
+
     private Member getMember() {
         Member member = new Member();
         member.setAssertionServiceEnabled(true);
@@ -803,7 +1057,7 @@ class MemberServiceTest {
         member.setClientName("clientname");
         member.setIsConsortiumLead(false);
         member.setSalesforceId("two");
-        member.setParentSalesforceId("some parent");
+        member.setParentSalesforceId("parentSalesforceId");
         return member;
     }
 
