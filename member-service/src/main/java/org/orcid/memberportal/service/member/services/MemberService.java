@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.validation.Valid;
-
 import org.orcid.memberportal.service.member.client.SalesforceClient;
 import org.orcid.memberportal.service.member.client.model.*;
 import org.orcid.memberportal.service.member.domain.Member;
@@ -270,7 +268,7 @@ public class MemberService {
 
     }
 
-    public MemberDetails getCurrentMemberDetails(String salesforceId) throws UnauthorizedMemberAccessException {
+    public MemberDetails getMemberDetails(String salesforceId) throws UnauthorizedMemberAccessException {
         validateUserAccess(salesforceId);
         Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
         try {

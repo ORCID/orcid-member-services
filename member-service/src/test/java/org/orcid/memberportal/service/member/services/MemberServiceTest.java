@@ -424,7 +424,7 @@ class MemberServiceTest {
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
         Mockito.when(salesforceClient.getMemberDetails(Mockito.eq("salesforceId"))).thenReturn(getMemberDetails());
 
-        MemberDetails memberDetails = memberService.getCurrentMemberDetails("salesforceId");
+        MemberDetails memberDetails = memberService.getMemberDetails("salesforceId");
         assertThat(memberDetails).isNotNull();
         assertThat(memberDetails.getName()).isEqualTo("test member details");
         assertThat(memberDetails.getPublicDisplayName()).isEqualTo("public display name");
@@ -560,7 +560,7 @@ class MemberServiceTest {
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
         Mockito.when(salesforceClient.getConsortiumLeadDetails(Mockito.eq("salesforceId"))).thenReturn(getConsortiumLeadDetails());
 
-        ConsortiumLeadDetails consortiumLeadDetails = (ConsortiumLeadDetails) memberService.getCurrentMemberDetails("salesforceId");
+        ConsortiumLeadDetails consortiumLeadDetails = (ConsortiumLeadDetails) memberService.getMemberDetails("salesforceId");
         assertThat(consortiumLeadDetails).isNotNull();
         assertThat(consortiumLeadDetails.getName()).isEqualTo("test member details");
         assertThat(consortiumLeadDetails.getPublicDisplayName()).isEqualTo("public display name");
@@ -588,7 +588,7 @@ class MemberServiceTest {
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
         Mockito.when(salesforceClient.getMemberDetails(Mockito.eq("salesforceId"))).thenReturn(getMemberDetails());
 
-        MemberDetails memberDetails = memberService.getCurrentMemberDetails("salesforceId");
+        MemberDetails memberDetails = memberService.getMemberDetails("salesforceId");
         assertThat(memberDetails).isNotNull();
         assertThat(memberDetails.getName()).isEqualTo("test member details");
         assertThat(memberDetails.getPublicDisplayName()).isEqualTo("public display name");
@@ -611,7 +611,7 @@ class MemberServiceTest {
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("differentSalesforceId"))).thenReturn(Optional.of(getMember()));
 
         Assertions.assertThrows(UnauthorizedMemberAccessException.class, () -> {
-            MemberDetails memberDetails = memberService.getCurrentMemberDetails("differentSalesforceId");
+            MemberDetails memberDetails = memberService.getMemberDetails("differentSalesforceId");
         });
 
         Mockito.verify(salesforceClient, Mockito.never()).getMemberDetails(Mockito.anyString());
