@@ -1,0 +1,111 @@
+repos:
+
+#   - repo: https://github.com/pre-commit/pre-commit-hooks
+#     rev: v4.4.0
+#     hooks:
+#       - id: check-added-large-files
+#         name: check for added large files
+#         description: prevents giant files from being committed.
+#         entry: check-added-large-files
+#         language: python
+#         stages: [commit, push, manual]
+#         exclude: ^tx
+# 
+# #       - id: check-executables-have-shebangs
+# #         name: check that executables have shebangs
+# #         description: ensures that (non-binary) executables have a shebang.
+# #         entry: check-executables-have-shebangs
+# #         language: python
+# #         types: [text, executable]
+# #         stages: [commit, push, manual]
+# #
+#       - id: check-yaml
+#         name: check yaml
+#         description: checks yaml files for parseable syntax.
+#         entry: check-yaml
+#         args: ["--allow-multiple-documents"]
+#         language: python
+#         exclude: ".ytt.yaml$"
+#         types: [yaml]
+# 
+#       - id: check-merge-conflict
+#         name: check for merge conflicts
+#         description: checks for files that contain merge conflict strings.
+#         entry: check-merge-conflict
+#         language: python
+#         types: [text]
+# 
+#       - id: trailing-whitespace
+#         name: trim trailing whitespace
+#         description: trims trailing whitespace.
+#         entry: trailing-whitespace-fixer
+#         language: python
+#         types: [text]
+#         stages: [commit, push, manual]
+# 
+#       - id: mixed-line-ending
+#         name: mixed line ending
+#         description: replaces or checks mixed line ending.
+#         entry: mixed-line-ending
+#         language: python
+#         exclude: ".csv$"
+#         types: [text]
+# 
+#   - repo: https://gitlab.com/bmares/check-json5
+#     rev: v1.0.0
+#     hooks:
+#       - id: check-json5
+# 
+
+  - repo: local
+    hooks:
+      - id: actionlint
+        name: actionlint
+        entry: actionlint
+        language: golang
+        additional_dependencies:
+          [github.com/rhysd/actionlint/cmd/actionlint@v1.6.23]
+        types: [yaml]
+        files: "^.github/workflows/"
+
+#       - id: prettier
+#         name: prettier-local
+#         types: [javascript,css,xml]
+#         entry: prettier --write --list-different --ignore-unknown
+#         #entry: prettier --check --loglevel debug
+#         additional_dependencies:
+#           - "prettier@2.8.8"
+#           - "@prettier/plugin-xml@v2.2.0"
+#           - "prettier-plugin-java@v2.1.0"
+#         language: node
+#         args: []
+#         exclude: ".pom$"
+#         require_serial: false
+#         minimum_pre_commit_version: "0"
+#
+
+  # NOTE: see spotless.xml to see how it is configured
+  - repo: https://github.com/ORCID/pre-commit-spotless
+    rev: v1.0.0
+    hooks:
+      - id: spotless-check
+        #types_or: [java, xml]
+        types_or: [xml]
+      - id: spotless-apply
+        #types_or: [java, xml]
+        types_or: [xml]
+
+##########
+# pre-commit-ci config
+
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ""
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

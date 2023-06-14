@@ -26,6 +26,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.orcid.memberportal.service.member.client.model.BillingAddress;
 import org.orcid.memberportal.service.member.client.model.ConsortiumLeadDetails;
 import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
 import org.orcid.memberportal.service.member.client.model.MemberContact;
@@ -33,7 +34,7 @@ import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgId;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
-import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
+import org.orcid.memberportal.service.member.client.model.MemberUpdateData;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -330,6 +331,8 @@ public class SalesforceClientTest {
         memberDetails.setMembershipStartDateString("2022-01-01");
         memberDetails.setMembershipEndDateString("2027-01-01");
         memberDetails.setWebsite("https://website.com");
+        memberDetails.setTrademarkLicense("Yes");
+        memberDetails.setBillingAddress(getBillingAddress());
 
         MemberDetailsResponseEntity response = new MemberDetailsResponseEntity();
         response.setMember(memberDetails);
@@ -337,6 +340,18 @@ public class SalesforceClientTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString = objectMapper.writeValueAsString(response);
         return new StringEntity(jsonString);
+    }
+
+    private BillingAddress getBillingAddress() {
+        BillingAddress address = new BillingAddress();
+        address.setCity("city");
+        address.setCountry("country");
+        address.setCountryCode("GB");
+        address.setPostalCode("postalCode");
+        address.setCity("city");
+        address.setState("state");
+        address.setStreet("street");
+        return address;
     }
 
     private HttpEntity getMemberContactsEntity() throws JsonProcessingException, UnsupportedEncodingException {
@@ -382,12 +397,14 @@ public class SalesforceClientTest {
         return new StringEntity(jsonString);
     }
 
-    private PublicMemberDetails getPublicMemberDetails() {
-        PublicMemberDetails publicMemberDetails = new PublicMemberDetails();
-        publicMemberDetails.setName("test member details");
-        publicMemberDetails.setWebsite("https://website.com");
-        publicMemberDetails.setDescription("test");
-        publicMemberDetails.setEmail("email@orcid.org");
-        return publicMemberDetails;
+    private MemberUpdateData getPublicMemberDetails() {
+        MemberUpdateData memberUpdateData = new MemberUpdateData();
+        memberUpdateData.setName("test member details");
+        memberUpdateData.setWebsite("https://website.com");
+        memberUpdateData.setDescription("test");
+        memberUpdateData.setEmail("email@orcid.org");
+        memberUpdateData.setTrademarkLicense("Yes");
+        memberUpdateData.setBillingAddress(getBillingAddress());
+        return memberUpdateData;
     }
 }

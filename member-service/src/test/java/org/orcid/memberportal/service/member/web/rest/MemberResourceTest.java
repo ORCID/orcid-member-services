@@ -21,12 +21,14 @@ import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgId;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
-import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
+import org.orcid.memberportal.service.member.client.model.MemberUpdateData;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
+import org.orcid.memberportal.service.member.web.rest.errors.UnauthorizedMemberAccessException;
 import org.orcid.memberportal.service.member.web.rest.vm.AddConsortiumMember;
 import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdate;
+import org.orcid.memberportal.service.member.web.rest.vm.MemberContactUpdateResponse;
 import org.orcid.memberportal.service.member.web.rest.vm.RemoveConsortiumMember;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -62,9 +64,9 @@ public class MemberResourceTest {
     }
 
     @Test
-    public void testGetMemberDetails() {
-        Mockito.when(memberService.getCurrentMemberDetails()).thenReturn(getMemberDetails());
-        ResponseEntity<MemberDetails> entity = memberResource.getMemberDetails();
+    public void testGetMemberDetails() throws UnauthorizedMemberAccessException {
+        Mockito.when(memberService.getMemberDetails(Mockito.eq("salesforceId"))).thenReturn(getMemberDetails());
+        ResponseEntity<MemberDetails> entity = memberResource.getMemberDetails("salesforceId");
         assertEquals(200, entity.getStatusCodeValue());
 
         MemberDetails memberDetails = entity.getBody();
@@ -86,28 +88,42 @@ public class MemberResourceTest {
     }
 
     @Test
-    public void testUpdatePublicMemberDetails() {
-        Mockito.when(memberService.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(Boolean.TRUE);
-        PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
-        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(publicMemberDetails);
+    public void testGetMemberDetails_unauthorised() throws UnauthorizedMemberAccessException {
+        Mockito.when(memberService.getMemberDetails(Mockito.eq("salesforceId"))).thenThrow(new UnauthorizedMemberAccessException("blah", "blah"));
+        ResponseEntity<MemberDetails> entity = memberResource.getMemberDetails("salesforceId");
+        assertEquals(401, entity.getStatusCodeValue());
+    }
+
+    @Test
+    public void testUpdatePublicMemberDetails() throws UnauthorizedMemberAccessException {
+        Mockito.when(memberService.updateMemberData(Mockito.any(MemberUpdateData.class), Mockito.eq("salesforceId"))).thenReturn(Boolean.TRUE);
+        MemberUpdateData memberUpdateData = getPublicMemberDetails();
+        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(memberUpdateData, "salesforceId");
         assertEquals(200, response.getStatusCodeValue());
-        Mockito.verify(memberService).updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
+        Mockito.verify(memberService).updateMemberData(Mockito.any(MemberUpdateData.class), Mockito.eq("salesforceId"));
     }
 
     @Test
-    public void testUpdatePublicMemberDetailsWithEmptyName() {
-        Mockito.when(memberService.updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class))).thenReturn(Boolean.FALSE);
-        PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
-        publicMemberDetails.setName("");
-        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(publicMemberDetails);
+    public void testUpdatePublicMemberDetails_unauthorised() throws UnauthorizedMemberAccessException {
+        Mockito.when(memberService.updateMemberData(Mockito.any(MemberUpdateData.class), Mockito.eq("salesforceId"))).thenThrow(new UnauthorizedMemberAccessException("blah", "blah"));
+        MemberUpdateData memberUpdateData = getPublicMemberDetails();
+        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(memberUpdateData, "salesforceId");
+        assertEquals(401, response.getStatusCodeValue());
+    }
+
+    @Test
+    public void testUpdatePublicMemberDetailsWithEmptyName() throws UnauthorizedMemberAccessException {
+        Mockito.when(memberService.updateMemberData(Mockito.any(MemberUpdateData.class), Mockito.eq("salesforceId"))).thenReturn(Boolean.FALSE);
+        MemberUpdateData memberUpdateData = getPublicMemberDetails();
+        memberUpdateData.setName("");
+        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(memberUpdateData, "salesforceId");
         assertTrue(response.getStatusCode().is4xxClientError());
-        Mockito.verify(memberService, Mockito.never()).updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
     }
 
     @Test
-    public void testGetMemberContacts() {
-        Mockito.when(memberService.getCurrentMemberContacts()).thenReturn(getMemberContacts());
-        ResponseEntity<MemberContacts> entity = memberResource.getMemberContacts();
+    public void testGetMemberContacts() throws UnauthorizedMemberAccessException {
+        Mockito.when(memberService.getCurrentMemberContacts(Mockito.eq("salesforceId"))).thenReturn(getMemberContacts());
+        ResponseEntity<MemberContacts> entity = memberResource.getMemberContacts("salesforceId");
         assertEquals(200, entity.getStatusCodeValue());
 
         MemberContacts memberContacts = entity.getBody();
@@ -130,12 +146,19 @@ public class MemberResourceTest {
     }
 
     @Test
-    public void testGetMemberOrgIds() {
-        Mockito.when(memberService.getCurrentMemberOrgIds()).thenReturn(getMemberOrgIds());
-        ResponseEntity<MemberOrgIds> entity = memberResource.getMemberOrgIds();
+    public void testGetMemberContacts_unauthorised() throws UnauthorizedMemberAccessException {
+        Mockito.when(memberService.getCurrentMemberContacts(Mockito.eq("salesforceId"))).thenThrow(new UnauthorizedMemberAccessException("blah", "blah"));
+        ResponseEntity<MemberContacts> entity = memberResource.getMemberContacts("salesforceId");
+        assertEquals(401, entity.getStatusCodeValue());
+    }
+
+    @Test
+    public void testGetMemberOrgIds() throws UnauthorizedMemberAccessException {
+        Mockito.when(memberService.getCurrentMemberOrgIds(Mockito.eq("salesforceId"))).thenReturn(getMemberOrgIds());
+        ResponseEntity<MemberOrgIds> entity = memberResource.getMemberOrgIds("salesforceId");
         assertEquals(200, entity.getStatusCodeValue());
 
-        MemberOrgIds memberOrgIds = memberService.getCurrentMemberOrgIds();
+        MemberOrgIds memberOrgIds = memberService.getCurrentMemberOrgIds("salesforceId");
         assertThat(memberOrgIds).isNotNull();
         assertThat(memberOrgIds.getTotalSize()).isEqualTo(2);
         assertThat(memberOrgIds.getRecords()).isNotNull();
@@ -144,6 +167,13 @@ public class MemberResourceTest {
         assertThat(memberOrgIds.getRecords().get(0).getValue()).isEqualTo("9988776655");
         assertThat(memberOrgIds.getRecords().get(1).getType()).isEqualTo("GRID");
         assertThat(memberOrgIds.getRecords().get(1).getValue()).isEqualTo("grid.238252");
+    }
+
+    @Test
+    public void testGetMemberOrgIds_unauthorised() throws UnauthorizedMemberAccessException {
+        Mockito.when(memberService.getCurrentMemberOrgIds(Mockito.eq("salesforceId"))).thenThrow(new UnauthorizedMemberAccessException("blah", "blah"));
+        ResponseEntity<MemberOrgIds> entity = memberResource.getMemberOrgIds("salesforceId");
+        assertEquals(401, entity.getStatusCodeValue());
     }
 
     @Test
@@ -172,10 +202,17 @@ public class MemberResourceTest {
     }
 
     @Test
-    public void testProcessMemberContactUpdate() {
-        Mockito.doNothing().when(memberService).processMemberContact(Mockito.any(MemberContactUpdate.class));
-        memberResource.processMemberContactUpdate(new MemberContactUpdate());
-        Mockito.verify(memberService).processMemberContact(Mockito.any(MemberContactUpdate.class));
+    public void testProcessMemberContactUpdate() throws UnauthorizedMemberAccessException {
+        Mockito.doNothing().when(memberService).processMemberContact(Mockito.any(MemberContactUpdate.class), Mockito.eq("salesforceId"));
+        memberResource.processMemberContactUpdate(new MemberContactUpdate(), "salesforceId");
+        Mockito.verify(memberService).processMemberContact(Mockito.any(MemberContactUpdate.class), Mockito.eq("salesforceId"));
+    }
+
+    @Test
+    public void testProcessMemberContactUpdate_unauthorised() throws UnauthorizedMemberAccessException {
+        Mockito.doThrow(new UnauthorizedMemberAccessException("blah", "blah")).when(memberService).processMemberContact(Mockito.any(MemberContactUpdate.class), Mockito.eq("salesforceId"));
+        ResponseEntity<MemberContactUpdateResponse> response = memberResource.processMemberContactUpdate(new MemberContactUpdate(), "salesforceId");
+        assertEquals(401, response.getStatusCodeValue());
     }
 
     @Test
@@ -229,13 +266,13 @@ public class MemberResourceTest {
         return memberDetails;
     }
 
-    private PublicMemberDetails getPublicMemberDetails() {
-        PublicMemberDetails publicMemberDetails = new PublicMemberDetails();
-        publicMemberDetails.setName("test member details");
-        publicMemberDetails.setWebsite("https://website.com");
-        publicMemberDetails.setDescription("test");
-        publicMemberDetails.setEmail("email@orcid.org");
-        return publicMemberDetails;
+    private MemberUpdateData getPublicMemberDetails() {
+        MemberUpdateData memberUpdateData = new MemberUpdateData();
+        memberUpdateData.setName("test member details");
+        memberUpdateData.setWebsite("https://website.com");
+        memberUpdateData.setDescription("test");
+        memberUpdateData.setEmail("email@orcid.org");
+        return memberUpdateData;
     }
 
     private MemberContacts getMemberContacts() {

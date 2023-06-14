@@ -33,7 +33,7 @@ import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
-import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
+import org.orcid.memberportal.service.member.client.model.MemberUpdateData;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 import org.orcid.memberportal.service.member.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
@@ -66,9 +66,9 @@ public class SalesforceClient {
         });
     }
 
-    public Boolean updatePublicMemberDetails(PublicMemberDetails publicMemberDetails) throws IOException {
+    public Boolean updatePublicMemberDetails(MemberUpdateData memberUpdateData) throws IOException {
         return request(() -> {
-            return updateSFPublicMemberDetails(publicMemberDetails);
+            return updateSFPublicMemberDetails(memberUpdateData);
         });
     }
 
@@ -90,16 +90,16 @@ public class SalesforceClient {
         });
     }
 
-    private Boolean updateSFPublicMemberDetails(PublicMemberDetails publicMemberDetails) {
-        LOG.info("Updating public details for salesforce id {}", publicMemberDetails.getSalesforceId());
+    private Boolean updateSFPublicMemberDetails(MemberUpdateData memberUpdateData) {
+        LOG.info("Updating public details for salesforce id {}", memberUpdateData.getSalesforceId());
         try (CloseableHttpClient httpClient = getHttpClient()) {
-            HttpPut httpPut = getPutRequest("member/" + publicMemberDetails.getSalesforceId() + "/member-data", publicMemberDetails);
+            HttpPut httpPut = getPutRequest("member/" + memberUpdateData.getSalesforceId() + "/member-data", memberUpdateData);
             try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
                 if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
-                    logError(publicMemberDetails.getSalesforceId(), response);
+                    logError(memberUpdateData.getSalesforceId(), response);
                     EntityUtils.consume(response.getEntity());
                 } else {
-                    LOG.info("Public details for salesforce id {} updated", publicMemberDetails.getSalesforceId());
+                    LOG.info("Public details for salesforce id {} updated", memberUpdateData.getSalesforceId());
                     ObjectMapper objectMapper = new ObjectMapper();
                     objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
                     JsonNode root = objectMapper.readTree(response.getEntity().getContent());
@@ -226,17 +226,17 @@ public class SalesforceClient {
         return httpGet;
     }
 
-    private HttpPut getPutRequest(String path, PublicMemberDetails publicMemberDetails) throws JsonProcessingException {
+    private HttpPut getPutRequest(String path, MemberUpdateData memberUpdateData) throws JsonProcessingException {
         String endpoint = applicationProperties.getSalesforceClientEndpoint();
         HttpPut httpPut = new HttpPut(endpoint + path);
         httpPut.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-        httpPut.setEntity(getHttpEntity(publicMemberDetails));
+        httpPut.setEntity(getHttpEntity(memberUpdateData));
         return httpPut;
     }
 
-    private HttpEntity getHttpEntity(PublicMemberDetails publicMemberDetails) throws JsonProcessingException {
+    private HttpEntity getHttpEntity(MemberUpdateData memberUpdateData) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(publicMemberDetails);
+        String json = objectMapper.writeValueAsString(memberUpdateData);
         return new StringEntity(json, ContentType.APPLICATION_JSON);
     }
 

@@ -87,8 +87,8 @@ export class MSMemberService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  getMember(): Observable<SFMemberData> {
-    return this.http.get<ISFRawMemberData>(`${this.resourceUrl}/member-details`, { observe: 'response' }).pipe(
+  getMember(salesforceId: string): Observable<SFMemberData> {
+    return this.http.get<ISFRawMemberData>(`${this.resourceUrl}/members/${salesforceId}/member-details`, { observe: 'response' }).pipe(
       catchError(err => {
         return of(err);
       }),
@@ -125,8 +125,8 @@ export class MSMemberService {
       );
   }
 
-  getMemberContacts(): Observable<SFMemberContact[]> {
-    return this.http.get<ISFRawMemberContacts>(`${this.resourceUrl}/member-contacts`, { observe: 'response' }).pipe(
+  getMemberContacts(salesforceId: string): Observable<SFMemberContact[]> {
+    return this.http.get<ISFRawMemberContacts>(`${this.resourceUrl}/members/${salesforceId}/member-contacts`, { observe: 'response' }).pipe(
       takeUntil(this.stopFetchingMemberData),
       map((res: SalesforceContactsResponseType) => this.convertToSalesforceMemberContacts(res)),
       tap(res => this.memberData.next({ ...this.memberData.value, contacts: res })),
@@ -136,17 +136,19 @@ export class MSMemberService {
     );
   }
 
-  updateContact(contact: ISFMemberContactUpdate): Observable<Boolean> {
-    return this.http.post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/contact-update`, contact, { observe: 'response' }).pipe(
-      map((res: HttpResponse<any>) => res.status === 200),
-      catchError(err => {
-        return throwError(err);
-      })
-    );
+  updateContact(contact: ISFMemberContactUpdate, salesforceId: string): Observable<Boolean> {
+    return this.http
+      .post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/${salesforceId}/contact-update`, contact, { observe: 'response' })
+      .pipe(
+        map((res: HttpResponse<any>) => res.status === 200),
+        catchError(err => {
+          return throwError(err);
+        })
+      );
   }
 
-  getMemberOrgIds(): Observable<SFMemberOrgIds> {
-    return this.http.get<ISFRawMemberOrgIds>(`${this.resourceUrl}/member-org-ids`, { observe: 'response' }).pipe(
+  getMemberOrgIds(salesforceId: string): Observable<SFMemberOrgIds> {
+    return this.http.get<ISFRawMemberOrgIds>(`${this.resourceUrl}/members/${salesforceId}/member-org-ids`, { observe: 'response' }).pipe(
       takeUntil(this.stopFetchingMemberData),
       map((res: SalesforceOrgIdResponseType) => this.convertToMemberOrgIds(res)),
       tap(res => this.memberData.next({ ...this.memberData.value, orgIds: res })),
@@ -160,8 +162,8 @@ export class MSMemberService {
     return this.http.delete<any>(`${this.resourceUrl}/members/${id}`, { observe: 'response' });
   }
 
-  updateMemberDetails(memberDetails: ISFMemberUpdate): Observable<HttpResponse<any>> {
-    return this.http.put(`${this.resourceUrl}/public-details`, memberDetails, { observe: 'response' });
+  updateMemberDetails(memberDetails: ISFMemberData, salesforceId: string): Observable<HttpResponse<any>> {
+    return this.http.put(`${this.resourceUrl}/members/${salesforceId}/member-details`, memberDetails, { observe: 'response' });
   }
 
   getConsortiaLeadName(consortiaLeadId: string): Observable<EntityResponseType> {
@@ -195,13 +197,13 @@ export class MSMemberService {
     if (!this.fetchingMemberDataState.value) {
       if (!this.memberData.value && userIdentity) {
         this.fetchingMemberDataState.next(true);
-        this.getMember()
+        this.getMember(userIdentity.salesforceId)
           .pipe(
             switchMap(res => {
               this.memberData.next(res);
               return combineLatest([
-                this.getMemberContacts(),
-                this.getMemberOrgIds(),
+                this.getMemberContacts(userIdentity.salesforceId),
+                this.getMemberOrgIds(userIdentity.salesforceId),
                 this.getConsortiaLeadName(res.consortiaLeadId),
                 this.getIsConsortiumLead(userIdentity.salesforceId)
               ]);

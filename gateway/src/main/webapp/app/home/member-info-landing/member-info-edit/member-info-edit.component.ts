@@ -129,7 +129,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
       this.invalidForm = false;
       this.isSaving = true;
       const details = this.createDetailsFromForm();
-      this.memberService.updateMemberDetails(details).subscribe(
+      this.memberService.updateMemberDetails(details, this.account.salesforceId).subscribe(
         res => {
           this.memberService.memberData.next({
             ...this.memberService.memberData.value,
