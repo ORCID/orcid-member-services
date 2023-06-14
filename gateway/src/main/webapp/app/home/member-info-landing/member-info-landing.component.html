@@ -12,15 +12,15 @@
       <div class="mb-40">
         <h2 class="mb-10 font-size-18">Public details</h2>
         <hr class="mt-0 mb-10" />
-        <div class="mb-20 side-bar-subsection line-height-150">
-          <h6>Website</h6>
+        <div class="mb-20 side-bar-subsection">
+          <h3 class="font-size-14 wide-text-25">Website</h3>
           <div *ngIf="memberData.website">
             <a href="{{ memberData.website }}">{{ memberData.website }}</a>
           </div>
           <div *ngIf="!memberData.website" class="color-gray">No website added</div>
         </div>
-        <div class="mb-20 side-bar-subsection line-height-150">
-          <h6>Email</h6>
+        <div class="mb-20 side-bar-subsection">
+          <h3 class="font-size-14 wide-text-25">Email</h3>
           <div *ngIf="memberData.publicDisplayEmail">
             <a href="mailto:{{ memberData.publicDisplayEmail }}">{{ memberData.publicDisplayEmail }}</a>
           </div>
@@ -31,29 +31,29 @@
       <!-- IDENTIFIERS -->
 
       <div *ngIf="memberData.orgIds">
-        <h2 class="mb-10 font-size-18 line-height-150">Identifiers</h2>
+        <h2 class="mb-10 font-size-18">Identifiers</h2>
 
         <hr class="mt-0 mb-10" />
-        <div class="mb-20 side-bar-subsection  line-height-150" *ngIf="memberData.orgIds && memberData.orgIds['ROR'].length > 0">
-          <h6>ROR</h6>
+        <div class="mb-20 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['ROR'].length > 0">
+          <h3 class="font-size-14 wide-text-25">ROR</h3>
           <div *ngFor="let id of memberData.orgIds['ROR']">
             <a href="{{ id }}">{{ id }}</a>
           </div>
         </div>
-        <div class="mb-20 side-bar-subsection line-height-150" *ngIf="memberData.orgIds && memberData.orgIds['GRID'].length > 0">
-          <h6>GRID</h6>
+        <div class="mb-20 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['GRID'].length > 0">
+          <h3 class="font-size-14 wide-text-25">GRID</h3>
           <div *ngFor="let id of memberData.orgIds['GRID']">
             {{ id }}
           </div>
         </div>
-        <div class="mb-20 side-bar-subsection line-height-150" *ngIf="memberData.orgIds && memberData.orgIds['Ringgold'].length > 0">
-          <h6>Ringgold ID</h6>
+        <div class="mb-20 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['Ringgold'].length > 0">
+          <h3 class="font-size-14 wide-text-25">Ringgold ID</h3>
           <div *ngFor="let id of memberData.orgIds['Ringgold']">
             {{ id }}
           </div>
         </div>
-        <div class="mb-20 side-bar-subsection line-height-150" *ngIf="memberData.orgIds && memberData.orgIds['Fundref'].length > 0">
-          <h6>Crossref Funder ID</h6>
+        <div class="mb-20 side-bar-subsection" *ngIf="memberData.orgIds && memberData.orgIds['Fundref'].length > 0">
+          <h3 class="font-size-14 wide-text-25">Crossref Funder ID</h3>
           <div *ngFor="let id of memberData.orgIds['Fundref']">
             <a href="{{ id }}">{{ filterCRFID(id) }}</a>
           </div>
