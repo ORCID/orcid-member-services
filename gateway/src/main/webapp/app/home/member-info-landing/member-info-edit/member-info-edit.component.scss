@@ -1,20 +1,25 @@
 @use '../../../../content/scss/bootstrap-variables' as global;
 //@import "../member-info-landing.component";
 
+button,
+textarea,
+input,
+span,
+h1,
+h2,
+h3,
+h4,
+label,
+small {
+  line-height: 150%;
+}
+
 button {
   font-size: 14px;
 }
 
-.go-back {
-  a {
-    text-decoration: underline;
-    font-weight: normal;
-  }
-  font-size: 14px;
-}
-
 .side-bar {
-  max-width: 250px;
+  max-width: 300px;
   height: 100%;
   padding: 1.25rem;
   flex: 1;
@@ -34,19 +39,9 @@ button {
   margin-right: auto;
 }
 
-.form {
-  width: 100%;
-}
-
-h6 {
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 0.2rem;
-}
-
 .contact {
   > div,
-  h6 {
+  h4 {
     width: 10%;
     text-align: left;
     flex-grow: 1;
@@ -80,9 +75,10 @@ input {
   letter-spacing: 0.25px;
 }
 
-.identifiers,
-.contacts {
-  margin-bottom: 2.5rem;
+input,
+select,
+option {
+  height: 40px;
 }
 
 .coming-soon {
@@ -105,4 +101,31 @@ input {
   }
   border: 2px solid #b71c1c;
   border-radius: 4px;
+}
+
+.radio {
+  height: 1.125rem;
+  width: 1.125rem;
+  accent-color: #2e7f9f;
+}
+
+.postcode-input-field {
+  max-width: 180px;
+}
+
+.org-name-input-field {
+  max-width: 400px;
+}
+
+:host ::ng-deep .ql-editor a {
+  color: #2e7f9f;
+  text-decoration: none;
+}
+
+:host ::ng-deep .ql-toolbar button:hover .ql-stroke {
+  stroke: #2e7f9f !important;
+}
+
+:host ::ng-deep .ql-active .ql-stroke {
+  stroke: #2e7f9f !important;
 }

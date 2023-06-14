@@ -1,23 +1,23 @@
 <div *ngIf="memberData" class="h-100">
   <div class="p-3 mb-3">
-    <div class="go-back">
-      Back to <a routerLink="">{{ memberData.publicDisplayName }}</a>
+    <div class="font-size-14 line-height-150">
+      Back to <a routerLink="" class="font-weight-normal text-decoration-underline">{{ memberData.publicDisplayName }}</a>
     </div>
     <hr class="mb-4" />
-    <div class="edit-org-label mb- font-size-18 color-gray">Edit organization</div>
+    <div class="edit-org-label mb-10 font-size-18 color-gray line-height-150">Edit organization</div>
     <h1 class="font-weight-bold mb-3 wide-text">{{ memberData.publicDisplayName }}</h1>
-    <div>Manage how this organization is displayed on the <a href="{{ MEMBER_LIST_URL }} " target="_blank">ORCID member list</a>.</div>
+    <div class="line-height-150">Manage public and private information for this organization.</div>
   </div>
   <div class="d-flex">
     <div class="side-bar">
-      <div class="logo-container">
+      <div class="logo-container mb-20">
         <img src="{{ memberData.logoUrl }}" onerror="this.src='../../content/images/member-logo-placeholder.svg'" alt="Member logo" />
       </div>
       <div class="text-center">
         <img src="./../../../../content/images/lockpad.svg" alt="Locked" />
       </div>
       <div class="text-center m-1">
-        <em class="wide-text font-size-12">Logo upload coming soon</em>
+        <em class="wide-text font-size-12 line-height-150">Logo upload coming soon</em>
       </div>
     </div>
     <div class="main-section">
@@ -25,31 +25,234 @@
         <div *ngIf="invalidForm" class="warning d-flex w-75 p-3 mb-3">
           <img src="./../../../../content/images/error-sign.svg" alt="Warning sign" class="p-2" />
           <div>
-            <div class="mb-2 font-size-12 wide-text font-weight-bold">
+            <div class="mb-2 font-size-12 wide-text font-weight-bold line-height-150">
               Your changes cannot be saved
             </div>
-            <div class="font-size-12 wide-text">
+            <div class="font-size-12 wide-text line-height-150">
               Please fix the issues with the public details before trying to save again
             </div>
           </div>
         </div>
-        <h3 class="mb-3 wide-text">Public details</h3>
-        <div class="form mb-5">
-          <div class="form-group w-50">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('name').invalid }">Organization name</label>
+        <h2 class="mb-30 wide-text font-size-24 ">Organization details</h2>
+
+        <!-- Organization name -->
+
+        <h3 class="mb-20 font-size-16 font-weight-bold">Organization name</h3>
+        <div class="form-group mb-30">
+          <input
+            type="text"
+            class="form-control wide-text-25 org-name-input-field"
+            name="orgName"
+            formControlName="orgName"
+            (input)="editForm.get('orgName').markAsUntouched()"
+            [ngClass]="{
+              'text-danger': editForm.get('orgName').invalid && editForm.get('orgName').touched && editForm.get('orgName').dirty,
+              'input-field-default-border': !editForm.get('orgName').dirty || !editForm.get('orgName').touched
+            }"
+          />
+          <ng-template #validOrgName>
+            <small class="wide-text font-size-12 form-text color-gray"
+              >The legal or official name for this organization. Max 41 characters.</small
+            >
+          </ng-template>
+          <div
+            *ngIf="editForm.get('orgName').invalid && editForm.get('orgName').touched && editForm.get('orgName').dirty; else validOrgName"
+          >
+            <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('orgName').errors.required">
+              Organization name cannot be empty
+            </small>
+            <div>
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('orgName').errors.maxlength">
+                Organization name is too long. Please use 41 characters or less.
+              </small>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Billing address -->
+
+        <h3 class="mb-20 font-size-16 font-weight-bold">Billing address</h3>
+        <div class="form-group mb-20">
+          <label
+            class="wide-text font-size-12 font-weight-bold"
+            [ngClass]="{ 'text-danger': editForm.get('street').invalid && editForm.get('street').touched }"
+            >Street</label
+          >
+          <input
+            type="text"
+            class="form-control wide-text-25 w-75"
+            name="street"
+            formControlName="street"
+            (input)="editForm.get('street').markAsUntouched()"
+            [ngClass]="{
+              'text-danger': editForm.get('street').invalid && editForm.get('street').touched,
+              'input-field-default-border': !editForm.get('street').dirty || !editForm.get('street').touched
+            }"
+          />
+          <div *ngIf="editForm.get('street').invalid && editForm.get('street').touched">
+            <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('street').errors.maxlength">
+              Street name is too long. Please use 255 characters or less.
+            </small>
+          </div>
+        </div>
+        <div class="form-group mb-20">
+          <label class="wide-text font-size-12 font-weight-bold" [ngClass]="{ 'text-danger': editForm.get('city').invalid && editForm.get('city').touched }"
+            >City</label
+          >
+          <input
+            type="text"
+            class="form-control wide-text-25 w-75"
+            name="city"
+            formControlName="city"
+            (input)="editForm.get('city').markAsUntouched()"
+            [ngClass]="{
+              'text-danger': editForm.get('city').invalid && editForm.get('city').touched,
+              'input-field-default-border': !editForm.get('city').dirty || !editForm.get('city').touched
+            }"
+          />
+          <div *ngIf="editForm.get('city').invalid && editForm.get('city').touched">
+            <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('city').errors.maxlength">
+              City name is too long. Please use 40 characters or less.
+            </small>
+          </div>
+        </div>
+        <div class="form-group mb-20">
+          <label
+            class="wide-text font-size-12 font-weight-bold"
+            [ngClass]="{
+              'text-danger': editForm.get('state').invalid && editForm.get('state').touched
+            }"
+            >State/Province</label
+          >
+          <input
+            type="text"
+            class="form-control wide-text-25 w-75"
+            name="state"
+            formControlName="state"
+            (input)="editForm.get('state').markAsUntouched()"
+            [ngClass]="{
+              'text-danger': editForm.get('state').invalid && editForm.get('state').touched,
+              'input-field-default-border': !editForm.get('state').dirty || !editForm.get('state').touched
+            }"
+          />
+          <div *ngIf="editForm.get('state').invalid && editForm.get('state').touched">
+            <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('state').errors.maxlength">
+              State/province name is too long. Please use 80 characters or less.
+            </small>
+          </div>
+        </div>
+        <div class="form-group mb-20">
+          <label
+            class="wide-text font-size-12 font-weight-bold"
+            [ngClass]="{ 'text-danger': editForm.get('country').invalid && editForm.get('country').dirty }"
+            >Country</label
+          >
+          <select
+            class="form-control font-size-14 wide-text-25 w-75"
+            name="country"
+            formControlName="country"
+            [ngClass]="{
+              'text-danger': editForm.get('country').invalid && editForm.get('country').dirty,
+              'input-field-default-border': !editForm.get('country').dirty
+            }"
+          >
+            <option hidden selected [ngValue]="null">Country</option>
+            <option *ngFor="let country of COUNTRIES | keyvalue" [ngValue]="country.key" class="form-field-text-color-default">{{
+              country.key
+            }}</option>
+          </select>
+          <div *ngIf="editForm.get('country').invalid && editForm.get('country').dirty">
+            <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('country').errors.required">
+              Please select a country
+            </small>
+          </div>
+        </div>
+        <div class="form-group mb-30">
+          <label
+            class="wide-text font-size-12 font-weight-bold"
+            [ngClass]="{ 'text-danger': editForm.get('postcode').invalid && editForm.get('postcode').touched }"
+            >ZIP/Postcode</label
+          >
+          <input
+            type="text"
+            class="form-control wide-text-25 postcode-input-field"
+            name="postcode"
+            formControlName="postcode"
+            (input)="editForm.get('postcode').markAsUntouched()"
+            [ngClass]="{
+              'text-danger': editForm.get('postcode').invalid && editForm.get('postcode').touched,
+              'input-field-default-border': !editForm.get('postcode').dirty || !editForm.get('postcode').touched
+            }"
+          />
+          <div *ngIf="editForm.get('postcode').invalid && editForm.get('postcode').touched">
+            <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('postcode').errors.maxlength">
+              ZIP/Postcode is too long. Please use 20 characters or less.
+            </small>
+          </div>
+        </div>
+
+        <!-- Trademark license -->
+
+        <h3 class="font-weight-bold font-size-16 mb-10">
+          Trademark license
+        </h3>
+        <div class="font-size-14 wide-text-25 mb-20 line-height-150">
+          Can ORCID use this organization's trademarked name and logos?
+        </div>
+        <div class="mb-40">
+          <div class="form-group d-flex">
+            <input
+              type="radio"
+              class="form-control radio mr-8"
+              name="trademarkLicense"
+              value="Yes"
+              formControlName="trademarkLicense"
+              [ngClass]="{ 'outline-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').dirty }"
+            />
+            <label class="wide-text-25 font-size-14 font-weight-normal"
+              ><strong>YES</strong> - ORCID can use this organization's trademarked name and logos</label
+            >
+          </div>
+          <div class="form-group d-flex">
+            <input
+              type="radio"
+              class="form-control radio mr-8"
+              name="trademarkLicense"
+              value="No"
+              formControlName="trademarkLicense"
+              [ngClass]="{ 'outline-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').dirty }"
+            />
+            <label class="wide-text-25 font-size-14 font-weight-normal"
+              ><strong>NO</strong> - ORCID cannot use this organization's trademarked name and logos</label
+            >
+          </div>
+          <div *ngIf="editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').dirty">
+            <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('trademarkLicense').errors.required">
+              Please select a trademark license option
+            </small>
+          </div>
+        </div>
+
+        <!-- PUBLIC DETAILS -->
+
+        <h2 class="wide-text font-size-24 ">Public details</h2>
+        <div class=" wide-text-25 mb-20 font-size-14 line-height-150">Organization information to be displayed publicly, such as on the <a href="{{ MEMBER_LIST_URL }} " target="_blank">ORCID member list</a></div>
+        <div class="mb-5">
+          <div class="form-group w-75">
+            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('publicName').invalid }">Public display name</label>
             <input
               type="text"
               class="form-control"
-              name="name"
-              formControlName="name"
-              [ngClass]="{ 'text-danger': editForm.get('name').invalid }"
+              name="publicName"
+              formControlName="publicName"
+              [ngClass]="{ 'text-danger': editForm.get('publicName').invalid }"
             />
-            <div *ngIf="editForm.get('name').invalid">
-              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('name').errors.required">
+            <div *ngIf="editForm.get('publicName').invalid">
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('publicName').errors.required">
                 The organization name cannot be empty
               </small>
               <div>
-                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('name').errors.maxlength">
+                <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('publicName').errors.maxlength">
                   Organization name is too long. Please use 255 characters or less.
                 </small>
               </div>
@@ -58,7 +261,7 @@
           <div class="form-group">
             <label class="wide-text font-size-12">Organization description</label>
             <quill-editor
-              class="d-block w-75"
+              class="d-block w-75 description"
               formControlName="description"
               format="html"
               [styles]="quillStyles"
@@ -72,7 +275,7 @@
               </small>
             </div>
           </div>
-          <div class="form-group w-50">
+          <div class="form-group w-75">
             <label
               class="wide-text font-size-12"
               [ngClass]="{
@@ -105,7 +308,7 @@
               </div>
             </div>
           </div>
-          <div class="form-group mb-4 w-50">
+          <div class="form-group mb-40 w-75">
             <label
               [ngClass]="{ 'text-danger': editForm.get('email').invalid && editForm.get('email').touched }"
               class="wide-text font-size-12"
@@ -140,11 +343,11 @@
           <button type="button" class="btn btn-outline-primary" routerLink="">Cancel</button>
         </div>
       </form>
-      <div *ngIf="memberData.orgIds" class="identifiers">
+      <div *ngIf="memberData.orgIds" class="mb-40">
         <div class="d-flex mb-2">
           <h3 class="mb-0 mr-2">Identifiers</h3>
         </div>
-        <div class="wide-text font-size-12 coming-soon">
+        <div class="wide-text font-size-12 coming-soon line-height-150">
           <em
             >We did our best to register the right organization identifiers in our systems when you became an ORCID member. If you think any
             are missing (ROR, GRID, RINGGOLD or Funder Registry ID)
@@ -152,17 +355,17 @@
           >
         </div>
         <div class="row ml-0 d-flex justify-content-between contact">
-          <h6 class="w-66">ID</h6>
-          <h6 class="w-33">Type</h6>
+          <h4 class="w-66 font-size-14">ID</h4>
+          <h4 class="w-33 font-size-14">Type</h4>
         </div>
-        <hr class="green-hr" />
-        <ul class="ml-0 pl-0" *ngFor="let orgIdType of objectKeys(memberData.orgIds); let i = index">
+        <hr class="green-hr mb-0" />
+        <ul class="ml-0 pl-0 mb-0" *ngFor="let orgIdType of objectKeys(memberData.orgIds); let i = index">
           <div *ngFor="let orgId of memberData.orgIds[orgIdType]; let ii = index">
-            <li class="row ml-0 d-flex justify-content-between contact">
-              <div class="w-66">{{ orgId }}</div>
-              <div class="w-33">{{ orgIdType }}</div>
+            <li class="row ml-0 pt-16 pb-16 d-flex justify-content-between contact">
+              <div class="w-66 line-height-150">{{ orgId }}</div>
+              <div class="w-33 line-height-150">{{ orgIdType }}</div>
             </li>
-            <hr *ngIf="!(i == objectKeys(memberData.orgIds).length - 1 && ii == memberData.orgIds[orgIdType].length - 1)" />
+            <hr *ngIf="!(i == objectKeys(memberData.orgIds).length - 1 && ii == memberData.orgIds[orgIdType].length - 1)" class="mb-0 mt-0"/>
           </div>
         </ul>
       </div>
@@ -171,7 +374,7 @@
           Consortium Members
           <span class="font-weight-normal">({{ memberData.consortiumMembers.length }})</span>
         </h3>
-        <h6>Member name</h6>
+        <h4 class="font-size-14">Member name</h4>
         <hr class="green-hr" />
         <div *ngFor="let consortiumMember of memberData.consortiumMembers; let i = index">
           <div>{{ consortiumMember.orgName }}</div>
