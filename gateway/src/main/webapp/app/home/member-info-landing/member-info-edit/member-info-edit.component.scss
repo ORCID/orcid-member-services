@@ -1,5 +1,4 @@
 @use '../../../../content/scss/bootstrap-variables' as global;
-//@import "../member-info-landing.component";
 
 button,
 textarea,
@@ -106,7 +105,7 @@ option {
 .radio {
   height: 1.125rem;
   width: 1.125rem;
-  accent-color: #2e7f9f;
+  accent-color: global.$info;
 }
 
 .postcode-input-field {
@@ -118,14 +117,14 @@ option {
 }
 
 :host ::ng-deep .ql-editor a {
-  color: #2e7f9f;
+  color: global.$info;
   text-decoration: none;
 }
 
 :host ::ng-deep .ql-toolbar button:hover .ql-stroke {
-  stroke: #2e7f9f !important;
+  stroke: global.$info !important;
 }
 
 :host ::ng-deep .ql-active .ql-stroke {
-  stroke: #2e7f9f !important;
+  stroke: global.$info !important;
 }
