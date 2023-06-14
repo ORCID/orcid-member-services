@@ -179,11 +179,11 @@ public class MemberResource {
 
 
     /**
-     * {@code PUT  /members/{salesforceId}/public-details} : update details of member specified by salesforceID
+     * {@code PUT  /members/{salesforceId}/member-details} : update details of member specified by salesforceID
      *
      * @return the {@link MemberUpdateData}
      */
-    @PutMapping("/members/{salesforceId}/public-details")
+    @PutMapping("/members/{salesforceId}/member-details")
     public ResponseEntity<Boolean> updatePublicMemberDetails(@RequestBody MemberUpdateData memberUpdateData, @PathVariable String salesforceId) {
         LOG.info("REST request to update member public details for salesforce id {}", salesforceId);
         if (StringUtils.isBlank(memberUpdateData.getName())) {
