@@ -93,3 +93,9 @@ Our user service, based on [JHipster UAA](https://www.jhipster.tech/using-uaa/),
 ## Notes
 
 - As long as the jhipster-registry is running first, the starting order of the other services is not important. They can also be started concurrently.
+
+## Optional pre-commit
+
+pre-commit is a framework for managing git pre-commit hooks that run before you push code out to do things like linting and syntax checking. To set it up for this project run ./pre-commit-env-setup.sh . This is only tested on amd64 macos. See .pre-commit-config.yaml for the hooks that have been configured.
+
+
