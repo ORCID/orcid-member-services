@@ -112,7 +112,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
     };
     return {
       ...new SFMemberUpdate(),
-      orgName: this.editForm.get(['orgName']).value,
+      name: this.editForm.get(['orgName']).value,
       billingAddress: address,
       trademarkLicense: this.editForm.get(['trademarkLicense']).value,
       publicName: this.editForm.get(['publicName']).value,
@@ -128,14 +128,14 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
     } else {
       this.invalidForm = false;
       this.isSaving = true;
-      const details = this.createDetailsFromForm();
-      this.memberService.updateMemberDetails(details, this.account.salesforceId).subscribe(
+      const details: ISFMemberUpdate = this.createDetailsFromForm();
+      this.memberService.updateMemberDetails(details, this.memberData.id).subscribe(
         res => {
           this.memberService.memberData.next({
             ...this.memberService.memberData.value,
             publicDisplayDescriptionHtml: details.description,
             publicDisplayName: details.publicName,
-            name: details.orgName,
+            name: details.name,
             billingAddress: details.billingAddress,
             trademarkLicense: details.trademarkLicense,
             publicDisplayEmail: details.email,
