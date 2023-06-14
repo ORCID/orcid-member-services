@@ -1,6 +1,5 @@
 <div class="d-flex h-100">
   <div *ngIf="memberData" class="side-bar">
-
     <!-- SIDEBAR -->
 
     <div class="logo-container mb-40">
@@ -83,11 +82,14 @@
 
     <!-- ORG NAME & EDIT ORGANIZATION-->
 
-    <div class="row ml-0 mb-8 mt-3 d-flex align-items-center justify-content-between">
+    <div
+      class="row ml-0 mt-3 d-flex align-items-center justify-content-between"
+      [ngClass]="{ 'mb-8': memberData.publicDisplayEmail === memberData.name, 'mb-16': memberData.publicDisplayEmail !== memberData.name }"
+    >
       <h1 class="mb-0 font-weight-bold wide-text">{{ memberData.name }}</h1>
       <button class="btn btn-primary edit-button mr-3 wide-text-25 font-size-14" routerLink="/edit">Edit Organization</button>
     </div>
-    <div class="mb-16">
+    <div *ngIf="memberData.name !== memberData.publicDisplayName" class="mb-16">
       <div class="color-gray font-size-12 wide-text">Public display name</div>
       <div class="font-weight-bold">{{ memberData.publicDisplayName }}</div>
     </div>
@@ -95,7 +97,6 @@
       Your ORCID membership is currently inactive. Please contact your consortium lead or ORCID to reinstate your membership.
     </div>
     <div *ngIf="isActive()">
-
       <!-- DESCRIPTION -->
 
       <div class="row ml-0 mb-40">
@@ -181,7 +182,7 @@
               </a>
             </div>
           </li>
-          <hr *ngIf="i + 1 < memberData.contacts.length" class="mt-0 mb-0"/>
+          <hr *ngIf="i + 1 < memberData.contacts.length" class="mt-0 mb-0" />
         </ul>
       </div>
 
@@ -205,7 +206,7 @@
               ><fa-icon [icon]="'trash-alt'" class="float-right"></fa-icon
             ></a>
           </div>
-          <hr *ngIf="i + 1 < memberData.consortiumMembers.length" class="mt-0 mb-0"/>
+          <hr *ngIf="i + 1 < memberData.consortiumMembers.length" class="mt-0 mb-0" />
         </div>
       </div>
     </div>
