@@ -37,7 +37,7 @@
     "id": "61b3400030c49e0008ffc6c4",
     "clientName": "!@#$%^&*()-=               проверка test 3",
     "clientId": "APP-9GN1GYLRUONIPZRE",
-    "salesforceId": "thesalesforce",
+    "salesforceId": "0012i00000jXKkwAAG",
     "users": {
       "owner": {
         "id": "624583472ab79c0008809b89",
@@ -106,7 +106,7 @@
     "consortiumLeadEmail": "qa+cy_mp_mambono5@orcid.org",
     "consortiumMember": {"email": "qa+cy_mp_almondsforest@orcid.org", "name": "Almonds Forest"},
     "consortiumMemberEmail2": "qa+cy_mp_gratefulfrogs@orcid.org",
-    "consortiumLeadAndMemberEmail": "qa+cy_mp_theharvestascendancy@orcid.org",
+    "consortiumLeadAndMember": {"email": "qa+cy_mp_theharvestascendancy@orcid.org", "salesforceId": "0012i00000h6xo5AAA"},
     "inactiveConsortiumMemberEmail": "qa+cy_mp_considineandsons@orcid.org" 
   }
 }

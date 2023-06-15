@@ -169,7 +169,7 @@ describe('Test report menus', () => {
   });
 
   it('Consortium member and lead', function() {
-    cy.programmaticSignin(data.homepageTestMembers.consortiumLeadAndMemberEmail, credentials.password);
+    cy.programmaticSignin(data.homepageTestMembers.consortiumLeadAndMember.email, credentials.password);
     cy.visit('/');
     cy.get('#entity-menu').click();
     cy.get('[href="/report/member"]').should('be.visible');

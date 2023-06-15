@@ -29,7 +29,7 @@ describe('Test restricted access', () => {
   });
 
   it('Cannot access the assertion menu if assertions are not enabled', function() {
-    cy.programmaticSignin(data.homepageTestMembers.consortiumLeadAndMemberEmail, credentials.password);
+    cy.programmaticSignin(data.homepageTestMembers.consortiumLeadAndMember.email, credentials.password);
     cy.visit('/assertion');
     cy.get('h1').filter('[jhitranslate="error.title.string"]').contains('Your request cannot be processed')
     cy.get('div').filter('[jhitranslate="error.http.403.string"]').invoke('attr', 'hidden').should('not.exist')

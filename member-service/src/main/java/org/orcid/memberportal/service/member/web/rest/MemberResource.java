@@ -199,7 +199,7 @@ public class MemberResource {
     }
 
     /**
-     * {@code PUT  /members/{salesforceId}/member-details} : get details of member specified by salesforceId param
+     * {@code GET  /members/{salesforceId}/member-details} : get details of member specified by salesforceId param
      *
      * @return the {@link MemberDetails}
      */
