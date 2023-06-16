@@ -9,6 +9,3 @@ gateway/yarn.lock
 gateway/cypress/fixtures/editAffiliations.csv
 gateway/cypress/fixtures/bulk-edit-salesforce-ids-config.json
 .idea/
-
-# spotless index
-target/**
