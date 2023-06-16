@@ -61,6 +61,8 @@ server:
 # Full reference is available at: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
+
+
 jhipster:
   clientApp:
     name: 'userServiceApp'
