@@ -1,11 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
 import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
+import { COUNTRIES } from 'app/shared/constants/orcid-api.constants';
+import { ISFAddress } from 'app/shared/model/salesforce-address.model';
 import { ISFMemberData, SFMemberData } from 'app/shared/model/salesforce-member-data.model';
-import { SFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
+import { ISFMemberUpdate, SFMemberUpdate } from 'app/shared/model/salesforce-member-update.model';
 import { IMSUser } from 'app/shared/model/user.model';
 import { Subscription } from 'rxjs';
 
@@ -15,6 +17,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./member-info-edit.component.scss']
 })
 export class MemberInfoEditComponent implements OnInit, OnDestroy {
+  COUNTRIES = COUNTRIES;
   memberDataSubscription: Subscription;
   account: IMSUser;
   memberData: ISFMemberData;
@@ -34,14 +37,20 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   };
 
   editForm = this.fb.group({
-    name: [null, [Validators.required, Validators.maxLength(255)]],
+    orgName: [null, [Validators.required, Validators.maxLength(41)]],
+    street: [null, [Validators.maxLength(255)]],
+    city: [null, [Validators.maxLength(40)]],
+    state: [null, [Validators.maxLength(80)]],
+    country: [null, [Validators.required]],
+    postcode: [null, [Validators.maxLength(20)]],
+    trademarkLicense: [null, [Validators.required]],
+    publicName: [null, [Validators.required, Validators.maxLength(255)]],
     description: [null, [Validators.maxLength(5000)]],
     website: [null, [Validators.pattern(URL_REGEXP), Validators.maxLength(255)]],
     email: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]]
   });
 
   constructor(
-    private accountService: AccountService,
     private memberService: MSMemberService,
     private fb: FormBuilder,
     protected activatedRoute: ActivatedRoute,
@@ -74,7 +83,14 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   updateForm(data: SFMemberData) {
     if (data && data.id) {
       this.editForm.patchValue({
-        name: data.publicDisplayName,
+        orgName: data.name,
+        street: data.billingAddress.street,
+        city: data.billingAddress.city,
+        state: data.billingAddress.state,
+        country: data.billingAddress.country,
+        postcode: data.billingAddress.postalCode,
+        trademarkLicense: data.trademarkLicense,
+        publicName: data.publicDisplayName,
         description: data.publicDisplayDescriptionHtml,
         website: data.website,
         email: data.publicDisplayEmail
@@ -86,10 +102,20 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
     return id.replace(/^.*dx.doi.org\//g, '');
   }
 
-  createDetailsFromForm(): SFPublicDetails {
+  createDetailsFromForm(): ISFMemberUpdate {
+    const address: ISFAddress = {
+      street: this.editForm.get(['street']).value,
+      city: this.editForm.get(['city']).value,
+      state: this.editForm.get(['state']).value,
+      country: this.editForm.get(['country']).value,
+      postalCode: this.editForm.get(['postcode']).value
+    };
     return {
-      ...new SFPublicDetails(),
-      name: this.editForm.get(['name']).value,
+      ...new SFMemberUpdate(),
+      name: this.editForm.get(['orgName']).value,
+      billingAddress: address,
+      trademarkLicense: this.editForm.get(['trademarkLicense']).value,
+      publicName: this.editForm.get(['publicName']).value,
       description: this.editForm.get(['description']).value,
       website: this.editForm.get(['website']).value,
       email: this.editForm.get(['email']).value
@@ -102,13 +128,16 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
     } else {
       this.invalidForm = false;
       this.isSaving = true;
-      const details = this.createDetailsFromForm();
-      this.memberService.updatePublicDetails(details, this.account.salesforceId).subscribe(
+      const details: ISFMemberUpdate = this.createDetailsFromForm();
+      this.memberService.updateMemberDetails(details, this.memberData.id).subscribe(
         res => {
           this.memberService.memberData.next({
             ...this.memberService.memberData.value,
             publicDisplayDescriptionHtml: details.description,
-            publicDisplayName: details.name,
+            publicDisplayName: details.publicName,
+            name: details.name,
+            billingAddress: details.billingAddress,
+            trademarkLicense: details.trademarkLicense,
             publicDisplayEmail: details.email,
             website: details.website
           });

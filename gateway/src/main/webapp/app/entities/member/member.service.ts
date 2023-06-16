@@ -23,7 +23,7 @@ import {
   SFMemberContact
 } from 'app/shared/model/salesforce-member-contact.model';
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from 'app/shared/model/salesforce-member-org-id.model';
-import { ISFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
+import { ISFMemberUpdate } from 'app/shared/model/salesforce-member-update.model';
 import { ISFNewConsortiumMember } from 'app/shared/model/salesforce-new-consortium-member.model';
 
 type EntityResponseType = HttpResponse<IMSMember>;
@@ -162,8 +162,8 @@ export class MSMemberService {
     return this.http.delete<any>(`${this.resourceUrl}/members/${id}`, { observe: 'response' });
   }
 
-  updatePublicDetails(publicDetails: ISFPublicDetails, salesforceId: string): Observable<HttpResponse<any>> {
-    return this.http.put(`${this.resourceUrl}/members/${salesforceId}/member-details`, publicDetails, { observe: 'response' });
+  updateMemberDetails(memberDetails: ISFMemberUpdate, salesforceId: string): Observable<HttpResponse<any>> {
+    return this.http.put(`${this.resourceUrl}/members/${salesforceId}/member-details`, memberDetails, { observe: 'response' });
   }
 
   getConsortiaLeadName(consortiaLeadId: string): Observable<EntityResponseType> {
@@ -265,7 +265,9 @@ export class MSMemberService {
         publicDisplayEmail: res.body.Public_Display_Email__c,
         membershipStartDateString: res.body.Last_membership_start_date__c,
         membershipEndDateString: res.body.Last_membership_end_date__c,
-        consortiumMembers: res.body.consortiumOpportunities ? this.convertToConsortiumMembers(res.body.consortiumOpportunities) : null
+        consortiumMembers: res.body.consortiumOpportunities ? this.convertToConsortiumMembers(res.body.consortiumOpportunities) : null,
+        billingAddress: res.body.BillingAddress,
+        trademarkLicense: res.body.Trademark_License__c
       };
     } else {
       return new SFMemberData();
