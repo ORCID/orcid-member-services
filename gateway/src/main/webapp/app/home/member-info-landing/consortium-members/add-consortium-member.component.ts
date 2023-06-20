@@ -21,7 +21,6 @@ import { Subscription } from 'rxjs';
 export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
   COUNTRIES = COUNTRIES;
   memberDataSubscription: Subscription;
-  account: IMSUser;
   memberData: ISFMemberData;
   isSaving: boolean;
   invalidForm: boolean;
@@ -52,10 +51,6 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.accountService.identity().then(account => {
-      this.account = account;
-    });
-
     this.currentMonth = this.dateUtilService.getCurrentMonthNumber();
     this.currentYear = this.dateUtilService.getCurrentYear();
     this.monthList = this.dateUtilService.getMonthsList();
