@@ -160,6 +160,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.eventManager.destroy(this.eventSubscriber);
-    this.paginationHeaderSubscription.unsubscribe();
+    if (this.paginationHeaderSubscription) {
+      this.paginationHeaderSubscription.unsubscribe();
+    }
   }
 }

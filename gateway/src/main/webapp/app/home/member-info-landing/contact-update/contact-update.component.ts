@@ -138,7 +138,8 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
         contact.contactName = this.contact.name;
         contact.contactMember = this.memberData.name;
       }
-      this.memberService.updateContact(contact, this.account.salesforceId).subscribe(
+
+      this.memberService.updateContact(contact, this.memberData.id).subscribe(
         res => {
           if (res) {
             this.onSaveSuccess();
@@ -163,7 +164,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
       contact.contactName = this.contact.name;
       contact.contactMember = this.memberData.name;
     }
-    this.memberService.updateContact(contact, this.account.salesforceId).subscribe(
+    this.memberService.updateContact(contact, this.memberData.id).subscribe(
       res => {
         if (res) {
           this.onSaveSuccess();

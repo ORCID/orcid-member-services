@@ -4,6 +4,7 @@ import { IMSUser } from 'app/shared/model/user.model';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { Subscription } from 'rxjs';
 import { MSMemberService } from 'app/entities/member';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'jhi-home',
@@ -15,17 +16,26 @@ export class HomeComponent implements OnInit, OnDestroy {
   memberData: ISFMemberData;
   authenticationStateSubscription: Subscription;
   memberDataSubscription: Subscription;
+  manageMemberSubscription: Subscription;
+  salesforceId: string;
+  manage: string;
 
-  constructor(private accountService: AccountService, private memberService: MSMemberService) {}
+  constructor(private accountService: AccountService, private memberService: MSMemberService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
+    this.manageMemberSubscription = this.memberService.getManagedMember().subscribe(manage => (this.manage = manage));
+
     this.authenticationStateSubscription = this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
-      this.memberService.fetchMemberData(account);
+      if (account) {
+        this.memberService.fetchMemberData(account.salesforceId);
+      }
     });
     this.accountService.identity().then((account: IMSUser) => {
       this.account = account;
-      this.memberService.fetchMemberData(account);
+      if (account) {
+        this.memberService.fetchMemberData(account.salesforceId);
+      }
     });
     this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
       this.memberData = data;
@@ -33,7 +43,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.authenticationStateSubscription.unsubscribe();
-    this.memberDataSubscription.unsubscribe();
+    if (this.authenticationStateSubscription) {
+      this.authenticationStateSubscription.unsubscribe();
+    }
+    if (this.memberDataSubscription) {
+      this.memberDataSubscription.unsubscribe();
+    }
+    if (this.manageMemberSubscription) {
+      this.manageMemberSubscription.unsubscribe();
+    }
   }
 }

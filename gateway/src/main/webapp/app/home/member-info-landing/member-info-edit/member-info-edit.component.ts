@@ -84,17 +84,21 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
     if (data && data.id) {
       this.editForm.patchValue({
         orgName: data.name,
-        street: data.billingAddress.street,
-        city: data.billingAddress.city,
-        state: data.billingAddress.state,
-        country: data.billingAddress.country,
-        postcode: data.billingAddress.postalCode,
-        trademarkLicense: data.trademarkLicense,
+        trademarkLicense: data.trademarkLicense ? data.trademarkLicense : 'No',
         publicName: data.publicDisplayName,
         description: data.publicDisplayDescriptionHtml,
         website: data.website,
         email: data.publicDisplayEmail
       });
+      if (data.billingAddress) {
+        this.editForm.patchValue({
+          street: data.billingAddress.street,
+          city: data.billingAddress.city,
+          state: data.billingAddress.state,
+          country: data.billingAddress.country,
+          postcode: data.billingAddress.postalCode
+        });
+      }
     }
   }
 
@@ -125,6 +129,9 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   save() {
     if (this.editForm.status === 'INVALID') {
       this.invalidForm = true;
+      Object.keys(this.editForm.controls).forEach(key => {
+        this.editForm.get(key).markAsDirty();
+      });
     } else {
       this.invalidForm = false;
       this.isSaving = true;

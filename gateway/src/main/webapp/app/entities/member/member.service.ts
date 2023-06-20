@@ -37,6 +37,7 @@ export class MSMemberService {
   public resourceUrl = SERVER_API_URL + 'services/memberservice/api';
   public orgNameMap: any;
   public memberData = new BehaviorSubject<ISFMemberData>(undefined);
+  public managedMember = new BehaviorSubject<string | null>(null);
   public fetchingMemberDataState = new BehaviorSubject<boolean>(undefined);
   public stopFetchingMemberData = new Subject();
 
@@ -193,19 +194,24 @@ export class MSMemberService {
     return of(null);
   }
 
-  fetchMemberData(userIdentity) {
+  fetchMemberData(salesforceId: string) {
+    if (this.memberData.value && this.managedMember.value !== this.memberData.value.id) {
+      this.stopFetchingMemberData.next();
+      this.fetchingMemberDataState.next(false);
+    }
+
     if (!this.fetchingMemberDataState.value) {
-      if (!this.memberData.value && userIdentity) {
+      if (!this.memberData.value || this.memberData.value.id !== this.managedMember.value) {
         this.fetchingMemberDataState.next(true);
-        this.getMember(userIdentity.salesforceId)
+        this.getMember(salesforceId)
           .pipe(
             switchMap(res => {
               this.memberData.next(res);
               return combineLatest([
-                this.getMemberContacts(userIdentity.salesforceId),
-                this.getMemberOrgIds(userIdentity.salesforceId),
+                this.getMemberContacts(salesforceId),
+                this.getMemberOrgIds(salesforceId),
                 this.getConsortiaLeadName(res.consortiaLeadId),
-                this.getIsConsortiumLead(userIdentity.salesforceId)
+                this.getIsConsortiumLead(salesforceId)
               ]);
             }),
             tap(res => {
@@ -220,6 +226,14 @@ export class MSMemberService {
           .subscribe();
       }
     }
+  }
+
+  getManagedMember(): Observable<string | null> {
+    return this.managedMember.asObservable();
+  }
+
+  setManagedMember(value: string | null) {
+    this.managedMember.next(value);
   }
 
   protected convertDateFromClient(msMember: IMSMember): IMSMember {
