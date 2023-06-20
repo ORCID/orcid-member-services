@@ -84,7 +84,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
     if (data && data.id) {
       this.editForm.patchValue({
         orgName: data.name,
-        trademarkLicense: data.trademarkLicense,
+        trademarkLicense: data.trademarkLicense ? data.trademarkLicense : 'No',
         publicName: data.publicDisplayName,
         description: data.publicDisplayDescriptionHtml,
         website: data.website,
