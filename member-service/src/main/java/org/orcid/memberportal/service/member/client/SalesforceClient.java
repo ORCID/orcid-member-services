@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -30,6 +31,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.memberportal.service.member.client.model.ConsortiumLeadDetails;
 import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
+import org.orcid.memberportal.service.member.client.model.Country;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
@@ -90,13 +92,44 @@ public class SalesforceClient {
         });
     }
 
+    public List<Country> getSalesforceCountries() {
+        return request(() -> {
+            return getSFCountryData();
+        });
+    }
+
+    private List<Country> getSFCountryData() {
+        try (CloseableHttpClient httpClient = getHttpClient()) {
+            HttpGet httpGet = getGetRequest("countries");
+            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+                if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
+                    LOG.warn("Received non-200 response from salesforce client for country data");
+                    logErrorBody(response);
+                    EntityUtils.consume(response.getEntity());
+                } else {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+                    return objectMapper.readValue(response.getEntity().getContent(), new TypeReference<List<Country>>() {});
+                }
+            } catch (IOException e) {
+                LOG.error("Error getting country data from salesforce", e);
+                throw new RuntimeException(e);
+            }
+        } catch (IOException e) {
+            LOG.error("HttpClient error", e);
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
     private Boolean updateSFPublicMemberDetails(MemberUpdateData memberUpdateData) {
         LOG.info("Updating public details for salesforce id {}", memberUpdateData.getSalesforceId());
         try (CloseableHttpClient httpClient = getHttpClient()) {
             HttpPut httpPut = getPutRequest("member/" + memberUpdateData.getSalesforceId() + "/member-data", memberUpdateData);
             try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
                 if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
-                    logError(memberUpdateData.getSalesforceId(), response);
+                    LOG.warn("Received non-200 response from salesforce client for salesforce id {}", memberUpdateData.getSalesforceId());
+                    logErrorBody(response);
                     EntityUtils.consume(response.getEntity());
                 } else {
                     LOG.info("Public details for salesforce id {} updated", memberUpdateData.getSalesforceId());
@@ -115,21 +148,17 @@ public class SalesforceClient {
     }
 
     private MemberDetails getSFMemberDetails(String salesforceId) {
-        LOG.info("*** getSFMemberDetails(): running ***");
         try (CloseableHttpClient httpClient = getHttpClient()) {
             HttpGet httpGet = getGetRequest("member/" + salesforceId + "/details");
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
-                    logError(salesforceId, response);
+                    LOG.warn("Received non-200 response from salesforce client for salesforce id {}", salesforceId);
+                    logErrorBody(response);
                     EntityUtils.consume(response.getEntity());
                 } else {
-                    LOG.info("*** getSFMemberDetails(): response received ***");
                     ObjectMapper objectMapper = new ObjectMapper();
                     objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
                     JsonNode root = objectMapper.readTree(response.getEntity().getContent());
-                    LOG.info("*** getSFMemberDetails(): response processed ***");
-                    LOG.info("Root is {}", root);
-                    LOG.info("Response received: {} ", root.asText());
                     return objectMapper.treeToValue(root.at("/member"), MemberDetails.class);
                 }
             } catch (IOException e) {
@@ -148,7 +177,8 @@ public class SalesforceClient {
             HttpGet httpGet = getGetRequest("member/" + salesforceId + "/contacts");
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
-                    logError(salesforceId, response);
+                    LOG.warn("Received non-200 response from salesforce client for salesforce id {}", salesforceId);
+                    logErrorBody(response);
                     EntityUtils.consume(response.getEntity());
                 } else {
                     ObjectMapper objectMapper = new ObjectMapper();
@@ -171,7 +201,8 @@ public class SalesforceClient {
             HttpGet httpGet = getGetRequest("member/" + salesforceId + "/org-ids");
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
-                    logError(salesforceId, response);
+                    LOG.warn("Received non-200 response from salesforce client for salesforce id {}", salesforceId);
+                    logErrorBody(response);
                     EntityUtils.consume(response.getEntity());
                 } else {
                     ObjectMapper objectMapper = new ObjectMapper();
@@ -194,7 +225,8 @@ public class SalesforceClient {
             HttpGet httpGet = getGetRequest("member/" + salesforceId + "/details");
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
-                    logError(salesforceId, response);
+                    LOG.warn("Received non-200 response from salesforce client for salesforce id {}", salesforceId);
+                    logErrorBody(response);
                     EntityUtils.consume(response.getEntity());
                 } else {
                     ObjectMapper objectMapper = new ObjectMapper();
@@ -306,8 +338,7 @@ public class SalesforceClient {
         }
     }
 
-    private void logError(String salesforceId, CloseableHttpResponse response) throws IOException {
-        LOG.warn("Received non-200 response from salesforce client for salesforce id {}", salesforceId);
+    private void logErrorBody(CloseableHttpResponse response) throws IOException {
         String responseString = new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
         LOG.warn("Response received:");
         LOG.warn(responseString);
