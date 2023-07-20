@@ -1,10 +1,13 @@
 package org.orcid.memberportal.service.member.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
@@ -29,12 +32,14 @@ import org.mockito.stubbing.Answer;
 import org.orcid.memberportal.service.member.client.model.BillingAddress;
 import org.orcid.memberportal.service.member.client.model.ConsortiumLeadDetails;
 import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
+import org.orcid.memberportal.service.member.client.model.Country;
 import org.orcid.memberportal.service.member.client.model.MemberContact;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgId;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
 import org.orcid.memberportal.service.member.client.model.MemberUpdateData;
+import org.orcid.memberportal.service.member.client.model.State;
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -70,7 +75,8 @@ public class SalesforceClientTest {
                 // request for orcid internal token
                 MockCloseableHttpResponse response = new MockCloseableHttpResponse();
                 response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
-                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\"," +
+                    "\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
                 StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
                 entity.setContentType("application/json;charset=UTF-8");
                 response.setEntity(entity);
@@ -117,7 +123,8 @@ public class SalesforceClientTest {
                 // request for orcid internal token
                 MockCloseableHttpResponse response = new MockCloseableHttpResponse();
                 response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
-                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\"," +
+                    "\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
                 StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
                 entity.setContentType("application/json;charset=UTF-8");
                 response.setEntity(entity);
@@ -151,7 +158,8 @@ public class SalesforceClientTest {
                 // request for orcid internal token
                 MockCloseableHttpResponse response = new MockCloseableHttpResponse();
                 response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
-                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\"," +
+                    "\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
                 StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
                 entity.setContentType("application/json;charset=UTF-8");
                 response.setEntity(entity);
@@ -188,6 +196,39 @@ public class SalesforceClientTest {
     }
 
     @Test
+    void testGetSalesforceCountries() throws IOException {
+        Mockito.when(applicationProperties.getSalesforceClientEndpoint()).thenReturn("microservice/");
+
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                MockCloseableHttpResponse response = new MockCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\"," +
+                    "\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                MockCloseableHttpResponse response = new MockCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                response.setEntity(getSalesforceCountriesEntity());
+                return response;
+            }
+        });
+
+        List<Country> countries = client.getSalesforceCountries();
+        assertNotNull(countries);
+        assertEquals(1, countries.size());
+        Mockito.verify(applicationProperties).getSalesforceClientEndpoint();
+    }
+
+    @Test
     void testGetMemberOrgIds() throws JAXBException, ClientProtocolException, IOException {
         Mockito.when(applicationProperties.getSalesforceClientEndpoint()).thenReturn("microservice/");
 
@@ -197,7 +238,8 @@ public class SalesforceClientTest {
                 // request for orcid internal token
                 MockCloseableHttpResponse response = new MockCloseableHttpResponse();
                 response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
-                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\"," +
+                    "\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
                 StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
                 entity.setContentType("application/json;charset=UTF-8");
                 response.setEntity(entity);
@@ -237,7 +279,8 @@ public class SalesforceClientTest {
                 // request for orcid internal token
                 MockCloseableHttpResponse response = new MockCloseableHttpResponse();
                 response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
-                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\"," +
+                    "\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
                 StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
                 entity.setContentType("application/json;charset=UTF-8");
                 response.setEntity(entity);
@@ -376,6 +419,27 @@ public class SalesforceClientTest {
 
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString = objectMapper.writeValueAsString(memberContacts);
+        return new StringEntity(jsonString);
+    }
+
+    private HttpEntity getSalesforceCountriesEntity() throws JsonProcessingException, UnsupportedEncodingException {
+        State state1 = new State();
+        state1.setName("state1");
+        state1.setCode("s1");
+
+        State state2 = new State();
+        state2.setName("state2");
+        state2.setCode("s2");
+
+        Country country = new Country();
+        country.setName("country1");
+        country.setCode("c1");
+        country.setStates(Arrays.asList(state1, state2));
+
+        List<Country> countries = Arrays.asList(country);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(countries);
         return new StringEntity(jsonString);
     }
 

@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -26,12 +27,14 @@ import org.mockito.stubbing.Answer;
 import org.orcid.memberportal.service.member.client.SalesforceClient;
 import org.orcid.memberportal.service.member.client.model.ConsortiumLeadDetails;
 import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
+import org.orcid.memberportal.service.member.client.model.Country;
 import org.orcid.memberportal.service.member.client.model.MemberContact;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgId;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
 import org.orcid.memberportal.service.member.client.model.MemberUpdateData;
+import org.orcid.memberportal.service.member.client.model.State;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
 import org.orcid.memberportal.service.member.security.EncryptUtil;
@@ -906,6 +909,33 @@ class MemberServiceTest {
         Assertions.assertThrows(RuntimeException.class, () -> {
             memberService.requestNewConsortiumMember(addConsortiumMember);
         });
+    }
+
+    @Test
+    public void testGetSalesforceCountries() {
+        Mockito.when(salesforceClient.getSalesforceCountries()).thenReturn(getSalesforceCountries());
+        List<Country> countries = memberService.getSalesforceCountries();
+        assertThat(countries).isNotNull();
+        assertThat(countries.size()).isEqualTo(1);
+        assertThat(countries.get(0).getStates().size()).isEqualTo(2);
+        Mockito.verify(salesforceClient).getSalesforceCountries();
+    }
+
+    private List<Country> getSalesforceCountries() {
+        State state1 = new State();
+        state1.setName("state1");
+        state1.setCode("s1");
+
+        State state2 = new State();
+        state2.setName("state2");
+        state2.setCode("s2");
+
+        Country country = new Country();
+        country.setName("country1");
+        country.setCode("c1");
+        country.setStates(Arrays.asList(state1, state2));
+
+        return Arrays.asList(country);
     }
 
     private MemberUpdateData getPublicMemberDetails() {
