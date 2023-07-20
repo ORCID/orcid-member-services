@@ -133,10 +133,10 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
       this.invalidForm = false;
       this.isSaving = true;
       const contact = this.createContactFromForm();
+      contact.contactMember = this.memberData.name;
       if (this.contactId) {
         contact.contactEmail = this.contact.contactEmail;
         contact.contactName = this.contact.name;
-        contact.contactMember = this.memberData.name;
       }
 
       this.memberService.updateContact(contact, this.memberData.id).subscribe(
