@@ -633,7 +633,7 @@ class MemberServiceTest {
         MemberUpdateData details = publicMemberDetailsCaptor.getValue();
         assertThat(details).isNotNull();
         assertThat(details.getSalesforceId()).isEqualTo("salesforceId");
-        assertThat(details.getName()).isEqualTo(memberUpdateData.getName());
+        assertThat(details.getPublicName()).isEqualTo(memberUpdateData.getPublicName());
         assertThat(details.getDescription()).isEqualTo(memberUpdateData.getDescription());
         assertThat(details.getWebsite()).isEqualTo(memberUpdateData.getWebsite());
         assertThat(details.getEmail()).isEqualTo(memberUpdateData.getEmail());
@@ -652,7 +652,7 @@ class MemberServiceTest {
         MemberUpdateData details = publicMemberDetailsCaptor.getValue();
         assertThat(details).isNotNull();
         assertThat(details.getSalesforceId()).isEqualTo("salesforceId");
-        assertThat(details.getName()).isEqualTo(memberUpdateData.getName());
+        assertThat(details.getPublicName()).isEqualTo(memberUpdateData.getPublicName());
         assertThat(details.getDescription()).isEqualTo(memberUpdateData.getDescription());
         assertThat(details.getWebsite()).isEqualTo(memberUpdateData.getWebsite());
         assertThat(details.getEmail()).isEqualTo(memberUpdateData.getEmail());
@@ -940,7 +940,7 @@ class MemberServiceTest {
 
     private MemberUpdateData getPublicMemberDetails() {
         MemberUpdateData memberUpdateData = new MemberUpdateData();
-        memberUpdateData.setName("test member details");
+        memberUpdateData.setPublicName("test member details");
         memberUpdateData.setWebsite("https://website.com");
         memberUpdateData.setDescription("test");
         memberUpdateData.setEmail("email@orcid.org");

@@ -63,39 +63,27 @@ public class SalesforceClient {
     private ApplicationProperties applicationProperties;
 
     public MemberDetails getMemberDetails(String salesforceId) throws IOException {
-        return request(() -> {
-            return getSFMemberDetails(salesforceId);
-        });
+        return request(() -> getSFMemberDetails(salesforceId));
     }
 
     public Boolean updatePublicMemberDetails(MemberUpdateData memberUpdateData) throws IOException {
-        return request(() -> {
-            return updateSFPublicMemberDetails(memberUpdateData);
-        });
+        return request(() -> updateSFPublicMemberDetails(memberUpdateData));
     }
 
     public MemberContacts getMemberContacts(String salesforceId) throws IOException {
-        return request(() -> {
-            return getSFMemberContacts(salesforceId);
-        });
+        return request(() -> getSFMemberContacts(salesforceId));
     }
 
     public MemberOrgIds getMemberOrgIds(String salesforceId) throws IOException {
-        return request(() -> {
-            return getSFMemberOrgIds(salesforceId);
-        });
+        return request(() -> getSFMemberOrgIds(salesforceId));
     }
 
     public ConsortiumLeadDetails getConsortiumLeadDetails(String salesforceId) throws IOException {
-        return request(() -> {
-            return getSFConsortiumLeadDetails(salesforceId);
-        });
+        return request(() -> getSFConsortiumLeadDetails(salesforceId));
     }
 
     public List<Country> getSalesforceCountries() {
-        return request(() -> {
-            return getSFCountryData();
-        });
+        return request(() -> getSFCountryData());
     }
 
     private List<Country> getSFCountryData() {
