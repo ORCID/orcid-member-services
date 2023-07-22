@@ -187,7 +187,7 @@ public class MemberResource {
     @PutMapping("/members/{salesforceId}/member-details")
     public ResponseEntity<Boolean> updatePublicMemberDetails(@RequestBody MemberUpdateData memberUpdateData, @PathVariable String salesforceId) {
         LOG.info("REST request to update member public details for salesforce id {}", salesforceId);
-        if (StringUtils.isBlank(memberUpdateData.getName())) {
+        if (StringUtils.isBlank(memberUpdateData.getPublicName())) {
             LOG.info("Null name in request to update public details");
             return ResponseEntity.badRequest().build();
         }

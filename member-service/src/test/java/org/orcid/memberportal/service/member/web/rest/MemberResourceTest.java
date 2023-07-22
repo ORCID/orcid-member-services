@@ -117,7 +117,7 @@ public class MemberResourceTest {
     public void testUpdatePublicMemberDetailsWithEmptyName() throws UnauthorizedMemberAccessException {
         Mockito.when(memberService.updateMemberData(Mockito.any(MemberUpdateData.class), Mockito.eq("salesforceId"))).thenReturn(Boolean.FALSE);
         MemberUpdateData memberUpdateData = getPublicMemberDetails();
-        memberUpdateData.setName("");
+        memberUpdateData.setPublicName("");
         ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(memberUpdateData, "salesforceId");
         assertTrue(response.getStatusCode().is4xxClientError());
     }
@@ -293,8 +293,9 @@ public class MemberResourceTest {
 
     private MemberUpdateData getPublicMemberDetails() {
         MemberUpdateData memberUpdateData = new MemberUpdateData();
-        memberUpdateData.setName("test member details");
+        memberUpdateData.setPublicName("test member details");
         memberUpdateData.setWebsite("https://website.com");
+        memberUpdateData.setOrgName("orgName");
         memberUpdateData.setDescription("test");
         memberUpdateData.setEmail("email@orcid.org");
         return memberUpdateData;

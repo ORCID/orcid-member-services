@@ -621,7 +621,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void testUpdatePublicMemberDetails() throws IOException, UnauthorizedMemberAccessException {
+    void testUpdateMemberData() throws IOException, UnauthorizedMemberAccessException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
         Mockito.when(salesforceClient.updatePublicMemberDetails(Mockito.any(MemberUpdateData.class))).thenReturn(Boolean.TRUE);
@@ -633,10 +633,11 @@ class MemberServiceTest {
         MemberUpdateData details = publicMemberDetailsCaptor.getValue();
         assertThat(details).isNotNull();
         assertThat(details.getSalesforceId()).isEqualTo("salesforceId");
-        assertThat(details.getName()).isEqualTo(memberUpdateData.getName());
+        assertThat(details.getPublicName()).isEqualTo(memberUpdateData.getPublicName());
         assertThat(details.getDescription()).isEqualTo(memberUpdateData.getDescription());
         assertThat(details.getWebsite()).isEqualTo(memberUpdateData.getWebsite());
         assertThat(details.getEmail()).isEqualTo(memberUpdateData.getEmail());
+        assertThat(details.getOrgName()).isEqualTo(memberUpdateData.getOrgName());
     }
 
     @Test
@@ -652,7 +653,7 @@ class MemberServiceTest {
         MemberUpdateData details = publicMemberDetailsCaptor.getValue();
         assertThat(details).isNotNull();
         assertThat(details.getSalesforceId()).isEqualTo("salesforceId");
-        assertThat(details.getName()).isEqualTo(memberUpdateData.getName());
+        assertThat(details.getPublicName()).isEqualTo(memberUpdateData.getPublicName());
         assertThat(details.getDescription()).isEqualTo(memberUpdateData.getDescription());
         assertThat(details.getWebsite()).isEqualTo(memberUpdateData.getWebsite());
         assertThat(details.getEmail()).isEqualTo(memberUpdateData.getEmail());
@@ -940,8 +941,9 @@ class MemberServiceTest {
 
     private MemberUpdateData getPublicMemberDetails() {
         MemberUpdateData memberUpdateData = new MemberUpdateData();
-        memberUpdateData.setName("test member details");
+        memberUpdateData.setPublicName("test member details");
         memberUpdateData.setWebsite("https://website.com");
+        memberUpdateData.setOrgName("orgName");
         memberUpdateData.setDescription("test");
         memberUpdateData.setEmail("email@orcid.org");
         return memberUpdateData;

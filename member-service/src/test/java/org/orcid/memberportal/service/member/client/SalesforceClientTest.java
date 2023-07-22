@@ -463,8 +463,9 @@ public class SalesforceClientTest {
 
     private MemberUpdateData getPublicMemberDetails() {
         MemberUpdateData memberUpdateData = new MemberUpdateData();
-        memberUpdateData.setName("test member details");
+        memberUpdateData.setPublicName("test member details");
         memberUpdateData.setWebsite("https://website.com");
+        memberUpdateData.setOrgName("orgName");
         memberUpdateData.setDescription("test");
         memberUpdateData.setEmail("email@orcid.org");
         memberUpdateData.setTrademarkLicense("Yes");
