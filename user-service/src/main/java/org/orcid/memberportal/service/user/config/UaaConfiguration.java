@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
 import org.orcid.memberportal.service.user.security.PasswordTokenGranter;
 import org.orcid.memberportal.service.user.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -55,6 +57,8 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
      * Access tokens will not expire any earlier than this.
      */
     private static final int MIN_ACCESS_TOKEN_VALIDITY_SECS = 60;
+
+    private static final Logger LOG = LoggerFactory.getLogger(UaaConfiguration.class);
 
     private ApplicationContext applicationContext;
 
@@ -140,13 +144,17 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
 
     @Bean
     public DefaultTokenServices tokenServices() {
-        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setTokenStore(tokenStore());
-        defaultTokenServices.setSupportRefreshToken(true);
-        defaultTokenServices.setTokenEnhancer(jwtAccessTokenConverter());
-        defaultTokenServices.setAccessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds());
-        defaultTokenServices.setRefreshTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe());
-        return defaultTokenServices;
+        if (uaaProperties.getKeyStore().getName() != null) {
+            DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+            defaultTokenServices.setTokenStore(tokenStore());
+            defaultTokenServices.setSupportRefreshToken(true);
+            defaultTokenServices.setTokenEnhancer(jwtAccessTokenConverter());
+            defaultTokenServices.setAccessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds());
+            defaultTokenServices.setRefreshTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe());
+            return defaultTokenServices;
+        } else {
+            return null;
+        }
     }
 
     private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints) {
@@ -162,12 +170,16 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
 
     /**
      * Apply the token converter (and enhancer) for token store.
-     * 
+     *
      * @return the {@link JwtTokenStore} managing the tokens.
      */
     @Bean
     public JwtTokenStore tokenStore() {
-        return new JwtTokenStore(jwtAccessTokenConverter());
+        if (uaaProperties.getKeyStore().getName() != null) {
+            return new JwtTokenStore(jwtAccessTokenConverter());
+        } else {
+            return null;
+        }
     }
 
     /**
