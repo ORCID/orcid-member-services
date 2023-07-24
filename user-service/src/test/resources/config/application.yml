@@ -86,6 +86,20 @@ jhipster:
       enabled: true
       report-frequency: 60 # in seconds
 
+uaa:
+  key-store:
+    name:
+    password:
+    alias: userservice
+  web-client-configuration:
+    # Access Token is valid for 5 mins
+    access-token-validity-in-seconds: 300
+    # Refresh Token is valid for 7 days
+    refresh-token-validity-in-seconds-for-remember-me: 604800
+    #change client secret in production, keep in sync with gateway configuration
+    client-id: web_app
+    secret: changeit
+
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
