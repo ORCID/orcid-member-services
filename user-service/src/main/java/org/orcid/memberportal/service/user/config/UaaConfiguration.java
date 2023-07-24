@@ -88,13 +88,13 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED)).and().csrf()
-                    .disable().addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class).headers().frameOptions().disable().and().sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests().antMatchers("/api/register").permitAll()
-                    .antMatchers("/api/activate").permitAll().antMatchers("/api/authenticate").permitAll().antMatchers("/api/account/reset-password/init").permitAll()
-                    .antMatchers("/api/account/reset-password/finish").permitAll().antMatchers("/api/account/reset-password/validate").permitAll()
-                    .antMatchers("/api/users/**/resendActivation").permitAll().antMatchers("/api/**").authenticated().antMatchers("/management/health").permitAll()
-                    .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN).antMatchers("/v2/api-docs/**").permitAll()
-                    .antMatchers("/swagger-resources/configuration/ui").permitAll().antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
+                .disable().addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class).headers().frameOptions().disable().and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests().antMatchers("/api/register").permitAll()
+                .antMatchers("/api/activate").permitAll().antMatchers("/api/authenticate").permitAll().antMatchers("/api/account/reset-password/init").permitAll()
+                .antMatchers("/api/account/reset-password/finish").permitAll().antMatchers("/api/account/reset-password/validate").permitAll()
+                .antMatchers("/api/users/**/resendActivation").permitAll().antMatchers("/api/**").authenticated().antMatchers("/management/health").permitAll()
+                .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN).antMatchers("/v2/api-docs/**").permitAll()
+                .antMatchers("/swagger-resources/configuration/ui").permitAll().antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
         }
 
         @Override
@@ -122,13 +122,13 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
         int refreshTokenValidity = uaaProperties.getWebClientConfiguration().getRefreshTokenValidityInSecondsForRememberMe();
         refreshTokenValidity = Math.max(refreshTokenValidity, accessTokenValidity);
         clients.inMemory().withClient(uaaProperties.getWebClientConfiguration().getClientId())
-                .secret(passwordEncoder.encode(uaaProperties.getWebClientConfiguration().getSecret())).scopes("openid").autoApprove(true)
-                .authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code").accessTokenValiditySeconds(accessTokenValidity)
-                .refreshTokenValiditySeconds(refreshTokenValidity).and().withClient(jHipsterProperties.getSecurity().getClientAuthorization().getClientId())
-                .secret(passwordEncoder.encode(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret())).scopes("web-app").authorities("ROLE_ADMIN")
-                .autoApprove(true).authorizedGrantTypes("client_credentials")
-                .accessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds())
-                .refreshTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe());
+            .secret(passwordEncoder.encode(uaaProperties.getWebClientConfiguration().getSecret())).scopes("openid").autoApprove(true)
+            .authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code").accessTokenValiditySeconds(accessTokenValidity)
+            .refreshTokenValiditySeconds(refreshTokenValidity).and().withClient(jHipsterProperties.getSecurity().getClientAuthorization().getClientId())
+            .secret(passwordEncoder.encode(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret())).scopes("web-app").authorities("ROLE_ADMIN")
+            .autoApprove(true).authorizedGrantTypes("client_credentials")
+            .accessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds())
+            .refreshTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe());
     }
 
     @Override
@@ -144,23 +144,20 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
 
     @Bean
     public DefaultTokenServices tokenServices() {
-        if (uaaProperties.getKeyStore().getName() != null) {
-            DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-            defaultTokenServices.setTokenStore(tokenStore());
-            defaultTokenServices.setSupportRefreshToken(true);
-            defaultTokenServices.setTokenEnhancer(jwtAccessTokenConverter());
-            defaultTokenServices.setAccessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds());
-            defaultTokenServices.setRefreshTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe());
-            return defaultTokenServices;
-        } else {
-            return null;
-        }
+        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setSupportRefreshToken(true);
+        defaultTokenServices.setTokenEnhancer(jwtAccessTokenConverter());
+        defaultTokenServices.setAccessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds());
+        defaultTokenServices.setRefreshTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe());
+        return defaultTokenServices;
     }
 
     private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints) {
         PasswordTokenGranter passwordTokenGranter = new PasswordTokenGranter(endpoints, authenticationManager, userService, tokenServices());
         RefreshTokenGranter refreshTokenGranter = new RefreshTokenGranter(tokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory());
-        ClientCredentialsTokenGranter clientCredentialsTokenGranter = new ClientCredentialsTokenGranter(tokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory());
+        ClientCredentialsTokenGranter clientCredentialsTokenGranter = new ClientCredentialsTokenGranter(tokenServices(), endpoints.getClientDetailsService(),
+            endpoints.getOAuth2RequestFactory());
         return new CompositeTokenGranter(Arrays.asList(passwordTokenGranter, refreshTokenGranter, clientCredentialsTokenGranter));
     }
 
@@ -175,11 +172,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
      */
     @Bean
     public JwtTokenStore tokenStore() {
-        if (uaaProperties.getKeyStore().getName() != null) {
-            return new JwtTokenStore(jwtAccessTokenConverter());
-        } else {
-            return null;
-        }
+        return new JwtTokenStore(jwtAccessTokenConverter());
     }
 
     /**
@@ -187,23 +180,19 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
      * JWT access tokens and Authentication in both directions.
      *
      * @return an access token converter configured with the authorization
-     *         server's public/private keys.
+     * server's public/private keys.
      */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        if (uaaProperties.getKeyStore().getName() != null) {
-            JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-            try {
-                KeyPair keyPair = new KeyStoreKeyFactory(new FileUrlResource(uaaProperties.getKeyStore().getName()),
-                        uaaProperties.getKeyStore().getPassword().toCharArray()).getKeyPair(uaaProperties.getKeyStore().getAlias());
-                converter.setKeyPair(keyPair);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException("Error creating keystore factory", e);
-            }
-            return converter;
-        } else {
-            return null;
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        try {
+            KeyPair keyPair = new KeyStoreKeyFactory(new FileUrlResource(uaaProperties.getKeyStore().getName()),
+                uaaProperties.getKeyStore().getPassword().toCharArray()).getKeyPair(uaaProperties.getKeyStore().getAlias());
+            converter.setKeyPair(keyPair);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error creating keystore factory", e);
         }
+        return converter;
     }
 
     public class RefreshTokenConverter extends JwtAccessTokenConverter {
@@ -211,7 +200,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
             super();
             try {
                 KeyPair keyPair = new KeyStoreKeyFactory(new FileUrlResource(uaaProperties.getKeyStore().getName()),
-                        uaaProperties.getKeyStore().getPassword().toCharArray()).getKeyPair(uaaProperties.getKeyStore().getAlias());
+                    uaaProperties.getKeyStore().getPassword().toCharArray()).getKeyPair(uaaProperties.getKeyStore().getAlias());
                 super.setKeyPair(keyPair);
             } catch (MalformedURLException e) {
                 throw new RuntimeException("Error creating keystore factory", e);

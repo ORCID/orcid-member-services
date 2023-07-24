@@ -88,9 +88,9 @@ jhipster:
 
 uaa:
   key-store:
-    name:
-    password:
-    alias: userservice
+    name: src/test/resources/keystore.p12
+    password: password
+    alias: userservicetest
   web-client-configuration:
     # Access Token is valid for 5 mins
     access-token-validity-in-seconds: 300
