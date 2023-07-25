@@ -6,21 +6,24 @@ import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
 import { AddConsortiumMemberConfirmationComponent, AlertService } from 'app/shared';
 import { COUNTRIES } from 'app/shared/constants/orcid-api.constants';
+import { ISFCountry } from 'app/shared/model/salesforce-country.model';
+import { ISFState } from 'app/shared/model/salesforce-country.model copy';
 
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { ISFNewConsortiumMember } from 'app/shared/model/salesforce-new-consortium-member.model';
 import { IMSUser } from 'app/shared/model/user.model';
 import { DateUtilService } from 'app/shared/util/date-util.service';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-consortium-member',
   templateUrl: './add-consortium-member.component.html',
   styleUrls: ['./add-consortium-member.scss']
 })
-export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
-  COUNTRIES = COUNTRIES;
-  memberDataSubscription: Subscription;
+export class AddConsortiumMemberComponent implements OnInit {
+  countries: ISFCountry[];
+  states: ISFState[];
   memberData: ISFMemberData;
   isSaving: boolean;
   invalidForm: boolean;
@@ -71,19 +74,17 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
       contactJobTitle: [null, [Validators.maxLength(128)]],
       contactEmail: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]]
     });
-
-    this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
-      this.memberData = data;
-    });
+    combineLatest([this.memberService.memberData, this.memberService.getCountries()])
+      .pipe(take(1))
+      .subscribe(([data, countries]) => {
+        this.memberData = data;
+        this.countries = countries;
+      });
     this.editForm.valueChanges.subscribe(() => {
       if (this.editForm.status === 'VALID') {
         this.invalidForm = false;
       }
     });
-  }
-
-  ngOnDestroy(): void {
-    this.memberDataSubscription.unsubscribe();
   }
 
   createNewConsortiumMemberFromForm(): ISFNewConsortiumMember {
@@ -95,7 +96,7 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
       emailDomain: this.editForm.get('emailDomain').value,
       street: this.editForm.get('street').value,
       city: this.editForm.get('city').value,
-      state: this.editForm.get('state').value,
+      state: this.editForm.get(['state']).value == '-- No state or province --' ? null : this.editForm.get(['state']).value,
       country: this.editForm.get('country').value,
       postcode: this.editForm.get('postcode').value,
       contactGivenName: this.editForm.get('contactGivenName').value,
@@ -104,6 +105,10 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
       contactEmail: this.editForm.get('contactEmail').value
     };
     return consortiumMember;
+  }
+
+  onCountryChange(countryName: string) {
+    this.states = this.countries.find(country => country.name === countryName).states;
   }
 
   save() {

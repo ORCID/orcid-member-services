@@ -40,7 +40,6 @@
         <h3 class="mb-20 font-size-16 font-weight-bold">Organization name</h3>
         <div class="form-group mb-30">
           <input
-            disabled
             type="text"
             class="form-control wide-text-25 org-name-input-field"
             name="orgName"
@@ -117,7 +116,7 @@
             </small>
           </div>
         </div>
-        <div class="form-group mb-20">
+        <div class="form-group mb-20" *ngIf="states">
           <label
             class="wide-text font-size-12 font-weight-bold"
             [ngClass]="{
@@ -125,22 +124,20 @@
             }"
             >State/Province</label
           >
-          <input
-            type="text"
-            class="form-control wide-text-25 w-75"
+          <select
+            class="form-control font-size-14 wide-text-25 w-75"
             name="state"
             formControlName="state"
-            (input)="editForm.get('state').markAsUntouched()"
             [ngClass]="{
-              'text-danger': editForm.get('state').invalid && editForm.get('state').touched,
-              'input-field-default-border': !editForm.get('state').dirty || !editForm.get('state').touched
+              'text-danger': editForm.get('state').invalid && editForm.get('state').dirty,
+              'input-field-default-border': !editForm.get('state').dirty
             }"
-          />
-          <div *ngIf="editForm.get('state').invalid && editForm.get('state').touched">
-            <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('state').errors.maxlength">
-              State/province name is too long. Please use 80 characters or less.
-            </small>
-          </div>
+          >
+            <option selected [ngValue]="null">-- No state or province --</option>
+            <option *ngFor="let state of states" [ngValue]="state.name" class="form-field-text-color-default">{{
+              state.name
+            }}</option>
+          </select>
         </div>
         <div class="form-group mb-20">
           <label
@@ -148,25 +145,12 @@
             [ngClass]="{ 'text-danger': editForm.get('country').invalid && editForm.get('country').dirty }"
             >Country</label
           >
-          <select
+          <input
+            readonly
             class="form-control font-size-14 wide-text-25 w-75"
             name="country"
             formControlName="country"
-            [ngClass]="{
-              'text-danger': editForm.get('country').invalid && editForm.get('country').dirty,
-              'input-field-default-border': !editForm.get('country').dirty
-            }"
-          >
-            <option hidden selected [ngValue]="null">Country</option>
-            <option *ngFor="let country of COUNTRIES | keyvalue" [ngValue]="country.key" class="form-field-text-color-default">{{
-              country.key
-            }}</option>
-          </select>
-          <div *ngIf="editForm.get('country').invalid && editForm.get('country').dirty">
-            <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('country').errors.required">
-              Please select a country
-            </small>
-          </div>
+          />
         </div>
         <div class="form-group mb-30">
           <label

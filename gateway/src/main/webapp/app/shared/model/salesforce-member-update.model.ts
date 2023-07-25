@@ -1,7 +1,7 @@
 import { ISFAddress } from './salesforce-address.model';
 
 export interface ISFMemberUpdate {
-  name?: string;
+  orgName?: string;
   billingAddress?: ISFAddress;
   trademarkLicense?: string;
   publicName?: string;
@@ -12,7 +12,7 @@ export interface ISFMemberUpdate {
 
 export class SFMemberUpdate implements ISFMemberUpdate {
   constructor(
-    public name?: string,
+    public orgName?: string,
     public billingAddress?: ISFAddress,
     public trademarkLicense?: string,
     public publicName?: string,
