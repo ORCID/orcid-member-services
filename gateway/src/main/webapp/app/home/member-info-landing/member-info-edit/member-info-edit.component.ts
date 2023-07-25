@@ -95,7 +95,9 @@ export class MemberInfoEditComponent implements OnInit {
       });
       if (data.billingAddress) {
         this.country = this.countries.find(country => country.name === data.billingAddress.country);
-        this.states = this.country.states;
+        if (this.country) {
+          this.states = this.country.states;
+        }
         this.editForm.patchValue({
           street: data.billingAddress.street,
           city: data.billingAddress.city,
