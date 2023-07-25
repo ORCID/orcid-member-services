@@ -6,19 +6,23 @@ import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
 import { COUNTRIES } from 'app/shared/constants/orcid-api.constants';
 import { ISFAddress } from 'app/shared/model/salesforce-address.model';
+import { ISFCountry } from 'app/shared/model/salesforce-country.model';
+import { ISFState } from 'app/shared/model/salesforce-country.model copy';
 import { ISFMemberData, SFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { ISFMemberUpdate, SFMemberUpdate } from 'app/shared/model/salesforce-member-update.model';
 import { IMSUser } from 'app/shared/model/user.model';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-member-info-edit',
   templateUrl: './member-info-edit.component.html',
   styleUrls: ['./member-info-edit.component.scss']
 })
-export class MemberInfoEditComponent implements OnInit, OnDestroy {
-  COUNTRIES = COUNTRIES;
-  memberDataSubscription: Subscription;
+export class MemberInfoEditComponent implements OnInit {
+  countries: ISFCountry[];
+  country: ISFCountry;
+  states: ISFState[];
   account: IMSUser;
   memberData: ISFMemberData;
   objectKeys = Object.keys;
@@ -58,20 +62,19 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
-      this.memberData = data;
-      this.validateUrl();
-      this.updateForm(data);
-    });
+    combineLatest([this.memberService.memberData, this.memberService.getCountries()])
+      .pipe(take(1))
+      .subscribe(([data, countries]) => {
+        this.memberData = data;
+        this.countries = countries;
+        this.validateUrl();
+        this.updateForm(data);
+      });
     this.editForm.valueChanges.subscribe(() => {
       if (this.editForm.status === 'VALID') {
         this.invalidForm = false;
       }
     });
-  }
-
-  ngOnDestroy(): void {
-    this.memberDataSubscription.unsubscribe();
   }
 
   validateUrl() {
@@ -91,6 +94,8 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
         email: data.publicDisplayEmail
       });
       if (data.billingAddress) {
+        this.country = this.countries.find(country => country.name === data.billingAddress.country);
+        this.states = this.country.states;
         this.editForm.patchValue({
           street: data.billingAddress.street,
           city: data.billingAddress.city,
@@ -110,13 +115,14 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
     const address: ISFAddress = {
       street: this.editForm.get(['street']).value,
       city: this.editForm.get(['city']).value,
-      state: this.editForm.get(['state']).value,
+      state: this.editForm.get(['state']).value == '-- No state or province --' ? null : this.editForm.get(['state']).value,
       country: this.editForm.get(['country']).value,
+      countryCode: this.country.code,
       postalCode: this.editForm.get(['postcode']).value
     };
     return {
       ...new SFMemberUpdate(),
-      name: this.editForm.get(['orgName']).value,
+      orgName: this.editForm.get(['orgName']).value,
       billingAddress: address,
       trademarkLicense: this.editForm.get(['trademarkLicense']).value,
       publicName: this.editForm.get(['publicName']).value,
@@ -142,7 +148,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
             ...this.memberService.memberData.value,
             publicDisplayDescriptionHtml: details.description,
             publicDisplayName: details.publicName,
-            name: details.name,
+            name: details.orgName,
             billingAddress: details.billingAddress,
             trademarkLicense: details.trademarkLicense,
             publicDisplayEmail: details.email,

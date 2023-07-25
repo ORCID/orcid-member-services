@@ -25,6 +25,7 @@ import {
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from 'app/shared/model/salesforce-member-org-id.model';
 import { ISFMemberUpdate } from 'app/shared/model/salesforce-member-update.model';
 import { ISFNewConsortiumMember } from 'app/shared/model/salesforce-new-consortium-member.model';
+import { ISFCountry } from 'app/shared/model/salesforce-country.model';
 
 type EntityResponseType = HttpResponse<IMSMember>;
 type EntityArrayResponseType = HttpResponse<IMSMember[]>;
@@ -40,6 +41,7 @@ export class MSMemberService {
   public managedMember = new BehaviorSubject<string | null>(null);
   public fetchingMemberDataState = new BehaviorSubject<boolean>(undefined);
   public stopFetchingMemberData = new Subject();
+  private countries = new BehaviorSubject<ISFCountry[]>(undefined);
 
   constructor(protected http: HttpClient) {
     this.orgNameMap = new Object();
@@ -192,6 +194,28 @@ export class MSMemberService {
       );
     }
     return of(null);
+  }
+
+  getCountries(): Observable<ISFCountry[]> {
+    if (!this.countries.value) {
+      return this.fetchCountries();
+    }
+    return this.countries.asObservable();
+  }
+
+  fetchCountries(): Observable<ISFCountry[]> {
+    return this.http.get(`${this.resourceUrl}/countries`, { observe: 'response' }).pipe(
+      catchError(error => {
+        return of('An error occurred:', error);
+      }),
+      map((res: HttpResponse<ISFCountry[]>) => {
+        if (res.status === 200) {
+          return res.body;
+        } else {
+          console.error('Request failed:', res);
+        }
+      })
+    );
   }
 
   fetchMemberData(salesforceId: string) {
