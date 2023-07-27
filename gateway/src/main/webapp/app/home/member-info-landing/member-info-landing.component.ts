@@ -60,10 +60,11 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
       )
       // subscribe to member data
       .subscribe(memberData => {
-        // fetch managed member data if we've started managing a member
         if (this.managedMember) {
+          // fetch managed member data if we've started managing a member
           if (this.account.salesforceId === memberData.id) {
             this.memberService.fetchMemberData(this.managedMember);
+            // otherwise display managed member data
           } else {
             this.memberData = memberData;
           }
