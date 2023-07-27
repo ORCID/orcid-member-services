@@ -103,7 +103,8 @@
                         <br><a jhiTranslate="gatewayApp.assertionServiceAssertion.details.string" [routerLink]="['/assertion', assertion.id, 'view' ]">View details</a>
                     </td>
                 <td>{{assertion.created | date:'medium'}}</td>
-                <td jhiTranslate="{{'gatewayApp.assertionStatus.' + (assertion.prettyStatus | camelcase) + '.string'}}">{{assertion.prettyStatus}}
+                <td class="assertion-status">
+                    <span jhiTranslate="{{'gatewayApp.assertionStatus.' + (assertion.prettyStatus | camelcase) + '.string'}}">{{assertion.prettyStatus}}</span>
                     <div *ngIf="assertion.prettyStatus == errorAddingToOrcid || assertion.prettyStatus == errorUpdatingInOrcid || assertion.prettyStatus == errorDeletingInOrcid">
                         <p class="note" jhiTranslate="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string">For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below.</p>
                         <div  class="alert alert-warning">
