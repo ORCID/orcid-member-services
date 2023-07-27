@@ -58,14 +58,18 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
         switchMap(() => this.memberService.memberData),
         takeUntil(this.destroy$)
       )
-      // fetch member data
+      // subscribe to member data
       .subscribe(memberData => {
         // fetch managed member data if we've started managing a member
-        if (this.managedMember && this.account.salesforceId === memberData.id) {
-          this.memberService.fetchMemberData(this.managedMember);
+        if (this.managedMember) {
+          if (this.account.salesforceId === memberData.id) {
+            this.memberService.fetchMemberData(this.managedMember);
+          } else {
+            this.memberData = memberData;
+          }
+        } else {
+          this.memberData = memberData;
         }
-
-        this.memberData = memberData;
       });
 
     this.accountService.identity().then((account: IMSUser) => {
