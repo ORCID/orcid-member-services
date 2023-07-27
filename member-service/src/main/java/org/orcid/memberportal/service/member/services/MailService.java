@@ -54,6 +54,7 @@ public class MailService {
         context.setVariable("requestedByName", memberContactUpdate.getRequestedByName());
         context.setVariable("requestedByEmail", memberContactUpdate.getRequestedByEmail());
         context.setVariable("requestedByMember", memberContactUpdate.getRequestedByMember());
+        context.setVariable("currentMember", memberContactUpdate.getContactMember());
         context.setVariable("name", memberContactUpdate.getContactNewName());
         context.setVariable("email", memberContactUpdate.getContactNewEmail());
         context.setVariable("jobTitle", memberContactUpdate.getContactNewJobTitle());
