@@ -14,7 +14,7 @@ describe('Test authorities', () => {
    * ************************************************************************************************************************
    */
 
-  it('User', function() {
+  it('User', function () {
     cy.programmaticSignin(data.populatedMember.users.user.email, credentials.password);
     cy.visit('/');
     cy.get('#admin-menu').should('not.exist');
@@ -29,8 +29,7 @@ describe('Test authorities', () => {
       .filter('[href="/member"]')
       .should('not.exist');
 
-    // non org-owners shouldn't be able to access their own userlist
-    cy.getUsersBySfId(data.populatedMember.salesforceId, 200);
+    cy.getUsersBySfId(data.populatedMember.salesforceId, 401);
     cy.getUsersBySfId(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 400, "Salesforce id doesn't match current user's memeber");
     cy.getAllUsers(403, 'Forbidden');
     cy.getAllMembers(403, 'Forbidden');
@@ -38,21 +37,19 @@ describe('Test authorities', () => {
     cy.updateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
     cy.validateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
 
-    // SHOULDN'T PASS FOR OTHER MEMBERS
+    // Awaiting endpoint changes
     //cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 403, 'Forbidden');
 
-    // CODE ISN'T PUSHED TO QA YET
-    /*
-    cy.updateContact(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-    cy.updateMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-    cy.getMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-    cy.getMemberContacts(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-    cy.getMemberOrgIds(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-    */
+    cy.updateContact(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
+    cy.updateMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, "The Harvest Ascendancy", 401, 'Unauthorized');
+    cy.getMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
+    cy.getMemberContacts(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
+    cy.getMemberOrgIds(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
+
 
     cy.getMembersList(403, 'Forbidden');
 
-    // SHOULDN'T PASS FOR OTHER MEMBERS AND POSSIBLY FOR OWN MEMBER EITHER
+    // Awaiting endpoint changes
     //cy.getMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
 
     cy.deleteMember(data.populatedMember.salesforceId, 403, 'Forbidden');
@@ -70,7 +67,7 @@ describe('Test authorities', () => {
    * ************************************************************************************************************************
    */
 
-  it('Org owner', function() {
+  it('Org owner', function () {
     cy.programmaticSignin(data.populatedMember.users.owner.email, credentials.password);
     cy.visit('/');
     cy.get('#admin-menu').should('exist');
@@ -93,22 +90,19 @@ describe('Test authorities', () => {
     cy.updateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
     cy.validateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
 
-    // SHOULDN'T PASS FOR OTHER MEMBERS
+    // Awaiting endpoint changes
     //cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 403, 'Forbidden');
 
-    // CODE ISN'T PUSHED TO QA YET
-    // SHOULD ADMINS BE ABLE TO DO THIS?
-    /*
-    cy.updateContact(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-    cy.updateMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-    cy.getMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-    cy.getMemberContacts(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-    cy.getMemberOrgIds(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-    */
+    cy.updateContact(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
+    cy.updateMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 'The Harvest Ascendancy', 401, 'Unauthorized');
+    cy.getMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
+    cy.getMemberContacts(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
+    cy.getMemberOrgIds(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
+
 
     cy.getMembersList(403, 'Forbidden');
 
-    // SHOULDN'T PASS FOR OTHER MEMBERS AND POSSIBLY FOR OWN MEMBER EITHER
+    // Awaiting endpoint changes
     //cy.getMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
 
     cy.addConsortiumMember(403, 'Forbidden');
@@ -125,7 +119,7 @@ describe('Test authorities', () => {
    * ************************************************************************************************************************
    */
 
-  it('Admin', function() {
+  it('Admin', function () {
     cy.programmaticSignin(credentials.adminEmail, credentials.adminPassword);
     cy.visit('/');
     cy.get('#admin-menu').should('exist');
@@ -147,22 +141,18 @@ describe('Test authorities', () => {
     cy.updateMember(data.invalidString, false, false, 500, 'Internal Server Error');
     cy.validateMember(data.populatedMember.salesforceId, false, false, 200);
 
-    // SHOULDN'T PASS FOR OTHER MEMBERS, ANY LANGUAGE CODE CAN BE PROVIDED 
+    // Awaiting endpoint changes
     //cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 403, 'Forbidden');
 
-    // CODE ISN'T PUSHED TO QA YET
-    // SHOULD ADMINS BE ABLE TO DO THIS?
-    /*
-    cy.updateContact(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-      cy.updateMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-      cy.getMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-      cy.getMemberContacts(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-      cy.getMemberOrgIds(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
-      */
+    cy.updateContact(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
+    cy.updateMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 'The Harvest Ascendancy', 401, 'Unauthorized');
+    cy.getMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
+    cy.getMemberContacts(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
+    cy.getMemberOrgIds(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
 
     cy.getMembersList(200);
 
-    // SHOULDN'T PASS FOR OTHER MEMBERS AND POSSIBLY FOR OWN MEMBER EITHER
+    // Awaiting endpoint changes
     //cy.getMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 200);
 
     cy.addConsortiumMember(403, 'Forbidden');
@@ -179,7 +169,7 @@ describe('Test authorities', () => {
    * ************************************************************************************************************************
    */
 
-  it('Consortium lead', function() {
+  it('Consortium lead', function () {
     cy.programmaticSignin(data.homepageTestMembers.consortiumLeadAndMember.email, credentials.password);
     cy.visit('/');
     cy.get('#admin-menu').should('exist');
@@ -194,7 +184,7 @@ describe('Test authorities', () => {
       .filter('[href="/member"]')
       .should('not.exist');
 
-    cy.getUsersBySfId(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 200);
+    cy.getUsersBySfId(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401);
     cy.getUsersBySfId(data.populatedMember.salesforceId, 400, "Salesforce id doesn't match current user's memeber");
     cy.getAllUsers(403, 'Forbidden');
     cy.getAllMembers(403, 'Forbidden');
@@ -202,28 +192,25 @@ describe('Test authorities', () => {
     cy.updateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
     cy.validateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
 
-    // SHOULDN'T PASS FOR OTHER MEMBERS
+    // Awaiting endpoint changes
     //cy.changeNotificationLanguage(data.populatedMember.salesforceId, data.italianLanguageCode, 403, 'Forbidden');
 
-    // CODE ISN'T PUSHED TO QA YET
-    /*
-    cy.updateContact(data.populatedMember.salesforceId, 403, 'Forbidden');
-    cy.updateMemberDetails(data.populatedMember.salesforceId, 403, 'Forbidden');
-    cy.getMemberDetails(data.populatedMember.salesforceId, 403, 'Forbidden');
-    cy.getMemberContacts(data.populatedMember.salesforceId, 403, 'Forbidden');
-    cy.getMemberOrgIds(data.populatedMember.salesforceId, 403, 'Forbidden');
-    */
+    cy.updateContact(data.populatedMember.salesforceId, 401, 'Unauthorized');
+    cy.updateMemberDetails(data.populatedMember.salesforceId, "Test", 401, 'Unauthorized');
+    cy.getMemberDetails(data.populatedMember.salesforceId, 401, 'Unauthorized');
+    cy.getMemberContacts(data.populatedMember.salesforceId, 401, 'Unauthorized');
+    cy.getMemberOrgIds(data.populatedMember.salesforceId, 401, 'Unauthorized');
 
     cy.getMembersList(403, 'Forbidden');
 
-    // SHOULDN'T PASS FOR OTHER MEMBERS AND POSSIBLY FOR OWN MEMBER EITHER
+    // Awaiting endpoint changes
     //cy.getMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
 
     cy.deleteMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
     cy.addConsortiumMember(200);
     cy.removeConsortiumMember(200);
 
-    // SHOULDN'T HAVE ACCESS TO ASSERTIONS
+    // Awaiting endpoint changes
     //cy.getAssertions(400, 'Forbidden');
   });
 

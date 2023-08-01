@@ -368,7 +368,6 @@ Cypress.Commands.add('validateMember', (salesforceId, assertionServiceEnabled, i
   });
 });
 
-// SHOULDN'T PASS FOR OTHER MEMBERS
 Cypress.Commands.add('changeNotificationLanguage', (salesforceId, language, code, title) => {
   cy.log('changeNotificationLanguage');
   cy.getCookie('XSRF-TOKEN').then(csrfCookie => {
@@ -384,7 +383,6 @@ Cypress.Commands.add('changeNotificationLanguage', (salesforceId, language, code
   });
 });
 
-// CODE ISN'T PUSHED TO QA YET
 Cypress.Commands.add('updateContact', (salesforceId, code, title) => {
   cy.log('updateContact');
   cy.getCookie('XSRF-TOKEN').then(csrfCookie => {
@@ -398,13 +396,12 @@ Cypress.Commands.add('updateContact', (salesforceId, code, title) => {
       }
     }).then(resp => {
       expect(resp.status).to.eq(code);
-      expect(resp.body.title).to.eq(title);
+      expect(resp.statusText).to.eq(title);
     });
   });
 });
 
-// CODE ISN'T PUSHED TO QA YET
-Cypress.Commands.add('updateMemberDetails', (salesforceId, name, code, title) => {
+Cypress.Commands.add('updateMemberDetails', (salesforceId, publicName, code, title) => {
   cy.log('updateMemberDetails');
   cy.getCookie('XSRF-TOKEN').then(csrfCookie => {
     cy.request({
@@ -413,48 +410,46 @@ Cypress.Commands.add('updateMemberDetails', (salesforceId, name, code, title) =>
       headers: { 'X-XSRF-TOKEN': csrfCookie.value },
       failOnStatusCode: false,
       body: {
-        name
+        publicName,
+        salesforceId
       }
     }).then(resp => {
       expect(resp.status).to.eq(code);
-      expect(resp.body.title).to.eq(title);
+      expect(resp.statusText).to.eq(title);
     });
   });
 });
 
-// CODE ISN'T PUSHED TO QA YET
-Cypress.Commands.add('getMemberDetails', (salesforceId, code) => {
+Cypress.Commands.add('getMemberDetails', (salesforceId, code, title) => {
   cy.log('getMemberDetails');
   cy.request({
     url: `/services/memberservice/api/members/${salesforceId}/member-details`,
     failOnStatusCode: false
   }).then(resp => {
     expect(resp.status).to.eq(code);
-    expect(resp.body.title).to.eq(title);
+    expect(resp.statusText).to.eq(title);
   });
 });
 
-// CODE ISN'T PUSHED TO QA YET
-Cypress.Commands.add('getMemberContacts', (salesforceId, code) => {
+Cypress.Commands.add('getMemberContacts', (salesforceId, code, title) => {
   cy.log('getMemberContacts');
   cy.request({
     url: `/services/memberservice/api/members/${salesforceId}/member-contacts`,
     failOnStatusCode: false
   }).then(resp => {
     expect(resp.status).to.eq(code);
-    expect(resp.body.title).to.eq(title);
+    expect(resp.statusText).to.eq(title);
   });
 });
 
-// CODE ISN'T PUSHED TO QA YET
-Cypress.Commands.add('getMemberOrgIds', (salesforceId, code) => {
+Cypress.Commands.add('getMemberOrgIds', (salesforceId, code, title) => {
   cy.log('getMemberOrgIds');
   cy.request({
     url: `/services/memberservice/api/members/${salesforceId}/member-org-ids`,
     failOnStatusCode: false
   }).then(resp => {
     expect(resp.status).to.eq(code);
-    expect(resp.body.title).to.eq(title);
+    expect(resp.statusText).to.eq(title);
   });
 });
 
@@ -470,7 +465,6 @@ Cypress.Commands.add('getMembersList', (code, title) => {
   });
 });
 
-// SHOULDN'T PASS FOR OTHER MEMBERS AND POSSIBLY FOR OWN MEMBER EITHER
 Cypress.Commands.add('getMember', (salesforceId, code, title) => {
   cy.log('getMember');
   cy.request({
