@@ -699,7 +699,7 @@ class MemberServiceTest {
     @Test
     void testUpdateMemberDefaultLanguage_illegalAccess() {
         Member member = getMember();
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(member));
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("wrongSalesforceId"))).thenReturn(Optional.of(member));
 
         Assertions.assertThrows(UnauthorizedMemberAccessException.class, () -> {
                 memberService.updateMemberDefaultLanguage("wrongSalesforceId", "en");
