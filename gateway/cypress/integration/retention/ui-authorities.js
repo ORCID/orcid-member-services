@@ -18,12 +18,6 @@ describe('Test authorities', () => {
     cy.programmaticSignin(data.populatedMember.users.user.email, credentials.password);
     cy.visit('/');
     cy.get('#admin-menu').should('not.exist');
-<<<<<<< Updated upstream
-    cy.get('#entity-menu').should('exist')
-    cy.get('a').filter('[href="/assertion"]').should('exist');
-    cy.get('a').filter('[href="/user"]').should('not.exist');
-    cy.get('a').filter('[href="/member"]').should('not.exist');
-=======
     cy.get('#entity-menu').should('exist');
     cy.get('a')
       .filter('[href="/assertion"]')
@@ -64,7 +58,6 @@ describe('Test authorities', () => {
     cy.removeConsortiumMember(403, 'Forbidden');
 
     cy.getAssertions(200);
->>>>>>> Stashed changes
   });
 
   /* ************************************************************************************************************************
@@ -79,11 +72,6 @@ describe('Test authorities', () => {
     cy.visit('/');
     cy.get('#admin-menu').should('exist');
     cy.get('#entity-menu').should('exist');
-<<<<<<< Updated upstream
-    cy.get('a').filter('[href="/user"]').should('exist');
-    cy.get('a').filter('[href="/assertion"]').should('exist');
-    cy.get('a').filter('[href="/member"]').should('not.exist');
-=======
     cy.get('a')
       .filter('[href="/user"]')
       .should('exist');
@@ -122,7 +110,6 @@ describe('Test authorities', () => {
 
     cy.deleteMember(data.populatedMember.salesforceId, 403, 'Forbidden');
     cy.getAssertions(200);
->>>>>>> Stashed changes
   });
 
   /* ************************************************************************************************************************
@@ -136,12 +123,6 @@ describe('Test authorities', () => {
     cy.programmaticSignin(credentials.adminEmail, credentials.adminPassword);
     cy.visit('/');
     cy.get('#admin-menu').should('exist');
-<<<<<<< Updated upstream
-    cy.get('#entity-menu').should('exist')
-    cy.get('a').filter('[href="/user"]').should('exist');
-    cy.get('a').filter('[href="/assertion"]').should('exist');
-    cy.get('a').filter('[href="/member"]').should('exist');
-=======
     cy.get('#entity-menu').should('exist');
     cy.get('a')
       .filter('[href="/user"]')
@@ -179,7 +160,6 @@ describe('Test authorities', () => {
 
     cy.deleteMember(data.invalidString, 400, 'Invalid id');
     cy.getAssertions(200);
->>>>>>> Stashed changes
   });
 
   /* ************************************************************************************************************************
@@ -230,8 +210,6 @@ describe('Test authorities', () => {
     cy.addConsortiumMember(200);
     cy.removeConsortiumMember(200);
 
-<<<<<<< Updated upstream
-=======
     cy.getUsersBySfId(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401);
     cy.getUsersBySfId(data.populatedMember.salesforceId, 400, "Salesforce id doesn't match current user's memeber");
     cy.getAllUsers(403, 'Forbidden');
@@ -260,7 +238,6 @@ describe('Test authorities', () => {
 
     // Awaiting endpoint changes
     cy.getAssertions(200);
->>>>>>> Stashed changes
   });
 
   // TODO: enable once the issue with signed out users not being able to visit routes is fixed
