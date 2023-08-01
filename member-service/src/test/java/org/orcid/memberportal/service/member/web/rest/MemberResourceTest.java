@@ -197,7 +197,7 @@ public class MemberResourceTest {
     }
 
     @Test
-    public void testUpdateMemberDefaultLanguage() {
+    public void testUpdateMemberDefaultLanguage() throws UnauthorizedMemberAccessException {
         ResponseEntity<Void> response = memberResource.updateMemberDefaultLanguage("salesforceId", "en");
         assertTrue(response.getStatusCode().is2xxSuccessful());
         Mockito.verify(memberService).updateMemberDefaultLanguage(Mockito.eq("salesforceId"), Mockito.eq("en"));
