@@ -205,6 +205,8 @@ export class AssertionComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.eventManager.destroy(this.eventSubscriber);
     this.routeData.unsubscribe();
-    this.paginationHeaderSubscription.unsubscribe();
+    if (this.paginationHeaderSubscription) {
+      this.paginationHeaderSubscription.unsubscribe();
+    }
   }
 }

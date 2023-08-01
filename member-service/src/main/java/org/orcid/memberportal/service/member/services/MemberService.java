@@ -379,6 +379,10 @@ public class MemberService {
         mailService.sendRemoveConsortiumMemberEmail(removeConsortiumMember);
     }
 
+    public List<Country> getSalesforceCountries() {
+        return salesforceClient.getSalesforceCountries();
+    }
+
     /**
      * validates whether current user can access member with specified salesforceId
      *

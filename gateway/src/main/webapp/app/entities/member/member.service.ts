@@ -23,8 +23,9 @@ import {
   SFMemberContact
 } from 'app/shared/model/salesforce-member-contact.model';
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from 'app/shared/model/salesforce-member-org-id.model';
-import { ISFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
+import { ISFMemberUpdate } from 'app/shared/model/salesforce-member-update.model';
 import { ISFNewConsortiumMember } from 'app/shared/model/salesforce-new-consortium-member.model';
+import { ISFCountry } from 'app/shared/model/salesforce-country.model';
 
 type EntityResponseType = HttpResponse<IMSMember>;
 type EntityArrayResponseType = HttpResponse<IMSMember[]>;
@@ -37,8 +38,10 @@ export class MSMemberService {
   public resourceUrl = SERVER_API_URL + 'services/memberservice/api';
   public orgNameMap: any;
   public memberData = new BehaviorSubject<ISFMemberData>(undefined);
+  public managedMember = new BehaviorSubject<string | null>(null);
   public fetchingMemberDataState = new BehaviorSubject<boolean>(undefined);
   public stopFetchingMemberData = new Subject();
+  private countries = new BehaviorSubject<ISFCountry[]>(undefined);
 
   constructor(protected http: HttpClient) {
     this.orgNameMap = new Object();
@@ -162,8 +165,8 @@ export class MSMemberService {
     return this.http.delete<any>(`${this.resourceUrl}/members/${id}`, { observe: 'response' });
   }
 
-  updatePublicDetails(publicDetails: ISFPublicDetails, salesforceId: string): Observable<HttpResponse<any>> {
-    return this.http.put(`${this.resourceUrl}/members/${salesforceId}/member-details`, publicDetails, { observe: 'response' });
+  updateMemberDetails(memberDetails: ISFMemberUpdate, salesforceId: string): Observable<HttpResponse<any>> {
+    return this.http.put(`${this.resourceUrl}/members/${salesforceId}/member-details`, memberDetails, { observe: 'response' });
   }
 
   getConsortiaLeadName(consortiaLeadId: string): Observable<EntityResponseType> {
@@ -193,19 +196,46 @@ export class MSMemberService {
     return of(null);
   }
 
-  fetchMemberData(userIdentity) {
+  getCountries(): Observable<ISFCountry[]> {
+    if (!this.countries.value) {
+      return this.fetchCountries();
+    }
+    return this.countries.asObservable();
+  }
+
+  fetchCountries(): Observable<ISFCountry[]> {
+    return this.http.get(`${this.resourceUrl}/countries`, { observe: 'response' }).pipe(
+      catchError(error => {
+        return of('An error occurred:', error);
+      }),
+      map((res: HttpResponse<ISFCountry[]>) => {
+        if (res.status === 200) {
+          return res.body;
+        } else {
+          console.error('Request failed:', res);
+        }
+      })
+    );
+  }
+
+  fetchMemberData(salesforceId: string) {
+    if (this.memberData.value && this.managedMember.value !== this.memberData.value.id) {
+      this.stopFetchingMemberData.next();
+      this.fetchingMemberDataState.next(false);
+    }
+
     if (!this.fetchingMemberDataState.value) {
-      if (!this.memberData.value && userIdentity) {
+      if (!this.memberData.value || this.memberData.value.id !== this.managedMember.value) {
         this.fetchingMemberDataState.next(true);
-        this.getMember(userIdentity.salesforceId)
+        this.getMember(salesforceId)
           .pipe(
             switchMap(res => {
               this.memberData.next(res);
               return combineLatest([
-                this.getMemberContacts(userIdentity.salesforceId),
-                this.getMemberOrgIds(userIdentity.salesforceId),
+                this.getMemberContacts(salesforceId),
+                this.getMemberOrgIds(salesforceId),
                 this.getConsortiaLeadName(res.consortiaLeadId),
-                this.getIsConsortiumLead(userIdentity.salesforceId)
+                this.getIsConsortiumLead(salesforceId)
               ]);
             }),
             tap(res => {
@@ -220,6 +250,14 @@ export class MSMemberService {
           .subscribe();
       }
     }
+  }
+
+  getManagedMember(): Observable<string | null> {
+    return this.managedMember.asObservable();
+  }
+
+  setManagedMember(value: string | null) {
+    this.managedMember.next(value);
   }
 
   protected convertDateFromClient(msMember: IMSMember): IMSMember {
@@ -265,7 +303,9 @@ export class MSMemberService {
         publicDisplayEmail: res.body.Public_Display_Email__c,
         membershipStartDateString: res.body.Last_membership_start_date__c,
         membershipEndDateString: res.body.Last_membership_end_date__c,
-        consortiumMembers: res.body.consortiumOpportunities ? this.convertToConsortiumMembers(res.body.consortiumOpportunities) : null
+        consortiumMembers: res.body.consortiumOpportunities ? this.convertToConsortiumMembers(res.body.consortiumOpportunities) : null,
+        billingAddress: res.body.BillingAddress,
+        trademarkLicense: res.body.Trademark_License__c
       };
     } else {
       return new SFMemberData();

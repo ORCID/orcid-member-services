@@ -3,10 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MSMemberService } from 'app/entities/member';
 import { AlertService, RemoveConsortiumMemberConfirmationComponent } from 'app/shared';
-import { COUNTRIES } from 'app/shared/constants/orcid-api.constants';
 
 import { ISFConsortiumMemberData, ISFMemberData, SFConsortiumMemberData } from 'app/shared/model/salesforce-member-data.model';
-import { IMSUser } from 'app/shared/model/user.model';
 import { DateUtilService } from 'app/shared/util/date-util.service';
 import { Subscription } from 'rxjs';
 
@@ -16,9 +14,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./remove-consortium-member.scss']
 })
 export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
-  COUNTRIES = COUNTRIES;
   memberDataSubscription: Subscription;
-  account: IMSUser;
   memberData: ISFMemberData;
   consortiumMember: SFConsortiumMemberData;
   isSaving: boolean;

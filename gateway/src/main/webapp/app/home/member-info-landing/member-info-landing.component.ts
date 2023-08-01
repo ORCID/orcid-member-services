@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { IMSUser } from 'app/shared/model/user.model';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { switchMap, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-member-info-landing',
@@ -17,8 +19,15 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   authenticationStateSubscription: Subscription;
   memberDataSubscription: Subscription;
   alertSubscription: Subscription;
-
-  constructor(private memberService: MSMemberService, private accountService: AccountService, protected activatedRoute: ActivatedRoute) {}
+  managedMember: string;
+  destroy$ = new Subject();
+  constructor(
+    private memberService: MSMemberService,
+    private accountService: AccountService,
+    private location: Location,
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router
+  ) {}
 
   isActive() {
     return this.memberData && new Date(this.memberData.membershipEndDateString) > new Date();
@@ -35,22 +44,54 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authenticationStateSubscription = this.accountService.getAuthenticationState().subscribe(account => {
-      this.account = account;
-    });
-    this.memberDataSubscription = this.memberService.memberData.subscribe(res => {
-      if (res) {
-        this.memberData = res;
-        this.validateUrl();
+    this.activatedRoute.params.subscribe(params => {
+      if (params['id']) {
+        this.managedMember = params['id'];
+        this.memberService.setManagedMember(params['id']);
       }
     });
+    this.authenticationStateSubscription = this.accountService
+      // get account info
+      .getAuthenticationState()
+      .pipe(
+        tap(account => (this.account = account)),
+        switchMap(() => this.memberService.memberData),
+        takeUntil(this.destroy$)
+      )
+      // subscribe to member data
+      .subscribe(memberData => {
+        if (this.managedMember) {
+          // fetch managed member data if we've started managing a member
+          if (this.account.salesforceId === memberData.id) {
+            this.memberService.fetchMemberData(this.managedMember);
+            // otherwise display managed member data
+          } else {
+            this.memberData = memberData;
+          }
+        } else {
+          this.memberData = memberData;
+        }
+      });
+
     this.accountService.identity().then((account: IMSUser) => {
       this.account = account;
     });
   }
 
+  stopManagingMember() {
+    // empty string if it's not working
+    this.memberService.setManagedMember(null);
+    this.memberService.fetchMemberData(this.account.salesforceId);
+  }
+
   ngOnDestroy() {
-    this.authenticationStateSubscription.unsubscribe();
-    this.memberDataSubscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
+    if (this.authenticationStateSubscription) {
+      this.authenticationStateSubscription.unsubscribe();
+    }
+    if (this.memberDataSubscription) {
+      this.memberDataSubscription.unsubscribe();
+    }
   }
 }

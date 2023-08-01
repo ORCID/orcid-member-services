@@ -16,12 +16,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.orcid.memberportal.service.member.client.model.Country;
 import org.orcid.memberportal.service.member.client.model.MemberContact;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgId;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
 import org.orcid.memberportal.service.member.client.model.MemberUpdateData;
+import org.orcid.memberportal.service.member.client.model.State;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
@@ -115,7 +117,7 @@ public class MemberResourceTest {
     public void testUpdatePublicMemberDetailsWithEmptyName() throws UnauthorizedMemberAccessException {
         Mockito.when(memberService.updateMemberData(Mockito.any(MemberUpdateData.class), Mockito.eq("salesforceId"))).thenReturn(Boolean.FALSE);
         MemberUpdateData memberUpdateData = getPublicMemberDetails();
-        memberUpdateData.setName("");
+        memberUpdateData.setPublicName("");
         ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(memberUpdateData, "salesforceId");
         assertTrue(response.getStatusCode().is4xxClientError());
     }
@@ -229,6 +231,29 @@ public class MemberResourceTest {
         Mockito.verify(memberService).requestRemoveConsortiumMember(Mockito.any(RemoveConsortiumMember.class));
     }
 
+    @Test
+    public void testGetSalesforceCountries() {
+        Mockito.when(memberService.getSalesforceCountries()).thenReturn(getSalesforceCountries());
+        memberResource.getSalesforceCountries();
+        Mockito.verify(memberService).getSalesforceCountries();
+    }
+
+    private List<Country> getSalesforceCountries() {
+        State state1 = new State();
+        state1.setName("state1");
+        state1.setCode("s1");
+
+        State state2 = new State();
+        state2.setName("state2");
+        state2.setCode("s2");
+
+        Country country = new Country();
+        country.setName("country1");
+        country.setCode("c1");
+        country.setStates(Arrays.asList(state1, state2));
+
+        return Arrays.asList(country);
+    }
 
     private MemberValidation getMemberValidation() {
         MemberValidation validation = new MemberValidation();
@@ -268,8 +293,9 @@ public class MemberResourceTest {
 
     private MemberUpdateData getPublicMemberDetails() {
         MemberUpdateData memberUpdateData = new MemberUpdateData();
-        memberUpdateData.setName("test member details");
+        memberUpdateData.setPublicName("test member details");
         memberUpdateData.setWebsite("https://website.com");
+        memberUpdateData.setOrgName("orgName");
         memberUpdateData.setDescription("test");
         memberUpdateData.setEmail("email@orcid.org");
         return memberUpdateData;

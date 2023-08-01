@@ -72,21 +72,21 @@ class UserResourceTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
     }
-    
+
     @Test
     void testUpdateSalesforceId() {
         Mockito.when(userService.updateUsersSalesforceId(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(true);
         ResponseEntity<Void> response = userResource.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
         assertTrue(response.getStatusCode().is2xxSuccessful());
     }
-    
+
     @Test
     void testUpdateSalesforceIdWithError() {
         Mockito.when(userService.updateUsersSalesforceId(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(false);
         ResponseEntity<Void> response = userResource.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
         assertTrue(response.getStatusCode().is5xxServerError());
     }
-    
+
     @Test
     public void testResendActivation() {
         Mockito.doNothing().when(userService).resendActivationEmail(Mockito.anyString());
@@ -170,7 +170,7 @@ class UserResourceTest {
         ResponseEntity<List<UserDTO>> response = userResource.getUsersBySalesforceId("some-salesforceId", new HttpHeaders(), UriComponentsBuilder.newInstance(), "",
                 Mockito.mock(Pageable.class));
         assertEquals(3, response.getBody().size());
-        
+
         response = userResource.getUsersBySalesforceId("some-salesforceId", new HttpHeaders(), UriComponentsBuilder.newInstance(), "some filter",
                 Mockito.mock(Pageable.class));
         assertEquals(1, response.getBody().size());
@@ -185,6 +185,8 @@ class UserResourceTest {
         User user = new User();
         user.setEmail("some@email.com");
         user.setLangKey("en");
+        user.setSalesforceId("some-salesforceId");
+        user.setMainContact(true);
         return Optional.of(user);
     }
 

@@ -1,5 +1,6 @@
-import { SFMemberContact } from './salesforce-member-contact.model';
-import { SFMemberOrgIds } from './salesforce-member-org-id.model';
+import { ISFAddress } from './salesforce-address.model';
+import { ISFMemberContact } from './salesforce-member-contact.model';
+import { ISFMemberOrgIds } from './salesforce-member-org-id.model';
 
 export interface ISFMemberData {
   id?: string;
@@ -18,8 +19,10 @@ export interface ISFMemberData {
   membershipEndDateString?: string;
   consortiumLeadName?: string;
   consortiumMembers?: ISFConsortiumMemberData[];
-  contacts?: SFMemberContact[];
-  orgIds?: SFMemberOrgIds;
+  contacts?: ISFMemberContact[];
+  orgIds?: ISFMemberOrgIds;
+  billingAddress?: ISFAddress;
+  trademarkLicense?: string;
 }
 
 export interface ISFConsortiumMemberData {
@@ -49,6 +52,8 @@ export interface ISFRawMemberData {
   Last_membership_start_date__c?: string;
   Last_membership_end_date__c?: string;
   consortiumOpportunities: [ISFRawConsortiumMemberData];
+  BillingAddress: ISFAddress;
+  Trademark_License__c: string;
 }
 
 export interface ISFRawConsortiumMemberData {
@@ -78,8 +83,10 @@ export class SFMemberData implements ISFMemberData {
     public membershipEndDateString?: string,
     public consortiumLeadName?: string,
     public consortiumMembers?: SFConsortiumMemberData[],
-    public contacts?: SFMemberContact[],
-    public orgIds?: SFMemberOrgIds
+    public contacts?: ISFMemberContact[],
+    public orgIds?: ISFMemberOrgIds,
+    public billingAddress?: ISFAddress,
+    public trademarkLicense?: string
   ) {}
 }
 

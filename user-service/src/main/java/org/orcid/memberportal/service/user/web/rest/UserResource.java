@@ -173,6 +173,11 @@ public class UserResource {
         if (!currentUser.getSalesforceId().equals(salesforceId)) {
             throw new BadRequestAlertException("Salesforce id doesn't match current user's memeber", "User", "badSalesforceId");
         }
+
+        if (currentUser.getMainContact() == null || !currentUser.getMainContact().booleanValue()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         List<UserDTO> users = userService.getAllUsersBySalesforceId(salesforceId);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
@@ -192,6 +197,15 @@ public class UserResource {
     public ResponseEntity<List<UserDTO>> getUsersBySalesforceId(@PathVariable String salesforceId, @RequestParam MultiValueMap<String, String> queryParams,
                                                                 UriComponentsBuilder uriBuilder, @RequestParam(required = false, name = "filter") String filter,
                                                                 Pageable pageable) {
+        User currentUser = getCurrentUser();
+        if (!currentUser.getSalesforceId().equals(salesforceId)) {
+            throw new BadRequestAlertException("Salesforce id doesn't match current user's memeber", "User", "badSalesforceId");
+        }
+
+        if (currentUser.getMainContact() == null || !currentUser.getMainContact().booleanValue()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         Page<UserDTO> page = null;
         if (StringUtils.isBlank(filter)) {
             page = userService.getAllUsersBySalesforceId(pageable, salesforceId);

@@ -2,7 +2,9 @@ package org.orcid.memberportal.service.member.client.model;
 
 public class MemberUpdateData {
 
-    private String name;
+    private String orgName;
+
+    private String publicName;
 
     private String description;
 
@@ -16,12 +18,12 @@ public class MemberUpdateData {
 
     private BillingAddress billingAddress;
 
-    public String getName() {
-        return name;
+    public String getPublicName() {
+        return publicName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPublicName(String publicName) {
+        this.publicName = publicName;
     }
 
     public String getDescription() {
@@ -70,5 +72,13 @@ public class MemberUpdateData {
 
     public void setBillingAddress(BillingAddress billingAddress) {
         this.billingAddress = billingAddress;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 }

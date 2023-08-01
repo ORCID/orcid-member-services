@@ -61,6 +61,8 @@ server:
 # Full reference is available at: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
+
+
 jhipster:
   clientApp:
     name: 'userServiceApp'
@@ -83,6 +85,20 @@ jhipster:
     logs: # Reports metrics in the logs
       enabled: true
       report-frequency: 60 # in seconds
+
+uaa:
+  key-store:
+    name: src/test/resources/keystore.p12
+    password: password
+    alias: userservicetest
+  web-client-configuration:
+    # Access Token is valid for 5 mins
+    access-token-validity-in-seconds: 300
+    # Refresh Token is valid for 7 days
+    refresh-token-validity-in-seconds-for-remember-me: 604800
+    #change client secret in production, keep in sync with gateway configuration
+    client-id: web_app
+    secret: changeit
 
 # ===================================================================
 # Application specific properties

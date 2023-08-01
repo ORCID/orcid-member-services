@@ -1,5 +1,6 @@
 package org.orcid.memberportal.service.user.config;
 
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
  * configuration must be included in {@code @SpringBootTest} in order to take
  * effect.
  */
-@Configuration
+@TestConfiguration
 public class SecurityBeanOverrideConfiguration {
 
     @Bean

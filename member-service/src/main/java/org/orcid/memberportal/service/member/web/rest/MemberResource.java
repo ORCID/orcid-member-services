@@ -4,6 +4,7 @@ import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
+import org.orcid.memberportal.service.member.client.model.Country;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
@@ -186,7 +187,7 @@ public class MemberResource {
     @PutMapping("/members/{salesforceId}/member-details")
     public ResponseEntity<Boolean> updatePublicMemberDetails(@RequestBody MemberUpdateData memberUpdateData, @PathVariable String salesforceId) {
         LOG.info("REST request to update member public details for salesforce id {}", salesforceId);
-        if (StringUtils.isBlank(memberUpdateData.getName())) {
+        if (StringUtils.isBlank(memberUpdateData.getPublicName())) {
             LOG.info("Null name in request to update public details");
             return ResponseEntity.badRequest().build();
         }
@@ -213,6 +214,14 @@ public class MemberResource {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+    @GetMapping("/countries")
+    public ResponseEntity<List<Country>> getSalesforceCountries() {
+        LOG.debug("REST request to get salesforce countries");
+        List<Country> countries = memberService.getSalesforceCountries();
+        return ResponseEntity.ok(countries);
+    }
+
 
     /**
      * {@code GET  /members/{salesforceId}/member-contacts} : get contacts of member specified by salesforceId param
