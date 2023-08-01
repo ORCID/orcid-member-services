@@ -674,7 +674,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void testUpdateMemberDefaultLanguage() {
+    void testUpdateMemberDefaultLanguage() throws UnauthorizedMemberAccessException {
         Member member = getMember();
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(member));
         memberService.updateMemberDefaultLanguage("salesforceId", "en");
@@ -694,6 +694,17 @@ class MemberServiceTest {
         assertThat(captured.getType()).isEqualTo(member.getType());
 
         assertThat(captured.getDefaultLanguage()).isEqualTo("en");
+    }
+
+    @Test
+    void testUpdateMemberDefaultLanguage_illegalAccess() {
+        Member member = getMember();
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(member));
+
+        Assertions.assertThrows(UnauthorizedMemberAccessException.class, () -> {
+                memberService.updateMemberDefaultLanguage("wrongSalesforceId", "en");
+            });
+        Mockito.verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
     }
 
     @Test
