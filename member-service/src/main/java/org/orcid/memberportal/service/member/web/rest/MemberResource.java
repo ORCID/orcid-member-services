@@ -305,6 +305,7 @@ public class MemberResource {
      * body the member, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/members/{id}")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<Member> getMember(@PathVariable String id) {
         LOG.debug("REST request to get Member : {}", id);
         Optional<Member> member = memberService.getMember(id);
