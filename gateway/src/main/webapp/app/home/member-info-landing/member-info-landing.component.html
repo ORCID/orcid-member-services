@@ -158,45 +158,47 @@
 
       <!-- CONTACTS -->
 
-      <div *ngIf="memberData.contacts" class="mb-40">
+      <div class="mb-40">
         <h2 class="mb-16 font-size-18">Contacts</h2>
         <a routerLink="/contact/new" class="mb-20 font-weight-normal font-size-14 d-block">
           <img src="../../../content/images/plus-circle.svg" class="add-new-contact-icon mr-1" alt="Add new" />
           <span>Add a new contact</span>
         </a>
-        <div class="row ml-0 d-flex justify-content-between contact">
-          <h3 class="font-size-14 wide-text-25">Name</h3>
-          <h3 class="font-size-14 wide-text-25">Member roles</h3>
-          <h3 class="font-size-14 wide-text-25">Email</h3>
-          <h3 class="font-size-14 wide-text-25">Phone</h3>
-          <h3 class="font-size-14 wide-text-25 contacts-edit-column"></h3>
+        <div *ngIf="memberData.contacts" >
+          <div class="row ml-0 d-flex justify-content-between contact">
+            <h3 class="font-size-14 wide-text-25">Name</h3>
+            <h3 class="font-size-14 wide-text-25">Member roles</h3>
+            <h3 class="font-size-14 wide-text-25">Email</h3>
+            <h3 class="font-size-14 wide-text-25">Phone</h3>
+            <h3 class="font-size-14 wide-text-25 contacts-edit-column"></h3>
+          </div>
+          <hr class="green-hr mb-0" />
+          <ul class="ml-0 pl-0 mb-0" *ngFor="let contact of memberData.contacts; let i = index">
+            <li class="row ml-0 pb-16 pt-16 d-flex justify-content-between contact">
+              <div>
+                <div>{{ contact.name }}</div>
+                <div class="color-gray font-size-12">{{ contact.title }}</div>
+              </div>
+              <div>{{ contact.memberOrgRole.join(', ') }}</div>
+              <div>
+                <a class="font-weight-normal" href="mailto:{{ contact.contactEmail }}">{{ contact.contactEmail }}</a>
+              </div>
+              <div *ngIf="contact.phone">
+                {{ contact.phone }}
+              </div>
+              <div *ngIf="!contact.phone">
+                -
+              </div>
+              <div class="contacts-edit-column">
+                <a routerLink="/contact/{{ contact.contactEmail }}/edit" class="font-weight-normal">
+                  <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                  Edit
+                </a>
+              </div>
+            </li>
+            <hr *ngIf="i + 1 < memberData.contacts.length" class="mt-0 mb-0" />
+          </ul>
         </div>
-        <hr class="green-hr mb-0" />
-        <ul class="ml-0 pl-0 mb-0" *ngFor="let contact of memberData.contacts; let i = index">
-          <li class="row ml-0 pb-16 pt-16 d-flex justify-content-between contact">
-            <div>
-              <div>{{ contact.name }}</div>
-              <div class="color-gray font-size-12">{{ contact.title }}</div>
-            </div>
-            <div>{{ contact.memberOrgRole.join(', ') }}</div>
-            <div>
-              <a class="font-weight-normal" href="mailto:{{ contact.contactEmail }}">{{ contact.contactEmail }}</a>
-            </div>
-            <div *ngIf="contact.phone">
-              {{ contact.phone }}
-            </div>
-            <div *ngIf="!contact.phone">
-              -
-            </div>
-            <div class="contacts-edit-column">
-              <a routerLink="/contact/{{ contact.contactEmail }}/edit" class="font-weight-normal">
-                <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                Edit
-              </a>
-            </div>
-          </li>
-          <hr *ngIf="i + 1 < memberData.contacts.length" class="mt-0 mb-0" />
-        </ul>
       </div>
 
       <!-- CONSORTIUM MEMBERS -->
