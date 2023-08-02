@@ -137,6 +137,7 @@ export class MemberInfoEditComponent implements OnInit {
   save() {
     if (this.editForm.status === 'INVALID') {
       this.invalidForm = true;
+      this.editForm.markAllAsTouched();
       Object.keys(this.editForm.controls).forEach(key => {
         this.editForm.get(key).markAsDirty();
       });
