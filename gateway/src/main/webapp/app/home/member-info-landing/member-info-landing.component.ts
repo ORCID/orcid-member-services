@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { IMSUser } from 'app/shared/model/user.model';
-import { Subject, Subscription } from 'rxjs';
-import { switchMap, takeUntil, tap } from 'rxjs/operators';
+import { Subject, Subscription, combineLatest } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-member-info-landing',
@@ -16,7 +15,6 @@ import { switchMap, takeUntil, tap } from 'rxjs/operators';
 export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   account: IMSUser;
   memberData: ISFMemberData;
-  authenticationStateSubscription: Subscription;
   memberDataSubscription: Subscription;
   alertSubscription: Subscription;
   managedMember: string;
@@ -24,7 +22,6 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   constructor(
     private memberService: MSMemberService,
     private accountService: AccountService,
-    private location: Location,
     protected activatedRoute: ActivatedRoute,
     protected router: Router
   ) {}
@@ -50,16 +47,11 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
         this.memberService.setManagedMember(params['id']);
       }
     });
-    this.authenticationStateSubscription = this.accountService
-      // get account info
-      .getAuthenticationState()
-      .pipe(
-        tap(account => (this.account = account)),
-        switchMap(() => this.memberService.memberData),
-        takeUntil(this.destroy$)
-      )
-      // subscribe to member data
-      .subscribe(memberData => {
+    combineLatest([this.memberService.memberData, this.accountService.getAuthenticationState()])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([memberData, account]) => {
+        this.account = account;
+        // subscribe to member data
         if (this.managedMember) {
           // fetch managed member data if we've started managing a member
           if (this.account.salesforceId === memberData.id) {
@@ -87,9 +79,6 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    if (this.authenticationStateSubscription) {
-      this.authenticationStateSubscription.unsubscribe();
-    }
     if (this.memberDataSubscription) {
       this.memberDataSubscription.unsubscribe();
     }

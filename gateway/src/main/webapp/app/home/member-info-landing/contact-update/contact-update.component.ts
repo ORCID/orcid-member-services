@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMAIL_REGEXP } from 'app/app.constants';
+import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
 import { AlertService, ContactUpdateConfirmationAlert } from 'app/shared';
 import {
@@ -12,7 +13,8 @@ import {
 } from 'app/shared/model/salesforce-member-contact.model';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { IMSUser } from 'app/shared/model/user.model';
-import { Subscription } from 'rxjs';
+import { Subject, combineLatest } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contact-update',
@@ -20,7 +22,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./contact-update.component.scss']
 })
 export class ContactUpdateComponent implements OnInit, OnDestroy {
-  memberDataSubscription: Subscription;
   account: IMSUser;
   memberData: ISFMemberData;
   contact: ISFMemberContact;
@@ -29,6 +30,8 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   routeData: any;
   editForm: FormGroup;
   contactId: string;
+  managedMember: string;
+  destroy$ = new Subject();
 
   rolesData = [
     { id: 1, selected: false, name: 'Main relationship contact' },
@@ -41,6 +44,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
 
   constructor(
     private memberService: MSMemberService,
+    private accountService: AccountService,
     private fb: FormBuilder,
     private alertService: AlertService,
     private router: Router,
@@ -49,8 +53,12 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
+      if (params['contactId']) {
+        this.contactId = params['contactId'];
+      }
       if (params['id']) {
-        this.contactId = params['id'];
+        this.managedMember = params['id'];
+        this.memberService.setManagedMember(params['id']);
       }
     });
     this.editForm = this.fb.group({
@@ -64,14 +72,36 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
         [this.validateContactRoles]
       )
     });
+    combineLatest([this.memberService.memberData, this.accountService.getAuthenticationState()])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([memberData, account]) => {
+        this.account = account;
+        // subscribe to member data
+        if (this.managedMember) {
+          // fetch managed member data if we've started managing a member
+          if (this.account.salesforceId === memberData.id) {
+            this.memberService.fetchMemberData(this.managedMember);
+            // otherwise display managed member data
+          } else {
+            this.memberData = memberData;
+            if (memberData.contacts && this.contactId) {
+              this.contact = Object.values(memberData.contacts).find(contact => contact.contactEmail == this.contactId);
+              this.updateForm(this.contact);
+            }
+          }
+        } else {
+          this.memberData = memberData;
+          if (memberData.contacts && this.contactId) {
+            this.contact = Object.values(memberData.contacts).find(contact => contact.contactEmail == this.contactId);
+            this.updateForm(this.contact);
+          }
+        }
+      });
 
-    this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
-      this.memberData = data;
-      if (data.contacts && this.contactId) {
-        this.contact = Object.values(data.contacts).find(contact => contact.contactEmail == this.contactId);
-        this.updateForm(this.contact);
-      }
+    this.accountService.identity().then((account: IMSUser) => {
+      this.account = account;
     });
+
     this.editForm.valueChanges.subscribe(() => {
       if (this.editForm.status === 'VALID') {
         this.invalidForm = false;
@@ -100,7 +130,8 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.memberDataSubscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get roles(): FormArray {
