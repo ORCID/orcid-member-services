@@ -236,7 +236,7 @@
               (input)="editForm.get('publicName').markAsUntouched()"
               formControlName="publicName"
               [ngClass]="
-                { 'text-danger': editForm.get('publicName').invalid && editForm.get('publicName').touched && editForm.get('publicName').dirty;
+                { 'text-danger': editForm.get('publicName').invalid && editForm.get('publicName').touched && editForm.get('publicName').dirty,
                 'input-field-default-border': !editForm.get('publicName').touched || !editForm.get('publicName').dirty }"
             />
             <div *ngIf="editForm.get('publicName').invalid">
