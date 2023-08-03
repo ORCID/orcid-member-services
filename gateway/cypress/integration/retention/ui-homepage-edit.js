@@ -4,8 +4,8 @@ import credentials from '../../fixtures/credentials.json';
 
 const { email, name } = data.homepageTestMembers.consortiumMember;
 
-describe('Test homepage', () => {
-  it('Direct member', function () {
+describe('Test editing member details', () => {
+  it('Editing Almonds forest member dtails', function () {
     const date = Date.now();
     cy.programmaticSignin(email, credentials.password);
     cy.visit('/');
@@ -26,6 +26,10 @@ describe('Test homepage', () => {
     cy.get('small').contains('The organization name cannot be empty').should('not.exist');
     cy.get('[name="country"]').invoke('attr', 'readonly').should('exist');
     cy.get('[name="state"]').should('not.exist')
+
+    cy.get('[name="street"]').type('Street ' + date);
+    cy.get('[name="city"]').type('City ' + date);
+    cy.get('[name="postcode"]').type('Postcode ' + date);
 
     cy.get('.ql-editor')
       .clear()
@@ -53,5 +57,6 @@ describe('Test homepage', () => {
     cy.get('app-member-info-landing').contains(date + '@orcid.org');
     cy.get('app-member-info-landing').contains('https://' + date + '.org');
     cy.get('app-member-info-landing').contains('Description: ' + date);
+    cy.get('app-member-info-landing').contains('Street ' + date + ", City " + date + " ");
   });
 });

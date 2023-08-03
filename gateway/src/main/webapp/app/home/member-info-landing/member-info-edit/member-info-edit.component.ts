@@ -70,6 +70,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
         this.memberService.setManagedMember(params['id']);
       }
     });
+    // TODO: code gets repeated too much
     combineLatest([this.memberService.memberData, this.accountService.getAuthenticationState()])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([memberData, account]) => {
