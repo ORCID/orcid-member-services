@@ -223,6 +223,8 @@ Cypress.Commands.add('fetchLinkAndGrantPermission', (email) => {
   cy.task('getClipboard').then(link => {
     cy.visit(link);
   });
+  // Handle cookies
+  cy.get('#onetrust-reject-all-handler').click();
   // Grant permission
   cy.get('#username')
     .clear()

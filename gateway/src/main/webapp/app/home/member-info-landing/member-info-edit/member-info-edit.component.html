@@ -224,21 +224,28 @@
         <div class=" wide-text-25 mb-20 font-size-14 line-height-150">Organization information to be displayed publicly, such as on the <a href="{{ MEMBER_LIST_URL }} " target="_blank">ORCID member list</a></div>
         <div class="mb-5">
           <div class="form-group w-75">
-            <label class="wide-text font-size-12" [ngClass]="{ 'text-danger': editForm.get('publicName').invalid }">Public display name</label>
+            <label 
+              class="wide-text font-size-12" 
+              [ngClass]="
+                { 'text-danger': editForm.get('publicName').invalid && editForm.get('publicName').touched && editForm.get('publicName').dirty }"
+                >Public display name</label>
             <input
               type="text"
               class="form-control"
               name="publicName"
+              (input)="editForm.get('publicName').markAsUntouched()"
               formControlName="publicName"
-              [ngClass]="{ 'text-danger': editForm.get('publicName').invalid }"
+              [ngClass]="
+                { 'text-danger': editForm.get('publicName').invalid && editForm.get('publicName').touched && editForm.get('publicName').dirty;
+                'input-field-default-border': !editForm.get('publicName').touched || !editForm.get('publicName').dirty }"
             />
             <div *ngIf="editForm.get('publicName').invalid">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('publicName').errors.required">
-                The organization name cannot be empty
+                Public organization name cannot be empty
               </small>
               <div>
                 <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('publicName').errors.maxlength">
-                  Organization name is too long. Please use 255 characters or less.
+                  Public organization name is too long. Please use 255 characters or less.
                 </small>
               </div>
             </div>
