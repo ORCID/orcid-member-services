@@ -142,6 +142,7 @@ export class NavbarComponent implements OnInit {
         window.location.href = SERVER_API_URL;
       });
     } else {
+      this.memberService.setManagedMember(null);
       this.loginService.logout();
       this.router.navigate(['']);
     }
