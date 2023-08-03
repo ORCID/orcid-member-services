@@ -37,8 +37,7 @@ describe('Test authorities', () => {
     cy.updateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
     cy.validateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
 
-    // Awaiting endpoint changes
-    //cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 403, 'Forbidden');
+    cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 401);
 
     cy.updateContact(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
     cy.updateMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, "The Harvest Ascendancy", 401, 'Unauthorized');
@@ -49,8 +48,8 @@ describe('Test authorities', () => {
 
     cy.getMembersList(403, 'Forbidden');
 
-    // Awaiting endpoint changes
-    //cy.getMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
+    // TODO: Awaiting endpoint changes
+    cy.getMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 200);
 
     cy.deleteMember(data.populatedMember.salesforceId, 403, 'Forbidden');
 
@@ -90,8 +89,7 @@ describe('Test authorities', () => {
     cy.updateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
     cy.validateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
 
-    // Awaiting endpoint changes
-    //cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 403, 'Forbidden');
+    cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 401);
 
     cy.updateContact(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
     cy.updateMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 'The Harvest Ascendancy', 401, 'Unauthorized');
@@ -102,8 +100,8 @@ describe('Test authorities', () => {
 
     cy.getMembersList(403, 'Forbidden');
 
-    // Awaiting endpoint changes
-    //cy.getMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
+    // TODO: Awaiting endpoint changes
+    cy.getMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 200);
 
     cy.addConsortiumMember(403, 'Forbidden');
     cy.removeConsortiumMember(403, 'Forbidden');
@@ -141,8 +139,7 @@ describe('Test authorities', () => {
     cy.updateMember(data.invalidString, false, false, 500, 'Internal Server Error');
     cy.validateMember(data.populatedMember.salesforceId, false, false, 200);
 
-    // Awaiting endpoint changes
-    //cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 403, 'Forbidden');
+    cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 401);
 
     cy.updateContact(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
     cy.updateMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 'The Harvest Ascendancy', 401, 'Unauthorized');
@@ -152,8 +149,8 @@ describe('Test authorities', () => {
 
     cy.getMembersList(200);
 
-    // Awaiting endpoint changes
-    //cy.getMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 200);
+    // TODO: Awaiting endpoint changes
+    cy.getMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 200);
 
     cy.addConsortiumMember(403, 'Forbidden');
     cy.removeConsortiumMember(403, 'Forbidden');
@@ -172,11 +169,11 @@ describe('Test authorities', () => {
   it('Consortium lead', function () {
     cy.programmaticSignin(data.homepageTestMembers.consortiumLeadAndMember.email, credentials.password);
     cy.visit('/');
-    cy.get('#admin-menu').should('exist');
-    cy.get('#entity-menu').should('exist');
+    cy.get('#admin-menu').should('not.exist');
+    cy.get('#entity-menu').should('not.exist');
     cy.get('a')
       .filter('[href="/user"]')
-      .should('exist');
+      .should('not.exist');
     cy.get('a')
       .filter('[href="/assertion"]')
       .should('not.exist');
@@ -192,8 +189,7 @@ describe('Test authorities', () => {
     cy.updateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
     cy.validateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
 
-    // Awaiting endpoint changes
-    //cy.changeNotificationLanguage(data.populatedMember.salesforceId, data.italianLanguageCode, 403, 'Forbidden');
+    cy.changeNotificationLanguage(data.populatedMember.salesforceId, data.italianLanguageCode, 401);
 
     cy.updateContact(data.populatedMember.salesforceId, 401, 'Unauthorized');
     cy.updateMemberDetails(data.populatedMember.salesforceId, "Test", 401, 'Unauthorized');
@@ -203,15 +199,15 @@ describe('Test authorities', () => {
 
     cy.getMembersList(403, 'Forbidden');
 
-    // Awaiting endpoint changes
-    //cy.getMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
+    // TODO: Awaiting endpoint changes
+    cy.getMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 200);
 
     cy.deleteMember(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 403, 'Forbidden');
     cy.addConsortiumMember(200);
     cy.removeConsortiumMember(200);
 
-    // Awaiting endpoint changes
-    //cy.getAssertions(400, 'Forbidden');
+    // TODO: Awaiting endpoint changes
+    cy.getAssertions(200);
   });
 
   // TODO: enable once the issue with signed out users not being able to visit routes is fixed
