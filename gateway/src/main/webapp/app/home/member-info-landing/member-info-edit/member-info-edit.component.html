@@ -271,7 +271,7 @@
             <label
               class="wide-text font-size-12"
               [ngClass]="{
-                'text-danger': editForm.get('website').invalid && editForm.get('website').touched
+                'text-danger': editForm.get('website').invalid && editForm.get('website').touched && editForm.get('website').dirty
               }"
               >Website</label
             >
@@ -282,8 +282,8 @@
               (input)="editForm.get('website').markAsUntouched()"
               formControlName="website"
               [ngClass]="{
-                'text-danger': editForm.get('website').invalid && editForm.get('website').touched,
-                'input-field-default-border': !editForm.get('website').touched
+                'text-danger': editForm.get('website').invalid && editForm.get('website').touched && editForm.get('website').dirty,
+                'input-field-default-border': !editForm.get('website').touched || !editForm.get('website').dirty
               }"
             />
             <ng-template #validWebsite>

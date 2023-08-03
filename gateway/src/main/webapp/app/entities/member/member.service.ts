@@ -210,6 +210,7 @@ export class MSMemberService {
       }),
       map((res: HttpResponse<ISFCountry[]>) => {
         if (res.status === 200) {
+          this.countries.next(res.body);
           return res.body;
         } else {
           console.error('Request failed:', res);
