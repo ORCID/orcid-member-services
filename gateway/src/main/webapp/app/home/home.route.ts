@@ -1,4 +1,4 @@
-import { CanActivate, Route, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Route, Router } from '@angular/router';
 import { UserRouteAccessService } from 'app/core';
 
 import { HomeComponent } from './';
@@ -16,11 +16,26 @@ import { Injectable } from '@angular/core';
 export class ManageMemberGuard implements CanActivate {
   constructor(private router: Router, private memberService: MSMemberService) {}
 
-  canActivate(): Observable<boolean> {
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
     return this.memberService.getManagedMember().pipe(
       map(salesforceId => {
         if (salesforceId) {
-          this.router.navigate(['manage', salesforceId]);
+          const segments = ['manage', salesforceId];
+
+          if (route.routeConfig.path === 'edit') {
+            segments.push('edit');
+          }
+
+          if (route.routeConfig.path === 'contact/new') {
+            segments.push('contact', 'new');
+          }
+
+          if (route.routeConfig.path === 'contact/:contactId/edit') {
+            segments.push('contact', route.params.contactId, 'edit');
+          }
+
+          this.router.navigate(segments);
+          return false;
         }
         return true;
       })
@@ -60,6 +75,15 @@ export const HOME_ROUTE: Route = {
         authorities: ['ROLE_USER'],
         pageTitle: 'home.title.string'
       },
+      canActivate: [UserRouteAccessService, ManageMemberGuard]
+    },
+    {
+      path: 'manage/:id/edit',
+      component: MemberInfoEditComponent,
+      data: {
+        authorities: ['ROLE_USER'],
+        pageTitle: 'home.title.string'
+      },
       canActivate: [UserRouteAccessService]
     },
     {
@@ -69,10 +93,28 @@ export const HOME_ROUTE: Route = {
         authorities: ['ROLE_USER'],
         pageTitle: 'home.title.string'
       },
+      canActivate: [UserRouteAccessService, ManageMemberGuard]
+    },
+    {
+      path: 'manage/:id/contact/new',
+      component: ContactUpdateComponent,
+      data: {
+        authorities: ['ROLE_USER'],
+        pageTitle: 'home.title.string'
+      },
       canActivate: [UserRouteAccessService]
     },
     {
-      path: 'contact/:id/edit',
+      path: 'contact/:contactId/edit',
+      component: ContactUpdateComponent,
+      data: {
+        authorities: ['ROLE_USER'],
+        pageTitle: 'home.title.string'
+      },
+      canActivate: [UserRouteAccessService, ManageMemberGuard]
+    },
+    {
+      path: 'manage/:id/contact/:contactId/edit',
       component: ContactUpdateComponent,
       data: {
         authorities: ['ROLE_USER'],

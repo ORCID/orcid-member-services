@@ -1,25 +1,24 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
 import { AccountService } from 'app/core';
 import { MSMemberService } from 'app/entities/member';
-import { COUNTRIES } from 'app/shared/constants/orcid-api.constants';
 import { ISFAddress } from 'app/shared/model/salesforce-address.model';
 import { ISFCountry } from 'app/shared/model/salesforce-country.model';
 import { ISFState } from 'app/shared/model/salesforce-country.model copy';
 import { ISFMemberData, SFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { ISFMemberUpdate, SFMemberUpdate } from 'app/shared/model/salesforce-member-update.model';
 import { IMSUser } from 'app/shared/model/user.model';
-import { Subscription, combineLatest } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Subject, combineLatest } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-member-info-edit',
   templateUrl: './member-info-edit.component.html',
   styleUrls: ['./member-info-edit.component.scss']
 })
-export class MemberInfoEditComponent implements OnInit {
+export class MemberInfoEditComponent implements OnInit, OnDestroy {
   countries: ISFCountry[];
   country: ISFCountry;
   states: ISFState[];
@@ -30,6 +29,8 @@ export class MemberInfoEditComponent implements OnInit {
   MEMBER_LIST_URL: string = 'https://orcid.org/members';
   isSaving: boolean;
   invalidForm: boolean;
+  managedMember: string;
+  destroy$ = new Subject();
   quillConfig = {
     toolbar: [['bold', 'italic'], [{ list: 'ordered' }, { list: 'bullet' }], ['link']]
   };
@@ -56,20 +57,53 @@ export class MemberInfoEditComponent implements OnInit {
 
   constructor(
     private memberService: MSMemberService,
+    private accountService: AccountService,
     private fb: FormBuilder,
     protected activatedRoute: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit() {
-    combineLatest([this.memberService.memberData, this.memberService.getCountries()])
-      .pipe(take(1))
-      .subscribe(([data, countries]) => {
-        this.memberData = data;
-        this.countries = countries;
-        this.validateUrl();
-        this.updateForm(data);
+    this.activatedRoute.params.subscribe(params => {
+      if (params['id']) {
+        this.managedMember = params['id'];
+        this.memberService.setManagedMember(params['id']);
+      }
+    });
+    combineLatest([this.memberService.memberData, this.accountService.getAuthenticationState()])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([memberData, account]) => {
+        this.account = account;
+        if (this.managedMember) {
+          // fetch managed member data if we've started managing a member
+          if (this.account.salesforceId === memberData.id) {
+            this.memberService.fetchMemberData(this.managedMember);
+            // otherwise display managed member data
+          } else {
+            this.memberData = memberData;
+            this.validateUrl();
+            this.updateForm(memberData);
+          }
+        } else {
+          this.memberData = memberData;
+          this.validateUrl();
+          this.updateForm(memberData);
+        }
       });
+    this.memberService
+      .getCountries()
+      .pipe(take(1))
+      .subscribe(countries => {
+        this.countries = countries;
+        if (this.memberData) {
+          this.updateForm(this.memberData);
+        }
+      });
+
+    this.accountService.identity().then((account: IMSUser) => {
+      this.account = account;
+    });
+
     this.editForm.valueChanges.subscribe(() => {
       if (this.editForm.status === 'VALID') {
         this.invalidForm = false;
@@ -94,9 +128,13 @@ export class MemberInfoEditComponent implements OnInit {
         email: data.publicDisplayEmail
       });
       if (data.billingAddress) {
-        this.country = this.countries.find(country => country.name === data.billingAddress.country);
-        if (this.country) {
-          this.states = this.country.states;
+        if (this.countries) {
+          this.country = this.countries.find(country => country.name === data.billingAddress.country);
+          if (this.country) {
+            this.states = this.country.states;
+          } else {
+            console.error('Unable to find country: ', data.billingAddress.country);
+          }
         }
         this.editForm.patchValue({
           street: data.billingAddress.street,
@@ -165,6 +203,11 @@ export class MemberInfoEditComponent implements OnInit {
         }
       );
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onSaveSuccess() {
