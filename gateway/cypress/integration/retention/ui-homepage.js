@@ -48,7 +48,7 @@ describe('Test homepage', () => {
     cy.get('.side-bar').contains("Public details")
     cy.get('.side-bar').contains("Website")
     cy.get('.side-bar').contains("Email")
-    cy.get('.side-bar').contains("https://")
+    cy.get('.side-bar').contains("No website added")
     cy.get('.side-bar').contains("@orcid.org")
     cy.get('.main-section').contains("Consortium/Parent organization: Mambo No 5")
     cy.get('.main-section').contains("Membership: Active")

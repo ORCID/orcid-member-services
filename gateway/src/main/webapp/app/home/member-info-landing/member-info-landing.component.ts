@@ -35,7 +35,7 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   }
 
   validateUrl() {
-    if (!/(http(s?)):\/\//i.test(this.memberData.website)) {
+    if (this.memberData.website && !/(http(s?)):\/\//i.test(this.memberData.website)) {
       this.memberData.website = 'http://' + this.memberData.website;
     }
   }
@@ -71,7 +71,6 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   }
 
   stopManagingMember() {
-    // empty string if it's not working
     this.memberService.setManagedMember(null);
     this.memberService.fetchMemberData(this.account.salesforceId);
   }
