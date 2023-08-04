@@ -5,7 +5,7 @@ import credentials from '../../fixtures/credentials.json';
 const { email, name } = data.homepageTestMembers.consortiumMember;
 
 describe('Test editing member details', () => {
-  it('Editing Almonds forest member dtails', function () {
+  it('Editing Almonds Forest member details', function () {
     const date = Date.now();
     cy.programmaticSignin(email, credentials.password);
     cy.visit('/');
@@ -61,11 +61,12 @@ describe('Test editing member details', () => {
     cy.get('app-member-info-landing').contains('Street ' + date + ", City " + date + ", " + date);
     cy.get('app-member-info-landing').contains(`YES - ORCID can use trademarked assets`);
     cy.visit('/edit');
+    // wait for data to load
     cy.intercept(`/services/memberservice/api/members/${data.homepageTestMembers.consortiumMember.salesforceId}/member-contacts`).as('details');
     cy.wait('@details');
     cy.get('[name="trademarkLicense"][value="No"]').click();
+    cy.get('[name="website"]').clear()
     cy.get('[type="submit"]').click();
     cy.get('app-member-info-landing').contains(`NO - ORCID cannot use this organization's trademarked name and logos`);
-
   });
 });
