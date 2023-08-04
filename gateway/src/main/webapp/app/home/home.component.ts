@@ -4,7 +4,6 @@ import { IMSUser } from 'app/shared/model/user.model';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { Subscription } from 'rxjs';
 import { MSMemberService } from 'app/entities/member';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'jhi-home',
@@ -20,10 +19,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   salesforceId: string;
   manage: string;
 
-  constructor(private accountService: AccountService, private memberService: MSMemberService, private activatedRoute: ActivatedRoute) {}
+  constructor(private accountService: AccountService, private memberService: MSMemberService) {}
 
   ngOnInit() {
-    this.manageMemberSubscription = this.memberService.getManagedMember().subscribe(manage => (this.manage = manage));
+    this.manageMemberSubscription = this.memberService.getManagedMember().subscribe(manage => {
+      this.manage = manage;
+    });
 
     this.authenticationStateSubscription = this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
