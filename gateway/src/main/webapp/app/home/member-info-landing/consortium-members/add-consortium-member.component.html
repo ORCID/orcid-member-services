@@ -223,26 +223,28 @@
           <div class="form-group d-flex">
             <input
               type="radio"
+              id="trademarkLicenseYes"
               class="form-control radio mr-8"
               name="trademarkLicense"
               value="Yes"
               formControlName="trademarkLicense"
               [ngClass]="{ 'outline-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').dirty }"
             />
-            <label class="wide-text-25 font-size-14 font-weight-normal"
+            <label for="trademarkLicenseYes" class="wide-text-25 font-size-14 font-weight-normal"
               ><strong>YES</strong> - ORCID can use this organization's trademarked name and logos</label
             >
           </div>
           <div class="form-group d-flex">
             <input
               type="radio"
+              id="trademarkLicenseNo"
               class="form-control radio mr-8"
               name="trademarkLicense"
               value="No"
               formControlName="trademarkLicense"
               [ngClass]="{ 'outline-danger': editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').dirty }"
             />
-            <label class="wide-text-25 font-size-14 font-weight-normal"
+            <label for="trademarkLicenseNo" class="wide-text-25 font-size-14 font-weight-normal"
               ><strong>NO</strong> - ORCID cannot use this organization's trademarked name and logos</label
             >
           </div>
