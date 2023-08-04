@@ -113,7 +113,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   }
 
   validateUrl() {
-    if (!/(http(s?)):\/\//i.test(this.memberData.website)) {
+    if (this.memberData.website && !/(http(s?)):\/\//i.test(this.memberData.website)) {
       this.memberData.website = 'http://' + this.memberData.website;
     }
   }
@@ -184,6 +184,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
       this.invalidForm = false;
       this.isSaving = true;
       const details: ISFMemberUpdate = this.createDetailsFromForm();
+
       this.memberService.updateMemberDetails(details, this.memberData.id).subscribe(
         res => {
           this.memberService.memberData.next({
