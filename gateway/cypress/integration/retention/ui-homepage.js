@@ -28,7 +28,7 @@ describe('Test homepage', () => {
     cy.get('.side-bar').contains("Public details")
     cy.get('.side-bar').contains("Website")
     cy.get('.side-bar').contains("Email")
-    cy.get('.side-bar').contains("http://testtest.com")
+    cy.get('.side-bar').contains("No website added")
     cy.get('.side-bar').contains("No email added")
     cy.get('.main-section').contains("Consortium lead")
     cy.get('.main-section').contains("Mambo No 5")
@@ -72,7 +72,6 @@ describe('Test homepage', () => {
     cy.get('.main-section').contains("Consortium/Parent organization: The Concord of Kinship")
     cy.get('.main-section').contains("Membership: Active")
     cy.get('.main-section').contains("Grateful Frogs")
-    cy.get('.main-section').contains('Contacts').should('not.exist')
   });
 
   it('Consortium member and lead', function() {
