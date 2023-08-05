@@ -22,23 +22,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(private accountService: AccountService, private memberService: MSMemberService) {}
 
   ngOnInit() {
-    this.manageMemberSubscription = this.memberService.getManagedMember().subscribe(manage => {
+    this.manageMemberSubscription = this.memberService.getActiveMember().subscribe(manage => {
       this.manage = manage;
     });
 
     this.authenticationStateSubscription = this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
-      if (account) {
-        this.memberService.fetchMemberData(account.salesforceId);
-      }
     });
     this.accountService.identity().then((account: IMSUser) => {
       this.account = account;
-      if (account) {
-        this.memberService.fetchMemberData(account.salesforceId);
-      }
     });
-    this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
+    this.memberDataSubscription = this.memberService.getMemberData().subscribe(data => {
       this.memberData = data;
     });
   }

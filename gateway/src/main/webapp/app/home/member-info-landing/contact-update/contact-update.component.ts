@@ -58,7 +58,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
       }
       if (params['id']) {
         this.managedMember = params['id'];
-        this.memberService.setManagedMember(params['id']);
+        this.memberService.setActiveMember(params['id']);
       }
     });
     this.editForm = this.fb.group({

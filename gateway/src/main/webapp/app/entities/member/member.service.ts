@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, EMPTY, Observable, of, Subject, throwError, combineLatest } from 'rxjs';
-import { catchError, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { catchError, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import * as moment from 'moment';
 import { map } from 'rxjs/operators';
 
@@ -38,7 +38,7 @@ export class MSMemberService {
   public resourceUrl = SERVER_API_URL + 'services/memberservice/api';
   public orgNameMap: any;
   public memberData = new BehaviorSubject<ISFMemberData>(undefined);
-  public managedMember = new BehaviorSubject<string | null>(null);
+  public activeMember = new BehaviorSubject<[string | null, boolean]>([null, false]);
   public fetchingMemberDataState = new BehaviorSubject<boolean>(undefined);
   public stopFetchingMemberData = new Subject();
   private countries = new BehaviorSubject<ISFCountry[]>(undefined);
@@ -219,46 +219,64 @@ export class MSMemberService {
     );
   }
 
-  fetchMemberData(salesforceId: string) {
-    if (this.memberData.value && this.managedMember.value !== this.memberData.value.id) {
+  getMemberData(): Observable<ISFMemberData> {
+    if (!this.memberData.value && this.activeMember.value[0]) {
+      this.fetchMemberData(this.activeMember.value[0]);
+    }
+    return this.memberData.asObservable();
+  }
+
+  fetchMemberData(salesforceId: string, force = false) {
+    if (force) {
       this.stopFetchingMemberData.next();
       this.fetchingMemberDataState.next(false);
     }
 
     if (!this.fetchingMemberDataState.value) {
-      if (!this.memberData.value || this.memberData.value.id !== this.managedMember.value) {
-        this.fetchingMemberDataState.next(true);
-        this.getMember(salesforceId)
-          .pipe(
-            switchMap(res => {
-              this.memberData.next(res);
-              return combineLatest([
-                this.getMemberContacts(salesforceId),
-                this.getMemberOrgIds(salesforceId),
-                this.getConsortiaLeadName(res.consortiaLeadId),
-                this.getIsConsortiumLead(salesforceId)
-              ]);
-            }),
-            tap(res => {
-              this.fetchingMemberDataState.next(false);
-            }),
-            catchError(() => {
-              this.memberData.next(null);
-              this.fetchingMemberDataState.next(false);
-              return EMPTY;
-            })
-          )
-          .subscribe();
-      }
+      console.log('FETCHING');
+
+      this.fetchingMemberDataState.next(true);
+      this.getMember(salesforceId)
+        .pipe(
+          switchMap(res => {
+            this.memberData.next(res);
+            return combineLatest([
+              this.getMemberContacts(salesforceId),
+              this.getMemberOrgIds(salesforceId),
+              this.getConsortiaLeadName(res.consortiaLeadId),
+              this.getIsConsortiumLead(salesforceId)
+            ]);
+          }),
+          take(1),
+          tap(res => {
+            this.fetchingMemberDataState.next(false);
+          }),
+          catchError(() => {
+            this.memberData.next(null);
+            this.fetchingMemberDataState.next(false);
+            return EMPTY;
+          })
+        )
+        .subscribe();
     }
   }
 
-  getManagedMember(): Observable<string | null> {
-    return this.managedMember.asObservable();
+  getActiveMember(): Observable<[string, boolean]> {
+    return this.activeMember.asObservable();
   }
 
-  setManagedMember(value: string | null) {
-    this.managedMember.next(value);
+  setActiveMember(salesforceId: string | null, isManaging = false) {
+    console.log(salesforceId, 'SETACTIVEMEMBER');
+
+    if (salesforceId) {
+      this.activeMember.next([salesforceId, isManaging]);
+      if (this.memberData.value && this.memberData.value.id !== salesforceId) {
+        this.fetchMemberData(salesforceId, true);
+      }
+      if (!this.memberData.value) {
+        this.fetchMemberData(salesforceId);
+      }
+    }
   }
 
   protected convertDateFromClient(msMember: IMSMember): IMSMember {

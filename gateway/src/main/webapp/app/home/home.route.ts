@@ -17,9 +17,11 @@ export class ManageMemberGuard implements CanActivate {
   constructor(private router: Router, private memberService: MSMemberService) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
-    return this.memberService.getManagedMember().pipe(
-      map(salesforceId => {
-        if (salesforceId) {
+    return this.memberService.getActiveMember().pipe(
+      map(([salesforceId, isManaging]) => {
+        console.log(salesforceId, isManaging);
+
+        if (salesforceId && isManaging) {
           const segments = ['manage', salesforceId];
 
           if (route.routeConfig.path === 'edit') {

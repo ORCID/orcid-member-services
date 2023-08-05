@@ -97,6 +97,7 @@ export class AccountService {
       .then(response => {
         const account: Account = response.body;
         if (account) {
+          this.memberService.setActiveMember(account.salesforceId);
           this.userIdentity = account;
           this.authenticated = true;
           // After retrieve the account info, the language will be changed to
@@ -107,6 +108,7 @@ export class AccountService {
           }
         } else {
           this.memberService.memberData.next(undefined);
+          this.memberService.setActiveMember(null);
           this.userIdentity = null;
           this.authenticated = false;
         }
@@ -116,6 +118,7 @@ export class AccountService {
       .catch(err => {
         this.userIdentity = null;
         this.memberService.memberData.next(undefined);
+        this.memberService.setActiveMember(null);
         this.authenticated = false;
         this.authenticationState.next(this.userIdentity);
         return null;

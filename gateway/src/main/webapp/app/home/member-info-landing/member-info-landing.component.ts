@@ -44,25 +44,16 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
     this.activatedRoute.params.subscribe(params => {
       if (params['id']) {
         this.managedMember = params['id'];
-        this.memberService.setManagedMember(params['id']);
+        this.memberService.setActiveMember(params['id'], true);
       }
     });
     combineLatest([this.memberService.memberData, this.accountService.getAuthenticationState()])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([memberData, account]) => {
+        console.log('skldjfhskdjfhskdjfhskdjfhskdjfhskdjfhskdjfh');
+
         this.account = account;
-        // subscribe to member data
-        if (this.managedMember) {
-          // fetch managed member data if we've started managing a member
-          if (this.account.salesforceId === memberData.id) {
-            this.memberService.fetchMemberData(this.managedMember);
-            // otherwise display managed member data
-          } else {
-            this.memberData = memberData;
-          }
-        } else {
-          this.memberData = memberData;
-        }
+        this.memberData = memberData;
       });
 
     this.accountService.identity().then((account: IMSUser) => {
@@ -71,8 +62,7 @@ export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   }
 
   stopManagingMember() {
-    this.memberService.setManagedMember(null);
-    this.memberService.fetchMemberData(this.account.salesforceId);
+    this.memberService.setActiveMember(this.account.salesforceId, false);
   }
 
   ngOnDestroy() {

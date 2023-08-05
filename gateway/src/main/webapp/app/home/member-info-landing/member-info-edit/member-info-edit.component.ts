@@ -67,7 +67,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
     this.activatedRoute.params.subscribe(params => {
       if (params['id']) {
         this.managedMember = params['id'];
-        this.memberService.setManagedMember(params['id']);
+        this.memberService.setActiveMember(params['id'], true);
       }
     });
     // TODO: code gets repeated too much
