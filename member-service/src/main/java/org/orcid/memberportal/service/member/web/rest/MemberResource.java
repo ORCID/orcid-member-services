@@ -173,7 +173,7 @@ public class MemberResource {
      */
     @PostMapping("/members/{salesforceId}/language/{language}")
     public ResponseEntity<Void> updateMemberDefaultLanguage(@PathVariable String salesforceId, @PathVariable String language) {
-        LOG.debug("REST request to update member default language : {}", salesforceId);
+        LOG.info("REST request to update default language for member : {}", salesforceId);
         try {
             memberService.updateMemberDefaultLanguage(salesforceId, language);
         } catch (UnauthorizedMemberAccessException e) {

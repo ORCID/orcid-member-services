@@ -315,6 +315,7 @@ public class MemberService {
     }
 
     public void updateMemberDefaultLanguage(String salesforceId, String language) throws UnauthorizedMemberAccessException {
+        LOG.info("Logged in user is {}, language is {}", userService.getLoggedInUser().getEmail());
         validateUserAccess(salesforceId);
         Optional<Member> optional = memberRepository.findBySalesforceId(salesforceId);
         if (optional.isPresent()) {
