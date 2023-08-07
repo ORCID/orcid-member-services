@@ -33,7 +33,7 @@ jobs:
       with:
         java-version: 11
     - name: Build User service
-      run: mvn -B verify --file user-service/pom.xml
+      run: mvn -B verify  -Pprod --file user-service/pom.xml
       
   build-assertion-service:
     runs-on: ubuntu-latest
