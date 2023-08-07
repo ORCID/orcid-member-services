@@ -66,7 +66,8 @@ export const HOME_ROUTE: Route = {
       data: {
         authorities: ['ROLE_USER', 'ROLE_CONSORTIUM_LEAD'],
         pageTitle: 'home.title.string'
-      }
+      },
+      canActivate: [UserRouteAccessService]
     },
     {
       path: 'edit',
