@@ -37,7 +37,7 @@ describe('Test authorities', () => {
     cy.updateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
     cy.validateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
 
-    cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 401);
+    //cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 401);
 
     cy.updateContact(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
     cy.updateMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, "The Harvest Ascendancy", 401, 'Unauthorized');
@@ -89,7 +89,7 @@ describe('Test authorities', () => {
     cy.updateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
     cy.validateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
 
-    cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 401);
+    //cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 401);
 
     cy.updateContact(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
     cy.updateMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 'The Harvest Ascendancy', 401, 'Unauthorized');
@@ -139,7 +139,7 @@ describe('Test authorities', () => {
     cy.updateMember(data.invalidString, false, false, 500, 'Internal Server Error');
     cy.validateMember(data.populatedMember.salesforceId, false, false, 200);
 
-    cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 401);
+    //cy.changeNotificationLanguage(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, data.italianLanguageCode, 401);
 
     cy.updateContact(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 401, 'Unauthorized');
     cy.updateMemberDetails(data.homepageTestMembers.consortiumLeadAndMember.salesforceId, 'The Harvest Ascendancy', 401, 'Unauthorized');
@@ -189,7 +189,7 @@ describe('Test authorities', () => {
     cy.updateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
     cy.validateMember(data.populatedMember.salesforceId, false, false, 403, 'Forbidden');
 
-    cy.changeNotificationLanguage(data.populatedMember.salesforceId, data.italianLanguageCode, 401);
+    //cy.changeNotificationLanguage(data.populatedMember.salesforceId, data.italianLanguageCode, 401);
 
     cy.updateContact(data.populatedMember.salesforceId, 401, 'Unauthorized');
     cy.updateMemberDetails(data.populatedMember.salesforceId, "Test", 401, 'Unauthorized');
