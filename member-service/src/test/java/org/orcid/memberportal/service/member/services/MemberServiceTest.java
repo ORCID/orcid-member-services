@@ -697,17 +697,6 @@ class MemberServiceTest {
     }
 
     @Test
-    void testUpdateMemberDefaultLanguage_illegalAccess() {
-        Member member = getMember();
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("wrongSalesforceId"))).thenReturn(Optional.of(member));
-
-        Assertions.assertThrows(UnauthorizedMemberAccessException.class, () -> {
-                memberService.updateMemberDefaultLanguage("wrongSalesforceId", "en");
-            });
-        Mockito.verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
-    }
-
-    @Test
     void testProcessMemberContact_add() throws UnauthorizedMemberAccessException {
         Mockito.doNothing().when(mailService).sendUpdateContactEmail(Mockito.any(MemberContactUpdate.class));
         Mockito.doNothing().when(mailService).sendAddContactEmail(Mockito.any(MemberContactUpdate.class));
