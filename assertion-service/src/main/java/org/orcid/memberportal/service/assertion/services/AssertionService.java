@@ -92,7 +92,7 @@ public class AssertionService {
 
     @Autowired
     private CsvReportService csvReportService;
-    
+
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault())
             .withZone(ZoneId.systemDefault());
 
@@ -250,7 +250,7 @@ public class AssertionService {
                     a.setModified(Instant.now());
                     assertionRepository.save(a);
                 });
-                
+
                 // repeat until no more left in db with old sf id
                 page = assertionRepository.findBySalesforceId(from, pageable);
             }
@@ -613,7 +613,7 @@ public class AssertionService {
     }
 
     private void storeError(Assertion assertion, int statusCode, String error, AssertionStatus defaultErrorStatus) {
-        LOG.info("Error updating ORCID registry: status code - {}, error - {}", statusCode, error);
+        LOG.info("Error updating ORCID registry: assertion id - {}, orcid id - {], status code - {}, error - {}", assertion.getId(), assertion.getOrcidId(), statusCode, error);
         JSONObject obj = new JSONObject();
         obj.put("statusCode", statusCode);
         obj.put("error", error);
