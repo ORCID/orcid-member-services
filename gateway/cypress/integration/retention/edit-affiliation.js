@@ -48,8 +48,8 @@ describe('Edit an affiliation', () => {
         expect(res.body['affiliation-group']).to.have.length(1);
         expect(education['department-name']).to.eq(testString);
         expect(education['role-title']).to.eq(testString);
-        expect(education['organization']['address']['city']).to.eq(testString);
-        expect(education['organization']['name']).to.eq(testString);
+        expect(education['organization']['address']['city']).to.eq(testString.trim());
+        expect(education['organization']['name']).to.eq(testString.trim());
       },
       {
         log: true,

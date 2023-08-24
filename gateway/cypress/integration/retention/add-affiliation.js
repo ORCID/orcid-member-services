@@ -21,15 +21,15 @@ const months = {
 const { country, countryCode, url, invalidUrl, startDate, endDate, type } = record.affiliation;
 const { ringgold, grid, ror } = record.affiliation.org;
 describe('Add and remove affiliation', () => {
- /* beforeEach(() => {
-    cy.programmaticSignin(data.member.users.owner.email, credentials.password);
-  });
+  /* beforeEach(() => {
+     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
+   });
+ 
+   afterEach(() => {
+     cy.programmaticSignout();
+   });*/
 
-  afterEach(() => {
-    cy.programmaticSignout();
-  });*/
-
-  it('Add affiliation', function() {
+  it('Add affiliation', function () {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     cy.visit('/assertion/new');
 
@@ -67,7 +67,7 @@ describe('Add and remove affiliation', () => {
     cy.get('.alerts')
       .children()
       .should('have.length', 1);
-    
+
     cy.get('#save-entity').click();
     cy.get('.alerts')
       .children()
@@ -89,7 +89,7 @@ describe('Add and remove affiliation', () => {
     cy.get('tbody').children().first().children().eq(1).should('not.contain', record.id);
     cy.get('tbody').children().first().children().eq(2).contains(record.affiliation.type);
     cy.get('tbody').children().first().children().eq(4).contains('Pending');
-    
+
     cy.fetchLinkAndGrantPermission(record.email);
 
     recurse(
@@ -103,10 +103,9 @@ describe('Add and remove affiliation', () => {
         expect(res.body['affiliation-group']).to.have.length(1);
         expect(service['department-name']).to.eq(data.testString);
         expect(service['role-title']).to.eq(data.testString);
-        expect(service['organization']['address']['city']).to.eq(data.testString);
+        expect(service['organization']['address']['city']).to.eq(data.testString.trim());
         expect(service['organization']['address']['country']).to.eq(countryCode);
-        expect(service['organization']['name']).to.eq(data.testString);
-        expect(service['department-name']).to.eq(data.testString);
+        expect(service['organization']['name']).to.eq(data.testString.trim());
         expect(service['url']['value']).to.eq(url);
         expect(service['start-date']['year']['value']).to.eq(startDate.year);
         expect(service['start-date']['month']['value']).to.eq(months[startDate.month]);
@@ -116,7 +115,6 @@ describe('Add and remove affiliation', () => {
         expect(service['end-date']['day']['value']).to.eq(endDate.day);
         expect(service['organization']['disambiguated-organization']['disambiguated-organization-identifier']).to.eq(ror.id);
         expect(service['organization']['disambiguated-organization']['disambiguation-source']).to.eq(ror.name);
-        expect(service['department-name']).to.eq(data.testString);
       },
       {
         log: true,
@@ -124,7 +122,7 @@ describe('Add and remove affiliation', () => {
         timeout: 600000, // time limit in ms
         delay: 30000 // delay before next iteration, ms
       }
-    );    
+    );
   });
 
   it('Confirm UI changes on the assertion page', () => {
