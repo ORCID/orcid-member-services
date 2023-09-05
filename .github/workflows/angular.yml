@@ -9,6 +9,8 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
-      - run: |
+      - name: Install dependencies and run tests
+        working-directory: ui
+        run: |
           npm i
           npm test
