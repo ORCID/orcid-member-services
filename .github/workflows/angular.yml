@@ -1,4 +1,4 @@
-name: Angular CI
+name: Angular Unit Tests
 on:
   workflow_dispatch:
 jobs:
@@ -6,9 +6,13 @@ jobs:
     runs-on: ubuntu-latest    
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
       - name: Install dependencies
         working-directory: ui
-        run: npm i
+        run: npm ci
       - name: Run tests
         working-directory: ui
         run: npm test
