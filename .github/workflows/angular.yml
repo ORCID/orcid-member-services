@@ -1,17 +1,19 @@
-name: Angular CI
+name: Angular Unit Tests
 on:
   workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest    
     steps:
-      - uses: actions/checkout@v3      
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: 'npm'
-      - name: Install dependencies and run tests
+          cache-dependency-path: 'ui/package-lock.json'
+      - name: Install dependencies
         working-directory: ui
-        run: |
-          npm i
-          npm test
+        run: npm ci
+      - name: Run tests
+        working-directory: ui
+        run: npm test
