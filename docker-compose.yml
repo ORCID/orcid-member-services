@@ -179,3 +179,5 @@ services:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     depends_on:
       - "gateway-app"
+    ports:
+      - 8090:8090
