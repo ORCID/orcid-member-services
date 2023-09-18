@@ -169,3 +169,14 @@ services:
     command: -r us -j --no-stats --no-docker-events --skipByName '.*jhipster-registry.*'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+  ui-app:
+    restart: unless-stopped
+    image: ${DOCKER_REG}/ui:${TAG}
+    environment:
+      - 'SPRING_PROFILES_ACTIVE=prod'
+    volumes:
+    depends_on:
+      - "gateway-app"
+    ports:
+      - 8090:8090
