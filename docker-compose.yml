@@ -176,6 +176,7 @@ services:
     environment:
       - 'SPRING_PROFILES_ACTIVE=prod'
     volumes:
+      - ${LOG_VOLUME:-/var/tmp/}:/logs
     depends_on:
       - "gateway-app"
     ports:
