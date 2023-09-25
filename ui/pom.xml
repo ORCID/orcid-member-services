@@ -769,13 +769,22 @@
                                 </goals>
                             </execution>
                             <execution>
-                                <id>webpack build dev</id>
+                                #<id>webpack build dev</id>
+                                #<goals>
+                                #    <goal>npm</goal>
+                                #</goals>
+                                #<phase>generate-resources</phase>
+                                #<configuration>
+                                #    <arguments>run webpack:build</arguments>
+                                #    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                                #</configuration>
+                                <id>ng build dev</id>
                                 <goals>
                                     <goal>npm</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>run webpack:build</arguments>
+                                    <arguments>ng build</arguments>
                                     <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
                                 </configuration>
                             </execution>
@@ -868,15 +877,15 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>webpack build prod</id>
-                                <goals>
-                                    <goal>npm</goal>
-                                </goals>
-                                <phase>generate-resources</phase>
-                                <configuration>
-                                    <arguments>run webpack:${angular.env}</arguments>
-                                    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
-                                </configuration>
+                                #<id>webpack build prod</id>
+                                #<goals>
+                                #    <goal>npm</goal>
+                                #</goals>
+                                #<phase>generate-resources</phase>
+                                #<configuration>
+                                #    <arguments>run webpack:${angular.env}</arguments>
+                                #    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                                #</configuration>
                             </execution>
                         </executions>
                     </plugin>
