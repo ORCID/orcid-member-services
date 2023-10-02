@@ -1,0 +1,43 @@
+<div *ngIf="isModal" class="modal-header">
+    <h4 class="modal-title" jhiTranslate="login.title.string">Sign in</h4>
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')"><span aria-hidden="true">x</span>
+    </button>
+</div>
+<div [ngClass]="{'modal-body': isModal === false}">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div [ngClass]="{'col-md-8': isModal === false, 'col-md-4':  isModal === true}">
+                <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication.string">
+                    <strong>Failed to sign in!</strong> Please check your credentials and try again.
+                </div>
+                <form id="signin-form" class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
+                    <div class="form-group">
+                        <label class="username-label" for="username" jhiTranslate="global.form.email.label.string">Email</label>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="{{'global.form.email.placeholder.string' | translate}}"
+                               formControlName="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" jhiTranslate="login.form.password.label.string">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="{{'login.form.password.placeholder.string' | translate}}"
+                               formControlName="password">
+                    </div>
+                    <div *ngIf="showMfa" class="form-group">
+                    	<div class="alert alert-danger" jhiTranslate="login.form.mfaCode.prompt.string">
+		                    Please enter the MFA code from your authenticator app
+		                </div>
+						<div *ngIf="mfaError" class="alert alert-danger" jhiTranslate="login.form.mfaCode.error.string">
+		                    Invalid MFA code
+		                </div>		                
+                    	<label for="mfaCode" jhiTranslate="login.form.mfaCode.label.string">MFA code</label>
+                        <input type="text" class="form-control" name="mfaCode" id="mfaCode" formControlName="mfaCode">
+                    </div>
+                    <button id="signin-button" type="submit" class="btn btn-primary" jhiTranslate="login.form.button.string">Sign in</button>
+                </form>
+                <p></p>
+                <div class="alert alert-warning">
+                    <a class="alert-link" (click)="requestResetPassword()" jhiTranslate="login.password.forgot.string">Did you forget your password?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
