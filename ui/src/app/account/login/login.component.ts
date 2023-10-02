@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, ElementRef, Renderer2 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AccountService } from 'app/core/auth/account.service';
-import { LoginService } from 'app/core/login/login.service';
-import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { AccountService } from '../service/account.service';
+import { LoginService } from '../service/login.service';
+import { StateStorageService } from '../service/state-storage.service';
 import { ILoginResult } from '../model/login.model';
 import { IAccount } from '../model/account.model';
 
@@ -62,9 +62,8 @@ export class LoginComponent implements AfterViewInit {
 
       this.loginService
         .login({
-          username: this.loginForm.get('username')?.value,
-          password: this.loginForm.get('password')?.value,
-          rememberMe: this.loginForm.get('rememberMe')?.value,
+          username: this.loginForm.get('username')?.value!,
+          password: this.loginForm.get('password')?.value!,
           mfaCode: this.loginForm.get('mfaCode')?.value
         })
         .subscribe(
