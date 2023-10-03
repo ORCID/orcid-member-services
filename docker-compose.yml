@@ -174,7 +174,7 @@ services:
     image: ${DOCKER_REG_PRIVATE}/orcid-angular/memberservice-ui:${TAG:-1}
     build: .
     # cron_mode=0 means cron healthcheck is broken
-    restart: ${RESTART:-no}
+    restart: unless-stopped
     entrypoint: ${ENTRYPOINT:-"/var/tmp/entrypoint.sh"}
     environment:
       - 'SPRING_PROFILES_ACTIVE=prod'
@@ -186,7 +186,5 @@ services:
       - 0.0.0.0:4200:4200
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
-    depends_on:
-      - "gateway-app"
     labels:
       description: angular node js container for member services ui
