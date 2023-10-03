@@ -170,14 +170,23 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-  ui-app:
-    restart: unless-stopped
-    image: ${DOCKER_REG}/ui:${TAG}
+  memberservice-ui:
+    image: ${DOCKER_REG_PRIVATE}/orcid-angular/memberservice-ui:${TAG:-1}
+    build: .
+    # cron_mode=0 means cron healthcheck is broken
+    restart: ${RESTART:-no}
+    entrypoint: ${ENTRYPOINT:-"/var/tmp/entrypoint.sh"}
     environment:
       - 'SPRING_PROFILES_ACTIVE=prod'
+    env_file:
+      - ${ENV_FILE:-dev.env}
+      # anything secure that is non prod separated goes here
+      - ${DOCKER_DEV_ENV_FILE:-empty.env}
+    ports:
+      - 0.0.0.0:4200:4200
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     depends_on:
       - "gateway-app"
-    ports:
-      - 8090:8090
+    labels:
+      description: angular node js container for member services ui
