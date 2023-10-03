@@ -98,6 +98,9 @@ export class AccountService {
     return this.fetch()
       .toPromise()
       .then(response => {
+        // TODO: change into an observable
+        // since a promise has to return something it can return null
+      // whereas an observable will only return something when it's available therefore it will not be null or undefined
         if (response && response.body) {
           const account: IAccount = response.body;
           this.userIdentity = account;
