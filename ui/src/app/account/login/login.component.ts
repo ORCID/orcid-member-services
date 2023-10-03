@@ -34,7 +34,7 @@ export class LoginComponent implements AfterViewInit {
     private router: Router,
     private accountService: AccountService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   ngAfterViewInit() {
     setTimeout(() => this.renderer.selectRootElement('#username').scrollIntoView());
@@ -67,22 +67,24 @@ export class LoginComponent implements AfterViewInit {
           mfaCode: this.loginForm.get('mfaCode')?.value
         })
         .subscribe(
-          (data: ILoginResult) => {
-            if (!data.mfaRequired) {
-              this.showMfa = false;
-              this.accountService.identity(true).then((account: IAccount) => {
-                this.loginSuccess();
-              });
-            } else {
-              this.showMfa = true;
-              this.mfaError = this.mfaSent;
+          {
+            next: (data: ILoginResult) => {
+              if (!data.mfaRequired) {
+                this.showMfa = false;
+                this.accountService.identity(true).then((account: IAccount) => {
+                  this.loginSuccess();
+                });
+              } else {
+                this.showMfa = true;
+                this.mfaError = this.mfaSent;
+              }
+              this.mfaSent = false;
+            },
+            // TODO: review any type
+            error: err => {
+              this.loginService.logout();
+              this.authenticationError = true;
             }
-            this.mfaSent = false;
-          },
-          // TODO: review any type
-          (err: any) => {
-            this.loginService.logout();
-            this.authenticationError = true;
           }
         );
     }
@@ -94,10 +96,10 @@ export class LoginComponent implements AfterViewInit {
     }
 
     // TODO: Event manager
-   /*  this.eventManager.broadcast({
-      name: 'authenticationSuccess',
-      content: 'Sending Authentication Success'
-    }); */
+    /*  this.eventManager.broadcast({
+       name: 'authenticationSuccess',
+       content: 'Sending Authentication Success'
+     }); */
 
     // previousState was set in the authExpiredInterceptor before being redirected to login modal.
     // since login is successful, go to stored previousState and clear previousState
