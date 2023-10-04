@@ -8,6 +8,8 @@ export interface IAccount {
       imageUrl: string,
       salesforceId: string,
       loggedAs: boolean,
+      loginAs: string,
+      mainContact: boolean,
       mfaEnabled: boolean
   }
   

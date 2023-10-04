@@ -6,6 +6,7 @@ import { LoginService } from '../service/login.service';
 import { StateStorageService } from '../service/state-storage.service';
 import { ILoginResult } from '../model/login.model';
 import { IAccount } from '../model/account.model';
+import { filter, take } from 'rxjs';
 
 
 @Component({
@@ -71,7 +72,8 @@ export class LoginComponent implements AfterViewInit {
             next: (data: ILoginResult) => {
               if (!data.mfaRequired) {
                 this.showMfa = false;
-                this.accountService.identity(true).then((account: IAccount) => {
+                this.accountService.getAccountData().pipe(filter((account: IAccount | undefined) => !!account), take(1)).subscribe((account: IAccount | undefined) => {
+                  console.log("Login successful, account data:", account);
                   this.loginSuccess();
                 });
               } else {

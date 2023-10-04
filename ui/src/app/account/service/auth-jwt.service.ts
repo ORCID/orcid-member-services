@@ -20,7 +20,8 @@ export class AuthServerProvider {
       password: credentials.password,
       mfaCode: credentials.mfaCode
     };
-    return this.http.post(SERVER_API_URL + 'auth/login', data, {});
+    
+    return this.http.post('/auth/login', data, {});
   }
 
   // TODO: not being used?

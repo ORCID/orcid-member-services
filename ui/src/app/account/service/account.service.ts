@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SessionStorageService } from 'ngx-webstorage';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, catchError, map, of, tap } from 'rxjs';
 
 import { SERVER_API_URL } from '../../../app/app.constants';
 import { IAccount } from '../model/account.model';
@@ -10,7 +10,7 @@ import { IAccount } from '../model/account.model';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private userIdentity: any;
+  private accountData: BehaviorSubject<IAccount | undefined> = new BehaviorSubject<IAccount | undefined>(undefined);
   private authenticated = false;
   private authenticationState = new BehaviorSubject<any>(null);
   private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
@@ -24,8 +24,39 @@ export class AccountService {
     //private memberService: MSMemberService
   ) { }
 
-  fetch(): Observable<HttpResponse<IAccount>> {
-    return this.http.get<IAccount>(SERVER_API_URL + 'services/userservice/api/account', { observe: 'response' });
+  private fetchAccountData() {
+    console.log("Fetching account data from the back end");
+    
+    return this.http.get<IAccount>(SERVER_API_URL + '/services/userservice/api/account', { observe: 'response' }).pipe(
+      catchError((err) => {
+        this.accountData.next(undefined);
+        // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
+        //this.memberService.memberData.next(undefined);
+        this.authenticated = false;
+        this.authenticationState.next(this.accountData);
+        return EMPTY;
+      }),
+      map((response: HttpResponse<IAccount>) => {
+        this.authenticationState.next(this.accountData);
+        if (response && response.body) {
+          const account: IAccount = response.body;
+          this.accountData.next(account);
+          this.authenticated = true;
+          // After retrieve the account info, the language will be changed to
+          // the user's preferred language configured in the account setting
+          if (this.accountData.value?.langKey) {
+            const langKey = this.sessionStorage.retrieve('locale') || this.accountData.value.langKey;
+            // TODO: uncomment when language service is implemented
+            //this.languageService.changeLanguage(langKey);
+          }
+        } else {
+          // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
+          //this.memberService.memberData.next(undefined);
+          this.accountData.next(undefined);
+          this.authenticated = false;
+          console.error("Invalid response:", response);
+        }
+      }));
   }
 
   getMfaSetup(): Observable<HttpResponse<any>> {
@@ -45,18 +76,18 @@ export class AccountService {
   }
   // TODO: any - this seems to only be used for logging out (only ever receives null as arg)
   authenticate(identity: any) {
-    this.userIdentity = identity;
+    this.accountData = identity;
     this.authenticated = identity !== null;
-    this.authenticationState.next(this.userIdentity);
+    this.authenticationState.next(this.accountData);
   }
 
   hasAnyAuthority(authorities: string[]): boolean {
-    if (!this.authenticated || !this.userIdentity || !this.userIdentity.authorities) {
+    if (!this.authenticated || !this.accountData || !this.accountData.value?.authorities) {
       return false;
     }
 
     for (let i = 0; i < authorities.length; i++) {
-      if (this.userIdentity.authorities.includes(authorities[i])) {
+      if (this.accountData.value?.authorities.includes(authorities[i])) {
         return true;
       }
     }
@@ -64,72 +95,31 @@ export class AccountService {
     return false;
   }
 
-  hasAuthority(authority: string): Promise<boolean> {
+  hasAuthority(authority: string): boolean {
     if (!this.authenticated) {
-      return Promise.resolve(false);
+      return false;
+    } else {
+      return this.accountData.value!.authorities && this.accountData.value!.authorities.includes(authority)
     }
-
-    return this.identity().then(
-      id => {
-        return Promise.resolve(id.authorities && id.authorities.includes(authority));
-      },
-      () => {
-        return Promise.resolve(false);
-      }
-    );
   }
 
-  identity(force?: boolean): Promise<IAccount> {
+  getAccountData(force?: boolean): Observable<IAccount | undefined> {
     if (force) {
       // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
-
       //this.memberService.stopFetchingMemberData.next();
-      this.userIdentity = undefined;
+      this.accountData.next(undefined);
       //this.memberService.memberData.next(undefined);
     }
 
     // check and see if we have retrieved the userIdentity data from the server.
     // if we have, reuse it by immediately resolving
-    if (this.userIdentity) {
-      return Promise.resolve(this.userIdentity);
+    if (!this.accountData.value) {
+      this.fetchAccountData().subscribe()
     }
 
     // retrieve the userIdentity data from the server, update the identity object, and then resolve.
-    return this.fetch()
-      .toPromise()
-      .then(response => {
-        // TODO: change into an observable
-        // since a promise has to return something it can return null
-      // whereas an observable will only return something when it's available therefore it will not be null or undefined
-        if (response && response.body) {
-          const account: IAccount = response.body;
-          this.userIdentity = account;
-          this.authenticated = true;
-          // After retrieve the account info, the language will be changed to
-          // the user's preferred language configured in the account setting
-          if (this.userIdentity.langKey) {
-            const langKey = this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
-            // TODO: uncomment when language service is implemented
-            //this.languageService.changeLanguage(langKey);
-          }
+    return this.accountData.asObservable()
 
-        } else {
-          // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
-          //this.memberService.memberData.next(undefined);
-          this.userIdentity = null;
-          this.authenticated = false;
-        }
-        this.authenticationState.next(this.userIdentity);
-        return this.userIdentity;
-      })
-      .catch(err => {
-        this.userIdentity = null;
-        // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
-        //this.memberService.memberData.next(undefined);
-        this.authenticated = false;
-        this.authenticationState.next(this.userIdentity);
-        return null;
-      });
   }
 
   isAuthenticated(): boolean {
@@ -137,53 +127,53 @@ export class AccountService {
   }
 
   isIdentityResolved(): boolean {
-    return this.userIdentity !== undefined;
+    return this.accountData.value !== undefined;
   }
 
   getAuthenticationState(): Observable<any> {
     return this.authenticationState.asObservable();
   }
 
-  getImageUrl(): string {
-    return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
+  getImageUrl(): string | null {
+    return this.isIdentityResolved() ? this.accountData.value!.imageUrl : null;
   }
 
   getUserName(): string | null {
     let userName: string | null = null;
 
     if (this.isIdentityResolved()) {
-      if (this.userIdentity.firstName) {
-        userName = this.userIdentity.firstName;
+      if (this.accountData.value!.firstName) {
+        userName = this.accountData.value!.firstName;
       }
-      if (this.userIdentity.lastName) {
+      if (this.accountData.value!.lastName) {
         if (userName) {
-          userName = userName + ' ' + this.userIdentity.lastName;
+          userName = userName + ' ' + this.accountData.value!.lastName;
         } else {
-          userName = this.userIdentity.lastName;
+          userName = this.accountData.value!.lastName;
         }
       }
       if (userName == null) {
-        userName = this.userIdentity.email;
+        userName = this.accountData.value!.email;
       }
     }
     return userName;
   }
 
-  getSalesforceId(): string {
-    return this.isAuthenticated() && this.userIdentity ? this.userIdentity.salesforceId : null;
+  getSalesforceId(): string | null {
+    return this.isAuthenticated() && this.accountData ? this.accountData.value!.salesforceId : null;
   }
 
-  isOrganizationOwner(): string {
-    return this.isIdentityResolved() && this.userIdentity ? this.userIdentity.mainContact : false;
+  isOrganizationOwner(): boolean | null {
+    return this.isIdentityResolved() && this.accountData ? this.accountData.value!.mainContact : false;
   }
 
   isLoggedAs(): boolean {
-    return !!(this.isIdentityResolved() && this.userIdentity && this.userIdentity.loggedAs);
+    return !!(this.isIdentityResolved() && this.accountData.value!.loggedAs);
   }
 
   logoutAs(): Observable<any> {
     const formData = new FormData();
-    formData.set('username', this.userIdentity.loginAs);
+    formData.set('username', this.accountData.value!.loginAs);
     return this.http.post(`${this.logoutAsResourceUrl}/logout_as`, formData, {
       headers: new HttpHeaders().set('Accept', 'text/html'),
       withCredentials: true,
