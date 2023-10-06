@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, ElementRef, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, Renderer2 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccountService } from '../service/account.service';
 import { LoginService } from '../service/login.service';
 import { StateStorageService } from '../service/state-storage.service';
 import { ILoginResult } from '../model/login.model';
-import { IAccount } from '../model/account.model';
 import { filter, take } from 'rxjs';
 
 
@@ -30,7 +29,6 @@ export class LoginComponent implements AfterViewInit {
   constructor(
     private loginService: LoginService,
     private stateStorageService: StateStorageService,
-    private elementRef: ElementRef,
     private renderer: Renderer2,
     private router: Router,
     private accountService: AccountService,
