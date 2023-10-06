@@ -5,9 +5,11 @@ import {
   BehaviorSubject,
   EMPTY,
   Observable,
+  Subject,
   catchError,
   map,
   of,
+  takeUntil,
   tap,
 } from 'rxjs'
 
@@ -18,12 +20,12 @@ import { IAccount } from '../model/account.model'
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private accountData: BehaviorSubject<IAccount | undefined> =
-    new BehaviorSubject<IAccount | undefined>(undefined)
+  private accountData = new BehaviorSubject<IAccount | undefined>(undefined);
   private isFetchingAccountData = false;
-  private authenticated = false
-  private authenticationState = new BehaviorSubject<any>(null)
-  private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api'
+  private stopFetchingAccountData = new Subject();
+  private authenticated = false;
+  private authenticationState = new BehaviorSubject<any>(null);
+  private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
 
   constructor(
     // TODO: uncomment when language service is implemented
@@ -40,15 +42,18 @@ export class AccountService {
         observe: 'response',
       })
       .pipe(
+        takeUntil(this.stopFetchingAccountData),
         catchError((err) => {
           this.accountData.next(undefined)
           // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
           //this.memberService.memberData.next(undefined);
           this.authenticated = false
           this.authenticationState.next(this.accountData)
+          this.isFetchingAccountData = false
           return EMPTY
         }),
         map((response: HttpResponse<IAccount>) => {
+          this.isFetchingAccountData = false
           this.authenticationState.next(this.accountData)
           if (response && response.body) {
             const account: IAccount = response.body
@@ -106,7 +111,7 @@ export class AccountService {
   }
   // TODO: any - this seems to only be used for logging out (only ever receives null as arg)
   authenticate(identity: any) {
-    this.accountData = identity
+    this.accountData.next(identity)
     this.authenticated = identity !== null
     this.authenticationState.next(this.accountData)
   }
@@ -142,20 +147,16 @@ export class AccountService {
 
   getAccountData(force?: boolean): Observable<IAccount | undefined> {
     if (force) {
-      // TODO: move to the (!this.accountData.value || force) logic 
-      // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
+       // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
       //this.memberService.stopFetchingMemberData.next();
       //this.memberService.memberData.next(undefined);
+      this.stopFetchingAccountData.next(true);
     }
-
-    // check and see if we have retrieved the userIdentity data from the server.
-    // if we have, reuse it by immediately resolving
-    if (!this.accountData.value || force) {
-      this.isFetchingAccountData = true;
+    if ((!this.accountData.value && !this.isFetchingAccountData) || force) {
+      this.isFetchingAccountData = true
       this.fetchAccountData().subscribe()
     }
 
-    // retrieve the userIdentity data from the server, update the identity object, and then resolve.
     return this.accountData.asObservable()
   }
 
