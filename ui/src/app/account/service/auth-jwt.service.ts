@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from '../../../app/app.constants';
-import { ILoginCredentials } from '../model/login.model';
+import { ILoginCredentials, ILoginResult } from '../model/login.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
@@ -14,14 +13,8 @@ export class AuthServerProvider {
     return null;
   }
 
-  login(credentials: ILoginCredentials): Observable<any> {
-    const data = {
-      username: credentials.username,
-      password: credentials.password,
-      mfaCode: credentials.mfaCode
-    };
-    
-    return this.http.post('/auth/login', data, {});
+  login(credentials: ILoginCredentials): Observable<ILoginResult> {   
+    return this.http.post<ILoginResult>('/auth/login', credentials);
   }
 
   // TODO: not being used?

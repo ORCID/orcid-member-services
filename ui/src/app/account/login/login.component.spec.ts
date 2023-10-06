@@ -127,7 +127,7 @@ describe('LoginComponent', () => {
   }))
 
   it('should handle login error', fakeAsync(() => {
-    loginService.login.and.returnValue(throwError('Error'))
+    loginService.login.and.returnValue(throwError(() => new Error('error')))
 
     component.loginForm.patchValue({
       username: 'testuser',

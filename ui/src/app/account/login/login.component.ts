@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { AccountService } from '../service/account.service';
 import { LoginService } from '../service/login.service';
 import { StateStorageService } from '../service/state-storage.service';
-import { ILoginResult } from '../model/login.model';
 import { filter, take } from 'rxjs';
 
 
@@ -66,7 +65,7 @@ export class LoginComponent implements AfterViewInit {
         })
         .subscribe(
           {
-            next: (data: ILoginResult) => {
+            next: (data) => {
               if (!data.mfaRequired) {
                 this.showMfa = false;
                 this.accountService.getAccountData().pipe(filter((account) => !!account), take(1)).subscribe((account) => {
