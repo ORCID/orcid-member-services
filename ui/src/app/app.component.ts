@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -6,16 +6,12 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'gateway';
 
   constructor(
     private http: HttpClient
   ) {}
 
-  ngOnInit(): void {
-     this.http.get<any>("http://localhost:8080/" + 'services/userservice/api/account', { observe: 'response' }).subscribe();
-    
-  }
   
 }

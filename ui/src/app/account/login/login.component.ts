@@ -72,7 +72,8 @@ export class LoginComponent implements AfterViewInit {
             next: (data: ILoginResult) => {
               if (!data.mfaRequired) {
                 this.showMfa = false;
-                this.accountService.getAccountData().pipe(filter((account: IAccount | undefined) => !!account), take(1)).subscribe((account: IAccount | undefined) => {
+                this.accountService.getAccountData().pipe(filter((account) => !!account), take(1)).subscribe((account) => {
+                  // TODO: remove after sprint review
                   console.log("Login successful, account data:", account);
                   this.loginSuccess();
                 });
