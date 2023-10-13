@@ -172,10 +172,8 @@ services:
 
   memberservice-ui:
     image: ${DOCKER_REG}/memberservice-ui:${TAG:-1}
-    build: .
     # cron_mode=0 means cron healthcheck is broken
     restart: unless-stopped
-    entrypoint: ${ENTRYPOINT:-"/var/tmp/entrypoint.sh"}
     environment:
       - 'SPRING_PROFILES_ACTIVE=prod'
     ports:
