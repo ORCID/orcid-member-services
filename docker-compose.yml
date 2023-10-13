@@ -171,7 +171,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   memberservice-ui:
-    image: ${DOCKER_REG_PRIVATE}/orcid-angular/memberservice-ui:${TAG:-1}
+    image: ${DOCKER_REG_PRIVATE}/memberservice-ui:${TAG:-1}
     build: .
     # cron_mode=0 means cron healthcheck is broken
     restart: unless-stopped
