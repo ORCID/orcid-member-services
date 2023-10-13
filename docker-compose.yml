@@ -178,10 +178,6 @@ services:
     entrypoint: ${ENTRYPOINT:-"/var/tmp/entrypoint.sh"}
     environment:
       - 'SPRING_PROFILES_ACTIVE=prod'
-    env_file:
-      - ${ENV_FILE:-dev.env}
-      # anything secure that is non prod separated goes here
-      - ${DOCKER_DEV_ENV_FILE:-empty.env}
     ports:
       - 0.0.0.0:4200:4200
     volumes:
