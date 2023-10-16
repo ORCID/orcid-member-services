@@ -171,14 +171,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   memberservice-ui:
-    image: ${DOCKER_REG}/memberservice-ui:${TAG:-1}
-    # cron_mode=0 means cron healthcheck is broken
     restart: unless-stopped
+    image: ${DOCKER_REG}/memberservice-ui:${TAG:-1}
     environment:
       - 'SPRING_PROFILES_ACTIVE=prod'
-    ports:
-      - 0.0.0.0:4200:4200
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
-    labels:
-      description: angular node js container for member services ui
+    ports:
+      - 0.0.0.0:4200:4200
