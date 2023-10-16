@@ -1,0 +1,78 @@
+@use '../../../content/scss/bootstrap-variables' as global;
+
+/* ==========================================================================
+Navbar
+========================================================================== */
+
+.bg-dark {
+  background-color: #202428 !important;
+}
+
+.profile-image {
+  height: 1.75em;
+  width: 1.75em;
+}
+
+.navbar {
+  padding: 0.2rem 1rem;
+
+  ul.navbar-nav {
+    .nav-item {
+      margin-left: 0.5em;
+    }
+  }
+
+  a.nav-link {
+    font-weight: 400;
+  }
+}
+
+/* ==========================================================================
+Logo styles
+========================================================================== */
+.logo-img {
+  img {
+    max-height: 1.875rem;
+    position: relative;
+    top: -0.25rem;
+  }
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+.navbar-title {
+  line-height: 28px;
+  vertical-align: bottom;
+  font-size: 1.125rem;
+  font-weight: normal;
+  margin-right: 2px;
+}
+
+.navbar-beta {
+  vertical-align: bottom;
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.org-name {
+  &:hover {
+    cursor: pointer;
+    color: global.$secondary;
+  }
+  text-decoration: underline;
+}
+
+.pipe {
+  color: global.$secondary;
+}
+
+@media screen and (max-width: 767px) {
+  .logo-img,
+  .navbar-title {
+    display: block;
+    clear: both;
+    float: left;
+  }
+}
