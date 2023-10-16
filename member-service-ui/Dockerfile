@@ -3,23 +3,22 @@ FROM node:20.7.0-bullseye-slim
 # Create app directory
 WORKDIR /app
 
-RUN apt-get update
-
 # Install some useful utils for debug/test
-RUN apt -y install procps iproute2 net-tools curl iputils-ping
-
-RUN rm -rf /var/lib/apt/lists/*
+RUN \
+    apt-get update \
+    apt -y install procps iproute2 net-tools curl iputils-ping \
+    rm -rf /var/lib/apt/lists/*
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY package*.json ./
+COPY \
+    package*.json ./ \
+    container-files/* /var/tmp/  
 
-COPY container-files/* /var/tmp/  
-
-RUN chmod +x /var/tmp/*
-
-RUN npm install \
+RUN \
+    chmod +x /var/tmp/* \
+    npm install \
     npm build
 
 # If you are building your code for production
