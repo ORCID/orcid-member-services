@@ -104,9 +104,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   }
 
   loginSuccess(): void {
-    if (this.router.url === '/register' || /^\/activate\//.test(this.router.url) || /^\/reset\//.test(this.router.url)) {
-      this.router.navigate(['']);
-    }
+    this.router.navigate(['']);
 
     this.eventService.broadcast(new Event(EventType.LOG_IN_SUCCESS, "logged in"))
     // TODO: Event manager

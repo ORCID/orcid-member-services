@@ -1,4 +1,4 @@
-<div class="text-center" *ngIf="this.isLoggedAs()">
+    <div class="text-center" *ngIf="this.isLoggedAs()">
    <fa-icon icon="user"></fa-icon> <span jhiTranslate="global.menu.account.loggedInAs.string"></span> <b>{{ this.getUserName()}}</b> |
    <span jhiTranslate="global.menu.account.logoutAs.string"></span><a (click)="logoutAs()" id="logoutAs.string">
                            {{ this.getUserName() }} <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
@@ -6,7 +6,7 @@
 
 </div>
 <nav class="navbar navbar-dark navbar-expand-md bg-dark">
-    <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()"><span class="logo logo-img"><img src="/content/images/orcid-logo.svg" width="120px" alt="ORCID logo"></span></a>
+    <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()"><span class="logo logo-img"><img src="../../../content/images/orcid-logo.svg" width="120px" alt="ORCID logo"></span></a>
     <span jhiTranslate="global.menu.memberPortal.string" class="navbar-title navbar-brand logo">Member Portal</span>&nbsp;
     <div *ngIf="this.organizationName" class="navbar-title navbar-brand pipe">|</div>&nbsp;
     <div *ngIf="isAuthenticated()" class="navbar-brand navbar-title logo org-name truncate-text" routerLink="/">{{ this.organizationName }}</div>
@@ -16,7 +16,7 @@
     <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
         <ul class="navbar-nav ml-auto">
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-            <li *jhiHasAnyAuthority="'ROLE_USER'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *hasAnyAuthority="'ROLE_USER'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <fa-icon icon="wrench"></fa-icon>
@@ -26,7 +26,7 @@
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-                    <li *jhiHasAnyAuthority="'ASSERTION_SERVICE_ENABLED'">
+                    <li *hasAnyAuthority="'ASSERTION_SERVICE_ENABLED'">
                         <a class="dropdown-item" routerLink="assertion" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon [icon]="faAddressCard" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.tools.assertionServiceAffiliationManager.string">Affiliation Manager</span>
@@ -66,7 +66,7 @@
 					</a></li>
                 </ul>
             </li>
-            <li *jhiHasAnyAuthority="'ROLE_USER'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *hasAnyAuthority="'ROLE_USER'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <fa-icon [icon]="faLightbulb"></fa-icon>
@@ -114,7 +114,7 @@
                         </a>
                     </li>
                     <li>
-                        <a *jhiHasAnyAuthority="'ROLE_ADMIN'" class="dropdown-item" routerLink="member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                        <a *hasAnyAuthority="'ROLE_ADMIN'" class="dropdown-item" routerLink="member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon [icon]="faUniversity" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.adminMenu.manageMembers.string">Manage members</span>
                         </a>
