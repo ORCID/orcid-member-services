@@ -1,10 +1,13 @@
-import { AfterViewInit, Component, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, Renderer2 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccountService } from '../service/account.service';
 import { LoginService } from '../service/login.service';
 import { StateStorageService } from '../service/state-storage.service';
-import { filter, take } from 'rxjs';
+import { Subscription, filter, take } from 'rxjs';
+import { EventService } from 'src/app/shared/service/event.service';
+import { EventType } from 'src/app/app.constants';
+import { Event } from 'src/app/shared/model/event.model';
 
 
 @Component({
@@ -12,11 +15,12 @@ import { filter, take } from 'rxjs';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements AfterViewInit {
+export class LoginComponent implements AfterViewInit, OnDestroy {
   authenticationError = false;
   showMfa = false;
   mfaSent = false;
   mfaError = false;
+  sub: Subscription | undefined;
 
   loginForm = this.fb.group({
     username: [''],
@@ -30,8 +34,18 @@ export class LoginComponent implements AfterViewInit {
     private renderer: Renderer2,
     private router: Router,
     private accountService: AccountService,
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder,
+    private eventService: EventService
+  ) {
+    this.sub = this.eventService.on(EventType.LOG_IN_SUCCESS).subscribe(e => {
+      console.log(e.payload);
+    })
+   }
+
+   ngOnDestroy(): void {
+       this.sub?.unsubscribe();
+       console.log('test')
+   }
 
   ngAfterViewInit() {
     setTimeout(() => this.renderer.selectRootElement('#username').scrollIntoView());
@@ -94,6 +108,7 @@ export class LoginComponent implements AfterViewInit {
       this.router.navigate(['']);
     }
 
+    this.eventService.broadcast(new Event(EventType.LOG_IN_SUCCESS, "logged in"))
     // TODO: Event manager
     /*  this.eventManager.broadcast({
        name: 'authenticationSuccess',
