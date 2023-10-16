@@ -1,13 +1,12 @@
 {
-  "name": "ui",
+  "name": "memberservice-ui",
   "version": "0.0.0",
   "scripts": {
-    "ng": "./node_modules/.bin/ng",
-    "start": "./node_modules/.bin/ng serve",
-    "start_ssl": "./node_modules/.bin/ng serve --ssl",
-    "build": "./node_modules/.bin/ng build",
-    "watch": "./node_modules/.bin/ng build --watch --configuration development",
-    "test": "./node_modules/.bin/ng test"
+    "start": "ng serve",
+    "start_ssl": "ng serve --ssl",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
