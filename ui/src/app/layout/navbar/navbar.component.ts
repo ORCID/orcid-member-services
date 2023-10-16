@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiLanguageService } from 'ng-jhipster';
-import { SessionStorageService } from 'ngx-webstorage';
 import { faAddressCard, faUniversity, faChartPie, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { VERSION } from 'app/app.constants';
-import { JhiLanguageHelper, AccountService, LoginModalService, LoginService, Account } from 'app/core';
+import { AccountService, LoginModalService, LoginService, Account } from 'app/core';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { MSMemberService } from 'app/entities/member/member.service';
 import { IMSMember } from 'app/shared/model/member.model';
@@ -42,9 +40,6 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private languageService: JhiLanguageService,
-    private languageHelper: JhiLanguageHelper,
-    private sessionStorage: SessionStorageService,
     private accountService: AccountService,
     private loginModalService: LoginModalService,
     private profileService: ProfileService,
@@ -56,10 +51,6 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.languageHelper.getAll().then(languages => {
-      this.languages = languages;
-    });
-
     this.profileService.getProfileInfo().then(profileInfo => {
       this.inProduction = profileInfo.inProduction;
       this.swaggerEnabled = profileInfo.swaggerEnabled;
@@ -92,11 +83,6 @@ export class NavbarComponent implements OnInit {
           );
       }
     });
-  }
-
-  changeLanguage(languageKey: string) {
-    this.sessionStorage.store('locale', languageKey);
-    this.languageService.changeLanguage(languageKey);
   }
 
   collapseNavbar() {
