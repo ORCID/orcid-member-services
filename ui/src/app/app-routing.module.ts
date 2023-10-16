@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { navbarRoute } from './layout/navbar/navbar.route';
 
 const routes: Routes = [
   {
@@ -10,7 +11,7 @@ const routes: Routes = [
 ] 
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot([...routes, navbarRoute])],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
