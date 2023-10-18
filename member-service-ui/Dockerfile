@@ -6,7 +6,7 @@ WORKDIR /app
 # Install some useful utils for debug/test
 RUN \
     apt-get update && \
-    apt -y install procps iproute2 net-tools curl iputils-ping && \
+    apt -y install procps iproute2 net-tools curl iputils-ping vim && \
     rm -rf /var/lib/apt/lists/*
 
 # Install app dependencies
