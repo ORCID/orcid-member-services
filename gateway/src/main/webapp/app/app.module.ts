@@ -24,7 +24,8 @@ import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
 import { QuillModule } from 'ngx-quill';
-
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 @NgModule({
   imports: [
     BrowserModule,
@@ -72,5 +73,6 @@ import { QuillModule } from 'ngx-quill';
 export class GatewayAppModule {
   constructor(private dpConfig: NgbDatepickerConfig) {
     this.dpConfig.minDate = { year: moment().year() - 100, month: 1, day: 1 };
+    library.add(faBars);
   }
 }
