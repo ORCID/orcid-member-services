@@ -7,6 +7,11 @@ import {
   faChartPie,
   faLightbulb,
   faBars,
+  faUser,
+  faUserPlus,
+  faSignOutAlt,
+  faWrench,
+  faLock
 } from '@fortawesome/free-solid-svg-icons'
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http'
 import { Observable } from 'rxjs'
@@ -32,8 +37,13 @@ export class NavbarComponent implements OnInit {
   consortiumLead: boolean | undefined
   memberCallDone = false
   consortiumMember = false
-  faBars = faBars
 
+  faBars = faBars
+  faUser = faUser
+  faUserPlus = faUserPlus
+  faSignOutAlt = faSignOutAlt
+  faWrench = faWrench
+  faLock = faLock
   faAddressCard = faAddressCard
   faUniversity = faUniversity
   faChartPie = faChartPie
