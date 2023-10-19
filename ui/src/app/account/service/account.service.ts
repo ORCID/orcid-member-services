@@ -20,7 +20,7 @@ import { IAccount } from '../model/account.model'
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private accountData = new BehaviorSubject<IAccount | undefined>(undefined);
+  private accountData = new BehaviorSubject<IAccount | null | undefined>(undefined);
   private isFetchingAccountData = false;
   private stopFetchingAccountData = new Subject();
   private authenticated = false;
@@ -44,10 +44,10 @@ export class AccountService {
       .pipe(
         takeUntil(this.stopFetchingAccountData),
         catchError((err) => {
-          this.accountData.next(undefined)
+          this.authenticated = false
+          this.accountData.next(null)
           // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
           //this.memberService.memberData.next(undefined);
-          this.authenticated = false
           this.authenticationState.next(this.accountData)
           this.isFetchingAccountData = false
           return EMPTY
@@ -56,9 +56,10 @@ export class AccountService {
           this.isFetchingAccountData = false
           this.authenticationState.next(this.accountData)
           if (response && response.body) {
+            this.authenticated = true
             const account: IAccount = response.body
             this.accountData.next(account)
-            this.authenticated = true
+            
             // After retrieve the account info, the language will be changed to
             // the user's preferred language configured in the account setting
             if (this.accountData.value?.langKey) {
@@ -71,7 +72,7 @@ export class AccountService {
           } else {
             // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
             //this.memberService.memberData.next(undefined);
-            this.accountData.next(undefined)
+            this.accountData.next(null)
             this.authenticated = false
             console.error('Invalid response:', response)
           }
@@ -121,7 +122,7 @@ export class AccountService {
       !this.authenticated ||
       !this.accountData ||
       !this.accountData.value?.authorities
-    ) {
+    ) {      
       return false
     }
 
@@ -130,7 +131,7 @@ export class AccountService {
         return true
       }
     }
-
+    
     return false
   }
 
@@ -145,7 +146,7 @@ export class AccountService {
     }
   }
 
-  getAccountData(force?: boolean): Observable<IAccount | undefined> {
+  getAccountData(force?: boolean): Observable<IAccount | undefined | null> {
     if (force) {
        // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
       //this.memberService.stopFetchingMemberData.next();

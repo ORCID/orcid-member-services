@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/ro
 
 import { StateStorageService } from './service/state-storage.service';
 import { AccountService } from './service/account.service';
-import { Observable, map, take } from 'rxjs';
+import { Observable, filter, map, take } from 'rxjs';
 
 export const AuthGuard = (route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot): Observable<boolean> | boolean => {
@@ -14,7 +14,7 @@ export const AuthGuard = (route: ActivatedRouteSnapshot,
   const accountService = inject(AccountService);
   const stateStorageService = inject(StateStorageService)
 
-  return accountService.getAccountData().pipe(take(1),map(account => {
+  return accountService.getAccountData().pipe(filter(account => account !== undefined),map(account => {
     console.log(authorities, account);
 
     if (account) {
