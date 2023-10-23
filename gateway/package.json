@@ -141,8 +141,8 @@
     "webpack:qa": "npm run cleanup && npm run webpack:qa:main && npm run clean-www",
     "webpack:sandbox:main": "npm run webpack -- --config webpack/webpack.sandbox.js --profile",
     "webpack:sandbox": "npm run cleanup && npm run webpack:sandbox:main && npm run clean-www",
-    "webpack:prod:main": "npm run webpack -- --config webpack/webpack.prod.js --profile",
-    "webpack:prod": "npm run cleanup && npm run webpack:prod:main && npm run clean-www",
+    "webpack:prod:main": "./node/node_modules/npm/bin/npm run webpack -- --config webpack/webpack.prod.js --profile",
+    "webpack:prod": "./node/node_modules/npm/bin/npm run cleanup && ./node/node_modules/npm/bin/npm run webpack:prod:main && ./node/node_modules/npm/bin/npm run clean-www",
     "webpack:test": "npm run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
