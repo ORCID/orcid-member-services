@@ -10,13 +10,15 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { NavbarComponent } from './layout/navbar/navbar.component'
 import { CommonModule } from '@angular/common'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
-import { HasAnyAuthorityDirective } from './shared/directive/has-any-authority.directive'
+import { HasAnyAuthorityDirective } from './shared/directive/has-any-authority.directive';
+import { HomeModule } from './home/home.module'
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, HasAnyAuthorityDirective],
   imports: [
     FontAwesomeModule,
     AccountModule,
+    HomeModule,
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
