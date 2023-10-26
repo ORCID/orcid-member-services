@@ -17,7 +17,9 @@ jobs:
       - name: Install dependencies
         working-directory: ui
         run: npm ci
-      - run: npm run prettier:format
+      - name: Run prettier
+        working-directory: ui
+        run: npm run prettier:format
       - name: add and commit any files that have changed
         id: add_and_commit
         uses: EndBug/add-and-commit@c8bfb4ff65642c4c54445500822f6e7da558994a
