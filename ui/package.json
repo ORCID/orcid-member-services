@@ -7,7 +7,8 @@
     "start_ssl": "ng serve --disable-host-check --host 0.0.0.0 --ssl",
     "build": "ng build --base-href ./",
     "watch": "ng build --base-href ./ --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -30,9 +31,17 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.2.6",
+    "@angular-eslint/builder": "16.2.0",
+    "@angular-eslint/eslint-plugin": "16.2.0",
+    "@angular-eslint/eslint-plugin-template": "16.2.0",
+    "@angular-eslint/schematics": "16.2.0",
+    "@angular-eslint/template-parser": "16.2.0",
     "@angular/cli": "~16.2.6",
     "@angular/compiler-cli": "^16.2.9",
     "@types/jasmine": "~4.0.0",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "@typescript-eslint/parser": "5.62.0",
+    "eslint": "^8.49.0",
     "jasmine-core": "~4.3.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
