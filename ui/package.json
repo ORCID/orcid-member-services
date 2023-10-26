@@ -12,7 +12,7 @@
     "format": "ng lint --fix && npx prettier --write ."
   },
   "private": true,
-  "dependencies": { 
+  "dependencies": {
     "@angular/animations": "^16.2.9",
     "@angular/cdk": "^16.2.9",
     "@angular/common": "^16.2.9",

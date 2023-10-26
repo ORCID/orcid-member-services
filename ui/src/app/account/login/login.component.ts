@@ -72,7 +72,6 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
         this.mfaSent = true
       }
 
-
       this.loginService
         .login({
           username: this.loginForm.get('username')!.value!,
