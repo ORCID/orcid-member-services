@@ -20,12 +20,14 @@ import { IAccount } from '../model/account.model'
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private accountData = new BehaviorSubject<IAccount | null | undefined>(undefined);
-  private isFetchingAccountData = false;
-  private stopFetchingAccountData = new Subject();
-  private authenticated = false;
-  private authenticationState = new BehaviorSubject<any>(null);
-  private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
+  private accountData = new BehaviorSubject<IAccount | null | undefined>(
+    undefined
+  )
+  private isFetchingAccountData = false
+  private stopFetchingAccountData = new Subject()
+  private authenticated = false
+  private authenticationState = new BehaviorSubject<any>(null)
+  private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api'
 
   constructor(
     // TODO: uncomment when language service is implemented
@@ -59,7 +61,7 @@ export class AccountService {
             this.authenticated = true
             const account: IAccount = response.body
             this.accountData.next(account)
-            
+
             // After retrieve the account info, the language will be changed to
             // the user's preferred language configured in the account setting
             if (this.accountData.value?.langKey) {
@@ -122,7 +124,7 @@ export class AccountService {
       !this.authenticated ||
       !this.accountData ||
       !this.accountData.value?.authorities
-    ) {      
+    ) {
       return false
     }
 
@@ -131,7 +133,7 @@ export class AccountService {
         return true
       }
     }
-    
+
     return false
   }
 
@@ -148,10 +150,10 @@ export class AccountService {
 
   getAccountData(force?: boolean): Observable<IAccount | undefined | null> {
     if (force) {
-       // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
+      // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
       //this.memberService.stopFetchingMemberData.next();
       //this.memberService.memberData.next(undefined);
-      this.stopFetchingAccountData.next(true);
+      this.stopFetchingAccountData.next(true)
     }
     if ((!this.accountData.value && !this.isFetchingAccountData) || force) {
       this.isFetchingAccountData = true

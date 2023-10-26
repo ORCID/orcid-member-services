@@ -11,7 +11,7 @@ import {
   faUserPlus,
   faSignOutAlt,
   faWrench,
-  faLock
+  faLock,
 } from '@fortawesome/free-solid-svg-icons'
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http'
 import { Observable } from 'rxjs'
