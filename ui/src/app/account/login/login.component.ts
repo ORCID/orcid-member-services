@@ -114,11 +114,6 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     this.eventService.broadcast(
       new Event(EventType.LOG_IN_SUCCESS, 'logged in')
     )
-    // TODO: Event manager
-    /*  this.eventManager.broadcast({
-       name: 'authenticationSuccess',
-       content: 'Sending Authentication Success'
-     }); */
 
     // previousState was set in the authExpiredInterceptor before being redirected to login modal.
     // since login is successful, go to stored previousState and clear previousState
