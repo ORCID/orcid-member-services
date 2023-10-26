@@ -37,12 +37,8 @@ export class MemberService {
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
-      res.body.createdDate =
-        res.body.createdDate != null ? moment(res.body.createdDate) : undefined
-      res.body.lastModifiedDate =
-        res.body.lastModifiedDate != null
-          ? moment(res.body.lastModifiedDate)
-          : undefined
+      res.body.createdDate = res.body.createdDate != null ? moment(res.body.createdDate) : undefined
+      res.body.lastModifiedDate = res.body.lastModifiedDate != null ? moment(res.body.lastModifiedDate) : undefined
     }
     return res
   }

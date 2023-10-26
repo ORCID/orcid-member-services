@@ -1,13 +1,13 @@
-import { ISFAddress } from './salesforce-address.model';
+import { ISFAddress } from './salesforce-address.model'
 
 export interface ISFMemberUpdate {
-  orgName?: string;
-  billingAddress?: ISFAddress;
-  trademarkLicense?: string;
-  publicName?: string;
-  description?: string;
-  website?: string;
-  email?: string;
+  orgName?: string
+  billingAddress?: ISFAddress
+  trademarkLicense?: string
+  publicName?: string
+  description?: string
+  website?: string
+  email?: string
 }
 
 export class SFMemberUpdate implements ISFMemberUpdate {

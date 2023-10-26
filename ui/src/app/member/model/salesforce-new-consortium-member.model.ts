@@ -1,19 +1,19 @@
 export interface ISFNewConsortiumMember {
-  orgName: string;
-  trademarkLicense: string;
-  startMonth: string;
-  startYear: string;
-  emailDomain?: string;
-  street?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  postcode?: string;
-  contactGivenName?: string;
-  contactFamilyName?: string;
-  contactJobTitle?: string;
-  contactEmail?: string;
-  contactPhone?: string;
+  orgName: string
+  trademarkLicense: string
+  startMonth: string
+  startYear: string
+  emailDomain?: string
+  street?: string
+  city?: string
+  state?: string
+  country?: string
+  postcode?: string
+  contactGivenName?: string
+  contactFamilyName?: string
+  contactJobTitle?: string
+  contactEmail?: string
+  contactPhone?: string
 }
 
 export class SFNewConsortiumMember implements ISFNewConsortiumMember {
