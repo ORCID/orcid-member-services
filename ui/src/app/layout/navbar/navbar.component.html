@@ -3,7 +3,12 @@
   <span jhiTranslate="global.menu.account.loggedInAs.string"></span>
   <b>{{ this.getUserName() }}</b> |
   <span jhiTranslate="global.menu.account.logoutAs.string"></span
-  ><a tabindex="1" (click)="logoutAs()" (keypress)="logoutAs()" id="logoutAs.string">
+  ><a
+    tabindex="1"
+    (click)="logoutAs()"
+    (keypress)="logoutAs()"
+    id="logoutAs.string"
+  >
     {{ this.getUserName() }}
     <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
   </a>
@@ -344,7 +349,13 @@
             </a>
           </li>
           <li>
-            <a class="dropdown-item" tabindex="1" (click)="logout()" (keypress)="logout()" id="logout">
+            <a
+              class="dropdown-item"
+              tabindex="1"
+              (click)="logout()"
+              (keypress)="logout()"
+              id="logout"
+            >
               <fa-icon [icon]="faSignOutAlt" [fixedWidth]="true"></fa-icon>
               <span jhiTranslate="global.menu.account.logout.string"
                 >Sign out</span
