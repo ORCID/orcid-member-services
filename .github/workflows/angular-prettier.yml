@@ -14,7 +14,9 @@ jobs:
           node-version: 18
           cache: "npm"
           cache-dependency-path: "ui/package-lock.json"
-      - run: npm ci
+      - name: Install dependencies
+        working-directory: ui
+        run: npm ci
       - run: npm run prettier:format
       - name: add and commit any files that have changed
         id: add_and_commit
