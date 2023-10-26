@@ -29,7 +29,8 @@
               "src/content/images"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/content/scss/wro.css",
+              "src/content/scss/global.scss"
             ],
             "scripts": []
           },
@@ -101,7 +102,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/content/scss/wro.css",
+              "src/content/scss/global.scss"
             ],
             "scripts": []
           }

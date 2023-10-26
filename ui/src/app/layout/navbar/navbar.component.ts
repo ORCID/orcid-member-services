@@ -26,7 +26,7 @@ type EntityResponseType = HttpResponse<IMember>
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['navbar.scss'],
+  styleUrls: ['./navbar.scss'],
 })
 export class NavbarComponent implements OnInit {
   isNavbarCollapsed: boolean
