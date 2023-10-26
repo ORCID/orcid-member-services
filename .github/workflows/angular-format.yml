@@ -27,11 +27,3 @@ jobs:
           message: "🤖 GITHUB ACTIONS format_prettier"
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-
-      - name: cancel run if commit is done so the second run is used
-        run: |
-          if ${{ steps.add_and_commit.outputs.committed }};then
-            gh run cancel ${{ github.run_id }}
-          fi
-        env:
-          GH_TOKEN: ${{ github.token }}
