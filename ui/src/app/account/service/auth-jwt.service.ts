@@ -31,6 +31,6 @@ export class AuthServerProvider {
 */
 
   logout(): Observable<any> {
-    return this.http.post(SERVER_API_URL + 'auth/logout', null);
+    return this.http.post(SERVER_API_URL + '/auth/logout', null)
   }
 }

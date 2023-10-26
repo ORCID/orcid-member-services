@@ -21,18 +21,22 @@ export class HasAnyAuthorityDirective {
   constructor(private accountService: AccountService, private templateRef: TemplateRef<any>, private viewContainerRef: ViewContainerRef) {}
 
   @Input()
-  set hasAnyAuthority(value: string | string[]) {
-    this.authorities = typeof value === 'string' ? [value] : value;
-    this.updateView();
+  set appHasAnyAuthority(value: string | string[]) {
+    this.authorities = typeof value === 'string' ? [value] : value
+    this.updateView()
     // Get notified each time authentication state changes.
-    this.accountService.getAuthenticationState().subscribe(identity => this.updateView());
+    this.accountService
+      .getAuthenticationState()
+      .subscribe((identity) => this.updateView())
   }
 
   private updateView(): void {
-    const hasAnyAuthority = this.accountService.hasAnyAuthority(this.authorities);
-    this.viewContainerRef.clear();
+    const hasAnyAuthority = this.accountService.hasAnyAuthority(
+      this.authorities
+    )
+    this.viewContainerRef.clear()
     if (hasAnyAuthority) {
-      this.viewContainerRef.createEmbeddedView(this.templateRef);
+      this.viewContainerRef.createEmbeddedView(this.templateRef)
     }
   }
 }
