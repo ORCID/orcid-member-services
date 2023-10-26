@@ -87,8 +87,10 @@
         <p></p>
         <div class="alert alert-warning">
           <a
+            tabindex="1"
             class="alert-link"
             (click)="requestResetPassword()"
+            (keypress)="requestResetPassword()"
             jhiTranslate="login.password.forgot.string"
             >Did you forget your password?</a
           >

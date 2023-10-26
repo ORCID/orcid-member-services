@@ -7,7 +7,7 @@ import {
 
 import { StateStorageService } from './service/state-storage.service'
 import { AccountService } from './service/account.service'
-import { Observable, filter, map, take } from 'rxjs'
+import { Observable, filter, map } from 'rxjs'
 
 export const AuthGuard = (
   route: ActivatedRouteSnapshot,
