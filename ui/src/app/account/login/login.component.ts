@@ -72,10 +72,11 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
         this.mfaSent = true
       }
 
+
       this.loginService
         .login({
-          username: this.loginForm.get('username')?.value!,
-          password: this.loginForm.get('password')?.value!,
+          username: this.loginForm.get('username')!.value!,
+          password: this.loginForm.get('password')!.value!,
           mfaCode: this.loginForm.get('mfaCode')?.value,
         })
         .subscribe({

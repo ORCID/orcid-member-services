@@ -13,7 +13,7 @@ import { AccountService } from 'src/app/account/service/account.service'
  * ```
  */
 @Directive({
-  selector: '[hasAnyAuthority]',
+  selector: '[appHasAnyAuthority]',
 })
 export class HasAnyAuthorityDirective {
   private authorities: string[] = []

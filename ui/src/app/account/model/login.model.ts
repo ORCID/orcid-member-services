@@ -4,7 +4,7 @@ export interface ILoginResult {
 }
 
 export interface ILoginCredentials {
-  username?: string
-  password?: string
+  username: string
+  password: string
   mfaCode?: string | null
 }
