@@ -9,6 +9,7 @@
     "watch": "ng build --base-href ./ --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
+    "format:cli": "ng lint && npx prettier .",
     "format": "ng lint --fix && npx prettier --write ."
   },
   "private": true,
