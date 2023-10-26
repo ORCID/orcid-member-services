@@ -25,9 +25,7 @@ export class LoginService {
 
   logout() {
     if (this.accountService.isAuthenticated()) {
-      this.authServerProvider
-        .logout()
-        .subscribe(() => this.accountService.authenticate(null))
+      this.authServerProvider.logout().subscribe(() => this.accountService.authenticate(null))
     } else {
       this.accountService.authenticate(null)
     }

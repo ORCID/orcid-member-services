@@ -7,23 +7,11 @@
           *ngIf="authenticationError"
           jhiTranslate="login.messages.error.authentication.string"
         >
-          <strong>Failed to sign in!</strong> Please check your credentials and
-          try again.
+          <strong>Failed to sign in!</strong> Please check your credentials and try again.
         </div>
-        <form
-          id="signin-form"
-          class="form"
-          role="form"
-          (ngSubmit)="login()"
-          [formGroup]="loginForm"
-        >
+        <form id="signin-form" class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
           <div class="form-group">
-            <label
-              class="username-label"
-              for="username"
-              jhiTranslate="global.form.email.label.string"
-              >Email</label
-            >
+            <label class="username-label" for="username" jhiTranslate="global.form.email.label.string">Email</label>
             <!-- TODO: add translation -->
             <input
               type="text"
@@ -35,11 +23,7 @@
             />
           </div>
           <div class="form-group">
-            <label
-              for="password"
-              jhiTranslate="login.form.password.label.string"
-              >Password</label
-            >
+            <label for="password" jhiTranslate="login.form.password.label.string">Password</label>
             <!-- TODO: add translation -->
             <input
               type="password"
@@ -51,36 +35,16 @@
             />
           </div>
           <div *ngIf="showMfa" class="form-group">
-            <div
-              class="alert alert-danger"
-              jhiTranslate="login.form.mfaCode.prompt.string"
-            >
+            <div class="alert alert-danger" jhiTranslate="login.form.mfaCode.prompt.string">
               Please enter the MFA code from your authenticator app
             </div>
-            <div
-              *ngIf="mfaError"
-              class="alert alert-danger"
-              jhiTranslate="login.form.mfaCode.error.string"
-            >
+            <div *ngIf="mfaError" class="alert alert-danger" jhiTranslate="login.form.mfaCode.error.string">
               Invalid MFA code
             </div>
-            <label for="mfaCode" jhiTranslate="login.form.mfaCode.label.string"
-              >MFA code</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              name="mfaCode"
-              id="mfaCode"
-              formControlName="mfaCode"
-            />
+            <label for="mfaCode" jhiTranslate="login.form.mfaCode.label.string">MFA code</label>
+            <input type="text" class="form-control" name="mfaCode" id="mfaCode" formControlName="mfaCode" />
           </div>
-          <button
-            id="signin-button"
-            type="submit"
-            class="btn btn-primary"
-            jhiTranslate="login.form.button.string"
-          >
+          <button id="signin-button" type="submit" class="btn btn-primary" jhiTranslate="login.form.button.string">
             Sign in
           </button>
         </form>

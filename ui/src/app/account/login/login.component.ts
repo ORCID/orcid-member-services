@@ -47,9 +47,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    setTimeout(() =>
-      this.renderer.selectRootElement('#username').scrollIntoView()
-    )
+    setTimeout(() => this.renderer.selectRootElement('#username').scrollIntoView())
   }
 
   cancel() {
@@ -111,9 +109,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   loginSuccess(): void {
     this.router.navigate([''])
 
-    this.eventService.broadcast(
-      new Event(EventType.LOG_IN_SUCCESS, 'logged in')
-    )
+    this.eventService.broadcast(new Event(EventType.LOG_IN_SUCCESS, 'logged in'))
 
     // previousState was set in the authExpiredInterceptor before being redirected to login modal.
     // since login is successful, go to stored previousState and clear previousState

@@ -5,8 +5,7 @@ import { navbarRoute } from './layout/navbar/navbar.route'
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () =>
-      import('./account/account.module').then((m) => m.AccountModule),
+    loadChildren: () => import('./account/account.module').then((m) => m.AccountModule),
   },
   {
     path: '',

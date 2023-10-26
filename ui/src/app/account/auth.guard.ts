@@ -1,18 +1,11 @@
 import { inject } from '@angular/core'
-import {
-  ActivatedRouteSnapshot,
-  Router,
-  RouterStateSnapshot,
-} from '@angular/router'
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router'
 
 import { StateStorageService } from './service/state-storage.service'
 import { AccountService } from './service/account.service'
 import { Observable, filter, map } from 'rxjs'
 
-export const AuthGuard = (
-  route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot
-): Observable<boolean> | boolean => {
+export const AuthGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean => {
   const authorities = route.data['authorities']
 
   const router = inject(Router)

@@ -1,17 +1,7 @@
 import { Injectable } from '@angular/core'
 import { SessionStorageService } from 'ngx-webstorage'
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
-import {
-  BehaviorSubject,
-  EMPTY,
-  Observable,
-  Subject,
-  catchError,
-  map,
-  of,
-  takeUntil,
-  tap,
-} from 'rxjs'
+import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil, tap } from 'rxjs'
 
 import { SERVER_API_URL } from '../../../app/app.constants'
 import { IAccount } from '../model/account.model'
@@ -20,9 +10,7 @@ import { IAccount } from '../model/account.model'
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private accountData = new BehaviorSubject<IAccount | null | undefined>(
-    undefined
-  )
+  private accountData = new BehaviorSubject<IAccount | null | undefined>(undefined)
   private isFetchingAccountData = false
   private stopFetchingAccountData = new Subject()
   private authenticated = false
@@ -65,9 +53,7 @@ export class AccountService {
             // After retrieve the account info, the language will be changed to
             // the user's preferred language configured in the account setting
             if (this.accountData.value?.langKey) {
-              const langKey =
-                this.sessionStorage.retrieve('locale') ||
-                this.accountData.value.langKey
+              const langKey = this.sessionStorage.retrieve('locale') || this.accountData.value.langKey
               // TODO: uncomment when language service is implemented
               //this.languageService.changeLanguage(langKey);
             }
@@ -83,34 +69,19 @@ export class AccountService {
   }
 
   getMfaSetup(): Observable<HttpResponse<any>> {
-    return this.http.get<any>(
-      SERVER_API_URL + 'services/userservice/api/account/mfa',
-      { observe: 'response' }
-    )
+    return this.http.get<any>(SERVER_API_URL + 'services/userservice/api/account/mfa', { observe: 'response' })
   }
 
   save(account: any): Observable<HttpResponse<any>> {
-    return this.http.post(
-      SERVER_API_URL + 'services/userservice/api/account',
-      account,
-      { observe: 'response' }
-    )
+    return this.http.post(SERVER_API_URL + 'services/userservice/api/account', account, { observe: 'response' })
   }
 
   enableMfa(mfaSetup: any): Observable<HttpResponse<any>> {
-    return this.http.post(
-      SERVER_API_URL + 'services/userservice/api/account/mfa/on',
-      mfaSetup,
-      { observe: 'response' }
-    )
+    return this.http.post(SERVER_API_URL + 'services/userservice/api/account/mfa/on', mfaSetup, { observe: 'response' })
   }
 
   disableMfa(): Observable<HttpResponse<any>> {
-    return this.http.post(
-      SERVER_API_URL + 'services/userservice/api/account/mfa/off',
-      null,
-      { observe: 'response' }
-    )
+    return this.http.post(SERVER_API_URL + 'services/userservice/api/account/mfa/off', null, { observe: 'response' })
   }
   // TODO: any - this seems to only be used for logging out (only ever receives null as arg)
   authenticate(identity: any) {
@@ -120,11 +91,7 @@ export class AccountService {
   }
 
   hasAnyAuthority(authorities: string[]): boolean {
-    if (
-      !this.authenticated ||
-      !this.accountData ||
-      !this.accountData.value?.authorities
-    ) {
+    if (!this.authenticated || !this.accountData || !this.accountData.value?.authorities) {
       return false
     }
 
@@ -141,10 +108,7 @@ export class AccountService {
     if (!this.authenticated) {
       return false
     } else {
-      return (
-        this.accountData.value!.authorities &&
-        this.accountData.value!.authorities.includes(authority)
-      )
+      return this.accountData.value!.authorities && this.accountData.value!.authorities.includes(authority)
     }
   }
 
@@ -201,15 +165,11 @@ export class AccountService {
   }
 
   getSalesforceId(): string | null {
-    return this.isAuthenticated() && this.accountData
-      ? this.accountData.value!.salesforceId
-      : null
+    return this.isAuthenticated() && this.accountData ? this.accountData.value!.salesforceId : null
   }
 
   isOrganizationOwner(): boolean | null {
-    return this.isIdentityResolved() && this.accountData
-      ? this.accountData.value!.mainContact
-      : false
+    return this.isIdentityResolved() && this.accountData ? this.accountData.value!.mainContact : false
   }
 
   isLoggedAs(): boolean {
