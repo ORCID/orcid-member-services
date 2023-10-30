@@ -1,12 +1,12 @@
 {
-  "name": "gateway",
+  "name": "ui",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --disable-host-check --host 0.0.0.0",
     "start_ssl": "ng serve --disable-host-check --host 0.0.0.0 --ssl",
-    "build": "ng build --base-href ./",
-    "watch": "ng build --base-href ./ --watch --configuration development",
+    "build": "ng build --base-href='/ui/'",
+    "watch": "ng build --base-href='/ui/' --watch --configuration development",
     "test": "ng test"
   },
   "private": true,
