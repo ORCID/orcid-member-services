@@ -25,22 +25,7 @@ export class HasAnyAuthorityDirective {
   ) {}
 
   @Input()
-<<<<<<< HEAD
   set appHasAnyAuthority(value: string | string[]) {
-    this.authorities = typeof value === 'string' ? [value] : value
-    this.updateView()
-    // Get notified each time authentication state changes.
-    this.accountService
-      .getAuthenticationState()
-      .subscribe((identity) => this.updateView())
-  }
-
-  private updateView(): void {
-    const hasAnyAuthority = this.accountService.hasAnyAuthority(
-      this.authorities
-    )
-=======
-  set hasAnyAuthority(value: string | string[]) {
     this.authorities = typeof value === 'string' ? [value] : value
     this.updateView()
     // Get notified each time authentication state changes.
@@ -49,7 +34,6 @@ export class HasAnyAuthorityDirective {
 
   private updateView(): void {
     const hasAnyAuthority = this.accountService.hasAnyAuthority(this.authorities)
->>>>>>> main
     this.viewContainerRef.clear()
     if (hasAnyAuthority) {
       this.viewContainerRef.createEmbeddedView(this.templateRef)

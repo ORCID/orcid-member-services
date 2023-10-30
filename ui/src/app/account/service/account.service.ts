@@ -91,17 +91,9 @@ export class AccountService {
   }
 
   hasAnyAuthority(authorities: string[]): boolean {
-<<<<<<< HEAD
-    console.log(authorities, this.accountData.value?.authorities);
-    
-    if (
-      !this.authenticated ||
-      !this.accountData ||
-      !this.accountData.value?.authorities
-    ) {      
-=======
+    console.log(authorities, this.accountData.value?.authorities)
+
     if (!this.authenticated || !this.accountData || !this.accountData.value?.authorities) {
->>>>>>> main
       return false
     }
 
