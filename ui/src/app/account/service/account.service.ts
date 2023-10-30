@@ -1,17 +1,7 @@
 import { Injectable } from '@angular/core'
 import { SessionStorageService } from 'ngx-webstorage'
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
-import {
-  BehaviorSubject,
-  EMPTY,
-  Observable,
-  Subject,
-  catchError,
-  map,
-  of,
-  takeUntil,
-  tap,
-} from 'rxjs'
+import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil, tap } from 'rxjs'
 
 import { SERVER_API_URL } from '../../../app/app.constants'
 import { IAccount } from '../model/account.model'
@@ -20,12 +10,12 @@ import { IAccount } from '../model/account.model'
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private accountData = new BehaviorSubject<IAccount | null | undefined>(undefined);
-  private isFetchingAccountData = false;
-  private stopFetchingAccountData = new Subject();
-  private authenticated = false;
-  private authenticationState = new BehaviorSubject<any>(null);
-  private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api';
+  private accountData = new BehaviorSubject<IAccount | null | undefined>(undefined)
+  private isFetchingAccountData = false
+  private stopFetchingAccountData = new Subject()
+  private authenticated = false
+  private authenticationState = new BehaviorSubject<any>(null)
+  private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api'
 
   constructor(
     // TODO: uncomment when language service is implemented
@@ -59,13 +49,11 @@ export class AccountService {
             this.authenticated = true
             const account: IAccount = response.body
             this.accountData.next(account)
-            
+
             // After retrieve the account info, the language will be changed to
             // the user's preferred language configured in the account setting
             if (this.accountData.value?.langKey) {
-              const langKey =
-                this.sessionStorage.retrieve('locale') ||
-                this.accountData.value.langKey
+              const langKey = this.sessionStorage.retrieve('locale') || this.accountData.value.langKey
               // TODO: uncomment when language service is implemented
               //this.languageService.changeLanguage(langKey);
             }
@@ -81,34 +69,19 @@ export class AccountService {
   }
 
   getMfaSetup(): Observable<HttpResponse<any>> {
-    return this.http.get<any>(
-      SERVER_API_URL + 'services/userservice/api/account/mfa',
-      { observe: 'response' }
-    )
+    return this.http.get<any>(SERVER_API_URL + 'services/userservice/api/account/mfa', { observe: 'response' })
   }
 
   save(account: any): Observable<HttpResponse<any>> {
-    return this.http.post(
-      SERVER_API_URL + 'services/userservice/api/account',
-      account,
-      { observe: 'response' }
-    )
+    return this.http.post(SERVER_API_URL + 'services/userservice/api/account', account, { observe: 'response' })
   }
 
   enableMfa(mfaSetup: any): Observable<HttpResponse<any>> {
-    return this.http.post(
-      SERVER_API_URL + 'services/userservice/api/account/mfa/on',
-      mfaSetup,
-      { observe: 'response' }
-    )
+    return this.http.post(SERVER_API_URL + 'services/userservice/api/account/mfa/on', mfaSetup, { observe: 'response' })
   }
 
   disableMfa(): Observable<HttpResponse<any>> {
-    return this.http.post(
-      SERVER_API_URL + 'services/userservice/api/account/mfa/off',
-      null,
-      { observe: 'response' }
-    )
+    return this.http.post(SERVER_API_URL + 'services/userservice/api/account/mfa/off', null, { observe: 'response' })
   }
   // TODO: any - this seems to only be used for logging out (only ever receives null as arg)
   authenticate(identity: any) {
@@ -118,6 +91,7 @@ export class AccountService {
   }
 
   hasAnyAuthority(authorities: string[]): boolean {
+<<<<<<< HEAD
     console.log(authorities, this.accountData.value?.authorities);
     
     if (
@@ -125,6 +99,9 @@ export class AccountService {
       !this.accountData ||
       !this.accountData.value?.authorities
     ) {      
+=======
+    if (!this.authenticated || !this.accountData || !this.accountData.value?.authorities) {
+>>>>>>> main
       return false
     }
 
@@ -133,7 +110,7 @@ export class AccountService {
         return true
       }
     }
-    
+
     return false
   }
 
@@ -141,19 +118,16 @@ export class AccountService {
     if (!this.authenticated) {
       return false
     } else {
-      return (
-        this.accountData.value!.authorities &&
-        this.accountData.value!.authorities.includes(authority)
-      )
+      return this.accountData.value!.authorities && this.accountData.value!.authorities.includes(authority)
     }
   }
 
   getAccountData(force?: boolean): Observable<IAccount | undefined | null> {
     if (force) {
-       // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
+      // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
       //this.memberService.stopFetchingMemberData.next();
       //this.memberService.memberData.next(undefined);
-      this.stopFetchingAccountData.next(true);
+      this.stopFetchingAccountData.next(true)
     }
     if ((!this.accountData.value && !this.isFetchingAccountData) || force) {
       this.isFetchingAccountData = true
@@ -201,15 +175,11 @@ export class AccountService {
   }
 
   getSalesforceId(): string | null {
-    return this.isAuthenticated() && this.accountData
-      ? this.accountData.value!.salesforceId
-      : null
+    return this.isAuthenticated() && this.accountData ? this.accountData.value!.salesforceId : null
   }
 
   isOrganizationOwner(): boolean | null {
-    return this.isIdentityResolved() && this.accountData
-      ? this.accountData.value!.mainContact
-      : false
+    return this.isIdentityResolved() && this.accountData ? this.accountData.value!.mainContact : false
   }
 
   isLoggedAs(): boolean {

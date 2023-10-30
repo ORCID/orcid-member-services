@@ -1,8 +1,11 @@
 export interface ISFState {
-  code: string;
-  name: string;
+  code: string
+  name: string
 }
 
 export class SFState implements ISFState {
-  constructor(public code: string, public name: string) {}
+  constructor(
+    public code: string,
+    public name: string
+  ) {}
 }

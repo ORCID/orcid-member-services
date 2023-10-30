@@ -1,5 +1,5 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { AccountService } from 'src/app/account/service/account.service';
+import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core'
+import { AccountService } from 'src/app/account/service/account.service'
 
 /**
  * @whatItDoes Conditionally includes an HTML element if current user has any
@@ -13,14 +13,19 @@ import { AccountService } from 'src/app/account/service/account.service';
  * ```
  */
 @Directive({
-  selector: '[hasAnyAuthority]'
+  selector: '[appHasAnyAuthority]',
 })
 export class HasAnyAuthorityDirective {
-  private authorities: string[] = [];
+  private authorities: string[] = []
 
-  constructor(private accountService: AccountService, private templateRef: TemplateRef<any>, private viewContainerRef: ViewContainerRef) {}
+  constructor(
+    private accountService: AccountService,
+    private templateRef: TemplateRef<any>,
+    private viewContainerRef: ViewContainerRef
+  ) {}
 
   @Input()
+<<<<<<< HEAD
   set appHasAnyAuthority(value: string | string[]) {
     this.authorities = typeof value === 'string' ? [value] : value
     this.updateView()
@@ -34,6 +39,17 @@ export class HasAnyAuthorityDirective {
     const hasAnyAuthority = this.accountService.hasAnyAuthority(
       this.authorities
     )
+=======
+  set hasAnyAuthority(value: string | string[]) {
+    this.authorities = typeof value === 'string' ? [value] : value
+    this.updateView()
+    // Get notified each time authentication state changes.
+    this.accountService.getAuthenticationState().subscribe((identity) => this.updateView())
+  }
+
+  private updateView(): void {
+    const hasAnyAuthority = this.accountService.hasAnyAuthority(this.authorities)
+>>>>>>> main
     this.viewContainerRef.clear()
     if (hasAnyAuthority) {
       this.viewContainerRef.createEmbeddedView(this.templateRef)

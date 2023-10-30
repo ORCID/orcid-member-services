@@ -5,7 +5,6 @@ import { Event } from '../model/event.model'
 
 @Injectable({ providedIn: 'root' })
 export class EventService {
-    
   private events = new Subject<Event>()
 
   on(eventType: EventType): Observable<Event> {
@@ -15,5 +14,4 @@ export class EventService {
   broadcast(event: Event): void {
     this.events.next(event)
   }
-
 }

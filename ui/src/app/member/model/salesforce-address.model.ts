@@ -1,11 +1,11 @@
 export interface ISFAddress {
-  city?: string;
-  country?: string;
-  countryCode?: string;
-  postalCode?: string;
-  state?: string;
-  stateCode?: string;
-  street?: string;
+  city?: string
+  country?: string
+  countryCode?: string
+  postalCode?: string
+  state?: string
+  stateCode?: string
+  street?: string
 }
 
 export class SFAddress implements ISFAddress {

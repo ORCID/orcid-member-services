@@ -11,7 +11,7 @@ import {
   faUserPlus,
   faSignOutAlt,
   faWrench,
-  faLock
+  faLock,
 } from '@fortawesome/free-solid-svg-icons'
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http'
 import { Observable } from 'rxjs'
@@ -31,6 +31,7 @@ type EntityResponseType = HttpResponse<IMember>
 export class NavbarComponent implements OnInit {
   isNavbarCollapsed: boolean
   version: string
+
   organizationName: string | undefined
   account: IAccount | undefined
   userName: string | undefined
@@ -61,11 +62,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.accountService.getAuthenticationState().subscribe(() => {
-      if (
-        !this.memberCallDone &&
-        this.isAuthenticated() &&
-        this.hasRoleUser()
-      ) {
+      if (!this.memberCallDone && this.isAuthenticated() && this.hasRoleUser()) {
         this.memberCallDone = true
 
         const salesforceId = this.accountService.getSalesforceId()

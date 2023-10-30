@@ -1,8 +1,12 @@
 <div class="text-center" *ngIf="this.isLoggedAs()">
   <fa-icon [icon]="faUser"></fa-icon>
   <span jhiTranslate="global.menu.account.loggedInAs.string"></span>
+<<<<<<< HEAD
   <b>{{ this.getUserName() }}</b> |
   <span jhiTranslate="global.menu.account.logoutAs.string"></span
+=======
+  <b>{{ this.getUserName() }}</b> | <span jhiTranslate="global.menu.account.logoutAs.string"></span
+>>>>>>> main
   ><a tabindex="1" (click)="logoutAs()" (keypress)="logoutAs()" id="logoutAs.string">
     {{ this.getUserName() }}
     <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
@@ -11,6 +15,7 @@
 <nav class="navbar navbar-dark navbar-expand-md bg-dark">
   <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()"
     ><span class="logo logo-img"
+<<<<<<< HEAD
       ><img
         src="../../../content/images/orcid-logo.svg"
         width="120px"
@@ -30,6 +35,14 @@
     class="navbar-brand navbar-title logo org-name truncate-text"
     routerLink="/"
   >
+=======
+      ><img src="../../../content/images/orcid-logo.svg" width="120px" alt="ORCID logo" /></span
+  ></a>
+  <span jhiTranslate="global.menu.memberPortal.string" class="navbar-title navbar-brand logo">Member Portal</span>&nbsp;
+  <div *ngIf="this.organizationName" class="navbar-title navbar-brand pipe">|</div>
+  &nbsp;
+  <div *ngIf="isAuthenticated()" class="navbar-brand navbar-title logo org-name truncate-text" routerLink="/">
+>>>>>>> main
     {{ this.organizationName }}
   </div>
   <a
@@ -39,7 +52,10 @@
     data-target="#navbarResponsive"
     aria-controls="navbarResponsive"
     aria-expanded="false"
+<<<<<<< HEAD
     id="collapse-button"
+=======
+>>>>>>> main
     aria-label="Toggle navigation"
     (click)="toggleNavbar()"
   >
@@ -54,25 +70,37 @@
     <ul class="navbar-nav ml-auto">
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       <li
+<<<<<<< HEAD
         *appHasAnyAuthority="'ROLE_USER'"
+=======
+        *hasAnyAuthority="'ROLE_USER'"
+>>>>>>> main
         ngbDropdown
         class="nav-item dropdown pointer"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
+<<<<<<< HEAD
         <a
           class="nav-link dropdown-toggle"
           ngbDropdownToggle
           href="javascript:void(0);"
           id="tools-menu"
         >
+=======
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+>>>>>>> main
           <span>
             <fa-icon [icon]="faWrench"></fa-icon>
             <span jhiTranslate="global.menu.tools.main.string"> Tools </span>
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+<<<<<<< HEAD
           <li *appHasAnyAuthority="'ASSERTION_SERVICE_ENABLED'">
+=======
+          <li *hasAnyAuthority="'ASSERTION_SERVICE_ENABLED'">
+>>>>>>> main
             <a
               class="dropdown-item"
               routerLink="assertion"
@@ -81,15 +109,22 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faAddressCard" [fixedWidth]="true"></fa-icon>
+<<<<<<< HEAD
               <span
                 jhiTranslate="global.menu.tools.assertionServiceAffiliationManager.string"
+=======
+              <span jhiTranslate="global.menu.tools.assertionServiceAffiliationManager.string"
+>>>>>>> main
                 >Affiliation Manager</span
               >
             </a>
           </li>
           <li>
             <a
+<<<<<<< HEAD
               id="memberReportLink"
+=======
+>>>>>>> main
               class="dropdown-item"
               routerLink="report/member"
               routerLinkActive="active"
@@ -97,14 +132,21 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
+<<<<<<< HEAD
               <span jhiTranslate="global.menu.report.member.string"
                 >Member report</span
               >
+=======
+              <span jhiTranslate="global.menu.report.member.string">Member report</span>
+>>>>>>> main
             </a>
           </li>
           <li>
             <a
+<<<<<<< HEAD
               id="integrationReportLink"
+=======
+>>>>>>> main
               class="dropdown-item"
               routerLink="report/integration"
               routerLinkActive="active"
@@ -112,14 +154,21 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
+<<<<<<< HEAD
               <span jhiTranslate="global.menu.report.integration.string"
                 >Integration report</span
               >
+=======
+              <span jhiTranslate="global.menu.report.integration.string">Integration report</span>
+>>>>>>> main
             </a>
           </li>
           <li *ngIf="consortiumLead">
             <a
+<<<<<<< HEAD
               id="consortiaReportLink"
+=======
+>>>>>>> main
               class="dropdown-item"
               routerLink="report/consortia"
               routerLinkActive="active"
@@ -127,14 +176,21 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
+<<<<<<< HEAD
               <span jhiTranslate="global.menu.report.consortium.string"
                 >Consortium report</span
               >
+=======
+              <span jhiTranslate="global.menu.report.consortium.string">Consortium report</span>
+>>>>>>> main
             </a>
           </li>
           <li>
             <a
+<<<<<<< HEAD
               id="affiliationReportLink"
+=======
+>>>>>>> main
               class="dropdown-item"
               routerLink="report/affiliation"
               routerLinkActive="active"
@@ -142,9 +198,13 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
+<<<<<<< HEAD
               <span jhiTranslate="global.menu.report.affiliation.string"
                 >Affiliation report</span
               >
+=======
+              <span jhiTranslate="global.menu.report.affiliation.string">Affiliation report</span>
+>>>>>>> main
             </a>
           </li>
           <li *ngIf="consortiumLead">
@@ -156,21 +216,30 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
+<<<<<<< HEAD
               <span
                 jhiTranslate="global.menu.report.consortiumMemberAffiliations.string"
                 >Consortium report</span
               >
+=======
+              <span jhiTranslate="global.menu.report.consortiumMemberAffiliations.string">Consortium report</span>
+>>>>>>> main
             </a>
           </li>
         </ul>
       </li>
       <li
+<<<<<<< HEAD
         *appHasAnyAuthority="'ROLE_USER'"
+=======
+        *hasAnyAuthority="'ROLE_USER'"
+>>>>>>> main
         ngbDropdown
         class="nav-item dropdown pointer"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
+<<<<<<< HEAD
         <a
           class="nav-link dropdown-toggle"
           ngbDropdownToggle
@@ -182,6 +251,12 @@
             <span jhiTranslate="global.menu.resources.main.string">
               Resources
             </span>
+=======
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+          <span>
+            <fa-icon [icon]="faLightbulb"></fa-icon>
+            <span jhiTranslate="global.menu.resources.main.string"> Resources </span>
+>>>>>>> main
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
@@ -192,10 +267,14 @@
               href="https://info.orcid.org/documentation/member-portal/account-management/"
               (click)="collapseNavbar()"
             >
+<<<<<<< HEAD
               <span
                 jhiTranslate="global.menu.resources.accountManagementGuide.string"
                 >Account Management Guide</span
               >
+=======
+              <span jhiTranslate="global.menu.resources.accountManagementGuide.string">Account Management Guide</span>
+>>>>>>> main
             </a>
           </li>
           <li>
@@ -205,10 +284,14 @@
               href="https://info.orcid.org/documentation/member-portal/member-portal-organizational-admin-guide/"
               (click)="collapseNavbar()"
             >
+<<<<<<< HEAD
               <span
                 jhiTranslate="global.menu.resources.affiliationManagerGuide.string"
                 >Affiliation Manager Guide</span
               >
+=======
+              <span jhiTranslate="global.menu.resources.affiliationManagerGuide.string">Affiliation Manager Guide</span>
+>>>>>>> main
             </a>
           </li>
           <li>
@@ -218,10 +301,14 @@
               href="https://info.orcid.org/documentation/member-portal/member-reporting/"
               (click)="collapseNavbar()"
             >
+<<<<<<< HEAD
               <span
                 jhiTranslate="global.menu.resources.memberReportingGuide.string"
                 >Member Reporting Guide</span
               >
+=======
+              <span jhiTranslate="global.menu.resources.memberReportingGuide.string">Member Reporting Guide</span>
+>>>>>>> main
             </a>
           </li>
           <li>
@@ -231,8 +318,12 @@
               href="https://info.orcid.org/affiliation-manager-production-credentials-request-form/"
               (click)="collapseNavbar()"
             >
+<<<<<<< HEAD
               <span
                 jhiTranslate="global.menu.resources.applyForAffiliationManagerCreds.string"
+=======
+              <span jhiTranslate="global.menu.resources.applyForAffiliationManagerCreds.string"
+>>>>>>> main
                 >Apply for Affiliation Manager Credentials</span
               >
             </a>
@@ -240,21 +331,29 @@
         </ul>
       </li>
       <li
+<<<<<<< HEAD
         *ngIf="
           this.isAuthenticated() &&
           (this.isOrganizationOwner() || this.hasRoleAdmin())
         "
+=======
+        *ngIf="this.isAuthenticated() && (this.isOrganizationOwner() || this.hasRoleAdmin())"
+>>>>>>> main
         ngbDropdown
         class="nav-item dropdown pointer"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
+<<<<<<< HEAD
         <a
           class="nav-link dropdown-toggle"
           ngbDropdownToggle
           href="javascript:void(0);"
           id="admin-menu"
         >
+=======
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
+>>>>>>> main
           <span>
             <fa-icon [icon]="faUserPlus"></fa-icon>
             <span jhiTranslate="global.menu.adminMenu.main.string">Admin</span>
@@ -270,14 +369,22 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faUser" [fixedWidth]="true"></fa-icon>
+<<<<<<< HEAD
               <span jhiTranslate="global.menu.adminMenu.manageUsers.string"
                 >Manage users</span
               >
+=======
+              <span jhiTranslate="global.menu.adminMenu.manageUsers.string">Manage users</span>
+>>>>>>> main
             </a>
           </li>
           <li>
             <a
+<<<<<<< HEAD
               *appappHasAnyAuthority="'ROLE_ADMIN'"
+=======
+              *hasAnyAuthority="'ROLE_ADMIN'"
+>>>>>>> main
               class="dropdown-item"
               routerLink="member"
               routerLinkActive="active"
@@ -285,9 +392,13 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faUniversity" [fixedWidth]="true"></fa-icon>
+<<<<<<< HEAD
               <span jhiTranslate="global.menu.adminMenu.manageMembers.string"
                 >Manage members</span
               >
+=======
+              <span jhiTranslate="global.menu.adminMenu.manageMembers.string">Manage members</span>
+>>>>>>> main
             </a>
           </li>
         </ul>
@@ -299,17 +410,22 @@
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
+<<<<<<< HEAD
         <a
           class="nav-link dropdown-toggle"
           ngbDropdownToggle
           href="javascript:void(0);"
           id="account-menu"
         >
+=======
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
+>>>>>>> main
           <span *ngIf="!getImageUrl()">
             <fa-icon [icon]="faUser"></fa-icon>
             <span jhiTranslate="global.menu.account.main.string">Account</span>
           </span>
           <span *ngIf="getImageUrl()">
+<<<<<<< HEAD
             <img
               [src]="getImageUrl()"
               class="profile-image rounded-circle"
@@ -346,14 +462,34 @@
               <span jhiTranslate="global.menu.account.password.string"
                 >Password</span
               >
+=======
+            <img [src]="getImageUrl()" class="profile-image rounded-circle" alt="Avatar" />
+          </span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu aria-labelledby="account-menu">
+          <li>
+            <a class="dropdown-item" routerLink="settings" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon [icon]="faWrench" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.account.settings.string">Settings</span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="password" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon [icon]="faLock" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.account.password.string">Password</span>
+>>>>>>> main
             </a>
           </li>
           <li>
             <a class="dropdown-item" tabindex="1" (click)="logout()" (keypress)="logout()" id="logout">
               <fa-icon [icon]="faSignOutAlt" [fixedWidth]="true"></fa-icon>
+<<<<<<< HEAD
               <span jhiTranslate="global.menu.account.logout.string"
                 >Sign out</span
               >
+=======
+              <span jhiTranslate="global.menu.account.logout.string">Sign out</span>
+>>>>>>> main
             </a>
           </li>
         </ul>
