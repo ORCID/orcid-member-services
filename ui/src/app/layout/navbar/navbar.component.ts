@@ -66,14 +66,13 @@ export class NavbarComponent implements OnInit {
         this.memberCallDone = true
 
         const salesforceId = this.accountService.getSalesforceId()
-
         if (salesforceId) {
           this.memberService.find(salesforceId).subscribe({
-            next: (res: HttpResponse<IMember>) => {
-              if (res.body) {
-                this.organizationName = res.body.clientName
-                this.consortiumLead = res.body.isConsortiumLead
-                this.consortiumMember = res.body.parentSalesforceId != null
+            next: (res: IMember | null) => {
+              if (res) {
+                this.organizationName = res.clientName
+                this.consortiumLead = res.isConsortiumLead
+                this.consortiumMember = res.parentSalesforceId != null
               }
               return this.organizationName
             },

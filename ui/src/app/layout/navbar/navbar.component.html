@@ -55,6 +55,7 @@
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
           <li *appHasAnyAuthority="'ASSERTION_SERVICE_ENABLED'">
             <a
+              id="affiliationManagerLink"
               class="dropdown-item"
               routerLink="assertion"
               routerLinkActive="active"
@@ -92,6 +93,8 @@
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
               <span jhiTranslate="global.menu.report.integration.string">Integration report</span>
             </a>
+          </li>
+          <li *ngIf="consortiumLead">
             <a
               id="consortiaReportLink"
               class="dropdown-item"
@@ -105,13 +108,19 @@
             </a>
           </li>
           <li>
-            <a id="affiliationReportLink" routerLink="report/affiliation" (click)="collapseNavbar()">
+            <a
+              id="affiliationReportLink"
+              class="dropdown-item"
+              routerLink="report/affiliation"
+              (click)="collapseNavbar()"
+            >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
               <span jhiTranslate="global.menu.report.affiliation.string">Affiliation report</span>
             </a>
           </li>
           <li *ngIf="consortiumLead">
             <a
+              id="consortiumMemberAffiliationsReportLink"
               class="dropdown-item"
               routerLink="report/consortia-member-affiliations"
               routerLinkActive="active"
@@ -119,7 +128,9 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.report.consortiumMemberAffiliations.string">Consortium report</span>
+              <span jhiTranslate="global.menu.report.consortiumMemberAffiliations.string"
+                >Consortium member affiliations</span
+              >
             </a>
           </li>
         </ul>

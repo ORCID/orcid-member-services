@@ -11,10 +11,10 @@ type EntityResponseType = HttpResponse<IMember>
 export class MemberService {
   constructor(protected http: HttpClient) {}
 
-  public resourceUrl = SERVER_API_URL + 'services/memberservice/api'
+  public resourceUrl = SERVER_API_URL + '/services/memberservice/api'
   public managedMember = new BehaviorSubject<string | null>(null)
 
-  find(id: string): Observable<EntityResponseType> {
+  find(id: string): Observable<IMember | null> {
     return this.http
       .get<IMember>(`${this.resourceUrl}/members/${id}`, {
         observe: 'response',
@@ -35,11 +35,13 @@ export class MemberService {
     this.managedMember.next(value)
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+  protected convertDateFromServer(res: EntityResponseType): IMember | null {
+    console.log('************************************************* convertDateFromServer')
+
     if (res.body) {
       res.body.createdDate = res.body.createdDate != null ? moment(res.body.createdDate) : undefined
       res.body.lastModifiedDate = res.body.lastModifiedDate != null ? moment(res.body.lastModifiedDate) : undefined
     }
-    return res
+    return res.body
   }
 }
