@@ -25,7 +25,7 @@ export class HasAnyAuthorityDirective {
   ) {}
 
   @Input()
-  set hasAnyAuthority(value: string | string[]) {
+  set appHasAnyAuthority(value: string | string[]) {
     this.authorities = typeof value === 'string' ? [value] : value
     this.updateView()
     // Get notified each time authentication state changes.

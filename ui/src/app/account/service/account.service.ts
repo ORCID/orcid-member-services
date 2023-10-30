@@ -91,6 +91,8 @@ export class AccountService {
   }
 
   hasAnyAuthority(authorities: string[]): boolean {
+    console.log(authorities, this.accountData.value?.authorities)
+
     if (!this.authenticated || !this.accountData || !this.accountData.value?.authorities) {
       return false
     }
@@ -136,7 +138,7 @@ export class AccountService {
   }
 
   getAuthenticationState(): Observable<any> {
-    return this.authenticationState.asObservable()
+    return this.accountData.asObservable()
   }
 
   getImageUrl(): string | null {

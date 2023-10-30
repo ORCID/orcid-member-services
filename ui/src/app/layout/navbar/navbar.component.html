@@ -25,6 +25,7 @@
     data-target="#navbarResponsive"
     aria-controls="navbarResponsive"
     aria-expanded="false"
+    id="collapse-button"
     aria-label="Toggle navigation"
     (click)="toggleNavbar()"
   >
@@ -39,21 +40,22 @@
     <ul class="navbar-nav ml-auto">
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       <li
-        *hasAnyAuthority="'ROLE_USER'"
+        *appHasAnyAuthority="'ROLE_USER'"
         ngbDropdown
         class="nav-item dropdown pointer"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
-        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="tools-menu">
           <span>
             <fa-icon [icon]="faWrench"></fa-icon>
             <span jhiTranslate="global.menu.tools.main.string"> Tools </span>
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-          <li *hasAnyAuthority="'ASSERTION_SERVICE_ENABLED'">
+          <li *appHasAnyAuthority="'ASSERTION_SERVICE_ENABLED'">
             <a
+              id="affiliationManagerLink"
               class="dropdown-item"
               routerLink="assertion"
               routerLinkActive="active"
@@ -68,6 +70,7 @@
           </li>
           <li>
             <a
+              id="memberReportLink"
               class="dropdown-item"
               routerLink="report/member"
               routerLinkActive="active"
@@ -80,6 +83,7 @@
           </li>
           <li>
             <a
+              id="integrationReportLink"
               class="dropdown-item"
               routerLink="report/integration"
               routerLinkActive="active"
@@ -92,6 +96,7 @@
           </li>
           <li *ngIf="consortiumLead">
             <a
+              id="consortiaReportLink"
               class="dropdown-item"
               routerLink="report/consortia"
               routerLinkActive="active"
@@ -104,10 +109,9 @@
           </li>
           <li>
             <a
+              id="affiliationReportLink"
               class="dropdown-item"
               routerLink="report/affiliation"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
@@ -116,6 +120,7 @@
           </li>
           <li *ngIf="consortiumLead">
             <a
+              id="consortiumMemberAffiliationsReportLink"
               class="dropdown-item"
               routerLink="report/consortia-member-affiliations"
               routerLinkActive="active"
@@ -123,13 +128,15 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.report.consortiumMemberAffiliations.string">Consortium report</span>
+              <span jhiTranslate="global.menu.report.consortiumMemberAffiliations.string"
+                >Consortium member affiliations</span
+              >
             </a>
           </li>
         </ul>
       </li>
       <li
-        *hasAnyAuthority="'ROLE_USER'"
+        *appHasAnyAuthority="'ROLE_USER'"
         ngbDropdown
         class="nav-item dropdown pointer"
         routerLinkActive="active"
@@ -214,7 +221,7 @@
           </li>
           <li>
             <a
-              *hasAnyAuthority="'ROLE_ADMIN'"
+              *appappHasAnyAuthority="'ROLE_ADMIN'"
               class="dropdown-item"
               routerLink="member"
               routerLinkActive="active"
