@@ -1,9 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-  tick,
-  fakeAsync,
-} from '@angular/core/testing'
+import { ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing'
 import { LoginComponent } from './login.component'
 import { ReactiveFormsModule } from '@angular/forms'
 import { RouterTestingModule } from '@angular/router/testing'
@@ -20,17 +15,9 @@ describe('LoginComponent', () => {
   let accountService: jasmine.SpyObj<AccountService>
 
   beforeEach(() => {
-    const loginServiceSpy = jasmine.createSpyObj('LoginService', [
-      'login',
-      'logout',
-    ])
-    const stateStorageServiceSpy = jasmine.createSpyObj('StateStorageService', [
-      'getUrl',
-      'storeUrl',
-    ])
-    const accountServiceSpy = jasmine.createSpyObj('AccountService', [
-      'getAccountData',
-    ])
+    const loginServiceSpy = jasmine.createSpyObj('LoginService', ['login', 'logout'])
+    const stateStorageServiceSpy = jasmine.createSpyObj('StateStorageService', ['getUrl', 'storeUrl'])
+    const accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
 
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
@@ -45,12 +32,8 @@ describe('LoginComponent', () => {
     fixture = TestBed.createComponent(LoginComponent)
     component = fixture.componentInstance
     loginService = TestBed.inject(LoginService) as jasmine.SpyObj<LoginService>
-    stateStorageService = TestBed.inject(
-      StateStorageService
-    ) as jasmine.SpyObj<StateStorageService>
-    accountService = TestBed.inject(
-      AccountService
-    ) as jasmine.SpyObj<AccountService>
+    stateStorageService = TestBed.inject(StateStorageService) as jasmine.SpyObj<StateStorageService>
+    accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
   })
 
   it('should create', () => {

@@ -1,26 +1,26 @@
 export interface ISFMemberContact {
-  memberId?: string;
-  votingContant?: boolean;
-  memberOrgRole?: string[];
-  name?: string;
-  contactEmail?: string;
-  title?: string;
-  phone?: string;
+  memberId?: string
+  votingContant?: boolean
+  memberOrgRole?: string[]
+  name?: string
+  contactEmail?: string
+  title?: string
+  phone?: string
 }
 
 export interface ISFRawMemberContact {
-  Organization__c?: string;
-  Voting_Contact__c?: boolean;
-  Contact_Curr_Email__c?: string;
-  Member_Org_Role__c?: string;
-  Name?: string;
-  Title?: string;
-  Phone?: string;
+  Organization__c?: string
+  Voting_Contact__c?: boolean
+  Contact_Curr_Email__c?: string
+  Member_Org_Role__c?: string
+  Name?: string
+  Title?: string
+  Phone?: string
 }
 
 export interface ISFRawMemberContacts {
-  size?: number;
-  records?: ISFRawMemberContact[];
+  size?: number
+  records?: ISFRawMemberContact[]
 }
 
 export class SFMemberContact implements ISFMemberContact {
@@ -33,19 +33,19 @@ export class SFMemberContact implements ISFMemberContact {
     public title?: string,
     public phone?: string
   ) {
-    this.memberOrgRole = [];
+    this.memberOrgRole = []
   }
 }
 
 export class ISFMemberContactUpdate {
-  contactName?: string;
-  contactEmail?: string;
-  contactMember?: string;
-  contactNewName?: string;
-  contactNewEmail?: string;
-  contactNewJobTitle?: string;
-  contactNewPhone?: string;
-  contactNewRoles?: string[];
+  contactName?: string
+  contactEmail?: string
+  contactMember?: string
+  contactNewName?: string
+  contactNewEmail?: string
+  contactNewJobTitle?: string
+  contactNewPhone?: string
+  contactNewRoles?: string[]
 }
 
 export class SFMemberContactUpdate implements ISFMemberContactUpdate {
