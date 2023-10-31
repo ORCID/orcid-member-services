@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpResponse } from '@angular/common/http'
 import { Observable } from 'rxjs'
 
-import { SERVER_API_URL } from '../../../app/app.constants'
 import { ILoginCredentials, ILoginResult } from '../model/login.model'
+import { environment } from 'src/environments/environment'
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
@@ -31,6 +31,6 @@ export class AuthServerProvider {
 */
 
   logout(): Observable<any> {
-    return this.http.post(SERVER_API_URL + '/auth/logout', null)
+    return this.http.post(environment.SERVER_API_URL + '/auth/logout', null)
   }
 }

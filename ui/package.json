@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --disable-host-check --host 0.0.0.0",
+    "start": "ng serve --disable-host-check --host 0.0.0.0 --serve-path='/ui'",
     "start_ssl": "ng serve --disable-host-check --host 0.0.0.0 --ssl",
     "build": "ng build --base-href='/ui/'",
     "watch": "ng build --base-href='/ui/' --watch --configuration development",

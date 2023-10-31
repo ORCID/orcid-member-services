@@ -12,5 +12,13 @@
     "changeOrigin": true,
     "logLevel": "debug",
     "cookieDomainRewrite": "localhost"
+  },
+  "/ui/*": {
+    "target": "",
+    "secure": false,
+    "pathRewrite": {
+      "^/ui": ""
+    },
+    "changeOrigin": true
   }
 }

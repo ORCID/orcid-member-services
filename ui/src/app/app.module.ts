@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { HasAnyAuthorityDirective } from './shared/directive/has-any-authority.directive'
 import { HomeModule } from './home/home.module'
+import { environment } from 'src/environments/environment'
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, HasAnyAuthorityDirective],
@@ -29,4 +30,8 @@ import { HomeModule } from './home/home.module'
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    environment.SERVER_API_URL = environment.SERVER_API_URL.replace('<DOMAIN>', window.location.origin)
+  }
+}

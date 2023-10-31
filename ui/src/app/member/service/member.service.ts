@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable, of, map, catchError } from 'rxjs'
 import { HttpClient, HttpResponse } from '@angular/common/http'
 import { IMember } from '../model/member.model'
-import { SERVER_API_URL } from 'src/app/app.constants'
 import * as moment from 'moment'
+import { environment } from 'src/environments/environment'
 
 type EntityResponseType = HttpResponse<IMember>
 
@@ -11,7 +11,7 @@ type EntityResponseType = HttpResponse<IMember>
 export class MemberService {
   constructor(protected http: HttpClient) {}
 
-  public resourceUrl = SERVER_API_URL + '/services/memberservice/api'
+  public resourceUrl = environment.SERVER_API_URL + '/services/memberservice/api'
   public managedMember = new BehaviorSubject<string | null>(null)
 
   find(id: string): Observable<IMember | null> {
