@@ -243,7 +243,7 @@
       >
         <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
           <span *ngIf="!getImageUrl()">
-            <fa-icon [icon]="faUser"></fa-icon>
+            <fa-icon [icon]="faUser" [fixedWidth]="true"></fa-icon>
             <span jhiTranslate="global.menu.account.main.string">Account</span>
           </span>
           <span *ngIf="getImageUrl()">

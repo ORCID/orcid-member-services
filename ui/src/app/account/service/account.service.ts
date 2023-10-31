@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core'
 import { SessionStorageService } from 'ngx-webstorage'
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
-import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil, tap } from 'rxjs'
+import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, takeUntil } from 'rxjs'
 
-import { SERVER_API_URL } from '../../../app/app.constants'
 import { IAccount } from '../model/account.model'
+import { environment } from 'src/environments/environment'
 // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
 //import { MSMemberService } from 'app/entities/member/member.service';
 
@@ -14,8 +14,7 @@ export class AccountService {
   private isFetchingAccountData = false
   private stopFetchingAccountData = new Subject()
   private authenticated = false
-  private authenticationState = new BehaviorSubject<any>(null)
-  private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api'
+  private logoutAsResourceUrl = environment.SERVER_API_URL + 'services/userservice/api'
 
   constructor(
     // TODO: uncomment when language service is implemented
@@ -28,7 +27,7 @@ export class AccountService {
     console.log('Fetching account data from the back end')
 
     return this.http
-      .get<IAccount>(SERVER_API_URL + '/services/userservice/api/account', {
+      .get<IAccount>(environment.SERVER_API_URL + '/services/userservice/api/account', {
         observe: 'response',
       })
       .pipe(
@@ -38,13 +37,11 @@ export class AccountService {
           this.accountData.next(null)
           // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
           //this.memberService.memberData.next(undefined);
-          this.authenticationState.next(this.accountData)
           this.isFetchingAccountData = false
           return EMPTY
         }),
         map((response: HttpResponse<IAccount>) => {
           this.isFetchingAccountData = false
-          this.authenticationState.next(this.accountData)
           if (response && response.body) {
             this.authenticated = true
             const account: IAccount = response.body
@@ -69,30 +66,35 @@ export class AccountService {
   }
 
   getMfaSetup(): Observable<HttpResponse<any>> {
-    return this.http.get<any>(SERVER_API_URL + 'services/userservice/api/account/mfa', { observe: 'response' })
+    return this.http.get<any>(environment.SERVER_API_URL + 'services/userservice/api/account/mfa', {
+      observe: 'response',
+    })
   }
 
   save(account: any): Observable<HttpResponse<any>> {
-    return this.http.post(SERVER_API_URL + 'services/userservice/api/account', account, { observe: 'response' })
+    return this.http.post(environment.SERVER_API_URL + 'services/userservice/api/account', account, {
+      observe: 'response',
+    })
   }
 
   enableMfa(mfaSetup: any): Observable<HttpResponse<any>> {
-    return this.http.post(SERVER_API_URL + 'services/userservice/api/account/mfa/on', mfaSetup, { observe: 'response' })
+    return this.http.post(environment.SERVER_API_URL + 'services/userservice/api/account/mfa/on', mfaSetup, {
+      observe: 'response',
+    })
   }
 
   disableMfa(): Observable<HttpResponse<any>> {
-    return this.http.post(SERVER_API_URL + 'services/userservice/api/account/mfa/off', null, { observe: 'response' })
+    return this.http.post(environment.SERVER_API_URL + 'services/userservice/api/account/mfa/off', null, {
+      observe: 'response',
+    })
   }
   // TODO: any - this seems to only be used for logging out (only ever receives null as arg)
   authenticate(identity: any) {
     this.accountData.next(identity)
     this.authenticated = identity !== null
-    this.authenticationState.next(this.accountData)
   }
 
   hasAnyAuthority(authorities: string[]): boolean {
-    console.log(authorities, this.accountData.value?.authorities)
-
     if (!this.authenticated || !this.accountData || !this.accountData.value?.authorities) {
       return false
     }
@@ -137,10 +139,6 @@ export class AccountService {
     return this.accountData.value !== undefined
   }
 
-  getAuthenticationState(): Observable<any> {
-    return this.accountData.asObservable()
-  }
-
   getImageUrl(): string | null {
     return this.isIdentityResolved() ? this.accountData.value!.imageUrl : null
   }
@@ -166,16 +164,16 @@ export class AccountService {
     return userName
   }
 
-  getSalesforceId(): string | null {
-    return this.isAuthenticated() && this.accountData ? this.accountData.value!.salesforceId : null
+  getSalesforceId(): string | undefined {
+    return this.isAuthenticated() && this.accountData ? this.accountData.value?.salesforceId : undefined
   }
 
-  isOrganizationOwner(): boolean | null {
-    return this.isIdentityResolved() && this.accountData ? this.accountData.value!.mainContact : false
+  isOrganizationOwner(): boolean | undefined {
+    return this.isIdentityResolved() && this.accountData ? this.accountData.value?.mainContact : false
   }
 
   isLoggedAs(): boolean {
-    return !!(this.isIdentityResolved() && this.accountData.value!.loggedAs)
+    return !!(this.isIdentityResolved() && this.accountData.value?.loggedAs)
   }
 
   logoutAs(): Observable<any> {

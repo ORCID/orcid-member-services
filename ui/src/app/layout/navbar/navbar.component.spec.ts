@@ -24,7 +24,6 @@ describe('NavbarComponent', () => {
       'getAccountData',
       'isAuthenticated',
       'hasAnyAuthority',
-      'getAuthenticationState',
       'isLoggedAs',
       'isOrganizationOwner',
       'getImageUrl',
@@ -60,7 +59,7 @@ describe('NavbarComponent', () => {
     accountService.isOrganizationOwner.and.returnValue(false)
     accountService.getImageUrl.and.returnValue(null)
     accountService.getSalesforceId.and.returnValue('sfid')
-    accountService.getAuthenticationState.and.returnValue(
+    accountService.getAccountData.and.returnValue(
       of({
         activated: true,
         authorities: ['ROLE_USER'],
@@ -105,7 +104,7 @@ describe('NavbarComponent', () => {
     accountService.isOrganizationOwner.and.returnValue(false)
     accountService.getImageUrl.and.returnValue(null)
     accountService.getSalesforceId.and.returnValue('sfid')
-    accountService.getAuthenticationState.and.returnValue(
+    accountService.getAccountData.and.returnValue(
       of({
         activated: true,
         authorities: ['ROLE_USER', 'ROLE_CONSORTIUM_LEAD'],
@@ -143,7 +142,7 @@ describe('NavbarComponent', () => {
     accountService.isOrganizationOwner.and.returnValue(false)
     accountService.getImageUrl.and.returnValue(null)
     accountService.getSalesforceId.and.returnValue('sfid')
-    accountService.getAuthenticationState.and.returnValue(
+    accountService.getAccountData.and.returnValue(
       of({
         activated: true,
         authorities: ['ROLE_USER', 'ASSERTION_SERVICE_ENABLED'],

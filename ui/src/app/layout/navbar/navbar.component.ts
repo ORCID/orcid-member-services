@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import {
   faAddressCard,
   faUniversity,
@@ -14,12 +13,12 @@ import {
   faLock,
 } from '@fortawesome/free-solid-svg-icons'
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http'
-import { Observable } from 'rxjs'
-import { SERVER_API_URL, VERSION } from '../../../app/app.constants'
+import { VERSION } from '../../../app/app.constants'
 import { AccountService, LoginService } from '../../account'
 import { MemberService } from 'src/app/member/service/member.service'
 import { IAccount } from 'src/app/account/model/account.model'
 import { IMember } from 'src/app/member/model/member.model'
+import { environment } from 'src/environments/environment'
 
 type EntityResponseType = HttpResponse<IMember>
 
@@ -61,7 +60,7 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.accountService.getAuthenticationState().subscribe(() => {
+    this.accountService.getAccountData().subscribe(() => {
       if (!this.memberCallDone && this.isAuthenticated() && this.hasRoleUser()) {
         this.memberCallDone = true
 
@@ -122,7 +121,7 @@ export class NavbarComponent implements OnInit {
     this.userName = undefined
     if (this.isLoggedAs()) {
       this.accountService.logoutAs().subscribe(() => {
-        window.location.href = SERVER_API_URL
+        window.location.href = environment.SERVER_API_URL
       })
     } else {
       this.memberService.setManagedMember(null)
@@ -137,7 +136,7 @@ export class NavbarComponent implements OnInit {
     this.memberCallDone = false
     this.userName = undefined
     this.accountService.logoutAs().subscribe((res) => {
-      window.location.href = SERVER_API_URL
+      window.location.href = environment.SERVER_API_URL
     })
   }
 
