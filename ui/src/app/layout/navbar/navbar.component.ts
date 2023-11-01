@@ -127,7 +127,8 @@ export class NavbarComponent implements OnInit {
     } else {
       this.memberService.setManagedMember(null)
       this.loginService.logout()
-      this.router.navigate([''])
+      console.log('logged out now')
+      this.router.navigate(['/login'])
     }
   }
 
