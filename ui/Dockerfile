@@ -30,12 +30,12 @@ RUN \
     apt -y install procps vim && \
     rm -rf /var/lib/apt/lists/*
 
-COPY container-files/ /var/tmp/  
+COPY container-files/etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 
 # Copy files from the ui-build-stage into this new nginx stage
-COPY --from=ui-build-stage /app/dist/ui /usr/share/nginx/html
+COPY --from=ui-build-stage /app/dist/ /usr/share/nginx/html/
 
-EXPOSE 80
+EXPOSE 8090
 
 # Use the underlying ENTRYPOINT and CMD provided by the base NGINX image
 #ENTRYPOINT /var/tmp/entrypoint.sh
