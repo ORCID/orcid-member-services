@@ -1,4 +1,4 @@
-FROM node:20.7.0-bullseye-slim
+FROM node:20.7.0-bullseye-slim AS ui-build-stage
 
 # Create app directory
 WORKDIR /app
@@ -6,7 +6,7 @@ WORKDIR /app
 # Install some useful utils for debug/test
 RUN \
     apt-get update && \
-    apt -y install procps iproute2 net-tools curl iputils-ping vim && \
+    apt -y install python3 make gcc g++ && \
     rm -rf /var/lib/apt/lists/*
 
 # Install app dependencies
@@ -14,20 +14,28 @@ RUN \
 # where available (npm@5+)
 COPY package*.json ./
 
-COPY container-files/* /var/tmp/  
-
-RUN \
-    chmod +x /var/tmp/* && \
-    npm install
-
 # If you are building your code for production
 # RUN npm install --only=production
+RUN npm install
 
 # Bundle app source
 COPY . .
 
 RUN npm run build
 
-EXPOSE 4200
+FROM nginx
 
-ENTRYPOINT /var/tmp/entrypoint.sh
+RUN \
+    apt-get update && \
+    apt -y install procps vim && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY container-files/ /var/tmp/  
+
+# Copy files from the ui-build-stage into this new nginx stage
+COPY --from=ui-build-stage /app/dist/ui /usr/share/nginx/html
+
+EXPOSE 80
+
+# Use the underlying ENTRYPOINT and CMD provided by the base NGINX image
+#ENTRYPOINT /var/tmp/entrypoint.sh
