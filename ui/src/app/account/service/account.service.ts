@@ -28,7 +28,7 @@ export class AccountService {
     console.log('Fetching account data from the back end')
 
     return this.http
-      .get<IAccount>(SERVER_API_URL + '/services/userservice/api/account', {
+      .get<IAccount>('/services/userservice/api/account', {
         observe: 'response',
       })
       .pipe(
@@ -69,19 +69,19 @@ export class AccountService {
   }
 
   getMfaSetup(): Observable<HttpResponse<any>> {
-    return this.http.get<any>(SERVER_API_URL + 'services/userservice/api/account/mfa', { observe: 'response' })
+    return this.http.get<any>('/services/userservice/api/account/mfa', { observe: 'response' })
   }
 
   save(account: any): Observable<HttpResponse<any>> {
-    return this.http.post(SERVER_API_URL + 'services/userservice/api/account', account, { observe: 'response' })
+    return this.http.post('/services/userservice/api/account', account, { observe: 'response' })
   }
 
   enableMfa(mfaSetup: any): Observable<HttpResponse<any>> {
-    return this.http.post(SERVER_API_URL + 'services/userservice/api/account/mfa/on', mfaSetup, { observe: 'response' })
+    return this.http.post('/services/userservice/api/account/mfa/on', mfaSetup, { observe: 'response' })
   }
 
   disableMfa(): Observable<HttpResponse<any>> {
-    return this.http.post(SERVER_API_URL + 'services/userservice/api/account/mfa/off', null, { observe: 'response' })
+    return this.http.post('/services/userservice/api/account/mfa/off', null, { observe: 'response' })
   }
   // TODO: any - this seems to only be used for logging out (only ever receives null as arg)
   authenticate(identity: any) {
