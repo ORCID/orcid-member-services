@@ -178,4 +178,4 @@ services:
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     ports:
-      - 4200:4200
+      - 8090:8090
