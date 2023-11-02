@@ -172,10 +172,12 @@ services:
 
   ui:
     restart: unless-stopped
-    image: ${DOCKER_REG}/ui:${TAG:-1}
+    image: ${DOCKER_REG}/ui:${TAG:}
     environment:
       - 'SPRING_PROFILES_ACTIVE=prod'
+      - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
+      - GATEWAY_COOKIE_DOMAIN=${COOKIE_DOMAIN}
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     ports:
-      - 4200:4200
+      - 8090:8090
