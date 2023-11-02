@@ -172,7 +172,7 @@ services:
 
   ui:
     restart: unless-stopped
-    image: ${DOCKER_REG}/ui:${TAG:-1}
+    image: ${DOCKER_REG}/ui:${TAG}
     environment:
       - 'SPRING_PROFILES_ACTIVE=prod'
     volumes:
