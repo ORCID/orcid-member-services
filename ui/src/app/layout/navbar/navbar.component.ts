@@ -61,10 +61,9 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.accountService.getAuthenticationState().subscribe(() => {
+    this.accountService.getAccountData().subscribe(() => {
       if (!this.memberCallDone && this.isAuthenticated() && this.hasRoleUser()) {
         this.memberCallDone = true
-
         const salesforceId = this.accountService.getSalesforceId()
         if (salesforceId) {
           this.memberService.find(salesforceId).subscribe({

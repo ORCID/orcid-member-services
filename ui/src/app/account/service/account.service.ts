@@ -137,10 +137,6 @@ export class AccountService {
     return this.accountData.value !== undefined
   }
 
-  getAuthenticationState(): Observable<any> {
-    return this.accountData.asObservable()
-  }
-
   getImageUrl(): string | null {
     return this.isIdentityResolved() ? this.accountData.value!.imageUrl : null
   }

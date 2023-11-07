@@ -29,7 +29,7 @@ export class HasAnyAuthorityDirective {
     this.authorities = typeof value === 'string' ? [value] : value
     this.updateView()
     // Get notified each time authentication state changes.
-    this.accountService.getAuthenticationState().subscribe((identity) => this.updateView())
+    this.accountService.getAccountData().subscribe((identity) => this.updateView())
   }
 
   private updateView(): void {
