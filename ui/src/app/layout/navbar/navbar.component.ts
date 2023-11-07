@@ -14,14 +14,10 @@ import {
   faLock,
 } from '@fortawesome/free-solid-svg-icons'
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http'
-import { Observable } from 'rxjs'
-import { SERVER_API_URL, VERSION } from '../../../app/app.constants'
 import { AccountService, LoginService } from '../../account'
 import { MemberService } from 'src/app/member/service/member.service'
 import { IAccount } from 'src/app/account/model/account.model'
 import { IMember } from 'src/app/member/model/member.model'
-
-type EntityResponseType = HttpResponse<IMember>
 
 @Component({
   selector: 'app-navbar',
@@ -30,7 +26,6 @@ type EntityResponseType = HttpResponse<IMember>
 })
 export class NavbarComponent implements OnInit {
   isNavbarCollapsed: boolean
-  version: string
 
   organizationName: string | undefined
   account: IAccount | undefined
@@ -56,7 +51,6 @@ export class NavbarComponent implements OnInit {
     private memberService: MemberService,
     private router: Router
   ) {
-    this.version = VERSION ? 'v' + VERSION : ''
     this.isNavbarCollapsed = true
   }
 
@@ -122,7 +116,7 @@ export class NavbarComponent implements OnInit {
     this.userName = undefined
     if (this.isLoggedAs()) {
       this.accountService.logoutAs().subscribe(() => {
-        window.location.href = SERVER_API_URL
+        window.location.href = '/'
       })
     } else {
       this.memberService.setManagedMember(null)
@@ -138,7 +132,7 @@ export class NavbarComponent implements OnInit {
     this.memberCallDone = false
     this.userName = undefined
     this.accountService.logoutAs().subscribe((res) => {
-      window.location.href = SERVER_API_URL
+      window.location.href = '/'
     })
   }
 

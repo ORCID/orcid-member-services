@@ -3,7 +3,6 @@ import { SessionStorageService } from 'ngx-webstorage'
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil, tap } from 'rxjs'
 
-import { SERVER_API_URL } from '../../../app/app.constants'
 import { IAccount } from '../model/account.model'
 // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
 //import { MSMemberService } from 'app/entities/member/member.service';
@@ -15,7 +14,7 @@ export class AccountService {
   private stopFetchingAccountData = new Subject()
   private authenticated = false
   private authenticationState = new BehaviorSubject<any>(null)
-  private logoutAsResourceUrl = SERVER_API_URL + 'services/userservice/api'
+  private logoutAsResourceUrl = '/services/userservice/api'
 
   constructor(
     // TODO: uncomment when language service is implemented
