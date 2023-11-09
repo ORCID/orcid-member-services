@@ -11,10 +11,11 @@ import { NavbarComponent } from './layout/navbar/navbar.component'
 import { CommonModule } from '@angular/common'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { HasAnyAuthorityDirective } from './shared/directive/has-any-authority.directive'
-import { HomeModule } from './home/home.module'
+import { HomeModule } from './home/home.module';
+import { FooterComponent } from './layout/footer/footer.component'
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, HasAnyAuthorityDirective],
+  declarations: [AppComponent, NavbarComponent, HasAnyAuthorityDirective, FooterComponent],
   imports: [
     FontAwesomeModule,
     AccountModule,
