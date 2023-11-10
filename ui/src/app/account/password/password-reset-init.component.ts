@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Renderer2, ElementRef } from '@angular/core'
+import { Component, AfterViewInit, Renderer2 } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
 import { PasswordResetInitService } from '../service/password-reset-init.service'
@@ -13,7 +13,7 @@ export class PasswordResetInitComponent implements AfterViewInit {
   errorEmailNotExists: string | undefined
   success: string | undefined
   resetRequestForm = this.fb.group({
-    email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
+    email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100), Validators.email]],
   })
 
   constructor(
