@@ -1,6 +1,4 @@
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing'
-import { Renderer2, ElementRef } from '@angular/core'
-import { FormBuilder } from '@angular/forms'
 import { of, throwError } from 'rxjs'
 
 import { PasswordResetInitService } from '../service/password-reset-init.service'
@@ -17,19 +15,6 @@ describe('Component Tests', () => {
       fixture = TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
         declarations: [PasswordResetInitComponent],
-        providers: [
-          FormBuilder,
-          {
-            provide: Renderer2,
-            useValue: {
-              invokeElementMethod(renderElement: any, methodName: string, args?: any[]) {},
-            },
-          },
-          {
-            provide: ElementRef,
-            useValue: new ElementRef(null),
-          },
-        ],
       }).createComponent(PasswordResetInitComponent)
       comp = fixture.componentInstance
     })
