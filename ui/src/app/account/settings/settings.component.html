@@ -8,50 +8,52 @@
                 <strong>Settings saved!</strong>
             </div>
 
-            <jhi-alert-error></jhi-alert-error>
-
-            <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="settingsForm.get('email').value" novalidate>
+            <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="settingsForm.get('email')?.value" novalidate>
                 <div class="form-group">
                     <label class="form-control-label" for="firstName" jhiTranslate="settings.form.firstname.label.string">First Name</label>
-                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{'settings.form.firstname.placeholder.string' | translate}}"
+					<!-- TODO: translate pipe removed -->
+                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{'settings.form.firstname.placeholder.string' }}"
                            formControlName="firstName">
-                    <div *ngIf="settingsForm.get('firstName').invalid && (settingsForm.get('firstName').dirty || settingsForm.get('firstName').touched)">
+                    <div *ngIf="settingsForm.get('firstName')?.invalid && (settingsForm.get('firstName')?.dirty || settingsForm.get('firstName')?.touched)">
                         <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('firstName').errors.required" jhiTranslate="settings.messages.validate.firstname.required.string">
+                           *ngIf="settingsForm.get('firstName')?.errors!['required']" jhiTranslate="settings.messages.validate.firstname.required.string">
                             Your first name is required.
                         </small>
                         <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('firstName').errors.minlength" jhiTranslate="settings.messages.validate.firstname.minlength.string">
+                           *ngIf="settingsForm.get('firstName')?.errors!['minlength']" jhiTranslate="settings.messages.validate.firstname.minlength.string">
                             Your first name is required to be at least 1 character.
                         </small>
                         <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('firstName').errors.maxlength" jhiTranslate="settings.messages.validate.firstname.maxlength.string">
+                           *ngIf="settingsForm.get('firstName')?.errors!['maxlength']" jhiTranslate="settings.messages.validate.firstname.maxlength.string">
                             Your first name cannot be longer than 50 characters.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="lastName" jhiTranslate="settings.form.lastname.label.string">Last Name</label>
-                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="{{'settings.form.lastname.placeholder.string' | translate}}"
+					<!-- TODO: translate pipe removed -->
+
+                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="{{'settings.form.lastname.placeholder.string'}}"
                            formControlName="lastName">
-                    <div *ngIf="settingsForm.get('lastName').invalid && (settingsForm.get('lastName').dirty || settingsForm.get('lastName').touched)">
+                    <div *ngIf="settingsForm.get('lastName')?.invalid && (settingsForm.get('lastName')?.dirty || settingsForm.get('lastName')?.touched)">
                         <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('lastName').errors.required" jhiTranslate="settings.messages.validate.lastname.required.string">
+                           *ngIf="settingsForm.get('lastName')?.errors!['required']" jhiTranslate="settings.messages.validate.lastname.required.string">
                             Your last name is required.
                         </small>
                         <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('lastName').errors.minlength" jhiTranslate="settings.messages.validate.lastname.minlength.string">
+                           *ngIf="settingsForm.get('lastName')?.errors!['minlength']" jhiTranslate="settings.messages.validate.lastname.minlength.string">
                             Your last name is required to be at least 1 character.
                         </small>
                         <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('lastName').errors.maxlength" jhiTranslate="settings.messages.validate.lastname.maxlength.string">
+                           *ngIf="settingsForm.get('lastName')?.errors!['maxlength']" jhiTranslate="settings.messages.validate.lastname.maxlength.string">
                             Your last name cannot be longer than 50 characters.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="email" jhiTranslate="global.form.email.label.string">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder.string' | translate}}"
+					<!-- TODO: translate pipe removed -->
+                    <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder.string'}}"
                            formControlName="email" readonly>
 
                 </div>
@@ -66,7 +68,7 @@
             <hr />
             
 			<form name="form" role="form" (ngSubmit)="saveMfa()"
-				[formGroup]="mfaForm" *ngIf="settingsForm.get('email').value"
+				[formGroup]="mfaForm" *ngIf="settingsForm.get('email')?.value"
 				novalidate>
 				<h1 class="mt-3" jhiTranslate="settings.security.heading.string">Security</h1>
             	<hr />
@@ -111,8 +113,10 @@
 					    <div *ngIf="mfaSetupFailure" class="alert alert-danger" jhiTranslate="settings.security.otpError.string">
 					        Incorrect verification code
 					    </div>
+					<!-- TODO: translate pipe removed -->
+
 						<input class="indented" name="verificationCode" formControlName="verificationCode"
-							placeholder="{{'settings.security.verificationCode.string' | translate}}" />
+							placeholder="{{'settings.security.verificationCode.string'}}" />
 					</div>
 				</div>
 				<div class="row" *ngIf="showMfaBackupCodes && showMfaSetup">
