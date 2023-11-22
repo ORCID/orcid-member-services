@@ -84,9 +84,14 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
           "options": {
-            "browserTarget": "ui:build"
+            "browserTarget": "ui:build",
+            "format": "xlf2",
+            "outputPath": "src/i18n",
+            "targetFiles": [
+              "messages.es.xlf"
+            ]
           }
         },
         "test": {
