@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { SettingsComponent } from './settings.component'
 import { ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule, HttpResponse } from '@angular/common/http'
 import { LanguageService } from 'src/app/shared/service/language.service'
 import { AccountService } from '../service/account.service'
-import { of } from 'rxjs'
+import { of, throwError } from 'rxjs'
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent
@@ -63,7 +63,7 @@ describe('SettingsComponent', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should flip mfa fields when mfa state changed', fakeAsync(() => {
+  it('should flip mfa fields when mfa state changed', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
         activated: true,
@@ -82,7 +82,6 @@ describe('SettingsComponent', () => {
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: 'test' }))
     accountServiceSpy.getUserName.and.returnValue('test')
-    tick()
     fixture.detectChanges()
 
     expect(component.showMfaSetup).toBeFalsy()
@@ -93,9 +92,9 @@ describe('SettingsComponent', () => {
 
     expect(component.showMfaSetup).toBeTruthy()
     expect(component.showMfaBackupCodes).toBeFalsy()
-  }))
+  })
 
-  it('should flip mfa fields when mfa state changed', fakeAsync(() => {
+  it('should flip mfa fields when mfa state changed', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
         activated: true,
@@ -113,16 +112,15 @@ describe('SettingsComponent', () => {
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: 'test' }))
-    tick()
 
     expect(component.showMfaTextCode).toBeFalsy()
 
     component.toggleMfaTextCode()
 
     expect(component.showMfaTextCode).toBeTruthy()
-  }))
+  })
 
-  it('save mfa enabled should call account service enable', fakeAsync(() => {
+  it('save mfa enabled should call account service enable', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
         activated: true,
@@ -148,9 +146,9 @@ describe('SettingsComponent', () => {
 
     expect(accountServiceSpy.enableMfa).toHaveBeenCalled()
     expect(accountServiceSpy.disableMfa).toHaveBeenCalledTimes(0)
-  }))
+  })
 
-  it('save mfa enabled should call account service disable', fakeAsync(() => {
+  it('save mfa enabled should call account service disable', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
         activated: true,
@@ -175,5 +173,57 @@ describe('SettingsComponent', () => {
 
     expect(accountServiceSpy.disableMfa).toHaveBeenCalled()
     expect(accountServiceSpy.enableMfa).toHaveBeenCalledTimes(0)
-  }))
+  })
+
+  it('save form should call accountService.save and then account data requested when save is successful', () => {
+    accountServiceSpy.save.and.returnValue(of(new HttpResponse()))
+    accountServiceSpy.getAccountData.and.returnValue(
+      of({
+        activated: true,
+        authorities: ['test', 'test'],
+        email: 'email@email.com',
+        firstName: 'name',
+        langKey: 'en',
+        lastName: 'surname',
+        imageUrl: 'url',
+        salesforceId: 'sfid',
+        loggedAs: false,
+        loginAs: 'sfid',
+        mainContact: false,
+        mfaEnabled: true,
+      })
+    )
+    languageServiceSpy.getCurrentLanguage.and.returnValue(of('en'))
+    fixture.detectChanges()
+    expect(component.success).toBeFalsy()
+    component.save()
+    expect(component.success).toBeTruthy()
+    expect(accountServiceSpy.save).toHaveBeenCalled()
+  })
+
+  it('save form should call accountService.save and then account data requested when save is successful', () => {
+    accountServiceSpy.save.and.returnValue(throwError(() => new Error('error')))
+    accountServiceSpy.getAccountData.and.returnValue(
+      of({
+        activated: true,
+        authorities: ['test', 'test'],
+        email: 'email@email.com',
+        firstName: 'name',
+        langKey: 'en',
+        lastName: 'surname',
+        imageUrl: 'url',
+        salesforceId: 'sfid',
+        loggedAs: false,
+        loginAs: 'sfid',
+        mainContact: false,
+        mfaEnabled: true,
+      })
+    )
+    fixture.detectChanges()
+    expect(component.success).toBeFalsy()
+    component.save()
+    expect(component.success).toBeFalsy()
+    expect(accountServiceSpy.save).toHaveBeenCalled()
+    expect(languageServiceSpy.getCurrentLanguage).toHaveBeenCalledTimes(0)
+  })
 })

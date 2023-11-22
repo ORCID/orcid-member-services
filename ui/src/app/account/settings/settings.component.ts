@@ -87,8 +87,8 @@ export class SettingsComponent implements OnInit {
 
   save() {
     const settingsAccount = this.accountFromForm()
-    this.accountService.save(settingsAccount).subscribe(
-      () => {
+    this.accountService.save(settingsAccount).subscribe({
+      next: () => {
         this.error = undefined
         this.success = 'OK'
         this.accountService.getAccountData().subscribe((account) => {
@@ -103,11 +103,11 @@ export class SettingsComponent implements OnInit {
           }
         })
       },
-      () => {
+      error: () => {
         this.success = undefined
         this.error = 'ERROR'
-      }
-    )
+      },
+    })
   }
 
   saveMfa() {
