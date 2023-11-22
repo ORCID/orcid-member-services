@@ -67,8 +67,8 @@ export class AccountService {
       )
   }
 
-  getMfaSetup(): Observable<HttpResponse<any>> {
-    return this.http.get<any>('/services/userservice/api/account/mfa', { observe: 'response' })
+  getMfaSetup(): Observable<{ secret: string; otp: string; qrCode: any }> {
+    return this.http.get<any>('/services/userservice/api/account/mfa')
   }
 
   save(account: any): Observable<HttpResponse<any>> {
@@ -90,8 +90,6 @@ export class AccountService {
   }
 
   hasAnyAuthority(authorities: string[]): boolean {
-    console.log(authorities, this.accountData.value?.authorities)
-
     if (!this.authenticated || !this.accountData || !this.accountData.value?.authorities) {
       return false
     }

@@ -11,8 +11,9 @@ import { NavbarComponent } from './layout/navbar/navbar.component'
 import { CommonModule } from '@angular/common'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { HasAnyAuthorityDirective } from './shared/directive/has-any-authority.directive'
-import { HomeModule } from './home/home.module';
+import { HomeModule } from './home/home.module'
 import { FooterComponent } from './layout/footer/footer.component'
+import { SharedModule } from './shared/shared.module'
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, HasAnyAuthorityDirective, FooterComponent],
@@ -26,6 +27,7 @@ import { FooterComponent } from './layout/footer/footer.component'
     NgxWebstorageModule.forRoot(),
     CommonModule,
     NgbModule,
+    SharedModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

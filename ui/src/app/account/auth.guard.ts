@@ -15,8 +15,6 @@ export const AuthGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnaps
   return accountService.getAccountData().pipe(
     filter((account) => account !== undefined),
     map((account) => {
-      console.log(authorities, account)
-
       if (account) {
         const hasAnyAuthority = accountService.hasAnyAuthority(authorities)
         if (hasAnyAuthority) {
