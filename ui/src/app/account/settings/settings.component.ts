@@ -116,26 +116,26 @@ export class SettingsComponent implements OnInit {
       const otp = this.mfaForm.get('verificationCode')!.value
       console.log('about to set otp on ' + this.mfaSetup)
       this.mfaSetup.otp = otp
-      this.accountService.enableMfa(this.mfaSetup).subscribe(
-        (res) => {
+      this.accountService.enableMfa(this.mfaSetup).subscribe({
+        next: (res) => {
           this.mfaBackupCodes = res.body
           this.showMfaBackupCodes = true
           this.showMfaUpdated = true
         },
-        (err) => {
+        error: (err) => {
           this.mfaSetupFailure = true
-        }
-      )
+        },
+      })
     } else {
-      this.accountService.disableMfa().subscribe(
-        () => {
+      this.accountService.disableMfa().subscribe({
+        next: () => {
           this.showMfaUpdated = true
           this.accountService.getMfaSetup().subscribe((res) => {
             this.mfaSetup = res
           })
         },
-        (err) => console.log('error disabling mfa')
-      )
+        error: (err) => console.log('error disabling mfa'),
+      })
     }
   }
 

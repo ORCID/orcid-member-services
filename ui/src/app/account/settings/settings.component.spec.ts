@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 
 import { SettingsComponent } from './settings.component'
 import { ReactiveFormsModule } from '@angular/forms'
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule, HttpResponse } from '@angular/common/http'
 import { LanguageService } from 'src/app/shared/service/language.service'
 import { AccountService } from '../service/account.service'
 import { of } from 'rxjs'
@@ -83,6 +83,7 @@ describe('SettingsComponent', () => {
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: 'test' }))
     accountServiceSpy.getUserName.and.returnValue('test')
     tick()
+    fixture.detectChanges()
 
     expect(component.showMfaSetup).toBeFalsy()
     expect(component.showMfaBackupCodes).toBeFalsy()
@@ -139,10 +140,40 @@ describe('SettingsComponent', () => {
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: ['test'] }))
+    accountServiceSpy.enableMfa.and.returnValue(of(new HttpResponse()))
+    fixture.detectChanges()
 
     component.mfaForm.patchValue({ mfaEnabled: true, verificationCode: 'test' })
     component.saveMfa()
 
     expect(accountServiceSpy.enableMfa).toHaveBeenCalled()
+    expect(accountServiceSpy.disableMfa).toHaveBeenCalledTimes(0)
+  }))
+
+  it('save mfa enabled should call account service disable', fakeAsync(() => {
+    accountServiceSpy.getAccountData.and.returnValue(
+      of({
+        activated: true,
+        authorities: ['test', 'test'],
+        email: 'email@email.com',
+        firstName: 'name',
+        langKey: 'en',
+        lastName: 'surname',
+        imageUrl: 'url',
+        salesforceId: 'sfid',
+        loggedAs: false,
+        loginAs: 'sfid',
+        mainContact: false,
+        mfaEnabled: true,
+      })
+    )
+    accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: ['test'] }))
+    accountServiceSpy.disableMfa.and.returnValue(of(new HttpResponse()))
+
+    component.mfaForm.patchValue({ mfaEnabled: false, verificationCode: 'test' })
+    component.saveMfa()
+
+    expect(accountServiceSpy.disableMfa).toHaveBeenCalled()
+    expect(accountServiceSpy.enableMfa).toHaveBeenCalledTimes(0)
   }))
 })
