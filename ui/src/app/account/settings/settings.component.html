@@ -92,7 +92,7 @@
 				</div>
 				<div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes">
 				    <div class="col-md-8">
-						<img [src]="safeQrCode()" />
+						<img [src]="safeQrCode()" alt="QR Code" />
 					</div>
 				</div>	
 				<div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes && showMfaTextCode">

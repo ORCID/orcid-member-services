@@ -26,5 +26,7 @@ export class LanguageService {
     return of('en')
   }
 
-  changeLanguage(languageKey: string): void {}
+  changeLanguage(languageKey: string): void {
+    console.log('not empty')
+  }
 }
