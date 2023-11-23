@@ -4,6 +4,21 @@
   "newProjectRoot": "projects",
   "projects": {
     "ui": {
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": { 
+          "es":  "src/locale/messages.es.xlf",
+          "fr": "src/locale/messages.fr.xlf",
+          "ja": "src/locale/messages.ja.xlf",
+          "zh-TW": "src/locale/messages.zh_TW.xlf",
+          "zh-CN": "src/locale/messages.zh_CN.xlf",
+          "cs": "src/locale/messages.cs.xlf",
+          "it": "src/locale/messages.it.xlf",
+          "ko": "src/locale/messages.ko.xlf",
+          "pt": "src/locale/messages.pt.xlf",
+          "ru": "src/locale/messages.ru.xlf"
+        }
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,6 +32,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": ["es"],
             "outputPath": "dist/",
             "index": "src/index.html",
             "main": "src/main.ts",
