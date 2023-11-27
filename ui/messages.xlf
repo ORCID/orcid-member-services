@@ -243,177 +243,184 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6350883417064341925" datatype="html">
+      <trans-unit id="settings.personalDetails.string" datatype="html">
         <source>Personal details</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4428228346093138089" datatype="html">
+      <trans-unit id="settings.messages.success.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6028371114637047813" datatype="html">
+      <trans-unit id="settings.form.firstname.label.string" datatype="html">
         <source>First Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7408534242980650852" datatype="html">
+      <trans-unit id="settings.messages.validate.firstname.required.string" datatype="html">
         <source> Your first name is required. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">43,45</context>
+          <context context-type="linenumber">42,44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4525649168844806918" datatype="html">
+      <trans-unit id="settings.messages.validate.firstname.minlength.string" datatype="html">
         <source> Your first name is required to be at least 1 character. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">51,53</context>
+          <context context-type="linenumber">49,51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="337177560191653207" datatype="html">
+      <trans-unit id="settings.messages.validate.firstname.maxlength.string" datatype="html">
         <source> Your first name cannot be longer than 50 characters. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">59,61</context>
+          <context context-type="linenumber">56,58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4407559560004943843" datatype="html">
+      <trans-unit id="settings.form.lastname.label.string" datatype="html">
         <source>Last Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2204464333936626885" datatype="html">
+      <trans-unit id="settings.messages.validate.lastname.required.string" datatype="html">
         <source> Your last name is required. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">89,91</context>
+          <context context-type="linenumber">85,87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5430321546523499672" datatype="html">
+      <trans-unit id="settings.messages.validate.lastname.minlength.string" datatype="html">
         <source> Your last name is required to be at least 1 character. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">97,99</context>
+          <context context-type="linenumber">92,94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4363410932803216509" datatype="html">
+      <trans-unit id="settings.messages.validate.lastname.maxlength.string" datatype="html">
         <source> Your last name cannot be longer than 50 characters. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">105,107</context>
+          <context context-type="linenumber">99,101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4768749765465246664" datatype="html">
+      <trans-unit id="global.form.email.label.string" datatype="html">
         <source>Email</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2826581353496868063" datatype="html">
+      <trans-unit id="settings.form.language.string" datatype="html">
         <source>Language</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3620188369327429839" datatype="html">
+      <trans-unit id="settings.form.button.string" datatype="html">
         <source> Save </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">137,139</context>
+          <context context-type="linenumber">128,130</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">260,262</context>
+          <context context-type="linenumber">243,245</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8878700331247603166" datatype="html">
+      <trans-unit id="settings.security.heading.string" datatype="html">
         <source>Security</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">151</context>
+          <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1784581906085146842" datatype="html">
+      <trans-unit id="settings.security.mfaExplain.string" datatype="html">
         <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">154,157</context>
+          <context context-type="linenumber">145,148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8900662509426586619" datatype="html">
+      <trans-unit id="settings.security.mfa.string" datatype="html">
         <source>Two-factor Authentication</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">159</context>
+          <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5440506517645808777" datatype="html">
+      <trans-unit id="settings.security.mfaUpdated.string" datatype="html">
         <source>2FA settings updated</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">170</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4430936908424819492" datatype="html">
+      <trans-unit id="settings.security.mfaQrCodeSteps.one.string" datatype="html">
         <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot;
                   &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">174,181</context>
+          <context context-type="linenumber">165,172</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8543415974738007429" datatype="html">
+      <trans-unit id="settings.security.mfaQrCodeSteps.two.string" datatype="html">
+        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Open your 2FA app and scan the image below. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
+          <context context-type="linenumber">173,175</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.security.mfaCannotScan.one.string" datatype="html">
         <source>Can&apos;t scan the QR code?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">204</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3967424407206179962" datatype="html">
+      <trans-unit id="settings.security.mfaCannotScan.two.string" datatype="html">
         <source>Get a text code</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">199</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4567432566091686144" datatype="html">
+      <trans-unit id="settings.security.mfaCannotScan.three.string" datatype="html">
         <source>and enter it into your 2FA app instead</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">212</context>
+          <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="716408221653572445" datatype="html">
+      <trans-unit id="settings.security.mfaTextCodeSteps.one.string" datatype="html">
         <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">215,218</context>
+          <context context-type="linenumber">204,207</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5957802278108070796" datatype="html">
+      <trans-unit id="settings.security.otpError.string" datatype="html">
         <source> Incorrect verification code </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">229,231</context>
+          <context context-type="linenumber">213,215</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8666779716994652231" datatype="html">
+      <trans-unit id="settings.security.backupCodes.string" datatype="html">
         <source> Make a note of the following backup codes, this is the only time they will be shown. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">244,246</context>
+          <context context-type="linenumber">228,230</context>
         </context-group>
       </trans-unit>
     </body>
