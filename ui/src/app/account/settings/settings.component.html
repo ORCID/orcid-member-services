@@ -26,7 +26,8 @@
             class="form-control"
             id="firstName"
             name="firstName"
-            placeholder="{{ 'settings.form.firstname.placeholder.string' }}"
+            placeholder="Your first name"
+            i18n-placeholder="@@settings.form.firstname.placeholder.string"
             formControlName="firstName"
           />
           <div
@@ -69,7 +70,8 @@
             class="form-control"
             id="lastName"
             name="lastName"
-            placeholder="{{ 'settings.form.lastname.placeholder.string' }}"
+            placeholder="Your last name"
+            i18n-placeholder="@@settings.form.lastname.placeholder.string"
             formControlName="lastName"
           />
           <div
@@ -109,7 +111,8 @@
             class="form-control"
             id="email"
             name="email"
-            placeholder="{{ 'global.form.email.placeholder.string' }}"
+            placeholder="Your email"
+            i18n-placeholder="@@global.form.email.placeholder.string"
             formControlName="email"
             readonly
           />
@@ -219,7 +222,8 @@
               class="indented"
               name="verificationCode"
               formControlName="verificationCode"
-              placeholder="{{ 'settings.security.verificationCode.string' }}"
+              placeholder="Verification code"
+              i18n-placeholder="@@settings.security.verificationCode.string"
             />
           </div>
         </div>
