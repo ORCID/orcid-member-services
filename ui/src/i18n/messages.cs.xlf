@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="ng2.template">
+  <file source-language="en" target-language="cs" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="ngb.alert.close" datatype="html">
         <source>Close</source>
+        <target state="new">Close</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -11,6 +11,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.HH" datatype="html">
         <source>HH</source>
+        <target state="new">HH</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -18,6 +19,7 @@
       </trans-unit>
       <trans-unit id="ngb.toast.close-aria" datatype="html">
         <source>Close</source>
+        <target state="new">Close</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -25,6 +27,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.first" datatype="html">
         <source>««</source>
+        <target state="new">««</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -32,6 +35,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-month" datatype="html">
         <source>Select month</source>
+        <target state="new">Select month</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -43,6 +47,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.previous-month" datatype="html">
         <source>Previous month</source>
+        <target state="new">Previous month</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -56,6 +61,9 @@
         <source>
           <x id="INTERPOLATION"/>
         </source>
+        <target state="new">
+          <x id="INTERPOLATION"/>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -63,6 +71,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </source>
+        <target state="new"> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -71,6 +80,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.hours" datatype="html">
         <source>Hours</source>
+        <target state="new">Hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -78,6 +88,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.previous" datatype="html">
         <source>«</source>
+        <target state="new">«</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -85,6 +96,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
+        <target state="new">Previous</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -92,6 +104,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.MM" datatype="html">
         <source>MM</source>
+        <target state="new">MM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -99,6 +112,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.next" datatype="html">
         <source>»</source>
+        <target state="new">»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -106,6 +120,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-year" datatype="html">
         <source>Select year</source>
+        <target state="new">Select year</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -117,6 +132,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.next-month" datatype="html">
         <source>Next month</source>
+        <target state="new">Next month</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -128,6 +144,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.next" datatype="html">
         <source>Next</source>
+        <target state="new">Next</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -135,6 +152,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes" datatype="html">
         <source>Minutes</source>
+        <target state="new">Minutes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -142,6 +160,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html">
         <source>»»</source>
+        <target state="new">»»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -149,6 +168,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
         <source>Increment hours</source>
+        <target state="new">Increment hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -156,6 +176,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.first-aria" datatype="html">
         <source>First</source>
+        <target state="new">First</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -163,6 +184,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.previous-aria" datatype="html">
         <source>Previous</source>
+        <target state="new">Previous</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -170,6 +192,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
         <source>Decrement hours</source>
+        <target state="new">Decrement hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -177,6 +200,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.next-aria" datatype="html">
         <source>Next</source>
+        <target state="new">Next</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -184,6 +208,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source>
+        <target state="new">Increment minutes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -191,6 +216,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.last-aria" datatype="html">
         <source>Last</source>
+        <target state="new">Last</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -198,6 +224,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source>
+        <target state="new">Decrement minutes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -205,6 +232,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source>
+        <target state="new">SS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -212,6 +240,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds" datatype="html">
         <source>Seconds</source>
+        <target state="new">Seconds</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -219,6 +248,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
         <source>Increment seconds</source>
+        <target state="new">Increment seconds</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -226,6 +256,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
         <source>Decrement seconds</source>
+        <target state="new">Decrement seconds</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -235,6 +266,9 @@
         <source>
           <x id="INTERPOLATION"/>
         </source>
+        <target state="new">
+          <x id="INTERPOLATION"/>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -244,6 +278,9 @@
         <source>
           <x id="INTERPOLATION"/>
         </source>
+        <target state="new">
+          <x id="INTERPOLATION"/>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -251,6 +288,7 @@
       </trans-unit>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check your credentials and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check your credentials and try again. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -258,6 +296,7 @@
       </trans-unit>
       <trans-unit id="global.form.email.label.string" datatype="html">
         <source>Email</source>
+        <target state="new">Email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">10</context>
@@ -273,6 +312,7 @@
       </trans-unit>
       <trans-unit id="global.form.email.placeholder.string" datatype="html">
         <source>Email</source>
+        <target state="new">Email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">17</context>
@@ -288,13 +328,23 @@
       </trans-unit>
       <trans-unit id="login.form.password.label.string" datatype="html">
         <source>Password</source>
+        <target state="new">Password</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="login.form.password.placeholder.string" datatype="html">
+        <source>Password</source>
+        <target state="new">Password</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/login/login.component.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="login.form.mfaCode.prompt.string" datatype="html">
         <source> Please enter the MFA code from your authenticator app </source>
+        <target state="new"> Please enter the MFA code from your authenticator app </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">36</context>
@@ -302,6 +352,7 @@
       </trans-unit>
       <trans-unit id="login.form.mfaCode.error.string" datatype="html">
         <source> Invalid MFA code </source>
+        <target state="new"> Invalid MFA code </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">39</context>
@@ -309,6 +360,7 @@
       </trans-unit>
       <trans-unit id="login.form.mfaCode.label.string" datatype="html">
         <source>MFA code</source>
+        <target state="new">MFA code</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">42</context>
@@ -316,6 +368,7 @@
       </trans-unit>
       <trans-unit id="login.form.button.string" datatype="html">
         <source> Sign in </source>
+        <target state="new"> Sign in </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">45</context>
@@ -323,13 +376,87 @@
       </trans-unit>
       <trans-unit id="login.password.forgot.string" datatype="html">
         <source>Did you forget your password?</source>
+        <target state="new">Did you forget your password?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="reset.request.title.string" datatype="html">
+        <source>Reset your password</source>
+        <target state="new">Reset your password</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.request.messages.notfound.string" datatype="html">
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.request.messages.info.string" datatype="html">
+        <source>Enter the email address you used to register.</source>
+        <target state="new">Enter the email address you used to register.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.request.messages.success.string" datatype="html">
+        <source> Check your emails for details on how to reset your password. </source>
+        <target state="new"> Check your emails for details on how to reset your password. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.messages.validate.email.required.string" datatype="html">
+        <source> Your email is required. </source>
+        <target state="new"> Your email is required. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.messages.validate.email.invalid.string" datatype="html">
+        <source> Your email is invalid. </source>
+        <target state="new"> Your email is invalid. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.messages.validate.email.minlength.string" datatype="html">
+        <source> Your email is required to be at least 5 characters. </source>
+        <target state="new"> Your email is required to be at least 5 characters. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.messages.validate.email.maxlength.string" datatype="html">
+        <source> Your email cannot be longer than 100 characters. </source>
+        <target state="new"> Your email cannot be longer than 100 characters. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.request.form.button.string" datatype="html">
+        <source> Reset </source>
+        <target state="new"> Reset </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="settings.personalDetails.string" datatype="html">
         <source>Personal details</source>
+        <target state="new">Personal details</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">4</context>
@@ -337,6 +464,7 @@
       </trans-unit>
       <trans-unit id="settings.messages.success.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -344,13 +472,23 @@
       </trans-unit>
       <trans-unit id="settings.form.firstname.label.string" datatype="html">
         <source>First Name</source>
+        <target state="new">First Name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="settings.form.firstname.placeholder.string" datatype="html">
+        <source>Your first name</source>
+        <target state="new">Your first name</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="settings.messages.validate.firstname.required.string" datatype="html">
         <source> Your first name is required. </source>
+        <target state="new"> Your first name is required. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">43</context>
@@ -358,6 +496,7 @@
       </trans-unit>
       <trans-unit id="settings.messages.validate.firstname.minlength.string" datatype="html">
         <source> Your first name is required to be at least 1 character. </source>
+        <target state="new"> Your first name is required to be at least 1 character. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">50</context>
@@ -365,6 +504,7 @@
       </trans-unit>
       <trans-unit id="settings.messages.validate.firstname.maxlength.string" datatype="html">
         <source> Your first name cannot be longer than 50 characters. </source>
+        <target state="new"> Your first name cannot be longer than 50 characters. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">57</context>
@@ -372,13 +512,23 @@
       </trans-unit>
       <trans-unit id="settings.form.lastname.label.string" datatype="html">
         <source>Last Name</source>
+        <target state="new">Last Name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="settings.form.lastname.placeholder.string" datatype="html">
+        <source>Your last name</source>
+        <target state="new">Your last name</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="settings.messages.validate.lastname.required.string" datatype="html">
         <source> Your last name is required. </source>
+        <target state="new"> Your last name is required. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">87</context>
@@ -386,6 +536,7 @@
       </trans-unit>
       <trans-unit id="settings.messages.validate.lastname.minlength.string" datatype="html">
         <source> Your last name is required to be at least 1 character. </source>
+        <target state="new"> Your last name is required to be at least 1 character. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">94</context>
@@ -393,6 +544,7 @@
       </trans-unit>
       <trans-unit id="settings.messages.validate.lastname.maxlength.string" datatype="html">
         <source> Your last name cannot be longer than 50 characters. </source>
+        <target state="new"> Your last name cannot be longer than 50 characters. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">101</context>
@@ -400,6 +552,7 @@
       </trans-unit>
       <trans-unit id="settings.form.language.string" datatype="html">
         <source>Language</source>
+        <target state="new">Language</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">121</context>
@@ -407,6 +560,7 @@
       </trans-unit>
       <trans-unit id="settings.form.button.string" datatype="html">
         <source> Save </source>
+        <target state="new"> Save </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">131</context>
@@ -418,6 +572,7 @@
       </trans-unit>
       <trans-unit id="settings.security.heading.string" datatype="html">
         <source>Security</source>
+        <target state="new">Security</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">145</context>
@@ -425,6 +580,7 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaExplain.string" datatype="html">
         <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
+        <target state="new"> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code we send to your preferred authentication application. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">148</context>
@@ -432,6 +588,7 @@
       </trans-unit>
       <trans-unit id="settings.security.mfa.string" datatype="html">
         <source>Two-factor Authentication</source>
+        <target state="new">Two-factor Authentication</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">153</context>
@@ -439,6 +596,7 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaUpdated.string" datatype="html">
         <source>2FA settings updated</source>
+        <target state="new">2FA settings updated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">164</context>
@@ -446,6 +604,7 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.one.string" datatype="html">
         <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <target state="new"> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">168</context>
@@ -453,6 +612,7 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.two.string" datatype="html">
         <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Open your 2FA app and scan the image below. </source>
+        <target state="new"> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Open your 2FA app and scan the image below. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">176</context>
@@ -460,6 +620,7 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaCannotScan.one.string" datatype="html">
         <source>Can&apos;t scan the QR code?</source>
+        <target state="new">Can&apos;t scan the QR code?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">198</context>
@@ -467,6 +628,7 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaCannotScan.two.string" datatype="html">
         <source>Get a text code</source>
+        <target state="new">Get a text code</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">202</context>
@@ -474,6 +636,7 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaCannotScan.three.string" datatype="html">
         <source>and enter it into your 2FA app instead</source>
+        <target state="new">and enter it into your 2FA app instead</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">204</context>
@@ -481,6 +644,7 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaTextCodeSteps.one.string" datatype="html">
         <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
+        <target state="new"> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">207</context>
@@ -488,107 +652,26 @@
       </trans-unit>
       <trans-unit id="settings.security.otpError.string" datatype="html">
         <source> Incorrect verification code </source>
+        <target state="new"> Incorrect verification code </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="settings.security.backupCodes.string" datatype="html">
-        <source> Make a note of the following backup codes, this is the only time they will be shown. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">232</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="login.form.password.placeholder.string" datatype="html">
-        <source>Password</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">30</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="global.messages.validate.email.invalid.string" datatype="html">
-        <source> Your email is invalid. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">49</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="global.messages.validate.email.maxlength.string" datatype="html">
-        <source> Your email cannot be longer than 100 characters. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">64</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="global.messages.validate.email.minlength.string" datatype="html">
-        <source> Your email is required to be at least 5 characters. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">56</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="global.messages.validate.email.required.string" datatype="html">
-        <source> Your email is required. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">42</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="reset.request.form.button.string" datatype="html">
-        <source> Reset </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">75</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="reset.request.messages.info.string" datatype="html">
-        <source>Enter the email address you used to register.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">7</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="reset.request.messages.success.string" datatype="html">
-        <source> Check your emails for details on how to reset your password. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="reset.request.title.string" datatype="html">
-        <source>Reset your password</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="settings.form.firstname.placeholder.string" datatype="html">
-        <source>Your first name</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">29</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="settings.form.lastname.placeholder.string" datatype="html">
-        <source>Your last name</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">73</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="settings.security.verificationCode.string" datatype="html">
         <source>Verification code</source>
+        <target state="new">Verification code</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">225</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.security.backupCodes.string" datatype="html">
+        <source> Make a note of the following backup codes, this is the only time they will be shown. </source>
+        <target state="new"> Make a note of the following backup codes, this is the only time they will be shown. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
+          <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
     </body>
