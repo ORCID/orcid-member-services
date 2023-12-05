@@ -15,8 +15,8 @@
           "ko": "src/i18n/messages.ko.xlf",
           "pt": "src/i18n/messages.pt.xlf",
           "ru": "src/i18n/messages.ru.xlf",
-          "zh-CN": "src/i18n/messages.zh-CN.xlf",
-          "zh-TW": "src/i18n/messages.zh-TW.xlf"
+          "zh-CN": "src/i18n/messages.zh_CN.xlf",
+          "zh-TW": "src/i18n/messages.zh_TW.xlf"
         }
       },
       "projectType": "application",
@@ -109,8 +109,8 @@
               "messages.ko.xlf",
               "messages.pt.xlf",
               "messages.ru.xlf",
-              "messages.zh-CN.xlf",
-              "messages.zh-TW.xlf"
+              "messages.zh_CN.xlf",
+              "messages.zh_TW.xlf"
             ]
           }
         },
