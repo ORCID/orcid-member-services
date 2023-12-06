@@ -675,6 +675,198 @@
           <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="global.menu.memberPortal.string" datatype="html">
+        <source>Member Portal</source>
+        <target state="new">メンバーポータル</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.tools.main.string" datatype="html">
+        <source>Tools</source>
+        <target state="new">ツール</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.tools.assertionServiceAffiliationManager.string" datatype="html">
+        <source>Affiliation Manager</source>
+        <target state="new">Affiliation Manager</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.report.member.string" datatype="html">
+        <source>Member report</source>
+        <target state="new">メンバーレポート</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.report.integration.string" datatype="html">
+        <source>Integration report</source>
+        <target state="new">統合レポート</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.report.consortium.string" datatype="html">
+        <source>Consortium report</source>
+        <target state="new">コンソーシアムレポート</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.report.affiliation.string" datatype="html">
+        <source>Affiliation report</source>
+        <target state="new">アフィリエーションレポート</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">116</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.report.consortiumMemberAffiliations.string" datatype="html">
+        <source>Consortium member affiliations</source>
+        <target state="new">Consortium member affiliations</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">130</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.resources.main.string" datatype="html">
+        <source>Resources</source>
+        <target state="new">リソース</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">146</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.resources.accountManagementGuide.string" datatype="html">
+        <source>Account Management Guide</source>
+        <target state="new">アカウント管理ガイド</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">157</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.resources.affiliationManagerGuide.string" datatype="html">
+        <source>Affiliation Manager Guide</source>
+        <target state="new">Affiliation Managerガイド</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">167</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.resources.memberReportingGuide.string" datatype="html">
+        <source>Member Reporting Guide</source>
+        <target state="new">メンバーレポートガイド</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">177</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.resources.applyForAffiliationManagerCreds.string" datatype="html">
+        <source>Apply for Affiliation Manager Credentials</source>
+        <target state="new">Affiliation Managerの資格取得を申請する</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">188</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.adminMenu.main.string" datatype="html">
+        <source>Admin</source>
+        <target state="new">管理者</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">204</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.adminMenu.manageUsers.string" datatype="html">
+        <source>Manage users</source>
+        <target state="new">ユーザーを管理する</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">217</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.adminMenu.manageMembers.string" datatype="html">
+        <source>Manage members</source>
+        <target state="new">メンバーを管理する</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">230</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.account.main.string" datatype="html">
+        <source>Account</source>
+        <target state="new">アカウント</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">245</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.account.settings.string" datatype="html">
+        <source>Settings</source>
+        <target state="new">設定</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">255</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.account.password.string" datatype="html">
+        <source>Password</source>
+        <target state="new">パスワード</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">261</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.menu.account.logout.string" datatype="html">
+        <source>Sign out</source>
+        <target state="new">サインアウト</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
+          <context context-type="linenumber">267</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="footer.privacyPolicy.string" datatype="html">
+        <source>Privacy Policy</source>
+        <target state="new">個人情報保護方針</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/footer/footer.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="footer.termsOfUse.string" datatype="html">
+        <source>Terms of Use</source>
+        <target state="new">利用規約</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/footer/footer.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="footer.help.string" datatype="html">
+        <source>Help</source>
+        <target state="new">ヘルプ</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/footer/footer.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="footer.orcidRegistry.string" datatype="html">
+        <source>ORCID Registry</source>
+        <target state="new">ORCID レジストリ</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/layout/footer/footer.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>
