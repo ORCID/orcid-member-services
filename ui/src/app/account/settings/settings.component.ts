@@ -64,7 +64,7 @@ export class SettingsComponent implements OnInit {
         }
       }
     })
-    this.languages = this.languageService.getAllLanguages()
+    this.languages = Object.keys(this.languageService.getAllLanguages())
   }
 
   mfaEnabledStateChange(): void {
@@ -98,6 +98,8 @@ export class SettingsComponent implements OnInit {
           }
         })
         this.languageService.getCurrentLanguage().subscribe((current) => {
+          console.log(current);
+          
           if (settingsAccount.langKey !== current) {
             this.languageService.changeLanguage(settingsAccount.langKey)
           }
