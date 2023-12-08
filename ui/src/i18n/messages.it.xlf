@@ -59,10 +59,10 @@
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
         <source>
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </source>
         <target state="new">
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -70,8 +70,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
-        <source> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </source>
-        <target state="new"> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </target>
+        <source> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x> </source>
+        <target state="new"> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -264,10 +264,10 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source>
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </source>
         <target state="new">
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -276,10 +276,10 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source>
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </source>
         <target state="new">
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -287,8 +287,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check your credentials and try again. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accesso non riuscito!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Controlla le credenziali e riprova.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please check your credentials and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Accesso non riuscito!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Controlla le credenziali e riprova.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -391,8 +391,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>L&apos;indirizzo e-mail non è registrato!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Controlla e riprova</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please check and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>L&apos;indirizzo e-mail non è registrato!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Controlla e riprova</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">7</context>
@@ -400,7 +400,8 @@
       </trans-unit>
       <trans-unit id="reset.request.messages.info.string" datatype="html">
         <source>Enter the email address you used to register.</source>
-        <target state="new">Inserisci l&apos;indirizzo e-mail che hai usato per registrarti </target>
+        <target state="new">Inserisci l&apos;indirizzo e-mail che hai usato per registrarti
+</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">11</context>
@@ -463,8 +464,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Impostazioni salvate!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Impostazioni salvate!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -504,7 +505,8 @@
       </trans-unit>
       <trans-unit id="settings.messages.validate.firstname.maxlength.string" datatype="html">
         <source> Your first name cannot be longer than 50 characters. </source>
-        <target state="new">Il tuo nome non può superare i 50 caratteri </target>
+        <target state="new">Il tuo nome non può superare i 50 caratteri
+</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">57</context>
@@ -528,7 +530,8 @@
       </trans-unit>
       <trans-unit id="settings.messages.validate.lastname.required.string" datatype="html">
         <source> Your last name is required. </source>
-        <target state="new">Il tuo cognome è obbligatorio. </target>
+        <target state="new">Il tuo cognome è obbligatorio.
+</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">87</context>
@@ -603,16 +606,16 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.one.string" datatype="html">
-        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">Installa un&apos;app di autenticazione a due fattori<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>È necessaria un&apos;app 2FA per creare il codice a sei cifre necessario per aprire il tuo account ogni volta che effettui l&apos;accesso. La maggior parte di queste app sono per dispositivi mobili, ma alcune di esse sono disponibili anche come applicazione per desktop o web app. Scarica e installa la tua app 2FA preferita, come <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> o <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>. </source>
+        <target state="new">Installa un&apos;app di autenticazione a due fattori<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>È necessaria un&apos;app 2FA per creare il codice a sei cifre necessario per aprire il tuo account ogni volta che effettui l&apos;accesso. La maggior parte di queste app sono per dispositivi mobili, ma alcune di esse sono disponibili anche come applicazione per desktop o web app. Scarica e installa la tua app 2FA preferita, come <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x> o <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.two.string" datatype="html">
-        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Open your 2FA app and scan the image below. </source>
-        <target state="new">Scansiona questo codice QR con il tuo dispositivo<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Apri la tua app 2FA e scansiona l&apos;immagine qui sotto.</target>
+        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Open your 2FA app and scan the image below. </source>
+        <target state="new">Scansiona questo codice QR con il tuo dispositivo<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Apri la tua app 2FA e scansiona l&apos;immagine qui sotto.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">176</context>
@@ -643,8 +646,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaTextCodeSteps.one.string" datatype="html">
-        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
-        <target state="new">Inserisci il codice a sei cifre fornito dalla app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Dopo aver scansionato il codice QR o inserito il codice di testo, l&apos;app 2FA visualizzerà un codice a sei cifre. Inserisci questo codice nella casella sottostante e fai clic su Salva.</target>
+        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
+        <target state="new">Inserisci il codice a sei cifre fornito dalla app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Dopo aver scansionato il codice QR o inserito il codice di testo, l&apos;app 2FA visualizzerà un codice a sei cifre. Inserisci questo codice nella casella sottostante e fai clic su Salva.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">207</context>
@@ -708,7 +711,8 @@
       </trans-unit>
       <trans-unit id="global.menu.report.integration.string" datatype="html">
         <source>Integration report</source>
-        <target state="new">Rapporto di integrazione </target>
+        <target state="new">Rapporto di integrazione
+</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
           <context context-type="linenumber">92</context>

@@ -59,10 +59,10 @@
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
         <source>
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </source>
         <target state="new">
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -70,8 +70,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
-        <source> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </source>
-        <target state="new"> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </target>
+        <source> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x> </source>
+        <target state="new"> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -264,10 +264,10 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source>
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </source>
         <target state="new">
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -276,10 +276,10 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source>
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </source>
         <target state="new">
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -287,8 +287,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check your credentials and try again. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>登录失败！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>请检查您的凭证并重试。</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please check your credentials and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>登录失败！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>请检查您的凭证并重试。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -391,8 +391,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>电子邮件地址尚未注册！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>请检查并重试</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please check and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>电子邮件地址尚未注册！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>请检查并重试</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">7</context>
@@ -463,8 +463,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>设置已保存！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>设置已保存！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -603,16 +603,16 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.one.string" datatype="html">
-        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">安装双重身份验证应用<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>每次登录时都需要 2FA 应用程序来创建访问帐户所需的六位数代码。大多数应用程序适用于移动设备；有些还可以作为桌面或基于 Web 的应用程序使用。下载并安装您首选的 2FA 应用，例如 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>、<x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 或 <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>。</target>
+        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>. </source>
+        <target state="new">安装双重身份验证应用<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>每次登录时都需要 2FA 应用程序来创建访问帐户所需的六位数代码。大多数应用程序适用于移动设备；有些还可以作为桌面或基于 Web 的应用程序使用。下载并安装您首选的 2FA 应用，例如 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>、<x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x> 或 <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.two.string" datatype="html">
-        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Open your 2FA app and scan the image below. </source>
-        <target state="new">使用设备扫描此二维码<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>打开 2FA 应用并扫描下方图像。</target>
+        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Open your 2FA app and scan the image below. </source>
+        <target state="new">使用设备扫描此二维码<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>打开 2FA 应用并扫描下方图像。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">176</context>
@@ -643,8 +643,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaTextCodeSteps.one.string" datatype="html">
-        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
-        <target state="new">输入来自应用的六位数验证码<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>扫描二维码或输入短信验证码后，2FA 即会显示一个六位数验证码。在下方框中输入该验证码，然后单击“保存”。</target>
+        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
+        <target state="new">输入来自应用的六位数验证码<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>扫描二维码或输入短信验证码后，2FA 即会显示一个六位数验证码。在下方框中输入该验证码，然后单击“保存”。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">207</context>
