@@ -71,8 +71,9 @@ export class AccountService {
     return this.http.get<any>('/services/userservice/api/account/mfa')
   }
 
-  save(account: any): Observable<HttpResponse<any>> {
-    return this.http.post('/services/userservice/api/account', account, { observe: 'response' })
+  save(account: IAccount): Observable<HttpResponse<any>> {
+    const headers = { 'Accept-Language': account.langKey }
+    return this.http.post('/services/userservice/api/account', account, { observe: 'response', headers })
   }
 
   enableMfa(mfaSetup: any): Observable<HttpResponse<any>> {

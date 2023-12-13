@@ -11,6 +11,7 @@ import { IAccount } from '../model/account.model'
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit {
+  account: IAccount | undefined
   error: string | undefined
   success: string | undefined
   languages: any[] | undefined
@@ -48,30 +49,25 @@ export class SettingsComponent implements OnInit {
     this.showMfaSetup = false
     this.showMfaTextCode = false
     this.showMfaBackupCodes = false
-    console.log('calling get account data')
     this.accountService.getAccountData().subscribe((account) => {
-      console.log('got account data', account)
       if (account) {
+        this.account = account
         this.updateForm(account)
         this.updateMfaForm(account)
         this.userName = this.accountService.getUserName()
-        console.log('acocunt and account mfa enabled are ', account, ' and ', account.mfaEnabled)
         if (account && !account.mfaEnabled) {
           this.accountService.getMfaSetup().subscribe((res) => {
-            console.log('setting mfa setup to ' + res)
             this.mfaSetup = res
           })
         }
       }
     })
-    this.languages = this.languageService.getAllLanguages()
+    this.languages = Object.keys(this.languageService.getAllLanguages())
   }
 
   mfaEnabledStateChange(): void {
-    console.log('mfa state change called')
     this.showMfaUpdated = false
     const mfaEnabled = this.mfaForm.get('mfaEnabled')!.value
-    console.log('setup is ' + this.mfaSetup)
     if (mfaEnabled && this.mfaSetup) {
       this.showMfaSetup = true
       this.showMfaBackupCodes = false
@@ -91,15 +87,13 @@ export class SettingsComponent implements OnInit {
       next: () => {
         this.error = undefined
         this.success = 'OK'
-        this.accountService.getAccountData().subscribe((account) => {
+        this.accountService.getAccountData(true).subscribe((account) => {
           if (account) {
+            if (settingsAccount.langKey !== account.langKey) {
+              location.reload()
+            }
             this.updateForm(account)
             this.updateMfaForm(account)
-          }
-        })
-        this.languageService.getCurrentLanguage().subscribe((current) => {
-          if (settingsAccount.langKey !== current) {
-            this.languageService.changeLanguage(settingsAccount.langKey)
           }
         })
       },

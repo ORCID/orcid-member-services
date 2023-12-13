@@ -4,6 +4,21 @@
   "newProjectRoot": "projects",
   "projects": {
     "ui": {
+      "i18n": {
+        "sourceLocale": "en",
+        "locales": {
+          "cs": "src/i18n/messages.cs.xlf",
+          "es": "src/i18n/messages.es.xlf",
+          "fr": "src/i18n/messages.fr.xlf",
+          "it": "src/i18n/messages.it.xlf",
+          "ja": "src/i18n/messages.ja.xlf",
+          "ko": "src/i18n/messages.ko.xlf",
+          "pt": "src/i18n/messages.pt.xlf",
+          "ru": "src/i18n/messages.ru.xlf",
+          "zh-CN": "src/i18n/messages.zh-CN.xlf",
+          "zh-TW": "src/i18n/messages.zh-TW.xlf"
+        }
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,6 +32,18 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": [
+              "fr",
+              "es",
+              "cs",
+              "it",
+              "ja",
+              "ko",
+              "pt",
+              "ru",
+              "zh-CN",
+              "zh-TW"
+            ],
             "outputPath": "dist/",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -50,6 +77,7 @@
               "outputHashing": "all"
             },
             "development": {
+              "localize": ["en"],
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
@@ -77,9 +105,24 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
           "options": {
-            "browserTarget": "ui:build"
+            "includeContext": true,
+            "browserTarget": "ui:build",
+            "format": "xlf",
+            "outputPath": "src/i18n",
+            "targetFiles": [
+              "messages.cs.xlf",
+              "messages.es.xlf",
+              "messages.fr.xlf",
+              "messages.it.xlf",
+              "messages.ja.xlf",
+              "messages.ko.xlf",
+              "messages.pt.xlf",
+              "messages.ru.xlf",
+              "messages.zh-CN.xlf",
+              "messages.zh-TW.xlf"
+            ]
           }
         },
         "test": {

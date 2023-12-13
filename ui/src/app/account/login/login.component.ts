@@ -86,8 +86,6 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
                   take(1)
                 )
                 .subscribe((account) => {
-                  // TODO: remove after sprint review
-                  console.log('Login successful, account data:', account)
                   this.loginSuccess()
                 })
             } else {
