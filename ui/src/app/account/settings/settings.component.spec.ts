@@ -6,6 +6,7 @@ import { HttpClientModule, HttpResponse } from '@angular/common/http'
 import { LanguageService } from 'src/app/shared/service/language.service'
 import { AccountService } from '../service/account.service'
 import { of, throwError } from 'rxjs'
+import { FindLanguageFromKeyPipe } from 'src/app/shared/pipe/find-language-from-key'
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent
@@ -29,7 +30,7 @@ describe('SettingsComponent', () => {
     ])
 
     TestBed.configureTestingModule({
-      declarations: [SettingsComponent],
+      declarations: [SettingsComponent, FindLanguageFromKeyPipe],
       imports: [ReactiveFormsModule, HttpClientModule],
       providers: [
         { provide: LanguageService, useValue: languageServiceSpy },
@@ -40,6 +41,21 @@ describe('SettingsComponent', () => {
     fixture = TestBed.createComponent(SettingsComponent)
     component = fixture.componentInstance
     accountServiceSpy = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
+
+    languageServiceSpy.getAllLanguages.and.returnValue({
+      en: { name: 'English' },
+      es: { name: 'Español' },
+      fr: { name: 'Français' },
+      ja: { name: '日本語' },
+      'zh-TW': { name: '繁體中文' },
+      'zh-CN': { name: '简体中文' },
+      cs: { name: 'Čeština' },
+      it: { name: 'Italiano' },
+      ko: { name: '한국어' },
+      pt: { name: 'Português' },
+      ru: { name: 'Pусский' },
+      xx: { name: 'Test' },
+    })
   })
 
   it('should create', () => {
