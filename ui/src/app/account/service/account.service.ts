@@ -47,6 +47,9 @@ export class AccountService {
           if (response && response.body) {
             this.authenticated = true
             const account: IAccount = response.body
+            if (account.langKey) {
+              localStorage.setItem('langCode', account.langKey)
+            }
             this.accountData.next(account)
 
             // After retrieve the account info, the language will be changed to
