@@ -7,16 +7,22 @@
       "i18n": {
         "sourceLocale": "en",
         "locales": {
-          "cs": "src/i18n/messages.cs.xlf",
-          "es": "src/i18n/messages.es.xlf",
-          "fr": "src/i18n/messages.fr.xlf",
-          "it": "src/i18n/messages.it.xlf",
-          "ja": "src/i18n/messages.ja.xlf",
-          "ko": "src/i18n/messages.ko.xlf",
-          "pt": "src/i18n/messages.pt.xlf",
-          "ru": "src/i18n/messages.ru.xlf",
-          "zh-CN": "src/i18n/messages.zh-CN.xlf",
-          "zh-TW": "src/i18n/messages.zh-TW.xlf"
+          "cs": { "translation": "src/i18n/messages.cs.xlf", "baseHref": "" },
+          "es": { "translation": "src/i18n/messages.es.xlf", "baseHref": "" },
+          "fr": { "translation": "src/i18n/messages.fr.xlf", "baseHref": "" },
+          "it": { "translation": "src/i18n/messages.it.xlf", "baseHref": "" },
+          "ja": { "translation": "src/i18n/messages.ja.xlf", "baseHref": "" },
+          "ko": { "translation": "src/i18n/messages.ko.xlf", "baseHref": "" },
+          "pt": { "translation": "src/i18n/messages.pt.xlf", "baseHref": "" },
+          "ru": { "translation": "src/i18n/messages.ru.xlf", "baseHref": "" },
+          "zh-CN": {
+            "translation": "src/i18n/messages.zh-CN.xlf",
+            "baseHref": ""
+          },
+          "zh-TW": {
+            "translation": "src/i18n/messages.zh-TW.xlf",
+            "baseHref": ""
+          }
         }
       },
       "projectType": "application",
