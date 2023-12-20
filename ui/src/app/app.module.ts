@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
-import { HttpClientModule } from '@angular/common/http'
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'
 import { AccountModule } from './account/account.module'
 import { NgxWebstorageModule } from 'ngx-webstorage'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
@@ -14,6 +14,7 @@ import { HasAnyAuthorityDirective } from './shared/directive/has-any-authority.d
 import { HomeModule } from './home/home.module'
 import { FooterComponent } from './layout/footer/footer.component'
 import { SharedModule } from './shared/shared.module'
+import { HeaderInterceptor } from './shared/interceptor/header.interceptor'
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, HasAnyAuthorityDirective, FooterComponent],
@@ -29,7 +30,13 @@ import { SharedModule } from './shared/shared.module'
     NgbModule,
     SharedModule.forRoot(),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HeaderInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
