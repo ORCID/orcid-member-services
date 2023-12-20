@@ -5,23 +5,47 @@
   "projects": {
     "ui": {
       "i18n": {
-        "sourceLocale": { "code": "en", "baseHref": "" },
+        "sourceLocale": { "code": "en", "baseHref": "ui/en/../" },
         "locales": {
-          "cs": { "translation": "src/i18n/messages.cs.xlf", "baseHref": "" },
-          "es": { "translation": "src/i18n/messages.es.xlf", "baseHref": "" },
-          "fr": { "translation": "src/i18n/messages.fr.xlf", "baseHref": "" },
-          "it": { "translation": "src/i18n/messages.it.xlf", "baseHref": "" },
-          "ja": { "translation": "src/i18n/messages.ja.xlf", "baseHref": "" },
-          "ko": { "translation": "src/i18n/messages.ko.xlf", "baseHref": "" },
-          "pt": { "translation": "src/i18n/messages.pt.xlf", "baseHref": "" },
-          "ru": { "translation": "src/i18n/messages.ru.xlf", "baseHref": "" },
+          "cs": {
+            "translation": "src/i18n/messages.cs.xlf",
+            "baseHref": "ui/cs/../"
+          },
+          "es": {
+            "translation": "src/i18n/messages.es.xlf",
+            "baseHref": "ui/es/../"
+          },
+          "fr": {
+            "translation": "src/i18n/messages.fr.xlf",
+            "baseHref": "ui/fr/../"
+          },
+          "it": {
+            "translation": "src/i18n/messages.it.xlf",
+            "baseHref": "ui/it/../"
+          },
+          "ja": {
+            "translation": "src/i18n/messages.ja.xlf",
+            "baseHref": "ui/ja/../"
+          },
+          "ko": {
+            "translation": "src/i18n/messages.ko.xlf",
+            "baseHref": "ui/ko/../"
+          },
+          "pt": {
+            "translation": "src/i18n/messages.pt.xlf",
+            "baseHref": "ui/pt/../"
+          },
+          "ru": {
+            "translation": "src/i18n/messages.ru.xlf",
+            "baseHref": "ui/ru/../"
+          },
           "zh-CN": {
             "translation": "src/i18n/messages.zh-CN.xlf",
-            "baseHref": ""
+            "baseHref": "ui/zh-CN/../"
           },
           "zh-TW": {
             "translation": "src/i18n/messages.zh-TW.xlf",
-            "baseHref": ""
+            "baseHref": "ui/zh-TW/../"
           }
         }
       },
@@ -57,7 +81,12 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets", "src/content/images"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/content/images",
+              "src/content/css"
+            ],
             "styles": ["src/content/scss/global.scss"],
             "scripts": []
           },
