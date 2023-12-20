@@ -5,47 +5,47 @@
   "projects": {
     "ui": {
       "i18n": {
-        "sourceLocale": { "code": "en", "baseHref": "ui/en/../" },
+        "sourceLocale": { "code": "en", "baseHref": "en/../" },
         "locales": {
           "cs": {
             "translation": "src/i18n/messages.cs.xlf",
-            "baseHref": "ui/cs/../"
+            "baseHref": "cs/../"
           },
           "es": {
             "translation": "src/i18n/messages.es.xlf",
-            "baseHref": "ui/es/../"
+            "baseHref": "es/../"
           },
           "fr": {
             "translation": "src/i18n/messages.fr.xlf",
-            "baseHref": "ui/fr/../"
+            "baseHref": "fr/../"
           },
           "it": {
             "translation": "src/i18n/messages.it.xlf",
-            "baseHref": "ui/it/../"
+            "baseHref": "it/../"
           },
           "ja": {
             "translation": "src/i18n/messages.ja.xlf",
-            "baseHref": "ui/ja/../"
+            "baseHref": "ja/../"
           },
           "ko": {
             "translation": "src/i18n/messages.ko.xlf",
-            "baseHref": "ui/ko/../"
+            "baseHref": "ko/../"
           },
           "pt": {
             "translation": "src/i18n/messages.pt.xlf",
-            "baseHref": "ui/pt/../"
+            "baseHref": "pt/../"
           },
           "ru": {
             "translation": "src/i18n/messages.ru.xlf",
-            "baseHref": "ui/ru/../"
+            "baseHref": "ru/../"
           },
           "zh-CN": {
             "translation": "src/i18n/messages.zh-CN.xlf",
-            "baseHref": "ui/zh-CN/../"
+            "baseHref": "zh-CN/../"
           },
           "zh-TW": {
             "translation": "src/i18n/messages.zh-TW.xlf",
-            "baseHref": "ui/zh-TW/../"
+            "baseHref": "zh-TW/../"
           }
         }
       },
