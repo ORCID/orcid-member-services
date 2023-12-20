@@ -5,7 +5,7 @@
   "projects": {
     "ui": {
       "i18n": {
-        "sourceLocale": "en",
+        "sourceLocale": { "code": "en", "baseHref": "" },
         "locales": {
           "cs": { "translation": "src/i18n/messages.cs.xlf", "baseHref": "" },
           "es": { "translation": "src/i18n/messages.es.xlf", "baseHref": "" },
