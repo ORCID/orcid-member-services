@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil, tap } from 'rxjs'
 
 import { IAccount } from '../model/account.model'
+import { CookieService } from 'ngx-cookie-service'
 // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
 //import { MSMemberService } from 'app/entities/member/member.service';
 
@@ -20,6 +21,7 @@ export class AccountService {
     // TODO: uncomment when language service is implemented
     //private languageService: JhiLanguageService,
     private sessionStorage: SessionStorageService,
+    private cookieService: CookieService,
     private http: HttpClient // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service //private memberService: MSMemberService
   ) {}
 
@@ -48,7 +50,7 @@ export class AccountService {
             this.authenticated = true
             const account: IAccount = response.body
             if (account.langKey) {
-              localStorage.setItem('langCode', account.langKey)
+              this.cookieService.set('locale', account.langKey)
             }
             this.accountData.next(account)
 
