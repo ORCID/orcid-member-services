@@ -13,7 +13,12 @@ export class ErrorService implements ErrorHandler {
 
   handleError(error: any) {
     if (error instanceof HttpErrorResponse) {
-      this.errors.next(new AppError(error.status, error.message))
+      if (error.headers.has('errmmmmm')) {
+        const i18nKey: string | null = error.headers.get('errmmmmm')
+        this.errors.next(new AppError(error.status, error.message, i18nKey))
+      } else {
+        this.errors.next(new AppError(error.status, error.message, null))
+      }
     } else {
       console.error('Unknown error occurred', error)
     }

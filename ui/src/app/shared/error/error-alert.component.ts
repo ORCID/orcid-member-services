@@ -22,6 +22,10 @@ export class ErrorAlertComponent {
 
     this.sub = this.errorService.on().subscribe((e: AppError) => {
       if (e.statusCode == 404) {
+        if (e.i18nKey) {
+          // set key or actual translated message in below alert object?
+        }
+
         const alert: ErrorAlert = {
           type: 'danger',
           msg: e.message,
