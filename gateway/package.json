@@ -134,7 +134,7 @@
     "webpack:dev": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --env.stats=minimal",
     "webpack:dev-verbose": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --profile --progress --env.stats=normal",
     "webpack:build:main": "npm run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
-    "webpack:build": "npm run cleanup && npm run webpack:build:main",
+    "webpack:build": "./node/node_modules/npm/bin/npm run cleanup && ./node/node_modules/npm/bin/npm run webpack:build:main",
     "webpack:local:main": "npm run webpack -- --config webpack/webpack.local.js --profile",
     "webpack:local": "npm run cleanup && npm run webpack:local:main && npm run clean-www",
     "webpack:qa:main": "npm run webpack -- --config webpack/webpack.qa.js --profile",
