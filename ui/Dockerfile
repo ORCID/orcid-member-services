@@ -16,10 +16,11 @@ COPY package*.json ./
 
 # If you are building your code for production
 # RUN npm install --only=production
+
 RUN \
     npm config list && \
     npm config delete proxy && \
-    npm install
+    npm install --loglevel silly
 
 # Bundle app source
 COPY . .
