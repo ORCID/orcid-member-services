@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { ErrorService } from '../service/error.service'
 import { Subscription } from 'rxjs/internal/Subscription'
 import { ErrorAlert } from '../model/error-alert'
+import { AppError } from '../model/error.model'
 
 @Component({
   selector: 'app-error-alert',
@@ -14,27 +15,26 @@ export class ErrorAlertComponent {
   alerts: any[]
 
   constructor(private errorService: ErrorService) {
-    // subscribe to error handler
-    // find 400 errors
     // look for translation key - if present somehow translate the fucker
     // set error fields in component for template to read
-    // make it show
-
-    // build list of alerts called alerts
 
     this.alerts = []
 
-    this.sub = this.errorService.on().subscribe((e) => {
-      const alert: ErrorAlert = {
-        type: 'danger',
-        msg: message,
-        params: data,
-        toast: this.alertService.isToast(),
-        scoped: true,
-      }
+    this.sub = this.errorService.on().subscribe((e: AppError) => {
+      if (e.statusCode == 404) {
+        const alert: ErrorAlert = {
+          type: 'danger',
+          msg: e.message,
+          params: '',
+          toast: false, // previously this.alertService.isToast(),
+          scoped: true,
+        }
 
-      this.alerts.push(alert)
+        this.alerts.push(alert)
+      }
     })
+
+    // make it show
   }
 
   ngOnDestroy(): void {

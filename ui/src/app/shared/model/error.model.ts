@@ -1,6 +1,4 @@
-import { EventType } from 'src/app/app.constants'
-
-export class Error {
+export class AppError {
   constructor(
     public statusCode: number,
     public message: string
