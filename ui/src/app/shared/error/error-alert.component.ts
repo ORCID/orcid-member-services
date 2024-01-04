@@ -12,5 +12,16 @@ export class ErrorAlertComponent {
     // look for translation key - if present somehow translate the fucker
     // set error fields in component for template to read
     // make it show
+
+    // build list of alerts called alerts
+    const newAlert = {
+      type: 'danger',
+      msg: message,
+      params: data,
+      toast: this.alertService.isToast(),
+      scoped: true,
+    }
+
+    this.alerts.push(this.alertService.addAlert(newAlert, this.alerts))
   }
 }
