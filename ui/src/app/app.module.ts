@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core'
+import { ErrorHandler, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 
 import { AppRoutingModule } from './app-routing.module'
@@ -15,6 +15,7 @@ import { HomeModule } from './home/home.module'
 import { FooterComponent } from './layout/footer/footer.component'
 import { SharedModule } from './shared/shared.module'
 import { HeaderInterceptor } from './shared/interceptor/header.interceptor'
+import { ErrorService } from './shared/service/error.service'
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, HasAnyAuthorityDirective, FooterComponent],
@@ -35,6 +36,10 @@ import { HeaderInterceptor } from './shared/interceptor/header.interceptor'
       provide: HTTP_INTERCEPTORS,
       useClass: HeaderInterceptor,
       multi: true,
+    },
+    {
+      provide: ErrorHandler,
+      useClass: ErrorService,
     },
   ],
   bootstrap: [AppComponent],
