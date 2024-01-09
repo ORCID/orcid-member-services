@@ -1,5 +1,8 @@
 import { ChangeDetectorRef, Component, ErrorHandler, Inject, OnInit } from '@angular/core'
 import { ErrorService } from '../service/error.service'
+import { Subscription } from 'rxjs'
+import { ErrorAlert } from '../model/error-alert'
+import { AppError } from '../model/error.model'
 
 @Component({
   selector: 'app-error-alert',
@@ -7,48 +10,30 @@ import { ErrorService } from '../service/error.service'
   styleUrls: ['./error-alert.component.scss'],
 })
 export class ErrorAlertComponent implements OnInit {
-  alerts: any = []
+  alerts: any[] = []
+  sub: Subscription | undefined
+
   constructor(
     @Inject(ErrorHandler) private errorService: ErrorService,
     private cdr: ChangeDetectorRef
-  ) {
-    // subscribe to error handler
-    // find 400 errors
-    // look for translation key - if present somehow translate the fucker
-    // set error fields in component for template to read
-    // make it show
-    // build list of alerts called alerts
-    /* const newAlert = {
-      type: 'danger',
-      msg: message,
-      params: data,
-      toast: this.alertService.isToast(),
-      scoped: true,
-    }
-
-     */
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.errorService.on().subscribe((err) => {
+    this.sub = this.errorService.on().subscribe((err: AppError) => {
       const alerts = [...this.alerts]
-      alerts.push({
+      const alert: ErrorAlert = {
         type: 'danger',
         msg: err.message,
-        params: err.params,
         toast: false,
-        dismiss: true,
-      })
-      this.alerts = alerts
+      }
+      this.alerts.push(alert)
+      this.alerts.push(alerts)
       this.cdr.detectChanges()
     })
   }
 
-  setClasses(alert: any) {
-    return {
-      'jhi-toast': alert.toast,
-      [alert.position]: true,
-    }
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe()
   }
 
   close(alertToRemove: any) {
