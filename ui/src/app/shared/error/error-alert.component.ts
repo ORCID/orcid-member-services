@@ -35,7 +35,7 @@ export class ErrorAlertComponent implements OnInit {
     this.sub?.unsubscribe()
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
+  @HostListener('document:keyup.escape', ['$event'])
   closeOldestAlert() {
     this.alerts.shift()
     this.cdr.detectChanges()
