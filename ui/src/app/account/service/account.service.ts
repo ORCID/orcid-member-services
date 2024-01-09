@@ -76,17 +76,40 @@ export class AccountService {
     return this.http.get<any>('/services/userservice/api/account/mfa')
   }
 
-  save(account: IAccount): Observable<HttpResponse<any>> {
+  save(account: IAccount): Observable<boolean> {
     const headers = { 'Accept-Language': account.langKey }
-    return this.http.post('/services/userservice/api/account', account, { observe: 'response', headers })
+    return this.http.post('/services/userservice/api/account', account, { observe: 'response', headers }).pipe(
+      map((res: HttpResponse<any>) => this.isSuccess(res)),
+      catchError((err) => {
+        return of(false)
+      })
+    )
   }
 
-  enableMfa(mfaSetup: any): Observable<HttpResponse<any>> {
-    return this.http.post('/services/userservice/api/account/mfa/on', mfaSetup, { observe: 'response' })
+  isSuccess(res: HttpResponse<any>): boolean {
+    if (res.status == 200) {
+      return true
+    }
+    return false
   }
 
-  disableMfa(): Observable<HttpResponse<any>> {
-    return this.http.post('/services/userservice/api/account/mfa/off', null, { observe: 'response' })
+  enableMfa(mfaSetup: any): Observable<string[] | null> {
+    return this.http.post('/services/userservice/api/account/mfa/on', mfaSetup, { observe: 'response' }).pipe(
+      map((res: HttpResponse<any>) => res.body),
+      catchError((err) => {
+        console.error('error enabling mfa')
+        return of(null)
+      })
+    )
+  }
+
+  disableMfa(): Observable<boolean> {
+    return this.http.post('/services/userservice/api/account/mfa/off', null, { observe: 'response' }).pipe(
+      map((res: HttpResponse<any>) => this.isSuccess(res)),
+      catchError((err) => {
+        return of(false)
+      })
+    )
   }
   // TODO: any - this seems to only be used for logging out (only ever receives null as arg)
   authenticate(identity: any) {

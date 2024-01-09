@@ -83,8 +83,8 @@ export class SettingsComponent implements OnInit {
 
   save() {
     const settingsAccount = this.accountFromForm()
-    this.accountService.save(settingsAccount).subscribe({
-      next: () => {
+    this.accountService.save(settingsAccount).subscribe((success: boolean) => {
+      if (success) {
         this.error = undefined
         this.success = 'OK'
         this.accountService.getAccountData(true).subscribe((account) => {
@@ -96,11 +96,10 @@ export class SettingsComponent implements OnInit {
             this.updateMfaForm(account)
           }
         })
-      },
-      error: () => {
+      } else {
         this.success = undefined
         this.error = 'ERROR'
-      },
+      }
     })
   }
 
@@ -110,15 +109,14 @@ export class SettingsComponent implements OnInit {
       const otp = this.mfaForm.get('verificationCode')!.value
       console.log('about to set otp on ' + this.mfaSetup)
       this.mfaSetup.otp = otp
-      this.accountService.enableMfa(this.mfaSetup).subscribe({
-        next: (res) => {
-          this.mfaBackupCodes = res.body
+      this.accountService.enableMfa(this.mfaSetup).subscribe((codes: string[] | null) => {
+        if (codes) {
+          this.mfaBackupCodes = codes
           this.showMfaBackupCodes = true
           this.showMfaUpdated = true
-        },
-        error: (err) => {
+        } else {
           this.mfaSetupFailure = true
-        },
+        }
       })
     } else {
       this.accountService.disableMfa().subscribe({
