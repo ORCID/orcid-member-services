@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ErrorHandler, Inject, OnInit } from '@angular/core'
+import { ChangeDetectorRef, Component, ErrorHandler, HostListener, Inject, OnInit } from '@angular/core'
 import { ErrorService } from '../service/error.service'
 import { Subscription } from 'rxjs'
 import { ErrorAlert } from '../model/error-alert'
@@ -27,7 +27,6 @@ export class ErrorAlertComponent implements OnInit {
         toast: false,
       }
       this.alerts.push(alert)
-      this.alerts.push(alerts)
       this.cdr.detectChanges()
     })
   }
@@ -36,9 +35,14 @@ export class ErrorAlertComponent implements OnInit {
     this.sub?.unsubscribe()
   }
 
+  @HostListener('document:keydown.escape', ['$event'])
+  closeOldestAlert() {
+    this.alerts.shift()
+    this.cdr.detectChanges()
+  }
+
   close(alertToRemove: any) {
     this.alerts = this.alerts.filter((alert: any) => alert !== alertToRemove)
     this.cdr.detectChanges()
-    console.log(this.alerts)
   }
 }
