@@ -167,7 +167,7 @@ export class AccountService {
     return this.isIdentityResolved() ? this.accountData.value!.imageUrl : null
   }
 
-  getUserName(): string | null {
+  getUsername(): string | null {
     let userName: string | null = null
 
     if (this.isIdentityResolved()) {

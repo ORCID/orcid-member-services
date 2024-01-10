@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing'
 import { of, throwError } from 'rxjs'
 
-import { PasswordResetInitService } from '../service/password-reset-init.service'
+import { PasswordService } from '../service/password.service'
 import { PasswordResetInitComponent } from './password-reset-init.component'
 import { EMAIL_NOT_FOUND_TYPE } from 'src/app/app.constants'
 import { HttpClientTestingModule } from '@angular/common/http/testing'
@@ -26,32 +26,29 @@ describe('Component Tests', () => {
       expect(comp.errorEmailNotExists).toBeUndefined()
     })
 
-    it('notifies of success upon successful requestReset', inject(
-      [PasswordResetInitService],
-      (service: PasswordResetInitService) => {
-        spyOn(service, 'initPasswordReset').and.returnValue(of(new PasswordResetInitResult(true, false, false)))
-        comp.resetRequestForm.patchValue({
-          email: 'user@domain.com',
-        })
+    it('notifies of success upon successful requestReset', inject([PasswordService], (service: PasswordService) => {
+      spyOn(service, 'initPasswordReset').and.returnValue(of(new PasswordResetInitResult(true, false, false)))
+      comp.resetRequestForm.patchValue({
+        email: 'user@domain.com',
+      })
 
-        comp.requestReset()
-        const emailControl = comp.resetRequestForm.get('email')!
-        emailControl.setValue('valid@email.com')
-        fixture.detectChanges()
-        expect(comp.success).toEqual('OK')
-        expect(comp.error).toBeUndefined()
-        expect(comp.errorEmailNotExists).toBeUndefined()
-        fixture.whenStable().then(() => {
-          expect(true).toBeFalsy()
-          const button = fixture.debugElement.query(By.css('#reset'))
-          expect(button.nativeElement.disabled).toBeFalsy()
-        })
-      }
-    ))
+      comp.requestReset()
+      const emailControl = comp.resetRequestForm.get('email')!
+      emailControl.setValue('valid@email.com')
+      fixture.detectChanges()
+      expect(comp.success).toEqual('OK')
+      expect(comp.error).toBeUndefined()
+      expect(comp.errorEmailNotExists).toBeUndefined()
+      fixture.whenStable().then(() => {
+        expect(true).toBeFalsy()
+        const button = fixture.debugElement.query(By.css('#reset'))
+        expect(button.nativeElement.disabled).toBeFalsy()
+      })
+    }))
 
     it('notifies of unknown email upon email address not registered/400', inject(
-      [PasswordResetInitService],
-      (service: PasswordResetInitService) => {
+      [PasswordService],
+      (service: PasswordService) => {
         spyOn(service, 'initPasswordReset').and.returnValue(of(new PasswordResetInitResult(false, true, false)))
         comp.resetRequestForm.patchValue({
           email: 'user@domain.com',
@@ -65,21 +62,18 @@ describe('Component Tests', () => {
       }
     ))
 
-    it('notifies of error upon error response', inject(
-      [PasswordResetInitService],
-      (service: PasswordResetInitService) => {
-        spyOn(service, 'initPasswordReset').and.returnValue(of(new PasswordResetInitResult(false, false, true)))
-        comp.resetRequestForm.patchValue({
-          email: 'user@domain.com',
-        })
-        comp.requestReset()
+    it('notifies of error upon error response', inject([PasswordService], (service: PasswordService) => {
+      spyOn(service, 'initPasswordReset').and.returnValue(of(new PasswordResetInitResult(false, false, true)))
+      comp.resetRequestForm.patchValue({
+        email: 'user@domain.com',
+      })
+      comp.requestReset()
 
-        expect(service.initPasswordReset).toHaveBeenCalledWith('user@domain.com')
-        expect(comp.success).toBeUndefined()
-        expect(comp.errorEmailNotExists).toBeUndefined()
-        expect(comp.error).toEqual('ERROR')
-      }
-    ))
+      expect(service.initPasswordReset).toHaveBeenCalledWith('user@domain.com')
+      expect(comp.success).toBeUndefined()
+      expect(comp.errorEmailNotExists).toBeUndefined()
+      expect(comp.error).toEqual('ERROR')
+    }))
 
     it('should disable the submit button for invalid email address', () => {
       const emailControl = comp.resetRequestForm.get('email')!

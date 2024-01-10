@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, Renderer2 } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
-import { PasswordResetInitService } from '../service/password-reset-init.service'
+import { PasswordService } from '../service/password.service'
 import { EMAIL_NOT_FOUND_TYPE } from 'src/app/app.constants'
 import { PasswordResetInitResult } from '../model/password-reset-init-result.model'
 
@@ -18,7 +18,7 @@ export class PasswordResetInitComponent implements AfterViewInit {
   })
 
   constructor(
-    private passwordResetInitService: PasswordResetInitService,
+    private passwordResetInitService: PasswordService,
     private renderer: Renderer2,
     private fb: FormBuilder
   ) {}

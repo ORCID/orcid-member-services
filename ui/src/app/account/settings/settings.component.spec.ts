@@ -97,7 +97,7 @@ describe('SettingsComponent', () => {
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: 'test' }))
-    accountServiceSpy.getUserName.and.returnValue('test')
+    accountServiceSpy.getUsername.and.returnValue('test')
     fixture.detectChanges()
 
     expect(component.showMfaSetup).toBeFalsy()

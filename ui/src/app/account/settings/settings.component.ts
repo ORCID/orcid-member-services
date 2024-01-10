@@ -54,7 +54,7 @@ export class SettingsComponent implements OnInit {
         this.account = account
         this.updateForm(account)
         this.updateMfaForm(account)
-        this.userName = this.accountService.getUserName()
+        this.userName = this.accountService.getUsername()
         if (account && !account.mfaEnabled) {
           this.accountService.getMfaSetup().subscribe((res) => {
             this.mfaSetup = res

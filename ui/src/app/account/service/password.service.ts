@@ -5,7 +5,7 @@ import { PasswordResetInitResult } from '../model/password-reset-init-result.mod
 import { EMAIL_NOT_FOUND_TYPE } from 'src/app/app.constants'
 
 @Injectable({ providedIn: 'root' })
-export class PasswordResetInitService {
+export class PasswordService {
   constructor(private http: HttpClient) {}
 
   initPasswordReset(mail: string): Observable<PasswordResetInitResult | null> {
@@ -15,6 +15,13 @@ export class PasswordResetInitService {
         return of(null)
       })
     )
+  }
+
+  updatePassword(newPassword: string, currentPassword: string): Observable<any> {
+    return this.http.post('/services/userservice/api/account/change-password', {
+      currentPassword,
+      newPassword,
+    })
   }
 
   getResult(res: HttpResponse<any>): PasswordResetInitResult {
