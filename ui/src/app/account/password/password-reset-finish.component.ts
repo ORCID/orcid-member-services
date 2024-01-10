@@ -67,7 +67,7 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
     if (password !== confirmPassword) {
       this.doNotMatch = 'ERROR'
     } else {
-      this.passwordResetFinishService.save({ key: this.key, newPassword: password }).subscribe(
+      this.passwordService.savePassword({ key: this.key, newPassword: password }).subscribe(
         () => {
           this.success = 'OK'
         },

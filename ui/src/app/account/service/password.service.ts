@@ -26,7 +26,7 @@ export class PasswordService {
     })
   }
 
-  save(keyAndPassword: any): Observable<any> {
+  savePassword(keyAndPassword: any): Observable<any> {
     return this.http.post('/services/userservice/api/account/reset-password/finish', keyAndPassword)
   }
 
