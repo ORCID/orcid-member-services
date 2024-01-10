@@ -6,6 +6,7 @@ import { PasswordResetInitComponent } from './password-reset-init.component'
 import { EMAIL_NOT_FOUND_TYPE } from 'src/app/app.constants'
 import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { By } from '@angular/platform-browser'
+import { PasswordResetInitResult } from '../model/password-reset-init-result.model'
 
 describe('Component Tests', () => {
   describe('PasswordResetInitComponent', () => {
@@ -28,7 +29,7 @@ describe('Component Tests', () => {
     it('notifies of success upon successful requestReset', inject(
       [PasswordResetInitService],
       (service: PasswordResetInitService) => {
-        spyOn(service, 'initPasswordReset').and.returnValue(of({}))
+        spyOn(service, 'initPasswordReset').and.returnValue(of(new PasswordResetInitResult(true, false, false)))
         comp.resetRequestForm.patchValue({
           email: 'user@domain.com',
         })
@@ -51,12 +52,7 @@ describe('Component Tests', () => {
     it('notifies of unknown email upon email address not registered/400', inject(
       [PasswordResetInitService],
       (service: PasswordResetInitService) => {
-        spyOn(service, 'initPasswordReset').and.returnValue(
-          throwError({
-            status: 400,
-            error: { type: EMAIL_NOT_FOUND_TYPE },
-          })
-        )
+        spyOn(service, 'initPasswordReset').and.returnValue(of(new PasswordResetInitResult(false, true, false)))
         comp.resetRequestForm.patchValue({
           email: 'user@domain.com',
         })
@@ -72,12 +68,7 @@ describe('Component Tests', () => {
     it('notifies of error upon error response', inject(
       [PasswordResetInitService],
       (service: PasswordResetInitService) => {
-        spyOn(service, 'initPasswordReset').and.returnValue(
-          throwError({
-            status: 503,
-            data: 'something else',
-          })
-        )
+        spyOn(service, 'initPasswordReset').and.returnValue(of(new PasswordResetInitResult(false, false, true)))
         comp.resetRequestForm.patchValue({
           email: 'user@domain.com',
         })

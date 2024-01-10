@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs'
 
 @Injectable({ providedIn: 'root' })
 export class LanguageService {
-  private languages: any = {
+  private languages: { [langCode: string]: { name: string } } = {
     en: { name: 'English' },
     es: { name: 'Español' },
     fr: { name: 'Français' },
@@ -18,7 +18,7 @@ export class LanguageService {
     xx: { name: 'Test' },
   }
 
-  getAllLanguages(): any {
+  getAllLanguages(): { [langCode: string]: { name: string } } {
     return this.languages
   }
 

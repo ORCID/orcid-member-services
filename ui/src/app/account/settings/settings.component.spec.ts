@@ -154,7 +154,7 @@ describe('SettingsComponent', () => {
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: ['test'] }))
-    accountServiceSpy.enableMfa.and.returnValue(of(new HttpResponse()))
+    accountServiceSpy.enableMfa.and.returnValue(of(['code1', 'code2']))
     fixture.detectChanges()
 
     component.mfaForm.patchValue({ mfaEnabled: true, verificationCode: 'test' })
@@ -182,7 +182,7 @@ describe('SettingsComponent', () => {
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: ['test'] }))
-    accountServiceSpy.disableMfa.and.returnValue(of(new HttpResponse()))
+    accountServiceSpy.disableMfa.and.returnValue(of(true))
 
     component.mfaForm.patchValue({ mfaEnabled: false, verificationCode: 'test' })
     component.saveMfa()
@@ -192,7 +192,7 @@ describe('SettingsComponent', () => {
   })
 
   it('save form should call accountService.save and then account data requested when save is successful', () => {
-    accountServiceSpy.save.and.returnValue(of(new HttpResponse()))
+    accountServiceSpy.save.and.returnValue(of(true))
     accountServiceSpy.getAccountData.and.returnValue(
       of({
         activated: true,
@@ -218,7 +218,7 @@ describe('SettingsComponent', () => {
   })
 
   it('save form should call accountService.save and then account data requested when save is successful', () => {
-    accountServiceSpy.save.and.returnValue(throwError(() => new Error('error')))
+    accountServiceSpy.save.and.returnValue(of(false))
     accountServiceSpy.getAccountData.and.returnValue(
       of({
         activated: true,

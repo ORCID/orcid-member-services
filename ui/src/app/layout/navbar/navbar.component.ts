@@ -69,10 +69,6 @@ export class NavbarComponent implements OnInit {
               }
               return this.organizationName
             },
-            error: (res: HttpErrorResponse) => {
-              console.error('Error when getting org name: ' + res.error)
-              return null
-            },
           })
         }
       }
