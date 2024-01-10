@@ -1,6 +1,6 @@
-import { Component } from '@angular/core'
+import { ChangeDetectorRef, Component, ErrorHandler, HostListener, Inject, OnInit } from '@angular/core'
 import { ErrorService } from '../service/error.service'
-import { Subscription } from 'rxjs/internal/Subscription'
+import { Subscription } from 'rxjs'
 import { ErrorAlert } from '../model/error-alert'
 import { AppError } from '../model/error.model'
 
@@ -9,39 +9,40 @@ import { AppError } from '../model/error.model'
   templateUrl: './error-alert.component.html',
   styleUrls: ['./error-alert.component.scss'],
 })
-export class ErrorAlertComponent {
+export class ErrorAlertComponent implements OnInit {
+  alerts: any[] = []
   sub: Subscription | undefined
 
-  alerts: any[]
+  constructor(
+    @Inject(ErrorHandler) private errorService: ErrorService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  constructor(private errorService: ErrorService) {
-    // look for translation key - if present somehow translate the fucker
-    // set error fields in component for template to read
-
-    this.alerts = []
-
-    this.sub = this.errorService.on().subscribe((e: AppError) => {
-      if (e.statusCode == 404) {
-        if (e.i18nKey) {
-          // set key or actual translated message in below alert object?
-        }
-
-        const alert: ErrorAlert = {
-          type: 'danger',
-          msg: e.message,
-          params: '',
-          toast: false, // previously this.alertService.isToast(),
-          scoped: true,
-        }
-
-        this.alerts.push(alert)
+  ngOnInit(): void {
+    this.sub = this.errorService.on().subscribe((err: AppError) => {
+      const alerts = [...this.alerts]
+      const alert: ErrorAlert = {
+        type: 'danger',
+        msg: err.message,
+        toast: false,
       }
+      this.alerts.push(alert)
+      this.cdr.detectChanges()
     })
-
-    // make it show
   }
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe()
+  }
+
+  @HostListener('document:keyup.escape', ['$event'])
+  closeOldestAlert() {
+    this.alerts.shift()
+    this.cdr.detectChanges()
+  }
+
+  close(alertToRemove: any) {
+    this.alerts = this.alerts.filter((alert: any) => alert !== alertToRemove)
+    this.cdr.detectChanges()
   }
 }

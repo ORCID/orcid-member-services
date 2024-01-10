@@ -1,15 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http'
-import { ErrorHandler } from '@angular/core'
-import { Observable } from 'rxjs/internal/Observable'
-import { Subject } from 'rxjs/internal/Subject'
+import { ErrorHandler, Injectable } from '@angular/core'
+import { Observable, Subject } from 'rxjs'
 import { AppError } from '../model/error.model'
 
-export class ErrorService implements ErrorHandler {
-  private errors = new Subject<AppError>()
+// To inject this service, you have to include '@Inject(ErrorHandler)' to be able to subscribe to observables, e.g.:
+// @Inject(ErrorHandler) private errorService: ErrorService
 
-  on(): Observable<AppError> {
-    return this.errors
-  }
+@Injectable({ providedIn: 'root' })
+export class ErrorService implements ErrorHandler {
+  private errors: Subject<any> = new Subject<any>()
 
   handleError(error: any) {
     if (error instanceof HttpErrorResponse) {
@@ -22,5 +21,9 @@ export class ErrorService implements ErrorHandler {
     } else {
       console.error('Unknown error occurred', error)
     }
+  }
+
+  on(): Observable<any> {
+    return this.errors.asObservable()
   }
 }
