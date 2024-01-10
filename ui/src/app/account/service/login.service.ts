@@ -20,14 +20,14 @@ export class LoginService {
   }
 
   logoutDirectly() {
-    this.accountService.authenticate(null)
+    this.accountService.clearAccountData()
   }
 
   logout() {
     if (this.accountService.isAuthenticated()) {
-      this.authServerProvider.logout().subscribe(() => this.accountService.authenticate(null))
+      this.authServerProvider.logout().subscribe(() => this.accountService.clearAccountData())
     } else {
-      this.accountService.authenticate(null)
+      this.accountService.clearAccountData()
     }
   }
 }

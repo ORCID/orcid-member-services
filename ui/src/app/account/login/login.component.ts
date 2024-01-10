@@ -85,7 +85,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
                   filter((account) => !!account),
                   take(1)
                 )
-                .subscribe((account) => {
+                .subscribe(() => {
                   this.loginSuccess()
                 })
             } else {

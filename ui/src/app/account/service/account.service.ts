@@ -14,7 +14,6 @@ export class AccountService {
   private isFetchingAccountData = false
   private stopFetchingAccountData = new Subject()
   private authenticated = false
-  private authenticationState = new BehaviorSubject<any>(null)
   private logoutAsResourceUrl = '/services/userservice/api'
 
   constructor(
@@ -39,13 +38,11 @@ export class AccountService {
           this.accountData.next(null)
           // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
           //this.memberService.memberData.next(undefined);
-          this.authenticationState.next(this.accountData)
           this.isFetchingAccountData = false
           return EMPTY
         }),
         map((response: HttpResponse<IAccount>) => {
           this.isFetchingAccountData = false
-          this.authenticationState.next(this.accountData)
           if (response && response.body) {
             this.authenticated = true
             const account: IAccount = response.body
@@ -112,10 +109,9 @@ export class AccountService {
     )
   }
   // TODO: any - this seems to only be used for logging out (only ever receives null as arg)
-  authenticate(identity: any) {
-    this.accountData.next(identity)
-    this.authenticated = identity !== null
-    this.authenticationState.next(this.accountData)
+  clearAccountData() {
+    this.accountData.next(null)
+    this.authenticated = false;
   }
 
   hasAnyAuthority(authorities: string[]): boolean {
