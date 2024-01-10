@@ -3,6 +3,7 @@ import { LoginComponent } from './login/login.component'
 import { PasswordResetInitComponent } from './password/password-reset-init.component'
 import { SettingsComponent } from './settings/settings.component'
 import { AuthGuard } from './auth.guard'
+import { PasswordComponent } from './password/password.component'
 
 export const routes: Routes = [
   {
@@ -23,6 +24,15 @@ export const routes: Routes = [
     data: {
       authorities: ['ROLE_USER'],
       pageTitle: 'global.menu.account.settings.string',
+    },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'password',
+    component: PasswordComponent,
+    data: {
+      authorities: ['ROLE_USER'],
+      pageTitle: 'global.menu.account.password.string',
     },
     canActivate: [AuthGuard],
   },
