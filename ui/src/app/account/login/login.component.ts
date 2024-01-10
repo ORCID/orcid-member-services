@@ -43,7 +43,6 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe()
-    console.log('test')
   }
 
   ngAfterViewInit() {

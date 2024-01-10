@@ -4,6 +4,51 @@
   "newProjectRoot": "projects",
   "projects": {
     "ui": {
+      "i18n": {
+        "sourceLocale": { "code": "en", "baseHref": "en/../" },
+        "locales": {
+          "cs": {
+            "translation": "src/i18n/messages.cs.xlf",
+            "baseHref": "cs/../"
+          },
+          "es": {
+            "translation": "src/i18n/messages.es.xlf",
+            "baseHref": "es/../"
+          },
+          "fr": {
+            "translation": "src/i18n/messages.fr.xlf",
+            "baseHref": "fr/../"
+          },
+          "it": {
+            "translation": "src/i18n/messages.it.xlf",
+            "baseHref": "it/../"
+          },
+          "ja": {
+            "translation": "src/i18n/messages.ja.xlf",
+            "baseHref": "ja/../"
+          },
+          "ko": {
+            "translation": "src/i18n/messages.ko.xlf",
+            "baseHref": "ko/../"
+          },
+          "pt": {
+            "translation": "src/i18n/messages.pt.xlf",
+            "baseHref": "pt/../"
+          },
+          "ru": {
+            "translation": "src/i18n/messages.ru.xlf",
+            "baseHref": "ru/../"
+          },
+          "zh-CN": {
+            "translation": "src/i18n/messages.zh-CN.xlf",
+            "baseHref": "zh-CN/../"
+          },
+          "zh-TW": {
+            "translation": "src/i18n/messages.zh-TW.xlf",
+            "baseHref": "zh-TW/../"
+          }
+        }
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,13 +62,31 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": [
+              "en",
+              "fr",
+              "es",
+              "cs",
+              "it",
+              "ja",
+              "ko",
+              "pt",
+              "ru",
+              "zh-CN",
+              "zh-TW"
+            ],
             "outputPath": "dist/",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets", "src/content/images"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/content/images",
+              "src/content/css"
+            ],
             "styles": ["src/content/scss/global.scss"],
             "scripts": []
           },
@@ -50,6 +113,7 @@
               "outputHashing": "all"
             },
             "development": {
+              "localize": ["en"],
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
@@ -77,9 +141,24 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
           "options": {
-            "browserTarget": "ui:build"
+            "includeContext": true,
+            "browserTarget": "ui:build",
+            "format": "xlf",
+            "outputPath": "src/i18n",
+            "targetFiles": [
+              "messages.cs.xlf",
+              "messages.es.xlf",
+              "messages.fr.xlf",
+              "messages.it.xlf",
+              "messages.ja.xlf",
+              "messages.ko.xlf",
+              "messages.pt.xlf",
+              "messages.ru.xlf",
+              "messages.zh-CN.xlf",
+              "messages.zh-TW.xlf"
+            ]
           }
         },
         "test": {

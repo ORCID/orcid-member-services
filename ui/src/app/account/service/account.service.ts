@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil, tap } from 'rxjs'
 
 import { IAccount } from '../model/account.model'
+import { CookieService } from 'ngx-cookie-service'
 // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
 //import { MSMemberService } from 'app/entities/member/member.service';
 
@@ -19,6 +20,7 @@ export class AccountService {
     // TODO: uncomment when language service is implemented
     //private languageService: JhiLanguageService,
     private sessionStorage: SessionStorageService,
+    private cookieService: CookieService,
     private http: HttpClient // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service //private memberService: MSMemberService
   ) {}
 
@@ -44,6 +46,9 @@ export class AccountService {
           if (response && response.body) {
             this.authenticated = true
             const account: IAccount = response.body
+            if (account.langKey) {
+              this.cookieService.set('locale', account.langKey)
+            }
             this.accountData.next(account)
 
             // After retrieve the account info, the language will be changed to
@@ -64,20 +69,44 @@ export class AccountService {
       )
   }
 
-  getMfaSetup(): Observable<HttpResponse<any>> {
-    return this.http.get<any>('/services/userservice/api/account/mfa', { observe: 'response' })
+  getMfaSetup(): Observable<{ secret: string; otp: string; qrCode: any }> {
+    return this.http.get<any>('/services/userservice/api/account/mfa')
   }
 
-  save(account: any): Observable<HttpResponse<any>> {
-    return this.http.post('/services/userservice/api/account', account, { observe: 'response' })
+  save(account: IAccount): Observable<boolean> {
+    const headers = { 'Accept-Language': account.langKey }
+    return this.http.post('/services/userservice/api/account', account, { observe: 'response', headers }).pipe(
+      map((res: HttpResponse<any>) => this.isSuccess(res)),
+      catchError((err) => {
+        return of(false)
+      })
+    )
   }
 
-  enableMfa(mfaSetup: any): Observable<HttpResponse<any>> {
-    return this.http.post('/services/userservice/api/account/mfa/on', mfaSetup, { observe: 'response' })
+  isSuccess(res: HttpResponse<any>): boolean {
+    if (res.status == 200) {
+      return true
+    }
+    return false
   }
 
-  disableMfa(): Observable<HttpResponse<any>> {
-    return this.http.post('/services/userservice/api/account/mfa/off', null, { observe: 'response' })
+  enableMfa(mfaSetup: any): Observable<string[] | null> {
+    return this.http.post('/services/userservice/api/account/mfa/on', mfaSetup, { observe: 'response' }).pipe(
+      map((res: HttpResponse<any>) => res.body),
+      catchError((err) => {
+        console.error('error enabling mfa')
+        return of(null)
+      })
+    )
+  }
+
+  disableMfa(): Observable<boolean> {
+    return this.http.post('/services/userservice/api/account/mfa/off', null, { observe: 'response' }).pipe(
+      map((res: HttpResponse<any>) => this.isSuccess(res)),
+      catchError((err) => {
+        return of(false)
+      })
+    )
   }
   // TODO: any - this seems to only be used for logging out (only ever receives null as arg)
   clearAccountData() {
@@ -86,8 +115,6 @@ export class AccountService {
   }
 
   hasAnyAuthority(authorities: string[]): boolean {
-    console.log(authorities, this.accountData.value?.authorities)
-
     if (!this.authenticated || !this.accountData || !this.accountData.value?.authorities) {
       return false
     }
@@ -136,25 +163,25 @@ export class AccountService {
     return this.isIdentityResolved() ? this.accountData.value!.imageUrl : null
   }
 
-  getUserName(): string | null {
-    let userName: string | null = null
+  getUsername(): string | null {
+    let username: string | null = null
 
     if (this.isIdentityResolved()) {
       if (this.accountData.value!.firstName) {
-        userName = this.accountData.value!.firstName
+        username = this.accountData.value!.firstName
       }
       if (this.accountData.value!.lastName) {
-        if (userName) {
-          userName = userName + ' ' + this.accountData.value!.lastName
+        if (username) {
+          username = username + ' ' + this.accountData.value!.lastName
         } else {
-          userName = this.accountData.value!.lastName
+          username = this.accountData.value!.lastName
         }
       }
-      if (userName == null) {
-        userName = this.accountData.value!.email
+      if (username == null) {
+        username = this.accountData.value!.email
       }
     }
-    return userName
+    return username
   }
 
   getSalesforceId(): string | null {

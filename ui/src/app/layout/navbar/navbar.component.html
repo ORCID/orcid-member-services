@@ -1,7 +1,7 @@
 <div class="text-center" *ngIf="this.isLoggedAs()">
   <fa-icon [icon]="faUser"></fa-icon>
-  <span jhiTranslate="global.menu.account.loggedInAs.string"></span>
-  <b>{{ this.getUserName() }}</b> | <span jhiTranslate="global.menu.account.logoutAs.string"></span
+  <span i18n="@@global.menu.account.loggedInAs.string"></span>
+  <b>{{ this.getUserName() }}</b> | <span i18n="@@global.menu.account.logoutAs.string"></span
   ><a tabindex="1" (click)="logoutAs()" (keypress)="logoutAs()" id="logoutAs.string">
     {{ this.getUserName() }}
     <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
@@ -12,7 +12,7 @@
     ><span class="logo logo-img"
       ><img src="../../../content/images/orcid-logo.svg" width="120px" alt="ORCID logo" /></span
   ></a>
-  <span jhiTranslate="global.menu.memberPortal.string" class="navbar-title navbar-brand logo">Member Portal</span>&nbsp;
+  <span i18n="@@global.menu.memberPortal.string" class="navbar-title navbar-brand logo">Member Portal</span>&nbsp;
   <div *ngIf="this.organizationName" class="navbar-title navbar-brand pipe">|</div>
   &nbsp;
   <div *ngIf="isAuthenticated()" class="navbar-brand navbar-title logo org-name truncate-text" routerLink="/">
@@ -49,7 +49,7 @@
         <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="tools-menu">
           <span>
             <fa-icon [icon]="faWrench"></fa-icon>
-            <span jhiTranslate="global.menu.tools.main.string"> Tools </span>
+            <span i18n="@@global.menu.tools.main.string">Tools</span>
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
@@ -63,9 +63,7 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faAddressCard" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.tools.assertionServiceAffiliationManager.string"
-                >Affiliation Manager</span
-              >
+              <span i18n="@@global.menu.tools.assertionServiceAffiliationManager.string">Affiliation Manager</span>
             </a>
           </li>
           <li>
@@ -78,7 +76,7 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.report.member.string">Member report</span>
+              <span i18n="@@global.menu.report.member.string">Member report</span>
             </a>
           </li>
           <li>
@@ -91,7 +89,7 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.report.integration.string">Integration report</span>
+              <span i18n="@@global.menu.report.integration.string">Integration report</span>
             </a>
           </li>
           <li *ngIf="consortiumLead">
@@ -104,7 +102,7 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.report.consortium.string">Consortium report</span>
+              <span i18n="@@global.menu.report.consortium.string">Consortium report</span>
             </a>
           </li>
           <li>
@@ -115,7 +113,7 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.report.affiliation.string">Affiliation report</span>
+              <span i18n="@@global.menu.report.affiliation.string">Affiliation report</span>
             </a>
           </li>
           <li *ngIf="consortiumLead">
@@ -128,7 +126,7 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.report.consortiumMemberAffiliations.string"
+              <span i18n="@@global.menu.report.consortiumMemberAffiliations.string"
                 >Consortium member affiliations</span
               >
             </a>
@@ -145,7 +143,7 @@
         <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
           <span>
             <fa-icon [icon]="faLightbulb"></fa-icon>
-            <span jhiTranslate="global.menu.resources.main.string"> Resources </span>
+            <span i18n="@@global.menu.resources.main.string">Resources</span>
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
@@ -156,7 +154,7 @@
               href="https://info.orcid.org/documentation/member-portal/account-management/"
               (click)="collapseNavbar()"
             >
-              <span jhiTranslate="global.menu.resources.accountManagementGuide.string">Account Management Guide</span>
+              <span i18n="@@global.menu.resources.accountManagementGuide.string">Account Management Guide</span>
             </a>
           </li>
           <li>
@@ -166,7 +164,7 @@
               href="https://info.orcid.org/documentation/member-portal/member-portal-organizational-admin-guide/"
               (click)="collapseNavbar()"
             >
-              <span jhiTranslate="global.menu.resources.affiliationManagerGuide.string">Affiliation Manager Guide</span>
+              <span i18n="@@global.menu.resources.affiliationManagerGuide.string">Affiliation Manager Guide</span>
             </a>
           </li>
           <li>
@@ -176,7 +174,7 @@
               href="https://info.orcid.org/documentation/member-portal/member-reporting/"
               (click)="collapseNavbar()"
             >
-              <span jhiTranslate="global.menu.resources.memberReportingGuide.string">Member Reporting Guide</span>
+              <span i18n="@@global.menu.resources.memberReportingGuide.string">Member Reporting Guide</span>
             </a>
           </li>
           <li>
@@ -186,7 +184,7 @@
               href="https://info.orcid.org/affiliation-manager-production-credentials-request-form/"
               (click)="collapseNavbar()"
             >
-              <span jhiTranslate="global.menu.resources.applyForAffiliationManagerCreds.string"
+              <span i18n="@@global.menu.resources.applyForAffiliationManagerCreds.string"
                 >Apply for Affiliation Manager Credentials</span
               >
             </a>
@@ -203,7 +201,7 @@
         <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
           <span>
             <fa-icon [icon]="faUserPlus"></fa-icon>
-            <span jhiTranslate="global.menu.adminMenu.main.string">Admin</span>
+            <span i18n="@@global.menu.adminMenu.main.string">Admin</span>
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
@@ -216,7 +214,7 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faUser" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.adminMenu.manageUsers.string">Manage users</span>
+              <span i18n="@@global.menu.adminMenu.manageUsers.string">Manage users</span>
             </a>
           </li>
           <li>
@@ -229,7 +227,7 @@
               (click)="collapseNavbar()"
             >
               <fa-icon [icon]="faUniversity" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.adminMenu.manageMembers.string">Manage members</span>
+              <span i18n="@@global.menu.adminMenu.manageMembers.string">Manage members</span>
             </a>
           </li>
         </ul>
@@ -244,7 +242,7 @@
         <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
           <span *ngIf="!getImageUrl()">
             <fa-icon [icon]="faUser"></fa-icon>
-            <span jhiTranslate="global.menu.account.main.string">Account</span>
+            <span i18n="@@global.menu.account.main.string">Account</span>
           </span>
           <span *ngIf="getImageUrl()">
             <img [src]="getImageUrl()" class="profile-image rounded-circle" alt="Avatar" />
@@ -252,21 +250,21 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu aria-labelledby="account-menu">
           <li>
-            <a class="dropdown-item" routerLink="settings" routerLinkActive="active" (click)="collapseNavbar()">
+            <a class="dropdown-item" routerLink="/settings" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon [icon]="faWrench" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.account.settings.string">Settings</span>
+              <span i18n="@@global.menu.account.settings.string">Settings</span>
             </a>
           </li>
           <li>
-            <a class="dropdown-item" routerLink="password" routerLinkActive="active" (click)="collapseNavbar()">
+            <a class="dropdown-item" routerLink="/password" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon [icon]="faLock" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.account.password.string">Password</span>
+              <span i18n="@@global.menu.account.password.string">Password</span>
             </a>
           </li>
           <li>
             <a class="dropdown-item" tabindex="1" (click)="logout()" (keypress)="logout()" id="logout">
               <fa-icon [icon]="faSignOutAlt" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.account.logout.string">Sign out</span>
+              <span i18n="@@global.menu.account.logout.string">Sign out</span>
             </a>
           </li>
         </ul>

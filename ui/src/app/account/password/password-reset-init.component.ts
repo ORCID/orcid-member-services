@@ -1,8 +1,9 @@
 import { Component, AfterViewInit, Renderer2 } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
-import { PasswordResetInitService } from '../service/password-reset-init.service'
+import { PasswordService } from '../service/password.service'
 import { EMAIL_NOT_FOUND_TYPE } from 'src/app/app.constants'
+import { PasswordResetInitResult } from '../model/password-reset-init-result.model'
 
 @Component({
   selector: 'app-password-reset-init',
@@ -17,7 +18,7 @@ export class PasswordResetInitComponent implements AfterViewInit {
   })
 
   constructor(
-    private passwordResetInitService: PasswordResetInitService,
+    private passwordResetInitService: PasswordService,
     private renderer: Renderer2,
     private fb: FormBuilder
   ) {}
@@ -31,19 +32,20 @@ export class PasswordResetInitComponent implements AfterViewInit {
     this.errorEmailNotExists = undefined
 
     if (this.resetRequestForm.get(['email'])) {
-      this.passwordResetInitService.initPasswordReset(this.resetRequestForm.get(['email'])!.value).subscribe({
-        next: () => {
-          this.success = 'OK'
-        },
-        error: (response) => {
-          this.success = undefined
-          if (response.status === 400 && response.error.type === EMAIL_NOT_FOUND_TYPE) {
-            this.errorEmailNotExists = 'ERROR'
+      this.passwordResetInitService
+        .initPasswordReset(this.resetRequestForm.get(['email'])!.value)
+        .subscribe((result: PasswordResetInitResult | null) => {
+          if (result && result.success) {
+            this.success = 'OK'
           } else {
-            this.error = 'ERROR'
+            this.success = undefined
+            if (result && result.emailNotFound) {
+              this.errorEmailNotExists = 'ERROR'
+            } else {
+              this.error = 'ERROR'
+            }
           }
-        },
-      })
+        })
     }
   }
 }

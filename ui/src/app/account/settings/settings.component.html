@@ -1,0 +1,248 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h1 class="mt-3" i18n="@@settings.personalDetails.string">Personal details</h1>
+      <hr />
+
+      <div class="alert alert-success" *ngIf="success" i18n="@@settings.messages.success.string">
+        <strong>Settings saved!</strong>
+      </div>
+
+      <form
+        name="form"
+        role="form"
+        (ngSubmit)="save()"
+        [formGroup]="settingsForm"
+        *ngIf="settingsForm.get('email')?.value"
+        novalidate
+      >
+        <div class="form-group">
+          <label class="form-control-label" for="firstName" i18n="@@settings.form.firstname.label.string"
+            >First Name</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="firstName"
+            name="firstName"
+            placeholder="Your first name"
+            i18n-placeholder="@@settings.form.firstname.placeholder.string"
+            formControlName="firstName"
+          />
+          <div
+            *ngIf="
+              settingsForm.get('firstName')?.invalid &&
+              (settingsForm.get('firstName')?.dirty || settingsForm.get('firstName')?.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="(settingsForm.get('firstName')?.errors)!['required']"
+              i18n="@@settings.messages.validate.firstname.required.string"
+            >
+              Your first name is required.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="(settingsForm.get('firstName')?.errors)!['minlength']"
+              i18n="@@settings.messages.validate.firstname.minlength.string"
+            >
+              Your first name is required to be at least 1 character.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="(settingsForm.get('firstName')?.errors)!['maxlength']"
+              i18n="@@settings.messages.validate.firstname.maxlength.string"
+            >
+              Your first name cannot be longer than 50 characters.
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-control-label" for="lastName" i18n="@@settings.form.lastname.label.string"
+            >Last Name</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="lastName"
+            name="lastName"
+            placeholder="Your last name"
+            i18n-placeholder="@@settings.form.lastname.placeholder.string"
+            formControlName="lastName"
+          />
+          <div
+            *ngIf="
+              settingsForm.get('lastName')?.invalid &&
+              (settingsForm.get('lastName')?.dirty || settingsForm.get('lastName')?.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="(settingsForm.get('lastName')?.errors)!['required']"
+              i18n="@@settings.messages.validate.lastname.required.string"
+            >
+              Your last name is required.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="(settingsForm.get('lastName')?.errors)!['minlength']"
+              i18n="@@settings.messages.validate.lastname.minlength.string"
+            >
+              Your last name is required to be at least 1 character.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="(settingsForm.get('lastName')?.errors)!['maxlength']"
+              i18n="@@settings.messages.validate.lastname.maxlength.string"
+            >
+              Your last name cannot be longer than 50 characters.
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-control-label" for="email" i18n="@@global.form.email.label.string">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="Your email"
+            i18n-placeholder="@@global.form.email.placeholder.string"
+            formControlName="email"
+            readonly
+          />
+        </div>
+        <div class="form-group" *ngIf="languages && languages.length > 0">
+          <label class="form-control-label" for="langKey" i18n="@@settings.form.language.string">Language</label>
+          <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
+            <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
+          </select>
+        </div>
+        <button
+          type="submit"
+          [disabled]="settingsForm.invalid || settingsForm.pristine"
+          class="btn btn-primary"
+          i18n="@@settings.form.button.string"
+        >
+          Save
+        </button>
+      </form>
+      <hr />
+
+      <form
+        name="form"
+        role="form"
+        (ngSubmit)="saveMfa()"
+        [formGroup]="mfaForm"
+        *ngIf="settingsForm.get('email')?.value"
+        novalidate
+      >
+        <h1 class="mt-3" i18n="@@settings.security.heading.string">Security</h1>
+        <hr />
+        <div class="form-group">
+          <p i18n="@@settings.security.mfaExplain.string">
+            Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you
+            sign in, you'll be prompted to enter a six-digit code we send to your preferred authentication application.
+          </p>
+          <label class="form-control-label" for="field_mfaEnabled" i18n="@@settings.security.mfa.string"
+            >Two-factor Authentication</label
+          >
+          <input
+            type="checkbox"
+            class="form-control"
+            name="mfaEnabled"
+            id="field_mfaEnabled"
+            formControlName="mfaEnabled"
+            (change)="mfaEnabledStateChange()"
+          />
+        </div>
+        <div *ngIf="showMfaUpdated" i18n="@@settings.security.mfaUpdated.string">2FA settings updated</div>
+        <div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes">
+          <div class="col-md-8">
+            <ul>
+              <li i18n="@@settings.security.mfaQrCodeSteps.one.string">
+                Install a two-factor authentication app<br />A 2FA app is required to create the six-digit code you need
+                to access your account each time you sign in. Most apps are for mobile devices; some are also available
+                as desktop or web-based apps. Download and install your preferred 2FA app, such as
+                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+                  >Google Authenticator</a
+                >, <a href="https://freeotp.github.io/">FreeOTP</a>, or <a href="https://authy.com/">Authy</a>.
+              </li>
+              <li i18n="@@settings.security.mfaQrCodeSteps.two.string">
+                Scan this QR code with your device<br />Open your 2FA app and scan the image below.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes">
+          <div class="col-md-8">
+            <img [src]="safeQrCode()" alt="QR Code" />
+          </div>
+        </div>
+        <div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes && showMfaTextCode">
+          <div class="col-md-8">
+            <p class="mfaSecret">
+              <strong>{{ mfaSetup.secret }}</strong>
+            </p>
+          </div>
+        </div>
+        <div class="row" *ngIf="showMfaSetup && !showMfaBackupCodes">
+          <div class="col-md-8">
+            <ul>
+              <li>
+                <span i18n="@@settings.security.mfaCannotScan.one.string">Can't scan the QR code?</span><br /><a
+                  href="JavaScript:void(0);"
+                  (click)="toggleMfaTextCode()"
+                  i18n="@@settings.security.mfaCannotScan.two.string"
+                  >Get a text code</a
+                >&nbsp;<span i18n="@@settings.security.mfaCannotScan.three.string"
+                  >and enter it into your 2FA app instead</span
+                >
+              </li>
+              <li i18n="@@settings.security.mfaTextCodeSteps.one.string">
+                Enter the six-digit code from the app<br />After scanning the QR code or entering in the text code, your
+                2FA app will display a six-digit code. Enter this code in the box below and click Save.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="showMfaSetup && !showMfaBackupCodes">
+          <div class="col-md-8">
+            <div *ngIf="mfaSetupFailure" class="alert alert-danger" i18n="@@settings.security.otpError.string">
+              Incorrect verification code
+            </div>
+            <input
+              class="indented"
+              name="verificationCode"
+              formControlName="verificationCode"
+              placeholder="Verification code"
+              i18n-placeholder="@@settings.security.verificationCode.string"
+            />
+          </div>
+        </div>
+        <div class="row" *ngIf="showMfaBackupCodes && showMfaSetup">
+          <div class="col-md-8">
+            <p i18n="@@settings.security.backupCodes.string">
+              Make a note of the following backup codes, this is the only time they will be shown.
+            </p>
+            <table>
+              <tr *ngFor="let backupCode of mfaBackupCodes">
+                <td>{{ backupCode }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <button
+          [disabled]="mfaForm.pristine || showMfaBackupCodes"
+          type="submit"
+          class="btn btn-primary"
+          i18n="@@settings.form.button.string"
+        >
+          Save
+        </button>
+      </form>
+      <hr />
+    </div>
+  </div>
+</div>

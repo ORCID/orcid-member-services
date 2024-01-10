@@ -16,14 +16,18 @@ COPY package*.json ./
 
 # If you are building your code for production
 # RUN npm install --only=production
-RUN npm install
+
+RUN \
+    npm config list && \
+    npm config delete proxy && \
+    npm install --loglevel silly
 
 # Bundle app source
 COPY . .
 
 RUN npm run build
 
-FROM nginx
+FROM nginx:1.24.0-bullseye
 
 RUN \
     apt-get update && \
