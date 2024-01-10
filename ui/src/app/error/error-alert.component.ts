@@ -1,13 +1,11 @@
 import { ChangeDetectorRef, Component, ErrorHandler, HostListener, Inject, OnInit } from '@angular/core'
-import { ErrorService } from '../service/error.service'
+import { ErrorService } from './service/error.service'
 import { Subscription } from 'rxjs'
-import { ErrorAlert } from '../model/error-alert'
-import { AppError } from '../model/error.model'
+import { AppError, ErrorAlert } from './model/error.model'
 
 @Component({
   selector: 'app-error-alert',
-  templateUrl: './error-alert.component.html',
-  styleUrls: ['./error-alert.component.scss'],
+  templateUrl: './error-alert.component.html'
 })
 export class ErrorAlertComponent implements OnInit {
   alerts: any[] = []
