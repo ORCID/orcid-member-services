@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { ErrorAlertComponent } from './error-alert.component'
-import { ErrorService } from '../service/error.service'
+import { ErrorService } from './service/error.service'
 import { AppModule } from 'src/app/app.module'
 
 describe('ErrorAlertComponent', () => {

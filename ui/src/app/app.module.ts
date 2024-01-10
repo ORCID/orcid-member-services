@@ -15,10 +15,11 @@ import { HomeModule } from './home/home.module'
 import { FooterComponent } from './layout/footer/footer.component'
 import { SharedModule } from './shared/shared.module'
 import { HeaderInterceptor } from './shared/interceptor/header.interceptor'
-import { ErrorService } from './shared/service/error.service'
+import { ErrorService } from './error/service/error.service';
+import { ErrorComponent } from './error/error.component'
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, HasAnyAuthorityDirective, FooterComponent],
+  declarations: [AppComponent, NavbarComponent, HasAnyAuthorityDirective, FooterComponent, ErrorComponent],
   imports: [
     FontAwesomeModule,
     AccountModule,
