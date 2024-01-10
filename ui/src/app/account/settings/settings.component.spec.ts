@@ -17,7 +17,7 @@ describe('SettingsComponent', () => {
   beforeEach(() => {
     accountServiceSpy = jasmine.createSpyObj('AccountService', [
       'getAccountData',
-      'getUserName',
+      'getUsername',
       'save',
       'getMfaSetup',
       'enableMfa',

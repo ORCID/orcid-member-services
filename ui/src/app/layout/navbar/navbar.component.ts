@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit {
 
   organizationName: string | undefined
   account: IAccount | undefined
-  userName: string | undefined
+  username: string | undefined
   consortiumLead: boolean | undefined
   memberCallDone = false
   consortiumMember = false
@@ -100,7 +100,6 @@ export class NavbarComponent implements OnInit {
   }
 
   getUserName() {
-    // return this.isAuthenticated() ? this.userName : null;
     return this.isAuthenticated() ? this.accountService.getUsername() : null
   }
 
@@ -108,7 +107,7 @@ export class NavbarComponent implements OnInit {
     this.collapseNavbar()
     this.organizationName = undefined
     this.memberCallDone = false
-    this.userName = undefined
+    this.username = undefined
     if (this.isLoggedAs()) {
       this.accountService.logoutAs().subscribe(() => {
         window.location.href = '/'
@@ -125,7 +124,7 @@ export class NavbarComponent implements OnInit {
     this.collapseNavbar()
     this.organizationName = undefined
     this.memberCallDone = false
-    this.userName = undefined
+    this.username = undefined
     this.accountService.logoutAs().subscribe((res) => {
       window.location.href = '/'
     })

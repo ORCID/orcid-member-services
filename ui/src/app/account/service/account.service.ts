@@ -168,24 +168,24 @@ export class AccountService {
   }
 
   getUsername(): string | null {
-    let userName: string | null = null
+    let username: string | null = null
 
     if (this.isIdentityResolved()) {
       if (this.accountData.value!.firstName) {
-        userName = this.accountData.value!.firstName
+        username = this.accountData.value!.firstName
       }
       if (this.accountData.value!.lastName) {
-        if (userName) {
-          userName = userName + ' ' + this.accountData.value!.lastName
+        if (username) {
+          username = username + ' ' + this.accountData.value!.lastName
         } else {
-          userName = this.accountData.value!.lastName
+          username = this.accountData.value!.lastName
         }
       }
-      if (userName == null) {
-        userName = this.accountData.value!.email
+      if (username == null) {
+        username = this.accountData.value!.email
       }
     }
-    return userName
+    return username
   }
 
   getSalesforceId(): string | null {
