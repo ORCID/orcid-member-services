@@ -6,7 +6,6 @@ import { AccountService } from '../service/account.service'
 @Component({
   selector: 'app-password',
   templateUrl: './password.component.html',
-  styleUrls: ['./password.component.scss'],
 })
 export class PasswordComponent implements OnInit {
   doNotMatch: string | undefined
