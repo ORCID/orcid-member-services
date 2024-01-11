@@ -3,24 +3,21 @@ import { Component, OnInit, AfterViewInit, Renderer2, ElementRef } from '@angula
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'app-password-reset-finish',
   templateUrl: './password-reset-finish.component.html',
-  styleUrls: ['./password-reset-finish.component.scss'],
 })
 export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
-  doNotMatch: string
-  error: string
-  keyMissing: boolean
-  success: string
-  modalRef: NgbModalRef
-  key: string
-  invalidKey: boolean
-  expiredKey: boolean
-  activationEmailResent: boolean
-  showPasswordForm: boolean
+  doNotMatch: string | undefined
+  error: string | undefined
+  keyMissing: boolean = false
+  success: string | undefined
+  key: string | undefined
+  invalidKey: boolean = false
+  expiredKey: boolean = false
+  activationEmailResent: boolean = false
+  showPasswordForm: boolean = false
 
   passwordForm = this.fb.group({
     newPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
@@ -60,22 +57,22 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
   }
 
   finishReset() {
-    this.doNotMatch = null
-    this.error = null
-    const password = this.passwordForm.get(['newPassword']).value
-    const confirmPassword = this.passwordForm.get(['confirmPassword']).value
+    this.doNotMatch = undefined
+    this.error = undefined
+    const password = this.passwordForm.get(['newPassword'])?.value
+    const confirmPassword = this.passwordForm.get(['confirmPassword'])?.value
     if (password !== confirmPassword) {
       this.doNotMatch = 'ERROR'
     } else {
-      this.passwordService.savePassword({ key: this.key, newPassword: password }).subscribe(
-        () => {
+      this.passwordService.savePassword({ key: this.key, newPassword: password }).subscribe({
+        next: () => {
           this.success = 'OK'
         },
-        () => {
-          this.success = null
+        error: () => {
+          this.success = undefined
           this.error = 'ERROR'
         }
-      )
+    })
     }
   }
 
