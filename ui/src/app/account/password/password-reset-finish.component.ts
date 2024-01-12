@@ -11,13 +11,13 @@ import { ActivatedRoute, Router } from '@angular/router'
 export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
   doNotMatch: string | undefined
   error: string | undefined
-  keyMissing: boolean = false
   success: string | undefined
   key: string | undefined
-  invalidKey: boolean = false
-  expiredKey: boolean = false
-  activationEmailResent: boolean = false
-  showPasswordForm: boolean = false
+  invalidKey = false
+  keyMissing = false
+  expiredKey = false
+  activationEmailResent = false
+  showPasswordForm = false
 
   passwordForm = this.fb.group({
     newPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
