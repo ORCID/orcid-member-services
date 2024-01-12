@@ -400,10 +400,9 @@
       </trans-unit>
       <trans-unit id="password.title.string" datatype="html">
         <source>Password for <x id="PH" equiv-text="this.username"/> (You)</source>
-        <note priority="1" from="description">Password label with username param</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.success.string" datatype="html">
@@ -422,6 +421,10 @@
       </trans-unit>
       <trans-unit id="global.messages.error.dontmatch.string" datatype="html">
         <source> The password and its confirmation do not match! </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">13</context>
@@ -444,6 +447,10 @@
       <trans-unit id="global.messages.validate.newpassword.required.string" datatype="html">
         <source> Your password is required. </source>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
@@ -455,12 +462,20 @@
       <trans-unit id="global.form.newpassword.label.string" datatype="html">
         <source>New password</source>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.form.newpassword.placeholder.string" datatype="html">
         <source>New password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">34</context>
@@ -469,12 +484,20 @@
       <trans-unit id="global.messages.validate.newpassword.minlength.string" datatype="html">
         <source> Your password is required to be at least 4 characters. </source>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.newpassword.maxlength.string" datatype="html">
         <source> Your password cannot be longer than 50 characters. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">98</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">47</context>
@@ -483,6 +506,10 @@
       <trans-unit id="global.form.confirmpassword.label.string" datatype="html">
         <source>New password confirmation</source>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
@@ -490,26 +517,42 @@
       <trans-unit id="global.form.confirmpassword.placeholder.string" datatype="html">
         <source>Confirm the new password</source>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.confirmpassword.required.string" datatype="html">
-        <source> Your confirmation password is required. </source>
+        <source> Your password confirmation is required. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">128</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.confirmpassword.minlength.string" datatype="html">
-        <source> Your confirmation password is required to be at least 4 characters. </source>
+        <source> Your password confirmation is required to be at least 4 characters. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.confirmpassword.maxlength.string" datatype="html">
-        <source> Your confirmation password cannot be longer than 50 characters. </source>
+        <source> Your password confirmation cannot be longer than 50 characters. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">142</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">69</context>
@@ -886,8 +929,120 @@
       <trans-unit id="error.subtitle" datatype="html">
         <source>Sorry, an error has occurred</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/error/error-alert.component.html</context>
+          <context context-type="sourcefile">src/app/error/error-alert.component.html</context>
           <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="error.http.403.string" datatype="html">
+        <source> You are not authorized to access this page. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/error/error.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="error.http.404.string" datatype="html">
+        <source>The page does not exist.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/error/error.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="error.title.string" datatype="html">
+        <source>Your request cannot be processed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/error/error.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.messages.info.authenticated.link.string" datatype="html">
+        <source>sign in</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.form.button.string" datatype="html">
+        <source> Reset Password </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">152</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.error.string" datatype="html">
+        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for 24 hours. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.info.string" datatype="html">
+        <source>Choose a new password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.keyexpired.paragraph1.string" datatype="html">
+        <source>ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.keyexpired.paragraph2.string" datatype="html">
+        <source>To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.keyexpired.paragraph3.string" datatype="html">
+        <source>If you are still having problems activating your account or have not received your new activation link please contact our support team please contact us at membership@orcid.org.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.keyexpired.string" datatype="html">
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>This activation has expired.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.keyinvalid.string" datatype="html">
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>This activation key is invalid.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.keymissing.string" datatype="html">
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>The activation key is missing.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.success.string" datatype="html">
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Your password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.title.string" datatype="html">
+        <source>Reset password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.messages.validate.newpassword.strength.string" datatype="html">
+        <source>Password strength:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-strength.component.html</context>
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
     </body>
