@@ -4,6 +4,7 @@ import { PasswordResetInitComponent } from './password/password-reset-init.compo
 import { SettingsComponent } from './settings/settings.component'
 import { AuthGuard } from './auth.guard'
 import { PasswordComponent } from './password/password.component'
+import { PasswordResetFinishComponent } from './password/password-reset-finish.component'
 
 export const routes: Routes = [
   {
@@ -17,6 +18,14 @@ export const routes: Routes = [
       authorities: [],
       pageTitle: 'global.menu.account.password.string',
     },
+  },
+  {
+    path: 'reset/finish',
+    component: PasswordResetFinishComponent,
+    data: {
+      authorities: [],
+      pageTitle: 'global.menu.account.password.string'
+    }
   },
   {
     path: 'settings',
