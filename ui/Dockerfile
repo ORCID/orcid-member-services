@@ -6,7 +6,7 @@ WORKDIR /app
 # Install some useful utils for debug/test
 RUN \
     apt-get update && \
-    apt -y install python3 make gcc g++ && \
+    apt -y install python3 make gcc g++ vim && \
     rm -rf /var/lib/apt/lists/*
 
 # Install app dependencies
@@ -19,8 +19,7 @@ COPY package*.json ./
 
 RUN \
     npm config list && \
-    npm config delete proxy && \
-    npm install --loglevel silly
+    npm install
 
 # Bundle app source
 COPY . .
