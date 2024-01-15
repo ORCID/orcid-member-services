@@ -26,8 +26,8 @@ export class PasswordService {
     })
   }
 
-  savePassword(keyAndPassword: any): Observable<any> {
-    return this.http.post('/services/userservice/api/account/reset-password/finish', keyAndPassword)
+  savePassword(key: string, newPassword: string): Observable<any> {
+    return this.http.post('/services/userservice/api/account/reset-password/finish', {key, newPassword:"a"})
   }
 
   validateKey(key: any): Observable<KeyValidationResult> {
