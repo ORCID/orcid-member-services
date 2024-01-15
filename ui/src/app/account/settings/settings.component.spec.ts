@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule, HttpResponse } from '@angular/common/http'
 import { LanguageService } from 'src/app/shared/service/language.service'
 import { AccountService } from '../service/account.service'
-import { of, throwError } from 'rxjs'
+import { of } from 'rxjs'
 import { FindLanguageFromKeyPipe } from 'src/app/shared/pipe/find-language-from-key'
 
 describe('SettingsComponent', () => {
