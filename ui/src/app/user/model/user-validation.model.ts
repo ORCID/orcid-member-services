@@ -9,6 +9,6 @@ export class UserValidation implements IUserValidation {
     public errors: string[] | undefined | null
   ) {
     this.valid = valid || false
-    this.errors = this.errors
+    this.errors = errors
   }
 }
