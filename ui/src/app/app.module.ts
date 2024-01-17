@@ -10,26 +10,25 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { NavbarComponent } from './layout/navbar/navbar.component'
 import { CommonModule } from '@angular/common'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
-import { HasAnyAuthorityDirective } from './shared/directive/has-any-authority.directive'
 import { HomeModule } from './home/home.module'
 import { FooterComponent } from './layout/footer/footer.component'
 import { SharedModule } from './shared/shared.module'
 import { HeaderInterceptor } from './shared/interceptor/header.interceptor'
-import { ErrorService } from './error/service/error.service';
+import { ErrorService } from './error/service/error.service'
 import { ErrorComponent } from './error/error.component'
+import { FormsModule } from '@angular/forms'
+import { UserModule } from './user/user.module'
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, HasAnyAuthorityDirective, FooterComponent, ErrorComponent],
+  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
   imports: [
-    FontAwesomeModule,
-    AccountModule,
-    HomeModule,
     BrowserModule,
+    UserModule,
     HttpClientModule,
     AppRoutingModule,
     NgxWebstorageModule.forRoot(),
     CommonModule,
-    NgbModule,
+    FormsModule,
     SharedModule.forRoot(),
   ],
   providers: [

@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpResponse, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import * as moment from 'moment'
-import { map } from 'rxjs/operators'
+import { filter, map } from 'rxjs/operators'
 
 import { User, UserAuthorities } from '../model/user.model'
 import { createRequestOption } from '../../shared/request-util'
 import { UserValidation } from '../model/user-validation.model'
+import { IUserPage, UserPage } from '../model/user-page.model'
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -48,18 +49,18 @@ export class UserService {
     return this.http.get<boolean>(`${this.resourceUrl}/${salesforceId}/owner`)
   }
 
-  findBySalesForceId(salesforceId: string, req?: any): Observable<User[]> {
+  findBySalesForceId(salesforceId: string | null, req?: any): Observable<IUserPage | null> {
     const options = createRequestOption(req)
     return this.http
-      .get<User[]>(`${this.resourceUrl}/salesforce/${salesforceId}/p`, { params: options })
-      .pipe(map((res: User[]) => this.convertArrayFromServer(res)))
+      .get<User[]>(`${this.resourceUrl}/salesforce/${salesforceId}/p`, { params: options, observe: 'response' })
+      .pipe(map((res: HttpResponse<User[]>) => this.convertToUserPage(res)))
   }
 
-  query(req?: any): Observable<User[]> {
+  query(req?: any): Observable<IUserPage | null> {
     const options = createRequestOption(req)
     return this.http
-      .get<User[]>(this.resourceUrl, { params: options })
-      .pipe(map((res: User[]) => this.convertArrayFromServer(res)))
+      .get<User[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map((res: HttpResponse<User[]>) => this.convertToUserPage(res)))
   }
 
   delete(id: string): Observable<HttpResponse<any>> {
@@ -101,9 +102,9 @@ export class UserService {
     return res
   }
 
-  protected convertArrayFromServer(res: User[]): User[] {
-    if (res) {
-      res.forEach((user: User) => {
+  protected convertToUserPage(res: HttpResponse<User[]>): UserPage | null {
+    if (res.body) {
+      res.body.forEach((user: User) => {
         user.createdDate = user.createdDate != null ? moment(user.createdDate) : null
         user.lastModifiedDate = user.lastModifiedDate != null ? moment(user.lastModifiedDate) : null
         user.isAdmin = false
@@ -115,7 +116,13 @@ export class UserService {
           })
         }
       })
+      const totalCount: string | null = res.headers.get('X-Total-Count')
+
+      if (totalCount) {
+        const userPage = new UserPage(res.body, parseInt(totalCount, 10))
+        return userPage
+      }
     }
-    return res
+    return null
   }
 }

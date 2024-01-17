@@ -14,13 +14,13 @@ describe('Service Tests', () => {
     let service: UserService
     let httpMock: HttpTestingController
     let elemDefault: User
-    let expectedResult: any | null = null
+    let result: any | null = null
     let currentDate: moment.Moment
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
       })
-      expectedResult = {}
+      result = {}
       injector = getTestBed()
       service = injector.get(UserService)
       httpMock = injector.get(HttpTestingController)
@@ -64,10 +64,10 @@ describe('Service Tests', () => {
         service
           .create(new User(undefined))
           .pipe(take(1))
-          .subscribe((resp) => (expectedResult = resp))
+          .subscribe((resp) => (result = resp))
         const req = httpMock.expectOne({ method: 'POST' })
         req.flush(returnedFromService)
-        expect(expectedResult).toEqual(expected)
+        expect(result).toEqual(expected)
       })
 
       it('should update a user', async () => {
@@ -100,10 +100,10 @@ describe('Service Tests', () => {
         service
           .update(expected)
           .pipe(take(1))
-          .subscribe((resp) => (expectedResult = resp))
+          .subscribe((resp) => (result = resp))
         const req = httpMock.expectOne({ method: 'PUT' })
         req.flush(returnedFromService)
-        expect(expectedResult).toEqual(expected)
+        expect(result).toEqual(expected)
       })
 
       it('should return a list of MSUserService', async () => {
@@ -135,12 +135,11 @@ describe('Service Tests', () => {
         service
           .query(expected)
           .pipe(take(1))
-          .subscribe((body) => (expectedResult = body))
+          .subscribe((body) => (result = body))
         const req = httpMock.expectOne({ method: 'GET' })
         req.flush([returnedFromService])
         httpMock.verify()
-        const expectedResultList = [expectedResult]
-        expect(expectedResult).toContain(expected)
+        expect(result.users).toContain(expected)
       })
     })
 
