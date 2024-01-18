@@ -311,7 +311,11 @@ public class MemberResource {
     @GetMapping("/members/{id}")
     public ResponseEntity<Member> getMember(@PathVariable String id) {
         LOG.debug("REST request to get Member : {}", id);
-        Optional<Member> member = memberService.getMember(id);
+        Optional<Member> membermember-service/src/main/java/org/orcid/memberportal/service/member/web/rest/MemberResource.java
+            = memberService.getMember(id);
+        if (!member.isPresent()) {
+            LOG.warn("Can't find member with id {}", id);
+        }
         return ResponseUtil.wrapOrNotFound(member);
     }
 
