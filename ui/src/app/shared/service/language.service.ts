@@ -25,14 +25,6 @@ export class LanguageService {
     return this.languages
   }
 
-  getCurrentLanguage(): Observable<string> {
-    return of('en')
-  }
-
-  changeLanguage(languageKey: string): void {
-    console.log('not empty')
-  }
-
   updateLanguageCodeInUrl(langCode: string) {
     if (!this.windowLocationService.getWindowLocationOrigin().includes('localhost')) {
       const currentLang = this.getLanguageCodeFromUrl()

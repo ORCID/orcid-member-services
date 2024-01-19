@@ -4,7 +4,6 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil, tap } from 'rxjs'
 
 import { IAccount } from '../model/account.model'
-import { CookieService } from 'ngx-cookie-service'
 import { LanguageService } from 'src/app/shared/service/language.service'
 // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
 //import { MSMemberService } from 'app/entities/member/member.service';
@@ -22,7 +21,6 @@ export class AccountService {
     //private languageService: JhiLanguageService,
     private languageService: LanguageService,
     private sessionStorage: SessionStorageService,
-    private cookieService: CookieService,
     private http: HttpClient // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service //private memberService: MSMemberService
   ) {}
 
@@ -50,17 +48,8 @@ export class AccountService {
             const account: IAccount = response.body
             if (account.langKey) {
               this.languageService.updateLanguageCodeInUrl(account.langKey)
-              //this.cookieService.set('locale', account.langKey)
             }
             this.accountData.next(account)
-
-            // After retrieve the account info, the language will be changed to
-            // the user's preferred language configured in the account setting
-            if (this.accountData.value?.langKey) {
-              const langKey = this.sessionStorage.retrieve('locale') || this.accountData.value.langKey
-              // TODO: uncomment when language service is implemented
-              //this.languageService.changeLanguage(langKey);
-            }
           } else {
             // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
             //this.memberService.memberData.next(undefined);
