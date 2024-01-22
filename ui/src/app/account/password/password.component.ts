@@ -6,7 +6,6 @@ import { AccountService } from '../service/account.service'
 @Component({
   selector: 'app-password',
   templateUrl: './password.component.html',
-  styleUrls: ['./password.component.scss'],
 })
 export class PasswordComponent implements OnInit {
   doNotMatch: string | undefined
@@ -44,16 +43,16 @@ export class PasswordComponent implements OnInit {
       this.doNotMatch = 'ERROR'
     } else {
       this.doNotMatch = undefined
-      this.passwordService.updatePassword(newPassword, this.passwordForm.get(['currentPassword'])?.value).subscribe(
-        () => {
+      this.passwordService.updatePassword(newPassword, this.passwordForm.get(['currentPassword'])?.value).subscribe({
+        next: () => {
           this.error = undefined
           this.success = 'OK'
         },
-        () => {
+        error: () => {
           this.success = undefined
           this.error = 'ERROR'
         }
-      )
+    })
     }
   }
 }

@@ -59,10 +59,10 @@
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
         <source>
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </source>
         <target state="new">
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -70,8 +70,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
-        <source> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </source>
-        <target state="new"> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </target>
+        <source> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x> </source>
+        <target state="new"> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -264,10 +264,10 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source>
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </source>
         <target state="new">
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -276,10 +276,10 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source>
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </source>
         <target state="new">
-          <x id="INTERPOLATION"/>
+          <x id="INTERPOLATION"></x>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -287,8 +287,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check your credentials and try again. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>登入失敗！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>請檢查您的憑證並再試一次。</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please check your credentials and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>登入失敗！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>請檢查您的憑證並再試一次。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -391,8 +391,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> 電子郵件地址尚未登錄！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 請在檢查後再試一次</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please check and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x> 電子郵件地址尚未登錄！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> 請在檢查後再試一次</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">7</context>
@@ -463,8 +463,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> 設定已儲存！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x> 設定已儲存！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -603,16 +603,16 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.one.string" datatype="html">
-        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">安裝雙重認證 app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>您需要一個雙重認證 app 來創建您每次登入帳戶時所需的六位數代碼。多數 app 適用於行動裝置，部分 app 還能在電腦桌面使用，或是使用網頁型 app。下載並安裝您喜歡的雙重認證 app，例如 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>、<x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>，或 <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>。</target>
+        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>. </source>
+        <target state="new">安裝雙重認證 app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>您需要一個雙重認證 app 來創建您每次登入帳戶時所需的六位數代碼。多數 app 適用於行動裝置，部分 app 還能在電腦桌面使用，或是使用網頁型 app。下載並安裝您喜歡的雙重認證 app，例如 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>、<x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>，或 <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.two.string" datatype="html">
-        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Open your 2FA app and scan the image below. </source>
-        <target state="new">使用您的裝置掃描此 QR 碼<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>開啟您的雙重認證 app 並掃描下方圖片。</target>
+        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Open your 2FA app and scan the image below. </source>
+        <target state="new">使用您的裝置掃描此 QR 碼<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>開啟您的雙重認證 app 並掃描下方圖片。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">172</context>
@@ -643,8 +643,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaTextCodeSteps.one.string" datatype="html">
-        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
-        <target state="new">輸入 app 中的六位數代碼<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>掃描 QR 碼或輸入簡訊代碼後，您的雙重認證 app 便會顯示一個六位數代碼，將此代碼輸入下方選框後點擊「儲存」。</target>
+        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
+        <target state="new">輸入 app 中的六位數代碼<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>掃描 QR 碼或輸入簡訊代碼後，您的雙重認證 app 便會顯示一個六位數代碼，將此代碼輸入下方選框後點擊「儲存」。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">203</context>
@@ -867,25 +867,24 @@
         </context-group>
       </trans-unit>
       <trans-unit id="password.title.string" datatype="html">
-        <source>Password for <x id="PH" equiv-text="this.username"/> (You)</source>
-        <target state="new">Password for <x id="PH" equiv-text="this.username"/> (You)</target>
-        <note priority="1" from="description">Password label with username param</note>
+        <source>Password for <x id="PH" equiv-text="this.username"></x> (You)</source>
+        <target state="new"> {{username}} 的密碼 （您的）<x id="PH" equiv-text="this.username"></x>undefined</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Password changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Password changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Password changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x> 密碼已變更！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.error.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>An error has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> The password could not be changed. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>An error has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> The password could not be changed. </target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>An error has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> The password could not be changed. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x> 發生錯誤！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> 無法變更密碼。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">10</context>
@@ -893,7 +892,11 @@
       </trans-unit>
       <trans-unit id="global.messages.error.dontmatch.string" datatype="html">
         <source> The password and its confirmation do not match! </source>
-        <target state="new"> The password and its confirmation do not match! </target>
+        <target state="new">密碼與確認用密碼不相符！</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">13</context>
@@ -901,7 +904,7 @@
       </trans-unit>
       <trans-unit id="global.form.currentpassword.label.string" datatype="html">
         <source>Current password</source>
-        <target state="new">Current password</target>
+        <target state="new">目前密碼</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">20</context>
@@ -917,7 +920,11 @@
       </trans-unit>
       <trans-unit id="global.messages.validate.newpassword.required.string" datatype="html">
         <source> Your password is required. </source>
-        <target state="new"> Your password is required. </target>
+        <target state="new">需要您的密碼。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">26</context>
@@ -929,7 +936,11 @@
       </trans-unit>
       <trans-unit id="global.form.newpassword.label.string" datatype="html">
         <source>New password</source>
-        <target state="new">New password</target>
+        <target state="new">新密碼</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">32</context>
@@ -937,7 +948,11 @@
       </trans-unit>
       <trans-unit id="global.form.newpassword.placeholder.string" datatype="html">
         <source>New password</source>
-        <target state="new">New password</target>
+        <target state="new">新密碼</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">34</context>
@@ -945,7 +960,11 @@
       </trans-unit>
       <trans-unit id="global.messages.validate.newpassword.minlength.string" datatype="html">
         <source> Your password is required to be at least 4 characters. </source>
-        <target state="new"> Your password is required to be at least 4 characters. </target>
+        <target state="new">您的密碼至少必須有 4 個字元。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">43</context>
@@ -953,7 +972,11 @@
       </trans-unit>
       <trans-unit id="global.messages.validate.newpassword.maxlength.string" datatype="html">
         <source> Your password cannot be longer than 50 characters. </source>
-        <target state="new"> Your password cannot be longer than 50 characters. </target>
+        <target state="new">您的密碼不能超過 50 個字元。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">98</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">47</context>
@@ -961,7 +984,11 @@
       </trans-unit>
       <trans-unit id="global.form.confirmpassword.label.string" datatype="html">
         <source>New password confirmation</source>
-        <target state="new">New password confirmation</target>
+        <target state="new">新的確認用密碼</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">54</context>
@@ -969,31 +996,47 @@
       </trans-unit>
       <trans-unit id="global.form.confirmpassword.placeholder.string" datatype="html">
         <source>Confirm the new password</source>
-        <target state="new">Confirm the new password</target>
+        <target state="new">確認新密碼</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.confirmpassword.required.string" datatype="html">
-        <source> Your confirmation password is required. </source>
-        <target state="new"> Your confirmation password is required. </target>
+        <source> Your password confirmation is required. </source>
+        <target state="new">需要您的確認密碼。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">128</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.confirmpassword.minlength.string" datatype="html">
-        <source> Your confirmation password is required to be at least 4 characters. </source>
-        <target state="new"> Your confirmation password is required to be at least 4 characters. </target>
+        <source> Your password confirmation is required to be at least 4 characters. </source>
+        <target state="new">您的確認用密碼必須至少為 4 個字元。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.confirmpassword.maxlength.string" datatype="html">
-        <source> Your confirmation password cannot be longer than 50 characters. </source>
-        <target state="new"> Your confirmation password cannot be longer than 50 characters. </target>
+        <source> Your password confirmation cannot be longer than 50 characters. </source>
+        <target state="new">您的確認用密碼長度不能超過 50 個字元。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">142</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">69</context>
@@ -1001,7 +1044,7 @@
       </trans-unit>
       <trans-unit id="password.form.button.string" datatype="html">
         <source>Save</source>
-        <target state="new">Save</target>
+        <target state="new">儲存</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">74</context>
@@ -1011,8 +1054,136 @@
         <source>Sorry, an error has occurred</source>
         <target state="new">Sorry, an error has occurred</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/error/error-alert.component.html</context>
+          <context context-type="sourcefile">src/app/error/error-alert.component.html</context>
           <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.title.string" datatype="html">
+        <source>Reset password</source>
+        <target state="new">重設密碼</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.keymissing.string" datatype="html">
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>The activation key is missing.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>缺少啟動金鑰<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.keyinvalid.string" datatype="html">
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This activation key is invalid.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>啟用金鑰無效。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.keyexpired.string" datatype="html">
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This activation has expired.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>啟動金鑰已過期。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.keyexpired.paragraph1.string" datatype="html">
+        <source>ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired.</source>
+        <target state="new">ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.keyexpired.paragraph2.string" datatype="html">
+        <source>To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address.</source>
+        <target state="new">To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.keyexpired.paragraph3.string" datatype="html">
+        <source>If you are still having problems activating your account or have not received your new activation link please contact our support team please contact us at membership@orcid.org.</source>
+        <target state="new">If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.info.string" datatype="html">
+        <source>Choose a new password</source>
+        <target state="new">請選擇一個新密碼</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.error.string" datatype="html">
+        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for 24 hours. </source>
+        <target state="new">無法重設您的密碼。請記得密碼要求只在 24 小時內有效。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.messages.success.string" datatype="html">
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Your password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>已重設您的密碼。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> 請</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.messages.info.authenticated.link.string" datatype="html">
+        <source>sign in</source>
+        <target state="new">登入</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.finish.form.button.string" datatype="html">
+        <source> Reset Password </source>
+        <target state="new">認證新密碼</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="linenumber">152</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="error.title.string" datatype="html">
+        <source>Your request cannot be processed</source>
+        <target state="new">無法處理您的要求</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/error/error.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="error.http.403.string" datatype="html">
+        <source> You are not authorized to access this page. </source>
+        <target state="new">您沒有存取此頁面的權限。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/error/error.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="error.http.404.string" datatype="html">
+        <source>The page does not exist.</source>
+        <target state="new">此頁面不存在。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/error/error.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.messages.validate.newpassword.strength.string" datatype="html">
+        <source>Password strength:</source>
+        <target state="new">密碼強度：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-strength.component.html</context>
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
     </body>
