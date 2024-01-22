@@ -4,7 +4,15 @@ import { Subscription, filter } from 'rxjs'
 import { UserService } from './service/user.service'
 import { HttpErrorResponse } from '@angular/common/http'
 import { IUserPage, UserPage } from './model/user-page.model'
-import { faCheckCircle, faSearch, faTimes, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCheckCircle,
+  faPencilAlt,
+  faPlus,
+  faSearch,
+  faSignInAlt,
+  faTimes,
+  faTimesCircle,
+} from '@fortawesome/free-solid-svg-icons'
 import { AlertType, EventType, ITEMS_PER_PAGE } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AccountService } from '../account/service/account.service'
@@ -38,6 +46,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   faCheckCircle = faCheckCircle
   faTimes = faTimes
   faSearch = faSearch
+  faPlus = faPlus
+  faPencilAlt = faPencilAlt
+  faSignInAlt = faSignInAlt
 
   DEFAULT_ADMIN = 'admin@orcid.org'
 
