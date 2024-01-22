@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { AccountService } from '../account/service/account.service'
 import { EventService } from '../shared/service/event.service'
 import { IAccount } from '../account/model/account.model'
+import { AlertService } from '../shared/service/alert.service'
 
 @Component({
   selector: 'app-users',
@@ -42,7 +43,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   constructor(
     protected userService: UserService,
-    // protected jhiAlertService: JhiAlertService,
+    protected alertService: AlertService,
     protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
@@ -68,6 +69,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       }
     })
     this.loadAll()
+
     this.eventSubscriber = this.eventService.on(EventType.USER_LIST_MODIFIED).subscribe(() => {
       this.searchTerm = ''
       this.submittedSearchTerm = ''
@@ -96,7 +98,6 @@ export class UsersComponent implements OnInit, OnDestroy {
               this.paginate(res)
             }
           },
-          error: (res: HttpErrorResponse) => this.onError(res.message),
         })
     } else {
       this.userService
@@ -112,7 +113,6 @@ export class UsersComponent implements OnInit, OnDestroy {
               this.paginate(res)
             }
           },
-          error: (res: HttpErrorResponse) => this.onError(res.message),
         })
     }
   }
@@ -161,9 +161,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   sendActivate(msUser: IUser) {
     this.userService.sendActivate(msUser).subscribe((res) => {
       if (res) {
-        //this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.success.string', null, null)
+        this.alertService.broadcast('gatewayApp.msUserServiceMSUser.sendActivate.success.string')
       } else {
-        //this.jhiAlertService.success('gatewayApp.msUserServiceMSUser.sendActivate.error.string', null, null)
+        this.alertService.broadcast('gatewayApp.msUserServiceMSUser.sendActivate.error.string')
       }
     })
   }
@@ -229,10 +229,6 @@ export class UsersComponent implements OnInit, OnDestroy {
     const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1
     const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems
     this.itemCount = $localize`:@@global.item-count.string:Showing ${first} - ${second} of ${this.totalItems} items.`
-  }
-
-  protected onError(errorMessage: string) {
-    //this.jhiAlertService.error(errorMessage, null, null)
   }
 
   ngOnDestroy() {

@@ -24,6 +24,8 @@ import { UserModule } from './user/user.module'
   imports: [
     BrowserModule,
     UserModule,
+    AccountModule,
+    HomeModule,
     HttpClientModule,
     AppRoutingModule,
     NgxWebstorageModule.forRoot(),

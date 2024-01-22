@@ -1,0 +1,19 @@
+<div class="alerts" role="alert">
+  <div *ngFor="let alert of alerts">
+    <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" [dismissible]="false">
+      <div class="d-flex">
+        <p i18n="@@error.subtitle" class="font-size-16 font-weight-bold mr-auto mb-2">Sorry, an error has occurred</p>
+        <a (click)="close(alert)" (keyup)="closeOldestAlert()" tabindex="0">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16 1.61143L14.3886 0L8 6.38857L1.61143 0L0 1.61143L6.38857 8L0 14.3886L1.61143 16L8 9.61143L14.3886 16L16 14.3886L9.61143 8L16 1.61143Z"
+              fill="black"
+              fill-opacity="0.9"
+            />
+          </svg>
+        </a>
+      </div>
+      <div class="font-size-16">{{ message }}</div>
+    </ngb-alert>
+  </div>
+</div>
