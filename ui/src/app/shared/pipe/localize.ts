@@ -5,8 +5,6 @@ import { AlertType } from 'src/app/app.constants'
   name: 'localize',
 })
 export class LocalizePipe implements PipeTransform {
-  constructor() {}
-
   transform(value: string, ...args: any[]): any {
     switch (value) {
       case AlertType.SEND_ACTIVATION_SUCCESS:
