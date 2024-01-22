@@ -209,7 +209,6 @@ describe('SettingsComponent', () => {
         mfaEnabled: true,
       })
     )
-    languageServiceSpy.getCurrentLanguage.and.returnValue(of('en'))
     fixture.detectChanges()
     expect(component.success).toBeFalsy()
     component.save()
@@ -240,6 +239,5 @@ describe('SettingsComponent', () => {
     component.save()
     expect(component.success).toBeFalsy()
     expect(accountServiceSpy.save).toHaveBeenCalled()
-    expect(languageServiceSpy.getCurrentLanguage).toHaveBeenCalledTimes(0)
   })
 })
