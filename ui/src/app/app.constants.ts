@@ -3,7 +3,11 @@ export enum EventType {
   AFFILIATION_CREATED = 'AFFILIATION_CREATED',
   AFFILIATION_UPDATED = 'AFFILIATION_UPDATED',
   USER_LIST_MODIFIED = 'USER_LIST_MODIFIED',
-  // add as we go
+}
+
+export enum AlertType {
+  SEND_ACTIVATION_SUCCESS = 'Invite sent.',
+  SEND_ACTIVATION_FAILURE = 'Invite email couldn`t be sent.',
 }
 
 export const EMAIL_NOT_FOUND_TYPE = 'https://www.jhipster.tech/problem/email-not-found'

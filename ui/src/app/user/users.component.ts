@@ -5,7 +5,7 @@ import { UserService } from './service/user.service'
 import { HttpErrorResponse } from '@angular/common/http'
 import { IUserPage, UserPage } from './model/user-page.model'
 import { faCheckCircle, faSearch, faTimes, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { EventType, ITEMS_PER_PAGE } from '../app.constants'
+import { AlertType, EventType, ITEMS_PER_PAGE } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AccountService } from '../account/service/account.service'
 import { EventService } from '../shared/service/event.service'
@@ -161,9 +161,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   sendActivate(msUser: IUser) {
     this.userService.sendActivate(msUser).subscribe((res) => {
       if (res) {
-        this.alertService.broadcast('gatewayApp.msUserServiceMSUser.sendActivate.success.string')
+        this.alertService.broadcast(AlertType.SEND_ACTIVATION_SUCCESS)
       } else {
-        this.alertService.broadcast('gatewayApp.msUserServiceMSUser.sendActivate.error.string')
+        this.alertService.broadcast(AlertType.SEND_ACTIVATION_FAILURE)
       }
     })
   }
@@ -224,6 +224,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   protected paginate(data: IUserPage) {
+    this.alertService.broadcast(AlertType.SEND_ACTIVATION_SUCCESS)
+
     this.totalItems = data.totalItems
     this.users = data.users
     const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1

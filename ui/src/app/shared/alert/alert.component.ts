@@ -18,21 +18,11 @@ export class AlertComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('before alertservice on')
-
     this.sub = this.alertService.on().subscribe((alert: AppAlert) => {
-      console.log('test')
-
-      console.log(alert.msg)
-      const messageKey = '@@' + alert.msg
-      //this.message = $localize`${messageKey}`
-      const id = alert.msg
-      this.message = $localize(<any>{ '0': `:@@${id}:${id}`, raw: [':'] })
-
       this.alerts.push(alert)
       this.cdr.detectChanges()
+      setTimeout(() => this.close(alert), 5000)
     })
-    console.log('after alertservice on')
   }
 
   ngOnDestroy(): void {
