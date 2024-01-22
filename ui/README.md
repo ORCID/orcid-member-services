@@ -17,7 +17,8 @@ Run `ng generate component component-name` to generate a new component. You can 
 ## Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-The build will create an multiple localized applications, one for each locale {eg cs|de|en|es|fr|it....} see https://angular.io/guide/i18n-common-deploy for more info.
+The build will create multiple localized applications, one for each locale {eg cs|de|en|es|fr|it....} see https://angular.io/guide/i18n-common-deploy for more info.
+Nginx has been configured to employ a fall-back route to the index.html file for each locale.
 
 ## Running unit tests
 
