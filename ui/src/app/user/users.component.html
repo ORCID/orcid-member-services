@@ -55,20 +55,20 @@
   <div class="table-responsive" *ngIf="users && users.length && users.length > 0">
     <table class="table table-striped">
       <thead>
-        <!-- <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+        <tr>
             <th></th>
-            <th jhiSortBy="email"><span i18n="@@gatewayApp.msUserServiceMSUser.email.string">Email</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
-            <th jhiSortBy="firstName"><span i18n="@@gatewayApp.msUserServiceMSUser.firstName.string">First Name</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
-            <th jhiSortBy="lastName"><span i18n="@@gatewayApp.msUserServiceMSUser.lastName.string">Last Name</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
-            <th jhiSortBy="mainContact"><span i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string">Main Contact</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
-            <th jhiSortBy="salesforceId"><span i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string">Organization</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
-            <th jhiSortBy="activated"><span i18n="@@gatewayApp.msUserServiceMSUser.activated.string">Activated</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
-            <th jhiSortBy="lastModifiedDate"><span i18n="@@gatewayApp.msUserServiceMSUser.lastModifiedDate.string">Last Modified</span> <fa-icon [icon]="'sort'.string"></fa-icon></th>
+            <th (click)="updateSort('email')"><span i18n="@@gatewayApp.msUserServiceMSUser.email.string">Email</span> <fa-icon [icon]="faSort"></fa-icon></th>
+            <th (click)="updateSort('firstName')"><span i18n="@@gatewayApp.msUserServiceMSUser.firstName.string">First Name</span> <fa-icon [icon]="faSort"></fa-icon></th>
+            <th (click)="updateSort('lastName')"><span i18n="@@gatewayApp.msUserServiceMSUser.lastName.string">Last Name</span> <fa-icon [icon]="faSort"></fa-icon></th>
+            <th (click)="updateSort('mainContact')"><span i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string">Main Contact</span> <fa-icon [icon]="faSort"></fa-icon></th>
+            <th (click)="updateSort('salesforceId')"><span i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string">Organization</span> <fa-icon [icon]="faSort"></fa-icon></th>
+            <th (click)="updateSort('activated')"><span i18n="@@gatewayApp.msUserServiceMSUser.activated.string">Activated</span> <fa-icon [icon]="faSort"></fa-icon></th>
+            <th (click)="updateSort('lastModifiedDate')"><span i18n="@@gatewayApp.msUserServiceMSUser.lastModifiedDate.string">Last Modified</span> <fa-icon [icon]="faSort"></fa-icon></th>
             <th></th>
-            </tr> -->
+        </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users; trackBy: trackId">
+        <tr *ngFor="let user of users">
           <td>
             <button
               *appHasAnyAuthority="'ROLE_ADMIN'"
@@ -120,7 +120,7 @@
               [styles]="{ color: '#f22112' }"
             ></fa-icon>
           </td>
-          <!-- <td>{{user.lastModifiedDate | date:'medium'}}</td> -->
+          <td>{{user.lastModifiedDate?.toString() | date:'medium'}}</td>
           <td class="text-right">
             <div class="btn-group">
               <button
@@ -170,7 +170,7 @@
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"
-        (pageChange)="loadPage(page)"
+        (pageChange)="loadPage()"
       ></ngb-pagination>
     </div>
   </div>
