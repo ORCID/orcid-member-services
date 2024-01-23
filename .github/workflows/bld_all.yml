@@ -1,0 +1,125 @@
+name: bld_all
+
+permissions:
+  checks: write
+  contents: read
+  issues: read
+  pull-requests: write
+
+on:
+  workflow_call:
+    inputs:
+      version_tag:
+        description: 'Version tag to use: (bump must also be set to none to keep a specific version'
+        required: false
+        default: '0.0.1-dev'
+        type: string
+      bump:
+        description: 'whether to bump the version number by a major minor patch'
+        required: false
+        default: 'patch'
+        type: string
+      ref:
+        description: 'git reference to use with the checkout use default_branch to have that calculated'
+        required: false
+        default: "default"
+        type: string
+
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: 'Version:- numeric x.x.x that will be used to tag docker containers. So if you selected release-1.72.22 as your git reference, this would normally be 1.72.22'
+        required: false
+        default: '0.0.1'
+        type: string
+      ref:
+        description: 'git reference to use with the checkout. This should be the tag that you want to build'
+        required: true
+        default: "release-1.72.22"
+        type: string
+
+jobs:
+
+  bld_ui:
+    uses: ./.github/workflows/bld_docker.yml
+    secrets: inherit # pass all secrets
+    with:
+      docker_name: ui
+      context: ui
+      version_tag: ${{ inputs.version_tag }}
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
+
+  bld_memberservice:
+    uses: ./.github/workflows/bld_docker_jib.yml
+    secrets: inherit # pass all secrets
+    with:
+      context: member-service
+      version_tag: ${{ inputs.version_tag }}
+      docker_name: memberservice
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
+
+  bld_assertionservice:
+    uses: ./.github/workflows/bld_docker_jib.yml
+    secrets: inherit # pass all secrets
+    with:
+      context: assertion-service
+      version_tag: ${{ inputs.version_tag }}
+      docker_name: assertionservice
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
+
+  bld_discoveryservice:
+    uses: ./.github/workflows/bld_docker_jib.yml
+    secrets: inherit # pass all secrets
+    with:
+      context: discovery-service
+      version_tag: ${{ inputs.version_tag }}
+      docker_name: discoveryservice
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
+
+  bld_userservice:
+    uses: ./.github/workflows/bld_docker_jib.yml
+    secrets: inherit # pass all secrets
+    with:
+      context: user-service
+      version_tag: ${{ inputs.version_tag }}
+      docker_name: userservice
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
+
+  bld_gateway_qa:
+    uses: ./.github/workflows/bld_docker_jib.yml
+    secrets: inherit # pass all secrets
+    with:
+      context: gateway
+      version_tag: ${{ inputs.version_tag }}
+      docker_name: gateway
+      angular_env: qa
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
+
+  bld_gateway_sandbox:
+    uses: ./.github/workflows/bld_docker_jib.yml
+    secrets: inherit # pass all secrets
+    with:
+      context: gateway
+      version_tag: ${{ inputs.version_tag }}
+      docker_name: gateway
+      angular_env: sandbox
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
+
+  bld_gateway_prod:
+    uses: ./.github/workflows/bld_docker_jib.yml
+    secrets: inherit # pass all secrets
+    with:
+      context: gateway
+      version_tag: ${{ inputs.version_tag }}
+      docker_name: gateway
+      angular_env: prod
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
+
