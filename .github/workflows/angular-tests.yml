@@ -2,6 +2,9 @@ name: Angular Unit Tests
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      # Ignore workflow changes
+      - '.github/**'
   pull_request:
     branches: [ main ]
 
@@ -9,7 +12,7 @@ on:
   workflow_dispatch:
 jobs:
   build:
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
