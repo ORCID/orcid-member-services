@@ -30,7 +30,7 @@ on:
       version_tag:
         description: 'Version_tag :- tag that will be used to tag docker containers. This should normally match the tag that you used in the git ref. e.g if you used release-1.72.22 as your git reference, this would normally be release-1.72.22'
         required: false
-        default: '0.0.1'
+        default: 'release-0.0.1'
         type: string
       ref:
         description: 'git reference to use with the checkout. This should be the tag that you want to build'
