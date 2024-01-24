@@ -7,6 +7,7 @@ import { DATE_TIME_FORMAT } from '../../app.constants'
 
 import { IUser, User } from '../model/user.model'
 import { UserService } from './user.service'
+import { HttpHeaders } from '@angular/common/http'
 
 describe('Service Tests', () => {
   describe('Member service users service', () => {
@@ -106,40 +107,20 @@ describe('Service Tests', () => {
         expect(result).toEqual(expected)
       })
 
-      it('should return a list of MSUserService', async () => {
-        const returnedFromService = Object.assign(
-          {
-            login: 'BBBBBB',
-            email: 'BBBBBB',
-            password: 'BBBBBB',
-            firstName: 'BBBBBB',
-            lastName: 'BBBBBB',
-            mainContact: true,
-            salesforceId: 'BBBBBB',
-            parentSalesforceId: 'BBBBBB',
-            activated: false,
-            createdBy: 'BBBBBB',
-            createdDate: currentDate.format(DATE_TIME_FORMAT),
-            lastModifiedBy: 'BBBBBB',
-            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
-          },
-          elemDefault
-        )
-        const expected = Object.assign(
-          {
-            createdDate: currentDate,
-            lastModifiedDate: currentDate,
-          },
-          returnedFromService
-        )
+      it('should return a list of users', async () => {
         service
-          .query(expected)
+          .query({ sort: ['name,desc', 'id'] })
           .pipe(take(1))
           .subscribe((body) => (result = body))
+
         const req = httpMock.expectOne({ method: 'GET' })
-        req.flush([returnedFromService])
+        const responseHeaders = new HttpHeaders().append('X-Total-Count', '100')
+        req.flush([new User('123')], { headers: responseHeaders })
         httpMock.verify()
-        expect(result.users).toContain(expected)
+        expect(result).toBeTruthy()
+        expect(result.users).toBeTruthy()
+        expect(result.users.length).toEqual(1)
+        expect(result.totalItems).toEqual(100)
       })
     })
 
