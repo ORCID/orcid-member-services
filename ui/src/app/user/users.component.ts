@@ -35,7 +35,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   links: any
   totalItems: any
   itemsPerPage: any
-  page: any
+  page = 1
   sortColumn = 'id'
   ascending: any
   itemCount: string | null | undefined = null
@@ -64,9 +64,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE
     this.routeData = this.activatedRoute.data.subscribe((data) => {
-      this.page = data['queryParams'].page
-      this.ascending = data['queryParams'].sort.split(',')[1]
-      this.sortColumn = data['queryParams'].sort.split(',')[0]
+      this.page = data['queryParams'] ? data['queryParams'].page : 1
+      this.ascending = data['queryParams'] ? data['queryParams'].page.sort.split(',')[1] : false
+      this.sortColumn = data['queryParams'] ? data['queryParams'].page.sort.split(',')[0] : 'id'
     })
   }
 
