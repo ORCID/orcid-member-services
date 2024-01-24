@@ -59,25 +59,29 @@
           <th></th>
           <th (click)="updateSort('email')">
             <span i18n="@@gatewayApp.msUserServiceMSUser.email.string">Email</span>
-            <fa-icon class="ml-2" *ngIf="sortColumn == 'email'" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+            <fa-icon class="ml-2" *ngIf="sortColumn === 'email'" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
           </th>
           <th (click)="updateSort('firstName')">
             <span i18n="@@gatewayApp.msUserServiceMSUser.firstName.string">First Name</span>
             <fa-icon
               class="ml-2"
-              *ngIf="sortColumn == 'firstName'"
+              *ngIf="sortColumn === 'firstName'"
               [icon]="ascending ? faSortDown : faSortUp"
             ></fa-icon>
           </th>
           <th (click)="updateSort('lastName')">
             <span i18n="@@gatewayApp.msUserServiceMSUser.lastName.string">Last Name</span>
-            <fa-icon class="ml-2" *ngIf="sortColumn == 'lastName'" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+            <fa-icon
+              class="ml-2"
+              *ngIf="sortColumn === 'lastName'"
+              [icon]="ascending ? faSortDown : faSortUp"
+            ></fa-icon>
           </th>
           <th (click)="updateSort('mainContact')">
             <span i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string">Main Contact</span>
             <fa-icon
               class="ml-2"
-              *ngIf="sortColumn == 'mainContact'"
+              *ngIf="sortColumn === 'mainContact'"
               [icon]="ascending ? faSortDown : faSortUp"
             ></fa-icon>
           </th>
@@ -85,7 +89,7 @@
             <span i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string">Organization</span>
             <fa-icon
               class="ml-2"
-              *ngIf="sortColumn == 'salesforceId'"
+              *ngIf="sortColumn === 'salesforceId'"
               [icon]="ascending ? faSortDown : faSortUp"
             ></fa-icon>
           </th>
@@ -93,7 +97,7 @@
             <span i18n="@@gatewayApp.msUserServiceMSUser.activated.string">Activated</span>
             <fa-icon
               class="ml-2"
-              *ngIf="sortColumn == 'activated'"
+              *ngIf="sortColumn === 'activated'"
               [icon]="ascending ? faSortDown : faSortUp"
             ></fa-icon>
           </th>
@@ -101,7 +105,7 @@
             <span i18n="@@gatewayApp.msUserServiceMSUser.lastModifiedDate.string">Last Modified</span>
             <fa-icon
               class="ml-2"
-              *ngIf="sortColumn == 'lastModifiedDate'"
+              *ngIf="sortColumn === 'lastModifiedDate'"
               [icon]="ascending ? faSortDown : faSortUp"
             ></fa-icon>
           </th>
