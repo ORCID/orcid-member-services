@@ -56,15 +56,56 @@
     <table class="table table-striped">
       <thead>
         <tr>
-            <th></th>
-            <th (click)="updateSort('email')"><span i18n="@@gatewayApp.msUserServiceMSUser.email.string">Email</span> <fa-icon [icon]="faSort"></fa-icon></th>
-            <th (click)="updateSort('firstName')"><span i18n="@@gatewayApp.msUserServiceMSUser.firstName.string">First Name</span> <fa-icon [icon]="faSort"></fa-icon></th>
-            <th (click)="updateSort('lastName')"><span i18n="@@gatewayApp.msUserServiceMSUser.lastName.string">Last Name</span> <fa-icon [icon]="faSort"></fa-icon></th>
-            <th (click)="updateSort('mainContact')"><span i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string">Main Contact</span> <fa-icon [icon]="faSort"></fa-icon></th>
-            <th (click)="updateSort('salesforceId')"><span i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string">Organization</span> <fa-icon [icon]="faSort"></fa-icon></th>
-            <th (click)="updateSort('activated')"><span i18n="@@gatewayApp.msUserServiceMSUser.activated.string">Activated</span> <fa-icon [icon]="faSort"></fa-icon></th>
-            <th (click)="updateSort('lastModifiedDate')"><span i18n="@@gatewayApp.msUserServiceMSUser.lastModifiedDate.string">Last Modified</span> <fa-icon [icon]="faSort"></fa-icon></th>
-            <th></th>
+          <th></th>
+          <th (click)="updateSort('email')">
+            <span i18n="@@gatewayApp.msUserServiceMSUser.email.string">Email</span>
+            <fa-icon class="ml-2" *ngIf="sortColumn == 'email'" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+          </th>
+          <th (click)="updateSort('firstName')">
+            <span i18n="@@gatewayApp.msUserServiceMSUser.firstName.string">First Name</span>
+            <fa-icon
+              class="ml-2"
+              *ngIf="sortColumn == 'firstName'"
+              [icon]="ascending ? faSortDown : faSortUp"
+            ></fa-icon>
+          </th>
+          <th (click)="updateSort('lastName')">
+            <span i18n="@@gatewayApp.msUserServiceMSUser.lastName.string">Last Name</span>
+            <fa-icon class="ml-2" *ngIf="sortColumn == 'lastName'" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+          </th>
+          <th (click)="updateSort('mainContact')">
+            <span i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string">Main Contact</span>
+            <fa-icon
+              class="ml-2"
+              *ngIf="sortColumn == 'mainContact'"
+              [icon]="ascending ? faSortDown : faSortUp"
+            ></fa-icon>
+          </th>
+          <th (click)="updateSort('salesforceId')">
+            <span i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string">Organization</span>
+            <fa-icon
+              class="ml-2"
+              *ngIf="sortColumn == 'salesforceId'"
+              [icon]="ascending ? faSortDown : faSortUp"
+            ></fa-icon>
+          </th>
+          <th (click)="updateSort('activated')">
+            <span i18n="@@gatewayApp.msUserServiceMSUser.activated.string">Activated</span>
+            <fa-icon
+              class="ml-2"
+              *ngIf="sortColumn == 'activated'"
+              [icon]="ascending ? faSortDown : faSortUp"
+            ></fa-icon>
+          </th>
+          <th (click)="updateSort('lastModifiedDate')">
+            <span i18n="@@gatewayApp.msUserServiceMSUser.lastModifiedDate.string">Last Modified</span>
+            <fa-icon
+              class="ml-2"
+              *ngIf="sortColumn == 'lastModifiedDate'"
+              [icon]="ascending ? faSortDown : faSortUp"
+            ></fa-icon>
+          </th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -120,7 +161,7 @@
               [styles]="{ color: '#f22112' }"
             ></fa-icon>
           </td>
-          <td>{{user.lastModifiedDate?.toString() | date:'medium'}}</td>
+          <td>{{ user.lastModifiedDate?.toString() | date: 'medium' }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

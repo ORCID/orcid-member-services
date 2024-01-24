@@ -12,7 +12,8 @@ import {
   faSignInAlt,
   faTimes,
   faTimesCircle,
-  faSort,
+  faSortDown,
+  faSortUp,
 } from '@fortawesome/free-solid-svg-icons'
 import { AlertType, EventType, ITEMS_PER_PAGE } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -50,8 +51,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   faPlus = faPlus
   faPencilAlt = faPencilAlt
   faSignInAlt = faSignInAlt
-  faSort = faSort
-
+  faSortDown = faSortDown
+  faSortUp = faSortUp
   DEFAULT_ADMIN = 'admin@orcid.org'
 
   constructor(
@@ -77,10 +78,8 @@ export class UsersComponent implements OnInit, OnDestroy {
       }
     })
     this.loadAll()
-    console.log('before subscription')
 
     this.eventSubscriber = this.eventService.on(EventType.USER_LIST_MODIFIED).subscribe(() => {
-      console.log('after subscription')
       this.searchTerm = ''
       this.submittedSearchTerm = ''
       this.loadAll()
@@ -235,8 +234,6 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   protected paginate(data: IUserPage) {
-    this.alertService.broadcast(AlertType.SEND_ACTIVATION_SUCCESS)
-
     this.totalItems = data.totalItems
     this.users = data.users
     const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1
