@@ -36,7 +36,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   totalItems: any
   itemsPerPage: any
   page: any
-  sortColumn: string = 'id'
+  sortColumn = 'id'
   ascending: any
   itemCount: string | null | undefined = null
   searchTerm: string | null = null
