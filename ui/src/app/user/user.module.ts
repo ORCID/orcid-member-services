@@ -8,10 +8,11 @@ import { BrowserModule } from '@angular/platform-browser'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { FormsModule } from '@angular/forms'
-import { HasAnyAuthorityDirective } from '../shared/directive/has-any-authority.directive'
+import { HasAnyAuthorityDirective } from '../shared/directive/has-any-authority.directive';
+import { UserDetailComponent } from './user-detail.component'
 
 @NgModule({
-  declarations: [UsersComponent],
+  declarations: [UsersComponent, UserDetailComponent],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes), FontAwesomeModule, FormsModule],
 })
 export class UserModule {}
