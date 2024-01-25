@@ -1,0 +1,82 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="user">
+            <h1 class="mt-5" i18n="@@gatewayApp.msUserServiceMSUser.detail.title.string">User Settings</h1>
+            <hr>
+            <app-error-alert></app-error-alert>
+            <div class="row">
+                <dl class="jh-entity-details">
+                    <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.email.string">Email</dt>
+                    <dd class="col-md-10">
+                        {{user.email}}
+                    </dd>
+                    <dt  class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.firstName.string">First Name</dt>
+                    <dd class="col-md-10">
+                        {{user.firstName}}
+                    </dd>
+                    <dt  class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.lastName.string">Last Name</dt>
+                    <dd class="col-md-10">
+                        {{user.lastName}}
+                    </dd>
+                    <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string">Main Contact</dt>
+                    <dd class="col-md-10">
+                        <span class="sr-only" *ngIf="user.mainContact" i18n="@@global.true.string">True</span>
+                        <span class="sr-only" *ngIf="!user.mainContact" i18n="@@global.false.string">False</span>
+                        <fa-icon aria-hidden="true" *ngIf="user.mainContact" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                        <fa-icon aria-hidden="true" *ngIf="!user.mainContact" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                    </dd>
+                    <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string">Salesforce Id</dt>
+                    <dd class="col-md-10">
+                        {{user.memberName}}
+                    </dd>
+                    <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.activated.string">Activated</dt>
+                    <dd class="col-md-10">
+                        <span class="sr-only" *ngIf="user.activated" i18n="@@global.true.string">True</span>
+                        <span class="sr-only" *ngIf="!user.activated" i18n="@@global.false.string">False</span>
+                        <fa-icon aria-hidden="true" *ngIf="user.activated" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                        <fa-icon aria-hidden="true" *ngIf="!user.activated" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                    </dd>
+                    <ng-container *ngIf="superAdmin"> 
+                        <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.isAdmin.string">Admin</dt>
+                        <dd class="col-md-10">
+                            <span class="sr-only" *ngIf="user.isAdmin" i18n="@@global.true.string">True</span>
+                            <span class="sr-only" *ngIf="!user.isAdmin" i18n="@@global.false.string">False</span>
+                            <fa-icon aria-hidden="true" *ngIf="user.isAdmin" [icon]="faCheckCircle" [styles]="{'color': '#28a745'}"></fa-icon>
+                            <fa-icon aria-hidden="true" *ngIf="!user.isAdmin" [icon]="faTimesCircle" [styles]="{'color': '#f22112'}"></fa-icon>
+                        </dd>
+                    </ng-container>
+                    <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.createdDate.string">Created Date</dt>
+                    <dd class="col-md-10">
+                        {{user.createdDate!.toString() | date:'medium'}} <i><span i18n="@@global.by.string">by</span> {{user.createdBy}}</i>
+                    </dd>
+                    <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.lastModifiedDate.string">Last Modified Date</dt>
+                    <dd class="col-md-10">
+                        <span>{{user.lastModifiedDate!.toString() | date:'medium'}} <i><span i18n="@@global.by.string">by</span> {{user.lastModifiedBy}}</i></span>
+                    </dd>
+                </dl>
+            </div>
+            <hr>
+            <div class="form-group">
+                <button type="submit"
+                        (click)="previousState()"
+                        class="btn btn-outline-primary">
+                    <fa-icon [icon]="faArrowLeft"></fa-icon>&nbsp;<span i18n="@@entity.action.back.string"> Back</span>
+                </button>
+                <button type="button"
+                        [routerLink]="['/user', user.id, 'edit']"
+                        class="btn btn-primary"
+                        [disabled]="isDefaultAdmin(user)"
+                        >
+                    <fa-icon [icon]="faPencilAlt"></fa-icon>&nbsp;<span i18n="@@entity.action.edit.string"> Edit</span>
+                </button>
+                <button *ngIf="!user.activated" type="button"
+                                (click)="sendActivate()"
+                                class="btn btn-primary btn-sm ml-1"
+                        >
+                            <fa-icon [icon]="faCheckCircle"></fa-icon>
+                            <span class="d-none d-md-inline" i18n="@@entity.action.activate.string">Activate</span>
+                </button> 
+            </div>
+        </div>
+    </div>
+</div>
