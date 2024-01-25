@@ -117,7 +117,6 @@ export class UserService {
         }
       })
       const totalCount: string | null = res.headers.get('X-Total-Count')
-
       if (totalCount) {
         const userPage = new UserPage(res.body, parseInt(totalCount, 10))
         return userPage

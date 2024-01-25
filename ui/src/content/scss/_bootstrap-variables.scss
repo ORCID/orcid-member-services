@@ -55,3 +55,92 @@ $h5-font-size: $font-size-base * 1.17;
 $h6-font-size: $font-size-base * 1.12;
 
 $link-hover-color: $primary;
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.alert-warning {
+  color: #7f231c;
+  background-color: #fdd9d7;
+  border-color: #fccac7;
+}
+
+.alert-success {
+  color: #184253;
+  background-color: #d5e5ec;
+  border-color: #c4dbe4;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #2e7f9f;
+  border-color: #2e7f9f;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #256781;
+  border-color: #235f77;
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+  color: #fff;
+  background-color: #2e7f9f;
+  border-color: #2e7f9f;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  color: #fff;
+  text-decoration: none;
+  background-color: #2e7f9f;
+}
+
+.page-item.active .page-link {
+  z-index: 1;
+  color: #fff;
+  background-color: #2e7f9f;
+  border-color: #2e7f9f;
+}
+
+.page-link {
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.75rem;
+  margin-left: -1px;
+  line-height: 1.25;
+  color: #2e7f9f;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+}
+
+.page-link:hover {
+  z-index: 2;
+  color: #2e7f9f;
+  text-decoration: none;
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+a,
+a:hover {
+  color: #2e7f9f;
+}
+a {
+  cursor: pointer;
+}
+a,
+h2,
+h3,
+h4 {
+  font-weight: 700;
+}
+a {
+  text-decoration: none;
+  background-color: transparent;
+}

@@ -4,7 +4,17 @@ import { Subscription, filter } from 'rxjs'
 import { UserService } from './service/user.service'
 import { HttpErrorResponse } from '@angular/common/http'
 import { IUserPage, UserPage } from './model/user-page.model'
-import { faCheckCircle, faSearch, faTimes, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCheckCircle,
+  faPencilAlt,
+  faPlus,
+  faSearch,
+  faSignInAlt,
+  faTimes,
+  faTimesCircle,
+  faSortDown,
+  faSortUp,
+} from '@fortawesome/free-solid-svg-icons'
 import { AlertType, EventType, ITEMS_PER_PAGE } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AccountService } from '../account/service/account.service'
@@ -26,9 +36,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   links: any
   totalItems: any
   itemsPerPage: any
-  page: any
-  predicate: any
-  reverse: any
+  page = 1
+  sortColumn = 'id'
+  ascending: any
   itemCount: string | null | undefined = null
   searchTerm: string | null = null
   submittedSearchTerm: string | null = null
@@ -38,7 +48,11 @@ export class UsersComponent implements OnInit, OnDestroy {
   faCheckCircle = faCheckCircle
   faTimes = faTimes
   faSearch = faSearch
-
+  faPlus = faPlus
+  faPencilAlt = faPencilAlt
+  faSignInAlt = faSignInAlt
+  faSortDown = faSortDown
+  faSortUp = faSortUp
   DEFAULT_ADMIN = 'admin@orcid.org'
 
   constructor(
@@ -47,18 +61,13 @@ export class UsersComponent implements OnInit, OnDestroy {
     protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected eventService: EventService //protected translate: TranslateService
+    protected eventService: EventService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE
     this.routeData = this.activatedRoute.data.subscribe((data) => {
-      console.log(data)
-
-      /* this.page = data['pagingParams'].page
-      this.reverse = data['pagingParams'].ascending
-      this.predicate = data['pagingParams'].predicate */
-      this.page = 1
-      this.reverse = true
-      this.predicate = 'id'
+      this.page = data['queryParams'] ? data['queryParams'].page : 1
+      this.ascending = data['queryParams'] ? data['queryParams'].page.sort.split(',')[1] : false
+      this.sortColumn = data['queryParams'] ? data['queryParams'].page.sort.split(',')[0] : 'id'
     })
   }
 
@@ -117,16 +126,21 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadPage(page: number) {
-    this.transition()
+  updateSort(columnName: string) {
+    if (this.sortColumn && this.sortColumn == columnName) {
+      this.ascending = !this.ascending
+    } else {
+      this.sortColumn = columnName
+    }
+    this.loadPage()
   }
 
-  transition() {
+  loadPage() {
     this.router.navigate(['/users'], {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        sort: this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc'),
         filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
       },
     })
@@ -139,20 +153,16 @@ export class UsersComponent implements OnInit, OnDestroy {
       '/users',
       {
         page: this.page,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        sort: this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc'),
         filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
       },
     ])
     this.loadAll()
   }
 
-  trackId(index: number, item: IUser) {
-    return item.id
-  }
-
   sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')]
-    if (this.predicate !== 'id') {
+    const result = [this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc')]
+    if (this.sortColumn !== 'id') {
       result.push('id')
     }
     return result
@@ -224,8 +234,6 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   protected paginate(data: IUserPage) {
-    this.alertService.broadcast(AlertType.SEND_ACTIVATION_SUCCESS)
-
     this.totalItems = data.totalItems
     this.users = data.users
     const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1
