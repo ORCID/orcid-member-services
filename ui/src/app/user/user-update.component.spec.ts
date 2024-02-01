@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserUpdateComponent } from './user-update.component';
+import { AppModule } from '../app.module';
 
 describe('UserUpdateComponent', () => {
   let component: UserUpdateComponent;
@@ -8,6 +9,7 @@ describe('UserUpdateComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [AppModule],
       declarations: [UserUpdateComponent]
     });
     fixture = TestBed.createComponent(UserUpdateComponent);
