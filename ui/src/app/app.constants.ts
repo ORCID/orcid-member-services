@@ -1,3 +1,5 @@
+import { FormControl } from "@angular/forms";
+
 export enum EventType {
   LOG_IN_SUCCESS = 'LOG_IN_SUCCESS',
   AFFILIATION_CREATED = 'AFFILIATION_CREATED',
@@ -16,3 +18,11 @@ export const DATE_FORMAT = 'YYYY-MM-DD'
 export const DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm'
 
 export const ITEMS_PER_PAGE = 20
+
+export function emailValidator(control: FormControl): { [key: string]: any } | null {
+  const emailRegexp = /^([^@\s\."'\(\)\[\]\{\}\\/,:;]+\.)*([^@\s\."\(\)\[\]\{\}\\/,:;]|(".+"))+@[^@\s\."'\(\)\[\]\{\}\\/,:;]+(\.[^@\s\."'\(\)\[\]\{\}\\/,:;]{2,})+$/;
+  if (control.value && !emailRegexp.test(control.value)) {
+    return { invalidEmail: true };
+  }
+  return null
+}

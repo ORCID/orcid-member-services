@@ -5,7 +5,7 @@
       <button
         id="jh-create-entity"
         class="btn btn-primary float-right jh-create-entity ml-1"
-        [routerLink]="['/user/new']"
+        [routerLink]="['/users/new']"
       >
         <fa-icon [icon]="faPlus"></fa-icon>
         <span i18n="@@gatewayApp.msUserServiceMSUser.home.createLabel.string"> Add user </span>
@@ -14,7 +14,7 @@
         *appHasAnyAuthority="'ROLE_ADMIN'"
         id="jh-upload-entities"
         class="btn btn-primary float-right jh-create-entity create-ms-user ml-1"
-        [routerLink]="['/', 'user', { outlets: { popup: 'import' } }]"
+        [routerLink]="['users', { outlets: { popup: 'import' } }]"
       >
         <fa-icon [icon]="faPlus"></fa-icon>
         <span i18n="@@gatewayApp.msUserServiceMSUser.home.uploadLabel.string"> Import users from CSV </span>
@@ -179,7 +179,7 @@
               </button>
               <button
                 type="submit"
-                [routerLink]="['/user', user.id, 'edit']"
+                [routerLink]="['/users', user.id, 'edit']"
                 class="btn btn-primary btn-sm ml-1"
                 [disabled]="isDefaultAdmin(user)"
               >
@@ -188,7 +188,7 @@
               </button>
               <button
                 type="submit"
-                [routerLink]="['/', 'user', { outlets: { popup: user.id + '/delete' } }]"
+                [routerLink]="['/', 'users', { outlets: { popup: user.id + '/delete' } }]"
                 replaceUrl="true"
                 queryParamsHandling="merge"
                 class="btn btn-danger btn-sm ml-1"

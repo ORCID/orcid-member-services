@@ -11,9 +11,9 @@ export interface IMember {
   superadminEnabled?: boolean
   assertionServiceEnabled?: boolean
   createdBy?: string
-  createdDate?: Moment
+  createdDate?: Moment | undefined | null
   lastModifiedBy?: string
-  lastModifiedDate?: Moment
+  lastModifiedDate?: Moment | undefined | null
   type?: string
   status?: string
   defaultLanguage?: string
@@ -31,9 +31,9 @@ export class Member implements IMember {
     public superadminEnabled?: boolean,
     public assertionServiceEnabled?: boolean,
     public createdBy?: string,
-    public createdDate?: Moment,
+    public createdDate?: Moment | undefined | null,
     public lastModifiedBy?: string,
-    public lastModifiedDate?: Moment,
+    public lastModifiedDate?: Moment | undefined | null,
     public type?: string,
     public status?: string,
     public defaultLaungage?: string

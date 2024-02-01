@@ -5,6 +5,7 @@ import { IMember } from '../model/member.model'
 import * as moment from 'moment'
 
 type EntityResponseType = HttpResponse<IMember>
+type EntityArrayResponseType = HttpResponse<IMember[]>;
 
 @Injectable({ providedIn: 'root' })
 export class MemberService {
@@ -26,6 +27,12 @@ export class MemberService {
       )
   }
 
+  getAllMembers(): Observable<EntityArrayResponseType> {
+    return this.http
+      .get<IMember[]>(`${this.resourceUrl}/members/list/all`, { observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
   getManagedMember(): Observable<string | null> {
     return this.managedMember.asObservable()
   }
@@ -40,5 +47,15 @@ export class MemberService {
       res.body.lastModifiedDate = res.body.lastModifiedDate != null ? moment(res.body.lastModifiedDate) : undefined
     }
     return res.body
+  }
+
+  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+    if (res.body) {
+      res.body.forEach((member: IMember) => {
+        member.createdDate = member.createdDate != null ? moment(member.createdDate) : null;
+        member.lastModifiedDate = member.lastModifiedDate != null ? moment(member.lastModifiedDate) : null;
+      });
+    }
+    return res;
   }
 }
