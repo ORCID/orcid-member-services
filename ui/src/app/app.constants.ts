@@ -20,7 +20,8 @@ export const DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm'
 export const ITEMS_PER_PAGE = 20
 
 export function emailValidator(control: FormControl): { [key: string]: any } | null {
-  const emailRegexp = /^([^@\s\."'\(\)\[\]\{\}\\/,:;]+\.)*([^@\s\."\(\)\[\]\{\}\\/,:;]|(".+"))+@[^@\s\."'\(\)\[\]\{\}\\/,:;]+(\.[^@\s\."'\(\)\[\]\{\}\\/,:;]{2,})+$/;
+  // eslint-disable-next-line
+  const emailRegexp = /^([^@\s/."'\(\)\[\]\{\}\\/,:;]+\.)*([^@\s\."\(\)\[\]\{\}\\/,:;]|(".+"))+@[^@\s\."'\(\)\[\]\{\}\\/,:;]+(\.[^@\s\."'\(\)\[\]\{\}\\/,:;]{2,})+$/;
   if (control.value && !emailRegexp.test(control.value)) {
     return { invalidEmail: true };
   }
