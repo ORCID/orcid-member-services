@@ -219,6 +219,7 @@ export class UserUpdateComponent {
       this.userService.validate(msUser).subscribe(response => {
         const data = response;
         if (data.valid) {
+          
           if (msUser.id !== undefined) {
             if (this.currentAccount.id === msUser.id) {
               if (this.currentAccount.mainContact !== msUser.mainContact) {
@@ -269,9 +270,10 @@ export class UserUpdateComponent {
   }
 
   private createFromForm(): IUser {
+   
     return {
       ...new User(),
-      id: this.editForm.get(['id'])?.value,
+      id: this.editForm.get(['id'])?.value !== '' ? this.editForm.get(['id'])?.value : undefined,
       email: this.editForm.get(['email'])?.value,
       firstName: this.editForm.get(['firstName'])?.value,
       lastName: this.editForm.get(['lastName'])?.value,
