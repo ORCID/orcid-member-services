@@ -126,6 +126,4 @@ describe('UserUpdateComponent', () => {
     expect(component.displaySendActivate()).toBe(true);
   });
 
-  // Add more test cases as needed
-
 });
