@@ -45,6 +45,8 @@ describe('UserUpdateComponent', () => {
       providers: [
         FormBuilder,
         { provide: ActivatedRoute, useValue: { data: of({ user: {salesforceId: 'test'} as IUser }) } },
+        // rewrite in the same way as other services
+        // eslint-disable-next-line
         { provide: Router, useValue: { navigate: () => {} } },
         { provide: UserService, useValue: userServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
