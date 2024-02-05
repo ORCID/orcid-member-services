@@ -8,7 +8,6 @@ import { UserService } from './service/user.service'
 import { MemberService } from '../member/service/member.service'
 import { User } from './model/user.model'
 import { of } from 'rxjs'
-import { Member } from '../member/model/member.model'
 
 describe('UserDetailComponent', () => {
   let component: UserDetailComponent

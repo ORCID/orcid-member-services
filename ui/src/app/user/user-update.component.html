@@ -1,0 +1,149 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate [formGroup]="editForm">
+      <h1 id="jhi-ms-user-heading" class="mt-5" i18n="@@gatewayApp.msUserServiceMSUser.home.createOrEditLabel.string">
+        Create or edit a User Settings
+      </h1>
+      <div>
+        <app-alert></app-alert>
+        <div class="alerts top right" role="alert" *ngIf="validation.errors && validation.errors.length > 0">
+          <ngb-alert
+            class="alert alert-danger alert-dismissible"
+            role="alert"
+            ng-reflect-type="danger"
+            (close)="validation.errors = null"
+          >
+            <ul class="validation-errors">
+              <li *ngFor="let error of validation.errors">
+                {{ error }}
+              </li>
+            </ul>
+          </ngb-alert>
+        </div>
+        <div class="form-group">
+          <label class="form-control-label" i18n="@@gatewayApp.msUserServiceMSUser.email.string" for="field_email"
+            >Login</label
+          >
+          <input type="text" class="form-control" name="email" id="field_email" formControlName="email" />
+        </div>
+        <div class="form-group">
+          <label
+            class="form-control-label"
+            i18n="@@gatewayApp.msUserServiceMSUser.firstName.string"
+            for="field_firstName.string"
+            >First Name</label
+          >
+          <input type="text" class="form-control" name="firstName" id="field_firstName" formControlName="firstName" />
+        </div>
+        <div class="form-group">
+          <label
+            class="form-control-label"
+            i18n="@@gatewayApp.msUserServiceMSUser.lastName.string"
+            for="field_lastName.string"
+            >Last Name</label
+          >
+          <input type="text" class="form-control" name="lastName" id="field_lastName" formControlName="lastName" />
+        </div>
+        <div class="form-group">
+          <input
+            type="checkbox"
+            class="form-control"
+            name="mainContact"
+            id="field_mainContact"
+            formControlName="mainContact"
+            (change)="validateOrgOwners()"
+          />
+          <label
+            class="form-control-label"
+            i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string"
+            for="field_mainContact"
+            >Main Contact</label
+          >
+        </div>
+        <div class="form-group">
+          <label
+            class="form-control-label"
+            i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string"
+            for="field_salesforceId.string"
+            >Salesforce Id</label
+          >
+          <fieldset [disabled]="disableSalesForceIdDD()">
+            <select
+              *ngIf="memberList.length > 0"
+              class="custom-select"
+              name="salesforceId"
+              id="field_salesforceId"
+              formControlName="salesforceId"
+              (change)="validateOrgOwners()"
+            >
+              <option *ngFor="let member of memberList" [ngValue]="member.salesforceId">{{ member.clientName }}</option>
+            </select>
+          </fieldset>
+          <fieldset [disabled]="true">
+            <div class="form-group">
+              <input
+                type="checkbox"
+                class="form-control"
+                name="activated"
+                id="field_activated"
+                formControlName="activated"
+              />
+              <label
+                class="form-control-label"
+                i18n="@@gatewayApp.msUserServiceMSUser.activated.string"
+                for="field_activated.string"
+                >Activated</label
+              >
+            </div>
+          </fieldset>
+          <div class="form-group" *ngIf="showIsAdminCheckbox">
+            <input type="checkbox" class="form-control" name="isAdmin" id="field_isAdmin" formControlName="isAdmin" />
+            <label
+              class="form-control-label"
+              i18n="@@gatewayApp.msUserServiceMSUser.isAdmin.string"
+              for="field_isAdmin.string"
+              >Admin</label
+            >
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button type="button" id="cancel-save" class="btn btn-outline-primary" (click)="navigateToUsersList()">
+          <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
+        </button>
+
+        <button
+          *ngIf="hasOwner"
+          jhi-ownershipChange
+          (then)="save()"
+          (else)="(false)"
+          type="submit"
+          id="save-entity"
+          [disabled]="editForm.invalid || isSaving || memberList.length === 0"
+          class="btn btn-primary"
+        >
+          <fa-icon [icon]="faSave"></fa-icon>&nbsp;<span i18n="@@entity.action.save.string">Save</span>
+        </button>
+        <button
+          *ngIf="!hasOwner"
+          (click)="save()"
+          type="submit"
+          id="save-entity2"
+          [disabled]="editForm.invalid || isSaving || memberList.length === 0"
+          class="btn btn-primary"
+        >
+          <fa-icon [icon]="faSave"></fa-icon>&nbsp;<span i18n="@@entity.action.save.string">Save</span>
+        </button>
+        <button
+          *ngIf="displaySendActivate()"
+          type="button"
+          (click)="sendActivate()"
+          class="btn btn-primary btn-sm ml-1"
+        >
+          <fa-icon [icon]="faCheckCircle"></fa-icon>
+          <span class="d-none d-md-inline" i18n="@@entity.action.activate.string">Activate</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

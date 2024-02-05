@@ -31,7 +31,6 @@ export class PasswordComponent implements OnInit {
       this.account = account
       this.username = this.accountService.getUsername()
       this.passwordForUsernameString = $localize`:@@password.title.string:Password for ${this.username} (You)`
-      console.log('username:', this.username)
     })
   }
 
