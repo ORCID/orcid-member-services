@@ -11,6 +11,11 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+    data: {
+      authorities: [],
+      pageTitle: 'global.menu.account.login.string',
+    },
+    canActivate: [AuthGuard],
   },
   {
     path: 'reset/request',

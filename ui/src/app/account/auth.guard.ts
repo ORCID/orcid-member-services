@@ -20,7 +20,11 @@ export const AuthGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnaps
         if (hasAnyAuthority) {
           return true
         } else {
-          router.navigate(['accessdenied'])
+          if (state.url === '/login') {
+            router.navigate(['/'])
+          } else {
+            router.navigate(['accessdenied'])
+          }
           return false
         }
       } else {
