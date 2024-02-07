@@ -9,6 +9,8 @@ import { By } from '@angular/platform-browser'
 import { HasAnyAuthorityDirective } from 'src/app/shared/directive/has-any-authority.directive'
 import { HttpResponse } from '@angular/common/http'
 import { Member } from 'src/app/member/model/member.model'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent
@@ -38,6 +40,7 @@ describe('NavbarComponent', () => {
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
       ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents()
 
     fixture = TestBed.createComponent(NavbarComponent)

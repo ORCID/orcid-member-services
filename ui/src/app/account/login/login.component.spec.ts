@@ -40,7 +40,7 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should call loginService.login and handle successful login', fakeAsync(() => {
+  it('should call loginService.login and handle successful login', () => {
     const mockLoginResult = { mfaRequired: false }
     loginService.login.and.returnValue(of(mockLoginResult))
     accountService.getAccountData.and.returnValue(
@@ -68,11 +68,9 @@ describe('LoginComponent', () => {
 
     component.login()
 
-    tick() // Wait for Observable to emit
-
     expect(component.showMfa).toBe(false)
     expect(component.authenticationError).toBe(false)
-  }))
+  })
 
   it('should handle MFA required', fakeAsync(() => {
     const mockLoginResult = { mfaRequired: true }

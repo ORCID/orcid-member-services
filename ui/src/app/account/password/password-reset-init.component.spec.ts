@@ -7,6 +7,7 @@ import { EMAIL_NOT_FOUND_TYPE } from 'src/app/app.constants'
 import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { By } from '@angular/platform-browser'
 import { PasswordResetInitResult } from '../model/password-reset-init-result.model'
+import { ReactiveFormsModule } from '@angular/forms'
 
 describe('Component Tests', () => {
   describe('PasswordResetInitComponent', () => {
@@ -14,7 +15,7 @@ describe('Component Tests', () => {
     let comp: PasswordResetInitComponent
     beforeEach(() => {
       fixture = TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, ReactiveFormsModule],
         declarations: [PasswordResetInitComponent],
       }).createComponent(PasswordResetInitComponent)
       comp = fixture.componentInstance
