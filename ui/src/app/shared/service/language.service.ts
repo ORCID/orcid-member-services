@@ -36,7 +36,6 @@ export class LanguageService {
       // something has to be done
       if (currentLang == null) {
         // add langCode to url
-        console.log('adding locale to url')
         this.windowLocationService.updateWindowLocation(
           this.windowLocationService.getWindowLocationOrigin() +
             '/' +
@@ -45,7 +44,6 @@ export class LanguageService {
         )
       } else {
         // remove current lang code and replace with users lang
-        console.log('changing locale in url')
         this.windowLocationService.updateWindowLocation(
           this.windowLocationService.getWindowLocationOrigin() +
             this.windowLocationService.getWindowLocationPathname().replace(currentLang, langCode)

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core'
 import { IUser } from './model/user.model'
 import { Subscription, filter } from 'rxjs'
 import { UserService } from './service/user.service'
@@ -61,7 +61,8 @@ export class UsersComponent implements OnInit, OnDestroy {
     protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected eventService: EventService
+    protected eventService: EventService,
+    private ngZone: NgZone
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE
     this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -136,28 +137,32 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   loadPage() {
-    this.router.navigate(['/users'], {
-      queryParams: {
-        page: this.page,
-        size: this.itemsPerPage,
-        sort: this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc'),
-        filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
-      },
+    this.ngZone.run(() => {
+      this.router.navigate(['/users'], {
+        queryParams: {
+          page: this.page,
+          size: this.itemsPerPage,
+          sort: this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc'),
+          filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
+        },
+      })
+      this.loadAll()
     })
-    this.loadAll()
   }
 
   clear() {
     this.page = 0
-    this.router.navigate([
-      '/users',
-      {
-        page: this.page,
-        sort: this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc'),
-        filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
-      },
-    ])
-    this.loadAll()
+    this.ngZone.run(() => {
+      this.router.navigate([
+        '/users',
+        {
+          page: this.page,
+          sort: this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc'),
+          filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
+        },
+      ])
+      this.loadAll()
+    })
   }
 
   sort() {

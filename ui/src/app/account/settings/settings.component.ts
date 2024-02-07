@@ -107,7 +107,6 @@ export class SettingsComponent implements OnInit {
     const enabled = this.mfaForm.get('mfaEnabled')!.value
     if (enabled) {
       const otp = this.mfaForm.get('verificationCode')!.value
-      console.log('about to set otp on ' + this.mfaSetup)
       this.mfaSetup.otp = otp
       this.accountService.enableMfa(this.mfaSetup).subscribe((codes: string[] | null) => {
         if (codes) {

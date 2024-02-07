@@ -18,6 +18,7 @@ import { LocalizePipe } from '../shared/pipe/localize'
 import { EventType } from 'src/app/app.constants'
 import { Event } from '../shared/model/event.model'
 import { RouterModule } from '@angular/router'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 describe('UsersComponent', () => {
   let component: UsersComponent
   let fixture: ComponentFixture<UsersComponent>
@@ -54,6 +55,7 @@ describe('UsersComponent', () => {
         { provide: EventService, useValue: eventServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
       ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents()
 
     fixture = TestBed.createComponent(UsersComponent)

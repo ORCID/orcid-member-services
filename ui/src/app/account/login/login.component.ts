@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, Renderer2 } from '@angular/core'
+import { AfterViewInit, Component, NgZone, OnDestroy, Renderer2 } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AccountService } from '../service/account.service'
@@ -34,7 +34,8 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     private router: Router,
     private accountService: AccountService,
     private fb: FormBuilder,
-    private eventService: EventService
+    private eventService: EventService,
+    private ngZone: NgZone
   ) {
     this.sub = this.eventService.on(EventType.LOG_IN_SUCCESS).subscribe((e) => {
       console.log(e.payload)
@@ -104,7 +105,9 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   }
 
   loginSuccess(): void {
-    this.router.navigate([''])
+    this.ngZone.run(() => {
+      this.router.navigate([''])
+    })
 
     this.eventService.broadcast(new Event(EventType.LOG_IN_SUCCESS, 'logged in'))
 

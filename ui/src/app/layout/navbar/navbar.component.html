@@ -31,12 +31,7 @@
   >
     <fa-icon [icon]="faBars"></fa-icon>
   </a>
-  <div
-    class="navbar-collapse collapse"
-    id="navbarResponsive"
-    [ngbCollapse]="isNavbarCollapsed"
-    [ngSwitch]="isAuthenticated()"
-  >
+  <div class="navbar-collapse collapse" id="navbarResponsive" [ngSwitch]="isAuthenticated()">
     <ul class="navbar-nav ml-auto">
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       <li
