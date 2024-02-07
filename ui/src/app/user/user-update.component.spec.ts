@@ -70,6 +70,7 @@ describe('UserUpdateComponent', () => {
 
     accountService.getAccountData.and.returnValue(
       of({
+        id: 'test',
         activated: true,
         authorities: ['ROLE_USER'],
         email: 'email@email.com',
@@ -84,6 +85,7 @@ describe('UserUpdateComponent', () => {
         mfaEnabled: false,
       })
     )
+    memberService.find.and.returnValue(of(new Member()))
     userService.validate.and.returnValue(of(new UserValidation(true, null)))
     userService.update.and.returnValue(of({}))
     spyOn(router, 'navigate').and.returnValue(Promise.resolve(true))
@@ -101,7 +103,6 @@ describe('UserUpdateComponent', () => {
   it('should disable salesforceId dropdown on init for non-admin users', () => {
     activatedRoute.data = of({ user: { salesforceId: 'test', id: 'id' } as IUser })
     accountService.hasAnyAuthority.and.returnValue(false)
-    memberService.find.and.returnValue(of(new Member()))
     fixture.detectChanges()
 
     expect(component.disableSalesForceIdDD()).toBe(true)
@@ -114,15 +115,21 @@ describe('UserUpdateComponent', () => {
     expect(component.disableSalesForceIdDD()).toBe(false)
   })
 
-  it('should validate org owners', () => {
+  it('should validate non-owners', () => {
     userService.hasOwner.and.returnValue(of(true))
     fixture.detectChanges()
+
     component.editForm.patchValue({ salesforceId: '123', mainContact: false })
     component.validateOrgOwners()
     expect(component.hasOwner).toBe(false)
     expect(component.editForm.get('salesforceId')?.disabled).toBe(false)
+  })
 
-    component.editForm.patchValue({ mainContact: true })
+  it('should validate org owners', () => {
+    userService.hasOwner.and.returnValue(of(true))
+    fixture.detectChanges()
+
+    component.editForm.patchValue({ salesforceId: '123', mainContact: true })
     component.validateOrgOwners()
     expect(component.hasOwner).toBe(true)
     expect(component.editForm.get('salesforceId')?.disabled).toBe(true)
@@ -145,6 +152,94 @@ describe('UserUpdateComponent', () => {
     expect(userService.validate).toHaveBeenCalled()
     expect(userService.create).toHaveBeenCalled()
     expect(userService.update).toHaveBeenCalledTimes(0)
+    expect(router.navigate).toHaveBeenCalledWith(['/users'])
+  })
+
+  it('should create new user as org owner', () => {
+    component.editForm.patchValue({
+      salesforceId: 'sfid',
+      email: 'test@test.com',
+      firstName: 'firstName',
+      lastName: 'lastName',
+      activated: false,
+      mainContact: true,
+    })
+
+    userService.create.and.returnValue(of(new User()))
+
+    component.save()
+
+    expect(userService.validate).toHaveBeenCalled()
+    expect(userService.create).toHaveBeenCalled()
+    expect(userService.update).toHaveBeenCalledTimes(0)
+    expect(router.navigate).toHaveBeenCalledWith(['/'])
+  })
+
+  it('should update existing user', () => {
+    activatedRoute.data = of({
+      user: {
+        salesforceId: 'test',
+        id: 'test',
+        email: 'test@test.com',
+        firstName: 'hello',
+        lastName: 'hello',
+        mainContact: false,
+      } as IUser,
+    })
+    fixture.detectChanges()
+    userService.update.and.returnValue(of(new User()))
+
+    component.save()
+
+    expect(userService.validate).toHaveBeenCalled()
+    expect(userService.update).toHaveBeenCalled()
+    expect(userService.create).toHaveBeenCalledTimes(0)
+    expect(router.navigate).toHaveBeenCalledWith(['/users'])
+  })
+
+  it('should update user to org owner and redirect to homepage', () => {
+    activatedRoute.data = of({
+      user: {
+        salesforceId: 'test',
+        id: 'test',
+        email: 'test@test.com',
+        firstName: 'hello',
+        lastName: 'hello',
+        mainContact: true,
+      } as IUser,
+    })
+    fixture.detectChanges()
+    userService.update.and.returnValue(of(new User()))
+
+    component.save()
+
+    expect(userService.validate).toHaveBeenCalled()
+    expect(userService.update).toHaveBeenCalled()
+    expect(userService.create).toHaveBeenCalledTimes(0)
+    expect(router.navigate).toHaveBeenCalledWith(['/'])
+  })
+
+  it('should update user to org owner and redirect to users list', () => {
+    activatedRoute.data = of({
+      user: {
+        salesforceId: 'test',
+        id: 'testing',
+        email: 'test@test.com',
+        firstName: 'hello',
+        lastName: 'hello',
+        mainContact: true,
+      } as IUser,
+    })
+    fixture.detectChanges()
+    accountService.hasAnyAuthority.and.returnValue(true)
+    userService.update.and.returnValue(of(new User()))
+
+    component.save()
+
+    expect(userService.validate).toHaveBeenCalled()
+    expect(userService.update).toHaveBeenCalled()
+    expect(userService.create).toHaveBeenCalledTimes(0)
+    expect(router.navigate).toHaveBeenCalledWith(['/users'])
   })
 
   it('should send activation email for existing user', () => {
@@ -156,8 +251,13 @@ describe('UserUpdateComponent', () => {
     expect(userService.sendActivate).toHaveBeenCalled()
   })
 
-  it('should display send activation option for existing user with unactivated email', () => {
+  it('should display send activation option for existing user with inactive account', () => {
     component.existentUser = { email: 'test@example.com', activated: false } as IUser
     expect(component.displaySendActivate()).toBe(true)
+  })
+
+  it('should not display send activation option for existing user with active account', () => {
+    component.existentUser = { email: 'test@example.com', activated: true } as IUser
+    expect(component.displaySendActivate()).toBe(false)
   })
 })

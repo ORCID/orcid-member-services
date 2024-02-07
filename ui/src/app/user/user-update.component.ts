@@ -159,6 +159,10 @@ export class UserUpdateComponent {
     this.router.navigate(['/users'])
   }
 
+  navigateToHomePage() {
+    this.router.navigate(['/'])
+  }
+
   disableSalesForceIdDD() {
     if (this.hasRoleAdmin()) {
       return false
@@ -211,28 +215,30 @@ export class UserUpdateComponent {
   save() {
     if (this.editForm.valid) {
       this.isSaving = true
-      const msUser = this.createFromForm()
+      const userFromForm = this.createFromForm()
 
-      this.userService.validate(msUser).subscribe((response) => {
+      this.userService.validate(userFromForm).subscribe((response) => {
         const data = response
         if (data.valid) {
-          if (msUser.id !== undefined) {
-            if (this.currentAccount.id === msUser.id) {
-              if (this.currentAccount.mainContact !== msUser.mainContact) {
-                this.subscribeToUpdateResponseWithOwnershipChange(this.userService.update(msUser))
+          if (userFromForm.id !== undefined) {
+            if (this.currentAccount.id === userFromForm.id) {
+              // ownership change functions redirect to homepage instead of redirecting to users list
+              // as users who lose org owner status shouldn't have access to the users list
+              if (this.currentAccount.mainContact !== userFromForm.mainContact) {
+                this.subscribeToUpdateResponseWithOwnershipChange(this.userService.update(userFromForm))
               } else {
-                this.subscribeToUpdateResponse(this.userService.update(msUser))
+                this.subscribeToUpdateResponse(this.userService.update(userFromForm))
               }
-            } else if (msUser.mainContact && !this.hasRoleAdmin()) {
-              this.subscribeToUpdateResponseWithOwnershipChange(this.userService.update(msUser))
+            } else if (userFromForm.mainContact && !this.hasRoleAdmin()) {
+              this.subscribeToUpdateResponseWithOwnershipChange(this.userService.update(userFromForm))
             } else {
-              this.subscribeToUpdateResponse(this.userService.update(msUser))
+              this.subscribeToUpdateResponse(this.userService.update(userFromForm))
             }
           } else {
-            if (msUser.mainContact && !this.hasRoleAdmin()) {
-              this.subscribeToSaveResponseWithOwnershipChange(this.userService.create(msUser))
+            if (userFromForm.mainContact && !this.hasRoleAdmin()) {
+              this.subscribeToSaveResponseWithOwnershipChange(this.userService.create(userFromForm))
             } else {
-              this.subscribeToSaveResponse(this.userService.create(msUser))
+              this.subscribeToSaveResponse(this.userService.create(userFromForm))
             }
           }
         } else {
@@ -287,31 +293,31 @@ export class UserUpdateComponent {
   }
 
   protected subscribeToSaveResponse(result: Observable<IUser>) {
-    result.subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    )
+    result.subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    })
   }
 
   protected subscribeToUpdateResponse(result: Observable<IUser>) {
-    result.subscribe(
-      () => this.onUpdateSuccess(),
-      () => this.onSaveError()
-    )
+    result.subscribe({
+      next: () => this.onUpdateSuccess(),
+      error: () => this.onSaveError(),
+    })
   }
 
   protected subscribeToSaveResponseWithOwnershipChange(result: Observable<IUser>) {
-    result.subscribe(
-      () => this.onSaveSuccessOwnershipChange(),
-      () => this.onSaveError()
-    )
+    result.subscribe({
+      next: () => this.onSaveSuccessOwnershipChange(),
+      error: () => this.onSaveError(),
+    })
   }
 
   protected subscribeToUpdateResponseWithOwnershipChange(result: Observable<IUser>) {
-    result.subscribe(
-      () => this.onUpdateSuccessOwnershipChange(),
-      () => this.onSaveError()
-    )
+    result.subscribe({
+      next: () => this.onUpdateSuccessOwnershipChange(),
+      error: () => this.onSaveError(),
+    })
   }
 
   protected onSaveSuccess() {
@@ -329,13 +335,13 @@ export class UserUpdateComponent {
   protected onSaveSuccessOwnershipChange() {
     this.isSaving = false
     // TODO: confirm this actually works, previously it was set to SERVER_API_URL
-    window.location.href = '/'
+    this.navigateToHomePage()
     this.alertService.broadcast('userServiceApp.user.created.string')
   }
 
   protected onUpdateSuccessOwnershipChange() {
     this.isSaving = false
-    window.location.href = '/'
+    this.navigateToHomePage()
     this.alertService.broadcast('userServiceApp.user.updated.string')
   }
 
