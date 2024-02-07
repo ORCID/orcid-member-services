@@ -5,6 +5,7 @@ import { SettingsComponent } from './settings/settings.component'
 import { AuthGuard } from './auth.guard'
 import { PasswordComponent } from './password/password.component'
 import { PasswordResetFinishComponent } from './password/password-reset-finish.component'
+import { ActivationComponent } from './activation/activation.component'
 
 export const routes: Routes = [
   {
@@ -24,8 +25,8 @@ export const routes: Routes = [
     component: PasswordResetFinishComponent,
     data: {
       authorities: [],
-      pageTitle: 'global.menu.account.password.string'
-    }
+      pageTitle: 'global.menu.account.password.string',
+    },
   },
   {
     path: 'settings',
@@ -44,5 +45,13 @@ export const routes: Routes = [
       pageTitle: 'global.menu.account.password.string',
     },
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'activate',
+    component: ActivationComponent,
+    data: {
+      authorities: [],
+      pageTitle: 'activate.title.string',
+    },
   },
 ]

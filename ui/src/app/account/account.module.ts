@@ -9,7 +9,8 @@ import { SettingsComponent } from './settings/settings.component'
 import { SharedModule } from '../shared/shared.module'
 import { PasswordComponent } from './password/password.component'
 import { PasswordStrengthComponent } from './password/password-strength.component';
-import { PasswordResetFinishComponent } from './password/password-reset-finish.component'
+import { PasswordResetFinishComponent } from './password/password-reset-finish.component';
+import { ActivationComponent } from './activation/activation.component'
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { PasswordResetFinishComponent } from './password/password-reset-finish.c
     PasswordComponent,
     PasswordStrengthComponent,
     PasswordResetFinishComponent,
+    ActivationComponent,
   ],
   imports: [SharedModule, CommonModule, ReactiveFormsModule, RouterModule.forChild(routes)],
 })
