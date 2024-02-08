@@ -28,6 +28,10 @@ export const AuthGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnaps
           return false
         }
       } else {
+        if (state.url === '/login') {
+          return true
+        }
+
         router.navigate(['/login'])
         stateStorageService.storeUrl(state.url)
         return false

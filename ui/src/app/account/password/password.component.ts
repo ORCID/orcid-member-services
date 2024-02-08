@@ -28,9 +28,11 @@ export class PasswordComponent implements OnInit {
 
   ngOnInit() {
     this.accountService.getAccountData().subscribe((account) => {
-      this.account = account
-      this.username = this.accountService.getUsername()
-      this.passwordForUsernameString = $localize`:@@password.title.string:Password for ${this.username} (You)`
+      if (account) {
+        this.account = account
+        this.username = this.accountService.getUsername()
+        this.passwordForUsernameString = $localize`:@@password.title.string:Password for ${this.username} (You)`
+      }
     })
   }
 
@@ -50,8 +52,8 @@ export class PasswordComponent implements OnInit {
         error: () => {
           this.success = undefined
           this.error = 'ERROR'
-        }
-    })
+        },
+      })
     }
   }
 }

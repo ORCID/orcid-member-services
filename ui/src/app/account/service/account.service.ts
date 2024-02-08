@@ -5,6 +5,7 @@ import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeU
 
 import { IAccount } from '../model/account.model'
 import { LanguageService } from 'src/app/shared/service/language.service'
+import { Router } from '@angular/router'
 // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
 //import { MSMemberService } from 'app/entities/member/member.service';
 
@@ -21,6 +22,7 @@ export class AccountService {
     //private languageService: JhiLanguageService,
     private languageService: LanguageService,
     private sessionStorage: SessionStorageService,
+    private router: Router,
     private http: HttpClient // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service //private memberService: MSMemberService
   ) {}
 
@@ -104,6 +106,7 @@ export class AccountService {
   clearAccountData() {
     this.accountData.next(null)
     this.authenticated = false
+    this.router.navigate(['/login'])
   }
 
   hasAnyAuthority(authorities: string[]): boolean {
@@ -159,10 +162,10 @@ export class AccountService {
     let username: string | null = null
 
     if (this.isIdentityResolved()) {
-      if (this.accountData.value!.firstName) {
+      if (this.accountData.value?.firstName) {
         username = this.accountData.value!.firstName
       }
-      if (this.accountData.value!.lastName) {
+      if (this.accountData.value?.lastName) {
         if (username) {
           username = username + ' ' + this.accountData.value!.lastName
         } else {
