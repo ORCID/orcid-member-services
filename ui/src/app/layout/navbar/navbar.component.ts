@@ -110,13 +110,11 @@ export class NavbarComponent implements OnInit {
     this.username = undefined
     if (this.isLoggedAs()) {
       this.accountService.logoutAs().subscribe(() => {
-        window.location.href = '/'
+        this.router.navigate(['/'])
       })
     } else {
       this.memberService.setManagedMember(null)
       this.loginService.logout()
-      console.log('logged out now')
-      this.router.navigate(['/login'])
     }
   }
 
@@ -126,7 +124,7 @@ export class NavbarComponent implements OnInit {
     this.memberCallDone = false
     this.username = undefined
     this.accountService.logoutAs().subscribe((res) => {
-      window.location.href = '/'
+      this.router.navigate(['/'])
     })
   }
 
