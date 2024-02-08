@@ -59,10 +59,10 @@
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
         <source>
-          <x id="INTERPOLATION"></x>
+          <x id="INTERPOLATION"/>
         </source>
         <target state="new">
-          <x id="INTERPOLATION"></x>
+          <x id="INTERPOLATION"/>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -70,10 +70,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
-        <source> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x>
-        </source>
-        <target state="new"> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x>
-        </target>
+        <source> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </source>
+        <target state="new"> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -266,10 +264,10 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source>
-          <x id="INTERPOLATION"></x>
+          <x id="INTERPOLATION"/>
         </source>
         <target state="new">
-          <x id="INTERPOLATION"></x>
+          <x id="INTERPOLATION"/>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -278,10 +276,10 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source>
-          <x id="INTERPOLATION"></x>
+          <x id="INTERPOLATION"/>
         </source>
         <target state="new">
-          <x id="INTERPOLATION"></x>
+          <x id="INTERPOLATION"/>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -289,12 +287,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Failed to
-          sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please
-          check your credentials and try again. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>¡No
-          se ha podido iniciar sesión!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x> Compruebe sus credenciales y vuelva a intentarlo.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check your credentials and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>¡No se ha podido iniciar sesión!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Compruebe sus credenciales y vuelva a intentarlo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -308,8 +302,7 @@
           <context context-type="linenumber">10</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
         <context-group purpose="location">
@@ -325,8 +318,7 @@
           <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
@@ -391,10 +383,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Settings
-          saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>¡Ajustes
-          guardados!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>¡Ajustes guardados!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -493,13 +483,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaExplain.string" datatype="html">
-        <source> Add extra security to your ORCID member portal account by enabling two-factor
-          authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code
-          we send to your preferred authentication application. </source>
-        <target state="new">Añada seguridad adicional a su cuenta del portal de miembros de ORCID
-          activando la autenticación de dos factores. Cada vez que inicie sesión, se le pedirá que
-          introduzca un código de seis dígitos que le enviaremos a su aplicación de autenticación
-          preferida.</target>
+        <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
+        <target state="new">Añada seguridad adicional a su cuenta del portal de miembros de ORCID activando la autenticación de dos factores. Cada vez que inicie sesión, se le pedirá que introduzca un código de seis dígitos que le enviaremos a su aplicación de autenticación preferida.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">144</context>
@@ -522,39 +507,16 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.one.string" datatype="html">
-        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb"
-            equiv-text="&lt;br /&gt;"></x>A 2FA app is required to create the six-digit code you
-          need to access your account each time you sign in. Most apps are for mobile devices; some
-          are also available as desktop or web-based apps. Download and install your preferred 2FA
-          app, such as <x id="START_LINK" ctype="x-a"
-            equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google
-          Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x
-            id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>
-          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, or <x
-            id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x
-            id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>. </source>
-        <target state="new">Instale una aplicación de autenticación de dos factores<x
-            id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Es necesaria una aplicación 2FA
-          que genere un código de seis dígitos para acceder a su cuenta cada vez que inicie sesión.
-          La mayoría de estas aplicaciones son para dispositivos móviles, aunque también las hay
-          para escritorio o basadas en la web. Descargue e instale su aplicación 2FA preferida, por
-          ejemplo: <x id="START_LINK" ctype="x-a"
-            equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google
-          Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x
-            id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>
-          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, o <x id="START_LINK_2"
-            equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK"
-            ctype="x-a" equiv-text="&lt;/a&gt;"></x>.</target>
+        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <target state="new">Instale una aplicación de autenticación de dos factores<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Es necesaria una aplicación 2FA que genere un código de seis dígitos para acceder a su cuenta cada vez que inicie sesión. La mayoría de estas aplicaciones son para dispositivos móviles, aunque también las hay para escritorio o basadas en la web. Descargue e instale su aplicación 2FA preferida, por ejemplo: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/> FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, o <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.two.string" datatype="html">
-        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb"
-            equiv-text="&lt;br /&gt;"></x>Open your 2FA app and scan the image below. </source>
-        <target state="new">Escanee este código QR en su dispositivo<x id="LINE_BREAK" ctype="lb"
-            equiv-text="&lt;br /&gt;"></x>Abra su aplicación 2FA y escanee la siguiente imagen.</target>
+        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Open your 2FA app and scan the image below. </source>
+        <target state="new">Escanee este código QR en su dispositivo<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Abra su aplicación 2FA y escanee la siguiente imagen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">172</context>
@@ -585,14 +547,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaTextCodeSteps.one.string" datatype="html">
-        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb"
-            equiv-text="&lt;br /&gt;"></x>After scanning the QR code or entering in the text code,
-          your 2FA app will display a six-digit code. Enter this code in the box below and click
-          Save. </source>
-        <target state="new">Introduzca el código de seis dígitos de la aplicación<x id="LINE_BREAK"
-            ctype="lb" equiv-text="&lt;br /&gt;"></x>Tras escanear el código QR o introducir el
-          código de texto, su aplicación 2FA le mostrará un código de seis dígitos. Introdúzcalo en
-          el cuadro siguiente y haga clic en Guardar.</target>
+        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
+        <target state="new">Introduzca el código de seis dígitos de la aplicación<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Tras escanear el código QR o introducir el código de texto, su aplicación 2FA le mostrará un código de seis dígitos. Introdúzcalo en el cuadro siguiente y haga clic en Guardar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">203</context>
@@ -607,10 +563,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.backupCodes.string" datatype="html">
-        <source> Make a note of the following backup codes, this is the only time they will be
-          shown. </source>
-        <target state="new">Tome nota de los siguientes códigos de respaldo; solo se mostrarán esta
-          vez.</target>
+        <source> Make a note of the following backup codes, this is the only time they will be shown. </source>
+        <target state="new">Tome nota de los siguientes códigos de respaldo; solo se mostrarán esta vez.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">226</context>
@@ -628,41 +582,31 @@
         <source>Reset your password</source>
         <target state="new">Restablezca su contraseña</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Email
-          address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x> Please check and try again. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>¡La
-          dirección de correo electrónico no está registrada!<x id="CLOSE_TAG_STRONG"
-            ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Compruébalo e inténtalo de nuevo.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>¡La dirección de correo electrónico no está registrada!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Compruébalo e inténtalo de nuevo.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.info.string" datatype="html">
         <source>Enter the email address you used to register.</source>
-        <target state="new">Introduzca la dirección de correo electrónico que utilizó para
-          registrarse</target>
+        <target state="new">Introduzca la dirección de correo electrónico que utilizó para registrarse</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.success.string" datatype="html">
         <source> Check your emails for details on how to reset your password. </source>
-        <target state="new">Consulte sus correos electrónicos para consultar información para
-          restablecer su contraseña.</target>
+        <target state="new">Consulte sus correos electrónicos para consultar información para restablecer su contraseña.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
@@ -670,8 +614,7 @@
         <source> Your email is required. </source>
         <target state="new">Su correo electrónico es necesario.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
@@ -679,8 +622,7 @@
         <source> Your email is invalid. </source>
         <target state="new">Tu correo electrónico no es válido.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
@@ -688,8 +630,7 @@
         <source> Your email is required to be at least 5 characters. </source>
         <target state="new">Su correo electrónico debe tener al menos 5 caracteres.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
@@ -697,8 +638,7 @@
         <source> Your email cannot be longer than 100 characters. </source>
         <target state="new">El correo electrónico no puede tener más de 50 caracteres.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
@@ -706,8 +646,7 @@
         <source> Reset </source>
         <target state="new">Repetir contraseña</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
@@ -748,7 +687,7 @@
         <target state="new">Herramientas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.tools.assertionServiceAffiliationManager.string" datatype="html">
@@ -756,7 +695,7 @@
         <target state="new">Affiliation Manager</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.member.string" datatype="html">
@@ -764,7 +703,7 @@
         <target state="new">Informe de miembros</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.integration.string" datatype="html">
@@ -772,7 +711,7 @@
         <target state="new">Informe de integración</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.consortium.string" datatype="html">
@@ -780,7 +719,7 @@
         <target state="new">Informe del consorcio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.affiliation.string" datatype="html">
@@ -788,7 +727,7 @@
         <target state="new">Informe de afiliación</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.consortiumMemberAffiliations.string" datatype="html">
@@ -796,7 +735,7 @@
         <target state="new">Consortium member affiliations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.main.string" datatype="html">
@@ -804,7 +743,7 @@
         <target state="new">Recursos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">146</context>
+          <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.accountManagementGuide.string" datatype="html">
@@ -812,7 +751,7 @@
         <target state="new">Guía de gestión de cuentas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.affiliationManagerGuide.string" datatype="html">
@@ -820,7 +759,7 @@
         <target state="new">Guía de Affiliation Manager</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">167</context>
+          <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.memberReportingGuide.string" datatype="html">
@@ -828,7 +767,7 @@
         <target state="new">Guía de informes de los miembros</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">177</context>
+          <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.applyForAffiliationManagerCreds.string" datatype="html">
@@ -836,7 +775,7 @@
         <target state="new">Solicitar las credenciales de Affiliation Manager</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">188</context>
+          <context context-type="linenumber">183</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.adminMenu.main.string" datatype="html">
@@ -844,7 +783,7 @@
         <target state="new">Administrador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">204</context>
+          <context context-type="linenumber">199</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.adminMenu.manageUsers.string" datatype="html">
@@ -852,7 +791,7 @@
         <target state="new">Gestionar usuarios</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.adminMenu.manageMembers.string" datatype="html">
@@ -860,7 +799,7 @@
         <target state="new">Gestionar miembros</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">230</context>
+          <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.main.string" datatype="html">
@@ -868,7 +807,7 @@
         <target state="new">Cuenta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">245</context>
+          <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.settings.string" datatype="html">
@@ -876,7 +815,7 @@
         <target state="new">Ajustes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">255</context>
+          <context context-type="linenumber">250</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.password.string" datatype="html">
@@ -884,7 +823,7 @@
         <target state="new">Contraseña</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">261</context>
+          <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.logout.string" datatype="html">
@@ -892,7 +831,7 @@
         <target state="new">Cerrar sesión</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">262</context>
         </context-group>
       </trans-unit>
       <trans-unit id="footer.privacyPolicy.string" datatype="html">
@@ -928,31 +867,24 @@
         </context-group>
       </trans-unit>
       <trans-unit id="password.title.string" datatype="html">
-        <source>Password for <x id="PH" equiv-text="this.username"></x> (You)</source>
-        <target state="new">Contraseña de <x id="PH" equiv-text="this.username"></x> (usted)</target>
+        <source>Password for <x id="PH" equiv-text="this.username"/> (You)</source>
+        <target state="new">Contraseña de <x id="PH" equiv-text="this.username"/> (usted)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Password
-          changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>¡Se
-          ha cambiado la contraseña!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Password changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>¡Se ha cambiado la contraseña!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.error.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>An error
-          has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>
-          The password could not be changed. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>¡Ha
-          ocurrido un error!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>
-          No se ha podido cambiar la contraseña.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>An error has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> The password could not be changed. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>¡Ha ocurrido un error!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> No se ha podido cambiar la contraseña.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">10</context>
@@ -962,8 +894,7 @@
         <source> The password and its confirmation do not match! </source>
         <target state="new">La contraseña y su confirmación no coinciden</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
         <context-group purpose="location">
@@ -991,8 +922,7 @@
         <source> Your password is required. </source>
         <target state="new">Tu contraseña es necesaria.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
@@ -1008,8 +938,7 @@
         <source>New password</source>
         <target state="new">Nueva contraseña</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
         <context-group purpose="location">
@@ -1021,8 +950,7 @@
         <source>New password</source>
         <target state="new">Nueva contraseña</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
         <context-group purpose="location">
@@ -1034,8 +962,7 @@
         <source> Your password is required to be at least 4 characters. </source>
         <target state="new">Su contraseña debe tener al menos 4 caracteres.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">98</context>
         </context-group>
         <context-group purpose="location">
@@ -1047,8 +974,7 @@
         <source> Your password cannot be longer than 50 characters. </source>
         <target state="new">Su contraseña no puede tener más de 50 caracteres.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">105</context>
         </context-group>
         <context-group purpose="location">
@@ -1060,8 +986,7 @@
         <source>New password confirmation</source>
         <target state="new">Confirmación de la nueva contraseña</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">114</context>
         </context-group>
         <context-group purpose="location">
@@ -1073,8 +998,7 @@
         <source>Confirm the new password</source>
         <target state="new">Confirme la nueva contraseña</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">121</context>
         </context-group>
         <context-group purpose="location">
@@ -1086,8 +1010,7 @@
         <source> Your password confirmation is required. </source>
         <target state="new">Se requiere su contraseña de confirmación.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">135</context>
         </context-group>
         <context-group purpose="location">
@@ -1099,8 +1022,7 @@
         <source> Your password confirmation is required to be at least 4 characters. </source>
         <target state="new">La contraseña de confirmación tiene que contener al menos 4 caracteres.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">142</context>
         </context-group>
         <context-group purpose="location">
@@ -1112,8 +1034,7 @@
         <source> Your password confirmation cannot be longer than 50 characters. </source>
         <target state="new">Su contraseña de confirmación no puede tener más de 50 caracteres.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">149</context>
         </context-group>
         <context-group purpose="location">
@@ -1141,81 +1062,55 @@
         <source>Reset password</source>
         <target state="new">Restablecer la contraseña</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keymissing.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>The
-          activation key is missing.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Falta
-          la clave de activación.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>The activation key is missing.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Falta la clave de activación.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyinvalid.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This
-          activation key is invalid.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>La
-          clave de activación no es válida.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>This activation key is invalid.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>La clave de activación no es válida.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This
-          activation has expired.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>La
-          clave de activación ha caducado.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>This activation has expired.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>La clave de activación ha caducado.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph1.string" datatype="html">
-        <source>ORCID Member Portal activation links are only valid for 24 hours. It looks like this
-          link has expired.</source>
-        <target state="new">ORCID Member Portal activation links are only valid for 24 hours. It
-          looks like this link has expired.</target>
+        <source>ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired.</source>
+        <target state="new">ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph2.string" datatype="html">
-        <source>To make sure you can activate your Member Portal account we have sent a new
-          activation link to your registered email address.</source>
-        <target state="new">To make sure you can activate your Member Portal account we have sent a
-          new activation link to your registered email address.</target>
+        <source>To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address.</source>
+        <target state="new">To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph3.string" datatype="html">
-        <source>If you are still having problems activating your account or have not received your
-          new activation link please contact our support team please contact us at
-          membership@orcid.org.</source>
-        <target state="new">If you are still having problems activating your account or have not
-          received your new activation link, please contact us at membership@orcid.org.</target>
+        <source>If you are still having problems activating your account or have not received your new activation link please contact our support team please contact us at membership@orcid.org.</source>
+        <target state="new">If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
@@ -1223,32 +1118,23 @@
         <source>Choose a new password</source>
         <target state="new">Elija una nueva contraseña</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.error.string" datatype="html">
-        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for
-          24 hours. </source>
-        <target state="new">No se ha podido restablecer tu contraseña. Recuerde que una solicitud de
-          contraseña solo es válida por 24 horas.</target>
+        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for 24 hours. </source>
+        <target state="new">No se ha podido restablecer tu contraseña. Recuerde que una solicitud de contraseña solo es válida por 24 horas.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Your
-          password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x> Please </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Se
-          ha restablecido su contraseña.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x> Por favor,</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Your password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Se ha restablecido su contraseña.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Por favor,</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
@@ -1256,8 +1142,7 @@
         <source>sign in</source>
         <target state="new">iniciar sesión</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
@@ -1265,8 +1150,7 @@
         <source> Reset Password </source>
         <target state="new">Validar la nueva contraseña</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
@@ -1298,14 +1182,13 @@
         <source>Password strength:</source>
         <target state="new">Seguridad de la contraseña:</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-strength.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-strength.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.sendActivate.success.string" datatype="html">
         <source>
-          <x id="PH" equiv-text="AlertType.SEND_ACTIVATION_SUCCESS"></x>
+          <x id="PH" equiv-text="AlertType.SEND_ACTIVATION_SUCCESS"/>
         </source>
         <target state="new">Invitación enviada.</target>
         <context-group purpose="location">
@@ -1315,7 +1198,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.sendActivate.error.string" datatype="html">
         <source>
-          <x id="PH" equiv-text="AlertType.SEND_ACTIVATION_FAILURE"></x>
+          <x id="PH" equiv-text="AlertType.SEND_ACTIVATION_FAILURE"/>
         </source>
         <target state="new">No se ha podido enviar el correo de invitación.</target>
         <context-group purpose="location">
@@ -1532,7 +1415,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">144</context>
+          <context context-type="linenumber">142</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
@@ -1560,11 +1443,11 @@
         <target state="new">Guardar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">123</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">135</context>
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.home.title.string" datatype="html">
@@ -1616,13 +1499,19 @@
         </context-group>
       </trans-unit>
       <trans-unit id="global.item-count.string" datatype="html">
-        <source>Showing <x id="PH" equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x>
-          of <x id="PH_2" equiv-text="this.totalItems"></x> items.</source>
-        <target state="new">Mostrando <x id="PH" equiv-text="first" /> - <x id="PH_1"
-            equiv-text="second" /> de <x id="PH_2" equiv-text="this.totalItems" /> elementos.</target>
+        <source>Showing <x id="PH" equiv-text="first"/> - <x id="PH_1" equiv-text="second"/> of <x id="PH_2" equiv-text="this.totalItems"/> items.</source>
+        <target state="new">Mostrando <x id="PH" equiv-text="first"/> - <x id="PH_1" equiv-text="second"/> de <x id="PH_2" equiv-text="this.totalItems"/> elementos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.ts</context>
-          <context context-type="linenumber">243</context>
+          <context context-type="linenumber">246</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8705416788801538416" datatype="html">
+        <source>@@gatewayApp.msUserServiceMSUser.changeOwnership.question.string</source>
+        <target state="new">@@gatewayApp.msUserServiceMSUser.changeOwnership.question.string</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.ts</context>
+          <context context-type="linenumber">218</context>
         </context-group>
       </trans-unit>
     </body>

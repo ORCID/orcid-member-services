@@ -212,6 +212,14 @@ export class UserUpdateComponent {
     }
   }
 
+  confirmOwnershipChange() {
+    const question = $localize`@@gatewayApp.msUserServiceMSUser.changeOwnership.question.string`
+    const result = confirm(question)
+    if (result) {
+      this.save()
+    }
+  }
+
   save() {
     if (this.editForm.valid) {
       this.isSaving = true
