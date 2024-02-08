@@ -81,7 +81,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
             if (!data.mfaRequired) {
               this.showMfa = false
               this.accountService
-                .getAccountData()
+                .getAccountData(true)
                 .pipe(
                   filter((account) => !!account),
                   take(1)
