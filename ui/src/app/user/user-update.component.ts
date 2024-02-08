@@ -212,6 +212,14 @@ export class UserUpdateComponent {
     }
   }
 
+  confirmOwnershipChange() {
+    const question = $localize`:@@gatewayApp.msUserServiceMSUser.changeOwnership.question.string:Are you sure you want to transfer ownership? You are about to transfer ownership of this organization account. If you are the organization owner after transferring ownership, you will no longer have access to administrative functions, such as managing users.`
+    const result = confirm(question)
+    if (result) {
+      this.save()
+    }
+  }
+
   save() {
     if (this.editForm.valid) {
       this.isSaving = true

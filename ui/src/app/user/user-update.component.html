@@ -114,9 +114,7 @@
 
         <button
           *ngIf="hasOwner"
-          jhi-ownershipChange
-          (then)="save()"
-          (else)="(false)"
+          (click)="confirmOwnershipChange()"
           type="submit"
           id="save-entity"
           [disabled]="editForm.invalid || isSaving || memberList.length === 0"
