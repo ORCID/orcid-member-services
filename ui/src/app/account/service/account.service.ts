@@ -11,6 +11,7 @@ import { Router } from '@angular/router'
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
+  // TODO: have unknown and offline instead of undefined and null
   private accountData = new BehaviorSubject<IAccount | null | undefined>(undefined)
   private isFetchingAccountData = false
   private stopFetchingAccountData = new Subject()
@@ -138,7 +139,7 @@ export class AccountService {
       //this.memberService.memberData.next(undefined);
       this.stopFetchingAccountData.next(true)
     }
-    if ((!this.accountData.value && !this.isFetchingAccountData) || force) {
+    if ((this.accountData.value === undefined && !this.isFetchingAccountData) || force) {
       this.isFetchingAccountData = true
       this.fetchAccountData().subscribe()
     }
