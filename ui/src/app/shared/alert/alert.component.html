@@ -3,7 +3,14 @@
     <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" [dismissible]="false" class="alert-success">
       <div class="d-flex">
         <div class="font-size-16 flex-grow-1">{{ alert.msg | localize }}</div>
-        <a (click)="close(alert)" (keyup)="closeOldestAlert()" tabindex="0" class="close">×</a>
+        <a
+          (click)="close(alert)"
+          (keyup.esc)="closeOldestAlert()"
+          (keyup.enter)="closeOldestAlert()"
+          tabindex="0"
+          class="close"
+          >×</a
+        >
       </div>
     </ngb-alert>
   </div>
