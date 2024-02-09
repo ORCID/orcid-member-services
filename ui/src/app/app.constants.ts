@@ -1,4 +1,4 @@
-import { FormControl } from "@angular/forms";
+import { FormControl } from '@angular/forms'
 
 export enum EventType {
   LOG_IN_SUCCESS = 'LOG_IN_SUCCESS',
@@ -10,6 +10,8 @@ export enum EventType {
 export enum AlertType {
   SEND_ACTIVATION_SUCCESS = 'Invite sent.',
   SEND_ACTIVATION_FAILURE = 'Invite email couldn`t be sent.',
+  USER_CREATED = 'User created. Invite sent.',
+  USER_UPDATED = 'User updated successfully',
 }
 
 export const EMAIL_NOT_FOUND_TYPE = 'https://www.jhipster.tech/problem/email-not-found'
@@ -21,9 +23,10 @@ export const ITEMS_PER_PAGE = 20
 
 export function emailValidator(control: FormControl): { [key: string]: any } | null {
   // eslint-disable-next-line
-  const emailRegexp = /^([^@\s/."'\(\)\[\]\{\}\\/,:;]+\.)*([^@\s\."\(\)\[\]\{\}\\/,:;]|(".+"))+@[^@\s\."'\(\)\[\]\{\}\\/,:;]+(\.[^@\s\."'\(\)\[\]\{\}\\/,:;]{2,})+$/;
+  const emailRegexp =
+    /^([^@\s/."'\(\)\[\]\{\}\\/,:;]+\.)*([^@\s\."\(\)\[\]\{\}\\/,:;]|(".+"))+@[^@\s\."'\(\)\[\]\{\}\\/,:;]+(\.[^@\s\."'\(\)\[\]\{\}\\/,:;]{2,})+$/
   if (control.value && !emailRegexp.test(control.value)) {
-    return { invalidEmail: true };
+    return { invalidEmail: true }
   }
   return null
 }

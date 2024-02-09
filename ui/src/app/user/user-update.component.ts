@@ -14,7 +14,7 @@ import { AccountService } from '../account'
 import { IUser, User } from './model/user.model'
 import { IMember } from '../member/model/member.model'
 import { ErrorService } from '../error/service/error.service'
-import { DATE_TIME_FORMAT, emailValidator } from '../app.constants'
+import { AlertType, DATE_TIME_FORMAT, emailValidator } from '../app.constants'
 
 @Component({
   selector: 'app-user-update',
@@ -261,9 +261,9 @@ export class UserUpdateComponent {
     if (this.existentUser?.id) {
       this.userService.sendActivate(this.existentUser).subscribe((res) => {
         if (res) {
-          this.alertService.broadcast('gatewayApp.msUserServiceMSUser.sendActivate.success.string')
+          this.alertService.broadcast(AlertType.SEND_ACTIVATION_SUCCESS)
         } else {
-          this.alertService.broadcast('gatewayApp.msUserServiceMSUser.sendActivate.error.string')
+          this.alertService.broadcast(AlertType.SEND_ACTIVATION_FAILURE)
         }
         this.navigateToUsersList()
       })
@@ -331,26 +331,25 @@ export class UserUpdateComponent {
   protected onSaveSuccess() {
     this.isSaving = false
     this.navigateToUsersList()
-    this.alertService.broadcast('userServiceApp.user.created.string')
+    this.alertService.broadcast(AlertType.USER_CREATED)
   }
 
   protected onUpdateSuccess() {
     this.isSaving = false
     this.navigateToUsersList()
-    this.alertService.broadcast('userServiceApp.user.updated.string')
+    this.alertService.broadcast(AlertType.USER_UPDATED)
   }
 
   protected onSaveSuccessOwnershipChange() {
     this.isSaving = false
-    // TODO: confirm this actually works, previously it was set to SERVER_API_URL
     this.navigateToHomePage()
-    this.alertService.broadcast('userServiceApp.user.created.string')
+    this.alertService.broadcast(AlertType.USER_CREATED)
   }
 
   protected onUpdateSuccessOwnershipChange() {
     this.isSaving = false
     this.navigateToHomePage()
-    this.alertService.broadcast('userServiceApp.user.updated.string')
+    this.alertService.broadcast(AlertType.USER_UPDATED)
   }
 
   protected onSaveError() {
