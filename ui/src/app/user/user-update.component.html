@@ -11,13 +11,21 @@
             class="alert alert-danger alert-dismissible"
             role="alert"
             ng-reflect-type="danger"
-            (close)="validation.errors = null"
+            [dismissible]="false"
           >
             <ul class="validation-errors">
               <li *ngFor="let error of validation.errors">
                 {{ error }}
               </li>
             </ul>
+            <a
+              (click)="validation.errors = null"
+              (keyup.esc)="validation.errors = null"
+              (keyup.enter)="validation.errors = null"
+              tabindex="0"
+              class="close"
+              >×</a
+            >
           </ngb-alert>
         </div>
         <div class="form-group">
