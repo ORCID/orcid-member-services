@@ -6,6 +6,7 @@ import { map, switchMap, tap } from 'rxjs'
 import { UserService } from './service/user.service'
 import { AlertService } from '../shared/service/alert.service'
 import { MemberService } from '../member/service/member.service'
+import { AlertType } from '../app.constants'
 
 @Component({
   selector: 'app-user-detail',
@@ -38,7 +39,7 @@ export class UserDetailComponent {
   sendActivate() {
     if (this.user) {
       this.userService.sendActivate(this.user).subscribe((res) => {
-        this.alertService.broadcast('gatewayApp.msUserServiceMSUser.sendActivate.success.string')
+        this.alertService.broadcast(AlertType.SEND_ACTIVATION_SUCCESS)
         this.previousState()
       })
     }

@@ -11,6 +11,10 @@ export class LocalizePipe implements PipeTransform {
         return $localize`:@@gatewayApp.msUserServiceMSUser.sendActivate.success.string:${AlertType.SEND_ACTIVATION_SUCCESS}`
       case AlertType.SEND_ACTIVATION_FAILURE:
         return $localize`:@@gatewayApp.msUserServiceMSUser.sendActivate.error.string:${AlertType.SEND_ACTIVATION_FAILURE}`
+      case AlertType.USER_CREATED:
+        return $localize`:@@userServiceApp.user.created.string:${AlertType.USER_CREATED}`
+      case AlertType.USER_UPDATED:
+        return $localize`:@@userServiceApp.user.updated.string:${AlertType.USER_UPDATED}`
     }
   }
 }

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ErrorHandler, HostListener, Inject, OnInit } from '@angular/core'
-import { Subscription } from 'rxjs'
+import { Subscription, filter } from 'rxjs'
 import { AlertService } from '../service/alert.service'
 import { AppAlert } from './model/alert.model'
 
@@ -18,10 +18,9 @@ export class AlertComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.sub = this.alertService.on().subscribe((alert: AppAlert) => {
-      this.alerts.push(alert)
+    this.sub = this.alertService.on().subscribe((alerts: AppAlert[]) => {
+      this.alerts = alerts
       this.cdr.detectChanges()
-      setTimeout(() => this.close(alert), 5000)
     })
   }
 
@@ -30,13 +29,14 @@ export class AlertComponent implements OnInit {
   }
 
   @HostListener('document:keyup.escape', ['$event'])
+  @HostListener('document:keyup.enter', ['$event'])
   closeOldestAlert() {
     this.alerts.shift()
     this.cdr.detectChanges()
   }
 
   close(alertToRemove: any) {
-    this.alerts = this.alerts.filter((alert: any) => alert !== alertToRemove)
+    this.alertService.clear(alertToRemove)
     this.cdr.detectChanges()
   }
 }
