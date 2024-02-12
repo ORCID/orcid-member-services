@@ -6,6 +6,10 @@ name: Java CI with Maven
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      # Ignore workflow changes
+      - '.github/**'
+
   pull_request:
     branches: [ main ]
 
