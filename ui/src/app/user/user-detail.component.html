@@ -18,7 +18,7 @@
           <dd class="col-md-10">
             {{ user.lastName }}
           </dd>
-          <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string">Main Contact</dt>
+          <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string">Organization owner</dt>
           <dd class="col-md-10">
             <span class="sr-only" *ngIf="user.mainContact" i18n="@@global.true.string">True</span>
             <span class="sr-only" *ngIf="!user.mainContact" i18n="@@global.false.string">False</span>
@@ -35,7 +35,7 @@
               [styles]="{ color: '#f22112' }"
             ></fa-icon>
           </dd>
-          <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string">Salesforce Id</dt>
+          <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string">Organization</dt>
           <dd class="col-md-10">
             {{ user.memberName }}
           </dd>
@@ -75,12 +75,12 @@
               ></fa-icon>
             </dd>
           </ng-container>
-          <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.createdDate.string">Created Date</dt>
+          <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.createdDate.string">Created</dt>
           <dd class="col-md-10">
             {{ user.createdDate!.toString() | date: 'medium' }}
             <i><span i18n="@@global.by.string">by</span> {{ user.createdBy }}</i>
           </dd>
-          <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.lastModifiedDate.string">Last Modified Date</dt>
+          <dt class="col-md-2" i18n="@@gatewayApp.msUserServiceMSUser.lastModifiedDate.string">Last Modified</dt>
           <dd class="col-md-10">
             <span
               >{{ user.lastModifiedDate!.toString() | date: 'medium' }}
