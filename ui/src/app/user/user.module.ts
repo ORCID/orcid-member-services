@@ -8,9 +8,23 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { UserUpdateComponent } from './user-update.component'
 import { UserDetailComponent } from './user-detail.component'
+import { UserImportDialogComponent, UserImportPopupComponent } from './user-import-dialog.component'
 
 @NgModule({
-  declarations: [UsersComponent, UserUpdateComponent, UserDetailComponent],
-  imports: [CommonModule, SharedModule, RouterModule.forChild(routes), FontAwesomeModule, FormsModule, ReactiveFormsModule],
+  declarations: [
+    UsersComponent,
+    UserUpdateComponent,
+    UserDetailComponent,
+    UserImportDialogComponent,
+    UserImportPopupComponent,
+  ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    RouterModule.forChild(routes),
+    FontAwesomeModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
 })
 export class UserModule {}
