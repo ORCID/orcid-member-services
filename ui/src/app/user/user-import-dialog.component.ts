@@ -4,10 +4,10 @@ import { IUser } from './model/user.model'
 import { UserService } from './service/user.service'
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { EventService } from '../shared/service/event.service'
-import { HttpResponse } from '@angular/common/http'
 import { Event } from '../shared/model/event.model'
 import { EventType } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
+import { faSave, faBan } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-user-import-dialog',
@@ -22,6 +22,8 @@ export class UserImportDialogComponent {
   currentFile: FileList | null
   csvErrors: any
   loading = false
+  faBan = faBan
+  faSave = faSave
 
   constructor(
     protected userService: UserService,
@@ -44,13 +46,16 @@ export class UserImportDialogComponent {
   }
 
   upload() {
+    console.log('resource url is ', this.resourceUrl)
     if (this.currentFile) {
+      console.log('found current file')
       this.loading = true
       const f = this.currentFile.item(0)
       this.uploadService.uploadFile(this.resourceUrl, f!, 'text').subscribe((res: string) => {
-        this.csvErrors = JSON.parse(res)
-        this.loading = false
-        if (this.csvErrors.length === 0) {
+        if (res) {
+          this.csvErrors = JSON.parse(res)
+          this.loading = false
+        } else {
           this.eventService.broadcast(new Event(EventType.USER_LIST_MODIFIED, 'New user settings uploaded'))
           this.activeModal.dismiss(true)
         }
@@ -77,20 +82,20 @@ export class UserImportPopupComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.data.subscribe(({ msUser }) => {
+    this.activatedRoute.data.subscribe(({ u }) => {
       setTimeout(() => {
         this.ngbModalRef = this.modalService.open(UserImportDialogComponent as Component, {
           size: 'lg',
           backdrop: 'static',
         })
-        this.ngbModalRef.componentInstance.msUser = msUser
+        this.ngbModalRef.componentInstance.user = u
         this.ngbModalRef.result.then(
           (result) => {
-            this.router.navigate(['/user', { outlets: { popup: null } }])
+            this.router.navigate(['/users', { outlets: { popup: null } }])
             this.ngbModalRef = null
           },
           (reason) => {
-            this.router.navigate(['/user', { outlets: { popup: null } }])
+            this.router.navigate(['/users', { outlets: { popup: null } }])
             this.ngbModalRef = null
           }
         )
@@ -100,6 +105,6 @@ export class UserImportPopupComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.ngbModalRef = null
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => this.router.navigate(['/user']))
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => this.router.navigate(['/users']))
   }
 }

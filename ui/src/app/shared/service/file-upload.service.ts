@@ -12,14 +12,17 @@ export class FileUploadService {
     file: File,
     expectedResponseType: 'arraybuffer' | 'blob' | 'json' | 'text' | undefined
   ): Observable<string> {
+    console.log('uploading file')
     const formdata: FormData = new FormData()
     formdata.append('file', file)
     const req = new HttpRequest('POST', resourceUrl, formdata, {
       reportProgress: true,
       responseType: expectedResponseType,
     })
+    console.log('posting filexs')
     this.http.request<string>(req).pipe(
       map((res: HttpEvent<string>) => {
+        console.log('result')
         if (res instanceof HttpResponse) {
           return res.body
         }
