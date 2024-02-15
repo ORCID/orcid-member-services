@@ -19,7 +19,6 @@ import { AlertType, DATE_TIME_FORMAT, emailValidator } from '../app.constants'
 @Component({
   selector: 'app-user-update',
   templateUrl: './user-update.component.html',
-  styleUrls: ['./user-update.component.scss'],
 })
 export class UserUpdateComponent {
   isSaving = false
