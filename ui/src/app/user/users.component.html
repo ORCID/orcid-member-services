@@ -14,7 +14,7 @@
         *appHasAnyAuthority="'ROLE_ADMIN'"
         id="jh-upload-entities"
         class="btn btn-primary float-right jh-create-entity create-ms-user ml-1"
-        [routerLink]="['users', { outlets: { popup: 'import' } }]"
+        [routerLink]="['/' + 'users', { outlets: { popup: 'import' } }]"
       >
         <fa-icon [icon]="faPlus"></fa-icon>
         <span i18n="@@gatewayApp.msUserServiceMSUser.home.uploadLabel.string">Import users from CSV </span>

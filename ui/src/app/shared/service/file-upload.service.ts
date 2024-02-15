@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpRequest, HttpEvent, HttpResponse } from '@angular/common/http'
 import { Observable } from 'rxjs/internal/Observable'
-import { map, of } from 'rxjs'
+import { filter, map, of } from 'rxjs'
 
 @Injectable()
 export class FileUploadService {
@@ -20,15 +20,12 @@ export class FileUploadService {
       responseType: expectedResponseType,
     })
     console.log('posting filexs')
-    this.http.request<string>(req).pipe(
-      map((res: HttpEvent<string>) => {
-        console.log('result')
-        if (res instanceof HttpResponse) {
-          return res.body
-        }
-        return of('')
+    return this.http.request<string>(req).pipe(
+      filter((event: HttpEvent<string>): event is HttpResponse<string> => event instanceof HttpResponse),
+      map((res: HttpResponse<string>) => {
+        console.log('httpresponse found')
+        return res.body != null ? res.body : ''
       })
     )
-    return of('')
   }
 }
