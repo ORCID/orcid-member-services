@@ -7,6 +7,7 @@ import { EventService } from '../shared/service/event.service'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Event } from '../shared/model/event.model'
 import { AlertType, EventType } from '../app.constants'
+import { faBan, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-user-delete-dialog',
@@ -15,6 +16,8 @@ import { AlertType, EventType } from '../app.constants'
 export class UserDeleteDialogComponent implements OnInit {
   user: IUser | undefined
   message = ''
+  faBan = faBan
+  faTimes = faTimes
 
   constructor(
     protected userService: UserService,
@@ -60,8 +63,6 @@ export class UserDeletePopupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ user }) => {
       setTimeout(() => {
-        console.log(user)
-
         this.ngbModalRef = this.modalService.open(UserDeleteDialogComponent as Component, {
           size: 'lg',
           backdrop: 'static',
@@ -77,7 +78,7 @@ export class UserDeletePopupComponent implements OnInit, OnDestroy {
             this.ngbModalRef = undefined
           }
         )
-      }, 100)
+      }, 0)
     })
   }
 
