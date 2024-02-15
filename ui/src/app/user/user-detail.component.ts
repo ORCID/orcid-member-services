@@ -11,7 +11,6 @@ import { AlertType } from '../app.constants'
 @Component({
   selector: 'app-user-detail',
   templateUrl: './user-detail.component.html',
-  styleUrls: ['./user-detail.component.scss'],
 })
 export class UserDetailComponent {
   user: IUser | null = null
