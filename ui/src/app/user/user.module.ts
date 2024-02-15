@@ -9,15 +9,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { UserUpdateComponent } from './user-update.component'
 import { UserDetailComponent } from './user-detail.component'
 import { UserImportDialogComponent, UserImportPopupComponent } from './user-import-dialog.component'
+import { UserDeleteDialogComponent, UserDeletePopupComponent } from './user-delete.component'
 
 @NgModule({
-  declarations: [
-    UsersComponent,
-    UserUpdateComponent,
-    UserDetailComponent,
-    UserImportDialogComponent,
-    UserImportPopupComponent,
-  ],
   imports: [
     CommonModule,
     SharedModule,
@@ -25,6 +19,15 @@ import { UserImportDialogComponent, UserImportPopupComponent } from './user-impo
     FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
+  ],
+  declarations: [
+    UsersComponent,
+    UserUpdateComponent,
+    UserDetailComponent,
+    UserDeletePopupComponent,
+    UserDeleteDialogComponent,
+    UserImportDialogComponent,
+    UserImportPopupComponent,
   ],
 })
 export class UserModule {}

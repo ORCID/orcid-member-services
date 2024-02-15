@@ -12,6 +12,7 @@ export enum AlertType {
   SEND_ACTIVATION_FAILURE = 'Invite email couldn`t be sent.',
   USER_CREATED = 'User created. Invite sent.',
   USER_UPDATED = 'User updated successfully',
+  USER_DELETED = 'User deleted successfully',
 }
 
 export const EMAIL_NOT_FOUND_TYPE = 'https://www.jhipster.tech/problem/email-not-found'
