@@ -7,6 +7,7 @@ import { LanguageService } from 'src/app/shared/service/language.service'
 import { AccountService } from '../service/account.service'
 import { of } from 'rxjs'
 import { FindLanguageFromKeyPipe } from 'src/app/shared/pipe/find-language-from-key'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent
@@ -36,6 +37,7 @@ describe('SettingsComponent', () => {
         { provide: LanguageService, useValue: languageServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
       ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents()
 
     fixture = TestBed.createComponent(SettingsComponent)
