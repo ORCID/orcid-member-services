@@ -3,7 +3,7 @@ import { HttpClient, HttpRequest, HttpEvent, HttpResponse } from '@angular/commo
 import { Observable } from 'rxjs/internal/Observable'
 import { filter, map, of } from 'rxjs'
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class FileUploadService {
   constructor(private http: HttpClient) {}
 
@@ -19,11 +19,10 @@ export class FileUploadService {
       reportProgress: true,
       responseType: expectedResponseType,
     })
-    console.log('posting filexs')
+
     return this.http.request<string>(req).pipe(
       filter((event: HttpEvent<string>): event is HttpResponse<string> => event instanceof HttpResponse),
       map((res: HttpResponse<string>) => {
-        console.log('httpresponse found')
         return res.body != null ? res.body : ''
       })
     )

@@ -7,13 +7,12 @@ import { EventService } from '../shared/service/event.service'
 import { Event } from '../shared/model/event.model'
 import { EventType } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
-import { faSave, faBan } from '@fortawesome/free-solid-svg-icons'
+import { faSave, faBan, faLaptopHouse } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-user-import-dialog',
   templateUrl: './user-import-dialog.component.html',
   styleUrls: ['./user-import-dialog.component.scss'],
-  providers: [FileUploadService],
 })
 export class UserImportDialogComponent {
   resourceUrl: string
@@ -29,7 +28,7 @@ export class UserImportDialogComponent {
     protected userService: UserService,
     public activeModal: NgbActiveModal,
     protected eventService: EventService,
-    private uploadService: FileUploadService
+    private fileUploadService: FileUploadService
   ) {
     this.isSaving = false
     this.user = null
@@ -49,12 +48,15 @@ export class UserImportDialogComponent {
     if (this.currentFile) {
       this.loading = true
       const f = this.currentFile.item(0)
-      this.uploadService.uploadFile(this.resourceUrl, f!, 'text').subscribe((res: string) => {
-        this.csvErrors = JSON.parse(res)
-        this.loading = false
-        if (this.csvErrors.length === 0) {
-          this.eventService.broadcast(new Event(EventType.USER_LIST_MODIFIED, 'New user settings uploaded'))
-          this.activeModal.dismiss(true)
+
+      this.fileUploadService.uploadFile(this.resourceUrl, f!, 'text').subscribe((res: string) => {
+        if (res) {
+          this.csvErrors = JSON.parse(res)
+          this.loading = false
+          if (this.csvErrors.length === 0) {
+            this.eventService.broadcast(new Event(EventType.USER_LIST_MODIFIED, 'New user settings uploaded'))
+            this.activeModal.dismiss(true)
+          }
         }
       })
     } else {
