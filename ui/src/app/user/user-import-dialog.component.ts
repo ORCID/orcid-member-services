@@ -46,20 +46,14 @@ export class UserImportDialogComponent {
   }
 
   upload() {
-    console.log('resource url is ', this.resourceUrl)
     if (this.currentFile) {
-      console.log('found current file')
       this.loading = true
       const f = this.currentFile.item(0)
       this.uploadService.uploadFile(this.resourceUrl, f!, 'text').subscribe((res: string) => {
-        console.log('got result ', res)
-        console.log('parsing errors')
         this.csvErrors = JSON.parse(res)
-        console.log('parsed errors')
         this.loading = false
-        if (this.csvErrors.size === 0) {
+        if (this.csvErrors.length === 0) {
           this.eventService.broadcast(new Event(EventType.USER_LIST_MODIFIED, 'New user settings uploaded'))
-          console.log('dismissing dialog')
           this.activeModal.dismiss(true)
         }
       })
