@@ -1542,6 +1542,14 @@
         <source>Cancel</source>
         <target state="new">Zrušit</target>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
           <context context-type="linenumber">120</context>
         </context-group>
@@ -1567,7 +1575,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.home.createLabel.string" datatype="html">
-        <source> Add user </source>
+        <source>Add user </source>
         <target state="new">Přidat uživatele</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
@@ -1575,7 +1583,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.home.uploadLabel.string" datatype="html">
-        <source> Import users from CSV </source>
+        <source>Import users from CSV </source>
         <target state="new">Importovat uživatele z CSV</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
@@ -1602,6 +1610,10 @@
         <source>Delete</source>
         <target state="new">Smazat</target>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
           <context context-type="linenumber">198</context>
         </context-group>
@@ -1609,7 +1621,8 @@
       <trans-unit id="global.item-count.string" datatype="html">
         <source>Showing <x id="PH" equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x>
           of <x id="PH_2" equiv-text="this.totalItems"></x> items.</source>
-        <target state="new">Zobrazují se položky {{first}} – {{second}} z {{total}}</target>
+        <target state="new">Zobrazují se položky <x id="PH" equiv-text="first"></x> – <x id="PH_1"
+            equiv-text="second"></x> z <x id="PH_2" equiv-text="this.totalItems"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.ts</context>
           <context context-type="linenumber">246</context>
@@ -1650,7 +1663,7 @@
           ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.ts</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="userServiceApp.user.deleted.string" datatype="html">
@@ -1659,6 +1672,65 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="entity.delete.title.string" datatype="html">
+        <source>Confirm deletion</source>
+        <target state="new">Potvrdit smazání</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSUser.import.title.string" datatype="html">
+        <source>Import users</source>
+        <target state="new">Importovat uživatele</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSUser.import.errors.label.string" datatype="html">
+        <source>Oops! There was a problem processing your data. Pleases fix the errors below and try
+          again</source>
+        <target state="new">Jejda! Při zpracování vašich údajů došlo k problému. Opravte prosím níže
+          uvedené chyby a zkuste to znovu</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSUser.import.label.string" datatype="html">
+        <source>Please select a CSV file to upload</source>
+        <target state="new">Vyberte CSV soubor, který chcete nahrát</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSUser.import.filePath.string" datatype="html">
+        <source>File Path</source>
+        <target state="new">Cesta k souboru</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="entity.action.upload.string" datatype="html">
+        <source>Upload</source>
+        <target state="new">Nahrát</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7238639860984722601" datatype="html">
+        <source>There is no file to upload. Please select one.</source>
+        <target state="new">There is no file to upload. Please select one.</target>
+        <note priority="1" from="description">gatewayApp.msUserServiceMSUser.import.emptyFile.string</note>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.ts</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
     </body>

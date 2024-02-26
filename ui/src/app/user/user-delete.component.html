@@ -1,20 +1,20 @@
 <form name="deleteForm" (ngSubmit)="confirmDelete(user?.id)">
   <div class="modal-header">
-    <h4 class="modal-title" jhiTranslate="entity.delete.title.string">Confirm deletion</h4>
+    <h4 class="modal-title" i18n="@@entity.delete.title.string">Confirm deletion</h4>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
   </div>
   <div class="modal-body">
     <app-error-alert></app-error-alert>
-    <p id="jhi-delete-msUser-heading" jhiTranslate="gatewayApp.msUserServiceMSUser.delete.question.string">
+    <p id="jhi-delete-msUser-heading">
       {{ message }}
     </p>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">
-      <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
+      <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
     </button>
     <button id="jhi-confirm-delete-msUser" type="submit" class="btn btn-danger">
-      <fa-icon [icon]="faTimes"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete.string">Delete</span>
+      <fa-icon [icon]="faTimes"></fa-icon>&nbsp;<span i18n="@@entity.action.delete.string">Delete</span>
     </button>
   </div>
 </form>
