@@ -1070,12 +1070,24 @@
       <trans-unit id="entity.action.cancel.string" datatype="html">
         <source>Cancel</source>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.delete.string" datatype="html">
         <source>Delete</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
           <context context-type="linenumber">198</context>
@@ -1163,7 +1175,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.home.createLabel.string" datatype="html">
-        <source> Add user </source>
+        <source>Add user </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1191,7 +1203,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.home.uploadLabel.string" datatype="html">
-        <source> Import users from CSV </source>
+        <source>Import users from CSV </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
           <context context-type="linenumber">20</context>
@@ -1344,7 +1356,7 @@
         <source>Are you sure you want to delete user <x id="PH" equiv-text="this.user?.email"/>?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.ts</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="userServiceApp.user.created.string" datatype="html">
@@ -1366,6 +1378,56 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7238639860984722601" datatype="html">
+        <source>There is no file to upload. Please select one.</source>
+        <note priority="1" from="description">gatewayApp.msUserServiceMSUser.import.emptyFile.string</note>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="entity.action.upload.string" datatype="html">
+        <source>Upload</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="entity.delete.title.string" datatype="html">
+        <source>Confirm deletion</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSUser.import.errors.label.string" datatype="html">
+        <source>Oops! There was a problem processing your data. Pleases fix the errors below and try again</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSUser.import.filePath.string" datatype="html">
+        <source>File Path</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSUser.import.label.string" datatype="html">
+        <source>Please select a CSV file to upload</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSUser.import.title.string" datatype="html">
+        <source>Import users</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
     </body>
