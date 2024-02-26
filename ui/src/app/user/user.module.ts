@@ -8,6 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { UserUpdateComponent } from './user-update.component'
 import { UserDetailComponent } from './user-detail.component'
+import { UserImportDialogComponent, UserImportPopupComponent } from './user-import-dialog.component'
 import { UserDeleteDialogComponent, UserDeletePopupComponent } from './user-delete.component'
 
 @NgModule({
@@ -25,6 +26,8 @@ import { UserDeleteDialogComponent, UserDeletePopupComponent } from './user-dele
     UserDetailComponent,
     UserDeletePopupComponent,
     UserDeleteDialogComponent,
+    UserImportDialogComponent,
+    UserImportPopupComponent,
   ],
 })
 export class UserModule {}
