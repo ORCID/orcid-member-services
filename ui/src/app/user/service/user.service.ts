@@ -67,16 +67,6 @@ export class UserService {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`)
   }
 
-  switchUser(username: string): Observable<any> {
-    const formData = new FormData()
-    formData.set('username', username)
-    return this.http.post(`${this.switchResourceUrl}/switch_user`, formData, {
-      headers: new HttpHeaders().set('Accept', 'text/html'),
-      withCredentials: true,
-      responseType: 'text',
-    })
-  }
-
   protected convertDateFromClient(user: User): User {
     const copy: User = Object.assign({}, user, {
       createdDate: user.createdDate != null && user.createdDate.isValid() ? user.createdDate.toJSON() : null,

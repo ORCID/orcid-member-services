@@ -95,37 +95,13 @@ export class NavbarComponent implements OnInit {
     return this.accountService.hasAnyAuthority(['ROLE_ADMIN'])
   }
 
-  isLoggedAs() {
-    return this.accountService.isLoggedAs()
-  }
-
-  getUserName() {
-    return this.isAuthenticated() ? this.accountService.getUsername() : null
-  }
-
   logout() {
     this.collapseNavbar()
     this.organizationName = undefined
     this.memberCallDone = false
     this.username = undefined
-    if (this.isLoggedAs()) {
-      this.accountService.logoutAs().subscribe(() => {
-        this.router.navigate(['/'])
-      })
-    } else {
-      this.memberService.setManagedMember(null)
-      this.loginService.logout()
-    }
-  }
-
-  logoutAs() {
-    this.collapseNavbar()
-    this.organizationName = undefined
-    this.memberCallDone = false
-    this.username = undefined
-    this.accountService.logoutAs().subscribe((res) => {
-      this.router.navigate(['/'])
-    })
+    this.memberService.setManagedMember(null)
+    this.loginService.logout()
   }
 
   toggleNavbar() {

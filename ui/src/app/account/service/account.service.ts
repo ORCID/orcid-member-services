@@ -16,16 +16,15 @@ export class AccountService {
   private isFetchingAccountData = false
   private stopFetchingAccountData = new Subject()
   private authenticated = false
-  private logoutAsResourceUrl = '/services/userservice/api'
 
   constructor(
-    // TODO: uncomment when language service is implemented
-    //private languageService: JhiLanguageService,
     private languageService: LanguageService,
     private sessionStorage: SessionStorageService,
     private router: Router,
-    private http: HttpClient // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service //private memberService: MSMemberService
-  ) {}
+    private http: HttpClient
+  ) // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
+  //private memberService: MSMemberService
+  {}
 
   private fetchAccountData() {
     console.log('Fetching account data from the back end')
@@ -186,19 +185,5 @@ export class AccountService {
 
   isOrganizationOwner(): boolean | null {
     return this.isIdentityResolved() && this.accountData ? this.accountData.value!.mainContact : false
-  }
-
-  isLoggedAs(): boolean {
-    return !!(this.isIdentityResolved() && this.accountData.value && this.accountData.value.loggedAs)
-  }
-
-  logoutAs(): Observable<any> {
-    const formData = new FormData()
-    formData.set('username', this.accountData.value!.loginAs)
-    return this.http.post(`${this.logoutAsResourceUrl}/logout_as`, formData, {
-      headers: new HttpHeaders().set('Accept', 'text/html'),
-      withCredentials: true,
-      responseType: 'text',
-    })
   }
 }

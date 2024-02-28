@@ -201,28 +201,12 @@ export class UsersComponent implements OnInit, OnDestroy {
     return msUser.email === this.currentAccount?.email
   }
 
-  disableImpersonate(msUser: IUser) {
-    if (msUser.email === this.DEFAULT_ADMIN) {
-      return true
-    }
-    return msUser.email === this.currentAccount?.email
-  }
-
   hasRoleAdmin() {
     return this.accountService.hasAnyAuthority(['ROLE_ADMIN'])
   }
 
   isOrganizationOwner() {
     return this.accountService.isOrganizationOwner()
-  }
-
-  switchUser(login: string | undefined) {
-    if (login) {
-      this.userService.switchUser(login).subscribe((res) => {
-        // TODO: what is this doing? useless? revisit when working on impersonation
-        // window.location.href = SERVER_API_URL
-      })
-    }
   }
 
   resetSearch() {

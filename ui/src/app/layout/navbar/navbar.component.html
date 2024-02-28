@@ -1,12 +1,3 @@
-<div class="text-center" *ngIf="this.isLoggedAs()">
-  <fa-icon [icon]="faUser"></fa-icon>
-  <span i18n="@@global.menu.account.loggedInAs.string"></span>
-  <b>{{ this.getUserName() }}</b> | <span i18n="@@global.menu.account.logoutAs.string"></span
-  ><a tabindex="1" (click)="logoutAs()" (keypress)="logoutAs()" id="logoutAs.string">
-    {{ this.getUserName() }}
-    <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
-  </a>
-</div>
 <nav class="navbar navbar-dark navbar-expand-md bg-dark">
   <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()"
     ><span class="logo logo-img"
@@ -33,7 +24,6 @@
   </a>
   <div class="navbar-collapse collapse" id="navbarResponsive" [ngSwitch]="isAuthenticated()">
     <ul class="navbar-nav ml-auto">
-      <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       <li
         *appHasAnyAuthority="'ROLE_USER'"
         ngbDropdown
