@@ -56,7 +56,6 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th></th>
           <th (click)="updateSort('email')">
             <span i18n="@@gatewayApp.msUserServiceMSUser.email.string">Email</span>
             <fa-icon class="ml-2" *ngIf="sortColumn === 'email'" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
@@ -114,18 +113,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let user of users">
-          <td>
-            <button
-              *appHasAnyAuthority="'ROLE_ADMIN'"
-              type="submit"
-              (click)="switchUser(user.email)"
-              replaceUrl="true"
-              class="btn btn-primary btn-sm ml-1"
-              [disabled]="disableImpersonate(user)"
-            >
-              <fa-icon [icon]="faSignInAlt"></fa-icon>
-            </button>
-          </td>
           <td>
             <a [routerLink]="['/users', user.id, 'view']">{{ user.email }}</a>
           </td>

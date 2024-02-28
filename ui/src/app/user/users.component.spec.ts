@@ -32,17 +32,11 @@ describe('UsersComponent', () => {
       'getAccountData',
       'isAuthenticated',
       'hasAnyAuthority',
-      'isLoggedAs',
       'isOrganizationOwner',
       'getImageUrl',
       'getSalesforceId',
     ])
-    const userServiceSpy = jasmine.createSpyObj('UserService', [
-      'query',
-      'findBySalesForceId',
-      'sendActivate',
-      'switchUser',
-    ])
+    const userServiceSpy = jasmine.createSpyObj('UserService', ['query', 'findBySalesForceId', 'sendActivate'])
     const eventServiceSpy = jasmine.createSpyObj('EventService', ['on', 'broadcast'])
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['on', 'broadcast'])
 
