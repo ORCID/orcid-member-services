@@ -18,12 +18,15 @@ import { ErrorService } from './error/service/error.service'
 import { ErrorComponent } from './error/error.component'
 import { FormsModule } from '@angular/forms'
 import { UserModule } from './user/user.module'
+import { AffiliationsComponent } from './affiliation/affiliations.component'
+import { AffiliationModule } from './affiliation/affiliation.module'
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
+  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent, AffiliationsComponent],
   imports: [
     BrowserModule,
     UserModule,
+    AffiliationModule,
     AccountModule,
     HomeModule,
     HttpClientModule,

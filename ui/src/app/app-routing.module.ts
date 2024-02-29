@@ -18,6 +18,10 @@ const routes: Routes = [
     path: 'users',
     loadChildren: () => import('./user/user.module').then((m) => m.UserModule),
   },
+  {
+    path: 'affiliations',
+    loadChildren: () => import('./affiliation/affiliation.module').then((m) => m.AffiliationModule),
+  },
 ]
 
 @NgModule({
