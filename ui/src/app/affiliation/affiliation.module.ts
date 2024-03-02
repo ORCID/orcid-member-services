@@ -33,16 +33,6 @@ const ENTITY_STATES = [...assertionRoute, ...assertionPopupRoute]
     SendNotificationsPopupComponent,
     SendNotificationsDialogComponent,
   ],
-  entryComponents: [
-    AssertionComponent,
-    AssertionUpdateComponent,
-    AssertionDeleteDialogComponent,
-    AssertionDeletePopupComponent,
-    AssertionImportPopupComponent,
-    AssertionImportDialogComponent,
-    SendNotificationsPopupComponent,
-    SendNotificationsDialogComponent,
-  ],
   providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
