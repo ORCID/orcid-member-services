@@ -5,6 +5,9 @@ export enum EventType {
   AFFILIATION_CREATED = 'AFFILIATION_CREATED',
   AFFILIATION_UPDATED = 'AFFILIATION_UPDATED',
   USER_LIST_MODIFIED = 'USER_LIST_MODIFIED',
+  AFFILIATION_LIST_MODIFICATION = 'AFFILIATION_LIST_MODIFICATION',
+  IMPORT_AFFILIATIONS = 'IMPORT_AFFILIATIONS',
+  SEND_NOTIFICATIONS = 'SEND_NOTIFICATIONS',
 }
 
 export enum AlertType {
@@ -31,3 +34,5 @@ export function emailValidator(control: FormControl): { [key: string]: any } | n
   }
   return null
 }
+
+export const ORCID_BASE_URL = process.env['ORCID_BASE_URL']
