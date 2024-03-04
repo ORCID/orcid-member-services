@@ -19,96 +19,15 @@ export const AffiliationResolver: ResolveFn<Affiliation | null> = (
   }
 }
 
-export const assertionRoute: Routes = [
+export const affiliationRoutes: Routes = [
   {
     path: '',
-    component: AssertionComponent,
-    resolve: {
-      pagingParams: JhiResolvePagingParams,
-    },
+    component: AffiliationsComponent,
     data: {
       authorities: ['ASSERTION_SERVICE_ENABLED'],
       defaultSort: 'email,asc',
       pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string',
     },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: ':id/view',
-    component: AssertionDetailComponent,
-    resolve: {
-      assertion: AssertionResolve,
-    },
-    data: {
-      authorities: ['ASSERTION_SERVICE_ENABLED'],
-      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string',
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: 'new',
-    component: AssertionUpdateComponent,
-    resolve: {
-      assertion: AssertionResolve,
-    },
-    data: {
-      authorities: ['ASSERTION_SERVICE_ENABLED'],
-      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string',
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: ':id/edit',
-    component: AssertionUpdateComponent,
-    resolve: {
-      assertion: AssertionResolve,
-    },
-    data: {
-      authorities: ['ASSERTION_SERVICE_ENABLED'],
-      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string',
-    },
-    canActivate: [UserRouteAccessService],
-  },
-]
-
-export const assertionPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: AssertionDeletePopupComponent,
-    resolve: {
-      assertion: AssertionResolve,
-    },
-    data: {
-      authorities: ['ASSERTION_SERVICE_ENABLED'],
-      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string',
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup',
-  },
-  {
-    path: 'import',
-    component: AssertionImportPopupComponent,
-    resolve: {
-      assertion: AssertionResolve,
-    },
-    data: {
-      authorities: ['ASSERTION_SERVICE_ENABLED'],
-      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string',
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup',
-  },
-  {
-    path: 'notifications',
-    component: SendNotificationsPopupComponent,
-    resolve: {
-      assertion: AssertionResolve,
-    },
-    data: {
-      authorities: ['ASSERTION_SERVICE_ENABLED'],
-      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string',
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup',
+    canActivate: [AuthGuard],
   },
 ]

@@ -22,7 +22,7 @@ import { AffiliationsComponent } from './affiliation/affiliations.component'
 import { AffiliationModule } from './affiliation/affiliation.module'
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent, AffiliationsComponent],
+  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
   imports: [
     BrowserModule,
     UserModule,

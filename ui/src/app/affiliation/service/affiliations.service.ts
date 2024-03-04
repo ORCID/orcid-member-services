@@ -3,11 +3,8 @@ import { HttpClient, HttpResponse } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import * as moment from 'moment'
 import { map } from 'rxjs/operators'
-import { IAffiliation } from '../model/affiliation.model'
+import { AffiliationPage, IAffiliation, IAffiliationPage } from '../model/affiliation.model'
 import { createRequestOption } from 'src/app/shared/request-util'
-
-type EntityResponseType = HttpResponse<IAffiliation>
-type EntityArrayResponseType = HttpResponse<IAffiliation[]>
 
 @Injectable({ providedIn: 'root' })
 export class AffiliationService {
@@ -32,8 +29,8 @@ export class AffiliationService {
   update(affiliation: IAffiliation): Observable<IAffiliation> {
     const copy = this.convertDateFromClient(affiliation)
     return this.http
-      .put<IAffiliation>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+      .put<IAffiliation>(this.resourceUrl, copy)
+      .pipe(map((res: IAffiliation) => this.convertDateFromClient(res)))
   }
 
   find(id: string): Observable<IAffiliation> {
@@ -42,11 +39,11 @@ export class AffiliationService {
       .pipe(map((res: IAffiliation) => this.convertDateFromServer(res)))
   }
 
-  query(req?: any): Observable<IAffiliation[]> {
+  query(req?: any): Observable<IAffiliationPage | null> {
     const options = createRequestOption(req)
     return this.http
-      .get<IAffiliation[]>(this.resourceUrl + 's', { params: options })
-      .pipe(map((res: IAffiliation[]) => this.convertDateArrayFromServer(res)))
+      .get<IAffiliation[]>(this.resourceUrl + 's', { params: options, observe: 'response' })
+      .pipe(map((res: HttpResponse<IAffiliation[]>) => this.convertToAffiliationPage(res)))
   }
 
   delete(id: string): Observable<HttpResponse<any>> {
@@ -92,16 +89,21 @@ export class AffiliationService {
     return res
   }
 
-  protected convertDateArrayFromServer(res: IAffiliation[]): IAffiliation[] {
-    if (res) {
-      res.forEach((affiliation: IAffiliation) => {
+  protected convertToAffiliationPage(res: HttpResponse<IAffiliation[]>): IAffiliationPage | null {
+    if (res.body) {
+      res.body.forEach((affiliation: IAffiliation) => {
         affiliation.created = affiliation.created ? moment(affiliation.created) : undefined
         affiliation.modified = affiliation.modified ? moment(affiliation.modified) : undefined
         affiliation.deletedFromORCID = affiliation.deletedFromORCID ? moment(affiliation.deletedFromORCID) : undefined
         affiliation.addedToORCID = affiliation.addedToORCID ? moment(affiliation.addedToORCID) : undefined
         affiliation.updatedInORCID = affiliation.updatedInORCID ? moment(affiliation.updatedInORCID) : undefined
       })
+      const totalCount: string | null = res.headers.get('X-Total-Count')
+      if (totalCount) {
+        const userPage = new AffiliationPage(res.body, parseInt(totalCount, 10))
+        return userPage
+      }
     }
-    return res
+    return null
   }
 }

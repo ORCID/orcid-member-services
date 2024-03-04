@@ -102,3 +102,18 @@ export class Affiliation implements IAffiliation {
     this.permissionLink = this.permissionLink || null
   }
 }
+
+export interface IAffiliationPage {
+  affiliations: Affiliation[] | null | undefined
+  totalItems: number | null | undefined
+}
+
+export class AffiliationPage implements IAffiliationPage {
+  constructor(
+    public affiliations: Affiliation[],
+    public totalItems: number
+  ) {
+    this.affiliations = affiliations
+    this.totalItems = totalItems
+  }
+}

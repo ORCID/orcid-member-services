@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { IAffiliation } from './model/affiliation.model'
+import { IAffiliation, IAffiliationPage } from './model/affiliation.model'
 import { AFFILIATION_STATUS } from '../shared/constants/orcid-api.constants'
 import { Subscription, delay, tap } from 'rxjs'
 import { EventType, ITEMS_PER_PAGE, ORCID_BASE_URL } from '../app.constants'
@@ -9,10 +9,11 @@ import {
   faFileImport,
   faPaperPlane,
   faSearch,
+  faSortDown,
+  faSortUp,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons'
 import { AffiliationService } from './service/affiliations.service'
-import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { LanguageService } from '../shared/service/language.service'
 import { AccountService } from '../account'
 import { AlertService } from '../shared/service/alert.service'
@@ -29,7 +30,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   errorUpdatingInOrcid: string = AFFILIATION_STATUS.ERROR_UPDATING_TO_ORCID
   errorDeletingInOrcid: string = AFFILIATION_STATUS.ERROR_DELETING_IN_ORCID
   currentAccount: any
-  affiliations: IAffiliation[] | undefined
+  affiliations: IAffiliation[] | null | undefined
   error: any
   success: any
   eventSubscriber: Subscription | undefined
@@ -40,8 +41,8 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   totalItems: any
   itemsPerPage: any
   page: any
-  predicate: any
-  reverse: any
+  sortColumn: any
+  ascending: any
   orcidBaseUrl: string | undefined = ORCID_BASE_URL
   itemCount: string | undefined
   faChartBar = faChartBar
@@ -50,6 +51,8 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   faTimes = faTimes
   faSearch = faSearch
   faPaperPlane = faPaperPlane
+  faSortDown = faSortDown
+  faSortUp = faSortUp
   searchTerm: string | undefined
   submittedSearchTerm: string | undefined
   showEditReportPendingMessage: boolean | undefined
@@ -59,7 +62,6 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
 
   constructor(
     protected affiliationService: AffiliationService,
-    protected parseLinks: JhiParseLinks,
     protected alertService: AlertService,
     protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
@@ -71,7 +73,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.accountService.identity().then((account) => {
+    this.accountService.getAccountData().subscribe((account) => {
       this.currentAccount = account
     })
     this.eventSubscriber = this.eventService.on(EventType.AFFILIATION_LIST_MODIFICATION).subscribe(() => {
@@ -86,9 +88,9 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
       this.loadAll()
     })
     this.routeData = this.activatedRoute.data.subscribe((data) => {
-      this.page = data.pagingParams.page
-      this.reverse = data.pagingParams.ascending
-      this.predicate = data.pagingParams.predicate
+      this.page = data['pagingParams'].page
+      this.ascending = data['pagingParams'].ascending
+      this.sortColumn = data['pagingParams'].predicate
       this.loadAll()
     })
   }
@@ -101,18 +103,30 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
         sort: this.sort(),
         filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
       })
-      .subscribe(
-        (res: IAffiliation[]) => this.paginateAssertions(res.body, res.headers),
-        (res: HttpErrorResponse) => this.onError(res.message)
-      )
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.paginate(res)
+          }
+        },
+      })
   }
 
-  transition() {
+  updateSort(columnName: string) {
+    if (this.sortColumn && this.sortColumn == columnName) {
+      this.ascending = !this.ascending
+    } else {
+      this.sortColumn = columnName
+    }
+    this.loadPage()
+  }
+
+  loadPage() {
     this.router.navigate(['/assertion'], {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        sort: this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc'),
         filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
       },
     })
@@ -125,7 +139,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
       '/assertion',
       {
         page: this.page,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+        sort: this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc'),
         filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
       },
     ])
@@ -137,8 +151,8 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   }
 
   sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')]
-    if (this.predicate !== 'id') {
+    const result = [this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc')]
+    if (this.sortColumn !== 'id') {
       result.push('id')
     }
     return result
@@ -190,15 +204,12 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
     this.loadAll()
   }
 
-  protected paginateAssertions(data: IAffiliation[], headers: HttpHeaders) {
-    this.links = this.parseLinks.parse(headers.get('link'))
-    this.totalItems = parseInt(headers.get('X-Total-Count')!, 10)
-    this.affiliations = data
+  protected paginate(res: IAffiliationPage) {
+    this.totalItems = res.totalItems
+    this.affiliations = res.affiliations
     const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1
     const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems
-    this.paginationHeaderSubscription = this.translate
-      .get('global.item-count.string', { first, second, total: this.totalItems })
-      .subscribe((paginationHeader: string) => (this.itemCount = paginationHeader))
+    this.itemCount = $localize`:@@global.item-count.string:Showing ${first} - ${second} of ${this.totalItems} items.`
   }
 
   protected onError(errorMessage: string) {
@@ -207,8 +218,5 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeData!.unsubscribe()
-    if (this.paginationHeaderSubscription) {
-      this.paginationHeaderSubscription.unsubscribe()
-    }
   }
 }
