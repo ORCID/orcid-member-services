@@ -8,6 +8,8 @@ import {
   faFileDownload,
   faFileImport,
   faPaperPlane,
+  faPencilAlt,
+  faPlus,
   faSearch,
   faSortDown,
   faSortUp,
@@ -53,6 +55,8 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   faPaperPlane = faPaperPlane
   faSortDown = faSortDown
   faSortUp = faSortUp
+  faPencilAlt = faPencilAlt
+  faPlus = faPlus
   searchTerm: string | undefined
   submittedSearchTerm: string | undefined
   showEditReportPendingMessage: boolean | undefined
@@ -88,9 +92,9 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
       this.loadAll()
     })
     this.routeData = this.activatedRoute.data.subscribe((data) => {
-      this.page = data['pagingParams'].page
-      this.ascending = data['pagingParams'].ascending
-      this.sortColumn = data['pagingParams'].predicate
+      this.page = data['queryParams'] ? data['queryParams'].page : 1
+      this.ascending = data['queryParams'] ? data['queryParams'].page.sort.split(',')[1] : false
+      this.sortColumn = data['queryParams'] ? data['queryParams'].page.sort.split(',')[0] : 'id'
       this.loadAll()
     })
   }
