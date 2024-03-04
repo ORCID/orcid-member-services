@@ -34,5 +34,5 @@ export function emailValidator(control: FormControl): { [key: string]: any } | n
   }
   return null
 }
-
-export const ORCID_BASE_URL = process.env['ORCID_BASE_URL']
+const environment = window.location.hostname.replace('member-portal.', '').replace('.orcid.org', '')
+export const ORCID_BASE_URL = environment + '.orcid.org'
