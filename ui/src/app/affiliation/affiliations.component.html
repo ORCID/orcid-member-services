@@ -102,6 +102,7 @@
             type="text"
             (keyup.enter)="submitSearch()"
             placeholder="Search..."
+            [(ngModel)]="searchTerm"
             i18n-placeholder="@@global.form.search.string"
             ng-model="selected"
             class="form-control"
@@ -118,7 +119,7 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <jhi-alert></jhi-alert>
+      <app-alert></app-alert>
       <br />
       <div class="alert alert-warning" *ngIf="affiliations?.length === 0">
         <span i18n="@@gatewayApp.assertionServiceAssertion.home.notFound.string">No affiliations found</span>
@@ -246,6 +247,7 @@
         [pageSize]="itemsPerPage"
         [maxSize]="5"
         [rotate]="true"
+        [(page)]="page"
         [boundaryLinks]="true"
         (pageChange)="loadPage()"
       ></ngb-pagination>
