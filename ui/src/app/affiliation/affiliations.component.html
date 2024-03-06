@@ -5,7 +5,7 @@
       <button
         id="jh-send-notifications"
         class="btn btn-primary float-right send-notifications ml-1"
-        [routerLink]="['/', 'assertion', { outlets: { popup: 'notifications' } }]"
+        [routerLink]="['/', 'affiliations', { outlets: { popup: 'notifications' } }]"
       >
         <fa-icon [icon]="faPaperPlane"></fa-icon>
         <span i18n="@@gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string">
@@ -45,7 +45,7 @@
       <button
         id="jh-upload-entities"
         class="btn btn-primary float-right jh-upload-entities upload-assertions ml-1"
-        [routerLink]="['/', 'assertion', { outlets: { popup: 'import' } }]"
+        [routerLink]="['/', 'affiliations', { outlets: { popup: 'import' } }]"
       >
         <fa-icon [icon]="faFileImport"></fa-icon>
         <span i18n="@@gatewayApp.assertionServiceAssertion.home.uploadLabel.string">
@@ -55,7 +55,7 @@
       <button
         id="jh-create-entity"
         class="btn btn-primary float-right jh-create-entity create-assertion ml-1"
-        [routerLink]="['/assertion/new']"
+        [routerLink]="['/affiliations/new']"
       >
         <fa-icon [icon]="faPlus"></fa-icon>
         <span i18n="@@gatewayApp.assertionServiceAssertion.home.createLabel.string"> Add affiliation </span>
@@ -215,7 +215,7 @@
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/affiliation', affiliation.id, 'edit']"
+                [routerLink]="['/affiliations', affiliation.id, 'edit']"
                 class="btn btn-primary btn-sm ml-1"
               >
                 <fa-icon [icon]="faPencilAlt"></fa-icon>
@@ -223,7 +223,7 @@
               </button>
               <button
                 type="submit"
-                [routerLink]="['/', 'affiliation', { outlets: { popup: affiliation.id + '/delete' } }]"
+                [routerLink]="['/', 'affiliations', { outlets: { popup: affiliation.id + '/delete' } }]"
                 replaceUrl="true"
                 queryParamsHandling="merge"
                 class="btn btn-danger btn-sm ml-1"

@@ -42,8 +42,8 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   links: any
   totalItems: any
   itemsPerPage: any
-  page: any
-  sortColumn: any
+  page = 1
+  sortColumn = 'id'
   ascending: any
   orcidBaseUrl: string | undefined = ORCID_BASE_URL
   itemCount: string | undefined
@@ -126,7 +126,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   }
 
   loadPage() {
-    this.router.navigate(['/assertion'], {
+    this.router.navigate(['/affiliations'], {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
@@ -140,7 +140,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   clear() {
     this.page = 0
     this.router.navigate([
-      '/assertion',
+      '/affiliations',
       {
         page: this.page,
         sort: this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc'),
@@ -221,6 +221,14 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.routeData!.unsubscribe()
+    if (this.notificationSubscription) {
+      this.notificationSubscription.unsubscribe()
+    }
+    if (this.eventSubscriber) {
+      this.eventSubscriber.unsubscribe()
+    }
+    if (this.importEventSubscriber) {
+      this.importEventSubscriber.unsubscribe()
+    }
   }
 }
