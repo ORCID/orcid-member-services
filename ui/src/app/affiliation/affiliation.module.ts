@@ -12,6 +12,4 @@ import { FormsModule } from '@angular/forms'
   declarations: [AffiliationsComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AffiliationModule {
-  constructor() {}
-}
+export class AffiliationModule {}

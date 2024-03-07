@@ -170,7 +170,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
         delay(10000),
         tap(() => (this.showLinksReportPendingMessage = false))
       )
-      .subscribe((res) => {})
+      .subscribe()
   }
 
   generateCSV() {
@@ -181,7 +181,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
         delay(10000),
         tap(() => (this.showEditReportPendingMessage = false))
       )
-      .subscribe((res) => {})
+      .subscribe()
   }
 
   generateReport() {
@@ -192,7 +192,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
         delay(10000),
         tap(() => (this.showStatusReportPendingMessage = false))
       )
-      .subscribe((res) => {})
+      .subscribe()
   }
 
   resetSearch() {

@@ -195,9 +195,9 @@
             <span>{{ affiliation.prettyStatus | localize }}</span>
             <div
               *ngIf="
-                affiliation.prettyStatus == errorAddingToOrcid ||
-                affiliation.prettyStatus == errorUpdatingInOrcid ||
-                affiliation.prettyStatus == errorDeletingInOrcid
+                affiliation.prettyStatus === errorAddingToOrcid ||
+                affiliation.prettyStatus === errorUpdatingInOrcid ||
+                affiliation.prettyStatus === errorDeletingInOrcid
               "
             >
               <p class="note" i18n="@@gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string">
@@ -239,7 +239,7 @@
     <div class="row justify-content-center">
       <p>{{ itemCount }}</p>
     </div>
-    <div class="row justify-content-center" *ngIf="totalItems != null && totalItems > 0">
+    <div class="row justify-content-center" *ngIf="totalItems !== null && totalItems > 0">
       <ngb-pagination
         [collectionSize]="totalItems"
         [pageSize]="itemsPerPage"
