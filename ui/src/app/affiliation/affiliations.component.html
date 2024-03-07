@@ -1,0 +1,254 @@
+<div>
+  <h1 id="page-heading" class="mt-3" i18n="@@gatewayApp.assertionServiceAssertion.home.title.string">Affiliations</h1>
+  <div class="row justify-content-end">
+    <div class="col-md-12 mb-2">
+      <button
+        id="jh-send-notifications"
+        class="btn btn-primary float-right send-notifications ml-1"
+        [routerLink]="['/', 'affiliations', { outlets: { popup: 'notifications' } }]"
+      >
+        <fa-icon [icon]="faPaperPlane"></fa-icon>
+        <span i18n="@@gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string">
+          Send permission notifications
+        </span>
+      </button>
+      <button
+        id="jh-generate-links"
+        class="btn btn-primary float-right jh-generate-links generate-links ml-1"
+        (click)="generatePermissionLinks()"
+      >
+        <fa-icon [icon]="faFileDownload"></fa-icon>
+        <span i18n="@@gatewayApp.assertionServiceAssertion.reports.links.button.string">
+          Request permission links
+        </span>
+      </button>
+      <button
+        id="jh-generate-report"
+        class="btn btn-primary float-right jh-generate-reports generate-report ml-1"
+        (click)="generateReport()"
+      >
+        <fa-icon [icon]="faChartBar"></fa-icon>
+        <span i18n="@@gatewayApp.assertionServiceAssertion.reports.affiliationsReport.button.string">
+          Request affiliation status report
+        </span>
+      </button>
+      <button
+        id="jh-generate-csv"
+        class="btn btn-primary float-right jh-generate-links generate-links ml-1"
+        (click)="generateCSV()"
+      >
+        <fa-icon [icon]="faFileDownload"></fa-icon>
+        <span i18n="@@gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.button.string">
+          Request affiliations for edit
+        </span>
+      </button>
+      <button
+        id="jh-upload-entities"
+        class="btn btn-primary float-right jh-upload-entities upload-assertions ml-1"
+        [routerLink]="['/', 'affiliations', { outlets: { popup: 'import' } }]"
+      >
+        <fa-icon [icon]="faFileImport"></fa-icon>
+        <span i18n="@@gatewayApp.assertionServiceAssertion.home.uploadLabel.string">
+          Import affiliations from CSV
+        </span>
+      </button>
+      <button
+        id="jh-create-entity"
+        class="btn btn-primary float-right jh-create-entity create-assertion ml-1"
+        [routerLink]="['/affiliations/new']"
+      >
+        <fa-icon [icon]="faPlus"></fa-icon>
+        <span i18n="@@gatewayApp.assertionServiceAssertion.home.createLabel.string"> Add affiliation </span>
+      </button>
+    </div>
+  </div>
+  <div
+    class="row success"
+    *ngIf="showEditReportPendingMessage || showStatusReportPendingMessage || showLinksReportPendingMessage"
+  >
+    <div class="col-md-12">
+      <span
+        *ngIf="showEditReportPendingMessage"
+        i18n="@@gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.confirmation.string"
+      >
+        Your affiliations for edit file will be mailed to you shortly. If you do not receive your file then please
+        contact us at membership&#64;orcid.org.
+      </span>
+    </div>
+    <div class="col-md-12">
+      <span
+        *ngIf="showStatusReportPendingMessage"
+        i18n="@@gatewayApp.assertionServiceAssertion.reports.affiliationsReport.confirmation.string"
+      >
+        Your affiliation status report file will be mailed to you shortly. If you do not receive your file then please
+        contact us at membership&#64;orcid.org.
+      </span>
+    </div>
+    <div class="col-md-12">
+      <span
+        *ngIf="showLinksReportPendingMessage"
+        i18n="@@gatewayApp.assertionServiceAssertion.reports.links.confirmation.string"
+      >
+        Your permission links file will be mailed to you shortly. If you do not receive your file then please contact us
+        at membership&#64;orcid.org.
+      </span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="input-group filter-group justify-content-end">
+        <div class="filter-input">
+          <input
+            type="text"
+            (keyup.enter)="submitSearch()"
+            placeholder="Search..."
+            [(ngModel)]="searchTerm"
+            i18n-placeholder="@@global.form.search.string"
+            ng-model="selected"
+            class="form-control"
+          />
+          <button *ngIf="submittedSearchTerm" class="reset" (click)="resetSearch()">
+            <fa-icon aria-hidden="true" [icon]="faTimes" [styles]="{ color: '#2e7f9f' }"></fa-icon>
+          </button>
+        </div>
+        <button class="search" (click)="submitSearch()">
+          <fa-icon aria-hidden="true" [icon]="faSearch" [styles]="{ color: '#2e7f9f' }"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <app-alert></app-alert>
+      <br />
+      <div class="alert alert-warning" *ngIf="affiliations?.length === 0">
+        <span i18n="@@gatewayApp.assertionServiceAssertion.home.notFound.string">No affiliations found</span>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive" *ngIf="affiliations && affiliations.length && affiliations.length > 0">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th (click)="updateSort('email')">
+            <span i18n="@@gatewayApp.assertionServiceAssertion.email.string">Email</span>
+            <fa-icon *ngIf="sortColumn === 'email'" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+          </th>
+          <th (click)="updateSort('orcidId')">
+            <span i18n="@@gatewayApp.assertionServiceAssertion.orcidId.string">ORCID iD</span>
+            <fa-icon *ngIf="sortColumn === 'orcidId'" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+          </th>
+          <th (click)="updateSort('affiliationSection')" width="30%">
+            <span i18n="@@gatewayApp.assertionServiceAssertion.affiliationData.string">Affiliation Data</span>
+            <fa-icon *ngIf="sortColumn === 'affiliationSection'" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+          </th>
+          <th (click)="updateSort('created')">
+            <span i18n="@@gatewayApp.assertionServiceAssertion.dateCreated.string">Date created</span>
+            <fa-icon *ngIf="sortColumn === 'created'" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+          </th>
+          <th (click)="updateSort('status')">
+            <span i18n="@@gatewayApp.assertionServiceAssertion.status.string">Status</span>
+            <fa-icon *ngIf="sortColumn === 'status'" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let affiliation of affiliations; trackBy: trackId">
+          <td>{{ affiliation.email }}</td>
+          <td>
+            <span *ngIf="affiliation.orcidId"
+              ><a href="{{ orcidBaseUrl }}/{{ affiliation.orcidId }}" target="_blank"
+                >{{ orcidBaseUrl }}/{{ affiliation.orcidId }}</a
+              ></span
+            >
+          </td>
+          <td>
+            <span i18n="@@{{'gatewayApp.AffiliationSection.' + affiliation.affiliationSection + '.string'}}">{{
+              affiliation.affiliationSection
+            }}</span
+            ><br />
+            {{ affiliation.orgName }}: <span *ngIf="affiliation.orgCity">{{ affiliation.orgCity }}</span
+            ><span *ngIf="affiliation.orgRegion">, {{ affiliation.orgRegion }}</span
+            ><span *ngIf="affiliation.orgCountry">, {{ affiliation.orgCountry }}</span
+            ><br />
+            <span *ngIf="affiliation.departmentName">{{ affiliation.departmentName }}</span
+            ><span *ngIf="affiliation.roleTitle"> ({{ affiliation.roleTitle }})</span><br />
+            <span *ngIf="affiliation.startYear">{{ affiliation.startYear }}</span
+            ><span *ngIf="affiliation.startMonth">-{{ affiliation.startMonth }}</span
+            ><span *ngIf="affiliation.startDay">-{{ affiliation.startDay }}</span>
+            <span
+              *ngIf="affiliation.startYear && affiliation.endYear"
+              i18n="@@gatewayApp.assertionServiceaffiliation.dateRange.string"
+              >to</span
+            >
+            <span *ngIf="affiliation.endYear">{{ affiliation.endYear }}</span
+            ><span *ngIf="affiliation.endMonth">-{{ affiliation.endMonth }}</span
+            ><span *ngIf="affiliation.endDay">-{{ affiliation.endDay }} </span> <br /><a
+              i18n="@@gatewayApp.assertionServiceAssertion.details.string"
+              [routerLink]="['/affiliation', affiliation.id, 'view']"
+              >View details</a
+            >
+          </td>
+          <td>{{ affiliation.created?.toString() | date: 'medium' }}</td>
+          <td class="assertion-status" *ngIf="affiliation.prettyStatus">
+            <span>{{ affiliation.prettyStatus | localize }}</span>
+            <div
+              *ngIf="
+                affiliation.prettyStatus === errorAddingToOrcid ||
+                affiliation.prettyStatus === errorUpdatingInOrcid ||
+                affiliation.prettyStatus === errorDeletingInOrcid
+              "
+            >
+              <p class="note" i18n="@@gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string">
+                For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot
+                of the error message below.
+              </p>
+              <div class="alert alert-warning">
+                <pre><code>{{affiliation.orcidError}}</code></pre>
+              </div>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/affiliations', affiliation.id, 'edit']"
+                class="btn btn-primary btn-sm ml-1"
+              >
+                <fa-icon [icon]="faPencilAlt"></fa-icon>
+                <span class="d-none d-md-inline" i18n="@@entity.action.edit.string">Edit</span>
+              </button>
+              <button
+                type="submit"
+                [routerLink]="['/', 'affiliations', { outlets: { popup: affiliation.id + '/delete' } }]"
+                replaceUrl="true"
+                queryParamsHandling="merge"
+                class="btn btn-danger btn-sm ml-1"
+              >
+                <fa-icon [icon]="faTimes"></fa-icon>
+                <span class="d-none d-md-inline" i18n="@@entity.action.delete.string">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div [hidden]="affiliations?.length === 0">
+    <div class="row justify-content-center">
+      <p>{{ itemCount }}</p>
+    </div>
+    <div class="row justify-content-center" *ngIf="totalItems !== null && totalItems > 0">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [(page)]="page"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage()"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

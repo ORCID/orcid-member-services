@@ -1,10 +1,13 @@
 import { FormControl } from '@angular/forms'
 
 export enum EventType {
-  LOG_IN_SUCCESS = 'LOG_IN_SUCCESS',
-  AFFILIATION_CREATED = 'AFFILIATION_CREATED',
-  AFFILIATION_UPDATED = 'AFFILIATION_UPDATED',
-  USER_LIST_MODIFIED = 'USER_LIST_MODIFIED',
+  LOG_IN_SUCCESS,
+  AFFILIATION_CREATED,
+  AFFILIATION_UPDATED,
+  USER_LIST_MODIFIED,
+  AFFILIATION_LIST_MODIFICATION,
+  IMPORT_AFFILIATIONS,
+  SEND_NOTIFICATIONS,
 }
 
 export enum AlertType {
@@ -31,3 +34,5 @@ export function emailValidator(control: FormControl): { [key: string]: any } | n
   }
   return null
 }
+const environment = window.location.hostname.replace('member-portal.', '').replace('.orcid.org', '')
+export const ORCID_BASE_URL = environment + '.orcid.org'
