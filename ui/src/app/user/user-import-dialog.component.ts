@@ -7,7 +7,7 @@ import { EventService } from '../shared/service/event.service'
 import { Event } from '../shared/model/event.model'
 import { EventType } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
-import { faSave, faBan, faLaptopHouse } from '@fortawesome/free-solid-svg-icons'
+import { faSave, faBan } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-user-import-dialog',

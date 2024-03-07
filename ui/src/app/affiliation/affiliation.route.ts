@@ -6,6 +6,7 @@ import { AffiliationService } from './service/affiliations.service'
 import { Affiliation } from './model/affiliation.model'
 import { AffiliationsComponent } from './affiliations.component'
 import { AffiliationDetailComponent } from './affiliation-detail.component'
+import { AffiliationImportPopupComponent } from './affiliation-import-dialog.component'
 
 export const AffiliationResolver: ResolveFn<Affiliation | null> = (
   route: ActivatedRouteSnapshot,
@@ -32,6 +33,21 @@ export const affiliationRoutes: Routes = [
       pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string',
     },
     canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'import',
+        component: AffiliationImportPopupComponent,
+        resolve: {
+          affiliation: AffiliationResolver,
+        },
+        data: {
+          authorities: ['ASSERTION_SERVICE_ENABLED'],
+          pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string',
+        },
+        canActivate: [AuthGuard],
+        outlet: 'popup',
+      },
+    ],
   },
   {
     path: 'affiliations/:id/view',
