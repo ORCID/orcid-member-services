@@ -5,11 +5,12 @@ import { AffiliationsComponent } from './affiliations.component'
 import { affiliationRoutes } from './affiliation.route'
 import { SharedModule } from '../shared/shared.module'
 import { CommonModule } from '@angular/common'
-import { FormsModule } from '@angular/forms'
+import { FormsModule } from '@angular/forms';
+import { AffiliationDetailComponent } from './affiliation-detail.component'
 
 @NgModule({
   imports: [CommonModule, FormsModule, SharedModule, RouterModule.forChild(affiliationRoutes), ClipboardModule],
-  declarations: [AffiliationsComponent],
+  declarations: [AffiliationsComponent, AffiliationDetailComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AffiliationModule {}
