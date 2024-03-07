@@ -191,10 +191,8 @@
             >
           </td>
           <td>{{ affiliation.created?.toString() | date: 'medium' }}</td>
-          <td class="assertion-status">
-            <span i18n="@@{{'gatewayApp.assertionStatus.' + (affiliation.prettyStatus | camelcase) + '.string'}}">{{
-              affiliation.prettyStatus
-            }}</span>
+          <td class="assertion-status" *ngIf="affiliation.prettyStatus">
+            <span>{{ affiliation.prettyStatus | localize }}</span>
             <div
               *ngIf="
                 affiliation.prettyStatus == errorAddingToOrcid ||

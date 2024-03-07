@@ -681,7 +681,7 @@
         <target state="new">Portail des membres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.tools.main.string" datatype="html">
@@ -689,7 +689,7 @@
         <target state="new">Outils</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.tools.assertionServiceAffiliationManager.string" datatype="html">
@@ -697,7 +697,7 @@
         <target state="new">Affiliation Manager</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.member.string" datatype="html">
@@ -705,7 +705,7 @@
         <target state="new">Rapport de membre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.integration.string" datatype="html">
@@ -713,7 +713,7 @@
         <target state="new">Rapport d&apos;intégration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.consortium.string" datatype="html">
@@ -721,7 +721,7 @@
         <target state="new">Rapport du consortium</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.affiliation.string" datatype="html">
@@ -729,7 +729,7 @@
         <target state="new">Rapport d&apos;affiliation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.consortiumMemberAffiliations.string" datatype="html">
@@ -737,7 +737,7 @@
         <target state="new">Consortium member affiliations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.main.string" datatype="html">
@@ -745,7 +745,7 @@
         <target state="new">Ressources</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">141</context>
+          <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.accountManagementGuide.string" datatype="html">
@@ -753,7 +753,7 @@
         <target state="new">Guide de gestion de compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">152</context>
+          <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.affiliationManagerGuide.string" datatype="html">
@@ -761,7 +761,7 @@
         <target state="new">Guide Affiliation Manager</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">162</context>
+          <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.memberReportingGuide.string" datatype="html">
@@ -769,7 +769,7 @@
         <target state="new">Guide de signalement de membres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">172</context>
+          <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.applyForAffiliationManagerCreds.string" datatype="html">
@@ -777,7 +777,7 @@
         <target state="new">Demander des identifiants Affiliation Manager</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">183</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.adminMenu.main.string" datatype="html">
@@ -785,7 +785,7 @@
         <target state="new">Administrateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">199</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.adminMenu.manageUsers.string" datatype="html">
@@ -793,7 +793,7 @@
         <target state="new">Gérer les utilisateurs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">212</context>
+          <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.adminMenu.manageMembers.string" datatype="html">
@@ -801,7 +801,7 @@
         <target state="new">Gérer les membres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.main.string" datatype="html">
@@ -809,7 +809,7 @@
         <target state="new">Compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">240</context>
+          <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.settings.string" datatype="html">
@@ -817,7 +817,7 @@
         <target state="new">Réglages</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">250</context>
+          <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.password.string" datatype="html">
@@ -825,7 +825,7 @@
         <target state="new">Mot de passe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.logout.string" datatype="html">
@@ -833,7 +833,7 @@
         <target state="new">Se déconnecter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
       <trans-unit id="footer.privacyPolicy.string" datatype="html">
@@ -1225,7 +1225,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.firstName.string" datatype="html">
@@ -1241,7 +1241,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.lastName.string" datatype="html">
@@ -1257,7 +1257,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.mainContact.string" datatype="html">
@@ -1273,7 +1273,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.true.string" datatype="html">
@@ -1321,7 +1321,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.activated.string" datatype="html">
@@ -1337,7 +1337,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.isAdmin.string" datatype="html">
@@ -1381,7 +1381,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.back.string" datatype="html">
@@ -1393,15 +1393,19 @@
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.edit.string" datatype="html">
-        <source> Edit</source>
+        <source>Edit</source>
         <target state="new">Modifier</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">220</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-detail.component.html</context>
           <context context-type="linenumber">103</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">187</context>
+          <context context-type="linenumber">174</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.activate.string" datatype="html">
@@ -1417,7 +1421,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">178</context>
+          <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.home.createOrEditLabel.string" datatype="html">
@@ -1484,6 +1488,10 @@
         <source>Search...</source>
         <target state="new">Recherche…</target>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
@@ -1500,20 +1508,28 @@
         <source>Delete</source>
         <target state="new">Supprimer</target>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">230</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">198</context>
+          <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.item-count.string" datatype="html">
         <source>Showing <x id="PH" equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x> of <x id="PH_2" equiv-text="this.totalItems"></x> items.</source>
         <target state="new">Montrer entre <x id="PH" equiv-text="first"></x> et <x id="PH_1" equiv-text="second"></x> éléments sur <x id="PH_2" equiv-text="this.totalItems"></x>.</target>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.ts</context>
+          <context context-type="linenumber">218</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.ts</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.changeOwnership.question.string" datatype="html">
@@ -1611,6 +1627,282 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-import-dialog.component.ts</context>
           <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.title.string" datatype="html">
+        <source>Affiliations</source>
+        <target state="new">Affiliations</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string" datatype="html">
+        <source> Send permission notifications </source>
+        <target state="new">Envoyer des notifications d&apos;autorisation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.button.string" datatype="html">
+        <source> Request permission links </source>
+        <target state="new">Demander des liens d&apos;autorisation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.button.string" datatype="html">
+        <source> Request affiliation status report </source>
+        <target state="new">Demander un rapport sur l&apos;état de l&apos;affiliation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.button.string" datatype="html">
+        <source> Request affiliations for edit </source>
+        <target state="new">Demander des affiliations pour modification</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.uploadLabel.string" datatype="html">
+        <source> Import affiliations from CSV </source>
+        <target state="new">Importer des affiliations à partir d&apos;un CSV</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.createLabel.string" datatype="html">
+        <source> Add affiliation </source>
+        <target state="new">Ajouter une affiliation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.confirmation.string" datatype="html">
+        <source> Your affiliations for edit file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org. </source>
+        <target state="new">Vos affiliations pour le fichier d&apos;édition vous seront envoyées sous peu. Si vous ne recevez pas votre fichier, veuillez nous contacter à membership@orcid.org.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.confirmation.string" datatype="html">
+        <source> Your affiliation status report file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org. </source>
+        <target state="new">Votre fichier de rapport d&apos;état d&apos;affiliation vous sera envoyé sous peu. Si vous ne recevez pas votre fichier, veuillez nous contacter à membership@orcid.org.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.confirmation.string" datatype="html">
+        <source> Your permission links file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org. </source>
+        <target state="new">Votre fichier de liens d&apos;autorisation vous sera envoyé sous peu. Si vous ne recevez pas votre fichier, veuillez nous contacter à membership@orcid.org.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.notFound.string" datatype="html">
+        <source>No affiliations found</source>
+        <target state="new">Aucune affiliation trouvée</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.email.string" datatype="html">
+        <source>Email</source>
+        <target state="new">Adresse e-mail de l&apos;utilisateur</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">134</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.orcidId.string" datatype="html">
+        <source>ORCID iD</source>
+        <target state="new">Identifiant ORCID</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">138</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.affiliationData.string" datatype="html">
+        <source>Affiliation Data</source>
+        <target state="new">Données d&apos;affiliation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">142</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.dateCreated.string" datatype="html">
+        <source>Date created</source>
+        <target state="new">Date de création</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">146</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.status.string" datatype="html">
+        <source>Status</source>
+        <target state="new">Statut</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">150</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="{{&apos;gatewayApp.AffiliationSection.&apos; + affiliation.affiliationSection + &apos;.string&apos;}}" datatype="html">
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ affiliation.affiliationSection }}"></x>
+        </source>
+        <target state="new">
+          <x id="INTERPOLATION" equiv-text="{{ affiliation.affiliationSection }}"></x>
+        </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">167</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceaffiliation.dateRange.string" datatype="html">
+        <source>to</source>
+        <target state="new">to</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">183</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.details.string" datatype="html">
+        <source>View details</source>
+        <target state="new">Voir les détails</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">190</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string" datatype="html">
+        <source> For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below. </source>
+        <target state="new">Pour obtenir de l&apos;aide en cas de problème, veuillez contacter l&apos;équipe du portail des membres et copier-coller ci-dessous le message d&apos;erreur ou en joindre une capture d&apos;écran.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
+          <context context-type="linenumber">203</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.userDeniedAccess.string" datatype="html">
+        <source>User denied access</source>
+        <target state="new">L&apos;utilisateur a refusé l&apos;accès</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.pending.string" datatype="html">
+        <source>Pending</source>
+        <target state="new">En attente</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.inOrcid.string" datatype="html">
+        <source>In ORCID</source>
+        <target state="new">Dans ORCID</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.userGrantedAccess.string" datatype="html">
+        <source>User granted access</source>
+        <target state="new">L&apos;utilisateur a accordé l&apos;accès</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.userDeletedFromOrcid.string" datatype="html">
+        <source>User deleted from ORCID</source>
+        <target state="new">User deleted from ORCID</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.userRevokedAccess.string" datatype="html">
+        <source>User revoked access</source>
+        <target state="new">L&apos;utilisateur a revoqué l&apos;accès</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.errorAddingToOrcid.string" datatype="html">
+        <source>Error adding to ORCID</source>
+        <target state="new">Erreur lors de l&apos;ajout à ORCID</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.errorUpdatingInOrcid.string" datatype="html">
+        <source>Error updating in ORCID</source>
+        <target state="new">Erreur lors de la mise à jour dans ORCID</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.pendingRetryInOrcid.string" datatype="html">
+        <source>Pending retry in ORCID</source>
+        <target state="new">En attente d&apos;une nouvelle tentative dans ORCID</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.errorDeletingInOrcid.string" datatype="html">
+        <source>Error deleting in ORCID</source>
+        <target state="new">Erreur lors de la suppression dans ORCID</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.notificationRequested.string" datatype="html">
+        <source>Notification requested</source>
+        <target state="new">Notification demandée</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.notificationSent.string" datatype="html">
+        <source>Notification sent</source>
+        <target state="new">Notification envoyée</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.notificationFailed.string" datatype="html">
+        <source>Notification failed</source>
+        <target state="new">Échec de la notification</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionStatus.pendingUpdateInOrcid.string" datatype="html">
+        <source>Pending update in ORCID</source>
+        <target state="new">En attente de mise à jour dans ORCID</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
     </body>
