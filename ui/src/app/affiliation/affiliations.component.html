@@ -45,7 +45,7 @@
       <button
         id="jh-upload-entities"
         class="btn btn-primary float-right jh-upload-entities upload-assertions ml-1"
-        [routerLink]="['/', 'affiliations', { outlets: { popup: 'import' } }]"
+        [routerLink]="['/' + 'affiliations', { outlets: { popup: 'import' } }]"
       >
         <fa-icon [icon]="faFileImport"></fa-icon>
         <span i18n="@@gatewayApp.assertionServiceAssertion.home.uploadLabel.string">
@@ -252,3 +252,4 @@
     </div>
   </div>
 </div>
+<router-outlet name="popup"></router-outlet>
