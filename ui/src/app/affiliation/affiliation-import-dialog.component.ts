@@ -20,7 +20,7 @@ export class AffiliationImportDialogComponent {
   affiliation: IAffiliation | undefined
   isSaving: boolean
   currentFile: FileList | undefined
-  success: Boolean
+  success: boolean
   uploaded: boolean
   loading = false
   faBan = faBan
