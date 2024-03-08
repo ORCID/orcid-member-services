@@ -1,5 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { RouterModule } from '@angular/router'
+import { RouterModule, provideRouter, withDebugTracing } from '@angular/router'
 import { ClipboardModule } from 'ngx-clipboard'
 import { AffiliationsComponent } from './affiliations.component'
 import { affiliationRoutes } from './affiliation.route'

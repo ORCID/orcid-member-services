@@ -16,7 +16,6 @@ import { faSave, faBan } from '@fortawesome/free-solid-svg-icons'
 })
 export class UserImportDialogComponent {
   resourceUrl: string
-  user: IUser | null
   isSaving: boolean
   currentFile: FileList | null
   csvErrors: any
@@ -31,7 +30,6 @@ export class UserImportDialogComponent {
     private fileUploadService: FileUploadService
   ) {
     this.isSaving = false
-    this.user = null
     this.currentFile = null
     this.resourceUrl = this.userService.resourceUrl + '/upload'
   }
@@ -81,25 +79,22 @@ export class UserImportPopupComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.data.subscribe(({ u }) => {
-      setTimeout(() => {
-        this.ngbModalRef = this.modalService.open(UserImportDialogComponent as Component, {
-          size: 'lg',
-          backdrop: 'static',
-        })
-        this.ngbModalRef.componentInstance.user = u
-        this.ngbModalRef.result.then(
-          (result) => {
-            this.router.navigate(['/users', { outlets: { popup: null } }])
-            this.ngbModalRef = null
-          },
-          (reason) => {
-            this.router.navigate(['/users', { outlets: { popup: null } }])
-            this.ngbModalRef = null
-          }
-        )
-      }, 0)
-    })
+    setTimeout(() => {
+      this.ngbModalRef = this.modalService.open(UserImportDialogComponent as Component, {
+        size: 'lg',
+        backdrop: 'static',
+      })
+      this.ngbModalRef.result.then(
+        (result) => {
+          this.router.navigate(['/users', { outlets: { popup: null } }])
+          this.ngbModalRef = null
+        },
+        (reason) => {
+          this.router.navigate(['/users', { outlets: { popup: null } }])
+          this.ngbModalRef = null
+        }
+      )
+    }, 0)
   }
 
   ngOnDestroy() {
