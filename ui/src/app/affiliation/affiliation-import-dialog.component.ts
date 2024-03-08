@@ -82,7 +82,6 @@ export class AffiliationImportPopupComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    console.log('import dialog on init')
     setTimeout(() => {
       this.ngbModalRef = this.modalService.open(AffiliationImportDialogComponent as Component, {
         size: 'lg',
