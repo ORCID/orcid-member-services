@@ -8,7 +8,6 @@ import { faPencilAlt, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 @Component({
   selector: 'app-affiliation-detail',
   templateUrl: './affiliation-detail.component.html',
-  styleUrls: ['./affiliation-detail.component.scss'],
 })
 export class AffiliationDetailComponent implements OnInit {
   affiliation: IAffiliation = new Affiliation()
