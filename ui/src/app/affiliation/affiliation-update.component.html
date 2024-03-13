@@ -147,7 +147,7 @@
             >
             <select class="form-control" name="orgCountry" id="field_orgCountry" formControlName="orgCountry">
               <option *ngFor="let country of COUNTRIES | keyvalue" [ngValue]="country.value">
-                {{ country.key | localize }}
+                {{ country.value | localize }}
               </option>
             </select>
             <div
@@ -404,12 +404,7 @@
             </select>
           </div>
           <br />
-          <div
-            *ngIf="
-              editForm.get('endYear')?.hasError('dateValidator') &&
-              (editForm.get('endYear')?.dirty || editForm.get('endYear')?.touched)
-            "
-          >
+          <div *ngIf="editForm.get('endYear')?.hasError('dateValidator')">
             <small class="form-text text-danger" jhiTranslate="entity.validation.endDate.string">
               End date cannot be greater than the start date
             </small>
@@ -475,10 +470,10 @@
       </div>
       <div class="form-group">
         <button type="button" id="cancel-save" class="btn btn-outline-primary" (click)="previousState()">
-          <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
+          <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
         </button>
         <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-          <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save.string">Save</span>
+          <fa-icon [icon]="faSave"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save.string">Save</span>
         </button>
       </div>
     </form>

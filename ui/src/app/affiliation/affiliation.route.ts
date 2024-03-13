@@ -65,9 +65,6 @@ export const affiliationRoutes: Routes = [
   {
     path: 'new',
     component: AffiliationUpdateComponent,
-    resolve: {
-      assertion: AffiliationResolver,
-    },
     data: {
       authorities: ['ASSERTION_SERVICE_ENABLED'],
       pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string',

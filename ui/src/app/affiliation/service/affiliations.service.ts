@@ -30,7 +30,7 @@ export class AffiliationService {
     const copy = this.convertDateFromClient(affiliation)
     return this.http
       .put<IAffiliation>(this.resourceUrl, copy)
-      .pipe(map((res: IAffiliation) => this.convertDateFromClient(res)))
+      .pipe(map((res: IAffiliation) => this.convertDateFromServer(res)))
   }
 
   find(id: string): Observable<IAffiliation> {

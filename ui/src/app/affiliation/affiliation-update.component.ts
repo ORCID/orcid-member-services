@@ -15,6 +15,7 @@ import {
   DEFAULT_LATEST_YEAR_INCREMENT,
 } from '../app.constants'
 import { AlertService } from '../shared/service/alert.service'
+import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
 
 function dateValidator() {
   return (formGroup: FormGroup) => {
@@ -31,14 +32,14 @@ function dateValidator() {
       (hasValue(startYearControl) && hasValue(endYearControl))
     ) {
       const startDate = new Date(
-        (hasValue(startYearControl) ? startYearControl.value + '-' : '') +
-          (hasValue(startMonthControl) ? startMonthControl.value + '-' : '') +
-          (hasValue(startDayControl) ? startDayControl.value : '')
+        hasValue(startYearControl) ? startYearControl.value : 0,
+        hasValue(startMonthControl) ? startMonthControl.value : 0,
+        hasValue(startDayControl) ? startDayControl.value : 0
       )
       const endDate = new Date(
-        (hasValue(endYearControl) ? endYearControl.value + '-' : '') +
-          (hasValue(endMonthControl) ? endMonthControl.value + '-' : '') +
-          (hasValue(endDayControl) ? endDayControl.value : '')
+        hasValue(endYearControl) ? endYearControl.value : 0,
+        hasValue(endMonthControl) ? endMonthControl.value : 0,
+        hasValue(endDayControl) ? endDayControl.value : 0
       )
 
       if (startDate > endDate) {
@@ -69,7 +70,6 @@ function disambiguatedOrgIdValidator(): ValidatorFn {
         // strip the url and see if is a valid grid id
         if (gridId && gridId.substr(0, gridBaseUrlInstitutes.length) === gridBaseUrlInstitutes) {
           gridId = gridId.substr(gridBaseUrlInstitutes.length, gridId.length)
-          console.log('!!!!' + gridId)
         } else if (gridId && gridId.substr(0, gridBaseUrl.length) === gridBaseUrl) {
           gridId = gridId.substr(gridBaseUrl.length)
         } else if (gridId && gridId.substr(0, gridBaseUrlInstitutesAlt.length) === gridBaseUrlInstitutesAlt) {
@@ -78,7 +78,6 @@ function disambiguatedOrgIdValidator(): ValidatorFn {
           gridId = gridId.substr(gridBaseUrlAlt.length)
         }
 
-        console.log('gridID: ' + gridId)
         if (gridId && !(gridId.substr(0, gridStartsWith.length) === gridStartsWith)) {
           return { validDisambiguatedOrgId: false }
         }
@@ -121,6 +120,8 @@ export class AffiliationUpdateComponent implements OnInit {
   endDaysList: any
   isSaving = false
   ngbDate: any
+  faBan = faBan
+  faSave = faSave
 
   editForm = this.fb.group(
     {
@@ -130,12 +131,12 @@ export class AffiliationUpdateComponent implements OnInit {
       departmentName: ['', [Validators.maxLength(4000)]],
       roleTitle: ['', [Validators.maxLength(4000)]],
       url: ['', [Validators.maxLength(8000)]],
-      startYear: [''],
-      startMonth: [''],
-      startDay: [''],
-      endYear: [''],
-      endMonth: [''],
-      endDay: [''],
+      startYear: [null],
+      startMonth: [null],
+      startDay: [null],
+      endYear: [null],
+      endMonth: [null],
+      endDay: [null],
       orgName: ['', [Validators.required]],
       orgCountry: ['', [Validators.required]],
       orgCity: ['', [Validators.required]],
@@ -153,11 +154,11 @@ export class AffiliationUpdateComponent implements OnInit {
       ownerId: [''],
       sent: [''],
     },
-    { validators: dateValidator }
+    { validators: dateValidator() }
   )
 
   constructor(
-    protected assertionService: AffiliationService,
+    protected affiliationService: AffiliationService,
     protected dateUtilService: DateUtilService,
     protected activatedRoute: ActivatedRoute,
     private alertService: AlertService,
@@ -171,7 +172,6 @@ export class AffiliationUpdateComponent implements OnInit {
     this.startDaysList = this.dateUtilService.getDaysList()
     this.endDaysList = this.dateUtilService.getDaysList()
     this.isSaving = false
-
     this.activatedRoute.data.subscribe(({ assertion }) => {
       this.updateForm(assertion)
     })
@@ -199,7 +199,7 @@ export class AffiliationUpdateComponent implements OnInit {
   }
 
   updateForm(assertion: IAffiliation) {
-    if (assertion.id) {
+    if (assertion?.id) {
       this.editForm.patchValue({
         id: assertion.id,
         email: assertion.email?.trim(),
@@ -208,10 +208,10 @@ export class AffiliationUpdateComponent implements OnInit {
         roleTitle: assertion.roleTitle,
         url: assertion.url,
         startYear: assertion.startYear,
-        startMonth: assertion.startMonth,
+        startMonth: parseInt(assertion.startMonth || '0'),
         startDay: assertion.startDay,
         endYear: assertion.endYear,
-        endMonth: assertion.endMonth,
+        endMonth: parseInt(assertion.endMonth || '0'),
         endDay: assertion.endDay,
         orgName: assertion.orgName,
         orgCountry: assertion.orgCountry,
@@ -243,23 +243,24 @@ export class AffiliationUpdateComponent implements OnInit {
   save() {
     this.isSaving = true
     const assertion = this.createFromForm()
+
     if (assertion.id !== undefined && assertion.id != null) {
-      this.assertionService.update(assertion).subscribe(
-        () => {
+      this.affiliationService.update(assertion).subscribe({
+        next: () => {
           this.onSaveSuccess()
           this.alertService.broadcast('assertionServiceApp.affiliation.updated.string')
         },
-        () => this.onSaveError()
-      )
+        error: (err) => this.onSaveError(err),
+      })
     } else {
-      this.assertionService.create(assertion).subscribe(
-        () => {
+      this.affiliationService.create(assertion).subscribe({
+        next: () => {
           this.onSaveSuccess()
           // TODO: add alerttype
           this.alertService.broadcast('assertionServiceApp.affiliation.created.string')
         },
-        () => this.onSaveError()
-      )
+        error: (err) => this.onSaveError(err),
+      })
     }
   }
 
@@ -310,7 +311,8 @@ export class AffiliationUpdateComponent implements OnInit {
     this.previousState()
   }
 
-  protected onSaveError() {
+  protected onSaveError(err: any) {
+    console.error(err)
     this.isSaving = false
   }
 
@@ -319,13 +321,7 @@ export class AffiliationUpdateComponent implements OnInit {
       this.editForm.get('startYear')?.value || undefined,
       this.editForm.get('startMonth')?.value || undefined
     )
-    console.log(
-      this.editForm.get('startYear')?.value +
-        ' ' +
-        this.editForm.get('startMonth')?.value +
-        ' ' +
-        this.editForm.get('startDay')?.value
-    )
+
     if (resetValue && this.editForm.get('startDay')?.value) {
       if (this.editForm.get('startYear')?.value && this.editForm.get('startMonth')?.value) {
         if (
