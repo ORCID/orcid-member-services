@@ -13,9 +13,7 @@ import { Member } from '../member/model/member.model'
 import { UserValidation } from './model/user-validation.model'
 import { RouterTestingModule } from '@angular/router/testing'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core'
-import { AppComponent } from '../app.component'
-import { NgbPagination } from '@ng-bootstrap/ng-bootstrap'
+import { NO_ERRORS_SCHEMA } from '@angular/core'
 
 describe('UserUpdateComponent', () => {
   let component: UserUpdateComponent
