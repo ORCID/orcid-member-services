@@ -12,7 +12,6 @@ export class FileUploadService {
     file: File,
     expectedResponseType: 'arraybuffer' | 'blob' | 'json' | 'text' | undefined
   ): Observable<string> {
-    console.log('uploading file')
     const formdata: FormData = new FormData()
     formdata.append('file', file)
     const req = new HttpRequest('POST', resourceUrl, formdata, {
