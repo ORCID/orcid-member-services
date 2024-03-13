@@ -58,7 +58,9 @@ export class AffiliationImportDialogComponent {
         }
       })
     } else {
-      alert($localize`:@@gatewayApp.msUserServiceMSUser.import.emptyFile.string:`)
+      alert(
+        $localize`:@@gatewayApp.msUserServiceMSUser.import.emptyFile.string:There is no file to upload. Please select one.`
+      )
     }
   }
 

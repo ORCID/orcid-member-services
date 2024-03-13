@@ -36,6 +36,6 @@ export class AffiliationDetailComponent implements OnInit {
   }
 
   successMessage() {
-    alert($localize`:@@gatewayApp.assertionServiceAssertion.copySuccess.string:`)
+    alert($localize`:@@gatewayApp.assertionServiceAssertion.copySuccess.string:Copied to clipboard`)
   }
 }
