@@ -10,7 +10,7 @@ describe('AffiliationUpdateComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [AffiliationUpdateComponent],
-      imports: [HttpClientModule],
+      imports: [HttpClientModule, RouterTestingModule],
     })
     fixture = TestBed.createComponent(AffiliationUpdateComponent)
     component = fixture.componentInstance
