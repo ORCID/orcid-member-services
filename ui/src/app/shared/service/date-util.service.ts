@@ -41,7 +41,7 @@ export class DateUtilService {
     const months = moment.months()
     const monthsArray = []
     for (let _i = 1; _i <= months.length; _i++) {
-      let res: [number, string] = [parseInt(('0' + _i.toString()).slice(-2)), months[_i - 1]]
+      const res: [number, string] = [parseInt(('0' + _i.toString()).slice(-2)), months[_i - 1]]
       monthsArray.push(res)
     }
     return monthsArray
@@ -52,7 +52,7 @@ export class DateUtilService {
     const monthsArray = []
     for (let _i = 1; _i <= months.length; _i++) {
       if (_i > this.getCurrentMonthNumber()) {
-        let res: [number, string] = [parseInt(('0' + _i.toString()).slice(-2)), months[_i - 1]]
+        const res: [number, string] = [parseInt(('0' + _i.toString()).slice(-2)), months[_i - 1]]
         monthsArray.push(res)
       }
     }

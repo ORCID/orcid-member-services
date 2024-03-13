@@ -97,9 +97,9 @@ function hasValue(controls: AbstractControl): boolean {
 }
 
 function isValidDate(y: string, m: string, d: string) {
-  let year = parseInt(y)
-  let month = parseInt(m)
-  let day = parseInt(d)
+  const year = parseInt(y)
+  const month = parseInt(m)
+  const day = parseInt(d)
   const date = new Date(year, month - 1, day)
 
   return date.getUTCFullYear() === year && date.getUTCMonth() === month && date.getUTCDate() === day
