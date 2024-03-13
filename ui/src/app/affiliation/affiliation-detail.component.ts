@@ -8,7 +8,6 @@ import { faPencilAlt, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 @Component({
   selector: 'app-affiliation-detail',
   templateUrl: './affiliation-detail.component.html',
-  styleUrls: ['./affiliation-detail.component.scss'],
 })
 export class AffiliationDetailComponent implements OnInit {
   affiliation: IAffiliation = new Affiliation()
@@ -36,6 +35,6 @@ export class AffiliationDetailComponent implements OnInit {
   }
 
   successMessage() {
-    alert($localize`:@@gatewayApp.assertionServiceAssertion.copySuccess.string:`)
+    alert($localize`:@@gatewayApp.assertionServiceAssertion.copySuccess.string:Copied to clipboard`)
   }
 }
