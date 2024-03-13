@@ -7,6 +7,7 @@ import { Affiliation } from './model/affiliation.model'
 import { AffiliationsComponent } from './affiliations.component'
 import { AffiliationDetailComponent } from './affiliation-detail.component'
 import { AffiliationImportPopupComponent } from './affiliation-import-dialog.component'
+import { AffiliationUpdateComponent } from './affiliation-update.component'
 
 export const AffiliationResolver: ResolveFn<Affiliation | null> = (
   route: ActivatedRouteSnapshot,
@@ -54,6 +55,30 @@ export const affiliationRoutes: Routes = [
     component: AffiliationDetailComponent,
     resolve: {
       affiliation: AffiliationResolver,
+    },
+    data: {
+      authorities: ['ASSERTION_SERVICE_ENABLED'],
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string',
+    },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'new',
+    component: AffiliationUpdateComponent,
+    resolve: {
+      assertion: AffiliationResolver,
+    },
+    data: {
+      authorities: ['ASSERTION_SERVICE_ENABLED'],
+      pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string',
+    },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':id/edit',
+    component: AffiliationUpdateComponent,
+    resolve: {
+      assertion: AffiliationResolver,
     },
     data: {
       authorities: ['ASSERTION_SERVICE_ENABLED'],
