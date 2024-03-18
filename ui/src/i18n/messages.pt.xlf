@@ -1451,6 +1451,10 @@
           <context context-type="linenumber">34</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">465</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
@@ -1466,6 +1470,10 @@
       <trans-unit id="entity.action.save.string" datatype="html">
         <source>Save</source>
         <target state="new">Guardar</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">468</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
           <context context-type="linenumber">131</context>
@@ -1729,8 +1737,16 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.home.notFound.string" datatype="html">
-        <source>No affiliations found</source>
+        <source>No affiliations to show</source>
         <target state="new">Não foram encontradas afiliações</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">192</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">125</context>
@@ -1742,6 +1758,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
           <context context-type="linenumber">13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">15</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
@@ -1979,6 +1999,10 @@
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.detail.org.string" datatype="html">
         <source>Organization</source>
@@ -1995,6 +2019,10 @@
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">236</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.roleTitle.string" datatype="html">
         <source>Role Title</source>
@@ -2003,6 +2031,10 @@
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">265</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.url.string" datatype="html">
         <source>Url</source>
@@ -2010,6 +2042,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
           <context context-type="linenumber">46</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">285</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.startDate.string" datatype="html">
@@ -2034,6 +2070,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
           <context context-type="linenumber">58</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">426</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.created.string" datatype="html">
@@ -2109,7 +2149,7 @@
         <target state="new">Copiado para a área de transferência</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.ts</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.import.title.string" datatype="html">
@@ -2173,7 +2213,7 @@
         <target state="new">Não existe nenhum ficheiro para carregar. Selecione um.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.ts</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.EDUCATION.string" datatype="html">
@@ -4326,6 +4366,242 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">597</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.createOrEditLabel.string" datatype="html">
+        <source> Add or edit affiliation </source>
+        <target state="new">Adicionar ou editar afiliação</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="entity.validation.pattern.string" datatype="html">
+        <source> This field should follow pattern for &quot;Email&quot;. </source>
+        <target state="new">Este campo deve seguir um padrão para {{ pattern }}.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="entity.validation.required.string" datatype="html">
+        <source> This field is required. </source>
+        <target state="new">Este campo é necessário.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">108</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">158</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">188</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.orgName.string" datatype="html">
+        <source>Org Name</source>
+        <target state="new">Nome da Organização</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.orgCity.string" datatype="html">
+        <source>Org City</source>
+        <target state="new">Cidade</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.orgRegion.string" datatype="html">
+        <source>Org Region</source>
+        <target state="new">Estado/Região</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.orgCountry.string" datatype="html">
+        <source>Org Country</source>
+        <target state="new">País</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">141</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguationSource.string" datatype="html">
+        <source>Disambiguation Source</source>
+        <target state="new">Fonte da ID da Organização</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">170</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguatedOrgId.string" datatype="html">
+        <source>Disambiguated Org Id</source>
+        <target state="new">ID da Organização</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">201</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="entity.validation.disambiguatedOrgId.string" datatype="html">
+        <source> This field is required. GRID Organization ID should start with &quot;grid.&quot;, RINGGOLD Organization ID should be a number, ROR IDs must be 9 characters, beginning with 0 </source>
+        <target state="new">Este campo é obrigatório. O ID de Organização GRID deve começar com grid, como grid.12344, ou ser um URL de grid válido. O ID de Organização RINGGOLD deve ser um número. Os IDs ROR devem ter 9 caracteres, a começar com 0.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">223</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="entity.validation.maxlength.string" datatype="html">
+        <source> This field cannot be longer than 4000 characters. </source>
+        <target state="new">Este campo não pode ter mais do que {{ max }} caracteres.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">255</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">278</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">293</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.startYear.string" datatype="html">
+        <source>Start Year</source>
+        <target state="new">Ano de Início</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">305</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.year.string" datatype="html">
+        <source>Year</source>
+        <target state="new">Ano</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">314</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">364</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.startMonth.string" datatype="html">
+        <source>Start Month</source>
+        <target state="new">Mês de Início</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">323</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.month.string" datatype="html">
+        <source>Month</source>
+        <target state="new">Mês</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">332</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">382</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.startDay.string" datatype="html">
+        <source>Start Day</source>
+        <target state="new">Dia de Início</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">341</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.day.string" datatype="html">
+        <source>Day</source>
+        <target state="new">Dia</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">344</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">394</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.endYear.string" datatype="html">
+        <source>End Year</source>
+        <target state="new">Ano de Término</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">355</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.endMonth.string" datatype="html">
+        <source>End Month</source>
+        <target state="new">Último Mês</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">373</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.endDay.string" datatype="html">
+        <source>End Day</source>
+        <target state="new">Data de Término</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">391</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="entity.validation.endDate.string" datatype="html">
+        <source> End date cannot be greater than the start date </source>
+        <target state="new">A data de início não pode ser maior que a data de fim.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">400</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.externalIdType.string" datatype="html">
+        <source>External Id Type</source>
+        <target state="new">Tipo de ID Externo</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">411</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.externalIdUrl.string" datatype="html">
+        <source>External Id Url</source>
+        <target state="new">ID do URL externo</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">441</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.updateNote.string" datatype="html">
+        <source>Please do not forget to download and send permission links to your researcher once the assertion has been saved.</source>
+        <target state="new">Nota: Não se esqueça de descarregar e enviar as ligações de permissão para o seu investigador assim que a asserção for guardada.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
+          <context context-type="linenumber">457</context>
         </context-group>
       </trans-unit>
     </body>
