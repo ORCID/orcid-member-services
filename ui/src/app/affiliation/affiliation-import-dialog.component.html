@@ -13,7 +13,7 @@
 		</div>
         <app-error-alert></app-error-alert>
         <div class="alerts top right" role="alert" *ngIf="uploaded && !success">
-			<ngb-alert class="alert alert-danger alert-dismissible" role="alert" ng-reflect-type="danger">
+			<ngb-alert class="alert alert-danger alert-dismissible" role="alert" [dismissible]="false" ng-reflect-type="danger">
 			    <p i18n="@@gatewayApp.assertionServiceAssertion.import.failure.string">There was a problem uploading your CSV for processing.</p>
 		    </ngb-alert>
 		</div>

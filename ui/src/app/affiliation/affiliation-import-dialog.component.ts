@@ -50,12 +50,10 @@ export class AffiliationImportDialogComponent {
     if (this.currentFile) {
       this.loading = true
       const f = this.currentFile.item(0)
-      this.uploadService.uploadFile(this.resourceUrl, f!, 'json').subscribe((event: any) => {
-        if (event instanceof HttpResponse) {
-          this.success = event.body
-          this.uploaded = true
-          this.loading = false
-        }
+      this.uploadService.uploadFile(this.resourceUrl, f!, 'json').subscribe((event: string) => {
+        this.success = true
+        this.uploaded = true
+        this.loading = false
       })
     } else {
       alert(
