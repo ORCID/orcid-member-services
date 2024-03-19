@@ -216,7 +216,7 @@
               <small
                 class="form-text text-danger"
                 *ngIf="
-                  !editForm.get('disambiguatedOrgId')?.errors ||
+                  !this.editForm.get('disambiguatedOrgId')?.hasError('validDisambiguatedOrgId') ||
                   (editForm.get('disambiguatedOrgId')?.errors)!['required']
                 "
                 i18n="@@entity.validation.disambiguatedOrgId.string"
@@ -398,7 +398,7 @@
           <br />
           <div *ngIf="editForm.get('endYear')?.hasError('dateValidator')">
             <small class="form-text text-danger" i18n="@@entity.validation.endDate.string">
-              End date cannot be greater than the start date
+              Start date cannot be greater than the end date
             </small>
           </div>
         </div>
@@ -461,7 +461,7 @@
         </p>
       </div>
       <div class="form-group">
-        <button type="button" id="cancel-save" class="btn btn-outline-primary" (click)="previousState()">
+        <button type="button" id="cancel-save" class="btn btn-outline-primary mr-2" (click)="previousState()">
           <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
         </button>
         <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">

@@ -174,23 +174,23 @@
             ><br />
             <span *ngIf="affiliation.departmentName">{{ affiliation.departmentName }}</span
             ><span *ngIf="affiliation.roleTitle"> ({{ affiliation.roleTitle }})</span><br />
-            <span *ngIf="affiliation.startYear">{{ affiliation.startYear }}</span
-            ><span *ngIf="affiliation.startMonth">-{{ affiliation.startMonth }}</span
-            ><span *ngIf="affiliation.startDay">-{{ affiliation.startDay }}</span>
+            <span *ngIf="affiliation.startYear"
+              >{{ formatDate(affiliation.startYear, affiliation.startMonth, affiliation.startDay) }}
+            </span>
             <span
               *ngIf="affiliation.startYear && affiliation.endYear"
-              i18n="@@gatewayApp.assertionServiceaffiliation.dateRange.string"
+              i18n="@@gatewayApp.assertionServiceAssertion.dateRange.string"
               >to</span
             >
-            <span *ngIf="affiliation.endYear">{{ affiliation.endYear }}</span
-            ><span *ngIf="affiliation.endMonth">-{{ affiliation.endMonth }}</span
-            ><span *ngIf="affiliation.endDay">-{{ affiliation.endDay }} </span> <br /><a
+            <span *ngIf="affiliation.endYear">
+              {{ formatDate(affiliation.endYear, affiliation.endMonth, affiliation.endDay) }}</span
+            ><br /><a
               i18n="@@gatewayApp.assertionServiceAssertion.details.string"
               [routerLink]="['/affiliations', affiliation.id, 'view']"
               >View details</a
             >
           </td>
-          <td>{{ affiliation.created?.toString() | date: 'medium' }}</td>
+          <td>{{ affiliation.created?.toDate() | date: 'medium' : 'en-US' }}</td>
           <td class="assertion-status" *ngIf="affiliation.prettyStatus">
             <span>{{ affiliation.prettyStatus | localize }}</span>
             <div

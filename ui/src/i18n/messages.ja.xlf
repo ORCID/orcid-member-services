@@ -1364,7 +1364,7 @@
         <target state="new">による</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">143</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-detail.component.html</context>
@@ -1392,7 +1392,7 @@
         <target state="new">戻る</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">230</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-detail.component.html</context>
@@ -1404,7 +1404,7 @@
         <target state="new">編集</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">234</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
@@ -1548,7 +1548,7 @@
         <target state="new"><x id="PH_2" equiv-text="this.totalItems"></x>アイテムの<x id="PH" equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x>を表示しています。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.ts</context>
-          <context context-type="linenumber">216</context>
+          <context context-type="linenumber">228</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.ts</context>
@@ -1769,11 +1769,11 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.orcidId.string" datatype="html">
-        <source>ORCID iD</source>
+        <source> ORCID iD </source>
         <target state="new">ORCID iD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">40</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
@@ -1810,23 +1810,23 @@
       </trans-unit>
       <trans-unit id="{{&apos;gatewayApp.AffiliationSection.&apos; + affiliation.affiliationSection + &apos;.string&apos;}}" datatype="html">
         <source>
-          <x id="INTERPOLATION" equiv-text="{{affiliation.affiliationSection}}"></x>
+          <x id="INTERPOLATION" equiv-text="{{ affiliation.affiliationSection }}"></x>
         </source>
         <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{affiliation.affiliationSection}}"></x>
+          <x id="INTERPOLATION" equiv-text="{{ affiliation.affiliationSection }}"></x>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">52</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceaffiliation.dateRange.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.dateRange.string" datatype="html">
         <source>to</source>
-        <target state="new">to</target>
+        <target state="new">:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">183</context>
@@ -1977,27 +1977,27 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.permissionLink.string" datatype="html">
-        <source>Permission link</source>
+        <source> Permission link </source>
         <target state="new">パーミッションリンク：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.copyClipboard.string" datatype="html">
-        <source>Copy to clipboard</source>
+        <source> Copy to clipboard </source>
         <target state="new">クリップボードにコピー</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.affiliationSection.string" datatype="html">
-        <source>Affiliation Section</source>
+        <source> Affiliation Section </source>
         <target state="new">アフィリエーションタイプ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">48</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
@@ -2009,15 +2009,15 @@
         <target state="new">組織</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.departmentName.string" datatype="html">
-        <source>Department Name</source>
+        <source> Department Name </source>
         <target state="new">部</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">68</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
@@ -2025,11 +2025,11 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.roleTitle.string" datatype="html">
-        <source>Role Title</source>
+        <source> Role Title </source>
         <target state="new">役割 / 役職</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">78</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
@@ -2041,7 +2041,7 @@
         <target state="new">URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">84</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
@@ -2049,27 +2049,27 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.startDate.string" datatype="html">
-        <source>Start Date</source>
+        <source> Start Date </source>
         <target state="new">開始日付</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.endDate.string" datatype="html">
-        <source>End Date</source>
+        <source> End Date </source>
         <target state="new">終了日付</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.externalId.string" datatype="html">
-        <source>External Id</source>
+        <source> External Id </source>
         <target state="new">外部ID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">108</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
@@ -2081,23 +2081,23 @@
         <target state="new">作成されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.addedToOrcid.string" datatype="html">
-        <source>Added To ORCID</source>
+        <source> Added To ORCID </source>
         <target state="new">ORCIDに追加されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.updatedInOrcid.string" datatype="html">
-        <source>Updated In ORCID</source>
+        <source> Updated In ORCID </source>
         <target state="new">ORCID で更新されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.modified.string" datatype="html">
@@ -2105,7 +2105,7 @@
         <target state="new">変更しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.adminId.string" datatype="html">
@@ -2113,35 +2113,35 @@
         <target state="new">管理者ID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.notificationFirstSent.string" datatype="html">
-        <source>Notification First Sent</source>
+        <source> Notification First Sent </source>
         <target state="new">初回通知を送信しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">156</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.notificationLastSent.string" datatype="html">
-        <source>Notification Last Sent</source>
+        <source> Notification Last Sent </source>
         <target state="new">最終送信通知</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">194</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceaffiliation.notificationLastSent.string" datatype="html">
-        <source>Notification Last Sent</source>
-        <target state="new">Notification Last Sent</target>
+        <source> Notification Last Sent </source>
+        <target state="new"> Notification Last Sent </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">213</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.copySuccess.string" datatype="html">
@@ -2149,7 +2149,7 @@
         <target state="new">クリップボードにコピーされました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.import.title.string" datatype="html">

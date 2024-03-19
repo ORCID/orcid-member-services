@@ -1,116 +1,239 @@
 <div class="row justify-content-center">
-    <div class="col-8">
-        <div *ngIf="affiliation">
-            <h1 class="mt-5" i18n="@@gatewayApp.assertionServiceAssertion.detail.title.string">Affiliation details</h1>
-            <hr>
-            <app-error-alert></app-error-alert>
-            <div class="row">
-                <dl class="jh-entity-details">
-                 	<dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.id.string">ID</dt>
-                    <dd class="col-md-9">
-                        {{affiliation.id}}
-                    </dd>
-                    <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.email.string">Email</dt>
-                    <dd class="col-md-9">
-                        {{affiliation.email}}
-                    </dd>
-                    <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.status.string">Status</dt>
-                    <dd class="col-md-9">
-                        {{affiliation.prettyStatus}}
-                    </dd>
-                    <dt *ngIf="affiliation.permissionLink" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.permissionLink.string">Permission link</dt>
-                    <dd *ngIf="affiliation.permissionLink" class="col-md-9">
-                        <button class="btn btn-outline-primary" type="button" [ngxClipboard] [cbContent]="affiliation.permissionLink" (cbOnSuccess)="successMessage()" i18n="@@gatewayApp.assertionServiceAssertion.copyClipboard.string">Copy to clipboard</button>
-                    </dd>
-                    <dt *ngIf="affiliation.orcidId" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.orcidId.string">ORCID iD</dt>
-                    <dd *ngIf="affiliation.orcidId" class="col-md-9">
-                        <a href="{{orcidBaseUrl}}/{{affiliation.orcidId}}" target="_blank">{{orcidBaseUrl}}/{{affiliation.orcidId}}</a>
-                    </dd>
-                    <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.affiliationSection.string">Affiliation Section</dt>
-                    <dd class="col-md-9">
-                        <span i18n="@@{{'gatewayApp.AffiliationSection.' + affiliation.affiliationSection + '.string'}}">{{affiliation.affiliationSection}}</span>
-                    </dd>
-                    <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.detail.org.string">Organization</dt>
-                    <dd class="col-md-9">
-                        {{affiliation.orgName}}: <span *ngIf="affiliation.orgCity">{{affiliation.orgCity}}</span><span *ngIf="affiliation.orgRegion">, {{affiliation.orgRegion}}</span><span *ngIf="affiliation.orgCountry">, {{affiliation.orgCountry}}</span><br>
-                        {{affiliation.disambiguationSource}} {{affiliation.disambiguatedOrgId}}
-                    </dd>
-                    <dt *ngIf="affiliation.departmentName" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.departmentName.string">Department Name</dt>
-                    <dd *ngIf="affiliation.departmentName" class="col-md-9">
-                        {{affiliation.departmentName}}
-                    </dd>
-                    <dt *ngIf="affiliation.roleTitle" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.roleTitle.string">Role Title</dt>
-                    <dd *ngIf="affiliation.roleTitle" class="col-md-9">
-                        {{affiliation.roleTitle}}
-                    </dd>
-                    <dt *ngIf="affiliation.url" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.url.string">Url</dt>
-                    <dd *ngIf="affiliation.url" class="col-md-9">
-                        <a href="{{affiliation.url}}">{{affiliation.url}}</a>
-                    </dd>
-                    <dt *ngIf="affiliation.startYear" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.startDate.string">Start Date</dt>
-                    <dd *ngIf="affiliation.startYear" class="col-md-9">
-                        {{affiliation.startYear!}}<span *ngIf="affiliation.startMonth">-{{affiliation.startMonth}}</span><span *ngIf="affiliation.startMonth&&affiliation.startDay">-{{affiliation.startDay!}}</span>
-                    </dd>
-                    <dt *ngIf="affiliation.endYear" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.endDate.string">End Date</dt>
-                    <dd *ngIf="affiliation.endYear" class="col-md-9">
-                        {{affiliation.endYear!}}<span *ngIf="affiliation.endMonth">-{{affiliation.endMonth}}</span><span *ngIf="affiliation.endMonth&&affiliation.endDay">-{{affiliation.endDay!}}</span>
-                    </dd>
-                    <dt *ngIf="affiliation.externalId" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.externalId.string">External Id</dt>
-                    <dd *ngIf="affiliation.externalId" class="col-md-9">
-                        {{affiliation.externalIdType!}} <a *ngIf="affiliation.externalIdUrl" href="{{affiliation.externalIdUrl}}">{{affiliation.externalId}}</a> <span *ngIf="!affiliation.externalIdUrl">{{affiliation.externalId}}</span>
-                    </dd>
-                    <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.created.string">Created</dt>
-                    <dd class="col-md-9">
-                        {{affiliation.created!.toString() | date:'medium'}}
-                    </dd>
-                    <dt *ngIf="affiliation.addedToORCID" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.addedToOrcid.string">Added To ORCID</dt>
-                    <dd *ngIf="affiliation.addedToORCID" class="col-md-9">
-                        {{affiliation.addedToORCID!.toString() | date:'medium'}}
-                    </dd>
-                    <dt *ngIf="affiliation.updatedInORCID" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.updatedInOrcid.string">Updated In ORCID</dt>
-                    <dd *ngIf="affiliation.updatedInORCID" class="col-md-9">
-                        {{affiliation.updatedInORCID!.toString() | date:'medium'}}
-                    </dd>
-                    <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.modified.string">Modified</dt>
-                    <dd class="col-md-9">
-                        {{affiliation.modified!.toString() | date:'medium'}} <i><span i18n="@@global.by.string">by</span> {{affiliation.lastModifiedBy}}</i>
-                    </dd>
-                    <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.adminId.string">Admin Id</dt>
-                    <dd class="col-md-9">
-                        {{ownerId}}
-                    </dd>
-                    <dt *ngIf="(!affiliation.invitationSent && affiliation.notificationSent) || (affiliation.notificationSent && affiliation.notificationSent < affiliation.invitationSent!)" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.notificationFirstSent.string">Notification First Sent</dt>
-                    <dd *ngIf="(!affiliation.invitationSent && affiliation.notificationSent) || (affiliation.notificationSent && affiliation.notificationSent < affiliation.invitationSent!)" class="col-md-9">
-                        {{affiliation.notificationSent.toString() | date:'medium'}}
-                    </dd>
-                    <dt *ngIf="(!affiliation.notificationSent && affiliation.invitationSent) || (affiliation.invitationSent && affiliation.invitationSent < affiliation.notificationSent!)" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.notificationFirstSent.string">Notification First Sent</dt>
-                    <dd *ngIf="(!affiliation.notificationSent && affiliation.invitationSent) || (affiliation.invitationSent && affiliation.invitationSent < affiliation.notificationSent!)" class="col-md-9">
-                        {{affiliation.invitationSent.toString() | date:'medium'}}
-                    </dd>
-                    <dt *ngIf="(!affiliation.invitationLastSent && affiliation.notificationLastSent) || (affiliation.notificationLastSent && affiliation.notificationLastSent > affiliation.invitationLastSent!)" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.notificationLastSent.string">Notification Last Sent</dt>
-                    <dd *ngIf="(!affiliation.invitationLastSent && affiliation.notificationLastSent) || (affiliation.notificationLastSent && affiliation.notificationLastSent > affiliation.invitationLastSent!)" class="col-md-9">
-                        {{affiliation.notificationLastSent.toString() | date:'medium'}}
-                    </dd>
-                    <dt *ngIf="(!affiliation.notificationLastSent && affiliation.invitationLastSent) || (affiliation.invitationLastSent && affiliation.invitationLastSent > affiliation.notificationLastSent!)" class="col-md-3" i18n="@@gatewayApp.assertionServiceaffiliation.notificationLastSent.string">Notification Last Sent</dt>
-                    <dd *ngIf="(!affiliation.notificationLastSent && affiliation.invitationLastSent) || (affiliation.invitationLastSent && affiliation.invitationLastSent > affiliation.notificationLastSent!)" class="col-md-9">
-                        {{affiliation.invitationLastSent.toString() | date:'medium'}}
-                    </dd>
-                </dl>
-            </div>
-            <hr>
-            <div class="mb-3">
-                <button type="submit"
-                        (click)="previousState()"
-                        class="btn btn-outline-primary mr-2">
-                    <fa-icon [icon]="faArrowLeft"></fa-icon>&nbsp;<span i18n="@@entity.action.back.string"> Back</span>
-                </button>
+  <div class="col-8">
+    <div *ngIf="affiliation">
+      <h1 class="mt-5" i18n="@@gatewayApp.assertionServiceAssertion.detail.title.string">Affiliation details</h1>
+      <hr />
+      <app-error-alert></app-error-alert>
+      <div class="row">
+        <dl class="jh-entity-details">
+          <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.id.string">ID</dt>
+          <dd class="col-md-9">
+            {{ affiliation.id }}
+          </dd>
+          <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.email.string">Email</dt>
+          <dd class="col-md-9">
+            {{ affiliation.email }}
+          </dd>
+          <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.status.string">Status</dt>
+          <dd class="col-md-9">
+            {{ affiliation.prettyStatus }}
+          </dd>
+          <dt
+            *ngIf="affiliation.permissionLink"
+            class="col-md-3"
+            i18n="@@gatewayApp.assertionServiceAssertion.permissionLink.string"
+          >
+            Permission link
+          </dt>
+          <dd *ngIf="affiliation.permissionLink" class="col-md-9">
+            <button
+              class="btn btn-outline-primary"
+              type="button"
+              [ngxClipboard]
+              [cbContent]="affiliation.permissionLink"
+              (cbOnSuccess)="successMessage()"
+              i18n="@@gatewayApp.assertionServiceAssertion.copyClipboard.string"
+            >
+              Copy to clipboard
+            </button>
+          </dd>
+          <dt *ngIf="affiliation.orcidId" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.orcidId.string">
+            ORCID iD
+          </dt>
+          <dd *ngIf="affiliation.orcidId" class="col-md-9">
+            <a href="{{ orcidBaseUrl }}/{{ affiliation.orcidId }}" target="_blank"
+              >{{ orcidBaseUrl }}/{{ affiliation.orcidId }}</a
+            >
+          </dd>
+          <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.affiliationSection.string">
+            Affiliation Section
+          </dt>
+          <dd class="col-md-9">
+            <span i18n="@@{{'gatewayApp.AffiliationSection.' + affiliation.affiliationSection + '.string'}}">{{
+              affiliation.affiliationSection
+            }}</span>
+          </dd>
+          <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.detail.org.string">Organization</dt>
+          <dd class="col-md-9">
+            {{ affiliation.orgName }}: <span *ngIf="affiliation.orgCity">{{ affiliation.orgCity }}</span
+            ><span *ngIf="affiliation.orgRegion">, {{ affiliation.orgRegion }}</span
+            ><span *ngIf="affiliation.orgCountry">, {{ affiliation.orgCountry }}</span
+            ><br />
+            {{ affiliation.disambiguationSource }} {{ affiliation.disambiguatedOrgId }}
+          </dd>
+          <dt
+            *ngIf="affiliation.departmentName"
+            class="col-md-3"
+            i18n="@@gatewayApp.assertionServiceAssertion.departmentName.string"
+          >
+            Department Name
+          </dt>
+          <dd *ngIf="affiliation.departmentName" class="col-md-9">
+            {{ affiliation.departmentName }}
+          </dd>
+          <dt
+            *ngIf="affiliation.roleTitle"
+            class="col-md-3"
+            i18n="@@gatewayApp.assertionServiceAssertion.roleTitle.string"
+          >
+            Role Title
+          </dt>
+          <dd *ngIf="affiliation.roleTitle" class="col-md-9">
+            {{ affiliation.roleTitle }}
+          </dd>
+          <dt *ngIf="affiliation.url" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.url.string">Url</dt>
+          <dd *ngIf="affiliation.url" class="col-md-9">
+            <a href="{{ affiliation.url }}">{{ affiliation.url }}</a>
+          </dd>
+          <dt
+            *ngIf="affiliation.startYear"
+            class="col-md-3"
+            i18n="@@gatewayApp.assertionServiceAssertion.startDate.string"
+          >
+            Start Date
+          </dt>
+          <dd *ngIf="affiliation.startYear" class="col-md-9">
+            {{ startDate }}
+          </dd>
+          <dt *ngIf="affiliation.endYear" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.endDate.string">
+            End Date
+          </dt>
+          <dd *ngIf="affiliation.endYear" class="col-md-9">
+            {{ endDate }}
+          </dd>
+          <dt
+            *ngIf="affiliation.externalId"
+            class="col-md-3"
+            i18n="@@gatewayApp.assertionServiceAssertion.externalId.string"
+          >
+            External Id
+          </dt>
+          <dd *ngIf="affiliation.externalId" class="col-md-9">
+            {{ affiliation.externalIdType! }}
+            <a *ngIf="affiliation.externalIdUrl" href="{{ affiliation.externalIdUrl }}">{{ affiliation.externalId }}</a>
+            <span *ngIf="!affiliation.externalIdUrl">{{ affiliation.externalId }}</span>
+          </dd>
+          <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.created.string">Created</dt>
+          <dd class="col-md-9">
+            {{ affiliation.created!.toString() | date: 'medium' }}
+          </dd>
+          <dt
+            *ngIf="affiliation.addedToORCID"
+            class="col-md-3"
+            i18n="@@gatewayApp.assertionServiceAssertion.addedToOrcid.string"
+          >
+            Added To ORCID
+          </dt>
+          <dd *ngIf="affiliation.addedToORCID" class="col-md-9">
+            {{ affiliation.addedToORCID!.toString() | date: 'medium' }}
+          </dd>
+          <dt
+            *ngIf="affiliation.updatedInORCID"
+            class="col-md-3"
+            i18n="@@gatewayApp.assertionServiceAssertion.updatedInOrcid.string"
+          >
+            Updated In ORCID
+          </dt>
+          <dd *ngIf="affiliation.updatedInORCID" class="col-md-9">
+            {{ affiliation.updatedInORCID!.toString() | date: 'medium' }}
+          </dd>
+          <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.modified.string">Modified</dt>
+          <dd class="col-md-9">
+            {{ affiliation.modified!.toString() | date: 'medium' }}
+            <i><span i18n="@@global.by.string">by</span> {{ affiliation.lastModifiedBy }}</i>
+          </dd>
+          <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.adminId.string">Admin Id</dt>
+          <dd class="col-md-9">
+            {{ ownerId }}
+          </dd>
+          <dt
+            *ngIf="
+              (!affiliation.invitationSent && affiliation.notificationSent) ||
+              (affiliation.notificationSent && affiliation.notificationSent < affiliation.invitationSent!)
+            "
+            class="col-md-3"
+            i18n="@@gatewayApp.assertionServiceAssertion.notificationFirstSent.string"
+          >
+            Notification First Sent
+          </dt>
+          <dd
+            *ngIf="
+              (!affiliation.invitationSent && affiliation.notificationSent) ||
+              (affiliation.notificationSent && affiliation.notificationSent < affiliation.invitationSent!)
+            "
+            class="col-md-9"
+          >
+            {{ affiliation.notificationSent.toString() | date: 'medium' }}
+          </dd>
+          <dt
+            *ngIf="
+              (!affiliation.notificationSent && affiliation.invitationSent) ||
+              (affiliation.invitationSent && affiliation.invitationSent < affiliation.notificationSent!)
+            "
+            class="col-md-3"
+            i18n="@@gatewayApp.assertionServiceAssertion.notificationFirstSent.string"
+          >
+            Notification First Sent
+          </dt>
+          <dd
+            *ngIf="
+              (!affiliation.notificationSent && affiliation.invitationSent) ||
+              (affiliation.invitationSent && affiliation.invitationSent < affiliation.notificationSent!)
+            "
+            class="col-md-9"
+          >
+            {{ affiliation.invitationSent.toString() | date: 'medium' }}
+          </dd>
+          <dt
+            *ngIf="
+              (!affiliation.invitationLastSent && affiliation.notificationLastSent) ||
+              (affiliation.notificationLastSent && affiliation.notificationLastSent > affiliation.invitationLastSent!)
+            "
+            class="col-md-3"
+            i18n="@@gatewayApp.assertionServiceAssertion.notificationLastSent.string"
+          >
+            Notification Last Sent
+          </dt>
+          <dd
+            *ngIf="
+              (!affiliation.invitationLastSent && affiliation.notificationLastSent) ||
+              (affiliation.notificationLastSent && affiliation.notificationLastSent > affiliation.invitationLastSent!)
+            "
+            class="col-md-9"
+          >
+            {{ affiliation.notificationLastSent.toString() | date: 'medium' }}
+          </dd>
+          <dt
+            *ngIf="
+              (!affiliation.notificationLastSent && affiliation.invitationLastSent) ||
+              (affiliation.invitationLastSent && affiliation.invitationLastSent > affiliation.notificationLastSent!)
+            "
+            class="col-md-3"
+            i18n="@@gatewayApp.assertionServiceaffiliation.notificationLastSent.string"
+          >
+            Notification Last Sent
+          </dt>
+          <dd
+            *ngIf="
+              (!affiliation.notificationLastSent && affiliation.invitationLastSent) ||
+              (affiliation.invitationLastSent && affiliation.invitationLastSent > affiliation.notificationLastSent!)
+            "
+            class="col-md-9"
+          >
+            {{ affiliation.invitationLastSent.toString() | date: 'medium' }}
+          </dd>
+        </dl>
+      </div>
+      <hr />
+      <div class="mb-3">
+        <button type="submit" (click)="previousState()" class="btn btn-outline-primary mr-2">
+          <fa-icon [icon]="faArrowLeft"></fa-icon>&nbsp;<span i18n="@@entity.action.back.string"> Back</span>
+        </button>
 
-                <button type="button"
-                        [routerLink]="['/affiliation', affiliation!.id, 'edit']"
-                        class="btn btn-primary">
-                    <fa-icon [icon]="faPencilAlt"></fa-icon>&nbsp;<span i18n="@@entity.action.edit.string"> Edit</span>
-                </button>
-            </div>
-        </div>
+        <button type="button" [routerLink]="['/affiliations', affiliation!.id, 'edit']" class="btn btn-primary">
+          <fa-icon [icon]="faPencilAlt"></fa-icon>&nbsp;<span i18n="@@entity.action.edit.string"> Edit</span>
+        </button>
+      </div>
     </div>
+  </div>
 </div>
