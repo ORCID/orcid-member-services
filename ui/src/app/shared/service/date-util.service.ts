@@ -72,4 +72,20 @@ export class DateUtilService {
     }
     return days
   }
+
+  formatDate({ year, month, day }: { year?: string; month?: string; day?: string }): string {
+    let date = ''
+    if (year) {
+      date = year
+
+      if (month && parseInt(month) > 0) {
+        date += `-${month.padStart(2, '0')}`
+
+        if (day && parseInt(day) > 0) {
+          date += `-${day.padStart(2, '0')}`
+        }
+      }
+    }
+    return date
+  }
 }

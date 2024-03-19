@@ -4,6 +4,7 @@ import { ORCID_BASE_URL } from '../app.constants'
 import { ActivatedRoute } from '@angular/router'
 import { UserService } from '../user/service/user.service'
 import { faPencilAlt, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { DateUtilService } from '../shared/service/date-util.service'
 
 @Component({
   selector: 'app-affiliation-detail',
@@ -15,15 +16,28 @@ export class AffiliationDetailComponent implements OnInit {
   ownerId: string | undefined
   faPencilAlt = faPencilAlt
   faArrowLeft = faArrowLeft
+  startDate: string | undefined
+  endDate: string | undefined
 
   constructor(
     protected activatedRoute: ActivatedRoute,
-    protected userService: UserService
+    protected userService: UserService,
+    protected dateUtilService: DateUtilService
   ) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ affiliation }) => {
       this.affiliation = affiliation
+      this.startDate = this.dateUtilService.formatDate({
+        year: affiliation.startYear,
+        month: affiliation.startMonth,
+        day: affiliation.startDay,
+      })
+      this.endDate = this.dateUtilService.formatDate({
+        year: affiliation.endYear,
+        month: affiliation.endMonth,
+        day: affiliation.endDay,
+      })
       this.userService.find(this.affiliation!.ownerId!).subscribe((user) => {
         this.ownerId = user.email
       })
