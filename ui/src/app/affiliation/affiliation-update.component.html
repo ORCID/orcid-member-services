@@ -216,7 +216,7 @@
               <small
                 class="form-text text-danger"
                 *ngIf="
-                  !editForm.get('disambiguatedOrgId')?.errors ||
+                  !this.editForm.get('disambiguatedOrgId')?.hasError('validDisambiguatedOrgId') ||
                   (editForm.get('disambiguatedOrgId')?.errors)!['required']
                 "
                 i18n="@@entity.validation.disambiguatedOrgId.string"
