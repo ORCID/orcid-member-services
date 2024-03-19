@@ -4597,7 +4597,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="entity.validation.endDate.string" datatype="html">
-        <source> End date cannot be greater than the start date </source>
+        <source> Start date cannot be greater than the end date </source>
         <target state="new">La data di inizio non può essere successiva alla data di fine.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
