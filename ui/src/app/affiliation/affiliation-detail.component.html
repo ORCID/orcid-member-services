@@ -93,15 +93,13 @@
             Start Date
           </dt>
           <dd *ngIf="affiliation.startYear" class="col-md-9">
-            {{ affiliation.startYear! }}<span *ngIf="affiliation.startMonth">-{{ affiliation.startMonth }}</span
-            ><span *ngIf="affiliation.startMonth && affiliation.startDay">-{{ affiliation.startDay! }}</span>
+            {{ startDate }}
           </dd>
           <dt *ngIf="affiliation.endYear" class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.endDate.string">
             End Date
           </dt>
           <dd *ngIf="affiliation.endYear" class="col-md-9">
-            {{ affiliation.endYear! }}<span *ngIf="affiliation.endMonth">-{{ affiliation.endMonth }}</span
-            ><span *ngIf="affiliation.endMonth && affiliation.endDay">-{{ affiliation.endDay! }}</span>
+            {{ endDate }}
           </dd>
           <dt
             *ngIf="affiliation.externalId"

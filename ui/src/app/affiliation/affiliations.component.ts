@@ -21,6 +21,7 @@ import { AccountService } from '../account'
 import { AlertService } from '../shared/service/alert.service'
 import { ActivatedRoute, Router } from '@angular/router'
 import { EventService } from '../shared/service/event.service'
+import { DateUtilService } from '../shared/service/date-util.service'
 
 @Component({
   selector: 'app-affiliations',
@@ -47,6 +48,8 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   ascending: any
   orcidBaseUrl: string | undefined = ORCID_BASE_URL
   itemCount: string | undefined
+  startDate: string | undefined
+  endDate: string | undefined
   faChartBar = faChartBar
   faFileDownload = faFileDownload
   faFileImport = faFileImport
@@ -71,7 +74,8 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected eventService: EventService,
-    protected translate: LanguageService
+    protected translate: LanguageService,
+    protected dateUtilService: DateUtilService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE
   }
@@ -135,6 +139,14 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
       },
     })
     this.loadAll()
+  }
+
+  formatDate(year?: string, month?: string, day?: string) {
+    return this.dateUtilService.formatDate({
+      year,
+      month,
+      day,
+    })
   }
 
   clear() {
