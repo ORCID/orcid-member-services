@@ -16,14 +16,14 @@ import { faBan, faTimes } from '@fortawesome/free-solid-svg-icons'
   selector: 'app-affiliation-delete-dialog',
   templateUrl: './affiliation-delete.component.html',
 })
-export class AffiliationDeleteDialogComponent {
+export class AffiliationDeleteDialogComponent implements OnInit {
   inOrcid: string = AFFILIATION_STATUS.IN_ORCID
   userRevokedAccess: string = AFFILIATION_STATUS.USER_REVOKED_ACCESS
   affiliation: IAffiliation | undefined
   errorUserRevoked = false
   faTimes = faTimes
   faBan = faBan
-  message: string | undefined
+  message = ''
 
   constructor(
     protected affiliationService: AffiliationService,
@@ -31,12 +31,14 @@ export class AffiliationDeleteDialogComponent {
     protected eventService: EventService,
     private alertService: AlertService
   ) {}
+
   clear() {
     this.activeModal.dismiss(true)
   }
 
   ngOnInit(): void {
-    this.message = $localize`:@@gatewayApp.msUserServiceMSUser.delete.question.string:Are you sure you want to delete user ${this.affiliation?.email}?`
+    this.message = $localize`:@@gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string:Are you sure you want to delete this affiliation for ${this.affiliation?.email}? The affiliation will be deleted from the portal and
+    the user's ORCID record`
   }
 
   confirmDelete(id: string | undefined) {

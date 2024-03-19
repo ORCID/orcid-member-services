@@ -8,19 +8,16 @@
     <p *ngIf="!affiliation?.addedToORCID" i18n="@@gatewayApp.assertionServiceAssertion.delete.fromPortal.string">
       Are you sure you want to delete this affiliation from the portal?
     </p>
-    <p
-      *ngIf="affiliation?.addedToORCID"
-      i18n="@@gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string"
-    >
+    <p *ngIf="affiliation?.addedToORCID">
       {{ message | localize }}
     </p>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">
-      <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel.string">Cancel</span>
+      <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
     </button>
     <button id="jhi-confirm-delete-assertion" type="submit" class="btn btn-danger">
-      <fa-icon [icon]="faTimes"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete.string">Delete</span>
+      <fa-icon [icon]="faTimes"></fa-icon>&nbsp;<span i18n="@@entity.action.delete.string">Delete</span>
     </button>
   </div>
 </form>
