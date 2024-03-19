@@ -10,17 +10,30 @@ import { AffiliationDetailComponent } from './affiliation-detail.component'
 import {
   AffiliationImportDialogComponent,
   AffiliationImportPopupComponent,
-} from './affiliation-import-dialog.component';
+} from './affiliation-import-dialog.component'
+import {
+  AffiliationDeleteDialogComponent,
+  AffiliationDeletePopupComponent,
+} from './affiliation-delete/affiliation-delete.component'
 import { AffiliationUpdateComponent } from './affiliation-update.component'
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SharedModule, RouterModule.forChild(affiliationRoutes), ClipboardModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SharedModule,
+    RouterModule.forChild(affiliationRoutes),
+    ClipboardModule,
+  ],
   declarations: [
     AffiliationsComponent,
     AffiliationDetailComponent,
     AffiliationImportDialogComponent,
     AffiliationImportPopupComponent,
     AffiliationUpdateComponent,
+    AffiliationDeleteDialogComponent,
+    AffiliationDeletePopupComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
