@@ -99,9 +99,14 @@ function hasValue(controls: AbstractControl): boolean {
 
 function isValidDate(y: string, m: string, d: string) {
   const year = parseInt(y)
-  const month = parseInt(m)
+  const month = parseInt(m) - 1
   const day = parseInt(d)
-  const date = new Date(year, month - 1, day)
+
+  if (year === 0 && month === 1 && day === 29) {
+    return true
+  }
+
+  const date = new Date(Date.UTC(year, month, day))
 
   return date.getUTCFullYear() === year && date.getUTCMonth() === month && date.getUTCDate() === day
 }
@@ -209,10 +214,10 @@ export class AffiliationUpdateComponent implements OnInit {
         roleTitle: assertion.roleTitle,
         url: assertion.url,
         startYear: assertion.startYear,
-        startMonth: parseInt(assertion.startMonth || '0'),
+        startMonth: parseInt(assertion.startMonth || '') || null,
         startDay: assertion.startDay,
         endYear: assertion.endYear,
-        endMonth: parseInt(assertion.endMonth || '0'),
+        endMonth: parseInt(assertion.endMonth || '') || null,
         endDay: assertion.endDay,
         orgName: assertion.orgName,
         orgCountry: assertion.orgCountry,
@@ -319,17 +324,17 @@ export class AffiliationUpdateComponent implements OnInit {
 
   public onStartDateSelected(resetValue: boolean) {
     this.startDaysList = this.dateUtilService.getDaysList(
-      this.editForm.get('startYear')?.value || undefined,
-      this.editForm.get('startMonth')?.value || undefined
+      this.editForm.get('startYear')?.value,
+      this.editForm.get('startMonth')?.value
     )
 
     if (resetValue && this.editForm.get('startDay')?.value) {
-      if (this.editForm.get('startYear')?.value && this.editForm.get('startMonth')?.value) {
+      if (this.editForm.get('startMonth')?.value) {
         if (
           !isValidDate(
-            this.editForm.get('startYear')!.value!,
-            this.editForm.get('startMonth')!.value!,
-            this.editForm.get('startDay')!.value!
+            this.editForm.get('startYear')!.value || '0',
+            this.editForm.get('startMonth')!.value,
+            this.editForm.get('startDay')!.value
           )
         ) {
           this.editForm.patchValue({
@@ -341,17 +346,17 @@ export class AffiliationUpdateComponent implements OnInit {
   }
 
   public onEndDateSelected(resetValue: boolean) {
+    this.endDaysList = this.dateUtilService.getDaysList(
+      this.editForm.get('endYear')?.value,
+      this.editForm.get('endMonth')?.value
+    )
     if (resetValue && this.editForm.get('endDay')?.value) {
-      if (this.editForm.get('endYear')?.value && this.editForm.get('endMonth')?.value) {
-        this.endDaysList = this.dateUtilService.getDaysList(
-          this.editForm.get('endYear')!.value!,
-          this.editForm.get('endMonth')!.value!
-        )
+      if (this.editForm.get('endMonth')?.value) {
         if (
           !isValidDate(
-            this.editForm.get('endYear')!.value!,
-            this.editForm.get('endMonth')!.value!,
-            this.editForm.get('endDay')!.value!
+            this.editForm.get('endYear')!.value || '0',
+            this.editForm.get('endMonth')!.value,
+            this.editForm.get('endDay')!.value
           )
         ) {
           this.editForm.patchValue({
