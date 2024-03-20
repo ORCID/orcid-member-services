@@ -11,8 +11,9 @@ import {
   AffiliationImportDialogComponent,
   AffiliationImportPopupComponent,
 } from './affiliation-import-dialog.component'
-import { AffiliationDeleteDialogComponent, AffiliationDeletePopupComponent } from './affiliation-delete.component'
 import { AffiliationUpdateComponent } from './affiliation-update.component'
+import { SendNotificationsDialogComponent } from './send-notifications-dialog.component'
+import { AffiliationDeleteDialogComponent, AffiliationDeletePopupComponent } from './affiliation-delete.component'
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { AffiliationUpdateComponent } from './affiliation-update.component'
     AffiliationImportDialogComponent,
     AffiliationImportPopupComponent,
     AffiliationUpdateComponent,
+    SendNotificationsDialogComponent,
     AffiliationDeleteDialogComponent,
     AffiliationDeletePopupComponent,
   ],

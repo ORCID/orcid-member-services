@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 
-import { AffiliationService } from './service/affiliations.service'
+import { AffiliationService } from './service/affiliation.service'
 import { EventService } from 'src/app/shared/service/event.service'
 import { AlertService } from 'src/app/shared/service/alert.service'
 import { IAffiliation } from './model/affiliation.model'

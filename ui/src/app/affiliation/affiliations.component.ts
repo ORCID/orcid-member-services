@@ -15,7 +15,7 @@ import {
   faSortUp,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons'
-import { AffiliationService } from './service/affiliations.service'
+import { AffiliationService } from './service/affiliation.service'
 import { LanguageService } from '../shared/service/language.service'
 import { AccountService } from '../account'
 import { AlertService } from '../shared/service/alert.service'

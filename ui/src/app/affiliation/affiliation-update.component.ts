@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from
 import { ActivatedRoute } from '@angular/router'
 import * as moment from 'moment'
 import { IAffiliation, Affiliation } from './model/affiliation.model'
-import { AffiliationService } from './service/affiliations.service'
+import { AffiliationService } from './service/affiliation.service'
 import { DateUtilService } from '../shared/service/date-util.service'
 
 import {
