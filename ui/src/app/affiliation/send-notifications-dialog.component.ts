@@ -22,7 +22,7 @@ export class SendNotificationsDialogComponent implements OnInit {
   faPaperPlane = faPaperPlane
   requestAlreadyInProgress = false
   languages: { [langCode: string]: { name: string } } | undefined
-  language: string = ''
+  language = ''
   account: IUser | undefined
 
   constructor(
@@ -79,7 +79,7 @@ export class SendNotificationsDialogComponent implements OnInit {
 }
 
 @Component({
-  selector: 'send-notifications-popup',
+  selector: 'app-send-notifications-popup',
   template: '',
 })
 export class SendNotificationsPopupComponent implements OnInit, OnDestroy {
