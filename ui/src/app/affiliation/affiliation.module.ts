@@ -11,7 +11,8 @@ import {
   AffiliationImportDialogComponent,
   AffiliationImportPopupComponent,
 } from './affiliation-import-dialog.component';
-import { AffiliationUpdateComponent } from './affiliation-update.component'
+import { AffiliationUpdateComponent } from './affiliation-update.component';
+import { SendNotificationsDialogComponent } from './send-notifications-dialog.component'
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule, SharedModule, RouterModule.forChild(affiliationRoutes), ClipboardModule],
@@ -21,6 +22,7 @@ import { AffiliationUpdateComponent } from './affiliation-update.component'
     AffiliationImportDialogComponent,
     AffiliationImportPopupComponent,
     AffiliationUpdateComponent,
+    SendNotificationsDialogComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

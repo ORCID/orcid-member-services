@@ -16,6 +16,7 @@ export enum AlertType {
   USER_CREATED = 'User created. Invite sent.',
   USER_UPDATED = 'User updated successfully',
   USER_DELETED = 'User deleted successfully',
+  NOTIFICATION_IN_PROGRESS = 'Notification in progress',
 }
 
 export const EMAIL_NOT_FOUND_TYPE = 'https://www.jhipster.tech/problem/email-not-found'

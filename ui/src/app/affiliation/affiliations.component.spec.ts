@@ -16,7 +16,7 @@ import { Event } from '../shared/model/event.model'
 import { RouterModule } from '@angular/router'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { AffiliationsComponent } from './affiliations.component'
-import { AffiliationService } from './service/affiliations.service'
+import { AffiliationService } from './service/affiliation.service'
 import { Affiliation, AffiliationPage } from './model/affiliation.model'
 describe('AffiliationsComponent', () => {
   let component: AffiliationsComponent
