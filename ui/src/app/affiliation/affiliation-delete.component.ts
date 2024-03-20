@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router'
 
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 
-import { AffiliationService } from '../service/affiliations.service'
+import { AffiliationService } from './service/affiliations.service'
 import { EventService } from 'src/app/shared/service/event.service'
 import { AlertService } from 'src/app/shared/service/alert.service'
-import { IAffiliation } from '../model/affiliation.model'
+import { IAffiliation } from './model/affiliation.model'
 import { AFFILIATION_STATUS } from 'src/app/shared/constants/orcid-api.constants'
 import { AlertType, EventType } from 'src/app/app.constants'
 import { Event } from 'src/app/shared/model/event.model'
@@ -42,6 +42,8 @@ export class AffiliationDeleteDialogComponent implements OnInit {
   }
 
   confirmDelete(id: string | undefined) {
+    console.log(id)
+
     if (id) {
       this.affiliationService.delete(id).subscribe((response) => {
         if (response.body.deleted) {
@@ -74,6 +76,8 @@ export class AffiliationDeletePopupComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ affiliation }) => {
+      console.log(affiliation)
+
       setTimeout(() => {
         this.ngbModalRef = this.modalService.open(AffiliationDeleteDialogComponent as Component, {
           size: 'lg',

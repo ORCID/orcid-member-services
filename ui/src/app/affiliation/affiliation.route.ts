@@ -8,6 +8,7 @@ import { AffiliationsComponent } from './affiliations.component'
 import { AffiliationDetailComponent } from './affiliation-detail.component'
 import { AffiliationImportPopupComponent } from './affiliation-import-dialog.component'
 import { AffiliationUpdateComponent } from './affiliation-update.component'
+import { AffiliationDeletePopupComponent } from './affiliation-delete.component'
 
 export const AffiliationResolver: ResolveFn<Affiliation | null> = (
   route: ActivatedRouteSnapshot,
@@ -48,6 +49,19 @@ export const affiliationRoutes: Routes = [
         canActivate: [AuthGuard],
         outlet: 'popup',
       },
+      {
+        path: ':id/delete',
+        component: AffiliationDeletePopupComponent,
+        resolve: {
+          affiliation: AffiliationResolver,
+        },
+        data: {
+          authorities: ['ASSERTION_SERVICE_ENABLED'],
+          pageTitle: 'gatewayApp.assertionServiceAssertion.home.title.string',
+        },
+        canActivate: [AuthGuard],
+        outlet: 'popup',
+      },
     ],
   },
   {
@@ -75,7 +89,7 @@ export const affiliationRoutes: Routes = [
     path: ':id/edit',
     component: AffiliationUpdateComponent,
     resolve: {
-      assertion: AffiliationResolver,
+      affiliation: AffiliationResolver,
     },
     data: {
       authorities: ['ASSERTION_SERVICE_ENABLED'],

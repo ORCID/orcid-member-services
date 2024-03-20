@@ -178,8 +178,8 @@ export class AffiliationUpdateComponent implements OnInit {
     this.startDaysList = this.dateUtilService.getDaysList()
     this.endDaysList = this.dateUtilService.getDaysList()
     this.isSaving = false
-    this.activatedRoute.data.subscribe(({ assertion }) => {
-      this.updateForm(assertion)
+    this.activatedRoute.data.subscribe(({ affiliation }) => {
+      this.updateForm(affiliation)
     })
 
     this.onChanges()
