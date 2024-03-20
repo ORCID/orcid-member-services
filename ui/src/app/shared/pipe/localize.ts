@@ -17,6 +17,14 @@ export class LocalizePipe implements PipeTransform {
         return $localize`:@@userServiceApp.user.updated.string:User updated successfully`
       case AlertType.USER_DELETED:
         return $localize`:@@userServiceApp.user.deleted.string:User deleted successfully`
+      case AlertType.AFFILIATION_CREATED:
+        return $localize`:@@assertionServiceApp.affiliation.created.string:Affiliation created`
+      case AlertType.AFFILIATION_UPDATED:
+        return $localize`:@@assertionServiceApp.affiliation.updated.string:Affiliation updated`
+      case AlertType.AFFILIATION_DELETED:
+        return $localize`:@@assertionServiceApp.affiliation.deleted.string:Affiliation deleted`
+      case AlertType.AFFILIATION_DELETE_FAILURE:
+        return $localize`:@@assertionServiceApp.affiliation.problemDeleting.string:There was a problem deleting the affiliation`
 
       // Affiliation pretty statuses
 
