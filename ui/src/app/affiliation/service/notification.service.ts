@@ -13,9 +13,9 @@ export class NotificationService {
 
   constructor(
     private http: HttpClient,
-    private assertionService: AffiliationService
+    private affiliationService: AffiliationService
   ) {
-    this.resourceUrl = this.assertionService.resourceUrl + '/notification-request'
+    this.resourceUrl = this.affiliationService.resourceUrl + '/notification-request'
   }
 
   updateStatuses(language: string): Observable<any> {

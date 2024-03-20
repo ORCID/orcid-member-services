@@ -19,6 +19,14 @@ export class LocalizePipe implements PipeTransform {
         return $localize`:@@userServiceApp.user.deleted.string:User deleted successfully`
       case AlertType.NOTIFICATION_IN_PROGRESS:
         return $localize`:@@gatewayApp.assertionServiceAssertion.notifications.notificationInProgress.string:Notification process has now started. We will email you as soon as the process has completed.`
+      case AlertType.AFFILIATION_CREATED:
+        return $localize`:@@assertionServiceApp.affiliation.created.string:Affiliation created`
+      case AlertType.AFFILIATION_UPDATED:
+        return $localize`:@@assertionServiceApp.affiliation.updated.string:Affiliation updated`
+      case AlertType.AFFILIATION_DELETED:
+        return $localize`:@@assertionServiceApp.affiliation.deleted.string:Affiliation deleted`
+      case AlertType.AFFILIATION_DELETE_FAILURE:
+        return $localize`:@@assertionServiceApp.affiliation.problemDeleting.string:There was a problem deleting the affiliation`
 
       // Affiliation pretty statuses
 

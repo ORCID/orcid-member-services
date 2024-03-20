@@ -13,6 +13,7 @@ import {
   COUNTRIES,
   ORG_ID_TYPES,
   DEFAULT_LATEST_YEAR_INCREMENT,
+  AlertType,
 } from '../app.constants'
 import { AlertService } from '../shared/service/alert.service'
 import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
@@ -177,8 +178,8 @@ export class AffiliationUpdateComponent implements OnInit {
     this.startDaysList = this.dateUtilService.getDaysList()
     this.endDaysList = this.dateUtilService.getDaysList()
     this.isSaving = false
-    this.activatedRoute.data.subscribe(({ assertion }) => {
-      this.updateForm(assertion)
+    this.activatedRoute.data.subscribe(({ affiliation }) => {
+      this.updateForm(affiliation)
     })
 
     this.onChanges()
@@ -253,7 +254,7 @@ export class AffiliationUpdateComponent implements OnInit {
       this.affiliationService.update(assertion).subscribe({
         next: () => {
           this.onSaveSuccess()
-          this.alertService.broadcast('assertionServiceApp.affiliation.updated.string')
+          this.alertService.broadcast(AlertType.AFFILIATION_UPDATED)
         },
         error: (err) => this.onSaveError(err),
       })
@@ -262,7 +263,7 @@ export class AffiliationUpdateComponent implements OnInit {
         next: () => {
           this.onSaveSuccess()
           // TODO: add alerttype
-          this.alertService.broadcast('assertionServiceApp.affiliation.created.string')
+          this.alertService.broadcast(AlertType.AFFILIATION_CREATED)
         },
         error: (err) => this.onSaveError(err),
       })
