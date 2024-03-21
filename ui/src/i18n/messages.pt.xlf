@@ -70,8 +70,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
-        <source> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x> </source>
-        <target state="new"> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x> </target>
+        <source> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x>
+        </source>
+        <target state="new"> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x>
+        </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -287,8 +289,12 @@
         </context-group>
       </trans-unit>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please check your credentials and try again. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Erro ao iniciar sessão!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Por favor verifique as suas credenciais e tente novamente.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Failed to
+          sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please
+          check your credentials and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Erro
+          ao iniciar sessão!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>
+          Por favor verifique as suas credenciais e tente novamente.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -302,7 +308,8 @@
           <context context-type="linenumber">10</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
         <context-group purpose="location">
@@ -318,7 +325,8 @@
           <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
@@ -386,15 +394,21 @@
         <source>Reset your password</source>
         <target state="new">Redefina a sua palavra-passe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please check and try again. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>O endereço de e-mail não está registado!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Verifique e tente novamente</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Email
+          address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x> Please check and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>O
+          endereço de e-mail não está registado!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x> Verifique e tente novamente</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
@@ -402,15 +416,18 @@
         <source>Enter the email address you used to register.</source>
         <target state="new">Insira o endereço de e-mail que usou para se registar</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.success.string" datatype="html">
         <source> Check your emails for details on how to reset your password. </source>
-        <target state="new">Verifique os seus emails para mais detalhes sobre como redefinir a sua palavra-passe.</target>
+        <target state="new">Verifique os seus emails para mais detalhes sobre como redefinir a sua
+          palavra-passe.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
@@ -418,7 +435,8 @@
         <source> Your email is required. </source>
         <target state="new">O seu e-mail é obrigatório.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
@@ -426,7 +444,8 @@
         <source> Your email is invalid. </source>
         <target state="new">O seu e-mail é inválido.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
@@ -434,7 +453,8 @@
         <source> Your email is required to be at least 5 characters. </source>
         <target state="new">É necessário que o seu email tenha pelo menos 5 caractéres.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
@@ -442,7 +462,8 @@
         <source> Your email cannot be longer than 100 characters. </source>
         <target state="new">O seu email não pode ter mais que 50 caractéres.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
@@ -450,7 +471,8 @@
         <source> Reset </source>
         <target state="new">Redefinir palavra-passe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
@@ -463,8 +485,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Configurações gravadas!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Settings
+          saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Configurações
+          gravadas!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -579,8 +603,12 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaExplain.string" datatype="html">
-        <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
-        <target state="new">Adicione mais segurança à sua conta permitindo a autenticação de dois fatores. De cada vez que iniciar sessão, ser-lhe-à solicitado que introduza um código de seis dígitos que enviaremos para a sua aplicação de autenticação preferida.</target>
+        <source> Add extra security to your ORCID member portal account by enabling two-factor
+          authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code
+          we send to your preferred authentication application. </source>
+        <target state="new">Adicione mais segurança à sua conta permitindo a autenticação de dois
+          fatores. De cada vez que iniciar sessão, ser-lhe-à solicitado que introduza um código de
+          seis dígitos que enviaremos para a sua aplicação de autenticação preferida.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">146</context>
@@ -603,16 +631,40 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.one.string" datatype="html">
-        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>. </source>
-        <target state="new">Instale uma aplicação de autenticação de dois fatores<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Uma aplicação de 2FA é requerida para criar o código de seis dígitos de que necessita para aceder à sua conta de cada vez que iniciar sessão. A maioria das aplicações são para dispositivos móveis; algumas estão disponíveis para PC, ou são baseadas na rede. Transfira e instale a sua aplicação de 2FA favorita, tal como a  <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, a <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, ou a <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>.</target>
+        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb"
+            equiv-text="&lt;br /&gt;"></x>A 2FA app is required to create the six-digit code you
+          need to access your account each time you sign in. Most apps are for mobile devices; some
+          are also available as desktop or web-based apps. Download and install your preferred 2FA
+          app, such as <x id="START_LINK" ctype="x-a"
+            equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google
+          Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x
+            id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>
+          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, or <x
+            id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x
+            id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>. </source>
+        <target state="new">Instale uma aplicação de autenticação de dois fatores<x id="LINE_BREAK"
+            ctype="lb" equiv-text="&lt;br /&gt;"></x>Uma aplicação de 2FA é requerida para criar o
+          código de seis dígitos de que necessita para aceder à sua conta de cada vez que iniciar
+          sessão. A maioria das aplicações são para dispositivos móveis; algumas estão disponíveis
+          para PC, ou são baseadas na rede. Transfira e instale a sua aplicação de 2FA favorita, tal
+          como a <x id="START_LINK" ctype="x-a"
+            equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google
+          Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, a <x
+            id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>
+          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, ou a <x
+            id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x
+            id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.two.string" datatype="html">
-        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Open your 2FA app and scan the image below. </source>
-        <target state="new">Digitalize este código QR com o seu dispositivo<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Abra a sua aplicação de 2FA e digitalize a imagem abaixo.</target>
+        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb"
+            equiv-text="&lt;br /&gt;"></x>Open your 2FA app and scan the image below. </source>
+        <target state="new">Digitalize este código QR com o seu dispositivo<x id="LINE_BREAK"
+            ctype="lb" equiv-text="&lt;br /&gt;"></x>Abra a sua aplicação de 2FA e digitalize a
+          imagem abaixo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">174</context>
@@ -643,8 +695,14 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaTextCodeSteps.one.string" datatype="html">
-        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
-        <target state="new">Introduza o código de seis dígitos na aplicação<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Após digitalizar o código QR ou introduzir o código de texto, a sua aplicação de 2FA exibirá um código de seis dígitos. Introduza este código na caixa abaixo e clique em Guardar.</target>
+        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb"
+            equiv-text="&lt;br /&gt;"></x>After scanning the QR code or entering in the text code,
+          your 2FA app will display a six-digit code. Enter this code in the box below and click
+          Save. </source>
+        <target state="new">Introduza o código de seis dígitos na aplicação<x id="LINE_BREAK"
+            ctype="lb" equiv-text="&lt;br /&gt;"></x>Após digitalizar o código QR ou introduzir o
+          código de texto, a sua aplicação de 2FA exibirá um código de seis dígitos. Introduza este
+          código na caixa abaixo e clique em Guardar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">205</context>
@@ -667,8 +725,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.backupCodes.string" datatype="html">
-        <source> Make a note of the following backup codes, this is the only time they will be shown. </source>
-        <target state="new">Anote os seguintes códigos da cópia de segurança, esta é a única vez que serão exibidos.</target>
+        <source> Make a note of the following backup codes, this is the only time they will be
+          shown. </source>
+        <target state="new">Anote os seguintes códigos da cópia de segurança, esta é a única vez que
+          serão exibidos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">228</context>
@@ -875,17 +935,22 @@
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Password changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Palavra-passe alterada!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Password
+          changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Palavra-passe
+          alterada!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.error.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>An error has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> The password could not be changed. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Ocorreu um erro!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Não foi possível alterar a palavra-passe.
-</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>An error
+          has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>
+          The password could not be changed. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Ocorreu
+          um erro!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Não
+          foi possível alterar a palavra-passe. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">10</context>
@@ -895,7 +960,8 @@
         <source> The password and its confirmation do not match! </source>
         <target state="new">A palavra-chave e a sua confirmação não coincidem!</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
         <context-group purpose="location">
@@ -923,7 +989,8 @@
         <source> Your password is required. </source>
         <target state="new">É necessária a sua palavra-passe.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
@@ -939,7 +1006,8 @@
         <source>New password</source>
         <target state="new">Nova palavra-passe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
         <context-group purpose="location">
@@ -951,7 +1019,8 @@
         <source>New password</source>
         <target state="new">Nova palavra-passe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
         <context-group purpose="location">
@@ -963,7 +1032,8 @@
         <source> Your password is required to be at least 4 characters. </source>
         <target state="new">A sua palavra-passe deverá ter pelo menos 4 caracteres</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">98</context>
         </context-group>
         <context-group purpose="location">
@@ -975,7 +1045,8 @@
         <source> Your password cannot be longer than 50 characters. </source>
         <target state="new">Esta palavra-passe não pode ter mais de 50 caractéres.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">105</context>
         </context-group>
         <context-group purpose="location">
@@ -987,7 +1058,8 @@
         <source>New password confirmation</source>
         <target state="new">Confirmação da nova palavra-passe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">114</context>
         </context-group>
         <context-group purpose="location">
@@ -999,7 +1071,8 @@
         <source>Confirm the new password</source>
         <target state="new">Confirme a nova palavra-passe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">121</context>
         </context-group>
         <context-group purpose="location">
@@ -1011,7 +1084,8 @@
         <source> Your password confirmation is required. </source>
         <target state="new">É necessária a sua palavra-passe de confirmação.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">135</context>
         </context-group>
         <context-group purpose="location">
@@ -1021,9 +1095,11 @@
       </trans-unit>
       <trans-unit id="global.messages.validate.confirmpassword.minlength.string" datatype="html">
         <source> Your password confirmation is required to be at least 4 characters. </source>
-        <target state="new">A sua palavra-passe de confirmação precisa de ter pelo menos 4 caracteres.</target>
+        <target state="new">A sua palavra-passe de confirmação precisa de ter pelo menos 4
+          caracteres.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">142</context>
         </context-group>
         <context-group purpose="location">
@@ -1035,7 +1111,8 @@
         <source> Your password confirmation cannot be longer than 50 characters. </source>
         <target state="new">A sua palavra-passe de confirmação não pode ter mais de 50 caracteres.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">149</context>
         </context-group>
         <context-group purpose="location">
@@ -1063,55 +1140,81 @@
         <source>Reset password</source>
         <target state="new">Redefinir palavra-passe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keymissing.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>The activation key is missing.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Falta o código de ativação.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>The
+          activation key is missing.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Falta
+          o código de ativação.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyinvalid.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This activation key is invalid.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>A chave de ativação é inválida.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This
+          activation key is invalid.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>A
+          chave de ativação é inválida.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This activation has expired.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Esta chave de ativação expirou.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This
+          activation has expired.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Esta
+          chave de ativação expirou.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph1.string" datatype="html">
-        <source>ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired.</source>
-        <target state="new">ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired.</target>
+        <source>ORCID Member Portal activation links are only valid for 24 hours. It looks like this
+          link has expired.</source>
+        <target state="new">ORCID Member Portal activation links are only valid for 24 hours. It
+          looks like this link has expired.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph2.string" datatype="html">
-        <source>To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address.</source>
-        <target state="new">To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address.</target>
+        <source>To make sure you can activate your Member Portal account we have sent a new
+          activation link to your registered email address.</source>
+        <target state="new">To make sure you can activate your Member Portal account we have sent a
+          new activation link to your registered email address.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph3.string" datatype="html">
-        <source>If you are still having problems activating your account or have not received your new activation link please contact our support team please contact us at membership@orcid.org.</source>
-        <target state="new">If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org.</target>
+        <source>If you are still having problems activating your account or have not received your
+          new activation link please contact our support team please contact us at
+          membership@orcid.org.</source>
+        <target state="new">If you are still having problems activating your account or have not
+          received your new activation link, please contact us at membership@orcid.org.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
@@ -1119,23 +1222,32 @@
         <source>Choose a new password</source>
         <target state="new">Escolha uma nova palavra-passe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.error.string" datatype="html">
-        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for 24 hours. </source>
-        <target state="new">Não foi possível redefinir a sua palavra-passe. Lembre-se que um pedido de palavra-passe é apenas válido por 24 horas.</target>
+        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for
+          24 hours. </source>
+        <target state="new">Não foi possível redefinir a sua palavra-passe. Lembre-se que um pedido
+          de palavra-passe é apenas válido por 24 horas.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Your password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>A sua palavra-passe foi redefinida.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Por favor</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Your
+          password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x> Please </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>A
+          sua palavra-passe foi redefinida.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x> Por favor</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
@@ -1143,7 +1255,8 @@
         <source>sign in</source>
         <target state="new">iniciar sessão</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
@@ -1151,7 +1264,8 @@
         <source> Reset Password </source>
         <target state="new">Validar nova palavra-passe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
@@ -1183,7 +1297,8 @@
         <source>Password strength:</source>
         <target state="new">Força da palavra-passe:</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-strength.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-strength.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
@@ -1451,12 +1566,18 @@
           <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
           <context context-type="linenumber">465</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">20</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
@@ -1552,8 +1673,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="global.item-count.string" datatype="html">
-        <source>Showing <x id="PH" equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x> of <x id="PH_2" equiv-text="this.totalItems"></x> items.</source>
-        <target state="new">A mostrar <x id="PH" equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x> de <x id="PH_2" equiv-text="this.totalItems"></x> itens.</target>
+        <source>Showing <x id="PH" equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x>
+          of <x id="PH_2" equiv-text="this.totalItems"></x> items.</source>
+        <target state="new">A mostrar <x id="PH" equiv-text="first"></x> - <x id="PH_1"
+            equiv-text="second"></x> de <x id="PH_2" equiv-text="this.totalItems"></x> itens.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.ts</context>
           <context context-type="linenumber">228</context>
@@ -1563,9 +1686,15 @@
           <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSUser.changeOwnership.question.string" datatype="html">
-        <source>Are you sure you want to transfer ownership? You are about to transfer ownership of this organization account. If you are the organization owner after transferring ownership, you will no longer have access to administrative functions, such as managing users.</source>
-        <target state="new">Tem a certeza que quer transferir a propriedade? Está prestes a transferir a propriedade da conta desta organização. Se for o proprietário da conta depois de transferir a propriedade, não terá mais acesso a a funções administrativas, tais como a gestão de utilizadores.</target>
+      <trans-unit id="gatewayApp.msUserServiceMSUser.changeOwnership.question.string"
+        datatype="html">
+        <source>Are you sure you want to transfer ownership? You are about to transfer ownership of
+          this organization account. If you are the organization owner after transferring ownership,
+          you will no longer have access to administrative functions, such as managing users.</source>
+        <target state="new">Tem a certeza que quer transferir a propriedade? Está prestes a
+          transferir a propriedade da conta desta organização. Se for o proprietário da conta depois
+          de transferir a propriedade, não terá mais acesso a a funções administrativas, tais como a
+          gestão de utilizadores.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.ts</context>
           <context context-type="linenumber">215</context>
@@ -1589,7 +1718,8 @@
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.delete.question.string" datatype="html">
         <source>Are you sure you want to delete user <x id="PH" equiv-text="this.user?.email"></x>?</source>
-        <target state="new">Tem a certeza de que quer eliminar o utilizador <x id="PH" equiv-text="this.user?.email"></x>?</target>
+        <target state="new">Tem a certeza de que quer eliminar o utilizador <x id="PH"
+            equiv-text="this.user?.email"></x>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -1607,6 +1737,10 @@
         <source>Confirm deletion</source>
         <target state="new">Confirmar eliminação</target>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-delete.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
@@ -1620,8 +1754,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.import.errors.label.string" datatype="html">
-        <source> Oops! There was a problem processing your data. Pleases fix the errors below and try again </source>
-        <target state="new">Ups! Ocorreu um problema com o processamento dos seus dados. Corrija os erros abaixo e tente novamente.</target>
+        <source> Oops! There was a problem processing your data. Pleases fix the errors below and
+          try again </source>
+        <target state="new">Ups! Ocorreu um problema com o processamento dos seus dados. Corrija os
+          erros abaixo e tente novamente.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1647,7 +1783,8 @@
         <source>Upload</source>
         <target state="new">Carregar</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
         <context-group purpose="location">
@@ -1672,7 +1809,8 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string"
+        datatype="html">
         <source> Send permission notifications </source>
         <target state="new">Enviar notificações de permissão</target>
         <context-group purpose="location">
@@ -1680,7 +1818,8 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.button.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.button.string"
+        datatype="html">
         <source> Request permission links </source>
         <target state="new">Solicitar hiperligações de permissão</target>
         <context-group purpose="location">
@@ -1688,7 +1827,8 @@
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.button.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.button.string"
+        datatype="html">
         <source> Request affiliation status report </source>
         <target state="new">Solicitar relatório de estado de afiliação</target>
         <context-group purpose="location">
@@ -1696,7 +1836,9 @@
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.button.string" datatype="html">
+      <trans-unit
+        id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.button.string"
+        datatype="html">
         <source> Request affiliations for edit </source>
         <target state="new">Solicitar afiliações para editar</target>
         <context-group purpose="location">
@@ -1720,25 +1862,39 @@
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.confirmation.string" datatype="html">
-        <source> Your affiliations for edit file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org. </source>
-        <target state="new">As suas afiliações para editar o ficheiro ser-lhe-ão enviadas por e-mail brevemente. Se não receber o seu ficheiro, contacte-nos através do e-mail membership@orcid.org.</target>
+      <trans-unit
+        id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.confirmation.string"
+        datatype="html">
+        <source> Your affiliations for edit file will be mailed to you shortly. If you do not
+          receive your file then please contact us at membership@orcid.org. </source>
+        <target state="new">As suas afiliações para editar o ficheiro ser-lhe-ão enviadas por e-mail
+          brevemente. Se não receber o seu ficheiro, contacte-nos através do e-mail
+          membership@orcid.org.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.confirmation.string" datatype="html">
-        <source> Your affiliation status report file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org. </source>
-        <target state="new">O seu ficheiro de relatório de estado de afiliação ser-lhe-á enviado por e-mail brevemente. Se não receber o seu ficheiro, contacte-nos através do e-mail membership@orcid.org.</target>
+      <trans-unit
+        id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.confirmation.string"
+        datatype="html">
+        <source> Your affiliation status report file will be mailed to you shortly. If you do not
+          receive your file then please contact us at membership@orcid.org. </source>
+        <target state="new">O seu ficheiro de relatório de estado de afiliação ser-lhe-á enviado por
+          e-mail brevemente. Se não receber o seu ficheiro, contacte-nos através do e-mail
+          membership@orcid.org.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.confirmation.string" datatype="html">
-        <source> Your permission links file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org. </source>
-        <target state="new">O seu ficheiro de hiperligações de permissão ser-lhe-á enviado por e-mail brevemente. Se não receber o seu ficheiro, contacte-nos através do e-mail membership@orcid.org.</target>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.confirmation.string"
+        datatype="html">
+        <source> Your permission links file will be mailed to you shortly. If you do not receive
+          your file then please contact us at membership@orcid.org. </source>
+        <target state="new">O seu ficheiro de hiperligações de permissão ser-lhe-á enviado por
+          e-mail brevemente. Se não receber o seu ficheiro, contacte-nos através do e-mail
+          membership@orcid.org.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">91</context>
@@ -1816,7 +1972,9 @@
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="{{&apos;gatewayApp.AffiliationSection.&apos; + affiliation.affiliationSection + &apos;.string&apos;}}" datatype="html">
+      <trans-unit
+        id="{{&apos;gatewayApp.AffiliationSection.&apos; + affiliation.affiliationSection + &apos;.string&apos;}}"
+        datatype="html">
         <source>
           <x id="INTERPOLATION" equiv-text="{{ affiliation.affiliationSection }}"></x>
         </source>
@@ -1848,9 +2006,13 @@
           <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string" datatype="html">
-        <source> For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below. </source>
-        <target state="new">Se precisar de ajuda a resolver este erro, por favor contacte o seu líder de consórcio ou membership@orcid.org. Por favor inclua uma captura de ecrã da mensagem de erro em baixo.</target>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string"
+        datatype="html">
+        <source> For help troubleshooting, please contact the Member Portal Team and copy/paste or
+          include a screenshot of the error message below. </source>
+        <target state="new">Se precisar de ajuda a resolver este erro, por favor contacte o seu
+          líder de consórcio ou membership@orcid.org. Por favor inclua uma captura de ecrã da
+          mensagem de erro em baixo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">203</context>
@@ -1861,7 +2023,7 @@
         <target state="new">Acesso negado ao utilzador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.pending.string" datatype="html">
@@ -1869,7 +2031,7 @@
         <target state="new">Pendente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.inOrcid.string" datatype="html">
@@ -1877,7 +2039,7 @@
         <target state="new">Em ORCID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.userGrantedAccess.string" datatype="html">
@@ -1885,7 +2047,7 @@
         <target state="new">Acesso concedido ao utilizador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.userDeletedFromOrcid.string" datatype="html">
@@ -1893,7 +2055,7 @@
         <target state="new">User deleted from ORCID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.userRevokedAccess.string" datatype="html">
@@ -1901,7 +2063,7 @@
         <target state="new">Acesso revogado do utilizador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.errorAddingToOrcid.string" datatype="html">
@@ -1909,7 +2071,7 @@
         <target state="new">Erro ao adicionar ao ORCID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.errorUpdatingInOrcid.string" datatype="html">
@@ -1917,7 +2079,7 @@
         <target state="new">Erro ao atualizar no ORCID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.pendingRetryInOrcid.string" datatype="html">
@@ -1925,7 +2087,7 @@
         <target state="new">Nova tentativa pendente em ORCID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.errorDeletingInOrcid.string" datatype="html">
@@ -1933,7 +2095,7 @@
         <target state="new">Erro ao eliminar no ORCID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.notificationRequested.string" datatype="html">
@@ -1941,7 +2103,7 @@
         <target state="new">Notificação solicitada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.notificationSent.string" datatype="html">
@@ -1949,7 +2111,7 @@
         <target state="new">Notificação enviada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.notificationFailed.string" datatype="html">
@@ -1957,7 +2119,7 @@
         <target state="new">Notificação falhada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.pendingUpdateInOrcid.string" datatype="html">
@@ -1965,7 +2127,7 @@
         <target state="new">Atualização pendente no ORCID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.detail.title.string" datatype="html">
@@ -2000,7 +2162,8 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.affiliationSection.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.affiliationSection.string"
+        datatype="html">
         <source> Affiliation Section </source>
         <target state="new">Tipo de Afiliação</target>
         <context-group purpose="location">
@@ -2124,7 +2287,8 @@
           <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.notificationFirstSent.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notificationFirstSent.string"
+        datatype="html">
         <source> Notification First Sent </source>
         <target state="new">Primeira notificação enviada</target>
         <context-group purpose="location">
@@ -2136,7 +2300,8 @@
           <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.notificationLastSent.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notificationLastSent.string"
+        datatype="html">
         <source> Notification Last Sent </source>
         <target state="new">Última notificação enviada</target>
         <context-group purpose="location">
@@ -2144,7 +2309,8 @@
           <context context-type="linenumber">194</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceaffiliation.notificationLastSent.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceaffiliation.notificationLastSent.string"
+        datatype="html">
         <source> Notification Last Sent </source>
         <target state="new"> Notification Last Sent </target>
         <context-group purpose="location">
@@ -2164,15 +2330,20 @@
         <source>Import affiliations from CSV</source>
         <target state="new">Importar afiliações</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.import.successMessage.string" datatype="html">
-        <source>Your CSV has been uploaded for processing. We will let you know via email once the file has been processed.</source>
-        <target state="new">O seu CSV foi carregado para processamento. Avisá-lo-emos por e-mail assim que o ficheiro tiver sido processado.</target>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.import.successMessage.string"
+        datatype="html">
+        <source>Your CSV has been uploaded for processing. We will let you know via email once the
+          file has been processed.</source>
+        <target state="new">O seu CSV foi carregado para processamento. Avisá-lo-emos por e-mail
+          assim que o ficheiro tiver sido processado.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
@@ -2180,7 +2351,8 @@
         <source>There was a problem uploading your CSV for processing.</source>
         <target state="new">Ocorreu um problema ao carregar o seu CSV para processamento.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
@@ -2188,7 +2360,8 @@
         <source>Please select the CSV file to upload</source>
         <target state="new">Selecione um ficheiro CRV para carregar</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
@@ -2196,15 +2369,19 @@
         <source>File Path</source>
         <target state="new">Caminho de ficheiro</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.uploadNote.string" datatype="html">
-        <source>Please do not forget to download and send permission links to your researchers once the upload has completed.</source>
-        <target state="new">Nota: Não se esqueça de descarregar e enviar. as ligações de permissão para os seus investigadores quando o upload estiver completo.</target>
+        <source>Please do not forget to download and send permission links to your researchers once
+          the upload has completed.</source>
+        <target state="new">Nota: Não se esqueça de descarregar e enviar. as ligações de permissão
+          para os seus investigadores quando o upload estiver completo.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
@@ -2212,7 +2389,8 @@
         <source>Close</source>
         <target state="new">Fechar</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
@@ -2220,7 +2398,8 @@
         <source>There is no file to upload. Please select one.</source>
         <target state="new">Não existe nenhum ficheiro para carregar. Selecione um.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.ts</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.ts</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
@@ -2229,7 +2408,7 @@
         <target state="new">EDUCAÇÃO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.EMPLOYMENT.string" datatype="html">
@@ -2237,7 +2416,7 @@
         <target state="new">EMPREGO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.DISTINCTION.string" datatype="html">
@@ -2245,7 +2424,7 @@
         <target state="new">DISTINÇÃO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.INVITED_POSITION.string" datatype="html">
@@ -2253,7 +2432,7 @@
         <target state="new">POSIÇÃO_CONVIDADA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.QUALIFICATION.string" datatype="html">
@@ -2261,7 +2440,7 @@
         <target state="new">QUALIFICAÇÃO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.SERVICE.string" datatype="html">
@@ -2269,7 +2448,7 @@
         <target state="new">SERVIÇO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.MEMBERSHIP.string" datatype="html">
@@ -2277,7 +2456,7 @@
         <target state="new">MEMBROS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.january.string" datatype="html">
@@ -2285,7 +2464,7 @@
         <target state="new">Janeiro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.february.string" datatype="html">
@@ -2293,7 +2472,7 @@
         <target state="new">Fevereiro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.march.string" datatype="html">
@@ -2301,7 +2480,7 @@
         <target state="new">Março</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.april.string" datatype="html">
@@ -2309,7 +2488,7 @@
         <target state="new">Abril</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.may.string" datatype="html">
@@ -2317,7 +2496,7 @@
         <target state="new">Maio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">88</context>
+          <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.june.string" datatype="html">
@@ -2325,7 +2504,7 @@
         <target state="new">Junho</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.july.string" datatype="html">
@@ -2333,7 +2512,7 @@
         <target state="new">Julho</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.august.string" datatype="html">
@@ -2341,7 +2520,7 @@
         <target state="new">Agosto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.september.string" datatype="html">
@@ -2349,7 +2528,7 @@
         <target state="new">Setembro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.october.string" datatype="html">
@@ -2357,7 +2536,7 @@
         <target state="new">Outubro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.november.string" datatype="html">
@@ -2365,7 +2544,7 @@
         <target state="new">Novembro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.december.string" datatype="html">
@@ -2373,7 +2552,7 @@
         <target state="new">Dezembro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AD.string" datatype="html">
@@ -2381,7 +2560,7 @@
         <target state="new">Andorra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">107</context>
+          <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AE.string" datatype="html">
@@ -2389,7 +2568,7 @@
         <target state="new">Emirados Árabes Unidos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AF.string" datatype="html">
@@ -2397,7 +2576,7 @@
         <target state="new">Afeganistão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AG.string" datatype="html">
@@ -2405,7 +2584,7 @@
         <target state="new">Antígua e Barbuda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AI.string" datatype="html">
@@ -2413,7 +2592,7 @@
         <target state="new">Anguila</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">115</context>
+          <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AL.string" datatype="html">
@@ -2421,7 +2600,7 @@
         <target state="new">Albânia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AM.string" datatype="html">
@@ -2429,7 +2608,7 @@
         <target state="new">Arménia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AO.string" datatype="html">
@@ -2437,7 +2616,7 @@
         <target state="new">Angola</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AQ.string" datatype="html">
@@ -2445,7 +2624,7 @@
         <target state="new">Antártida</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">123</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AR.string" datatype="html">
@@ -2453,7 +2632,7 @@
         <target state="new">Argentina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AS.string" datatype="html">
@@ -2461,7 +2640,7 @@
         <target state="new">Samoa Americana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AT.string" datatype="html">
@@ -2469,7 +2648,7 @@
         <target state="new">Áustria</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AU.string" datatype="html">
@@ -2477,7 +2656,7 @@
         <target state="new">Austrália</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">131</context>
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AW.string" datatype="html">
@@ -2485,7 +2664,7 @@
         <target state="new">Aruba</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AX.string" datatype="html">
@@ -2493,7 +2672,7 @@
         <target state="new">Alanda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">135</context>
+          <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AZ.string" datatype="html">
@@ -2501,7 +2680,7 @@
         <target state="new">Azerbaijão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BA.string" datatype="html">
@@ -2509,7 +2688,7 @@
         <target state="new">Bósnia-Herzegovina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">139</context>
+          <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BB.string" datatype="html">
@@ -2517,7 +2696,7 @@
         <target state="new">Barbados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">141</context>
+          <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BD.string" datatype="html">
@@ -2525,7 +2704,7 @@
         <target state="new">Bangladexe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">143</context>
+          <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BE.string" datatype="html">
@@ -2533,7 +2712,7 @@
         <target state="new">Bélgica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BF.string" datatype="html">
@@ -2541,7 +2720,7 @@
         <target state="new">Burquina Fasso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">147</context>
+          <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BG.string" datatype="html">
@@ -2549,7 +2728,7 @@
         <target state="new">Bulgária</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BH.string" datatype="html">
@@ -2557,7 +2736,7 @@
         <target state="new">Barém</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">151</context>
+          <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BI.string" datatype="html">
@@ -2565,7 +2744,7 @@
         <target state="new">Burundi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">153</context>
+          <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BJ.string" datatype="html">
@@ -2573,7 +2752,7 @@
         <target state="new">Benim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BL.string" datatype="html">
@@ -2581,7 +2760,7 @@
         <target state="new">São Bartolomeu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BM.string" datatype="html">
@@ -2589,7 +2768,7 @@
         <target state="new">Bermudas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">159</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BN.string" datatype="html">
@@ -2597,7 +2776,7 @@
         <target state="new">Brunei</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">161</context>
+          <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BO.string" datatype="html">
@@ -2605,7 +2784,7 @@
         <target state="new">Bolívia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">163</context>
+          <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BQ.string" datatype="html">
@@ -2613,7 +2792,7 @@
         <target state="new">Território Antártico Britânico</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BR.string" datatype="html">
@@ -2621,7 +2800,7 @@
         <target state="new">Brasil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">167</context>
+          <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BS.string" datatype="html">
@@ -2629,7 +2808,7 @@
         <target state="new">Baamas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">169</context>
+          <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BT.string" datatype="html">
@@ -2637,7 +2816,7 @@
         <target state="new">Butão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">171</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BV.string" datatype="html">
@@ -2645,7 +2824,7 @@
         <target state="new">Ilha Bouvet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BW.string" datatype="html">
@@ -2653,7 +2832,7 @@
         <target state="new">Botsuana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">175</context>
+          <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BY.string" datatype="html">
@@ -2661,7 +2840,7 @@
         <target state="new">Bielorrússia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">177</context>
+          <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BZ.string" datatype="html">
@@ -2669,7 +2848,7 @@
         <target state="new">Belize</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">179</context>
+          <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CA.string" datatype="html">
@@ -2677,7 +2856,7 @@
         <target state="new">Canadá</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">183</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CC.string" datatype="html">
@@ -2685,7 +2864,7 @@
         <target state="new">Ilhas dos Cocos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">183</context>
+          <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CD.string" datatype="html">
@@ -2693,7 +2872,7 @@
         <target state="new">Congo – Quinxassa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">185</context>
+          <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CF.string" datatype="html">
@@ -2701,7 +2880,7 @@
         <target state="new">República Centro-Africana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">187</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CG.string" datatype="html">
@@ -2709,7 +2888,7 @@
         <target state="new">Congo – Brazzaville</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CH.string" datatype="html">
@@ -2717,7 +2896,7 @@
         <target state="new">Suíça</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">191</context>
+          <context context-type="linenumber">193</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CI.string" datatype="html">
@@ -2725,7 +2904,7 @@
         <target state="new">Costa do Marfim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">193</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CK.string" datatype="html">
@@ -2733,7 +2912,7 @@
         <target state="new">Ilhas Cook</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CL.string" datatype="html">
@@ -2741,7 +2920,7 @@
         <target state="new">Chile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">197</context>
+          <context context-type="linenumber">199</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CM.string" datatype="html">
@@ -2749,7 +2928,7 @@
         <target state="new">Camarões</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">199</context>
+          <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CN.string" datatype="html">
@@ -2757,7 +2936,7 @@
         <target state="new">China</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">201</context>
+          <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CO.string" datatype="html">
@@ -2765,7 +2944,7 @@
         <target state="new">Colômbia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">203</context>
+          <context context-type="linenumber">205</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CR.string" datatype="html">
@@ -2773,7 +2952,7 @@
         <target state="new">Costa Rica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CU.string" datatype="html">
@@ -2781,7 +2960,7 @@
         <target state="new">Cuba</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">207</context>
+          <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CV.string" datatype="html">
@@ -2789,7 +2968,7 @@
         <target state="new">Cabo Verde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">209</context>
+          <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CW.string" datatype="html">
@@ -2797,7 +2976,7 @@
         <target state="new">Curaçau</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">211</context>
+          <context context-type="linenumber">213</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CX.string" datatype="html">
@@ -2805,7 +2984,7 @@
         <target state="new">Ilha do Natal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">213</context>
+          <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CY.string" datatype="html">
@@ -2813,7 +2992,7 @@
         <target state="new">Chipre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">217</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CZ.string" datatype="html">
@@ -2821,7 +3000,7 @@
         <target state="new">República Checa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">219</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.DE.string" datatype="html">
@@ -2829,7 +3008,7 @@
         <target state="new">Alemanha</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">219</context>
+          <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.DJ.string" datatype="html">
@@ -2837,7 +3016,7 @@
         <target state="new">Jibuti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">221</context>
+          <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.DK.string" datatype="html">
@@ -2845,7 +3024,7 @@
         <target state="new">Dinamarca</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">223</context>
+          <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.DM.string" datatype="html">
@@ -2853,7 +3032,7 @@
         <target state="new">Domínica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.DO.string" datatype="html">
@@ -2861,7 +3040,7 @@
         <target state="new">República Dominicana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">227</context>
+          <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.DZ.string" datatype="html">
@@ -2869,7 +3048,7 @@
         <target state="new">Argélia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">229</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.EC.string" datatype="html">
@@ -2877,7 +3056,7 @@
         <target state="new">Equador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">231</context>
+          <context context-type="linenumber">233</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.EE.string" datatype="html">
@@ -2885,7 +3064,7 @@
         <target state="new">Estónia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.EG.string" datatype="html">
@@ -2893,7 +3072,7 @@
         <target state="new">Egito</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">235</context>
+          <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.EH.string" datatype="html">
@@ -2901,7 +3080,7 @@
         <target state="new">Sara Ocidental</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">237</context>
+          <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ER.string" datatype="html">
@@ -2909,7 +3088,7 @@
         <target state="new">Eritreia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">239</context>
+          <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ES.string" datatype="html">
@@ -2917,7 +3096,7 @@
         <target state="new">Espanha</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">241</context>
+          <context context-type="linenumber">243</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ET.string" datatype="html">
@@ -2925,7 +3104,7 @@
         <target state="new">Etiópia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">243</context>
+          <context context-type="linenumber">245</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.FI.string" datatype="html">
@@ -2933,7 +3112,7 @@
         <target state="new">Finlândia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">245</context>
+          <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.FJ.string" datatype="html">
@@ -2941,7 +3120,7 @@
         <target state="new">Fiji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">247</context>
+          <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.FK.string" datatype="html">
@@ -2949,7 +3128,7 @@
         <target state="new">Ilhas Falkland</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">249</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.FM.string" datatype="html">
@@ -2957,7 +3136,7 @@
         <target state="new">Micronésia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">253</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.FO.string" datatype="html">
@@ -2965,7 +3144,7 @@
         <target state="new">Ilhas Faroé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">253</context>
+          <context context-type="linenumber">255</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.FR.string" datatype="html">
@@ -2973,7 +3152,7 @@
         <target state="new">França</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">255</context>
+          <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GA.string" datatype="html">
@@ -2981,7 +3160,7 @@
         <target state="new">Gabão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GB.string" datatype="html">
@@ -2989,7 +3168,7 @@
         <target state="new">Reino Unido</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">259</context>
+          <context context-type="linenumber">261</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GD.string" datatype="html">
@@ -2997,7 +3176,7 @@
         <target state="new">Granada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">261</context>
+          <context context-type="linenumber">263</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GE.string" datatype="html">
@@ -3005,7 +3184,7 @@
         <target state="new">Geórgia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">263</context>
+          <context context-type="linenumber">265</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GF.string" datatype="html">
@@ -3013,7 +3192,7 @@
         <target state="new">Guiana Francesa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">265</context>
+          <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GG.string" datatype="html">
@@ -3021,7 +3200,7 @@
         <target state="new">Guernesey</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GH.string" datatype="html">
@@ -3029,7 +3208,7 @@
         <target state="new">Gana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">269</context>
+          <context context-type="linenumber">271</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GI.string" datatype="html">
@@ -3037,7 +3216,7 @@
         <target state="new">Gibraltar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">271</context>
+          <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GL.string" datatype="html">
@@ -3045,7 +3224,7 @@
         <target state="new">Gronelândia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">273</context>
+          <context context-type="linenumber">275</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GM.string" datatype="html">
@@ -3053,7 +3232,7 @@
         <target state="new">Gâmbia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">275</context>
+          <context context-type="linenumber">277</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GN.string" datatype="html">
@@ -3061,7 +3240,7 @@
         <target state="new">Guiné</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GP.string" datatype="html">
@@ -3069,7 +3248,7 @@
         <target state="new">Guadalupe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">279</context>
+          <context context-type="linenumber">281</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GQ.string" datatype="html">
@@ -3077,7 +3256,7 @@
         <target state="new">Guiné Equatorial</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">281</context>
+          <context context-type="linenumber">283</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GR.string" datatype="html">
@@ -3085,7 +3264,7 @@
         <target state="new">Grécia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">283</context>
+          <context context-type="linenumber">285</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GS.string" datatype="html">
@@ -3093,7 +3272,7 @@
         <target state="new">Ilhas Geórgia do Sul e Sandwich do Sul</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">285</context>
+          <context context-type="linenumber">287</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GT.string" datatype="html">
@@ -3101,7 +3280,7 @@
         <target state="new">Guatemala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">287</context>
+          <context context-type="linenumber">289</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GU.string" datatype="html">
@@ -3109,7 +3288,7 @@
         <target state="new">Guame</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">289</context>
+          <context context-type="linenumber">291</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GW.string" datatype="html">
@@ -3117,7 +3296,7 @@
         <target state="new">Guiné-Bissau</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">291</context>
+          <context context-type="linenumber">293</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GY.string" datatype="html">
@@ -3125,7 +3304,7 @@
         <target state="new">Guiana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">293</context>
+          <context context-type="linenumber">295</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.HK.string" datatype="html">
@@ -3133,7 +3312,7 @@
         <target state="new">RAE de Hong Kong</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">295</context>
+          <context context-type="linenumber">297</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.HM.string" datatype="html">
@@ -3141,7 +3320,7 @@
         <target state="new">Ilha Heard e Ilhas McDonald</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">297</context>
+          <context context-type="linenumber">299</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.HN.string" datatype="html">
@@ -3149,7 +3328,7 @@
         <target state="new">Honduras</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">299</context>
+          <context context-type="linenumber">301</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.HR.string" datatype="html">
@@ -3157,7 +3336,7 @@
         <target state="new">Croácia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">301</context>
+          <context context-type="linenumber">303</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.HT.string" datatype="html">
@@ -3165,7 +3344,7 @@
         <target state="new">Haiti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">303</context>
+          <context context-type="linenumber">305</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.HU.string" datatype="html">
@@ -3173,7 +3352,7 @@
         <target state="new">Hungria</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">305</context>
+          <context context-type="linenumber">307</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ID.string" datatype="html">
@@ -3181,7 +3360,7 @@
         <target state="new">Indonésia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">307</context>
+          <context context-type="linenumber">309</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IE.string" datatype="html">
@@ -3189,7 +3368,7 @@
         <target state="new">Irlanda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">309</context>
+          <context context-type="linenumber">311</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IL.string" datatype="html">
@@ -3197,7 +3376,7 @@
         <target state="new">Israel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">311</context>
+          <context context-type="linenumber">313</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IM.string" datatype="html">
@@ -3205,7 +3384,7 @@
         <target state="new">Ilha de Man</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">313</context>
+          <context context-type="linenumber">315</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IN.string" datatype="html">
@@ -3213,7 +3392,7 @@
         <target state="new">Índia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">315</context>
+          <context context-type="linenumber">317</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IO.string" datatype="html">
@@ -3221,7 +3400,7 @@
         <target state="new">Território Britânico do Oceano Índico</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">317</context>
+          <context context-type="linenumber">319</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IQ.string" datatype="html">
@@ -3229,7 +3408,7 @@
         <target state="new">Iraque</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">319</context>
+          <context context-type="linenumber">321</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IR.string" datatype="html">
@@ -3237,7 +3416,7 @@
         <target state="new">Irão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">321</context>
+          <context context-type="linenumber">323</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IS.string" datatype="html">
@@ -3245,7 +3424,7 @@
         <target state="new">Islândia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">323</context>
+          <context context-type="linenumber">325</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IT.string" datatype="html">
@@ -3253,7 +3432,7 @@
         <target state="new">Itália</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">325</context>
+          <context context-type="linenumber">327</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.JE.string" datatype="html">
@@ -3261,7 +3440,7 @@
         <target state="new">Jersey</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">327</context>
+          <context context-type="linenumber">329</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.JM.string" datatype="html">
@@ -3269,7 +3448,7 @@
         <target state="new">Jamaica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">329</context>
+          <context context-type="linenumber">331</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.JO.string" datatype="html">
@@ -3277,7 +3456,7 @@
         <target state="new">Jordânia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">331</context>
+          <context context-type="linenumber">333</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.JP.string" datatype="html">
@@ -3285,7 +3464,7 @@
         <target state="new">Japão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">333</context>
+          <context context-type="linenumber">335</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KE.string" datatype="html">
@@ -3293,7 +3472,7 @@
         <target state="new">Quénia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">335</context>
+          <context context-type="linenumber">337</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KG.string" datatype="html">
@@ -3301,7 +3480,7 @@
         <target state="new">Quirguistão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">337</context>
+          <context context-type="linenumber">339</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KH.string" datatype="html">
@@ -3309,7 +3488,7 @@
         <target state="new">Camboja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">339</context>
+          <context context-type="linenumber">341</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KI.string" datatype="html">
@@ -3317,7 +3496,7 @@
         <target state="new">Quiribáti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">341</context>
+          <context context-type="linenumber">343</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KM.string" datatype="html">
@@ -3325,7 +3504,7 @@
         <target state="new">Comores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">343</context>
+          <context context-type="linenumber">345</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KN.string" datatype="html">
@@ -3333,7 +3512,7 @@
         <target state="new">São Cristóvão e Neves</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">345</context>
+          <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KP.string" datatype="html">
@@ -3341,7 +3520,7 @@
         <target state="new">Coreia do Norte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">347</context>
+          <context context-type="linenumber">349</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KR.string" datatype="html">
@@ -3349,7 +3528,7 @@
         <target state="new">Coreia do Sul</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">349</context>
+          <context context-type="linenumber">351</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KW.string" datatype="html">
@@ -3357,7 +3536,7 @@
         <target state="new">Koweit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">351</context>
+          <context context-type="linenumber">353</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KY.string" datatype="html">
@@ -3365,7 +3544,7 @@
         <target state="new">Ilhas Caimão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">353</context>
+          <context context-type="linenumber">355</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KZ.string" datatype="html">
@@ -3373,7 +3552,7 @@
         <target state="new">Cazaquistão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">355</context>
+          <context context-type="linenumber">357</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LA.string" datatype="html">
@@ -3381,7 +3560,7 @@
         <target state="new">Laos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">357</context>
+          <context context-type="linenumber">359</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LB.string" datatype="html">
@@ -3389,7 +3568,7 @@
         <target state="new">Líbano</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">359</context>
+          <context context-type="linenumber">361</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LC.string" datatype="html">
@@ -3397,7 +3576,7 @@
         <target state="new">Santa Lúcia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">361</context>
+          <context context-type="linenumber">363</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LI.string" datatype="html">
@@ -3405,7 +3584,7 @@
         <target state="new">Listenstaine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">363</context>
+          <context context-type="linenumber">365</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LK.string" datatype="html">
@@ -3413,7 +3592,7 @@
         <target state="new">Seri Lanca</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">365</context>
+          <context context-type="linenumber">367</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LR.string" datatype="html">
@@ -3421,7 +3600,7 @@
         <target state="new">Libéria</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">367</context>
+          <context context-type="linenumber">369</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LS.string" datatype="html">
@@ -3429,7 +3608,7 @@
         <target state="new">Lesoto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">369</context>
+          <context context-type="linenumber">371</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LT.string" datatype="html">
@@ -3437,7 +3616,7 @@
         <target state="new">Lituânia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">371</context>
+          <context context-type="linenumber">373</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LU.string" datatype="html">
@@ -3445,7 +3624,7 @@
         <target state="new">Luxemburgo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">373</context>
+          <context context-type="linenumber">375</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LV.string" datatype="html">
@@ -3453,7 +3632,7 @@
         <target state="new">Letónia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">375</context>
+          <context context-type="linenumber">377</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LY.string" datatype="html">
@@ -3461,7 +3640,7 @@
         <target state="new">Líbia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">377</context>
+          <context context-type="linenumber">379</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MA.string" datatype="html">
@@ -3469,7 +3648,7 @@
         <target state="new">Marrocos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">379</context>
+          <context context-type="linenumber">381</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MC.string" datatype="html">
@@ -3477,7 +3656,7 @@
         <target state="new">Mónaco</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">381</context>
+          <context context-type="linenumber">383</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MD.string" datatype="html">
@@ -3485,7 +3664,7 @@
         <target state="new">Moldávia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">383</context>
+          <context context-type="linenumber">385</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ME.string" datatype="html">
@@ -3493,7 +3672,7 @@
         <target state="new">Montenegro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">385</context>
+          <context context-type="linenumber">387</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MF.string" datatype="html">
@@ -3501,7 +3680,7 @@
         <target state="new">São Martinho (Saint-Martin)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">387</context>
+          <context context-type="linenumber">389</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MG.string" datatype="html">
@@ -3509,7 +3688,7 @@
         <target state="new">Madagáscar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">389</context>
+          <context context-type="linenumber">391</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MH.string" datatype="html">
@@ -3517,7 +3696,7 @@
         <target state="new">Ilhas Marshall</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">391</context>
+          <context context-type="linenumber">393</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MK.string" datatype="html">
@@ -3525,7 +3704,7 @@
         <target state="new">Macedónia do Norte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">393</context>
+          <context context-type="linenumber">395</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ML.string" datatype="html">
@@ -3533,7 +3712,7 @@
         <target state="new">Mali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">395</context>
+          <context context-type="linenumber">397</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MM.string" datatype="html">
@@ -3541,7 +3720,7 @@
         <target state="new">Mianmar {Birmânia}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">397</context>
+          <context context-type="linenumber">399</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MN.string" datatype="html">
@@ -3549,7 +3728,7 @@
         <target state="new">Mongólia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">399</context>
+          <context context-type="linenumber">401</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MO.string" datatype="html">
@@ -3557,7 +3736,7 @@
         <target state="new">RAE de Macau</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">401</context>
+          <context context-type="linenumber">403</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MP.string" datatype="html">
@@ -3565,7 +3744,7 @@
         <target state="new">Ilhas Marianas do Norte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">403</context>
+          <context context-type="linenumber">405</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MQ.string" datatype="html">
@@ -3573,7 +3752,7 @@
         <target state="new">Martinica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">405</context>
+          <context context-type="linenumber">407</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MR.string" datatype="html">
@@ -3581,7 +3760,7 @@
         <target state="new">Mauritânia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">407</context>
+          <context context-type="linenumber">409</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MS.string" datatype="html">
@@ -3589,7 +3768,7 @@
         <target state="new">Monserrate</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">409</context>
+          <context context-type="linenumber">411</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MT.string" datatype="html">
@@ -3597,7 +3776,7 @@
         <target state="new">Malta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">411</context>
+          <context context-type="linenumber">413</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MU.string" datatype="html">
@@ -3605,7 +3784,7 @@
         <target state="new">Maurícia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">413</context>
+          <context context-type="linenumber">415</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MV.string" datatype="html">
@@ -3613,7 +3792,7 @@
         <target state="new">Maldivas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">415</context>
+          <context context-type="linenumber">417</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MW.string" datatype="html">
@@ -3621,7 +3800,7 @@
         <target state="new">Maláui</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">417</context>
+          <context context-type="linenumber">419</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MX.string" datatype="html">
@@ -3629,7 +3808,7 @@
         <target state="new">México</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">419</context>
+          <context context-type="linenumber">421</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MY.string" datatype="html">
@@ -3637,7 +3816,7 @@
         <target state="new">Malásia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">421</context>
+          <context context-type="linenumber">423</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MZ.string" datatype="html">
@@ -3645,7 +3824,7 @@
         <target state="new">Moçambique</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">423</context>
+          <context context-type="linenumber">425</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NA.string" datatype="html">
@@ -3653,7 +3832,7 @@
         <target state="new">Namíbia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">425</context>
+          <context context-type="linenumber">427</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NC.string" datatype="html">
@@ -3661,7 +3840,7 @@
         <target state="new">Nova Caledónia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">427</context>
+          <context context-type="linenumber">429</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NE.string" datatype="html">
@@ -3669,7 +3848,7 @@
         <target state="new">Níger</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">429</context>
+          <context context-type="linenumber">431</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NF.string" datatype="html">
@@ -3677,7 +3856,7 @@
         <target state="new">Ilha Norfolk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">431</context>
+          <context context-type="linenumber">433</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NG.string" datatype="html">
@@ -3685,7 +3864,7 @@
         <target state="new">Nigéria</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">433</context>
+          <context context-type="linenumber">435</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NI.string" datatype="html">
@@ -3693,7 +3872,7 @@
         <target state="new">Nicarágua</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">435</context>
+          <context context-type="linenumber">437</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NL.string" datatype="html">
@@ -3701,7 +3880,7 @@
         <target state="new">Países Baixos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">437</context>
+          <context context-type="linenumber">439</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NO.string" datatype="html">
@@ -3709,7 +3888,7 @@
         <target state="new">Noruega</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">439</context>
+          <context context-type="linenumber">441</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NP.string" datatype="html">
@@ -3717,7 +3896,7 @@
         <target state="new">Nepal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">441</context>
+          <context context-type="linenumber">443</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NR.string" datatype="html">
@@ -3725,7 +3904,7 @@
         <target state="new">Nauru</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">443</context>
+          <context context-type="linenumber">445</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NU.string" datatype="html">
@@ -3733,7 +3912,7 @@
         <target state="new">Niuê</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">445</context>
+          <context context-type="linenumber">447</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NZ.string" datatype="html">
@@ -3741,7 +3920,7 @@
         <target state="new">Nova Zelândia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">447</context>
+          <context context-type="linenumber">449</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.OM.string" datatype="html">
@@ -3749,7 +3928,7 @@
         <target state="new">Omã</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">449</context>
+          <context context-type="linenumber">451</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PA.string" datatype="html">
@@ -3757,7 +3936,7 @@
         <target state="new">Panamá</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">451</context>
+          <context context-type="linenumber">453</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PE.string" datatype="html">
@@ -3765,7 +3944,7 @@
         <target state="new">Peru</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">453</context>
+          <context context-type="linenumber">455</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PF.string" datatype="html">
@@ -3773,7 +3952,7 @@
         <target state="new">Polinésia Francesa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">455</context>
+          <context context-type="linenumber">457</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PG.string" datatype="html">
@@ -3781,7 +3960,7 @@
         <target state="new">Papua-Nova Guiné</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">457</context>
+          <context context-type="linenumber">459</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PH.string" datatype="html">
@@ -3789,7 +3968,7 @@
         <target state="new">Filipinas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">459</context>
+          <context context-type="linenumber">461</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PK.string" datatype="html">
@@ -3797,7 +3976,7 @@
         <target state="new">Paquistão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">461</context>
+          <context context-type="linenumber">463</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PL.string" datatype="html">
@@ -3805,7 +3984,7 @@
         <target state="new">Polónia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">463</context>
+          <context context-type="linenumber">465</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PM.string" datatype="html">
@@ -3813,7 +3992,7 @@
         <target state="new">São Pedro e Miquelão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">465</context>
+          <context context-type="linenumber">467</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PN.string" datatype="html">
@@ -3821,7 +4000,7 @@
         <target state="new">Ilhas Pitcairn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">467</context>
+          <context context-type="linenumber">469</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PR.string" datatype="html">
@@ -3829,7 +4008,7 @@
         <target state="new">Porto Rico</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">469</context>
+          <context context-type="linenumber">471</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PS.string" datatype="html">
@@ -3837,7 +4016,7 @@
         <target state="new">Territórios Palestinianos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">471</context>
+          <context context-type="linenumber">473</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PT.string" datatype="html">
@@ -3845,7 +4024,7 @@
         <target state="new">Portugal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">473</context>
+          <context context-type="linenumber">475</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PW.string" datatype="html">
@@ -3853,7 +4032,7 @@
         <target state="new">Palau</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">475</context>
+          <context context-type="linenumber">477</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PY.string" datatype="html">
@@ -3861,7 +4040,7 @@
         <target state="new">Paraguai</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">477</context>
+          <context context-type="linenumber">479</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.QA.string" datatype="html">
@@ -3869,7 +4048,7 @@
         <target state="new">Catar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">479</context>
+          <context context-type="linenumber">481</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.RE.string" datatype="html">
@@ -3877,7 +4056,7 @@
         <target state="new">Reunião</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">481</context>
+          <context context-type="linenumber">483</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.RO.string" datatype="html">
@@ -3885,7 +4064,7 @@
         <target state="new">Roménia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">483</context>
+          <context context-type="linenumber">485</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.RS.string" datatype="html">
@@ -3893,7 +4072,7 @@
         <target state="new">Sérvia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">485</context>
+          <context context-type="linenumber">487</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.RU.string" datatype="html">
@@ -3901,7 +4080,7 @@
         <target state="new">Rússia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">487</context>
+          <context context-type="linenumber">489</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.RW.string" datatype="html">
@@ -3909,7 +4088,7 @@
         <target state="new">Ruanda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">489</context>
+          <context context-type="linenumber">491</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SA.string" datatype="html">
@@ -3917,7 +4096,7 @@
         <target state="new">Arábia Saudita</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">491</context>
+          <context context-type="linenumber">493</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SB.string" datatype="html">
@@ -3925,7 +4104,7 @@
         <target state="new">Ilhas Salomão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">493</context>
+          <context context-type="linenumber">495</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SC.string" datatype="html">
@@ -3933,7 +4112,7 @@
         <target state="new">Seicheles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">495</context>
+          <context context-type="linenumber">497</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SD.string" datatype="html">
@@ -3941,7 +4120,7 @@
         <target state="new">Sudão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">497</context>
+          <context context-type="linenumber">499</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SE.string" datatype="html">
@@ -3949,7 +4128,7 @@
         <target state="new">Suécia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">499</context>
+          <context context-type="linenumber">501</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SG.string" datatype="html">
@@ -3957,7 +4136,7 @@
         <target state="new">Singapura</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">501</context>
+          <context context-type="linenumber">503</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SH.string" datatype="html">
@@ -3965,7 +4144,7 @@
         <target state="new">Santa Helena</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">503</context>
+          <context context-type="linenumber">505</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SI.string" datatype="html">
@@ -3973,7 +4152,7 @@
         <target state="new">Eslovénia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">505</context>
+          <context context-type="linenumber">507</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SJ.string" datatype="html">
@@ -3981,7 +4160,7 @@
         <target state="new">Svalbard e Jan Mayen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">507</context>
+          <context context-type="linenumber">509</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SK.string" datatype="html">
@@ -3989,7 +4168,7 @@
         <target state="new">Eslováquia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">509</context>
+          <context context-type="linenumber">511</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SL.string" datatype="html">
@@ -3997,7 +4176,7 @@
         <target state="new">Serra Leoa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">511</context>
+          <context context-type="linenumber">513</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SM.string" datatype="html">
@@ -4005,7 +4184,7 @@
         <target state="new">São Marinho</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">513</context>
+          <context context-type="linenumber">515</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SN.string" datatype="html">
@@ -4013,7 +4192,7 @@
         <target state="new">Senegal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">515</context>
+          <context context-type="linenumber">517</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SO.string" datatype="html">
@@ -4021,7 +4200,7 @@
         <target state="new">Somália</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">517</context>
+          <context context-type="linenumber">519</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SR.string" datatype="html">
@@ -4029,7 +4208,7 @@
         <target state="new">Suriname</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">519</context>
+          <context context-type="linenumber">521</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SS.string" datatype="html">
@@ -4037,7 +4216,7 @@
         <target state="new">Sudão do Sul</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">521</context>
+          <context context-type="linenumber">523</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ST.string" datatype="html">
@@ -4045,7 +4224,7 @@
         <target state="new">São Tomé e Príncipe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">523</context>
+          <context context-type="linenumber">525</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SV.string" datatype="html">
@@ -4053,7 +4232,7 @@
         <target state="new">Salvador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">525</context>
+          <context context-type="linenumber">527</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SX.string" datatype="html">
@@ -4061,7 +4240,7 @@
         <target state="new">São Martinho (Sint Maarten)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">527</context>
+          <context context-type="linenumber">529</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SY.string" datatype="html">
@@ -4069,7 +4248,7 @@
         <target state="new">Síria</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">529</context>
+          <context context-type="linenumber">531</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SZ.string" datatype="html">
@@ -4077,7 +4256,7 @@
         <target state="new">Essuatíni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">531</context>
+          <context context-type="linenumber">533</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TC.string" datatype="html">
@@ -4085,7 +4264,7 @@
         <target state="new">Ilhas Turcas e Caicos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">533</context>
+          <context context-type="linenumber">535</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TD.string" datatype="html">
@@ -4093,7 +4272,7 @@
         <target state="new">Chade</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">535</context>
+          <context context-type="linenumber">537</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TF.string" datatype="html">
@@ -4101,7 +4280,7 @@
         <target state="new">Territórios Franceses do Sul</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">537</context>
+          <context context-type="linenumber">539</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TG.string" datatype="html">
@@ -4109,7 +4288,7 @@
         <target state="new">Togo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">539</context>
+          <context context-type="linenumber">541</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TH.string" datatype="html">
@@ -4117,7 +4296,7 @@
         <target state="new">Tailândia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">541</context>
+          <context context-type="linenumber">543</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TJ.string" datatype="html">
@@ -4125,7 +4304,7 @@
         <target state="new">Tajiquistão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">543</context>
+          <context context-type="linenumber">545</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TK.string" datatype="html">
@@ -4133,7 +4312,7 @@
         <target state="new">Toquelau</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">545</context>
+          <context context-type="linenumber">547</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TL.string" datatype="html">
@@ -4141,7 +4320,7 @@
         <target state="new">Timor-Leste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">547</context>
+          <context context-type="linenumber">549</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TM.string" datatype="html">
@@ -4149,7 +4328,7 @@
         <target state="new">Turquemenistão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">549</context>
+          <context context-type="linenumber">551</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TN.string" datatype="html">
@@ -4157,7 +4336,7 @@
         <target state="new">Tunísia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">551</context>
+          <context context-type="linenumber">553</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TO.string" datatype="html">
@@ -4165,7 +4344,7 @@
         <target state="new">Tonga</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">553</context>
+          <context context-type="linenumber">555</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TR.string" datatype="html">
@@ -4173,7 +4352,7 @@
         <target state="new">Turquia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">555</context>
+          <context context-type="linenumber">557</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TT.string" datatype="html">
@@ -4181,7 +4360,7 @@
         <target state="new">Trindade e Tobago</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">557</context>
+          <context context-type="linenumber">559</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TV.string" datatype="html">
@@ -4189,7 +4368,7 @@
         <target state="new">Tuvalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">559</context>
+          <context context-type="linenumber">561</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TW.string" datatype="html">
@@ -4197,7 +4376,7 @@
         <target state="new">Taiwan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">561</context>
+          <context context-type="linenumber">563</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TZ.string" datatype="html">
@@ -4205,7 +4384,7 @@
         <target state="new">Tanzânia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">563</context>
+          <context context-type="linenumber">565</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.UA.string" datatype="html">
@@ -4213,7 +4392,7 @@
         <target state="new">Ucrânia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">565</context>
+          <context context-type="linenumber">567</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.UG.string" datatype="html">
@@ -4221,7 +4400,7 @@
         <target state="new">Uganda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">567</context>
+          <context context-type="linenumber">569</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.UM.string" datatype="html">
@@ -4229,7 +4408,7 @@
         <target state="new">Ilhas Menores Afastadas dos Estados Unidos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">569</context>
+          <context context-type="linenumber">571</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.US.string" datatype="html">
@@ -4237,7 +4416,7 @@
         <target state="new">Estados Unidos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">571</context>
+          <context context-type="linenumber">573</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.UY.string" datatype="html">
@@ -4245,7 +4424,7 @@
         <target state="new">Uruguai</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">573</context>
+          <context context-type="linenumber">575</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.UZ.string" datatype="html">
@@ -4253,7 +4432,7 @@
         <target state="new">Usbequistão</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">575</context>
+          <context context-type="linenumber">577</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VA.string" datatype="html">
@@ -4261,7 +4440,7 @@
         <target state="new">Cidade do Vaticano</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">577</context>
+          <context context-type="linenumber">579</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VC.string" datatype="html">
@@ -4269,7 +4448,7 @@
         <target state="new">São Vicente e Granadinas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">579</context>
+          <context context-type="linenumber">581</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VE.string" datatype="html">
@@ -4277,7 +4456,7 @@
         <target state="new">Venezuela</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">581</context>
+          <context context-type="linenumber">583</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VG.string" datatype="html">
@@ -4285,7 +4464,7 @@
         <target state="new">Ilhas Virgens Britânicas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">583</context>
+          <context context-type="linenumber">585</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VI.string" datatype="html">
@@ -4293,7 +4472,7 @@
         <target state="new">Ilhas Virgens dos Estados Unidos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">585</context>
+          <context context-type="linenumber">587</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VN.string" datatype="html">
@@ -4301,7 +4480,7 @@
         <target state="new">Vietname</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">587</context>
+          <context context-type="linenumber">589</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VU.string" datatype="html">
@@ -4309,7 +4488,7 @@
         <target state="new">Vanuatu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">589</context>
+          <context context-type="linenumber">591</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.WF.string" datatype="html">
@@ -4317,7 +4496,7 @@
         <target state="new">Wallis e Futuna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">591</context>
+          <context context-type="linenumber">593</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.WS.string" datatype="html">
@@ -4325,7 +4504,7 @@
         <target state="new">Samoa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">593</context>
+          <context context-type="linenumber">595</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.XK.string" datatype="html">
@@ -4333,7 +4512,7 @@
         <target state="new">Kosovo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">595</context>
+          <context context-type="linenumber">597</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.YE.string" datatype="html">
@@ -4341,7 +4520,7 @@
         <target state="new">Iémen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">597</context>
+          <context context-type="linenumber">599</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.YT.string" datatype="html">
@@ -4349,7 +4528,7 @@
         <target state="new">Maiote</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">599</context>
+          <context context-type="linenumber">601</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ZA.string" datatype="html">
@@ -4357,7 +4536,7 @@
         <target state="new">África do Sul</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">601</context>
+          <context context-type="linenumber">603</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ZM.string" datatype="html">
@@ -4365,7 +4544,7 @@
         <target state="new">Zâmbia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">603</context>
+          <context context-type="linenumber">605</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ZW.string" datatype="html">
@@ -4373,10 +4552,11 @@
         <target state="new">Zimbabué</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">605</context>
+          <context context-type="linenumber">607</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.home.createOrEditLabel.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.createOrEditLabel.string"
+        datatype="html">
         <source> Add or edit affiliation </source>
         <target state="new">Adicionar ou editar afiliação</target>
         <context-group purpose="location">
@@ -4456,7 +4636,8 @@
           <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguationSource.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguationSource.string"
+        datatype="html">
         <source>Disambiguation Source</source>
         <target state="new">Fonte da ID da Organização</target>
         <context-group purpose="location">
@@ -4464,7 +4645,8 @@
           <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguatedOrgId.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguatedOrgId.string"
+        datatype="html">
         <source>Disambiguated Org Id</source>
         <target state="new">ID da Organização</target>
         <context-group purpose="location">
@@ -4473,8 +4655,12 @@
         </context-group>
       </trans-unit>
       <trans-unit id="entity.validation.disambiguatedOrgId.string" datatype="html">
-        <source> This field is required. GRID Organization ID should start with &quot;grid.&quot;, RINGGOLD Organization ID should be a number, ROR IDs must be 9 characters, beginning with 0 </source>
-        <target state="new">Este campo é obrigatório. O ID de Organização GRID deve começar com grid, como grid.12344, ou ser um URL de grid válido. O ID de Organização RINGGOLD deve ser um número. Os IDs ROR devem ter 9 caracteres, a começar com 0.</target>
+        <source> This field is required. GRID Organization ID should start with &quot;grid.&quot;,
+          RINGGOLD Organization ID should be a number, ROR IDs must be 9 characters, beginning with
+          0 </source>
+        <target state="new">Este campo é obrigatório. O ID de Organização GRID deve começar com
+          grid, como grid.12344, ou ser um URL de grid válido. O ID de Organização RINGGOLD deve ser
+          um número. Os IDs ROR devem ter 9 caracteres, a começar com 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
           <context context-type="linenumber">223</context>
@@ -4605,8 +4791,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.updateNote.string" datatype="html">
-        <source>Please do not forget to download and send permission links to your researcher once the assertion has been saved.</source>
-        <target state="new">Nota: Não se esqueça de descarregar e enviar as ligações de permissão para o seu investigador assim que a asserção for guardada.</target>
+        <source>Please do not forget to download and send permission links to your researcher once
+          the assertion has been saved.</source>
+        <target state="new">Nota: Não se esqueça de descarregar e enviar as ligações de permissão
+          para o seu investigador assim que a asserção for guardada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
           <context context-type="linenumber">457</context>
@@ -4620,9 +4808,14 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string" datatype="html">
-        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"></x>? The affiliation will be deleted from the portal and the user&apos;s ORCID record</source>
-        <target state="new">Tem a certeza de que quer eliminar esta afiliação para {{ email }}? A afiliação será eliminada do portal e do registo ORCID do utilizador.<x id="PH" equiv-text="this.affiliation?.email"></x>undefined</target>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string"
+        datatype="html">
+        <source>Are you sure you want to delete this affiliation for <x id="PH"
+            equiv-text="this.affiliation?.email"></x>? The affiliation will be deleted from the
+          portal and the user&apos;s ORCID record</source>
+        <target state="new">Tem a certeza de que quer eliminar esta afiliação para <x id="PH"
+            equiv-text="this.affiliation?.email"></x>? A afiliação será eliminada do portal e do
+          registo ORCID do utilizador.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-delete.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -4633,7 +4826,7 @@
         <target state="new">Afiliação criada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="assertionServiceApp.affiliation.updated.string" datatype="html">
@@ -4641,7 +4834,7 @@
         <target state="new">Afiliação atualizada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="assertionServiceApp.affiliation.deleted.string" datatype="html">
@@ -4649,7 +4842,7 @@
         <target state="new">Afiliação excluída</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="assertionServiceApp.affiliation.problemDeleting.string" datatype="html">
@@ -4657,7 +4850,83 @@
         <target state="new">Ocorreu um problema ao eliminar a afiliação</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.title.string"
+        datatype="html">
+        <source>Send permission notifications</source>
+        <target state="new">Enviar notificações de permissão</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.alreadyInProgress.string"
+        datatype="html">
+        <source> A request to send notifications to your users is already in progress. Please try
+          again later. </source>
+        <target state="new">Um pedido para enviar notificações para os seus utilizadores está em
+          curso. Tente novamente mais tarde.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.description.string"
+        datatype="html">
+        <source>Are you sure that you would like ORCID to send permission links to your researchers
+          for the affiliations that are pending?</source>
+        <target state="new">As notificações de permissão serão enviadas a todos os investigadores
+          com um item de afiliação no estado &quot;Pendente&quot;.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.languageHeader.string"
+        datatype="html">
+        <source>Notification language</source>
+        <target state="new">Idioma da notificação</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.languageDescription.string"
+        datatype="html">
+        <source>What language should the notification be sent in?</source>
+        <target state="new">Em que idioma devem ser enviadas as notificações?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.sendNotifications.string"
+        datatype="html">
+        <source>Send notifications</source>
+        <target state="new">Enviar notificações</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit
+        id="gatewayApp.assertionServiceAssertion.notifications.notificationInProgress.string"
+        datatype="html">
+        <source>Notification process has now started. We will email you as soon as the process has
+          completed.</source>
+        <target state="new">O processo de notificação foi iniciado. Enviaremos um e-mail para você
+          assim que esse processo for concluído.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
     </body>

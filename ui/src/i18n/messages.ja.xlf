@@ -70,8 +70,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
-        <source> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x> </source>
-        <target state="new"> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x> </target>
+        <source> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x>
+        </source>
+        <target state="new"> Slide <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x>
+        </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
@@ -287,8 +289,12 @@
         </context-group>
       </trans-unit>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please check your credentials and try again. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x> サインインに失敗しました。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> 認証情報をご確認の上、再度お試し下さい。 </target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Failed to
+          sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please
+          check your credentials and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>
+          サインインに失敗しました。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>
+          認証情報をご確認の上、再度お試し下さい。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -302,7 +308,8 @@
           <context context-type="linenumber">10</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
         <context-group purpose="location">
@@ -318,7 +325,8 @@
           <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
@@ -386,15 +394,21 @@
         <source>Reset your password</source>
         <target state="new">パスワードをリセット</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please check and try again. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Eメールアドレスが登録されていません！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>確認して、もう一度やり直してください</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Email
+          address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x> Please check and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>
+          Eメールアドレスが登録されていません！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>
+          確認して、もう一度やり直してください</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
@@ -402,7 +416,8 @@
         <source>Enter the email address you used to register.</source>
         <target state="new">登録に使用した e メールアドレスを入力する</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
@@ -410,7 +425,8 @@
         <source> Check your emails for details on how to reset your password. </source>
         <target state="new">お客様のパスワードをどのようにリセットするかにつきましては、詳細は e メールにてご確認ください。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
@@ -418,7 +434,8 @@
         <source> Your email is required. </source>
         <target state="new">あなたのEメールが必要です。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
@@ -426,7 +443,8 @@
         <source> Your email is invalid. </source>
         <target state="new">Eメールが無効です。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
@@ -434,7 +452,8 @@
         <source> Your email is required to be at least 5 characters. </source>
         <target state="new">e メールには少なくとも 5 文字必要です。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
@@ -442,7 +461,8 @@
         <source> Your email cannot be longer than 100 characters. </source>
         <target state="new">Eメールを50文字超にはできません。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
@@ -450,7 +470,8 @@
         <source> Reset </source>
         <target state="new">パスワードのリセット</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
@@ -463,8 +484,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>設定が保存されました！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Settings
+          saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>
+          設定が保存されました！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -579,8 +602,11 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaExplain.string" datatype="html">
-        <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
-        <target state="new">2段階認証を有効にして、ORCIDメンバーポータルアカウントにさらなるセキュリティ対策を追加しましょう。サインインをするたびに、ご希望の認証アプリケーションに送信される6桁のコードを入力するように要求されます。</target>
+        <source> Add extra security to your ORCID member portal account by enabling two-factor
+          authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code
+          we send to your preferred authentication application. </source>
+        <target state="new">
+          2段階認証を有効にして、ORCIDメンバーポータルアカウントにさらなるセキュリティ対策を追加しましょう。サインインをするたびに、ご希望の認証アプリケーションに送信される6桁のコードを入力するように要求されます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">146</context>
@@ -603,17 +629,37 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.one.string" datatype="html">
-        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>. </source>
-        <target state="new">2段階認証アプリをインストール<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>サインインをする度にアカウントへのアクセスに必要となる6桁のコードを作成するために、2段階認証アプリが必須となります。多くのアプリはモバイルデバイス向けですが、デスクトップやウェブ上のアプリとして使用可能なものもあります。<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>、<x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>、<x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>などのお好きな2段階認証アプリをダウンロードして、インストールしてください。</target>
+        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb"
+            equiv-text="&lt;br /&gt;"></x>A 2FA app is required to create the six-digit code you
+          need to access your account each time you sign in. Most apps are for mobile devices; some
+          are also available as desktop or web-based apps. Download and install your preferred 2FA
+          app, such as <x id="START_LINK" ctype="x-a"
+            equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google
+          Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x
+            id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>
+          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, or <x
+            id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x
+            id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>. </source>
+        <target state="new">2段階認証アプリをインストール<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>
+          サインインをする度にアカウントへのアクセスに必要となる6桁のコードを作成するために、2段階認証アプリが必須となります。多くのアプリはモバイルデバイス向けですが、デスクトップやウェブ上のアプリとして使用可能なものもあります。<x
+            id="START_LINK" ctype="x-a"
+            equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google
+          Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>、<x
+            id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>
+          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>、<x id="START_LINK_2"
+            equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK"
+            ctype="x-a" equiv-text="&lt;/a&gt;"></x>などのお好きな2段階認証アプリをダウンロードして、インストールしてください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.two.string" datatype="html">
-        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Open your 2FA app and scan the image below. </source>
-        <target state="new">ご使用のデバイスでこちらのQRコードをスキャンしてください<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>
-</target>
+        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb"
+            equiv-text="&lt;br /&gt;"></x>Open your 2FA app and scan the image below. </source>
+        <target state="new">ご使用のデバイスでこちらのQRコードをスキャンしてください<x id="LINE_BREAK" ctype="lb"
+            equiv-text="&lt;br /&gt;"></x>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">174</context>
@@ -644,8 +690,13 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaTextCodeSteps.one.string" datatype="html">
-        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
-        <target state="new">アプリで受け取った6桁のコードを入力してください<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>QRコードをスキャンまたはテキストコードを入力した後に、2段階認証アプリに6桁のコードが表示されます。このコードを以下のボックスに入力して、保存をクリックしてください。</target>
+        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb"
+            equiv-text="&lt;br /&gt;"></x>After scanning the QR code or entering in the text code,
+          your 2FA app will display a six-digit code. Enter this code in the box below and click
+          Save. </source>
+        <target state="new">アプリで受け取った6桁のコードを入力してください<x id="LINE_BREAK" ctype="lb"
+            equiv-text="&lt;br /&gt;"></x>
+          QRコードをスキャンまたはテキストコードを入力した後に、2段階認証アプリに6桁のコードが表示されます。このコードを以下のボックスに入力して、保存をクリックしてください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">205</context>
@@ -668,7 +719,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.backupCodes.string" datatype="html">
-        <source> Make a note of the following backup codes, this is the only time they will be shown. </source>
+        <source> Make a note of the following backup codes, this is the only time they will be
+          shown. </source>
         <target state="new">次のバックアップコードを控えておいてください。バックアップコードが表示されるのは今回のみになります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -876,16 +928,22 @@
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Password changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>パスワードが変更されました！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Password
+          changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>
+          パスワードが変更されました！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.error.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>An error has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> The password could not be changed. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x> エラーが発生しました。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> パスワードが変更できません。 </target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>An error
+          has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>
+          The password could not be changed. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>
+          エラーが発生しました。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>
+          パスワードが変更できません。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">10</context>
@@ -895,7 +953,8 @@
         <source> The password and its confirmation do not match! </source>
         <target state="new">パスワードとその確認が一致しません！</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
         <context-group purpose="location">
@@ -923,7 +982,8 @@
         <source> Your password is required. </source>
         <target state="new">パスワードが必要です。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
@@ -939,7 +999,8 @@
         <source>New password</source>
         <target state="new">新しいパスワード</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
         <context-group purpose="location">
@@ -951,7 +1012,8 @@
         <source>New password</source>
         <target state="new">新しいパスワード</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
         <context-group purpose="location">
@@ -963,7 +1025,8 @@
         <source> Your password is required to be at least 4 characters. </source>
         <target state="new">パスワードは4文字以上である必要があります。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">98</context>
         </context-group>
         <context-group purpose="location">
@@ -975,7 +1038,8 @@
         <source> Your password cannot be longer than 50 characters. </source>
         <target state="new">パスワードは 50 文字より長くすることはできません</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">105</context>
         </context-group>
         <context-group purpose="location">
@@ -987,7 +1051,8 @@
         <source>New password confirmation</source>
         <target state="new">新しいパスワードの確認</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">114</context>
         </context-group>
         <context-group purpose="location">
@@ -999,7 +1064,8 @@
         <source>Confirm the new password</source>
         <target state="new">新しいパスワードの確認</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">121</context>
         </context-group>
         <context-group purpose="location">
@@ -1011,7 +1077,8 @@
         <source> Your password confirmation is required. </source>
         <target state="new">確認パスワードが必要です。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">135</context>
         </context-group>
         <context-group purpose="location">
@@ -1023,7 +1090,8 @@
         <source> Your password confirmation is required to be at least 4 characters. </source>
         <target state="new">確認用パスワード には少なくとも 4 文字が必要です。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">142</context>
         </context-group>
         <context-group purpose="location">
@@ -1035,7 +1103,8 @@
         <source> Your password confirmation cannot be longer than 50 characters. </source>
         <target state="new">確認パスワードは50文字を超えることはできません。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">149</context>
         </context-group>
         <context-group purpose="location">
@@ -1063,55 +1132,79 @@
         <source>Reset password</source>
         <target state="new">パスワードをリセット</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keymissing.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>The activation key is missing.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>有効化キーがありません。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>The
+          activation key is missing.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>
+          有効化キーがありません。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyinvalid.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This activation key is invalid.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>有効化キーが無効です。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This
+          activation key is invalid.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>
+          有効化キーが無効です。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This activation has expired.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>アクティベーションキーの有効期限が切れています。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This
+          activation has expired.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>
+          アクティベーションキーの有効期限が切れています。<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph1.string" datatype="html">
-        <source>ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired.</source>
-        <target state="new">ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired.</target>
+        <source>ORCID Member Portal activation links are only valid for 24 hours. It looks like this
+          link has expired.</source>
+        <target state="new">ORCID Member Portal activation links are only valid for 24 hours. It
+          looks like this link has expired.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph2.string" datatype="html">
-        <source>To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address.</source>
-        <target state="new">To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address.</target>
+        <source>To make sure you can activate your Member Portal account we have sent a new
+          activation link to your registered email address.</source>
+        <target state="new">To make sure you can activate your Member Portal account we have sent a
+          new activation link to your registered email address.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph3.string" datatype="html">
-        <source>If you are still having problems activating your account or have not received your new activation link please contact our support team please contact us at membership@orcid.org.</source>
-        <target state="new">If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org.</target>
+        <source>If you are still having problems activating your account or have not received your
+          new activation link please contact our support team please contact us at
+          membership@orcid.org.</source>
+        <target state="new">If you are still having problems activating your account or have not
+          received your new activation link, please contact us at membership@orcid.org.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
@@ -1119,23 +1212,31 @@
         <source>Choose a new password</source>
         <target state="new">新しいパスワードを選んでください</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.error.string" datatype="html">
-        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for 24 hours. </source>
+        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for
+          24 hours. </source>
         <target state="new">パスワードがリセットできませんでした。パスワードの要求は 24 時間に限り有効であることにご留意ください。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Your password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x> お客様のパスワードが変更されました。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> 行って下さい。</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Your
+          password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;"></x> Please </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>
+          お客様のパスワードが変更されました。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>
+          行って下さい。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
@@ -1143,7 +1244,8 @@
         <source>sign in</source>
         <target state="new">サインイン</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
@@ -1151,7 +1253,8 @@
         <source> Reset Password </source>
         <target state="new">新しいパスワードを有効にする</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
@@ -1183,7 +1286,8 @@
         <source>Password strength:</source>
         <target state="new">パスワードの強度：</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-strength.component.html</context>
+          <context context-type="sourcefile">
+            src/app/account/password/password-strength.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
@@ -1451,12 +1555,18 @@
           <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
           <context context-type="linenumber">465</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">20</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
@@ -1552,8 +1662,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="global.item-count.string" datatype="html">
-        <source>Showing <x id="PH" equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x> of <x id="PH_2" equiv-text="this.totalItems"></x> items.</source>
-        <target state="new"><x id="PH_2" equiv-text="this.totalItems"></x>アイテムの<x id="PH" equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x>を表示しています。</target>
+        <source>Showing <x id="PH" equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x>
+          of <x id="PH_2" equiv-text="this.totalItems"></x> items.</source>
+        <target state="new"><x id="PH_2" equiv-text="this.totalItems"></x>アイテムの<x id="PH"
+            equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x>を表示しています。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.ts</context>
           <context context-type="linenumber">228</context>
@@ -1563,9 +1675,13 @@
           <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSUser.changeOwnership.question.string" datatype="html">
-        <source>Are you sure you want to transfer ownership? You are about to transfer ownership of this organization account. If you are the organization owner after transferring ownership, you will no longer have access to administrative functions, such as managing users.</source>
-        <target state="new">所有権を本当に移転しますか。こちらの組織アカウントの所有権を移転しようとしています。所有権移転後にも組織の所有者である場合には、ユーザー管理といった管理機能にアクセスすることはもうできなくなります。</target>
+      <trans-unit id="gatewayApp.msUserServiceMSUser.changeOwnership.question.string"
+        datatype="html">
+        <source>Are you sure you want to transfer ownership? You are about to transfer ownership of
+          this organization account. If you are the organization owner after transferring ownership,
+          you will no longer have access to administrative functions, such as managing users.</source>
+        <target state="new">
+          所有権を本当に移転しますか。こちらの組織アカウントの所有権を移転しようとしています。所有権移転後にも組織の所有者である場合には、ユーザー管理といった管理機能にアクセスすることはもうできなくなります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.ts</context>
           <context context-type="linenumber">215</context>
@@ -1607,6 +1723,10 @@
         <source>Confirm deletion</source>
         <target state="new">削除を確認する</target>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-delete.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
@@ -1620,7 +1740,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.import.errors.label.string" datatype="html">
-        <source> Oops! There was a problem processing your data. Pleases fix the errors below and try again </source>
+        <source> Oops! There was a problem processing your data. Pleases fix the errors below and
+          try again </source>
         <target state="new">おっと！あなたのデータの処理で問題がありました。以下のエラーを修正して、もう一度やり直してください</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
@@ -1647,7 +1768,8 @@
         <source>Upload</source>
         <target state="new">アップロード</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
         <context-group purpose="location">
@@ -1672,7 +1794,8 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string"
+        datatype="html">
         <source> Send permission notifications </source>
         <target state="new">許可通知を送信</target>
         <context-group purpose="location">
@@ -1680,7 +1803,8 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.button.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.button.string"
+        datatype="html">
         <source> Request permission links </source>
         <target state="new">許可リンクをリクエスト</target>
         <context-group purpose="location">
@@ -1688,7 +1812,8 @@
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.button.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.button.string"
+        datatype="html">
         <source> Request affiliation status report </source>
         <target state="new">アフィリエーションステータスレポートをリクエスト</target>
         <context-group purpose="location">
@@ -1696,7 +1821,9 @@
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.button.string" datatype="html">
+      <trans-unit
+        id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.button.string"
+        datatype="html">
         <source> Request affiliations for edit </source>
         <target state="new">編集用アフィリエーションをリクエスト</target>
         <context-group purpose="location">
@@ -1720,24 +1847,33 @@
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.confirmation.string" datatype="html">
-        <source> Your affiliations for edit file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org. </source>
+      <trans-unit
+        id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.confirmation.string"
+        datatype="html">
+        <source> Your affiliations for edit file will be mailed to you shortly. If you do not
+          receive your file then please contact us at membership@orcid.org. </source>
         <target state="new">編集用アフィリエーションファイルが間もなく届きます。ファイルが届かない場合は、membership@orcid.orgまでご連絡ください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.confirmation.string" datatype="html">
-        <source> Your affiliation status report file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org. </source>
-        <target state="new">アフィリエーションステータスレポートファイルが間もなく届きます。ファイルが届かない場合は、membership@orcid.orgまでご連絡ください。</target>
+      <trans-unit
+        id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.confirmation.string"
+        datatype="html">
+        <source> Your affiliation status report file will be mailed to you shortly. If you do not
+          receive your file then please contact us at membership@orcid.org. </source>
+        <target state="new">
+          アフィリエーションステータスレポートファイルが間もなく届きます。ファイルが届かない場合は、membership@orcid.orgまでご連絡ください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.confirmation.string" datatype="html">
-        <source> Your permission links file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org. </source>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.confirmation.string"
+        datatype="html">
+        <source> Your permission links file will be mailed to you shortly. If you do not receive
+          your file then please contact us at membership@orcid.org. </source>
         <target state="new">許可リンクファイルが間もなく届きます。ファイルが届かない場合は、membership@orcid.orgまでご連絡ください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
@@ -1816,7 +1952,9 @@
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="{{&apos;gatewayApp.AffiliationSection.&apos; + affiliation.affiliationSection + &apos;.string&apos;}}" datatype="html">
+      <trans-unit
+        id="{{&apos;gatewayApp.AffiliationSection.&apos; + affiliation.affiliationSection + &apos;.string&apos;}}"
+        datatype="html">
         <source>
           <x id="INTERPOLATION" equiv-text="{{ affiliation.affiliationSection }}"></x>
         </source>
@@ -1848,9 +1986,12 @@
           <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string" datatype="html">
-        <source> For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below. </source>
-        <target state="new">このエラーのトラブルシューティングについてサポートが必要な場合は、コンソーシアムの責任者またはmembership@orcid.orgにお問い合わせください。以下のエラーメッセージのスクリーンショットを含めてください。</target>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string"
+        datatype="html">
+        <source> For help troubleshooting, please contact the Member Portal Team and copy/paste or
+          include a screenshot of the error message below. </source>
+        <target state="new">
+          このエラーのトラブルシューティングについてサポートが必要な場合は、コンソーシアムの責任者またはmembership@orcid.orgにお問い合わせください。以下のエラーメッセージのスクリーンショットを含めてください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">203</context>
@@ -1861,7 +2002,7 @@
         <target state="new">ユーザーがアクセスを拒否しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.pending.string" datatype="html">
@@ -1869,7 +2010,7 @@
         <target state="new">保留中</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.inOrcid.string" datatype="html">
@@ -1877,7 +2018,7 @@
         <target state="new">ORCID内</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.userGrantedAccess.string" datatype="html">
@@ -1885,7 +2026,7 @@
         <target state="new">ユーザーがアクセスを許可しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.userDeletedFromOrcid.string" datatype="html">
@@ -1893,7 +2034,7 @@
         <target state="new">User deleted from ORCID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.userRevokedAccess.string" datatype="html">
@@ -1901,7 +2042,7 @@
         <target state="new">ユーザーがアクセスを取り消しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.errorAddingToOrcid.string" datatype="html">
@@ -1909,7 +2050,7 @@
         <target state="new">ORCIDへの追加時にエラーが発生しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.errorUpdatingInOrcid.string" datatype="html">
@@ -1917,7 +2058,7 @@
         <target state="new">ORCIDの更新中にエラーが発生しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.pendingRetryInOrcid.string" datatype="html">
@@ -1925,7 +2066,7 @@
         <target state="new">ORCIDでの再試行を待機中です</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.errorDeletingInOrcid.string" datatype="html">
@@ -1933,7 +2074,7 @@
         <target state="new">ORCIDでの削除時にエラーが発生しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.notificationRequested.string" datatype="html">
@@ -1941,7 +2082,7 @@
         <target state="new">通知をリクエストしました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.notificationSent.string" datatype="html">
@@ -1949,7 +2090,7 @@
         <target state="new">通知を送信しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.notificationFailed.string" datatype="html">
@@ -1957,7 +2098,7 @@
         <target state="new">通知の送信に失敗しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.pendingUpdateInOrcid.string" datatype="html">
@@ -1965,7 +2106,7 @@
         <target state="new">ORCIDでの更新を待機中です</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.detail.title.string" datatype="html">
@@ -2000,7 +2141,8 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.affiliationSection.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.affiliationSection.string"
+        datatype="html">
         <source> Affiliation Section </source>
         <target state="new">アフィリエーションタイプ</target>
         <context-group purpose="location">
@@ -2124,7 +2266,8 @@
           <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.notificationFirstSent.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notificationFirstSent.string"
+        datatype="html">
         <source> Notification First Sent </source>
         <target state="new">初回通知を送信しました</target>
         <context-group purpose="location">
@@ -2136,7 +2279,8 @@
           <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.notificationLastSent.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notificationLastSent.string"
+        datatype="html">
         <source> Notification Last Sent </source>
         <target state="new">最終送信通知</target>
         <context-group purpose="location">
@@ -2144,7 +2288,8 @@
           <context context-type="linenumber">194</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceaffiliation.notificationLastSent.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceaffiliation.notificationLastSent.string"
+        datatype="html">
         <source> Notification Last Sent </source>
         <target state="new"> Notification Last Sent </target>
         <context-group purpose="location">
@@ -2164,15 +2309,19 @@
         <source>Import affiliations from CSV</source>
         <target state="new">所属をインポート</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.import.successMessage.string" datatype="html">
-        <source>Your CSV has been uploaded for processing. We will let you know via email once the file has been processed.</source>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.import.successMessage.string"
+        datatype="html">
+        <source>Your CSV has been uploaded for processing. We will let you know via email once the
+          file has been processed.</source>
         <target state="new">あなたのCSVが処理用にアップロードされました。ファイルの処理が完了次第、メールでお知らせします。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
@@ -2180,7 +2329,8 @@
         <source>There was a problem uploading your CSV for processing.</source>
         <target state="new">処理するためにCSVをアップロードする際に問題が発生しました。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
@@ -2188,7 +2338,8 @@
         <source>Please select the CSV file to upload</source>
         <target state="new">アップロードするCSVファイルを選択してください</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
@@ -2196,15 +2347,18 @@
         <source>File Path</source>
         <target state="new">ファイルパス</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.uploadNote.string" datatype="html">
-        <source>Please do not forget to download and send permission links to your researchers once the upload has completed.</source>
+        <source>Please do not forget to download and send permission links to your researchers once
+          the upload has completed.</source>
         <target state="new">ご注意：アップロードが完了したら、許可リンクをダウンロードして研究者に送信することを忘れないでください。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
@@ -2212,7 +2366,8 @@
         <source>Close</source>
         <target state="new">閉じる</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
@@ -2220,7 +2375,8 @@
         <source>There is no file to upload. Please select one.</source>
         <target state="new">アップロードするファイルがありません。ファイルを 1 つ選択してください。</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.ts</context>
+          <context context-type="sourcefile">
+            src/app/affiliation/affiliation-import-dialog.component.ts</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
@@ -2229,7 +2385,7 @@
         <target state="new">教育</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.EMPLOYMENT.string" datatype="html">
@@ -2237,7 +2393,7 @@
         <target state="new">雇用</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.DISTINCTION.string" datatype="html">
@@ -2245,7 +2401,7 @@
         <target state="new">区別</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.INVITED_POSITION.string" datatype="html">
@@ -2253,7 +2409,7 @@
         <target state="new">招待状況</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.QUALIFICATION.string" datatype="html">
@@ -2261,7 +2417,7 @@
         <target state="new">資格</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.SERVICE.string" datatype="html">
@@ -2269,7 +2425,7 @@
         <target state="new">サービス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.MEMBERSHIP.string" datatype="html">
@@ -2277,7 +2433,7 @@
         <target state="new">メンバーシップ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.january.string" datatype="html">
@@ -2285,7 +2441,7 @@
         <target state="new">1月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.february.string" datatype="html">
@@ -2293,7 +2449,7 @@
         <target state="new">2月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.march.string" datatype="html">
@@ -2301,7 +2457,7 @@
         <target state="new">3月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.april.string" datatype="html">
@@ -2309,7 +2465,7 @@
         <target state="new">4月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.may.string" datatype="html">
@@ -2317,7 +2473,7 @@
         <target state="new">5月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">88</context>
+          <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.june.string" datatype="html">
@@ -2325,7 +2481,7 @@
         <target state="new">6月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.july.string" datatype="html">
@@ -2333,7 +2489,7 @@
         <target state="new">7月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.august.string" datatype="html">
@@ -2341,7 +2497,7 @@
         <target state="new">8月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.september.string" datatype="html">
@@ -2349,7 +2505,7 @@
         <target state="new">9月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.october.string" datatype="html">
@@ -2357,7 +2513,7 @@
         <target state="new">10月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.november.string" datatype="html">
@@ -2365,7 +2521,7 @@
         <target state="new">11月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.month.december.string" datatype="html">
@@ -2373,7 +2529,7 @@
         <target state="new">12月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AD.string" datatype="html">
@@ -2381,7 +2537,7 @@
         <target state="new">アンドラ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">107</context>
+          <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AE.string" datatype="html">
@@ -2389,7 +2545,7 @@
         <target state="new">アラブ首長国連邦</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AF.string" datatype="html">
@@ -2397,7 +2553,7 @@
         <target state="new">アフガニスタン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AG.string" datatype="html">
@@ -2405,7 +2561,7 @@
         <target state="new">アンティグア・バーブーダ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AI.string" datatype="html">
@@ -2413,7 +2569,7 @@
         <target state="new">アンギラ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">115</context>
+          <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AL.string" datatype="html">
@@ -2421,7 +2577,7 @@
         <target state="new">アルバニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AM.string" datatype="html">
@@ -2429,7 +2585,7 @@
         <target state="new">アルメニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AO.string" datatype="html">
@@ -2437,7 +2593,7 @@
         <target state="new">アンゴラ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AQ.string" datatype="html">
@@ -2445,7 +2601,7 @@
         <target state="new">南極大陸</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">123</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AR.string" datatype="html">
@@ -2453,7 +2609,7 @@
         <target state="new">アルゼンチン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AS.string" datatype="html">
@@ -2461,7 +2617,7 @@
         <target state="new">アメリカ領サモア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AT.string" datatype="html">
@@ -2469,7 +2625,7 @@
         <target state="new">オーストリア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AU.string" datatype="html">
@@ -2477,7 +2633,7 @@
         <target state="new">オーストラリア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">131</context>
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AW.string" datatype="html">
@@ -2485,7 +2641,7 @@
         <target state="new">アルバ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AX.string" datatype="html">
@@ -2493,7 +2649,7 @@
         <target state="new">オーランド諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">135</context>
+          <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.AZ.string" datatype="html">
@@ -2501,7 +2657,7 @@
         <target state="new">アゼルバイジャン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BA.string" datatype="html">
@@ -2509,7 +2665,7 @@
         <target state="new">ボスニア・ヘルツェゴビナ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">139</context>
+          <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BB.string" datatype="html">
@@ -2517,7 +2673,7 @@
         <target state="new">バルバドス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">141</context>
+          <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BD.string" datatype="html">
@@ -2525,7 +2681,7 @@
         <target state="new">バングラデシュ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">143</context>
+          <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BE.string" datatype="html">
@@ -2533,7 +2689,7 @@
         <target state="new">ベルギー</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BF.string" datatype="html">
@@ -2541,7 +2697,7 @@
         <target state="new">ブルキナファソ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">147</context>
+          <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BG.string" datatype="html">
@@ -2549,7 +2705,7 @@
         <target state="new">ブルガリア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BH.string" datatype="html">
@@ -2557,7 +2713,7 @@
         <target state="new">バーレーン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">151</context>
+          <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BI.string" datatype="html">
@@ -2565,7 +2721,7 @@
         <target state="new">ブルンジ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">153</context>
+          <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BJ.string" datatype="html">
@@ -2573,7 +2729,7 @@
         <target state="new">ベナン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BL.string" datatype="html">
@@ -2581,7 +2737,7 @@
         <target state="new">サン・バルテルミー島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BM.string" datatype="html">
@@ -2589,7 +2745,7 @@
         <target state="new">バミューダ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">159</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BN.string" datatype="html">
@@ -2597,7 +2753,7 @@
         <target state="new">ブルネイ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">161</context>
+          <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BO.string" datatype="html">
@@ -2605,7 +2761,7 @@
         <target state="new">ボリビア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">163</context>
+          <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BQ.string" datatype="html">
@@ -2613,7 +2769,7 @@
         <target state="new">イギリス領南極地域</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BR.string" datatype="html">
@@ -2621,7 +2777,7 @@
         <target state="new">ブラジル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">167</context>
+          <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BS.string" datatype="html">
@@ -2629,7 +2785,7 @@
         <target state="new">バハマ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">169</context>
+          <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BT.string" datatype="html">
@@ -2637,7 +2793,7 @@
         <target state="new">ブータン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">171</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BV.string" datatype="html">
@@ -2645,7 +2801,7 @@
         <target state="new">ブーベ島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BW.string" datatype="html">
@@ -2653,7 +2809,7 @@
         <target state="new">ボツワナ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">175</context>
+          <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BY.string" datatype="html">
@@ -2661,7 +2817,7 @@
         <target state="new">ベラルーシ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">177</context>
+          <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.BZ.string" datatype="html">
@@ -2669,7 +2825,7 @@
         <target state="new">ベリーズ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">179</context>
+          <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CA.string" datatype="html">
@@ -2677,7 +2833,7 @@
         <target state="new">カナダ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">183</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CC.string" datatype="html">
@@ -2685,7 +2841,7 @@
         <target state="new">ココス（キーリング）諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">183</context>
+          <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CD.string" datatype="html">
@@ -2693,7 +2849,7 @@
         <target state="new">コンゴ民主共和国</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">185</context>
+          <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CF.string" datatype="html">
@@ -2701,7 +2857,7 @@
         <target state="new">中央アフリカ共和国</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">187</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CG.string" datatype="html">
@@ -2709,7 +2865,7 @@
         <target state="new">コンゴ共和国（首都：ブラザビル）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CH.string" datatype="html">
@@ -2717,7 +2873,7 @@
         <target state="new">スイス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">191</context>
+          <context context-type="linenumber">193</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CI.string" datatype="html">
@@ -2725,7 +2881,7 @@
         <target state="new">コートジボワール</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">193</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CK.string" datatype="html">
@@ -2733,7 +2889,7 @@
         <target state="new">クック諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CL.string" datatype="html">
@@ -2741,7 +2897,7 @@
         <target state="new">チリ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">197</context>
+          <context context-type="linenumber">199</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CM.string" datatype="html">
@@ -2749,7 +2905,7 @@
         <target state="new">カメルーン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">199</context>
+          <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CN.string" datatype="html">
@@ -2757,7 +2913,7 @@
         <target state="new">中国</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">201</context>
+          <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CO.string" datatype="html">
@@ -2765,7 +2921,7 @@
         <target state="new">コロンビア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">203</context>
+          <context context-type="linenumber">205</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CR.string" datatype="html">
@@ -2773,7 +2929,7 @@
         <target state="new">キューバ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CU.string" datatype="html">
@@ -2781,7 +2937,7 @@
         <target state="new">キューバ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">207</context>
+          <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CV.string" datatype="html">
@@ -2789,7 +2945,7 @@
         <target state="new">カーボベルデ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">209</context>
+          <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CW.string" datatype="html">
@@ -2797,7 +2953,7 @@
         <target state="new">キュラソー</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">211</context>
+          <context context-type="linenumber">213</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CX.string" datatype="html">
@@ -2805,7 +2961,7 @@
         <target state="new">クリスマス島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">213</context>
+          <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CY.string" datatype="html">
@@ -2813,7 +2969,7 @@
         <target state="new">キプロス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">217</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.CZ.string" datatype="html">
@@ -2821,7 +2977,7 @@
         <target state="new">チェコ共和国</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">219</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.DE.string" datatype="html">
@@ -2829,7 +2985,7 @@
         <target state="new">ドイツ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">219</context>
+          <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.DJ.string" datatype="html">
@@ -2837,7 +2993,7 @@
         <target state="new">ジブチ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">221</context>
+          <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.DK.string" datatype="html">
@@ -2845,7 +3001,7 @@
         <target state="new">デンマーク</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">223</context>
+          <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.DM.string" datatype="html">
@@ -2853,7 +3009,7 @@
         <target state="new">ドミニカ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.DO.string" datatype="html">
@@ -2861,7 +3017,7 @@
         <target state="new">ドミニカ共和国</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">227</context>
+          <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.DZ.string" datatype="html">
@@ -2869,7 +3025,7 @@
         <target state="new">アルジェリア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">229</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.EC.string" datatype="html">
@@ -2877,7 +3033,7 @@
         <target state="new">エクアドル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">231</context>
+          <context context-type="linenumber">233</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.EE.string" datatype="html">
@@ -2885,7 +3041,7 @@
         <target state="new">エストニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.EG.string" datatype="html">
@@ -2893,7 +3049,7 @@
         <target state="new">エジプト</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">235</context>
+          <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.EH.string" datatype="html">
@@ -2901,7 +3057,7 @@
         <target state="new">西サハラ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">237</context>
+          <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ER.string" datatype="html">
@@ -2909,7 +3065,7 @@
         <target state="new">エリトリア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">239</context>
+          <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ES.string" datatype="html">
@@ -2917,7 +3073,7 @@
         <target state="new">スペイン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">241</context>
+          <context context-type="linenumber">243</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ET.string" datatype="html">
@@ -2925,7 +3081,7 @@
         <target state="new">エチオピア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">243</context>
+          <context context-type="linenumber">245</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.FI.string" datatype="html">
@@ -2933,7 +3089,7 @@
         <target state="new">フィンランド</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">245</context>
+          <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.FJ.string" datatype="html">
@@ -2941,7 +3097,7 @@
         <target state="new">フィジー</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">247</context>
+          <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.FK.string" datatype="html">
@@ -2949,7 +3105,7 @@
         <target state="new">フォークランド諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">249</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.FM.string" datatype="html">
@@ -2957,7 +3113,7 @@
         <target state="new">ミクロネシア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">253</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.FO.string" datatype="html">
@@ -2965,7 +3121,7 @@
         <target state="new">フェロー諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">253</context>
+          <context context-type="linenumber">255</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.FR.string" datatype="html">
@@ -2973,7 +3129,7 @@
         <target state="new">フランス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">255</context>
+          <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GA.string" datatype="html">
@@ -2981,7 +3137,7 @@
         <target state="new">ガボン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GB.string" datatype="html">
@@ -2989,7 +3145,7 @@
         <target state="new">イギリス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">259</context>
+          <context context-type="linenumber">261</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GD.string" datatype="html">
@@ -2997,7 +3153,7 @@
         <target state="new">グレナダ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">261</context>
+          <context context-type="linenumber">263</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GE.string" datatype="html">
@@ -3005,7 +3161,7 @@
         <target state="new">ジョージア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">263</context>
+          <context context-type="linenumber">265</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GF.string" datatype="html">
@@ -3013,7 +3169,7 @@
         <target state="new">フランス領ギアナ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">265</context>
+          <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GG.string" datatype="html">
@@ -3021,7 +3177,7 @@
         <target state="new">ガーンジー</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GH.string" datatype="html">
@@ -3029,7 +3185,7 @@
         <target state="new">ガーナ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">269</context>
+          <context context-type="linenumber">271</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GI.string" datatype="html">
@@ -3037,7 +3193,7 @@
         <target state="new">ジブラルタル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">271</context>
+          <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GL.string" datatype="html">
@@ -3045,7 +3201,7 @@
         <target state="new">グリーンランド</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">273</context>
+          <context context-type="linenumber">275</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GM.string" datatype="html">
@@ -3053,7 +3209,7 @@
         <target state="new">ガンビア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">275</context>
+          <context context-type="linenumber">277</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GN.string" datatype="html">
@@ -3061,7 +3217,7 @@
         <target state="new">ギニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GP.string" datatype="html">
@@ -3069,7 +3225,7 @@
         <target state="new">グアドループ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">279</context>
+          <context context-type="linenumber">281</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GQ.string" datatype="html">
@@ -3077,7 +3233,7 @@
         <target state="new">赤道ギニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">281</context>
+          <context context-type="linenumber">283</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GR.string" datatype="html">
@@ -3085,7 +3241,7 @@
         <target state="new">ギリシャ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">283</context>
+          <context context-type="linenumber">285</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GS.string" datatype="html">
@@ -3093,7 +3249,7 @@
         <target state="new">サウスジョージア・サウスサンドウィッチ諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">285</context>
+          <context context-type="linenumber">287</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GT.string" datatype="html">
@@ -3101,7 +3257,7 @@
         <target state="new">グアテマラ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">287</context>
+          <context context-type="linenumber">289</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GU.string" datatype="html">
@@ -3109,7 +3265,7 @@
         <target state="new">グアム</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">289</context>
+          <context context-type="linenumber">291</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GW.string" datatype="html">
@@ -3117,7 +3273,7 @@
         <target state="new">ギニアビサウ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">291</context>
+          <context context-type="linenumber">293</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.GY.string" datatype="html">
@@ -3125,7 +3281,7 @@
         <target state="new">ガイアナ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">293</context>
+          <context context-type="linenumber">295</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.HK.string" datatype="html">
@@ -3133,7 +3289,7 @@
         <target state="new">香港</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">295</context>
+          <context context-type="linenumber">297</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.HM.string" datatype="html">
@@ -3141,7 +3297,7 @@
         <target state="new">ハード島とマクドナルド諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">297</context>
+          <context context-type="linenumber">299</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.HN.string" datatype="html">
@@ -3149,7 +3305,7 @@
         <target state="new">ホンジュラス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">299</context>
+          <context context-type="linenumber">301</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.HR.string" datatype="html">
@@ -3157,7 +3313,7 @@
         <target state="new">クロアチア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">301</context>
+          <context context-type="linenumber">303</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.HT.string" datatype="html">
@@ -3165,7 +3321,7 @@
         <target state="new">ハイチ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">303</context>
+          <context context-type="linenumber">305</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.HU.string" datatype="html">
@@ -3173,7 +3329,7 @@
         <target state="new">ハンガリー</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">305</context>
+          <context context-type="linenumber">307</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ID.string" datatype="html">
@@ -3181,7 +3337,7 @@
         <target state="new">インドネシア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">307</context>
+          <context context-type="linenumber">309</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IE.string" datatype="html">
@@ -3189,7 +3345,7 @@
         <target state="new">アイルランド</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">309</context>
+          <context context-type="linenumber">311</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IL.string" datatype="html">
@@ -3197,7 +3353,7 @@
         <target state="new">イスラエル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">311</context>
+          <context context-type="linenumber">313</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IM.string" datatype="html">
@@ -3205,7 +3361,7 @@
         <target state="new">マン島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">313</context>
+          <context context-type="linenumber">315</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IN.string" datatype="html">
@@ -3213,7 +3369,7 @@
         <target state="new">インド</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">315</context>
+          <context context-type="linenumber">317</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IO.string" datatype="html">
@@ -3221,7 +3377,7 @@
         <target state="new">イギリス領インド洋地域</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">317</context>
+          <context context-type="linenumber">319</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IQ.string" datatype="html">
@@ -3229,7 +3385,7 @@
         <target state="new">イラク</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">319</context>
+          <context context-type="linenumber">321</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IR.string" datatype="html">
@@ -3237,7 +3393,7 @@
         <target state="new">イラン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">321</context>
+          <context context-type="linenumber">323</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IS.string" datatype="html">
@@ -3245,7 +3401,7 @@
         <target state="new">アイスランド</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">323</context>
+          <context context-type="linenumber">325</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.IT.string" datatype="html">
@@ -3253,7 +3409,7 @@
         <target state="new">イタリア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">325</context>
+          <context context-type="linenumber">327</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.JE.string" datatype="html">
@@ -3261,7 +3417,7 @@
         <target state="new">ジャージー</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">327</context>
+          <context context-type="linenumber">329</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.JM.string" datatype="html">
@@ -3269,7 +3425,7 @@
         <target state="new">ジャマイカ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">329</context>
+          <context context-type="linenumber">331</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.JO.string" datatype="html">
@@ -3277,7 +3433,7 @@
         <target state="new">ヨルダン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">331</context>
+          <context context-type="linenumber">333</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.JP.string" datatype="html">
@@ -3285,7 +3441,7 @@
         <target state="new">日本</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">333</context>
+          <context context-type="linenumber">335</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KE.string" datatype="html">
@@ -3293,7 +3449,7 @@
         <target state="new">ケニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">335</context>
+          <context context-type="linenumber">337</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KG.string" datatype="html">
@@ -3301,7 +3457,7 @@
         <target state="new">キルギス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">337</context>
+          <context context-type="linenumber">339</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KH.string" datatype="html">
@@ -3309,7 +3465,7 @@
         <target state="new">カンボジア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">339</context>
+          <context context-type="linenumber">341</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KI.string" datatype="html">
@@ -3317,7 +3473,7 @@
         <target state="new">キリバス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">341</context>
+          <context context-type="linenumber">343</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KM.string" datatype="html">
@@ -3325,7 +3481,7 @@
         <target state="new">コモロ連合</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">343</context>
+          <context context-type="linenumber">345</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KN.string" datatype="html">
@@ -3333,7 +3489,7 @@
         <target state="new">セントクリストファー・ネイビス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">345</context>
+          <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KP.string" datatype="html">
@@ -3341,7 +3497,7 @@
         <target state="new">北朝鮮</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">347</context>
+          <context context-type="linenumber">349</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KR.string" datatype="html">
@@ -3349,7 +3505,7 @@
         <target state="new">韓国</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">349</context>
+          <context context-type="linenumber">351</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KW.string" datatype="html">
@@ -3357,7 +3513,7 @@
         <target state="new">クウェート</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">351</context>
+          <context context-type="linenumber">353</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KY.string" datatype="html">
@@ -3365,7 +3521,7 @@
         <target state="new">ケイマン諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">353</context>
+          <context context-type="linenumber">355</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.KZ.string" datatype="html">
@@ -3373,7 +3529,7 @@
         <target state="new">カザフスタン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">355</context>
+          <context context-type="linenumber">357</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LA.string" datatype="html">
@@ -3381,7 +3537,7 @@
         <target state="new">ラオス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">357</context>
+          <context context-type="linenumber">359</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LB.string" datatype="html">
@@ -3389,7 +3545,7 @@
         <target state="new">レバノン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">359</context>
+          <context context-type="linenumber">361</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LC.string" datatype="html">
@@ -3397,7 +3553,7 @@
         <target state="new">セントルシア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">361</context>
+          <context context-type="linenumber">363</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LI.string" datatype="html">
@@ -3405,7 +3561,7 @@
         <target state="new">リヒテンシュタイン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">363</context>
+          <context context-type="linenumber">365</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LK.string" datatype="html">
@@ -3413,7 +3569,7 @@
         <target state="new">スリランカ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">365</context>
+          <context context-type="linenumber">367</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LR.string" datatype="html">
@@ -3421,7 +3577,7 @@
         <target state="new">リベリア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">367</context>
+          <context context-type="linenumber">369</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LS.string" datatype="html">
@@ -3429,7 +3585,7 @@
         <target state="new">レソト</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">369</context>
+          <context context-type="linenumber">371</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LT.string" datatype="html">
@@ -3437,7 +3593,7 @@
         <target state="new">リトアニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">371</context>
+          <context context-type="linenumber">373</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LU.string" datatype="html">
@@ -3445,7 +3601,7 @@
         <target state="new">ルクセンブルク</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">373</context>
+          <context context-type="linenumber">375</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LV.string" datatype="html">
@@ -3453,7 +3609,7 @@
         <target state="new">ラトビア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">375</context>
+          <context context-type="linenumber">377</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.LY.string" datatype="html">
@@ -3461,7 +3617,7 @@
         <target state="new">リビア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">377</context>
+          <context context-type="linenumber">379</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MA.string" datatype="html">
@@ -3469,7 +3625,7 @@
         <target state="new">モロッコ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">379</context>
+          <context context-type="linenumber">381</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MC.string" datatype="html">
@@ -3477,7 +3633,7 @@
         <target state="new">モナコ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">381</context>
+          <context context-type="linenumber">383</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MD.string" datatype="html">
@@ -3485,7 +3641,7 @@
         <target state="new">モルドバ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">383</context>
+          <context context-type="linenumber">385</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ME.string" datatype="html">
@@ -3493,7 +3649,7 @@
         <target state="new">モンテネグロ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">385</context>
+          <context context-type="linenumber">387</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MF.string" datatype="html">
@@ -3501,7 +3657,7 @@
         <target state="new">サン・マルタン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">387</context>
+          <context context-type="linenumber">389</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MG.string" datatype="html">
@@ -3509,7 +3665,7 @@
         <target state="new">マダガスカル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">389</context>
+          <context context-type="linenumber">391</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MH.string" datatype="html">
@@ -3517,7 +3673,7 @@
         <target state="new">マーシャル諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">391</context>
+          <context context-type="linenumber">393</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MK.string" datatype="html">
@@ -3525,7 +3681,7 @@
         <target state="new">北マケドニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">393</context>
+          <context context-type="linenumber">395</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ML.string" datatype="html">
@@ -3533,7 +3689,7 @@
         <target state="new">マリ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">395</context>
+          <context context-type="linenumber">397</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MM.string" datatype="html">
@@ -3541,7 +3697,7 @@
         <target state="new">ミャンマー（ビルマ）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">397</context>
+          <context context-type="linenumber">399</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MN.string" datatype="html">
@@ -3549,7 +3705,7 @@
         <target state="new">モンゴル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">399</context>
+          <context context-type="linenumber">401</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MO.string" datatype="html">
@@ -3557,7 +3713,7 @@
         <target state="new">マカオ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">401</context>
+          <context context-type="linenumber">403</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MP.string" datatype="html">
@@ -3565,7 +3721,7 @@
         <target state="new">北マリアナ諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">403</context>
+          <context context-type="linenumber">405</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MQ.string" datatype="html">
@@ -3573,7 +3729,7 @@
         <target state="new">マルティニーク</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">405</context>
+          <context context-type="linenumber">407</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MR.string" datatype="html">
@@ -3581,7 +3737,7 @@
         <target state="new">モーリタニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">407</context>
+          <context context-type="linenumber">409</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MS.string" datatype="html">
@@ -3589,7 +3745,7 @@
         <target state="new">モントセラト</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">409</context>
+          <context context-type="linenumber">411</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MT.string" datatype="html">
@@ -3597,7 +3753,7 @@
         <target state="new">マルタ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">411</context>
+          <context context-type="linenumber">413</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MU.string" datatype="html">
@@ -3605,7 +3761,7 @@
         <target state="new">モーリシャス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">413</context>
+          <context context-type="linenumber">415</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MV.string" datatype="html">
@@ -3613,7 +3769,7 @@
         <target state="new">モルディブ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">415</context>
+          <context context-type="linenumber">417</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MW.string" datatype="html">
@@ -3621,7 +3777,7 @@
         <target state="new">マラウイ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">417</context>
+          <context context-type="linenumber">419</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MX.string" datatype="html">
@@ -3629,7 +3785,7 @@
         <target state="new">メキシコ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">419</context>
+          <context context-type="linenumber">421</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MY.string" datatype="html">
@@ -3637,7 +3793,7 @@
         <target state="new">マレーシア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">421</context>
+          <context context-type="linenumber">423</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.MZ.string" datatype="html">
@@ -3645,7 +3801,7 @@
         <target state="new">モザンビーク</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">423</context>
+          <context context-type="linenumber">425</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NA.string" datatype="html">
@@ -3653,7 +3809,7 @@
         <target state="new">ナミビア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">425</context>
+          <context context-type="linenumber">427</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NC.string" datatype="html">
@@ -3661,7 +3817,7 @@
         <target state="new">ニューカレドニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">427</context>
+          <context context-type="linenumber">429</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NE.string" datatype="html">
@@ -3669,7 +3825,7 @@
         <target state="new">ニジェール</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">429</context>
+          <context context-type="linenumber">431</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NF.string" datatype="html">
@@ -3677,7 +3833,7 @@
         <target state="new">ノーフォーク島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">431</context>
+          <context context-type="linenumber">433</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NG.string" datatype="html">
@@ -3685,7 +3841,7 @@
         <target state="new">ナイジェリア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">433</context>
+          <context context-type="linenumber">435</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NI.string" datatype="html">
@@ -3693,7 +3849,7 @@
         <target state="new">ニカラグア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">435</context>
+          <context context-type="linenumber">437</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NL.string" datatype="html">
@@ -3701,7 +3857,7 @@
         <target state="new">オランダ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">437</context>
+          <context context-type="linenumber">439</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NO.string" datatype="html">
@@ -3709,7 +3865,7 @@
         <target state="new">ノルウェー</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">439</context>
+          <context context-type="linenumber">441</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NP.string" datatype="html">
@@ -3717,7 +3873,7 @@
         <target state="new">ネパール</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">441</context>
+          <context context-type="linenumber">443</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NR.string" datatype="html">
@@ -3725,7 +3881,7 @@
         <target state="new">ナウル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">443</context>
+          <context context-type="linenumber">445</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NU.string" datatype="html">
@@ -3733,7 +3889,7 @@
         <target state="new">ニウエ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">445</context>
+          <context context-type="linenumber">447</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.NZ.string" datatype="html">
@@ -3741,7 +3897,7 @@
         <target state="new">ニュージーランド</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">447</context>
+          <context context-type="linenumber">449</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.OM.string" datatype="html">
@@ -3749,7 +3905,7 @@
         <target state="new">オマーン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">449</context>
+          <context context-type="linenumber">451</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PA.string" datatype="html">
@@ -3757,7 +3913,7 @@
         <target state="new">パナマ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">451</context>
+          <context context-type="linenumber">453</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PE.string" datatype="html">
@@ -3765,7 +3921,7 @@
         <target state="new">ペルー</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">453</context>
+          <context context-type="linenumber">455</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PF.string" datatype="html">
@@ -3773,7 +3929,7 @@
         <target state="new">フランス領ポリネシア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">455</context>
+          <context context-type="linenumber">457</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PG.string" datatype="html">
@@ -3781,7 +3937,7 @@
         <target state="new">パプアニューギニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">457</context>
+          <context context-type="linenumber">459</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PH.string" datatype="html">
@@ -3789,7 +3945,7 @@
         <target state="new">フィリピン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">459</context>
+          <context context-type="linenumber">461</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PK.string" datatype="html">
@@ -3797,7 +3953,7 @@
         <target state="new">パキスタン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">461</context>
+          <context context-type="linenumber">463</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PL.string" datatype="html">
@@ -3805,7 +3961,7 @@
         <target state="new">ポーランド</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">463</context>
+          <context context-type="linenumber">465</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PM.string" datatype="html">
@@ -3813,7 +3969,7 @@
         <target state="new">サンピエール島およびミクロン島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">465</context>
+          <context context-type="linenumber">467</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PN.string" datatype="html">
@@ -3821,7 +3977,7 @@
         <target state="new">ピトケアン諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">467</context>
+          <context context-type="linenumber">469</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PR.string" datatype="html">
@@ -3829,7 +3985,7 @@
         <target state="new">プエルトリコ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">469</context>
+          <context context-type="linenumber">471</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PS.string" datatype="html">
@@ -3837,7 +3993,7 @@
         <target state="new">パレスチナ自治区</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">471</context>
+          <context context-type="linenumber">473</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PT.string" datatype="html">
@@ -3845,7 +4001,7 @@
         <target state="new">ポルトガル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">473</context>
+          <context context-type="linenumber">475</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PW.string" datatype="html">
@@ -3853,7 +4009,7 @@
         <target state="new">パラオ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">475</context>
+          <context context-type="linenumber">477</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.PY.string" datatype="html">
@@ -3861,7 +4017,7 @@
         <target state="new">パラグアイ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">477</context>
+          <context context-type="linenumber">479</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.QA.string" datatype="html">
@@ -3869,7 +4025,7 @@
         <target state="new">カタール</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">479</context>
+          <context context-type="linenumber">481</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.RE.string" datatype="html">
@@ -3877,7 +4033,7 @@
         <target state="new">レユニオン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">481</context>
+          <context context-type="linenumber">483</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.RO.string" datatype="html">
@@ -3885,7 +4041,7 @@
         <target state="new">ルーマニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">483</context>
+          <context context-type="linenumber">485</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.RS.string" datatype="html">
@@ -3893,7 +4049,7 @@
         <target state="new">セルビア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">485</context>
+          <context context-type="linenumber">487</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.RU.string" datatype="html">
@@ -3901,7 +4057,7 @@
         <target state="new">ロシア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">487</context>
+          <context context-type="linenumber">489</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.RW.string" datatype="html">
@@ -3909,7 +4065,7 @@
         <target state="new">ルワンダ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">489</context>
+          <context context-type="linenumber">491</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SA.string" datatype="html">
@@ -3917,7 +4073,7 @@
         <target state="new">サウジアラビア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">491</context>
+          <context context-type="linenumber">493</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SB.string" datatype="html">
@@ -3925,7 +4081,7 @@
         <target state="new">ソロモン諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">493</context>
+          <context context-type="linenumber">495</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SC.string" datatype="html">
@@ -3933,7 +4089,7 @@
         <target state="new">セーシェル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">495</context>
+          <context context-type="linenumber">497</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SD.string" datatype="html">
@@ -3941,7 +4097,7 @@
         <target state="new">スーダン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">497</context>
+          <context context-type="linenumber">499</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SE.string" datatype="html">
@@ -3949,7 +4105,7 @@
         <target state="new">スウェーデン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">499</context>
+          <context context-type="linenumber">501</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SG.string" datatype="html">
@@ -3957,7 +4113,7 @@
         <target state="new">シンガポール</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">501</context>
+          <context context-type="linenumber">503</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SH.string" datatype="html">
@@ -3965,7 +4121,7 @@
         <target state="new">セントヘレナ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">503</context>
+          <context context-type="linenumber">505</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SI.string" datatype="html">
@@ -3973,7 +4129,7 @@
         <target state="new">スロベニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">505</context>
+          <context context-type="linenumber">507</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SJ.string" datatype="html">
@@ -3981,7 +4137,7 @@
         <target state="new">スヴァールバル諸島およびヤンマイエン島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">507</context>
+          <context context-type="linenumber">509</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SK.string" datatype="html">
@@ -3989,7 +4145,7 @@
         <target state="new">スロバキア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">509</context>
+          <context context-type="linenumber">511</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SL.string" datatype="html">
@@ -3997,7 +4153,7 @@
         <target state="new">シエラレオネ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">511</context>
+          <context context-type="linenumber">513</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SM.string" datatype="html">
@@ -4005,7 +4161,7 @@
         <target state="new">サンマリノ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">513</context>
+          <context context-type="linenumber">515</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SN.string" datatype="html">
@@ -4013,7 +4169,7 @@
         <target state="new">セネガル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">515</context>
+          <context context-type="linenumber">517</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SO.string" datatype="html">
@@ -4021,7 +4177,7 @@
         <target state="new">ソマリア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">517</context>
+          <context context-type="linenumber">519</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SR.string" datatype="html">
@@ -4029,7 +4185,7 @@
         <target state="new">スリナム</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">519</context>
+          <context context-type="linenumber">521</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SS.string" datatype="html">
@@ -4037,7 +4193,7 @@
         <target state="new">南スーダン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">521</context>
+          <context context-type="linenumber">523</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ST.string" datatype="html">
@@ -4045,7 +4201,7 @@
         <target state="new">サントメ・プリンシペ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">523</context>
+          <context context-type="linenumber">525</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SV.string" datatype="html">
@@ -4053,7 +4209,7 @@
         <target state="new">エルサルバドル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">525</context>
+          <context context-type="linenumber">527</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SX.string" datatype="html">
@@ -4061,7 +4217,7 @@
         <target state="new">シント・マールテン（オランダ領）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">527</context>
+          <context context-type="linenumber">529</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SY.string" datatype="html">
@@ -4069,7 +4225,7 @@
         <target state="new">シリア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">529</context>
+          <context context-type="linenumber">531</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.SZ.string" datatype="html">
@@ -4077,7 +4233,7 @@
         <target state="new">スワジランド</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">531</context>
+          <context context-type="linenumber">533</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TC.string" datatype="html">
@@ -4085,7 +4241,7 @@
         <target state="new">タークス・カイコス諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">533</context>
+          <context context-type="linenumber">535</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TD.string" datatype="html">
@@ -4093,7 +4249,7 @@
         <target state="new">チャド</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">535</context>
+          <context context-type="linenumber">537</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TF.string" datatype="html">
@@ -4101,7 +4257,7 @@
         <target state="new">フランス領南方・南極地域</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">537</context>
+          <context context-type="linenumber">539</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TG.string" datatype="html">
@@ -4109,7 +4265,7 @@
         <target state="new">トーゴ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">539</context>
+          <context context-type="linenumber">541</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TH.string" datatype="html">
@@ -4117,7 +4273,7 @@
         <target state="new">タイ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">541</context>
+          <context context-type="linenumber">543</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TJ.string" datatype="html">
@@ -4125,7 +4281,7 @@
         <target state="new">タジキスタン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">543</context>
+          <context context-type="linenumber">545</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TK.string" datatype="html">
@@ -4133,7 +4289,7 @@
         <target state="new">トケラウ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">545</context>
+          <context context-type="linenumber">547</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TL.string" datatype="html">
@@ -4141,7 +4297,7 @@
         <target state="new">東ティモール</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">547</context>
+          <context context-type="linenumber">549</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TM.string" datatype="html">
@@ -4149,7 +4305,7 @@
         <target state="new">トルクメニスタン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">549</context>
+          <context context-type="linenumber">551</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TN.string" datatype="html">
@@ -4157,7 +4313,7 @@
         <target state="new">チュニジア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">551</context>
+          <context context-type="linenumber">553</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TO.string" datatype="html">
@@ -4165,7 +4321,7 @@
         <target state="new">トンガ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">553</context>
+          <context context-type="linenumber">555</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TR.string" datatype="html">
@@ -4173,7 +4329,7 @@
         <target state="new">トルコ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">555</context>
+          <context context-type="linenumber">557</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TT.string" datatype="html">
@@ -4181,7 +4337,7 @@
         <target state="new">トリニダード・トバゴ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">557</context>
+          <context context-type="linenumber">559</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TV.string" datatype="html">
@@ -4189,7 +4345,7 @@
         <target state="new">ツバル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">559</context>
+          <context context-type="linenumber">561</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TW.string" datatype="html">
@@ -4197,7 +4353,7 @@
         <target state="new">台湾</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">561</context>
+          <context context-type="linenumber">563</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.TZ.string" datatype="html">
@@ -4205,7 +4361,7 @@
         <target state="new">タンザニア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">563</context>
+          <context context-type="linenumber">565</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.UA.string" datatype="html">
@@ -4213,7 +4369,7 @@
         <target state="new">ウクライナ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">565</context>
+          <context context-type="linenumber">567</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.UG.string" datatype="html">
@@ -4221,7 +4377,7 @@
         <target state="new">ウガンダ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">567</context>
+          <context context-type="linenumber">569</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.UM.string" datatype="html">
@@ -4229,7 +4385,7 @@
         <target state="new">合衆国領有小離島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">569</context>
+          <context context-type="linenumber">571</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.US.string" datatype="html">
@@ -4237,7 +4393,7 @@
         <target state="new">アメリカ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">571</context>
+          <context context-type="linenumber">573</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.UY.string" datatype="html">
@@ -4245,7 +4401,7 @@
         <target state="new">ウルグアイ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">573</context>
+          <context context-type="linenumber">575</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.UZ.string" datatype="html">
@@ -4253,7 +4409,7 @@
         <target state="new">ウズベキスタン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">575</context>
+          <context context-type="linenumber">577</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VA.string" datatype="html">
@@ -4261,7 +4417,7 @@
         <target state="new">バチカン市国</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">577</context>
+          <context context-type="linenumber">579</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VC.string" datatype="html">
@@ -4269,7 +4425,7 @@
         <target state="new">セントビンセント及びグレナディーン諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">579</context>
+          <context context-type="linenumber">581</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VE.string" datatype="html">
@@ -4277,7 +4433,7 @@
         <target state="new">ベネズエラ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">581</context>
+          <context context-type="linenumber">583</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VG.string" datatype="html">
@@ -4285,7 +4441,7 @@
         <target state="new">イギリス領ヴァージン諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">583</context>
+          <context context-type="linenumber">585</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VI.string" datatype="html">
@@ -4293,7 +4449,7 @@
         <target state="new">アメリカ領ヴァージン諸島</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">585</context>
+          <context context-type="linenumber">587</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VN.string" datatype="html">
@@ -4301,7 +4457,7 @@
         <target state="new">ベトナム</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">587</context>
+          <context context-type="linenumber">589</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.VU.string" datatype="html">
@@ -4309,7 +4465,7 @@
         <target state="new">バヌアツ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">589</context>
+          <context context-type="linenumber">591</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.WF.string" datatype="html">
@@ -4317,7 +4473,7 @@
         <target state="new">ウォリス・フツナ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">591</context>
+          <context context-type="linenumber">593</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.WS.string" datatype="html">
@@ -4325,7 +4481,7 @@
         <target state="new">サモア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">593</context>
+          <context context-type="linenumber">595</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.XK.string" datatype="html">
@@ -4333,7 +4489,7 @@
         <target state="new">Kosovo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">595</context>
+          <context context-type="linenumber">597</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.YE.string" datatype="html">
@@ -4341,7 +4497,7 @@
         <target state="new">イエメン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">597</context>
+          <context context-type="linenumber">599</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.YT.string" datatype="html">
@@ -4349,7 +4505,7 @@
         <target state="new">マヨット</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">599</context>
+          <context context-type="linenumber">601</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ZA.string" datatype="html">
@@ -4357,7 +4513,7 @@
         <target state="new">南アフリカ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">601</context>
+          <context context-type="linenumber">603</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ZM.string" datatype="html">
@@ -4365,7 +4521,7 @@
         <target state="new">ザンビア</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">603</context>
+          <context context-type="linenumber">605</context>
         </context-group>
       </trans-unit>
       <trans-unit id="country.ZW.string" datatype="html">
@@ -4373,10 +4529,11 @@
         <target state="new">ジンバブエ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">605</context>
+          <context context-type="linenumber">607</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.home.createOrEditLabel.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.createOrEditLabel.string"
+        datatype="html">
         <source> Add or edit affiliation </source>
         <target state="new">所属を追加または編集</target>
         <context-group purpose="location">
@@ -4456,7 +4613,8 @@
           <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguationSource.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguationSource.string"
+        datatype="html">
         <source>Disambiguation Source</source>
         <target state="new">組織IDソース</target>
         <context-group purpose="location">
@@ -4464,7 +4622,8 @@
           <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguatedOrgId.string" datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguatedOrgId.string"
+        datatype="html">
         <source>Disambiguated Org Id</source>
         <target state="new">組織ID</target>
         <context-group purpose="location">
@@ -4473,8 +4632,11 @@
         </context-group>
       </trans-unit>
       <trans-unit id="entity.validation.disambiguatedOrgId.string" datatype="html">
-        <source> This field is required. GRID Organization ID should start with &quot;grid.&quot;, RINGGOLD Organization ID should be a number, ROR IDs must be 9 characters, beginning with 0 </source>
-        <target state="new">こちらのフィールドが必要です。GRID 組織 ID は、grid.12344 のように grid. で始まる必要があります。あるいは有効な grid URL である必要があります。RINGGOLD 組織 ID は数字である必要があります。ROR ID は 0 から始まり、9 文字である必要があります。</target>
+        <source> This field is required. GRID Organization ID should start with &quot;grid.&quot;,
+          RINGGOLD Organization ID should be a number, ROR IDs must be 9 characters, beginning with
+          0 </source>
+        <target state="new">こちらのフィールドが必要です。GRID 組織 ID は、grid.12344 のように grid. で始まる必要があります。あるいは有効な
+          grid URL である必要があります。RINGGOLD 組織 ID は数字である必要があります。ROR ID は 0 から始まり、9 文字である必要があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
           <context context-type="linenumber">223</context>
@@ -4605,8 +4767,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.updateNote.string" datatype="html">
-        <source>Please do not forget to download and send permission links to your researcher once the assertion has been saved.</source>
-        <target state="new">注 : アサーションがいったん保存された際には、ダウンロードして、許可用リンクをお客様のリサーチャーに送信することを忘れないようお願いいたします。</target>
+        <source>Please do not forget to download and send permission links to your researcher once
+          the assertion has been saved.</source>
+        <target state="new">注 :
+          アサーションがいったん保存された際には、ダウンロードして、許可用リンクをお客様のリサーチャーに送信することを忘れないようお願いいたします。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
           <context context-type="linenumber">457</context>
@@ -4620,9 +4784,13 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string" datatype="html">
-        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"></x>? The affiliation will be deleted from the portal and the user&apos;s ORCID record</source>
-        <target state="new">{{ email }}のこのアフィリエーション を削除しますか？ポータルとユーザーのORCIDレコードからアフィリエーション が削除されます。<x id="PH" equiv-text="this.affiliation?.email"></x>undefined</target>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string"
+        datatype="html">
+        <source>Are you sure you want to delete this affiliation for <x id="PH"
+            equiv-text="this.affiliation?.email"></x>? The affiliation will be deleted from the
+          portal and the user&apos;s ORCID record</source>
+        <target state="new"><x id="PH" equiv-text="this.affiliation?.email"></x>のこのアフィリエーション
+          を削除しますか？ポータルとユーザーのORCIDレコードからアフィリエーション が削除されます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-delete.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -4633,7 +4801,7 @@
         <target state="new">アフィリエーションが作成されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="assertionServiceApp.affiliation.updated.string" datatype="html">
@@ -4641,7 +4809,7 @@
         <target state="new">アフィリエーションが更新されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="assertionServiceApp.affiliation.deleted.string" datatype="html">
@@ -4649,7 +4817,7 @@
         <target state="new">アフィリエーションが削除されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="assertionServiceApp.affiliation.problemDeleting.string" datatype="html">
@@ -4657,7 +4825,80 @@
         <target state="new">アフィリエーションの削除中に問題が発生しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.title.string"
+        datatype="html">
+        <source>Send permission notifications</source>
+        <target state="new">許可通知を送信</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.alreadyInProgress.string"
+        datatype="html">
+        <source> A request to send notifications to your users is already in progress. Please try
+          again later. </source>
+        <target state="new">ユーザーへの通知送信リクエストを実行中です。後でもう一度お試しください。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.description.string"
+        datatype="html">
+        <source>Are you sure that you would like ORCID to send permission links to your researchers
+          for the affiliations that are pending?</source>
+        <target state="new">ステータスが「保留中」のアフィリエーションアイテムを持つすべての研究者に許可通知が送信されます。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.languageHeader.string"
+        datatype="html">
+        <source>Notification language</source>
+        <target state="new">通知の言語</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.languageDescription.string"
+        datatype="html">
+        <source>What language should the notification be sent in?</source>
+        <target state="new">どの言語で通知を送信しますか？</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.sendNotifications.string"
+        datatype="html">
+        <source>Send notifications</source>
+        <target state="new">通知を送信</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">
+            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit
+        id="gatewayApp.assertionServiceAssertion.notifications.notificationInProgress.string"
+        datatype="html">
+        <source>Notification process has now started. We will email you as soon as the process has
+          completed.</source>
+        <target state="new">現在、通知処理を開始しています。手続きが完了し次第、メールでお知らせします。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
     </body>
