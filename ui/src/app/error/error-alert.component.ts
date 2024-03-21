@@ -5,7 +5,7 @@ import { AppError, ErrorAlert } from './model/error.model'
 
 @Component({
   selector: 'app-error-alert',
-  templateUrl: './error-alert.component.html'
+  templateUrl: './error-alert.component.html',
 })
 export class ErrorAlertComponent implements OnInit {
   alerts: any[] = []
