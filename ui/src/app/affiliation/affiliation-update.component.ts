@@ -131,7 +131,7 @@ export class AffiliationUpdateComponent implements OnInit {
 
   editForm = this.fb.group(
     {
-      id: [''],
+      id: [null],
       email: ['', [Validators.pattern(EMAIL_REGEXP), Validators.required]],
       affiliationSection: ['', [Validators.required]],
       departmentName: ['', [Validators.maxLength(4000)]],
@@ -249,8 +249,7 @@ export class AffiliationUpdateComponent implements OnInit {
   save() {
     this.isSaving = true
     const assertion = this.createFromForm()
-
-    if (assertion.id !== undefined && assertion.id != null) {
+    if (assertion.id !== null && assertion.id !== undefined) {
       this.affiliationService.update(assertion).subscribe({
         next: () => {
           this.onSaveSuccess()

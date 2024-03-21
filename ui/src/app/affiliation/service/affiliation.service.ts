@@ -46,8 +46,8 @@ export class AffiliationService {
       .pipe(map((res: HttpResponse<IAffiliation[]>) => this.convertToAffiliationPage(res)))
   }
 
-  delete(id: string): Observable<HttpResponse<any>> {
-    return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+  delete(id: string): Observable<boolean> {
+    return this.http.delete<any>(`${this.resourceUrl}/${id}`).pipe(map((res: { deleted: boolean }) => res.deleted))
   }
 
   deleteFromOrcid(id: string): Observable<HttpResponse<any>> {
