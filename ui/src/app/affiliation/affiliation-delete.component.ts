@@ -42,11 +42,9 @@ export class AffiliationDeleteDialogComponent implements OnInit {
   }
 
   confirmDelete(id: string | undefined) {
-    console.log(id)
-
     if (id) {
       this.affiliationService.delete(id).subscribe((response) => {
-        if (response.body.deleted) {
+        if (response) {
           this.eventService.broadcast(new Event(EventType.AFFILIATION_LIST_MODIFICATION, 'Deleted an affiliation'))
           this.alertService.broadcast(AlertType.AFFILIATION_DELETED)
         } else {
