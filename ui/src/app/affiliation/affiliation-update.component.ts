@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, ErrorHandler, Inject, OnInit } from '@angular/core'
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import * as moment from 'moment'
@@ -17,6 +17,7 @@ import {
 } from '../app.constants'
 import { AlertService } from '../shared/service/alert.service'
 import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
+import { ErrorService } from '../error/service/error.service'
 
 function dateValidator() {
   return (formGroup: FormGroup) => {
@@ -168,7 +169,8 @@ export class AffiliationUpdateComponent implements OnInit {
     protected dateUtilService: DateUtilService,
     protected activatedRoute: ActivatedRoute,
     private alertService: AlertService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    @Inject(ErrorHandler) private errorService: ErrorService
   ) {}
 
   ngOnInit() {
@@ -262,7 +264,6 @@ export class AffiliationUpdateComponent implements OnInit {
       this.affiliationService.create(assertion).subscribe({
         next: () => {
           this.onSaveSuccess()
-          // TODO: add alerttype
           this.alertService.broadcast(AlertType.AFFILIATION_CREATED)
         },
         error: (err) => this.onSaveError(err),
@@ -318,6 +319,7 @@ export class AffiliationUpdateComponent implements OnInit {
   }
 
   protected onSaveError(err: any) {
+    this.errorService.handleError(err)
     console.error(err)
     this.isSaving = false
   }
