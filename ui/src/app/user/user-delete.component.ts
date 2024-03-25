@@ -66,11 +66,11 @@ export class UserDeletePopupComponent implements OnInit, OnDestroy {
         })
         this.ngbModalRef.componentInstance.user = user
         this.ngbModalRef.result.then(
-          (result) => {
+          () => {
             this.router.navigate(['/users', { outlets: { popup: null } }])
             this.ngbModalRef = undefined
           },
-          (reason) => {
+          () => {
             this.router.navigate(['/users', { outlets: { popup: null } }])
             this.ngbModalRef = undefined
           }
