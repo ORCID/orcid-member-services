@@ -63,8 +63,8 @@ export class UserService {
       .pipe(map((res: HttpResponse<User[]>) => this.convertToUserPage(res)))
   }
 
-  delete(id: string): Observable<HttpResponse<any>> {
-    return this.http.delete<any>(`${this.resourceUrl}/${id}`)
+  delete(id: string): Observable<Boolean> {
+    return this.http.delete<any>(`${this.resourceUrl}/${id}`).pipe(map((res: { deleted: boolean }) => res.deleted))
   }
 
   protected convertDateFromClient(user: User): User {

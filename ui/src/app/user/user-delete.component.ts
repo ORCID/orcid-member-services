@@ -33,10 +33,7 @@ export class UserDeleteDialogComponent implements OnInit {
   confirmDelete(id: string | undefined) {
     if (id) {
       this.userService.delete(id).subscribe(() => {
-        this.eventService.broadcast({
-          type: EventType.USER_LIST_MODIFIED,
-          payload: 'Deleted a user',
-        } as Event)
+        this.eventService.broadcast(new Event(EventType.USER_LIST_MODIFIED, 'Deleted a user'))
         this.activeModal.dismiss(true)
         this.alertService.broadcast(AlertType.USER_DELETED)
       })
