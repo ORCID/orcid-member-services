@@ -12,7 +12,7 @@
         <app-error-alert></app-error-alert>
         <div class="form-group">
           <label class="form-control-label" i18n="@@gatewayApp.assertionServiceAssertion.email.string" for="field_email"
-            >Email</label
+            >User Email</label
           >
           <input type="text" class="form-control" name="email" id="field_email" formControlName="email" />
           <div
@@ -39,7 +39,7 @@
             class="form-control-label"
             i18n="@@gatewayApp.assertionServiceAssertion.affiliationSection.string"
             for="field_affiliationSection"
-            >Assertion Section</label
+            >Affiliation Type</label
           >
           <select
             class="form-control"
@@ -70,7 +70,7 @@
             class="form-control-label"
             i18n="@@gatewayApp.assertionServiceAssertion.orgName.string"
             for="field_orgName"
-            >Org Name</label
+            >Organization Name</label
           >
           <input type="text" class="form-control" name="orgName" id="field_orgName" formControlName="orgName" />
           <div
@@ -93,7 +93,7 @@
               class="form-control-label"
               i18n="@@gatewayApp.assertionServiceAssertion.orgCity.string"
               for="field_orgCity"
-              >Org City</label
+              >City</label
             >
             <input type="text" class="form-control" name="orgCity" id="field_orgCity" formControlName="orgCity" />
             <div
@@ -115,7 +115,7 @@
               class="form-control-label"
               i18n="@@gatewayApp.assertionServiceAssertion.orgRegion.string"
               for="field_orgRegion"
-              >Org Region</label
+              >State/Region</label
             >
             <input type="text" class="form-control" name="orgRegion" id="field_orgRegion" formControlName="orgRegion" />
             <div
@@ -138,7 +138,7 @@
               class="form-control-label"
               i18n="@@gatewayApp.assertionServiceAssertion.orgCountry.string"
               for="field_orgCountry"
-              >Org Country</label
+              >Country</label
             >
             <select class="form-control" name="orgCountry" id="field_orgCountry" formControlName="orgCountry">
               <option *ngFor="let country of COUNTRIES | keyvalue" [ngValue]="country.value">
@@ -167,7 +167,7 @@
               class="form-control-label"
               i18n="@@gatewayApp.assertionServiceAssertion.disambiguationSource.string"
               for="field_disambiguationSource"
-              >Disambiguation Source</label
+              >Organization ID Source</label
             >
             <select
               class="form-control"
@@ -198,7 +198,7 @@
               class="form-control-label"
               i18n="@@gatewayApp.assertionServiceAssertion.disambiguatedOrgId.string"
               for="field_disambiguatedOrgId"
-              >Disambiguated Org Id</label
+              >Organization ID</label
             >
             <input
               type="text"
@@ -233,7 +233,7 @@
               class="form-control-label"
               i18n="@@gatewayApp.assertionServiceAssertion.departmentName.string"
               for="field_departmentName"
-              >Department Name</label
+              >Department</label
             >
             <input
               type="text"
@@ -262,7 +262,7 @@
               class="form-control-label"
               i18n="@@gatewayApp.assertionServiceAssertion.roleTitle.string"
               for="field_roleTitle"
-              >Role Title</label
+              >Role/Title</label
             >
             <input type="text" class="form-control" name="roleTitle" id="field_roleTitle" formControlName="roleTitle" />
             <div
@@ -282,7 +282,7 @@
           </div>
           <div class="col-md-4 float-left pr-0">
             <label class="form-control-label" i18n="@@gatewayApp.assertionServiceAssertion.url.string" for="field_url"
-              >Url</label
+              >URL</label
             >
             <input type="text" class="form-control" name="url" id="field_url" formControlName="url" />
             <div *ngIf="editForm.get('url')?.invalid && (editForm.get('url')?.dirty || editForm.get('url')?.touched)">
