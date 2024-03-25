@@ -63,7 +63,7 @@ export class UserService {
       .pipe(map((res: HttpResponse<User[]>) => this.convertToUserPage(res)))
   }
 
-  delete(id: string): Observable<Boolean> {
+  delete(id: string): Observable<boolean> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`).pipe(map((res: { deleted: boolean }) => res.deleted))
   }
 
