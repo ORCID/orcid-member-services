@@ -3564,13 +3564,6 @@
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceaffiliation.notificationLastSent.string" datatype="html">
-        <source> Notification Last Sent </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">213</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.addedToOrcid.string" datatype="html">
         <source> Added To ORCID </source>
         <context-group purpose="location">
@@ -3725,6 +3718,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
           <context context-type="linenumber">194</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
+          <context context-type="linenumber">213</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.permissionLink.string" datatype="html">
