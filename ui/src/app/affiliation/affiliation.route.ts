@@ -28,7 +28,7 @@ export const AffiliationResolver: ResolveFn<Affiliation | null> = (
 
 export const affiliationRoutes: Routes = [
   {
-    path: 'affiliations',
+    path: '',
     component: AffiliationsComponent,
     data: {
       authorities: ['ASSERTION_SERVICE_ENABLED'],
@@ -76,7 +76,7 @@ export const affiliationRoutes: Routes = [
     ],
   },
   {
-    path: 'affiliations/:id/view',
+    path: ':id/view',
     component: AffiliationDetailComponent,
     resolve: {
       affiliation: AffiliationResolver,

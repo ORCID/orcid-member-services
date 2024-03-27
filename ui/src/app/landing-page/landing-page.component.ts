@@ -8,7 +8,7 @@ import { IMember } from '../member/model/member.model'
 import { ORCID_BASE_URL } from '../app.constants'
 
 @Component({
-  selector: 'landing-page',
+  selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
 })
 export class LandingPageComponent implements OnInit {

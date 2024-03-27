@@ -42,7 +42,11 @@ describe('UsersComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [UsersComponent, HasAnyAuthorityDirective, LocalizePipe],
-      imports: [ReactiveFormsModule, RouterModule.forRoot([{ path: 'users', component: UsersComponent }]), FormsModule],
+      imports: [
+        ReactiveFormsModule,
+        RouterModule.forChild([{ path: 'users', component: UsersComponent }]),
+        FormsModule,
+      ],
       providers: [
         { provide: UserService, useValue: userServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
