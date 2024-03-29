@@ -44,6 +44,7 @@ describe('UsersComponent', () => {
       declarations: [UsersComponent, HasAnyAuthorityDirective, LocalizePipe],
       imports: [
         ReactiveFormsModule,
+        RouterTestingModule,
         RouterModule.forChild([{ path: 'users', component: UsersComponent }]),
         FormsModule,
       ],

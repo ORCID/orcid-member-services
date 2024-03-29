@@ -7,9 +7,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatProgressBarModule } from '@angular/material/progress-bar'
 import { LandingPageComponent } from './landing-page.component'
 import { LANDING_PAGE_ROUTE } from './landing-page.route'
+import { CommonModule } from '@angular/common'
 
 @NgModule({
-  imports: [MatProgressSpinnerModule, MatProgressBarModule, RouterModule.forChild(LANDING_PAGE_ROUTE)],
+  imports: [CommonModule, MatProgressSpinnerModule, MatProgressBarModule, RouterModule.forChild(LANDING_PAGE_ROUTE)],
   declarations: [LandingPageComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

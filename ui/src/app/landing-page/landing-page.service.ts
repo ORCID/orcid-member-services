@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
-import { Observable } from 'rxjs'
+import { Observable, map } from 'rxjs'
 import { ORCID_BASE_URL } from '../app.constants'
+import { OrcidRecord } from '../shared/model/orcid-record.model'
 
 @Injectable({ providedIn: 'root' })
 export class LandingPageService {
   private headers: HttpHeaders
 
-  idTokenUri: string = '/services/assertionservice/api/id-token'
-  recordConnectionUri: string = '/services/assertionservice/api/assertion/record/'
-  memberInfoUri: string = '/services/memberservice/api/members/authorized/'
-  userInfoUri: string = ORCID_BASE_URL + '/oauth/userinfo'
-  publicKeyUri: string = ORCID_BASE_URL + '/oauth/jwks'
+  idTokenUri = '/services/assertionservice/api/id-token'
+  recordConnectionUri = '/services/assertionservice/api/assertion/record/'
+  memberInfoUri = '/services/memberservice/api/members/authorized/'
+  userInfoUri = ORCID_BASE_URL + '/oauth/userinfo'
+  publicKeyUri = ORCID_BASE_URL + '/oauth/jwks'
 
   constructor(private http: HttpClient) {
     this.headers = new HttpHeaders({
@@ -24,17 +25,17 @@ export class LandingPageService {
     return this.http.post(this.idTokenUri, JSON.stringify(data), { headers: this.headers })
   }
 
-  getOrcidConnectionRecord(state: String): Observable<any> {
+  getOrcidConnectionRecord(state: string): Observable<OrcidRecord> {
     const requestUrl = this.recordConnectionUri + state
-    return this.http.get(requestUrl, { observe: 'response' })
+    return this.http.get(requestUrl).pipe(map((response: any) => response.body))
   }
 
-  getMemberInfo(state: String): Observable<any> {
+  getMemberInfo(state: string): Observable<any> {
     const requestUrl = this.memberInfoUri + state
     return this.http.get(requestUrl)
   }
 
-  getUserInfo(access_token: String): Observable<any> {
+  getUserInfo(access_token: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + access_token,
       'Content-Type': 'application/json',

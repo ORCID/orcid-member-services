@@ -17,4 +17,8 @@ export class WindowLocationService {
   getWindowLocationHref(): string {
     return window.location.href
   }
+
+  getWindowLocationHash(): string {
+    return window.location.hash
+  }
 }

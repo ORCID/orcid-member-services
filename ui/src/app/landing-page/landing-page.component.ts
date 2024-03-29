@@ -6,22 +6,23 @@ import { LandingPageService } from './landing-page.service'
 import { MemberService } from '../member/service/member.service'
 import { IMember } from '../member/model/member.model'
 import { ORCID_BASE_URL } from '../app.constants'
+import { WindowLocationService } from '../shared/service/window-location.service'
 
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
 })
 export class LandingPageComponent implements OnInit {
-  issuer: string = ORCID_BASE_URL
-  oauthBaseUrl: string = ORCID_BASE_URL + '/oauth/authorize'
-  redirectUri: string = '/landing-page'
+  issuer = ORCID_BASE_URL
+  oauthBaseUrl = ORCID_BASE_URL + '/oauth/authorize'
+  redirectUri = '/landing-page'
 
-  loading: Boolean = true
-  showConnectionExists: Boolean = false
-  showConnectionExistsDifferentUser: Boolean = false
-  showDenied: Boolean = false
-  showError: Boolean = false
-  showSuccess: Boolean = false
+  loading = true
+  showConnectionExists = false
+  showConnectionExistsDifferentUser = false
+  showDenied = false
+  showError = false
+  showSuccess = false
   key: any
   clientName: string | undefined
   salesforceId: string | undefined
@@ -42,6 +43,7 @@ export class LandingPageComponent implements OnInit {
 
   constructor(
     private landingPageService: LandingPageService,
+    private windowLocationService: WindowLocationService,
     protected memberService: MemberService
   ) {}
 
@@ -51,67 +53,73 @@ export class LandingPageComponent implements OnInit {
     const state_param = this.getQueryParameterByName('state')
 
     if (state_param) {
-      this.landingPageService.getOrcidConnectionRecord(state_param).subscribe({
-        next: (result: HttpResponse<any>) => {
-          this.orcidRecord = result.body
-          this.landingPageService.getMemberInfo(state_param).subscribe({
-            next: (res: IMember) => {
-              this.clientName = res.clientName
-              this.clientId = res.clientId
-              this.salesforceId = res.salesforceId
-              this.oauthUrl =
-                this.oauthBaseUrl +
-                '?response_type=token&redirect_uri=' +
-                this.redirectUri +
-                '&client_id=' +
-                this.clientId +
-                '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
-                state_param
-
-              this.incorrectDataMessage = $localize`:@@landingPage.success.ifYouFind:If you find that data added to your ORCID record is incorrect, please contact ${this.clientName}`
-              this.linkAlreadyUsedMessage = $localize`:@@landingPage.connectionExists.differentUser.string:This authorization link has already been used. Please contact ${this.clientName} for a new authorization link.`
-              this.allowToUpdateRecordMessage = $localize`:@@landingPage.denied.grantAccess.string:Allow ${this.clientName} to update my ORCID record.`
-              this.successfullyGrantedMessage = $localize`:@@landingPage.success.youHaveSuccessfully.string:You have successfully granted ${this.clientName} permission to update your ORCID record, and your record has been updated with affiliation information.`
-
-              // Check if id token exists in URL (user just granted permission)
-              if (id_token_fragment != null && id_token_fragment !== '') {
-                this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment)
-              } else {
-                const error = this.getFragmentParameterByName('error')
-                // Check if user denied permission
-                if (error != null && error !== '') {
-                  if (error === 'access_denied') {
-                    this.submitUserDenied(state_param)
-                  } else {
-                    this.showErrorElement()
-                  }
-                } else {
-                  window.location.replace(this.oauthUrl)
-                }
-              }
-
-              this.startTimer(600)
-            },
-            error: (res: HttpErrorResponse) => {
-              console.log('error')
-            },
-          })
-        },
-        error: (res: HttpErrorResponse) => {
-          console.log('error')
-        },
-      })
+      this.processRequest(state_param, id_token_fragment, access_token_fragment)
     }
   }
 
+  processRequest(state_param: string, id_token_fragment: string, access_token_fragment: string) {
+    this.landingPageService.getOrcidConnectionRecord(state_param).subscribe({
+      next: (result) => {
+        this.orcidRecord = result
+        this.landingPageService.getMemberInfo(state_param).subscribe({
+          next: (res: IMember) => {
+            this.clientName = res.clientName
+            this.clientId = res.clientId
+            this.salesforceId = res.salesforceId
+            this.oauthUrl =
+              this.oauthBaseUrl +
+              '?response_type=token&redirect_uri=' +
+              this.redirectUri +
+              '&client_id=' +
+              this.clientId +
+              '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
+              state_param
+
+            this.incorrectDataMessage = $localize`:@@landingPage.success.ifYouFind:If you find that data added to your ORCID record is incorrect, please contact ${this.clientName}`
+            this.linkAlreadyUsedMessage = $localize`:@@landingPage.connectionExists.differentUser.string:This authorization link has already been used. Please contact ${this.clientName} for a new authorization link.`
+            this.allowToUpdateRecordMessage = $localize`:@@landingPage.denied.grantAccess.string:Allow ${this.clientName} to update my ORCID record.`
+            this.successfullyGrantedMessage = $localize`:@@landingPage.success.youHaveSuccessfully.string:You have successfully granted ${this.clientName} permission to update your ORCID record, and your record has been updated with affiliation information.`
+
+            // Check if id token exists in URL (user just granted permission)
+            if (id_token_fragment != null && id_token_fragment !== '') {
+              this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment)
+            } else {
+              const error = this.getFragmentParameterByName('error')
+              // Check if user denied permission
+              if (error != null && error !== '') {
+                if (error === 'access_denied') {
+                  this.submitUserDenied(state_param)
+                } else {
+                  this.showErrorElement()
+                }
+              } else {
+                this.windowLocationService.updateWindowLocation(this.oauthUrl)
+              }
+            }
+
+            this.startTimer(600)
+          },
+          error: (res: HttpErrorResponse) => {
+            console.log('error')
+          },
+        })
+      },
+      error: (res: HttpErrorResponse) => {
+        console.log('error')
+      },
+    })
+  }
+
   getFragmentParameterByName(name: string): string {
+    // eslint-disable-next-line
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
     const regex = new RegExp('[\\#&]' + name + '=([^&#]*)'),
-      results = regex.exec(window.location.hash)
+      results = regex.exec(this.windowLocationService.getWindowLocationHash())
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '))
   }
 
   getQueryParameterByName(name: string): string | null {
+    // eslint-disable-next-line
     name = name.replace(/[\[\]]/g, '\\$&')
     const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
       results = regex.exec(window.location.href)
@@ -125,8 +133,8 @@ export class LandingPageComponent implements OnInit {
   }
 
   checkSubmitToken(id_token: string, state: string, access_token: string) {
-    this.landingPageService.getPublicKey().subscribe(
-      (res) => {
+    this.landingPageService.getPublicKey().subscribe({
+      next: (res) => {
         const pubKey = KEYUTIL.getKey(res.keys[0]) as RSAKey
         const response = KJUR.jws.JWS.verifyJWT(id_token, pubKey, {
           alg: ['RS256'],
@@ -178,25 +186,6 @@ export class LandingPageComponent implements OnInit {
           this.showErrorElement()
         }
       },
-      () => {
-        this.showErrorElement()
-      }
-    )
-  }
-
-  submitIdTokenData(id_token: string, state: string, access_token: string) {
-    this.landingPageService.submitUserResponse({ id_token, state }).subscribe({
-      next: () => {
-        this.landingPageService.getUserInfo(access_token).subscribe({
-          next: (res: HttpResponse<any>) => {
-            this.signedInIdToken = res
-            this.showSuccessElement()
-          },
-          error: () => {
-            this.showErrorElement()
-          },
-        })
-      },
       error: () => {
         this.showErrorElement()
       },
@@ -204,14 +193,14 @@ export class LandingPageComponent implements OnInit {
   }
 
   submitUserDenied(state: string) {
-    this.landingPageService.submitUserResponse({ denied: true, state }).subscribe(
-      () => {
+    this.landingPageService.submitUserResponse({ denied: true, state }).subscribe({
+      next: () => {
         this.showDeniedElement()
       },
-      () => {
+      error: () => {
         this.showErrorElement()
-      }
-    )
+      },
+    })
   }
 
   startTimer(seconds: number) {
