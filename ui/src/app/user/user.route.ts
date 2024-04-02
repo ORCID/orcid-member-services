@@ -27,7 +27,7 @@ export const UserResolver: ResolveFn<User | null> = (
 
 export const routes: Routes = [
   {
-    path: 'users',
+    path: '',
     component: UsersComponent,
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER', 'ROLE_CONSORTIUM_LEAD'],
@@ -66,7 +66,7 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'users/:id/view',
+    path: ':id/view',
     component: UserDetailComponent,
     resolve: {
       user: UserResolver,
@@ -78,7 +78,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'users/new',
+    path: 'new',
     component: UserUpdateComponent,
     resolve: {
       user: UserResolver,
@@ -90,7 +90,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'users/:id/edit',
+    path: ':id/edit',
     component: UserUpdateComponent,
     resolve: {
       user: UserResolver,

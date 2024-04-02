@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core'
-import { ActivatedRouteSnapshot, Resolve, Route, RouterModule, RouterStateSnapshot, Routes } from '@angular/router'
+import { RouterModule, Routes } from '@angular/router'
 import { navbarRoute } from './layout/navbar/navbar.route'
 import { errorRoutes } from './error/error.route'
-import { AuthGuard } from './account/auth.guard'
-import { UsersComponent } from './user/users.component'
 
 const routes: Routes = [
   {
@@ -21,6 +19,10 @@ const routes: Routes = [
   {
     path: 'affiliations',
     loadChildren: () => import('./affiliation/affiliation.module').then((m) => m.AffiliationModule),
+  },
+  {
+    path: 'landing-page',
+    loadChildren: () => import('./landing-page/landing-page.module').then((m) => m.LandingPageModule),
   },
 ]
 

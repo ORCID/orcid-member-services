@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="row justify-content-center mt-4">
+    <div class="col-md-8 text-center">
+      <div *ngIf="loading" class="app-loading">
+        <div class="spinner-border text-secondary" style="width: 5rem; height: 5rem" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      <div *ngIf="!loading">
+        <div class="mt-5">
+          <div *ngIf="showConnectionExists">
+            <h2>
+              <span i18n="@@landingPage.connectionExists.youHaveAlready.string">You have already granted</span><br />
+              {{ clientName }}<br />
+              <span i18n="@@landingPage.connectionExists.permissionToUpdate.string"
+                >permission to update your ORCID record</span
+              >
+            </h2>
+            <p class="mt-4">
+              <img class="id-icon" src="../../content/images/orcid-icon.svg" alt="orcid-logo" width="16" height="16" />
+              <a target="_orcidRecord" href="{{ issuer }}/my-orcid">{{ issuer }}/{{ orcidRecord.orcid }}</a>
+            </p>
+            <p>
+              {{ incorrectDataMessage }}
+            </p>
+          </div>
+          <div *ngIf="showConnectionExistsDifferentUser">
+            <h2>
+              {{ linkAlreadyUsedMessage }}
+            </h2>
+          </div>
+          <div *ngIf="showError">
+            <h2 i18n="@@landingPage.error.somethingWentWrong.string">
+              Oops, something went wrong and we were not able to fetch your ORCID iD
+            </h2>
+          </div>
+          <div *ngIf="showDenied">
+            <h2>
+              <span i18n="@@landingPage.denied.youHaveDenied.string">Oops, you have denied access.</span><br />
+              {{ clientName }}<br />
+              <span i18n="@@landingPage.denied.willNotBeAble.string"
+                >will not be able to update your ORCID record.</span
+              >
+            </h2>
+            <p i18n="@@landingPage.denied.ifThisWas.string">
+              If this was a mistake, click the button below to grant access.
+            </p>
+            <a href="{{ oauthUrl }}" class="btn btn-primary">
+              {{ allowToUpdateRecordMessage }}
+            </a>
+          </div>
+          <div *ngIf="showSuccess">
+            <h2>
+              {{ thanksMessage }}
+            </h2>
+            <p>
+              {{ successfullyGrantedMessage }}
+            </p>
+            <p>
+              <img class="id-icon" src="../../content/images/orcid-icon.svg" alt="orcid-logo" width="16" height="16" />
+              <a target="_orcidRecord" href="{{ issuer }}/my-orcid">{{ issuer }}/{{ signedInIdToken.sub }}</a>
+            </p>
+            <p>
+              <em>{{ incorrectDataMessage }}</em>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

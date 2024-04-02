@@ -9,7 +9,7 @@ import { AlertComponent } from './alert/alert.component'
 import { LocalizePipe } from './pipe/localize'
 
 @NgModule({
-  imports: [CommonModule, NgbModule, FontAwesomeModule],
+  imports: [NgbModule, FontAwesomeModule],
   declarations: [FindLanguageFromKeyPipe, LocalizePipe, ErrorAlertComponent, HasAnyAuthorityDirective, AlertComponent],
   exports: [
     FindLanguageFromKeyPipe,
