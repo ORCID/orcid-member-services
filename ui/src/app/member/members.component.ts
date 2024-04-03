@@ -3,6 +3,8 @@ import { IMember } from './model/member.model'
 import { Subscription } from 'rxjs'
 import {
   faCheckCircle,
+  faPencilAlt,
+  faPlus,
   faSearch,
   faSortDown,
   faSortUp,
@@ -31,7 +33,7 @@ export class MembersComponent implements OnInit {
   links: any
   totalItems: any
   itemsPerPage: any
-  page: any
+  page = 1
   predicate: any
   reverse: any
   faTimesCircle = faTimesCircle
@@ -40,6 +42,8 @@ export class MembersComponent implements OnInit {
   faSearch = faSearch
   faSortDown = faSortDown
   faSortUp = faSortUp
+  faPencilAlt = faPencilAlt
+  faPlus = faPlus
   itemCount: string | undefined
   searchTerm: string | undefined
   submittedSearchTerm: string | undefined
@@ -57,9 +61,9 @@ export class MembersComponent implements OnInit {
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE
     this.routeData = this.activatedRoute.data.subscribe((data: any) => {
-      this.page = data.pagingParams.page
-      this.reverse = data.pagingParams.ascending
-      this.predicate = data.pagingParams.predicate
+      this.page = data['queryParams'] ? data['queryParams'].page : 1
+      this.ascending = data['queryParams'] ? data['queryParams'].page.sort.split(',')[1] : false
+      this.sortColumn = data['queryParams'] ? data['queryParams'].page.sort.split(',')[0] : 'salesforceId'
     })
   }
 

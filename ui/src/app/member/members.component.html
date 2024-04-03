@@ -3,13 +3,13 @@
     <div class="row justify-content-end">
         <div class="col-md-12 mb-2">
             <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-ms-member ml-1" [routerLink]="['/member/new']">
-                <fa-icon [icon]="'plus'"></fa-icon>
+                <fa-icon [icon]="faPlus"></fa-icon>
                 <span  i18n="@@gatewayApp.msUserServiceMSMember.home.createLabel.string">
                 Add member
                 </span>
             </button>
             <button id="jh-upload-ms-member" class="btn btn-primary float-right jh-create-entity create-ms-member ml-1" [routerLink]="['/', 'member', { outlets: { popup: 'import'} }]">
-                <fa-icon [icon]="'plus'"></fa-icon>
+                <fa-icon [icon]="faPlus"></fa-icon>
                 <span  i18n="@@gatewayApp.msUserServiceMSMember.home.uploadLabel.string">
                 Import members from CSV
                 </span>
@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-    <div class="table-responsive" *ngIf="members!.length > 0">
+    <div class="table-responsive" *ngIf="members && members.length && members.length > 0">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -69,7 +69,7 @@
                         <button type="submit"
                                 [routerLink]="['/members', member.id, 'edit']"
                                 class="btn btn-primary btn-sm ml-1">
-                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <fa-icon [icon]="faPencilAlt"></fa-icon>
                             <span class="d-none d-md-inline" i18n="@@entity.action.edit.string">Edit</span>
                         </button>
                     </div>

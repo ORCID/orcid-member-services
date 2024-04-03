@@ -34,7 +34,7 @@ export class MemberService {
   query(req?: any): Observable<IMemberPage | null> {
     const options = createRequestOption(req)
     return this.http
-      .get<IMember[]>(this.resourceUrl + 's', { params: options, observe: 'response' })
+      .get<IMember[]>(this.resourceUrl + '/members', { params: options, observe: 'response' })
       .pipe(map((res: HttpResponse<IMember[]>) => this.convertToMemberPage(res)))
   }
 
