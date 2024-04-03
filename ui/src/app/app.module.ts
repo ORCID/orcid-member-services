@@ -17,10 +17,11 @@ import { ErrorComponent } from './error/error.component'
 import { FormsModule } from '@angular/forms'
 import { UserModule } from './user/user.module'
 import { AffiliationModule } from './affiliation/affiliation.module'
-import { MembersComponent } from './member/members.component'
+import { MembersComponent } from './member/members.component';
+import { MemberUpdateComponent } from './member/member-update.component'
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent, MembersComponent],
+  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent, MembersComponent, MemberUpdateComponent],
   imports: [
     BrowserModule,
     UserModule,

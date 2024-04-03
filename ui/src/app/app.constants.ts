@@ -17,6 +17,8 @@ export enum AlertType {
   USER_CREATED = 'User created. Invite sent.',
   USER_UPDATED = 'User updated successfully',
   USER_DELETED = 'User deleted successfully',
+  MEMBER_CREATED = 'Member created',
+  MEMBER_UPDATED = 'Member updated successfully',
   NOTIFICATION_IN_PROGRESS = 'Notification in progress',
   AFFILIATION_CREATED = 'Affiliation created',
   AFFILIATION_UPDATED = 'Affiliation updated',

@@ -25,6 +25,25 @@ export class MemberService {
     )
   }
 
+  create(msMember: IMember): Observable<IMember> {
+    const copy = this.convertDateFromClient(msMember)
+    return this.http
+      .post<IMember>(`${this.resourceUrl}/members`, copy)
+      .pipe(map((res: IMember) => this.convertDateFromServer(res)))
+  }
+
+  update(msMember: IMember): Observable<IMember> {
+    const copy = this.convertDateFromClient(msMember)
+    return this.http
+      .put<IMember>(`${this.resourceUrl}/members`, copy)
+      .pipe(map((res: IMember) => this.convertDateFromServer(res)))
+  }
+
+  validate(member: IMember): Observable<{ valid: boolean; errors: string[] }> {
+    const copy = this.convertDateFromClient(member)
+    return this.http.post<{ valid: boolean; errors: string[] }>(`${this.resourceUrl}/members/validate`, copy)
+  }
+
   getAllMembers(): Observable<IMember[]> {
     return this.http
       .get<IMember[]>(`${this.resourceUrl}/members/list/all`)
@@ -44,6 +63,15 @@ export class MemberService {
 
   setManagedMember(value: string | null) {
     this.managedMember.next(value)
+  }
+
+  protected convertDateFromClient(member: IMember): IMember {
+    const copy: IMember = Object.assign({}, member, {
+      createdDate: member.createdDate != null && member.createdDate.isValid() ? member.createdDate.toJSON() : null,
+      lastModifiedDate:
+        member.lastModifiedDate != null && member.lastModifiedDate.isValid() ? member.lastModifiedDate.toJSON() : null,
+    })
+    return copy
   }
 
   protected convertDateFromServer(member: IMember): IMember {
