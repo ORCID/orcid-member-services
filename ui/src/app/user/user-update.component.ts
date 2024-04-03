@@ -135,9 +135,9 @@ export class UserUpdateComponent {
   getMemberList(): Observable<IMember[]> {
     if (this.hasRoleAdmin()) {
       return this.memberService.getAllMembers().pipe(
-        map((res) => {
-          if (res.body) {
-            return res.body
+        map((members) => {
+          if (members) {
+            return members
           }
           return []
         })
