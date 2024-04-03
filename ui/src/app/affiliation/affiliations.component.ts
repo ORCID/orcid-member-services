@@ -40,7 +40,6 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   importEventSubscriber: Subscription | undefined
   notificationSubscription: Subscription | undefined
   routeData: Subscription | undefined
-  links: any
   totalItems: any
   itemsPerPage: any
   page = 1

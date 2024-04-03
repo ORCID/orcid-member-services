@@ -17,6 +17,8 @@ import { ErrorComponent } from './error/error.component'
 import { FormsModule } from '@angular/forms'
 import { UserModule } from './user/user.module'
 import { AffiliationModule } from './affiliation/affiliation.module'
+import { MembersComponent } from './member/members.component'
+import { MemberModule } from './member/member.module'
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
@@ -24,6 +26,7 @@ import { AffiliationModule } from './affiliation/affiliation.module'
     BrowserModule,
     UserModule,
     AffiliationModule,
+    MemberModule,
     AccountModule,
     HomeModule,
     HttpClientModule,
