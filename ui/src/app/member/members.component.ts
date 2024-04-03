@@ -100,10 +100,6 @@ export class MembersComponent implements OnInit {
   }
 
   loadPage() {
-    this.transition()
-  }
-
-  transition() {
     this.router.navigate(['/members'], {
       queryParams: {
         page: this.page,
