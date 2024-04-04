@@ -33,6 +33,7 @@ import { AffiliationDeleteDialogComponent, AffiliationDeletePopupComponent } fro
     SendNotificationsDialogComponent,
     AffiliationDeleteDialogComponent,
     AffiliationDeletePopupComponent,
+    AffiliationDetailComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
