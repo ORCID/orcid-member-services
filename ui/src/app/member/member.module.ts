@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { MembersComponent } from './members.component'
+import { MemberUpdateComponent } from './member-update.component'
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { MembersComponent } from './members.component'
     FormsModule,
     ReactiveFormsModule,
   ],
-  declarations: [MembersComponent],
+  declarations: [MembersComponent, MemberUpdateComponent],
 })
 export class MemberModule {}

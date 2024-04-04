@@ -44,6 +44,7 @@ export function emailValidator(control: FormControl): { [key: string]: any } | n
 }
 const environment = window.location.hostname.replace('member-portal.', '').replace('.orcid.org', '')
 export const ORCID_BASE_URL = environment + '.orcid.org'
+export const BASE_URL = window.location.origin
 
 // eslint-disable-next-line
 export const EMAIL_REGEXP = /^([^@\s]|(".+"))+@([^@\s\."'\(\)\[\]\{\}\\/,:;]+\.)+([^@\s\."'\(\)\[\]\{\}\\/,:;]{2,})+$/

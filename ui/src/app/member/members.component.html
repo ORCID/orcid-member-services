@@ -5,7 +5,7 @@
       <button
         id="jh-create-entity"
         class="btn btn-primary float-right jh-create-entity create-ms-member ml-1"
-        [routerLink]="['/member/new']"
+        [routerLink]="['/members/new']"
       >
         <fa-icon [icon]="faPlus"></fa-icon>
         <span i18n="@@gatewayApp.msUserServiceMSMember.home.createLabel.string"> Add member </span>
@@ -13,7 +13,7 @@
       <button
         id="jh-upload-ms-member"
         class="btn btn-primary float-right jh-create-entity create-ms-member ml-1"
-        [routerLink]="['/', 'member', { outlets: { popup: 'import' } }]"
+        [routerLink]="['/', 'members', { outlets: { popup: 'import' } }]"
       >
         <fa-icon [icon]="faPlus"></fa-icon>
         <span i18n="@@gatewayApp.msUserServiceMSMember.home.uploadLabel.string"> Import members from CSV </span>

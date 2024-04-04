@@ -3,11 +3,11 @@ import { AbstractControl, FormBuilder, FormControl, ValidatorFn, Validators } fr
 import { ActivatedRoute, Router } from '@angular/router'
 import { Observable } from 'rxjs'
 import * as moment from 'moment'
-import { AccountService } from '../account'
 import { MemberService } from './service/member.service'
 import { AlertService } from '../shared/service/alert.service'
-import { AlertType, DATE_TIME_FORMAT, ORCID_BASE_URL } from '../app.constants'
+import { AlertType, BASE_URL, DATE_TIME_FORMAT, ORCID_BASE_URL } from '../app.constants'
 import { IMember, Member } from './model/member.model'
+import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
 
 function parentSalesforceIdValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
@@ -66,9 +66,11 @@ function clientIdValidator(): ValidatorFn {
 })
 export class MemberUpdateComponent implements OnInit {
   orcidBaseUrl: string = ORCID_BASE_URL
-  //baseUrl: string = BASE_URL
+  baseUrl: string = BASE_URL
   isSaving = false
   validation: any
+  faBan = faBan
+  faSave = faSave
 
   editForm = this.fb.group({
     id: new FormControl<string | null>(null),
@@ -85,7 +87,6 @@ export class MemberUpdateComponent implements OnInit {
   })
 
   constructor(
-    private accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected memberService: MemberService,
@@ -150,7 +151,7 @@ export class MemberUpdateComponent implements OnInit {
   }
 
   navigateToMembersList() {
-    this.router.navigate(['/member'])
+    this.router.navigate(['/members'])
   }
 
   save() {
