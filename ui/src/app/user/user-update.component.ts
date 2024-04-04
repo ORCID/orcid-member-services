@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core'
 import { HttpResponse } from '@angular/common/http'
-import { FormBuilder, Validators } from '@angular/forms'
+import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { EMPTY, Observable } from 'rxjs'
 import * as moment from 'moment'
@@ -32,19 +32,24 @@ export class UserUpdateComponent {
   validation: any
 
   editForm = this.fb.group({
-    id: [''],
-    email: ['', [Validators.required, Validators.email, Validators.maxLength(50), emailValidator]],
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    mainContact: [false],
-    assertionServiceEnabled: [false],
-    salesforceId: ['', Validators.required],
-    activated: [false],
-    isAdmin: [false],
-    createdBy: [''],
-    createdDate: [''],
-    lastModifiedBy: [''],
-    lastModifiedDate: [''],
+    id: new FormControl<string | null>(null),
+    email: new FormControl<string | null>(null, [
+      Validators.required,
+      Validators.email,
+      Validators.maxLength(50),
+      emailValidator,
+    ]),
+    firstName: new FormControl<string | null>(null, Validators.required),
+    lastName: new FormControl<string | null>(null, Validators.required),
+    mainContact: new FormControl<boolean | null>(null),
+    assertionServiceEnabled: new FormControl<boolean | null>(null),
+    salesforceId: new FormControl<string | null>(null, Validators.required),
+    activated: new FormControl<boolean | null>(null),
+    isAdmin: new FormControl<boolean | null>(null),
+    createdBy: new FormControl<string | null>(null),
+    createdDate: new FormControl<string | null>(null),
+    lastModifiedBy: new FormControl<string | null>(null),
+    lastModifiedDate: new FormControl<string | null>(null),
   })
 
   memberList = [] as IMember[]
