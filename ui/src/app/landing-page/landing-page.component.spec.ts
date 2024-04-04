@@ -55,7 +55,7 @@ describe('LandingPageComponent', () => {
     component.processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
     expect(component.oauthUrl).toBe(
-      'localhost.orcid.org/oauth/authorize?response_type=token&redirect_uri=/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
+      'https://localhost.orcid.org/oauth/authorize?response_type=token&redirect_uri=/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalled()
@@ -72,7 +72,7 @@ describe('LandingPageComponent', () => {
     component.processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
     expect(component.oauthUrl).toBe(
-      'localhost.orcid.org/oauth/authorize?response_type=token&redirect_uri=/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
+      'https://localhost.orcid.org/oauth/authorize?response_type=token&redirect_uri=/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
@@ -92,7 +92,7 @@ describe('LandingPageComponent', () => {
     component.processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
     expect(component.oauthUrl).toBe(
-      'localhost.orcid.org/oauth/authorize?response_type=token&redirect_uri=/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
+      'https://localhost.orcid.org/oauth/authorize?response_type=token&redirect_uri=/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
