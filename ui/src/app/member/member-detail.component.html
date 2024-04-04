@@ -46,8 +46,8 @@
                     <dd class="col-md-9">
                         {{member.createdDate}} <i><span i18n="@@global.by.string">by</span> {{member.createdBy}}</i>
                     </dd>
-                    <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.lastModifiedDate.string">Last Modified Date</dt>
-                    <dd class="col-md-9">
+                    <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.lastModifiedDate.string" *ngIf="member.lastModifiedDate">Last Modified Date</dt>
+                    <dd class="col-md-9" *ngIf="member.lastModifiedDate">
                         {{member.lastModifiedDate}} <i><span i18n="@@global.by.string">by</span> {{member.lastModifiedBy}}</i>
                     </dd>
                 </dl>
@@ -58,12 +58,12 @@
                         (click)="previousState()"
                         class="btn btn-outline-primary
                         ">
-                    <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span i18n="@@entity.action.back.string"> Back</span>
+                    <fa-icon [icon]="faArrowLeft"></fa-icon>&nbsp;<span i18n="@@entity.action.back.string"> Back</span>
                 </button>
                 <button type="button"
                         [routerLink]="['/member', member.id, 'edit']"
-                        class="btn btn-primary">
-                    <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span i18n="@@entity.action.edit.string"> Edit</span>
+                        class="btn btn-primary ml-1">
+                        <fa-icon [icon]="faPencilAlt"></fa-icon>&nbsp;<span i18n="@@entity.action.edit.string"> Edit</span>
                 </button>
             </div>
         </div>

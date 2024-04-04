@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { IMember } from './model/member.model'
-import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faCheckCircle, faPencilAlt, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { ActivatedRoute } from '@angular/router'
 
 @Component({
@@ -12,6 +12,8 @@ export class MemberDetailComponent implements OnInit {
   member: IMember | undefined
   faTimesCircle = faTimesCircle
   faCheckCircle = faCheckCircle
+  faArrowLeft = faArrowLeft
+  faPencilAlt = faPencilAlt
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
