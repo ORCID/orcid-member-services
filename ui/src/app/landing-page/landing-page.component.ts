@@ -90,7 +90,7 @@ export class LandingPageComponent implements OnInit {
                 if (error === 'access_denied') {
                   this.submitUserDenied(state_param)
                 } else {
-                  this.showErrorElement()
+                  this.showErrorElement(error)
                 }
               } else {
                 this.windowLocationService.updateWindowLocation(this.oauthUrl)
@@ -173,21 +173,21 @@ export class LandingPageComponent implements OnInit {
 
                   this.showSuccessElement()
                 },
-                error: () => {
-                  this.showErrorElement()
+                error: (err) => {
+                  this.showErrorElement(err)
                 },
               })
             },
-            error: () => {
-              this.showErrorElement()
+            error: (err) => {
+              this.showErrorElement(err)
             },
           })
         } else {
-          this.showErrorElement()
+          this.showErrorElement(response)
         }
       },
-      error: () => {
-        this.showErrorElement()
+      error: (err) => {
+        this.showErrorElement(err)
       },
     })
   }
@@ -197,8 +197,8 @@ export class LandingPageComponent implements OnInit {
       next: () => {
         this.showDeniedElement()
       },
-      error: () => {
-        this.showErrorElement()
+      error: (err) => {
+        this.showErrorElement(err)
       },
     })
   }
@@ -232,7 +232,8 @@ export class LandingPageComponent implements OnInit {
     this.showConnectionExistsDifferentUser = true
   }
 
-  showErrorElement(): void {
+  showErrorElement(err: any): void {
+    console.error(err)
     this.showDenied = false
     this.showError = true
     this.showSuccess = false
