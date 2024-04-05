@@ -31,7 +31,10 @@ function clientIdValidator(): ValidatorFn {
       const isConsortiumLead = control.parent?.get('isConsortiumLead')?.value
       const assertionServiceEnabled = control.parent?.get('assertionServiceEnabled')?.value
       if (!isConsortiumLead && clientIdValue === '') {
-        return Validators.required(control.parent?.get('clientId')!)
+        const clientIdControl = control.parent?.get('clientId')
+        if (clientIdControl) {
+          return Validators.required(clientIdControl)
+        }
       }
       if (isConsortiumLead && (!clientIdValue || clientIdValue === '')) {
         return null
