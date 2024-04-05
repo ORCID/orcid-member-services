@@ -284,7 +284,7 @@ export class UserUpdateComponent {
   private createFromForm(): IUser {
     return {
       ...new User(),
-      id: this.editForm.get(['id'])?.value !== '' ? this.editForm.get(['id'])?.value : undefined,
+      id: this.editForm.get(['id'])?.value ? this.editForm.get(['id'])?.value : undefined,
       email: this.editForm.get(['email'])?.value,
       firstName: this.editForm.get(['firstName'])?.value,
       lastName: this.editForm.get(['lastName'])?.value,
