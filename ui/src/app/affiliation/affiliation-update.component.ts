@@ -129,6 +129,8 @@ export class AffiliationUpdateComponent implements OnInit {
   ngbDate: any
   faBan = faBan
   faSave = faSave
+  maxChars4000 = ''
+  maxChars8000 = ''
 
   editForm = this.fb.group(
     {
@@ -174,6 +176,7 @@ export class AffiliationUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.localizeString()
     this.startYearsList = this.dateUtilService.getYearsList(0)
     this.endYearsList = this.dateUtilService.getYearsList(DEFAULT_LATEST_YEAR_INCREMENT)
     this.monthsList = this.dateUtilService.getMonthsList()
@@ -185,6 +188,13 @@ export class AffiliationUpdateComponent implements OnInit {
     })
 
     this.onChanges()
+  }
+
+  localizeString() {
+    let maxCharLimit = 4000
+    this.maxChars4000 = $localize`:@@entity.validation.maxlength.string:This field cannot be longer than ${maxCharLimit} characters.`
+    maxCharLimit = 8000
+    this.maxChars8000 = $localize`:@@entity.validation.maxlength.string:This field cannot be longer than ${maxCharLimit} characters.`
   }
 
   onChanges(): void {
