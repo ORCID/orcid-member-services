@@ -98,8 +98,8 @@ export class MemberUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.isSaving = false
-    this.activatedRoute.data.subscribe(({ msMember }) => {
-      this.updateForm(msMember)
+    this.activatedRoute.data.subscribe(({ member }) => {
+      this.updateForm(member)
     })
 
     this.onChanges()
@@ -174,7 +174,7 @@ export class MemberUpdateComponent implements OnInit {
   private createFromForm(): IMember {
     return {
       ...new Member(),
-      id: this.editForm.get(['id'])?.value,
+      id: this.editForm.get(['id'])?.value || undefined,
       clientId: this.editForm.get(['clientId'])?.value,
       clientName: this.editForm.get(['clientName'])?.value,
       salesforceId: this.editForm.get(['salesforceId'])?.value,

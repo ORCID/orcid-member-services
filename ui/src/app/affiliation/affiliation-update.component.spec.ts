@@ -3,11 +3,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { AffiliationUpdateComponent } from './affiliation-update.component'
 import { HttpClientModule } from '@angular/common/http'
 import { RouterTestingModule } from '@angular/router/testing'
-import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { LocalizePipe } from '../shared/pipe/localize'
 import { AffiliationService } from './service/affiliation.service'
 import { ReactiveFormsModule } from '@angular/forms'
-import { of } from 'rxjs'
 import { DateUtilService } from '../shared/service/date-util.service'
 
 describe('AffiliationUpdateComponent', () => {
@@ -33,7 +32,7 @@ describe('AffiliationUpdateComponent', () => {
         { provide: AffiliationService, useValue: affiliationServiceSpy },
         { provide: DateUtilService, useValue: dateUtilServiceSpy },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents()
     affiliationService = TestBed.inject(AffiliationService) as jasmine.SpyObj<AffiliationService>
     dateUtilService = TestBed.inject(DateUtilService) as jasmine.SpyObj<DateUtilService>

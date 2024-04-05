@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { BehaviorSubject, Observable, of } from 'rxjs'
+import { of } from 'rxjs'
 import { UserUpdateComponent } from './user-update.component'
 import { UserService } from './service/user.service'
 import { AccountService } from '../account'
@@ -13,7 +13,7 @@ import { Member } from '../member/model/member.model'
 import { UserValidation } from './model/user-validation.model'
 import { RouterTestingModule } from '@angular/router/testing'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
-import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 describe('UserUpdateComponent', () => {
   let component: UserUpdateComponent
@@ -54,7 +54,7 @@ describe('UserUpdateComponent', () => {
         { provide: AlertService, useValue: alertServiceSpy },
         { provide: ErrorService, useValue: {} },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents()
 
     fixture = TestBed.createComponent(UserUpdateComponent)

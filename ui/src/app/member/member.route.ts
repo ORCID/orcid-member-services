@@ -37,7 +37,7 @@ export const memberRoutes: Routes = [
     path: 'new',
     component: MemberUpdateComponent,
     resolve: {
-      msMember: MemberResolver,
+      member: MemberResolver,
     },
     data: {
       authorities: ['ROLE_ADMIN'],
@@ -49,7 +49,7 @@ export const memberRoutes: Routes = [
     path: ':id/edit',
     component: MemberUpdateComponent,
     resolve: {
-      msMember: MemberResolver,
+      member: MemberResolver,
     },
     data: {
       authorities: ['ROLE_ADMIN'],

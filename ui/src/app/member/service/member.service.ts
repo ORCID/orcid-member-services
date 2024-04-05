@@ -36,7 +36,7 @@ export class MemberService {
       .pipe(map((res: IMember) => this.convertDateFromServer(res)))
   }
 
-  validate(member: IMember): Observable<{ valid: boolean; errors: string[] }> {
+  validate(member: IMember): Observable<{ valid: boolean; errors?: string[] }> {
     const copy = this.convertDateFromClient(member)
     return this.http.post<{ valid: boolean; errors: string[] }>(`${this.resourceUrl}/members/validate`, copy)
   }
