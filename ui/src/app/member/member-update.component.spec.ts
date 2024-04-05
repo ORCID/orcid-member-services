@@ -76,4 +76,26 @@ describe('MemberUpdateComponent', () => {
     component.editForm.get('clientId')?.setValue('APP-0000000000000000')
     expect(component.editForm.get('clientId')?.valid).toBeTruthy()
   })
+
+  it('test consortium lead parent sfid validator', () => {
+    component.editForm.get('isConsortiumLead')?.setValue(true)
+    component.editForm.get('salesforceId')?.setValue('sfid')
+    component.editForm.get('parentSalesforceId')?.setValue('sfid2')
+    expect(component.editForm.get('parentSalesforceId')?.errors).toBeInstanceOf(Object)
+  })
+
+  it('test consortium lead parent sfid validator', () => {
+    component.editForm.get('isConsortiumLead')?.setValue(true)
+    component.editForm.get('salesforceId')?.setValue('sfid')
+    component.editForm.get('parentSalesforceId')?.setValue('sfid')
+
+    expect(component.editForm.get('parentSalesforceId')?.errors).toBeNull()
+  })
+
+  it('test consortium lead parent sfid validator', () => {
+    component.editForm.get('salesforceId')?.setValue('sfid')
+    component.editForm.get('parentSalesforceId')?.setValue('sfid2')
+    component.editForm.get('isConsortiumLead')?.setValue(false)
+    expect(component.editForm.get('parentSalesforceId')?.errors).toBeNull()
+  })
 })
