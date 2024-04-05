@@ -6,6 +6,7 @@ import { IMember, Member } from './model/member.model'
 import { MemberService } from './service/member.service'
 import { MembersComponent } from './members.component'
 import { MemberUpdateComponent } from './member-update.component'
+import { MemberDetailComponent } from './member-detail.component'
 
 export const MemberResolver: ResolveFn<Member | null> = (
   route: ActivatedRouteSnapshot,
@@ -48,6 +49,18 @@ export const memberRoutes: Routes = [
   {
     path: ':id/edit',
     component: MemberUpdateComponent,
+    resolve: {
+      member: MemberResolver,
+    },
+    data: {
+      authorities: ['ROLE_ADMIN'],
+      pageTitle: 'gatewayApp.msUserServiceMSMember.home.title.string',
+    },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':id/view',
+    component: MemberDetailComponent,
     resolve: {
       member: MemberResolver,
     },
