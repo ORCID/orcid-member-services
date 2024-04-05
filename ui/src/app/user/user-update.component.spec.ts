@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { of } from 'rxjs'
 import { UserUpdateComponent } from './user-update.component'
 import { UserService } from './service/user.service'
 import { AccountService } from '../account'
@@ -11,9 +10,10 @@ import { ErrorService } from '../error/service/error.service'
 import { IUser, User } from './model/user.model'
 import { Member } from '../member/model/member.model'
 import { UserValidation } from './model/user-validation.model'
-import { RouterTestingModule } from '@angular/router/testing'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { RouterTestingModule } from '@angular/router/testing'
+import { of } from 'rxjs'
 
 describe('UserUpdateComponent', () => {
   let component: UserUpdateComponent
