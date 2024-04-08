@@ -248,12 +248,8 @@
                 (editForm.get('departmentName')?.dirty || editForm.get('departmentName')?.touched)
               "
             >
-              <small
-                class="form-text text-danger"
-                *ngIf="(editForm.get('departmentName')?.errors)!['maxlength']"
-                i18n="@@entity.validation.maxlength.string"
-              >
-                This field cannot be longer than 4000 characters.
+              <small class="form-text text-danger" *ngIf="(editForm.get('departmentName')?.errors)!['maxlength']">
+                {{ maxChars4000 }}
               </small>
             </div>
           </div>
@@ -271,12 +267,8 @@
                 (editForm.get('roleTitle')?.dirty || editForm.get('roleTitle')?.touched)
               "
             >
-              <small
-                class="form-text text-danger"
-                *ngIf="(editForm.get('roleTitle')?.errors)!['maxlength']"
-                i18n="@@entity.validation.maxlength.string"
-              >
-                This field cannot be longer than 4000 characters.
+              <small class="form-text text-danger" *ngIf="(editForm.get('roleTitle')?.errors)!['maxlength']">
+                {{ maxChars4000 }}
               </small>
             </div>
           </div>
@@ -286,12 +278,8 @@
             >
             <input type="text" class="form-control" name="url" id="field_url" formControlName="url" />
             <div *ngIf="editForm.get('url')?.invalid && (editForm.get('url')?.dirty || editForm.get('url')?.touched)">
-              <small
-                class="form-text text-danger"
-                *ngIf="(editForm.get('url')?.errors)!['maxlength']"
-                i18n="@@entity.validation.maxlength.string"
-              >
-                This field cannot be longer than 8000 characters.
+              <small class="form-text text-danger" *ngIf="(editForm.get('url')?.errors)!['maxlength']">
+                {{ maxChars8000 }}
               </small>
             </div>
           </div>

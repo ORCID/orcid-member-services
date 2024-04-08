@@ -11,7 +11,7 @@ import { IUser, User } from './model/user.model'
 import { Member } from '../member/model/member.model'
 import { UserValidation } from './model/user-validation.model'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
-import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { RouterTestingModule } from '@angular/router/testing'
 import { of } from 'rxjs'
 
@@ -54,7 +54,7 @@ describe('UserUpdateComponent', () => {
         { provide: AlertService, useValue: alertServiceSpy },
         { provide: ErrorService, useValue: {} },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents()
 
     fixture = TestBed.createComponent(UserUpdateComponent)

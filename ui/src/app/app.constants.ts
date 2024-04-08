@@ -17,6 +17,8 @@ export enum AlertType {
   USER_CREATED = 'User created. Invite sent.',
   USER_UPDATED = 'User updated successfully',
   USER_DELETED = 'User deleted successfully',
+  MEMBER_CREATED = 'Member created',
+  MEMBER_UPDATED = 'Member updated successfully',
   NOTIFICATION_IN_PROGRESS = 'Notification in progress',
   AFFILIATION_CREATED = 'Affiliation created',
   AFFILIATION_UPDATED = 'Affiliation updated',
@@ -42,6 +44,7 @@ export function emailValidator(control: FormControl): { [key: string]: any } | n
 }
 const environment = window.location.hostname.replace('member-portal.', '').replace('.orcid.org', '')
 export const ORCID_BASE_URL = 'https://' + environment + '.orcid.org'
+export const BASE_URL = window.location.origin
 
 // eslint-disable-next-line
 export const EMAIL_REGEXP = /^([^@\s]|(".+"))+@([^@\s\."'\(\)\[\]\{\}\\/,:;]+\.)+([^@\s\."'\(\)\[\]\{\}\\/,:;]{2,})+$/

@@ -75,7 +75,7 @@ export class LandingPageComponent implements OnInit {
               '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
               state_param
 
-            this.incorrectDataMessage = $localize`:@@landingPage.success.ifYouFind:If you find that data added to your ORCID record is incorrect, please contact ${this.clientName}`
+            this.incorrectDataMessage = $localize`:@@landingPage.success.ifYouFind.string:If you find that data added to your ORCID record is incorrect, please contact ${this.clientName}`
             this.linkAlreadyUsedMessage = $localize`:@@landingPage.connectionExists.differentUser.string:This authorization link has already been used. Please contact ${this.clientName} for a new authorization link.`
             this.allowToUpdateRecordMessage = $localize`:@@landingPage.denied.grantAccess.string:Allow ${this.clientName} to update my ORCID record.`
             this.successfullyGrantedMessage = $localize`:@@landingPage.success.youHaveSuccessfully.string:You have successfully granted ${this.clientName} permission to update your ORCID record, and your record has been updated with affiliation information.`
