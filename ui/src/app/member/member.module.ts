@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { MembersComponent } from './members.component'
 import { MemberUpdateComponent } from './member-update.component'
 import { MemberDetailComponent } from './member-detail.component'
+import { MemberImportDialogComponent } from './member-import-dialog.component'
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { MemberDetailComponent } from './member-detail.component'
     FormsModule,
     ReactiveFormsModule,
   ],
-  declarations: [MembersComponent, MemberUpdateComponent, MemberDetailComponent],
+  declarations: [MembersComponent, MemberUpdateComponent, MemberDetailComponent, MemberImportDialogComponent],
 })
 export class MemberModule {}
