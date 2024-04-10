@@ -7,6 +7,7 @@ import { MemberService } from './service/member.service'
 import { MembersComponent } from './members.component'
 import { MemberUpdateComponent } from './member-update.component'
 import { MemberDetailComponent } from './member-detail.component'
+import { MemberImportPopupComponent } from './member-import-dialog.component'
 
 export const MemberResolver: ResolveFn<Member | null> = (
   route: ActivatedRouteSnapshot,
@@ -33,6 +34,18 @@ export const memberRoutes: Routes = [
       pageTitle: 'gatewayApp.msUserServiceMSMember.home.title.string',
     },
     canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'import',
+        component: MemberImportPopupComponent,
+        data: {
+          authorities: ['ROLE_ADMIN'],
+          pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.strings',
+        },
+        canActivate: [AuthGuard],
+        outlet: 'popup',
+      },
+    ],
   },
   {
     path: 'new',
