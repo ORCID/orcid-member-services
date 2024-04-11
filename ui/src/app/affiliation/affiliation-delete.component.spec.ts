@@ -45,18 +45,14 @@ describe('AffiliationDeleteComponent', () => {
     affiliationService.delete.and.returnValue(of(true))
     component.confirmDelete('id')
 
-    expect(eventService.broadcast).toHaveBeenCalledWith(
-      new Event(EventType.AFFILIATION_LIST_MODIFICATION, 'Deleted an affiliation')
-    )
+    expect(eventService.broadcast).toHaveBeenCalledWith(new Event(EventType.AFFILIATION_LIST_MODIFICATION))
   })
 
   it('should fail to delete the affiliation', () => {
     affiliationService.delete.and.returnValue(of(false))
     component.confirmDelete('id')
 
-    expect(eventService.broadcast).toHaveBeenCalledWith(
-      new Event(EventType.AFFILIATION_LIST_MODIFICATION, 'Failed to delete an affiliation')
-    )
+    expect(eventService.broadcast).toHaveBeenCalledWith(new Event(EventType.AFFILIATION_LIST_MODIFICATION))
   })
 
   it('should not call the assertion service without an id', () => {

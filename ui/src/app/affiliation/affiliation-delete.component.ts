@@ -45,12 +45,10 @@ export class AffiliationDeleteDialogComponent implements OnInit {
     if (id) {
       this.affiliationService.delete(id).subscribe((response) => {
         if (response) {
-          this.eventService.broadcast(new Event(EventType.AFFILIATION_LIST_MODIFICATION, 'Deleted an affiliation'))
+          this.eventService.broadcast(new Event(EventType.AFFILIATION_LIST_MODIFICATION))
           this.alertService.broadcast(AlertType.AFFILIATION_DELETED)
         } else {
-          this.eventService.broadcast(
-            new Event(EventType.AFFILIATION_LIST_MODIFICATION, 'Failed to delete an affiliation')
-          )
+          this.eventService.broadcast(new Event(EventType.AFFILIATION_LIST_MODIFICATION))
           this.alertService.broadcast(AlertType.AFFILIATION_DELETE_FAILURE)
         }
         this.activeModal.dismiss(true)

@@ -63,7 +63,7 @@ export class AffiliationImportDialogComponent {
   }
 
   close() {
-    this.eventService.broadcast(new Event(EventType.IMPORT_AFFILIATIONS, ''))
+    this.eventService.broadcast(new Event(EventType.IMPORT_AFFILIATIONS))
     this.activeModal.dismiss(true)
   }
 }

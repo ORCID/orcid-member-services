@@ -52,7 +52,7 @@ export class UserImportDialogComponent {
           this.csvErrors = JSON.parse(res)
           this.loading = false
           if (this.csvErrors.length === 0) {
-            this.eventService.broadcast(new Event(EventType.USER_LIST_MODIFIED, 'New user settings uploaded'))
+            this.eventService.broadcast(new Event(EventType.USER_LIST_MODIFIED))
             this.activeModal.dismiss(true)
           }
         }

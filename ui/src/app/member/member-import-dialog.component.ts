@@ -50,7 +50,7 @@ export class MemberImportDialogComponent {
           this.csvErrors = JSON.parse(res)
           this.loading = false
           if (this.csvErrors.length === 0) {
-            this.eventService.broadcast(new Event(EventType.MEMBER_LIST_MODIFICATION, 'New member uploaded'))
+            this.eventService.broadcast(new Event(EventType.MEMBER_LIST_MODIFICATION))
             this.activeModal.dismiss(true)
           }
         }
