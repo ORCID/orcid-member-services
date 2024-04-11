@@ -47,7 +47,7 @@ describe('UserDeleteComponent', () => {
     userServiceSpy.delete.and.returnValue(of(true))
     component.confirmDelete('id')
 
-    expect(eventServiceSpy.broadcast).toHaveBeenCalledWith(new Event(EventType.USER_LIST_MODIFIED, 'Deleted a user'))
+    expect(eventServiceSpy.broadcast).toHaveBeenCalledWith(new Event(EventType.USER_LIST_MODIFIED))
   })
 
   it('should not call the userservice without a provided id', () => {

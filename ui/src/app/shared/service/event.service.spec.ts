@@ -16,7 +16,6 @@ describe('EventService', () => {
   it('should broadcast events', () => {
     const event: Event = {
       type: EventType.LOG_IN_SUCCESS,
-      payload: 'Login successful',
     }
     let receivedEvent: Event | undefined
 
@@ -30,10 +29,9 @@ describe('EventService', () => {
   })
 
   it('should filter events by type', () => {
-    const event1: Event = { type: EventType.LOG_IN_SUCCESS, payload: 'data 1' }
+    const event1: Event = { type: EventType.LOG_IN_SUCCESS }
     const event2: Event = {
       type: EventType.AFFILIATION_CREATED,
-      payload: 'data 2',
     }
     let receivedEvent: Event | undefined
 
