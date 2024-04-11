@@ -38,7 +38,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     private ngZone: NgZone
   ) {
     this.sub = this.eventService.on(EventType.LOG_IN_SUCCESS).subscribe((e) => {
-      console.log(e.payload)
+      console.log('login success')
     })
   }
 
@@ -109,7 +109,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
       this.router.navigate([''])
     })
 
-    this.eventService.broadcast(new Event(EventType.LOG_IN_SUCCESS, 'logged in'))
+    this.eventService.broadcast(new Event(EventType.LOG_IN_SUCCESS))
 
     // previousState was set in the authExpiredInterceptor before being redirected to login modal.
     // since login is successful, go to stored previousState and clear previousState

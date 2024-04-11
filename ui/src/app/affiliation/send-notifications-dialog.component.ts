@@ -70,7 +70,6 @@ export class SendNotificationsDialogComponent implements OnInit {
   close() {
     this.eventService.broadcast({
       type: EventType.SEND_NOTIFICATIONS,
-      payload: 'Send notifications',
     })
     this.activeModal.dismiss(true)
   }
