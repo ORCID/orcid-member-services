@@ -28,6 +28,10 @@ const routes: Routes = [
     path: 'members',
     loadChildren: () => import('./member/member.module').then((m) => m.MemberModule),
   },
+  {
+    path: 'report',
+    loadChildren: () => import('./report/report.module').then((m) => m.ReportModule),
+  },
 ]
 
 @NgModule({
