@@ -218,8 +218,6 @@ export class AffiliationUpdateComponent implements OnInit {
 
   updateForm(assertion: IAffiliation) {
     if (assertion?.id) {
-      console.log(assertion, assertion.roleTitle || null)
-
       this.editForm.patchValue({
         id: assertion.id || null,
         email: assertion.email?.trim(),
