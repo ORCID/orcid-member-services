@@ -132,13 +132,13 @@ export class MemberUpdateComponent implements OnInit {
 
   updateForm(member: IMember) {
     this.editForm.patchValue({
-      id: member.id,
-      clientId: member.clientId,
-      clientName: member.clientName,
-      salesforceId: member.salesforceId,
-      parentSalesforceId: member.parentSalesforceId,
-      isConsortiumLead: member.isConsortiumLead,
-      assertionServiceEnabled: member.assertionServiceEnabled ? true : false,
+      id: member.id || null,
+      clientId: member.clientId || null,
+      clientName: member.clientName || null,
+      salesforceId: member.salesforceId || null,
+      parentSalesforceId: member.parentSalesforceId || null,
+      isConsortiumLead: member.isConsortiumLead || false,
+      assertionServiceEnabled: member.assertionServiceEnabled || false,
       createdBy: member.createdBy,
       createdDate: member.createdDate != null ? member.createdDate.format(DATE_TIME_FORMAT) : null,
       lastModifiedBy: member.lastModifiedBy,
