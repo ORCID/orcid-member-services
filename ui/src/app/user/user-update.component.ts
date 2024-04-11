@@ -232,7 +232,7 @@ export class UserUpdateComponent {
       this.userService.validate(userFromForm).subscribe((response) => {
         const data = response
         if (data.valid) {
-          if (userFromForm.id !== undefined) {
+          if (userFromForm.id !== null) {
             if (this.currentAccount.id === userFromForm.id) {
               // ownership change functions redirect to homepage instead of redirecting to users list
               // as users who lose org owner status shouldn't have access to the users list
@@ -284,19 +284,20 @@ export class UserUpdateComponent {
   private createFromForm(): IUser {
     return {
       ...new User(),
-      id: this.editForm.get(['id'])?.value ? this.editForm.get(['id'])?.value : undefined,
-      email: this.editForm.get(['email'])?.value,
-      firstName: this.editForm.get(['firstName'])?.value,
-      lastName: this.editForm.get(['lastName'])?.value,
-      mainContact: this.editForm.get(['mainContact'])?.value,
-      isAdmin: this.editForm.get(['isAdmin']) ? this.editForm.get(['isAdmin'])?.value : false,
-      salesforceId: this.editForm.get(['salesforceId'])?.value,
-      createdBy: this.editForm.get(['createdBy'])?.value,
+
+      id: this.editForm.get(['id'])?.value || null,
+      email: this.editForm.get(['email'])?.value || null,
+      firstName: this.editForm.get(['firstName'])?.value || null,
+      lastName: this.editForm.get(['lastName'])?.value || null,
+      mainContact: this.editForm.get(['mainContact'])?.value || false,
+      isAdmin: this.editForm.get(['isAdmin'])?.value || false,
+      salesforceId: this.editForm.get(['salesforceId'])?.value || null,
+      createdBy: this.editForm.get(['createdBy'])?.value || null,
       createdDate:
         this.editForm.get(['createdDate'])?.value != null
           ? moment(this.editForm.get(['createdDate'])?.value, DATE_TIME_FORMAT)
           : undefined,
-      lastModifiedBy: this.editForm.get(['lastModifiedBy'])?.value,
+      lastModifiedBy: this.editForm.get(['lastModifiedBy'])?.value || null,
       lastModifiedDate:
         this.editForm.get(['lastModifiedDate'])?.value != null
           ? moment(this.editForm.get(['lastModifiedDate'])?.value, DATE_TIME_FORMAT)
