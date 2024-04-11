@@ -55,7 +55,7 @@ function dateValidator() {
 
 function disambiguatedOrgIdValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
-    if (control.parent !== undefined) {
+    if (control.parent) {
       const disambiguationSourceValue = control.parent?.get('disambiguationSource')?.value
       if (disambiguationSourceValue === 'RINGGOLD') {
         const reg = new RegExp('^\\d+$')
@@ -200,14 +200,14 @@ export class AffiliationUpdateComponent implements OnInit {
   onChanges(): void {
     this.editForm.get('startMonth')?.valueChanges.subscribe((val) => {
       this.startDaysList = this.dateUtilService.getDaysList(
-        this.editForm.get('startYear')?.value || undefined,
-        this.editForm.get('startMonth')?.value || undefined
+        this.editForm.get('startYear')?.value || null,
+        this.editForm.get('startMonth')?.value || null
       )
     })
     this.editForm.get('endMonth')?.valueChanges.subscribe((val) => {
       this.endDaysList = this.dateUtilService.getDaysList(
-        this.editForm.get('endYear')?.value || undefined,
-        this.editForm.get('endMonth')?.value || undefined
+        this.editForm.get('endYear')?.value || null,
+        this.editForm.get('endMonth')?.value || null
       )
     })
     this.editForm.get('disambiguationSource')?.valueChanges.subscribe((value) => {
@@ -219,24 +219,24 @@ export class AffiliationUpdateComponent implements OnInit {
   updateForm(assertion: IAffiliation) {
     if (assertion?.id) {
       this.editForm.patchValue({
-        id: assertion.id || null,
+        id: assertion.id,
         email: assertion.email?.trim(),
         affiliationSection: assertion.affiliationSection,
-        departmentName: assertion.departmentName || null,
-        roleTitle: assertion.roleTitle || null,
-        url: assertion.url || null,
-        startYear: assertion.startYear || null,
+        departmentName: assertion.departmentName,
+        roleTitle: assertion.roleTitle,
+        url: assertion.url,
+        startYear: assertion.startYear,
         startMonth: parseInt(assertion.startMonth || '') || null,
-        startDay: assertion.startDay || null,
-        endYear: assertion.endYear || null,
+        startDay: assertion.startDay,
+        endYear: assertion.endYear,
         endMonth: parseInt(assertion.endMonth || '') || null,
-        endDay: assertion.endDay || null,
-        orgName: assertion.orgName || null,
-        orgCountry: assertion.orgCountry || null,
-        orgCity: assertion.orgCity || null,
-        orgRegion: assertion.orgRegion || null,
-        disambiguatedOrgId: assertion.disambiguatedOrgId || null,
-        disambiguationSource: assertion.disambiguationSource || null,
+        endDay: assertion.endDay,
+        orgName: assertion.orgName,
+        orgCountry: assertion.orgCountry,
+        orgCity: assertion.orgCity,
+        orgRegion: assertion.orgRegion,
+        disambiguatedOrgId: assertion.disambiguatedOrgId,
+        disambiguationSource: assertion.disambiguationSource,
         externalId: assertion.externalId,
         externalIdType: assertion.externalIdType,
         externalIdUrl: assertion.externalIdUrl,
@@ -283,27 +283,27 @@ export class AffiliationUpdateComponent implements OnInit {
   private createFromForm(): IAffiliation {
     return {
       ...new Affiliation(),
-      id: this.editForm.get(['id'])?.value,
-      email: this.editForm.get(['email'])?.value,
+      id: this.editForm.get(['id'])?.value || null,
+      email: this.editForm.get(['email'])?.value || null,
       affiliationSection: this.editForm.get(['affiliationSection'])?.value,
-      departmentName: this.editForm.get(['departmentName'])?.value,
-      roleTitle: this.editForm.get(['roleTitle'])?.value,
-      url: this.editForm.get(['url'])?.value,
+      departmentName: this.editForm.get(['departmentName'])?.value || null,
+      roleTitle: this.editForm.get(['roleTitle'])?.value || null,
+      url: this.editForm.get(['url'])?.value || null,
       startYear: this.editForm.get(['startYear'])?.value,
       startMonth: this.editForm.get(['startMonth'])?.value,
       startDay: this.editForm.get(['startDay'])?.value,
       endYear: this.editForm.get(['endYear'])?.value,
       endMonth: this.editForm.get(['endMonth'])?.value,
       endDay: this.editForm.get(['endDay'])?.value,
-      orgName: this.editForm.get(['orgName'])?.value,
+      orgName: this.editForm.get(['orgName'])?.value || null,
       orgCountry: this.editForm.get(['orgCountry'])?.value,
       orgCity: this.editForm.get(['orgCity'])?.value,
-      orgRegion: this.editForm.get(['orgRegion'])?.value,
+      orgRegion: this.editForm.get(['orgRegion'])?.value || null,
       disambiguatedOrgId: this.editForm.get(['disambiguatedOrgId'])?.value,
       disambiguationSource: this.editForm.get(['disambiguationSource'])?.value,
-      externalId: this.editForm.get(['externalId'])?.value,
-      externalIdType: this.editForm.get(['externalIdType'])?.value,
-      externalIdUrl: this.editForm.get(['externalIdUrl'])?.value,
+      externalId: this.editForm.get(['externalId'])?.value || null,
+      externalIdType: this.editForm.get(['externalIdType'])?.value || null,
+      externalIdUrl: this.editForm.get(['externalIdUrl'])?.value || null,
       putCode: this.editForm.get(['putCode'])?.value,
       created:
         this.editForm.get(['created'])?.value != null
