@@ -12,7 +12,7 @@ describe('ReportComponent', () => {
   let reportService: jasmine.SpyObj<ReportService>
 
   beforeEach(async () => {
-    let reportServiceSpy = jasmine.createSpyObj('ReportService', ['getDashboardInfo'])
+    const reportServiceSpy = jasmine.createSpyObj('ReportService', ['getDashboardInfo'])
 
     await TestBed.configureTestingModule({
       declarations: [ReportComponent],
