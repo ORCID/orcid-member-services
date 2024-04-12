@@ -11,7 +11,7 @@ import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
 
 function parentSalesforceIdValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
-    if (control.parent !== undefined && control.value !== undefined && isNaN(control.value)) {
+    if (control.parent && control.value && isNaN(control.value)) {
       const parentSalesforceId = control.value
       const isConsortiumLead = control.parent?.get('isConsortiumLead')?.value
       const salesforceId = control.parent?.get('salesforceId')?.value
@@ -26,7 +26,7 @@ function parentSalesforceIdValidator(): ValidatorFn {
 
 function clientIdValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
-    if (control.parent !== undefined && control.value !== undefined && isNaN(control.value)) {
+    if (control.parent && control.value && isNaN(control.value)) {
       const clientIdValue = control.value
       const isConsortiumLead = control.parent?.get('isConsortiumLead')?.value
       const assertionServiceEnabled = control.parent?.get('assertionServiceEnabled')?.value
@@ -49,12 +49,12 @@ function clientIdValidator(): ValidatorFn {
       }
       return { validClientId: false }
     }
-    if (control.parent !== undefined) {
+    if (control.parent) {
       if (control.parent?.get('isConsortiumLead')?.value) {
         return null
       }
     }
-    if (control.parent !== undefined) {
+    if (control.parent) {
       if (!control.parent?.get('assertionServiceEnabled')?.value) {
         return null
       }
@@ -132,13 +132,13 @@ export class MemberUpdateComponent implements OnInit {
 
   updateForm(member: IMember) {
     this.editForm.patchValue({
-      id: member.id || null,
-      clientId: member.clientId || null,
-      clientName: member.clientName || null,
-      salesforceId: member.salesforceId || null,
-      parentSalesforceId: member.parentSalesforceId || null,
-      isConsortiumLead: member.isConsortiumLead || false,
-      assertionServiceEnabled: member.assertionServiceEnabled || false,
+      id: member.id,
+      clientId: member.clientId,
+      clientName: member.clientName,
+      salesforceId: member.salesforceId,
+      parentSalesforceId: member.parentSalesforceId,
+      isConsortiumLead: member.isConsortiumLead,
+      assertionServiceEnabled: member.assertionServiceEnabled ? true : false,
       createdBy: member.createdBy,
       createdDate: member.createdDate != null ? member.createdDate.format(DATE_TIME_FORMAT) : null,
       lastModifiedBy: member.lastModifiedBy,
@@ -162,7 +162,7 @@ export class MemberUpdateComponent implements OnInit {
     const member = this.createFromForm()
     this.memberService.validate(member).subscribe((data) => {
       if (data.valid) {
-        if (member.id !== undefined) {
+        if (member.id !== null) {
           this.subscribeToUpdateResponse(this.memberService.update(member))
         } else {
           this.subscribeToSaveResponse(this.memberService.create(member))
@@ -177,23 +177,23 @@ export class MemberUpdateComponent implements OnInit {
   private createFromForm(): IMember {
     return {
       ...new Member(),
-      id: this.editForm.get(['id'])?.value || undefined,
-      clientId: this.editForm.get(['clientId'])?.value,
-      clientName: this.editForm.get(['clientName'])?.value,
-      salesforceId: this.editForm.get(['salesforceId'])?.value,
-      parentSalesforceId: this.editForm.get(['parentSalesforceId'])?.value,
-      isConsortiumLead: this.editForm.get(['isConsortiumLead'])?.value,
+      id: this.editForm.get(['id'])?.value || null,
+      clientId: this.editForm.get(['clientId'])?.value || null,
+      clientName: this.editForm.get(['clientName'])?.value || null,
+      salesforceId: this.editForm.get(['salesforceId'])?.value || null,
+      parentSalesforceId: this.editForm.get(['parentSalesforceId'])?.value || null,
+      isConsortiumLead: this.editForm.get(['isConsortiumLead'])?.value || false,
       assertionServiceEnabled: this.editForm.get(['assertionServiceEnabled'])?.value ? true : false,
       createdBy: this.editForm.get(['createdBy'])?.value,
       createdDate:
         this.editForm.get(['createdDate'])?.value != null
           ? moment(this.editForm.get(['createdDate'])?.value, DATE_TIME_FORMAT)
-          : undefined,
+          : null,
       lastModifiedBy: this.editForm.get(['lastModifiedBy'])?.value,
       lastModifiedDate:
         this.editForm.get(['lastModifiedDate'])?.value != null
           ? moment(this.editForm.get(['lastModifiedDate'])?.value, DATE_TIME_FORMAT)
-          : undefined,
+          : null,
     }
   }
 
