@@ -9,18 +9,18 @@ import { MemberUpdateComponent } from './member-update.component'
 import { MemberDetailComponent } from './member-detail.component'
 import { MemberImportPopupComponent } from './member-import-dialog.component'
 
-export const MemberResolver: ResolveFn<Member | null> = (
+export const MemberResolver: ResolveFn<Member> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
   memberService: MemberService = inject(MemberService)
-): Observable<IMember | null> => {
+): Observable<IMember> => {
   if (route.paramMap.get('id')) {
     return memberService.find(route.paramMap.get('id')!).pipe(
       filter<IMember>((member: IMember) => !!member),
       take(1)
     )
   } else {
-    return of(null)
+    return of(new Member())
   }
 }
 
