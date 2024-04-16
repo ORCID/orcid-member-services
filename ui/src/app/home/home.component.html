@@ -1,1 +1,13 @@
-<p>home works!</p>
+<div class="row h-100">
+    <div class="col-md-12">
+        <div class="h-100">
+            <div class="d-flex flex-column h-100">
+                <div class="alert alert-success mt-3">{{ loggedInMessage }}</div>
+                <div *ngIf="memberData || memberData === null" class="h-100 home-container mb-3">
+                    <router-outlet *ngIf="memberData"></router-outlet>
+                    <app-generic-landing *ngIf="memberData === null" class="p-4 d-flex"></app-generic-landing>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

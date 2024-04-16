@@ -27,7 +27,7 @@ describe('LoginComponent', () => {
         { provide: StateStorageService, useValue: stateStorageServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
       ],
-    }).compileComponents()
+    })
 
     fixture = TestBed.createComponent(LoginComponent)
     component = fixture.componentInstance
