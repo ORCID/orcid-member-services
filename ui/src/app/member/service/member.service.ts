@@ -271,7 +271,7 @@ export class MemberService {
   }
 
   private convertToConsortiumMembers(consortiumOpportunities: ISFRawConsortiumMemberData[]): SFConsortiumMemberData[] {
-    let consortiumMembers: SFConsortiumMemberData[] = []
+    const consortiumMembers: SFConsortiumMemberData[] = []
     for (const consortiumOpportunity of consortiumOpportunities) {
       consortiumMembers.push(this.convertToConsortiumMember(consortiumOpportunity))
     }
@@ -327,7 +327,7 @@ export class MemberService {
         GRID = [],
         Ringgold = [],
         Fundref = []
-      for (var i = 0; i < ids.length; i++) {
+      for (let i = 0; i < ids.length; i++) {
         if (ids[i].Identifier_Type__c === 'ROR') {
           ROR.push(ids[i].Name)
         }
