@@ -37,8 +37,8 @@ export class MemberService {
   public resourceUrl = '/services/memberservice/api'
   public managedMember = new BehaviorSubject<string | null>(null)
 
-  public memberData = new BehaviorSubject<ISFMemberData | undefined | null>(undefined)
-  public fetchingMemberDataState = new BehaviorSubject<boolean | undefined>(undefined)
+  private memberData = new BehaviorSubject<ISFMemberData | undefined | null>(undefined)
+  private fetchingMemberDataState = false
   public stopFetchingMemberData = new Subject()
   private countries = new BehaviorSubject<ISFCountry[] | undefined>(undefined)
 
@@ -133,38 +133,41 @@ export class MemberService {
     return null
   }
 
-  fetchMemberData(salesforceId: string) {
-    if (this.memberData.value && this.managedMember.value !== this.memberData.value.id) {
+  getMemberData(salesforceId: string, force?: boolean): Observable<ISFMemberData | undefined | null> {
+    if (force) {
       this.stopFetchingMemberData.next(true)
-      this.fetchingMemberDataState.next(false)
     }
 
-    if (!this.fetchingMemberDataState.value) {
-      if (!this.memberData.value || this.memberData.value.id !== this.managedMember.value) {
-        this.fetchingMemberDataState.next(true)
-        this.getSFMemberData(salesforceId)
-          .pipe(
-            switchMap((res) => {
-              this.memberData.next(res)
-              return combineLatest([
-                this.getMemberContacts(salesforceId),
-                this.getMemberOrgIds(salesforceId),
-                this.getConsortiaLeadName(res.consortiaLeadId!),
-                this.getIsConsortiumLead(salesforceId),
-              ])
-            }),
-            tap((res) => {
-              this.fetchingMemberDataState.next(false)
-            }),
-            catchError(() => {
-              this.memberData.next(null)
-              this.fetchingMemberDataState.next(false)
-              return EMPTY
-            })
-          )
-          .subscribe()
-      }
+    if (!this.memberData.value || this.memberData.value.id !== this.managedMember.value || force) {
+      this.fetchMemberData(salesforceId)
     }
+
+    return this.memberData.asObservable()
+  }
+
+  fetchMemberData(salesforceId: string) {
+    this.fetchingMemberDataState = true
+    this.getSFMemberData(salesforceId)
+      .pipe(
+        switchMap((res) => {
+          this.memberData.next(res)
+          return combineLatest([
+            this.getMemberContacts(salesforceId),
+            this.getMemberOrgIds(salesforceId),
+            this.getConsortiaLeadName(res.consortiaLeadId!),
+            this.getIsConsortiumLead(salesforceId),
+          ])
+        }),
+        tap((res) => {
+          this.fetchingMemberDataState = false
+        }),
+        catchError(() => {
+          this.memberData.next(null)
+          this.fetchingMemberDataState = false
+          return EMPTY
+        })
+      )
+      .subscribe()
   }
 
   getMemberContacts(salesforceId: string): Observable<SFMemberContact[]> {

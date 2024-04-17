@@ -3,8 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { HomeComponent } from './home.component'
 import { MemberService } from '../member/service/member.service'
 import { AccountService } from '../account'
-import { BehaviorSubject, of } from 'rxjs'
-import { ISFMemberData, SFMemberData } from '../member/model/salesforce-member-data.model'
+import { of } from 'rxjs'
 
 describe('HomeComponent', () => {
   let component: HomeComponent
@@ -14,7 +13,7 @@ describe('HomeComponent', () => {
 
   beforeEach(() => {
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
-    memberServiceSpy = jasmine.createSpyObj('MemberService', ['fetchMemberData'])
+    memberServiceSpy = jasmine.createSpyObj('MemberService', ['getMemberData'])
 
     TestBed.configureTestingModule({
       declarations: [HomeComponent],
@@ -30,34 +29,18 @@ describe('HomeComponent', () => {
     memberServiceSpy = TestBed.inject(MemberService) as jasmine.SpyObj<MemberService>
   })
 
-  it('should call get account data', () => {
-    accountServiceSpy.getAccountData.and.returnValue(
-      of({
-        activated: true,
-        authorities: ['test', 'test'],
-        email: 'email@email.com',
-        firstName: 'name',
-        langKey: 'en',
-        lastName: 'surname',
-        imageUrl: 'url',
-        salesforceId: 'sfid',
-        loggedAs: false,
-        loginAs: 'sfid',
-        mainContact: false,
-        mfaEnabled: false,
-      })
-    )
-
-    memberServiceSpy.memberData = new BehaviorSubject<ISFMemberData | undefined | null>(new SFMemberData())
+  it('should call getAccountData but not getMemberData', () => {
+    accountServiceSpy.getAccountData.and.returnValue(of(null))
 
     expect(component).toBeTruthy()
 
     component.ngOnInit()
 
     expect(accountServiceSpy.getAccountData).toHaveBeenCalled()
+    expect(memberServiceSpy.getMemberData).toHaveBeenCalledTimes(0)
   })
 
-  it('should call fetchMember data if account data is not null', () => {
+  it('should call getMemberData if account data is not null', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
         activated: true,
@@ -74,14 +57,13 @@ describe('HomeComponent', () => {
         mfaEnabled: false,
       })
     )
-
-    memberServiceSpy.memberData = new BehaviorSubject<ISFMemberData | undefined | null>(new SFMemberData())
+    memberServiceSpy.getMemberData.and.returnValue(of({}))
 
     expect(component).toBeTruthy()
 
     component.ngOnInit()
 
     expect(accountServiceSpy.getAccountData).toHaveBeenCalled()
-    expect(memberServiceSpy.fetchMemberData).toHaveBeenCalled()
+    expect(memberServiceSpy.getMemberData).toHaveBeenCalled()
   })
 })

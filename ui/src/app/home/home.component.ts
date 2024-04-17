@@ -28,12 +28,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.accountService.getAccountData().subscribe((account) => {
       this.account = account
       if (account) {
-        this.memberService.fetchMemberData(account.salesforceId)
+        this.memberDataSubscription = this.memberService.getMemberData(account.salesforceId).subscribe((data) => {
+          this.memberData = data
+        })
         this.loggedInMessage = $localize`:@@home.loggedIn.message.string:You are logged in as user ${account.email}`
       }
-    })
-    this.memberDataSubscription = this.memberService.memberData.subscribe((data) => {
-      this.memberData = data
     })
   }
 
