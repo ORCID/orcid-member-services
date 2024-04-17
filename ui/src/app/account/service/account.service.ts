@@ -21,14 +21,12 @@ export class AccountService {
     private languageService: LanguageService,
     private sessionStorage: SessionStorageService,
     private router: Router,
-    private http: HttpClient
-  ) // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
-  //private memberService: MSMemberService
+    private http: HttpClient // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
+  ) //private memberService: MSMemberService
   {}
 
   private fetchAccountData() {
-    console.log('Fetching account data from the back end')
-
+    this.isFetchingAccountData = true
     return this.http
       .get<IAccount>('/services/userservice/api/account', {
         observe: 'response',
@@ -139,7 +137,6 @@ export class AccountService {
       this.stopFetchingAccountData.next(true)
     }
     if ((this.accountData.value === undefined && !this.isFetchingAccountData) || force) {
-      this.isFetchingAccountData = true
       this.fetchAccountData().subscribe()
     }
 
