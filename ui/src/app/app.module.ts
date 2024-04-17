@@ -15,20 +15,13 @@ import { HeaderInterceptor } from './shared/interceptor/header.interceptor'
 import { ErrorService } from './error/service/error.service'
 import { ErrorComponent } from './error/error.component'
 import { FormsModule } from '@angular/forms'
-import { UserModule } from './user/user.module'
-import { AffiliationModule } from './affiliation/affiliation.module'
-import { MembersComponent } from './member/members.component'
-import { MemberModule } from './member/member.module'
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
   imports: [
     BrowserModule,
-    UserModule,
-    AffiliationModule,
-    MemberModule,
-    AccountModule,
     HomeModule,
+    AccountModule,
     HttpClientModule,
     AppRoutingModule,
     NgxWebstorageModule.forRoot(),
