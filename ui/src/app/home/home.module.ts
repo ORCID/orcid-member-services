@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { routes } from './home.route'
 import { HomeComponent } from './home.component'
-import { GenericLandingComponent } from './generic-landing.component'
+import { MemberInfoComponent } from './member-info/member-info.component'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes)],
-  declarations: [HomeComponent, GenericLandingComponent],
+  imports: [CommonModule, RouterModule.forChild(routes), FontAwesomeModule],
+  declarations: [HomeComponent, MemberInfoComponent],
 })
 export class HomeModule {}

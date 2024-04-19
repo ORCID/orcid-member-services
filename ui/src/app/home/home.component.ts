@@ -28,9 +28,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.accountService.getAccountData().subscribe((account) => {
       this.account = account
       if (account) {
-        this.memberDataSubscription = this.memberService.getMemberData(account.salesforceId).subscribe((data) => {
+        /* this.memberDataSubscription = this.memberService.getMemberData(account.salesforceId).subscribe((data) => {
           this.memberData = data
-        })
+        }) */
         this.loggedInMessage = $localize`:@@home.loggedIn.message.string:You are logged in as user ${account.email}`
       }
     })
@@ -40,11 +40,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.authenticationStateSubscription) {
       this.authenticationStateSubscription.unsubscribe()
     }
-    if (this.memberDataSubscription) {
+    /*     if (this.memberDataSubscription) {
       this.memberDataSubscription.unsubscribe()
-    }
-    if (this.manageMemberSubscription) {
+    } */
+    /*   if (this.manageMemberSubscription) {
       this.manageMemberSubscription.unsubscribe()
-    }
+    } */
   }
 }
