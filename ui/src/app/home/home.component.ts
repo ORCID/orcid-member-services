@@ -13,38 +13,24 @@ import { IAccount } from '../account/model/account.model'
 export class HomeComponent implements OnInit, OnDestroy {
   account: IAccount | undefined | null
   memberData: ISFMemberData | undefined | null
-  authenticationStateSubscription: Subscription | undefined
-  memberDataSubscription: Subscription | undefined
-  manageMemberSubscription: Subscription | undefined
   salesforceId: string | undefined
   loggedInMessage: string | undefined
+  accountServiceSubscription: Subscription | undefined
 
-  constructor(
-    private accountService: AccountService,
-    private memberService: MemberService
-  ) {}
+  constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-    this.accountService.getAccountData().subscribe((account) => {
+    this.accountServiceSubscription = this.accountService.getAccountData().subscribe((account) => {
       this.account = account
       if (account) {
-        this.memberDataSubscription = this.memberService.getMemberData(account.salesforceId).subscribe((data) => {
-          this.memberData = data
-        })
         this.loggedInMessage = $localize`:@@home.loggedIn.message.string:You are logged in as user ${account.email}`
       }
     })
   }
 
-  ngOnDestroy() {
-    if (this.authenticationStateSubscription) {
-      this.authenticationStateSubscription.unsubscribe()
-    }
-    if (this.memberDataSubscription) {
-      this.memberDataSubscription.unsubscribe()
-    }
-    if (this.manageMemberSubscription) {
-      this.manageMemberSubscription.unsubscribe()
+  ngOnDestroy(): void {
+    if (this.accountServiceSubscription) {
+      this.accountServiceSubscription.unsubscribe()
     }
   }
 }

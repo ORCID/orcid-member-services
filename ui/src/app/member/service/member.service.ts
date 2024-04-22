@@ -133,19 +133,19 @@ export class MemberService {
     return null
   }
 
-  getMemberData(salesforceId: string, force?: boolean): Observable<ISFMemberData | undefined | null> {
+  getMemberData(salesforceId?: string, force?: boolean): Observable<ISFMemberData | undefined | null> {
     if (force) {
       this.stopFetchingMemberData.next(true)
     }
 
-    if (!this.memberData.value || this.memberData.value.id !== this.managedMember.value || force) {
+    if (salesforceId && (!this.memberData.value || this.memberData.value.id !== salesforceId || force)) {
       this.fetchMemberData(salesforceId)
     }
 
     return this.memberData.asObservable()
   }
 
-  fetchMemberData(salesforceId: string) {
+  private fetchMemberData(salesforceId: string) {
     this.fetchingMemberDataState = true
     this.getSFMemberData(salesforceId)
       .pipe(
