@@ -1,9 +1,8 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core'
 import { IUser } from './model/user.model'
-import { Subscription, filter } from 'rxjs'
+import { Subscription } from 'rxjs'
 import { UserService } from './service/user.service'
-import { HttpErrorResponse } from '@angular/common/http'
-import { IUserPage, UserPage } from './model/user-page.model'
+import { IUserPage } from './model/user-page.model'
 import {
   faCheckCircle,
   faPencilAlt,

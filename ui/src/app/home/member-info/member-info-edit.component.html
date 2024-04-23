@@ -89,19 +89,19 @@
           <label
             class="wide-text font-size-12 font-weight-bold"
             [ngClass]="{ 'text-danger': editForm.get('street')?.invalid && editForm.get('street')?.touched }"
-            >Street</label
+            ><input
+              type="text"
+              class="form-control wide-text-25 w-75"
+              name="street"
+              formControlName="street"
+              (input)="editForm.get('street')?.markAsUntouched()"
+              [ngClass]="{
+                'text-danger': editForm.get('street')?.invalid && editForm.get('street')?.touched,
+                'input-field-default-border': !editForm.get('street')?.dirty || !editForm.get('street')?.touched
+              }"
+            />Street</label
           >
-          <input
-            type="text"
-            class="form-control wide-text-25 w-75"
-            name="street"
-            formControlName="street"
-            (input)="editForm.get('street')?.markAsUntouched()"
-            [ngClass]="{
-              'text-danger': editForm.get('street')?.invalid && editForm.get('street')?.touched,
-              'input-field-default-border': !editForm.get('street')?.dirty || !editForm.get('street')?.touched
-            }"
-          />
+
           <div *ngIf="editForm.get('street')?.invalid && editForm.get('street')?.touched">
             <small
               class="wide-text font-size-12 form-text text-danger"
@@ -115,19 +115,19 @@
           <label
             class="wide-text font-size-12 font-weight-bold"
             [ngClass]="{ 'text-danger': editForm.get('city')?.invalid && editForm.get('city')?.touched }"
-            >City</label
+            ><input
+              type="text"
+              class="form-control wide-text-25 w-75"
+              name="city"
+              formControlName="city"
+              (input)="editForm.get('city')?.markAsUntouched()"
+              [ngClass]="{
+                'text-danger': editForm.get('city')?.invalid && editForm.get('city')?.touched,
+                'input-field-default-border': !editForm.get('city')?.dirty || !editForm.get('city')?.touched
+              }"
+            />City</label
           >
-          <input
-            type="text"
-            class="form-control wide-text-25 w-75"
-            name="city"
-            formControlName="city"
-            (input)="editForm.get('city')?.markAsUntouched()"
-            [ngClass]="{
-              'text-danger': editForm.get('city')?.invalid && editForm.get('city')?.touched,
-              'input-field-default-border': !editForm.get('city')?.dirty || !editForm.get('city')?.touched
-            }"
-          />
+
           <div *ngIf="editForm.get('city')?.invalid && editForm.get('city')?.touched">
             <small
               class="wide-text font-size-12 form-text text-danger"
@@ -143,53 +143,51 @@
             [ngClass]="{
               'text-danger': editForm.get('state')?.invalid && editForm.get('state')?.touched
             }"
+            ><select
+              class="form-control font-size-14 wide-text-25 w-75"
+              name="state"
+              formControlName="state"
+              [ngClass]="{
+                'text-danger': editForm.get('state')?.invalid && editForm.get('state')?.dirty,
+                'input-field-default-border': !editForm.get('state')?.dirty
+              }"
+            >
+              <option selected [value]="null">-- No state or province --</option>
+              <option *ngFor="let state of states" [value]="state.name" class="form-field-text-color-default">
+                {{ state.name }}
+              </option></select
             >State/Province</label
           >
-          <select
-            class="form-control font-size-14 wide-text-25 w-75"
-            name="state"
-            formControlName="state"
-            [ngClass]="{
-              'text-danger': editForm.get('state')?.invalid && editForm.get('state')?.dirty,
-              'input-field-default-border': !editForm.get('state')?.dirty
-            }"
-          >
-            <option selected [value]="null">-- No state or province --</option>
-            <option *ngFor="let state of states" [value]="state.name" class="form-field-text-color-default">
-              {{ state.name }}
-            </option>
-          </select>
         </div>
         <div class="form-group mb-20">
           <label
             class="wide-text font-size-12 font-weight-bold"
             [ngClass]="{ 'text-danger': editForm.get('country')?.invalid && editForm.get('country')?.dirty }"
-            >Country</label
+            ><input
+              readonly
+              class="form-control font-size-14 wide-text-25 w-75"
+              name="country"
+              formControlName="country"
+            />Country</label
           >
-          <input
-            readonly
-            class="form-control font-size-14 wide-text-25 w-75"
-            name="country"
-            formControlName="country"
-          />
         </div>
         <div class="form-group mb-30">
           <label
             class="wide-text font-size-12 font-weight-bold"
             [ngClass]="{ 'text-danger': editForm.get('postcode')?.invalid && editForm.get('postcode')?.touched }"
-            >ZIP/Postcode</label
+            ><input
+              type="text"
+              class="form-control wide-text-25 postcode-input-field"
+              name="postcode"
+              formControlName="postcode"
+              (input)="editForm.get('postcode')?.markAsUntouched()"
+              [ngClass]="{
+                'text-danger': editForm.get('postcode')?.invalid && editForm.get('postcode')?.touched,
+                'input-field-default-border': !editForm.get('postcode')?.dirty || !editForm.get('postcode')?.touched
+              }"
+            />ZIP/Postcode</label
           >
-          <input
-            type="text"
-            class="form-control wide-text-25 postcode-input-field"
-            name="postcode"
-            formControlName="postcode"
-            (input)="editForm.get('postcode')?.markAsUntouched()"
-            [ngClass]="{
-              'text-danger': editForm.get('postcode')?.invalid && editForm.get('postcode')?.touched,
-              'input-field-default-border': !editForm.get('postcode')?.dirty || !editForm.get('postcode')?.touched
-            }"
-          />
+
           <div *ngIf="editForm.get('postcode')?.invalid && editForm.get('postcode')?.touched">
             <small
               class="wide-text font-size-12 form-text text-danger"
@@ -254,7 +252,7 @@
         <h2 class="wide-text font-size-24">Public details</h2>
         <div class="wide-text-25 mb-20 font-size-14 line-height-150">
           Organization information to be displayed publicly, such as on the
-          <a href="{{ MEMBER_LIST_URL }} " target="_blank">ORCID member list</a>
+          <a href="{{ ORCID_BASE_URL }}/members" target="_blank">ORCID member list</a>
         </div>
         <div class="mb-5">
           <div class="form-group w-75">
@@ -266,22 +264,23 @@
                   editForm.get('publicName')?.touched &&
                   editForm.get('publicName')?.dirty
               }"
-              >Public display name</label
+              ><input
+                type="text"
+                class="form-control"
+                name="publicName"
+                (input)="editForm.get('publicName')?.markAsUntouched()"
+                formControlName="publicName"
+                [ngClass]="{
+                  'text-danger':
+                    editForm.get('publicName')?.invalid &&
+                    editForm.get('publicName')?.touched &&
+                    editForm.get('publicName')?.dirty,
+                  'input-field-default-border':
+                    !editForm.get('publicName')?.touched || !editForm.get('publicName')?.dirty
+                }"
+              />Public display name</label
             >
-            <input
-              type="text"
-              class="form-control"
-              name="publicName"
-              (input)="editForm.get('publicName')?.markAsUntouched()"
-              formControlName="publicName"
-              [ngClass]="{
-                'text-danger':
-                  editForm.get('publicName')?.invalid &&
-                  editForm.get('publicName')?.touched &&
-                  editForm.get('publicName')?.dirty,
-                'input-field-default-border': !editForm.get('publicName')?.touched || !editForm.get('publicName')?.dirty
-              }"
-            />
+
             <div *ngIf="editForm.get('publicName')?.invalid">
               <small
                 class="wide-text font-size-12 form-text text-danger"
@@ -300,16 +299,20 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="wide-text font-size-12">Organization description</label>
-            <quill-editor
-              class="d-block w-75 description"
-              formControlName="description"
-              format="html"
-              [styles]="quillStyles"
-              [modules]="quillConfig"
-              [placeholder]="'A brief description of the organization'"
+            <!-- eslint-disable-next-line -->
+            <label class="wide-text font-size-12"
+              ><quill-editor
+                class="d-block w-75 description"
+                formControlName="description"
+                format="html"
+                [styles]="quillStyles"
+                [modules]="quillConfig"
+                [placeholder]="'A brief description of the organization'"
+              >
+              </quill-editor
+              >Organization description</label
             >
-            </quill-editor>
+
             <div *ngIf="editForm.get('description')?.invalid">
               <small
                 class="wide-text font-size-12 form-text text-danger"
@@ -326,22 +329,22 @@
                 'text-danger':
                   editForm.get('website')?.invalid && editForm.get('website')?.touched && editForm.get('website')?.dirty
               }"
-              >Website</label
+              ><input
+                type="text"
+                class="form-control"
+                name="website"
+                (input)="editForm.get('website')?.markAsUntouched()"
+                formControlName="website"
+                [ngClass]="{
+                  'text-danger':
+                    editForm.get('website')?.invalid &&
+                    editForm.get('website')?.touched &&
+                    editForm.get('website')?.dirty,
+                  'input-field-default-border': !editForm.get('website')?.touched || !editForm.get('website')?.dirty
+                }"
+              />Website</label
             >
-            <input
-              type="text"
-              class="form-control"
-              name="website"
-              (input)="editForm.get('website')?.markAsUntouched()"
-              formControlName="website"
-              [ngClass]="{
-                'text-danger':
-                  editForm.get('website')?.invalid &&
-                  editForm.get('website')?.touched &&
-                  editForm.get('website')?.dirty,
-                'input-field-default-border': !editForm.get('website')?.touched || !editForm.get('website')?.dirty
-              }"
-            />
+
             <ng-template #validWebsite>
               <small class="wide-text font-size-12 color-gray"
                 >Links should be in the full URL format e.g. http://www.website.com</small
@@ -365,19 +368,19 @@
             <label
               [ngClass]="{ 'text-danger': editForm.get('email')?.invalid && editForm.get('email')?.touched }"
               class="wide-text font-size-12"
-              >Email</label
+              ><input
+                type="text"
+                class="form-control"
+                name="email"
+                (input)="editForm.get('email')?.markAsUntouched()"
+                formControlName="email"
+                [ngClass]="{
+                  'text-danger': editForm.get('email')?.invalid && editForm.get('email')?.touched,
+                  'input-field-default-border': !editForm.get('email')?.touched
+                }"
+              />Email</label
             >
-            <input
-              type="text"
-              class="form-control"
-              name="email"
-              (input)="editForm.get('email')?.markAsUntouched()"
-              formControlName="email"
-              [ngClass]="{
-                'text-danger': editForm.get('email')?.invalid && editForm.get('email')?.touched,
-                'input-field-default-border': !editForm.get('email')?.touched
-              }"
-            />
+
             <ng-template #validEmail>
               <small class="wide-text font-size-12 color-gray"
                 >Emails should be in the standard format e.g. contactus&#64;website.com</small
@@ -420,7 +423,7 @@
             <div class="w-66 line-height-150">{{ orgId.value }}</div>
             <div class="w-33 line-height-150">{{ orgId.key }}</div>
           </li>
-          <hr *ngIf="!(i == objectKeys(memberData.orgIds).length - 1)" class="mb-0 mt-0" />
+          <hr *ngIf="!(i === objectKeys(memberData.orgIds).length - 1)" class="mb-0 mt-0" />
         </ul>
       </div>
       <div *ngIf="memberData.isConsortiumLead">

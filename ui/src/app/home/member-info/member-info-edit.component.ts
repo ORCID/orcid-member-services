@@ -6,7 +6,7 @@ import { EMPTY, Subject, combineLatest } from 'rxjs'
 import { switchMap, take, takeUntil } from 'rxjs/operators'
 import { AccountService } from 'src/app/account'
 import { IAccount } from 'src/app/account/model/account.model'
-import { EMAIL_REGEXP, URL_REGEXP } from 'src/app/app.constants'
+import { EMAIL_REGEXP, URL_REGEXP, ORCID_BASE_URL } from 'src/app/app.constants'
 import { ISFAddress } from 'src/app/member/model/salesforce-address.model'
 import { ISFCountry } from 'src/app/member/model/salesforce-country.model'
 import { ISFState } from 'src/app/member/model/salesforce-country.model copy'
@@ -27,8 +27,8 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   memberData: ISFMemberData | undefined | null
   objectKeys = Object.keys
   orgIdsTransformed: KeyValue<string, string[]>[] = []
-  // TODO move to constants
-  MEMBER_LIST_URL: string = 'https://orcid.org/members'
+  ORCID_BASE_URL = ORCID_BASE_URL
+
   isSaving = false
   invalidForm: boolean | undefined
   managedMember: string | undefined
