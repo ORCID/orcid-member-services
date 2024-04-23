@@ -165,8 +165,8 @@ export class MSMemberService {
     return this.http.delete<any>(`${this.resourceUrl}/members/${id}`, { observe: 'response' });
   }
 
-  updateMemberDetails(memberDetails: ISFMemberUpdate, salesforceId: string): Observable<HttpResponse<any>> {
-    return this.http.put(`${this.resourceUrl}/members/${salesforceId}/member-details`, memberDetails, { observe: 'response' });
+  updateMemberDetails(memberDetails: ISFMemberUpdate, salesforceId: string): Observable<ISFMemberUpdate> {
+    return this.http.put(`${this.resourceUrl}/members/${salesforceId}/member-details`, memberDetails);
   }
 
   getConsortiaLeadName(consortiaLeadId: string): Observable<EntityResponseType> {

@@ -29,6 +29,7 @@ import {
 import { ISFCountry } from '../model/salesforce-country.model'
 import { ISFRawMemberContact, ISFRawMemberContacts, SFMemberContact } from '../model/salesforce-member-contact.model'
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from '../model/salesforce-member-org-id.model'
+import { ISFMemberUpdate } from '../model/salesforce-member-update.model'
 
 @Injectable({ providedIn: 'root' })
 export class MemberService {
@@ -145,14 +146,18 @@ export class MemberService {
     return this.memberData.asObservable()
   }
 
+  setMemberData(memberData: ISFMemberData | undefined | null) {
+    this.memberData.next(memberData)
+  }
+
   private fetchMemberData(salesforceId: string) {
     this.fetchingMemberDataState = true
-    this.getSFMemberData(salesforceId)
+    this.fetchSFMemberData(salesforceId)
       .pipe(
         switchMap((res) => {
           this.memberData.next(res)
           return combineLatest([
-            this.getMemberContacts(salesforceId),
+            this.fetchMemberContacts(salesforceId),
             this.getMemberOrgIds(salesforceId),
             this.getConsortiaLeadName(res.consortiaLeadId!),
             this.getIsConsortiumLead(salesforceId),
@@ -170,7 +175,33 @@ export class MemberService {
       .subscribe()
   }
 
-  getMemberContacts(salesforceId: string): Observable<SFMemberContact[]> {
+  getCountries(): Observable<ISFCountry[] | undefined> {
+    if (!this.countries.value) {
+      return this.fetchCountries()
+    }
+    return this.countries.asObservable()
+  }
+
+  fetchCountries(): Observable<ISFCountry[]> {
+    return this.http.get<ISFCountry[]>(`${this.resourceUrl}/countries`).pipe(
+      catchError((error) => {
+        return of('An error occurred:', error)
+      }),
+      tap((res: ISFCountry[]) => {
+        if (res) {
+          this.countries.next(res)
+        } else {
+          console.error('Request failed:', res)
+        }
+      })
+    )
+  }
+
+  updateMemberDetails(memberDetails: ISFMemberUpdate, salesforceId: string): Observable<ISFMemberUpdate> {
+    return this.http.put(`${this.resourceUrl}/members/${salesforceId}/member-details`, memberDetails)
+  }
+
+  private fetchMemberContacts(salesforceId: string): Observable<SFMemberContact[]> {
     return this.http
       .get<ISFRawMemberContacts>(`${this.resourceUrl}/members/${salesforceId}/member-contacts`, { observe: 'response' })
       .pipe(
@@ -183,7 +214,7 @@ export class MemberService {
       )
   }
 
-  getSFMemberData(salesforceId: string): Observable<SFMemberData> {
+  private fetchSFMemberData(salesforceId: string): Observable<SFMemberData> {
     return this.http.get<ISFRawMemberData>(`${this.resourceUrl}/members/${salesforceId}/member-details`).pipe(
       catchError((err) => {
         return of(err)
