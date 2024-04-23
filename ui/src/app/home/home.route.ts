@@ -54,6 +54,15 @@ export const routes: Routes = [
         },
         canActivate: [ManageMemberGuard],
       },
+      {
+        path: 'manage/:id',
+        component: MemberInfoComponent,
+        data: {
+          authorities: ['ROLE_USER', 'ROLE_CONSORTIUM_LEAD'],
+          pageTitle: 'home.title.string',
+        },
+        canActivate: [AuthGuard],
+      },
     ],
   },
 ]

@@ -1,4 +1,4 @@
-<div *ngIf="memberData || memberData === null" class="h-100 home-container mb-3">
+<div *ngIf="memberData || memberData === null" class="h-100 home-container">
   <!-- UNABLE TO RETRIEVE MEMBER DATA -->
   <div *ngIf="memberData === null" class="p-4 d-flex">
     <div>
@@ -24,7 +24,7 @@
       <div class="logo-container mb-40">
         <img
           src="{{ memberData.logoUrl }}"
-          onerror="this.src='../content/images/member-logo-placeholder.svg'"
+          onerror="this.src='./content/images/member-logo-placeholder.svg'"
           alt="Member logo"
         />
       </div>
