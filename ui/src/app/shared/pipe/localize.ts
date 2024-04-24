@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core'
-import { AlertType } from 'src/app/app.constants'
+import { AlertMessage } from 'src/app/app.constants'
 
 @Pipe({
   name: 'localize',
@@ -7,29 +7,29 @@ import { AlertType } from 'src/app/app.constants'
 export class LocalizePipe implements PipeTransform {
   transform(value: string, ...args: any[]): any {
     switch (value) {
-      case AlertType.SEND_ACTIVATION_SUCCESS:
+      case AlertMessage.SEND_ACTIVATION_SUCCESS:
         return $localize`:@@gatewayApp.msUserServiceMSUser.sendActivate.success.string:Invite sent.`
-      case AlertType.SEND_ACTIVATION_FAILURE:
+      case AlertMessage.SEND_ACTIVATION_FAILURE:
         return $localize`:@@gatewayApp.msUserServiceMSUser.sendActivate.error.string:Invite email couldn't be sent.`
-      case AlertType.USER_CREATED:
+      case AlertMessage.USER_CREATED:
         return $localize`:@@userServiceApp.user.created.string:User created. Invite sent.`
-      case AlertType.USER_UPDATED:
+      case AlertMessage.USER_UPDATED:
         return $localize`:@@userServiceApp.user.updated.string:User updated successfully`
-      case AlertType.USER_DELETED:
+      case AlertMessage.USER_DELETED:
         return $localize`:@@userServiceApp.user.deleted.string:User deleted successfully`
-      case AlertType.MEMBER_CREATED:
+      case AlertMessage.MEMBER_CREATED:
         return $localize`:@@memberServiceApp.member.created.string:Member created`
-      case AlertType.MEMBER_UPDATED:
+      case AlertMessage.MEMBER_UPDATED:
         return $localize`:@@memberServiceApp.member.updated.string:Member updated successfully`
-      case AlertType.NOTIFICATION_IN_PROGRESS:
+      case AlertMessage.NOTIFICATION_IN_PROGRESS:
         return $localize`:@@gatewayApp.assertionServiceAssertion.notifications.notificationInProgress.string:Notification process has now started. We will email you as soon as the process has completed.`
-      case AlertType.AFFILIATION_CREATED:
+      case AlertMessage.AFFILIATION_CREATED:
         return $localize`:@@assertionServiceApp.affiliation.created.string:Affiliation created`
-      case AlertType.AFFILIATION_UPDATED:
+      case AlertMessage.AFFILIATION_UPDATED:
         return $localize`:@@assertionServiceApp.affiliation.updated.string:Affiliation updated`
-      case AlertType.AFFILIATION_DELETED:
+      case AlertMessage.AFFILIATION_DELETED:
         return $localize`:@@assertionServiceApp.affiliation.deleted.string:Affiliation deleted`
-      case AlertType.AFFILIATION_DELETE_FAILURE:
+      case AlertMessage.AFFILIATION_DELETE_FAILURE:
         return $localize`:@@assertionServiceApp.affiliation.problemDeleting.string:There was a problem deleting the affiliation`
 
       // Affiliation pretty statuses

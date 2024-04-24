@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { IAffiliation, IAffiliationPage } from './model/affiliation.model'
 import { AFFILIATION_STATUS } from '../shared/constants/orcid-api.constants'
 import { Subscription, delay, tap } from 'rxjs'
-import { EventType, ITEMS_PER_PAGE, ORCID_BASE_URL } from '../app.constants'
+import { AlertType, EventType, ITEMS_PER_PAGE, ORCID_BASE_URL } from '../app.constants'
 import {
   faChartBar,
   faFileDownload,
@@ -229,7 +229,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   }
 
   protected onError(errorMessage: string) {
-    this.alertService.broadcast(errorMessage)
+    this.alertService.broadcast(AlertType.TOAST, errorMessage)
   }
 
   ngOnDestroy() {

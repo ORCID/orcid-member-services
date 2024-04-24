@@ -1,6 +1,6 @@
 <div class="alerts" role="alert">
   <div *ngFor="let alert of alerts">
-    <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" [dismissible]="false" class="alert-success">
+    <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="'info'" [dismissible]="false" class="alert-success">
       <div class="d-flex">
         <div class="font-size-16 flex-grow-1">{{ alert.msg | localize }}</div>
         <a

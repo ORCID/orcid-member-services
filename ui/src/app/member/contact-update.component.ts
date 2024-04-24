@@ -21,7 +21,7 @@ import { MemberService } from './service/member.service'
 import { AccountService } from '../account/service/account.service'
 import { AlertService } from '../shared/service/alert.service'
 import { ActivatedRoute, Router } from '@angular/router'
-import { EMAIL_REGEXP } from '../app.constants'
+import { AlertType, EMAIL_REGEXP } from '../app.constants'
 import { EMPTY, Subject, combineLatest, switchMap, takeUntil } from 'rxjs'
 import { IAccount } from '../account/model/account.model'
 
@@ -225,7 +225,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
 
   onSaveSuccess() {
     this.isSaving = false
-    this.alertService.showHomepageLightboxModal({ alertComponent: ContactUpdateConfirmationAlert })
+    this.alertService.broadcast(AlertType.CONTACT_UPDATED)
     this.router.navigate([''])
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, ErrorHandler, Inject, OnDestroy, OnInit } from '@angular/core'
 import { IMember } from './model/member.model'
 import { Subscription } from 'rxjs'
 import {
@@ -18,6 +18,7 @@ import { AccountService } from '../account/service/account.service'
 import { EventService } from '../shared/service/event.service'
 import { AlertService } from '../shared/service/alert.service'
 import { IMemberPage } from './model/member-page.model'
+import { ErrorService } from '../error/service/error.service'
 
 @Component({
   selector: 'app-members',
@@ -52,11 +53,11 @@ export class MembersComponent implements OnInit {
 
   constructor(
     protected memberService: MemberService,
-    protected alertService: AlertService,
     protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected eventService: EventService
+    protected eventService: EventService,
+    @Inject(ErrorHandler) private errorService: ErrorService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE
     this.routeData = this.activatedRoute.data.subscribe((data: any) => {
@@ -161,7 +162,7 @@ export class MembersComponent implements OnInit {
   }
 
   protected onError(errorMessage: string) {
-    this.alertService.broadcast(errorMessage)
+    this.errorService.handleError(errorMessage)
   }
 
   updateSort(columnName: string) {

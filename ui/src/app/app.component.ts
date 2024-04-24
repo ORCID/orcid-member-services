@@ -7,6 +7,5 @@ import { HttpClient } from '@angular/common/http'
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'ui';
-  constructor(private http: HttpClient) {}
+  constructor() {}
 }

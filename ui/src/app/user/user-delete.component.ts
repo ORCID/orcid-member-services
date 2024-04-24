@@ -6,7 +6,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { EventService } from '../shared/service/event.service'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Event } from '../shared/model/event.model'
-import { AlertType, EventType } from '../app.constants'
+import { AlertMessage, AlertType, EventType } from '../app.constants'
 import { faBan, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
@@ -35,7 +35,7 @@ export class UserDeleteDialogComponent implements OnInit {
       this.userService.delete(id).subscribe(() => {
         this.eventService.broadcast(new Event(EventType.USER_LIST_MODIFIED))
         this.activeModal.dismiss(true)
-        this.alertService.broadcast(AlertType.USER_DELETED)
+        this.alertService.broadcast(AlertType.TOAST, AlertMessage.USER_DELETED)
       })
     }
   }

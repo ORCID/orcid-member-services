@@ -7,7 +7,7 @@ import { IMember } from './model/member.model'
 import { ActivatedRoute, Router } from '@angular/router'
 import { of } from 'rxjs'
 import { AlertService } from '../shared/service/alert.service'
-import { AlertType } from '../app.constants'
+import { AlertMessage, AlertType } from '../app.constants'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 describe('MemberUpdateComponent', () => {
@@ -53,7 +53,7 @@ describe('MemberUpdateComponent', () => {
     component.save()
     expect(memberService.update).toHaveBeenCalled()
     expect(memberService.create).toHaveBeenCalledTimes(0)
-    expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.MEMBER_UPDATED)
+    expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.TOAST, AlertMessage.MEMBER_UPDATED)
     expect(router.navigate).toHaveBeenCalledWith(['/members'])
   })
 
@@ -63,7 +63,7 @@ describe('MemberUpdateComponent', () => {
     component.save()
     expect(memberService.create).toHaveBeenCalled()
     expect(memberService.update).toHaveBeenCalledTimes(0)
-    expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.MEMBER_CREATED)
+    expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.TOAST, AlertMessage.MEMBER_CREATED)
     expect(router.navigate).toHaveBeenCalledWith(['/members'])
   })
 

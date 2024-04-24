@@ -8,7 +8,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { MemberService } from '../member/service/member.service'
 import { LanguageService } from '../shared/service/language.service'
 import { AccountService } from '../account'
-import { AlertType, EventType } from '../app.constants'
+import { AlertMessage, AlertType, EventType } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
@@ -60,7 +60,7 @@ export class SendNotificationsDialogComponent implements OnInit {
         this.requestAlreadyInProgress = true
       } else {
         this.notificationService.updateStatuses(this.language).subscribe(() => {
-          this.alertService.broadcast(AlertType.NOTIFICATION_IN_PROGRESS)
+          this.alertService.broadcast(AlertType.TOAST, AlertMessage.NOTIFICATION_IN_PROGRESS)
           this.close()
         })
       }

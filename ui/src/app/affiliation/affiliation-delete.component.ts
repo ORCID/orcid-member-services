@@ -8,7 +8,7 @@ import { EventService } from 'src/app/shared/service/event.service'
 import { AlertService } from 'src/app/shared/service/alert.service'
 import { IAffiliation } from './model/affiliation.model'
 import { AFFILIATION_STATUS } from 'src/app/shared/constants/orcid-api.constants'
-import { AlertType, EventType } from 'src/app/app.constants'
+import { AlertMessage, AlertType, EventType } from 'src/app/app.constants'
 import { Event } from 'src/app/shared/model/event.model'
 import { faBan, faTimes } from '@fortawesome/free-solid-svg-icons'
 
@@ -46,10 +46,10 @@ export class AffiliationDeleteDialogComponent implements OnInit {
       this.affiliationService.delete(id).subscribe((response) => {
         if (response) {
           this.eventService.broadcast(new Event(EventType.AFFILIATION_LIST_MODIFICATION))
-          this.alertService.broadcast(AlertType.AFFILIATION_DELETED)
+          this.alertService.broadcast(AlertType.TOAST, AlertMessage.AFFILIATION_DELETED)
         } else {
           this.eventService.broadcast(new Event(EventType.AFFILIATION_LIST_MODIFICATION))
-          this.alertService.broadcast(AlertType.AFFILIATION_DELETE_FAILURE)
+          this.alertService.broadcast(AlertType.TOAST, AlertMessage.AFFILIATION_DELETE_FAILURE)
         }
         this.activeModal.dismiss(true)
       })
