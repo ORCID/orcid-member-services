@@ -87,6 +87,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
       this.searchTerm = ''
       this.submittedSearchTerm = ''
       this.loadAll()
+      console.log('test')
     })
     this.importEventSubscriber = this.eventService.on(EventType.IMPORT_AFFILIATIONS).subscribe(() => {
       this.loadAll()

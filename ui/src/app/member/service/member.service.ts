@@ -34,6 +34,7 @@ import {
   SFMemberContact,
 } from '../model/salesforce-member-contact.model'
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from '../model/salesforce-member-org-id.model'
+import { ISFMemberUpdate } from '../model/salesforce-member-update.model'
 
 @Injectable({ providedIn: 'root' })
 export class MemberService {
@@ -150,20 +151,24 @@ export class MemberService {
     return this.memberData.asObservable()
   }
 
+  setMemberData(memberData: ISFMemberData | undefined | null) {
+    this.memberData.next(memberData)
+  }
+
   private fetchMemberData(salesforceId: string) {
     this.fetchingMemberDataState = true
-    this.getSFMemberData(salesforceId)
+    this.fetchSFMemberData(salesforceId)
       .pipe(
         switchMap((res) => {
           this.memberData.next(res)
           return combineLatest([
-            this.getMemberContacts(salesforceId),
+            this.fetchMemberContacts(salesforceId),
             this.getMemberOrgIds(salesforceId),
             this.getConsortiaLeadName(res.consortiaLeadId!),
             this.getIsConsortiumLead(salesforceId),
           ])
         }),
-        tap((res) => {
+        tap(() => {
           this.fetchingMemberDataState = false
         }),
         catchError(() => {
@@ -175,7 +180,33 @@ export class MemberService {
       .subscribe()
   }
 
-  getMemberContacts(salesforceId: string): Observable<SFMemberContact[]> {
+  getCountries(): Observable<ISFCountry[] | undefined> {
+    if (!this.countries.value) {
+      return this.fetchCountries()
+    }
+    return this.countries.asObservable()
+  }
+
+  fetchCountries(): Observable<ISFCountry[]> {
+    return this.http.get<ISFCountry[]>(`${this.resourceUrl}/countries`).pipe(
+      catchError((error) => {
+        return of('An error occurred:', error)
+      }),
+      tap((res: ISFCountry[]) => {
+        if (res) {
+          this.countries.next(res)
+        } else {
+          console.error('Request failed:', res)
+        }
+      })
+    )
+  }
+
+  updateMemberDetails(memberDetails: ISFMemberUpdate, salesforceId: string): Observable<ISFMemberUpdate> {
+    return this.http.put(`${this.resourceUrl}/members/${salesforceId}/member-details`, memberDetails)
+  }
+
+  private fetchMemberContacts(salesforceId: string): Observable<SFMemberContact[]> {
     return this.http
       .get<ISFRawMemberContacts>(`${this.resourceUrl}/members/${salesforceId}/member-contacts`, { observe: 'response' })
       .pipe(
@@ -188,22 +219,20 @@ export class MemberService {
       )
   }
 
-  getSFMemberData(salesforceId: string): Observable<SFMemberData> {
-    return this.http
-      .get<ISFRawMemberData>(`${this.resourceUrl}/members/${salesforceId}/member-details`, { observe: 'response' })
-      .pipe(
-        catchError((err) => {
-          return of(err)
-        }),
-        map((res: HttpResponse<ISFRawMemberData>) => this.convertToSalesforceMemberData(res)),
-        switchMap((value) => {
-          if (value && !value.id) {
-            return throwError(value)
-          } else {
-            return of(value)
-          }
-        })
-      )
+  private fetchSFMemberData(salesforceId: string): Observable<SFMemberData> {
+    return this.http.get<ISFRawMemberData>(`${this.resourceUrl}/members/${salesforceId}/member-details`).pipe(
+      catchError((err) => {
+        return of(err)
+      }),
+      map((res: ISFRawMemberData) => this.convertToSalesforceMemberData(res)),
+      switchMap((value) => {
+        if (value && !value.id) {
+          return throwError(value)
+        } else {
+          return of(value)
+        }
+      })
+    )
   }
 
   getMemberOrgIds(salesforceId: string): Observable<SFMemberOrgIds> {
@@ -260,28 +289,28 @@ export class MemberService {
       )
   }
 
-  private convertToSalesforceMemberData(res: HttpResponse<ISFRawMemberData>): SFMemberData {
-    if (res.body) {
+  private convertToSalesforceMemberData(res: ISFRawMemberData): SFMemberData {
+    if (res && res['Id']) {
       return {
         ...new SFMemberData(),
-        id: res.body.Id,
-        consortiaMember: res.body.Consortia_Member__c,
-        consortiaLeadId: res.body.Consortium_Lead__c,
-        name: res.body.Name,
-        publicDisplayName: res.body.Public_Display_Name__c,
-        website: res.body.Website,
-        billingCountry: res.body.BillingCountry,
-        memberType: res.body.Research_Community__c,
-        publicDisplayDescriptionHtml: res.body.Public_Display_Description__c,
-        logoUrl: res.body.Logo_Description__c,
-        publicDisplayEmail: res.body.Public_Display_Email__c,
-        membershipStartDateString: res.body.Last_membership_start_date__c,
-        membershipEndDateString: res.body.Last_membership_end_date__c,
-        consortiumMembers: res.body.consortiumOpportunities
-          ? this.convertToConsortiumMembers(res.body.consortiumOpportunities)
+        id: res.Id,
+        consortiaMember: res.Consortia_Member__c,
+        consortiaLeadId: res.Consortium_Lead__c,
+        name: res.Name,
+        publicDisplayName: res.Public_Display_Name__c,
+        website: res.Website,
+        billingCountry: res.BillingCountry,
+        memberType: res.Research_Community__c,
+        publicDisplayDescriptionHtml: res.Public_Display_Description__c,
+        logoUrl: res.Logo_Description__c,
+        publicDisplayEmail: res.Public_Display_Email__c,
+        membershipStartDateString: res.Last_membership_start_date__c,
+        membershipEndDateString: res.Last_membership_end_date__c,
+        consortiumMembers: res.consortiumOpportunities
+          ? this.convertToConsortiumMembers(res.consortiumOpportunities)
           : undefined,
-        billingAddress: res.body.BillingAddress,
-        trademarkLicense: res.body.Trademark_License__c,
+        billingAddress: res.BillingAddress,
+        trademarkLicense: res.Trademark_License__c,
       }
     } else {
       return new SFMemberData()

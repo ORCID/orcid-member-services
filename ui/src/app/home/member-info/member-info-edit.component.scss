@@ -1,0 +1,130 @@
+@use '../../../content/scss/bootstrap-variables' as global;
+
+button,
+textarea,
+input,
+span,
+h1,
+h2,
+h3,
+h4,
+label,
+small {
+  line-height: 150%;
+}
+
+button {
+  font-size: 14px;
+}
+
+.side-bar {
+  max-width: 300px;
+  height: 100%;
+  padding: 1.25rem;
+  flex: 1;
+}
+
+.logo-container {
+  img {
+    width: 200px;
+    height: auto;
+    align-self: center;
+  }
+  width: 208px;
+  height: 208px;
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact {
+  > div,
+  h4 {
+    width: 10%;
+    text-align: left;
+    flex-grow: 1;
+    max-width: 200px;
+    font-size: 14px;
+  }
+  word-wrap: break-word;
+}
+
+.main-section {
+  label {
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+  flex: 1;
+  padding: 1.25rem;
+}
+
+.input-prompt {
+  color: global.$black-transparent;
+}
+
+textarea {
+  min-height: 9rem;
+  font-size: 14px;
+  letter-spacing: 0.25px;
+}
+
+input {
+  font-size: 14px;
+  letter-spacing: 0.25px;
+}
+
+input,
+select,
+option {
+  height: 40px;
+}
+
+.coming-soon {
+  margin-bottom: 24px;
+}
+
+.lockpad {
+  margin-top: -4px;
+}
+
+.ng-invalid:not(form) {
+  border: 1px solid #d32f2f;
+  border-radius: 2px;
+}
+
+.warning {
+  img {
+    padding: 0 16px 0 8px !important;
+    margin-top: -1.75rem;
+  }
+  border: 2px solid #b71c1c;
+  border-radius: 4px;
+}
+
+.radio {
+  height: 1.125rem;
+  width: 1.125rem;
+  accent-color: global.$info;
+}
+
+.postcode-input-field {
+  max-width: 180px;
+}
+
+.org-name-input-field {
+  max-width: 400px;
+}
+
+:host ::ng-deep .ql-editor a {
+  color: global.$info;
+  text-decoration: none;
+}
+
+:host ::ng-deep .ql-toolbar button:hover .ql-stroke {
+  stroke: global.$info !important;
+}
+
+:host ::ng-deep .ql-active .ql-stroke {
+  stroke: global.$info !important;
+}

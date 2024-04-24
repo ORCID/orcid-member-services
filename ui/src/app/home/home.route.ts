@@ -5,6 +5,7 @@ import { MemberInfoComponent } from './member-info/member-info.component'
 import { Injectable, inject } from '@angular/core'
 import { MemberService } from '../member/service/member.service'
 import { Observable, map } from 'rxjs'
+import { MemberInfoEditComponent } from './member-info/member-info-edit.component'
 
 export const ManageMemberGuard = (route: ActivatedRouteSnapshot): Observable<boolean> | boolean => {
   const router = inject(Router)
@@ -53,6 +54,33 @@ export const routes: Routes = [
           pageTitle: 'home.title.string',
         },
         canActivate: [ManageMemberGuard],
+      },
+      {
+        path: 'manage/:id',
+        component: MemberInfoComponent,
+        data: {
+          authorities: ['ROLE_USER', 'ROLE_CONSORTIUM_LEAD'],
+          pageTitle: 'home.title.string',
+        },
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'edit',
+        component: MemberInfoEditComponent,
+        data: {
+          authorities: ['ROLE_USER'],
+          pageTitle: 'home.title.string',
+        },
+        canActivate: [AuthGuard, ManageMemberGuard],
+      },
+      {
+        path: 'manage/:id/edit',
+        component: MemberInfoEditComponent,
+        data: {
+          authorities: ['ROLE_USER'],
+          pageTitle: 'home.title.string',
+        },
+        canActivate: [AuthGuard],
       },
     ],
   },

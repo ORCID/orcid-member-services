@@ -87,7 +87,10 @@
               "src/content/images",
               "src/content/css"
             ],
-            "styles": ["src/content/scss/global.scss"],
+            "styles": [
+              "src/content/scss/global.scss",
+              "node_modules/quill/dist/quill.snow.css"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -100,8 +103,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "6kb"
+                  "maximumWarning": "30kb",
+                  "maximumError": "50kb"
                 }
               ],
               "fileReplacements": [
