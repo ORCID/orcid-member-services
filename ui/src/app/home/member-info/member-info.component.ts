@@ -49,7 +49,6 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
           if (params['id']) {
             this.managedMember = params['id']
           }
-
           if (account) {
             this.account = account
             if (this.managedMember) {
