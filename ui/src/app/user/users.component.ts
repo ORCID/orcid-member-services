@@ -29,7 +29,6 @@ import { AlertService } from '../shared/service/alert.service'
 export class UsersComponent implements OnInit, OnDestroy {
   currentAccount: IAccount | undefined
   users: IUser[] | null | undefined
-  error: any
   eventSubscriber: Subscription | null = null
   routeData: any
   links: any

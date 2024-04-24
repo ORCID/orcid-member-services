@@ -4,7 +4,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
   </div>
   <div class="modal-body">
-    <app-error-alert></app-error-alert>
+    <app-alert-error></app-alert-error>
     <div class="alerts top right" role="alert" *ngIf="csvErrors && csvErrors.length > 0">
       <ngb-alert
         class="alert alert-danger alert-dismissible"

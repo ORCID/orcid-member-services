@@ -43,8 +43,10 @@
       </div>
     </div>
   </div>
+
   <div class="row">
     <div class="col-md-12">
+      <app-alert-error></app-alert-error>
       <app-alert-toast></app-alert-toast>
       <div class="alert alert-warning" *ngIf="members?.length === 0">
         <span i18n="@@gatewayApp.msUserServiceMSMember.home.notFound.string">No members to show</span>

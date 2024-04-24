@@ -1,4 +1,4 @@
-import { Component, ErrorHandler, Inject, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { IMember } from './model/member.model'
 import { Subscription } from 'rxjs'
 import {
@@ -16,9 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { EventType, ITEMS_PER_PAGE } from '../app.constants'
 import { AccountService } from '../account/service/account.service'
 import { EventService } from '../shared/service/event.service'
-import { AlertService } from '../shared/service/alert.service'
 import { IMemberPage } from './model/member-page.model'
-import { ErrorService } from '../error/service/error.service'
 
 @Component({
   selector: 'app-members',
@@ -27,7 +25,6 @@ import { ErrorService } from '../error/service/error.service'
 export class MembersComponent implements OnInit {
   currentAccount: any
   members: IMember[] | undefined | null
-  error: any
   eventSubscriber: Subscription | undefined
   routeData: any
   links: any
@@ -56,8 +53,7 @@ export class MembersComponent implements OnInit {
     protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected eventService: EventService,
-    @Inject(ErrorHandler) private errorService: ErrorService
+    protected eventService: EventService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE
     this.routeData = this.activatedRoute.data.subscribe((data: any) => {
@@ -159,10 +155,6 @@ export class MembersComponent implements OnInit {
     const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1
     const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems
     this.itemCount = $localize`:@@global.item-count.string:Showing ${first} - ${second} of ${this.totalItems} items.`
-  }
-
-  protected onError(errorMessage: string) {
-    this.errorService.handleError(errorMessage)
   }
 
   updateSort(columnName: string) {
