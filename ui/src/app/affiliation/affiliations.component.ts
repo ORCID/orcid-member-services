@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { IAffiliation, IAffiliationPage } from './model/affiliation.model'
 import { AFFILIATION_STATUS } from '../shared/constants/orcid-api.constants'
 import { Subscription, delay, tap } from 'rxjs'
-import { EventType, ITEMS_PER_PAGE, ORCID_BASE_URL } from '../app.constants'
+import { AlertType, EventType, ITEMS_PER_PAGE, ORCID_BASE_URL } from '../app.constants'
 import {
   faChartBar,
   faFileDownload,
@@ -34,7 +34,6 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   errorDeletingInOrcid: string = AFFILIATION_STATUS.ERROR_DELETING_IN_ORCID
   currentAccount: any
   affiliations: IAffiliation[] | null | undefined
-  error: any
   success: any
   eventSubscriber: Subscription | undefined
   importEventSubscriber: Subscription | undefined
@@ -87,7 +86,6 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
       this.searchTerm = ''
       this.submittedSearchTerm = ''
       this.loadAll()
-      console.log('test')
     })
     this.importEventSubscriber = this.eventService.on(EventType.IMPORT_AFFILIATIONS).subscribe(() => {
       this.loadAll()
@@ -226,10 +224,6 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
     const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1
     const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems
     this.itemCount = $localize`:@@global.item-count.string:Showing ${first} - ${second} of ${this.totalItems} items.`
-  }
-
-  protected onError(errorMessage: string) {
-    this.alertService.broadcast(errorMessage)
   }
 
   ngOnDestroy() {

@@ -8,9 +8,17 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MemberInfoEditComponent } from './member-info/member-info-edit.component'
 import { QuillModule } from 'ngx-quill'
 import { ReactiveFormsModule } from '@angular/forms'
+import { SharedModule } from '../shared/shared.module'
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes), FontAwesomeModule, QuillModule.forRoot(), ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    SharedModule,
+    RouterModule.forChild(routes),
+    FontAwesomeModule,
+    QuillModule.forRoot(),
+    ReactiveFormsModule,
+  ],
   declarations: [HomeComponent, MemberInfoComponent, MemberInfoEditComponent],
 })
 export class HomeModule {}

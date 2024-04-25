@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { IMember } from './model/member.model'
 import { Subscription } from 'rxjs'
 import {
@@ -16,7 +16,6 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { EventType, ITEMS_PER_PAGE } from '../app.constants'
 import { AccountService } from '../account/service/account.service'
 import { EventService } from '../shared/service/event.service'
-import { AlertService } from '../shared/service/alert.service'
 import { IMemberPage } from './model/member-page.model'
 
 @Component({
@@ -26,7 +25,6 @@ import { IMemberPage } from './model/member-page.model'
 export class MembersComponent implements OnInit {
   currentAccount: any
   members: IMember[] | undefined | null
-  error: any
   eventSubscriber: Subscription | undefined
   routeData: any
   links: any
@@ -52,7 +50,6 @@ export class MembersComponent implements OnInit {
 
   constructor(
     protected memberService: MemberService,
-    protected alertService: AlertService,
     protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
@@ -158,10 +155,6 @@ export class MembersComponent implements OnInit {
     const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1
     const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems
     this.itemCount = $localize`:@@global.item-count.string:Showing ${first} - ${second} of ${this.totalItems} items.`
-  }
-
-  protected onError(errorMessage: string) {
-    this.alertService.broadcast(errorMessage)
   }
 
   updateSort(columnName: string) {

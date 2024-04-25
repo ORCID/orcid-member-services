@@ -11,8 +11,10 @@ export class ErrorService implements ErrorHandler {
   private errors: Subject<any> = new Subject<any>()
 
   handleError(error: any) {
+    console.log(error)
+
     if (error instanceof HttpErrorResponse) {
-      this.errors.next(new AppError(error.status, error.error.title))
+      this.errors.next(new AppError(error.status, error.error.title || error.message))
     } else {
       console.error('Unknown error occurred', error)
     }

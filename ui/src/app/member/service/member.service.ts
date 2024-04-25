@@ -27,7 +27,12 @@ import {
   SFMemberData,
 } from '../model/salesforce-member-data.model'
 import { ISFCountry } from '../model/salesforce-country.model'
-import { ISFRawMemberContact, ISFRawMemberContacts, SFMemberContact } from '../model/salesforce-member-contact.model'
+import {
+  ISFMemberContactUpdate,
+  ISFRawMemberContact,
+  ISFRawMemberContacts,
+  SFMemberContact,
+} from '../model/salesforce-member-contact.model'
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from '../model/salesforce-member-org-id.model'
 import { ISFMemberUpdate } from '../model/salesforce-member-update.model'
 
@@ -271,6 +276,19 @@ export class MemberService {
     return of(null)
   }
 
+  updateContact(contact: ISFMemberContactUpdate, salesforceId: string): Observable<boolean> {
+    return this.http
+      .post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/${salesforceId}/contact-update`, contact, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: HttpResponse<any>) => res.status === 200),
+        catchError((err) => {
+          return throwError(err)
+        })
+      )
+  }
+
   private convertToSalesforceMemberData(res: ISFRawMemberData): SFMemberData {
     if (res && res['Id']) {
       return {
@@ -371,7 +389,6 @@ export class MemberService {
         }
       }
       return {
-        ...new SFMemberOrgIds(),
         ROR,
         GRID,
         Ringgold,

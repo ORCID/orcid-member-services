@@ -14,7 +14,7 @@ import {
   faSortDown,
   faSortUp,
 } from '@fortawesome/free-solid-svg-icons'
-import { AlertType, EventType, ITEMS_PER_PAGE } from '../app.constants'
+import { AlertMessage, AlertType, EventType, ITEMS_PER_PAGE } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AccountService } from '../account/service/account.service'
 import { EventService } from '../shared/service/event.service'
@@ -29,7 +29,6 @@ import { AlertService } from '../shared/service/alert.service'
 export class UsersComponent implements OnInit, OnDestroy {
   currentAccount: IAccount | undefined
   users: IUser[] | null | undefined
-  error: any
   eventSubscriber: Subscription | null = null
   routeData: any
   links: any
@@ -175,9 +174,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   sendActivate(msUser: IUser) {
     this.userService.sendActivate(msUser).subscribe((res) => {
       if (res) {
-        this.alertService.broadcast(AlertType.SEND_ACTIVATION_SUCCESS)
+        this.alertService.broadcast(AlertType.TOAST, AlertMessage.SEND_ACTIVATION_SUCCESS)
       } else {
-        this.alertService.broadcast(AlertType.SEND_ACTIVATION_FAILURE)
+        this.alertService.broadcast(AlertType.TOAST, AlertMessage.SEND_ACTIVATION_FAILURE)
       }
     })
   }

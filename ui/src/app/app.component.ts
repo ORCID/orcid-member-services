@@ -6,7 +6,4 @@ import { HttpClient } from '@angular/common/http'
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  title = 'ui';
-  constructor(private http: HttpClient) {}
-}
+export class AppComponent {}

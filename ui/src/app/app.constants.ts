@@ -11,7 +11,7 @@ export enum EventType {
   MEMBER_LIST_MODIFICATION,
 }
 
-export enum AlertType {
+export enum AlertMessage {
   SEND_ACTIVATION_SUCCESS = 'Invite sent.',
   SEND_ACTIVATION_FAILURE = 'Invite email couldn`t be sent.',
   USER_CREATED = 'User created. Invite sent.',
@@ -24,6 +24,13 @@ export enum AlertType {
   AFFILIATION_UPDATED = 'Affiliation updated',
   AFFILIATION_DELETED = 'Affiliation deleted',
   AFFILIATION_DELETE_FAILURE = 'There was a problem deleting the affiliation',
+}
+
+export enum AlertType {
+  CONTACT_UPDATED,
+  CONSORTIUM_MEMBER_ADDED,
+  CONSORTIUM_MEMBER_REMOVED,
+  TOAST,
 }
 
 export const EMAIL_NOT_FOUND_TYPE = 'https://www.jhipster.tech/problem/email-not-found'

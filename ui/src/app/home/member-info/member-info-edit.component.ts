@@ -7,10 +7,11 @@ import { switchMap, take, takeUntil } from 'rxjs/operators'
 import { AccountService } from 'src/app/account'
 import { IAccount } from 'src/app/account/model/account.model'
 import { EMAIL_REGEXP, URL_REGEXP, ORCID_BASE_URL } from 'src/app/app.constants'
-import { ISFAddress } from 'src/app/member/model/salesforce-address.model'
+import { ISFAddress, SFAddress } from 'src/app/member/model/salesforce-address.model'
 import { ISFCountry } from 'src/app/member/model/salesforce-country.model'
 import { ISFState } from 'src/app/member/model/salesforce-country.model copy'
-import { ISFMemberData } from 'src/app/member/model/salesforce-member-data.model'
+import { SFMemberContact } from 'src/app/member/model/salesforce-member-contact.model'
+import { ISFMemberData, SFConsortiumMemberData, SFMemberData } from 'src/app/member/model/salesforce-member-data.model'
 import { ISFMemberUpdate, SFMemberUpdate } from 'src/app/member/model/salesforce-member-update.model'
 import { MemberService } from 'src/app/member/service/member.service'
 
@@ -26,7 +27,8 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   account: IAccount | undefined | null
   memberData: ISFMemberData | undefined | null
   objectKeys = Object.keys
-  orgIdsTransformed: KeyValue<string, string[]>[] = []
+  objectValues = Object.values
+  orgIdsTransformed: { id: string; name: string }[] = []
   ORCID_BASE_URL = ORCID_BASE_URL
 
   isSaving = false
@@ -88,7 +90,35 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
       )
       .subscribe((data) => {
         this.memberData = data
-        this.orgIdsTransformed = Object.entries(this.memberData?.orgIds || {}).map(([key, value]) => ({ key, value }))
+        this.memberData = new SFMemberData(
+          '123',
+          true,
+          '123',
+          true,
+          'rara',
+          'roro',
+          'hehe.com',
+          'Lithuania',
+          'ruru',
+          'riri',
+          'rere',
+          'hehe@mail.com',
+          '2022',
+          '2050',
+          '',
+          [new SFConsortiumMemberData('he', 'ho'), new SFConsortiumMemberData('hee', 'hoo')],
+          [
+            new SFMemberContact('124', true, ['goob'], 'name', 'phone', 'email'),
+            new SFMemberContact('124', false, ['goob'], 'name', 'phone', 'email'),
+          ],
+          { ROR: ['123', '456'], GRID: ['1213', '1415'] },
+          new SFAddress('street', 'United Kingdom', 'state', 'Lithuania', 'code', 'postalCode', 'city')
+        )
+
+        this.orgIdsTransformed = Object.entries(this.memberData?.orgIds || {}).flatMap(([name, ids]) =>
+          ids.map((id: string) => ({ id, name }))
+        )
+
         this.validateUrl()
         if (data) {
           this.updateForm(data)
