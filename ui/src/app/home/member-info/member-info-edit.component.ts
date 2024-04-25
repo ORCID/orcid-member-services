@@ -88,7 +88,9 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
       )
       .subscribe((data) => {
         this.memberData = data
-        this.orgIdsTransformed = Object.entries(this.memberData?.orgIds || {}).map(([key, value]) => ({ key, value }))
+        this.orgIdsTransformed = Object.entries(this.memberData?.orgIds || {}).flatMap(([name, ids]) =>
+          ids.map((id: string) => ({ id, name }))
+        )
         this.validateUrl()
         if (data) {
           this.updateForm(data)
