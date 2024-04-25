@@ -12,7 +12,7 @@ import { AlertType } from 'src/app/app.constants'
 export class RemoveConsortiumMemberAlertComponent {
   alerts: AppAlert[] | undefined
   sub: Subscription | undefined
-  orgName: string = ''
+  orgName = ''
 
   constructor(
     private alertService: AlertService,

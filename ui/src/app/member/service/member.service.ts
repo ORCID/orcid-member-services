@@ -276,7 +276,7 @@ export class MemberService {
     return of(null)
   }
 
-  updateContact(contact: ISFMemberContactUpdate, salesforceId: string): Observable<Boolean> {
+  updateContact(contact: ISFMemberContactUpdate, salesforceId: string): Observable<boolean> {
     return this.http
       .post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/${salesforceId}/contact-update`, contact, {
         observe: 'response',
@@ -389,7 +389,6 @@ export class MemberService {
         }
       }
       return {
-        ...new SFMemberOrgIds(),
         ROR,
         GRID,
         Ringgold,

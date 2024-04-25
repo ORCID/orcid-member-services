@@ -6,6 +6,4 @@ import { HttpClient } from '@angular/common/http'
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  constructor() {}
-}
+export class AppComponent {}

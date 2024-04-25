@@ -71,7 +71,7 @@ export const routes: Routes = [
           authorities: ['ROLE_USER'],
           pageTitle: 'home.title.string',
         },
-        canActivate: [AuthGuard, ManageMemberGuard],
+        canActivate: [ManageMemberGuard],
       },
       {
         path: 'manage/:id/edit',

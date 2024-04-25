@@ -34,8 +34,8 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   account: IAccount | undefined | null
   memberData: ISFMemberData | undefined | null
   contact: ISFMemberContact | undefined
-  isSaving: boolean = false
-  invalidForm: boolean = false
+  isSaving = false
+  invalidForm = false
   routeData: any
   editForm: FormGroup | undefined
   contactId: string | undefined
