@@ -1,4 +1,3 @@
-import { KeyValue } from '@angular/common'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -7,11 +6,10 @@ import { switchMap, take, takeUntil } from 'rxjs/operators'
 import { AccountService } from 'src/app/account'
 import { IAccount } from 'src/app/account/model/account.model'
 import { EMAIL_REGEXP, URL_REGEXP, ORCID_BASE_URL } from 'src/app/app.constants'
-import { ISFAddress, SFAddress } from 'src/app/member/model/salesforce-address.model'
+import { ISFAddress } from 'src/app/member/model/salesforce-address.model'
 import { ISFCountry } from 'src/app/member/model/salesforce-country.model'
 import { ISFState } from 'src/app/member/model/salesforce-country.model copy'
-import { SFMemberContact } from 'src/app/member/model/salesforce-member-contact.model'
-import { ISFMemberData, SFConsortiumMemberData, SFMemberData } from 'src/app/member/model/salesforce-member-data.model'
+import { ISFMemberData } from 'src/app/member/model/salesforce-member-data.model'
 import { ISFMemberUpdate, SFMemberUpdate } from 'src/app/member/model/salesforce-member-update.model'
 import { MemberService } from 'src/app/member/service/member.service'
 
@@ -27,7 +25,6 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   account: IAccount | undefined | null
   memberData: ISFMemberData | undefined | null
   objectKeys = Object.keys
-  objectValues = Object.values
   orgIdsTransformed: { id: string; name: string }[] = []
   ORCID_BASE_URL = ORCID_BASE_URL
 
