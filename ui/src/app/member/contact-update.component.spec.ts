@@ -1,21 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { ContactUpdateComponent } from './contact-update.component';
+import { ContactUpdateComponent } from './contact-update.component'
+import { AppModule } from '../app.module'
 
 describe('ContactUpdateComponent', () => {
-  let component: ContactUpdateComponent;
-  let fixture: ComponentFixture<ContactUpdateComponent>;
+  let component: ContactUpdateComponent
+  let fixture: ComponentFixture<ContactUpdateComponent>
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ContactUpdateComponent]
-    });
-    fixture = TestBed.createComponent(ContactUpdateComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+      imports: [AppModule],
+      declarations: [ContactUpdateComponent],
+    })
+    fixture = TestBed.createComponent(ContactUpdateComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})
