@@ -14,7 +14,7 @@ import { AccountService } from '../account'
 import { IUser, User } from './model/user.model'
 import { IMember } from '../member/model/member.model'
 import { ErrorService } from '../error/service/error.service'
-import { AlertType, DATE_TIME_FORMAT, emailValidator } from '../app.constants'
+import { AlertMessage, AlertType, DATE_TIME_FORMAT, emailValidator } from '../app.constants'
 
 @Component({
   selector: 'app-user-update',
@@ -265,9 +265,9 @@ export class UserUpdateComponent {
     if (this.existentUser?.id) {
       this.userService.sendActivate(this.existentUser).subscribe((res) => {
         if (res) {
-          this.alertService.broadcast(AlertType.SEND_ACTIVATION_SUCCESS)
+          this.alertService.broadcast(AlertType.TOAST, AlertMessage.SEND_ACTIVATION_SUCCESS)
         } else {
-          this.alertService.broadcast(AlertType.SEND_ACTIVATION_FAILURE)
+          this.alertService.broadcast(AlertType.TOAST, AlertMessage.SEND_ACTIVATION_FAILURE)
         }
         this.navigateToUsersList()
       })
@@ -336,25 +336,25 @@ export class UserUpdateComponent {
   protected onSaveSuccess() {
     this.isSaving = false
     this.navigateToUsersList()
-    this.alertService.broadcast(AlertType.USER_CREATED)
+    this.alertService.broadcast(AlertType.TOAST, AlertMessage.USER_CREATED)
   }
 
   protected onUpdateSuccess() {
     this.isSaving = false
     this.navigateToUsersList()
-    this.alertService.broadcast(AlertType.USER_UPDATED)
+    this.alertService.broadcast(AlertType.TOAST, AlertMessage.USER_UPDATED)
   }
 
   protected onSaveSuccessOwnershipChange() {
     this.isSaving = false
     this.navigateToHomePage()
-    this.alertService.broadcast(AlertType.USER_CREATED)
+    this.alertService.broadcast(AlertType.TOAST, AlertMessage.USER_CREATED)
   }
 
   protected onUpdateSuccessOwnershipChange() {
     this.isSaving = false
     this.navigateToHomePage()
-    this.alertService.broadcast(AlertType.USER_UPDATED)
+    this.alertService.broadcast(AlertType.TOAST, AlertMessage.USER_UPDATED)
   }
 
   protected onSaveError() {

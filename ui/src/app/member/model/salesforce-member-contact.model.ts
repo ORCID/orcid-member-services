@@ -60,3 +60,17 @@ export class SFMemberContactUpdate implements ISFMemberContactUpdate {
     public contactNewRoles?: string[]
   ) {}
 }
+
+export class ISFMemberContactRole {
+  id?: number
+  selected?: boolean
+  name?: string
+}
+
+export class SFMemberContactRole implements ISFMemberContactRole {
+  constructor(
+    public id: number,
+    public selected: boolean,
+    public name: string
+  ) {}
+}

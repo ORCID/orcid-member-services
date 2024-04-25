@@ -1,6 +1,8 @@
+import { AlertType } from 'src/app/app.constants'
+
 export class AppAlert {
   constructor(
-    public type: 'info',
-    public msg: string
+    public type: AlertType,
+    public msg: string | undefined
   ) {}
 }

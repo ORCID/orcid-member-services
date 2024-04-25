@@ -13,6 +13,7 @@ import {
   COUNTRIES,
   ORG_ID_TYPES,
   DEFAULT_LATEST_YEAR_INCREMENT,
+  AlertMessage,
   AlertType,
 } from '../app.constants'
 import { AlertService } from '../shared/service/alert.service'
@@ -265,7 +266,7 @@ export class AffiliationUpdateComponent implements OnInit {
       this.affiliationService.update(assertion).subscribe({
         next: () => {
           this.onSaveSuccess()
-          this.alertService.broadcast(AlertType.AFFILIATION_UPDATED)
+          this.alertService.broadcast(AlertType.TOAST, AlertMessage.AFFILIATION_UPDATED)
         },
         error: (err) => this.onSaveError(err),
       })
@@ -273,7 +274,7 @@ export class AffiliationUpdateComponent implements OnInit {
       this.affiliationService.create(assertion).subscribe({
         next: () => {
           this.onSaveSuccess()
-          this.alertService.broadcast(AlertType.AFFILIATION_CREATED)
+          this.alertService.broadcast(AlertType.TOAST, AlertMessage.AFFILIATION_CREATED)
         },
         error: (err) => this.onSaveError(err),
       })

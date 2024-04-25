@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { AppError, ErrorAlert } from './model/error.model'
 
 @Component({
-  selector: 'app-error-alert',
+  selector: 'app-alert-error',
   templateUrl: './error-alert.component.html',
 })
 export class ErrorAlertComponent implements OnInit {
@@ -18,6 +18,8 @@ export class ErrorAlertComponent implements OnInit {
 
   ngOnInit(): void {
     this.sub = this.errorService.on().subscribe((err: AppError) => {
+      console.log(err)
+
       const alert: ErrorAlert = {
         type: 'danger',
         msg: err.message,

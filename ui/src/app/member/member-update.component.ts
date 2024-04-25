@@ -5,7 +5,7 @@ import { Observable } from 'rxjs'
 import * as moment from 'moment'
 import { MemberService } from './service/member.service'
 import { AlertService } from '../shared/service/alert.service'
-import { AlertType, BASE_URL, DATE_TIME_FORMAT, ORCID_BASE_URL } from '../app.constants'
+import { AlertMessage, AlertType, BASE_URL, DATE_TIME_FORMAT, ORCID_BASE_URL } from '../app.constants'
 import { IMember, Member } from './model/member.model'
 import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
 
@@ -207,7 +207,7 @@ export class MemberUpdateComponent implements OnInit {
   protected onSaveSuccess() {
     this.isSaving = false
     this.navigateToMembersList()
-    this.alertService.broadcast(AlertType.MEMBER_CREATED)
+    this.alertService.broadcast(AlertType.TOAST, AlertMessage.MEMBER_CREATED)
   }
 
   protected subscribeToUpdateResponse(result: Observable<IMember>) {
@@ -220,7 +220,7 @@ export class MemberUpdateComponent implements OnInit {
   protected onUpdateSuccess() {
     this.isSaving = false
     this.navigateToMembersList()
-    this.alertService.broadcast(AlertType.MEMBER_UPDATED)
+    this.alertService.broadcast(AlertType.TOAST, AlertMessage.MEMBER_UPDATED)
   }
 
   protected onSaveError() {

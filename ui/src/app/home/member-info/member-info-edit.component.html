@@ -1,4 +1,4 @@
-<div *ngIf="memberData" class="h-100">
+<div *ngIf="memberData" class="home-container">
   <div class="p-3 mb-3">
     <div class="font-size-14 line-height-150">
       Back to
@@ -84,14 +84,15 @@
 
         <!-- Billing address -->
 
-        <h3 class="mb-20 font-size-16 font-weight-bold">Billing address</h3>
+        <h3 class="mb-20 font-size-16">Billing address</h3>
         <div class="form-group mb-20">
           <label
-            class="wide-text font-size-12 font-weight-bold"
+            class="w-75"
             [ngClass]="{ 'text-danger': editForm.get('street')?.invalid && editForm.get('street')?.touched }"
+            ><span>Street</span
             ><input
               type="text"
-              class="form-control wide-text-25 w-75"
+              class="form-control wide-text-25"
               name="street"
               formControlName="street"
               (input)="editForm.get('street')?.markAsUntouched()"
@@ -99,8 +100,7 @@
                 'text-danger': editForm.get('street')?.invalid && editForm.get('street')?.touched,
                 'input-field-default-border': !editForm.get('street')?.dirty || !editForm.get('street')?.touched
               }"
-            />Street</label
-          >
+          /></label>
 
           <div *ngIf="editForm.get('street')?.invalid && editForm.get('street')?.touched">
             <small
@@ -113,11 +113,12 @@
         </div>
         <div class="form-group mb-20">
           <label
-            class="wide-text font-size-12 font-weight-bold"
+            class="w-75"
             [ngClass]="{ 'text-danger': editForm.get('city')?.invalid && editForm.get('city')?.touched }"
+            ><span>City</span
             ><input
               type="text"
-              class="form-control wide-text-25 w-75"
+              class="form-control wide-text-25"
               name="city"
               formControlName="city"
               (input)="editForm.get('city')?.markAsUntouched()"
@@ -125,8 +126,7 @@
                 'text-danger': editForm.get('city')?.invalid && editForm.get('city')?.touched,
                 'input-field-default-border': !editForm.get('city')?.dirty || !editForm.get('city')?.touched
               }"
-            />City</label
-          >
+          /></label>
 
           <div *ngIf="editForm.get('city')?.invalid && editForm.get('city')?.touched">
             <small
@@ -139,12 +139,13 @@
         </div>
         <div class="form-group mb-20" *ngIf="states">
           <label
-            class="wide-text font-size-12 font-weight-bold"
+            class="w-75"
             [ngClass]="{
               'text-danger': editForm.get('state')?.invalid && editForm.get('state')?.touched
             }"
+            ><span>State/Province</span
             ><select
-              class="form-control font-size-14 wide-text-25 w-75"
+              class="form-control font-size-14 wide-text-25"
               name="state"
               formControlName="state"
               [ngClass]="{
@@ -155,26 +156,21 @@
               <option selected [value]="null">-- No state or province --</option>
               <option *ngFor="let state of states" [value]="state.name" class="form-field-text-color-default">
                 {{ state.name }}
-              </option></select
-            >State/Province</label
+              </option>
+            </select></label
           >
         </div>
         <div class="form-group mb-20">
           <label
-            class="wide-text font-size-12 font-weight-bold"
+            class="w-75"
             [ngClass]="{ 'text-danger': editForm.get('country')?.invalid && editForm.get('country')?.dirty }"
-            ><input
-              readonly
-              class="form-control font-size-14 wide-text-25 w-75"
-              name="country"
-              formControlName="country"
-            />Country</label
-          >
+            ><span>Country</span
+            ><input readonly class="form-control font-size-14 wide-text-25" name="country" formControlName="country"
+          /></label>
         </div>
         <div class="form-group mb-30">
-          <label
-            class="wide-text font-size-12 font-weight-bold"
-            [ngClass]="{ 'text-danger': editForm.get('postcode')?.invalid && editForm.get('postcode')?.touched }"
+          <label [ngClass]="{ 'text-danger': editForm.get('postcode')?.invalid && editForm.get('postcode')?.touched }"
+            ><span>ZIP/Postcode</span
             ><input
               type="text"
               class="form-control wide-text-25 postcode-input-field"
@@ -185,8 +181,7 @@
                 'text-danger': editForm.get('postcode')?.invalid && editForm.get('postcode')?.touched,
                 'input-field-default-border': !editForm.get('postcode')?.dirty || !editForm.get('postcode')?.touched
               }"
-            />ZIP/Postcode</label
-          >
+          /></label>
 
           <div *ngIf="editForm.get('postcode')?.invalid && editForm.get('postcode')?.touched">
             <small
@@ -257,13 +252,13 @@
         <div class="mb-5">
           <div class="form-group w-75">
             <label
-              class="wide-text font-size-12"
               [ngClass]="{
                 'text-danger':
                   editForm.get('publicName')?.invalid &&
                   editForm.get('publicName')?.touched &&
                   editForm.get('publicName')?.dirty
               }"
+              ><span>Public display name</span
               ><input
                 type="text"
                 class="form-control"
@@ -278,8 +273,7 @@
                   'input-field-default-border':
                     !editForm.get('publicName')?.touched || !editForm.get('publicName')?.dirty
                 }"
-              />Public display name</label
-            >
+            /></label>
 
             <div *ngIf="editForm.get('publicName')?.invalid">
               <small
@@ -300,19 +294,16 @@
           </div>
           <div class="form-group">
             <!-- eslint-disable-next-line -->
-            <label class="wide-text font-size-12"
-              ><quill-editor
-                class="d-block w-75 description"
-                formControlName="description"
-                format="html"
-                [styles]="quillStyles"
-                [modules]="quillConfig"
-                [placeholder]="'A brief description of the organization'"
-              >
-              </quill-editor
-              >Organization description</label
+            <label><span>Organization description</span> </label>
+            <quill-editor
+              class="d-block w-75 description"
+              formControlName="description"
+              format="html"
+              [styles]="quillStyles"
+              [modules]="quillConfig"
+              [placeholder]="'A brief description of the organization'"
             >
-
+            </quill-editor>
             <div *ngIf="editForm.get('description')?.invalid">
               <small
                 class="wide-text font-size-12 form-text text-danger"
@@ -322,13 +313,14 @@
               </small>
             </div>
           </div>
-          <div class="form-group w-75">
+          <div class="form-group">
             <label
-              class="wide-text font-size-12"
+              class="w-75"
               [ngClass]="{
                 'text-danger':
                   editForm.get('website')?.invalid && editForm.get('website')?.touched && editForm.get('website')?.dirty
               }"
+              ><span>Website</span
               ><input
                 type="text"
                 class="form-control"
@@ -342,8 +334,7 @@
                     editForm.get('website')?.dirty,
                   'input-field-default-border': !editForm.get('website')?.touched || !editForm.get('website')?.dirty
                 }"
-              />Website</label
-            >
+            /></label>
 
             <ng-template #validWebsite>
               <small class="wide-text font-size-12 color-gray"
@@ -364,10 +355,11 @@
               </div>
             </div>
           </div>
-          <div class="form-group mb-40 w-75">
+          <div class="form-group mb-40">
             <label
               [ngClass]="{ 'text-danger': editForm.get('email')?.invalid && editForm.get('email')?.touched }"
-              class="wide-text font-size-12"
+              class="w-75"
+              ><span>Email</span
               ><input
                 type="text"
                 class="form-control"
@@ -378,8 +370,7 @@
                   'text-danger': editForm.get('email')?.invalid && editForm.get('email')?.touched,
                   'input-field-default-border': !editForm.get('email')?.touched
                 }"
-              />Email</label
-            >
+            /></label>
 
             <ng-template #validEmail>
               <small class="wide-text font-size-12 color-gray"
@@ -397,7 +388,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" [disabled]="isSaving" class="btn btn-primary">Save changes</button>
+          <button type="submit" [disabled]="isSaving" class="btn btn-primary mr-1">Save changes</button>
           <button type="button" class="btn btn-outline-primary" routerLink="">Cancel</button>
         </div>
       </form>
@@ -418,12 +409,12 @@
           <h4 class="w-33 font-size-14">Type</h4>
         </div>
         <hr class="green-hr mb-0" />
-        <ul class="ml-0 pl-0 mb-0" *ngFor="let orgId of orgIdsTransformed | keyvalue; let i = index">
+        <ul class="ml-0 pl-0 mb-0" *ngFor="let orgId of orgIdsTransformed; let i = index">
           <li class="row ml-0 pt-16 pb-16 d-flex justify-content-between contact">
-            <div class="w-66 line-height-150">{{ orgId.value }}</div>
-            <div class="w-33 line-height-150">{{ orgId.key }}</div>
+            <div class="w-66 line-height-150">{{ orgId.id }}</div>
+            <div class="w-33 line-height-150">{{ orgId.name }}</div>
           </li>
-          <hr *ngIf="!(i === objectKeys(memberData.orgIds).length - 1)" class="mb-0 mt-0" />
+          <hr *ngIf="!(i === objectKeys(orgIdsTransformed).length - 1)" class="mb-0 mt-0" />
         </ul>
       </div>
       <div *ngIf="memberData.isConsortiumLead">

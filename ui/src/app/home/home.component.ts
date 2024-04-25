@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { AccountService } from '../account'
-import { MemberService } from '../member/service/member.service'
 import { Subscription } from 'rxjs/internal/Subscription'
 import { ISFMemberData } from '../member/model/salesforce-member-data.model'
 import { IAccount } from '../account/model/account.model'
