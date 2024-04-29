@@ -8,8 +8,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { MembersComponent } from './members.component'
 import { MemberUpdateComponent } from './member-update.component'
 import { MemberDetailComponent } from './member-detail.component'
-import { MemberImportDialogComponent } from './member-import-dialog.component';
-import { ContactUpdateComponent } from './contact-update.component'
+import { MemberImportDialogComponent } from './member-import-dialog.component'
+import { ContactUpdateComponent } from '../home/contacts/contact-update.component'
+import { AddConsortiumMemberComponent } from './add-consortium-member.component'
 
 @NgModule({
   imports: [
@@ -20,6 +21,13 @@ import { ContactUpdateComponent } from './contact-update.component'
     FormsModule,
     ReactiveFormsModule,
   ],
-  declarations: [MembersComponent, MemberUpdateComponent, MemberDetailComponent, MemberImportDialogComponent, ContactUpdateComponent],
+  declarations: [
+    MembersComponent,
+    MemberUpdateComponent,
+    MemberDetailComponent,
+    MemberImportDialogComponent,
+    ContactUpdateComponent,
+    AddConsortiumMemberComponent,
+  ],
 })
 export class MemberModule {}

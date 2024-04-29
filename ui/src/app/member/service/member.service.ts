@@ -35,6 +35,7 @@ import {
 } from '../model/salesforce-member-contact.model'
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from '../model/salesforce-member-org-id.model'
 import { ISFMemberUpdate } from '../model/salesforce-member-update.model'
+import { ISFNewConsortiumMember } from '../model/salesforce-new-consortium-member.model'
 
 @Injectable({ providedIn: 'root' })
 export class MemberService {
@@ -153,6 +154,19 @@ export class MemberService {
 
   setMemberData(memberData: ISFMemberData | undefined | null) {
     this.memberData.next(memberData)
+  }
+
+  addConsortiumMember(consortiumMember: ISFNewConsortiumMember): Observable<Boolean> {
+    return this.http
+      .post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/add-consortium-member`, consortiumMember, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: HttpResponse<any>) => res.status === 200),
+        catchError((err) => {
+          return throwError(err)
+        })
+      )
   }
 
   private fetchMemberData(salesforceId: string) {

@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { IUser } from '../user/model/user.model'
-import { ISFMemberData } from './model/salesforce-member-data.model'
+import { IUser } from '../../user/model/user.model'
+import { ISFMemberData } from '../../member/model/salesforce-member-data.model'
 import {
   ISFMemberContact,
   ISFMemberContactUpdate,
   SFMemberContact,
   SFMemberContactRole,
   SFMemberContactUpdate,
-} from './model/salesforce-member-contact.model'
+} from '../../member/model/salesforce-member-contact.model'
 import {
   AbstractControl,
   FormArray,
@@ -17,13 +17,13 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms'
-import { MemberService } from './service/member.service'
-import { AccountService } from '../account/service/account.service'
-import { AlertService } from '../shared/service/alert.service'
+import { MemberService } from '../../member/service/member.service'
+import { AccountService } from '../../account/service/account.service'
+import { AlertService } from '../../shared/service/alert.service'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AlertType, EMAIL_REGEXP } from '../app.constants'
+import { AlertType, EMAIL_REGEXP } from '../../app.constants'
 import { EMPTY, Subject, combineLatest, switchMap, takeUntil } from 'rxjs'
-import { IAccount } from '../account/model/account.model'
+import { IAccount } from '../../account/model/account.model'
 
 @Component({
   selector: 'app-contact-update',
