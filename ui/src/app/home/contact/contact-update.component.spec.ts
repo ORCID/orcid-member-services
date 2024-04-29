@@ -163,5 +163,6 @@ describe('ContactUpdateComponent', () => {
   it('alert service and router should be called on save success', () => {
     component.onSaveSuccess()
     expect(alertServiceSpy.broadcast).toHaveBeenCalledWith(AlertType.CONTACT_UPDATED)
+    expect(router.navigate).toHaveBeenCalled()
   })
 })

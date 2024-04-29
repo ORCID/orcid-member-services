@@ -131,7 +131,7 @@
           <div *ngFor="let myOption of roles.controls; let i = index">
             <div formGroupName="{{ i }}">
               <input type="checkbox" [formControl]="myOption.get('selected')" class="role-checkbox" />
-              <label class="font-size-14 font-weight-normal mb-16"> {{ myOption.get('name').value }} </label>
+              <label class="font-size-14 font-weight-normal mb-16"> {{ myOption.get('name')?.value }} </label>
             </div>
           </div>
         </div>

@@ -24,11 +24,26 @@ export class AddConsortiumMemberComponent implements OnInit {
   isSaving: boolean = false
   invalidForm: boolean = false
   routeData: any
-  editForm: FormGroup | undefined
   currentMonth: number | undefined
   currentYear: number | undefined
   monthList: [number, string][] | undefined
   yearList: number[] | undefined
+  editForm: FormGroup = this.fb.group({
+    orgName: [null, [Validators.required, Validators.maxLength(41)]],
+    emailDomain: [null, [Validators.maxLength(255)]],
+    street: [null, [Validators.maxLength(255)]],
+    city: [null, [Validators.maxLength(40)]],
+    state: [null, [Validators.maxLength(80)]],
+    country: [null, [Validators.required]],
+    postcode: [null, [Validators.maxLength(20)]],
+    trademarkLicense: [null, [Validators.required]],
+    startMonth: [null, [Validators.required]],
+    startYear: [null, [Validators.required]],
+    contactGivenName: [null, [Validators.required, Validators.maxLength(40)]],
+    contactFamilyName: [null, [Validators.required, Validators.maxLength(80)]],
+    contactJobTitle: [null, [Validators.maxLength(128)]],
+    contactEmail: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
+  })
 
   rolesData = [
     { id: 1, selected: false, name: 'Main relationship contact' },
@@ -54,22 +69,6 @@ export class AddConsortiumMemberComponent implements OnInit {
     this.currentYear = this.dateUtilService.getCurrentYear()
     this.monthList = this.dateUtilService.getMonthsList()
     this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1)
-    this.editForm = this.fb.group({
-      orgName: [null, [Validators.required, Validators.maxLength(41)]],
-      emailDomain: [null, [Validators.maxLength(255)]],
-      street: [null, [Validators.maxLength(255)]],
-      city: [null, [Validators.maxLength(40)]],
-      state: [null, [Validators.maxLength(80)]],
-      country: [null, [Validators.required]],
-      postcode: [null, [Validators.maxLength(20)]],
-      trademarkLicense: [null, [Validators.required]],
-      startMonth: [null, [Validators.required]],
-      startYear: [null, [Validators.required]],
-      contactGivenName: [null, [Validators.required, Validators.maxLength(40)]],
-      contactFamilyName: [null, [Validators.required, Validators.maxLength(80)]],
-      contactJobTitle: [null, [Validators.maxLength(128)]],
-      contactEmail: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
-    })
 
     this.accountService.getAccountData().subscribe((account) => {
       if (account) {
@@ -131,7 +130,7 @@ export class AddConsortiumMemberComponent implements OnInit {
       this.memberService.addConsortiumMember(newConsortiumMember).subscribe(
         (res) => {
           if (res) {
-            this.onSaveSuccess(newConsortiumMember.orgName)
+            this.onSaveSuccess()
           } else {
             console.error(res)
             this.onSaveError()
@@ -145,7 +144,7 @@ export class AddConsortiumMemberComponent implements OnInit {
     }
   }
 
-  onSaveSuccess(orgName: string) {
+  onSaveSuccess() {
     this.isSaving = false
     this.alertService.broadcast(AlertType.CONSORTIUM_MEMBER_ADDED)
     this.router.navigate([''])
