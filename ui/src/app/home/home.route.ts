@@ -2,10 +2,12 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, Route
 import { HomeComponent } from '../home/home.component'
 import { AuthGuard } from '../account/auth.guard'
 import { MemberInfoComponent } from './member-info/member-info.component'
-import { Injectable, inject } from '@angular/core'
+import { inject } from '@angular/core'
 import { MemberService } from '../member/service/member.service'
 import { Observable, map } from 'rxjs'
 import { MemberInfoEditComponent } from './member-info/member-info-edit.component'
+import { AddConsortiumMemberComponent } from './consortium/add-consortium-member.component'
+import { ContactUpdateComponent } from './contact/contact-update.component'
 
 export const ManageMemberGuard = (route: ActivatedRouteSnapshot): Observable<boolean> | boolean => {
   const router = inject(Router)
@@ -78,6 +80,51 @@ export const routes: Routes = [
         component: MemberInfoEditComponent,
         data: {
           authorities: ['ROLE_USER'],
+          pageTitle: 'home.title.string',
+        },
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'contact/new',
+        component: ContactUpdateComponent,
+        data: {
+          authorities: ['ROLE_USER'],
+          pageTitle: 'home.title.string',
+        },
+        canActivate: [AuthGuard, ManageMemberGuard],
+      },
+      {
+        path: 'manage/:id/contact/new',
+        component: ContactUpdateComponent,
+        data: {
+          authorities: ['ROLE_USER'],
+          pageTitle: 'home.title.string',
+        },
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'contact/:contactId/edit',
+        component: ContactUpdateComponent,
+        data: {
+          authorities: ['ROLE_USER'],
+          pageTitle: 'home.title.string',
+        },
+        canActivate: [AuthGuard, ManageMemberGuard],
+      },
+      {
+        path: 'manage/:id/contact/:contactId/edit',
+        component: ContactUpdateComponent,
+        data: {
+          authorities: ['ROLE_USER'],
+          pageTitle: 'home.title.string',
+        },
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'consortium-member/new',
+        component: AddConsortiumMemberComponent,
+        data: {
+          authorities: ['ROLE_USER', 'ROLE_CONSORTIUM_LEAD'],
           pageTitle: 'home.title.string',
         },
         canActivate: [AuthGuard],

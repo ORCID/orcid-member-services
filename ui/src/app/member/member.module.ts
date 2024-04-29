@@ -9,8 +9,8 @@ import { MembersComponent } from './members.component'
 import { MemberUpdateComponent } from './member-update.component'
 import { MemberDetailComponent } from './member-detail.component'
 import { MemberImportDialogComponent } from './member-import-dialog.component'
-import { ContactUpdateComponent } from '../home/contacts/contact-update.component'
-import { AddConsortiumMemberComponent } from './add-consortium-member.component'
+import { ContactUpdateComponent } from '../home/contact/contact-update.component'
+import { AddConsortiumMemberComponent } from '../home/consortium/add-consortium-member.component'
 
 @NgModule({
   imports: [
