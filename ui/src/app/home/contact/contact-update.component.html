@@ -23,7 +23,7 @@
       <h3 class="mb-20 wide-text">Contact details</h3>
       <div class="form w-100">
         <div class="form-group mb-20">
-          <label
+          <label for="name"
             class="wide-text font-size-12 font-weight-bold mb-1"
             [ngClass]="{ 'text-danger': editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched }"
             >Name <span class="font-weight-normal">(Required)</span></label
@@ -32,6 +32,7 @@
             type="text"
             class="form-control"
             name="name"
+            id="name"
             formControlName="name"
             (input)="editForm.get('name')?.markAsUntouched()"
             [ngClass]="{
@@ -51,11 +52,12 @@
           </div>
         </div>
         <div class="form-group mb-20">
-          <label class="wide-text font-size-12 font-weight-bold mb-1" [ngClass]="{ 'text-danger': editForm.get('title')?.invalid }">Job title</label>
+          <label for="title" class="wide-text font-size-12 font-weight-bold mb-1" [ngClass]="{ 'text-danger': editForm.get('title')?.invalid }">Job title</label>
           <input
             type="text"
             class="form-control"
             name="title"
+            id="title"
             formControlName="title"
             [ngClass]="{ 'text-danger': editForm.get('title')?.invalid }"
           />
@@ -66,7 +68,7 @@
           </div>
         </div>
         <div class="form-group mb-20">
-          <label
+          <label for="email"
             [ngClass]="{ 'text-danger': editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched }"
             class="wide-text font-size-12 font-weight-bold mb-1"
             >Email address <span class="font-weight-normal">(Required)</span></label
@@ -75,6 +77,7 @@
             type="text"
             class="form-control"
             name="email"
+            id="email"
             formControlName="email"
             (input)="editForm.get('email')?.markAsUntouched()"
             [ngClass]="{
@@ -101,13 +104,14 @@
           </div>
         </div>
         <div class="form-group mb-30">
-          <label class="wide-text font-size-12 font-weight-bold mb-1" [ngClass]="{ 'text-danger': editForm.get('phone')?.invalid && editForm.get('phone')?.dirty }"
+          <label for="phone" class="wide-text font-size-12 font-weight-bold mb-1" [ngClass]="{ 'text-danger': editForm.get('phone')?.invalid && editForm.get('phone')?.dirty }"
             >Phone</label
           >
           <input
             type="text"
             class="form-control"
             name="phone"
+            id="phone"
             formControlName="phone"
             [ngClass]="{ 'text-danger': editForm.get('phone')?.invalid && editForm.get('phone')?.dirty }"
           />
@@ -130,8 +134,8 @@
         <div formArrayName="roles" class="border-0 mb-32">
           <div *ngFor="let myOption of roles.controls; let i = index">
             <div formGroupName="{{ i }}">
-              <input type="checkbox" class="role-checkbox" />
-              <label class="font-size-14 font-weight-normal mb-16"> {{ myOption.get('name')?.value }} </label>
+              <input [id]="myOption.get('name')" type="checkbox" class="role-checkbox" />
+              <label [for]="myOption.get('name')" class="font-size-14 font-weight-normal mb-16"> {{ myOption.get('name')?.value }} </label>
             </div>
           </div>
         </div>

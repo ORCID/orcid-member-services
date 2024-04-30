@@ -157,7 +157,7 @@ export class MemberService {
     this.memberData.next(memberData)
   }
 
-  addConsortiumMember(consortiumMember: ISFNewConsortiumMember): Observable<Boolean> {
+  addConsortiumMember(consortiumMember: ISFNewConsortiumMember): Observable<boolean> {
     return this.http
       .post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/add-consortium-member`, consortiumMember, {
         observe: 'response',
@@ -171,7 +171,7 @@ export class MemberService {
       )
   }
 
-  removeConsortiumMember(consortiumMember: ISFConsortiumMemberData): Observable<Boolean> {
+  removeConsortiumMember(consortiumMember: ISFConsortiumMemberData): Observable<boolean> {
     return this.http
       .post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/remove-consortium-member`, consortiumMember, {
         observe: 'response',

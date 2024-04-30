@@ -22,8 +22,8 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
   memberDataSubscription: Subscription | undefined
   memberData: ISFMemberData | undefined | null
   consortiumMember: SFConsortiumMemberData | undefined
-  isSaving: boolean = false
-  invalidForm: boolean = false
+  isSaving = false
+  invalidForm = false
   routeData: any
   consortiumMemberId: string | undefined
   currentMonth: number | undefined

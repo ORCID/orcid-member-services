@@ -25,7 +25,7 @@
   
           <h3 class="mb-20 font-size-16 font-weight-bold">Name & email domain</h3>
           <div class="form-group mb-20">
-            <label
+            <label for="orgName"
               class="wide-text font-size-12 font-weight-bold"
               [ngClass]="{
                 'text-danger': editForm.get('orgName')?.invalid && editForm.get('orgName')?.touched && editForm.get('orgName')?.dirty
@@ -36,6 +36,7 @@
               type="text"
               class="form-control wide-text-25 org-name-input-field"
               name="orgName"
+              id="orgName"
               formControlName="orgName"
               (input)="editForm.get('orgName')?.markAsUntouched()"
               [ngClass]="{
@@ -62,7 +63,7 @@
             </div>
           </div>
           <div class="form-group mb-30">
-            <label
+            <label for="emailDomain"
               [ngClass]="{ 'text-danger': editForm.get('emailDomain')?.invalid && editForm.get('emailDomain')?.touched }"
               class="wide-text font-size-12 font-weight-bold"
               >Email domain</label
@@ -71,6 +72,7 @@
               type="text"
               class="form-control wide-text-25"
               name="emailDomain"
+              id="emailDomain"
               formControlName="emailDomain"
               (input)="editForm.get('emailDomain')?.markAsUntouched()"
               [ngClass]="{
@@ -94,7 +96,7 @@
   
           <h3 class="mb-20 font-size-16 font-weight-bold">Billing address</h3>
           <div class="form-group mb-20">
-            <label
+            <label for="street"
               class="wide-text font-size-12 font-weight-bold"
               [ngClass]="{ 'text-danger': editForm.get('street')?.invalid && editForm.get('street')?.touched }"
               >Street</label
@@ -103,6 +105,7 @@
               type="text"
               class="form-control wide-text-25"
               name="street"
+              id="street"
               formControlName="street"
               (input)="editForm.get('street')?.markAsUntouched()"
               [ngClass]="{
@@ -117,13 +120,14 @@
             </div>
           </div>
           <div class="form-group mb-20">
-            <label class="wide-text font-size-12 font-weight-bold" [ngClass]="{ 'text-danger': editForm.get('city')?.invalid && editForm.get('city')?.touched }"
+            <label for="city" class="wide-text font-size-12 font-weight-bold" [ngClass]="{ 'text-danger': editForm.get('city')?.invalid && editForm.get('city')?.touched }"
               >City</label
             >
             <input
               type="text"
               class="form-control wide-text-25"
               name="city"
+              id="city"
               formControlName="city"
               (input)="editForm.get('city')?.markAsUntouched()"
               [ngClass]="{
@@ -139,6 +143,7 @@
           </div>
           <div class="form-group mb-20" *ngIf="states">
             <label
+              for="state"
               class="wide-text font-size-12 font-weight-bold"
               [ngClass]="{
                 'text-danger': editForm.get('state')?.invalid && editForm.get('state')?.touched
@@ -148,6 +153,7 @@
             <select
               class="form-control font-size-14 wide-text-25 w-75"
               name="state"
+              id="state"
               formControlName="state"
               [ngClass]="{
                 'text-danger': editForm.get('state')?.invalid && editForm.get('state')?.dirty,
@@ -162,6 +168,7 @@
           </div>
           <div class="form-group mb-20">
             <label
+              for="country"
               class="wide-text font-size-12 font-weight-bold"
               [ngClass]="{ 'text-danger': editForm.get('country')?.invalid && editForm.get('country')?.dirty }"
               >Country <span class="font-size-12 font-weight-normal">(Required)</span></label
@@ -170,6 +177,7 @@
               (change)="onCountryChange(editForm.get('country')?.value)"
               class="form-control font-size-14 wide-text-25"
               name="country"
+              id="country"
               formControlName="country"
               [ngClass]="{
                 'text-danger': editForm.get('country')?.invalid && editForm.get('country')?.dirty,
@@ -188,7 +196,7 @@
             </div>
           </div>
           <div class="form-group mb-30">
-            <label
+            <label for="postcode"
               class="wide-text font-size-12 font-weight-bold"
               [ngClass]="{ 'text-danger': editForm.get('postcode')?.invalid && editForm.get('postcode')?.touched }"
               >ZIP/Postcode</label
@@ -197,6 +205,7 @@
               type="text"
               class="form-control wide-text-25 postcode-input-field"
               name="postcode"
+              id="postcode"
               formControlName="postcode"
               (input)="editForm.get('postcode')?.markAsUntouched()"
               [ngClass]="{
@@ -328,7 +337,7 @@
             <strong>Main relationship</strong> and <strong>Voting contact</strong> roles for this organization.
           </div>
           <div class="form-group mb-20">
-            <label
+            <label for="contactGivenName"
               class="wide-text font-size-12 font-weight-bold"
               [ngClass]="{
                 'text-danger':
@@ -341,6 +350,7 @@
               type="text"
               class="form-control wide-text-25"
               name="contactGivenName"
+              id="contactGivenName"
               formControlName="contactGivenName"
               (input)="editForm.get('contactGivenName')?.markAsUntouched()"
               [ngClass]="{
@@ -365,7 +375,7 @@
             </div>
           </div>
           <div class="form-group mb-20">
-            <label
+            <label for="contactFamilyName"
               class="wide-text font-size-12 font-weight-bold"
               [ngClass]="{
                 'text-danger':
@@ -379,6 +389,7 @@
               type="text"
               class="form-control wide-text-25"
               name="contactFamilyName"
+              id="contactFamilyName"
               formControlName="contactFamilyName"
               (input)="editForm.get('contactFamilyName')?.markAsUntouched()"
               [ngClass]="{
@@ -405,7 +416,7 @@
             </div>
           </div>
           <div class="form-group mb-20">
-            <label
+            <label for="contactJobTitle"
               class="wide-text font-size-12 font-weight-bold"
               [ngClass]="{ 'text-danger': editForm.get('contactJobTitle')?.invalid && editForm.get('contactJobTitle')?.touched }"
               >Job title</label
@@ -414,6 +425,7 @@
               type="text"
               class="form-control wide-text-25"
               name="contactJobTitle"
+              id="contactJobTitle"
               formControlName="contactJobTitle"
               (input)="editForm.get('contactJobTitle')?.markAsUntouched()"
               [ngClass]="{
@@ -428,7 +440,7 @@
             </div>
           </div>
           <div class="form-group mb-40">
-            <label
+            <label for="contactEmail"
               [ngClass]="{
                 'text-danger':
                   editForm.get('contactEmail')?.invalid && editForm.get('contactEmail')?.dirty && editForm.get('contactEmail')?.touched
@@ -440,6 +452,7 @@
               type="text"
               class="form-control wide-text-25"
               name="contactEmail"
+              id="contactEmail"
               formControlName="contactEmail"
               (input)="editForm.get('contactEmail')?.markAsUntouched()"
               [ngClass]="{
