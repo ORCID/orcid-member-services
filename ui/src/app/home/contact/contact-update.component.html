@@ -25,7 +25,7 @@
         <div class="form-group mb-20">
           <label
             class="wide-text font-size-12 font-weight-bold mb-1"
-            [ngClass]="{ 'text-danger': editForm.get('name').invalid && editForm.get('name').dirty && editForm.get('name').touched }"
+            [ngClass]="{ 'text-danger': editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched }"
             >Name <span class="font-weight-normal">(Required)</span></label
           >
           <input
@@ -33,41 +33,41 @@
             class="form-control"
             name="name"
             formControlName="name"
-            (input)="editForm.get('name').markAsUntouched()"
+            (input)="editForm.get('name')?.markAsUntouched()"
             [ngClass]="{
-              'text-danger': editForm.get('name').invalid && editForm.get('name').dirty && editForm.get('name').touched,
-              'input-field-default-border': !editForm.get('name').dirty || !editForm.get('name').touched
+              'text-danger': editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched,
+              'input-field-default-border': !editForm.get('name')?.dirty || !editForm.get('name')?.touched
             }"
           />
-          <div *ngIf="editForm.get('name').invalid && editForm.get('name').dirty && editForm.get('name').touched">
-            <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('name').errors.required">
+          <div *ngIf="editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched">
+            <small class="wide-text font-size-12 form-text text-danger" *ngIf="(editForm.get('name')?.errors)!['required']">
               Name cannot be empty
             </small>
             <div>
-              <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('name').errors.maxlength">
+              <small class="wide-text font-size-12 form-text text-danger" *ngIf="(editForm.get('name')?.errors)!['maxlength']">
                 Name is too long. Please use 80 characters or less.
               </small>
             </div>
           </div>
         </div>
         <div class="form-group mb-20">
-          <label class="wide-text font-size-12 font-weight-bold mb-1" [ngClass]="{ 'text-danger': editForm.get('title').invalid }">Job title</label>
+          <label class="wide-text font-size-12 font-weight-bold mb-1" [ngClass]="{ 'text-danger': editForm.get('title')?.invalid }">Job title</label>
           <input
             type="text"
             class="form-control"
             name="title"
             formControlName="title"
-            [ngClass]="{ 'text-danger': editForm.get('title').invalid }"
+            [ngClass]="{ 'text-danger': editForm.get('title')?.invalid }"
           />
-          <div *ngIf="editForm.get('title').invalid">
-            <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('title').errors.maxlength">
+          <div *ngIf="editForm.get('title')?.invalid">
+            <small class="wide-text font-size-12 form-text text-danger" *ngIf="(editForm.get('title')?.errors)!['maxlength']">
               Job title is too long. Please use 128 characters or less.
             </small>
           </div>
         </div>
         <div class="form-group mb-20">
           <label
-            [ngClass]="{ 'text-danger': editForm.get('email').invalid && editForm.get('email').dirty && editForm.get('email').touched }"
+            [ngClass]="{ 'text-danger': editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched }"
             class="wide-text font-size-12 font-weight-bold mb-1"
             >Email address <span class="font-weight-normal">(Required)</span></label
           >
@@ -76,32 +76,32 @@
             class="form-control"
             name="email"
             formControlName="email"
-            (input)="editForm.get('email').markAsUntouched()"
+            (input)="editForm.get('email')?.markAsUntouched()"
             [ngClass]="{
-              'text-danger': editForm.get('email').invalid && editForm.get('email').dirty && editForm.get('email').touched,
-              'input-field-default-border': !editForm.get('email').dirty || !editForm.get('email').touched
+              'text-danger': editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched,
+              'input-field-default-border': !editForm.get('email')?.dirty || !editForm.get('email')?.touched
             }"
           />
           <ng-template #validEmail>
             <small class="wide-text font-size-12 color-gray">The contact email for this person</small>
           </ng-template>
-          <div *ngIf="editForm.get('email').invalid && editForm.get('email').dirty && editForm.get('email').touched; else validEmail">
+          <div *ngIf="editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched; else validEmail">
             <small
               class="wide-text font-size-12 text-danger"
-              *ngIf="editForm.get('email').errors.pattern && !editForm.get('email').errors.maxlength && editForm.get('email').touched"
+              *ngIf="(editForm.get('email')?.errors)!['pattern'] && !(editForm.get('email')?.errors)!['maxlength'] && editForm.get('email')?.touched"
             >
               Please enter a valid email address, for example contactus@website.com
             </small>
-            <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('email').errors.maxlength">
+            <small class="wide-text font-size-12 text-danger" *ngIf="(editForm.get('email')?.errors)!['maxlength']">
               Email is too long. Please use 80 characters or less.
             </small>
-            <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('email').errors.required">
+            <small class="wide-text font-size-12 text-danger" *ngIf="(editForm.get('email')?.errors)!['required']">
               Email cannot be empty
             </small>
           </div>
         </div>
         <div class="form-group mb-30">
-          <label class="wide-text font-size-12 font-weight-bold mb-1" [ngClass]="{ 'text-danger': editForm.get('phone').invalid && editForm.get('phone').dirty }"
+          <label class="wide-text font-size-12 font-weight-bold mb-1" [ngClass]="{ 'text-danger': editForm.get('phone')?.invalid && editForm.get('phone')?.dirty }"
             >Phone</label
           >
           <input
@@ -109,13 +109,13 @@
             class="form-control"
             name="phone"
             formControlName="phone"
-            [ngClass]="{ 'text-danger': editForm.get('phone').invalid && editForm.get('phone').dirty }"
+            [ngClass]="{ 'text-danger': editForm.get('phone')?.invalid && editForm.get('phone')?.dirty }"
           />
           <ng-template #validPhone>
             <small class="wide-text font-size-12 form-text color-gray">A direct contact phone for this person</small>
           </ng-template>
-          <ng-container *ngIf="editForm.get('phone').invalid && editForm.get('phone').dirty; else validPhone">
-            <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('phone').errors.maxlength">
+          <ng-container *ngIf="editForm.get('phone')?.invalid && editForm.get('phone')?.dirty; else validPhone">
+            <small class="wide-text font-size-12 form-text text-danger" *ngIf="(editForm.get('phone')?.errors)!['maxlength']">
               Phone number is too long. Please use 40 characters or less.
             </small>
           </ng-container>
@@ -123,14 +123,14 @@
         <h3 class="mb-16 mr-8">Roles <span class="font-size-12 font-weight-normal">(Required)</span></h3>
         <small
           class="wide-text font-size-12 form-text mb-20 color-gray"
-          [ngClass]="{ 'text-danger': editForm.get('roles').invalid && editForm.get('roles').dirty }"
+          [ngClass]="{ 'text-danger': editForm.get('roles')?.invalid && editForm.get('roles')?.dirty }"
         >
           Please assign at least one role to this contact
         </small>
         <div formArrayName="roles" class="border-0 mb-32">
           <div *ngFor="let myOption of roles.controls; let i = index">
             <div formGroupName="{{ i }}">
-              <input type="checkbox" [formControl]="myOption.get('selected')" class="role-checkbox" />
+              <input type="checkbox" class="role-checkbox" />
               <label class="font-size-14 font-weight-normal mb-16"> {{ myOption.get('name')?.value }} </label>
             </div>
           </div>
