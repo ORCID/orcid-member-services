@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { AddConsortiumMemberComponent } from './add-consortium-member.component'
-import { MemberService } from 'src/app/member/service/member.service'
-import { AccountService } from 'src/app/account'
-import { AlertService } from 'src/app/shared/service/alert.service'
+import { RemoveConsortiumMemberComponent } from './remove-consortium-member.component'
 import { ActivatedRoute, Router } from '@angular/router'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { AccountService } from 'src/app/account'
+import { MemberService } from 'src/app/member/service/member.service'
+import { AlertService } from 'src/app/shared/service/alert.service'
 import { RouterTestingModule } from '@angular/router/testing'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { of } from 'rxjs'
 import { AlertType } from 'src/app/app.constants'
 
-describe('AddConsortiumMemberComponent', () => {
-  let component: AddConsortiumMemberComponent
-  let fixture: ComponentFixture<AddConsortiumMemberComponent>
+describe('RemoveConsortiumMemberComponent', () => {
+  let component: RemoveConsortiumMemberComponent
+  let fixture: ComponentFixture<RemoveConsortiumMemberComponent>
 
   let memberServiceSpy: jasmine.SpyObj<MemberService>
   let accountServiceSpy: jasmine.SpyObj<AccountService>
@@ -21,13 +21,13 @@ describe('AddConsortiumMemberComponent', () => {
   let router: jasmine.SpyObj<Router>
 
   beforeEach(() => {
-    memberServiceSpy = jasmine.createSpyObj('MemberService', ['addConsortiumMember'])
+    memberServiceSpy = jasmine.createSpyObj('MemberService', ['removeConsortiumMember'])
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
-      declarations: [AddConsortiumMemberComponent],
+      declarations: [RemoveConsortiumMemberComponent],
       providers: [
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
@@ -41,7 +41,7 @@ describe('AddConsortiumMemberComponent', () => {
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>
     activatedRoute = TestBed.inject(ActivatedRoute) as jasmine.SpyObj<ActivatedRoute>
 
-    fixture = TestBed.createComponent(AddConsortiumMemberComponent)
+    fixture = TestBed.createComponent(RemoveConsortiumMemberComponent)
     component = fixture.componentInstance
 
     spyOn(router, 'navigate').and.returnValue(Promise.resolve(true))
@@ -70,8 +70,8 @@ describe('AddConsortiumMemberComponent', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should call memberService.addConsortiumMember when saving', () => {
-    memberServiceSpy.addConsortiumMember.and.returnValue(of(true))
+  it('should call memberService.removeConsortiumMembers when saving', () => {
+    memberServiceSpy.removeConsortiumMember.and.returnValue(of(true))
 
     // set form to valid
     for (const control in component.editForm.controls) {
@@ -83,18 +83,20 @@ describe('AddConsortiumMemberComponent', () => {
 
     component.save()
 
-    expect(memberServiceSpy.addConsortiumMember).toHaveBeenCalled()
+    expect(memberServiceSpy.removeConsortiumMember).toHaveBeenCalled()
   })
 
-  it('should not call memberService.addConsortiumMember when saving if form is invalid', () => {
+  it('should not call memberService.removeConsortiumMembers when saving if form is invalid', () => {
     // form will be invalid by default
+
     component.save()
-    expect(memberServiceSpy.addConsortiumMember).toHaveBeenCalledTimes(0)
+    expect(memberServiceSpy.removeConsortiumMember).toHaveBeenCalledTimes(0)
   })
 
   it('alert service and router should be called on save success', () => {
     component.onSaveSuccess()
-    expect(alertServiceSpy.broadcast).toHaveBeenCalledWith(AlertType.CONSORTIUM_MEMBER_ADDED)
+
+    expect(alertServiceSpy.broadcast).toHaveBeenCalledWith(AlertType.CONSORTIUM_MEMBER_REMOVED)
     expect(router.navigate).toHaveBeenCalled()
   })
 })

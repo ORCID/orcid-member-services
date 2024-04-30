@@ -20,6 +20,7 @@ import * as moment from 'moment'
 import { createRequestOption } from 'src/app/shared/request-util'
 import { IMemberPage, MemberPage } from '../model/member-page.model'
 import {
+  ISFConsortiumMemberData,
   ISFMemberData,
   ISFRawConsortiumMemberData,
   ISFRawMemberData,
@@ -164,7 +165,22 @@ export class MemberService {
       .pipe(
         map((res: HttpResponse<any>) => res.status === 200),
         catchError((err) => {
-          return throwError(err)
+          console.error('error adding consortium member', err)
+          return of(false)
+        })
+      )
+  }
+
+  removeConsortiumMember(consortiumMember: ISFConsortiumMemberData): Observable<Boolean> {
+    return this.http
+      .post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/remove-consortium-member`, consortiumMember, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: HttpResponse<any>) => res.status === 200),
+        catchError((err) => {
+          console.error('error removing consortium member', err)
+          return of(false)
         })
       )
   }
