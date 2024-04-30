@@ -21,8 +21,8 @@ export class AddConsortiumMemberComponent implements OnInit {
   countries: ISFCountry[] | undefined
   states: ISFState[] | undefined
   memberData: ISFMemberData | undefined | null
-  isSaving: boolean = false
-  invalidForm: boolean = false
+  isSaving = false
+  invalidForm = false
   routeData: any
   currentMonth: number | undefined
   currentYear: number | undefined

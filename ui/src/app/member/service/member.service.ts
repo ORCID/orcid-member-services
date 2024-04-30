@@ -156,7 +156,7 @@ export class MemberService {
     this.memberData.next(memberData)
   }
 
-  addConsortiumMember(consortiumMember: ISFNewConsortiumMember): Observable<Boolean> {
+  addConsortiumMember(consortiumMember: ISFNewConsortiumMember): Observable<boolean> {
     return this.http
       .post<ISFMemberContactUpdate>(`${this.resourceUrl}/members/add-consortium-member`, consortiumMember, {
         observe: 'response',
@@ -164,7 +164,8 @@ export class MemberService {
       .pipe(
         map((res: HttpResponse<any>) => res.status === 200),
         catchError((err) => {
-          return throwError(err)
+          console.log('error adding consortium member', err)
+          return of(false)
         })
       )
   }
