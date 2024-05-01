@@ -8,6 +8,7 @@ import { Observable, map } from 'rxjs'
 import { MemberInfoEditComponent } from './member-info/member-info-edit.component'
 import { AddConsortiumMemberComponent } from './consortium/add-consortium-member.component'
 import { ContactUpdateComponent } from './contact/contact-update.component'
+import { RemoveConsortiumMemberComponent } from './consortium/remove-consortium-member.component'
 
 export const ManageMemberGuard = (route: ActivatedRouteSnapshot): Observable<boolean> | boolean => {
   const router = inject(Router)
@@ -123,6 +124,15 @@ export const routes: Routes = [
       {
         path: 'consortium-member/new',
         component: AddConsortiumMemberComponent,
+        data: {
+          authorities: ['ROLE_USER', 'ROLE_CONSORTIUM_LEAD'],
+          pageTitle: 'home.title.string',
+        },
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'consortium-member/:id/remove',
+        component: RemoveConsortiumMemberComponent,
         data: {
           authorities: ['ROLE_USER', 'ROLE_CONSORTIUM_LEAD'],
           pageTitle: 'home.title.string',
