@@ -134,8 +134,8 @@
         <div formArrayName="roles" class="border-0 mb-32">
           <div *ngFor="let myOption of roles.controls; let i = index">
             <div formGroupName="{{ i }}">
-              <input [id]="myOption.get('name')" type="checkbox" class="role-checkbox" />
-              <label [for]="myOption.get('name')" class="font-size-14 font-weight-normal mb-16"> {{ myOption.get('name')?.value }} </label>
+              <input [id]="myOption.get('name')?.value + '-id'" type="checkbox" class="role-checkbox" />
+              <label [for]="myOption.get('name')?.value + '-id'" class="font-size-14 font-weight-normal mb-16"> {{ myOption.get('name')?.value }} </label>
             </div>
           </div>
         </div>
