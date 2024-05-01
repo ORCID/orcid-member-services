@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { IUser } from '../user/model/user.model'
-import { ISFMemberData } from './model/salesforce-member-data.model'
+import { IUser } from '../../user/model/user.model'
+import { ISFMemberData } from '../../member/model/salesforce-member-data.model'
 import {
   ISFMemberContact,
   ISFMemberContactUpdate,
   SFMemberContact,
   SFMemberContactRole,
   SFMemberContactUpdate,
-} from './model/salesforce-member-contact.model'
+} from '../../member/model/salesforce-member-contact.model'
 import {
   AbstractControl,
   FormArray,
@@ -17,13 +17,13 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms'
-import { MemberService } from './service/member.service'
-import { AccountService } from '../account/service/account.service'
-import { AlertService } from '../shared/service/alert.service'
+import { MemberService } from '../../member/service/member.service'
+import { AccountService } from '../../account/service/account.service'
+import { AlertService } from '../../shared/service/alert.service'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AlertType, EMAIL_REGEXP } from '../app.constants'
+import { AlertType, EMAIL_REGEXP } from '../../app.constants'
 import { EMPTY, Subject, combineLatest, switchMap, takeUntil } from 'rxjs'
-import { IAccount } from '../account/model/account.model'
+import { IAccount } from '../../account/model/account.model'
 
 @Component({
   selector: 'app-contact-update',
@@ -37,7 +37,6 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   isSaving = false
   invalidForm = false
   routeData: any
-  editForm: FormGroup | undefined
   contactId: string | undefined
   managedMember: string | undefined
   destroy$ = new Subject()
@@ -50,6 +49,28 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
     new SFMemberContactRole(5, false, 'Comms contact'),
     new SFMemberContactRole(6, false, 'Product contact'),
   ]
+
+  validateContactRoles: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const rolesArray = control as FormArray
+    const selectedRoles = rolesArray.controls.filter((control) => control.value.selected)
+    if (selectedRoles.length < 1) {
+      return { oneRoleSelected: true }
+    }
+    return null
+  }
+
+  editForm: FormGroup = this.fb.group({
+    name: [null, [Validators.required, Validators.maxLength(80)]],
+    phone: [null, [Validators.maxLength(40)]],
+    email: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
+    title: [null, [Validators.maxLength(128)]],
+    roles: this.fb.array(
+      this.rolesData.map((val: SFMemberContactRole) =>
+        this.fb.group({ id: val.id, selected: val.selected, name: val.name })
+      ),
+      [this.validateContactRoles]
+    ),
+  })
 
   constructor(
     private memberService: MemberService,
@@ -70,18 +91,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
         this.memberService.setManagedMember(params['id'])
       }
     })
-    this.editForm = this.fb.group({
-      name: [null, [Validators.required, Validators.maxLength(80)]],
-      phone: [null, [Validators.maxLength(40)]],
-      email: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
-      title: [null, [Validators.maxLength(128)]],
-      roles: this.fb.array(
-        this.rolesData.map((val: SFMemberContactRole) =>
-          this.fb.group({ id: val.id, selected: val.selected, name: val.name })
-        ),
-        [this.validateContactRoles]
-      ),
-    })
+
     combineLatest([this.activatedRoute.params, this.accountService.getAccountData()])
       .pipe(
         switchMap(([params, account]) => {
@@ -120,15 +130,6 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
         this.invalidForm = false
       }
     })
-  }
-
-  validateContactRoles: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    const rolesArray = control as FormArray
-    const selectedRoles = rolesArray.controls.filter((control) => control.value.selected)
-    if (selectedRoles.length < 1) {
-      return { oneRoleSelected: true }
-    }
-    return null
   }
 
   updateForm(contact: ISFMemberContact) {
@@ -173,6 +174,8 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
       })
       this.editForm!.markAllAsTouched()
     } else {
+      console.log('form valid')
+
       this.invalidForm = false
       this.isSaving = true
       const contact = this.createContactFromForm()
