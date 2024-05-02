@@ -32,9 +32,7 @@ export class SFMemberContact implements ISFMemberContact {
     public contactEmail?: string,
     public title?: string,
     public phone?: string
-  ) {
-    this.memberOrgRole = []
-  }
+  ) {}
 }
 
 export class ISFMemberContactUpdate {

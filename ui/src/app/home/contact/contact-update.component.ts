@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { IUser } from '../../user/model/user.model'
 import { ISFMemberData } from '../../member/model/salesforce-member-data.model'
 import {
   ISFMemberContact,
   ISFMemberContactUpdate,
-  SFMemberContact,
   SFMemberContactRole,
   SFMemberContactUpdate,
 } from '../../member/model/salesforce-member-contact.model'
@@ -24,6 +22,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { AlertType, EMAIL_REGEXP } from '../../app.constants'
 import { EMPTY, Subject, combineLatest, switchMap, takeUntil } from 'rxjs'
 import { IAccount } from '../../account/model/account.model'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-contact-update',
@@ -40,6 +39,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   contactId: string | undefined
   managedMember: string | undefined
   destroy$ = new Subject()
+  faTrashAlt = faTrashAlt
 
   rolesData = [
     new SFMemberContactRole(1, false, 'Main relationship contact'),
@@ -138,8 +138,12 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
       phone: contact.phone,
       title: contact.title,
       email: contact.contactEmail,
-      roles: contact.memberOrgRole?.map((role: string) => {
-        return { selected: true, name: role }
+      roles: this.editForm!.controls['roles'].value.map((role: SFMemberContactRole) => {
+        if (contact.memberOrgRole?.includes(role.name)) {
+          return { ...role, selected: true }
+        } else {
+          return role
+        }
       }),
     })
   }
