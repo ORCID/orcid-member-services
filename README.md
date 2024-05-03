@@ -5,6 +5,7 @@ The ORCID Member Portal is a new suite of tools intended to help organizations m
 The first phase of development includes features that simplify the process of posting affiliation information (employment, education, etc) to researchers’ ORCID records.
 
 Project tasks are managed in Trello:
+
 - Current development tasks: https://trello.com/b/a8Cxpwqe/member-services-current-development
 - Release notes: https://trello.com/b/9Xugawlx/member-services-release-notes-2020
 
@@ -47,7 +48,6 @@ Edit bash profile to set JAVA_HOME to your OpenJDK 11 path, ex:
 - Wait for the jhipster-registry to start
 - Verify it has started properly. Go to http://localhost:8761/#/ and sign in with `admin`, password `admin`
 
-
 ## Start the user service
 
 Our user service, based on [JHipster UAA](https://www.jhipster.tech/using-uaa/), is the service we use to secure our member services app. We also use it for all user based functionality.
@@ -69,6 +69,7 @@ Our user service, based on [JHipster UAA](https://www.jhipster.tech/using-uaa/),
 - Go to [http://localhost:8080/](http://localhost:8080/) and sign in with the admin credentials `admin / admin`
 
 ## Start the Angular frontend
+
 > This is only required after making front end changes
 
 - Stop the jhipster gateway if it's running
@@ -93,3 +94,4 @@ Our user service, based on [JHipster UAA](https://www.jhipster.tech/using-uaa/),
 ## Notes
 
 - As long as the jhipster-registry is running first, the starting order of the other services is not important. They can also be started concurrently.
+- Local development uses mock salesforce data. The `fetchDummyMemberData()` call should be bypassed if the local dev environment is connected to salesforce.
