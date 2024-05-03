@@ -33,10 +33,12 @@ import {
   ISFRawMemberContact,
   ISFRawMemberContacts,
   SFMemberContact,
+  SFMemberContactRole,
 } from '../model/salesforce-member-contact.model'
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from '../model/salesforce-member-org-id.model'
 import { ISFMemberUpdate } from '../model/salesforce-member-update.model'
 import { ISFNewConsortiumMember } from '../model/salesforce-new-consortium-member.model'
+import { SFAddress } from '../model/salesforce-address.model'
 
 @Injectable({ providedIn: 'root' })
 export class MemberService {
@@ -141,13 +143,55 @@ export class MemberService {
     return null
   }
 
+  fetchDummyMemberData() {
+    this.memberData.next({
+      id: 'SfId',
+      consortiaMember: true,
+      consortiaLeadId: 'SfId',
+      isConsortiumLead: true,
+      name: 'Member name',
+      publicDisplayName: 'Public display name',
+      website: 'hehe.com',
+      billingCountry: 'Lithuania',
+      memberType: 'memberType',
+      publicDisplayDescriptionHtml: 'Public dispay description',
+      logoUrl: 'https://orcid.org/assets/vectors/orcid.logo.icon.svg',
+      publicDisplayEmail: 'hehe@mail.com',
+      membershipStartDateString: '2022',
+      membershipEndDateString: '2050',
+      consortiumLeadName: '',
+      consortiumMembers: [
+        new SFConsortiumMemberData('sfid1', 'orgname1'),
+        new SFConsortiumMemberData('sfid2', 'orgname 2'),
+      ],
+      contacts: [
+        new SFMemberContact('contactId1', true, ['voting'], 'Anthony', 'email2@email.com', 'title', 'phone'),
+        new SFMemberContact(
+          'contactId2',
+          false,
+          ['Voting contact'],
+          'Barbara',
+          'email@email.com',
+          'other title',
+          'phone'
+        ),
+      ],
+      orgIds: { ROR: ['123', '456'], GRID: ['1213', '1415'] },
+      billingAddress: new SFAddress('street', 'United Kingdom', 'state', 'Lithuania', 'code', 'postalCode', 'city'),
+    })
+  }
+
   getMemberData(salesforceId?: string, force?: boolean): Observable<ISFMemberData | undefined | null> {
     if (force) {
       this.stopFetchingMemberData.next(true)
     }
 
     if (salesforceId && (!this.memberData.value || this.memberData.value.id !== salesforceId || force)) {
-      this.fetchMemberData(salesforceId)
+      if (window.location.origin.includes('localhost')) {
+        this.fetchDummyMemberData()
+      } else {
+        this.fetchMemberData(salesforceId)
+      }
     }
 
     return this.memberData.asObservable()
