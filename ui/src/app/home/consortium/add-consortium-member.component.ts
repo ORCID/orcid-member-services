@@ -130,7 +130,7 @@ export class AddConsortiumMemberComponent implements OnInit {
       this.memberService.addConsortiumMember(newConsortiumMember).subscribe(
         (res) => {
           if (res) {
-            this.onSaveSuccess()
+            this.onSaveSuccess(newConsortiumMember.orgName)
           } else {
             console.error(res)
             this.onSaveError()
@@ -144,9 +144,9 @@ export class AddConsortiumMemberComponent implements OnInit {
     }
   }
 
-  onSaveSuccess() {
+  onSaveSuccess(orgName: string) {
     this.isSaving = false
-    this.alertService.broadcast(AlertType.CONSORTIUM_MEMBER_ADDED)
+    this.alertService.broadcast(AlertType.CONSORTIUM_MEMBER_ADDED, orgName)
     this.router.navigate([''])
   }
 

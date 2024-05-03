@@ -94,9 +94,9 @@ describe('RemoveConsortiumMemberComponent', () => {
   })
 
   it('alert service and router should be called on save success', () => {
-    component.onSaveSuccess()
+    component.onSaveSuccess('orgName')
 
-    expect(alertServiceSpy.broadcast).toHaveBeenCalledWith(AlertType.CONSORTIUM_MEMBER_REMOVED)
+    expect(alertServiceSpy.broadcast).toHaveBeenCalledWith(AlertType.CONSORTIUM_MEMBER_REMOVED, 'orgName')
     expect(router.navigate).toHaveBeenCalled()
   })
 })
