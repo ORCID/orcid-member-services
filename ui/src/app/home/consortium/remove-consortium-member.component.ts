@@ -106,26 +106,26 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
       this.isSaving = true
       const consortiumMember = this.createConsortiumMemberFromForm()
 
-      this.memberService.removeConsortiumMember(consortiumMember).subscribe(
-        (res) => {
+      this.memberService.removeConsortiumMember(consortiumMember).subscribe({
+        next: (res) => {
           if (res) {
-            this.onSaveSuccess()
+            this.onSaveSuccess(consortiumMember.orgName)
           } else {
             console.error(res)
             this.onSaveError()
           }
         },
-        (err) => {
+        error: (err) => {
           console.error(err)
           this.onSaveError()
-        }
-      )
+        },
+      })
     }
   }
 
-  onSaveSuccess() {
+  onSaveSuccess(orgName: string | undefined) {
     this.isSaving = false
-    this.alertService.broadcast(AlertType.CONSORTIUM_MEMBER_REMOVED)
+    this.alertService.broadcast(AlertType.CONSORTIUM_MEMBER_REMOVED, orgName)
     this.router.navigate([''])
   }
 

@@ -25,10 +25,10 @@
         <div *ngIf="invalidForm" class="warning d-flex w-75 p-3 mb-3">
           <img src="./../../../../content/images/error-sign.svg" alt="Warning sign" class="p-2" />
           <div>
-            <div class="mb-2 font-size-12 wide-text font-weight-bold line-height-150">
+            <div class="mb-2 font-size-14 wide-text font-weight-bold line-height-150">
               Your changes cannot be saved
             </div>
-            <div class="font-size-12 wide-text line-height-150">
+            <div class="font-size-14 wide-text line-height-150">
               Please fix the issues with the public details before trying to save again
             </div>
           </div>
@@ -68,7 +68,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Billing address -->
 
         <h3 class="mb-20 font-size-16 font-weight-bold">Billing address</h3>
@@ -96,7 +96,9 @@
           </div>
         </div>
         <div class="form-group mb-20">
-          <label class="wide-text font-size-12 font-weight-bold" [ngClass]="{ 'text-danger': editForm.get('city').invalid && editForm.get('city').touched }"
+          <label
+            class="wide-text font-size-12 font-weight-bold"
+            [ngClass]="{ 'text-danger': editForm.get('city').invalid && editForm.get('city').touched }"
             >City</label
           >
           <input
@@ -134,9 +136,7 @@
             }"
           >
             <option selected [ngValue]="null">-- No state or province --</option>
-            <option *ngFor="let state of states" [ngValue]="state.name" class="form-field-text-color-default">{{
-              state.name
-            }}</option>
+            <option *ngFor="let state of states" [ngValue]="state.name" class="form-field-text-color-default">{{ state.name }}</option>
           </select>
         </div>
         <div class="form-group mb-20">
@@ -145,12 +145,7 @@
             [ngClass]="{ 'text-danger': editForm.get('country').invalid && editForm.get('country').dirty }"
             >Country</label
           >
-          <input
-            readonly
-            class="form-control font-size-14 wide-text-25 w-75"
-            name="country"
-            formControlName="country"
-          />
+          <input readonly class="form-control font-size-14 wide-text-25 w-75" name="country" formControlName="country" />
         </div>
         <div class="form-group mb-30">
           <label
@@ -223,23 +218,29 @@
         <!-- PUBLIC DETAILS -->
 
         <h2 class="wide-text font-size-24 ">Public details</h2>
-        <div class=" wide-text-25 mb-20 font-size-14 line-height-150">Organization information to be displayed publicly, such as on the <a href="{{ MEMBER_LIST_URL }} " target="_blank">ORCID member list</a></div>
+        <div class=" wide-text-25 mb-20 font-size-14 line-height-150">
+          Organization information to be displayed publicly, such as on the
+          <a href="{{ MEMBER_LIST_URL }} " target="_blank">ORCID member list</a>
+        </div>
         <div class="mb-5">
           <div class="form-group w-75">
-            <label 
-              class="wide-text font-size-12" 
-              [ngClass]="
-                { 'text-danger': editForm.get('publicName').invalid && editForm.get('publicName').touched && editForm.get('publicName').dirty }"
-                >Public display name</label>
+            <label
+              class="wide-text font-size-12"
+              [ngClass]="{
+                'text-danger': editForm.get('publicName').invalid && editForm.get('publicName').touched && editForm.get('publicName').dirty
+              }"
+              >Public display name</label
+            >
             <input
               type="text"
               class="form-control"
               name="publicName"
               (input)="editForm.get('publicName').markAsUntouched()"
               formControlName="publicName"
-              [ngClass]="
-                { 'text-danger': editForm.get('publicName').invalid && editForm.get('publicName').touched && editForm.get('publicName').dirty,
-                'input-field-default-border': !editForm.get('publicName').touched || !editForm.get('publicName').dirty }"
+              [ngClass]="{
+                'text-danger': editForm.get('publicName').invalid && editForm.get('publicName').touched && editForm.get('publicName').dirty,
+                'input-field-default-border': !editForm.get('publicName').touched || !editForm.get('publicName').dirty
+              }"
             />
             <div *ngIf="editForm.get('publicName').invalid">
               <small class="wide-text font-size-12 form-text text-danger" *ngIf="editForm.get('publicName').errors.required">
@@ -320,11 +321,13 @@
               }"
             />
             <ng-template #validEmail>
-              <small class="wide-text font-size-12 color-gray">Emails should be in the standard format e.g. contactus@website.com</small>
+              <small class="wide-text font-size-12 color-gray"
+                >Emails should be in the standard format e.g. contactus&#64;website.com</small
+              >
             </ng-template>
             <div *ngIf="editForm.get('email').invalid && editForm.get('email').touched; else validEmail">
               <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('email').errors.pattern">
-                Please enter a valid email address, for example contactus@website.com
+                Please enter a valid email address, for example contactus&#64;website.com
               </small>
               <div>
                 <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('email').errors.maxlength">
@@ -359,7 +362,10 @@
               <div class="w-66 line-height-150">{{ orgId }}</div>
               <div class="w-33 line-height-150">{{ orgIdType }}</div>
             </li>
-            <hr *ngIf="!(i == objectKeys(memberData.orgIds).length - 1 && ii == memberData.orgIds[orgIdType].length - 1)" class="mb-0 mt-0"/>
+            <hr
+              *ngIf="!(i == objectKeys(memberData.orgIds).length - 1 && ii == memberData.orgIds[orgIdType].length - 1)"
+              class="mb-0 mt-0"
+            />
           </div>
         </ul>
       </div>

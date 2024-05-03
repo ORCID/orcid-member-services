@@ -188,7 +188,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
         contact.contactEmail = this.contact!.contactEmail
         contact.contactName = this.contact!.name
       }
-
+      this.onSaveSuccess()
       this.memberService.updateContact(contact, this.memberData!.id!).subscribe({
         next: (res) => {
           if (res) {

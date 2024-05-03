@@ -10,10 +10,10 @@
       <div *ngIf="invalidForm" class="error-message d-flex p-16 mb-30 line-height-150">
         <img src="./../../../../content/images/error-sign.svg" alt="Warning sign" class="p-8" />
         <div>
-          <div class="mb-8 font-size-12 wide-text-25 font-weight-bold">
+          <div class="mb-8 font-size-14 wide-text-25 font-weight-bold">
             Your changes cannot be saved
           </div>
-          <div class="font-size-12 wide-text-25">
+          <div class="font-size-14 wide-text-25">
             Please fix the issues with the form before trying to save again
           </div>
         </div>
@@ -80,7 +80,7 @@
           />
           <ng-template #validEmailDomain>
             <small class="wide-text font-size-12 color-gray"
-              >The email domain is the remaining address after the @ symbol eg: orcid.org or website.com</small
+              >The email domain is the remaining address after the &#64; symbol eg: orcid.org or website.com</small
             >
           </ng-template>
           <div *ngIf="editForm.get('emailDomain').invalid && editForm.get('emailDomain').touched; else validEmailDomain">
@@ -117,7 +117,9 @@
           </div>
         </div>
         <div class="form-group mb-20">
-          <label class="wide-text font-size-12 font-weight-bold" [ngClass]="{ 'text-danger': editForm.get('city').invalid && editForm.get('city').touched }"
+          <label
+            class="wide-text font-size-12 font-weight-bold"
+            [ngClass]="{ 'text-danger': editForm.get('city').invalid && editForm.get('city').touched }"
             >City</label
           >
           <input
@@ -155,9 +157,7 @@
             }"
           >
             <option selected [ngValue]="null">-- No state or province --</option>
-            <option *ngFor="let state of states" [ngValue]="state.name" class="form-field-text-color-default">{{
-              state.name
-            }}</option>
+            <option *ngFor="let state of states" [ngValue]="state.name" class="form-field-text-color-default">{{ state.name }}</option>
           </select>
         </div>
         <div class="form-group mb-20">
@@ -461,7 +461,7 @@
               class="wide-text font-size-12 text-danger"
               *ngIf="editForm.get('contactEmail').errors.pattern && !editForm.get('contactEmail').errors.maxlength"
             >
-              Please enter a valid email address, for example contactus@website.com
+              Please enter a valid email address, for example contactus&#64;website.com
             </small>
             <small class="wide-text font-size-12 text-danger" *ngIf="editForm.get('contactEmail').errors.maxlength">
               Email is too long. Please use 80 characters or less.
