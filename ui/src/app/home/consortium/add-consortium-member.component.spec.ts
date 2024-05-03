@@ -93,8 +93,8 @@ describe('AddConsortiumMemberComponent', () => {
   })
 
   it('alert service and router should be called on save success', () => {
-    component.onSaveSuccess()
-    expect(alertServiceSpy.broadcast).toHaveBeenCalledWith(AlertType.CONSORTIUM_MEMBER_ADDED)
+    component.onSaveSuccess('orgName')
+    expect(alertServiceSpy.broadcast).toHaveBeenCalledWith(AlertType.CONSORTIUM_MEMBER_ADDED, 'orgName')
     expect(router.navigate).toHaveBeenCalled()
   })
 })
