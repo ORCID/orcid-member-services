@@ -394,7 +394,6 @@ export class MemberService {
       contactEmail: res.Contact_Curr_Email__c,
       phone: res.Phone,
       title: res.Title,
-      memberOrgRole: [],
     }
   }
 
