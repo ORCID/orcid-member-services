@@ -26,7 +26,7 @@ export class AddConsortiumMemberComponent implements OnInit {
   routeData: any
   currentMonth: number | undefined
   currentYear: number | undefined
-  monthList: [number, string][] | undefined
+  monthList: [string, string][] | undefined
   yearList: number[] | undefined
   editForm: FormGroup = this.fb.group({
     orgName: [null, [Validators.required, Validators.maxLength(41)]],

@@ -28,7 +28,7 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
   consortiumMemberId: string | undefined
   currentMonth: number | undefined
   currentYear: number | undefined
-  monthList: [number, string][] | undefined
+  monthList: [string, string][] | undefined
   yearList: number[] | undefined
   editForm: FormGroup = this.fb.group({
     terminationMonth: [null, [Validators.required]],
@@ -55,6 +55,8 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
     this.currentMonth = this.dateUtilService.getCurrentMonthNumber()
     this.currentYear = this.dateUtilService.getCurrentYear()
     this.monthList = this.dateUtilService.getMonthsList()
+    console.log(this.monthList)
+
     this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1)
 
     this.accountService.getAccountData().subscribe((account) => {
