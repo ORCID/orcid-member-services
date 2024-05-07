@@ -19,7 +19,7 @@ export interface ISFRawMemberContact {
 }
 
 export interface ISFRawMemberContacts {
-  size?: number
+  totalSize?: number
   records?: ISFRawMemberContact[]
 }
 
