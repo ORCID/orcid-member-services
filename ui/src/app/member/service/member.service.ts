@@ -363,8 +363,6 @@ export class MemberService {
   }
 
   private convertToSalesforceMemberContacts(res: HttpResponse<ISFRawMemberContacts>): SFMemberContact[] {
-    console.log(res)
-
     const contacts: { [email: string]: SFMemberContact } = {}
     if (res.body && res.body.records && res.body.records.length > 0) {
       for (const contact of res.body.records) {
@@ -381,8 +379,6 @@ export class MemberService {
           }
         }
       }
-      console.log(contacts)
-
       return Object.values(contacts)
     } else {
       return []
@@ -398,6 +394,7 @@ export class MemberService {
       contactEmail: res.Contact_Curr_Email__c,
       phone: res.Phone,
       title: res.Title,
+      memberOrgRole: [],
     }
   }
 

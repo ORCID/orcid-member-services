@@ -64,8 +64,6 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((data) => {
-        console.log(data)
-
         this.memberData = data
       })
   }
