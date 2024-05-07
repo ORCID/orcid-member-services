@@ -55,7 +55,6 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
     this.currentMonth = this.dateUtilService.getCurrentMonthNumber()
     this.currentYear = this.dateUtilService.getCurrentYear()
     this.monthList = this.dateUtilService.getMonthsList()
-    console.log(this.monthList)
 
     this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1)
 
