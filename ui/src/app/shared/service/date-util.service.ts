@@ -37,22 +37,22 @@ export class DateUtilService {
     return years
   }
 
-  getMonthsList(): [number, string][] {
+  getMonthsList(): [string, string][] {
     const months = moment.months()
     const monthsArray = []
     for (let _i = 1; _i <= months.length; _i++) {
-      const res: [number, string] = [parseInt(('0' + _i.toString()).slice(-2)), months[_i - 1]]
+      const res: [string, string] = [('0' + _i.toString()).slice(-2), months[_i - 1]]
       monthsArray.push(res)
     }
     return monthsArray
   }
 
-  getFutureMonthsList(): [number, string][] {
+  getFutureMonthsList(): [string, string][] {
     const months = moment.months()
     const monthsArray = []
     for (let _i = 1; _i <= months.length; _i++) {
       if (_i > this.getCurrentMonthNumber()) {
-        const res: [number, string] = [parseInt(('0' + _i.toString()).slice(-2)), months[_i - 1]]
+        const res: [string, string] = [('0' + _i.toString()).slice(-2), months[_i - 1]]
         monthsArray.push(res)
       }
     }
