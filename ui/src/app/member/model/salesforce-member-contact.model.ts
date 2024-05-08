@@ -27,7 +27,7 @@ export class SFMemberContact implements ISFMemberContact {
   constructor(
     public memberId?: string,
     public votingContact?: boolean,
-    public memberOrgRole?: string[],
+    public memberOrgRole: string[] = [],
     public name?: string,
     public contactEmail?: string,
     public title?: string,
