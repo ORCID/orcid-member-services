@@ -145,11 +145,17 @@ export class MemberUpdateComponent implements OnInit {
       lastModifiedDate: member.lastModifiedDate != null ? member.lastModifiedDate.format(DATE_TIME_FORMAT) : null,
     })
     const clientId = this.editForm.get('clientId')?.value
+    const sfId = this.editForm.get('salesforceId')?.value
+
     if (!clientId || (clientId && clientId === '')) {
       this.editForm.get('assertionServiceEnabled')?.reset()
       this.editForm.get('assertionServiceEnabled')?.disable()
     } else {
       this.editForm.get('assertionServiceEnabled')?.enable()
+    }
+
+    if (sfId) {
+      this.editForm.get('salesforceId')?.disable()
     }
   }
 
