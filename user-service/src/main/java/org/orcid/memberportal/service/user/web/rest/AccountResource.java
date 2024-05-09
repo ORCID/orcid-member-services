@@ -101,13 +101,7 @@ public class AccountResource {
     @GetMapping("/account")
     public UserDTO getAccount() {
         User user = userService.getCurrentUser();
-        UserDTO userDTO = userMapper.toUserDTO(user);
-        if (!StringUtils.isAllBlank(userDTO.getLoginAs())) {
-            Optional<User> loginAsUser = userService.getUserByLogin(userDTO.getLoginAs());
-            userDTO = userMapper.toUserDTO(loginAsUser.get());
-            userDTO.setLoggedAs(true);
-        }
-        return userDTO;
+        return userMapper.toUserDTO(user);
     }
 
     /**

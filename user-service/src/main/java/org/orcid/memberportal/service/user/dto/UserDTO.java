@@ -61,12 +61,8 @@ public class UserDTO {
 
     private boolean isAdmin = false;
 
-    private boolean isLoggedAs = false;
-
-    private String loginAs;
-
     private String memberName;
-    
+
     private boolean mfaEnabled;
 
     public UserDTO() {
@@ -225,22 +221,6 @@ public class UserDTO {
         this.isAdmin = isAdmin;
     }
 
-    public boolean isLoggedAs() {
-        return isLoggedAs;
-    }
-
-    public void setLoggedAs(boolean isLoggedAs) {
-        this.isLoggedAs = isLoggedAs;
-    }
-
-    public String getLoginAs() {
-        return loginAs;
-    }
-
-    public void setLoginAs(String loginAs) {
-        this.loginAs = loginAs;
-    }
-
     public String getMemberName() {
         return memberName;
     }
@@ -248,7 +228,7 @@ public class UserDTO {
     public void setMemberName(String memberName) {
         this.memberName = memberName;
     }
-    
+
     public boolean isMfaEnabled() {
         return mfaEnabled;
     }
@@ -355,7 +335,6 @@ public class UserDTO {
     public String toString() {
         return "UserDTO{firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\'' + ", imageUrl='" + imageUrl + '\''
                 + ", activated=" + activated + ", langKey='" + langKey + '\'' + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy='"
-                + lastModifiedBy + '\'' + ", lastModifiedDate=" + lastModifiedDate + ", authorities=" + authorities + " loginAs= " + loginAs + " isLoggedAs= "
-                + isLoggedAs + ", mainContact='" + mainContact + '\'' + "}";
+                + lastModifiedBy + '\'' + ", lastModifiedDate=" + lastModifiedDate + ", authorities=" + authorities + ", mainContact='" + mainContact + '\'' + "}";
     }
 }
