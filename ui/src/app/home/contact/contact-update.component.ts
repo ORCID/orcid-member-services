@@ -139,7 +139,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
       title: contact.title,
       email: contact.contactEmail,
       roles: this.editForm!.controls['roles'].value.map((role: SFMemberContactRole) => {
-        if (contact.memberOrgRole?.includes(role.name)) {
+        if (contact.memberOrgRole?.map((role) => role.trim().toLowerCase()).includes(role.name.trim().toLowerCase())) {
           return { ...role, selected: true }
         } else {
           return role
