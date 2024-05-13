@@ -106,35 +106,35 @@ describe('UsersComponent', () => {
     expect(component.users![0]).toEqual(jasmine.objectContaining({ id: '123' }))
   })
 
-  it('sort should be id,desc by default', () => {
+  it('sort should be id,asc by default', () => {
     const result = component.sort()
-    expect(result).toEqual(['id,desc'])
+    expect(result).toEqual(['id,asc'])
   })
 
-  it('direction should be desc and id should be secondary sort column by default', () => {
+  it('direction should be asc and id should be secondary sort column by default', () => {
     component.sortColumn = 'name'
     const result = component.sort()
-    expect(result).toEqual(['name,desc', 'id'])
+    expect(result).toEqual(['name,asc', 'id'])
   })
 
   it('updating sort column to different value should maintain sort direction', () => {
     component.sortColumn = 'name'
     let result = component.sort()
-    expect(result).toEqual(['name,desc', 'id'])
+    expect(result).toEqual(['name,asc', 'id'])
 
     component.updateSort('email')
     result = component.sort()
-    expect(result).toEqual(['email,desc', 'id'])
+    expect(result).toEqual(['email,asc', 'id'])
   })
 
   it('updating sort column with same value should flip sort direction', () => {
     component.sortColumn = 'name'
     let result = component.sort()
-    expect(result).toEqual(['name,desc', 'id'])
+    expect(result).toEqual(['name,asc', 'id'])
 
     component.updateSort('name')
     result = component.sort()
-    expect(result).toEqual(['name,asc', 'id'])
+    expect(result).toEqual(['name,desc', 'id'])
   })
 
   it('clear should reset page to zero', () => {
