@@ -4,7 +4,7 @@ import credentials from "../../fixtures/credentials.json";
 
 describe("Test sign in form", () => {
   it("Sign in", function () {
-    cy.visit(`/`);
+    cy.visit(`ui/en/`);
     cy.get("#username").clear().type(data.member.users.owner.email);
     cy.get("#password").type(credentials.password);
     cy.get("button").filter('[type="submit"]').click();
