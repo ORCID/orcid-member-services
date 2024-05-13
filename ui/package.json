@@ -53,6 +53,7 @@
     "@types/quill": "^1.3.10",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
+    "cypress": "^13.9.0",
     "eslint": "^8.49.0",
     "jasmine-core": "~4.3.0",
     "karma": "~6.4.0",
