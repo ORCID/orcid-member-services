@@ -40,3 +40,12 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Cypress
+/cypress/plugins/credentials_qa.json
+/cypress/plugins/token_qa.json
+/cypress/fixtures/credentials.json
+/cypress/fixtures/downloadedAffiliations.csv
+/cypress/fixtures/editAffiliations.csv
+/cypress/videos
+/cypress/screenshots
