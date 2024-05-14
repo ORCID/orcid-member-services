@@ -289,7 +289,6 @@ public class UserService {
         user.setMainContact(userDTO.getMainContact());
         user.setSalesforceId(userDTO.getSalesforceId());
         user.setMemberName(memberService.getMemberNameBySalesforce(userDTO.getSalesforceId()));
-        user.setLoginAs(userDTO.getLoginAs());
         user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
         user.setAdmin(userDTO.getIsAdmin());
 

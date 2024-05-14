@@ -436,40 +436,6 @@ public class UserResource {
         return userService.hasOwnerForSalesforceId(salesforceId);
     }
 
-    /**
-     * {@code POST /switch_user} : Switch user
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
-     */
-    @PostMapping("/switch_user")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> switchUser(@RequestParam(value = "username", required = true) String username) {
-        User user = userService.getCurrentUser();
-        UserDTO userDTO = userMapper.toUserDTO(user);
-        userDTO.setLoginAs(username);
-        userDTO.setIsAdmin(true);
-        userService.updateUser(userDTO);
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/")).build();
-    }
-
-    /**
-     * {@code POST /logout_as} : Switch user
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
-     */
-    @PostMapping("/logout_as")
-    public ResponseEntity<Void> logoutAsSwitchedUser(@RequestParam(value = "username", required = true) String username) {
-        Optional<User> authUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin().get());
-        if (authUser.isPresent()) {
-            UserDTO userDTO = userMapper.toUserDTO(authUser.get());
-            userDTO.setIsAdmin(true);
-            userDTO.setLoginAs(null);
-            userService.updateUser(userDTO);
-        }
-
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/")).build();
-    }
-
     private User getCurrentUser() {
         return userRepository.findOneByEmailIgnoreCase(SecurityUtils.getCurrentUserLogin().get()).get();
     }

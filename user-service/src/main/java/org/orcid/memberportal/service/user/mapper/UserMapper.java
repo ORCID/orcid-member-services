@@ -32,7 +32,6 @@ public class UserMapper {
         user.setAdmin(userDTO.getIsAdmin());
         user.setMainContact(user.getMainContact());
         user.setId(userDTO.getId());
-        user.setLoginAs(userDTO.getLoginAs());
         return user;
     }
 
@@ -53,7 +52,6 @@ public class UserMapper {
         userDTO.setMemberName(user.getMemberName());
         userDTO.setMainContact(user.getMainContact());
         userDTO.setId(user.getId());
-        userDTO.setLoginAs(user.getLoginAs());
         userDTO.setIsAdmin(user.getAdmin());
         userDTO.setMfaEnabled(user.getMfaEnabled() != null ? user.getMfaEnabled() : false);
         return userDTO;
