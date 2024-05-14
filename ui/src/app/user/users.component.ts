@@ -65,7 +65,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.itemsPerPage = ITEMS_PER_PAGE
     this.routeData = this.activatedRoute.data.subscribe((data) => {
       this.page = data['queryParams'] ? data['queryParams'].page : 1
-      this.ascending = data['queryParams'] ? data['queryParams'].page.sort.split(',')[1] : false
+      this.ascending = data['queryParams'] ? data['queryParams'].page.sort.split(',')[1] : true
       this.sortColumn = data['queryParams'] ? data['queryParams'].page.sort.split(',')[0] : 'id'
     })
   }

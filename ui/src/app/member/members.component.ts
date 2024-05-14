@@ -58,7 +58,7 @@ export class MembersComponent implements OnInit {
     this.itemsPerPage = ITEMS_PER_PAGE
     this.routeData = this.activatedRoute.data.subscribe((data: any) => {
       this.page = data['queryParams'] ? data['queryParams'].page : 1
-      this.ascending = data['queryParams'] ? data['queryParams'].page.sort.split(',')[1] : false
+      this.ascending = data['queryParams'] ? data['queryParams'].page.sort.split(',')[1] : true
       this.sortColumn = data['queryParams'] ? data['queryParams'].page.sort.split(',')[0] : 'salesforceId'
     })
   }
