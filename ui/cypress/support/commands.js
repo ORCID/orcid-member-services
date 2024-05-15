@@ -104,15 +104,9 @@ Cypress.Commands.add("processPasswordForm", (newPasswordFieldId) => {
     .clear()
     .type(credentials.shortConfirmationPassword);
   // check for min length error messages
+  cy.get("small").filter('[data-cy="passwordTooShort"').should("exist");
   cy.get("small")
-    .filter(
-      '[jhitranslate="global.messages.validate.newpassword.minlength.string"]',
-    )
-    .should("exist");
-  cy.get("small")
-    .filter(
-      '[jhitranslate="global.messages.validate.confirmpassword.minlength.string"]',
-    )
+    .filter('[data-cy="confirmationPasswordTooShort"]')
     .should("exist");
   // fix password
   cy.get(newPasswordFieldId).clear().type(credentials.password);
@@ -123,9 +117,7 @@ Cypress.Commands.add("processPasswordForm", (newPasswordFieldId) => {
   // make sure you can't activate account
   cy.get("button").filter('[type="submit"]').click();
   // check for confirmation error message
-  cy.get("div")
-    .filter('[jhitranslate="global.messages.error.dontmatch.string"]')
-    .should("exist");
+  cy.get("div").filter('[data-cy="passwordsDoNotMatch"]').should("exist");
   // fix confirmation password
   cy.get("#confirmPassword").clear().type(credentials.password);
   // activate account
@@ -192,11 +184,11 @@ Cypress.Commands.add("uploadCsv", (path) => {
   cy.intercept(
     "https://member-portal.qa.orcid.org/services/assertionservice/api/assertion/upload",
   ).as("upload");
-  cy.get("#jhi-confirm-csv-upload").click();
+  cy.get("button").filter('[data-cy="confirmCsvUpload"]').click();
   // Occasionally, trying to upload the csv results in a 403 code due to an invalid CSRF token, in which case we retry
   cy.wait("@upload").then((int) => {
     if (int.response.statusCode !== 200) {
-      cy.get("#jhi-confirm-csv-upload").click();
+      y.get(button).filter('[data-cy="confirmCsvUpload"]').click();
     }
   });
 });

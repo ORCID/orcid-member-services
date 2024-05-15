@@ -8,9 +8,9 @@ describe("Test editing member details", () => {
   it("Editing Almonds Forest member details", function () {
     const date = Date.now();
     cy.programmaticSignin(email, credentials.password);
-    cy.visit("/");
+    cy.visit("ui/en/");
     cy.get("app-member-info").contains(date).should("not.exist");
-    cy.visit("/edit");
+    cy.visit("ui/en/edit");
     cy.get(".text-danger").should("not.exist");
     // wait for data to load
     cy.intercept(
@@ -70,7 +70,7 @@ describe("Test editing member details", () => {
     cy.get("app-member-info").contains(
       `YES - ORCID can use trademarked assets`,
     );
-    cy.visit("/edit");
+    cy.visit("ui/en/edit");
     // wait for data to load
     cy.intercept(
       `/services/memberservice/api/members/${data.homepageTestMembers.consortiumMember.salesforceId}/member-contacts`,
