@@ -37,9 +37,9 @@ describe("Test homepage", () => {
     cy.get(".side-bar").contains("mambono5@mailinator.com");
     cy.get(".main-section").contains("Consortium lead");
     cy.get(".main-section").contains("Mambo no 5");
-    cy.get(".main-section").contains("Consortium Members (2)");
+    cy.get(".main-section").contains("Consortium Members (3)");
     cy.get(".main-section").contains("Member name");
-    cy.get(".main-section").contains("A Public Hot Metro");
+    cy.get(".main-section").contains("The Almond Forest");
     cy.get(".main-section").contains("Contacts");
     cy.get(".main-section").contains("Main relationship contact (OFFICIAL)");
     cy.get(".main-section").contains("first.last@orcid.org");
@@ -55,14 +55,15 @@ describe("Test homepage", () => {
     cy.get(".side-bar").contains("Public details");
     cy.get(".side-bar").contains("Website");
     cy.get(".side-bar").contains("Email");
-    cy.get(".side-bar").contains("No website added");
+    cy.get(".side-bar").contains("https://orcid.org");
     cy.get(".side-bar").contains("@orcid.org");
     cy.get(".main-section").contains(
       "Consortium/Parent organization: Mambo No 5",
     );
-    cy.get(".main-section").contains("Membership: Active");
-    cy.get(".main-section").contains("Almonds Forest");
-    cy.get(".main-section").contains("Description");
+    cy.get(".main-section").first().contains("Membership:");
+    cy.get(".main-section").first().contains("Active");
+    cy.get(".main-section").contains("The Almond Forest");
+    cy.get(".main-section").contains("Lorem ipsum");
     cy.get(".main-section").contains("Contacts");
     cy.get(".main-section").contains("Agreement signatory (OFFICIAL)");
     cy.get(".main-section").contains("last@orcid.org");
@@ -81,9 +82,10 @@ describe("Test homepage", () => {
     cy.get(".side-bar").contains("canadapost.ca");
     cy.get(".side-bar").contains("support@orcid.org");
     cy.get(".main-section").contains(
-      "Consortium/Parent organization: The Concord of Kinship",
+      "Consortium/Parent organization: The Harvest Ascendancy",
     );
-    cy.get(".main-section").contains("Membership: Active");
+    cy.get(".main-section").first().contains("Membership:");
+    cy.get(".main-section").first().contains("Active");
     cy.get(".main-section").contains("Grateful Frogs");
   });
 

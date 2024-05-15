@@ -1,26 +1,42 @@
 <form name="notificationForm" (ngSubmit)="send()">
-    <div class="modal-header">
-        <h4 class="modal-title" i18n="@@gatewayApp.assertionServiceAssertion.notifications.title.string">Send permission notifications</h4>
-        <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
+  <div class="modal-header">
+    <h4 class="modal-title" i18n="@@gatewayApp.assertionServiceAssertion.notifications.title.string">
+      Send permission notifications
+    </h4>
+    <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div
+      class="alert alert-danger"
+      *ngIf="requestAlreadyInProgress"
+      i18n="@@gatewayApp.assertionServiceAssertion.notifications.alreadyInProgress.string"
+    >
+      A request to send notifications to your users is already in progress. Please try again later.
     </div>
-    <div class="modal-body">
-        <div class="alert alert-danger" *ngIf="requestAlreadyInProgress" i18n="@@gatewayApp.assertionServiceAssertion.notifications.alreadyInProgress.string">
-            A request to send notifications to your users is already in progress. Please try again later.
-        </div>
-        <p i18n="@@gatewayApp.assertionServiceAssertion.notifications.description.string">Are you sure that you would like ORCID to send permission links to your researchers for the affiliations that are pending?</p>
-        <h6 class="mb-1 font-weight-bold" i18n="@@gatewayApp.assertionServiceAssertion.notifications.languageHeader.string">Notification language</h6>
-        <p i18n="@@gatewayApp.assertionServiceAssertion.notifications.languageDescription.string">What language should the notification be sent in?</p>
-        <select class="form-control w-66" id="langKey" name="langKey" [(ngModel)]="language">
-            <option *ngFor="let lang of languages | keyvalue" [ngValue]="lang.key">{{lang.value.name}}</option>
-        </select>
-    </div>
+    <p i18n="@@gatewayApp.assertionServiceAssertion.notifications.description.string">
+      Are you sure that you would like ORCID to send permission links to your researchers for the affiliations that are
+      pending?
+    </p>
+    <h6 class="mb-1 font-weight-bold" i18n="@@gatewayApp.assertionServiceAssertion.notifications.languageHeader.string">
+      Notification language
+    </h6>
+    <p i18n="@@gatewayApp.assertionServiceAssertion.notifications.languageDescription.string">
+      What language should the notification be sent in?
+    </p>
+    <select class="form-control w-66" id="langKey" name="langKey" [(ngModel)]="language">
+      <option *ngFor="let lang of languages | keyvalue" [ngValue]="lang.key">{{ lang.value.name }}</option>
+    </select>
+  </div>
 
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" (click)="close()">
-            <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
-        </button>
-        <button id="jhi-confirm-csv-upload" type="submit" class="btn btn-primary">
-            <fa-icon [icon]="faPaperPlane"></fa-icon>&nbsp;<span i18n="@@gatewayApp.assertionServiceAssertion.notifications.sendNotifications.string">Send notifications</span>
-        </button>
-    </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="close()">
+      <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
+    </button>
+    <button data-cy="confirmCsvUpload" type="submit" class="btn btn-primary">
+      <fa-icon [icon]="faPaperPlane"></fa-icon>&nbsp;<span
+        i18n="@@gatewayApp.assertionServiceAssertion.notifications.sendNotifications.string"
+        >Send notifications</span
+      >
+    </button>
+  </div>
 </form>

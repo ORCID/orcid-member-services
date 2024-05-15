@@ -28,6 +28,7 @@
             <small
               class="form-text text-danger"
               *ngIf="(editForm.get('email')?.errors)!['required']"
+              data-cy="fieldIsRequired"
               i18n="@@entity.validation.required.string"
             >
               This field is required.
@@ -59,6 +60,7 @@
               (editForm.get('affiliationSection')?.errors)!['required']
             "
             i18n="@@entity.validation.required.string"
+            data-cy="fieldIsRequired"
             >This field is required.</small
           >
           <div class="alert alert-warning" *ngIf="AFFILIATION_TYPES.length === 0">
@@ -81,6 +83,7 @@
             <small
               class="form-text text-danger"
               *ngIf="(editForm.get('orgName')?.errors)!['required']"
+              data-cy="fieldIsRequired"
               i18n="@@entity.validation.required.string"
             >
               This field is required.
@@ -104,6 +107,7 @@
               <small
                 class="form-text text-danger"
                 *ngIf="(editForm.get('orgCity')?.errors)!['required']"
+                data-cy="fieldIsRequired"
                 i18n="@@entity.validation.required.string"
               >
                 This field is required.
@@ -127,6 +131,7 @@
               <small
                 class="form-text text-danger"
                 *ngIf="(editForm.get('orgRegion')?.errors)!['required']"
+                data-cy="fieldIsRequired"
                 i18n="@@entity.validation.required.string"
               >
                 This field is required.
@@ -154,6 +159,7 @@
               <small
                 class="form-text text-danger"
                 *ngIf="(editForm.get('orgCountry')?.errors)!['required']"
+                data-cy="fieldIsRequired"
                 i18n="@@entity.validation.required.string"
               >
                 This field is required.
@@ -185,6 +191,7 @@
                 (editForm.get('disambiguationSource')?.errors)!['required']
               "
               i18n="@@entity.validation.required.string"
+              data-cy="fieldIsRequired"
               >This field is required.</small
             >
             <div class="alert alert-warning" *ngIf="ORG_ID_TYPES.length === 0">
