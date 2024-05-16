@@ -104,7 +104,7 @@ Cypress.Commands.add("processPasswordForm", (newPasswordFieldId) => {
     .clear()
     .type(credentials.shortConfirmationPassword);
   // check for min length error messages
-  cy.get("small").filter('[data-cy="passwordTooShort"').should("exist");
+  cy.get("small").filter('[data-cy="passwordTooShort"]').should("exist");
   cy.get("small")
     .filter('[data-cy="confirmationPasswordTooShort"]')
     .should("exist");
@@ -134,7 +134,13 @@ Cypress.Commands.add("visitLinkFromEmail", (email) => {
   const href = htmlDom.querySelector(
     'a[href*="https://member-portal.qa.orcid.org/reset/finish?key="]',
   ).href;
-  cy.visit(href);
+  // TODO: remove the replace bit when migrated
+  cy.visit(
+    href.replace(
+      "https://member-portal.qa.orcid.org/",
+      "https://member-portal.qa.orcid.org/ui/en/",
+    ),
+  );
 });
 
 Cypress.Commands.add("checkInbox", (subject, recipient, date) => {
@@ -199,19 +205,10 @@ Cypress.Commands.add("fetchLinkAndGrantPermission", (email) => {
     .children()
     .last()
     .within(() => {
-      cy.get("a")
-        .filter(
-          '[jhitranslate="gatewayApp.assertionServiceAssertion.details.string"]',
-        )
-        .click();
+      cy.get("a").filter('[data-cy="viewDetailsButton"]').click();
     });
   cy.get(".jh-entity-details").within(() =>
-    cy
-      .get("button")
-      .filter(
-        '[jhitranslate="gatewayApp.assertionServiceAssertion.copyClipboard.string"]',
-      )
-      .click(),
+    cy.get("button").filter('[data-cy="copyToClipboard"]').click(),
   );
   cy.task("getClipboard").then((link) => {
     cy.visit(link);

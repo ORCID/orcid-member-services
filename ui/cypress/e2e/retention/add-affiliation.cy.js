@@ -32,7 +32,7 @@ describe("Add and remove affiliation", () => {
 
   it("Add affiliation", function () {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
-    cy.visit("/assertion/new");
+    cy.visit("ui/en/affiliations/new");
 
     cy.get("#field_email").type(record.invalidEmail);
     cy.get("small.text-danger").should("exist");
@@ -54,9 +54,7 @@ describe("Add and remove affiliation", () => {
     cy.get("#field_endYear").select(endDate.year);
     cy.get("#field_endMonth").select(endDate.month);
     cy.get("#field_endDay").select(endDate.day);
-    cy.get("small")
-      .filter('[jhitranslate="entity.validation.endDate.string"]')
-      .should("exist");
+    cy.get("small").filter('[data-cy="invalidDateWarning"]').should("exist");
     cy.get("#save-entity").invoke("attr", "disabled").should("exist");
     cy.get("#field_startDay").select(startDate.day);
     cy.get("small").should("not.exist");
@@ -73,7 +71,7 @@ describe("Add and remove affiliation", () => {
   it("Grant permission and check ORCID record for added affiliation", () => {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     // Get permission link
-    cy.visit("/assertion");
+    cy.visit("ui/en/affiliations");
     cy.get("tbody").children().first().children().eq(0).contains(record.email);
     cy.get("tbody")
       .children()
@@ -143,7 +141,7 @@ describe("Add and remove affiliation", () => {
 
   it("Confirm UI changes on the assertion page", () => {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
-    cy.visit("/assertion");
+    cy.visit("ui/en/affiliations");
     cy.get("tbody").children().first().children().eq(1).contains(record.id);
     cy.get("tbody").children().first().children().eq(4).contains("In ORCID");
     cy.programmaticSignout();
@@ -151,10 +149,10 @@ describe("Add and remove affiliation", () => {
 
   it("Delete affiliation", () => {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
-    cy.visit("/assertion");
+    cy.visit("ui/en/affiliations");
     cy.get(".btn-group").each(($e) => {
       cy.wrap($e).children().last().click();
-      cy.get("button").filter('[data-cy="confirmDeleteAssertion"]').click();
+      cy.get("button").filter('[data-cy="confirmDeleteAffiliation"]').click();
     });
     recurse(
       () =>

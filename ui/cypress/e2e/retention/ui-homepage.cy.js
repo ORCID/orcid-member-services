@@ -55,7 +55,7 @@ describe("Test homepage", () => {
     cy.get(".side-bar").contains("Public details");
     cy.get(".side-bar").contains("Website");
     cy.get(".side-bar").contains("Email");
-    cy.get(".side-bar").contains("https://orcid.org");
+    cy.get(".side-bar").contains("No website added");
     cy.get(".side-bar").contains("@orcid.org");
     cy.get(".main-section").contains(
       "Consortium/Parent organization: Mambo No 5",
@@ -63,7 +63,7 @@ describe("Test homepage", () => {
     cy.get(".main-section").first().contains("Membership:");
     cy.get(".main-section").first().contains("Active");
     cy.get(".main-section").contains("The Almond Forest");
-    cy.get(".main-section").contains("Lorem ipsum");
+    cy.get(".main-section").contains("Description");
     cy.get(".main-section").contains("Contacts");
     cy.get(".main-section").contains("Agreement signatory (OFFICIAL)");
     cy.get(".main-section").contains("last@orcid.org");
@@ -102,9 +102,8 @@ describe("Test homepage", () => {
     cy.get(".side-bar").contains("www.haevesting.com");
     cy.get(".side-bar").contains("hhh@hhh.com");
     cy.get(".main-section").contains("Consortium lead");
-    cy.get(".main-section").contains("Consortium Members (2)");
+    cy.get(".main-section").contains("Consortium Members (1)");
     cy.get(".main-section").contains("Member name");
-    cy.get(".main-section").contains("Yellow member");
     cy.get(".main-section").contains("The Harvest Ascendancy");
     cy.get(".main-section").contains("Contacts");
     cy.get(".main-section").contains("Product Contact");

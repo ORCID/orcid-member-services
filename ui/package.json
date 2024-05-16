@@ -30,6 +30,7 @@
     "bootstrap": "^5.3.2",
     "clipboardy": "^2.3.0",
     "cypress-file-upload": "^5.0.8",
+    "cypress-recurse": "^1.35.3",
     "jsrsasign": "^11.1.0",
     "jsrsasign-util": "^1.0.5",
     "moment": "^2.29.4",

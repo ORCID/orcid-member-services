@@ -40,7 +40,7 @@ describe("Test the password reset functionality", () => {
     cy.get("#currentPassword").type(credentials.wrongConfirmationPasssword);
     cy.processPasswordForm("#newPassword");
     cy.get(".alert-danger")
-      .filter('data-cy="passwordChangeError"]')
+      .filter('[data-cy="passwordChangeError"]')
       .should("exist");
     cy.get("#currentPassword").clear().type(credentials.password);
     cy.get("button").filter('[type="submit"]').click();

@@ -122,10 +122,10 @@ describe("Test notifications", () => {
       data.notificationsMember.users.owner.email,
       credentials.password,
     );
-    cy.visit("/assertion");
+    cy.visit("ui/en/affiliations");
     cy.get(".btn-group").each(($e) => {
       cy.wrap($e).children().last().click();
-      cy.get("button").filter('[data-cy="confirmDeleteAssertion"]').click();
+      cy.get("button").filter('[data-cy="confirmDeleteAffiliation"]').click();
     });
     cy.programmaticSignout();
   });
