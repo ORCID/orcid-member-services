@@ -17,7 +17,7 @@ describe("Test restricted access", () => {
       .filter('[data-cy="cannotProcessRequest"]')
       .contains("Your request cannot be processed");
     cy.get("div")
-      .filter('[data-cy="notauthorized"]')
+      .filter('[data-cy="notAuthorized"]')
       .invoke("attr", "hidden")
       .should("not.exist");
   });
@@ -32,7 +32,7 @@ describe("Test restricted access", () => {
       .filter('[data-cy="cannotProcessRequest"]')
       .contains("Your request cannot be processed");
     cy.get("div")
-      .filter('[data-cy="notauthorized"]')
+      .filter('[data-cy="notAuthorized"]')
       .invoke("attr", "hidden")
       .should("not.exist");
   });
@@ -47,7 +47,7 @@ describe("Test restricted access", () => {
       .filter('[data-cy="cannotProcessRequest"]')
       .contains("Your request cannot be processed");
     cy.get("div")
-      .filter('[data-cy="notauthorized"]')
+      .filter('[data-cy="notAuthorized"]')
       .invoke("attr", "hidden")
       .should("not.exist");
   });
@@ -62,7 +62,7 @@ describe("Test restricted access", () => {
       .filter('[data-cy="cannotProcessRequest"]')
       .contains("Your request cannot be processed");
     cy.get("div")
-      .filter('[data-cy="notauthorized"]')
+      .filter('[data-cy="notAuthorized"]')
       .invoke("attr", "hidden")
       .should("not.exist");
   });
@@ -70,12 +70,12 @@ describe("Test restricted access", () => {
   /* it('Anonymous users cannot access anything', function() {
     cy.visit('/assertion');
     cy.get('h1').filter('[data-cy="cannotProcessRequest"]').contains('Your request cannot be processed')
-    cy.get('div').filter('[data-cy="notauthorized"]').invoke('attr', 'hidden').should('not.exist')
+    cy.get('div').filter('[data-cy="notAuthorized"]').invoke('attr', 'hidden').should('not.exist')
     cy.visit('/user');
     cy.get('h1').filter('[data-cy="cannotProcessRequest"]').contains('Your request cannot be processed')
-    cy.get('div').filter('[data-cy="notauthorized"]').invoke('attr', 'hidden').should('not.exist')
+    cy.get('div').filter('[data-cy="notAuthorized"]').invoke('attr', 'hidden').should('not.exist')
     cy.visit('/member');
     cy.get('h1').filter('[data-cy="cannotProcessRequest"]').contains('Your request cannot be processed')
-    cy.get('div').filter('[data-cy="notauthorized"]').invoke('attr', 'hidden').should('not.exist')
+    cy.get('div').filter('[data-cy="notAuthorized"]').invoke('attr', 'hidden').should('not.exist')
   }); */
 });

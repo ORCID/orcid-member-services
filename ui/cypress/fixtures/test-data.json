@@ -3,7 +3,7 @@
   "invalidEmail": "@test@email.com",
   "invalidWebsite": "orcid.org",
   "invalidString": "a",
-  "italianLanguageCode": "7: it",
+  "italianLanguageCode": "4: it",
   "outbox": {
     "email": "info@member-portal.qa.orcid.org",
     "updateEmail": "update@notify.orcid.org",

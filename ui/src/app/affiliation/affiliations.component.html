@@ -187,6 +187,7 @@
               {{ formatDate(affiliation.endYear, affiliation.endMonth, affiliation.endDay) }}</span
             ><br /><a
               i18n="@@gatewayApp.assertionServiceAssertion.details.string"
+              cy-data="viewDetailsButton"
               [routerLink]="['/affiliations', affiliation.id, 'view']"
               >View details</a
             >

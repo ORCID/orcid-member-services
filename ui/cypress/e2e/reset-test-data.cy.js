@@ -13,7 +13,7 @@ describe("Add new user", () => {
     cy.visit("/assertion");
     cy.get(".btn-group").each(($e) => {
       cy.wrap($e).children().last().click();
-      cy.get("button").filter('[data-cy="confirmDeleteAssertion"]').click();
+      cy.get("button").filter('[data-cy="confirmDeleteAffiliation"]').click();
     });
     cy.visit("/user");
     cy.get(".btn-group").each(($e) => {
@@ -55,7 +55,7 @@ describe("Add new user", () => {
     cy.visit("/assertion");
     cy.get(".btn-group").each(($e) => {
       cy.wrap($e).children().last().click();
-      cy.get("button").filter('[data-cy="confirmDeleteAssertion"]').click();
+      cy.get("button").filter('[data-cy="confirmDeleteAffiliation"]').click();
     });
     cy.programmaticSignout();
   });
@@ -68,7 +68,7 @@ describe("Add new user", () => {
     cy.visit("/assertion");
     cy.get(".btn-group").each(($e) => {
       cy.wrap($e).children().last().click();
-      cy.get("button").filter('[data-cy="confirmDeleteAssertion"]').click();
+      cy.get("button").filter('[data-cy="confirmDeleteAffiliation"]').click();
     });
     cy.programmaticSignout();
   });
