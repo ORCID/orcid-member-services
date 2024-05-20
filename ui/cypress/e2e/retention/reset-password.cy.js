@@ -23,9 +23,7 @@ describe("Test the password reset functionality", () => {
 
     cy.processPasswordForm("#password");
 
-    cy.get(".alert-success").within(() => {
-      cy.get("a").filter('data-cy="navigateToSignIn"]').click();
-    });
+    cy.get("a").filter('[data-cy="navigateToSignIn"]').click();
     // sign in and confirm the activation was successful
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
     cy.programmaticSignout();

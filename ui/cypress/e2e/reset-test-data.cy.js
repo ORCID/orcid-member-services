@@ -10,12 +10,12 @@ describe("Add new user", () => {
 
   it("Remove all affiliations from test group", function () {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
-    cy.visit("/assertion");
+    cy.visit("ui/en/affiliations");
     cy.get(".btn-group").each(($e) => {
       cy.wrap($e).children().last().click();
       cy.get("button").filter('[data-cy="confirmDeleteAffiliation"]').click();
     });
-    cy.visit("/user");
+    cy.visit("ui/en/users");
     cy.get(".btn-group").each(($e) => {
       cy.wrap($e)
         .children()
@@ -32,7 +32,7 @@ describe("Add new user", () => {
 
   it("Remove all affiliations from test member", function () {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
-    cy.visit("/user");
+    cy.visit("ui/en/users");
     cy.get(".btn-group").each(($e) => {
       cy.wrap($e)
         .children()
@@ -52,7 +52,7 @@ describe("Add new user", () => {
       data.csvMember.users.owner.email,
       credentials.password,
     );
-    cy.visit("/assertion");
+    cy.visit("ui/en/affiliations");
     cy.get(".btn-group").each(($e) => {
       cy.wrap($e).children().last().click();
       cy.get("button").filter('[data-cy="confirmDeleteAffiliation"]').click();
@@ -65,7 +65,7 @@ describe("Add new user", () => {
       data.notificationsMember.users.owner.email,
       credentials.password,
     );
-    cy.visit("/assertion");
+    cy.visit("ui/en/affiliations");
     cy.get(".btn-group").each(($e) => {
       cy.wrap($e).children().last().click();
       cy.get("button").filter('[data-cy="confirmDeleteAffiliation"]').click();

@@ -6,7 +6,7 @@
   "italianLanguageCode": "4: it",
   "outbox": {
     "email": "info@member-portal.qa.orcid.org",
-    "updateEmail": "update@notify.orcid.org",
+    "updateEmail": "DoNotReply@notify.orcid.org",
     "activationSubject": "ORCID Member Portal activation",
     "resetPasswordSubject": "ORCID Member Portal password reset",
     "ownerUpdateSubject": "ORCID Member Portal organization owner updated",

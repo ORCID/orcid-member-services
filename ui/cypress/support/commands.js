@@ -205,18 +205,16 @@ Cypress.Commands.add("fetchLinkAndGrantPermission", (email) => {
     .children()
     .last()
     .within(() => {
-      cy.get("a").filter('[data-cy="viewDetailsButton"]').click();
+      cy.get("a").click();
     });
-  cy.get(".jh-entity-details").within(() =>
-    cy.get("button").filter('[data-cy="copyToClipboard"]').click(),
-  );
-  cy.task("getClipboard").then((link) => {
-    cy.visit(link);
-  });
+  cy.get("button").filter('[data-cy="copyToClipboard"]').click(),
+    cy.task("getClipboard").then((link) => {
+      cy.visit(link);
+    });
   // Handle cookies
   cy.get("#onetrust-reject-all-handler").click();
   // Grant permission
-  cy.get("#username").clear().type(email);
+  cy.get("#username-input").clear().type(email);
   cy.get("#password").type(credentials.password);
   cy.get("#signin-button").click();
 
