@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "Create creds json"
         id: create-creds-json
         uses: jsdaniell/create-json@1.1.2
@@ -31,17 +31,17 @@ jobs:
           json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}'
           dir: "ui/cypress/plugins"
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v6
         with:
           install-command: npm install cypress --legacy-peer-deps
           working-directory: ui
           spec: cypress/e2e/retention/csv-add-affiliations.cy.js
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
           path: ui/cypress/screenshots
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-videos
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "Create creds json"
         id: create-creds-json
         uses: jsdaniell/create-json@1.1.2
@@ -73,18 +73,18 @@ jobs:
           json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}'
           dir: "ui/cypress/plugins"
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v6
         with:
           install-command: npm install cypress --legacy-peer-deps
           working-directory: ui
           spec: |
             cypress/e2e/retention/csv-edit-affiliations.cy.js
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
           path: ui/cypress/screenshots
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-videos
@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "Create creds json"
         id: create-creds-json
         uses: jsdaniell/create-json@1.1.2
@@ -116,18 +116,18 @@ jobs:
           json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}'
           dir: "ui/cypress/plugins"
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v6
         with:
           install-command: npm install cypress --legacy-peer-deps
           working-directory: ui
           spec: |
             cypress/e2e/retention/add-affiliation.cy.js
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
           path: ui/cypress/screenshots
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-videos
@@ -136,7 +136,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "Create creds json"
         id: create-creds-json
         uses: jsdaniell/create-json@1.1.2
@@ -159,18 +159,18 @@ jobs:
           json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}'
           dir: "ui/cypress/plugins"
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v6
         with:
           install-command: npm install cypress --legacy-peer-deps
           working-directory: ui
           spec: |
             cypress/e2e/retention/notifications.cy.js
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
           path: ui/cypress/screenshots
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-videos
@@ -179,7 +179,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "Create creds json"
         id: create-creds-json
         uses: jsdaniell/create-json@1.1.2
@@ -202,7 +202,7 @@ jobs:
           json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}'
           dir: "ui/cypress/plugins"
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v6
         with:
           install-command: npm install cypress --legacy-peer-deps
           working-directory: ui
@@ -221,12 +221,12 @@ jobs:
             cypress/e2e/retention/ui-homepage.cy.js
             cypress/e2e/retention/ui-homepage-edit.cy.js
             cypress/e2e/retention/ui-reports.cy.js
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
           path: ui/cypress/screenshots
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-videos

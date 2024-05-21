@@ -46,6 +46,6 @@ Thumbs.db
 /cypress/plugins/token_qa.json
 /cypress/fixtures/credentials.json
 /cypress/fixtures/downloadedAffiliations.csv
-/cypress/fixtures/editAffiliations.csv
+# /cypress/fixtures/editAffiliations.csv
 /cypress/videos
 /cypress/screenshots
