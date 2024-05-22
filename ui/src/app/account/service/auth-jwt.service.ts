@@ -15,19 +15,6 @@ export class AuthServerProvider {
     return this.http.post<ILoginResult>('/auth/login', credentials)
   }
 
-  // TODO: not being used?
-  /*   loginWithToken(jwt, rememberMe) {
-    if (jwt) {
-      this.storeAuthenticationToken(jwt, rememberMe);
-      return Promise.resolve(jwt);
-    } else {
-      return Promise.reject('auth-jwt-service Promise reject'); // Put appropriate error message here
-    }
-  } 
-
-  storeAuthenticationToken(jwt, rememberMe) {}
-*/
-
   logout(): Observable<any> {
     return this.http.post('/auth/logout', null)
   }

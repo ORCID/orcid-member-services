@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core'
 import { SessionStorageService } from 'ngx-webstorage'
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
-import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil, tap } from 'rxjs'
+import { HttpClient, HttpResponse } from '@angular/common/http'
+import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil } from 'rxjs'
 
 import { IAccount } from '../model/account.model'
 import { LanguageService } from 'src/app/shared/service/language.service'
 import { Router } from '@angular/router'
-// TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
-//import { MSMemberService } from 'app/entities/member/member.service';
+import { MemberService } from 'src/app/member/service/member.service'
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  // TODO: have unknown and offline instead of undefined and null
+  // TODO: have custom 'unknown' and 'offline' statuses instead of 'undefined' and 'null'
   private accountData = new BehaviorSubject<IAccount | null | undefined>(undefined)
   private isFetchingAccountData = false
   private stopFetchingAccountData = new Subject()
@@ -21,9 +20,9 @@ export class AccountService {
     private languageService: LanguageService,
     private sessionStorage: SessionStorageService,
     private router: Router,
-    private http: HttpClient // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
-  ) //private memberService: MSMemberService
-  {}
+    private http: HttpClient,
+    private memberService: MemberService
+  ) {}
 
   private fetchAccountData() {
     this.isFetchingAccountData = true
@@ -33,11 +32,10 @@ export class AccountService {
       })
       .pipe(
         takeUntil(this.stopFetchingAccountData),
-        catchError((err) => {
+        catchError(() => {
           this.authenticated = false
           this.accountData.next(null)
-          // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
-          //this.memberService.memberData.next(undefined);
+          this.memberService.setMemberData(undefined)
           this.isFetchingAccountData = false
           return EMPTY
         }),
@@ -51,8 +49,7 @@ export class AccountService {
             }
             this.accountData.next(account)
           } else {
-            // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
-            //this.memberService.memberData.next(undefined);
+            this.memberService.setMemberData(undefined)
             this.accountData.next(null)
             this.authenticated = false
             console.error('Invalid response:', response)
@@ -69,7 +66,7 @@ export class AccountService {
     const headers = { 'Accept-Language': account.langKey }
     return this.http.post('/services/userservice/api/account', account, { observe: 'response', headers }).pipe(
       map((res: HttpResponse<any>) => this.isSuccess(res)),
-      catchError((err) => {
+      catchError(() => {
         return of(false)
       })
     )
@@ -85,7 +82,7 @@ export class AccountService {
   enableMfa(mfaSetup: any): Observable<string[] | null> {
     return this.http.post('/services/userservice/api/account/mfa/on', mfaSetup, { observe: 'response' }).pipe(
       map((res: HttpResponse<any>) => res.body),
-      catchError((err) => {
+      catchError(() => {
         console.error('error enabling mfa')
         return of(null)
       })
@@ -95,12 +92,11 @@ export class AccountService {
   disableMfa(): Observable<boolean> {
     return this.http.post('/services/userservice/api/account/mfa/off', null, { observe: 'response' }).pipe(
       map((res: HttpResponse<any>) => this.isSuccess(res)),
-      catchError((err) => {
+      catchError(() => {
         return of(false)
       })
     )
   }
-  // TODO: any - this seems to only be used for logging out (only ever receives null as arg)
   clearAccountData() {
     this.accountData.next(null)
     this.authenticated = false
@@ -131,9 +127,8 @@ export class AccountService {
 
   getAccountData(force?: boolean): Observable<IAccount | undefined | null> {
     if (force) {
-      // TODO: uncomment when memberservice is added or change the account service so that this logic is absent from the account service
-      //this.memberService.stopFetchingMemberData.next();
-      //this.memberService.memberData.next(undefined);
+      this.memberService.stopFetchingMemberData.next(true)
+      this.memberService.setMemberData(undefined)
       this.stopFetchingAccountData.next(true)
     }
     if ((this.accountData.value === undefined && !this.isFetchingAccountData) || force) {
