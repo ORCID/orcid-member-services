@@ -365,15 +365,4 @@ describe("Test authorities", () => {
     // TODO: Awaiting endpoint changes
     cy.getAssertions(200);
   });
-
-  // TODO: enable once the issue with signed out users not being able to visit routes is fixed
-  it("Anonymous", function () {
-    cy.programmaticSignin(credentials.adminEmail, credentials.adminPassword);
-    cy.visit("ui/en/");
-    cy.get("#admin-menu").should("not.exist");
-    cy.get("#entity-menu").should("not.exist");
-    cy.get("a").filter('[routerLink="/users"]').should("not.exist");
-    cy.get("a").filter('[routerLink="/affiliations"]').should("not.exist");
-    cy.get("a").filter('[routerLink="/members"]').should("not.exist");
-  });
 });

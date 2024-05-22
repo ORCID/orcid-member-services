@@ -16,11 +16,6 @@ describe("Test pagination", () => {
 
   it('Test the "Manage users" page', function () {
     cy.visit("ui/en/users");
-    /*
-    cy.get('.container-fluid').within(() => {
-      cy.get('p')
-      .contains('Showing 1 - 20 of 22 items')
-    })*/
     cy.get("tbody").children().should("have.length", 20);
     cy.get(".pagination").contains("1");
     cy.get(".pagination").contains("3").should("not.exist");
@@ -37,11 +32,6 @@ describe("Test pagination", () => {
 
   it('Test the "Affiliations" page', function () {
     cy.visit("ui/en/affiliations");
-    /*
-    cy.get('.container-fluid').within(() => {
-      cy.get('p')
-      .contains('Showing 1 - 20 of 22 items')
-    })*/
     cy.get("tbody").children().should("have.length", 20);
     cy.get(".pagination").contains("1");
     cy.get(".pagination").contains("2");
