@@ -29,7 +29,7 @@ import credentials from "../fixtures/credentials.json";
 import record from "../fixtures/orcid-record.json";
 
 Cypress.Commands.add("signin", (email, password) => {
-  cy.visit("./");
+  cy.visit("ui/en/");
   cy.get("#username")
     .clear()
     .type(email)
@@ -54,7 +54,7 @@ Cypress.Commands.add("programmaticSignin", (username, password) => {
   cy.getCookie("XSRF-TOKEN").then((csrfCookie) => {
     if (!csrfCookie) {
       return cy
-        .visit("/")
+        .visit("ui/en/")
         .getCookie("XSRF-TOKEN")
         .then(() => cy.programmaticSignin(username, password));
     } else {
@@ -161,7 +161,7 @@ Cypress.Commands.add("removeAffiliation", ($e) => {
 });
 
 Cypress.Commands.add("changeOrgOwner", () => {
-  cy.visit(`/user/${data.member.users.owner.id}/edit`);
+  cy.visit(`ui/en/users/${data.member.users.owner.id}/edit`);
   cy.get("#field_mainContact").click();
   cy.get("#save-entity").click();
   cy.get(".alert-success").should("exist");

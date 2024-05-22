@@ -66,16 +66,4 @@ describe("Test restricted access", () => {
       .invoke("attr", "hidden")
       .should("not.exist");
   });
-
-  /* it('Anonymous users cannot access anything', function() {
-    cy.visit('/assertion');
-    cy.get('h1').filter('[data-cy="cannotProcessRequest"]').contains('Your request cannot be processed')
-    cy.get('div').filter('[data-cy="notAuthorized"]').invoke('attr', 'hidden').should('not.exist')
-    cy.visit('/user');
-    cy.get('h1').filter('[data-cy="cannotProcessRequest"]').contains('Your request cannot be processed')
-    cy.get('div').filter('[data-cy="notAuthorized"]').invoke('attr', 'hidden').should('not.exist')
-    cy.visit('/member');
-    cy.get('h1').filter('[data-cy="cannotProcessRequest"]').contains('Your request cannot be processed')
-    cy.get('div').filter('[data-cy="notAuthorized"]').invoke('attr', 'hidden').should('not.exist')
-  }); */
 });
