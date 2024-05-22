@@ -95,8 +95,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
             }
             this.mfaSent = false
           },
-          // TODO: review any type
-          error: (err) => {
+          error: () => {
             this.loginService.logout()
             this.authenticationError = true
           },

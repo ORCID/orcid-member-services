@@ -100,10 +100,6 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe((countries) => {
         this.countries = countries
-        // TODO: redundant? remove
-        if (this.memberData) {
-          this.updateForm(this.memberData)
-        }
       })
 
     this.editForm.valueChanges.subscribe(() => {
