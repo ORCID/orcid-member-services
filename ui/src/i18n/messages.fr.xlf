@@ -1,9 +1,9 @@
-<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0"?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en" target-language="fr" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check your credentials and try again. </source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Échec de la connexion !<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Veuillez vérifier vos identifiants et réessayer.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please check your credentials and try again. </source>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Échec de la connexion !<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Veuillez vérifier vos identifiants et réessayer.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -75,7 +75,8 @@
       </trans-unit>
       <trans-unit id="login.form.mfaCode.label.string" datatype="html">
         <source>MFA code</source>
-        <target>Code MFA </target>
+        <target>Code MFA
+</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">40</context>
@@ -106,8 +107,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>L&apos;adresse e-mail n&apos;est pas enregistrée !<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Veuillez vérifier et réessayer</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please check and try again. </source>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>L&apos;adresse e-mail n&apos;est pas enregistrée !<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Veuillez vérifier et réessayer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">7</context>
@@ -170,24 +171,24 @@
         </context-group>
       </trans-unit>
       <trans-unit id="password.title.string" datatype="html">
-        <source>Password for <x id="PH" equiv-text="this.username"/> (You)</source>
-        <target>Mot de passe pour <x id="PH" equiv-text="this.username"/> (vous)</target>
+        <source>Password for <x id="PH" equiv-text="this.username"></x> (You)</source>
+        <target>Mot de passe pour <x id="PH" equiv-text="this.username"></x> (vous)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.ts</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Password changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Mot de passe modifié !<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Password changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Mot de passe modifié !<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.error.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>An error has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> The password could not be changed. </source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Une erreur s&apos;est produite !<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Le mot de passe n&apos;a pas pu être modifié.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>An error has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> The password could not be changed. </source>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Une erreur s&apos;est produite !<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Le mot de passe n&apos;a pas pu être modifié.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">15</context>
@@ -362,8 +363,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Réglages enregistrés !<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Réglages enregistrés !<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -495,23 +496,24 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaUpdated.string" datatype="html">
         <source>2FA settings updated</source>
-        <target>Mise à jour des paramètres A2F </target>
+        <target>Mise à jour des paramètres A2F
+</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.one.string" datatype="html">
-        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target>Installer une application d&apos;authentification à deux facteurs<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Une application A2F est nécessaire pour créer le code à six chiffres dont vous avez besoin pour accéder à votre compte à chaque fois que vous vous connectez. La plupart des applications sont destinées aux appareils mobiles ; certaines sont également disponibles en tant qu&apos;applications de bureau ou web. Téléchargez et installez votre application A2F préférée, telle que <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, ou <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>. </source>
+        <target>Installer une application d&apos;authentification à deux facteurs<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Une application A2F est nécessaire pour créer le code à six chiffres dont vous avez besoin pour accéder à votre compte à chaque fois que vous vous connectez. La plupart des applications sont destinées aux appareils mobiles ; certaines sont également disponibles en tant qu&apos;applications de bureau ou web. Téléchargez et installez votre application A2F préférée, telle que <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, ou <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.two.string" datatype="html">
-        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Open your 2FA app and scan the image below. </source>
-        <target>Scannez ce code QR avec votre appareil<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Ouvrez votre application A2F et scannez l&apos;image ci-dessous.</target>
+        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Open your 2FA app and scan the image below. </source>
+        <target>Scannez ce code QR avec votre appareil<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Ouvrez votre application A2F et scannez l&apos;image ci-dessous.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">174</context>
@@ -542,8 +544,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaTextCodeSteps.one.string" datatype="html">
-        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
-        <target>Saisissez le code à six chiffres dans l&apos;application<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Après avoir scanné le code QR ou saisi le code texte, votre application A2F affiche un code à six chiffres. Saisissez ce code dans la case ci-dessous et cliquez sur Enregistrer.</target>
+        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
+        <target>Saisissez le code à six chiffres dans l&apos;application<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"></x>Après avoir scanné le code QR ou saisi le code texte, votre application A2F affiche un code à six chiffres. Saisissez ce code dans la case ci-dessous et cliquez sur Enregistrer.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">205</context>
@@ -854,32 +856,32 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>This activation has expired.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>La clé d&apos;activation est expirée.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This activation has expired.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>La clé d&apos;activation est expirée.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyinvalid.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>This activation key is invalid.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>La clé d&apos;activation est invalide.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This activation key is invalid.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>La clé d&apos;activation est invalide.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keymissing.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>The activation key is missing.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>La clé d&apos;activation est manquante.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>The activation key is missing.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>La clé d&apos;activation est manquante.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Your password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please </source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Votre mot de passe a été réinitialisé.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Veuillez</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Your password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please </source>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Votre mot de passe a été réinitialisé.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Veuillez</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">50</context>
@@ -1290,8 +1292,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="global.item-count.string" datatype="html">
-        <source>Showing <x id="PH" equiv-text="first"/> - <x id="PH_1" equiv-text="second"/> of <x id="PH_2" equiv-text="this.totalItems"/> items.</source>
-        <target>Montrer entre <x id="PH" equiv-text="first"/> et <x id="PH_1" equiv-text="second"/> éléments sur <x id="PH_2" equiv-text="this.totalItems"/>.</target>
+        <source>Showing <x id="PH" equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x> of <x id="PH_2" equiv-text="this.totalItems"></x> items.</source>
+        <target>Montrer entre <x id="PH" equiv-text="first"></x> et <x id="PH_1" equiv-text="second"></x> éléments sur <x id="PH_2" equiv-text="this.totalItems"></x>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.ts</context>
           <context context-type="linenumber">226</context>
@@ -1330,8 +1332,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.delete.question.string" datatype="html">
-        <source>Are you sure you want to delete user <x id="PH" equiv-text="this.user?.email"/>?</source>
-        <target>Êtes-vous sûr(e) de vouloir supprimer l&apos;utilisateur <x id="PH" equiv-text="this.user?.email"/>?</target>
+        <source>Are you sure you want to delete user <x id="PH" equiv-text="this.user?.email"></x>?</source>
+        <target>Êtes-vous sûr(e) de vouloir supprimer l&apos;utilisateur <x id="PH" equiv-text="this.user?.email"></x>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -1436,10 +1438,10 @@
       </trans-unit>
       <trans-unit id="{{&apos;gatewayApp.AffiliationSection.&apos; + affiliation.affiliationSection + &apos;.string&apos;}}" datatype="html">
         <source>
-          <x id="INTERPOLATION" equiv-text="{{ affiliation.affiliationSection }}"/>
+          <x id="INTERPOLATION" equiv-text="{{ affiliation.affiliationSection }}"></x>
         </source>
         <target>
-          <x id="INTERPOLATION" equiv-text="{{ affiliation.affiliationSection }}"/>
+          <x id="INTERPOLATION" equiv-text="{{ affiliation.affiliationSection }}"></x>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
@@ -4159,8 +4161,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="entity.validation.maxlength.string" datatype="html">
-        <source>This field cannot be longer than <x id="PH" equiv-text="maxCharLimit"/> characters.</source>
-        <target>Ce champ ne peut pas comporter plus de <x id="PH" equiv-text="maxCharLimit"/> caractères.</target>
+        <source>This field cannot be longer than <x id="PH" equiv-text="maxCharLimit"></x> characters.</source>
+        <target>Ce champ ne peut pas comporter plus de <x id="PH" equiv-text="maxCharLimit"></x> caractères.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.ts</context>
           <context context-type="linenumber">196</context>
@@ -4427,8 +4429,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string" datatype="html">
-        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"/>? The affiliation will be deleted from the portal and the user&apos;s ORCID record</source>
-        <target>Voulez-vous vraiment supprimer cette affiliation pour <x id="PH" equiv-text="this.affiliation?.email"/>? L&apos;affiliation sera supprimée du portail et du dossier ORCID de l&apos;utilisateur.</target>
+        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"></x>? The affiliation will be deleted from the portal and the user&apos;s ORCID record</source>
+        <target>Voulez-vous vraiment supprimer cette affiliation pour <x id="PH" equiv-text="this.affiliation?.email"></x>? L&apos;affiliation sera supprimée du portail et du dossier ORCID de l&apos;utilisateur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-delete.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -4683,8 +4685,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.connectionExists.differentUser.string" datatype="html">
-        <source>This authorization link has already been used. Please contact <x id="PH" equiv-text="this.clientName"/> for a new authorization link.</source>
-        <target>Ce lien d&apos;autorisation a déjà été utilisé. Veuillez contacter <x id="PH" equiv-text="this.clientName"/> pour obtenir un nouveau lien d&apos;autorisation.</target>
+        <source>This authorization link has already been used. Please contact <x id="PH" equiv-text="this.clientName"></x> for a new authorization link.</source>
+        <target>Ce lien d&apos;autorisation a déjà été utilisé. Veuillez contacter <x id="PH" equiv-text="this.clientName"></x> pour obtenir un nouveau lien d&apos;autorisation.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -4707,8 +4709,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.denied.grantAccess.string" datatype="html">
-        <source>Allow <x id="PH" equiv-text="this.clientName"/> to update my ORCID record.</source>
-        <target>Autoriser <x id="PH" equiv-text="this.clientName"/> à mettre à jour mon dossier ORCID</target>
+        <source>Allow <x id="PH" equiv-text="this.clientName"></x> to update my ORCID record.</source>
+        <target>Autoriser <x id="PH" equiv-text="this.clientName"></x> à mettre à jour mon dossier ORCID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -4747,24 +4749,24 @@
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.success.ifYouFind.string" datatype="html">
-        <source>If you find that data added to your ORCID record is incorrect, please contact <x id="PH" equiv-text="this.clientName"/></source>
-        <target>Si vous trouvez que les données ajoutées à votre dossier ORCID sont incorrectes, veuillez contacter <x id="PH" equiv-text="this.clientName"/></target>
+        <source>If you find that data added to your ORCID record is incorrect, please contact <x id="PH" equiv-text="this.clientName"></x></source>
+        <target>Si vous trouvez que les données ajoutées à votre dossier ORCID sont incorrectes, veuillez contacter <x id="PH" equiv-text="this.clientName"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.success.thanks.string" datatype="html">
-        <source>Thanks, <x id="PH" equiv-text="this.givenName"/> <x id="PH_1" equiv-text="this.familyName"/>!</source>
-        <target>Merci, <x id="PH" equiv-text="this.givenName"/> <x id="PH_1" equiv-text="this.familyName"/> </target>
+        <source>Thanks, <x id="PH" equiv-text="this.givenName"></x> <x id="PH_1" equiv-text="this.familyName"></x>!</source>
+        <target>Merci, <x id="PH" equiv-text="this.givenName"></x> <x id="PH_1" equiv-text="this.familyName"></x> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
           <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.success.youHaveSuccessfully.string" datatype="html">
-        <source>You have successfully granted <x id="PH" equiv-text="this.clientName"/> permission to update your ORCID record, and your record has been updated with affiliation information.</source>
-        <target>Vous avez accordé avec succès à <x id="PH" equiv-text="this.clientName"/> l&apos;autorisation de mettre à jour votre dossier ORCID, et votre dossier a été mis à jour avec les données d&apos;affiliation.</target>
+        <source>You have successfully granted <x id="PH" equiv-text="this.clientName"></x> permission to update your ORCID record, and your record has been updated with affiliation information.</source>
+        <target>Vous avez accordé avec succès à <x id="PH" equiv-text="this.clientName"></x> l&apos;autorisation de mettre à jour votre dossier ORCID, et votre dossier a été mis à jour avec les données d&apos;affiliation.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -4819,8 +4821,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="home.loggedIn.message.string" datatype="html">
-        <source>You are logged in as user <x id="PH" equiv-text="account.email"/></source>
-        <target>Vous êtes connecté en tant que <x id="PH" equiv-text="account.email"/></target>
+        <source>You are logged in as user <x id="PH" equiv-text="account.email"></x></source>
+        <target>Vous êtes connecté en tant que <x id="PH" equiv-text="account.email"></x></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/home/home.component.ts</context>
           <context context-type="linenumber">25</context>
