@@ -149,6 +149,7 @@
             "includeContext": true,
             "browserTarget": "ui:build",
             "format": "xlf",
+            "newTranslationTargetsBlank": true,
             "outputPath": "src/i18n",
             "removeIdsWithPrefix": [
               "ngb.alert.close",
