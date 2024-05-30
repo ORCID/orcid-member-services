@@ -218,6 +218,9 @@ export class AffiliationUpdateComponent implements OnInit {
   }
 
   updateForm(assertion: IAffiliation) {
+    console.log('start month is ', assertion.startMonth)
+    console.log('end month is ', assertion.endMonth)
+
     if (assertion?.id) {
       this.editForm.patchValue({
         id: assertion.id,
@@ -227,10 +230,10 @@ export class AffiliationUpdateComponent implements OnInit {
         roleTitle: assertion.roleTitle,
         url: assertion.url,
         startYear: assertion.startYear,
-        startMonth: parseInt(assertion.startMonth || '') || null,
+        startMonth: assertion.startMonth,
         startDay: assertion.startDay,
         endYear: assertion.endYear,
-        endMonth: parseInt(assertion.endMonth || '') || null,
+        endMonth: assertion.endMonth,
         endDay: assertion.endDay,
         orgName: assertion.orgName,
         orgCountry: assertion.orgCountry,
@@ -249,6 +252,8 @@ export class AffiliationUpdateComponent implements OnInit {
         status: assertion.status,
         ownerId: assertion.ownerId,
       })
+
+      console.log('form values set, start month is ', this.editForm.get('startMonth')!.value)
 
       this.onStartDateSelected(false)
       this.onEndDateSelected(false)

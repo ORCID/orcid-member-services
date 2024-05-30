@@ -325,7 +325,7 @@
               (change)="onStartDateSelected(true)"
             >
               <option i18n="@@gatewayApp.assertionServiceAssertion.month.string" [ngValue]="null">Month</option>
-              <option *ngFor="let month of monthsList" [ngValue]="month[0]">{{ month[1] | localize }}</option>
+              <option *ngFor="let month of monthsList" [value]="month[0]">{{ month[1] | localize }}</option>
             </select>
           </div>
           <div class="col-md-4 float-left pr-0">
