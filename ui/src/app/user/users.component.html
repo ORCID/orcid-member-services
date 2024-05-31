@@ -135,7 +135,7 @@
             ></fa-icon>
           </td>
           <td *ngIf="hasRoleAdmin()">
-            <a [routerLink]="['/member', user.salesforceId, 'view']">{{ user.memberName }}</a>
+            <a [routerLink]="['/members', user.salesforceId, 'view']">{{ user.memberName }}</a>
           </td>
           <td *ngIf="!hasRoleAdmin()">{{ user.memberName }}</td>
           <td class="text-center">
