@@ -27,7 +27,7 @@ export class LandingPageService {
 
   getOrcidConnectionRecord(state: string): Observable<OrcidRecord> {
     const requestUrl = this.recordConnectionUri + state
-    return this.http.get(requestUrl).pipe(map((response: any) => response.body))
+    return this.http.get<OrcidRecord>(requestUrl)
   }
 
   getMemberInfo(state: string): Observable<any> {
