@@ -60,56 +60,61 @@ export class LandingPageComponent implements OnInit {
   processRequest(state_param: string, id_token_fragment: string, access_token_fragment: string) {
     console.log('process request method, calling this.landingPageService.getOrcidConnectionRecord')
 
-    this.landingPageService.getOrcidConnectionRecord(state_param).subscribe((result) => {
-      console.log('got orcid record result: ', result)
+    this.landingPageService.getOrcidConnectionRecord(state_param).subscribe({
+      next: (result) => {
+        console.log('got orcid record result: ', result)
 
-      this.orcidRecord = result
-      this.landingPageService.getMemberInfo(state_param).subscribe({
-        next: (res: IMember) => {
-          console.log('got member data')
+        this.orcidRecord = result
+        this.landingPageService.getMemberInfo(state_param).subscribe({
+          next: (res: IMember) => {
+            console.log('got member data')
 
-          this.clientName = res.clientName
-          this.clientId = res.clientId
-          this.salesforceId = res.salesforceId
-          this.oauthUrl =
-            this.oauthBaseUrl +
-            '?response_type=token&redirect_uri=' +
-            this.redirectUri +
-            '&client_id=' +
-            this.clientId +
-            '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
-            state_param
+            this.clientName = res.clientName
+            this.clientId = res.clientId
+            this.salesforceId = res.salesforceId
+            this.oauthUrl =
+              this.oauthBaseUrl +
+              '?response_type=token&redirect_uri=' +
+              this.redirectUri +
+              '&client_id=' +
+              this.clientId +
+              '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
+              state_param
 
-          this.incorrectDataMessage = $localize`:@@landingPage.success.ifYouFind.string:If you find that data added to your ORCID record is incorrect, please contact ${this.clientName}`
-          this.linkAlreadyUsedMessage = $localize`:@@landingPage.connectionExists.differentUser.string:This authorization link has already been used. Please contact ${this.clientName} for a new authorization link.`
-          this.allowToUpdateRecordMessage = $localize`:@@landingPage.denied.grantAccess.string:Allow ${this.clientName} to update my ORCID record.`
-          this.successfullyGrantedMessage = $localize`:@@landingPage.success.youHaveSuccessfully.string:You have successfully granted ${this.clientName} permission to update your ORCID record, and your record has been updated with affiliation information.`
+            this.incorrectDataMessage = $localize`:@@landingPage.success.ifYouFind.string:If you find that data added to your ORCID record is incorrect, please contact ${this.clientName}`
+            this.linkAlreadyUsedMessage = $localize`:@@landingPage.connectionExists.differentUser.string:This authorization link has already been used. Please contact ${this.clientName} for a new authorization link.`
+            this.allowToUpdateRecordMessage = $localize`:@@landingPage.denied.grantAccess.string:Allow ${this.clientName} to update my ORCID record.`
+            this.successfullyGrantedMessage = $localize`:@@landingPage.success.youHaveSuccessfully.string:You have successfully granted ${this.clientName} permission to update your ORCID record, and your record has been updated with affiliation information.`
 
-          // Check if id token exists in URL (user just granted permission)
-          if (id_token_fragment != null && id_token_fragment !== '') {
-            console.log('checking submit token')
+            // Check if id token exists in URL (user just granted permission)
+            if (id_token_fragment != null && id_token_fragment !== '') {
+              console.log('checking submit token')
 
-            this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment)
-          } else {
-            const error = this.getFragmentParameterByName('error')
-            // Check if user denied permission
-            if (error != null && error !== '') {
-              if (error === 'access_denied') {
-                this.submitUserDenied(state_param)
-              } else {
-                this.showErrorElement(error)
-              }
+              this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment)
             } else {
-              this.windowLocationService.updateWindowLocation(this.oauthUrl)
+              const error = this.getFragmentParameterByName('error')
+              // Check if user denied permission
+              if (error != null && error !== '') {
+                if (error === 'access_denied') {
+                  this.submitUserDenied(state_param)
+                } else {
+                  this.showErrorElement(error)
+                }
+              } else {
+                this.windowLocationService.updateWindowLocation(this.oauthUrl)
+              }
             }
-          }
 
-          this.startTimer(600)
-        },
-        error: (res: HttpErrorResponse) => {
-          console.log('error')
-        },
-      })
+            this.startTimer(600)
+          },
+          error: (res: HttpErrorResponse) => {
+            console.log('error')
+          },
+        })
+      },
+      error: (res: HttpErrorResponse) => {
+        console.log('error')
+      },
     })
   }
 
