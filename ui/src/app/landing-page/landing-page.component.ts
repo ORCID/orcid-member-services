@@ -58,17 +58,11 @@ export class LandingPageComponent implements OnInit {
   }
 
   processRequest(state_param: string, id_token_fragment: string, access_token_fragment: string) {
-    console.log('process request method, calling this.landingPageService.getOrcidConnectionRecord')
-
     this.landingPageService.getOrcidConnectionRecord(state_param).subscribe({
       next: (result) => {
-        console.log('got orcid record result: ', result)
-
         this.orcidRecord = result
         this.landingPageService.getMemberInfo(state_param).subscribe({
           next: (res: IMember) => {
-            console.log('got member data')
-
             this.clientName = res.clientName
             this.clientId = res.clientId
             this.salesforceId = res.salesforceId
@@ -88,8 +82,6 @@ export class LandingPageComponent implements OnInit {
 
             // Check if id token exists in URL (user just granted permission)
             if (id_token_fragment != null && id_token_fragment !== '') {
-              console.log('checking submit token')
-
               this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment)
             } else {
               const error = this.getFragmentParameterByName('error')
@@ -162,9 +154,6 @@ export class LandingPageComponent implements OnInit {
                   return
                 }
                 if (data.isSameUserThatAlreadyGranted) {
-                  console.log('same user has already granted access. this.orcidRecord is ', this.orcidRecord)
-                  console.log('this.orcidRecord.orcidId is ', this.orcidRecord?.orcid)
-
                   this.showConnectionExistsElement()
                   return
                 }
