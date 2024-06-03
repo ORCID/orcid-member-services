@@ -99,13 +99,7 @@ export class LandingPageComponent implements OnInit {
 
             this.startTimer(600)
           },
-          error: (res: HttpErrorResponse) => {
-            console.log('error')
-          },
         })
-      },
-      error: (res: HttpErrorResponse) => {
-        console.log('error')
       },
     })
   }
