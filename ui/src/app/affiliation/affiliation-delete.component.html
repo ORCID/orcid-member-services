@@ -5,6 +5,7 @@
   </div>
   <div class="modal-body">
     <app-alert-error></app-alert-error>
+    <p>added to orcid: {{ affiliation?.addedToORCID }}</p>
     <p *ngIf="!affiliation?.addedToORCID" i18n="@@gatewayApp.assertionServiceAssertion.delete.fromPortal.string">
       Are you sure you want to delete this affiliation from the portal?
     </p>
