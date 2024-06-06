@@ -4,7 +4,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { EventService } from '../shared/service/event.service'
 import { AlertService } from '../shared/service/alert.service'
 import { IUser } from '../user/model/user.model'
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { faBan, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { MemberService } from '../member/service/member.service'
 import { LanguageService } from '../shared/service/language.service'
 import { AccountService } from '../account'
@@ -18,6 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 })
 export class SendNotificationsDialogComponent implements OnInit {
   faPaperPlane = faPaperPlane
+  faBan = faBan
   requestAlreadyInProgress = false
   languages: { [langCode: string]: { name: string } } | undefined
   language = ''
