@@ -19,6 +19,7 @@ export class ErrorAlertComponent implements OnInit {
   ngOnInit(): void {
     this.sub = this.errorService.on().subscribe((err: AppError) => {
       console.log(err)
+      console.log('error message is ', err.message)
 
       const alert: ErrorAlert = {
         type: 'danger',

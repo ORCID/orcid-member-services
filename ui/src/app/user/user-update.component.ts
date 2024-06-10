@@ -106,6 +106,12 @@ export class UserUpdateComponent {
         this.showIsAdminCheckbox = false
       }
     })
+
+    this.editForm.get('firstName')?.valueChanges.subscribe((val) => (this.isSaving = false))
+    this.editForm.get('lastName')?.valueChanges.subscribe((val) => (this.isSaving = false))
+    this.editForm.get('salesforceId')?.valueChanges.subscribe((val) => (this.isSaving = false))
+    this.editForm.get('mainContact')?.valueChanges.subscribe((val) => (this.isSaving = false))
+    this.editForm.get('assertionServiceEnabled')?.valueChanges.subscribe((val) => (this.isSaving = false))
   }
 
   updateForm(user: IUser) {
@@ -308,28 +314,24 @@ export class UserUpdateComponent {
   protected subscribeToSaveResponse(result: Observable<IUser>) {
     result.subscribe({
       next: () => this.onSaveSuccess(),
-      error: () => this.onSaveError(),
     })
   }
 
   protected subscribeToUpdateResponse(result: Observable<IUser>) {
     result.subscribe({
       next: () => this.onUpdateSuccess(),
-      error: () => this.onSaveError(),
     })
   }
 
   protected subscribeToSaveResponseWithOwnershipChange(result: Observable<IUser>) {
     result.subscribe({
       next: () => this.onSaveSuccessOwnershipChange(),
-      error: () => this.onSaveError(),
     })
   }
 
   protected subscribeToUpdateResponseWithOwnershipChange(result: Observable<IUser>) {
     result.subscribe({
       next: () => this.onUpdateSuccessOwnershipChange(),
-      error: () => this.onSaveError(),
     })
   }
 
