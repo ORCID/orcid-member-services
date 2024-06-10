@@ -38,7 +38,7 @@ export class AffiliationDeleteDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.message = $localize`:@@gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string:Are you sure you want to delete this affiliation for ${this.affiliation?.email}? The affiliation will be deleted from the portal and
-    the user's ORCID record`
+    the user's ORCID record.`
   }
 
   confirmDelete(id: string | undefined) {
