@@ -18,7 +18,6 @@ export class LanguageService {
     ko: { name: '한국어' },
     pt: { name: 'Português' },
     ru: { name: 'Pусский' },
-    xx: { name: 'Test' },
   }
 
   getAllLanguages(): { [langCode: string]: { name: string } } {
