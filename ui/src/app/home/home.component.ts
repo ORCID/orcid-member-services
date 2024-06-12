@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.accountServiceSubscription = this.accountService.getAccountData().subscribe((account) => {
       this.account = account
       if (account) {
-        this.loggedInMessage = $localize`:@@home.loggedIn.message.string:You are logged in as user ${account.email}`
+        this.loggedInMessage = $localize`:@@home.loggedIn.message.string:You are logged in as user <strong>${account.email}</strong>`
       }
     })
   }

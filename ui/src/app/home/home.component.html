@@ -1,5 +1,5 @@
 <div class="d-flex flex-column h-100">
-  <div class="alert alert-success mt-3" data-cy="signedInMessage">{{ loggedInMessage }}</div>
+  <div class="alert alert-success mt-3" data-cy="signedInMessage" [innerHTML]="loggedInMessage"></div>
   <div class="h-100 pb-3">
     <router-outlet></router-outlet>
   </div>
