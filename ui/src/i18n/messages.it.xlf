@@ -2109,7 +2109,7 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.import.filePath" datatype="html">
+      <trans-unit id="gatewayApp.msUserServiceMSMember.import.filePath.string" datatype="html">
         <source>File Path</source>
         <target state="new"/>
         <context-group purpose="location">
