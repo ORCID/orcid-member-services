@@ -65,41 +65,43 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    combineLatest([this.activatedRoute.params, this.accountService.getAccountData()])
-      .pipe(
-        switchMap(([params, account]) => {
-          if (params['id']) {
-            this.managedMember = params['id']
-          }
-          if (account) {
-            this.account = account
-            if (this.managedMember) {
-              this.memberService.setManagedMember(params['id'])
-              return this.memberService.getMemberData(this.managedMember)
-            } else {
-              return this.memberService.getMemberData(account?.salesforceId)
-            }
-          } else {
-            return EMPTY
-          }
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((data) => {
-        this.memberData = data
-        this.orgIdsTransformed = Object.entries(this.memberData?.orgIds || {}).flatMap(([name, ids]) =>
-          ids.map((id: string) => ({ id, name }))
-        )
-        this.validateUrl()
-        if (data) {
-          this.updateForm(data)
-        }
-      })
+    console.log('getting countries')
+
     this.memberService
       .getCountries()
       .pipe(take(1))
       .subscribe((countries) => {
         this.countries = countries
+        combineLatest([this.activatedRoute.params, this.accountService.getAccountData()])
+          .pipe(
+            switchMap(([params, account]) => {
+              if (params['id']) {
+                this.managedMember = params['id']
+              }
+              if (account) {
+                this.account = account
+                if (this.managedMember) {
+                  this.memberService.setManagedMember(params['id'])
+                  return this.memberService.getMemberData(this.managedMember)
+                } else {
+                  return this.memberService.getMemberData(account?.salesforceId)
+                }
+              } else {
+                return EMPTY
+              }
+            }),
+            takeUntil(this.destroy$)
+          )
+          .subscribe((data) => {
+            this.memberData = data
+            this.orgIdsTransformed = Object.entries(this.memberData?.orgIds || {}).flatMap(([name, ids]) =>
+              ids.map((id: string) => ({ id, name }))
+            )
+            this.validateUrl()
+            if (data) {
+              this.updateForm(data)
+            }
+          })
       })
 
     this.editForm.valueChanges.subscribe(() => {
@@ -116,6 +118,8 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   }
 
   updateForm(data: ISFMemberData) {
+    console.log('updating form: billing address is ', data.billingAddress)
+
     if (data && data.id) {
       this.editForm.patchValue({
         orgName: data.name || null,
@@ -126,9 +130,14 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
         email: data.publicDisplayEmail,
       })
       if (data.billingAddress) {
+        console.log('this.countries is ', this.countries)
+
         if (this.countries) {
           this.country = this.countries.find((country) => country.name === data.billingAddress?.country)
+          console.log('chosen as currently selected country', this.country)
           if (this.country) {
+            console.log('setting states to ', this.country.states)
+
             this.states = this.country.states
           } else {
             console.error('Unable to find country: ', data.billingAddress.country)
