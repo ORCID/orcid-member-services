@@ -117,6 +117,7 @@ public class SalesforceClient {
             try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
                 if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                     LOG.warn("Received non-200 response from salesforce client for salesforce id {}", memberUpdateData.getSalesforceId());
+                    LOG.info("Response code is {}", response.getStatusLine().getStatusCode());
                     logErrorBody(response);
                     EntityUtils.consume(response.getEntity());
                 } else {
@@ -141,6 +142,7 @@ public class SalesforceClient {
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                     LOG.warn("Received non-200 response from salesforce client for salesforce id {}", salesforceId);
+                    LOG.info("Response code is {}", response.getStatusLine().getStatusCode());
                     logErrorBody(response);
                     EntityUtils.consume(response.getEntity());
                 } else {
@@ -214,6 +216,7 @@ public class SalesforceClient {
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                     LOG.warn("Received non-200 response from salesforce client for salesforce id {}", salesforceId);
+                    LOG.info("response code is {}", response.getStatusLine().getStatusCode());
                     logErrorBody(response);
                     EntityUtils.consume(response.getEntity());
                 } else {
