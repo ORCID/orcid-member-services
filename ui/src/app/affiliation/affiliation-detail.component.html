@@ -16,7 +16,7 @@
           </dd>
           <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.status.string">Status</dt>
           <dd class="col-md-9">
-            {{ affiliation.prettyStatus }}
+            {{ affiliation.prettyStatus || '' | localize }}
           </dd>
           <dt
             *ngIf="affiliation.permissionLink"
@@ -50,9 +50,7 @@
             Affiliation Section
           </dt>
           <dd class="col-md-9">
-            <span i18n="@@{{'gatewayApp.AffiliationSection.' + affiliation.affiliationSection + '.string'}}">{{
-              affiliation.affiliationSection
-            }}</span>
+            <span>{{ affiliation.affiliationSection! | localize }}</span>
           </dd>
           <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.detail.org.string">Organization</dt>
           <dd class="col-md-9">
