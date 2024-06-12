@@ -56,6 +56,6 @@ describe('HomeComponent', () => {
     component.ngOnInit()
 
     expect(accountServiceSpy.getAccountData).toHaveBeenCalled()
-    expect(component.loggedInMessage).toEqual('You are logged in as user <strong>email@email.com</strong>')
+    expect(component.loggedInMessage).toEqual('You are logged in as user email@email.com')
   })
 })
