@@ -46,12 +46,14 @@ export class AddConsortiumMemberComponent implements OnInit {
   })
 
   rolesData = [
-    { id: 1, selected: false, name: 'Main relationship contact' },
-    { id: 2, selected: false, name: 'Voting contact' },
-    { id: 3, selected: false, name: 'Technical contact' },
-    { id: 4, selected: false, name: 'Invoice contact' },
-    { id: 5, selected: false, name: 'Comms contact' },
-    { id: 6, selected: false, name: 'Product contact' },
+    { id: 1, selected: false, name: 'Agreement signatory (OFFICIAL)' },
+    { id: 2, selected: false, name: 'Main relationship contact (OFFICIAL)' },
+    { id: 3, selected: false, name: 'Voting contact' },
+    { id: 4, selected: false, name: 'Technical contact' },
+    { id: 5, selected: false, name: 'Invoice contact' },
+    { id: 6, selected: false, name: 'Comms contact' },
+    { id: 7, selected: false, name: 'Product contact' },
+    { id: 8, selected: false, name: 'Other contact' },
   ]
 
   constructor(

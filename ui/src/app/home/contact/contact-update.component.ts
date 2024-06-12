@@ -42,12 +42,14 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   faTrashAlt = faTrashAlt
 
   rolesData = [
-    new SFMemberContactRole(1, false, 'Main relationship contact'),
-    new SFMemberContactRole(2, false, 'Voting contact'),
-    new SFMemberContactRole(3, false, 'Technical contact'),
-    new SFMemberContactRole(4, false, 'Invoice contact'),
-    new SFMemberContactRole(5, false, 'Comms contact'),
-    new SFMemberContactRole(6, false, 'Product contact'),
+    new SFMemberContactRole(1, false, 'Agreement signatory (OFFICIAL)'),
+    new SFMemberContactRole(2, false, 'Main relationship contact (OFFICIAL)'),
+    new SFMemberContactRole(3, false, 'Voting contact'),
+    new SFMemberContactRole(4, false, 'Technical contact'),
+    new SFMemberContactRole(5, false, 'Invoice contact'),
+    new SFMemberContactRole(6, false, 'Comms contact'),
+    new SFMemberContactRole(7, false, 'Product contact'),
+    new SFMemberContactRole(8, false, 'Other contact'),
   ]
 
   validateContactRoles: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
