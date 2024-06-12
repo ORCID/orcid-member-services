@@ -16,14 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.orcid.memberportal.service.member.client.model.Country;
-import org.orcid.memberportal.service.member.client.model.MemberContact;
-import org.orcid.memberportal.service.member.client.model.MemberContacts;
-import org.orcid.memberportal.service.member.client.model.MemberDetails;
-import org.orcid.memberportal.service.member.client.model.MemberOrgId;
-import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
-import org.orcid.memberportal.service.member.client.model.MemberUpdateData;
-import org.orcid.memberportal.service.member.client.model.State;
+import org.orcid.memberportal.service.member.client.model.*;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
@@ -103,6 +96,24 @@ public class MemberResourceTest {
         ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(memberUpdateData, "salesforceId");
         assertEquals(200, response.getStatusCodeValue());
         Mockito.verify(memberService).updateMemberData(Mockito.any(MemberUpdateData.class), Mockito.eq("salesforceId"));
+    }
+
+    @Test
+    public void testUpdatePublicMemberDetailsWithBillingAddress() throws UnauthorizedMemberAccessException {
+        Mockito.when(memberService.updateMemberData(Mockito.any(MemberUpdateData.class), Mockito.eq("salesforceId"))).thenReturn(Boolean.TRUE);
+        MemberUpdateData memberUpdateData = getPublicMemberDetailsWithBillingAddress();
+        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(memberUpdateData, "salesforceId");
+        assertEquals(200, response.getStatusCodeValue());
+        Mockito.verify(memberService).updateMemberData(Mockito.any(MemberUpdateData.class), Mockito.eq("salesforceId"));
+    }
+
+    @Test
+    public void testUpdatePublicMemberDetailsWithBillingAddressAndNullCountry() throws UnauthorizedMemberAccessException {
+        Mockito.when(memberService.updateMemberData(Mockito.any(MemberUpdateData.class), Mockito.eq("salesforceId"))).thenReturn(Boolean.TRUE);
+        MemberUpdateData memberUpdateData = getPublicMemberDetailsWithBillingAddressAndNullCountry();
+        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(memberUpdateData, "salesforceId");
+        assertEquals(400, response.getStatusCodeValue());
+        Mockito.verify(memberService, Mockito.never()).updateMemberData(Mockito.any(MemberUpdateData.class), Mockito.eq("salesforceId"));
     }
 
     @Test
@@ -298,6 +309,35 @@ public class MemberResourceTest {
         memberUpdateData.setOrgName("orgName");
         memberUpdateData.setDescription("test");
         memberUpdateData.setEmail("email@orcid.org");
+        return memberUpdateData;
+    }
+
+    private MemberUpdateData getPublicMemberDetailsWithBillingAddress() {
+        MemberUpdateData memberUpdateData = new MemberUpdateData();
+        memberUpdateData.setPublicName("test member details");
+        memberUpdateData.setWebsite("https://website.com");
+        memberUpdateData.setOrgName("orgName");
+        memberUpdateData.setDescription("test");
+        memberUpdateData.setEmail("email@orcid.org");
+
+        BillingAddress billingAddress = new BillingAddress();
+        billingAddress.setCity("new york");
+        billingAddress.setCountry("USA");
+        memberUpdateData.setBillingAddress(billingAddress);
+        return memberUpdateData;
+    }
+
+    private MemberUpdateData getPublicMemberDetailsWithBillingAddressAndNullCountry() {
+        MemberUpdateData memberUpdateData = new MemberUpdateData();
+        memberUpdateData.setPublicName("test member details");
+        memberUpdateData.setWebsite("https://website.com");
+        memberUpdateData.setOrgName("orgName");
+        memberUpdateData.setDescription("test");
+        memberUpdateData.setEmail("email@orcid.org");
+
+        BillingAddress billingAddress = new BillingAddress();
+        billingAddress.setCity("new york");
+        memberUpdateData.setBillingAddress(billingAddress);
         return memberUpdateData;
     }
 

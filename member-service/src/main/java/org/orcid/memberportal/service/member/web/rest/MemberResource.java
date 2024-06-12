@@ -196,8 +196,7 @@ public class MemberResource {
     public ResponseEntity<Boolean> updatePublicMemberDetails(@RequestBody MemberUpdateData memberUpdateData,
             @PathVariable String salesforceId) {
         LOG.info("REST request to update member public details for salesforce id {}", salesforceId);
-        if (StringUtils.isBlank(memberUpdateData.getPublicName())) {
-            LOG.info("Null name in request to update public details");
+        if (!memberDetailsUpdateValid(memberUpdateData)) {
             return ResponseEntity.badRequest().build();
         }
         try {
@@ -387,5 +386,19 @@ public class MemberResource {
         LOG.debug("REST request to request remove consortium member");
         memberService.requestRemoveConsortiumMember(removeConsortiumMember);
         return ResponseEntity.ok().build();
+    }
+
+    private boolean memberDetailsUpdateValid(MemberUpdateData data) {
+        if (StringUtils.isBlank(data.getPublicName())) {
+            LOG.info("Null name in request to update public details");
+            return false;
+        }
+
+        // allow null billing address but if present, country must be specified
+        if (data.getBillingAddress() != null && StringUtils.isBlank(data.getBillingAddress().getCountry())) {
+            LOG.info("Null billing country in request to update public details");
+            return false;
+        }
+        return true;
     }
 }
