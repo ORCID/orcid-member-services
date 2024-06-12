@@ -5,8 +5,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Failed to
           sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /> Please
           check your credentials and try again. </source>
-        <target state="new">&lt;strong&gt;Не удалось войти!&lt;/strong&gt; Проверьте свои учетные
-          данные и повторите попытку.</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Не
+          удалось войти!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          Проверьте свои учетные данные и повторите попытку.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -202,7 +203,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Your
           password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
             equiv-text="&lt;/strong&gt;" /> Please </source>
-        <target state="new">&lt;strong&gt;Ваш пароль сброшен.&lt;/strong&gt; Пожалуйста,</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Ваш
+          пароль сброшен.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          Пожалуйста,</target>
         <context-group purpose="location">
           <context context-type="sourcefile">
             src/app/account/password/password-reset-finish.component.html</context>
@@ -387,8 +390,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Email
           address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
             equiv-text="&lt;/strong&gt;" /> Please check and try again. </source>
-        <target state="new">&lt;strong&gt;Электронный адрес не
-          зарегистрирован!&lt;/strong&gt;Пожалуйста, проверьте и попробуйте ещё раз</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Электронный
+          адрес не зарегистрирован!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" />Пожалуйста, проверьте и попробуйте ещё раз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">
             src/app/account/password/password-reset-init.component.html</context>
@@ -470,7 +474,8 @@
       <trans-unit id="password.messages.success.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Password
           changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></source>
-        <target state="new">&lt;strong&gt;Пароль изменен!&lt;/strong&gt;</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Пароль
+          изменен!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">7</context>
@@ -480,8 +485,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />An error has
           occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /> The
           password could not be changed. </source>
-        <target state="new">&lt;strong&gt;Произошла ошибка!&lt;/strong&gt; Не удалось изменить
-          пароль.</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Произошла
+          ошибка!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /> Не
+          удалось изменить пароль.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">15</context>
@@ -530,7 +536,8 @@
       <trans-unit id="settings.messages.success.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Settings
           saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></source>
-        <target state="new">&lt;strong&gt;Настройки сохранены!&lt;/strong&gt;</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Настройки
+          сохранены!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -683,19 +690,23 @@
             equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;" />Google
           Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />, <x
             id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;" />
-          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />, or <x id="START_LINK_2"
+          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" /> or <x id="START_LINK_2"
             equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;" />Authy<x id="CLOSE_LINK"
             ctype="x-a" equiv-text="&lt;/a&gt;" />. </source>
-        <target state="new">&lt;strong&gt;Установите приложение двухфакторной
-          аутентификации&lt;/strong&gt;&lt;br /&gt;Для создания шестизначного кода, необходимого для
-          доступа к аккаунту при каждом входе в него, требуется приложение двухфакторной
-          аутентификации. Большинство приложений предназначены для мобильных устройств; некоторые
-          также доступны в виде настольных или веб-приложений. Загрузите и установите ваше
-          приложение двухфакторной аутентификации, например &lt;a
-          href=&apos;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&apos;&gt;Google
-          Authenticator&lt;/a&gt;, &lt;a
-          href=&apos;https://freeotp.github.io/&apos;&gt;FreeOTP&lt;/a&gt; или &lt;a
-          href=&apos;https://authy.com/&apos;&gt;Authy&lt;/a&gt;.</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Установите
+          приложение двухфакторной аутентификации<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />Для
+          создания шестизначного кода, необходимого для доступа к аккаунту при каждом входе в него,
+          требуется приложение двухфакторной аутентификации. Большинство приложений предназначены
+          для мобильных устройств; некоторые также доступны в виде настольных или веб-приложений.
+          Загрузите и установите ваше приложение двухфакторной аутентификации, например <x
+            id="START_LINK" ctype="x-a"
+            equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;" />Google
+          Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />, <x
+            id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;" />
+          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" /> или <x id="START_LINK_2"
+            equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;" />Authy<x id="CLOSE_LINK"
+            ctype="x-a" equiv-text="&lt;/a&gt;" />.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">167</context>
@@ -706,9 +717,10 @@
           code with your device<x id="CLOSE_TAG_STRONG" ctype="x-strong"
             equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />Open
           your 2FA app and scan the image below. </source>
-        <target state="new">&lt;strong&gt;Отсканируйте этот QR-код на своем
-          устройстве&lt;/strong&gt;&lt;br /&gt;Откройте приложение двухфакторной аутентификации и
-          отсканируйте изображение ниже.</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Отсканируйте
+          этот QR-код на своем устройстве<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />Откройте
+          приложение двухфакторной аутентификации и отсканируйте изображение ниже.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">175</context>
@@ -717,7 +729,9 @@
       <trans-unit id="settings.security.mfaCannotScan.one.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Can&apos;t
           scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></source>
-        <target state="new">&lt;strong&gt;Не можете отсканировать QR-код?&lt;/strong&gt;</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Не
+          можете отсканировать QR-код?<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">196</context>
@@ -745,10 +759,11 @@
             equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />After
           scanning the QR code or entering in the text code, your 2FA app will display a six-digit
           code. Enter this code in the box below and click Save. </source>
-        <target state="new">&lt;strong&gt;Введите шестизначный код из
-          приложения&lt;/strong&gt;&lt;br /&gt;После сканирования QR-кода или ввода кода из СМС ваше
-          приложение двухфакторной аутентификации покажет шестизначный код. Введите этот код в поле
-          ниже и нажмите &quot;Сохранить&quot;.</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Введите
+          шестизначный код из приложения<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />После
+          сканирования QR-кода или ввода кода из СМС ваше приложение двухфакторной аутентификации
+          покажет шестизначный код. Введите этот код в поле ниже и нажмите &quot;Сохранить&quot;.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">206</context>
@@ -1844,10 +1859,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="home.loggedIn.message.string" datatype="html">
-        <source>You are logged in as user &lt;strong&gt;<x id="PH" equiv-text="account.email" />
-          &lt;/strong&gt;</source>
-        <target state="new">Вы вошли как &lt;strong&gt;<x id="PH" equiv-text="account.email" />
-          &lt;/strong&gt;</target>
+        <source>You are logged in as user <x id="PH" equiv-text="account.email" /></source>
+        <target state="new">Вы вошли как <x id="PH" equiv-text="account.email" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/home/home.component.ts</context>
           <context context-type="linenumber">25</context>

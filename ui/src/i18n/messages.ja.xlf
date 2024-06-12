@@ -5,7 +5,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Failed to
           sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /> Please
           check your credentials and try again. </source>
-        <target state="new">&lt;strong&gt; サインインに失敗しました。&lt;/strong&gt; 認証情報をご確認の上、再度お試し下さい。 </target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          サインインに失敗しました。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          認証情報をご確認の上、再度お試し下さい。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -200,7 +202,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Your
           password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
             equiv-text="&lt;/strong&gt;" /> Please </source>
-        <target state="new">&lt;strong&gt; お客様のパスワードが変更されました。&lt;/strong&gt; 行って下さい。</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          お客様のパスワードが変更されました。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          行って下さい。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">
             src/app/account/password/password-reset-finish.component.html</context>
@@ -385,7 +389,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Email
           address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
             equiv-text="&lt;/strong&gt;" /> Please check and try again. </source>
-        <target state="new">&lt;strong&gt;Eメールアドレスが登録されていません！&lt;/strong&gt;確認して、もう一度やり直してください</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          Eメールアドレスが登録されていません！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          確認して、もう一度やり直してください</target>
         <context-group purpose="location">
           <context context-type="sourcefile">
             src/app/account/password/password-reset-init.component.html</context>
@@ -467,7 +473,8 @@
       <trans-unit id="password.messages.success.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Password
           changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></source>
-        <target state="new">&lt;strong&gt;パスワードが変更されました！&lt;/strong&gt;</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          パスワードが変更されました！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">7</context>
@@ -477,7 +484,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />An error has
           occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /> The
           password could not be changed. </source>
-        <target state="new">&lt;strong&gt; エラーが発生しました。&lt;/strong&gt; パスワードが変更できません。 </target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          エラーが発生しました。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          パスワードが変更できません。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">15</context>
@@ -526,7 +535,8 @@
       <trans-unit id="settings.messages.success.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Settings
           saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></source>
-        <target state="new">&lt;strong&gt;設定が保存されました！&lt;/strong&gt;</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          設定が保存されました！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -678,15 +688,22 @@
             equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;" />Google
           Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />, <x
             id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;" />
-          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />, or <x id="START_LINK_2"
+          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" /> or <x id="START_LINK_2"
             equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;" />Authy<x id="CLOSE_LINK"
             ctype="x-a" equiv-text="&lt;/a&gt;" />. </source>
-        <target state="new"> &lt;strong&gt;2段階認証アプリをインストール&lt;/strong&gt;&lt;br
-          /&gt;サインインをする度にアカウントへのアクセスに必要となる6桁のコードを作成するために、2段階認証アプリが必須となります。多くのアプリはモバイルデバイス向けですが、デスクトップやウェブ上のアプリとして使用可能なものもあります。&lt;a
-          href=&apos;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&apos;&gt;Google
-          Authenticator&lt;/a&gt;、&lt;a
-          href=&apos;https://freeotp.github.io/&apos;&gt;FreeOTP&lt;/a&gt;、&lt;a
-          href=&apos;https://authy.com/&apos;&gt;Authy&lt;/a&gt;などのお好きな2段階認証アプリをダウンロードして、インストールしてください。</target>
+        <target state="new">
+          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" /> 2段階認証アプリをインストール<x
+            id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /> <x id="LINE_BREAK"
+            ctype="lb" equiv-text="&lt;br /&gt;" />
+          サインインをする度にアカウントへのアクセスに必要となる6桁のコードを作成するために、2段階認証アプリが必須となります。多くのアプリはモバイルデバイス向けですが、デスクトップやウェブ上のアプリとして使用可能なものもあります。<x
+            id="START_LINK"
+            ctype="x-a"
+            equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;" />Google
+          Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />, <x
+            id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;" />
+          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" /> 、<x id="START_LINK_2"
+            equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;" />Authy<x id="CLOSE_LINK"
+            ctype="x-a" equiv-text="&lt;/a&gt;" />などのお好きな2段階認証アプリをダウンロードして、インストールしてください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">167</context>
@@ -697,8 +714,10 @@
           code with your device<x id="CLOSE_TAG_STRONG" ctype="x-strong"
             equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />Open
           your 2FA app and scan the image below. </source>
-        <target state="new">&lt;strong&gt;ご使用のデバイスでこちらのQRコードをスキャンしてください&lt;/strong&gt; &lt;br
-          /&gt;2段階認証アプリを開いて、以下の画像をスキャンしてください。</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          ご使用のデバイスでこちらのQRコードをスキャンしてください<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />
+          2段階認証アプリを開いて、以下の画像をスキャンしてください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">175</context>
@@ -707,7 +726,8 @@
       <trans-unit id="settings.security.mfaCannotScan.one.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Can&apos;t
           scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></source>
-        <target state="new">&lt;strong&gt;QRコードのスキャンができませんか？&lt;/strong&gt;</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          QRコードのスキャンができませんか？<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">196</context>
@@ -735,8 +755,10 @@
             equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />After
           scanning the QR code or entering in the text code, your 2FA app will display a six-digit
           code. Enter this code in the box below and click Save. </source>
-        <target state="new">&lt;strong&gt;アプリで受け取った6桁のコードを入力してください&lt;/strong&gt;&lt;br
-          /&gt;QRコードをスキャンまたはテキストコードを入力した後に、2段階認証アプリに6桁のコードが表示されます。このコードを以下のボックスに入力して、保存をクリックしてください。</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          アプリで受け取った6桁のコードを入力してください<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />
+          QRコードをスキャンまたはテキストコードを入力した後に、2段階認証アプリに6桁のコードが表示されます。このコードを以下のボックスに入力して、保存をクリックしてください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">206</context>
@@ -1821,10 +1843,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="home.loggedIn.message.string" datatype="html">
-        <source>You are logged in as user &lt;strong&gt;<x id="PH" equiv-text="account.email" />
-          &lt;/strong&gt;</source>
-        <target state="new">あなたは、ユーザー「&lt;strong&gt;<x id="PH" equiv-text="account.email" />
-          &lt;/strong&gt;」としてログインしています。</target>
+        <source>You are logged in as user <x id="PH" equiv-text="account.email" /></source>
+        <target state="new">あなたは、ユーザー「<x id="PH" equiv-text="account.email" />」としてログインしています。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/home/home.component.ts</context>
           <context context-type="linenumber">25</context>

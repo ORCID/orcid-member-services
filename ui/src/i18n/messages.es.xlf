@@ -5,8 +5,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Failed to
           sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /> Please
           check your credentials and try again. </source>
-        <target state="new">&lt;strong&gt;¡No se ha podido iniciar sesión!&lt;/strong&gt; Compruebe
-          sus credenciales y vuelva a intentarlo.</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />¡No
+          se ha podido iniciar sesión!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /> Compruebe sus credenciales y vuelva a intentarlo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -202,8 +203,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Your
           password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
             equiv-text="&lt;/strong&gt;" /> Please </source>
-        <target state="new">&lt;strong&gt;Se ha restablecido su contraseña.&lt;/strong&gt; Por
-          favor,</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Se
+          ha restablecido su contraseña.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /> Por favor,</target>
         <context-group purpose="location">
           <context context-type="sourcefile">
             src/app/account/password/password-reset-finish.component.html</context>
@@ -388,8 +390,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Email
           address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
             equiv-text="&lt;/strong&gt;" /> Please check and try again. </source>
-        <target state="new">&lt;strong&gt;¡La dirección de correo electrónico no está
-          registrada!&lt;/strong&gt; Compruébalo e inténtalo de nuevo.</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />¡La
+          dirección de correo electrónico no está registrada!<x id="CLOSE_TAG_STRONG"
+            ctype="x-strong" equiv-text="&lt;/strong&gt;" /> Compruébalo e inténtalo de nuevo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">
             src/app/account/password/password-reset-init.component.html</context>
@@ -473,7 +476,9 @@
       <trans-unit id="password.messages.success.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Password
           changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></source>
-        <target state="new">&lt;strong&gt;¡Se ha cambiado la contraseña!&lt;/strong&gt;</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />¡Se
+          ha cambiado la contraseña!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">7</context>
@@ -483,8 +488,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />An error has
           occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /> The
           password could not be changed. </source>
-        <target state="new">&lt;strong&gt;¡Ha ocurrido un error!&lt;/strong&gt; No se ha podido
-          cambiar la contraseña.</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />¡Ha
+          ocurrido un error!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          No se ha podido cambiar la contraseña.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">15</context>
@@ -533,7 +539,8 @@
       <trans-unit id="settings.messages.success.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Settings
           saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></source>
-        <target state="new">&lt;strong&gt;¡Ajustes guardados!&lt;/strong&gt;</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />¡Ajustes
+          guardados!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -687,18 +694,22 @@
             equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;" />Google
           Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />, <x
             id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;" />
-          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />, or <x id="START_LINK_2"
+          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" /> or <x id="START_LINK_2"
             equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;" />Authy<x id="CLOSE_LINK"
-            ctype="x-a" equiv-text="&lt;/a&gt;" />. </source>
-        <target state="new">&lt;strong&gt;Instale una aplicación de autenticación de dos
-          factores&lt;/strong&gt;&lt;br /&gt;Es necesaria una aplicación 2FA que genere un código de
-          seis dígitos para acceder a su cuenta cada vez que inicie sesión. La mayoría de estas
-          aplicaciones son para dispositivos móviles, aunque también las hay para escritorio o
-          basadas en la web. Descargue e instale su aplicación 2FA preferida, por ejemplo: &lt;a
-          href=&apos;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&apos;&gt;Google
-          Authenticator&lt;/a&gt;, &lt;a
-          href=&apos;https://freeotp.github.io/&apos;&gt;FreeOTP&lt;/a&gt;, o &lt;a
-          href=&apos;https://authy.com/&apos;&gt;Authy&lt;/a&gt;.</target>
+            ctype="x-a" equiv-text="&lt;/a&gt;" />.</source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Instale
+          una aplicación de autenticación de dos factores<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />Es
+          necesaria una aplicación 2FA que genere un código de seis dígitos para acceder a su cuenta
+          cada vez que inicie sesión. La mayoría de estas aplicaciones son para dispositivos
+          móviles, aunque también las hay para escritorio o basadas en la web. Descargue e instale
+          su aplicación 2FA preferida, por ejemplo: <x id="START_LINK" ctype="x-a"
+            equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;" />Google
+          Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />, <x
+            id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;" />
+          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" /> o <x id="START_LINK_2"
+            equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;" />Authy<x id="CLOSE_LINK"
+            ctype="x-a" equiv-text="&lt;/a&gt;" />.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">167</context>
@@ -709,9 +720,10 @@
           code with your device<x id="CLOSE_TAG_STRONG" ctype="x-strong"
             equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />Open
           your 2FA app and scan the image below. </source>
-        <target state="new">&lt;strong&gt;Escanee este código QR en su
-          dispositivo&lt;/strong&gt;&lt;br /&gt;Abra su aplicación 2FA y escanee la siguiente
-          imagen.</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Escanee
+          este código QR en su dispositivo<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />Abra
+          su aplicación 2FA y escanee la siguiente imagen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">175</context>
@@ -720,7 +732,9 @@
       <trans-unit id="settings.security.mfaCannotScan.one.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Can&apos;t
           scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></source>
-        <target state="new">&lt;strong&gt;¿No puede escanear el código QR?&lt;/strong&gt;</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />¿No
+          puede escanear el código QR?<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">196</context>
@@ -748,10 +762,11 @@
             equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />After
           scanning the QR code or entering in the text code, your 2FA app will display a six-digit
           code. Enter this code in the box below and click Save. </source>
-        <target state="new">&lt;strong&gt;Introduzca el código de seis dígitos de la
-          aplicación&lt;/strong&gt;&lt;br /&gt;Tras escanear el código QR o introducir el código de
-          texto, su aplicación 2FA le mostrará un código de seis dígitos. Introdúzcalo en el cuadro
-          siguiente y haga clic en Guardar.</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Introduzca
+          el código de seis dígitos de la aplicación<x id="CLOSE_TAG_STRONG" ctype="x-strong"
+            equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />Tras
+          escanear el código QR o introducir el código de texto, su aplicación 2FA le mostrará un
+          código de seis dígitos. Introdúzcalo en el cuadro siguiente y haga clic en Guardar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">206</context>
@@ -1846,10 +1861,11 @@
         </context-group>
       </trans-unit>
       <trans-unit id="home.loggedIn.message.string" datatype="html">
-        <source>You are logged in as user &lt;strong&gt;<x id="PH" equiv-text="account.email" />
-          &lt;/strong&gt;</source>
-        <target state="new">Ha iniciado sesión como usuario &lt;strong&gt;<x id="PH"
-            equiv-text="account.email" />&lt;/strong&gt;</target>
+        <source>You are logged in as user <x id="PH" equiv-text="account.email" /></source>
+        <target state="new">Ha iniciado sesión como usuario <x id="START_TAG_STRONG"
+            ctype="x-strong" equiv-text="&lt;strong&gt;" /><x id="PH" equiv-text="account.email" />
+          <x
+            id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/home/home.component.ts</context>
           <context context-type="linenumber">25</context>

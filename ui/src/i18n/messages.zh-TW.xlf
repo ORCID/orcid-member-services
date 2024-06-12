@@ -5,7 +5,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Failed to
           sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /> Please
           check your credentials and try again. </source>
-        <target state="new">&lt;strong&gt;登入失敗！&lt;/strong&gt;請檢查您的憑證並再試一次。</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          登入失敗！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          請檢查您的憑證並再試一次。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -200,7 +202,8 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Your
           password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
             equiv-text="&lt;/strong&gt;" /> Please </source>
-        <target state="new">&lt;strong&gt;已重設您的密碼。&lt;/strong&gt; 請</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          已重設您的密碼。<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /> 請</target>
         <context-group purpose="location">
           <context context-type="sourcefile">
             src/app/account/password/password-reset-finish.component.html</context>
@@ -385,7 +388,9 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Email
           address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
             equiv-text="&lt;/strong&gt;" /> Please check and try again. </source>
-        <target state="new">&lt;strong&gt; 電子郵件地址尚未登錄！&lt;/strong&gt; 請在檢查後再試一次</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          電子郵件地址尚未登錄！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          請在檢查後再試一次</target>
         <context-group purpose="location">
           <context context-type="sourcefile">
             src/app/account/password/password-reset-init.component.html</context>
@@ -467,7 +472,8 @@
       <trans-unit id="password.messages.success.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Password
           changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></source>
-        <target state="new">&lt;strong&gt; 密碼已變更！&lt;/strong&gt;</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          密碼已變更！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">7</context>
@@ -477,7 +483,8 @@
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />An error has
           occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /> The
           password could not be changed. </source>
-        <target state="new">&lt;strong&gt; 發生錯誤！&lt;/strong&gt; 無法變更密碼。</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          發生錯誤！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /> 無法變更密碼。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">15</context>
@@ -526,7 +533,8 @@
       <trans-unit id="settings.messages.success.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Settings
           saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></source>
-        <target state="new">&lt;strong&gt; 設定已儲存！&lt;/strong&gt;</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          設定已儲存！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -677,15 +685,21 @@
             equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;" />Google
           Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />, <x
             id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;" />
-          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />, or <x id="START_LINK_2"
+          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" /> or <x id="START_LINK_2"
             equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;" />Authy<x id="CLOSE_LINK"
             ctype="x-a" equiv-text="&lt;/a&gt;" />. </source>
-        <target state="new">&lt;strong&gt;安裝雙重認證 app&lt;/strong&gt;&lt;br /&gt;您需要一個雙重認證 app
-          來創建您每次登入帳戶時所需的六位數代碼。多數 app 適用於行動裝置，部分 app 還能在電腦桌面使用，或是使用網頁型 app。下載並安裝您喜歡的雙重認證 app，例如 &lt;a
-          href=&apos;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&apos;&gt;Google
-          Authenticator&lt;/a&gt;、&lt;a
-          href=&apos;https://freeotp.github.io/&apos;&gt;FreeOTP&lt;/a&gt;，或 &lt;a
-          href=&apos;https://authy.com/&apos;&gt;Authy&lt;/a&gt;。</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />安裝雙重認證
+          app<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /><x
+            id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />您需要一個雙重認證 app
+          來創建您每次登入帳戶時所需的六位數代碼。多數 app 適用於行動裝置，部分 app 還能在電腦桌面使用，或是使用網頁型 app。下載並安裝您喜歡的雙重認證 app，例如 <x
+            id="START_LINK"
+            ctype="x-a"
+            equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;" />Google
+          Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />, <x
+            id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;" />
+          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />，或 <x id="START_LINK_2"
+            equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;" />Authy<x id="CLOSE_LINK"
+            ctype="x-a" equiv-text="&lt;/a&gt;" />。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">167</context>
@@ -696,8 +710,9 @@
           code with your device<x id="CLOSE_TAG_STRONG" ctype="x-strong"
             equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />Open
           your 2FA app and scan the image below. </source>
-        <target state="new">&lt;strong&gt;使用您的裝置掃描此 QR 碼&lt;/strong&gt;&lt;br /&gt;開啟您的雙重認證 app
-          並掃描下方圖片。</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />使用您的裝置掃描此
+          QR 碼<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /><x
+            id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />開啟您的雙重認證 app 並掃描下方圖片。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">175</context>
@@ -706,7 +721,8 @@
       <trans-unit id="settings.security.mfaCannotScan.one.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />Can&apos;t
           scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></source>
-        <target state="new">&lt;strong&gt;無法掃描 QR 碼？&lt;/strong&gt;</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />無法掃描
+          QR 碼？<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">196</context>
@@ -734,8 +750,10 @@
             equiv-text="&lt;/strong&gt;" /><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />After
           scanning the QR code or entering in the text code, your 2FA app will display a six-digit
           code. Enter this code in the box below and click Save. </source>
-        <target state="new">&lt;strong&gt;輸入 app 中的六位數代碼&lt;/strong&gt;&lt;br /&gt;掃描 QR
-          碼或輸入簡訊代碼後，您的雙重認證 app 便會顯示一個六位數代碼，將此代碼輸入下方選框後點擊「儲存」。</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />輸入
+          app 中的六位數代碼<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" /><x
+            id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />掃描 QR 碼或輸入簡訊代碼後，您的雙重認證 app
+          便會顯示一個六位數代碼，將此代碼輸入下方選框後點擊「儲存」。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">206</context>
@@ -1817,10 +1835,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="home.loggedIn.message.string" datatype="html">
-        <source>You are logged in as user &lt;strong&gt;<x id="PH" equiv-text="account.email" />
-          &lt;/strong&gt;</source>
-        <target state="new">您已以使用者「&lt;strong&gt;<x id="PH" equiv-text="account.email" />
-          &lt;/strong&gt;」的身分登入</target>
+        <source>You are logged in as user <x id="PH" equiv-text="account.email" /></source>
+        <target state="new">您已以使用者「<x id="PH" equiv-text="account.email" />」的身分登入</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/home/home.component.ts</context>
           <context context-type="linenumber">25</context>
