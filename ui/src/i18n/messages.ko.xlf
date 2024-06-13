@@ -2,10 +2,8 @@
   <file source-language="en" target-language="ko" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Failed to
-          sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x> Please
-          check your credentials and try again. </source>
-        <target state="new">&lt;strong&gt;로그인에 실패했습니다!&lt;/strong&gt; 사용자 자격 증명을 확인하여 다시 시도해 주세요.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check your credentials and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>로그인에 실패했습니다!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 사용자 자격 증명을 확인하여 다시 시도해 주세요.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -19,8 +17,7 @@
           <context context-type="linenumber">10</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
         <context-group purpose="location">
@@ -36,8 +33,7 @@
           <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
@@ -105,75 +101,55 @@
         <source>Reset password</source>
         <target state="new">비밀번호 재설정</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keymissing.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>The
-          activation key is missing.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x></source>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>The activation key is missing.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
         <target state="new">활성화 키가 없습니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyinvalid.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This
-          activation key is invalid.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x></source>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>This activation key is invalid.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
         <target state="new">활성화 키가 잘못되었습니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>This
-          activation has expired.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x></source>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>This activation has expired.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
         <target state="new">활성화 키가 만료되었습니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph1.string" datatype="html">
-        <source>ORCID Member Portal activation links are only valid for 24 hours. It looks like this
-          link has expired.</source>
-        <target state="new">ORCID Member Portal activation links are only valid for 24 hours. It
-          looks like this link has expired.</target>
+        <source>ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired.</source>
+        <target state="new">ORCID Member Portal activation links are only valid for 24 hours. It looks like this link has expired.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph2.string" datatype="html">
-        <source>To make sure you can activate your Member Portal account we have sent a new
-          activation link to your registered email address.</source>
-        <target state="new">To make sure you can activate your Member Portal account we have sent a
-          new activation link to your registered email address.</target>
+        <source>To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address.</source>
+        <target state="new">To make sure you can activate your Member Portal account we have sent a new activation link to your registered email address.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph3.string" datatype="html">
-        <source>If you are still having problems activating your account or have not received your
-          new activation link please contact our support team please contact us at
-          membership@orcid.org.</source>
-        <target state="new">If you are still having problems activating your account or have not
-          received your new activation link, please contact us at membership@orcid.org.</target>
+        <source>If you are still having problems activating your account or have not received your new activation link please contact our support team please contact us at membership@orcid.org.</source>
+        <target state="new">If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
@@ -181,29 +157,23 @@
         <source>Choose a new password</source>
         <target state="new">새 비밀번호 선택</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.error.string" datatype="html">
-        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for
-          24 hours. </source>
+        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for 24 hours. </source>
         <target state="new">비밀번호를 초기화할 수 없습니다. 비밀번호 요청은 24시간 동안만 유효합니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Your
-          password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x> Please </source>
-        <target state="new">&lt;strong&gt;비밀번호가 재설정되었습니다.&lt;/strong&gt;</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Your password has been reset.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>비밀번호가 재설정되었습니다.<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
@@ -211,8 +181,7 @@
         <source>sign in</source>
         <target state="new">로그인</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
@@ -220,8 +189,7 @@
         <source> The password and its confirmation do not match! </source>
         <target state="new">비밀번호와 비밀번호 확인이 일치하지 않습니다!</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">68</context>
         </context-group>
         <context-group purpose="location">
@@ -233,8 +201,7 @@
         <source>New password</source>
         <target state="new">새 비밀번호</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
         <context-group purpose="location">
@@ -246,8 +213,7 @@
         <source>New password</source>
         <target state="new">새 비밀번호</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">83</context>
         </context-group>
         <context-group purpose="location">
@@ -259,8 +225,7 @@
         <source> Your password is required. </source>
         <target state="new">비밀번호가 필요합니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">97</context>
         </context-group>
         <context-group purpose="location">
@@ -276,8 +241,7 @@
         <source> Your password is required to be at least 4 characters. </source>
         <target state="new">비밀번호는 4자 이상이어야 합니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">105</context>
         </context-group>
         <context-group purpose="location">
@@ -289,8 +253,7 @@
         <source> Your password cannot be longer than 50 characters. </source>
         <target state="new">비밀번호는 50자를 초과할 수 없습니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">112</context>
         </context-group>
         <context-group purpose="location">
@@ -302,8 +265,7 @@
         <source>New password confirmation</source>
         <target state="new">새 비밀번호 확인</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">121</context>
         </context-group>
         <context-group purpose="location">
@@ -315,8 +277,7 @@
         <source>Confirm the new password</source>
         <target state="new">새 비밀번호 확인</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">128</context>
         </context-group>
         <context-group purpose="location">
@@ -328,8 +289,7 @@
         <source> Your password confirmation is required. </source>
         <target state="new">확인 비밀번호가 필요합니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">142</context>
         </context-group>
         <context-group purpose="location">
@@ -341,8 +301,7 @@
         <source> Your password confirmation is required to be at least 4 characters. </source>
         <target state="new">확인 비밀번호는 4자 이상이어야 합니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">150</context>
         </context-group>
         <context-group purpose="location">
@@ -354,8 +313,7 @@
         <source> Your password confirmation cannot be longer than 50 characters. </source>
         <target state="new">확인 비밀번호는 50자를 초과할 수 없습니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">157</context>
         </context-group>
         <context-group purpose="location">
@@ -367,8 +325,7 @@
         <source> Reset Password </source>
         <target state="new">새 비밀번호 인증</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-finish.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
@@ -376,19 +333,15 @@
         <source>Reset your password</source>
         <target state="new">비밀번호 재설정</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Email
-          address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong"
-            equiv-text="&lt;/strong&gt;"></x> Please check and try again. </source>
-        <target state="new">&lt;strong&gt;이메일 주소가 등록되지 않았습니다!&lt;/strong&gt; 확인하여 다시 시도해 주세요.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>이메일 주소가 등록되지 않았습니다!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 확인하여 다시 시도해 주세요.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
@@ -396,8 +349,7 @@
         <source>Enter the email address you used to register.</source>
         <target state="new">등록할 때 사용한 이메일 주소를 입력하세요</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
@@ -405,8 +357,7 @@
         <source> Check your emails for details on how to reset your password. </source>
         <target state="new">비밀번호 재설정 방법에 대한 자세한 내용은 이메일을 확인하세요.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
@@ -414,8 +365,7 @@
         <source> Your email is required. </source>
         <target state="new">이메일은 필수 항목입니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
@@ -423,8 +373,7 @@
         <source> Your email is invalid. </source>
         <target state="new">이메일이 잘못되었습니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
@@ -432,8 +381,7 @@
         <source> Your email is required to be at least 5 characters. </source>
         <target state="new">이메일은 최소 5자여야 합니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
@@ -441,8 +389,7 @@
         <source> Your email cannot be longer than 100 characters. </source>
         <target state="new">이메일은 50자 이하여야 합니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
@@ -450,8 +397,7 @@
         <source> Reset </source>
         <target state="new">비밀번호 재설정</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
@@ -459,25 +405,21 @@
         <source>Password strength:</source>
         <target state="new">비밀번호 강도:</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/account/password/password-strength.component.html</context>
+          <context context-type="sourcefile">src/app/account/password/password-strength.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Password
-          changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new">&lt;strong&gt;비밀번호가 변경되었습니다!&lt;/strong&gt;</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Password changed!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>비밀번호가 변경되었습니다!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.messages.error.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>An error
-          has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x>
-          The password could not be changed. </source>
-        <target state="new">&lt;strong&gt;오류가 발생했습니다!&lt;/strong&gt; 비밀번호를 변경할 수 없습니다.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>An error has occurred!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> The password could not be changed. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>오류가 발생했습니다!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 비밀번호를 변경할 수 없습니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">15</context>
@@ -491,9 +433,9 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="global.form.currentpassword.placeholder.string&apos;" datatype="html">
+      <trans-unit id="global.form.currentpassword.placeholder.string" datatype="html">
         <source>Current password</source>
-        <target state="new"></target>
+        <target state="new">기존 비밀번호</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.html</context>
           <context context-type="linenumber">38</context>
@@ -508,8 +450,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="password.title.string" datatype="html">
-        <source>Password for <x id="PH" equiv-text="this.username"></x> (You)</source>
-        <target state="new"></target>
+        <source>Password for <x id="PH" equiv-text="this.username"/> (You)</source>
+        <target state="new"><x id="PH" equiv-text="this.username"/> 비밀번호(사용자)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -524,9 +466,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.messages.success.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"></x>Settings
-          saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"></x></source>
-        <target state="new">&lt;strong&gt;설정이 저장되었습니다!&lt;/strong&gt;</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Settings saved!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>설정이 저장되었습니다!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -629,7 +570,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">243</context>
+          <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.heading.string" datatype="html">
@@ -641,11 +582,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaExplain.string" datatype="html">
-        <source> Add extra security to your ORCID member portal account by enabling two-factor
-          authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code
-          we send to your preferred authentication application. </source>
-        <target state="new">2단계 인증을 활성화해 ORCID 회원 포털 계정의 보안을 강화하세요. 로그인할 때마다 선택하신 인증 어플리케이션에 전송된 6자리
-          코드를 입력해야 합니다.</target>
+        <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
+        <target state="new">2단계 인증을 활성화해 ORCID 회원 포털 계정의 보안을 강화하세요. 로그인할 때마다 선택하신 인증 어플리케이션에 전송된 6자리 코드를 입력해야 합니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">146</context>
@@ -668,44 +606,27 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.one.string" datatype="html">
-        <source> Install a two-factor authentication app<x id="LINE_BREAK" ctype="lb"
-            equiv-text="&lt;br /&gt;"></x>A 2FA app is required to create the six-digit code you
-          need to access your account each time you sign in. Most apps are for mobile devices; some
-          are also available as desktop or web-based apps. Download and install your preferred 2FA
-          app, such as <x id="START_LINK" ctype="x-a"
-            equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"></x>Google
-          Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, <x
-            id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"></x>
-          FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>, or <x
-            id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"></x>Authy<x
-            id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"></x>. </source>
-        <target state="new">&lt;strong&gt;2단계 인증 앱 설치&lt;/strong&gt;&lt;br /&gt;2단계 인증 앱은 로그인할 때마다
-          계정에 접근하는 데 필요한 6자리 코드를 생성합니다. 대부분 모바일 기기용 앱이며, 데스크톱이나 웹 기반 앱을 이용할 수도 있습니다. &lt;a
-          href=&apos;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&apos;&gt;Google
-          Authenticator&lt;/a&gt;, &lt;a
-          href=&apos;https://freeotp.github.io/&apos;&gt;FreeOTP&lt;/a&gt;, &lt;a
-          href=&apos;https://authy.com/&apos;&gt;Authy&lt;/a&gt;와 같은 2단계 인증 앱 중 하나를 다운로드하고 설치하세요.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Install a two-factor authentication app<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>2단계 인증 앱 설치<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>2단계 인증 앱은 로그인할 때마다 계정에 접근하는 데 필요한 6자리 코드를 생성합니다. 대부분 모바일 기기용 앱이며, 데스크톱이나 웹 기반 앱을 이용할 수도 있습니다. <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/> FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>와 같은 2단계 인증 앱 중 하나를 다운로드하고 설치하세요.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.two.string" datatype="html">
-        <source> Scan this QR code with your device<x id="LINE_BREAK" ctype="lb"
-            equiv-text="&lt;br /&gt;"></x>Open your 2FA app and scan the image below. </source>
-        <target state="new">&lt;strong&gt;사용 중인 기기로 이 QR 코드 스캔&lt;/strong&gt;&lt;br /&gt;2단계 인증 앱을
-          열고 아래 이미지를 스캔하세요.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Scan this QR code with your device<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Open your 2FA app and scan the image below. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>사용 중인 기기로 이 QR 코드 스캔<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>2단계 인증 앱을 열고 아래 이미지를 스캔하세요.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">174</context>
+          <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaCannotScan.one.string" datatype="html">
-        <source>Can&apos;t scan the QR code?</source>
-        <target state="new">&lt;strong&gt;QR 코드를 스캔할 수 없으신가요?&lt;/strong&gt;</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Can&apos;t scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>QR 코드를 스캔할 수 없으신가요?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">196</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaCannotScan.two.string" datatype="html">
@@ -713,7 +634,7 @@
         <target state="new">텍스트 코드를 받고</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">200</context>
+          <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaCannotScan.three.string" datatype="html">
@@ -721,19 +642,15 @@
         <target state="new">2단계 인증 앱에 입력하세요</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">202</context>
+          <context context-type="linenumber">204</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaTextCodeSteps.one.string" datatype="html">
-        <source> Enter the six-digit code from the app<x id="LINE_BREAK" ctype="lb"
-            equiv-text="&lt;br /&gt;"></x>After scanning the QR code or entering in the text code,
-          your 2FA app will display a six-digit code. Enter this code in the box below and click
-          Save. </source>
-        <target state="new">&lt;strong&gt;앱의 6자리 코드 입력&lt;/strong&gt;&lt;br /&gt;QR 코드를 스캔하거나 텍스트
-          코드를 입력하시면 2단계 인증 앱에 6자리 코드가 표시됩니다. 아래 상자에 이 코드를 입력하고 저장을 클릭하세요.</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Enter the six-digit code from the app<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>앱의 6자리 코드 입력<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>QR 코드를 스캔하거나 텍스트 코드를 입력하시면 2단계 인증 앱에 6자리 코드가 표시됩니다. 아래 상자에 이 코드를 입력하고 저장을 클릭하세요.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">208</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.otpError.string" datatype="html">
@@ -741,7 +658,7 @@
         <target state="new">잘못된 인증 코드</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">217</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.verificationCode.string" datatype="html">
@@ -749,16 +666,15 @@
         <target state="new">인증 코드</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">221</context>
+          <context context-type="linenumber">224</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.backupCodes.string" datatype="html">
-        <source> Make a note of the following backup codes, this is the only time they will be
-          shown. </source>
+        <source> Make a note of the following backup codes, this is the only time they will be shown. </source>
         <target state="new">다음 백업 코드를 기록해 두세요. 해당 코드는 이번만 표시됩니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
-          <context context-type="linenumber">228</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.delete.title.string" datatype="html">
@@ -789,8 +705,7 @@
           <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">67</context>
         </context-group>
         <context-group purpose="location">
@@ -798,8 +713,7 @@
           <context context-type="linenumber">460</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/send-notifications-dialog.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
         <context-group purpose="location">
@@ -832,7 +746,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
-          <context context-type="linenumber">232</context>
+          <context context-type="linenumber">230</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
@@ -843,13 +757,9 @@
           <context context-type="linenumber">186</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string"
-        datatype="html">
-        <source>Are you sure you want to delete this affiliation for <x id="PH"
-            equiv-text="this.affiliation?.email"></x>? The affiliation will be deleted from the
-          portal and the user&apos;s ORCID record</source>
-        <target state="new"><x id="PH" equiv-text="this.affiliation?.email"></x>에 대한 이 제휴를 정말
-          삭제하시겠습니까? 포털 및 사용자의 ORCID 기록에서 제휴가 삭제됩니다.</target>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string" datatype="html">
+        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"/>? The affiliation will be deleted from the portal and the user&apos;s ORCID record.</source>
+        <target state="new"><x id="PH" equiv-text="this.affiliation?.email"/>에 대한 이 제휴를 정말 삭제하시겠습니까? 포털 및 사용자의 ORCID 기록에서 제휴가 삭제됩니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-delete.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -927,8 +837,7 @@
           <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.affiliationSection.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.affiliationSection.string" datatype="html">
         <source> Affiliation Section </source>
         <target state="new">제휴 유형</target>
         <context-group purpose="location">
@@ -940,28 +849,12 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit
-        id="{{&apos;gatewayApp.AffiliationSection.&apos; + affiliation.affiliationSection + &apos;.string&apos;}}"
-        datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ affiliation.affiliationSection }}"></x>
-        </source>
-        <target state="new"></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">53</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
-          <context context-type="linenumber">168</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.detail.org.string" datatype="html">
         <source>Organization</source>
         <target state="new">조직</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.departmentName.string" datatype="html">
@@ -969,7 +862,7 @@
         <target state="new">부서</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">67</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
@@ -981,7 +874,7 @@
         <target state="new">역할/직책</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">77</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
@@ -993,7 +886,7 @@
         <target state="new">URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">83</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
@@ -1005,7 +898,7 @@
         <target state="new">시작 날짜</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.endDate.string" datatype="html">
@@ -1013,7 +906,7 @@
         <target state="new">종료 날짜</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.externalId.string" datatype="html">
@@ -1021,7 +914,7 @@
         <target state="new">외부 ID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">107</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
@@ -1033,7 +926,7 @@
         <target state="new">생성됨</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.addedToOrcid.string" datatype="html">
@@ -1041,7 +934,7 @@
         <target state="new">ORCID에 추가됨</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.updatedInOrcid.string" datatype="html">
@@ -1049,7 +942,7 @@
         <target state="new">ORCID에서 업데이트됨</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">135</context>
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.modified.string" datatype="html">
@@ -1057,7 +950,7 @@
         <target state="new">수정됨</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">141</context>
+          <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.by.string" datatype="html">
@@ -1065,7 +958,7 @@
         <target state="new">다음에 의함:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">144</context>
+          <context context-type="linenumber">142</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
@@ -1089,33 +982,31 @@
         <target state="new">관리자 ID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">146</context>
+          <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.notificationFirstSent.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notificationFirstSent.string" datatype="html">
         <source> Notification First Sent </source>
         <target state="new">알림 처음 전송됨</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">155</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">176</context>
+          <context context-type="linenumber">174</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.notificationLastSent.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notificationLastSent.string" datatype="html">
         <source> Notification Last Sent </source>
         <target state="new">알림 마지막으로 전송됨</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">193</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.back.string" datatype="html">
@@ -1123,7 +1014,7 @@
         <target state="new">뒤로</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">231</context>
+          <context context-type="linenumber">229</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
@@ -1139,11 +1030,11 @@
         <target state="new">편집</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
-          <context context-type="linenumber">235</context>
+          <context context-type="linenumber">233</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
-          <context context-type="linenumber">222</context>
+          <context context-type="linenumber">220</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
@@ -1174,19 +1065,15 @@
         <source> Import affiliations from CSV </source>
         <target state="new">제휴 가져오기</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.import.successMessage.string"
-        datatype="html">
-        <source>Your CSV has been uploaded for processing. We will let you know via email once the
-          file has been processed.</source>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.import.successMessage.string" datatype="html">
+        <source>Your CSV has been uploaded for processing. We will let you know via email once the file has been processed.</source>
         <target state="new">처리를 위해 CSV를 업로드했습니다. 파일을 처리한 후 이메일로 알려 드리겠습니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
@@ -1194,8 +1081,7 @@
         <source> There was a problem uploading your CSV for processing. </source>
         <target state="new">처리를 위해 CSV를 업로드하는 중에 문제가 발생했습니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
@@ -1203,8 +1089,7 @@
         <source> Please select the CSV file to upload </source>
         <target state="new">업로드할 CSV 파일을 선택해 주세요</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
@@ -1212,18 +1097,15 @@
         <source>File Path</source>
         <target state="new">파일 경로</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.uploadNote.string" datatype="html">
-        <source>Please do not forget to download and send permission links to your researchers once
-          the upload has completed.</source>
+        <source>Please do not forget to download and send permission links to your researchers once the upload has completed.</source>
         <target state="new">참고: 업로드가 완료되면 권한 링크를 다운로드하여 연구원에게 보내는 것을 잊지 마세요.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
@@ -1231,8 +1113,7 @@
         <source>Upload</source>
         <target state="new">업로드</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
         <context-group purpose="location">
@@ -1248,8 +1129,7 @@
         <source>Close</source>
         <target state="new">닫기</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/affiliation-import-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
@@ -1257,13 +1137,19 @@
         <source>There is no file to upload. Please select one.</source>
         <target state="new">업로드할 파일이 없습니다. 하나를 선택해 주세요.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/affiliation-import-dialog.component.ts</context>
+          <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.ts</context>
           <context context-type="linenumber">60</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/member-import-dialog.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-import-dialog.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.home.createOrEditLabel.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.createOrEditLabel.string" datatype="html">
         <source> Add or edit affiliation </source>
         <target state="new">제휴 추가 또는 편집</target>
         <context-group purpose="location">
@@ -1273,7 +1159,7 @@
       </trans-unit>
       <trans-unit id="entity.validation.pattern.string" datatype="html">
         <source> This field should follow pattern for &quot;Email&quot;. </source>
-        <target state="new"></target>
+        <target state="new">이 필드는 &quot;Email&quot;의 패턴을 따라야 합니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
           <context context-type="linenumber">25</context>
@@ -1371,8 +1257,7 @@
           <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguationSource.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguationSource.string" datatype="html">
         <source>Organization ID Source</source>
         <target state="new">조직 ID 소스</target>
         <context-group purpose="location">
@@ -1380,8 +1265,7 @@
           <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguatedOrgId.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.disambiguatedOrgId.string" datatype="html">
         <source>Organization ID</source>
         <target state="new">조직 ID</target>
         <context-group purpose="location">
@@ -1390,11 +1274,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="entity.validation.disambiguatedOrgId.string" datatype="html">
-        <source> This field is required. GRID Organization ID should start with &quot;grid.&quot;,
-          RINGGOLD Organization ID should be a number, ROR IDs must be 9 characters, beginning with
-          0 </source>
-        <target state="new">이 필드는 필수입니다. GRID 조직 ID는 grid로 시작해야 하거나(예: grid.12344) 유효한 grid URL이어야
-          합니다. RINGGOLD 조직 ID는 숫자여야 합니다. ROR ID는 0으로 시작하는 9자여야 합니다.</target>
+        <source> This field is required. GRID Organization ID should start with &quot;grid.&quot;, RINGGOLD Organization ID should be a number, ROR IDs must be 9 characters, beginning with 0 </source>
+        <target state="new">이 필드는 필수입니다. GRID 조직 ID는 grid로 시작해야 하거나(예: grid.12344) 유효한 grid URL이어야 합니다. RINGGOLD 조직 ID는 숫자여야 합니다. ROR ID는 0으로 시작하는 9자여야 합니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
           <context context-type="linenumber">230</context>
@@ -1509,8 +1390,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.updateNote.string" datatype="html">
-        <source>Please do not forget to download and send permission links to your researcher once
-          the assertion has been saved.</source>
+        <source>Please do not forget to download and send permission links to your researcher once the assertion has been saved.</source>
         <target state="new">참고: 어설션이 저장되면 권한 링크를 다운로드하여 연구원에게 보내는 것을 잊지 마세요.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
@@ -1538,9 +1418,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="entity.validation.maxlength.string" datatype="html">
-        <source>This field cannot be longer than <x id="PH" equiv-text="maxCharLimit"></x>
-          characters.</source>
-        <target state="new"></target>
+        <source>This field cannot be longer than <x id="PH" equiv-text="maxCharLimit"/> characters.</source>
+        <target state="new">이 필드는 <x id="PH" equiv-text="maxCharLimit"/>자를 초과할 수 없습니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.ts</context>
           <context context-type="linenumber">196</context>
@@ -1558,8 +1437,7 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string" datatype="html">
         <source> Send permission notifications </source>
         <target state="new">권한 알림 전송</target>
         <context-group purpose="location">
@@ -1567,8 +1445,7 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.button.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.button.string" datatype="html">
         <source> Request permission links </source>
         <target state="new">권한 링크 요청</target>
         <context-group purpose="location">
@@ -1576,8 +1453,7 @@
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.button.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.button.string" datatype="html">
         <source> Request affiliation status report </source>
         <target state="new">제휴 현황 보고서 요청</target>
         <context-group purpose="location">
@@ -1585,9 +1461,7 @@
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit
-        id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.button.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.button.string" datatype="html">
         <source> Request affiliations for edit </source>
         <target state="new">편집에 대한 제휴 요청</target>
         <context-group purpose="location">
@@ -1611,36 +1485,25 @@
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit
-        id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.confirmation.string"
-        datatype="html">
-        <source> Your affiliations for edit file will be mailed to you shortly. If you do not
-          receive your file then please contact us at membership@orcid.org. </source>
-        <target state="new">파일 편집에 대한 제휴를 곧 우편으로 발송해 드립니다. 파일을 받지 못하셨다면 membership@orcid.org로 연락하여
-          문의해 주세요.</target>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.confirmation.string" datatype="html">
+        <source> Your affiliations for edit file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org. </source>
+        <target state="new">파일 편집에 대한 제휴를 곧 우편으로 발송해 드립니다. 파일을 받지 못하셨다면 membership@orcid.org로 연락하여 문의해 주세요.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit
-        id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.confirmation.string"
-        datatype="html">
-        <source> Your affiliation status report file will be mailed to you shortly. If you do not
-          receive your file then please contact us at membership@orcid.org. </source>
-        <target state="new">제휴 현황 보고서 파일을 곧 우편으로 발송해 드립니다. 파일을 받지 못하셨다면 membership@orcid.org로 연락하여
-          문의해 주세요.</target>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.confirmation.string" datatype="html">
+        <source> Your affiliation status report file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org. </source>
+        <target state="new">제휴 현황 보고서 파일을 곧 우편으로 발송해 드립니다. 파일을 받지 못하셨다면 membership@orcid.org로 연락하여 문의해 주세요.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.confirmation.string"
-        datatype="html">
-        <source> Your permission links file will be mailed to you shortly. If you do not receive
-          your file then please contact us at membership@orcid.org. </source>
-        <target state="new">권한 링크 파일을 곧 우편으로 발송해 드립니다. 파일을 받지 못하셨다면 membership@orcid.org로 연락하여 문의해
-          주세요.</target>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.confirmation.string" datatype="html">
+        <source> Your permission links file will be mailed to you shortly. If you do not receive your file then please contact us at membership@orcid.org. </source>
+        <target state="new">권한 링크 파일을 곧 우편으로 발송해 드립니다. 파일을 받지 못하셨다면 membership@orcid.org로 연락하여 문의해 주세요.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">91</context>
@@ -1683,7 +1546,7 @@
         <target state="new">~</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
-          <context context-type="linenumber">184</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.details.string" datatype="html">
@@ -1691,24 +1554,20 @@
         <target state="new">세부 정보 보기</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
-          <context context-type="linenumber">192</context>
+          <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string"
-        datatype="html">
-        <source> For help troubleshooting, please contact the Member Portal Team and copy/paste or
-          include a screenshot of the error message below. </source>
-        <target state="new">이 오류를 해결하는 데 도움이 필요한 경우 컨소시엄 리드 또는 membership@orcid.org에 문의해 주세요. 아래 오류
-          메시지 스크린샷을 포함해 주세요.</target>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string" datatype="html">
+        <source> For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below. </source>
+        <target state="new">이 오류를 해결하는 데 도움이 필요한 경우 컨소시엄 리드 또는 membership@orcid.org에 문의해 주세요. 아래 오류 메시지 스크린샷을 포함해 주세요.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.item-count.string" datatype="html">
-        <source>Showing <x id="PH" equiv-text="first"></x> - <x id="PH_1" equiv-text="second"></x>
-          of <x id="PH_2" equiv-text="this.totalItems"></x> items.</source>
-        <target state="new"></target>
+        <source>Showing <x id="PH" equiv-text="first"/> - <x id="PH_1" equiv-text="second"/> of <x id="PH_2" equiv-text="this.totalItems"/> items.</source>
+        <target state="new"><x id="PH_2" equiv-text="this.totalItems"/> 항목 중 <x id="PH" equiv-text="first"/> - <x id="PH_1" equiv-text="second"/> 항목 표시.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.ts</context>
           <context context-type="linenumber">226</context>
@@ -1722,71 +1581,57 @@
           <context context-type="linenumber">228</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.title.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.title.string" datatype="html">
         <source> Send permission notifications </source>
         <target state="new">권한 알림 전송</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/send-notifications-dialog.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.alreadyInProgress.string"
-        datatype="html">
-        <source> A request to send notifications to your users is already in progress. Please try
-          again later. </source>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.alreadyInProgress.string" datatype="html">
+        <source> A request to send notifications to your users is already in progress. Please try again later. </source>
         <target state="new">귀하의 사용자에게 알림 전송 요청이 이미 진행 중입니다. 나중에 다시 시도해 주세요.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/send-notifications-dialog.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.description.string"
-        datatype="html">
-        <source> Are you sure that you would like ORCID to send permission links to your researchers
-          for the affiliations that are pending? </source>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.description.string" datatype="html">
+        <source> Are you sure that you would like ORCID to send permission links to your researchers for the affiliations that are pending? </source>
         <target state="new">&apos;대기 중&apos; 상태인 제휴 항목이 있는 모든 연구원에게 권한 알림이 전송됩니다.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/send-notifications-dialog.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.languageHeader.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.languageHeader.string" datatype="html">
         <source> Notification language </source>
         <target state="new">알림 언어</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/send-notifications-dialog.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.languageDescription.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.languageDescription.string" datatype="html">
         <source> What language should the notification be sent in? </source>
         <target state="new">알림을 어떤 언어로 전송하시겠습니까?</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/send-notifications-dialog.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.sendNotifications.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.sendNotifications.string" datatype="html">
         <source>Send notifications</source>
         <target state="new">알림 전송</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">
-            src/app/affiliation/send-notifications-dialog.component.html</context>
+          <context context-type="sourcefile">src/app/affiliation/send-notifications-dialog.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="error.subtitle" datatype="html">
-        <source>Sorry, an error has occurred</source>
-        <target state="new"></target>
+      <trans-unit id="error.subtitle.string" datatype="html">
+        <source> Sorry, an error has occurred </source>
+        <target state="new">죄송하지만 오류가 발생했습니다</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/error/error-alert.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1817,8 +1662,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="home.loggedIn.message.string" datatype="html">
-        <source>You are logged in as user <x id="PH" equiv-text="account.email"></x></source>
-        <target state="new">로그인한 사용자 &lt;strong&gt;{{username}}&lt;/strong&gt;</target>
+        <source>You are logged in as user <x id="PH" equiv-text="account.email"/></source>
+        <target state="new">로그인한 사용자 <x id="PH" equiv-text="account.email"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/home/home.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -1873,48 +1718,43 @@
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.success.ifYouFind.string" datatype="html">
-        <source>If you find that data added to your ORCID record is incorrect, please contact <x
-            id="PH" equiv-text="this.clientName"></x></source>
-        <target state="new"></target>
+        <source>If you find that data added to your ORCID record is incorrect, please contact <x id="PH" equiv-text="this.clientName"/></source>
+        <target state="new">ORCID 기록에 추가된 데이터가 잘못되었다면 <x id="PH" equiv-text="this.clientName"/>에 문의해 주세요</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.connectionExists.differentUser.string" datatype="html">
-        <source>This authorization link has already been used. Please contact <x id="PH"
-            equiv-text="this.clientName"></x> for a new authorization link.</source>
-        <target state="new"></target>
+        <source>This authorization link has already been used. Please contact <x id="PH" equiv-text="this.clientName"/> for a new authorization link.</source>
+        <target state="new">이 승인 링크는 이미 사용되었습니다. 새 승인 링크를 위해 <x id="PH" equiv-text="this.clientName"/> 님에게 문의해 주세요.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.denied.grantAccess.string" datatype="html">
-        <source>Allow <x id="PH" equiv-text="this.clientName"></x> to update my ORCID record.</source>
-        <target state="new"></target>
+        <source>Allow <x id="PH" equiv-text="this.clientName"/> to update my ORCID record.</source>
+        <target state="new"><x id="PH" equiv-text="this.clientName"/> 님이 내 ORCID 기록을 업데이트하도록 허용</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.success.youHaveSuccessfully.string" datatype="html">
-        <source>You have successfully granted <x id="PH" equiv-text="this.clientName"></x>
-          permission to update your ORCID record, and your record has been updated with affiliation
-          information.</source>
-        <target state="new"></target>
+        <source>You have successfully granted <x id="PH" equiv-text="this.clientName"/> permission to update your ORCID record, and your record has been updated with affiliation information.</source>
+        <target state="new"><x id="PH" equiv-text="this.clientName"/> 님에게 ORCID 기록을 업데이트할 수 있는 권한을 성공적으로 부여했으며, 기록이 제휴 정보로 업데이트됩니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.success.thanks.string" datatype="html">
-        <source>Thanks, <x id="PH" equiv-text="this.givenName"></x> <x id="PH_1"
-            equiv-text="this.familyName"></x>!</source>
-        <target state="new"></target>
+        <source>Thanks, <x id="PH" equiv-text="this.givenName"/> <x id="PH_1" equiv-text="this.familyName"/>!</source>
+        <target state="new">감사합니다, <x id="PH" equiv-text="this.givenName"/> <x id="PH_1" equiv-text="this.familyName"/> 님</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
-          <context context-type="linenumber">172</context>
+          <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="footer.privacyPolicy.string" datatype="html">
@@ -2007,7 +1847,7 @@
       </trans-unit>
       <trans-unit id="global.menu.report.consortiumMemberAffiliations.string" datatype="html">
         <source>Consortium member affiliations</source>
-        <target state="new"></target>
+        <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
           <context context-type="linenumber">115</context>
@@ -2201,8 +2041,7 @@
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string" datatype="html">
         <source> Assertion Service Enabled </source>
         <target state="new">어설션 활서화됨</target>
         <context-group purpose="location">
@@ -2255,8 +2094,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.import.errors.label.string" datatype="html">
-        <source> Oops! There was a problem processing your data. Pleases fix the errors below and
-          try again </source>
+        <source> Oops! There was a problem processing your data. Pleases fix the errors below and try again </source>
         <target state="new">이런! 데이터 처리 중에 문제가 발생했습니다. 아래 오류를 수정하여 다시 시도해 주세요</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-import-dialog.component.html</context>
@@ -2271,29 +2109,15 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.import.filePath" datatype="html">
+      <trans-unit id="gatewayApp.msUserServiceMSMember.import.filePath.string" datatype="html">
         <source>File Path</source>
-        <target state="new"></target>
+        <target state="new">파일 경로</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-import-dialog.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7238639860984722601" datatype="html">
-        <source>There is no file to upload. Please select one.</source>
-        <target state="new"></target>
-        <note priority="1" from="description">gatewayApp.msUserServiceMSUser.import.emptyFile.string</note>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/member-import-dialog.component.ts</context>
-          <context context-type="linenumber">60</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-import-dialog.component.ts</context>
-          <context context-type="linenumber">62</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.home.createOrEditLabel.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.msUserServiceMSMember.home.createOrEditLabel.string" datatype="html">
         <source> Add or edit member </source>
         <target state="new">회원 추가 또는 편집</target>
         <context-group purpose="location">
@@ -2302,15 +2126,14 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.note.string" datatype="html">
-        <source>Note: Client ID must have User OBO enabled AND</source>
+        <source>Note: Client ID must have member OBO enabled AND</source>
         <target state="new">참고: 클라이언트 ID에는 회원 OBO가 활성화되어 있어야 하며</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.addedAsRedirect.string"
-        datatype="html">
+      <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.addedAsRedirect.string" datatype="html">
         <source>added as a Redirect URI in</source>
         <target state="new">다음에 리디렉션 URI로 추가됨:</target>
         <context-group purpose="location">
@@ -2352,7 +2175,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.sendActivate.success.string" datatype="html">
         <source>Invite sent.</source>
-        <target state="new"></target>
+        <target state="new">초대장을 보냈습니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">11</context>
@@ -2360,7 +2183,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.sendActivate.error.string" datatype="html">
         <source>Invite email couldn&apos;t be sent.</source>
-        <target state="new"></target>
+        <target state="new">초대 이메일을 보낼 수 없습니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">13</context>
@@ -2406,11 +2229,8 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit
-        id="gatewayApp.assertionServiceAssertion.notifications.notificationInProgress.string"
-        datatype="html">
-        <source>Notification process has now started. We will email you as soon as the process has
-          completed.</source>
+      <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.notificationInProgress.string" datatype="html">
+        <source>Notification process has now started. We will email you as soon as the process has completed.</source>
         <target state="new">지금 알림 프로세스가 시작되었습니다. 프로세스가 완료되면 이메일을 보내 드리겠습니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
@@ -2483,7 +2303,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.userDeletedFromOrcid.string" datatype="html">
         <source>User deleted from ORCID</source>
-        <target state="new"></target>
+        <target state="new">사용자가 ORCID에서 삭제함</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">46</context>
@@ -4667,7 +4487,7 @@
       </trans-unit>
       <trans-unit id="country.XK.string" datatype="html">
         <source>Kosovo</source>
-        <target state="new"></target>
+        <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">601</context>
@@ -4714,8 +4534,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.delete.question.string" datatype="html">
-        <source>Are you sure you want to delete user <x id="PH" equiv-text="this.user?.email"></x>?</source>
-        <target state="new"></target>
+        <source>Are you sure you want to delete user <x id="PH" equiv-text="this.user?.email"/>?</source>
+        <target state="new"><x id="PH" equiv-text="this.user?.email"/> 사용자를 정말 삭제하시겠습니까?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -4914,8 +4734,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.import.errors.label.string" datatype="html">
-        <source> Oops! There was a problem processing your data. Pleases fix the errors below and
-          try again </source>
+        <source> Oops! There was a problem processing your data. Pleases fix the errors below and try again </source>
         <target state="new">이런! 데이터 처리 중에 문제가 발생했습니다. 아래 오류를 수정한 후 다시 시도해 주세요</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
@@ -4946,16 +4765,12 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSUser.changeOwnership.question.string"
-        datatype="html">
-        <source>Are you sure you want to transfer ownership? You are about to transfer ownership of
-          this organization account. If you are the organization owner after transferring ownership,
-          you will no longer have access to administrative functions, such as managing users.</source>
-        <target state="new">소유권을 정말 이전하시겠습니까? 이 조직 계정의 소유권을 이전하려고 합니다. 소유권 이전 후 조직 소유자인 경우 더 이상 사용자
-          관리와 같은 관리 기능에 액세스할 수 없습니다.</target>
+      <trans-unit id="gatewayApp.msUserServiceMSUser.changeOwnership.question.string" datatype="html">
+        <source>Are you sure you want to transfer ownership? You are about to transfer ownership of this organization account. If you are the organization owner after transferring ownership, you will no longer have access to administrative functions, such as managing users.</source>
+        <target state="new">소유권을 정말 이전하시겠습니까? 이 조직 계정의 소유권을 이전하려고 합니다. 소유권 이전 후 조직 소유자인 경우 더 이상 사용자 관리와 같은 관리 기능에 액세스할 수 없습니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.ts</context>
-          <context context-type="linenumber">220</context>
+          <context context-type="linenumber">226</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.home.title.string" datatype="html">

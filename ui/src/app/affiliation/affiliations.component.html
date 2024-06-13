@@ -165,9 +165,7 @@
             >
           </td>
           <td>
-            <span i18n="@@{{'gatewayApp.AffiliationSection.' + affiliation.affiliationSection + '.string'}}">{{
-              affiliation.affiliationSection
-            }}</span
+            <span>{{ affiliation.affiliationSection! | localize }}</span
             ><br />
             {{ affiliation.orgName }}: <span *ngIf="affiliation.orgCity">{{ affiliation.orgCity }}</span
             ><span *ngIf="affiliation.orgRegion">, {{ affiliation.orgRegion }}</span
