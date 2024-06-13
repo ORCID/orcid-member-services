@@ -19,7 +19,7 @@ export class ErrorService implements ErrorHandler {
   ) {}
   handleError(error: any) {
     console.log(error)
-    if (error instanceof HttpErrorResponse) {
+    if (error instanceof HttpErrorResponse || error.name === 'HttpErrorResponse') {
       if (error.status === 401) {
         if (this.loginService.isAuthenticated()) {
           this.loginService.logoutDirectly()
