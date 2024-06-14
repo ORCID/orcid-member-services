@@ -17,7 +17,6 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       tap({
-        next: (event: HttpEvent<any>) => {},
         error: (err: any) => {
           if (err instanceof HttpErrorResponse) {
             if (err.status === 401) {
