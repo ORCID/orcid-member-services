@@ -15,6 +15,7 @@ import { HeaderInterceptor } from './shared/interceptor/header.interceptor'
 import { ErrorService } from './error/service/error.service'
 import { ErrorComponent } from './error/error.component'
 import { FormsModule } from '@angular/forms'
+import { AuthExpiredInterceptor } from './shared/interceptor/auth-expired.interceptor'
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
@@ -33,6 +34,11 @@ import { FormsModule } from '@angular/forms'
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HeaderInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthExpiredInterceptor,
       multi: true,
     },
     {
