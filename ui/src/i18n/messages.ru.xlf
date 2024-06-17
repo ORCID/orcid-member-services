@@ -1,5 +1,6 @@
-<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="en" datatype="plaintext" original="ng2.template" target-language="ru">
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" target-language="ru" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check your credentials and try again. </source>
@@ -106,7 +107,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn't registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
         <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Электронный адрес не зарегистрирован!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>Пожалуйста, проверьте и попробуйте ещё раз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
@@ -478,7 +479,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaExplain.string" datatype="html">
-        <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you'll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
+        <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
         <target>Повысьте безопасность своей учетной записи на портале участника ORCID, включив двухфакторную аутентификацию. Каждый раз, когда вы входите в систему, вам будет нужно ввести шестизначный код, который мы отправим в ваше приложение для аутентификации.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -503,7 +504,7 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.one.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Install a two-factor authentication app<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Установите приложение двухфакторной аутентификации<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Для создания шестизначного кода, необходимого для доступа к аккаунту при каждом входе в него, требуется приложение двухфакторной аутентификации. Большинство приложений предназначены для мобильных устройств; некоторые также доступны в виде настольных или веб-приложений. Загрузите и установите ваше приложение двухфакторной аутентификации, например <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/> FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> или <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Установите приложение двухфакторной аутентификации<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Для создания шестизначного кода, необходимого для доступа к аккаунту при каждом входе в него, требуется приложение двухфакторной аутентификации. Большинство приложений предназначены для мобильных устройств; некоторые также доступны в виде настольных или веб-приложений. Загрузите и установите ваше приложение двухфакторной аутентификации, например <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/> FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> или <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">167</context>
@@ -518,7 +519,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaCannotScan.one.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Can't scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Can&apos;t scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
         <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Не можете отсканировать QR-код?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -814,7 +815,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.error.string" datatype="html">
-        <source> Your password couldn't be reset. Remember a password request is only valid for 24 hours. </source>
+        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for 24 hours. </source>
         <target>Ваш пароль не может быть сброшен. Помните, что запрос пароля действителен только в течение 24 часов.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
@@ -846,7 +847,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph3.string" datatype="html">
-        <source>If you are still having problems activating your account or have not received your new activation link please contact our support team please contact us at membership@orcid.org.</source>
+        <source>If you are still having problems activating your account or have not received your new activation link please contact us at membership@orcid.org.</source>
         <target>Если вам не удается активировать аккаунт или ссылка не пришла, напишите нам на адрес membership@orcid.org.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
@@ -1218,7 +1219,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.sendActivate.error.string" datatype="html">
-        <source>Invite email couldn't be sent.</source>
+        <source>Invite email couldn&apos;t be sent.</source>
         <target>Не удалось отправить письмо с приглашением.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
@@ -1331,7 +1332,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.delete.question.string" datatype="html">
         <source>Are you sure you want to delete user <x id="PH" equiv-text="this.user?.email"/>?</source>
-        <target>Вы уверены, что хотите удалить пользователя <x id="PH" equiv-text="this.user?.email"/>?</target>
+        <target>Вы уверены, что хотите удалить пользователя <x id="PH" equiv-text="this.user?.email"/> ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -2055,7 +2056,7 @@
       </trans-unit>
       <trans-unit id="country.CI.string" datatype="html">
         <source>Côte d’Ivoire</source>
-        <target>Кот-д'Ивуар</target>
+        <target>Кот-д&apos;Ивуар</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">199</context>
@@ -4406,7 +4407,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string" datatype="html">
-        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"/>? The affiliation will be deleted from the portal and the user's ORCID record.</source>
+        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"/>? The affiliation will be deleted from the portal and the user&apos;s ORCID record.</source>
         <target>Удалить эту аффилиацию для <x id="PH" equiv-text="this.affiliation?.email"/>? Она будет удалена из портала и профиля ORCID пользователя.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-delete.component.ts</context>

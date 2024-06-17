@@ -1,5 +1,6 @@
-<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="en" datatype="plaintext" original="ng2.template" target-language="it">
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" target-language="it" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check your credentials and try again. </source>
@@ -106,8 +107,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn't registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>L'indirizzo e-mail non è registrato!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Controlla e riprova</target>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>L&apos;indirizzo e-mail non è registrato!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Controlla e riprova</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">7</context>
@@ -115,7 +116,7 @@
       </trans-unit>
       <trans-unit id="reset.request.messages.info.string" datatype="html">
         <source>Enter the email address you used to register.</source>
-        <target>Inserisci l'indirizzo e-mail che hai usato per registrarti </target>
+        <target>Inserisci l&apos;indirizzo e-mail che hai usato per registrarti </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
           <context context-type="linenumber">11</context>
@@ -478,8 +479,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaExplain.string" datatype="html">
-        <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you'll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
-        <target>Aggiungi ulteriore sicurezza al tuo account del portale membri ORCID abilitando l'autenticazione a due fattori. Ogni volta che accedi, ti verrà chiesto di inserire un codice a sei cifre che verrà inviato all'applicazione di autenticazione preferita.</target>
+        <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
+        <target>Aggiungi ulteriore sicurezza al tuo account del portale membri ORCID abilitando l&apos;autenticazione a due fattori. Ogni volta che accedi, ti verrà chiesto di inserire un codice a sei cifre che verrà inviato all&apos;applicazione di autenticazione preferita.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">146</context>
@@ -503,7 +504,7 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.one.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Install a two-factor authentication app<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/>FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Installa un'app di autenticazione a due fattori<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>È necessaria un'app 2FA per creare il codice a sei cifre necessario per aprire il tuo account ogni volta che effettui l'accesso. La maggior parte di queste app sono per dispositivi mobili, ma alcune di esse sono disponibili anche come applicazione per desktop o web app. Scarica e installa la tua app 2FA preferita, come <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/> FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> o <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Installa un&apos;app di autenticazione a due fattori<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>È necessaria un&apos;app 2FA per creare il codice a sei cifre necessario per aprire il tuo account ogni volta che effettui l&apos;accesso. La maggior parte di queste app sono per dispositivi mobili, ma alcune di esse sono disponibili anche come applicazione per desktop o web app. Scarica e installa la tua app 2FA preferita, come <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; &gt;"/>Google Authenticator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://freeotp.github.io/&quot;&gt;"/> FreeOTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> o <x id="START_LINK_2" equiv-text="&lt;a href=&quot;https://authy.com/&quot;&gt;"/>Authy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">167</context>
@@ -511,14 +512,14 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaQrCodeSteps.two.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Scan this QR code with your device<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Open your 2FA app and scan the image below. </source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Scansiona questo codice QR con il tuo dispositivo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Apri la tua app 2FA e scansiona l'immagine qui sotto.</target>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Scansiona questo codice QR con il tuo dispositivo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Apri la tua app 2FA e scansiona l&apos;immagine qui sotto.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaCannotScan.one.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Can't scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Can&apos;t scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
         <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Non riesci a scansionare il codice QR?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -543,7 +544,7 @@
       </trans-unit>
       <trans-unit id="settings.security.mfaTextCodeSteps.one.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Enter the six-digit code from the app<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>After scanning the QR code or entering in the text code, your 2FA app will display a six-digit code. Enter this code in the box below and click Save. </source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Inserisci il codice a sei cifre fornito dalla app<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Dopo aver scansionato il codice QR o inserito il codice di testo, l'app 2FA visualizzerà un codice a sei cifre. Inserisci questo codice nella casella sottostante e fai clic su Salva.</target>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Inserisci il codice a sei cifre fornito dalla app<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Dopo aver scansionato il codice QR o inserito il codice di testo, l&apos;app 2FA visualizzerà un codice a sei cifre. Inserisci questo codice nella casella sottostante e fai clic su Salva.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">208</context>
@@ -567,7 +568,7 @@
       </trans-unit>
       <trans-unit id="settings.security.backupCodes.string" datatype="html">
         <source> Make a note of the following backup codes, this is the only time they will be shown. </source>
-        <target>Annota i seguenti codici di backup, questa è l'unica volta in cui verranno mostrati.</target>
+        <target>Annota i seguenti codici di backup, questa è l&apos;unica volta in cui verranno mostrati.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">231</context>
@@ -814,7 +815,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.error.string" datatype="html">
-        <source> Your password couldn't be reset. Remember a password request is only valid for 24 hours. </source>
+        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for 24 hours. </source>
         <target>Impossibile ripristinare la tua password. Ti ricordiamo che la richiesta della password è valida solo per 24 ore.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
@@ -846,7 +847,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph3.string" datatype="html">
-        <source>If you are still having problems activating your account or have not received your new activation link please contact our support team please contact us at membership@orcid.org.</source>
+        <source>If you are still having problems activating your account or have not received your new activation link please contact us at membership@orcid.org.</source>
         <target>Se hai riscontrato altri problemi durante l’attivazione dell’account o non hai ricevuto il nuovo link di attivazione, contatta il nostro team di supporto all’indirizzo membership@orcid.org.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
@@ -903,7 +904,7 @@
       </trans-unit>
       <trans-unit id="entity.action.activate.string" datatype="html">
         <source>Resend activation email</source>
-        <target>Invia nuovamente l'email di attivazione</target>
+        <target>Invia nuovamente l&apos;email di attivazione</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-detail.component.html</context>
           <context context-type="linenumber">107</context>
@@ -1067,7 +1068,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.detail.title.string" datatype="html">
         <source>User details</source>
-        <target>Dettagli dell'utente</target>
+        <target>Dettagli dell&apos;utente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-detail.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1187,7 +1188,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.mainContact.string" datatype="html">
         <source>Organization owner</source>
-        <target>Proprietario dell'organizzazione</target>
+        <target>Proprietario dell&apos;organizzazione</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-detail.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1218,8 +1219,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.sendActivate.error.string" datatype="html">
-        <source>Invite email couldn't be sent.</source>
-        <target>Impossibile inviare l'email di invito.</target>
+        <source>Invite email couldn&apos;t be sent.</source>
+        <target>Impossibile inviare l&apos;email di invito.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">13</context>
@@ -1323,7 +1324,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.changeOwnership.question.string" datatype="html">
         <source>Are you sure you want to transfer ownership? You are about to transfer ownership of this organization account. If you are the organization owner after transferring ownership, you will no longer have access to administrative functions, such as managing users.</source>
-        <target>Sei sicuro di voler trasferire la proprietà? Stai per trasferire la proprietà di questo account dell'organizzazione. Se sei il proprietario dell'organizzazione dopo aver trasferito la proprietà, non avrai più accesso alle funzioni di amministrazione, come la gestione degli utenti.</target>
+        <target>Sei sicuro di voler trasferire la proprietà? Stai per trasferire la proprietà di questo account dell&apos;organizzazione. Se sei il proprietario dell&apos;organizzazione dopo aver trasferito la proprietà, non avrai più accesso alle funzioni di amministrazione, come la gestione degli utenti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.ts</context>
           <context context-type="linenumber">226</context>
@@ -1331,7 +1332,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.delete.question.string" datatype="html">
         <source>Are you sure you want to delete user <x id="PH" equiv-text="this.user?.email"/>?</source>
-        <target>Sei sicuro di voler eliminare l'utente <x id="PH" equiv-text="this.user?.email"/>? </target>
+        <target>Sei sicuro di voler eliminare l&apos;utente <x id="PH" equiv-text="this.user?.email"/>? </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -1347,7 +1348,7 @@
       </trans-unit>
       <trans-unit id="userServiceApp.user.updated.string" datatype="html">
         <source>User updated successfully</source>
-        <target>Aggiornamento dell'utente riuscito</target>
+        <target>Aggiornamento dell&apos;utente riuscito</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">17</context>
@@ -1379,7 +1380,7 @@
       </trans-unit>
       <trans-unit id="entity.delete.title.string" datatype="html">
         <source>Confirm deletion</source>
-        <target>Conferma l'eliminazione</target>
+        <target>Conferma l&apos;eliminazione</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-delete.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1391,7 +1392,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.import.errors.label.string" datatype="html">
         <source> Oops! There was a problem processing your data. Pleases fix the errors below and try again </source>
-        <target>Oops! Si è verificato un problema durante l'elaborazione dei dati. Correggi gli errori indicati qui di seguito e riprova</target>
+        <target>Oops! Si è verificato un problema durante l&apos;elaborazione dei dati. Correggi gli errori indicati qui di seguito e riprova</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1479,7 +1480,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string" datatype="html">
         <source> For help troubleshooting, please contact the Member Portal Team and copy/paste or include a screenshot of the error message below. </source>
-        <target>Se hai bisogno di aiuto per risolvere questo problema, contatta il tuo responsabile di consorzio oppure usa l'indirizzo membership@orcid.org. Allega uno screenshot del messaggio di errore qui sotto.</target>
+        <target>Se hai bisogno di aiuto per risolvere questo problema, contatta il tuo responsabile di consorzio oppure usa l&apos;indirizzo membership@orcid.org. Allega uno screenshot del messaggio di errore qui sotto.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
           <context context-type="linenumber">203</context>
@@ -3847,7 +3848,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.detail.title.string" datatype="html">
         <source>Affiliation details</source>
-        <target>Dettagli sull'affiliazione</target>
+        <target>Dettagli sull&apos;affiliazione</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-detail.component.html</context>
           <context context-type="linenumber">4</context>
@@ -3907,7 +3908,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.import.successMessage.string" datatype="html">
         <source>Your CSV has been uploaded for processing. We will let you know via email once the file has been processed.</source>
-        <target>Il tuo CSV è stato caricato per l'elaborazione. Ti comunicheremo via email l'avvenuta elaborazione.</target>
+        <target>Il tuo CSV è stato caricato per l&apos;elaborazione. Ti comunicheremo via email l&apos;avvenuta elaborazione.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">13</context>
@@ -4123,7 +4124,7 @@
       </trans-unit>
       <trans-unit id="entity.validation.disambiguatedOrgId.string" datatype="html">
         <source> This field is required. GRID Organization ID should start with &quot;grid.&quot;, RINGGOLD Organization ID should be a number, ROR IDs must be 9 characters, beginning with 0 </source>
-        <target>Questo campo è obbligatorio. L'ID organizzazione GRID deve iniziare con grid., ad esempio grid.12344, o deve essere un URL grid valido, l'ID organizzazione RINGGOLD deve essere un numero. Gli ID ROR devono essere composti da 9 caratteri e iniziare con 0.</target>
+        <target>Questo campo è obbligatorio. L&apos;ID organizzazione GRID deve iniziare con grid., ad esempio grid.12344, o deve essere un URL grid valido, l&apos;ID organizzazione RINGGOLD deve essere un numero. Gli ID ROR devono essere composti da 9 caratteri e iniziare con 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
           <context context-type="linenumber">230</context>
@@ -4307,7 +4308,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.orgName.string" datatype="html">
         <source>Organization Name</source>
-        <target>Nome dell'organizzazione</target>
+        <target>Nome dell&apos;organizzazione</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
           <context context-type="linenumber">75</context>
@@ -4347,7 +4348,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.updateNote.string" datatype="html">
         <source>Please do not forget to download and send permission links to your researcher once the assertion has been saved.</source>
-        <target>Nota: non dimenticare di scaricare e inviare i collegamenti di autorizzazione al tuo ricercatore una volta che l'asserzione è stata salvata.</target>
+        <target>Nota: non dimenticare di scaricare e inviare i collegamenti di autorizzazione al tuo ricercatore una volta che l&apos;asserzione è stata salvata.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
           <context context-type="linenumber">452</context>
@@ -4383,7 +4384,7 @@
       </trans-unit>
       <trans-unit id="assertionServiceApp.affiliation.problemDeleting.string" datatype="html">
         <source>There was a problem deleting the affiliation</source>
-        <target>C'è stato un problema nella cancellazione dell'affiliazione</target>
+        <target>C&apos;è stato un problema nella cancellazione dell&apos;affiliazione</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">33</context>
@@ -4406,7 +4407,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string" datatype="html">
-        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"/>? The affiliation will be deleted from the portal and the user's ORCID record.</source>
+        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"/>? The affiliation will be deleted from the portal and the user&apos;s ORCID record.</source>
         <target>Vuoi davvero eliminare questa affiliazione per <x id="PH" equiv-text="this.affiliation?.email"/>? L’affiliazione verrà eliminata dal portale e dal record ORCID dell’utente.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-delete.component.ts</context>
@@ -4507,7 +4508,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.note.string" datatype="html">
         <source>Note: Client ID must have member OBO enabled AND</source>
-        <target>Nota: l'ID cliente deve avere Membro OBO abilitato E</target>
+        <target>Nota: l&apos;ID cliente deve avere Membro OBO abilitato E</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
           <context context-type="linenumber">121</context>
@@ -4695,7 +4696,7 @@
       </trans-unit>
       <trans-unit id="landingPage.denied.ifThisWas.string" datatype="html">
         <source> If this was a mistake, click the button below to grant access. </source>
-        <target>Se si è trattato di un errore, fai clic sul pulsante in basso per concedere l'accesso.</target>
+        <target>Se si è trattato di un errore, fai clic sul pulsante in basso per concedere l&apos;accesso.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.html</context>
           <context context-type="linenumber">45</context>
@@ -4711,7 +4712,7 @@
       </trans-unit>
       <trans-unit id="landingPage.denied.youHaveDenied.string" datatype="html">
         <source>Oops, you have denied access.</source>
-        <target>Ops, l'accesso ti è stato negato.</target>
+        <target>Ops, l&apos;accesso ti è stato negato.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.html</context>
           <context context-type="linenumber">39</context>
@@ -4743,7 +4744,7 @@
       </trans-unit>
       <trans-unit id="landingPage.success.youHaveSuccessfully.string" datatype="html">
         <source>You have successfully granted <x id="PH" equiv-text="this.clientName"/> permission to update your ORCID record, and your record has been updated with affiliation information.</source>
-        <target>Hai concesso correttamente l'autorizzazione a <x id="PH" equiv-text="this.clientName"/> per aggiornare il tuo archivio ORCID e quest'ultimo sarà aggiornato con le informazioni di affiliazione. </target>
+        <target>Hai concesso correttamente l&apos;autorizzazione a <x id="PH" equiv-text="this.clientName"/> per aggiornare il tuo archivio ORCID e quest&apos;ultimo sarà aggiornato con le informazioni di affiliazione. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -4767,7 +4768,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.import.errors.label.string" datatype="html">
         <source> Oops! There was a problem processing your data. Pleases fix the errors below and try again </source>
-        <target>Oops! Si è verificato un problema durante l'elaborazione dei dati. Correggi gli errori indicati qui di seguito e riprova</target>
+        <target>Oops! Si è verificato un problema durante l&apos;elaborazione dei dati. Correggi gli errori indicati qui di seguito e riprova</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-import-dialog.component.html</context>
           <context context-type="linenumber">16</context>

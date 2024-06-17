@@ -750,7 +750,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.keyexpired.paragraph3.string" datatype="html">
-        <source>If you are still having problems activating your account or have not received your new activation link please contact our support team please contact us at membership@orcid.org.</source>
+        <source>If you are still having problems activating your account or have not received your new activation link please contact us at membership@orcid.org.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
           <context context-type="linenumber">32</context>
