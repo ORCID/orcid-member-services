@@ -52,9 +52,9 @@ export function emailValidator(control: FormControl): { [key: string]: any } | n
 
 let environment = ''
 if (window.location.hostname == 'member-portal.qa.orcid.org') {
-  environment = 'qa'
+  environment = 'qa.'
 } else if (window.location.hostname == 'member-portal.sandbox.orcid.org') {
-  environment = 'sandbox'
+  environment = 'sandbox.'
 }
 
 export const ORCID_BASE_URL = 'https://' + environment + 'orcid.org'
