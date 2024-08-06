@@ -5,7 +5,7 @@ import { KEYUTIL, KJUR, RSAKey } from 'jsrsasign'
 import { LandingPageService } from './landing-page.service'
 import { MemberService } from '../member/service/member.service'
 import { IMember } from '../member/model/member.model'
-import { ORCID_BASE_URL } from '../app.constants'
+import { BASE_URL, ORCID_BASE_URL } from '../app.constants'
 import { WindowLocationService } from '../shared/service/window-location.service'
 import { OrcidRecord } from '../shared/model/orcid-record.model'
 
@@ -16,7 +16,7 @@ import { OrcidRecord } from '../shared/model/orcid-record.model'
 export class LandingPageComponent implements OnInit {
   issuer = ORCID_BASE_URL
   oauthBaseUrl = ORCID_BASE_URL + '/oauth/authorize'
-  redirectUri = '/landing-page'
+  redirectUri = BASE_URL + '/landing-page'
 
   loading = true
   showConnectionExists = false
