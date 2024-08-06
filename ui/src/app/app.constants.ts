@@ -49,8 +49,16 @@ export function emailValidator(control: FormControl): { [key: string]: any } | n
   }
   return null
 }
-const environment = window.location.hostname.replace('member-portal.', '').replace('.orcid.org', '')
-export const ORCID_BASE_URL = 'https://' + environment + '.orcid.org'
+
+let environment = ''
+if (window.location.hostname == 'member-portal.qa.orcid.org') {
+  environment = 'qa'
+} else if (window.location.hostname == 'member-portal.sandbox.orcid.org') {
+  environment = 'sandbox'
+}
+
+export const ORCID_BASE_URL = 'https://' + environment + 'orcid.org'
+
 export const BASE_URL = window.location.origin
 
 // eslint-disable-next-line
