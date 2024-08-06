@@ -12,7 +12,7 @@ describe("Test updating affiliations via CSV", () => {
       data.csvPopulatedMember.users.owner.email,
       credentials.password,
     );
-    cy.visit("ui/en/affiliations/");
+    cy.visit("en/affiliations/");
   });
 
   it("Edit the contents of the existing CSV file", function () {

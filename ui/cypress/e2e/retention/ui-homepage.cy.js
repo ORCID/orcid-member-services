@@ -8,7 +8,7 @@ describe("Test homepage", () => {
       data.homepageTestMembers.directMemberEmail,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("app-member-info", { timeout: 20000 });
     cy.get(".side-bar").contains("Public details");
     cy.get(".side-bar").contains("Website");
@@ -28,7 +28,7 @@ describe("Test homepage", () => {
       data.homepageTestMembers.consortiumLeadEmail,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("app-member-info", { timeout: 20000 });
     cy.get(".side-bar").contains("Public details");
     cy.get(".side-bar").contains("Website");
@@ -50,7 +50,7 @@ describe("Test homepage", () => {
       data.homepageTestMembers.consortiumMember.email,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("app-member-info", { timeout: 20000 });
     cy.get(".side-bar").contains("Public details");
     cy.get(".side-bar").contains("Website");
@@ -74,7 +74,7 @@ describe("Test homepage", () => {
       data.homepageTestMembers.consortiumMemberEmail2,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("app-member-info", { timeout: 20000 });
     cy.get(".side-bar").contains("Public details");
     cy.get(".side-bar").contains("Website");
@@ -94,7 +94,7 @@ describe("Test homepage", () => {
       data.homepageTestMembers.consortiumLeadAndMember.email,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("app-member-info", { timeout: 20000 });
     cy.get(".side-bar").contains("Public details");
     cy.get(".side-bar").contains("Website");
@@ -115,7 +115,7 @@ describe("Test homepage", () => {
       data.homepageTestMembers.inactiveConsortiumMemberEmail,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("app-member-info", { timeout: 20000 }).contains(
       "Something has gone wrong...",
     );

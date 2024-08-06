@@ -14,8 +14,8 @@ describe("Edit an affiliation", () => {
     );
   });
   it("Edit affiliation in the member portal", function () {
-    cy.visit("ui/en/affiliations");
-    cy.visit(`ui/en/affiliations/${record.affiliation.id}/edit`);
+    cy.visit("en/affiliations");
+    cy.visit(`en/affiliations/${record.affiliation.id}/edit`);
 
     cy.get("#field_orgName").clear().type(testString);
     cy.get("#field_orgCity").clear().type(testString);
@@ -56,7 +56,7 @@ describe("Edit an affiliation", () => {
         delay: 30000, // delay before next iteration, ms
       },
     );
-    cy.visit("ui/en/affiliations/");
+    cy.visit("en/affiliations/");
     cy.get("tbody").children().first().children().eq(4).contains("In ORCID");
   });
 });

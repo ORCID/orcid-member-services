@@ -6,7 +6,7 @@ describe("Add new user", () => {
   it("Add user", function () {
     // enter email
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
-    cy.visit("ui/en/users/new");
+    cy.visit("en/users/new");
     // type in invalid email address
     cy.get("#field_email").type(data.invalidEmail);
     // type in name and surname
@@ -62,7 +62,7 @@ describe("Add new user", () => {
 
   it("Remove added user", function () {
     cy.programmaticSignin(data.member.users.owner.email, credentials.password);
-    cy.visit("ui/en/users");
+    cy.visit("en/users");
     cy.get(".btn-group").each(($e) => {
       cy.wrap($e)
         .children()

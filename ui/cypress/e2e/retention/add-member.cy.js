@@ -6,7 +6,7 @@ const { salesforceId, clientName, clientId } = data.member;
 describe('Test "Add member" functionality', () => {
   it("Add member", function () {
     cy.programmaticSignin(credentials.adminEmail, credentials.adminPassword);
-    cy.visit("ui/en/members");
+    cy.visit("en/members");
     cy.get("tbody")
       .children()
       // Fetch existing salesforce id
@@ -15,7 +15,7 @@ describe('Test "Add member" functionality', () => {
       .first()
       .then((existingSfId) => {
         // Check required field flags
-        cy.visit("ui/en/members/new");
+        cy.visit("en/members/new");
         cy.get("#field_salesforceId").should("have.class", "ng-invalid");
         cy.get("#field_clientName").should("have.class", "ng-invalid");
         // Save button should be disabled
