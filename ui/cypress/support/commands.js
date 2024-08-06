@@ -220,9 +220,7 @@ Cypress.Commands.add("fetchLinkAndGrantPermission", (email) => {
 
   // *ADD ID
   cy.get(".mt-5").within(() => {
-    cy.get("h2")
-      .filter('[jhitranslate="landingPage.success.thanks.string"]')
-      .should("exist");
+    cy.get("h2").filter('[data-cy="thanksMessage"]').should("exist");
   });
 });
 
