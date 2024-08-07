@@ -29,7 +29,7 @@ import credentials from "../fixtures/credentials.json";
 import record from "../fixtures/orcid-record.json";
 
 Cypress.Commands.add("signin", (email, password) => {
-  cy.visit("ui/en/");
+  cy.visit("en/");
   cy.get("#username")
     .clear()
     .type(email)
@@ -54,7 +54,7 @@ Cypress.Commands.add("programmaticSignin", (username, password) => {
   cy.getCookie("XSRF-TOKEN").then((csrfCookie) => {
     if (!csrfCookie) {
       return cy
-        .visit("ui/en/")
+        .visit("en/")
         .getCookie("XSRF-TOKEN")
         .then(() => cy.programmaticSignin(username, password));
     } else {
@@ -138,7 +138,7 @@ Cypress.Commands.add("visitLinkFromEmail", (email) => {
   cy.visit(
     href.replace(
       "https://member-portal.qa.orcid.org/",
-      "https://member-portal.qa.orcid.org/ui/en/",
+      "https://member-portal.qa.orcid.org/en/",
     ),
   );
 });
@@ -161,7 +161,7 @@ Cypress.Commands.add("removeAffiliation", ($e) => {
 });
 
 Cypress.Commands.add("changeOrgOwner", () => {
-  cy.visit(`ui/en/users/${data.member.users.owner.id}/edit`);
+  cy.visit(`en/users/${data.member.users.owner.id}/edit`);
   cy.get("#field_mainContact").click();
   cy.get("#save-entity").click();
   cy.get(".alert-success").should("exist");
@@ -220,9 +220,7 @@ Cypress.Commands.add("fetchLinkAndGrantPermission", (email) => {
 
   // *ADD ID
   cy.get(".mt-5").within(() => {
-    cy.get("h2")
-      .filter('[jhitranslate="landingPage.success.thanks.string"]')
-      .should("exist");
+    cy.get("h2").filter('[data-cy="thanksMessage"]').should("exist");
   });
 });
 

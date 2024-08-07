@@ -12,7 +12,7 @@ describe("Test notifications", () => {
       data.notificationsMember.users.owner.email,
       credentials.password,
     );
-    cy.visit("ui/en/affiliations/new");
+    cy.visit("en/affiliations/new");
     cy.get("#field_email").type(record.nonregisteredEmail);
     cy.get("#field_affiliationSection").select(type);
     cy.get("#field_orgName").type(data.testString);
@@ -30,7 +30,7 @@ describe("Test notifications", () => {
       data.notificationsMember.users.owner.email,
       credentials.password,
     );
-    cy.visit("ui/en/affiliations/new");
+    cy.visit("en/affiliations/new");
     cy.get("#field_email").type(record.email);
     cy.get("#field_affiliationSection").select(type);
     cy.get("#field_orgName").type(data.testString + " 2");
@@ -40,7 +40,7 @@ describe("Test notifications", () => {
     cy.get("#field_disambiguatedOrgId").type(ror.id);
     cy.get("#save-entity").click();
     cy.get(".alert-success").should("exist");
-    cy.visit("ui/en/affiliations");
+    cy.visit("en/affiliations");
     cy.get("button").filter('[data-cy="sendNotifications"]').click();
     cy.get("#langKey").should("have.value", data.italianLanguageCode);
     cy.get("button").filter('[data-cy="confirmCsvUpload"]').click();
@@ -122,7 +122,7 @@ describe("Test notifications", () => {
       data.notificationsMember.users.owner.email,
       credentials.password,
     );
-    cy.visit("ui/en/affiliations");
+    cy.visit("en/affiliations");
     cy.get(".btn-group").each(($e) => {
       cy.wrap($e).children().last().click();
       cy.get("button").filter('[data-cy="confirmDeleteAffiliation"]').click();

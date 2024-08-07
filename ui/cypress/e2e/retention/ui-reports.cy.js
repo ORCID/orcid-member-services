@@ -8,7 +8,7 @@ describe("Test report menus", () => {
       data.homepageTestMembers.directMemberEmail,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("app-member-info", { timeout: 20000 });
     cy.get("#tools-menu").click();
     cy.get('[routerLink="/report/member"]').should("be.visible");
@@ -55,7 +55,7 @@ describe("Test report menus", () => {
       data.homepageTestMembers.consortiumLeadEmail,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("#tools-menu").click();
     cy.get('[routerlink="/report/member"]').should("be.visible");
     cy.get('[routerlink="/report/integration"]').should("be.visible");
@@ -101,7 +101,7 @@ describe("Test report menus", () => {
       data.homepageTestMembers.consortiumMember.email,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("#tools-menu").click();
     cy.get('[routerlink="/report/member"]').should("be.visible");
     cy.get('[routerlink="/report/integration"]').should("be.visible");
@@ -147,7 +147,7 @@ describe("Test report menus", () => {
       data.homepageTestMembers.consortiumMemberEmail2,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("#tools-menu").click();
     cy.get('[routerlink="/report/member"]').should("be.visible");
     cy.get('[routerlink="/report/integration"]').should("be.visible");
@@ -193,7 +193,7 @@ describe("Test report menus", () => {
       data.homepageTestMembers.consortiumLeadAndMember.email,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("#tools-menu").click();
     cy.get('[routerlink="/report/member"]').should("be.visible");
     cy.get('[routerlink="/report/integration"]').should("be.visible");
@@ -239,7 +239,7 @@ describe("Test report menus", () => {
       data.homepageTestMembers.inactiveConsortiumMemberEmail,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("#tools-menu").click();
     cy.get('[routerLink="/report/member"]').should("be.visible");
     cy.get('[routerLink="/report/integration"]').should("be.visible");

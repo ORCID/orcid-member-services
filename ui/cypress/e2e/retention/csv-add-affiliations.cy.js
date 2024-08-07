@@ -10,7 +10,7 @@ describe("Test adding affiliations via CSV", () => {
       data.csvMember.users.owner.email,
       credentials.password,
     );
-    cy.visit("ui/en/affiliations/");
+    cy.visit("en/affiliations/");
   });
 
   it("Upload CSV and check inbox for the confirmation email", function () {

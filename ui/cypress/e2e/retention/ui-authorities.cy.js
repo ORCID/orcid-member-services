@@ -19,7 +19,7 @@ describe("Test authorities", () => {
       data.populatedMember.users.user.email,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("#admin-menu").should("not.exist");
     cy.get("#entity-menu").should("exist");
     cy.get("a").filter('[routerLink="/affiliations"]').should("exist");
@@ -113,7 +113,7 @@ describe("Test authorities", () => {
       data.populatedMember.users.owner.email,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("#admin-menu").should("exist");
     cy.get("#entity-menu").should("exist");
     cy.get("a").filter('[routerlink="/users"]').should("exist");
@@ -203,7 +203,7 @@ describe("Test authorities", () => {
 
   it("Admin", function () {
     cy.programmaticSignin(credentials.adminEmail, credentials.adminPassword);
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("#admin-menu").should("exist");
     cy.get("#entity-menu").should("exist");
     cy.get("a").filter('[routerlink="/users"]').should("exist");
@@ -289,7 +289,7 @@ describe("Test authorities", () => {
       data.homepageTestMembers.consortiumLeadAndMember.email,
       credentials.password,
     );
-    cy.visit("ui/en/");
+    cy.visit("en/");
     cy.get("#admin-menu").should("not.exist");
     cy.get("#entity-menu").should("not.exist");
     cy.get("a").filter('[routerlink="/users"]').should("not.exist");

@@ -6,7 +6,7 @@ const { salesforceId, clientName, clientId } = data.member;
 describe("Manage members menu", () => {
   it("Test edit member form", function () {
     cy.programmaticSignin(credentials.adminEmail, credentials.adminPassword);
-    cy.visit(`ui/en/members/${data.member.id}/edit`);
+    cy.visit(`en/members/${data.member.id}/edit`);
     cy.get("#field_isConsortiumLead").should("be.checked").uncheck();
     cy.get("#field_salesforceId").invoke("attr", "disabled").should("exist");
     cy.get("#field_parentSalesforceId").clear().type(clientName);

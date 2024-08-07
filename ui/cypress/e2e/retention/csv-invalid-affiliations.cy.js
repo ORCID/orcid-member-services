@@ -8,7 +8,7 @@ describe("Test invalid CSV upload", () => {
       data.csvMember.users.owner.email,
       credentials.password,
     );
-    cy.visit("ui/en/affiliations/");
+    cy.visit("en/affiliations/");
     cy.uploadCsv("../fixtures/invalidAffiliations.csv");
     cy.task("checkInbox", {
       subject: data.outbox.csvUpload,

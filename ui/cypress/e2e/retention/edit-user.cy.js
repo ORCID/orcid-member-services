@@ -8,7 +8,7 @@ describe("Test the edit user form", () => {
       data.populatedMember.users.owner.email,
       credentials.password,
     );
-    cy.visit(`ui/en/users/${data.populatedMember.users.owner.id}/edit`);
+    cy.visit(`en/users/${data.populatedMember.users.owner.id}/edit`);
     // Clear first name input field
     cy.get("#field_firstName").clear();
     // Shouldn't be possible to save with an empty name field

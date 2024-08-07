@@ -4,7 +4,7 @@ import credentials from "../../fixtures/credentials.json";
 
 describe("Test the password reset functionality", () => {
   it("Forgot your password?", function () {
-    cy.visit("ui/en/reset/request");
+    cy.visit("en/reset/request");
     cy.get("#email").type(data.invalidEmail);
     cy.get("small").filter('[data-cy="emailInvalid"]').should("exist");
     cy.get("button")
@@ -34,7 +34,7 @@ describe("Test the password reset functionality", () => {
       data.populatedMember.users.owner.email,
       credentials.password,
     );
-    cy.visit("ui/en/password");
+    cy.visit("en/password");
     cy.get("#currentPassword").type(credentials.wrongConfirmationPasssword);
     cy.processPasswordForm("#newPassword");
     cy.get(".alert-danger")

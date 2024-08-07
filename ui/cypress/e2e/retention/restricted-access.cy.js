@@ -12,7 +12,7 @@ describe("Test restricted access", () => {
       data.populatedMember.users.user.email,
       credentials.password,
     );
-    cy.visit("ui/en/members");
+    cy.visit("en/members");
     cy.get("h1")
       .filter('[data-cy="cannotProcessRequest"]')
       .contains("Your request cannot be processed");
@@ -27,7 +27,7 @@ describe("Test restricted access", () => {
       data.populatedMember.users.user.email,
       credentials.password,
     );
-    cy.visit("ui/en/users");
+    cy.visit("en/users");
     cy.get("h1")
       .filter('[data-cy="cannotProcessRequest"]')
       .contains("Your request cannot be processed");
@@ -42,7 +42,7 @@ describe("Test restricted access", () => {
       data.populatedMember.users.owner.email,
       credentials.password,
     );
-    cy.visit("ui/en/members");
+    cy.visit("en/members");
     cy.get("h1")
       .filter('[data-cy="cannotProcessRequest"]')
       .contains("Your request cannot be processed");
@@ -57,7 +57,7 @@ describe("Test restricted access", () => {
       data.homepageTestMembers.consortiumLeadAndMember.email,
       credentials.password,
     );
-    cy.visit("ui/en/affiliations");
+    cy.visit("en/affiliations");
     cy.get("h1")
       .filter('[data-cy="cannotProcessRequest"]')
       .contains("Your request cannot be processed");
