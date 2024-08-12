@@ -16,7 +16,7 @@
 		  <span th:text="#{email.creation.text4}">Your ORCID member portal account is ready to be activated. Please click on the URL below to activate your account and set a password.</span>
 		</p>
 		<p>
-      		<a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}/reset/finish?key=${user.resetKey}|})"
+      		<a style="color: #2E7F9F;" th:with="url=(@{|${baseUrl}/${user.langKey}/reset/finish?key=${user.resetKey}|})"
         	th:href="${url}" th:text="${url}">Login link</a>
     	</p>
     	<p>
