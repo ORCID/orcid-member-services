@@ -72,8 +72,6 @@ export class AffiliationDeletePopupComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ affiliation }) => {
-      console.log(affiliation)
-
       setTimeout(() => {
         this.ngbModalRef = this.modalService.open(AffiliationDeleteDialogComponent as Component, {
           size: 'lg',
