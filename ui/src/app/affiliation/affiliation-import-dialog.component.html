@@ -69,7 +69,7 @@
     <button data-cy="confirmCsvUpload" type="submit" class="btn btn-primary" *ngIf="!uploaded">
       <fa-icon [icon]="faPlus"></fa-icon>&nbsp;<span i18n="@@entity.action.upload.string">Upload</span>
     </button>
-    <button id="close-dialog" class="btn btn-primary" (click)="close()" *ngIf="uploaded">
+    <button id="close-dialog" type="button" class="btn btn-primary" (click)="close()" *ngIf="uploaded">
       <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.close.string">Close</span>
     </button>
   </div>
