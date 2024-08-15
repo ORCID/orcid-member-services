@@ -296,9 +296,10 @@ public class AssertionService {
     }
 
     public boolean isDuplicate(Assertion assertion, String salesforceId) {
+        Assertion normalized = assertionNormalizer.normalize(assertion);
         List<Assertion> assertions = assertionRepository.findByEmailAndSalesforceId(assertion.getEmail(), salesforceId);
         for (Assertion a : assertions) {
-            if (duplicates(a, assertion)) {
+            if (duplicates(a, normalized)) {
                 return true;
             }
         }

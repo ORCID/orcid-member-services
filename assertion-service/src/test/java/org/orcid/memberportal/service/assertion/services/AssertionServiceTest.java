@@ -1177,6 +1177,7 @@ class AssertionServiceTest {
         a.setUrl("something-different");
         assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
+
         a.setUrl(null);
         assertFalse(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
@@ -1319,6 +1320,7 @@ class AssertionServiceTest {
 
         comparison.setId("not-null"); // id should be ignored
         assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
+        verify(assertionNormalizer, Mockito.times(49)).normalize(Mockito.any(Assertion.class)); // check normalization was used
     }
 
     @Test
@@ -1722,10 +1724,10 @@ class AssertionServiceTest {
     void testUpdateAssertionsSalesforceIdWithFailure() {
         List<Assertion> firstPage = getAssertionsForSalesforceId("salesforce-id", 0, AssertionService.REGISTRY_SYNC_BATCH_SIZE);
         Mockito.when(assertionRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Pageable.class))).thenReturn(new PageImpl<Assertion>(firstPage));
-        
+
         // representing updated assertions that need to be rolled back
         Mockito.when(assertionRepository.findBySalesforceId(Mockito.eq("new-salesforce-id"), Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<Assertion>(Arrays.asList(new Assertion(), new Assertion(), new Assertion()))).thenReturn(new PageImpl<Assertion>(new ArrayList<>())); 
+                .thenReturn(new PageImpl<Assertion>(Arrays.asList(new Assertion(), new Assertion(), new Assertion()))).thenReturn(new PageImpl<Assertion>(new ArrayList<>()));
 
         // 3 successful updates before error, followed by rollback
         Mockito.when(assertionRepository.save(Mockito.any(Assertion.class))).thenReturn(new Assertion()).thenReturn(new Assertion()).thenReturn(new Assertion())
@@ -1734,8 +1736,8 @@ class AssertionServiceTest {
         boolean success = assertionService.updateAssertionsSalesforceId("salesforce-id", "new-salesforce-id");
         assertThat(success).isFalse();
 
-        // 3 updates followed by 1 failure and 3 rollbacks 
-        Mockito.verify(assertionRepository, Mockito.times(7)).save(assertionCaptor.capture()); 
+        // 3 updates followed by 1 failure and 3 rollbacks
+        Mockito.verify(assertionRepository, Mockito.times(7)).save(assertionCaptor.capture());
         List<Assertion> saved = assertionCaptor.getAllValues();
         assertThat(saved.get(0).getSalesforceId()).isEqualTo("new-salesforce-id");
         assertThat(saved.get(1).getSalesforceId()).isEqualTo("new-salesforce-id");
@@ -1745,7 +1747,7 @@ class AssertionServiceTest {
         assertThat(saved.get(5).getSalesforceId()).isEqualTo("salesforce-id");
         assertThat(saved.get(6).getSalesforceId()).isEqualTo("salesforce-id");
     }
-    
+
     private List<MemberAssertionStatusCount> getDummyAssertionStatusCounts() {
         List<MemberAssertionStatusCount> counts = new ArrayList<>();
         counts.add(new MemberAssertionStatusCount("salesforceId1", "PENDING", 4));
