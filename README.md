@@ -19,6 +19,7 @@ Project tasks are managed in Trello:
 - [Yarn](https://yarnpkg.com/lang/en/docs/install/#mac-stable)
 - [MongoDB](https://docs.mongodb.com/manual/installation/)
 - [MongoDB compass](https://www.mongodb.com/products/compass) also recommended
+- [Angular CLI](https://v16.angular.io/cli)
 
 ## Install and start MongoDB
 
@@ -39,12 +40,12 @@ Edit bash profile to set JAVA_HOME to your OpenJDK 11 path, ex:
     vim ~/.bash_profile
     export JAVA_HOME=$(/usr/libexec/java_home -v 11)
 
-## Start the JHipster registry
+## Start the discovery service
 
 - Open a new terminal
-- cd orcid-member-services/jhipster-registry/
-- Run `bash start.sh`. This should download the jhipster-registry jar if you don't have it installed. If for some reason the download fails you will need to download it manually
-- Wait for the jhipster-registry to start
+- cd orcid-member-services/discovery-service/
+- Run `bash mvnw`
+- Wait for it to start
 - Verify it has started properly. Go to http://localhost:8761/#/ and sign in with `admin`, password `admin`
 
 
@@ -59,7 +60,7 @@ Our user service, based on [JHipster UAA](https://www.jhipster.tech/using-uaa/),
 - Run `bash mvnw`
 - Wait for it to start
 
-## Start the JHipster gateway:
+## Start the gateway:
 
 - Start MongoDB (e.g. `mongod --config /usr/local/etc/mongod.conf --fork`)
 - Open a new terminal
@@ -69,12 +70,10 @@ Our user service, based on [JHipster UAA](https://www.jhipster.tech/using-uaa/),
 - Go to [http://localhost:8080/](http://localhost:8080/) and sign in with the admin credentials `admin / admin`
 
 ## Start the Angular frontend
-> This is only required after making front end changes
-
-- Stop the jhipster gateway if it's running
-- From the jhiptster gateway base directory, run `npm install` then `npm start`
-- Wait for it to start - localhost:9000 will open in a new browser tab once the server is up
-- Optionally kill it and start up again using bash mvnw as above
+- Open a new terminal 
+- cd orcid-member-services/ui
+- Run `ng serve`
+- Wait for it to start
 
 ## Start the assertion service
 
