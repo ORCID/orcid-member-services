@@ -9,6 +9,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
       - name: "Create creds json"
         id: create-creds-json
         uses: jsdaniell/create-json@1.1.2
@@ -49,6 +53,10 @@ jobs:
   csv-edit-affiliations:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
       - name: Checkout
         uses: actions/checkout@v2
       - name: "Create creds json"
@@ -94,6 +102,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
       - name: "Create creds json"
         id: create-creds-json
         uses: jsdaniell/create-json@1.1.2
@@ -137,6 +149,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
       - name: "Create creds json"
         id: create-creds-json
         uses: jsdaniell/create-json@1.1.2
@@ -180,6 +196,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
       - name: "Create creds json"
         id: create-creds-json
         uses: jsdaniell/create-json@1.1.2

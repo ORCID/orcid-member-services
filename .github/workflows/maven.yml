@@ -25,6 +25,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Set up Node.js 20
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
     - name: Build Gateway service
       run: mvn -B verify -Dangular.env=qa -Pprod --file gateway/pom.xml 
       
@@ -36,6 +40,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Set up Node.js 20
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
     - name: Build User service
       run: mvn -B verify  -Pprod --file user-service/pom.xml
       
@@ -47,6 +55,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Set up Node.js 20
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
     - name: Build Assertion service
       run: mvn -B verify -Pprod --file assertion-service/pom.xml
       
@@ -58,6 +70,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Set up Node.js 20
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
     - name: Build Member service
       run: mvn -B verify -Pprod --file member-service/pom.xml
       
@@ -69,6 +85,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Set up Node.js 20
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
     - name: Build Discovery service
       run: mvn -B verify -Pprod --file discovery-service/pom.xml
 
