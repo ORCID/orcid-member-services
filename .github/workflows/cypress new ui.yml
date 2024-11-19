@@ -11,21 +11,21 @@ jobs:
         uses: actions/checkout@v4
       - name: "Create creds json"
         id: create-creds-json
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "credentials.json"
           json: '{"adminEmail": "${{secrets.CY_ADMIN_EMAIL}}", "adminPassword": "${{secrets.CY_ADMIN_PASSWORD}}", "password": "${{secrets.CY_PASSWORD}}", "shortPassword": "${{secrets.CY_SHORT_PASSWORD}}", "shortConfirmationPassword": "${{secrets.CY_SHORT_CONFIRMATION_PASSWORD}}", "wrongConfirmationPasssword": "${{secrets.CY_WRONG_CONFIRMATION_PASSWORD}}"}'
           dir: "ui/cypress/fixtures"
       - name: "Create Gmail creds json"
         id: create-gmail-creds-file
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "credentials_qa.json"
           json: '{"installed":{"client_id":"${{secrets.CY_CREDS_CLIENT_ID}}","project_id":"${{secrets.CY_CREDS_PROJECT_ID}}","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"${{secrets.CY_CREDS_CLIENT_SECRET}}","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}'
           dir: "ui/cypress/plugins"
       - name: "Create Gmail token json"
         id: create-gmail-token-file
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "token_qa.json"
           json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}'
@@ -39,13 +39,14 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-screenshots
+          name: "cypress-screenshots-${{ github.job }}"
           path: ui/cypress/screenshots
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-videos
+          name: "cypress-videos-${{ github.job }}"
           path: ui/cypress/videos
+
   csv-edit-affiliations:
     runs-on: ubuntu-latest
     steps:
@@ -53,21 +54,21 @@ jobs:
         uses: actions/checkout@v4
       - name: "Create creds json"
         id: create-creds-json
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "credentials.json"
           json: '{"adminEmail": "${{secrets.CY_ADMIN_EMAIL}}", "adminPassword": "${{secrets.CY_ADMIN_PASSWORD}}", "password": "${{secrets.CY_PASSWORD}}", "shortPassword": "${{secrets.CY_SHORT_PASSWORD}}", "shortConfirmationPassword": "${{secrets.CY_SHORT_CONFIRMATION_PASSWORD}}", "wrongConfirmationPasssword": "${{secrets.CY_WRONG_CONFIRMATION_PASSWORD}}"}'
           dir: "ui/cypress/fixtures"
       - name: "Create Gmail creds json"
         id: create-gmail-creds-file
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "credentials_qa.json"
           json: '{"installed":{"client_id":"${{secrets.CY_CREDS_CLIENT_ID}}","project_id":"${{secrets.CY_CREDS_PROJECT_ID}}","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"${{secrets.CY_CREDS_CLIENT_SECRET}}","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}'
           dir: "ui/cypress/plugins"
       - name: "Create Gmail token json"
         id: create-gmail-token-file
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "token_qa.json"
           json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}'
@@ -89,6 +90,7 @@ jobs:
         with:
           name: cypress-videos
           path: ui/cypress/videos
+
   add-affiliation:
     runs-on: ubuntu-latest
     steps:
@@ -96,21 +98,21 @@ jobs:
         uses: actions/checkout@v4
       - name: "Create creds json"
         id: create-creds-json
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "credentials.json"
           json: '{"adminEmail": "${{secrets.CY_ADMIN_EMAIL}}", "adminPassword": "${{secrets.CY_ADMIN_PASSWORD}}", "password": "${{secrets.CY_PASSWORD}}", "shortPassword": "${{secrets.CY_SHORT_PASSWORD}}", "shortConfirmationPassword": "${{secrets.CY_SHORT_CONFIRMATION_PASSWORD}}", "wrongConfirmationPasssword": "${{secrets.CY_WRONG_CONFIRMATION_PASSWORD}}"}'
           dir: "ui/cypress/fixtures"
       - name: "Create Gmail creds json"
         id: create-gmail-creds-file
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "credentials_qa.json"
           json: '{"installed":{"client_id":"${{secrets.CY_CREDS_CLIENT_ID}}","project_id":"${{secrets.CY_CREDS_PROJECT_ID}}","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"${{secrets.CY_CREDS_CLIENT_SECRET}}","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}'
           dir: "ui/cypress/plugins"
       - name: "Create Gmail token json"
         id: create-gmail-token-file
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "token_qa.json"
           json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}'
@@ -132,6 +134,7 @@ jobs:
         with:
           name: cypress-videos
           path: ui/cypress/videos
+
   notifications:
     runs-on: ubuntu-latest
     steps:
@@ -139,21 +142,21 @@ jobs:
         uses: actions/checkout@v4
       - name: "Create creds json"
         id: create-creds-json
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "credentials.json"
           json: '{"adminEmail": "${{secrets.CY_ADMIN_EMAIL}}", "adminPassword": "${{secrets.CY_ADMIN_PASSWORD}}", "password": "${{secrets.CY_PASSWORD}}", "shortPassword": "${{secrets.CY_SHORT_PASSWORD}}", "shortConfirmationPassword": "${{secrets.CY_SHORT_CONFIRMATION_PASSWORD}}", "wrongConfirmationPasssword": "${{secrets.CY_WRONG_CONFIRMATION_PASSWORD}}"}'
           dir: "ui/cypress/fixtures"
       - name: "Create Gmail creds json"
         id: create-gmail-creds-file
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "credentials_qa.json"
           json: '{"installed":{"client_id":"${{secrets.CY_CREDS_CLIENT_ID}}","project_id":"${{secrets.CY_CREDS_PROJECT_ID}}","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"${{secrets.CY_CREDS_CLIENT_SECRET}}","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}'
           dir: "ui/cypress/plugins"
       - name: "Create Gmail token json"
         id: create-gmail-token-file
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "token_qa.json"
           json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}'
@@ -175,6 +178,7 @@ jobs:
         with:
           name: cypress-videos
           path: ui/cypress/videos
+
   other-tests:
     runs-on: ubuntu-latest
     steps:
@@ -182,21 +186,21 @@ jobs:
         uses: actions/checkout@v4
       - name: "Create creds json"
         id: create-creds-json
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "credentials.json"
           json: '{"adminEmail": "${{secrets.CY_ADMIN_EMAIL}}", "adminPassword": "${{secrets.CY_ADMIN_PASSWORD}}", "password": "${{secrets.CY_PASSWORD}}", "shortPassword": "${{secrets.CY_SHORT_PASSWORD}}", "shortConfirmationPassword": "${{secrets.CY_SHORT_CONFIRMATION_PASSWORD}}", "wrongConfirmationPasssword": "${{secrets.CY_WRONG_CONFIRMATION_PASSWORD}}"}'
           dir: "ui/cypress/fixtures"
       - name: "Create Gmail creds json"
         id: create-gmail-creds-file
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "credentials_qa.json"
           json: '{"installed":{"client_id":"${{secrets.CY_CREDS_CLIENT_ID}}","project_id":"${{secrets.CY_CREDS_PROJECT_ID}}","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"${{secrets.CY_CREDS_CLIENT_SECRET}}","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}'
           dir: "ui/cypress/plugins"
       - name: "Create Gmail token json"
         id: create-gmail-token-file
-        uses: jsdaniell/create-json@1.2.3
+        uses: jsdaniell/create-json@v1.2.3
         with:
           name: "token_qa.json"
           json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}'
