@@ -16,31 +16,32 @@ jobs:
             spec: |
               cypress/e2e/retention/csv-edit-affiliations.cy.js
 
-#           - name: add-affiliation
-#             spec:
-#               - cypress/e2e/retention/add-affiliation.cy.js
-# 
-#           - name: notifications
-#             spec:
-#               - cypress/e2e/retention/notifications.cy.js
-# 
-#           - name: other-tests
-#             spec:
-#               - cypress/e2e/retention/add-member.cy.js
-#               - cypress/e2e/retention/add-user.cy.js
-#               - cypress/e2e/retention/csv-invalid-affiliation.cy.js
-#               - cypress/e2e/retention/edit-affiliation.cy.js
-#               - cypress/e2e/retention/edit-member.cy.js
-#               - cypress/e2e/retention/edit-user.cy.js
-#               - cypress/e2e/retention/reset-password.cy.js
-#               - cypress/e2e/retention/restricted-access.cy.js
-#               - cypress/e2e/retention/ui-authorities.cy.js
-#               - cypress/e2e/retention/ui-login.cy.js
-#               - cypress/e2e/retention/ui-pagination.cy.js
-#               - cypress/e2e/retention/ui-homepage.cy.js
-#               - cypress/e2e/retention/ui-homepage-edit.cy.js
-#               - cypress/e2e/retention/ui-reports.cy.js
-# 
+          - name: add-affiliation
+            spec: |
+              cypress/e2e/retention/add-affiliation.cy.js
+
+          - name: notifications
+            spec: |
+              cypress/e2e/retention/notifications.cy.js
+
+          - name: other-tests
+            spec: |
+              cypress/e2e/retention/add-member.cy.js
+              cypress/e2e/retention/add-user.cy.js
+              cypress/e2e/retention/csv-invalid-affiliation.cy.js
+              cypress/e2e/retention/edit-affiliation.cy.js
+              cypress/e2e/retention/edit-member.cy.js
+              cypress/e2e/retention/edit-user.cy.js
+              cypress/e2e/retention/reset-password.cy.js
+              cypress/e2e/retention/restricted-access.cy.js
+              cypress/e2e/retention/ui-authorities.cy.js
+              cypress/e2e/retention/ui-login.cy.js
+              cypress/e2e/retention/ui-pagination.cy.js
+              cypress/e2e/retention/ui-homepage.cy.js
+              cypress/e2e/retention/ui-homepage-edit.cy.js
+              cypress/e2e/retention/ui-reports.cy.js
+      fail-fast: false
+
 ###################################################################################################
 
     runs-on: ubuntu-latest
