@@ -40,6 +40,7 @@ jobs:
               cypress/e2e/retention/ui-homepage.cy.js
               cypress/e2e/retention/ui-homepage-edit.cy.js
               cypress/e2e/retention/ui-reports.cy.js
+      # keep running jobs even if one test fails in case there are multiple failed tests
       fail-fast: false
 
 ###################################################################################################
@@ -87,13 +88,15 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: "cypress-screenshots-${{ github.job }}"
+          name: "cypress-screenshots-${{ matrix.name }}"
           path: ui/cypress/screenshots
+          if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: "cypress-videos-${{ github.job }}"
+          name: "cypress-videos-${{ matrix.name }}"
           path: ui/cypress/videos
+          if-no-files-found: ignore
 
 
