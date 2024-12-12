@@ -1,4 +1,4 @@
-name: Cypress end to end tests
+name: test-e2e-cypress-all
 
 on:
   workflow_dispatch:
