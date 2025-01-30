@@ -40,6 +40,36 @@ Edit bash profile to set JAVA_HOME to your OpenJDK 11 path, ex:
     vim ~/.bash_profile
     export JAVA_HOME=$(/usr/libexec/java_home -v 11)
 
+##
+
+Set up environment variables required by the application:
+
+- APPLICATION_BASEURL : base url of the application, eg https://member-portal.qa.orcid.org for ORCID's QA instance
+- APPLICATION_CONTACT_UPDATE_RECIPIENT : email of contact update recipient
+- APPLICATION_ENCRYPT_KEY : encryption key
+- APPLICATION_ENCRYPT_SALT : encryption salt
+- APPLICATION_INTERNAL_ACCESS_TOKEN : access token for internal ORCID endpoints
+- APPLICATION_INTERNAL_API_ENDPOINT : base url of internal ORCID endpoint
+- APPLICATION_LANDING_PAGE_URL : oauth landing page
+- APPLICATION_MAIL_API_KEY : mail api key
+- APPLICATION_MAIL_API_URL : mail api url 
+- APPLICATION_MAIL_DOMAIN : mail domain
+- APPLICATION_MAIL_FROM_ADDRESS : mail from address
+- APPLICATION_MAIL_FROM_NAME : mail from name
+- APPLICATION_ORCIDAPIENDPOINT : orcid api endpoint
+- APPLICATION_RESEND_NOTIFICATION_CRON : cron expression for resending notifications job
+- APPLICATION_RESEND_NOTIFICATION_DAYS : time delay in days for resending notifications
+- APPLICATION_SALESFORCE_REQUEST_TIMEOUT : salesforce client timeout
+- APPLICATION_TOKEN_EXCHANGE_CLIENT_ID : salesforce client id
+- APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET : salesforce client secret
+- APPLICATION_TOKEN_EXCHANGE_ENDPOINT : token exchange endpoint for salesforce client
+- MEMBER_ASSERTION_STATS_CRON : cron expression for affiliation stats job
+- SALESFORCE_CLIENT_ENDPOINT : salesforce client endpoint 
+- SALESFORCE_CLIENT_TOKEN : salesforce client token
+- STORED_FILE_LIFESPAN : lifespan of stoerd files 
+- UAA_KEYSTORE_NAME : keystore file
+- UAA_KEYSTORE_PASSWORD : keystore password
+
 ## Start the discovery service
 
 - Open a new terminal
