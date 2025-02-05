@@ -75,12 +75,12 @@ public class OrcidAPIClientTest {
         jaxbContext = JAXBContext.newInstance(Affiliation.class, Distinction.class, Employment.class, Education.class, InvitedPosition.class, Membership.class,
                 Qualification.class, Service.class, OrcidError.class, NotificationPermission.class);
         unmarshaller = jaxbContext.createUnmarshaller();
-        
+
         TokenExchange tokenExchange = new TokenExchange();
         tokenExchange.setClientId("client-id");
         tokenExchange.setClientSecret("client-secret");
         Mockito.when(applicationProperties.getTokenExchange()).thenReturn(tokenExchange);
-    }        
+    }
 
     @Test
     void testPostNotification() throws JAXBException, ClientProtocolException, IOException {
@@ -281,7 +281,7 @@ public class OrcidAPIClientTest {
 
         String orcidId = client.getOrcidIdForEmail("a.email@orcid.org");
         assertThat(orcidId).isEqualTo("1234-1234-1234-1234");
-        
+
         Mockito.verify(applicationProperties, Mockito.times(4)).getInternalRegistryApiEndpoint();
         Mockito.verify(httpClient, Mockito.times(4)).execute(requestCaptor.capture());
 
@@ -298,7 +298,7 @@ public class OrcidAPIClientTest {
         assertThat(request.getURI().toString()).endsWith("/email");
     }
 
-    
+
     @Test
     void testGetOrcidIdForEmail_orcidIdNotFound() throws JAXBException, ClientProtocolException, IOException {
         Mockito.when(applicationProperties.getInternalRegistryApiEndpoint()).thenReturn("orcid/internal/");
@@ -326,6 +326,94 @@ public class OrcidAPIClientTest {
 
         String orcidId = client.getOrcidIdForEmail("a.email@orcid.org");
         assertThat(orcidId).isNull();
+    }
+
+    @Test
+    void testRecordIsDeprecatedOrDeactivated_recordDeprecated() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(applicationProperties.getOrcidAPIEndpoint()).thenReturn("orcid/api/");
+        Mockito.when(applicationProperties.getInternalRegistryApiEndpoint()).thenReturn("orcid/internal/");
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"token\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-api /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setEntity(new StringEntity("{\"last-modified-date\":{\"value\":1728652976786},\"name\":{\"created-date\":{\"value\":1482344662307},\"last-modified-date\":{\"value\":1482344662307},\"given-names\":{\"value\":\"A\"},\"family-name\":{\"value\":\"Person\"},\"credit-name\":null,\"source\":null,\"visibility\":\"public\",\"path\":\"0000-0001-0002-0003\"},\"other-names\":{\"last-modified-date\":null,\"other-name\":[],\"path\":\"/0000-0001-0002-0003/other-names\"},\"biography\":null,\"researcher-urls\":{\"last-modified-date\":null,\"researcher-url\":[],\"path\":\"/0000-0001-0002-0003/researcher-urls\"},\"emails\":{\"last-modified-date\":null,\"email\":[],\"path\":\"/0000-0001-0002-0003/email\"},\"addresses\":{\"last-modified-date\":null,\"address\":[],\"path\":\"/0000-0001-0002-0003/address\"},\"keywords\":{\"last-modified-date\":{\"value\":1728652976786},\"keyword\":[{\"created-date\":{\"value\":1728652976786},\"last-modified-date\":{\"value\":1728652976786},\"source\":{\"source-orcid\":{\"uri\":\"https://qa.orcid.org/0000-0001-0002-0003\",\"path\":\"0000-0001-0002-0003\",\"host\":\"qa.orcid.org\"},\"source-client-id\":null,\"source-name\":{\"value\":\"A Person\"},\"assertion-origin-orcid\":null,\"assertion-origin-client-id\":null,\"assertion-origin-name\":null},\"content\":\"jhj\",\"visibility\":\"public\",\"path\":\"/0000-0001-0002-0003/keywords/9691\",\"put-code\":9691,\"display-index\":1}],\"path\":\"/0000-0001-0002-0003/keywords\"},\"external-identifiers\":{\"last-modified-date\":null,\"external-identifier\":[],\"path\":\"/0000-0001-0002-0003/external-identifiers\"},\"path\":\"/0000-0001-0002-0003/person\"}"));
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                return response;
+            }
+        });
+
+        boolean deprecatedOrDeactivated = client.recordIsDeprecatedOrDeactivated("1234-1234-1234-1234");
+        assertThat(deprecatedOrDeactivated).isEqualTo(true);
+    }
+
+    @Test
+    void testRecordIsDeprecatedOrDeactivated_recordDeactivated() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(applicationProperties.getOrcidAPIEndpoint()).thenReturn("orcid/api/");
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"token\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-api /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setEntity(new StringEntity("{\"response-code\":409,\"developer-message\":\"409 Conflict: The ORCID record is deactivated and cannot be edited. Full validation error: 0009-0004-5673-641X is deactivated\",\"user-message\":\"The ORCID record is deactivated.\",\"error-code\":9044,\"more-info\":\"https://members.orcid.org/api/resources/troubleshooting\"}"));
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 409, "CONFLICT"));
+                return response;
+            }
+        });
+
+        boolean deprecatedOrDeactivated = client.recordIsDeprecatedOrDeactivated("1234-1234-1234-1234");
+        assertThat(deprecatedOrDeactivated).isEqualTo(true);
+    }
+
+    @Test
+    void testRecordIsDeprecatedOrDeactivated_recordNotDeprecatedOrDeactivated() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(applicationProperties.getOrcidAPIEndpoint()).thenReturn("orcid/api/");
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"token\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-api /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setEntity(new StringEntity("{\"last-modified-date\":{\"value\":1728652976786},\"name\":{\"created-date\":{\"value\":1482344662307},\"last-modified-date\":{\"value\":1482344662307},\"given-names\":{\"value\":\"A\"},\"family-name\":{\"value\":\"Person\"},\"credit-name\":null,\"source\":null,\"visibility\":\"public\",\"path\":\"0000-0001-0002-0003\"},\"other-names\":{\"last-modified-date\":null,\"other-name\":[],\"path\":\"/0000-0001-0002-0003/other-names\"},\"biography\":null,\"researcher-urls\":{\"last-modified-date\":null,\"researcher-url\":[],\"path\":\"/0000-0001-0002-0003/researcher-urls\"},\"emails\":{\"last-modified-date\":null,\"email\":[],\"path\":\"/0000-0001-0002-0003/email\"},\"addresses\":{\"last-modified-date\":null,\"address\":[],\"path\":\"/0000-0001-0002-0003/address\"},\"keywords\":{\"last-modified-date\":{\"value\":1728652976786},\"keyword\":[{\"created-date\":{\"value\":1728652976786},\"last-modified-date\":{\"value\":1728652976786},\"source\":{\"source-orcid\":{\"uri\":\"https://qa.orcid.org/0000-0001-0002-0003\",\"path\":\"0000-0001-0002-0003\",\"host\":\"qa.orcid.org\"},\"source-client-id\":null,\"source-name\":{\"value\":\"A Person\"},\"assertion-origin-orcid\":null,\"assertion-origin-client-id\":null,\"assertion-origin-name\":null},\"content\":\"jhj\",\"visibility\":\"public\",\"path\":\"/0000-0001-0002-0003/keywords/9691\",\"put-code\":9691,\"display-index\":1}],\"path\":\"/0000-0001-0002-0003/keywords\"},\"external-identifiers\":{\"last-modified-date\":null,\"external-identifier\":[],\"path\":\"/0000-0001-0002-0003/external-identifiers\"},\"path\":\"/0000-0001-0002-0003/person\"}"));
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                return response;
+            }
+        });
+
+        boolean deprecatedOrDeactivated = client.recordIsDeprecatedOrDeactivated("0000-0001-0002-0003");
+        assertThat(deprecatedOrDeactivated).isEqualTo(false);
     }
 
     private NotificationPermission getNotificationPermission() {
