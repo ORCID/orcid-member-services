@@ -182,18 +182,18 @@ public class OrcidAPIClient {
     }
 
     public String postNotification(NotificationPermission notificationPermission, String orcidId) throws JAXBException, IOException {
-        return useInternalAccesstoken(() -> {
+        return useInternalAccessToken(() -> {
             return postNotificationPermission(notificationPermission, orcidId);
         });
     }
 
     public String getOrcidIdForEmail(String email) throws IOException {
-        return useInternalAccesstoken(() -> {
+        return useInternalAccessToken(() -> {
             return getOrcidIdFromRegistry(email);
         });
     }
 
-    private <T> T useInternalAccesstoken(Supplier<T> function) {
+    private <T> T useInternalAccessToken(Supplier<T> function) {
         initInternalAccessToken();
         try {
             return function.get();
