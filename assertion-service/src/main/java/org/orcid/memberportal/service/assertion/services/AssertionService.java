@@ -614,7 +614,7 @@ public class AssertionService {
     }
 
     private void storeError(Assertion assertion, int statusCode, String error, AssertionStatus defaultErrorStatus) {
-        LOG.info("Error updating ORCID registry: assertion id - {}, orcid id - {], status code - {}, error - {}", assertion.getId(), assertion.getOrcidId(), statusCode, error);
+        LOG.info("Error updating ORCID registry: assertion id - {}, orcid id - {}, status code - {}, error - {}", assertion.getId(), assertion.getOrcidId(), statusCode, error);
         JSONObject obj = new JSONObject();
         obj.put("statusCode", statusCode);
         obj.put("error", error);
