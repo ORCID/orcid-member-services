@@ -101,6 +101,7 @@ public class OrcidAPIClient {
             String responseString = EntityUtils.toString(response.getEntity());
 
             if (responseString.contains("invalid_scope")) {
+                LOG.info("Deactivated profile detected: status code {}", statusCode);
                 throw new DeactivatedException();
             } else {
                 LOG.error("Unable to exchange id_token: {}", responseString);
