@@ -411,9 +411,11 @@ public class AssertionService {
             } catch (ORCIDAPIException oae) {
                 LOG.info("Recieved orcid api exception");
                 storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_ADDING_TO_ORCID);
-            } catch (Exception e) {
-                LOG.error("Error posting assertion " + assertion.getId(), e);
-                storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_ADDING_TO_ORCID);
+            } catch (DeactivatedException | DeprecatedException e) {
+                handleDeactivatedOrDeprecated(orcid, assertion);
+            } catch (Exception e1) {
+                LOG.error("Error posting assertion " + assertion.getId(), e1);
+                storeError(assertion, 0, e1.getMessage(), AssertionStatus.ERROR_ADDING_TO_ORCID);
             }
         } else if (deniedStatus != null) {
             assertion.setStatus(deniedStatus.name());
@@ -457,6 +459,8 @@ public class AssertionService {
                 assertion.setOrcidError(null);
                 assertion.setStatus(AssertionStatus.IN_ORCID.name());
                 assertionRepository.save(assertion);
+            } catch (DeactivatedException | DeprecatedException e) {
+                handleDeactivatedOrDeprecated(orcid, assertion);
             } catch (ORCIDAPIException oae) {
                 storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_UPDATING_TO_ORCID);
                 LOG.info("Recieved orcid api exception");
@@ -485,7 +489,7 @@ public class AssertionService {
             String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId(), true));
             orcidAPIClient.deleteAffiliation(orcidId, accessToken, assertion);
         } catch (DeactivatedException | DeprecatedException e) {
-            handleDeactivedOrDeprecated(orcidId, assertion);
+            handleDeactivatedOrDeprecated(orcidId, assertion);
         } catch (ORCIDAPIException oae) {
             if (oae.getStatusCode() != 404) {
                 storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID);
@@ -578,30 +582,28 @@ public class AssertionService {
         return null;
     }
 
-    private String postToOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, ClientProtocolException, IOException, JAXBException {
-        try {
-            LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
-            String accessToken = orcidAPIClient.exchangeToken(idToken);
-            LOG.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
-            return orcidAPIClient.postAffiliation(orcid, accessToken, assertion);
-        } catch (DeactivatedException | DeprecatedException e) {
-            handleDeactivedOrDeprecated(orcid, assertion);
-            return null;
-        }
+    private String postToOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, ClientProtocolException, IOException, JAXBException, DeprecatedException, DeactivatedException {
+        LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
+        String accessToken = orcidAPIClient.exchangeToken(idToken);
+        LOG.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
+        return orcidAPIClient.postAffiliation(orcid, accessToken, assertion);
     }
 
-    private void handleDeactivedOrDeprecated(String orcid, Assertion assertion) {
+    private void handleDeactivatedOrDeprecated(String orcid, Assertion assertion) {
+        List<Assertion> assertions = assertionRepository.findByEmail(assertion.getEmail());
+        assertions.forEach(a -> {
+            a.setStatus(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
+            assertionRepository.save(a);
+        });
+
+        orcidRecordService.deleteOrcidRecordByEmail(assertion.getEmail());
     }
 
-    private void putInOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, JAXBException, ClientProtocolException, IOException {
-        try {
-            LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
-            String accessToken = orcidAPIClient.exchangeToken(idToken);
-            LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
-            orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
-        } catch (DeactivatedException | DeprecatedException e) {
-            handleDeactivedOrDeprecated(orcid, assertion);
-        }
+    private void putInOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, JAXBException, ClientProtocolException, IOException, DeprecatedException, DeactivatedException {
+        LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
+        String accessToken = orcidAPIClient.exchangeToken(idToken);
+        LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
+        orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
     }
 
     private boolean checkRegistryDeletePreconditions(Optional<OrcidRecord> record, Assertion assertion) {
