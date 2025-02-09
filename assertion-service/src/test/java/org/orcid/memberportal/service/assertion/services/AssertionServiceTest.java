@@ -51,6 +51,8 @@ import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.orcid.memberportal.service.assertion.upload.impl.AssertionsCsvReader;
+import org.orcid.memberportal.service.assertion.web.rest.errors.DeactivatedException;
+import org.orcid.memberportal.service.assertion.web.rest.errors.DeprecatedException;
 import org.orcid.memberportal.service.assertion.web.rest.errors.ORCIDAPIException;
 import org.orcid.memberportal.service.assertion.web.rest.errors.RegistryDeleteFailureException;
 import org.springframework.data.domain.Page;
@@ -449,7 +451,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPostAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
         Mockito.when(assertionRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class)))
                 .thenReturn(getAssertionsForCreatingInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE))
                 .thenReturn(getAssertionsForCreatingInOrcid(AssertionService.REGISTRY_SYNC_BATCH_SIZE + 1,
@@ -494,7 +496,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionsToOrcidWithRevokedTokens() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPostAssertionsToOrcidWithRevokedTokens() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeprecatedException {
         Mockito.when(assertionRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class)))
                 .thenReturn(getAssertionsForCreatingInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE)).thenReturn(new ArrayList<>());
 
@@ -509,7 +511,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionToOrcid_statusPendingToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPostAssertionToOrcid_statusPendingToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
 
@@ -526,7 +528,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionToOrcid_statusPendingToUserRevokedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPostAssertionToOrcid_statusPendingToUserRevokedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
 
@@ -573,7 +575,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionToOrcid_statusPendingToErrorAddingToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPostAssertionToOrcid_statusPendingToErrorAddingToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeprecatedException, DeactivatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
 
@@ -591,7 +593,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionToOrcid_statusPendingRetryToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPostAssertionToOrcid_statusPendingRetryToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         assertion.setOrcidError("{ statusCode: 400, error: 'something' }");
@@ -613,7 +615,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPutAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPutAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
         Mockito.when(assertionRepository.findAllToUpdateInOrcidRegistry(Mockito.any(Pageable.class)))
                 .thenReturn(getAssertionsForUpdateInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE))
                 .thenReturn(getAssertionsForUpdateInOrcid(AssertionService.REGISTRY_SYNC_BATCH_SIZE + 1, (int) (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5)))
@@ -649,7 +651,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPutAssertionInOrcid_statusPendingRetryToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPutAssertionInOrcid_statusPendingRetryToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         Instant addedToOrcid = Instant.now();
@@ -670,7 +672,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPutAssertionInOrcid_statusErrorPendingRetryToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPutAssertionInOrcid_statusErrorPendingRetryToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         assertion.setOrcidError("{ statusCode: 400, error: 'something' }");
@@ -692,7 +694,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPutAssertionInOrcid_statusPendingRetryToUserRevokedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPutAssertionInOrcid_statusPendingRetryToUserRevokedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeprecatedException, DeactivatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         Instant addedToOrcid = Instant.now();
@@ -745,7 +747,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPutAssertionInOrcid_statusPendingRetryToErrorUpdatingInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPutAssertionInOrcid_statusPendingRetryToErrorUpdatingInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         Instant addedToOrcid = Instant.now();
@@ -893,7 +895,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testDeleteByIdWithRegistryDeleteAndOtherAssertionsForUser() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+    void testDeleteByIdWithRegistryDeleteAndOtherAssertionsForUser() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
         assertion.setSalesforceId("salesforce-id");
 
@@ -919,7 +921,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testDeleteByIdAlreadyDeletedInTheRegistry() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+    void testDeleteByIdAlreadyDeletedInTheRegistry() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
         assertion.setSalesforceId("salesforce-id");
 
@@ -946,7 +948,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testDeleteByIdWithRegistryDeleteFailure() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+    void testDeleteByIdWithRegistryDeleteFailure() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
         assertion.setSalesforceId("salesforce-id");
 
@@ -972,7 +974,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testDeleteByIdWithRevokedToken() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+    void testDeleteByIdWithRevokedToken() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
         assertion.setSalesforceId("salesforce-id");
 
@@ -998,7 +1000,7 @@ class AssertionServiceTest {
 
     @Test
     void testDeleteByIdWithRegistryDeleteAndNoOtherAssertionsForUser()
-            throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+        throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
         assertion.setSalesforceId("salesforce-id");
 
@@ -1024,7 +1026,7 @@ class AssertionServiceTest {
 
     @Test
     void testDeleteByIdWithoutRegistryDeleteAndOtherAssertionsForUser()
-            throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+        throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         assertion.setSalesforceId("salesforce-id");
 
@@ -1047,7 +1049,7 @@ class AssertionServiceTest {
 
     @Test
     void testDeleteByIdWithoutRegistryDeleteAndNoOtherAssertionsForUser()
-            throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+        throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         assertion.setSalesforceId("salesforce-id");
 
@@ -1358,7 +1360,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testProcessAssertionUploads() throws IOException {
+    void testProcessAssertionUploads() throws IOException, DeprecatedException, DeactivatedException {
         Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE)))
                 .thenReturn(Arrays.asList(getDummyStoredFile()));
         Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());
@@ -1466,7 +1468,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testProcessAssertionUploadsWithDeleteFailures() throws IOException {
+    void testProcessAssertionUploadsWithDeleteFailures() throws IOException, DeprecatedException, DeactivatedException {
         Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE)))
                 .thenReturn(Arrays.asList(getDummyStoredFile()));
         Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());

@@ -48,6 +48,8 @@ import org.orcid.jaxb.model.v3.release.record.Service;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.adapter.AffiliationAdapter;
+import org.orcid.memberportal.service.assertion.web.rest.errors.DeactivatedException;
+import org.orcid.memberportal.service.assertion.web.rest.errors.DeprecatedException;
 import org.orcid.memberportal.service.assertion.web.rest.errors.ORCIDAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +82,7 @@ public class OrcidAPIClient {
         this.httpClient = HttpClients.createDefault();
     }
 
-    public String exchangeToken(String idToken) throws JSONException, ClientProtocolException, IOException {
+    public String exchangeToken(String idToken) throws JSONException, IOException, DeactivatedException {
         HttpPost httpPost = new HttpPost(applicationProperties.getTokenExchange().getEndpoint());
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -97,8 +99,13 @@ public class OrcidAPIClient {
 
         if (statusCode != Status.OK.getStatusCode()) {
             String responseString = EntityUtils.toString(response.getEntity());
-            LOG.error("Unable to exchange id_token: {}", responseString);
-            throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
+
+            if (responseString.contains("invalid_scope")) {
+                throw new DeactivatedException();
+            } else {
+                LOG.error("Unable to exchange id_token: {}", responseString);
+                throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
+            }
         }
 
         String responseString = EntityUtils.toString(response.getEntity());
@@ -107,7 +114,7 @@ public class OrcidAPIClient {
         return json.get("access_token").toString();
     }
 
-    public String postAffiliation(String orcid, String accessToken, Assertion assertion) throws JAXBException {
+    public String postAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException {
         Affiliation orcidAffiliation = AffiliationAdapter.toOrcidAffiliation(assertion);
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
         LOG.info("Creating {} for {} with role title {}", affType, orcid, orcidAffiliation.getRoleTitle());
@@ -120,22 +127,22 @@ public class OrcidAPIClient {
 
         try {
             HttpResponse response = httpClient.execute(httpPost);
-            if (response.getStatusLine().getStatusCode() != Status.CREATED.getStatusCode()) {
+            if (response.getStatusLine().getStatusCode() == 409) {
+                throw new DeprecatedException();
+            } else if (response.getStatusLine().getStatusCode() != Status.CREATED.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
                 LOG.error("Unable to create {} for {}. Status code: {}, error {}", affType, orcid, response.getStatusLine().getStatusCode(), responseString);
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
             String location = response.getFirstHeader("location").getValue();
             return location.substring(location.lastIndexOf('/') + 1);
-        } catch (ClientProtocolException e) {
-            LOG.error("Unable to create affiliation in ORCID", e);
         } catch (IOException e) {
             LOG.error("Unable to create affiliation in ORCID", e);
         }
         return null;
     }
 
-    public void putAffiliation(String orcid, String accessToken, Assertion assertion) throws JAXBException, IOException {
+    public void putAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException, IOException {
         Affiliation orcidAffiliation = AffiliationAdapter.toOrcidAffiliation(assertion);
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
         LOG.info("Updating affiliation with put code {} for {}", assertion.getPutCode(), orcid);
@@ -149,7 +156,9 @@ public class OrcidAPIClient {
         CloseableHttpResponse response = null;
         try {
             response = httpClient.execute(httpPut);
-            if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
+            if (response.getStatusLine().getStatusCode() == 409) {
+                throw new DeprecatedException();
+            } else if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
                 LOG.error("Unable to update {} with putcode {} for {}. Status code: {}, error {}", affType, assertion.getPutCode(), orcid,
                     response.getStatusLine().getStatusCode(), responseString);
@@ -160,7 +169,7 @@ public class OrcidAPIClient {
         }
     }
 
-    public void deleteAffiliation(String orcid, String accessToken, Assertion assertion) throws IOException {
+    public void deleteAffiliation(String orcid, String accessToken, Assertion assertion) throws IOException, DeprecatedException {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
         LOG.info("Deleting affiliation with putcode {} for {}", assertion.getPutCode(), orcid);
 
@@ -170,7 +179,9 @@ public class OrcidAPIClient {
         CloseableHttpResponse response = null;
         try {
             response = httpClient.execute(httpDelete);
-            if (response.getStatusLine().getStatusCode() != Status.NO_CONTENT.getStatusCode()) {
+            if (response.getStatusLine().getStatusCode() == 409) {
+                throw new DeprecatedException();
+            } else if (response.getStatusLine().getStatusCode() != Status.NO_CONTENT.getStatusCode()) {
                 String responseString = EntityUtils.toString(response.getEntity());
                 LOG.error("Unable to delete {} with putcode {} for {}. Status code: {}, error {}", affType, assertion.getPutCode(), orcid,
                     response.getStatusLine().getStatusCode(), responseString);
@@ -191,42 +202,6 @@ public class OrcidAPIClient {
         return useInternalAccessToken(() -> {
             return getOrcidIdFromRegistry(email);
         });
-    }
-
-    public boolean recordIsDeprecatedOrDeactivated(String orcidId) {
-        return useInternalAccessToken(() -> {
-            return checkRegistryForDeprecatedOrDeactivated(orcidId);
-        });
-    }
-
-    private boolean checkRegistryForDeprecatedOrDeactivated(String orcidId) {
-        HttpGet httpGet = new HttpGet(applicationProperties.getOrcidAPIEndpoint() + orcidId + "/person");
-        setJsonHeaders(httpGet, internalAccessToken);
-
-        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-            if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()
-                && response.getStatusLine().getStatusCode() != Status.NOT_FOUND.getStatusCode()
-                && response.getStatusLine().getStatusCode() != Status.CONFLICT.getStatusCode()) {
-                LOG.warn("Received non-200 / non-404 response trying to check if record {} is deprecated or deactivated", orcidId);
-                String responseString = new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
-                LOG.warn("Response received:");
-                LOG.warn(responseString);
-                throw new RuntimeException("Received non-200 / non-404 response trying to check if record is deprecated or deactivated");
-            } else if (response.getStatusLine().getStatusCode() == Status.CONFLICT.getStatusCode()) {
-                // deactivated
-                return true;
-            } else if (response.getStatusLine().getStatusCode() != Status.NOT_FOUND.getStatusCode()) {
-                // check for deprecation
-                Map<String, String> responseMap = new ObjectMapper().readValue(response.getEntity().getContent(), new TypeReference<HashMap<String, Object>>() {
-                });
-                String path = responseMap.get("path");
-                return !StringUtils.isBlank(path) && !path.startsWith("/" + orcidId);
-            }
-        } catch (Exception e) {
-            LOG.error("Error checking registry for deprecated or deactivated record {}", orcidId, e);
-            throw new RuntimeException(e);
-        }
-        return false;
     }
 
     private <T> T useInternalAccessToken(Supplier<T> function) {

@@ -38,9 +38,7 @@ import org.orcid.memberportal.service.assertion.stats.MemberAssertionStats;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.orcid.memberportal.service.assertion.upload.impl.AssertionsCsvReader;
-import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertException;
-import org.orcid.memberportal.service.assertion.web.rest.errors.ORCIDAPIException;
-import org.orcid.memberportal.service.assertion.web.rest.errors.RegistryDeleteFailureException;
+import org.orcid.memberportal.service.assertion.web.rest.errors.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -257,16 +255,16 @@ public class AssertionService {
         } catch (Exception e) {
             LOG.error("Error bulk updating assertions from salesforce '" + from + "' to salesforce '" + to + "'", e);
             if (rollback) {
-                LOG.info("Attempting to RESET assertion salesforce ids from '{}' to '{}'", new Object[] { to, from });
+                LOG.info("Attempting to RESET assertion salesforce ids from '{}' to '{}'", new Object[]{to, from});
                 boolean success = updateAssertionsSalesforceId(to, from, false);
                 if (success) {
-                    LOG.info("Succeeded in RESETTING assertion salesforce ids from '{}' to '{}'", new Object[] { to, from });
+                    LOG.info("Succeeded in RESETTING assertion salesforce ids from '{}' to '{}'", new Object[]{to, from});
                     return false;
                 } else {
-                    LOG.error("Failed to reset assertions from '{}' to '{}'", new Object[] { to, from });
+                    LOG.error("Failed to reset assertions from '{}' to '{}'", new Object[]{to, from});
                     LOG.error(
                             "Operation to update assertion salesforce ids from '{}' to '{}' has failed but there may be assertions with new sf id of '{}' in the database!",
-                            new Object[] { from, to, to });
+                            new Object[]{from, to, to});
                     return false;
                 }
             }
@@ -474,6 +472,8 @@ public class AssertionService {
 
     private void deleteAssertionFromOrcidRegistry(Assertion assertion) throws RegistryDeleteFailureException {
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(assertion.getEmail());
+        String orcidId = record.get().getOrcid();
+
         if (!checkRegistryDeletePreconditions(record, assertion)) {
             throw new RegistryDeleteFailureException();
         }
@@ -481,9 +481,11 @@ public class AssertionService {
         assertion.setLastSyncAttempt(Instant.now());
 
         try {
-            LOG.info("Exchanging id token for {}", record.get().getOrcid());
+            LOG.info("Exchanging id token for {}", orcidId);
             String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId(), true));
-            orcidAPIClient.deleteAffiliation(record.get().getOrcid(), accessToken, assertion);
+            orcidAPIClient.deleteAffiliation(orcidId, accessToken, assertion);
+        } catch (DeactivatedException | DeprecatedException e) {
+            handleDeactivedOrDeprecated(orcidId, assertion);
         } catch (ORCIDAPIException oae) {
             if (oae.getStatusCode() != 404) {
                 storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID);
@@ -524,7 +526,7 @@ public class AssertionService {
             rows.add(row);
         }
 
-        String[] headers = new String[] { "Member name", "Total affiliations", "Statuses" };
+        String[] headers = new String[]{"Member name", "Total affiliations", "Statuses"};
         return new CsvWriter().writeCsv(headers, rows);
     }
 
@@ -577,17 +579,29 @@ public class AssertionService {
     }
 
     private String postToOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, ClientProtocolException, IOException, JAXBException {
-        LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
-        String accessToken = orcidAPIClient.exchangeToken(idToken);
-        LOG.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
-        return orcidAPIClient.postAffiliation(orcid, accessToken, assertion);
+        try {
+            LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
+            String accessToken = orcidAPIClient.exchangeToken(idToken);
+            LOG.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
+            return orcidAPIClient.postAffiliation(orcid, accessToken, assertion);
+        } catch (DeactivatedException | DeprecatedException e) {
+            handleDeactivedOrDeprecated(orcid, assertion);
+            return null;
+        }
+    }
+
+    private void handleDeactivedOrDeprecated(String orcid, Assertion assertion) {
     }
 
     private void putInOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, JAXBException, ClientProtocolException, IOException {
-        LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
-        String accessToken = orcidAPIClient.exchangeToken(idToken);
-        LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
-        orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
+        try {
+            LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
+            String accessToken = orcidAPIClient.exchangeToken(idToken);
+            LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
+            orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
+        } catch (DeactivatedException | DeprecatedException e) {
+            handleDeactivedOrDeprecated(orcid, assertion);
+        }
     }
 
     private boolean checkRegistryDeletePreconditions(Optional<OrcidRecord> record, Assertion assertion) {
@@ -633,18 +647,18 @@ public class AssertionService {
         int statusCode = json.getInt("statusCode");
         String errorMessage = json.getString("error");
         switch (statusCode) {
-        case 404:
-            return AssertionStatus.USER_DELETED_FROM_ORCID;
-        case 401:
-            return AssertionStatus.USER_REVOKED_ACCESS;
-        case 400:
-            if (errorMessage.contains("invalid_scope")) {
+            case 404:
+                return AssertionStatus.USER_DELETED_FROM_ORCID;
+            case 401:
                 return AssertionStatus.USER_REVOKED_ACCESS;
-            } else {
+            case 400:
+                if (errorMessage.contains("invalid_scope")) {
+                    return AssertionStatus.USER_REVOKED_ACCESS;
+                } else {
+                    return defaultError;
+                }
+            default:
                 return defaultError;
-            }
-        default:
-            return defaultError;
         }
     }
 
