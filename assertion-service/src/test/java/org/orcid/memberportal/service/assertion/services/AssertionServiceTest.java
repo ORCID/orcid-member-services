@@ -1047,6 +1047,28 @@ class AssertionServiceTest {
     }
 
     @Test
+    void testDeleteByIdDeprecatedOrDeactivated() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
+        Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
+        assertion.setSalesforceId("salesforce-id");
+        assertion.setStatus(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
+
+        Mockito.when(assertionRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
+        Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(Optional.empty());
+        Mockito.when(assertionRepository.countByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(2l);
+        Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
+        Mockito.doNothing().when(assertionRepository).deleteById(Mockito.eq("id"));
+
+        assertionService.deleteById("id", getUser());
+
+        Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
+        Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecord(Mockito.any());
+        Mockito.verify(assertionRepository, Mockito.times(1)).findById(Mockito.eq("id"));
+        Mockito.verify(orcidAPIClient, Mockito.never()).exchangeToken(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.never()).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
+    }
+
+    @Test
     void testDeleteByIdWithRegistryDeleteFailure() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
         assertion.setSalesforceId("salesforce-id");

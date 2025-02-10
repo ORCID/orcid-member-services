@@ -277,7 +277,8 @@ public class AssertionService {
         String salesforceId = user.getSalesforceId();
         checkAssertionAccess(assertion, salesforceId);
 
-        if (!StringUtils.isEmpty(assertion.getPutCode())) {
+        // don't bother trying to delete affiliations for deactivated / deprecated profiles in the registry
+        if (!StringUtils.isEmpty(assertion.getPutCode()) && !AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name().equals(assertion.getStatus())) {
             LOG.info("Deleting assertion {} in ORCID registry", id);
             deleteAssertionFromOrcidRegistry(assertion);
         }
