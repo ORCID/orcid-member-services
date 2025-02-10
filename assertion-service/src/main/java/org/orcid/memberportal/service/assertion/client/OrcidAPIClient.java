@@ -82,7 +82,7 @@ public class OrcidAPIClient {
         this.httpClient = HttpClients.createDefault();
     }
 
-    public String exchangeToken(String idToken) throws JSONException, IOException, DeactivatedException {
+    public String exchangeToken(String idToken, String orcidId) throws JSONException, IOException, DeactivatedException {
         HttpPost httpPost = new HttpPost(applicationProperties.getTokenExchange().getEndpoint());
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -100,7 +100,7 @@ public class OrcidAPIClient {
         if (statusCode != Status.OK.getStatusCode()) {
             String responseString = EntityUtils.toString(response.getEntity());
 
-            if (responseString.contains("invalid_scope")) {
+            if (responseString.contains("invalid_scope") && recordIsDeactivated(orcidId)) {
                 LOG.info("Deactivated profile detected: status code {}", statusCode);
                 throw new DeactivatedException();
             } else {
@@ -203,6 +203,24 @@ public class OrcidAPIClient {
         return useInternalAccessToken(() -> {
             return getOrcidIdFromRegistry(email);
         });
+    }
+
+    public boolean recordIsDeactivated(String orcidId) {
+        return useInternalAccessToken(() -> {
+            return checkRegistryForDeactivated(orcidId);
+        });
+    }
+
+    private boolean checkRegistryForDeactivated(String orcidId) {
+        HttpGet httpGet = new HttpGet(applicationProperties.getOrcidAPIEndpoint() + orcidId + "/person");
+        setJsonHeaders(httpGet, internalAccessToken);
+
+        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            return response.getStatusLine().getStatusCode() == Status.CONFLICT.getStatusCode();
+        } catch (Exception e) {
+            LOG.error("Error checking registry for deactivated record {}", orcidId, e);
+            throw new RuntimeException(e);
+        }
     }
 
     private <T> T useInternalAccessToken(Supplier<T> function) {

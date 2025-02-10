@@ -486,7 +486,7 @@ public class AssertionService {
 
         try {
             LOG.info("Exchanging id token for {}", orcidId);
-            String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId(), true));
+            String accessToken = orcidAPIClient.exchangeToken(record.get().getToken(assertion.getSalesforceId(), true), orcidId);
             orcidAPIClient.deleteAffiliation(orcidId, accessToken, assertion);
         } catch (DeactivatedException | DeprecatedException e) {
             handleDeactivatedOrDeprecated(orcidId, assertion);
@@ -584,7 +584,7 @@ public class AssertionService {
 
     private String postToOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, ClientProtocolException, IOException, JAXBException, DeprecatedException, DeactivatedException {
         LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
-        String accessToken = orcidAPIClient.exchangeToken(idToken);
+        String accessToken = orcidAPIClient.exchangeToken(idToken, orcid);
         LOG.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
         return orcidAPIClient.postAffiliation(orcid, accessToken, assertion);
     }
@@ -601,7 +601,7 @@ public class AssertionService {
 
     private void putInOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, JAXBException, ClientProtocolException, IOException, DeprecatedException, DeactivatedException {
         LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
-        String accessToken = orcidAPIClient.exchangeToken(idToken);
+        String accessToken = orcidAPIClient.exchangeToken(idToken, orcid);
         LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
         orcidAPIClient.putAffiliation(orcid, accessToken, assertion);
     }

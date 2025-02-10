@@ -56,6 +56,7 @@ import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSe
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.web.rest.errors.DeactivatedException;
 import org.orcid.memberportal.service.assertion.web.rest.errors.DeprecatedException;
+import org.orcid.memberportal.service.assertion.web.rest.errors.ORCIDAPIException;
 
 public class OrcidAPIClientTest {
 
@@ -450,7 +451,7 @@ public class OrcidAPIClientTest {
     }
 
     @Test
-    void testExchangeToken() throws IOException {
+    void testExchangeToken_deactivatedRecord() throws IOException {
         TokenExchange mockTokenExchange = Mockito.mock(TokenExchange.class);
         Mockito.when(mockTokenExchange.getEndpoint()).thenReturn("orcid/tokenexchange/");
         Mockito.when(applicationProperties.getTokenExchange()).thenReturn(mockTokenExchange);
@@ -466,11 +467,141 @@ public class OrcidAPIClientTest {
                 response.setEntity(entity);
                 return response;
             }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"internal-access-token\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 409, "CONFLICT"));
+                String body = "{\"response-code\":409,\"developer-message\":\"409 Conflict: The ORCID record is deactivated and cannot be edited. Full validation error: 0009-0004-5673-641X is deactivated\",\"user-message\":\"The ORCID record is deactivated.\",\"error-code\":9044,\"more-info\":\"https://members.orcid.org/api/resources/troubleshooting\"}";
+                StringEntity entity = new StringEntity(body, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
         });
 
         assertThatExceptionOfType(DeactivatedException.class).isThrownBy(() -> {
-           client.exchangeToken("some id token");
+           client.exchangeToken("some id token", "orcid");
         });
+    }
+
+    @Test
+    void testExchangeToken_orcidApiError() throws IOException {
+        TokenExchange mockTokenExchange = Mockito.mock(TokenExchange.class);
+        Mockito.when(mockTokenExchange.getEndpoint()).thenReturn("orcid/tokenexchange/");
+        Mockito.when(applicationProperties.getTokenExchange()).thenReturn(mockTokenExchange);
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 401, "Unauthorized"));
+                String tokenResponse = "{“ error\": \"invalid_scope\", \"error_description\": \"The id_token is disabled and does not contain any valid scope\" }";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"internal-access-token\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "CONFLICT"));
+                String body = "{\"last-modified-date\":{\"value\":1728652976786},\"name\":{\"created-date\":{\"value\":1482344662307},\"last-modified-date\":{\"value\":1482344662307},\"given-names\":{\"value\":\"George\"},\"family-name\":{\"value\":\"Nash\"},\"credit-name\":null,\"source\":null,\"visibility\":\"public\",\"path\":\"0000-0001-0002-0003\"},\"other-names\":{\"last-modified-date\":null,\"other-name\":[],\"path\":\"/0000-0001-0002-0003/other-names\"},\"biography\":null,\"researcher-urls\":{\"last-modified-date\":null,\"researcher-url\":[],\"path\":\"/0000-0001-0002-0003/researcher-urls\"},\"emails\":{\"last-modified-date\":null,\"email\":[],\"path\":\"/0000-0001-0002-0003/email\"},\"addresses\":{\"last-modified-date\":null,\"address\":[],\"path\":\"/0000-0001-0002-0003/address\"},\"keywords\":{\"last-modified-date\":{\"value\":1728652976786},\"keyword\":[{\"created-date\":{\"value\":1728652976786},\"last-modified-date\":{\"value\":1728652976786},\"source\":{\"source-orcid\":{\"uri\":\"https://qa.orcid.org/0000-0001-0002-0003\",\"path\":\"0000-0001-0002-0003\",\"host\":\"qa.orcid.org\"},\"source-client-id\":null,\"source-name\":{\"value\":\"George Nash\"},\"assertion-origin-orcid\":null,\"assertion-origin-client-id\":null,\"assertion-origin-name\":null},\"content\":\"jhj\",\"visibility\":\"public\",\"path\":\"/0000-0001-0002-0003/keywords/9691\",\"put-code\":9691,\"display-index\":1}],\"path\":\"/0000-0001-0002-0003/keywords\"},\"external-identifiers\":{\"last-modified-date\":null,\"external-identifier\":[],\"path\":\"/0000-0001-0002-0003/external-identifiers\"},\"path\":\"/0000-0001-0002-0003/person\"}";
+                StringEntity entity = new StringEntity(body, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        });
+
+        assertThatExceptionOfType(ORCIDAPIException.class).isThrownBy(() -> {
+            client.exchangeToken("some id token", "0000-0001-0002-0003");
+        });
+    }
+
+    @Test
+    void testRecordIsDeactivated_recordDeactivated() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(applicationProperties.getOrcidAPIEndpoint()).thenReturn("orcid/api/");
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"token\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-api /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setEntity(new StringEntity("{\"response-code\":409,\"developer-message\":\"409 Conflict: The ORCID record is deactivated and cannot be edited. Full validation error: 0009-0004-5673-641X is deactivated\",\"user-message\":\"The ORCID record is deactivated.\",\"error-code\":9044,\"more-info\":\"https://members.orcid.org/api/resources/troubleshooting\"}"));
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 409, "CONFLICT"));
+                return response;
+            }
+        });
+
+        boolean deprecatedOrDeactivated = client.recordIsDeactivated("1234-1234-1234-1234");
+        assertThat(deprecatedOrDeactivated).isEqualTo(true);
+    }
+
+    @Test
+    void testRecordIsDeactivated_recordNotDeactivated() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(applicationProperties.getOrcidAPIEndpoint()).thenReturn("orcid/api/");
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"token\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-api /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setEntity(new StringEntity("{\"last-modified-date\":{\"value\":1728652976786},\"name\":{\"created-date\":{\"value\":1482344662307},\"last-modified-date\":{\"value\":1482344662307},\"given-names\":{\"value\":\"A\"},\"family-name\":{\"value\":\"Person\"},\"credit-name\":null,\"source\":null,\"visibility\":\"public\",\"path\":\"0000-0001-0002-0003\"},\"other-names\":{\"last-modified-date\":null,\"other-name\":[],\"path\":\"/0000-0001-0002-0003/other-names\"},\"biography\":null,\"researcher-urls\":{\"last-modified-date\":null,\"researcher-url\":[],\"path\":\"/0000-0001-0002-0003/researcher-urls\"},\"emails\":{\"last-modified-date\":null,\"email\":[],\"path\":\"/0000-0001-0002-0003/email\"},\"addresses\":{\"last-modified-date\":null,\"address\":[],\"path\":\"/0000-0001-0002-0003/address\"},\"keywords\":{\"last-modified-date\":{\"value\":1728652976786},\"keyword\":[{\"created-date\":{\"value\":1728652976786},\"last-modified-date\":{\"value\":1728652976786},\"source\":{\"source-orcid\":{\"uri\":\"https://qa.orcid.org/0000-0001-0002-0003\",\"path\":\"0000-0001-0002-0003\",\"host\":\"qa.orcid.org\"},\"source-client-id\":null,\"source-name\":{\"value\":\"A Person\"},\"assertion-origin-orcid\":null,\"assertion-origin-client-id\":null,\"assertion-origin-name\":null},\"content\":\"jhj\",\"visibility\":\"public\",\"path\":\"/0000-0001-0002-0003/keywords/9691\",\"put-code\":9691,\"display-index\":1}],\"path\":\"/0000-0001-0002-0003/keywords\"},\"external-identifiers\":{\"last-modified-date\":null,\"external-identifier\":[],\"path\":\"/0000-0001-0002-0003/external-identifiers\"},\"path\":\"/0000-0001-0002-0003/person\"}"));
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                return response;
+            }
+        });
+
+        boolean deprecatedOrDeactivated = client.recordIsDeactivated("0000-0001-0002-0003");
+        assertThat(deprecatedOrDeactivated).isEqualTo(false);
     }
 
     private NotificationPermission getNotificationPermission() {
