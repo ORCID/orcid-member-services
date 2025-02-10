@@ -51,6 +51,8 @@ import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUpload;
 import org.orcid.memberportal.service.assertion.upload.AssertionsUploadSummary;
 import org.orcid.memberportal.service.assertion.upload.impl.AssertionsCsvReader;
+import org.orcid.memberportal.service.assertion.web.rest.errors.DeactivatedException;
+import org.orcid.memberportal.service.assertion.web.rest.errors.DeprecatedException;
 import org.orcid.memberportal.service.assertion.web.rest.errors.ORCIDAPIException;
 import org.orcid.memberportal.service.assertion.web.rest.errors.RegistryDeleteFailureException;
 import org.springframework.data.domain.Page;
@@ -449,12 +451,12 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPostAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
         Mockito.when(assertionRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class)))
-                .thenReturn(getAssertionsForCreatingInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE))
-                .thenReturn(getAssertionsForCreatingInOrcid(AssertionService.REGISTRY_SYNC_BATCH_SIZE + 1,
-                        AssertionService.REGISTRY_SYNC_BATCH_SIZE + (AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2)))
-                .thenReturn(new ArrayList<>());
+            .thenReturn(getAssertionsForCreatingInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE))
+            .thenReturn(getAssertionsForCreatingInOrcid(AssertionService.REGISTRY_SYNC_BATCH_SIZE + 1,
+                AssertionService.REGISTRY_SYNC_BATCH_SIZE + (AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2)))
+            .thenReturn(new ArrayList<>());
 
         for (int i = 1; i <= 5; i++) {
             Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(Optional.of(getOrcidRecord(Integer.toString(i))));
@@ -465,14 +467,14 @@ class AssertionServiceTest {
         }
 
         for (int i = 1; i <= 5; i++) {
-            Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken" + i))).thenReturn("accessToken" + i);
+            Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken" + i), Mockito.eq("orcid" + i))).thenReturn("accessToken" + i);
             Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid" + i), Mockito.eq("accessToken" + i), Mockito.any(Assertion.class))).thenReturn("putCode" + i);
         }
 
         assertionService.postAssertionsToOrcid();
 
         Mockito.verify(orcidRecordService, Mockito.times(AssertionService.REGISTRY_SYNC_BATCH_SIZE + (AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2)))
-                .findOneByEmail(Mockito.anyString());
+            .findOneByEmail(Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).postAffiliation(Mockito.anyString(), Mockito.anyString(), assertionCaptor.capture());
         Mockito.verify(assertionRepository, Mockito.times(3)).findAllToCreateInOrcidRegistry(pageableCaptor.capture());
 
@@ -494,9 +496,9 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionsToOrcidWithRevokedTokens() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPostAssertionsToOrcidWithRevokedTokens() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeprecatedException {
         Mockito.when(assertionRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class)))
-                .thenReturn(getAssertionsForCreatingInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE)).thenReturn(new ArrayList<>());
+            .thenReturn(getAssertionsForCreatingInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE)).thenReturn(new ArrayList<>());
 
         OrcidRecord recordWithRevokedToken = getOrcidRecordWithRevokedToken();
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(Optional.of(recordWithRevokedToken));
@@ -509,12 +511,60 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionToOrcid_statusPendingToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPostAssertionsToOrcidWithDeactivatedProfile() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeprecatedException, DeactivatedException {
+        List<Assertion> assertions = getAssertionsForCreatingInOrcid(1, 1);
+
+        Mockito.when(assertionRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class)))
+            .thenReturn(assertions).thenReturn(new ArrayList<>());
+        Mockito.when(assertionRepository.findByEmail(Mockito.eq("1@email.com"))).thenReturn(assertions);
+        OrcidRecord recordWithRevokedToken = getOrcidRecordWithRevokedToken();
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(Optional.of(getOrcidRecord("1")));
+
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString(), Mockito.anyString())).thenThrow(new DeactivatedException());
+
+        assertionService.postAssertionsToOrcid();
+
+        Mockito.verify(orcidAPIClient).exchangeToken(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidRecordService).findOneByEmail(Mockito.eq("1@email.com"));
+        Mockito.verify(orcidAPIClient, Mockito.never()).postAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
+        Mockito.verify(assertionRepository).save(assertionCaptor.capture());
+        Assertion assertion = assertionCaptor.getValue();
+        assertThat(assertion.getStatus()).isEqualTo(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
+        Mockito.verify(assertionRepository, Mockito.times(2)).findAllToCreateInOrcidRegistry(pageableCaptor.capture());
+        Mockito.verify(orcidRecordService).deleteOrcidRecordByEmail(Mockito.eq("1@email.com"));
+    }
+
+    @Test
+    void testPostAssertionsToOrcidWithDeprecatedProfile() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeprecatedException, DeactivatedException {
+        List<Assertion> assertions = getAssertionsForCreatingInOrcid(1, 1);
+
+        Mockito.when(assertionRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class)))
+            .thenReturn(assertions).thenReturn(new ArrayList<>());
+        Mockito.when(assertionRepository.findByEmail(Mockito.eq("1@email.com"))).thenReturn(assertions);
+        OrcidRecord recordWithRevokedToken = getOrcidRecordWithRevokedToken();
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(Optional.of(getOrcidRecord("1")));
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1"), Mockito.anyString())).thenReturn("accessToken");
+        Mockito.doThrow(new DeprecatedException()).when(orcidAPIClient).postAffiliation(Mockito.eq("orcid1"), Mockito.eq("accessToken"), Mockito.any(Assertion.class));
+
+        assertionService.postAssertionsToOrcid();
+
+        Mockito.verify(orcidAPIClient).exchangeToken(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidRecordService).findOneByEmail(Mockito.eq("1@email.com"));
+        Mockito.verify(orcidAPIClient).postAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
+        Mockito.verify(assertionRepository).save(assertionCaptor.capture());
+        Assertion assertion = assertionCaptor.getValue();
+        assertThat(assertion.getStatus()).isEqualTo(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
+        Mockito.verify(assertionRepository, Mockito.times(2)).findAllToCreateInOrcidRegistry(pageableCaptor.capture());
+        Mockito.verify(orcidRecordService).deleteOrcidRecordByEmail(Mockito.eq("1@email.com"));
+    }
+
+    @Test
+    void testPostAssertionToOrcid_statusPendingToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"), Mockito.anyString())).thenReturn("accessToken1234");
         Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"), Mockito.any(Assertion.class))).thenReturn("putCode1234");
 
         assertionService.postAssertionToOrcid(assertion);
@@ -526,14 +576,14 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionToOrcid_statusPendingToUserRevokedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPostAssertionToOrcid_statusPendingToUserRevokedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"), Mockito.anyString())).thenReturn("accessToken1234");
         Mockito.doThrow(new ORCIDAPIException(401, "some message")).when(orcidAPIClient).postAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"),
-                Mockito.any(Assertion.class));
+            Mockito.any(Assertion.class));
 
         assertionService.postAssertionToOrcid(assertion);
 
@@ -542,9 +592,9 @@ class AssertionServiceTest {
         assertEquals(AssertionStatus.USER_REVOKED_ACCESS.name(), saved.getStatus());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"), Mockito.anyString())).thenReturn("accessToken1234");
         Mockito.doThrow(new ORCIDAPIException(400, "invalid_scope")).when(orcidAPIClient).postAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"),
-                Mockito.any(Assertion.class));
+            Mockito.any(Assertion.class));
 
         assertionService.postAssertionToOrcid(assertion);
 
@@ -573,14 +623,14 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionToOrcid_statusPendingToErrorAddingToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPostAssertionToOrcid_statusPendingToErrorAddingToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeprecatedException, DeactivatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"), Mockito.anyString())).thenReturn("accessToken1234");
         Mockito.doThrow(new ORCIDAPIException(400, "invalid data")).when(orcidAPIClient).postAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"),
-                Mockito.any(Assertion.class));
+            Mockito.any(Assertion.class));
 
         assertionService.postAssertionToOrcid(assertion);
 
@@ -591,7 +641,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPostAssertionToOrcid_statusPendingRetryToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPostAssertionToOrcid_statusPendingRetryToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         assertion.setOrcidError("{ statusCode: 400, error: 'something' }");
@@ -601,7 +651,7 @@ class AssertionServiceTest {
         assertion.setStatus(AssertionStatus.PENDING_RETRY.name());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"), Mockito.anyString())).thenReturn("accessToken1234");
         Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"), Mockito.any(Assertion.class))).thenReturn("putCode1234");
 
         assertionService.postAssertionToOrcid(assertion);
@@ -613,11 +663,11 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPutAssertionsToOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPutAssertionsInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
         Mockito.when(assertionRepository.findAllToUpdateInOrcidRegistry(Mockito.any(Pageable.class)))
-                .thenReturn(getAssertionsForUpdateInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE))
-                .thenReturn(getAssertionsForUpdateInOrcid(AssertionService.REGISTRY_SYNC_BATCH_SIZE + 1, (int) (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5)))
-                .thenReturn(new ArrayList<>());
+            .thenReturn(getAssertionsForUpdateInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE))
+            .thenReturn(getAssertionsForUpdateInOrcid(AssertionService.REGISTRY_SYNC_BATCH_SIZE + 1, (int) (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5)))
+            .thenReturn(new ArrayList<>());
 
         for (int i = 1; i <= 5; i++) {
             Mockito.when(orcidRecordService.findOneByEmail(i + "@email.com")).thenReturn(Optional.of(getOrcidRecord(Integer.toString(i))));
@@ -628,20 +678,20 @@ class AssertionServiceTest {
         }
 
         for (int i = 1; i <= 5; i++) {
-            Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken" + i))).thenReturn("accessToken" + i);
+            Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken" + i), Mockito.anyString())).thenReturn("accessToken" + i);
             Mockito.when(orcidAPIClient.postAffiliation(Mockito.eq("orcid" + i), Mockito.eq("accessToken" + i), Mockito.any(Assertion.class))).thenReturn("putCode" + i);
         }
 
         for (int i = 1; i <= AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5; i++) {
             // for when assertion is refreshed
             Mockito.when(assertionRepository.findById(Mockito.eq("id" + i)))
-                    .thenReturn(Optional.of(getAssertionWithEmailAndPutCode(i + "@email.com", String.valueOf(i))));
+                .thenReturn(Optional.of(getAssertionWithEmailAndPutCode(i + "@email.com", String.valueOf(i))));
         }
 
         assertionService.putAssertionsInOrcid();
 
         Mockito.verify(orcidRecordService, Mockito.times((int) (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5))).findOneByEmail(Mockito.anyString());
-        Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.times(5)).exchangeToken(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(5)).putAffiliation(Mockito.anyString(), Mockito.anyString(), assertionCaptor.capture());
 
         List<Assertion> posted = assertionCaptor.getAllValues();
@@ -649,7 +699,58 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPutAssertionInOrcid_statusPendingRetryToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPutAssertionsInOrcidWithDeactiveProfile() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
+        List<Assertion> assertions = getAssertionsForUpdateInOrcid(1, 1);
+        Mockito.when(assertionRepository.findAllToUpdateInOrcidRegistry(Mockito.any(Pageable.class)))
+            .thenReturn(assertions)
+            .thenReturn(new ArrayList<>());
+        Mockito.when(assertionRepository.findByEmail("1@email.com")).thenReturn(assertions);
+        Mockito.when(orcidRecordService.findOneByEmail("1@email.com")).thenReturn(Optional.of(getOrcidRecord("1")));
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1"), Mockito.anyString())).thenThrow(new DeactivatedException());
+
+        // for when assertion is refreshed
+        Mockito.when(assertionRepository.findById(Mockito.eq("id1")))
+            .thenReturn(Optional.of(getAssertionWithEmailAndPutCode("1@email.com", "1")));
+
+        assertionService.putAssertionsInOrcid();
+
+        Mockito.verify(orcidRecordService).findOneByEmail("1@email.com");
+        Mockito.verify(orcidAPIClient).exchangeToken(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.never()).putAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
+        Mockito.verify(assertionRepository).save(assertionCaptor.capture());
+        Assertion assertion = assertionCaptor.getValue();
+        assertThat(assertion.getStatus()).isEqualTo(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
+        Mockito.verify(orcidRecordService).deleteOrcidRecordByEmail(Mockito.eq("1@email.com"));
+    }
+
+    @Test
+    void testPutAssertionsInOrcidWithDeprecatedProfile() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
+        List<Assertion> assertions = getAssertionsForUpdateInOrcid(1, 1);
+        Mockito.when(assertionRepository.findAllToUpdateInOrcidRegistry(Mockito.any(Pageable.class)))
+            .thenReturn(assertions)
+            .thenReturn(new ArrayList<>());
+        Mockito.when(assertionRepository.findByEmail("1@email.com")).thenReturn(assertions);
+        Mockito.when(orcidRecordService.findOneByEmail("1@email.com")).thenReturn(Optional.of(getOrcidRecord("1")));
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1"), Mockito.anyString())).thenReturn("accessToken");
+        Mockito.doThrow(new DeprecatedException()).when(orcidAPIClient).putAffiliation(Mockito.eq("orcid1"), Mockito.eq("accessToken"), Mockito.any(Assertion.class));
+
+        // for when assertion is refreshed
+        Mockito.when(assertionRepository.findById(Mockito.eq("id1")))
+            .thenReturn(Optional.of(getAssertionWithEmailAndPutCode("1@email.com", "1")));
+
+        assertionService.putAssertionsInOrcid();
+
+        Mockito.verify(orcidRecordService).findOneByEmail("1@email.com");
+        Mockito.verify(orcidAPIClient).exchangeToken(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(orcidAPIClient).putAffiliation(Mockito.anyString(), Mockito.anyString(), Mockito.any(Assertion.class));
+        Mockito.verify(assertionRepository).save(assertionCaptor.capture());
+        Assertion assertion = assertionCaptor.getValue();
+        assertThat(assertion.getStatus()).isEqualTo(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
+        Mockito.verify(orcidRecordService).deleteOrcidRecordByEmail(Mockito.eq("1@email.com"));
+    }
+
+    @Test
+    void testPutAssertionInOrcid_statusPendingRetryToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         Instant addedToOrcid = Instant.now();
@@ -660,7 +761,7 @@ class AssertionServiceTest {
         assertion.setStatus(AssertionStatus.PENDING_RETRY.name());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"), Mockito.anyString())).thenReturn("accessToken1234");
 
         assertionService.putAssertionInOrcid(assertion);
 
@@ -670,7 +771,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPutAssertionInOrcid_statusErrorPendingRetryToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPutAssertionInOrcid_statusErrorPendingRetryToInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         assertion.setOrcidError("{ statusCode: 400, error: 'something' }");
@@ -682,7 +783,7 @@ class AssertionServiceTest {
         assertion.setStatus(AssertionStatus.PENDING_RETRY.name());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"), Mockito.anyString())).thenReturn("accessToken1234");
 
         assertionService.putAssertionInOrcid(assertion);
 
@@ -692,7 +793,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPutAssertionInOrcid_statusPendingRetryToUserRevokedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPutAssertionInOrcid_statusPendingRetryToUserRevokedAccess() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeprecatedException, DeactivatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         Instant addedToOrcid = Instant.now();
@@ -703,9 +804,9 @@ class AssertionServiceTest {
         assertion.setStatus(AssertionStatus.PENDING_RETRY.name());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"), Mockito.anyString())).thenReturn("accessToken1234");
         Mockito.doThrow(new ORCIDAPIException(401, "some message")).when(orcidAPIClient).putAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"),
-                Mockito.any(Assertion.class));
+            Mockito.any(Assertion.class));
 
         assertionService.putAssertionInOrcid(assertion);
 
@@ -714,9 +815,9 @@ class AssertionServiceTest {
         assertEquals(AssertionStatus.USER_REVOKED_ACCESS.name(), saved.getStatus());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"), Mockito.anyString())).thenReturn("accessToken1234");
         Mockito.doThrow(new ORCIDAPIException(400, "invalid_scope")).when(orcidAPIClient).putAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"),
-                Mockito.any(Assertion.class));
+            Mockito.any(Assertion.class));
 
         assertionService.putAssertionInOrcid(assertion);
 
@@ -745,7 +846,7 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testPutAssertionInOrcid_statusPendingRetryToErrorUpdatingInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException {
+    void testPutAssertionInOrcid_statusPendingRetryToErrorUpdatingInOrcid() throws org.json.JSONException, ClientProtocolException, IOException, JAXBException, DeactivatedException, DeprecatedException {
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         Instant addedToOrcid = Instant.now();
@@ -756,9 +857,9 @@ class AssertionServiceTest {
         assertion.setStatus(AssertionStatus.PENDING_RETRY.name());
 
         Mockito.when(orcidRecordService.findOneByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"))).thenReturn("accessToken1234");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("idToken1234"), Mockito.anyString())).thenReturn("accessToken1234");
         Mockito.doThrow(new ORCIDAPIException(400, "invalid data")).when(orcidAPIClient).putAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"),
-                Mockito.any(Assertion.class));
+            Mockito.any(Assertion.class));
 
         assertionService.putAssertionInOrcid(assertion);
 
@@ -767,81 +868,81 @@ class AssertionServiceTest {
         assertEquals(AssertionStatus.ERROR_UPDATING_TO_ORCID.name(), saved.getStatus());
     }
 
-    // @Test
-    // void testDeleteAssertionFromOrcidRegistry_successfulDelete() throws
-    // org.json.JSONException, ClientProtocolException, IOException {
-    // Mockito.when(assertionsRepository.findById(Mockito.eq("assertionId"))).thenReturn(Optional.of(getAssertionWithEmail("something@orcid.org")));
-    // Mockito.when(orcidRecordService.findOneByEmail("something@orcid.org")).thenReturn(getOptionalOrcidRecordWithIdToken());
-    // Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("accessToken");
-    // Mockito.when(orcidAPIClient.deleteAffiliation(Mockito.anyString(),
-    // Mockito.eq("accessToken"),
-    // Mockito.any(Assertion.class))).thenReturn(true);
-    // assertionService.deleteAssertionFromOrcidRegistry("assertionId",
-    // getUser());
-    //
-    // Mockito.verify(orcidAPIClient,
-    // Mockito.times(1)).exchangeToken(Mockito.anyString());
-    // Mockito.verify(orcidAPIClient,
-    // Mockito.times(1)).deleteAffiliation(Mockito.anyString(),
-    // Mockito.anyString(), Mockito.any(Assertion.class));
-    //
-    // Mockito.verify(assertionsRepository,
-    // Mockito.times(1)).save(assertionCaptor.capture());
-    // List<Assertion> captured = assertionCaptor.getAllValues();
-    // Assertion lastSaved = captured.get(captured.size() - 1);
-    // assertNotNull(lastSaved.getLastSyncAttempt());
-    // }
-    //
-    // @Test
-    // void testDeleteAssertionFromOrcidRegistry_failedDelete() throws
-    // org.json.JSONException, ClientProtocolException, IOException {
-    // Assertion assertion = getAssertionWithEmail("something@orcid.org");
-    // Mockito.when(assertionsRepository.findById(Mockito.eq("assertionId"))).thenReturn(Optional.of(assertion));
-    // Mockito.when(orcidRecordService.findOneByEmail("something@orcid.org")).thenReturn(getOptionalOrcidRecordWithIdToken());
-    // Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("accessToken");
-    // Mockito.when(orcidAPIClient.deleteAffiliation(Mockito.anyString(),
-    // Mockito.eq("accessToken"),
-    // Mockito.any(Assertion.class))).thenReturn(false);
-    // assertionService.deleteAssertionFromOrcidRegistry("assertionId",
-    // getUser());
-    //
-    // Mockito.verify(orcidAPIClient,
-    // Mockito.times(1)).exchangeToken(Mockito.anyString());
-    // Mockito.verify(orcidAPIClient,
-    // Mockito.times(1)).deleteAffiliation(Mockito.anyString(),
-    // Mockito.anyString(), Mockito.any(Assertion.class));
-    //
-    // assertNotNull(assertion.getLastSyncAttempt());
-    // }
-    //
-    // @Test
-    // void testDeleteAssertionFromOrcidRegistry_errorDeleting() throws
-    // org.json.JSONException, ClientProtocolException, IOException {
-    // Assertion assertion = getAssertionWithEmail("something@orcid.org");
-    // assertion.setId("assertionId");
-    // Mockito.when(assertionsRepository.findById(Mockito.eq("assertionId"))).thenReturn(Optional.of(assertion));
-    // Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenReturn(assertion);
-    // Mockito.when(orcidRecordService.findOneByEmail("something@orcid.org")).thenReturn(getOptionalOrcidRecordWithIdToken());
-    // Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("accessToken");
-    // Mockito.doThrow(new ORCIDAPIException(404, "not
-    // found")).when(orcidAPIClient).deleteAffiliation(Mockito.anyString(),
-    // Mockito.eq("accessToken"),
-    // Mockito.any(Assertion.class));
-    // assertionService.deleteAssertionFromOrcidRegistry("assertionId",
-    // getUser());
-    //
-    // Mockito.verify(orcidAPIClient,
-    // Mockito.times(1)).exchangeToken(Mockito.anyString());
-    // Mockito.verify(orcidAPIClient,
-    // Mockito.times(1)).deleteAffiliation(Mockito.anyString(),
-    // Mockito.anyString(), Mockito.any(Assertion.class));
-    //
-    // Mockito.verify(assertionsRepository,
-    // Mockito.times(1)).save(assertionCaptor.capture());
-    // List<Assertion> captured = assertionCaptor.getAllValues();
-    // Assertion lastSaved = captured.get(captured.size() - 1);
-    // assertNotNull(lastSaved.getLastSyncAttempt());
-    // }
+// @Test
+// void testDeleteAssertionFromOrcidRegistry_successfulDelete() throws
+// org.json.JSONException, ClientProtocolException, IOException {
+// Mockito.when(assertionsRepository.findById(Mockito.eq("assertionId"))).thenReturn(Optional.of(getAssertionWithEmail("something@orcid.org")));
+// Mockito.when(orcidRecordService.findOneByEmail("something@orcid.org")).thenReturn(getOptionalOrcidRecordWithIdToken());
+// Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("accessToken");
+// Mockito.when(orcidAPIClient.deleteAffiliation(Mockito.anyString(),
+// Mockito.eq("accessToken"),
+// Mockito.any(Assertion.class))).thenReturn(true);
+// assertionService.deleteAssertionFromOrcidRegistry("assertionId",
+// getUser());
+//
+// Mockito.verify(orcidAPIClient,
+// Mockito.times(1)).exchangeToken(Mockito.anyString());
+// Mockito.verify(orcidAPIClient,
+// Mockito.times(1)).deleteAffiliation(Mockito.anyString(),
+// Mockito.anyString(), Mockito.any(Assertion.class));
+//
+// Mockito.verify(assertionsRepository,
+// Mockito.times(1)).save(assertionCaptor.capture());
+// List<Assertion> captured = assertionCaptor.getAllValues();
+// Assertion lastSaved = captured.get(captured.size() - 1);
+// assertNotNull(lastSaved.getLastSyncAttempt());
+// }
+//
+// @Test
+// void testDeleteAssertionFromOrcidRegistry_failedDelete() throws
+// org.json.JSONException, ClientProtocolException, IOException {
+// Assertion assertion = getAssertionWithEmail("something@orcid.org");
+// Mockito.when(assertionsRepository.findById(Mockito.eq("assertionId"))).thenReturn(Optional.of(assertion));
+// Mockito.when(orcidRecordService.findOneByEmail("something@orcid.org")).thenReturn(getOptionalOrcidRecordWithIdToken());
+// Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("accessToken");
+// Mockito.when(orcidAPIClient.deleteAffiliation(Mockito.anyString(),
+// Mockito.eq("accessToken"),
+// Mockito.any(Assertion.class))).thenReturn(false);
+// assertionService.deleteAssertionFromOrcidRegistry("assertionId",
+// getUser());
+//
+// Mockito.verify(orcidAPIClient,
+// Mockito.times(1)).exchangeToken(Mockito.anyString());
+// Mockito.verify(orcidAPIClient,
+// Mockito.times(1)).deleteAffiliation(Mockito.anyString(),
+// Mockito.anyString(), Mockito.any(Assertion.class));
+//
+// assertNotNull(assertion.getLastSyncAttempt());
+// }
+//
+// @Test
+// void testDeleteAssertionFromOrcidRegistry_errorDeleting() throws
+// org.json.JSONException, ClientProtocolException, IOException {
+// Assertion assertion = getAssertionWithEmail("something@orcid.org");
+// assertion.setId("assertionId");
+// Mockito.when(assertionsRepository.findById(Mockito.eq("assertionId"))).thenReturn(Optional.of(assertion));
+// Mockito.when(assertionsRepository.save(Mockito.any(Assertion.class))).thenReturn(assertion);
+// Mockito.when(orcidRecordService.findOneByEmail("something@orcid.org")).thenReturn(getOptionalOrcidRecordWithIdToken());
+// Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("accessToken");
+// Mockito.doThrow(new ORCIDAPIException(404, "not
+// found")).when(orcidAPIClient).deleteAffiliation(Mockito.anyString(),
+// Mockito.eq("accessToken"),
+// Mockito.any(Assertion.class));
+// assertionService.deleteAssertionFromOrcidRegistry("assertionId",
+// getUser());
+//
+// Mockito.verify(orcidAPIClient,
+// Mockito.times(1)).exchangeToken(Mockito.anyString());
+// Mockito.verify(orcidAPIClient,
+// Mockito.times(1)).deleteAffiliation(Mockito.anyString(),
+// Mockito.anyString(), Mockito.any(Assertion.class));
+//
+// Mockito.verify(assertionsRepository,
+// Mockito.times(1)).save(assertionCaptor.capture());
+// List<Assertion> captured = assertionCaptor.getAllValues();
+// Assertion lastSaved = captured.get(captured.size() - 1);
+// assertNotNull(lastSaved.getLastSyncAttempt());
+// }
 
     @Test
     void testFindByEmail() {
@@ -893,14 +994,14 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testDeleteByIdWithRegistryDeleteAndOtherAssertionsForUser() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+    void testDeleteByIdWithRegistryDeleteAndOtherAssertionsForUser() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
         assertion.setSalesforceId("salesforce-id");
 
         Mockito.when(assertionRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
         Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("exchange-token");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString(), Mockito.anyString())).thenReturn("exchange-token");
         Mockito.when(assertionRepository.countByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(2l);
 
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
@@ -913,22 +1014,22 @@ class AssertionServiceTest {
 
         Mockito.verify(assertionRepository, Mockito.times(1)).findById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@orcid.org"));
-        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
 
     }
 
     @Test
-    void testDeleteByIdAlreadyDeletedInTheRegistry() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+    void testDeleteByIdAlreadyDeletedInTheRegistry() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
         assertion.setSalesforceId("salesforce-id");
 
         Mockito.when(assertionRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
         Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("exchange-token");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString(), Mockito.anyString())).thenReturn("exchange-token");
         Mockito.doThrow(new ORCIDAPIException(404, "already deleted")).when(orcidAPIClient).deleteAffiliation(Mockito.eq("orcid"), Mockito.eq("exchange-token"),
-                Mockito.any(Assertion.class));
+            Mockito.any(Assertion.class));
         Mockito.when(assertionRepository.countByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(2l);
 
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
@@ -941,21 +1042,21 @@ class AssertionServiceTest {
 
         Mockito.verify(assertionRepository, Mockito.times(1)).findById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@orcid.org"));
-        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
     }
 
     @Test
-    void testDeleteByIdWithRegistryDeleteFailure() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+    void testDeleteByIdWithRegistryDeleteFailure() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
         assertion.setSalesforceId("salesforce-id");
 
         Mockito.when(assertionRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
         Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("exchange-token");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString(), Mockito.anyString())).thenReturn("exchange-token");
         Mockito.doThrow(new ORCIDAPIException(500, "something bad")).when(orcidAPIClient).deleteAffiliation(Mockito.eq("orcid"), Mockito.eq("exchange-token"),
-                Mockito.any(Assertion.class));
+            Mockito.any(Assertion.class));
 
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
         Mockito.doNothing().when(assertionRepository).deleteById(Mockito.eq("id"));
@@ -972,14 +1073,14 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testDeleteByIdWithRevokedToken() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+    void testDeleteByIdWithRevokedToken() throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
         assertion.setSalesforceId("salesforce-id");
 
         Mockito.when(assertionRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
         Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(Optional.of(getOrcidRecordWithRevokedToken()));
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("exchange-token");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString(), Mockito.anyString())).thenReturn("exchange-token");
         Mockito.when(assertionRepository.countByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(0l);
 
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
@@ -992,20 +1093,20 @@ class AssertionServiceTest {
 
         Mockito.verify(assertionRepository, Mockito.times(1)).findById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@orcid.org"));
-        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
     }
 
     @Test
     void testDeleteByIdWithRegistryDeleteAndNoOtherAssertionsForUser()
-            throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+        throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmailAndPutCode("test@orcid.org", "1001");
         assertion.setSalesforceId("salesforce-id");
 
         Mockito.when(assertionRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
         Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("exchange-token");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString(), Mockito.anyString())).thenReturn("exchange-token");
         Mockito.when(assertionRepository.countByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(0l);
 
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
@@ -1018,20 +1119,20 @@ class AssertionServiceTest {
 
         Mockito.verify(assertionRepository, Mockito.times(1)).findById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@orcid.org"));
-        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.times(1)).exchangeToken(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.times(1)).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
     }
 
     @Test
     void testDeleteByIdWithoutRegistryDeleteAndOtherAssertionsForUser()
-            throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+        throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         assertion.setSalesforceId("salesforce-id");
 
         Mockito.when(assertionRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
         Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("exchange-token");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString(), Mockito.anyString())).thenReturn("exchange-token");
         Mockito.when(assertionRepository.countByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(2l);
 
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
@@ -1041,20 +1142,20 @@ class AssertionServiceTest {
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecord(Mockito.any());
-        Mockito.verify(orcidAPIClient, Mockito.never()).exchangeToken(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.never()).exchangeToken(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.never()).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
     }
 
     @Test
     void testDeleteByIdWithoutRegistryDeleteAndNoOtherAssertionsForUser()
-            throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException {
+        throws org.json.JSONException, ClientProtocolException, IOException, RegistryDeleteFailureException, DeactivatedException, DeprecatedException {
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         assertion.setSalesforceId("salesforce-id");
 
         Mockito.when(assertionRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
         Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
         Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@orcid.org"))).thenReturn(getOptionalOrcidRecordWithIdToken());
-        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString())).thenReturn("exchange-token");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.anyString(), Mockito.anyString())).thenReturn("exchange-token");
         Mockito.when(assertionRepository.countByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(0l);
 
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
@@ -1064,7 +1165,7 @@ class AssertionServiceTest {
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
-        Mockito.verify(orcidAPIClient, Mockito.never()).exchangeToken(Mockito.anyString());
+        Mockito.verify(orcidAPIClient, Mockito.never()).exchangeToken(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orcidAPIClient, Mockito.never()).deleteAffiliation(Mockito.anyString(), Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
     }
 
@@ -1097,13 +1198,13 @@ class AssertionServiceTest {
     @Test
     void testFindBySalesforceId() {
         Mockito.when(assertionRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<Assertion>(Arrays.asList(getAssertionWithEmail("email@orcid.org"), getAssertionWithEmail("email@orcid.org"))));
+            .thenReturn(new PageImpl<Assertion>(Arrays.asList(getAssertionWithEmail("email@orcid.org"), getAssertionWithEmail("email@orcid.org"))));
         Mockito.when(assertionRepository
                 .findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
-                        Mockito.any(Pageable.class), Mockito.eq("salesforce-id"), Mockito.eq("filter"), Mockito.eq("salesforce-id"), Mockito.eq("filter"),
-                        Mockito.eq("salesforce-id"), Mockito.eq("filter"), Mockito.eq("salesforce-id"), Mockito.eq("filter"), Mockito.eq("salesforce-id"),
-                        Mockito.eq("filter"), Mockito.eq("salesforce-id"), Mockito.eq("filter"), Mockito.eq("salesforce-id"), Mockito.eq("filter")))
-                .thenReturn(new PageImpl<Assertion>(Arrays.asList(getAssertionWithEmail("email@orcid.org"))));
+                    Mockito.any(Pageable.class), Mockito.eq("salesforce-id"), Mockito.eq("filter"), Mockito.eq("salesforce-id"), Mockito.eq("filter"),
+                    Mockito.eq("salesforce-id"), Mockito.eq("filter"), Mockito.eq("salesforce-id"), Mockito.eq("filter"), Mockito.eq("salesforce-id"),
+                    Mockito.eq("filter"), Mockito.eq("salesforce-id"), Mockito.eq("filter"), Mockito.eq("salesforce-id"), Mockito.eq("filter")))
+            .thenReturn(new PageImpl<Assertion>(Arrays.asList(getAssertionWithEmail("email@orcid.org"))));
 
         Page<Assertion> page = assertionService.findByCurrentSalesforceId(Mockito.mock(Pageable.class));
         assertEquals(2, page.getTotalElements());
@@ -1114,48 +1215,48 @@ class AssertionServiceTest {
         assertEquals(AssertionStatus.PENDING.getValue(), page.getContent().get(0).getPrettyStatus());
     }
 
-    //
-    // @Test
-    // void testDeleteAssertionFromOrcidRegistry_wrongSalesforceId() throws
-    // org.json.JSONException, ClientProtocolException, IOException,
-    // JAXBException {
-    // Assertion assertion = getAssertionWithEmailAndPutCode("test@email.com",
-    // "1001");
-    // assertion.setSalesforceId("salesforce-id");
-    // Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
-    // Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("wrong-salesforce-id");
-    //
-    // AssertionServiceUser user = getUser();
-    // user.setSalesforceId("something-wrong");
-    // Assertions.assertThrows(BadRequestAlertException.class, () -> {
-    // assertionService.deleteAssertionFromOrcidRegistry("id", user);
-    // });
-    // }
-    //
-    // @Test
-    // void testDeleteAssertionFromOrcidRegistry_CannotDelete() throws
-    // org.json.JSONException, ClientProtocolException, IOException,
-    // JAXBException {
-    // Assertion assertion = getAssertionWithEmailAndPutCode("test@email.com",
-    // "1001");
-    // assertion.setSalesforceId("salesforce-id");
-    //
-    // Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
-    // Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
-    // Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@email.com"))).thenReturn(getOptionalOrcidRecordWithoutIdToken());
-    //
-    // assertionService.deleteAssertionFromOrcidRegistry("id", getUser());
-    //
-    // Mockito.verify(assertionsRepository,
-    // Mockito.times(1)).findById(Mockito.eq("id"));
-    // Mockito.verify(orcidRecordService,
-    // Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@email.com"));
-    // Mockito.verify(orcidAPIClient,
-    // Mockito.never()).exchangeToken(Mockito.anyString());
-    // Mockito.verify(orcidAPIClient,
-    // Mockito.never()).deleteAffiliation(Mockito.anyString(),
-    // Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
-    // }
+//
+// @Test
+// void testDeleteAssertionFromOrcidRegistry_wrongSalesforceId() throws
+// org.json.JSONException, ClientProtocolException, IOException,
+// JAXBException {
+// Assertion assertion = getAssertionWithEmailAndPutCode("test@email.com",
+// "1001");
+// assertion.setSalesforceId("salesforce-id");
+// Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
+// Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("wrong-salesforce-id");
+//
+// AssertionServiceUser user = getUser();
+// user.setSalesforceId("something-wrong");
+// Assertions.assertThrows(BadRequestAlertException.class, () -> {
+// assertionService.deleteAssertionFromOrcidRegistry("id", user);
+// });
+// }
+//
+// @Test
+// void testDeleteAssertionFromOrcidRegistry_CannotDelete() throws
+// org.json.JSONException, ClientProtocolException, IOException,
+// JAXBException {
+// Assertion assertion = getAssertionWithEmailAndPutCode("test@email.com",
+// "1001");
+// assertion.setSalesforceId("salesforce-id");
+//
+// Mockito.when(assertionsRepository.findById(Mockito.eq("id"))).thenReturn(Optional.of(assertion));
+// Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn("salesforce-id");
+// Mockito.when(orcidRecordService.findOneByEmail(Mockito.eq("test@email.com"))).thenReturn(getOptionalOrcidRecordWithoutIdToken());
+//
+// assertionService.deleteAssertionFromOrcidRegistry("id", getUser());
+//
+// Mockito.verify(assertionsRepository,
+// Mockito.times(1)).findById(Mockito.eq("id"));
+// Mockito.verify(orcidRecordService,
+// Mockito.atLeastOnce()).findOneByEmail(Mockito.eq("test@email.com"));
+// Mockito.verify(orcidAPIClient,
+// Mockito.never()).exchangeToken(Mockito.anyString());
+// Mockito.verify(orcidAPIClient,
+// Mockito.never()).deleteAffiliation(Mockito.anyString(),
+// Mockito.eq("exchange-token"), Mockito.any(Assertion.class));
+// }
 
     @Test
     void testIsDuplicate() {
@@ -1168,9 +1269,9 @@ class AssertionServiceTest {
         d.setAffiliationSection(AffiliationSection.EMPLOYMENT);
 
         Assertion comparison = getAssertionWithoutIdForEmail("email"); // duplicate
-                                                                       // of
-                                                                       // assertion
-                                                                       // a
+        // of
+        // assertion
+        // a
         Mockito.when(assertionRepository.findByEmailAndSalesforceId(Mockito.eq("email"), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(Arrays.asList(b, c, a, d));
         assertTrue(assertionService.isDuplicate(comparison, DEFAULT_SALESFORCE_ID));
 
@@ -1326,7 +1427,7 @@ class AssertionServiceTest {
     @Test
     void testProcessAssertionUploadsNoProcessingIfErrorsPresent() throws IOException {
         Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE)))
-                .thenReturn(Arrays.asList(getDummyStoredFile()));
+            .thenReturn(Arrays.asList(getDummyStoredFile()));
         Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());
 
         AssertionsUpload upload = new AssertionsUpload();
@@ -1358,9 +1459,9 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testProcessAssertionUploads() throws IOException {
+    void testProcessAssertionUploads() throws IOException, DeprecatedException, DeactivatedException {
         Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE)))
-                .thenReturn(Arrays.asList(getDummyStoredFile()));
+            .thenReturn(Arrays.asList(getDummyStoredFile()));
         Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());
 
         AssertionsUpload upload = new AssertionsUpload();
@@ -1445,7 +1546,7 @@ class AssertionServiceTest {
         Mockito.when(assertionRepository.findById(Mockito.eq("7777"))).thenReturn(Optional.of(deleteThreeFull));
         Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
 
-        Mockito.when(orcidAPIClient.exchangeToken("token")).thenReturn("token");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("token"), Mockito.anyString())).thenReturn("token");
         Mockito.doNothing().when(orcidAPIClient).deleteAffiliation(Mockito.eq("6666"), Mockito.eq("token"), Mockito.any(Assertion.class));
         Mockito.doNothing().when(orcidAPIClient).deleteAffiliation(Mockito.eq("7777"), Mockito.eq("token"), Mockito.any(Assertion.class));
         Mockito.doNothing().when(orcidAPIClient).deleteAffiliation(Mockito.eq("9999"), Mockito.eq("token"), Mockito.any(Assertion.class));
@@ -1466,9 +1567,9 @@ class AssertionServiceTest {
     }
 
     @Test
-    void testProcessAssertionUploadsWithDeleteFailures() throws IOException {
+    void testProcessAssertionUploadsWithDeleteFailures() throws IOException, DeprecatedException, DeactivatedException {
         Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE)))
-                .thenReturn(Arrays.asList(getDummyStoredFile()));
+            .thenReturn(Arrays.asList(getDummyStoredFile()));
         Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());
 
         AssertionsUpload upload = new AssertionsUpload();
@@ -1552,10 +1653,10 @@ class AssertionServiceTest {
         Mockito.when(assertionRepository.findById(Mockito.eq("6666"))).thenReturn(Optional.of(deleteTwoFull));
         Mockito.when(assertionRepository.findById(Mockito.eq("7777"))).thenReturn(Optional.of(deleteThreeFull));
         Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class))).thenReturn(upload);
-        Mockito.when(orcidAPIClient.exchangeToken("token")).thenReturn("token");
+        Mockito.when(orcidAPIClient.exchangeToken(Mockito.eq("token"), Mockito.anyString())).thenReturn("token");
 
         Mockito.doThrow(new ORCIDAPIException(500, "some registry problem")).when(orcidAPIClient).deleteAffiliation(Mockito.eq("6666"), Mockito.eq("token"),
-                Mockito.any(Assertion.class));
+            Mockito.any(Assertion.class));
         Mockito.doNothing().when(orcidAPIClient).deleteAffiliation(Mockito.eq("7777"), Mockito.eq("token"), Mockito.any(Assertion.class));
         Mockito.doNothing().when(orcidAPIClient).deleteAffiliation(Mockito.eq("9999"), Mockito.eq("token"), Mockito.any(Assertion.class));
 
@@ -1614,7 +1715,7 @@ class AssertionServiceTest {
         });
         Mockito.when(assertionRepository.findById(Mockito.eq("12346"))).thenReturn(Optional.of(toUpdate));
         Mockito.when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(AssertionServiceUser.class)))
-                .thenThrow(new IOException("testing error message")).thenReturn(upload);
+            .thenThrow(new IOException("testing error message")).thenReturn(upload);
 
         assertionService.processAssertionUploads();
 
@@ -1643,7 +1744,7 @@ class AssertionServiceTest {
     private StoredFile getDummyStoredFile() {
         StoredFile storedFile = new StoredFile();
         storedFile.setFileLocation(getClass().getResource("/assertions-with-bad-url.csv").getFile()); // doesn't
-                                                                                                      // matter
+        // matter
         storedFile.setOriginalFilename("original-filename.csv");
         storedFile.setDateWritten(Instant.now());
         storedFile.setOwnerId("owner");
@@ -1653,14 +1754,14 @@ class AssertionServiceTest {
     @Test
     void testProcessAssertionUploadsWithDuplicates() throws IOException {
         Mockito.when(storedFileService.getUnprocessedStoredFilesByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE)))
-                .thenReturn(Arrays.asList(getDummyStoredFile()));
+            .thenReturn(Arrays.asList(getDummyStoredFile()));
         Mockito.when(assertionsUserService.getUserById(Mockito.eq("owner"))).thenReturn(getUser());
 
         Assertion alreadyPersisted1 = getAssertionWithEmail("1@email.com");
         alreadyPersisted1.setDepartmentName("not a duplicate");
         Assertion alreadyPersisted2 = getAssertionWithEmail("1@email.com");
         Mockito.when(assertionRepository.findByEmailAndSalesforceId(Mockito.eq("1@email.com"), Mockito.eq(DEFAULT_SALESFORCE_ID)))
-                .thenReturn(Arrays.asList(alreadyPersisted1, alreadyPersisted2));
+            .thenReturn(Arrays.asList(alreadyPersisted1, alreadyPersisted2));
 
         AssertionsUpload upload = new AssertionsUpload();
         upload.addAssertion(getAssertionWithEmail("1@email.com"));
@@ -1706,12 +1807,12 @@ class AssertionServiceTest {
     void testUpdateAssertionsSalesforceId() {
         List<Assertion> firstPage = getAssertionsForSalesforceId("salesforce-id", 0, AssertionService.REGISTRY_SYNC_BATCH_SIZE);
         List<Assertion> secondPage = getAssertionsForSalesforceId("salesforce-id", AssertionService.REGISTRY_SYNC_BATCH_SIZE,
-                AssertionService.REGISTRY_SYNC_BATCH_SIZE * 2);
+            AssertionService.REGISTRY_SYNC_BATCH_SIZE * 2);
         List<Assertion> thirdPage = getAssertionsForSalesforceId("salesforce-id", AssertionService.REGISTRY_SYNC_BATCH_SIZE * 2,
-                (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 3) - 10);
+            (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 3) - 10);
         ;
         Mockito.when(assertionRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Pageable.class))).thenReturn(new PageImpl<Assertion>(firstPage))
-                .thenReturn(new PageImpl<Assertion>(secondPage)).thenReturn(new PageImpl<Assertion>(thirdPage)).thenReturn(new PageImpl<Assertion>(new ArrayList<>()));
+            .thenReturn(new PageImpl<Assertion>(secondPage)).thenReturn(new PageImpl<Assertion>(thirdPage)).thenReturn(new PageImpl<Assertion>(new ArrayList<>()));
         boolean success = assertionService.updateAssertionsSalesforceId("salesforce-id", "new-salesforce-id");
         assertThat(success).isTrue();
 
@@ -1727,11 +1828,11 @@ class AssertionServiceTest {
 
         // representing updated assertions that need to be rolled back
         Mockito.when(assertionRepository.findBySalesforceId(Mockito.eq("new-salesforce-id"), Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<Assertion>(Arrays.asList(new Assertion(), new Assertion(), new Assertion()))).thenReturn(new PageImpl<Assertion>(new ArrayList<>()));
+            .thenReturn(new PageImpl<Assertion>(Arrays.asList(new Assertion(), new Assertion(), new Assertion()))).thenReturn(new PageImpl<Assertion>(new ArrayList<>()));
 
         // 3 successful updates before error, followed by rollback
         Mockito.when(assertionRepository.save(Mockito.any(Assertion.class))).thenReturn(new Assertion()).thenReturn(new Assertion()).thenReturn(new Assertion())
-                .thenThrow(new RuntimeException("some random problem")).thenReturn(new Assertion()).thenReturn(new Assertion()).thenReturn(new Assertion());
+            .thenThrow(new RuntimeException("some random problem")).thenReturn(new Assertion()).thenReturn(new Assertion()).thenReturn(new Assertion());
 
         boolean success = assertionService.updateAssertionsSalesforceId("salesforce-id", "new-salesforce-id");
         assertThat(success).isFalse();
