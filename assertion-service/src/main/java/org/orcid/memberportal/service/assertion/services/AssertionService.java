@@ -760,29 +760,29 @@ public class AssertionService {
         List<String> registryDeleteFailures = new ArrayList<>();
 
         for (Assertion a : upload.getAssertions()) {
-            if (!isDuplicate(a, user.getSalesforceId())) {
-                if (a.getId() == null || a.getId().isEmpty()) {
-                    createAssertion(a, user);
-                    created++;
-                } else {
-                    Assertion existingAssertion = findById(a.getId());
-                    if (!user.getSalesforceId().equals(existingAssertion.getSalesforceId())) {
-                        throw new BadRequestAlertException("This affiliation doesn't belong to your organization", "affiliation", "affiliationOtherOrganization");
-                    }
-                    if (assertionToDelete(a)) {
-                        try {
-                            deleteById(a.getId(), user);
-                            deleted++;
-                        } catch (RegistryDeleteFailureException e) {
-                            registryDeleteFailures.add(a.getId());
-                        }
+            if (assertionToDelete(a)) {
+                try {
+                    deleteById(a.getId(), user);
+                    deleted++;
+                } catch (RegistryDeleteFailureException e) {
+                    registryDeleteFailures.add(a.getId());
+                }
+            } else {
+                if (!isDuplicate(a, user.getSalesforceId())) {
+                    if (a.getId() == null || a.getId().isEmpty()) {
+                        createAssertion(a, user);
+                        created++;
                     } else {
+                        Assertion existingAssertion = findById(a.getId());
+                        if (!user.getSalesforceId().equals(existingAssertion.getSalesforceId())) {
+                            throw new BadRequestAlertException("This affiliation doesn't belong to your organization", "affiliation", "affiliationOtherOrganization");
+                        }
                         updateAssertion(a, user);
                         updated++;
                     }
+                } else {
+                    duplicates++;
                 }
-            } else {
-                duplicates++;
             }
         }
 
