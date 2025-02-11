@@ -733,6 +733,7 @@ public class AssertionService {
             summary.setDate(DATE_FORMAT.format(uploadFile.getDateWritten()));
             mailService.sendAssertionsUploadSummaryMail(summary, user);
         } catch (Exception e) {
+            LOG.warn("Unexpected error processing assertions CSV upload", e);
             if (e.getCause() != null) {
                 uploadFile.setError(e.getCause().toString());
             } else {
