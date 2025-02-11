@@ -25,6 +25,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mongodb.client.DistinctIterable;
 import com.mongodb.client.model.Filters;
+import org.springframework.util.Assert;
 
 @Repository
 public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom {
@@ -60,7 +61,13 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         Criteria needsUpdatingInOrcid = new Criteria();
         needsUpdatingInOrcid.orOperator(modifiedAfterUpdateInOrcid, modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet);
 
-        MatchOperation matchUpdatedAfterSync = Aggregation.match(needsUpdatingInOrcid);
+        Criteria notDeprecatedOrDeactivated = new Criteria();
+        notDeprecatedOrDeactivated.andOperator(Criteria.where("status").ne(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name()));
+
+        Criteria needsUpdatingInOrcidAndNotDeprecatedOrDeactivated = new Criteria();
+        needsUpdatingInOrcidAndNotDeprecatedOrDeactivated.andOperator(needsUpdatingInOrcid, notDeprecatedOrDeactivated);
+
+        MatchOperation matchUpdatedAfterSync = Aggregation.match(needsUpdatingInOrcidAndNotDeprecatedOrDeactivated);
 
         // pagination aggregation operations
         SortOperation sort = new SortOperation(pageable.getSort());
@@ -85,9 +92,16 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
     @Override
     public List<Assertion> findAllToCreateInOrcidRegistry(Pageable pageable) {
-        Criteria criteria = new Criteria();
-        criteria.orOperator(Criteria.where("added_to_orcid").exists(false), Criteria.where("added_to_orcid").is(null));
-        Query query = new Query(criteria);
+        Criteria notAddedToOrcid = new Criteria();
+        notAddedToOrcid.orOperator(Criteria.where("added_to_orcid").exists(false), Criteria.where("added_to_orcid").is(null));
+
+        Criteria notDeprecatedOrDeactivated = new Criteria();
+        notDeprecatedOrDeactivated.andOperator(Criteria.where("status").ne(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name()));
+
+        Criteria notAddedToOrcidAndNotDeprecatedOrDeactivated = new Criteria();
+        notAddedToOrcidAndNotDeprecatedOrDeactivated.andOperator(notAddedToOrcid, notDeprecatedOrDeactivated);
+
+        Query query = new Query(notAddedToOrcidAndNotDeprecatedOrDeactivated);
         query.with(pageable);
         return mongoTemplate.find(query, Assertion.class);
     }
