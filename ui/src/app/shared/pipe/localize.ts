@@ -62,6 +62,8 @@ export class LocalizePipe implements PipeTransform {
         return $localize`:@@gatewayApp.assertionStatus.notificationFailed.string:Notification failed`
       case 'Pending update in ORCID':
         return $localize`:@@gatewayApp.assertionStatus.pendingUpdateInOrcid.string:Pending update in ORCID`
+      case 'Record is deactivated or deprecated':
+        return $localize`:@@gatewayApp.assertionStatus.recordDeactivatedOrDeprecated.string:Record is deactivated or deprecated`
 
       // affiliation types
 
