@@ -612,12 +612,10 @@ public class AssertionService {
         if (!record.isPresent()) {
             LOG.error("OrcidRecord not available for email {}", assertion.getEmail());
             error = "Orcid record not available";
-        }
-        if (StringUtils.isBlank(record.get().getOrcid())) {
+        } else if (StringUtils.isBlank(record.get().getOrcid())) {
             LOG.info("Orcid ID not available for {}", assertion.getEmail());
             error = "ORCID iD not available";
-        }
-        if (record.get().getTokens() == null) {
+        } else if (record.get().getTokens() == null || record.get().getToken(assertion.getSalesforceId(), true) == null) {
             LOG.info("Token not available for {}", assertion.getEmail());
             error = "Token not available";
         }
