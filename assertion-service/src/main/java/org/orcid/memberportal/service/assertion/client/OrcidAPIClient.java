@@ -104,7 +104,7 @@ public class OrcidAPIClient {
                 LOG.info("Deactivated profile detected: status code {}", statusCode);
                 throw new DeactivatedException();
             } else {
-                LOG.error("Unable to exchange id_token: {}", responseString);
+                LOG.error("Unable to exchange id_token for orcid ID {} : {}", orcidId, responseString);
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
         }
@@ -206,16 +206,19 @@ public class OrcidAPIClient {
     }
 
     public boolean recordIsDeactivated(String orcidId) {
+        LOG.info("Checking to see if record {} is deactivated", orcidId);
         return useInternalAccessToken(() -> {
             return checkRegistryForDeactivated(orcidId);
         });
     }
 
     private boolean checkRegistryForDeactivated(String orcidId) {
+        LOG.info("Calling {}/person endpoint to check deactivated status", orcidId);
         HttpGet httpGet = new HttpGet(applicationProperties.getOrcidAPIEndpoint() + orcidId + "/person");
         setJsonHeaders(httpGet, internalAccessToken);
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            LOG.info("Received status {} from the registry", response.getStatusLine().getStatusCode());
             return response.getStatusLine().getStatusCode() == Status.CONFLICT.getStatusCode();
         } catch (Exception e) {
             LOG.error("Error checking registry for deactivated record {}", orcidId, e);
