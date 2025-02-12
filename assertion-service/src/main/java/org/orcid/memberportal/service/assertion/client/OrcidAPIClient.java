@@ -100,8 +100,8 @@ public class OrcidAPIClient {
         if (statusCode != Status.OK.getStatusCode()) {
             String responseString = EntityUtils.toString(response.getEntity());
 
-            if (responseString.contains("invalid_scope") && recordIsDeactivated(orcidId)) {
-                LOG.info("Deactivated profile detected: status code {}", statusCode);
+            if (statusCode == Status.UNAUTHORIZED.getStatusCode() && responseString.contains("invalid_scope") && recordIsDeactivated(orcidId)) {
+                LOG.info("Deactivated profile detected");
                 throw new DeactivatedException();
             } else {
                 LOG.error("Unable to exchange id_token for orcid ID {} : {}", orcidId, responseString);
