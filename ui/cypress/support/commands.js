@@ -132,15 +132,9 @@ Cypress.Commands.add("visitLinkFromEmail", (email) => {
   const htmlDom = new DOMParser().parseFromString(emailBody, "text/html");
   //href points to correct endpoint
   const href = htmlDom.querySelector(
-    'a[href*="https://member-portal.qa.orcid.org/reset/finish?key="]',
+    'a[href*="https://member-portal.qa.orcid.org/en/reset/finish?key="]',
   ).href;
-  // TODO: remove the replace bit when migrated
-  cy.visit(
-    href.replace(
-      "https://member-portal.qa.orcid.org/",
-      "https://member-portal.qa.orcid.org/en/",
-    ),
-  );
+  cy.visit(href);
 });
 
 Cypress.Commands.add("checkInbox", (subject, recipient, date) => {
