@@ -94,6 +94,7 @@ describe("Add and remove affiliation", () => {
         cy.request({
           url: `https://pub.qa.orcid.org/v3.0/${record.id}/services`,
           headers: { Accept: "application/json" },
+          Authorization: `Bearer ${credentials.publicToken}`,
         }),
       (res) => {
         const service =
@@ -158,7 +159,10 @@ describe("Add and remove affiliation", () => {
       () =>
         cy.request({
           url: `https://pub.qa.orcid.org/v3.0/${record.id}/services`,
-          headers: { Accept: "application/json" },
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${credentials.publicToken}`,
+          },
         }),
       (res) => {
         console.log(res);
