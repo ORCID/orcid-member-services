@@ -35,6 +35,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.orcid.jaxb.model.message.Orcid;
 import org.orcid.jaxb.model.v3.release.error.OrcidError;
 import org.orcid.jaxb.model.v3.release.notification.permission.NotificationPermission;
 import org.orcid.jaxb.model.v3.release.record.Affiliation;
@@ -219,7 +220,11 @@ public class OrcidAPIClient {
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             LOG.info("Received status {} from the registry", response.getStatusLine().getStatusCode());
-            return response.getStatusLine().getStatusCode() == Status.CONFLICT.getStatusCode();
+            if (response.getStatusLine().getStatusCode() == Status.UNAUTHORIZED.getStatusCode()) {
+                throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), response.getStatusLine().getReasonPhrase());
+            } else {
+                return response.getStatusLine().getStatusCode() == Status.CONFLICT.getStatusCode();
+            }
         } catch (Exception e) {
             LOG.error("Error checking registry for deactivated record {}", orcidId, e);
             throw new RuntimeException(e);

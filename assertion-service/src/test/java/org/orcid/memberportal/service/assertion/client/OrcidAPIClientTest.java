@@ -576,6 +576,58 @@ public class OrcidAPIClientTest {
     }
 
     @Test
+    void testRecordIsDeactivated_tokenExpired() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(applicationProperties.getOrcidAPIEndpoint()).thenReturn("orcid/api/");
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"expired-token\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-api /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setEntity(new StringEntity("{\"response-code\":401,\"developer-message\":\"401 Unauthorized: Token expired message\",\"user-message\":\"token expired.\",\"error-code\":9044,\"more-info\":\"https://members.orcid.org/api/resources/troubleshooting\"}"));
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 401, "CONFLICT"));
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"expired-token\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-api /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setEntity(new StringEntity("{\"response-code\":409,\"developer-message\":\"409 Conflict: The ORCID record is deactivated and cannot be edited. Full validation error: 0009-0004-5673-641X is deactivated\",\"user-message\":\"The ORCID record is deactivated.\",\"error-code\":9044,\"more-info\":\"https://members.orcid.org/api/resources/troubleshooting\"}"));
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 409, "CONFLICT"));
+                return response;
+            }
+        });
+        // first token expired, new token obtained
+        boolean deprecatedOrDeactivated = client.recordIsDeactivated("1234-1234-1234-1234");
+        assertThat(deprecatedOrDeactivated).isEqualTo(true);
+
+        // two requests for tokens due to one expired, two checks for deactivated record
+        Mockito.verify(httpClient, Mockito.times(4)).execute(Mockito.any(HttpUriRequest.class));
+    }
+
+    @Test
     void testRecordIsDeactivated_recordNotDeactivated() throws JAXBException, ClientProtocolException, IOException {
         Mockito.when(applicationProperties.getOrcidAPIEndpoint()).thenReturn("orcid/api/");
         Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
