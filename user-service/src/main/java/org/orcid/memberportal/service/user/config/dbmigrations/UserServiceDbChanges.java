@@ -77,7 +77,7 @@ public class UserServiceDbChanges {
     @ChangeSet(order = "07", author = "George Nash", id = "07-correctInvalidLanguageCodes")
     public void correctInvalidLanguageCodes(MongoTemplate mongoTemplate) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("lang_key").nin("en", "cs", "es", "fr", "it", "ja", "ko", "pt", "ru", "zh_CN", "zh_TW"));
+        query.addCriteria(Criteria.where("lang_key").nin("en", "cs", "es", "fr", "it", "ja", "ko", "pt", "ru", "zh-CN", "zh-TW"));
         Update update = new Update();
         update.set("lang_key", "en");
         mongoTemplate.updateMulti(query, update, User.class);
