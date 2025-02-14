@@ -71,8 +71,10 @@ describe("Test updating affiliations via CSV", () => {
       () =>
         cy.request({
           url: `https://pub.qa.orcid.org/v3.0/${record.id}/activities`,
-          headers: { Accept: "application/json" },
-          Authorization: `Bearer ${credentials.publicToken}`,
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${credentials.publicToken}`,
+          },
         }),
       (res) => {
         const distinction =

@@ -36,8 +36,10 @@ describe("Edit an affiliation", () => {
       () =>
         cy.request({
           url: `https://pub.qa.orcid.org/v3.0/${record.id}/educations`,
-          headers: { Accept: "application/json" },
-          Authorization: `Bearer ${credentials.publicToken}`,
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${credentials.publicToken}`,
+          },
         }),
       (res) => {
         const education =
