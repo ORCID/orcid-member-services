@@ -26,6 +26,7 @@ import org.orcid.memberportal.service.user.security.MfaSetup;
 import org.orcid.memberportal.service.user.security.MockSecurityContext;
 import org.orcid.memberportal.service.user.upload.UserUpload;
 import org.orcid.memberportal.service.user.upload.UserUploadReader;
+import org.orcid.memberportal.service.user.web.rest.errors.BadRequestAlertException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -483,14 +484,37 @@ class UserServiceTest {
     }
 
     @Test
-    public void testDisableMfa() {
+    public void testDisableMfa_currentUser() {
         Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("username"))).thenReturn(Optional.of(getUserUsingMfa()));
-        userService.disableMfa();
+        Mockito.when(userRepository.findById(Mockito.eq("userId"))).thenReturn(Optional.of(getUserUsingMfa()));
+        userService.disableMfa("userId");
         Mockito.verify(userRepository).save(userCaptor.capture());
         User captured = userCaptor.getValue();
         assertThat(captured.getMfaEnabled()).isFalse();
         assertThat(captured.getMfaEncryptedSecret()).isNull();
         assertThat(captured.getMfaBackupCodes()).isNull();
+    }
+
+    @Test
+    public void testDisableMfa_adminUser() {
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("username"))).thenReturn(Optional.of(getAdminUser()));
+        Mockito.when(userRepository.findById(Mockito.eq("userId"))).thenReturn(Optional.of(getUserUsingMfa()));
+        userService.disableMfa("userId");
+        Mockito.verify(userRepository).save(userCaptor.capture());
+        User captured = userCaptor.getValue();
+        assertThat(captured.getMfaEnabled()).isFalse();
+        assertThat(captured.getMfaEncryptedSecret()).isNull();
+        assertThat(captured.getMfaBackupCodes()).isNull();
+    }
+
+    @Test
+    public void testDisableMfa_notAdminUserOrCurrentUser() {
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("username"))).thenReturn(Optional.of(getNonAdminUser()));
+        Mockito.when(userRepository.findById(Mockito.eq("userId"))).thenReturn(Optional.of(getUserUsingMfa()));
+
+        assertThrows(BadRequestAlertException.class, () -> {
+            userService.disableMfa("userId");
+        });
     }
 
     @Test
@@ -655,6 +679,27 @@ class UserServiceTest {
     private User getUserUsingMfa() {
         User user = getUser("username");
         user.setMfaEnabled(true);
+        user.setId("userId");
+        user.setMfaEncryptedSecret("some encrypted secret");
+        user.setMfaBackupCodes(Arrays.asList("backup1", "backup2", "backupn"));
+        return user;
+    }
+
+    private User getAdminUser() {
+        User user = getUser("admin");
+        user.setMfaEnabled(true);
+        user.setId("adminId");
+        user.setAdmin(true);
+        user.setMfaEncryptedSecret("some encrypted secret");
+        user.setMfaBackupCodes(Arrays.asList("backup1", "backup2", "backupn"));
+        return user;
+    }
+
+    private User getNonAdminUser() {
+        User user = getUser("nonAdmin");
+        user.setMfaEnabled(true);
+        user.setId("nonAdminId");
+        user.setAdmin(false);
         user.setMfaEncryptedSecret("some encrypted secret");
         user.setMfaBackupCodes(Arrays.asList("backup1", "backup2", "backupn"));
         return user;
