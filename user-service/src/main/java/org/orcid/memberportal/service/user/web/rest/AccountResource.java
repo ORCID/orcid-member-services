@@ -28,11 +28,7 @@ import org.orcid.memberportal.service.user.web.rest.vm.PasswordResetResultVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * REST controller for managing the current user's account.
@@ -137,11 +133,11 @@ public class AccountResource {
     }
 
     /**
-     * {@code POST  /account/mfa} : disables mfa for the current user
+     * {@code POST  /account/mfa} : disables mfa for the specified user
      */
-    @PostMapping(path = "/account/mfa/off")
-    public ResponseEntity<Void> switchOffMfa() {
-        userService.disableMfa();
+    @PostMapping(path = "/account/{userId}/mfa/off")
+    public ResponseEntity<Void> switchOffMfa(@PathVariable String userId) {
+        userService.disableMfa(userId);
         return ResponseEntity.ok().build();
     }
 

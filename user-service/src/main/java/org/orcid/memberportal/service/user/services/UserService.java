@@ -73,7 +73,7 @@ public class UserService {
      * ordered list for days activation email is resent to users who haven't
      * activated yet
      */
-    private static final int[] ACTIVATION_REMINDER_DAYS = new int[] { 7, 30 };
+    private static final int[] ACTIVATION_REMINDER_DAYS = new int[]{7, 30};
 
     public static final int BATCH_SIZE = 100;
 
@@ -119,15 +119,15 @@ public class UserService {
         } catch (Exception e) {
             LOG.error("Error bulk updating users from salesforce '" + from + "' to salesforce '" + to + "'", e);
             if (rollback) {
-                LOG.info("Attempting to RESET user salesforce ids from '{}' to '{}'", new Object[] { to, from });
+                LOG.info("Attempting to RESET user salesforce ids from '{}' to '{}'", new Object[]{to, from});
                 boolean success = updateUsersSalesforceId(to, from, false);
                 if (success) {
-                    LOG.info("Succeeded in RESETTING user salesforce ids from '{}' to '{}'", new Object[] { to, from });
+                    LOG.info("Succeeded in RESETTING user salesforce ids from '{}' to '{}'", new Object[]{to, from});
                     return false;
                 } else {
-                    LOG.error("Failed to reset users from '{}' to '{}'", new Object[] { to, from });
+                    LOG.error("Failed to reset users from '{}' to '{}'", new Object[]{to, from});
                     LOG.error("Operation to update users salesforce ids from '{}' to '{}' has failed but there may be users with new sf id of '{}' in the database!",
-                            new Object[] { from, to, to });
+                        new Object[]{from, to, to});
                     return false;
                 }
             }
@@ -234,16 +234,11 @@ public class UserService {
      * Update basic information (first name, last name, email, language) for the
      * current user.
      *
-     * @param firstName
-     *            first name of user.
-     * @param lastName
-     *            last name of user.
-     * @param email
-     *            email id of user.
-     * @param langKey
-     *            language key.
-     * @param imageUrl
-     *            image URL of user.
+     * @param firstName first name of user.
+     * @param lastName  last name of user.
+     * @param email     email id of user.
+     * @param langKey   language key.
+     * @param imageUrl  image URL of user.
      */
     public void updateAccount(String firstName, String lastName, String email, String langKey, String imageUrl) {
         User user = getCurrentUser();
@@ -258,8 +253,7 @@ public class UserService {
     /**
      * Update all information for a specific user, and return the modified user.
      *
-     * @param userDTO
-     *            user to update.
+     * @param userDTO user to update.
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
@@ -373,9 +367,9 @@ public class UserService {
 
     public Page<UserDTO> getAllManagedUsers(Pageable pageable, String filter) {
         return userRepository
-                .findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndEmailContainingIgnoreCase(
-                        filter, filter, filter, filter, pageable)
-                .map(u -> userMapper.toUserDTO(u));
+            .findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndEmailContainingIgnoreCase(
+                filter, filter, filter, filter, pageable)
+            .map(u -> userMapper.toUserDTO(u));
     }
 
     public Optional<User> getUserByLogin(String email) {
@@ -462,9 +456,9 @@ public class UserService {
 
     public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId, String filter) {
         return userRepository
-                .findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
-                        pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter)
-                .map(u -> userMapper.toUserDTO(u));
+            .findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
+                pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter)
+            .map(u -> userMapper.toUserDTO(u));
     }
 
     public void sendActivationReminders() {
@@ -600,12 +594,17 @@ public class UserService {
         }
     }
 
-    public void disableMfa() {
-        User user = getCurrentUser();
-        user.setMfaEnabled(false);
-        user.setMfaEncryptedSecret(null);
-        user.setMfaBackupCodes(null);
-        userRepository.save(user);
+    public void disableMfa(String userId) {
+        Optional<User> optional = userRepository.findById(userId);
+        if (optional.isPresent() && (getCurrentUser().getId().equals(userId) || getCurrentUser().getAdmin())) {
+            User user = optional.get();
+            user.setMfaEnabled(false);
+            user.setMfaEncryptedSecret(null);
+            user.setMfaBackupCodes(null);
+            userRepository.save(user);
+        } else {
+            throw new BadRequestAlertException("Invalid request to disable MFA", "user", null);
+        }
     }
 
     public boolean isMfaEnabled(String username) {
