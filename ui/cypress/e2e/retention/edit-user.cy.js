@@ -16,12 +16,20 @@ describe("Test the edit user form", () => {
     // Check for 'required' flag on the input field
     cy.get("#field_firstName")
       .should("have.class", "ng-invalid")
+      .type(data.testString + data.testString);
+    cy.get("#save-entity2").invoke("attr", "disabled").should("exist");
+    cy.get("#field_firstName")
+      .should("have.class", "ng-invalid")
       .type("Automated");
     // Clear last name input field
     cy.get("#field_lastName").clear();
     // Shouldn't be possible to save with an empty name field
     cy.get("#save-entity2").invoke("attr", "disabled").should("exist");
     // Check for 'required' flag on the input field
+    cy.get("#field_lastName")
+      .should("have.class", "ng-invalid")
+      .type(data.testString + data.testString);
+    cy.get("#save-entity2").invoke("attr", "disabled").should("exist");
     cy.get("#field_lastName").should("have.class", "ng-invalid").type("Test");
     // Check disabled fields
     cy.get("#field_email").invoke("attr", "disabled").should("exist");
