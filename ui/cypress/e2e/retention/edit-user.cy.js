@@ -18,6 +18,7 @@ describe("Test the edit user form", () => {
       .should("have.class", "ng-invalid")
       .type(data.testString + data.testString);
     cy.get("#save-entity2").invoke("attr", "disabled").should("exist");
+    // Check for max length validation
     cy.get("#field_firstName")
       .should("have.class", "ng-invalid")
       .type("Automated");
@@ -30,6 +31,7 @@ describe("Test the edit user form", () => {
       .should("have.class", "ng-invalid")
       .type(data.testString + data.testString);
     cy.get("#save-entity2").invoke("attr", "disabled").should("exist");
+    // Check for max length validation
     cy.get("#field_lastName").should("have.class", "ng-invalid").type("Test");
     // Check disabled fields
     cy.get("#field_email").invoke("attr", "disabled").should("exist");
