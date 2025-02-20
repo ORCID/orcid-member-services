@@ -68,7 +68,7 @@
             >Organization Owner</label
           >
         </div>
-        <div class="form-group">
+        <div class="form-group mb-0">
           <label
             class="form-control-label"
             i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string"
@@ -114,6 +114,48 @@
             >
           </div>
         </div>
+        <ng-container *ngIf="existentUser && existentUser.id && hasRoleAdmin()">
+          <hr class="mb-32 mt-0" />
+          <h2 class="mb-8 font-size-16">
+            <ng-container i18n="@@">Two-factor authentication</ng-container>&nbsp;<span
+              class="mfaOn"
+              *ngIf="existentUser.mfaEnabled"
+              >(ON)</span
+            >
+            <span class="mfaOff" *ngIf="!existentUser.mfaEnabled">(OFF)</span>
+          </h2>
+          <div class="font-size-14">
+            <ng-container *ngIf="existentUser.mfaEnabled">
+              <p class="mb-8" i18n="@@">
+                Disable two-factor authentication (2FA) for this user if they are having difficulty signing in to the
+                member portal.
+              </p>
+              <div class="form-group">
+                <input
+                  type="checkbox"
+                  class="form-control"
+                  name="twoFactorAuthentication"
+                  id="field_twoFactorAuthentication"
+                  formControlName="twoFactorAuthentication"
+                />
+                <label
+                  class="form-control-label two-factor-authentication-label"
+                  i18n="@@gatewayApp.msUserServiceMSUser"
+                  for="field_twoFactorAuthentication"
+                  >Two-factor authentication</label
+                >
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!existentUser.mfaEnabled">
+              <div class="warning-message d-flex p-16 mb-40 mt-16">
+                <img src="./../../../../content/images/warning-sign.svg" alt="Warning sign" class="p-8" />
+                <div class="font-size-14 wide-text line-height-150">
+                  Users can enable 2FA from their account settings page
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
       </div>
       <div class="form-group">
         <button type="button" id="cancel-save" class="btn btn-outline-primary mr-2" (click)="navigateToUsersList()">

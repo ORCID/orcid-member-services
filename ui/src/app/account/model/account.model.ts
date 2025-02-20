@@ -1,4 +1,5 @@
 export interface IAccount {
+  id: string
   activated: boolean
   authorities: string[]
   email: string
