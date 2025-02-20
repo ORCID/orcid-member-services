@@ -31,6 +31,7 @@ export class UserUpdateComponent {
   showIsAdminCheckbox = false
   currentAccount: any
   validation: any
+  disableMfa = false
 
   editForm = this.fb.group({
     id: new FormControl<string | null>(null),
@@ -233,16 +234,19 @@ export class UserUpdateComponent {
     }
   }
 
+  toggleMfa() {
+    this.disableMfa = !this.editForm.get('twoFactorAuthentication')?.value
+  }
+
   save() {
     if (this.editForm.valid) {
       this.isSaving = true
       const userFromForm = this.createFromForm()
-
       this.userService.validate(userFromForm).subscribe((response) => {
         const data = response
         if (data.valid) {
           if (userFromForm.id !== null) {
-            if (this.hasRoleAdmin() && !userFromForm.mfaEnabled && userFromForm.id) {
+            if (this.hasRoleAdmin() && this.disableMfa && userFromForm.id) {
               this.accountService.disableMfa(userFromForm.id).subscribe()
             }
             if (this.currentAccount.id === userFromForm.id) {
