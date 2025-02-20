@@ -428,17 +428,20 @@ public class AssertionService {
         LOG.info("PUTting assertions in orcid");
         Pageable pageable = getPageableForRegistrySync();
         List<Assertion> assertionsToUpdate = assertionRepository.findAllToUpdateInOrcidRegistry(pageable);
+        LOG.info("Fetched {} assertions to update in orcid registry", assertionsToUpdate.size());
         while (assertionsToUpdate != null && !assertionsToUpdate.isEmpty()) {
             for (Assertion assertion : assertionsToUpdate) {
+                LOG.info("About to update assertion {} in orcid registry", assertion.getId());
                 Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
                 try {
                     putAssertionInOrcid(refreshed);
                 } catch (Exception e) {
-                    LOG.error("Unexpected error PUTting assertion in registry", e);
+                    LOG.error("Unexpected error PUTting assertion {} in registry", assertion.getId(), e);
                 }
             }
             pageable = pageable.next();
             assertionsToUpdate = assertionRepository.findAllToUpdateInOrcidRegistry(pageable);
+            LOG.info("Fetched {} assertions to update in orcid registry", assertionsToUpdate.size());
         }
         LOG.info("PUTting complete");
     }
