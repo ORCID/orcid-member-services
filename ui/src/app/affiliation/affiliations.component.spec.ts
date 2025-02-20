@@ -63,6 +63,7 @@ describe('AffiliationsComponent', () => {
 
     accountService.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['ROLE_USER', 'ROLE_ADMIN'],
         email: 'email@email.com',

@@ -38,6 +38,7 @@ describe('UserUpdateComponent', () => {
       'getAccountData',
       'hasAnyAuthority',
       'getSalesforceId',
+      'disableMfa',
     ])
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
     const memberServiceSpy = jasmine.createSpyObj('MemberService', ['find'])
@@ -86,6 +87,7 @@ describe('UserUpdateComponent', () => {
     memberService.find.and.returnValue(of(new Member()))
     userService.validate.and.returnValue(of(new UserValidation(true, null)))
     userService.update.and.returnValue(of({}))
+    accountService.disableMfa.and.returnValue(of(true))
     spyOn(router, 'navigate').and.returnValue(Promise.resolve(true))
   })
 

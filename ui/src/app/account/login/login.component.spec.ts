@@ -45,6 +45,7 @@ describe('LoginComponent', () => {
     loginService.login.and.returnValue(of(mockLoginResult))
     accountService.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['test', 'test'],
         email: 'email@email.com',

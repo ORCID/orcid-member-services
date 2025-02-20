@@ -63,6 +63,7 @@ describe('SettingsComponent', () => {
   it('should create', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['test', 'test'],
         email: 'email@email.com',
@@ -84,6 +85,7 @@ describe('SettingsComponent', () => {
   it('should flip mfa fields when mfa state changed', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['test', 'test'],
         email: 'email@email.com',
@@ -115,6 +117,7 @@ describe('SettingsComponent', () => {
   it('should flip mfa fields when mfa state changed', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['test', 'test'],
         email: 'email@email.com',
@@ -141,6 +144,7 @@ describe('SettingsComponent', () => {
   it('save mfa enabled should call account service enable', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['test', 'test'],
         email: 'email@email.com',
@@ -169,6 +173,7 @@ describe('SettingsComponent', () => {
   it('save mfa enabled should call account service disable', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['test', 'test'],
         email: 'email@email.com',
@@ -185,6 +190,7 @@ describe('SettingsComponent', () => {
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: ['test'] }))
     accountServiceSpy.disableMfa.and.returnValue(of(true))
+    fixture.detectChanges()
 
     component.mfaForm.patchValue({ mfaEnabled: false, verificationCode: 'test' })
     component.saveMfa()
@@ -197,6 +203,7 @@ describe('SettingsComponent', () => {
     accountServiceSpy.save.and.returnValue(of(true))
     accountServiceSpy.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['test', 'test'],
         email: 'email@email.com',
@@ -222,6 +229,7 @@ describe('SettingsComponent', () => {
     accountServiceSpy.save.and.returnValue(of(false))
     accountServiceSpy.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['test', 'test'],
         email: 'email@email.com',
