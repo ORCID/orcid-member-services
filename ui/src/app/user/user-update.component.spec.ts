@@ -14,6 +14,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { RouterTestingModule } from '@angular/router/testing'
 import { of } from 'rxjs'
+import { By } from '@angular/platform-browser'
 
 describe('UserUpdateComponent', () => {
   let component: UserUpdateComponent
@@ -41,7 +42,7 @@ describe('UserUpdateComponent', () => {
       'disableMfa',
     ])
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
-    const memberServiceSpy = jasmine.createSpyObj('MemberService', ['find'])
+    const memberServiceSpy = jasmine.createSpyObj('MemberService', ['find', 'getAllMembers'])
     const routerSpy = jasmine.createSpyObj('Router', ['navigate'])
 
     TestBed.configureTestingModule({
@@ -84,6 +85,7 @@ describe('UserUpdateComponent', () => {
         mfaEnabled: false,
       })
     )
+    memberService.getAllMembers.and.returnValue(of([]))
     memberService.find.and.returnValue(of(new Member()))
     userService.validate.and.returnValue(of(new UserValidation(true, null)))
     userService.update.and.returnValue(of({}))
@@ -108,7 +110,84 @@ describe('UserUpdateComponent', () => {
     expect(component.disableSalesForceIdDD()).toBe(true)
   })
 
-  it('should enable salesforceId dropdown for admin users', () => {
+  it('should display disable 2fa checkbox for admins when editing an existing user', () => {
+    activatedRoute.data = of({
+      user: {
+        salesforceId: 'test',
+        id: 'id',
+        email: 'test@test.com',
+        firstName: 'hello',
+        lastName: 'hello',
+        mainContact: false,
+        mfaEnabled: true,
+      } as IUser,
+    })
+    accountService.hasAnyAuthority.and.returnValue(true)
+    fixture.detectChanges()
+    const twoFactorAuthenticationCheckbox = fixture.debugElement.query(By.css('#field_twoFactorAuthentication'))
+    expect(twoFactorAuthenticationCheckbox).toBeTruthy()
+    const checkbox = fixture.debugElement.nativeElement.querySelector('#field_twoFactorAuthentication')
+    checkbox.click()
+    component.save()
+    expect(accountService.disableMfa).toHaveBeenCalledWith('id')
+  })
+
+  it('should not disable 2fa if 2fa checkmark remains ticked', () => {
+    activatedRoute.data = of({
+      user: {
+        salesforceId: 'test',
+        id: 'id',
+        email: 'test@test.com',
+        firstName: 'hello',
+        lastName: 'hello',
+        mainContact: false,
+        mfaEnabled: true,
+      } as IUser,
+    })
+    accountService.hasAnyAuthority.and.returnValue(true)
+    fixture.detectChanges()
+    component.save()
+    const twoFactorAuthenticationCheckbox = fixture.debugElement.query(By.css('#field_twoFactorAuthentication'))
+    expect(twoFactorAuthenticationCheckbox).toBeTruthy()
+    expect(accountService.disableMfa).toHaveBeenCalledTimes(0)
+  })
+
+  it('should not disable 2fa checkbox if 2fa is not enabled', () => {
+    activatedRoute.data = of({
+      user: {
+        salesforceId: 'test',
+        id: 'id',
+        email: 'test@test.com',
+        firstName: 'hello',
+        lastName: 'hello',
+        mainContact: false,
+        mfaEnabled: false,
+      } as IUser,
+    })
+    accountService.hasAnyAuthority.and.returnValue(true)
+    fixture.detectChanges()
+    component.save()
+    const twoFactorAuthenticationCheckbox = fixture.debugElement.query(By.css('#field_twoFactorAuthentication'))
+    expect(twoFactorAuthenticationCheckbox).toBeFalsy()
+    expect(accountService.disableMfa).toHaveBeenCalledTimes(0)
+  })
+
+  it('should not display disable 2fa checkbox for admins when adding a new user', () => {
+    accountService.hasAnyAuthority.and.returnValue(true)
+    fixture.detectChanges()
+    const twoFactorAuthenticationCheckbox = fixture.debugElement.query(By.css('#field_twoFactorAuthentication'))
+    expect(twoFactorAuthenticationCheckbox).toBeFalsy()
+  })
+
+  it('should not display disable 2fa checkbox for non-admins when editing an existing user', () => {
+    activatedRoute.data = of({ user: { mfaEnabled: true, id: 'id' } as IUser })
+    accountService.hasAnyAuthority.and.returnValue(false)
+    fixture.detectChanges()
+    const twoFactorAuthenticationCheckbox = fixture.debugElement.query(By.css('#field_twoFactorAuthentication'))
+    expect(twoFactorAuthenticationCheckbox).toBeFalsy()
+  })
+
+  it('should display salesforceId dropdown for admin users', () => {
     accountService.hasAnyAuthority.and.returnValue(true)
     fixture.detectChanges()
 
@@ -152,6 +231,7 @@ describe('UserUpdateComponent', () => {
     expect(userService.validate).toHaveBeenCalled()
     expect(userService.create).toHaveBeenCalled()
     expect(userService.update).toHaveBeenCalledTimes(0)
+    expect(accountService.disableMfa).toHaveBeenCalledTimes(0)
     expect(router.navigate).toHaveBeenCalledWith(['/users'])
   })
 
@@ -172,6 +252,7 @@ describe('UserUpdateComponent', () => {
     expect(userService.validate).toHaveBeenCalled()
     expect(userService.create).toHaveBeenCalled()
     expect(userService.update).toHaveBeenCalledTimes(0)
+    expect(accountService.disableMfa).toHaveBeenCalledTimes(0)
     expect(router.navigate).toHaveBeenCalledWith(['/'])
   })
 
@@ -194,6 +275,7 @@ describe('UserUpdateComponent', () => {
     expect(userService.validate).toHaveBeenCalled()
     expect(userService.update).toHaveBeenCalled()
     expect(userService.create).toHaveBeenCalledTimes(0)
+    expect(accountService.disableMfa).toHaveBeenCalledTimes(0)
     expect(router.navigate).toHaveBeenCalledWith(['/users'])
   })
 
@@ -216,6 +298,7 @@ describe('UserUpdateComponent', () => {
     expect(userService.validate).toHaveBeenCalled()
     expect(userService.update).toHaveBeenCalled()
     expect(userService.create).toHaveBeenCalledTimes(0)
+    expect(accountService.disableMfa).toHaveBeenCalledTimes(0)
     expect(router.navigate).toHaveBeenCalledWith(['/'])
   })
 
@@ -239,6 +322,7 @@ describe('UserUpdateComponent', () => {
     expect(userService.validate).toHaveBeenCalled()
     expect(userService.update).toHaveBeenCalled()
     expect(userService.create).toHaveBeenCalledTimes(0)
+    expect(accountService.disableMfa).toHaveBeenCalledTimes(0)
     expect(router.navigate).toHaveBeenCalledWith(['/users'])
   })
 
