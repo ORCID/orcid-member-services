@@ -10,8 +10,8 @@ describe("Add new user", () => {
     // type in invalid email address
     cy.get("#field_email").type(data.invalidEmail);
     // type in name and surname
-    cy.get("#field_firstName").type(data.testString);
-    cy.get("#field_lastName").type(data.testString);
+    cy.get("#field_firstName").type(data.testString + data.testString);
+    cy.get("#field_lastName").type(data.testString + data.testString);
     // save button should be disabled
     cy.get("#save-entity2").invoke("attr", "disabled").should("exist");
     // email input field should have warning label
@@ -20,6 +20,17 @@ describe("Add new user", () => {
       // enter existing email address
       .clear()
       .type(data.member.users.owner.email);
+    cy.get("#save-entity2").invoke("attr", "disabled").should("exist");
+    // check max length validation for names
+    cy.get("#field_firstName")
+      .should("have.class", "ng-invalid")
+      .clear()
+      .type(data.testString);
+    cy.get("#save-entity2").invoke("attr", "disabled").should("exist");
+    cy.get("#field_lastName")
+      .should("have.class", "ng-invalid")
+      .clear()
+      .type(data.testString);
     cy.get("#save-entity2").click();
     cy.get(".validation-errors").children().should("have.length", 1);
     cy.get("#field_email").clear().type(data.member.users.newUser.email);
