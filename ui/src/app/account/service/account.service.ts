@@ -89,8 +89,8 @@ export class AccountService {
     )
   }
 
-  disableMfa(): Observable<boolean> {
-    return this.http.post('/services/userservice/api/account/mfa/off', null, { observe: 'response' }).pipe(
+  disableMfa(userId: string): Observable<boolean> {
+    return this.http.post(`/services/userservice/api/account/${userId}/mfa/off`, null, { observe: 'response' }).pipe(
       map((res: HttpResponse<any>) => this.isSuccess(res)),
       catchError(() => {
         return of(false)

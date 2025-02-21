@@ -36,6 +36,7 @@ describe('HomeComponent', () => {
   it('should call getMemberData if account data is not null', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['test', 'test'],
         email: 'email@email.com',

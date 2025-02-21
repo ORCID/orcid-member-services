@@ -68,6 +68,7 @@ describe('SendNotificationsDialogComponent', () => {
   it('should create', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['test', 'test'],
         email: 'email@email.com',

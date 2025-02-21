@@ -118,15 +118,17 @@ export class SettingsComponent implements OnInit {
         }
       })
     } else {
-      this.accountService.disableMfa().subscribe({
-        next: () => {
-          this.showMfaUpdated = true
-          this.accountService.getMfaSetup().subscribe((res) => {
-            this.mfaSetup = res
-          })
-        },
-        error: (err) => console.log('error disabling mfa'),
-      })
+      if (this.account && this.account.id) {
+        this.accountService.disableMfa(this.account.id).subscribe({
+          next: () => {
+            this.showMfaUpdated = true
+            this.accountService.getMfaSetup().subscribe((res) => {
+              this.mfaSetup = res
+            })
+          },
+          error: (err) => console.log('error disabling mfa'),
+        })
+      }
     }
   }
 

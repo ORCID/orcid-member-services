@@ -63,6 +63,7 @@ describe('NavbarComponent', () => {
     accountService.getSalesforceId.and.returnValue('sfid')
     accountService.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['ROLE_USER'],
         email: 'email@email.com',
@@ -107,6 +108,7 @@ describe('NavbarComponent', () => {
     accountService.getSalesforceId.and.returnValue('sfid')
     accountService.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['ROLE_USER', 'ROLE_CONSORTIUM_LEAD'],
         email: 'email@email.com',
@@ -144,6 +146,7 @@ describe('NavbarComponent', () => {
     accountService.getSalesforceId.and.returnValue('sfid')
     accountService.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['ROLE_USER', 'ASSERTION_SERVICE_ENABLED'],
         email: 'email@email.com',

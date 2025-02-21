@@ -19,6 +19,7 @@ import { AlertMessage, AlertType, DATE_TIME_FORMAT, emailValidator } from '../ap
 @Component({
   selector: 'app-user-update',
   templateUrl: './user-update.component.html',
+  styleUrls: ['./user-update.component.scss'],
 })
 export class UserUpdateComponent {
   isSaving = false
@@ -30,6 +31,7 @@ export class UserUpdateComponent {
   showIsAdminCheckbox = false
   currentAccount: any
   validation: any
+  disableMfa = false
 
   editForm = this.fb.group({
     id: new FormControl<string | null>(null),
@@ -46,6 +48,7 @@ export class UserUpdateComponent {
     salesforceId: new FormControl<string | null>(null, Validators.required),
     activated: new FormControl<boolean | null>(null),
     isAdmin: new FormControl<boolean | null>(null),
+    twoFactorAuthentication: new FormControl<boolean | null>(null),
     createdBy: new FormControl<string | null>(null),
     createdDate: new FormControl<string | null>(null),
     lastModifiedBy: new FormControl<string | null>(null),
@@ -124,6 +127,7 @@ export class UserUpdateComponent {
       salesforceId: user.salesforceId,
       activated: user.activated,
       isAdmin: user.isAdmin,
+      twoFactorAuthentication: user.mfaEnabled,
       createdBy: user.createdBy,
       createdDate: user.createdDate != null ? user.createdDate.format(DATE_TIME_FORMAT) : null,
       lastModifiedBy: user.lastModifiedBy,
@@ -230,15 +234,21 @@ export class UserUpdateComponent {
     }
   }
 
+  toggleMfa() {
+    this.disableMfa = !this.editForm.get('twoFactorAuthentication')?.value
+  }
+
   save() {
     if (this.editForm.valid) {
       this.isSaving = true
       const userFromForm = this.createFromForm()
-
       this.userService.validate(userFromForm).subscribe((response) => {
         const data = response
         if (data.valid) {
           if (userFromForm.id !== null) {
+            if (this.hasRoleAdmin() && this.disableMfa && userFromForm.id) {
+              this.accountService.disableMfa(userFromForm.id).subscribe()
+            }
             if (this.currentAccount.id === userFromForm.id) {
               // ownership change functions redirect to homepage instead of redirecting to users list
               // as users who lose org owner status shouldn't have access to the users list
@@ -298,6 +308,7 @@ export class UserUpdateComponent {
       mainContact: this.editForm.get(['mainContact'])?.value || false,
       isAdmin: this.editForm.get(['isAdmin'])?.value || false,
       salesforceId: this.editForm.get(['salesforceId'])?.value || null,
+      mfaEnabled: this.editForm.get(['twoFactorAuthentication'])?.value || false,
       createdBy: this.editForm.get(['createdBy'])?.value || null,
       createdDate:
         this.editForm.get(['createdDate'])?.value != null
