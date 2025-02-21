@@ -117,16 +117,18 @@
         <ng-container *ngIf="existentUser && existentUser.id && hasRoleAdmin()">
           <hr class="mb-32 mt-0" />
           <h2 class="mb-8 font-size-16">
-            <ng-container i18n="@@">Two-factor authentication</ng-container>&nbsp;<span
+            <ng-container i18n="@@settings.security.mfa.string">Two-factor authentication</ng-container>&nbsp;<span
               class="mfaOn"
               *ngIf="existentUser.mfaEnabled"
-              >(ON)</span
+              >(<ng-container i18n="@@settings.security.mfaOn.string">ON</ng-container>)</span
             >
-            <span class="mfaOff" *ngIf="!existentUser.mfaEnabled">(OFF)</span>
+            <span class="mfaOff" *ngIf="!existentUser.mfaEnabled"
+              >(<ng-container i18n="@@settings.security.mfaOff.string">OFF</ng-container>)</span
+            >
           </h2>
           <div class="font-size-14">
             <ng-container *ngIf="existentUser.mfaEnabled">
-              <p class="mb-8" i18n="@@">
+              <p class="mb-8" i18n="@@settings.security.disableMfaDescription.string">
                 Disable two-factor authentication (2FA) for this user if they are having difficulty signing in to the
                 member portal.
               </p>
@@ -141,7 +143,7 @@
                 />
                 <label
                   class="form-control-label two-factor-authentication-label"
-                  i18n="@@gatewayApp.msUserServiceMSUser"
+                  i18n="@@settings.security.mfa.string"
                   for="field_twoFactorAuthentication"
                   >Two-factor authentication</label
                 >
@@ -150,7 +152,7 @@
             <ng-container *ngIf="!existentUser.mfaEnabled">
               <div class="warning-message d-flex p-16 mb-40 mt-16">
                 <img src="./../../../../content/images/warning-sign.svg" alt="Warning sign" class="p-8" />
-                <div class="font-size-14 wide-text line-height-150">
+                <div class="font-size-14 wide-text line-height-150" i18n="@@settings.security.disabledMfaNotice.string">
                   Users can enable 2FA from their account settings page
                 </div>
               </div>
