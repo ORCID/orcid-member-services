@@ -440,6 +440,14 @@
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">151</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">120</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">148</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaUpdated.string" datatype="html">
         <source>2FA settings updated</source>
@@ -806,7 +814,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">150</context>
+          <context context-type="linenumber">195</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
@@ -864,7 +872,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">120</context>
+          <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.delete.string" datatype="html">
@@ -925,11 +933,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">131</context>
+          <context context-type="linenumber">176</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">141</context>
+          <context context-type="linenumber">186</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.activated.string" datatype="html">
@@ -1194,7 +1202,7 @@
         <source>Are you sure you want to transfer ownership? You are about to transfer ownership of this organization account. If you are the organization owner after transferring ownership, you will no longer have access to administrative functions, such as managing users.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.ts</context>
-          <context context-type="linenumber">226</context>
+          <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.delete.question.string" datatype="html">
@@ -4265,6 +4273,34 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.security.disabledMfaNotice.string" datatype="html">
+        <source> Users can enable 2FA from their account settings page </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">155</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.security.disableMfaDescription.string" datatype="html">
+        <source> Disable two-factor authentication (2FA) for this user if they are having difficulty signing in to the member portal. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.security.mfaOff.string" datatype="html">
+        <source>OFF</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">126</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.security.mfaOn.string" datatype="html">
+        <source>ON</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
     </body>
