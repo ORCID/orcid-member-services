@@ -114,51 +114,6 @@
             >
           </div>
         </div>
-        <ng-container *ngIf="existentUser && existentUser.id && hasRoleAdmin()">
-          <hr class="mb-32 mt-0" />
-          <h2 class="mb-8 font-size-16">
-            <ng-container i18n="@@settings.security.mfa.string">Two-factor authentication</ng-container>&nbsp;<span
-              class="mfaOn"
-              *ngIf="existentUser.mfaEnabled"
-              >(<ng-container i18n="@@settings.security.mfaOn.string">ON</ng-container>)</span
-            >
-            <span class="mfaOff" *ngIf="!existentUser.mfaEnabled"
-              >(<ng-container i18n="@@settings.security.mfaOff.string">OFF</ng-container>)</span
-            >
-          </h2>
-          <div class="font-size-14">
-            <ng-container *ngIf="existentUser.mfaEnabled">
-              <p class="mb-8" i18n="@@settings.security.disableMfaDescription.string">
-                Disable two-factor authentication (2FA) for this user if they are having difficulty signing in to the
-                member portal.
-              </p>
-              <div class="form-group">
-                <input
-                  type="checkbox"
-                  class="form-control"
-                  name="twoFactorAuthentication"
-                  id="field_twoFactorAuthentication"
-                  formControlName="twoFactorAuthentication"
-                  (change)="toggleMfa()"
-                />
-                <label
-                  class="form-control-label two-factor-authentication-label"
-                  i18n="@@settings.security.mfa.string"
-                  for="field_twoFactorAuthentication"
-                  >Two-factor authentication</label
-                >
-              </div>
-            </ng-container>
-            <ng-container *ngIf="!existentUser.mfaEnabled">
-              <div class="warning-message d-flex p-16 mb-40 mt-16">
-                <img src="./../../../../content/images/warning-sign.svg" alt="Warning sign" class="p-8" />
-                <div class="font-size-14 wide-text line-height-150" i18n="@@settings.security.disabledMfaNotice.string">
-                  Users can enable 2FA from their account settings page
-                </div>
-              </div>
-            </ng-container>
-          </div>
-        </ng-container>
       </div>
       <div class="form-group">
         <button type="button" id="cancel-save" class="btn btn-outline-primary mr-2" (click)="navigateToUsersList()">
@@ -193,6 +148,65 @@
         >
           <fa-icon [icon]="faCheckCircle"></fa-icon>
           <span class="d-none d-md-inline" i18n="@@entity.action.activate.string">Resend activation email</span>
+        </button>
+      </div>
+    </form>
+    <form name="mfaForm" role="form" novalidate [formGroup]="mfaForm">
+      <ng-container *ngIf="existentUser && existentUser.id && hasRoleAdmin()">
+        <hr class="mb-32 mt-32" />
+        <h2 class="mb-8 font-size-18">
+          <ng-container i18n="@@settings.security.mfa.string">Two-factor authentication</ng-container>&nbsp;<span
+            class="mfaOn"
+            *ngIf="existentUser.mfaEnabled"
+            >(<ng-container i18n="@@settings.security.mfaOn.string">ON</ng-container>)</span
+          >
+          <span class="mfaOff" *ngIf="!existentUser.mfaEnabled"
+            >(<ng-container i18n="@@settings.security.mfaOff.string">OFF</ng-container>)</span
+          >
+        </h2>
+        <div class="font-size-14">
+          <ng-container *ngIf="existentUser.mfaEnabled">
+            <p class="mb-8" i18n="@@settings.security.disableMfaDescription.string">
+              Disable two-factor authentication (2FA) for this user if they are having difficulty signing in to the
+              member portal.
+            </p>
+            <div class="form-group">
+              <input
+                type="checkbox"
+                class="form-control"
+                name="twoFactorAuthentication"
+                id="field_twoFactorAuthentication"
+                formControlName="twoFactorAuthentication"
+              />
+              <label
+                class="form-control-label two-factor-authentication-label"
+                i18n="@@settings.security.mfa.string"
+                for="field_twoFactorAuthentication"
+                >Two-factor authentication</label
+              >
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!existentUser.mfaEnabled">
+            <div class="warning-message d-flex p-16 mb-40 mt-16">
+              <img src="./../../../../content/images/warning-sign.svg" alt="Warning sign" class="p-8" />
+              <div class="font-size-14 wide-text line-height-150" i18n="@@settings.security.disabledMfaNotice.string">
+                Users can enable 2FA from their account settings page
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+      <div class="form-group">
+        <button type="button" id="cancel-save" class="btn btn-outline-primary mr-2" (click)="navigateToUsersList()">
+          <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
+        </button>
+        <button
+          (click)="saveMfa()"
+          type="submit"
+          [disabled]="!disableMfa || isSaving || memberList.length === 0"
+          class="btn btn-primary"
+        >
+          <fa-icon [icon]="faSave"></fa-icon>&nbsp;<span i18n="@@entity.action.save.string">Save</span>
         </button>
       </div>
     </form>
