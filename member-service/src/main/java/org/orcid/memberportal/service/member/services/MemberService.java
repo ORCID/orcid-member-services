@@ -133,13 +133,6 @@ public class MemberService {
         }
 
         Member existingMember = optional.get();
-        existingMember.setClientId(member.getClientId());
-        existingMember.setClientName(member.getClientName());
-        existingMember.setParentSalesforceId(member.getParentSalesforceId());
-        existingMember.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
-        existingMember.setLastModifiedDate(Instant.now());
-        existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
-        existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
 
         // Check if name changed
         if (!existingMember.getClientName().equals(member.getClientName())) {
@@ -148,6 +141,16 @@ public class MemberService {
                 throw new BadRequestAlertException("Invalid member name", "member", "memberNameUsed.string");
             }
         }
+
+        existingMember.setClientId(member.getClientId());
+        existingMember.setClientName(member.getClientName());
+        existingMember.setParentSalesforceId(member.getParentSalesforceId());
+        existingMember.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+        existingMember.setLastModifiedDate(Instant.now());
+        existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
+        existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
+
+
 
         // Check if salesforceId changed
         if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
