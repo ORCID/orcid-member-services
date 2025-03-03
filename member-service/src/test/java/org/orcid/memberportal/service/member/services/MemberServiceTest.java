@@ -181,6 +181,29 @@ class MemberServiceTest {
     }
 
     @Test
+    void testUpdateMemberWithDuplicateName() {
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
+        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+
+        // return a record when name is checked against db
+        Mockito.when(memberRepository.findByClientName(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+
+        Member member = getMember();
+        member.setId("id");
+        member.setSalesforceId("three");
+        member.setClientName("new client name");
+
+        Exception e = Assertions.assertThrows(BadRequestAlertException.class, () -> {
+            memberService.updateMember(member);
+        });
+
+        assertThat(e.getMessage()).isEqualTo("Invalid member name");
+
+        Mockito.verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
+        Mockito.verify(userService, Mockito.never()).updateUsersSalesforceId(Mockito.anyString(), Mockito.anyString());
+    }
+
+    @Test
     void testUpdateMemberWithSalesforceIdUpdateFailure_userFailure() {
         Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
         Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
