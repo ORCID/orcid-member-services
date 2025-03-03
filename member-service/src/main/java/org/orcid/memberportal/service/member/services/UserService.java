@@ -88,4 +88,11 @@ public class UserService {
         }
     }
 
+    public void updateUsersMemberNames(String salesforceId, String oldClientName, String newClientName) {
+        ResponseEntity<String> response = userServiceClient.updateUsersMemberNames(salesforceId, oldClientName, newClientName);
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            LOG.warn("Error updating user member names {}, sf id {}, response code {}", oldClientName, salesforceId, response.getStatusCodeValue());
+            throw new RuntimeException("Failed to update users' member names");
+        }
+    }
 }

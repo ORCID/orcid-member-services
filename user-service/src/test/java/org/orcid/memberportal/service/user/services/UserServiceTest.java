@@ -621,6 +621,16 @@ class UserServiceTest {
     }
 
     @Test
+    void testUpdateUsersMemberName() {
+        Mockito.when(userRepository.updateMemberNames(Mockito.eq("salesforce-id"), Mockito.eq("oldName"), Mockito.eq("newName"))).thenReturn(true);
+
+        boolean success = userService.updateUsersMemberName("salesforce-id", "oldName", "newName");
+        assertThat(success).isTrue();
+
+        Mockito.verify(userRepository).updateMemberNames(Mockito.eq("salesforce-id"), Mockito.eq("oldName"), Mockito.eq("newName"));
+    }
+
+    @Test
     void testUpdateUsersSalesforceId() {
         List<User> firstPage = getUsersForSalesforceId("salesforce-id", 0, UserService.BATCH_SIZE);
         List<User> secondPage = getUsersForSalesforceId("salesforce-id", UserService.BATCH_SIZE, UserService.BATCH_SIZE * 2);

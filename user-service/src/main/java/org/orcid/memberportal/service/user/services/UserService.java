@@ -9,9 +9,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -638,4 +636,7 @@ public class UserService {
         }
     }
 
+    public boolean updateUsersMemberName(String salesforceId, String oldMemberName, String newMemberName) {
+        return userRepository.updateMemberNames(salesforceId, oldMemberName, newMemberName);
+    }
 }

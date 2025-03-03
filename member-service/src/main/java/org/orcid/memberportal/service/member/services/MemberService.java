@@ -134,20 +134,25 @@ public class MemberService {
         existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
         existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
 
-        return propagateUpdatesAndSave(member, existingMember);
+        propagateUpdatesAndSave(member, existingMember);
+
+        return memberRepository.save(existingMember);
     }
 
-    private Member propagateUpdatesAndSave(Member member, Member existingMember) {
-        String oldSalesforceId = existingMember.getSalesforceId();
-        String newSalesforceId = member.getSalesforceId();
-
-        // Check if salesforceId changed
-        if (!oldSalesforceId.equals(newSalesforceId)) {
-            updateAssertionSalesforceIds(oldSalesforceId, newSalesforceId);
-            updateUserSalesforceIds(oldSalesforceId, newSalesforceId);
-            return updateMemberSalesforceId(existingMember, newSalesforceId, oldSalesforceId);
+    private void propagateUpdatesAndSave(Member member, Member existingMember) {
+        if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
+            updateAssertionSalesforceIds(existingMember.getSalesforceId(), member.getSalesforceId());
+            updateUserSalesforceIds(existingMember.getSalesforceId(), member.getSalesforceId());
+            existingMember.setSalesforceId(member.getSalesforceId());
         }
-        return memberRepository.save(existingMember);
+
+        if (!member.getClientName().equals(existingMember.getClientName())) {
+            updateUserMemberNames(existingMember.getSalesforceId(), existingMember.getClientName(), member.getClientName());
+        }
+    }
+
+    private void updateUserMemberNames(String salesforceId, String oldClientName, String newClientName) {
+        userService.updateUsersMemberNames(salesforceId, oldClientName, newClientName);
     }
 
     private void updateAssertionSalesforceIds(String oldSalesforceId, String newSalesforceId) {
@@ -167,18 +172,6 @@ public class MemberService {
         } catch (Exception e) {
             LOG.error("Error updating users' salesforce id from {} to {}. Rolling back assertion changes", oldSalesforceId, newSalesforceId);
             assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Member updateMemberSalesforceId(Member existingMember, String newSalesforceId, String oldSalesforceId) {
-        existingMember.setSalesforceId(newSalesforceId);
-        try {
-            return memberRepository.save(existingMember);
-        } catch (Exception e) {
-            LOG.error("Error updating member's salesforce id from {} to {}. Rolling back user and assertion changes", oldSalesforceId, newSalesforceId);
-            assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
-            userService.updateUsersSalesforceId(newSalesforceId, oldSalesforceId);
             throw new RuntimeException(e);
         }
     }

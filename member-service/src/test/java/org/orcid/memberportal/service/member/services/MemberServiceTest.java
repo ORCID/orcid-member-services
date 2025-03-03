@@ -233,34 +233,6 @@ class MemberServiceTest {
     }
 
     @Test
-    void testUpdateMemberWithSalesforceIdUpdateWithMemberFailure() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
-        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
-            @Override
-            public Member answer(InvocationOnMock invocation) throws Throwable {
-                return (Member) invocation.getArgument(0);
-            }
-        });
-
-        Mockito.doThrow(new RuntimeException()).when(memberRepository).save(Mockito.any(Member.class));
-
-        Member member = getMember();
-        member.setId("id");
-        member.setSalesforceId("three");
-
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            memberService.updateMember(member);
-        });
-
-        // check assertion and user changes rolled back
-        Mockito.verify(assertionService, Mockito.times(1)).updateAssertionsSalesforceId(Mockito.eq("two"), Mockito.eq("three"));
-        Mockito.verify(assertionService, Mockito.times(1)).updateAssertionsSalesforceId(Mockito.eq("three"), Mockito.eq("two"));
-        Mockito.verify(userService, Mockito.times(1)).updateUsersSalesforceId(Mockito.eq("two"), Mockito.eq("three"));
-        Mockito.verify(userService, Mockito.times(1)).updateUsersSalesforceId(Mockito.eq("three"), Mockito.eq("two"));
-    }
-
-    @Test
     void testUpdateMemberWithSalesforceIdUpdate() {
         Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
         Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));

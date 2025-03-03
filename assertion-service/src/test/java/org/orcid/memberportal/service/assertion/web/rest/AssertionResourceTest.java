@@ -86,10 +86,10 @@ class AssertionResourceTest {
 
     @Mock
     private RorOrgValidator rorOrgValidator;
-    
+
     @Mock
     private MemberService memberService;
-    
+
     @Mock
     private NotificationService notificationService;
 
@@ -101,7 +101,7 @@ class AssertionResourceTest {
 
     @Mock
     private GridOrgValidator gridOrgValidator;
-    
+
     @InjectMocks
     private AssertionResource assertionResource;
 
@@ -115,7 +115,7 @@ class AssertionResourceTest {
         Mockito.when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
         Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
     }
-    
+
     @Test
     void testGetAssertionOfPendingStatus() {
         Assertion pendingAssertion = new Assertion();
@@ -126,7 +126,7 @@ class AssertionResourceTest {
         Mockito.verify(assertionService).findById(Mockito.eq("test"));
         Mockito.verify(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
     }
-    
+
     @Test
     void testGetAssertionOfNotificationSentStatus() {
         Assertion pendingAssertion = new Assertion();
@@ -137,7 +137,7 @@ class AssertionResourceTest {
         Mockito.verify(assertionService).findById(Mockito.eq("test"));
         Mockito.verify(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
     }
-    
+
     @Test
     void testGetAssertionOfDeniedAccessStatus() {
         Assertion pendingAssertion = new Assertion();
@@ -148,7 +148,7 @@ class AssertionResourceTest {
         Mockito.verify(assertionService).findById(Mockito.eq("test"));
         Mockito.verify(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
     }
-    
+
     @Test
     void testGetAssertionOfRevokedAccessStatus() {
         Assertion pendingAssertion = new Assertion();
@@ -159,7 +159,7 @@ class AssertionResourceTest {
         Mockito.verify(assertionService).findById(Mockito.eq("test"));
         Mockito.verify(assertionService).populatePermissionLink(Mockito.any(Assertion.class));
     }
-    
+
     @Test
     void testGetAssertionOfInOrcidStatus() {
         Assertion pendingAssertion = new Assertion();
@@ -169,7 +169,7 @@ class AssertionResourceTest {
         Mockito.verify(assertionService).findById(Mockito.eq("test"));
         Mockito.verify(assertionService, Mockito.never()).populatePermissionLink(Mockito.any(Assertion.class));
     }
-    
+
     @Test
     void testSendNotifications() {
         Mockito.when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
@@ -180,23 +180,23 @@ class AssertionResourceTest {
         Mockito.verify(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq(DEFAULT_SALESFORCE_ID));
         Mockito.verify(memberService).updateMemberDefaultLanguage(Mockito.eq(DEFAULT_SALESFORCE_ID), Mockito.eq("en"));
     }
-    
+
     @Test
     void testGetNotificationRequestInProgress_inProgressIsTrue() {
         Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
         Mockito.when(notificationService.requestInProgress(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(true);
-        
+
         ResponseEntity<NotificationRequestInProgress> response = assertionResource.getNotificationRequestInProgress();
         assertTrue(response.getStatusCode().is2xxSuccessful());
         assertNotNull(response.getBody());
         assertTrue(response.getBody().getInProgress());
     }
-    
+
     @Test
     void testGetNotificationRequestInProgress_inProgressIsFalse() {
         Mockito.when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
         Mockito.when(notificationService.requestInProgress(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(false);
-        
+
         ResponseEntity<NotificationRequestInProgress> response = assertionResource.getNotificationRequestInProgress();
         assertTrue(response.getStatusCode().is2xxSuccessful());
         assertNotNull(response.getBody());
@@ -390,14 +390,15 @@ class AssertionResourceTest {
         ResponseEntity<List<Assertion>> page = assertionResource.getAssertions(Mockito.mock(Pageable.class), new HttpHeaders(), UriComponentsBuilder.newInstance(), "");
         assertNotNull(page.getBody());
     }
-    
+
     @Test
     void testUpdateSalesforceId() {
         Mockito.when(assertionService.updateAssertionsSalesforceId(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(true);
+        Mockito.when(orcidRecordService.updateTokenSalesforceIds(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(true);
         ResponseEntity<Void> response = assertionResource.updateSalesforceId("salesforce-id", "new-salesforce-id");
         assertTrue(response.getStatusCode().is2xxSuccessful());
     }
-    
+
     @Test
     void testUpdateSalesforceIdWithError() {
         Mockito.when(assertionService.updateAssertionsSalesforceId(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(false);
@@ -477,7 +478,7 @@ class AssertionResourceTest {
         user.setLangKey("en");
         return user;
     }
-    
+
     private NotificationRequest getNotificationRequest() {
         NotificationRequest request = new NotificationRequest();
         request.setLanguage("en");
