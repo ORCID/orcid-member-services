@@ -122,26 +122,10 @@ public class MemberService {
     }
 
     public Member updateMember(Member member) {
-        MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
-        if (!validation.isValid()) {
-            throw new BadRequestAlertException("Member invalid", "member", "validation.string");
-        }
-
         Optional<Member> optional = memberRepository.findById(member.getId());
-        if (!optional.isPresent()) {
-            throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
-        }
+        validateMemberUpdate(member, optional);
 
         Member existingMember = optional.get();
-
-        // Check if name changed
-        if (!existingMember.getClientName().equals(member.getClientName())) {
-            Optional<Member> optionalMember = memberRepository.findByClientName(member.getClientName());
-            if (optionalMember.isPresent()) {
-                throw new BadRequestAlertException("Invalid member name", "member", "memberNameUsed.string");
-            }
-        }
-
         existingMember.setClientId(member.getClientId());
         existingMember.setClientName(member.getClientName());
         existingMember.setParentSalesforceId(member.getParentSalesforceId());
@@ -150,54 +134,77 @@ public class MemberService {
         existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
         existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
 
+        return propagateUpdatesAndSave(member, existingMember);
+    }
 
+    private Member propagateUpdatesAndSave(Member member, Member existingMember) {
+        String oldSalesforceId = existingMember.getSalesforceId();
+        String newSalesforceId = member.getSalesforceId();
 
         // Check if salesforceId changed
-        if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
+        if (!oldSalesforceId.equals(newSalesforceId)) {
             Optional<Member> optionalSalesforceId = memberRepository.findBySalesforceId(member.getSalesforceId());
             if (optionalSalesforceId.isPresent()) {
                 throw new BadRequestAlertException("Invalid salesForceId", "member", "salesForceIdUsed.string");
             }
 
-            String oldSalesforceId = existingMember.getSalesforceId();
-            String newSalesforceId = member.getSalesforceId();
-
-            try {
-                // update affiliations and users associated with the member
-                assertionService.updateAssertionsSalesforceId(oldSalesforceId, newSalesforceId);
-            } catch (Exception e) {
-                LOG.error("Error updating assertion salesforce ids", e);
-                throw new RuntimeException(e);
-            }
-
-            try {
-                userService.updateUsersSalesforceId(oldSalesforceId, newSalesforceId);
-            } catch (Exception e) {
-                LOG.error("Error updating users's salesforce id", e);
-                LOG.error("Error updating users' salesforce id from {} to {}", oldSalesforceId, newSalesforceId);
-                LOG.info("Attempting to perform salesforce id rollback on affiliations");
-                assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
-                LOG.info("Affiliation salesforce id rollback successfull");
-                throw new RuntimeException(e);
-            }
-            existingMember.setSalesforceId(member.getSalesforceId());
-
-            try {
-                return memberRepository.save(existingMember);
-            } catch (Exception e) {
-                LOG.error("Error updating member", e);
-                LOG.error("Error updating member's salesforce id from {} to {}", oldSalesforceId, newSalesforceId);
-                LOG.info("Attempting to perform salesforce id rollback on affiliations");
-                assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
-                LOG.info("Affiliation salesforce id rollback successfull");
-
-                LOG.info("Attempting to perform salesforce id rollback on users");
-                userService.updateUsersSalesforceId(newSalesforceId, oldSalesforceId);
-                LOG.info("User salesforce id rollback successfull");
-                throw new RuntimeException(e);
-            }
+            updateAssertionSalesforceIds(oldSalesforceId, newSalesforceId);
+            updateUserSalesforceIds(oldSalesforceId, newSalesforceId);
+            return updateMemberSalesforceId(existingMember, newSalesforceId, oldSalesforceId);
         }
         return memberRepository.save(existingMember);
+    }
+
+    private void updateAssertionSalesforceIds(String oldSalesforceId, String newSalesforceId) {
+        try {
+            // update affiliations and users associated with the member
+            assertionService.updateAssertionsSalesforceId(oldSalesforceId, newSalesforceId);
+        } catch (Exception e) {
+            LOG.error("Error updating assertion salesforce ids", e);
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private void updateUserSalesforceIds(String oldSalesforceId, String newSalesforceId) {
+        try {
+            userService.updateUsersSalesforceId(oldSalesforceId, newSalesforceId);
+        } catch (Exception e) {
+            LOG.error("Error updating users' salesforce id from {} to {}. Rolling back assertion changes", oldSalesforceId, newSalesforceId);
+            assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Member updateMemberSalesforceId(Member existingMember, String newSalesforceId, String oldSalesforceId) {
+        existingMember.setSalesforceId(newSalesforceId);
+        try {
+            return memberRepository.save(existingMember);
+        } catch (Exception e) {
+            LOG.error("Error updating member's salesforce id from {} to {}. Rolling back user and assertion changes", oldSalesforceId, newSalesforceId);
+            assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
+            userService.updateUsersSalesforceId(newSalesforceId, oldSalesforceId);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void validateMemberUpdate(Member member, Optional<Member> existingMember) {
+        MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
+        if (!validation.isValid()) {
+            throw new BadRequestAlertException("Member invalid", "member", "validation.string");
+        }
+
+        if (existingMember.isEmpty()) {
+            throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
+        }
+
+        // Check if name changed
+        if (!existingMember.get().getClientName().equals(member.getClientName())) {
+            Optional<Member> optionalMember = memberRepository.findByClientName(member.getClientName());
+            if (optionalMember.isPresent()) {
+                throw new BadRequestAlertException("Invalid member name", "member", "memberNameUsed.string");
+            }
+        }
     }
 
     public MemberValidation validateMember(Member member) {
