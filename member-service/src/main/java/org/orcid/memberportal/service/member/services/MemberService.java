@@ -143,11 +143,6 @@ public class MemberService {
 
         // Check if salesforceId changed
         if (!oldSalesforceId.equals(newSalesforceId)) {
-            Optional<Member> optionalSalesforceId = memberRepository.findBySalesforceId(member.getSalesforceId());
-            if (optionalSalesforceId.isPresent()) {
-                throw new BadRequestAlertException("Invalid salesForceId", "member", "salesForceIdUsed.string");
-            }
-
             updateAssertionSalesforceIds(oldSalesforceId, newSalesforceId);
             updateUserSalesforceIds(oldSalesforceId, newSalesforceId);
             return updateMemberSalesforceId(existingMember, newSalesforceId, oldSalesforceId);
@@ -203,6 +198,13 @@ public class MemberService {
             Optional<Member> optionalMember = memberRepository.findByClientName(member.getClientName());
             if (optionalMember.isPresent()) {
                 throw new BadRequestAlertException("Invalid member name", "member", "memberNameUsed.string");
+            }
+        }
+
+        if (!existingMember.get().getSalesforceId().equals(member.getSalesforceId())) {
+            Optional<Member> optionalSalesforceId = memberRepository.findBySalesforceId(member.getSalesforceId());
+            if (optionalSalesforceId.isPresent()) {
+                throw new BadRequestAlertException("Invalid salesForceId", "member", "salesForceIdUsed.string");
             }
         }
     }
