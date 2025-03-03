@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrcidRecordRepository extends MongoRepository<OrcidRecord, String> {
+public interface OrcidRecordRepository extends MongoRepository<OrcidRecord, String>, OrcidRecordRepositoryCustom {
 
     Optional<OrcidRecord> findOneByEmail(String email);
 
@@ -20,4 +20,5 @@ public interface OrcidRecordRepository extends MongoRepository<OrcidRecord, Stri
 
     @Query("{tokens: {salesforce_id: ?0}}")
     Page<OrcidRecord> findBySalesforceId(String salesforceId, Pageable pageable);
+
 }
