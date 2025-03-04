@@ -257,6 +257,29 @@ class MemberServiceTest {
     }
 
     @Test
+    void testUpdateMemberWithMemberName() {
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
+        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+            @Override
+            public Member answer(InvocationOnMock invocation) throws Throwable {
+                return (Member) invocation.getArgument(0);
+            }
+        });
+        Member member = getMember();
+        member.setId("id");
+        member.setClientName("a new member name");
+        memberService.updateMember(member);
+
+        // check assertion and user changes rolled back
+        Mockito.verify(userService, Mockito.times(1)).updateUsersMemberNames(Mockito.eq("two"), Mockito.eq("a new member name"));
+        Mockito.verify(memberRepository, Mockito.times(1)).save(memberCaptor.capture());
+
+        Member saved = memberCaptor.getValue();
+        assertThat(saved.getClientName()).isEqualTo("a new member name");
+    }
+
+    @Test
     void testUpdateMemberWithAssertionEnabledUpdate() {
         Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
 
