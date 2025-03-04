@@ -82,8 +82,8 @@ class UserResourceTest {
 
     @Test
     void testUpdateUsersMemberName() {
-        Mockito.when(userService.updateUsersMemberName(Mockito.eq("salesforce-id"), Mockito.eq("oldName"), Mockito.eq("newName"))).thenReturn(true);
-        ResponseEntity<Void> response = userResource.updateUsersMemberName("salesforce-id", "oldName", "newName");
+        Mockito.when(userService.updateUsersMemberName(Mockito.eq("salesforce-id"), Mockito.eq("newName"))).thenReturn(true);
+        ResponseEntity<Void> response = userResource.updateUsersMemberName("salesforce-id", "newName");
         assertTrue(response.getStatusCode().is2xxSuccessful());
     }
 

@@ -622,12 +622,12 @@ class UserServiceTest {
 
     @Test
     void testUpdateUsersMemberName() {
-        Mockito.when(userRepository.updateMemberNames(Mockito.eq("salesforce-id"), Mockito.eq("oldName"), Mockito.eq("newName"))).thenReturn(true);
+        Mockito.when(userRepository.updateMemberNames(Mockito.eq("salesforce-id"), Mockito.eq("newName"))).thenReturn(true);
 
-        boolean success = userService.updateUsersMemberName("salesforce-id", "oldName", "newName");
+        boolean success = userService.updateUsersMemberName("salesforce-id", "newName");
         assertThat(success).isTrue();
 
-        Mockito.verify(userRepository).updateMemberNames(Mockito.eq("salesforce-id"), Mockito.eq("oldName"), Mockito.eq("newName"));
+        Mockito.verify(userRepository).updateMemberNames(Mockito.eq("salesforce-id"), Mockito.eq("newName"));
     }
 
     @Test

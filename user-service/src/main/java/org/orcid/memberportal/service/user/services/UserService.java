@@ -636,7 +636,7 @@ public class UserService {
         }
     }
 
-    public boolean updateUsersMemberName(String salesforceId, String oldMemberName, String newMemberName) {
-        return userRepository.updateMemberNames(salesforceId, oldMemberName, newMemberName);
+    public boolean updateUsersMemberName(String salesforceId, String newMemberName) {
+        return userRepository.updateMemberNames(salesforceId, newMemberName);
     }
 }

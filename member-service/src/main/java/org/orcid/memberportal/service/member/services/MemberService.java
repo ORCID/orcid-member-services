@@ -127,7 +127,6 @@ public class MemberService {
 
         Member existingMember = optional.get();
         existingMember.setClientId(member.getClientId());
-        existingMember.setClientName(member.getClientName());
         existingMember.setParentSalesforceId(member.getParentSalesforceId());
         existingMember.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
         existingMember.setLastModifiedDate(Instant.now());
@@ -147,12 +146,13 @@ public class MemberService {
         }
 
         if (!member.getClientName().equals(existingMember.getClientName())) {
-            updateUserMemberNames(existingMember.getSalesforceId(), existingMember.getClientName(), member.getClientName());
+            updateUserMemberNames(existingMember.getSalesforceId(), member.getClientName());
+            existingMember.setClientName(member.getClientName());
         }
     }
 
-    private void updateUserMemberNames(String salesforceId, String oldClientName, String newClientName) {
-        userService.updateUsersMemberNames(salesforceId, oldClientName, newClientName);
+    private void updateUserMemberNames(String salesforceId, String newClientName) {
+        userService.updateUsersMemberNames(salesforceId, newClientName);
     }
 
     private void updateAssertionSalesforceIds(String oldSalesforceId, String newSalesforceId) {

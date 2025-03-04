@@ -16,5 +16,5 @@ import java.util.Optional;
 @Repository
 public interface CustomUserRepository {
 
-    boolean updateMemberNames(String salesforceId, String oldMemberName, String newMemberName);
+    boolean updateMemberNames(String salesforceId, String newMemberName);
 }
