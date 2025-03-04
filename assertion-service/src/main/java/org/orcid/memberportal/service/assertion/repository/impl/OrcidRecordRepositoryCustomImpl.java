@@ -35,6 +35,6 @@ public class OrcidRecordRepositoryCustomImpl implements OrcidRecordRepositoryCus
     @Override
     public void updateTokenSalesforceIds(String oldSalesforceId, String newSalesforceId) {
         mongoTemplate.updateMulti(Query.query(Criteria.where("tokens.salesforce_id").is(oldSalesforceId)),
-            new Update().set("tokens.$.salesforce_id", oldSalesforceId), OrcidRecord.class);
+            new Update().set("tokens.$.salesforce_id", newSalesforceId), OrcidRecord.class);
     }
 }
