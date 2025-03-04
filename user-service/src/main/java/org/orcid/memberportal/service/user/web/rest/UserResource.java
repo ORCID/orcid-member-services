@@ -433,7 +433,7 @@ public class UserResource {
      * @param newMemberName the new Value of the memberName to update
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
      */
-    @PutMapping("/users/memberName/{oldMemberName}/{newMemberName}")
+    @PutMapping("/users/memberName/{salesforceId}/{oldMemberName}/{newMemberName}")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> updateUsersMemberName(@PathVariable String salesforceId, @PathVariable String oldMemberName, @PathVariable String newMemberName) {
         LOG.debug("REST request to update users' member names id from {} to {}", oldMemberName, newMemberName);
