@@ -75,14 +75,13 @@
             for="field_salesforceId.string"
             >Organization</label
           >
-          <fieldset [disabled]="disableSalesForceIdDD()">
+          <fieldset [disabled]="isExistentMember">
             <select
               *ngIf="memberList.length > 0"
               class="custom-select"
               name="salesforceId"
               id="field_salesforceId"
               formControlName="salesforceId"
-              (change)="validateOrgOwners()"
             >
               <option *ngFor="let member of memberList" [ngValue]="member.salesforceId">{{ member.clientName }}</option>
             </select>
