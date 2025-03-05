@@ -43,6 +43,7 @@ describe('MembersComponent', () => {
     memberServiceSpy.query.and.returnValue(of(new MemberPage([new Member('id')], 1)))
     accountServiceSpy.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['ROLE_USER'],
         email: 'email@email.com',

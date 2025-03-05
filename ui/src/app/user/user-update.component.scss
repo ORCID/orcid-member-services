@@ -1,0 +1,21 @@
+.warning-message {
+  img {
+    padding: 0 16px 0 8px !important;
+  }
+  div {
+    font-size: 0.875rem;
+  }
+  border: 2px solid #ff9c00;
+  border-radius: 4px;
+}
+
+.mfaOn {
+  color: #7faa26;
+}
+.mfaOff {
+  color: #d32f2f;
+}
+
+.two-factor-authentication-label {
+  font-weight: normal;
+}
