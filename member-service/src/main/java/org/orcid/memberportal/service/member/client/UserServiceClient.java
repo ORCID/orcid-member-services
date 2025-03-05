@@ -42,4 +42,7 @@ public interface UserServiceClient {
     ResponseEntity<Void> deleteUser(@PathVariable("loginOrId") String loginOrId,
             @RequestParam(value = "noMainContactCheck", required = false) boolean noMainContactCheck);
 
+    @RequestMapping(method = RequestMethod.PUT, value = "/api/users/memberName/{salesforceId}/{newMemberName}", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
+    @HystrixProperty(name = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", value = "50000")
+    ResponseEntity<String> updateUsersMemberNames(@PathVariable("salesforceId") String salesforceId, @PathVariable("newMemberName") String newMemberName);
 }
