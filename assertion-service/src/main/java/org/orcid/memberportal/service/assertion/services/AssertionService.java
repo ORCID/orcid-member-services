@@ -497,13 +497,15 @@ public class AssertionService {
         } catch (DeactivatedException | DeprecatedException e) {
             handleDeactivatedOrDeprecated(orcidId, assertion);
         } catch (ORCIDAPIException oae) {
-            if (oae.getStatusCode() != 404) {
+            if (oae.getStatusCode() != 404 && !AssertionStatus.USER_REVOKED_ACCESS.name().equals(assertion.getStatus())) {
                 storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID);
                 throw new RegistryDeleteFailureException();
             }
         } catch (Exception e) {
-            storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_DELETING_IN_ORCID);
-            throw new RegistryDeleteFailureException();
+            if (!AssertionStatus.USER_REVOKED_ACCESS.name().equals(assertion.getStatus())) {
+                storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_DELETING_IN_ORCID);
+                throw new RegistryDeleteFailureException();
+            }
         }
     }
 
