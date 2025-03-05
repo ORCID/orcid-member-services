@@ -235,7 +235,9 @@ public class AssertionService {
     }
 
     public boolean updateAssertionsSalesforceId(String from, String to) {
-        return updateAssertionsSalesforceId(from, to, true);
+        boolean updated = updateAssertionsSalesforceId(from, to, true);
+        updated = updated && orcidRecordService.updateTokenSalesforceIds(from, to);
+        return updated;
     }
 
     private boolean updateAssertionsSalesforceId(String from, String to, boolean rollback) {

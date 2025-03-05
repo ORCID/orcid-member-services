@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
  * Spring Data MongoDB repository for the {@link User} entity.
  */
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
+public interface UserRepository extends MongoRepository<User, String>, CustomUserRepository {
 
     Optional<User> findOneByActivationKey(String activationKey);
 

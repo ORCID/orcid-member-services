@@ -1835,10 +1835,13 @@ class AssertionServiceTest {
         ;
         Mockito.when(assertionRepository.findBySalesforceId(Mockito.eq("salesforce-id"), Mockito.any(Pageable.class))).thenReturn(new PageImpl<Assertion>(firstPage))
             .thenReturn(new PageImpl<Assertion>(secondPage)).thenReturn(new PageImpl<Assertion>(thirdPage)).thenReturn(new PageImpl<Assertion>(new ArrayList<>()));
+        Mockito.when(orcidRecordService.updateTokenSalesforceIds(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+
         boolean success = assertionService.updateAssertionsSalesforceId("salesforce-id", "new-salesforce-id");
         assertThat(success).isTrue();
 
         Mockito.verify(assertionRepository, Mockito.times((AssertionService.REGISTRY_SYNC_BATCH_SIZE * 3) - 10)).save(assertionCaptor.capture());
+        Mockito.verify(orcidRecordService).updateTokenSalesforceIds(Mockito.anyString(), Mockito.anyString());
         List<Assertion> saved = assertionCaptor.getAllValues();
         saved.forEach(a -> assertThat(a.getSalesforceId()).isEqualTo("new-salesforce-id"));
     }

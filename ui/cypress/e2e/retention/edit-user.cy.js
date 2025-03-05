@@ -16,12 +16,22 @@ describe("Test the edit user form", () => {
     // Check for 'required' flag on the input field
     cy.get("#field_firstName")
       .should("have.class", "ng-invalid")
+      .type(data.testString + data.testString);
+    cy.get("#save-entity2").invoke("attr", "disabled").should("exist");
+    // Check for max length validation
+    cy.get("#field_firstName")
+      .should("have.class", "ng-invalid")
       .type("Automated");
     // Clear last name input field
     cy.get("#field_lastName").clear();
     // Shouldn't be possible to save with an empty name field
     cy.get("#save-entity2").invoke("attr", "disabled").should("exist");
     // Check for 'required' flag on the input field
+    cy.get("#field_lastName")
+      .should("have.class", "ng-invalid")
+      .type(data.testString + data.testString);
+    cy.get("#save-entity2").invoke("attr", "disabled").should("exist");
+    // Check for max length validation
     cy.get("#field_lastName").should("have.class", "ng-invalid").type("Test");
     // Check disabled fields
     cy.get("#field_email").invoke("attr", "disabled").should("exist");
@@ -29,6 +39,8 @@ describe("Test the edit user form", () => {
     cy.get("#field_salesforceId").invoke("attr", "disabled").should("exist");
     // Admin checkbox should not exist
     cy.get("#field_isAdmin").should("not.exist");
+    // Disable 2fa should not exist
+    cy.get("#field_twoFactorAuthentication").should("not.exist");
     // 'Activated' checkbox is missing the 'disabled' attr
     /*cy.get('#field_activated')
       .invoke('attr', 'disabled')

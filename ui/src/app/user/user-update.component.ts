@@ -19,6 +19,7 @@ import { AlertMessage, AlertType, DATE_TIME_FORMAT, emailValidator } from '../ap
 @Component({
   selector: 'app-user-update',
   templateUrl: './user-update.component.html',
+  styleUrls: ['./user-update.component.scss'],
 })
 export class UserUpdateComponent {
   isSaving = false
@@ -30,6 +31,7 @@ export class UserUpdateComponent {
   showIsAdminCheckbox = false
   currentAccount: any
   validation: any
+  disableMfa = false
 
   editForm = this.fb.group({
     id: new FormControl<string | null>(null),
@@ -39,8 +41,8 @@ export class UserUpdateComponent {
       Validators.maxLength(50),
       emailValidator,
     ]),
-    firstName: new FormControl<string | null>(null, Validators.required),
-    lastName: new FormControl<string | null>(null, Validators.required),
+    firstName: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(50)]),
+    lastName: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(50)]),
     mainContact: new FormControl<boolean | null>(null),
     assertionServiceEnabled: new FormControl<boolean | null>(null),
     salesforceId: new FormControl<string | null>(null, Validators.required),
@@ -50,6 +52,11 @@ export class UserUpdateComponent {
     createdDate: new FormControl<string | null>(null),
     lastModifiedBy: new FormControl<string | null>(null),
     lastModifiedDate: new FormControl<string | null>(null),
+  })
+
+  mfaForm = this.fb.group({
+    id: new FormControl<string | null>(null),
+    twoFactorAuthentication: new FormControl<boolean | null>(null),
   })
 
   memberList = [] as IMember[]
@@ -86,6 +93,7 @@ export class UserUpdateComponent {
         this.editForm.enable()
         if (this.existentUser) {
           this.updateForm(this.existentUser)
+          this.updateMfaForm(this.existentUser)
         }
       })
     })
@@ -112,6 +120,12 @@ export class UserUpdateComponent {
     this.editForm.get('salesforceId')?.valueChanges.subscribe((val) => (this.isSaving = false))
     this.editForm.get('mainContact')?.valueChanges.subscribe((val) => (this.isSaving = false))
     this.editForm.get('assertionServiceEnabled')?.valueChanges.subscribe((val) => (this.isSaving = false))
+
+    // MFA
+    this.mfaForm.get('twoFactorAuthentication')?.valueChanges.subscribe((val) => {
+      this.isSaving = false
+      if (val != null) this.disableMfa = !val
+    })
   }
 
   updateForm(user: IUser) {
@@ -141,6 +155,13 @@ export class UserUpdateComponent {
     if (user.email) {
       this.editForm.get('email')?.disable()
     }
+  }
+
+  updateMfaForm(user: IUser) {
+    this.mfaForm.patchValue({
+      id: user.id,
+      twoFactorAuthentication: user.mfaEnabled,
+    })
   }
 
   getMemberList(): Observable<IMember[]> {
@@ -212,11 +233,28 @@ export class UserUpdateComponent {
     }
   }
 
+  saveMfa() {
+    if (this.mfaForm.valid) {
+      this.isSaving = true
+      const userFromForm = this.createFromForm()
+      this.userService.validate(userFromForm).subscribe((response) => {
+        const data = response
+        if (data.valid) {
+          if (userFromForm != null && this.hasRoleAdmin() && this.disableMfa && userFromForm.id) {
+            this.subscribeToUpdateResponse(this.accountService.disableMfa(userFromForm.id))
+          }
+        } else {
+          this.isSaving = false
+          this.validation = data
+        }
+      })
+    }
+  }
+
   save() {
     if (this.editForm.valid) {
       this.isSaving = true
       const userFromForm = this.createFromForm()
-
       this.userService.validate(userFromForm).subscribe((response) => {
         const data = response
         if (data.valid) {
@@ -299,7 +337,7 @@ export class UserUpdateComponent {
     })
   }
 
-  protected subscribeToUpdateResponse(result: Observable<IUser>) {
+  protected subscribeToUpdateResponse(result: Observable<IUser | boolean>) {
     result.subscribe({
       next: () => this.onUpdateSuccess(),
     })

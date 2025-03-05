@@ -105,7 +105,7 @@ public class AssertionResource {
 
     @Autowired
     private NotificationService notificationService;
-    
+
     @Autowired
     private MemberService memberService;
 
@@ -452,6 +452,7 @@ public class AssertionResource {
     public ResponseEntity<Void> updateSalesforceId(@PathVariable String salesforceId, @PathVariable String newSalesforceId) {
         LOG.debug("REST request to update Assertions by salesforce : {}", salesforceId);
         boolean success = assertionService.updateAssertionsSalesforceId(salesforceId, newSalesforceId);
+        success = success && orcidRecordService.updateTokenSalesforceIds(salesforceId, newSalesforceId);
         if (success) {
             return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "assertion", salesforceId)).build();
         } else {

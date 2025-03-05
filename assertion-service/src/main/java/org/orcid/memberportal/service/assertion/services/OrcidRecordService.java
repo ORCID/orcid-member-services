@@ -17,6 +17,7 @@ import org.orcid.memberportal.service.assertion.web.rest.errors.BadRequestAlertE
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -117,7 +118,7 @@ public class OrcidRecordService {
         String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
         return generateLinkForEmailAndSalesforceId(email, salesforceId);
     }
-    
+
     public String generateLinkForEmailAndSalesforceId(String email, String salesforceId) {
         String landingPageUrl = applicationProperties.getLandingPageUrl();
         Optional<OrcidRecord> record = orcidRecordRepository.findOneByEmail(email);
@@ -178,14 +179,18 @@ public class OrcidRecordService {
             }
         }
     }
-    
+
     public boolean userHasGrantedOrDeniedPermission(String email, String salesforceId) {
         Optional<OrcidRecord> orcidRecordOptional = findOneByEmail(email);
         if (orcidRecordOptional.isEmpty()) {
             return false;
         }
-        
+
         return !StringUtils.isBlank(orcidRecordOptional.get().getToken(salesforceId, true));
     }
 
+    public boolean updateTokenSalesforceIds(String salesforceId, String newSalesforceId) {
+        orcidRecordRepository.updateTokenSalesforceIds(salesforceId, newSalesforceId);
+        return true;
+    }
 }

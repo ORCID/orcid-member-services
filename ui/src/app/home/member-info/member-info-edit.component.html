@@ -14,12 +14,12 @@
       <div class="logo-container mb-20">
         <img
           src="{{ memberData.logoUrl }}"
-          onerror="this.src='../../content/images/member-logo-placeholder.svg'"
+          onerror="this.src='./content/images/member-logo-placeholder.svg'"
           alt="Member logo"
         />
       </div>
       <div class="text-center">
-        <img src="./../../../../content/images/lockpad.svg" alt="Locked" />
+        <img src="./content/images/lockpad.svg" alt="Locked" />
       </div>
       <div class="text-center m-1">
         <em class="wide-text font-size-12 line-height-150">Logo upload coming soon</em>
@@ -28,7 +28,7 @@
     <div class="main-section">
       <form (ngSubmit)="save()" name="editForm" role="form" [formGroup]="editForm">
         <div *ngIf="invalidForm" class="warning d-flex w-75 p-3 mb-3">
-          <img src="./../../../../content/images/error-sign.svg" alt="Warning sign" class="p-2" />
+          <img src="./content/images/error-sign.svg" alt="Warning sign" class="p-2" />
           <div>
             <div class="mb-2 font-size-14 wide-text font-weight-bold line-height-150">Your changes cannot be saved</div>
             <div class="font-size-14 wide-text line-height-150">

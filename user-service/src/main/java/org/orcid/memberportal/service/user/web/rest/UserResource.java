@@ -425,6 +425,26 @@ public class UserResource {
     }
 
     /**
+     * {@code PUT /users/memberName/:oldMemberName/:newMemberName} : Updates memberName
+     * for existing Users.
+     *
+     * @param salesforceId the salesforceId for finding users to update
+     * @param newMemberName the new Value of the memberName to update
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
+     */
+    @PutMapping("/users/memberName/{salesforceId}/{newMemberName}")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<Void> updateUsersMemberName(@PathVariable String salesforceId, @PathVariable String newMemberName) {
+        LOG.debug("REST request to update users' member names id to {}", newMemberName);
+        boolean success = userService.updateUsersMemberName(salesforceId, newMemberName);
+        if (success) {
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, "user", salesforceId)).build();
+        } else {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    /**
      * {@code GET /users/:saleforceId}/owner : get the "login" user.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with

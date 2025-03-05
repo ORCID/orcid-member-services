@@ -55,6 +55,7 @@ describe('ContactUpdateComponent', () => {
   it('should call getAccountData and getMemberData to get contact data on init', () => {
     accountServiceSpy.getAccountData.and.returnValue(
       of({
+        id: 'id',
         activated: true,
         authorities: ['test', 'test'],
         email: 'email@email.com',
