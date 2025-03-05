@@ -102,12 +102,12 @@ describe('UserUpdateComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/users'])
   })
 
-  it('should disable salesforceId dropdown on init for non-admin users', () => {
+  it('should disable salesforceId dropdown on init for existing users', () => {
     activatedRoute.data = of({ user: { salesforceId: 'test', id: 'id' } as IUser })
     accountService.hasAnyAuthority.and.returnValue(false)
     fixture.detectChanges()
 
-    expect(component.disableSalesForceIdDD()).toBe(true)
+    expect(component.isExistentMember).toBe(true)
   })
 
   it('should display disable 2fa checkbox for admins when editing an existing user', () => {
@@ -191,17 +191,18 @@ describe('UserUpdateComponent', () => {
     accountService.hasAnyAuthority.and.returnValue(true)
     fixture.detectChanges()
 
-    expect(component.disableSalesForceIdDD()).toBe(false)
+    expect(component.isExistentMember).toBe(false)
   })
 
   it('should validate non-owners', () => {
+    activatedRoute.data = of({ user: { salesforceId: 'test', id: 'id' } as IUser })
     userService.hasOwner.and.returnValue(of(true))
     fixture.detectChanges()
 
     component.editForm.patchValue({ salesforceId: '123', mainContact: false })
     component.validateOrgOwners()
     expect(component.hasOwner).toBe(false)
-    expect(component.editForm.get('salesforceId')?.disabled).toBe(false)
+    expect(component.isExistentMember).toBe(true)
   })
 
   it('should validate org owners', () => {
@@ -211,7 +212,6 @@ describe('UserUpdateComponent', () => {
     component.editForm.patchValue({ salesforceId: '123', mainContact: true })
     component.validateOrgOwners()
     expect(component.hasOwner).toBe(true)
-    expect(component.editForm.get('salesforceId')?.disabled).toBe(true)
   })
 
   it('should create new user', () => {

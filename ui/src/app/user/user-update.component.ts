@@ -194,18 +194,6 @@ export class UserUpdateComponent {
     this.router.navigate(['/'])
   }
 
-  disableSalesForceIdDD() {
-    if (this.hasRoleAdmin()) {
-      return false
-    } else if (this.hasRoleOrgOwner() || this.hasRoleConsortiumLead()) {
-      this.editForm.patchValue({
-        salesforceId: this.getSalesForceId(),
-      })
-      return true
-    }
-    return this.isExistentMember
-  }
-
   getSalesForceId() {
     return this.accountService.getSalesforceId()
   }
@@ -234,12 +222,6 @@ export class UserUpdateComponent {
           this.hasOwner = value
         }
       })
-
-      if (this.editForm.get('mainContact')?.value) {
-        this.editForm.get('salesforceId')?.disable()
-      } else {
-        this.editForm.get('salesforceId')?.enable()
-      }
     }
   }
 
