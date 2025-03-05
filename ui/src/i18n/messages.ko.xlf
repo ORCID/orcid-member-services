@@ -1,5 +1,5 @@
-<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" target-language="ko" datatype="plaintext" original="ng2.template">
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template" target-language="ko">
     <body>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check your credentials and try again. </source>
@@ -106,7 +106,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn't registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
         <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>이메일 주소가 등록되지 않았습니다!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 확인하여 다시 시도해 주세요.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
@@ -478,7 +478,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaExplain.string" datatype="html">
-        <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
+        <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you'll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
         <target>2단계 인증을 활성화해 ORCID 회원 포털 계정의 보안을 강화하세요. 로그인할 때마다 선택하신 인증 어플리케이션에 전송된 6자리 코드를 입력해야 합니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -491,14 +491,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">151</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">120</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaUpdated.string" datatype="html">
@@ -526,7 +518,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaCannotScan.one.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Can&apos;t scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Can't scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
         <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>QR 코드를 스캔할 수 없으신가요?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -822,7 +814,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.error.string" datatype="html">
-        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for 24 hours. </source>
+        <source> Your password couldn't be reset. Remember a password request is only valid for 24 hours. </source>
         <target>비밀번호를 초기화할 수 없습니다. 비밀번호 요청은 24시간 동안만 유효합니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
@@ -918,7 +910,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">150</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
@@ -978,7 +970,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.delete.string" datatype="html">
@@ -1042,11 +1034,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">176</context>
+          <context context-type="linenumber">131</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">186</context>
+          <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.activated.string" datatype="html">
@@ -1226,7 +1218,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.sendActivate.error.string" datatype="html">
-        <source>Invite email couldn&apos;t be sent.</source>
+        <source>Invite email couldn't be sent.</source>
         <target>초대 이메일을 보낼 수 없습니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
@@ -1334,7 +1326,7 @@
         <target>소유권을 정말 이전하시겠습니까? 이 조직 계정의 소유권을 이전하려고 합니다. 소유권 이전 후 조직 소유자인 경우 더 이상 사용자 관리와 같은 관리 기능에 액세스할 수 없습니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.ts</context>
-          <context context-type="linenumber">230</context>
+          <context context-type="linenumber">226</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.delete.question.string" datatype="html">
@@ -4414,7 +4406,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string" datatype="html">
-        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"/>? The affiliation will be deleted from the portal and the user&apos;s ORCID record.</source>
+        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"/>? The affiliation will be deleted from the portal and the user's ORCID record.</source>
         <target><x id="PH" equiv-text="this.affiliation?.email"/>에 대한 이 제휴를 정말 삭제하시겠습니까? 포털 및 사용자의 ORCID 기록에서 제휴가 삭제됩니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-delete.component.ts</context>
@@ -4431,7 +4423,7 @@
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.notifications.description.string" datatype="html">
         <source> Are you sure that you would like ORCID to send permission links to your researchers for the affiliations that are pending? </source>
-        <target>&apos;대기 중&apos; 상태인 제휴 항목이 있는 모든 연구원에게 권한 알림이 전송됩니다.</target>
+        <target>'대기 중' 상태인 제휴 항목이 있는 모든 연구원에게 권한 알림이 전송됩니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/send-notifications-dialog.component.html</context>
           <context context-type="linenumber">16</context>
@@ -4815,41 +4807,10 @@
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.recordDeactivatedOrDeprecated.string" datatype="html">
         <source>Record is deactivated or deprecated</source>
+        <target>레코드가 비활성화되었거나 더 이상 사용되지 않습니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">66</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="settings.security.mfaOn.string" datatype="html">
-        <source>ON</source>
-        <target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">123</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="settings.security.mfaOff.string" datatype="html">
-        <source>OFF</source>
-        <target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">126</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="settings.security.disableMfaDescription.string" datatype="html">
-        <source> Disable two-factor authentication (2FA) for this user if they are having difficulty signing in to the member portal. </source>
-        <target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">131</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="settings.security.disabledMfaNotice.string" datatype="html">
-        <source> Users can enable 2FA from their account settings page </source>
-        <target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
     </body>
