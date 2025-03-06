@@ -155,7 +155,7 @@
       role="form"
       novalidate
       [formGroup]="mfaForm"
-      *ngIf="existentUser && existentUser.id && hasRoleAdmin()"
+      *ngIf="existentUser && existentUser.id && existentUser.id != currentAccount?.id && hasRoleAdmin()"
     >
       <hr class="mb-32 mt-32" />
       <h2 class="mb-8 font-size-18">
