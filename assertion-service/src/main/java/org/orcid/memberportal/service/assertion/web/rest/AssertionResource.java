@@ -319,7 +319,7 @@ public class AssertionResource {
                 }
             }
         } else {
-            LOG.warn("User {} have denied access", emailInStatus);
+            LOG.info("User {} denied access", emailInStatus);
             orcidRecordService.storeUserDeniedAccess(emailInStatus, salesforceId);
         }
         return ResponseEntity.ok().body(responseData.toString());

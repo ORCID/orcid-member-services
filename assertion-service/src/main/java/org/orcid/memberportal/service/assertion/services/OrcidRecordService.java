@@ -74,7 +74,7 @@ public class OrcidRecordService {
 
     public void storeIdToken(String emailInStatus, String idToken, String orcidIdInJWT, String salesforceId) {
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus)
-                .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
+                .orElseThrow(() -> new IllegalArgumentException("Unable to find orcidRecord for email: " + emailInStatus));
 
         OrcidToken newToken = new OrcidToken(salesforceId, idToken);
         List<OrcidToken> tokens = orcidRecord.getTokens().stream().filter(t -> !salesforceId.equals(t.getSalesforceId())).collect(Collectors.toList());

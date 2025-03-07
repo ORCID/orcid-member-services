@@ -179,6 +179,9 @@ public class AssertionService {
                 if (tokenDeniedStatus == null) {
                     String activeToken = record.getToken(assertion.getSalesforceId(), false);
                     if (activeToken != null && !activeToken.isBlank()) {
+                        if (StringUtils.isBlank(record.getOrcid())) {
+                            LOG.warn("Setting empty orcid id '{}' in affiliation {} for email {} when creating assertion", record.getOrcid(), assertion.getId(), email);
+                        }
                         assertion.setOrcidId(record.getOrcid());
                     }
                 }
@@ -719,9 +722,15 @@ public class AssertionService {
 
     public void updateOrcidIdsForEmailAndSalesforceId(String email, String salesforceId) {
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
+        if (record.isEmpty()) {
+            throw new IllegalArgumentException("Can't find orcid record for email " + email);
+        }
         final String orcid = record.get().getOrcid();
         List<Assertion> assertions = assertionRepository.findAllByEmail(email);
         assertions.stream().filter(a -> a.getOrcidId() == null && salesforceId.equals(a.getSalesforceId())).forEach(a -> {
+            if (StringUtils.isBlank(orcid)) {
+                LOG.warn("Setting empty orcid id '{}' in affiliation {} for email {} after granting permission", orcid, a.getId(), email);
+            }
             a.setOrcidId(orcid);
             assertionRepository.save(a);
         });
