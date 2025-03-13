@@ -94,6 +94,12 @@ export class UserUpdateComponent {
         if (this.existentUser) {
           this.updateForm(this.existentUser)
           this.updateMfaForm(this.existentUser)
+        } else {
+          if (this.hasRoleOrgOwner() || this.hasRoleConsortiumLead()) {
+            this.editForm.patchValue({
+              salesforceId: this.getSalesForceId(),
+            })
+          }
         }
       })
     })
