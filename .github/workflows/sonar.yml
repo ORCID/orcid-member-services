@@ -30,7 +30,19 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Build and analyze
+      - name: Build and analyze Gateway service
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ORCID_orcid-member-services --file gateway/pom.xml 
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=orcid -Dsonar.projectKey=ORCID_orcid-member-services -Dsonar.host.url=https://sonarcloud.io --file gateway/pom.xml
+      - name: Build and analyze User service
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=orcid -Dsonar.projectKey=ORCID_orcid-member-services -Dsonar.host.url=https://sonarcloud.io --file user-service/pom.xml
+      - name: Build and analyze Assertion service
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=orcid -Dsonar.projectKey=ORCID_orcid-member-services -Dsonar.host.url=https://sonarcloud.io --file assertion-service/pom.xml
+      - name: Build and analyze Member service
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=orcid -Dsonar.projectKey=ORCID_orcid-member-services -Dsonar.host.url=https://sonarcloud.io --file member-service/pom.xml
