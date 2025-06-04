@@ -20,7 +20,8 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
       - name: Generate dependency tree
-        run: mvn dependency:tree -DoutputFile=maven_dep_tree.txt -Dmaven.test.skip=true
+        run: |
+          find . -name "pom.xml" -execdir mvn dependency:tree -DoutputFile=maven_dep_tree.txt -Dmaven.test.skip=true \;
       - name: Create zip with all dependency trees
         run: find . -type f -name 'maven_dep_tree.txt' -exec zip -r deptree.zip {} +
       - name: Upload zip
