@@ -21,7 +21,7 @@ public interface AssertionRepository extends MongoRepository<Assertion, String>,
     List<Assertion> findAllByOwnerId(String ownerId, Sort sort);
 
     Page<Assertion> findBySalesforceId(String salesforceId, Pageable pageable);
-    
+
     List<Assertion> findByStatus(String status, Pageable pageable);
 
     Page<Assertion> findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
@@ -51,4 +51,5 @@ public interface AssertionRepository extends MongoRepository<Assertion, String>,
     @Query("{ addedToORCID: { $exists: false }, $or: [ { notificationSent: { $exists: true } }, { invitationSent: { $exists: true } } ] }")
     Page<Assertion> findNotificationResendCandidates(Pageable pageable);
 
+    List<Assertion> findByStatusAndOrcidIdIsNull(String status);
 }
