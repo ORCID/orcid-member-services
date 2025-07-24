@@ -32,10 +32,6 @@ spring:
       enabled: false
     livereload:
       enabled: false
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017
-      database: assertionservice
   mail:
     host: localhost
     port: 25
@@ -52,12 +48,6 @@ spring:
     locator:
       discovery:
         enabled: true
-server:
-  port: 8092
-  compression:
-    enabled: true
-    mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
-    min-response-size: 1024
 
 # ===================================================================
 # JHipster specific properties

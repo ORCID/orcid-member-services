@@ -85,6 +85,10 @@ management:
         auto-time-requests: true
 
 spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: assertionservice
   servlet:
     multipart:
       max-file-size: 15MB
@@ -128,6 +132,11 @@ security:
       filter-order: 3
 
 server:
+  port: 8092
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
+    min-response-size: 1024
   servlet:
     session:
       cookie:
@@ -177,14 +186,14 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:  
+application:
     orcidAPIEndpoint: ${APPLICATION_ORCIDAPIENDPOINT}
     jwtSignatureUrl: ${APPLICATION_JWT_SIGNATURE_URL}
     landingPageUrl: ${APPLICATION_LANDING_PAGE_URL}
     mailDomain: ${APPLICATION_MAIL_DOMAIN}
     mailApiKey: ${APPLICATION_MAIL_API_KEY}
     mailApiUrl: ${APPLICATION_MAIL_API_URL}
-    mailFromAddress: ${APPLICATION_MAIL_FROM_ADDRESS}  
+    mailFromAddress: ${APPLICATION_MAIL_FROM_ADDRESS}
     mailFromName: ${APPLICATION_MAIL_FROM_NAME}
     memberAssertionStatsDirectory: files/stats
     assertionsCsvUploadDirectory: files/uploads
@@ -205,5 +214,5 @@ application:
         grantType: ${APPLICATION_TOKEN_EXCHANGE_GRANT_TYPE}
         subjectTokenType: ${APPLICATION_TOKEN_EXCHANGE_SUBJECT_TOKEN_TYPE}
         requestedTokenType: ${APPLICATION_TOKEN_EXCHANGE_REQUESTED_TOKEN_TYPE}
-        clientId: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_ID} 
+        clientId: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_ID}
         clientSecret: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET}

@@ -1,35 +1,13 @@
 package org.orcid.memberportal.service.assertion.services;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.xml.bind.JAXBException;
-
+import com.google.common.base.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
 import org.orcid.memberportal.service.assertion.csv.CsvWriter;
-import org.orcid.memberportal.service.assertion.domain.Assertion;
-import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
-import org.orcid.memberportal.service.assertion.domain.CsvReport;
-import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
-import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
-import org.orcid.memberportal.service.assertion.domain.OrcidToken;
-import org.orcid.memberportal.service.assertion.domain.StoredFile;
+import org.orcid.memberportal.service.assertion.domain.*;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
@@ -50,7 +28,16 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.base.Objects;
+import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.*;
 
 @Service
 public class AssertionService {

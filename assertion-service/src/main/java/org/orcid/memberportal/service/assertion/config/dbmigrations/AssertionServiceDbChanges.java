@@ -93,10 +93,10 @@ public class AssertionServiceDbChanges {
         Query assertionsQuery = new Query();
         assertionsQuery.addCriteria(Criteria.where("orcid_id").exists(true));
         List<Assertion> assertionsWithOrcidId = mongoTemplate.find(assertionsQuery, Assertion.class, "assertion");
-        
+
         LOG.info("Found {} assertions with orcid id populated", assertionsWithOrcidId.size());
         int numRemoved = 0;
-        
+
         for (Assertion a : assertionsWithOrcidId) {
             Query orcidRecordQuery = new Query();
             orcidRecordQuery.addCriteria(Criteria.where("email").is(a.getEmail()));
@@ -109,7 +109,7 @@ public class AssertionServiceDbChanges {
                 numRemoved++;
             }
         }
-        
+
         LOG.info("{} orcid ids removed from affiliations", numRemoved);
     }
 
