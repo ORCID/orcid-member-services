@@ -7,7 +7,7 @@
   <h1 class="mb-40 wide-text font-weight-bold">New organization</h1>
   <div class="d-flex">
     <form (ngSubmit)="save()" name="editForm" role="form" [formGroup]="editForm" class="w-66">
-      <div *ngIf="invalidForm" class="error-message d-flex p-16 mb-30 line-height-150">
+      <div *ngIf="invalidForm" class="message-box error-message d-flex p-16 mb-30 line-height-150">
         <img src="./content/images/error-sign.svg" alt="Warning sign" class="p-8" />
         <div>
           <div class="mb-8 font-size-14 wide-text-25 font-weight-bold">Your changes cannot be saved</div>
@@ -28,7 +28,7 @@
               'text-danger':
                 editForm.get('orgName')?.invalid && editForm.get('orgName')?.touched && editForm.get('orgName')?.dirty
             }"
-            >Organization name <span class="font-weight-normal">(Required)</span></label
+            >Organization name <span class="font-weight-normal required">(Required)</span></label
           >
           <input
             type="text"
@@ -195,7 +195,7 @@
             for="country"
             class="wide-text font-size-12 font-weight-bold"
             [ngClass]="{ 'text-danger': editForm.get('country')?.invalid && editForm.get('country')?.dirty }"
-            >Country <span class="font-size-12 font-weight-normal">(Required)</span></label
+            >Country</label
           >
           <select
             (change)="onCountryChange(editForm.get('country')?.value)"
@@ -213,14 +213,6 @@
               {{ country.name }}
             </option>
           </select>
-          <div *ngIf="editForm.get('country')?.invalid && editForm.get('country')?.dirty">
-            <small
-              class="wide-text font-size-12 form-text text-danger"
-              *ngIf="(editForm.get('country')?.errors)!['required']"
-            >
-              Please select a country
-            </small>
-          </div>
         </div>
         <div class="form-group mb-30">
           <label
@@ -254,56 +246,37 @@
         <!-- Trademark license -->
 
         <h3 class="font-weight-bold font-size-16 mb-10">
-          Trademark license <span class="font-size-12 font-weight-normal">(Required)</span>
+          Trademark license <span class="font-size-12 font-weight-normal required">(Required)</span>
         </h3>
         <div class="font-size-14 wide-text-25 mb-20">Can ORCID use this organization's trademarked name and logos?</div>
+        <div
+          *ngIf="getControl('trademarkLicense').invalid && getControl('trademarkLicense').touched"
+          class="message-box error-message d-flex p-16 mb-40"
+        >
+          <img src="./content/images/error-sign.svg" alt="Required sign" />
+          <div>
+            <div class="font-size-14 wide-text-25 line-height-150">Please select a trademark license option</div>
+          </div>
+        </div>
         <div class="mb-40">
-          <div class="form-group d-flex">
+          <div *ngFor="let license of trademarkLicenseOptions; trackBy: trackByValue" class="form-group d-flex">
             <input
               type="radio"
-              id="trademarkLicenseYes"
+              [id]="'trademarkLicense' + license.value"
               class="form-control radio mr-8"
-              name="trademarkLicense"
-              value="Yes"
               formControlName="trademarkLicense"
-              [ngClass]="{
-                'outline-danger': editForm.get('trademarkLicense')?.invalid && editForm.get('trademarkLicense')?.dirty
-              }"
+              [value]="license.value"
             />
-            <label for="trademarkLicenseYes" class="wide-text-25 font-size-14 font-weight-normal"
-              ><strong>YES</strong> - ORCID can use this organization's trademarked name and logos</label
-            >
-          </div>
-          <div class="form-group d-flex">
-            <input
-              type="radio"
-              id="trademarkLicenseNo"
-              class="form-control radio mr-8"
-              name="trademarkLicense"
-              value="No"
-              formControlName="trademarkLicense"
-              [ngClass]="{
-                'outline-danger': editForm.get('trademarkLicense')?.invalid && editForm.get('trademarkLicense')?.dirty
-              }"
-            />
-            <label for="trademarkLicenseNo" class="wide-text-25 font-size-14 font-weight-normal"
-              ><strong>NO</strong> - ORCID cannot use this organization's trademarked name and logos</label
-            >
-          </div>
-          <div *ngIf="editForm.get('trademarkLicense')?.invalid && editForm.get('trademarkLicense')?.dirty">
-            <small
-              class="wide-text font-size-12 form-text text-danger"
-              *ngIf="(editForm.get('trademarkLicense')?.errors)!['required']"
-            >
-              Please select a trademark license option
-            </small>
+            <label [for]="'trademarkLicense' + license.value" class="wide-text-25 font-size-14 font-weight-normal">
+              <strong>{{ license.value.toUpperCase() }}</strong> – {{ license.description }}
+            </label>
           </div>
         </div>
 
         <!-- Membership start date -->
 
         <h3 class="font-weight-bold font-size-16">
-          Membership start date <span class="font-size-12 font-weight-normal">(Required)</span>
+          Membership start date <span class="font-size-12 font-weight-normal required">(Required)</span>
         </h3>
         <div class="font-size-14 wide-text-25 mb-20">
           When does this organization's ORCID membership start? All memberships begin on the 1st of the month.
@@ -374,6 +347,55 @@
           </small>
         </div>
 
+        <h3 class="font-weight-bold font-size-16">
+          Organization tier <span class="font-size-12 font-weight-normal required">(Required)</span>
+        </h3>
+        <div class="font-size-14 wide-text-25 mb-20">
+          Please select a tier that reflects this organization's annual operating budget.
+        </div>
+
+        <div
+          *ngIf="getControl('organizationTier').invalid && getControl('organizationTier').touched"
+          class="message-box error-message d-flex p-16 mb-40"
+        >
+          <img src="./content/images/error-sign.svg" alt="Required sign" />
+          <div>
+            <div class="font-size-14 wide-text-25 line-height-150">Please select an organization tier</div>
+          </div>
+        </div>
+
+        <div class="mb-40">
+          <div *ngFor="let tier of organizationTiers; trackBy: trackByValue" class="form-group d-flex">
+            <input
+              type="radio"
+              [id]="'organizationTier' + tier.value"
+              class="form-control radio mr-8"
+              formControlName="organizationTier"
+              [value]="tier.value"
+            />
+            <label [for]="'organizationTier' + tier.value" class="wide-text-25 font-size-14 font-weight-normal">
+              <strong>{{ tier.value.toUpperCase() }}</strong> – {{ tier.description }}
+            </label>
+          </div>
+        </div>
+
+        <h3 class="font-weight-bold font-size-16">Integration plans</h3>
+        <div class="font-size-14 wide-text-25 mb-20">
+          Tell us a little about the organization's plans for ORCID integration.
+        </div>
+        <div class="form-group mb-2">
+          <textarea id="integrationPlans" formControlName="integrationPlans" class="form-control" rows="4"></textarea>
+          <small class="wide-text font-size-12 form-text color-gray">Max 1000 characters</small>
+          <div *ngIf="editForm.get('integrationPlans')?.invalid && editForm.get('integrationPlans')?.touched">
+            <small
+              class="wide-text font-size-12 form-text text-danger"
+              *ngIf="(editForm.get('integrationPlans')?.errors)!['maxlength']"
+            >
+              Integration plans description is too long. Please use 1000 characters or less.
+            </small>
+          </div>
+        </div>
+
         <!-- Main contact -->
 
         <h2 class="mb-10 wide-text font-size-24 line-height-150">Main contact</h2>
@@ -392,7 +414,7 @@
                 editForm.get('contactGivenName')?.dirty &&
                 editForm.get('contactGivenName')?.touched
             }"
-            >First or given name <span class="font-size-12 font-weight-normal">(Required)</span></label
+            >First or given name</label
           >
           <input
             type="text"
@@ -423,12 +445,6 @@
             >
               First or given name is too long. Please use 40 characters or less.
             </small>
-            <small
-              class="wide-text font-size-12 form-text text-danger"
-              *ngIf="(editForm.get('contactGivenName')?.errors)!['required']"
-            >
-              Please provide a first or given name
-            </small>
           </div>
         </div>
         <div class="form-group mb-20">
@@ -441,7 +457,7 @@
                 editForm.get('contactFamilyName')?.dirty &&
                 editForm.get('contactFamilyName')?.touched
             }"
-            >Last or family name <span class="font-size-12 font-weight-normal">(Required)</span></label
+            >Last or family name</label
           >
           <input
             type="text"
@@ -471,12 +487,6 @@
               *ngIf="(editForm.get('contactFamilyName')?.errors)!['maxlength']"
             >
               Last or family name is too long. Please use 80 characters or less.
-            </small>
-            <small
-              class="wide-text font-size-12 form-text text-danger"
-              *ngIf="(editForm.get('contactFamilyName')?.errors)!['required']"
-            >
-              Please provide a last or family name
             </small>
           </div>
         </div>
@@ -521,7 +531,7 @@
                 editForm.get('contactEmail')?.touched
             }"
             class="wide-text font-size-12 font-weight-bold"
-            >Email address <span class="font-size-12 font-weight-normal">(Required)</span></label
+            >Email address</label
           >
           <input
             type="text"
@@ -565,18 +575,11 @@
             >
               Email is too long. Please use 80 characters or less.
             </small>
-            <small
-              class="wide-text font-size-12 text-danger"
-              *ngIf="(editForm.get('contactEmail')?.errors)!['required']"
-            >
-              Please provide an email address
-            </small>
           </div>
         </div>
-        <div class="warning-message d-flex p-16 mb-40">
-          <img src="./content/images/warning-sign.svg" alt="Warning sign" class="p-8" />
+        <div class="message-box warning-message d-flex p-16 mb-40">
+          <img src="./content/images/warning-sign.svg" alt="Warning sign" />
           <div>
-            <div class="mb-8 font-size-14 wide-text-25 font-weight-bold">Please note</div>
             <div class="font-size-14 wide-text-25 line-height-150">
               It can take up to 24 hours before a new organization is available in the Member Portal. Please contact
               your ORCID engagement lead for more information.
