@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core'
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { Router, ActivatedRoute } from '@angular/router'
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { ActivatedRoute, Router } from '@angular/router'
 import { combineLatest, take } from 'rxjs'
-import { AccountService } from '../../account'
+import { AccountService } from 'src/app/account'
 import { AlertType, EMAIL_REGEXP } from '../../app.constants'
-import { AlertService } from '../../shared/service/alert.service'
-import { DateUtilService } from '../../shared/service/date-util.service'
 import { ISFCountry } from '../../member/model/salesforce-country.model'
 import { ISFState } from '../../member/model/salesforce-country.model copy'
 import { ISFMemberData } from '../../member/model/salesforce-member-data.model'
-import { ISFNewConsortiumMember } from '../../member/model/salesforce-new-consortium-member.model'
+import { ISFNewConsortiumMember, OrganizationTierOption, TrademarkLicenseOption } from '../../member/model/salesforce-new-consortium-member.model'
 import { MemberService } from '../../member/service/member.service'
+import { AlertService } from '../../shared/service/alert.service'
+import { DateUtilService } from '../../shared/service/date-util.service'
 
 @Component({
   selector: 'app-add-consortium-member',
@@ -34,15 +34,17 @@ export class AddConsortiumMemberComponent implements OnInit {
     street: [null, [Validators.maxLength(255)]],
     city: [null, [Validators.maxLength(40)]],
     state: [null, [Validators.maxLength(80)]],
-    country: [null, [Validators.required]],
+    country: [null],
     postcode: [null, [Validators.maxLength(20)]],
     trademarkLicense: [null, [Validators.required]],
     startMonth: [null, [Validators.required]],
     startYear: [null, [Validators.required]],
-    contactGivenName: [null, [Validators.required, Validators.maxLength(40)]],
-    contactFamilyName: [null, [Validators.required, Validators.maxLength(80)]],
+    contactGivenName: [null, [Validators.maxLength(40)]],
+    contactFamilyName: [null, [Validators.maxLength(80)]],
     contactJobTitle: [null, [Validators.maxLength(128)]],
-    contactEmail: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
+    contactEmail: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
+    organizationTier: [null, [Validators.required]],
+    integrationPlans: [null, [Validators.maxLength(1000)]],
   })
 
   rolesData = [
@@ -56,6 +58,33 @@ export class AddConsortiumMemberComponent implements OnInit {
     { id: 8, selected: false, name: 'Other contact' },
   ]
 
+
+  trademarkLicenseOptions: TrademarkLicenseOption[] = [
+    {
+      value: 'Yes',
+      description: `ORCID can use this organization's trademarked name and logos`,
+    },
+    {
+      value: 'No',
+      description: `ORCID cannot use this organization's trademarked name and logos`,
+    },
+  ];
+
+  organizationTiers: OrganizationTierOption[] = [
+    {
+      value: 'Small',
+      description: `Legal entity's annual operating budget below 10 M USD`,
+    },
+    {
+      value: 'Standard',
+      description: `Legal entity's annual operating budget between 10 M and 1 B USD`,
+    },
+    {
+      value: 'Large',
+      description: `Legal entity's annual operating budget above 1 B USD`,
+    },
+  ];
+
   constructor(
     private memberService: MemberService,
     private fb: FormBuilder,
@@ -64,7 +93,7 @@ export class AddConsortiumMemberComponent implements OnInit {
     private dateUtilService: DateUtilService,
     private accountService: AccountService,
     protected activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.currentMonth = this.dateUtilService.getCurrentMonthNumber()
@@ -90,27 +119,38 @@ export class AddConsortiumMemberComponent implements OnInit {
     })
   }
 
+  getControl(name: string): AbstractControl {
+    return this.editForm.get(name)!;
+  }
+
+  getFormValue(controlName: string): string {
+    return this.getControl(controlName)?.value;
+  }
+
+  trackByValue(_idx: number, tier: OrganizationTierOption | TrademarkLicenseOption): string {
+    return tier.value;
+  }
+
   createNewConsortiumMemberFromForm(): ISFNewConsortiumMember {
-    const consortiumMember: ISFNewConsortiumMember = {
-      orgName: this.editForm!.get('orgName')?.value,
-      trademarkLicense: this.editForm!.get('trademarkLicense')?.value,
-      startMonth: this.editForm!.get('startMonth')?.value,
-      startYear: this.editForm!.get('startYear')?.value,
-      emailDomain: this.editForm!.get('emailDomain')?.value,
-      street: this.editForm!.get('street')?.value,
-      city: this.editForm!.get('city')?.value,
-      state:
-        this.editForm!.get(['state'])?.value == '-- No state or province --'
-          ? null
-          : this.editForm!.get(['state'])?.value,
-      country: this.editForm!.get('country')?.value,
-      postcode: this.editForm!.get('postcode')?.value,
-      contactGivenName: this.editForm!.get('contactGivenName')?.value,
-      contactFamilyName: this.editForm!.get('contactFamilyName')?.value,
-      contactJobTitle: this.editForm!.get('contactJobTitle')?.value,
-      contactEmail: this.editForm!.get('contactEmail')?.value,
+    const stateValue = this.getFormValue('state');
+    return {
+      orgName: this.getFormValue('orgName'),
+      trademarkLicense: this.getFormValue('trademarkLicense'),
+      startMonth: this.getFormValue('startMonth'),
+      startYear: this.getFormValue('startYear'),
+      emailDomain: this.getFormValue('emailDomain'),
+      street: this.getFormValue('street'),
+      city: this.getFormValue('city'),
+      state: stateValue === '-- No state or province --' ? undefined : stateValue,
+      country: this.getFormValue('country'),
+      postcode: this.getFormValue('postcode'),
+      contactGivenName: this.getFormValue('contactGivenName'),
+      contactFamilyName: this.getFormValue('contactFamilyName'),
+      contactJobTitle: this.getFormValue('contactJobTitle'),
+      contactEmail: this.getFormValue('contactEmail'),
+      organizationTier: this.getFormValue('organizationTier'),
+      integrationPlans: this.getFormValue('integrationPlans'),
     }
-    return consortiumMember
   }
 
   onCountryChange(countryName: string) {

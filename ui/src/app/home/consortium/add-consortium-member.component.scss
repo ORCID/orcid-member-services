@@ -20,28 +20,26 @@ label {
   margin-bottom: 0.25rem;
 }
 
-.error-message {
+.required {
+  color: #d32f2f;
+}
+
+.message-box {
   img {
-    padding: 0 16px 0 8px !important;
-    margin-top: -1.75rem;
+    padding: 0 16px 0 8px;
   }
   div {
     font-size: 0.875rem;
   }
-  border: 2px solid #b71c1c;
   border-radius: 4px;
 }
 
+.error-message {
+  border: 2px solid #b71c1c;
+}
+
 .warning-message {
-  img {
-    padding: 0 16px 0 8px !important;
-    margin-top: -3rem;
-  }
-  div {
-    font-size: 0.875rem;
-  }
   border: 2px solid #ff9c00;
-  border-radius: 4px;
 }
 
 .radio {

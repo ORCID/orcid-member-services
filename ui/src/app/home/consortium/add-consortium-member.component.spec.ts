@@ -71,6 +71,28 @@ describe('AddConsortiumMemberComponent', () => {
     expect(component).toBeTruthy()
   })
 
+  it('should be a valid form when all required fields are filled', () => {
+    component.editForm.controls['orgName'].setValue('Orcid')
+    component.editForm.controls['startMonth'].setValue('01')
+    component.editForm.controls['startYear'].setValue('2025')
+    component.editForm.controls['trademarkLicense'].setValue('Yes')
+    component.editForm.controls['organizationTier'].setValue('Small')
+    fixture.detectChanges()
+
+    expect(component.editForm.valid).toBeTrue()
+  })
+
+  it('should be a invalid form when a required field is missing', () => {
+    component.editForm.controls['orgName'].setValue('Orcid')
+    component.editForm.controls['startMonth'].setValue('01')
+    component.editForm.controls['startYear'].setValue('2025')
+    component.editForm.controls['trademarkLicense'].setValue('')
+    component.editForm.controls['organizationTier'].setValue('Small')
+    fixture.detectChanges()
+
+    expect(component.editForm.invalid).toBeTrue()
+  })
+
   it('should call memberService.addConsortiumMember when saving', () => {
     memberServiceSpy.addConsortiumMember.and.returnValue(of(true))
 
