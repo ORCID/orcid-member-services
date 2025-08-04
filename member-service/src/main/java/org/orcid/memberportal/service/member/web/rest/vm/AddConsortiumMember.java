@@ -38,6 +38,10 @@ public class AddConsortiumMember {
 
     private String contactJobTitle;
 
+    private String organizationTier;
+
+    private String integrationPlans;
+
     public String getRequestedByName() {
         return requestedByName;
     }
@@ -172,5 +176,21 @@ public class AddConsortiumMember {
 
     public void setContactJobTitle(String contactJobTitle) {
         this.contactJobTitle = contactJobTitle;
+    }
+
+    public String getOrganizationTier() {
+        return organizationTier;
+    }
+
+    public void setOrganizationTier(String organizationTier) {
+        this.organizationTier = organizationTier;
+    }
+
+    public String getIntegrationPlans() {
+        return integrationPlans;
+    }
+
+    public void setIntegrationPlans(String integrationPlans) {
+        this.integrationPlans = integrationPlans;
     }
 }
