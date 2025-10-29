@@ -8,10 +8,5 @@ assertion-service/files/
 gateway/yarn.lock
 gateway/cypress/fixtures/editAffiliations.csv
 gateway/cypress/fixtures/bulk-edit-salesforce-ids-config.json
-assertion-service/maven_dep_tree.txt
-member-service/maven_dep_tree.txt
-user-service/maven_dep_tree.txt
-discovery-service/maven_dep_tree.txt
-gateway/maven_dep_tree.txt
 .idea/
 .vscode/
