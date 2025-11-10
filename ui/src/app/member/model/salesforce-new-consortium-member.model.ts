@@ -14,6 +14,8 @@ export interface ISFNewConsortiumMember {
   contactJobTitle?: string
   contactEmail?: string
   contactPhone?: string
+  organizationTier?: string
+  integrationPlans?: string
 }
 
 export class SFNewConsortiumMember implements ISFNewConsortiumMember {
@@ -35,3 +37,14 @@ export class SFNewConsortiumMember implements ISFNewConsortiumMember {
     public contactPhone?: string
   ) {}
 }
+
+export interface Option<T extends string> {
+  value: T;
+  description: string;
+}
+
+export type TrademarkLicenseValue = 'Yes' | 'No';
+export type OrganizationTierValue = 'Small' | 'Standard' | 'Large';
+
+export type TrademarkLicenseOption = Option<TrademarkLicenseValue>;
+export type OrganizationTierOption = Option<OrganizationTierValue>;
