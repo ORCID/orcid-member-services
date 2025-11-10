@@ -127,6 +127,8 @@ public class MailService {
         context.setVariable("contactFamilyName", addConsortiumMember.getContactFamilyName());
         context.setVariable("contactJobTitle", addConsortiumMember.getContactJobTitle());
         context.setVariable("contactEmail", addConsortiumMember.getContactEmail());
+        context.setVariable("organizationTier", addConsortiumMember.getOrganizationTier());
+        context.setVariable("integrationPlans", addConsortiumMember.getIntegrationPlans());
 
         String content = templateEngine.process("mail/addConsortiumMember", context);
         try {
