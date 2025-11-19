@@ -369,6 +369,15 @@ public class OrcidAPIClientTest {
     }
 
     @Test
+    void testPostAffiliation_ioException() throws IOException, DeprecatedException {
+        Mockito.when(applicationProperties.getOrcidAPIEndpoint()).thenReturn("orcid/api/");
+        Mockito.doThrow(new IOException("something wrong")).when(httpClient).execute(Mockito.any(HttpUriRequest.class));
+        assertThatExceptionOfType(IOException.class).isThrownBy(() -> {
+            client.postAffiliation("orcid", "access-token", getAssertionWithEmail("hello@orcid.org"));
+        });
+    }
+
+    @Test
     void testPutAffiliation() throws IOException, DeprecatedException {
         Mockito.when(applicationProperties.getOrcidAPIEndpoint()).thenReturn("orcid/api/");
         Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {

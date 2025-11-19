@@ -116,7 +116,7 @@ public class OrcidAPIClient {
         return json.get("access_token").toString();
     }
 
-    public String postAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException {
+    public String postAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException, IOException {
         Affiliation orcidAffiliation = AffiliationAdapter.toOrcidAffiliation(assertion);
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
         LOG.info("Creating {} for {} with role title {}", affType, orcid, orcidAffiliation.getRoleTitle());
@@ -127,8 +127,9 @@ public class OrcidAPIClient {
         StringEntity entity = getStringEntity(orcidAffiliation);
         httpPost.setEntity(entity);
 
+        CloseableHttpResponse response = null;
         try {
-            HttpResponse response = httpClient.execute(httpPost);
+            response = httpClient.execute(httpPost);
             if (response.getStatusLine().getStatusCode() == 409) {
                 throw new DeprecatedException();
             } else if (response.getStatusLine().getStatusCode() != Status.CREATED.getStatusCode()) {
@@ -138,10 +139,11 @@ public class OrcidAPIClient {
             }
             String location = response.getFirstHeader("location").getValue();
             return location.substring(location.lastIndexOf('/') + 1);
-        } catch (IOException e) {
-            LOG.error("Unable to create affiliation in ORCID", e);
+        } finally {
+            if (response != null) {
+                response.close();
+            }
         }
-        return null;
     }
 
     public void putAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException, IOException {
@@ -167,7 +169,9 @@ public class OrcidAPIClient {
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
         } finally {
-            response.close();
+            if (response != null) {
+                response.close();
+            }
         }
     }
 
@@ -190,7 +194,9 @@ public class OrcidAPIClient {
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
         } finally {
-            response.close();
+            if (response != null) {
+                response.close();
+            }
         }
     }
 
