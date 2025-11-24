@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: 'user-service'
+  security:
+    oauth2:
+      authorizationserver:
+        issuer: http://localhost:9000
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000
+  data:
+    mongodb:
+      database: userservice
+      host: localhost
+      port: 27017
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+
+server:
+  port: 9000
+
+logging:
+  level:
+    root: info

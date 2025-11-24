@@ -1,4 +1,4 @@
-package org.orcid.mp.user_service;
+package org.orcid.mp.user;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
