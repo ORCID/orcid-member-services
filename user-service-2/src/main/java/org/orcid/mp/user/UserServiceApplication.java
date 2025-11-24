@@ -1,4 +1,4 @@
-package org.orcid.mp.user_service;
+package org.orcid.mp.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
