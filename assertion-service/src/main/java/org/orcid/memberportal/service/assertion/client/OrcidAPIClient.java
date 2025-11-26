@@ -73,6 +73,10 @@ public class OrcidAPIClient {
 
     private String internalAccessToken;
 
+    public static final int HTTP_CLIENT_MAX_CONNECTION_TOTAL = 100;
+    public static final int HTTP_CLIENT_MAX_CONNECTION_PER_ROUTE = 20;
+    public static final int HTTP_CLIENT_CONNECTION_TIME_TO_LIVE_SECONDS = 20;
+
     @Autowired
     private ApplicationProperties applicationProperties;
 
@@ -81,7 +85,7 @@ public class OrcidAPIClient {
             Membership.class, Qualification.class, Service.class, OrcidError.class, NotificationPermission.class);
         this.jaxbMarshaller = jaxbContext.createMarshaller();
         this.jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        this.httpClient = HttpClients.custom().disableCookieManagement().setMaxConnTotal(100).setMaxConnPerRoute(20).setConnectionTimeToLive(20, TimeUnit.SECONDS).build();
+        this.httpClient = HttpClients.custom().disableCookieManagement().setMaxConnTotal(HTTP_CLIENT_MAX_CONNECTION_TOTAL).setMaxConnPerRoute(HTTP_CLIENT_MAX_CONNECTION_PER_ROUTE).setConnectionTimeToLive(HTTP_CLIENT_CONNECTION_TIME_TO_LIVE_SECONDS, TimeUnit.SECONDS).build();
     }
 
     public String exchangeToken(String idToken, String orcidId) throws JSONException, IOException, DeactivatedException {
