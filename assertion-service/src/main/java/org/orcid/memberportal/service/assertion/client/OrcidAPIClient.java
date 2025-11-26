@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -80,7 +81,7 @@ public class OrcidAPIClient {
             Membership.class, Qualification.class, Service.class, OrcidError.class, NotificationPermission.class);
         this.jaxbMarshaller = jaxbContext.createMarshaller();
         this.jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        this.httpClient = HttpClients.createDefault();
+        this.httpClient = HttpClients.custom().disableCookieManagement().setMaxConnTotal(100).setMaxConnPerRoute(20).setConnectionTimeToLive(20, TimeUnit.SECONDS).build();
     }
 
     public String exchangeToken(String idToken, String orcidId) throws JSONException, IOException, DeactivatedException {
