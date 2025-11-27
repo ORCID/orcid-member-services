@@ -27,9 +27,9 @@ logging:
 
 application:
   httpclient:
-    maxConnTotal: ${APPLICATION_HTTPCLIENT_MAX_CONN_TOTAL}
-    maxConnPerRoute: ${APPLICATION_HTTPCLIENT_MAX_CONN_PER_ROUTE}
-    connectionTimeToLive: ${APPLICATION_HTTPCLIENT_CONNECTION_TIME_TO_LIVE}
+    maxConnTotal: ${APPLICATION_HTTPCLIENT_MAX_CONN_TOTAL:100}
+    maxConnPerRoute: ${APPLICATION_HTTPCLIENT_MAX_CONN_PER_ROUTE:20}
+    connectionTimeToLive: ${APPLICATION_HTTPCLIENT_CONNECTION_TIME_TO_LIVE:20}
   mail:
     apiKey: ${APPLICATION_MAIL_API_KEY}
     apiUrl: ${APPLICATION_MAIL_API_URL}
@@ -37,7 +37,7 @@ application:
     fromName: ${APPLICATION_MAIL_FROM_NAME}
     testMode: ${APPLICATION_MAIL_TEST_MODE:false}
   memberService:
-    apiUrl: ${APPLICATION_MEMBERSERVICE_API_URL}
+    apiUrl: ${APPLICATION_MEMBERSERVICE_API_URL:http://localhost:8080}
   baseUrl: ${APPLICATION_BASE_URL}
   sendActivationRemindersDelay: 3600000
   name: Member Portal User Service
