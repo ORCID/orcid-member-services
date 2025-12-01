@@ -40,7 +40,7 @@ public class UserCsvReader {
             for (CSVRecord record : parser) {
                 try {
                     UserDTO userDTO = getUserDTO(record, now, currentUser.getEmail());
-                    UserValidation userValidation = userValidator.validate(userDTO, currentUser);
+                    UserValidation userValidation = userValidator.validate(userDTO, currentUser.getLangKey());
                     if (userValidation.isValid()) {
                         upload.getUserDTOs().add(userDTO);
                     } else {

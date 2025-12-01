@@ -41,7 +41,7 @@ public class MailgunClient {
             LOGGER.info(html);
         }
 
-        ResponseEntity response = client.post().body(formData).retrieve().toEntity(String.class);
+        ResponseEntity<String> response = client.post().body(formData).retrieve().toEntity(String.class);
         if (!response.getStatusCode().is2xxSuccessful()) {
             LOGGER.warn("Received response from mailgun {} - {}", response.getStatusCode().value(), response.getBody());
         }
