@@ -1,4 +1,7 @@
 application:
+  encrypt:
+    salt: encryptSalt
+    key: encryptKey
   httpclient:
     maxConnTotal: 100
     maxConnPerRoute: 20
