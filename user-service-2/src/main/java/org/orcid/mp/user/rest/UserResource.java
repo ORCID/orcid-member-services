@@ -5,7 +5,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,6 @@ import org.orcid.mp.user.rest.validation.UserValidator;
 import org.orcid.mp.user.rest.vm.ResendActivationResponseVM;
 import org.orcid.mp.user.security.AuthoritiesConstants;
 import org.orcid.mp.user.security.SecurityUtils;
-import org.orcid.mp.user.service.MailService;
 import org.orcid.mp.user.service.UserService;
 import org.orcid.mp.user.upload.UserUpload;
 import org.slf4j.Logger;
@@ -64,9 +62,6 @@ public class UserResource {
     private UserRepository userRepository;
 
     @Autowired
-    private MailService mailService;
-
-    @Autowired
     private UserValidator userValidator;
 
     @Autowired
@@ -83,7 +78,7 @@ public class UserResource {
     @PutMapping("/users")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
         LOG.debug("REST request to update User : {}", userDTO);
-        if (!userValidator.validate(userDTO, getCurrentUser()).isValid()) {
+        if (!userValidator.validate(userDTO, getCurrentUser().getLangKey()).isValid()) {
             return ResponseEntity.badRequest().body(userDTO);
         }
 
@@ -228,7 +223,7 @@ public class UserResource {
     @PostMapping("/users")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
         LOG.debug("REST request to save UserDTO : {}", userDTO);
-        if (!userValidator.validate(userDTO, getCurrentUser()).isValid()) {
+        if (!userValidator.validate(userDTO, getCurrentUser().getLangKey()).isValid()) {
             return ResponseEntity.badRequest().body(userDTO);
         }
         UserDTO user = userService.createUser(userDTO);
@@ -246,7 +241,7 @@ public class UserResource {
     @PostMapping("/users/validate")
     public ResponseEntity<UserValidation> validateUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
         Optional<User> currentUser = userRepository.findOneByEmailIgnoreCase(SecurityUtils.getCurrentUserLogin().get());
-        UserValidation validation = userValidator.validate(userDTO, currentUser.get());
+        UserValidation validation = userValidator.validate(userDTO, currentUser.get().getLangKey());
         return ResponseEntity.ok(validation);
     }
 

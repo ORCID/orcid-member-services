@@ -13,7 +13,6 @@ import org.orcid.mp.user.domain.Member;
 import org.orcid.mp.user.domain.User;
 import org.orcid.mp.user.dto.UserDTO;
 import org.orcid.mp.user.repository.UserRepository;
-import org.orcid.mp.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -32,10 +31,10 @@ public class UserValidator {
 
     private EmailValidator emailValidator = EmailValidator.getInstance(false);
 
-    public UserValidation validate(UserDTO user, User currentUser) {
+    public UserValidation validate(UserDTO user, String langKey) {
         List<String> errors = new ArrayList<>();
-        validateEmail(user, currentUser, errors);
-        validateSalesforceId(user, currentUser, errors);
+        validateEmail(user, langKey, errors);
+        validateSalesforceId(user, langKey, errors);
 
         UserValidation validation = new UserValidation();
         validation.setValid(errors.isEmpty());
@@ -43,27 +42,27 @@ public class UserValidator {
         return validation;
     }
 
-    private void validateSalesforceId(UserDTO user, User currentUser, List<String> errors) {
+    private void validateSalesforceId(UserDTO user, String langKey, List<String> errors) {
         Member member = memberServiceClient.getMember(user.getSalesforceId());
         String salesforceId = user.getSalesforceId();
         if (StringUtils.isBlank(salesforceId)) {
-            errors.add(getError("missingSalesforceId", currentUser));
+            errors.add(getError("missingSalesforceId", langKey));
         } else if (member == null) {
-            errors.add(getError("invalidSalesforceId", salesforceId, currentUser));
+            errors.add(getError("invalidSalesforceId", salesforceId, langKey));
         } else if (user.getIsAdmin() == true && user.getSalesforceId() != null && !member.getSuperadminEnabled()) {
-            errors.add(getError("superAdminNotAllowed", currentUser));
+            errors.add(getError("superAdminNotAllowed", langKey));
         }
     }
 
-    private void validateEmail(UserDTO user, User currentUser, List<String> errors) {
+    private void validateEmail(UserDTO user, String langKey, List<String> errors) {
         String email = user.getEmail();
         if (StringUtils.isBlank(email)) {
-            errors.add(getError("missingEmail", currentUser));
+            errors.add(getError("missingEmail", langKey));
         } else if (!emailValidator.isValid(email)) {
-            errors.add(getError("invalidEmail", email, currentUser));
+            errors.add(getError("invalidEmail", email, langKey));
         } else {
             if (StringUtils.isBlank(user.getId()) && userExists(email)) {
-                errors.add(getError("userExists", email, currentUser));
+                errors.add(getError("userExists", email, langKey));
             }
         }
     }
@@ -73,12 +72,12 @@ public class UserValidator {
         return existingUser.isPresent();
     }
 
-    private String getError(String code, User user) {
-        return getError(code, null, user);
+    private String getError(String code, String langKey) {
+        return getError(code, null, langKey);
     }
 
-    private String getError(String code, String arg, User user) {
-        return messageSource.getMessage("user.validation.error." + code, arg != null ? new Object[] { arg } : null, Locale.forLanguageTag(user.getLangKey()));
+    private String getError(String code, String arg, String langKey) {
+        return messageSource.getMessage("user.validation.error." + code, arg != null ? new Object[] { arg } : null, Locale.forLanguageTag(langKey));
     }
 
 }
