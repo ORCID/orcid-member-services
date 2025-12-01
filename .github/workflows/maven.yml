@@ -48,7 +48,14 @@ jobs:
       with:
         java-version: 21
     - name: Build User service 2
-      run: mvn -B verify  -Pprod --file user-service-2/pom.xml
+      run: mvn -B verify --file user-service-2/pom.xml
+    - name: Upload Surefire Reports Artifact
+      uses: actions/upload-artifact@v4
+      if: always() # Upload even if tests fail
+      with:
+        name: surefire-test-reports
+        # Path to the directory containing XML and HTML reports
+        path: target/surefire-reports/
 
   build-assertion-service:
     runs-on: ubuntu-latest
