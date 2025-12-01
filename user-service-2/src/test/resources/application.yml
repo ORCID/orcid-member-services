@@ -1,0 +1,16 @@
+application:
+  httpclient:
+    maxConnTotal: 100
+    maxConnPerRoute: 20
+    connectionTimeToLive: 20
+  mail:
+    apiKey: some-key
+    apiUrl: http://mail/url
+    fromAddress: from@orcid.org
+    fromName: ORCID
+    testMode: true
+  memberService:
+    apiUrl: http://localhost:8080
+  baseUrl: http://memberportal.orcid.org
+  sendActivationRemindersDelay: 3600000
+  name: Member Portal User Service
