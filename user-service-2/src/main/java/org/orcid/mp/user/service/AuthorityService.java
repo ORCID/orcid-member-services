@@ -27,13 +27,13 @@ public class AuthorityService {
         if (!org.apache.commons.lang3.StringUtils.isBlank(user.getSalesforceId())) {
             Member member = memberServiceClient.getMember(user.getSalesforceId());
             if (member != null) {
-                if (member.getAssertionServiceEnabled()) {
+                if (member.getAssertionServiceEnabled() != null && member.getAssertionServiceEnabled().booleanValue()) {
                     authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
                 }
-                if (member.getIsConsortiumLead()) {
+                if (member.getIsConsortiumLead() != null && member.getIsConsortiumLead().booleanValue()) {
                     authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
                 }
-                if (user.getAdmin() != null && user.getAdmin().booleanValue() && member.getSuperadminEnabled()) {
+                if (user.getAdmin() != null && user.getAdmin().booleanValue() && member.getSuperadminEnabled() != null && member.getSuperadminEnabled().booleanValue()) {
                     authorities.add(AuthoritiesConstants.ADMIN);
                 }
             }

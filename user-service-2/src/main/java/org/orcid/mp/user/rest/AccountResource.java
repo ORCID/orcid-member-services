@@ -75,10 +75,10 @@ public class AccountResource {
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
         User currentUser = userService.getCurrentUser();
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && !existingUser.get().getEmail().equalsIgnoreCase(currentUser.getEmail())) {
-            throw new EmailAlreadyUsedException();
+        if (!currentUser.getEmail().equalsIgnoreCase(userDTO.getEmail())) {
+            throw new BadRequestAlertException("Updating email is not allowed");
         }
+
         userService.updateAccount(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getLangKey(), userDTO.getImageUrl());
     }
 

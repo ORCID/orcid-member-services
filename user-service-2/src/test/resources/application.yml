@@ -21,3 +21,6 @@ application:
   baseUrl: http://memberportal.orcid.org
   sendActivationRemindersDelay: 3600000
   name: Member Portal User Service
+  logging:
+    level:
+      org.springframework.web: DEBUG

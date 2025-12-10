@@ -90,9 +90,6 @@ public class User implements Serializable {
     @Field("deleted")
     private Boolean deleted = false;
 
-    @Field("login_as")
-    private String loginAs;
-
     @Field("mfa_enabled")
     private Boolean mfaEnabled;
 
@@ -123,14 +120,6 @@ public class User implements Serializable {
     @Field("last_modified_date")
     @JsonIgnore
     private Instant lastModifiedDate = Instant.now();
-
-    public String getLoginAs() {
-        return loginAs;
-    }
-
-    public void setLoginAs(String loginAs) {
-        this.loginAs = loginAs;
-    }
 
     public String getId() {
         return id;
