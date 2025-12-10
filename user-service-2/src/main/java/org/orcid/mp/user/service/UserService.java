@@ -553,12 +553,7 @@ public class UserService {
     public User getCurrentUser() {
         String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("Current user login not found"));
         Optional<User> user = userRepository.findOneByEmailIgnoreCase(login);
-
-        if (StringUtils.isEmpty(user.get().getLoginAs())) {
-            return user.get();
-        }
-
-        return userRepository.findOneByEmailIgnoreCase(user.get().getLoginAs()).get();
+        return user.get();
     }
 
     public MfaSetup getMfaSetup() {

@@ -390,26 +390,6 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetCurrentUser() {
-        User impersonatingUser = new User();
-        impersonatingUser.setEmail("admin-user");
-        impersonatingUser.setLoginAs("impersonated-user");
-
-        User impersonatedUser = new User();
-        impersonatedUser.setEmail("impersonated-user");
-
-        when(userRepository.findOneByEmailIgnoreCase(eq("username"))).thenReturn(Optional.of(impersonatingUser));
-        when(userRepository.findOneByEmailIgnoreCase(eq("impersonated-user"))).thenReturn(Optional.of(impersonatedUser));
-
-        User user = userService.getCurrentUser();
-        assertEquals("impersonated-user", user.getEmail());
-
-        impersonatingUser.setLoginAs(null);
-        user = userService.getCurrentUser();
-        assertEquals("admin-user", user.getEmail());
-    }
-
-    @Test
     public void testGetAllUsersBySalesforceId() {
         when(userRepository.findBySalesforceIdAndDeletedIsFalse(Mockito.any(Pageable.class), Mockito.anyString())).thenReturn(new PageImpl<>(getListOfUsers(10)));
         when(userRepository.findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(Mockito.any(Pageable.class), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(new PageImpl<>(getListOfUsers(5)));

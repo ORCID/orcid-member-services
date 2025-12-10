@@ -77,4 +77,8 @@ public class Member {
         return superadminEnabled;
     }
 
+    public void setSuperadminEnabled(Boolean superadminEnabled) {
+        this.superadminEnabled = superadminEnabled;
+    }
+
 }

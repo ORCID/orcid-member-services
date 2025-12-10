@@ -49,7 +49,7 @@ public class UserValidator {
             errors.add(getError("missingSalesforceId", langKey));
         } else if (member == null) {
             errors.add(getError("invalidSalesforceId", salesforceId, langKey));
-        } else if (user.getIsAdmin() == true && user.getSalesforceId() != null && !member.getSuperadminEnabled()) {
+        } else if (user.getIsAdmin() == true && user.getSalesforceId() != null && (member.getSuperadminEnabled() == null || !member.getSuperadminEnabled())) {
             errors.add(getError("superAdminNotAllowed", langKey));
         }
     }

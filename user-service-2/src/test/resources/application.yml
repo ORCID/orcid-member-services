@@ -1,3 +1,7 @@
+spring:
+  messages:
+    basename: i18n/messages
+    encoding: utf-8
 application:
   encrypt:
     salt: 5a8b9f1d2c6e7a403b5d8e9c0f4a1b32
@@ -17,3 +21,6 @@ application:
   baseUrl: http://memberportal.orcid.org
   sendActivationRemindersDelay: 3600000
   name: Member Portal User Service
+  logging:
+    level:
+      org.springframework.web: DEBUG
