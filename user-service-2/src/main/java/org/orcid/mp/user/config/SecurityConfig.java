@@ -74,8 +74,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/unprotected").permitAll()
                         .anyRequest().authenticated())
-                // Form login handles the redirect to the login page from the
-                // authorization server filter chain
+                .formLogin(form -> form.disable())
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("http://localhost:4200/login"))
+                )
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/unprotected"))
                 .formLogin(Customizer.withDefaults());
 
