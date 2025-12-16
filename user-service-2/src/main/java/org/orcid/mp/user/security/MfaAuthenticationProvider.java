@@ -6,13 +6,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Collections;
-import java.util.Map;
 
 public class MfaAuthenticationProvider implements AuthenticationProvider {
 
@@ -31,22 +27,17 @@ public class MfaAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        // Custom: Retrieve MFA code from details (passed from Angular)
         String mfaCode = "";
-        if (authentication.getDetails() instanceof Map) {
-            Map<String, String> details = (Map<String, String>) authentication.getDetails();
-            mfaCode = details.get("mfa_code");
+        if (authentication.getDetails() instanceof MfaWebAuthenticationDetails details) {
+            mfaCode = details.getMfaCode();
         }
 
         UserDetails user = userDetailsService.loadUserByUsername(username);
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Invalid credentials");
         }
-
-        // Use your existing userService logic
         if (userService.isMfaEnabled(username)) {
             if (mfaCode == null || !userService.validMfaCode(username, mfaCode)) {
-                // Throw a custom exception that your Angular app can catch to show the MFA UI
                 throw new MfaRequiredException("MFA_REQUIRED");
             }
         }

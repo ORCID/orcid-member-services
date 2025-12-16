@@ -3,6 +3,7 @@ package org.orcid.mp.user   .config;
 import org.orcid.mp.user.security.AuthenticationSuccessHandler;
 import org.orcid.mp.user.security.MfaAuthenticationFailureHandler;
 import org.orcid.mp.user.security.MfaAuthenticationProvider;
+import org.orcid.mp.user.security.MfaDetailsSource;
 import org.orcid.mp.user.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -88,6 +89,7 @@ public class SecurityConfig {
 
                 .formLogin(form -> form
                         .loginPage("http://localhost:4200/login")
+                        .authenticationDetailsSource(new MfaDetailsSource())
                         .successHandler(new AuthenticationSuccessHandler())
                         .failureHandler(new MfaAuthenticationFailureHandler())
                         .permitAll()
@@ -123,6 +125,7 @@ public class SecurityConfig {
                 .redirectUri("http://localhost:4200/login/oauth2/code/mp-ui-client-oidc")
                 .scope(OidcScopes.OPENID)
                 .scope("MP")
+                .tokenSettings(tokenSettings)
                 .clientSettings(ClientSettings.builder()
                         .requireProofKey(true)
                         .requireAuthorizationConsent(true)
