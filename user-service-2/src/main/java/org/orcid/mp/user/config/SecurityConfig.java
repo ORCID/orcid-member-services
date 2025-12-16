@@ -1,5 +1,10 @@
 package org.orcid.mp.user   .config;
 
+import org.orcid.mp.user.security.AuthenticationSuccessHandler;
+import org.orcid.mp.user.security.MfaAuthenticationFailureHandler;
+import org.orcid.mp.user.security.MfaAuthenticationProvider;
+import org.orcid.mp.user.security.MfaDetailsSource;
+import org.orcid.mp.user.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -8,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -20,10 +26,14 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import java.time.Duration;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -35,6 +45,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.time.Duration;
 import java.util.UUID;
 
 @Configuration
@@ -68,17 +79,26 @@ public class SecurityConfig {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
-            throws Exception {
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http,
+                                                          UserService userService,
+                                                          UserDetailsService userDetailsService) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/unprotected").permitAll()
+                        .requestMatchers("/unprotected", "/login").permitAll() // Ensure login is accessible
                         .anyRequest().authenticated())
-                // Form login handles the redirect to the login page from the
-                // authorization server filter chain
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/unprotected"))
-                .formLogin(Customizer.withDefaults());
 
+                .formLogin(form -> form
+                        .loginPage("http://localhost:4200/login")
+                        .authenticationDetailsSource(new MfaDetailsSource())
+                        .successHandler(new AuthenticationSuccessHandler())
+                        .failureHandler(new MfaAuthenticationFailureHandler())
+                        .permitAll()
+                )
+                .authenticationProvider(new MfaAuthenticationProvider(userService, passwordEncoder(), userDetailsService))
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("http://localhost:4200/login"))
+                )
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
 
@@ -89,17 +109,27 @@ public class SecurityConfig {
 
     @Bean
     public RegisteredClientRepository registeredClientRepository(PasswordEncoder encoder) {
+        TokenSettings tokenSettings = TokenSettings.builder()
+                // Equivalent to setAccessTokenValiditySeconds
+                .accessTokenTimeToLive(Duration.ofSeconds(3600))
+                // Equivalent to setRefreshTokenValiditySeconds
+                .refreshTokenTimeToLive(Duration.ofDays(30))
+                .reuseRefreshTokens(false) // Standard security practice
+                .build();
+
         RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("mp-ui-client")
-                .clientSecret(encoder.encode("secret"))
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri("http://localhost:4200/login/oauth2/code/mp-ui-client-oidc")
-                .redirectUri("http://localhost:4200/authorized")
-                .redirectUri("http://localhost:4200/something-else?")
                 .scope(OidcScopes.OPENID)
                 .scope("MP")
+                .tokenSettings(tokenSettings)
+                .clientSettings(ClientSettings.builder()
+                        .requireProofKey(true)
+                        .requireAuthorizationConsent(true)
+                        .build())
                 .build();
 
         return new InMemoryRegisteredClientRepository(oidcClient);
