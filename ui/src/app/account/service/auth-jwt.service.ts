@@ -19,7 +19,7 @@ export class AuthServerProvider {
   // 2. Point to the new backend endpoint on :9000
   // Note: Spring expects 'mfa_code' based on our MfaDetailsSource
   login(credentials: ILoginCredentials): Observable<any> {
-    return this.http.post<any>('/login', null, {
+    return this.http.post<any>('/api/login', null, {
       params: {
         username: credentials.username,
         password: credentials.password,
@@ -28,7 +28,6 @@ export class AuthServerProvider {
     })
   }
 
-  // 3. Use the library to log off
   logout(): Observable<any> {
     return this.oidcSecurityService.logoff()
   }
