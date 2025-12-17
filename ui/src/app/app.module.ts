@@ -16,6 +16,7 @@ import { ErrorService } from './error/service/error.service'
 import { ErrorComponent } from './error/error.component'
 import { FormsModule } from '@angular/forms'
 import { AuthExpiredInterceptor } from './shared/interceptor/auth-expired.interceptor'
+import { AuthInterceptor, AuthModule } from 'angular-auth-oidc-client'
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
@@ -29,8 +30,27 @@ import { AuthExpiredInterceptor } from './shared/interceptor/auth-expired.interc
     CommonModule,
     FormsModule,
     SharedModule.forRoot(),
+    AuthModule.forRoot({
+      config: {
+        authority: 'http://localhost:9000', // Your Spring Auth Server
+        redirectUrl: window.location.origin + '/login/callback',
+        postLogoutRedirectUri: window.location.origin,
+        clientId: 'mp-ui-client',
+        scope: 'openid MP',
+        responseType: 'code',
+        silentRenew: true,
+        useRefreshToken: true,
+        logLevel: 1,
+        secureRoutes: ['http://localhost:9000/services/'],
+      },
+    }),
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HeaderInterceptor,

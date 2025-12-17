@@ -8,6 +8,8 @@ import { Subscription, filter, take } from 'rxjs'
 import { EventService } from 'src/app/shared/service/event.service'
 import { EventType } from 'src/app/app.constants'
 import { Event } from 'src/app/shared/model/event.model'
+import { ILoginCredentials } from '../model/login.model'
+import { OidcSecurityService } from 'angular-auth-oidc-client'
 
 @Component({
   selector: 'app-login',
@@ -33,6 +35,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     private renderer: Renderer2,
     private router: Router,
     private accountService: AccountService,
+    private oidcSecurityService: OidcSecurityService,
     private fb: FormBuilder,
     private eventService: EventService,
     private ngZone: NgZone
@@ -60,47 +63,42 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   }
 
   login() {
+    this.authenticationError = false
     this.mfaError = false
-    const mfaCode = this.loginForm.get('mfaCode')?.value
 
-    if (this.showMfa && !mfaCode) {
-      this.mfaError = true
-    } else {
-      if (mfaCode) {
-        this.mfaSent = true
-      }
-
-      this.loginService
-        .login({
-          username: this.loginForm.get('username')!.value!,
-          password: this.loginForm.get('password')!.value!,
-          mfaCode: this.loginForm.get('mfaCode')?.value,
-        })
-        .subscribe({
-          next: (data) => {
-            if (!data.mfaRequired) {
-              this.showMfa = false
-              this.accountService
-                .getAccountData(true)
-                .pipe(
-                  filter((account) => !!account),
-                  take(1)
-                )
-                .subscribe(() => {
-                  this.loginSuccess()
-                })
-            } else {
-              this.showMfa = true
-              this.mfaError = this.mfaSent
-            }
-            this.mfaSent = false
-          },
-          error: () => {
-            this.loginService.logout()
-            this.authenticationError = true
-          },
-        })
+    const credentials: ILoginCredentials = {
+      username: this.loginForm.get('username')!.value!,
+      password: this.loginForm.get('password')!.value!,
+      mfaCode: this.loginForm.get('mfaCode')?.value,
     }
+
+    // If we are showing MFA but no code is entered, stop here
+    if (this.showMfa && !credentials.mfaCode) {
+      this.mfaError = true
+      return
+    }
+
+    this.loginService.login(credentials).subscribe({
+      next: (res) => {
+        // res comes from our MyCustomSuccessHandler: {"status": "success", "redirectUrl": "..."}
+        if (res.status === 'success') {
+          this.showMfa = false
+          // STEP 2: Trigger the OIDC PKCE Handshake
+          // The library will handle the redirect to localhost:9000/oauth2/authorize
+          this.oidcSecurityService.authorize()
+        }
+      },
+      error: (err) => {
+        // Catch our custom 401 MfaRequiredException
+        if (err.status === 401 && err.error?.error === 'mfa_required') {
+          this.showMfa = true
+        } else {
+          this.authenticationError = true
+          this.loginService.logout()
+        }
+        this.mfaSent = false
+      },
+    })
   }
 
   loginSuccess(): void {
