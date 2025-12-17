@@ -7,6 +7,7 @@ import { IAccount } from '../model/account.model'
 import { LanguageService } from 'src/app/shared/service/language.service'
 import { Router } from '@angular/router'
 import { MemberService } from 'src/app/member/service/member.service'
+import { OidcSecurityService } from 'angular-auth-oidc-client'
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -21,10 +22,11 @@ export class AccountService {
     private sessionStorage: SessionStorageService,
     private router: Router,
     private http: HttpClient,
-    private memberService: MemberService
+    private memberService: MemberService,
+    private oidcSecurityService: OidcSecurityService
   ) {}
 
-  private fetchAccountData() {
+  private fetchAccountData(): Observable<IAccount | null> {
     this.isFetchingAccountData = true
     return this.http
       .get<IAccount>('/services/userservice/api/account', {
@@ -32,13 +34,6 @@ export class AccountService {
       })
       .pipe(
         takeUntil(this.stopFetchingAccountData),
-        catchError(() => {
-          this.authenticated = false
-          this.accountData.next(null)
-          this.memberService.setMemberData(undefined)
-          this.isFetchingAccountData = false
-          return EMPTY
-        }),
         map((response: HttpResponse<IAccount>) => {
           this.isFetchingAccountData = false
           if (response && response.body) {
@@ -48,14 +43,24 @@ export class AccountService {
               this.languageService.updateLanguageCodeInUrl(account.langKey)
             }
             this.accountData.next(account)
+            return account // Return the account for the stream
           } else {
-            this.memberService.setMemberData(undefined)
-            this.accountData.next(null)
-            this.authenticated = false
-            console.error('Invalid response:', response)
+            this.handleError()
+            return null
           }
+        }),
+        catchError(() => {
+          this.handleError()
+          return of(null)
         })
       )
+  }
+
+  private handleError() {
+    this.authenticated = false
+    this.accountData.next(null)
+    this.memberService.setMemberData(undefined)
+    this.isFetchingAccountData = false
   }
 
   getMfaSetup(): Observable<{ secret: string; otp: string; qrCode: any }> {
@@ -101,6 +106,10 @@ export class AccountService {
     this.accountData.next(null)
     this.authenticated = false
     this.router.navigate(['/login'])
+
+    this.oidcSecurityService.logoff().subscribe(() => {
+      this.router.navigate(['/login'])
+    })
   }
 
   hasAnyAuthority(authorities: string[]): boolean {

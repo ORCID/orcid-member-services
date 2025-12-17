@@ -41,7 +41,7 @@ import { AuthInterceptor, AuthModule } from 'angular-auth-oidc-client'
         silentRenew: true,
         useRefreshToken: true,
         logLevel: 1,
-        secureRoutes: ['http://localhost:9000/services/'],
+        secureRoutes: ['/services/userservice/api/account'],
       },
     }),
   ],
