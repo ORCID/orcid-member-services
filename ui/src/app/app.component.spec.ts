@@ -14,7 +14,6 @@ describe('AppComponent', () => {
     const accountServiceMock = {
       getAccountData: () => of(null), // return an observable
       isAuthenticated: () => false,
-      clearAccountData: () => {},
     }
 
     await TestBed.configureTestingModule({
