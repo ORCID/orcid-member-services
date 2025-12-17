@@ -92,6 +92,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
         // Catch our custom 401 MfaRequiredException
         if (err.status === 401 && err.error?.error === 'mfa_required') {
           this.showMfa = true
+          this.mfaError = true
         } else {
           this.authenticationError = true
           this.loginService.logout()
