@@ -1,4 +1,4 @@
-package org.orcid.mp.user   .config;
+package org.orcid.mp.user.config;
 
 import org.orcid.mp.user.security.AuthenticationSuccessHandler;
 import org.orcid.mp.user.security.MfaAuthenticationFailureHandler;
@@ -33,6 +33,7 @@ import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+
 import java.time.Duration;
 
 import com.nimbusds.jose.jwk.JWKSet;
@@ -40,12 +41,16 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 
 @Configuration
@@ -60,15 +65,13 @@ public class SecurityConfig {
 
         http.with(OAuth2AuthorizationServerConfigurer.authorizationServer(), Customizer.withDefaults());
 
-        // 2. Retrieve the Configurer instance for further path matching
         OAuth2AuthorizationServerConfigurer configurer =
                 http.getConfigurer(OAuth2AuthorizationServerConfigurer.class);
+        configurer.oidc(Customizer.withDefaults());
 
-        // 3. Set the security matcher using the endpoints identified by the configurer
+
         http
-                .securityMatcher(configurer.getEndpointsMatcher())
-
-                // ... continue with exception handling, authorization, and Resource Server setup
+                .securityMatcher(configurer.getEndpointsMatcher()).cors(Customizer.withDefaults())
                 .exceptionHandling((exceptions) -> exceptions
                         .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("http://localhost:4200/login"))
                 )
@@ -84,7 +87,7 @@ public class SecurityConfig {
                                                           UserDetailsService userDetailsService) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/unprotected", "/api/login").permitAll() // Ensure login is accessible
+                        .requestMatchers("/unprotected", "/api/**", "/.well-known/**").permitAll() // Ensure login is accessible
                         .anyRequest().authenticated())
 
                 .formLogin(form -> form
@@ -123,13 +126,13 @@ public class SecurityConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://localhost:4200/login/oauth2/code/mp-ui-client-oidc")
+                .redirectUri("http://localhost:4200/login/callback")
                 .scope(OidcScopes.OPENID)
                 .scope("MP")
                 .tokenSettings(tokenSettings)
                 .clientSettings(ClientSettings.builder()
                         .requireProofKey(true)
-                        .requireAuthorizationConsent(true)
+                        .requireAuthorizationConsent(false)
                         .build())
                 .build();
 
@@ -171,4 +174,16 @@ public class SecurityConfig {
         return AuthorizationServerSettings.builder().issuer("http://localhost:9000").build();
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true); // Required for cookies/auth headers
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }

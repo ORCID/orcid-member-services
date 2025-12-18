@@ -19,7 +19,7 @@ export class AuthServerProvider {
   // 2. Point to the new backend endpoint on :9000
   // Note: Spring expects 'mfa_code' based on our MfaDetailsSource
   login(credentials: ILoginCredentials): Observable<any> {
-    return this.http.post<any>('/api/login', null, {
+    return this.http.post<any>('/userservice/api/login', null, {
       params: {
         username: credentials.username,
         password: credentials.password,

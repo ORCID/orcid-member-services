@@ -29,7 +29,7 @@ export class AccountService {
   private fetchAccountData(): Observable<IAccount | null> {
     this.isFetchingAccountData = true
     return this.http
-      .get<IAccount>('/services/userservice/api/account', {
+      .get<IAccount>('/userservice/api/account', {
         observe: 'response',
       })
       .pipe(

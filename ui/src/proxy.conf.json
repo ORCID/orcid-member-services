@@ -1,8 +1,11 @@
 {
-  "/api/login": {
+  "/userservice/*": {
     "target": "http://localhost:9000",
     "secure": false,
-    "changeOrigin": true
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/userservice": ""
+    }
   },
   "/oauth2/*": {
     "target": "http://localhost:9000",
