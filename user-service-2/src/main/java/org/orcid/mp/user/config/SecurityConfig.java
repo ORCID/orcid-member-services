@@ -70,7 +70,7 @@ public class SecurityConfig {
 
                 // ... continue with exception handling, authorization, and Resource Server setup
                 .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("http://localhost:4200/login"))
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
 
@@ -84,11 +84,12 @@ public class SecurityConfig {
                                                           UserDetailsService userDetailsService) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/unprotected", "/login").permitAll() // Ensure login is accessible
+                        .requestMatchers("/unprotected", "/api/login").permitAll() // Ensure login is accessible
                         .anyRequest().authenticated())
 
                 .formLogin(form -> form
                         .loginPage("http://localhost:4200/login")
+                        .loginProcessingUrl("/api/login")
                         .authenticationDetailsSource(new MfaDetailsSource())
                         .successHandler(new AuthenticationSuccessHandler())
                         .failureHandler(new MfaAuthenticationFailureHandler())

@@ -1,16 +1,17 @@
 {
-  "/auth/*": {
-    "target": "http://localhost:8080",
+  "/api/login": {
+    "target": "http://localhost:9000",
     "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug",
-    "cookieDomainRewrite": "localhost"
+    "changeOrigin": true
   },
-  "/services/*": {
-    "target": "http://localhost:8080",
+  "/oauth2/*": {
+    "target": "http://localhost:9000",
     "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug",
-    "cookieDomainRewrite": "localhost"
+    "changeOrigin": true
+  },
+  "/.well-known/*": {
+    "target": "http://localhost:9000",
+    "secure": false,
+    "changeOrigin": true
   }
 }

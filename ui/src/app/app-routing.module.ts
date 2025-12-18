@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { navbarRoute } from './layout/navbar/navbar.route'
 import { errorRoutes } from './error/error.route'
+import { AppComponent } from './app.component'
+import { LoginComponent } from './account'
 
 const routes: Routes = [
   {
@@ -32,6 +34,8 @@ const routes: Routes = [
     path: 'report',
     loadChildren: () => import('./report/report.module').then((m) => m.ReportModule),
   },
+  { path: 'login/callback', component: AppComponent },
+  { path: 'login', component: LoginComponent },
 ]
 
 @NgModule({

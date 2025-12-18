@@ -21,7 +21,7 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
           if (err instanceof HttpErrorResponse) {
             if (err.status === 401) {
               if (this.loginService.isAuthenticated()) {
-                this.loginService.logoutDirectly()
+                this.loginService.logout()
                 this.router.navigate(['/'])
               } else if (!this.NON_CHECKED_URLS.find((x) => this.router.url.startsWith(x))) {
                 this.loginService.logout()

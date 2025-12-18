@@ -21,7 +21,18 @@ public class MemberServiceClient {
     private String memberServiceApiUrl;
 
     public Member getMember(String id) {
-        return restClient.post().uri(memberServiceApiUrl + "/members/" + id).retrieve().toEntity(Member.class).getBody();
+        //return restClient.post().uri(memberServiceApiUrl + "/members/" + id).retrieve().toEntity(Member.class).getBody();
+        return getMockMember();
+    }
+
+    private Member getMockMember() {
+        Member member = new Member();
+        member.setAssertionServiceEnabled(true);
+        member.setSuperadminEnabled(true);
+        member.setSalesforceId("salesforce-id");
+        member.setIsConsortiumLead(false);
+        member.setParentSalesforceId(null);
+        return member;
     }
 
 }

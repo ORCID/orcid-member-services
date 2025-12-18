@@ -1,33 +1,28 @@
 import { Injectable } from '@angular/core'
 import { AccountService } from './account.service'
 import { AuthServerProvider } from './auth-jwt.service'
-import { Observable } from 'rxjs'
+import { map, Observable } from 'rxjs'
 import { ILoginCredentials, ILoginResult } from '../model/login.model'
+import { AuthenticatedResult, OidcSecurityService } from 'angular-auth-oidc-client'
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
   constructor(
     private accountService: AccountService,
-    private authServerProvider: AuthServerProvider
+    private authServerProvider: AuthServerProvider,
+    private oidcSecurityService: OidcSecurityService
   ) {}
 
-  login(credentials: ILoginCredentials): Observable<ILoginResult> {
+  login(credentials: ILoginCredentials): Observable<any> {
     return this.authServerProvider.login(credentials)
   }
 
-  isAuthenticated() {
-    return this.accountService.isAuthenticated()
-  }
-
-  logoutDirectly() {
-    this.accountService.clearAccountData()
+  isAuthenticated(): Observable<boolean> {
+    return this.oidcSecurityService.isAuthenticated$.pipe(map((result: AuthenticatedResult) => result.isAuthenticated))
   }
 
   logout() {
-    if (this.accountService.isAuthenticated()) {
-      this.authServerProvider.logout().subscribe(() => this.accountService.clearAccountData())
-    } else {
-      this.accountService.clearAccountData()
-    }
+    this.accountService.clearAccountData()
+    this.authServerProvider.logout().subscribe()
   }
 }
