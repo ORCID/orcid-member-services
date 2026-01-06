@@ -1,4 +1,4 @@
-package org.orcid.mp.user.domain;
+package org.orcid.mp.member.domain;
 
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -80,4 +80,5 @@ public class Member {
     public void setSuperadminEnabled(Boolean superadminEnabled) {
         this.superadminEnabled = superadminEnabled;
     }
+
 }

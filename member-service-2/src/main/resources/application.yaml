@@ -1,3 +1,22 @@
 spring:
   application:
     name: member-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000
+  data:
+    mongodb:
+      database: memberservice
+      host: localhost
+      port: 27017
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+server:
+  port: 9010
+logging:
+  level:
+    root: info
