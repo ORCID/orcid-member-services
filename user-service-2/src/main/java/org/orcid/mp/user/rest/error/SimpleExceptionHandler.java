@@ -56,6 +56,11 @@ public class SimpleExceptionHandler {
                 .body(errors);
     }
 
+    @ExceptionHandler(UserNotLoggedInException.class)
+    public ResponseEntity<String> handleUserNotLoggedInException(UserNotLoggedInException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
         LOG.error("Unexpected error occurred", ex);

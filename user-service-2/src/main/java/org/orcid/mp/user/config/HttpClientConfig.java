@@ -42,7 +42,7 @@ public class HttpClientConfig {
     public RestClient memberServiceRestClient() {
         CloseableHttpClient httpClient = getCloseableHttpClient();
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-        return RestClient.builder().defaultHeader("Authorization", "Basic " + getEncodedMailgunCredentials()).requestFactory(requestFactory).build();
+        return RestClient.builder().requestInterceptor(new BearerTokenInterceptor()).requestFactory(requestFactory).build();
     }
 
     private CloseableHttpClient getCloseableHttpClient() {
