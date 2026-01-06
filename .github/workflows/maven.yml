@@ -5,13 +5,13 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ main, backendServicesUpgrades ]
+    branches: [ main ]
     paths-ignore:
       # Ignore workflow changes
       - '.github/**'
 
   pull_request:
-    branches: [ main ]
+    branches: [ main, backendServicesUpgrades ]
 
   workflow_call:
   workflow_dispatch:
