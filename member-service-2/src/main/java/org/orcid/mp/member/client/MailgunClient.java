@@ -2,6 +2,7 @@ package org.orcid.mp.member.client;
 
 import java.util.Map;
 
+import org.orcid.mp.member.error.MailException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,9 +31,13 @@ public class MailgunClient {
         this.client = client;
     }
 
-    public void sendMail(String to, String subject, String html) {
-        LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
-        Map<String, String> formData = Map.of("from", getFrom(), "to", to, "subject", subject, "html", html);
+    public void sendMail(String to, String subject, String html) throws MailException {
+        sendMail(to, getFrom(), subject, html);
+    }
+
+    public void sendMail(String to, String from, String subject, String html) throws MailException {
+        LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, from);
+        Map<String, String> formData = Map.of("from", from, "to", to, "subject", subject, "html", html);
 
         if (testMode) {
             formData.put("o:testmode", "yes");
@@ -40,9 +45,13 @@ public class MailgunClient {
             LOGGER.info(html);
         }
 
-        ResponseEntity<String> response = client.post().body(formData).retrieve().toEntity(String.class);
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            LOGGER.warn("Received response from mailgun {} - {}", response.getStatusCode().value(), response.getBody());
+        try {
+            ResponseEntity<String> response = client.post().body(formData).retrieve().toEntity(String.class);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                LOGGER.warn("Received response from mailgun {} - {}", response.getStatusCode().value(), response.getBody());
+            }
+        } catch (Exception e) {
+            throw new MailException("Error posting mail to mailgun", e);
         }
     }
 
