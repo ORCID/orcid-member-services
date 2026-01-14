@@ -62,9 +62,6 @@ public class MemberService {
     @Autowired
     private MailService mailService;
 
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
-
     public MemberUpload uploadMemberCSV(InputStream inputStream) {
         LOG.info("Reading member CSV upload");
         MemberUpload upload = null;
