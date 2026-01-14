@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        (-) REMOVE MEMBER ORGANIZATION
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}"/>
+</head>
+<body
+    style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+<div style="padding: 20px; padding-top: 10px; margin: auto;">
+    <div th:insert="~{mail/common :: emailHeader}"></div>
+    <p><strong>(-) REMOVE MEMBER ORGANIZATION</strong></p>
+    <p>
+        <strong>Requested by</strong><br/>
+        <span th:text="(@{|${requestedBy}|})">Andrew User (a.user@aaf.edu.au)</span><br/>
+        <span th:text="(@{|${consortium}|})">Australian Access Federation - AAF</span>
+    </p>
+    <p>
+    <hr/>
+    <strong>Organization</strong>
+    <hr/>
+    </p>
+    <p>
+        <strong>Organization name</strong><br/>
+        <span th:text="(@{|${orgName}|})">Nature Valley University</span>
+    </p>
+
+    <p>
+        <strong>Membership termination date</strong><br/>
+        <span th:text="(@{|${terminationDate}|})">30/04/2023</span>
+    </p>
+</div>
+</body>
+</html>

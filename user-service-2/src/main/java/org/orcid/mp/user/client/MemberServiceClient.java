@@ -24,14 +24,4 @@ public class MemberServiceClient {
         return restClient.get().uri(memberServiceApiUrl + "/members/" + id).retrieve().toEntity(Member.class).getBody();
     }
 
-    private Member getMockMember() {
-        Member member = new Member();
-        member.setAssertionServiceEnabled(true);
-        member.setSuperadminEnabled(true);
-        member.setSalesforceId("salesforce-id");
-        member.setIsConsortiumLead(false);
-        member.setParentSalesforceId(null);
-        return member;
-    }
-
 }
