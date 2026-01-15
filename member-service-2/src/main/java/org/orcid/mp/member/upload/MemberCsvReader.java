@@ -15,8 +15,8 @@ import org.apache.commons.io.input.BOMInputStream;
 
 import org.orcid.mp.member.domain.Member;
 import org.orcid.mp.member.domain.User;
-import org.orcid.mp.member.rest.validation.MemberValidation;
-import org.orcid.mp.member.rest.validation.MemberValidator;
+import org.orcid.mp.member.validation.MemberValidation;
+import org.orcid.mp.member.validation.MemberValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
