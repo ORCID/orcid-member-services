@@ -1,6 +1,5 @@
-package org.orcid.mp.user.rest.error;
+package org.orcid.mp.member.error;
 
-import org.orcid.mp.user.rest.error.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -26,17 +25,10 @@ public class SimpleExceptionHandler {
                 .body(ex.getMessage());
     }
 
-    @ExceptionHandler(InvalidPasswordException.class)
-    public ResponseEntity<String> handleInvalidPasswordException(InvalidPasswordException ex) {
+    @ExceptionHandler(UnauthorizedMemberAccessException.class)
+    public ResponseEntity<String> handleInvalidPasswordException(UnauthorizedMemberAccessException ex) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ex.getMessage());
-    }
-
-    @ExceptionHandler(EmailNotFoundException.class)
-    public ResponseEntity<String> handleEmailNotFoundException(EmailNotFoundException ex) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.FORBIDDEN)
                 .body(ex.getMessage());
     }
 
@@ -55,11 +47,6 @@ public class SimpleExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(errors);
-    }
-
-    @ExceptionHandler(UserNotLoggedInException.class)
-    public ResponseEntity<String> handleUserNotLoggedInException(UserNotLoggedInException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
     }
 
     @ExceptionHandler(AuthorizationDeniedException.class)

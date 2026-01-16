@@ -547,6 +547,14 @@ public class UserResourceIT {
                 .andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(3)).andReturn();
     }
 
+    @Test
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = {"ROLE_USER"}, password = LOGGED_IN_PASSWORD)
+    public void getAllUsersWithoutAdminRole() throws Exception {
+        MvcResult result = restUserMockMvc.perform(
+                        get("/users").param("filter", "firstname").param("size", "50").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isForbidden()).andReturn();
+    }
+
     private void saveTenUsersWithSalesforceId(String salesforceId) {
         for (int i = 0; i < 9; i++) {
             userRepository.save(createUser(String.valueOf(i), salesforceId));
@@ -569,6 +577,7 @@ public class UserResourceIT {
         user.setMainContact(false);
         return user;
     }
+
 
     @Test
     @WithMockUser(username = LOGGED_IN_EMAIL, authorities = {"ROLE_ADMIN", "ROLE_USR"}, password = LOGGED_IN_PASSWORD)
