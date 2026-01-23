@@ -26,31 +26,31 @@ application:
     salt: 5a8b9f1d2c6e7a403b5d8e9c0f4a1b32
     key: member-service
   httpclient:
-    maxConnTotal: 100
-    maxConnPerRoute: 20
-    connectionTimeToLive: 5
+    maxConnTotal: ${APPLICATION_HTTPCLIENT_MAX_CONN_TOTAL:100}
+    maxConnPerRoute: ${APPLICATION_HTTPCLIENT_MAX_CONN_PER_ROUTE:20}
+    connectionTimeToLive: ${APPLICATION_HTTPCLIENT_CONNECTION_TIME_TO_LIVE:20}
   mail:
-    apiKey: some-key
-    apiUrl: http://mail.com/api
-    fromAddress: mp@orcid.org
-    fromName: member-portal
-    testMode: true
-    contactUpdateRecipient: someone@orcid.org
+    apiKey: ${APPLICATION_MAIL_API_KEY}
+    apiUrl: ${APPLICATION_MAIL_API_URL}
+    fromAddress: ${APPLICATION_MAIL_FROM_ADDRESS}
+    fromName: ${APPLICATION_MAIL_FROM_NAME}
+    testMode: ${APPLICATION_MAIL_TEST_MODE:false}
+    contactUpdateRecipient: ${APPLICATION_MAIL_CONTACT_UPDATE_RECIPIENT}
   salesforce:
-    orcidApiClientId: some-client-id
-    orcidApiClientSecret: some-secret
-    clientEndpoint: http://some.com/endpoint
-    tokenEndpoint: http://some.come/token/endpoint
+    orcidApiClientId: ${APPLICATION_ORCID_API_CLIENT_ID}
+    orcidApiClientSecret: ${APPLICATION_ORCID_API_CLIENT_SECRET}
+    clientEndpoint: ${APPLICATION_SALESFORCE_CLIENT_ENDPOINT}
+    tokenEndpoint: ${APPLICATION_SALESFORCE_TOKEN_ENDPOINT}
   userService:
-    apiUrl: http://user.com/service
+    apiUrl: ${APPLICATION_USER_SERVICE_API_URL}
   reports:
-    holisticsMemberDashboardUrl: http://holistics.com/member
-    holisticsMemberDashboardSecret: some-secret
-    holisticsIntegrationDashboardUrl: http://holistics.com/integration
-    holisticsIntegrationDashboardSecret: some-secret
-    holisticsConsortiaDashboardUrl: http://holistics.com/consortia
-    holisticsConsortiaDashboardSecret: some-secret
-    holisticsAffiliationDashboardUrl: http://holistics.com/affiliation
-    holisticsAffiliationDashboardSecret: some-secret
-    holisticsConsortiaMemberAffiliationsDashboardUrl: http://holistics.com/consortiaMember
-    holisticsConsortiaMemberAffiliationsDashboardSecret: some-secret
+    holisticsMemberDashboardUrl: ${APPLICATION_REPORTS_MEMBER_DASHBOARD_URL}
+    holisticsMemberDashboardSecret: ${APPLICATION_REPORTS_MEMBER_DASHBOARD_SECRET}
+    holisticsIntegrationDashboardUrl: ${APPLICATION_REPORTS_INTEGRATION_DASHBOARD_URL}
+    holisticsIntegrationDashboardSecret: ${APPLICATION_REPORTS_INTEGRATION_DASHBOARD_SECRET}
+    holisticsConsortiaDashboardUrl: ${APPLICATION_REPORTS_CONSORTIA_DASHBOARD_URL}
+    holisticsConsortiaDashboardSecret: ${APPLICATION_REPORTS_CONSORTIA_DASHBOARD_SECRET}
+    holisticsAffiliationDashboardUrl: ${APPLICATION_REPORTS_AFFILIATION_DASHBOARD_URL}
+    holisticsAffiliationDashboardSecret: ${APPLICATION_REPORTS_AFFILIATION_DASHBOARD_SECRET}
+    holisticsConsortiaMemberAffiliationsDashboardUrl: ${APPLICATION_REPORTS_CONSORTIA_MEMBER_AFFILIATION_DASHBOARD_URL}
+    holisticsConsortiaMemberAffiliationsDashboardSecret: ${APPLICATION_REPORTS_CONSORTIA_MEMBER_AFFILIATION_DASHBOARD_SECRET}
