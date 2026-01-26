@@ -80,11 +80,8 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
 
     this.loginService.login(credentials).subscribe({
       next: (res) => {
-        // res comes from our MyCustomSuccessHandler: {"status": "success", "redirectUrl": "..."}
         if (res.status === 'success') {
           this.showMfa = false
-          // STEP 2: Trigger the OIDC PKCE Handshake
-          // The library will handle the redirect to localhost:9000/oauth2/authorize
           this.oidcSecurityService.authorize()
         }
       },
