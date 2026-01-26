@@ -47,7 +47,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping
+@RequestMapping("/users")
 public class UserResource {
 
     private final Logger LOG = LoggerFactory.getLogger(UserResource.class);
@@ -75,7 +75,7 @@ public class UserResource {
      * body the updated user.
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
      */
-    @PutMapping("/users")
+    @PutMapping
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
         LOG.debug("REST request to update User : {}", userDTO);
         if (!userValidator.validate(userDTO, getCurrentUser().getLangKey()).isValid()) {
@@ -95,7 +95,7 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      * body all users.
      */
-    @GetMapping("/users")
+    @GetMapping
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Page<UserDTO>> getAllUsers(
             @RequestParam(required = false, name = "filter") String filter, Pageable pageable) {
@@ -121,7 +121,7 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      * body all users.
      */
-    @GetMapping("/users/salesforce/{salesforceId}")
+    @GetMapping("/salesforce/{salesforceId}")
     public ResponseEntity<List<UserDTO>> getUsersBySalesforceId(@PathVariable String salesforceId) {
         User currentUser = getCurrentUser();
         if (!currentUser.getSalesforceId().equals(salesforceId)) {
@@ -147,7 +147,7 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      * body all users.
      */
-    @GetMapping("/users/salesforce/{salesforceId}/p")
+    @GetMapping("/salesforce/{salesforceId}/p")
     public ResponseEntity<Page<UserDTO>> getUsersBySalesforceId(@PathVariable String salesforceId, @RequestParam MultiValueMap<String, String> queryParams,
                                                                 UriComponentsBuilder uriBuilder, @RequestParam(required = false, name = "filter") String filter,
                                                                 Pageable pageable) {
@@ -183,7 +183,7 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      * body the "login" user, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/users/{loginOrId}")
+    @GetMapping("/{loginOrId}")
     public ResponseEntity<UserDTO> getUserByLogin(@PathVariable String loginOrId) {
         LOG.debug("REST request to get User : {}", loginOrId);
         Optional<User> user = userService.getUserByLogin(loginOrId);
@@ -202,7 +202,7 @@ public class UserResource {
      * status {@code 400 (Bad Request)} if the file cannot be parsed.
      * @throws Throwable
      */
-    @PostMapping("/users/upload")
+    @PostMapping("/upload")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) throws Throwable {
         LOG.debug("Uploading users settings CSV");
@@ -220,7 +220,7 @@ public class UserResource {
      * if the user has already an ID.
      * @throws URISyntaxException
      */
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
         LOG.debug("REST request to save UserDTO : {}", userDTO);
         if (!userValidator.validate(userDTO, getCurrentUser().getLangKey()).isValid()) {
@@ -238,7 +238,7 @@ public class UserResource {
      * validation in the body.
      * @throws URISyntaxException
      */
-    @PostMapping("/users/validate")
+    @PostMapping("/validate")
     public ResponseEntity<UserValidation> validateUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
         Optional<User> currentUser = userRepository.findOneByEmailIgnoreCase(SecurityUtils.getCurrentUserLogin().get());
         UserValidation validation = userValidator.validate(userDTO, currentUser.get().getLangKey());
@@ -250,7 +250,7 @@ public class UserResource {
      *
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/users/{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String userId, @RequestParam(value = "noMainContactCheck", required = false) boolean noMainContactCheck) {
         LOG.debug("REST request to delete user {}", userId);
         String authUserLogin = SecurityUtils.getCurrentUserLogin().get();
@@ -282,7 +282,7 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      * body the "login" user, or with status {@code 404 (Not Found)}.
      */
-    @PostMapping("/users/{loginOrId}/sendActivate")
+    @PostMapping("/{loginOrId}/sendActivate")
     public ResponseEntity<UserDTO> sendActivate(@PathVariable String loginOrId) {
         LOG.debug("REST request to send user activation: {}", loginOrId);
         Optional<User> user = userService.getUserByLogin(loginOrId);
@@ -300,7 +300,7 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      * body the "login" user, or with status {@code 404 (Not Found)}.
      */
-    @PostMapping("/users/{key}/resendActivation")
+    @PostMapping("/{key}/resendActivation")
     public ResponseEntity<ResendActivationResponseVM> resendActivation(@PathVariable String key) {
         LOG.debug("REST request to resend user activation for key : {}", key);
         ResendActivationResponseVM response = new ResendActivationResponseVM();
@@ -321,7 +321,7 @@ public class UserResource {
      * @param newSalesforceId the new salesforceId to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
      */
-    @PutMapping("/users/{salesforceId}/{newSalesforceId}")
+    @PutMapping("/{salesforceId}/{newSalesforceId}")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> updateUsersSalesforceId(@PathVariable String salesforceId, @PathVariable String newSalesforceId) {
         LOG.debug("REST request to update users' salesforce id from {} to {}", salesforceId, newSalesforceId);
@@ -341,7 +341,7 @@ public class UserResource {
      * @param newMemberName the new Value of the memberName to update
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
      */
-    @PutMapping("/users/memberName/{salesforceId}/{newMemberName}")
+    @PutMapping("/memberName/{salesforceId}/{newMemberName}")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> updateUsersMemberName(@PathVariable String salesforceId, @PathVariable String newMemberName) {
         LOG.debug("REST request to update users' member names id to {}", newMemberName);
@@ -359,7 +359,7 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      * body the "login" user, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/users/{salesforceId}/owner")
+    @GetMapping("/{salesforceId}/owner")
     public boolean getOwner(@PathVariable String salesforceId) {
         LOG.debug("REST request to get Owner for : {}", salesforceId);
         return userService.hasOwnerForSalesforceId(salesforceId);

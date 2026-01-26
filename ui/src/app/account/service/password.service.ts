@@ -11,7 +11,7 @@ export class PasswordService {
   constructor(private http: HttpClient) {}
 
   initPasswordReset(mail: string): Observable<PasswordResetInitResult | null> {
-    return this.http.post('/services/userservice/api/account/reset-password/init', mail, { observe: 'response' }).pipe(
+    return this.http.post('/services/userservice/account/reset-password/init', mail, { observe: 'response' }).pipe(
       map((res: HttpResponse<any>) => this.getPasswordResetResult(res)),
       catchError((err) => {
         return of(null)
@@ -20,23 +20,23 @@ export class PasswordService {
   }
 
   updatePassword(newPassword: string, currentPassword: string): Observable<any> {
-    return this.http.post('/services/userservice/api/account/change-password', {
+    return this.http.post('/services/userservice/account/change-password', {
       currentPassword,
       newPassword,
     })
   }
 
   savePassword(key: string, newPassword: string): Observable<any> {
-    return this.http.post('/services/userservice/api/account/reset-password/finish', { key, newPassword })
+    return this.http.post('/services/userservice/account/reset-password/finish', { key, newPassword })
   }
 
   validateKey(key: any): Observable<KeyValidationResult> {
-    return this.http.post<KeyValidationResult>('/services/userservice/api/account/reset-password/validate', key)
+    return this.http.post<KeyValidationResult>('/services/userservice/account/reset-password/validate', key)
   }
 
   resendActivationEmail(key: any): Observable<ResendActivationEmailResult> {
     return this.http.post<ResendActivationEmailResult>(
-      '/services/userservice/api/users/' + key.key + '/resendActivation',
+      '/services/userservice/users/' + key.key + '/resendActivation',
       {}
     )
   }

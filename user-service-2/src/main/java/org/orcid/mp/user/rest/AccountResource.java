@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
  * REST controller for managing the current user's account.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/account")
 public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
@@ -52,19 +52,6 @@ public class AccountResource {
     }
 
     /**
-     * {@code GET  /authenticate} : check if the user is authenticated, and
-     * return its login.
-     *
-     * @param request the HTTP request.
-     * @return the login if the user is authenticated.
-     */
-    @GetMapping("/authenticate")
-    public String isAuthenticated(HttpServletRequest request) {
-        log.debug("REST request to check if the current user is authenticated");
-        return request.getRemoteUser();
-    }
-
-    /**
      * {@code POST  /account} : update the current user information.
      *
      * @param userDTO the current user information.
@@ -72,7 +59,7 @@ public class AccountResource {
      * @throws RuntimeException          {@code 500 (Internal Server Error)} if the user login wasn't
      *                                   found.
      */
-    @PostMapping("/account")
+    @PostMapping
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
         User currentUser = userService.getCurrentUser();
         if (!currentUser.getEmail().equalsIgnoreCase(userDTO.getEmail())) {
@@ -89,7 +76,7 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be
      *                          returned.
      */
-    @GetMapping("/account")
+    @GetMapping
     public UserDTO getAccount() {
         User user = userService.getCurrentUser();
         return userMapper.toUserDTO(user);
@@ -101,7 +88,7 @@ public class AccountResource {
      *
      * @return object containing mfa which can then be used to submit otp.
      */
-    @GetMapping("/account/mfa")
+    @GetMapping("/mfa")
     public ResponseEntity<MfaSetup> getMfaSetup() {
         MfaSetup mfaSetup = userService.getMfaSetup();
         return ResponseEntity.ok(mfaSetup);
@@ -113,7 +100,7 @@ public class AccountResource {
      *
      * @param mfaSetup - the otp and secret
      */
-    @PostMapping(path = "/account/mfa/on")
+    @PostMapping(path = "/mfa/on")
     public ResponseEntity<List<String>> switchOnMfa(@RequestBody MfaSetup mfaSetup) {
         if (mfaSetup == null || StringUtils.isBlank(mfaSetup.getOtp())) {
             return ResponseEntity.badRequest().build();
@@ -130,7 +117,7 @@ public class AccountResource {
     /**
      * {@code POST  /account/mfa} : disables mfa for the specified user
      */
-    @PostMapping(path = "/account/{userId}/mfa/off")
+    @PostMapping(path = "/{userId}/mfa/off")
     public ResponseEntity<Void> switchOffMfa(@PathVariable String userId) {
         userService.disableMfa(userId);
         return ResponseEntity.ok().build();
@@ -143,7 +130,7 @@ public class AccountResource {
      * @param passwordChangeDto current and new password.
      * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new password is incorrect.
      */
-    @PostMapping(path = "/account/change-password")
+    @PostMapping(path = "/change-password")
     public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
         if (!checkPasswordLength(passwordChangeDto.getNewPassword())) {
             throw new InvalidPasswordException();
@@ -159,7 +146,7 @@ public class AccountResource {
      * @throws EmailNotFoundException {@code 400 (Bad Request)} if the email address is not
      *                                registered.
      */
-    @PostMapping(path = "/account/reset-password/init")
+    @PostMapping(path = "/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
         mailService.sendPasswordResetMail(userService.requestPasswordReset(mail).orElseThrow(EmailNotFoundException::new));
     }
@@ -173,7 +160,7 @@ public class AccountResource {
      * @throws RuntimeException         {@code 500 (Internal Server Error)} if the password could not
      *                                  be reset.
      */
-    @PostMapping(path = "/account/reset-password/finish")
+    @PostMapping(path = "/reset-password/finish")
     public ResponseEntity<PasswordResetResultVM> finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
@@ -200,7 +187,7 @@ public class AccountResource {
      * @throws RuntimeException         {@code 500 (Internal Server Error)} if the password could not
      *                                  be reset.
      */
-    @PostMapping(path = "/account/reset-password/validate")
+    @PostMapping(path = "/reset-password/validate")
     public ResponseEntity<PasswordResetResultVM> validateKey(@RequestBody KeyVM key) {
         PasswordResetResultVM result = new PasswordResetResultVM();
         if (userService.validResetKey(key.getKey())) {
