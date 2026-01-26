@@ -20,3 +20,37 @@ server:
 logging:
   level:
     root: info
+
+application:
+  encrypt:
+    salt: 5a8b9f1d2c6e7a403b5d8e9c0f4a1b32
+    key: member-service
+  httpclient:
+    maxConnTotal: ${APPLICATION_HTTPCLIENT_MAX_CONN_TOTAL:100}
+    maxConnPerRoute: ${APPLICATION_HTTPCLIENT_MAX_CONN_PER_ROUTE:20}
+    connectionTimeToLive: ${APPLICATION_HTTPCLIENT_CONNECTION_TIME_TO_LIVE:20}
+  mail:
+    apiKey: ${APPLICATION_MAIL_API_KEY}
+    apiUrl: ${APPLICATION_MAIL_API_URL}
+    fromAddress: ${APPLICATION_MAIL_FROM_ADDRESS}
+    fromName: ${APPLICATION_MAIL_FROM_NAME}
+    testMode: ${APPLICATION_MAIL_TEST_MODE:false}
+    contactUpdateRecipient: ${APPLICATION_MAIL_CONTACT_UPDATE_RECIPIENT}
+  salesforce:
+    orcidApiClientId: ${APPLICATION_ORCID_API_CLIENT_ID}
+    orcidApiClientSecret: ${APPLICATION_ORCID_API_CLIENT_SECRET}
+    clientEndpoint: ${APPLICATION_SALESFORCE_CLIENT_ENDPOINT}
+    tokenEndpoint: ${APPLICATION_SALESFORCE_TOKEN_ENDPOINT}
+  userService:
+    apiUrl: ${APPLICATION_USER_SERVICE_API_URL}
+  reports:
+    holisticsMemberDashboardUrl: ${APPLICATION_REPORTS_MEMBER_DASHBOARD_URL}
+    holisticsMemberDashboardSecret: ${APPLICATION_REPORTS_MEMBER_DASHBOARD_SECRET}
+    holisticsIntegrationDashboardUrl: ${APPLICATION_REPORTS_INTEGRATION_DASHBOARD_URL}
+    holisticsIntegrationDashboardSecret: ${APPLICATION_REPORTS_INTEGRATION_DASHBOARD_SECRET}
+    holisticsConsortiaDashboardUrl: ${APPLICATION_REPORTS_CONSORTIA_DASHBOARD_URL}
+    holisticsConsortiaDashboardSecret: ${APPLICATION_REPORTS_CONSORTIA_DASHBOARD_SECRET}
+    holisticsAffiliationDashboardUrl: ${APPLICATION_REPORTS_AFFILIATION_DASHBOARD_URL}
+    holisticsAffiliationDashboardSecret: ${APPLICATION_REPORTS_AFFILIATION_DASHBOARD_SECRET}
+    holisticsConsortiaMemberAffiliationsDashboardUrl: ${APPLICATION_REPORTS_CONSORTIA_MEMBER_AFFILIATION_DASHBOARD_URL}
+    holisticsConsortiaMemberAffiliationsDashboardSecret: ${APPLICATION_REPORTS_CONSORTIA_MEMBER_AFFILIATION_DASHBOARD_SECRET}
