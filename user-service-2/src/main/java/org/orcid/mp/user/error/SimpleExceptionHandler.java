@@ -1,6 +1,5 @@
-package org.orcid.mp.user.rest.error;
+package org.orcid.mp.user.error;
 
-import org.orcid.mp.user.rest.error.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

@@ -1,23 +1,21 @@
 package org.orcid.mp.user.rest;
 
 import java.util.List;
-import java.util.Optional;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.mp.user.config.Constants;
 import org.orcid.mp.user.domain.User;
 import org.orcid.mp.user.dto.PasswordChangeDTO;
 import org.orcid.mp.user.dto.UserDTO;
+import org.orcid.mp.user.error.*;
 import org.orcid.mp.user.mapper.UserMapper;
 import org.orcid.mp.user.repository.UserRepository;
 
-import org.orcid.mp.user.rest.error.*;
-import org.orcid.mp.user.rest.vm.KeyAndPasswordVM;
-import org.orcid.mp.user.rest.vm.KeyVM;
-import org.orcid.mp.user.rest.vm.MfaSetup;
-import org.orcid.mp.user.rest.vm.PasswordResetResultVM;
+import org.orcid.mp.user.pojo.KeyAndPassword;
+import org.orcid.mp.user.pojo.Key;
+import org.orcid.mp.user.pojo.MfaSetup;
+import org.orcid.mp.user.pojo.PasswordResetResult;
 import org.orcid.mp.user.service.MailService;
 import org.orcid.mp.user.service.UserService;
 import org.slf4j.Logger;
@@ -161,12 +159,12 @@ public class AccountResource {
      *                                  be reset.
      */
     @PostMapping(path = "/reset-password/finish")
-    public ResponseEntity<PasswordResetResultVM> finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
+    public ResponseEntity<PasswordResetResult> finishPasswordReset(@RequestBody KeyAndPassword keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
         }
 
-        PasswordResetResultVM result = new PasswordResetResultVM();
+        PasswordResetResult result = new PasswordResetResult();
         try {
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
             result.setSuccess(true);
@@ -188,8 +186,8 @@ public class AccountResource {
      *                                  be reset.
      */
     @PostMapping(path = "/reset-password/validate")
-    public ResponseEntity<PasswordResetResultVM> validateKey(@RequestBody KeyVM key) {
-        PasswordResetResultVM result = new PasswordResetResultVM();
+    public ResponseEntity<PasswordResetResult> validateKey(@RequestBody Key key) {
+        PasswordResetResult result = new PasswordResetResult();
         if (userService.validResetKey(key.getKey())) {
             result.setExpiredKey(userService.expiredResetKey(key.getKey()));
         } else {

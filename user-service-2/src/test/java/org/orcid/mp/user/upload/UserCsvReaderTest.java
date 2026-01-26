@@ -8,8 +8,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.mp.user.domain.User;
 import org.orcid.mp.user.dto.UserDTO;
-import org.orcid.mp.user.rest.validation.UserValidation;
-import org.orcid.mp.user.rest.validation.UserValidator;
+import org.orcid.mp.user.validation.UserValidation;
+import org.orcid.mp.user.validation.UserValidator;
 import org.springframework.context.MessageSource;
 
 import java.io.IOException;

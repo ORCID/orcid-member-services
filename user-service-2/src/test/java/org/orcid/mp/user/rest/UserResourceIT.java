@@ -1,7 +1,6 @@
 package org.orcid.mp.user.rest;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -15,17 +14,15 @@ import org.orcid.mp.user.domain.User;
 import org.orcid.mp.user.dto.UserDTO;
 import org.orcid.mp.user.mapper.UserMapper;
 import org.orcid.mp.user.repository.UserRepository;
-import org.orcid.mp.user.rest.error.SimpleExceptionHandler;
-import org.orcid.mp.user.rest.validation.UserValidator;
-import org.orcid.mp.user.rest.vm.ManagedUserVM;
+import org.orcid.mp.user.error.SimpleExceptionHandler;
+import org.orcid.mp.user.validation.UserValidator;
+import org.orcid.mp.user.pojo.ManagedUser;
 import org.orcid.mp.user.security.AuthoritiesConstants;
 import org.orcid.mp.user.service.AuthorityService;
 import org.orcid.mp.user.service.MailService;
 import org.orcid.mp.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -210,19 +207,19 @@ public class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         // Create the User
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
-        managedUserVM.setActivated(true);
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setMainContact(false);
-        managedUserVM.setSalesforceId(DEFAULT_SALESFORCE_ID);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        ManagedUser managedUser = new ManagedUser();
+        managedUser.setPassword(DEFAULT_PASSWORD);
+        managedUser.setFirstName(DEFAULT_FIRSTNAME);
+        managedUser.setLastName(DEFAULT_LASTNAME);
+        managedUser.setEmail(DEFAULT_EMAIL);
+        managedUser.setActivated(true);
+        managedUser.setImageUrl(DEFAULT_IMAGEURL);
+        managedUser.setLangKey(DEFAULT_LANGKEY);
+        managedUser.setMainContact(false);
+        managedUser.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
-        restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUserVM)))
+        restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))
                 .andExpect(status().isCreated());
 
         // Validate the User in the database
@@ -243,20 +240,20 @@ public class UserResourceIT {
     public void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setId("1L");
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
-        managedUserVM.setActivated(true);
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        ManagedUser managedUser = new ManagedUser();
+        managedUser.setId("1L");
+        managedUser.setPassword(DEFAULT_PASSWORD);
+        managedUser.setFirstName(DEFAULT_FIRSTNAME);
+        managedUser.setLastName(DEFAULT_LASTNAME);
+        managedUser.setEmail(DEFAULT_EMAIL);
+        managedUser.setActivated(true);
+        managedUser.setImageUrl(DEFAULT_IMAGEURL);
+        managedUser.setLangKey(DEFAULT_LANGKEY);
+        managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // An entity with an existing ID cannot be created, so this API call
         // must fail
-        restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUserVM)))
+        restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))
                 .andExpect(status().isBadRequest());
 
         // Validate the User in the database
@@ -271,18 +268,18 @@ public class UserResourceIT {
         userRepository.save(user);
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
-        managedUserVM.setActivated(true);
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        ManagedUser managedUser = new ManagedUser();
+        managedUser.setPassword(DEFAULT_PASSWORD);
+        managedUser.setFirstName(DEFAULT_FIRSTNAME);
+        managedUser.setLastName(DEFAULT_LASTNAME);
+        managedUser.setEmail(DEFAULT_EMAIL);
+        managedUser.setActivated(true);
+        managedUser.setImageUrl(DEFAULT_IMAGEURL);
+        managedUser.setLangKey(DEFAULT_LANGKEY);
+        managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
-        restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUserVM)))
+        restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))
                 .andExpect(status().isBadRequest());
 
         // Validate the User in the database
@@ -297,20 +294,20 @@ public class UserResourceIT {
         userRepository.save(user);
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);// this email should already be
+        ManagedUser managedUser = new ManagedUser();
+        managedUser.setPassword(DEFAULT_PASSWORD);
+        managedUser.setFirstName(DEFAULT_FIRSTNAME);
+        managedUser.setLastName(DEFAULT_LASTNAME);
+        managedUser.setEmail(DEFAULT_EMAIL);// this email should already be
         // used
-        managedUserVM.setMainContact(false);
-        managedUserVM.setActivated(true);
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUser.setMainContact(false);
+        managedUser.setActivated(true);
+        managedUser.setImageUrl(DEFAULT_IMAGEURL);
+        managedUser.setLangKey(DEFAULT_LANGKEY);
+        managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
-        restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUserVM)))
+        restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))
                 .andExpect(status().isBadRequest());
 
         // Validate the User in the database
@@ -324,22 +321,22 @@ public class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         // Create the User
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
-        managedUserVM.setActivated(true);
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setSalesforceId(DEFAULT_SALESFORCE_ID);
-        managedUserVM.setMainContact(true);
-        managedUserVM.setIsAdmin(true);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        ManagedUser managedUser = new ManagedUser();
+        managedUser.setPassword(DEFAULT_PASSWORD);
+        managedUser.setFirstName(DEFAULT_FIRSTNAME);
+        managedUser.setLastName(DEFAULT_LASTNAME);
+        managedUser.setEmail(DEFAULT_EMAIL);
+        managedUser.setActivated(true);
+        managedUser.setImageUrl(DEFAULT_IMAGEURL);
+        managedUser.setLangKey(DEFAULT_LANGKEY);
+        managedUser.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        managedUser.setMainContact(true);
+        managedUser.setIsAdmin(true);
+        managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Mocked member does not have superadmin enabled so this request
         // must fail
-        restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUserVM)))
+        restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))
                 .andExpect(status().isBadRequest());
 
         // Validate the User in the database
@@ -353,22 +350,22 @@ public class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         // Create the User
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
-        managedUserVM.setActivated(true);
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setSalesforceId(ADMIN_SALESFORCE_ID);
-        managedUserVM.setMainContact(true);
-        managedUserVM.setIsAdmin(true);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        ManagedUser managedUser = new ManagedUser();
+        managedUser.setPassword(DEFAULT_PASSWORD);
+        managedUser.setFirstName(DEFAULT_FIRSTNAME);
+        managedUser.setLastName(DEFAULT_LASTNAME);
+        managedUser.setEmail(DEFAULT_EMAIL);
+        managedUser.setActivated(true);
+        managedUser.setImageUrl(DEFAULT_IMAGEURL);
+        managedUser.setLangKey(DEFAULT_LANGKEY);
+        managedUser.setSalesforceId(ADMIN_SALESFORCE_ID);
+        managedUser.setMainContact(true);
+        managedUser.setIsAdmin(true);
+        managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Mocked member does not have superadmin enabled so this request
         // must fail
-        restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUserVM)))
+        restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))
                 .andExpect(status().isCreated());
 
         // Validate the User in the database
@@ -419,24 +416,24 @@ public class UserResourceIT {
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).get();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setPassword(UPDATED_PASSWORD);
-        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
-        managedUserVM.setLastName(UPDATED_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
-        managedUserVM.setActivated(updatedUser.getActivated());
-        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
-        managedUserVM.setLangKey(UPDATED_LANGKEY);
-        managedUserVM.setMainContact(false);
-        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
-        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
-        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-        managedUserVM.setSalesforceId(UPDATED_SALESFORCE_ID);
+        ManagedUser managedUser = new ManagedUser();
+        managedUser.setId(updatedUser.getId());
+        managedUser.setPassword(UPDATED_PASSWORD);
+        managedUser.setFirstName(UPDATED_FIRSTNAME);
+        managedUser.setLastName(UPDATED_LASTNAME);
+        managedUser.setEmail(DEFAULT_EMAIL);
+        managedUser.setActivated(updatedUser.getActivated());
+        managedUser.setImageUrl(UPDATED_IMAGEURL);
+        managedUser.setLangKey(UPDATED_LANGKEY);
+        managedUser.setMainContact(false);
+        managedUser.setCreatedBy(updatedUser.getCreatedBy());
+        managedUser.setCreatedDate(updatedUser.getCreatedDate());
+        managedUser.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        managedUser.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUser.setSalesforceId(UPDATED_SALESFORCE_ID);
 
-        restUserMockMvc.perform(put("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUserVM)))
+        restUserMockMvc.perform(put("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))
                 .andExpect(status().isOk());
 
         // Validate the User in the database
@@ -588,24 +585,24 @@ public class UserResourceIT {
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).get();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setPassword(UPDATED_PASSWORD);
-        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
-        managedUserVM.setLastName(UPDATED_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
-        managedUserVM.setActivated(updatedUser.getActivated());
-        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
-        managedUserVM.setLangKey(UPDATED_LANGKEY);
-        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
-        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
-        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-        managedUserVM.setSalesforceId(ADMIN_SALESFORCE_ID);
-        managedUserVM.setIsAdmin(true);
+        ManagedUser managedUser = new ManagedUser();
+        managedUser.setId(updatedUser.getId());
+        managedUser.setPassword(UPDATED_PASSWORD);
+        managedUser.setFirstName(UPDATED_FIRSTNAME);
+        managedUser.setLastName(UPDATED_LASTNAME);
+        managedUser.setEmail(DEFAULT_EMAIL);
+        managedUser.setActivated(updatedUser.getActivated());
+        managedUser.setImageUrl(UPDATED_IMAGEURL);
+        managedUser.setLangKey(UPDATED_LANGKEY);
+        managedUser.setCreatedBy(updatedUser.getCreatedBy());
+        managedUser.setCreatedDate(updatedUser.getCreatedDate());
+        managedUser.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        managedUser.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUser.setSalesforceId(ADMIN_SALESFORCE_ID);
+        managedUser.setIsAdmin(true);
 
-        restUserMockMvc.perform(put("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUserVM)))
+        restUserMockMvc.perform(put("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))
                 .andExpect(status().isOk());
     }
 
@@ -618,24 +615,24 @@ public class UserResourceIT {
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).get();
 
-        ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setPassword(UPDATED_PASSWORD);
-        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
-        managedUserVM.setLastName(UPDATED_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
-        managedUserVM.setActivated(updatedUser.getActivated());
-        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
-        managedUserVM.setLangKey(UPDATED_LANGKEY);
-        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
-        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
-        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-        managedUserVM.setSalesforceId(DEFAULT_SALESFORCE_ID);
-        managedUserVM.setIsAdmin(true);
+        ManagedUser managedUser = new ManagedUser();
+        managedUser.setId(updatedUser.getId());
+        managedUser.setPassword(UPDATED_PASSWORD);
+        managedUser.setFirstName(UPDATED_FIRSTNAME);
+        managedUser.setLastName(UPDATED_LASTNAME);
+        managedUser.setEmail(DEFAULT_EMAIL);
+        managedUser.setActivated(updatedUser.getActivated());
+        managedUser.setImageUrl(UPDATED_IMAGEURL);
+        managedUser.setLangKey(UPDATED_LANGKEY);
+        managedUser.setCreatedBy(updatedUser.getCreatedBy());
+        managedUser.setCreatedDate(updatedUser.getCreatedDate());
+        managedUser.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        managedUser.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUser.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        managedUser.setIsAdmin(true);
 
-        restUserMockMvc.perform(put("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUserVM)))
+        restUserMockMvc.perform(put("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))
                 .andExpect(status().isBadRequest());
     }
 

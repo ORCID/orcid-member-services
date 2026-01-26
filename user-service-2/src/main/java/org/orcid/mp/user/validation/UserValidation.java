@@ -1,4 +1,4 @@
-package org.orcid.mp.user.rest.validation;
+package org.orcid.mp.user.validation;
 
 import java.util.List;
 

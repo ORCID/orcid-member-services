@@ -15,11 +15,11 @@ import org.orcid.mp.user.domain.User;
 import org.orcid.mp.user.dto.UserDTO;
 import org.orcid.mp.user.mapper.UserMapper;
 import org.orcid.mp.user.repository.UserRepository;
-import org.orcid.mp.user.rest.error.BadRequestAlertException;
-import org.orcid.mp.user.rest.error.LoginAlreadyUsedException;
-import org.orcid.mp.user.rest.validation.UserValidation;
-import org.orcid.mp.user.rest.validation.UserValidator;
-import org.orcid.mp.user.rest.vm.ResendActivationResponseVM;
+import org.orcid.mp.user.error.BadRequestAlertException;
+import org.orcid.mp.user.error.LoginAlreadyUsedException;
+import org.orcid.mp.user.validation.UserValidation;
+import org.orcid.mp.user.validation.UserValidator;
+import org.orcid.mp.user.pojo.ResendActivationResponse;
 import org.orcid.mp.user.security.AuthoritiesConstants;
 import org.orcid.mp.user.security.SecurityUtils;
 import org.orcid.mp.user.service.UserService;
@@ -301,9 +301,9 @@ public class UserResource {
      * body the "login" user, or with status {@code 404 (Not Found)}.
      */
     @PostMapping("/{key}/resendActivation")
-    public ResponseEntity<ResendActivationResponseVM> resendActivation(@PathVariable String key) {
+    public ResponseEntity<ResendActivationResponse> resendActivation(@PathVariable String key) {
         LOG.debug("REST request to resend user activation for key : {}", key);
-        ResendActivationResponseVM response = new ResendActivationResponseVM();
+        ResendActivationResponse response = new ResendActivationResponse();
         try {
             userService.resendActivationEmail(key);
             response.setResent(true);

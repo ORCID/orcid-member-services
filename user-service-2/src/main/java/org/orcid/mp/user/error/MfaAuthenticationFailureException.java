@@ -1,4 +1,4 @@
-package org.orcid.mp.user.rest.error;
+package org.orcid.mp.user.error;
 
 import org.springframework.security.core.AuthenticationException;
 
