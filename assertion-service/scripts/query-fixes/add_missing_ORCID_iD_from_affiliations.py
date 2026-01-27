@@ -40,8 +40,13 @@ class AddMissingORCIDiDFROMAffiliations:
             List of problematic assertions documents
         """
         query = {
-            'orcid_id': None,
-            'status': 'IN_ORCID'
+            'orcid_id': {
+                '$exists': False
+            },
+            'put_code': {
+                '$exists': True,
+                '$ne': ''
+            }
         }
 
         try:
@@ -75,7 +80,7 @@ class AddMissingORCIDiDFROMAffiliations:
         Fix the assertions without Orcid iD.
 
         Returns:
-            Number of sf successfully updated
+            Number of assertions successfully updated
         """
         if not assertions:
             logger.info("No orcid records to fix")

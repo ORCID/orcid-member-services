@@ -40,7 +40,7 @@ class AffiliationStatusFixer:
         """
         query = {
             'added_to_orcid': {'$exists': True},
-            'put_code': {'$exists': False}
+            'put_code': {'$exists': True, '$ne': ""}
         }
 
         try:

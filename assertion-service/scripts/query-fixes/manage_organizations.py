@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
 """
-Script to merge organizations from affiliations.
+Script to Update or Merge Organizations
 
-This script accepts two parameters: a Primary Salesforce Organization ID and a Deleted Salesforce Organization ID.
-All references to the Deleted Organization ID are updated to use the Primary Organization ID.
+This script accepts the following parameters:
+
+- Primary Salesforce Organization ID (--primary)
+
+- Salesforce Organization ID to update (--member_to_update)
+- Delete member flag (--delete)
+
+All references to the organization being updated (including users and assertions) are reassigned to the Primary Salesforce Organization ID.
+
+If the --delete flag is provided, the script deletes the updated (now obsolete) Salesforce Organization record from the member collection after all references have been successfully updated.
 
 Related to: https://app.clickup.com/t/9014437828/PD-3781
 
 Usage:
-    python merge_organizations.py --primary=0012i00000eiI3CAAU --deleted=0012i00000aQxlxAAC
+    python update_organizations.py --primary=0012i00000eiI3CAAU --member_to_update=0012i00000aQxlxAAC
 """
 
 import argparse
@@ -22,29 +30,123 @@ from db_connection import MongoDBConnection
 from config import Config
 
 # Set up logging
-logger = setup_logger(__name__, log_file='merge-organizations.log')
+logger = setup_logger(__name__, log_file='manage-organizations.log')
 
 
-class MergeOrganizationsAssertionAndOrcidRecords:
 
-    def __init__(self, connection: MongoDBConnection, primary: str, deleted: str):
-        self.connection = connection
-        self.collection_assertion = connection.get_collection('assertion')
-        self.collection_orcid_record = connection.get_collection('orcid_record')
+class UpdateOrganizationMember:
+
+    def __init__(self, connection_to_db: MongoDBConnection, primary: str, member_to_update: str, delete: bool):
+        self.connection = connection_to_db
+        self.collection_member = connection_to_db.get_collection('member')
         self.primary = primary
-        self.deleted = deleted
+        self.member_to_update = member_to_update
+        self.delete = delete
+
+    def find_problematic_members(self):
+        """
+        Find members to update.
+        """
+
+        try:
+            logger.info("Searching for members to update...")
+
+            member_to_update = self.collection_member.find_one(
+                {"salesforce_id": self.member_to_update}
+            )
+
+            primary_member = self.collection_member.find_one(
+                {"salesforce_id": self.primary}
+            )
+
+            if not member_to_update:
+                raise ValueError(f"Member to update not found: {self.member_to_update}")
+
+            if not primary_member:
+                raise ValueError(f"Primary member not found: {self.primary}")
+
+            logger.info(
+                "Found member to update salesforce_id=%s, client_name=%s",
+                member_to_update.get("salesforce_id"),
+                member_to_update.get("client_name"),
+            )
+
+            logger.info(
+                "Found primary member salesforce_id=%s, client_name=%s",
+                primary_member.get("salesforce_id"),
+                primary_member.get("client_name"),
+            )
+
+        except OperationFailure as e:
+            logger.error(f"Failed to query members: {e}")
+            raise
+        except Exception as e:
+            logger.exception("Unexpected error during member update search")
+            raise
+
+    def update_member(self):
+        try:
+            logger.info("Updating member salesforce_id=%s", self.member_to_update)
+
+            if self.delete:
+                result = self.collection_member.delete_one({"salesforce_id": self.member_to_update})
+
+                if result.deleted_count == 1:
+                    logger.info(
+                        "Updated member from memberToDelete=%s to primary=%s",
+                        self.member_to_update,
+                        self.primary,
+                    )
+                else:
+                    logger.error(
+                        "Failed to update member salesforce_id=%s",
+                        self.member_to_update
+                    )
+            else :
+                result = self.collection_member.update_one(
+                    {"salesforce_id": self.member_to_update},
+                    {"$set": {"salesforce_id": self.primary}}
+                )
+
+            if result.modified_count == 1:
+                logger.info(
+                    "Updated member salesforce_id from %s to %s",
+                    self.member_to_update,
+                    self.primary
+                )
+            else:
+                logger.warning(
+                    "Member salesforce_id=%s already up to date",
+                    self.member_to_update
+                )
+
+
+
+        except OperationFailure as e:
+            logger.error(f"Failed to query members: {e}")
+        except Exception as e:
+            logger.exception("Unexpected error during member update search")
+
+class UpdateOrganizationsAssertionAndOrcidRecords:
+
+    def __init__(self, connection_to_db: MongoDBConnection, primary: str, member_to_update: str):
+        self.connection_to_db = connection_to_db
+        self.collection_assertion = connection_to_db.get_collection('assertion')
+        self.collection_orcid_record = connection_to_db.get_collection('orcid_record')
+        self.primary = primary
+        self.member_to_update = member_to_update
 
     def find_problematic_assertions(self) -> List[Dict[str, Any]]:
         """
-        Find assertions to merge.
+        Find assertions to update.
 
         Returns:
             List of problematic assertions documents
         """
 
         try:
-            logger.info("Searching for assertions to merge...")
-            assertions = list(self.collection_assertion.find({ 'salesforce_id': self.deleted }))
+            logger.info("Searching for assertions to update...")
+            assertions = list(self.collection_assertion.find({ 'salesforce_id': self.member_to_update }))
             logger.info(f"Found {len(assertions)} assertions to fix")
             return assertions
         except OperationFailure as e:
@@ -56,14 +158,14 @@ class MergeOrganizationsAssertionAndOrcidRecords:
 
     def find_problematic_orcid_records(self) -> List[Dict[str, Any]]:
         """
-        Find orcid records to merge.
+        Find orcid records to update.
 
         Returns:
             List of problematic orcid records documents
         """
 
         try:
-            logger.info("Searching for orcid records to merge...")
+            logger.info("Searching for orcid records to update...")
 
             query = {
                 '$expr': {
@@ -84,7 +186,7 @@ class MergeOrganizationsAssertionAndOrcidRecords:
                                             {
                                                 '$eq': [
                                                     '$$token.salesforce_id',
-                                                    self.deleted
+                                                    self.member_to_update
                                                 ]
                                             }
                                         ]
@@ -97,7 +199,7 @@ class MergeOrganizationsAssertionAndOrcidRecords:
                 }
             }
 
-            orcid_records = list(self.collection.find(query))
+            orcid_records = list(self.collection_orcid_record.find(query))
             logger.info(f"Found {len(orcid_records)} orcid records to fix")
             return orcid_records
         except OperationFailure as e:
@@ -123,7 +225,7 @@ class MergeOrganizationsAssertionAndOrcidRecords:
 
     def print_orcid_records_report(self, orcid_records: List[Dict[str, Any]]):
         if not orcid_records:
-            logger.info("No problematic assertions found")
+            logger.info("No problematic orcid records found")
             return
 
         logger.info("\n" + "="*80)
@@ -140,7 +242,7 @@ class MergeOrganizationsAssertionAndOrcidRecords:
         Fix the assertions without Orcid iD.
 
         Returns:
-            Number of sf successfully updated
+            Number of assertions updated
         """
         if not assertions:
             logger.info("No orcid records to fix")
@@ -150,8 +252,8 @@ class MergeOrganizationsAssertionAndOrcidRecords:
 
         try:
 
-            result = self.collection.update_many(
-                {'salesforce_id': self.deleted},
+            result = self.collection_assertion.update_many(
+                {'salesforce_id': self.member_to_update},
                 {'$set': {'salesforce_id': self.primary}}
             )
 
@@ -170,7 +272,7 @@ class MergeOrganizationsAssertionAndOrcidRecords:
 
     def find_orcid_records(self, orcid_records: List[Dict[str, Any]]) -> int:
         """
-        Fix the orcid records that we wanted to merge.
+        Fix the orcid records that we wanted to update.
 
         Returns:
             Number of orcid records successfully updated
@@ -189,9 +291,9 @@ class MergeOrganizationsAssertionAndOrcidRecords:
                 tokens = orcid_record.get("tokens", [])
 
                 for t in tokens:
-                    salesforce_id_delete = self.deleted
+                    salesforce_id_update = self.member_to_update
                     salesforce_id_primary = self.primary
-                    if salesforce_id_delete == t.get("salesforce_id"):
+                    if salesforce_id_update == t.get("salesforce_id"):
                         result = self.collection_orcid_record.update_one(
                             {"_id": orcid_record["_id"]},
                             {
@@ -200,12 +302,12 @@ class MergeOrganizationsAssertionAndOrcidRecords:
                                 }
                             },
                             array_filters=[
-                                {"token.salesforce_id": salesforce_id_delete}
+                                {"token.salesforce_id": salesforce_id_update}
                             ]
                         )
                         modified_count += result.modified_count
                         logger.info(
-                            f"Updated SF iD: deleted={salesforce_id_delete}, primary={salesforce_id_primary}"
+                            f"Updated SF iD: member_to_update={salesforce_id_update}, primary={salesforce_id_primary}"
                         )
 
             logger.info(f" Successfully updated {modified_count} orcid records")
@@ -243,25 +345,25 @@ class MergeOrganizationsAssertionAndOrcidRecords:
             logger.warning(f" Verification failed: {len(remaining)} problematic orcid records still exist")
             return False
 
-class MergeOrganizationsUser:
+class UpdateOrganizationsUser:
 
-    def __init__(self, connection: MongoDBConnection, collection: str, primary: str, deleted: str):
-        self.connection = connection
-        self.collection = connection.get_collection(collection)
+    def __init__(self, connection_to_db: MongoDBConnection, collection: str, primary: str, member_to_update: str):
+        self.connection_to_db = connection_to_db
+        self.collection_users = connection_to_db.get_collection(collection)
         self.primary = primary
-        self.deleted = deleted
+        self.member_to_update = member_to_update
 
     def find_problematic_users(self) -> List[Dict[str, Any]]:
         """
-        Find users to merge.
+        Find users to update.
 
         Returns:
             List of problematic users documents
         """
 
         try:
-            logger.info("Searching for users to merge...")
-            users = list(self.collection.find({ 'salesforce_id': self.deleted }))
+            logger.info("Searching for users to update...")
+            users = list(self.collection_users.find({ 'salesforce_id': self.member_to_update }))
             logger.info(f"Found {len(users)} users to fix")
             return users
         except OperationFailure as e:
@@ -287,7 +389,7 @@ class MergeOrganizationsUser:
 
     def find_users(self, users: List[Dict[str, Any]]) -> int:
         """
-        Fix the users to merge.
+        Fix the users to update.
 
         Returns:
             Number of users successfully updated
@@ -300,8 +402,8 @@ class MergeOrganizationsUser:
 
         try:
 
-            result = self.collection.update_many(
-                {'salesforce_id': self.deleted},
+            result = self.collection_users.update_many(
+                {'salesforce_id': self.member_to_update},
                 {'$set': {'salesforce_id': self.primary}}
             )
 
@@ -331,12 +433,12 @@ class MergeOrganizationsUser:
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
-        description='Merge assertions',
+        description='Manage assertions',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   # Interactive mode
-  python merge_organizations.py
+  python update_organizations.py
 
   MONGO_URI or MONGO_DB       - MongoDB connection string
   MONGO_DATABASE or DATABASE  - Database name (default: assertionservice)
@@ -348,7 +450,12 @@ Examples:
     parser.add_argument('--database', help='Database name (overrides env)')
     parser.add_argument('--collection', help='Collection name (overrides env)')
     parser.add_argument('--primary', help='Primary organization SF iD')
-    parser.add_argument('--deleted', help='Deleted organization SF iD')
+    parser.add_argument('--member_to_update', help='Organization SF iD to update')
+    parser.add_argument(
+        "--delete",
+        action="store_true",
+        help="Delete the member after references are updated"
+    )
 
     return parser.parse_args()
 
@@ -361,32 +468,44 @@ def main():
     mongo_uri = args.mongo_uri or config.mongo_uri
     database_assertionservice = 'assertionservice'
     database_userservice = 'userservice'
+    database_memberservice = 'memberservice'
     primary = args.primary
-    deleted = args.deleted
+    update = args.member_to_update
+    delete = args.delete
 
     logger.info("="*80)
-    logger.info("Merge organizations")
+    logger.info("Manage organizations")
     logger.info("="*80)
-    logger.info(f"Databases: {database_assertionservice} and {database_userservice} ")
-    logger.info(f"Collections: assertion")
+    logger.info(f"Databases: {database_assertionservice}, {database_userservice} and {database_memberservice} ")
+    logger.info(f"Collections: assertion, orcid_record, jhi_user and member")
     logger.info(f"MongoDB URI: {mongo_uri[:20]}..." if len(mongo_uri) > 20 else f"MongoDB URI: {mongo_uri}")
     logger.info(f"Primary SF iD: {primary}")
-    logger.info(f"Deleted SF iD: {deleted}")
+    logger.info(f"Update SF iD: {update}")
+    logger.info(f"Delete option: {delete}")
     logger.info("="*80 + "\n")
 
     connection_assertionservice = MongoDBConnection(mongo_uri, database_assertionservice)
     connection_userservice = MongoDBConnection(mongo_uri, database_userservice)
+    connection_memberservice = MongoDBConnection(mongo_uri, database_memberservice)
 
     try:
         if not connection_assertionservice.connect():
-            logger.error("Failed to connect to MongoDB. Exiting.")
+            logger.error("Failed to connect to assertionservice MongoDB. Exiting.")
             return 1
 
         if not connection_userservice.connect():
-            logger.error("Failed to connect to MongoDB. Exiting.")
+            logger.error("Failed to connect to userservice MongoDB. Exiting.")
             return 1
 
-        fixer_assertionservice = MergeOrganizationsAssertionAndOrcidRecords(connection_assertionservice, primary, deleted)
+        if not connection_memberservice.connect():
+            logger.error("Failed to connect to memberservice MongoDB. Exiting.")
+            return 1
+
+        fixer_memberservice = UpdateOrganizationMember(connection_memberservice, primary, update, delete)
+
+        fixer_memberservice.find_problematic_members()
+
+        fixer_assertionservice = UpdateOrganizationsAssertionAndOrcidRecords(connection_assertionservice, primary, update)
 
         assertions = fixer_assertionservice.find_problematic_assertions()
 
@@ -396,11 +515,11 @@ def main():
 
         fixer_assertionservice.print_orcid_records_report(orcid_records)
 
-        fixer_userservice = MergeOrganizationsUser(connection_userservice, 'jhi_user', primary, deleted)
+        fixer_userservice = UpdateOrganizationsUser(connection_userservice, 'jhi_user', primary, update)
 
         users = fixer_userservice.find_problematic_users()
 
-        fixer_userservice.print_users_report(assertions)
+        fixer_userservice.print_users_report(users)
 
         if not assertions and orcid_records and users:
             logger.info("\n No fixes needed. All assertions, orcid records and users are correct.")
@@ -411,6 +530,8 @@ def main():
         logger.info(f"  {len(assertions)} assertions will be updated")
         logger.info(f"  {len(orcid_records)} orcid records will be updated")
         logger.info(f"  {len(users)} users will be updated")
+        if delete:
+            logger.info(f"  Member {update} will be deleted")
         logger.info("="*80)
 
         try:
@@ -443,19 +564,26 @@ def main():
         #         logger.warning("\n Some users may still need attention")
         #         return 1
 
+        # fixer_memberservice.update_member()
+
         logger.info("\n" + "="*80)
         logger.info("Script completed successfully")
         logger.info("="*80)
         return 0
 
+    except ValueError as e:
+        logger.error(f"\nOperation failed: {str(e)}")
+        return 1
     except KeyboardInterrupt:
         logger.info("\n\n Operation cancelled by user (Ctrl+C)")
         return 1
     except Exception as e:
         logger.error(f"\n Unexpected error: {e}", exc_info=True)
-        return 1
+        raise
     finally:
-        connection.disconnect()
+        connection_assertionservice.disconnect()
+        connection_memberservice.disconnect()
+        connection_userservice.disconnect()
 
 
 if __name__ == '__main__':
