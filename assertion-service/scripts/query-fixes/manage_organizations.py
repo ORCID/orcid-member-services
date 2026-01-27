@@ -543,28 +543,28 @@ def main():
             logger.info("\n\n Operation cancelled by user")
             return 1
 
-        # updated_count_assertions = fixer_assertionservice.find_assertions(assertions)
+        updated_count_assertions = fixer_assertionservice.find_assertions(assertions)
 
-        # if updated_count_assertions > 0:
-        #     if not fixer_assertionservice.verify_fixes_assertions():
-        #         logger.warning("\n Some assertions may still need attention")
-        #         return 1
+        if updated_count_assertions > 0:
+            if not fixer_assertionservice.verify_fixes_assertions():
+                logger.warning("\n Some assertions may still need attention")
+                return 1
 
-        # updated_count_orcid_records = fixer_assertionservice.find_orcid_records(assertions)
+        updated_count_orcid_records = fixer_assertionservice.find_orcid_records(assertions)
 
-        # if updated_count_orcid_records > 0:
-        #     if not fixer_assertionservice.verify_fixes_orcid_records():
-        #         logger.warning("\n Some orcid records may still need attention")
-        #         return 1
+        if updated_count_orcid_records > 0:
+            if not fixer_assertionservice.verify_fixes_orcid_records():
+                logger.warning("\n Some orcid records may still need attention")
+                return 1
 
         updated_count_users = fixer_userservice.find_users(users)
 
-        # if updated_count_users > 0:
-        #     if not fixer_userservice.verify_fixes_users():
-        #         logger.warning("\n Some users may still need attention")
-        #         return 1
+        if updated_count_users > 0:
+            if not fixer_userservice.verify_fixes_users():
+                logger.warning("\n Some users may still need attention")
+                return 1
 
-        # fixer_memberservice.update_member()
+        fixer_memberservice.update_member()
 
         logger.info("\n" + "="*80)
         logger.info("Script completed successfully")
