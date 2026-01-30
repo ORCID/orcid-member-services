@@ -11,6 +11,21 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:9000
+      client:
+        registration:
+          # This ID is used in your Java RestClient code
+          internal-user-client:
+            provider: myself
+            client-id: ${APPLICATION_INTERNAL_CLIENT_ID}
+            client-secret: ${APPLICATION_INTERNAL_CLIENT_SECRET}
+            authorization-grant-type: client_credentials
+            scope: internal
+        provider:
+          myself:
+            # It calls itself!
+            issuer-uri: http://localhost:9000
+            # If running in Docker/K8s, this might need to be the service name, e.g.:
+            # token-uri: http://user-service:9000/oauth2/token
   data:
     mongodb:
       database: userservice
@@ -44,3 +59,6 @@ application:
   baseUrl: ${APPLICATION_BASE_URL}
   sendActivationRemindersDelay: 3600000
   name: Member Portal User Service
+  internal:
+    clientId: ${APPLICATION_INTERNAL_CLIENT_ID}
+    clientSecret: ${APPLICATION_INTERNAL_CLIENT_SECRET}

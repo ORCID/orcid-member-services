@@ -5,6 +5,7 @@ import org.orcid.mp.user.security.MfaAuthenticationFailureHandler;
 import org.orcid.mp.user.security.MfaAuthenticationProvider;
 import org.orcid.mp.user.security.MfaDetailsSource;
 import org.orcid.mp.user.service.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -59,6 +60,12 @@ import java.util.UUID;
 @EnableMethodSecurity
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 public class SecurityConfig {
+
+    @Value("${application.internal.clientId")
+    private String internalClientId;
+
+    @Value("${application.internal.clientSecret")
+    private String internalClientSecret;
 
     @Bean
     @Order(1)
@@ -138,7 +145,18 @@ public class SecurityConfig {
                         .build())
                 .build();
 
-        return new InMemoryRegisteredClientRepository(oidcClient);
+        RegisteredClient userServiceClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId(internalClientId) // The ID for internal calls
+                .clientSecret(encoder.encode(internalClientSecret)) // The password
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .scope("internal")
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenTimeToLive(Duration.ofMinutes(5)) // Keep internal tokens short-lived
+                        .build())
+                .build();
+
+        return new InMemoryRegisteredClientRepository(oidcClient, userServiceClient);
     }
 
     @Bean
