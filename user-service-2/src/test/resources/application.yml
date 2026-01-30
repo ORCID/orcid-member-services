@@ -2,7 +2,23 @@ spring:
   messages:
     basename: i18n/messages
     encoding: utf-8
+  security:
+    oauth2:
+      client:
+        registration:
+          internal-user-client:
+            provider: myself
+            client-id: test-client-id
+            client-secret: test-client-secret
+            authorization-grant-type: client_credentials
+            scope: internal
+        provider:
+          myself:
+            token-uri: http://localhost:9000/oauth2/token
 application:
+  internal:
+    clientId: userservice
+    clientSecret: userserviceSecret
   encrypt:
     salt: 5a8b9f1d2c6e7a403b5d8e9c0f4a1b32
     key: user-service

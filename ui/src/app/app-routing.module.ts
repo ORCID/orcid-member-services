@@ -34,7 +34,6 @@ const routes: Routes = [
     path: 'report',
     loadChildren: () => import('./report/report.module').then((m) => m.ReportModule),
   },
-  { path: 'login/callback', component: AppComponent },
   { path: 'login', component: LoginComponent },
 ]
 
