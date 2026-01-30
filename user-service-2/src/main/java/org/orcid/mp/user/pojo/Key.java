@@ -1,9 +1,9 @@
-package org.orcid.mp.user.rest.vm;
+package org.orcid.mp.user.pojo;
 
 /**
  * View Model object for storing the user's key.
  */
-public class KeyVM {
+public class Key {
 
     private String key;
 

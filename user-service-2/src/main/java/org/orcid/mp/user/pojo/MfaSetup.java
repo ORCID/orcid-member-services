@@ -1,4 +1,4 @@
-package org.orcid.mp.user.rest.vm;
+package org.orcid.mp.user.pojo;
 
 public class MfaSetup {
 

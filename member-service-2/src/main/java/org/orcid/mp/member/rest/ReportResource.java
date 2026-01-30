@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * REST controller for requesting JWTs for chartio reports.
  */
 @RestController
-@RequestMapping
+@RequestMapping("/reports")
 public class ReportResource {
 
     private final Logger LOG = LoggerFactory.getLogger(ReportResource.class);
@@ -27,7 +27,7 @@ public class ReportResource {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/reports/member")
+    @GetMapping("/member")
     public ResponseEntity<ReportInfo> getMemberReport() {
         User user = userService.getLoggedInUser();
         LOG.info("Generating member report for user {} of {}", user.getEmail(), user.getMemberName());
@@ -35,7 +35,7 @@ public class ReportResource {
         return ResponseEntity.ok(memberReportInfo);
     }
 
-    @GetMapping("/reports/integration")
+    @GetMapping("/integration")
     public ResponseEntity<ReportInfo> getIntegrationReport() {
         User user = userService.getLoggedInUser();
         LOG.info("Generating integration report for user {} of {}", user.getEmail(), user.getMemberName());
@@ -43,7 +43,7 @@ public class ReportResource {
         return ResponseEntity.ok(memberReportInfo);
     }
 
-    @GetMapping("/reports/consortia")
+    @GetMapping("/consortia")
     public ResponseEntity<ReportInfo> getConsortiaReport() {
         User user = userService.getLoggedInUser();
         LOG.info("Generating consortium report for user {} of {}", user.getEmail(), user.getMemberName());
@@ -51,7 +51,7 @@ public class ReportResource {
         return ResponseEntity.ok(consortiumReportInfo);
     }
 
-    @GetMapping("/reports/affiliation")
+    @GetMapping("/affiliation")
     public ResponseEntity<ReportInfo> getAffiliationReport() {
         User user = userService.getLoggedInUser();
         LOG.info("Generating affiliation report for user {} of {}", user.getEmail(), user.getMemberName());
@@ -59,7 +59,7 @@ public class ReportResource {
         return ResponseEntity.ok(affiliationReportInfo);
     }
 
-    @GetMapping("/reports/consortia-member-affiliations")
+    @GetMapping("/consortia-member-affiliations")
     public ResponseEntity<ReportInfo> getConsortiaMemberAffiliationsReport() {
         User user = userService.getLoggedInUser();
         LOG.info("Generating consortia member affiliations report for user {} of {}", user.getEmail(), user.getMemberName());

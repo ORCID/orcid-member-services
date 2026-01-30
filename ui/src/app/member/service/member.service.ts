@@ -42,7 +42,7 @@ import { ISFNewConsortiumMember } from '../model/salesforce-new-consortium-membe
 export class MemberService {
   constructor(protected http: HttpClient) {}
 
-  public resourceUrl = '/services/memberservice/api'
+  public resourceUrl = '/memberservice'
   public managedMember = new BehaviorSubject<string | null>(null)
 
   private memberData = new BehaviorSubject<ISFMemberData | undefined | null>(undefined)

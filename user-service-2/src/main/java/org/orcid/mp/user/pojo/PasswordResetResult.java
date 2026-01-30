@@ -1,6 +1,6 @@
-package org.orcid.mp.user.rest.vm;
+package org.orcid.mp.user.pojo;
 
-public class PasswordResetResultVM {
+public class PasswordResetResult {
 
     private boolean success;
 

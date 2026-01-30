@@ -11,6 +11,8 @@ import org.orcid.mp.user.domain.Member;
 import org.orcid.mp.user.dto.UserDTO;
 import org.orcid.mp.user.repository.UserRepository;
 import org.orcid.mp.user.service.UserService;
+import org.orcid.mp.user.validation.UserValidation;
+import org.orcid.mp.user.validation.UserValidator;
 import org.springframework.context.MessageSource;
 
 import java.util.Locale;

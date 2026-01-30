@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { ILoginCredentials } from '../model/login.model'
@@ -16,15 +16,22 @@ export class AuthServerProvider {
     return this.oidcSecurityService.getAccessToken()
   }
 
-  // 2. Point to the new backend endpoint on :9000
-  // Note: Spring expects 'mfa_code' based on our MfaDetailsSource
   login(credentials: ILoginCredentials): Observable<any> {
-    return this.http.post<any>('/userservice/api/login', null, {
-      params: {
-        username: credentials.username,
-        password: credentials.password,
-        mfa_code: credentials.mfaCode ?? '',
-      },
+    const body = new URLSearchParams()
+    body.set('username', credentials.username)
+    body.set('password', credentials.password)
+
+    if (credentials.mfaCode) {
+      body.set('mfa_code', credentials.mfaCode)
+    }
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+    })
+
+    return this.http.post('/userservice/account/login', body.toString(), {
+      headers: headers,
+      responseType: 'json',
     })
   }
 

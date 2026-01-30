@@ -1,4 +1,4 @@
-package org.orcid.mp.user.rest.error;
+package org.orcid.mp.user.error;
 
 public class EmailAlreadyUsedException extends BadRequestAlertException {
 

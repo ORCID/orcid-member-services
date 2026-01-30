@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping
+@RequestMapping("/members")
 public class MemberResource {
 
     private final Logger LOG = LoggerFactory.getLogger(MemberResource.class);
@@ -53,7 +53,7 @@ public class MemberResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      * @throws JSONException
      */
-    @PostMapping("/members")
+    @PostMapping
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<Member> createMember(@Valid @RequestBody Member member)
             throws URISyntaxException, JSONException {
@@ -71,7 +71,7 @@ public class MemberResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      * @throws JSONException
      */
-    @PostMapping("/members/validate")
+    @PostMapping("/validate")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<MemberValidation> validateMember(@Valid @RequestBody Member member)
             throws URISyntaxException, JSONException {
@@ -88,7 +88,7 @@ public class MemberResource {
      *         status {@code 400 (Bad Request)} if the file cannot be parsed.
      * @throws Throwable
      */
-    @PostMapping("/members/upload")
+    @PostMapping("/upload")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<String> uploadMember(@RequestParam("file") MultipartFile file) throws Throwable {
         LOG.debug("Uploading member CSV");
@@ -108,7 +108,7 @@ public class MemberResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      * @throws JSONException
      */
-    @PutMapping("/members")
+    @PutMapping
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<Member> updateMember(@Valid @RequestBody Member member)
             throws URISyntaxException, JSONException {
@@ -133,7 +133,7 @@ public class MemberResource {
      *         {@code 500 (Internal Server Error)} if the member couldn't be
      *         updated.
      */
-    @PostMapping("/members/{salesforceId}/language/{language}")
+    @PostMapping("/{salesforceId}/language/{language}")
     public ResponseEntity<Void> updateMemberDefaultLanguage(@PathVariable String salesforceId,
             @PathVariable String language) {
         LOG.info("REST request to update default language for member : {}", salesforceId);
@@ -151,7 +151,7 @@ public class MemberResource {
      *
      * @return the {@link MemberUpdateData}
      */
-    @PutMapping("/members/{salesforceId}/member-details")
+    @PutMapping("/{salesforceId}/member-details")
     public ResponseEntity<Boolean> updatePublicMemberDetails(@RequestBody MemberUpdateData memberUpdateData,
             @PathVariable String salesforceId) {
         LOG.info("REST request to update member public details for salesforce id {}", salesforceId);
@@ -172,7 +172,7 @@ public class MemberResource {
      *
      * @return the {@link MemberDetails}
      */
-    @GetMapping("/members/{salesforceId}/member-details")
+    @GetMapping("/{salesforceId}/member-details")
     public ResponseEntity<MemberDetails> getMemberDetails(@PathVariable String salesforceId) {
         LOG.debug("REST request to get member details");
         try {
@@ -196,7 +196,7 @@ public class MemberResource {
      *
      * @return the {@link MemberDetails}
      */
-    @GetMapping("/members/{salesforceId}/member-contacts")
+    @GetMapping("/{salesforceId}/member-contacts")
     public ResponseEntity<MemberContacts> getMemberContacts(@PathVariable String salesforceId) {
         LOG.debug("REST request to get member contacts for member {}", salesforceId);
         try {
@@ -213,7 +213,7 @@ public class MemberResource {
      *
      * @return the {@link MemberDetails}
      */
-    @GetMapping("/members/{salesforceId}/member-org-ids")
+    @GetMapping("/{salesforceId}/member-org-ids")
     public ResponseEntity<MemberOrgIds> getMemberOrgIds(@PathVariable String salesforceId) {
         LOG.debug("REST request to get member org ids for member {}", salesforceId);
         try {
@@ -231,7 +231,7 @@ public class MemberResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the
      *         list of member in body.
      */
-    @GetMapping("/members")
+    @GetMapping
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<Page<Member>> getAllMembers(@RequestParam(required = false, name = "filter") String filter,
             Pageable pageable) {
@@ -258,7 +258,7 @@ public class MemberResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the
      *         list of member in body.
      */
-    @GetMapping("/members/list/all")
+    @GetMapping("/list/all")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
     public ResponseEntity<List<Member>> getMembersList() {
         LOG.debug("REST request to get a page of Member");
@@ -273,7 +273,7 @@ public class MemberResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      *         body the member, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/members/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Member> getMember(@PathVariable String id) {
         LOG.debug("REST request to get Member : {}", id);
         Optional<Member> member = memberService.getMember(id);
@@ -295,7 +295,7 @@ public class MemberResource {
      *         the member details in the body, or status
      *         {@code 404 (Not Found)}.
      */
-    @GetMapping("/members/authorized/{encryptedEmail}")
+    @GetMapping("/authorized/{encryptedEmail}")
     public ResponseEntity<Member> getAuthorizedMember(@PathVariable String encryptedEmail) {
         LOG.debug("REST request to get authorized Member details for encrypted email : {}", encryptedEmail);
         Optional<Member> member = memberService.getAuthorizedMemberForUser(encryptedEmail);
@@ -306,7 +306,7 @@ public class MemberResource {
         return ResponseEntity.ok(member.get());
     }
 
-    @PostMapping("/members/{salesforceId}/contact-update")
+    @PostMapping("/{salesforceId}/contact-update")
     public ResponseEntity<MemberContactUpdateResponse> processMemberContactUpdate(
             @RequestBody MemberContactUpdate memberContactUpdate,
             @PathVariable String salesforceId) {
@@ -320,7 +320,7 @@ public class MemberResource {
     }
 
     @PreAuthorize("hasRole(\"ROLE_CONSORTIUM_LEAD\")")
-    @PostMapping("/members/add-consortium-member")
+    @PostMapping("/add-consortium-member")
     public ResponseEntity<Void> requestNewConsortiumMember(@RequestBody AddConsortiumMember addConsortiumMember) {
         LOG.debug("REST request to request add new consortium member");
         memberService.requestNewConsortiumMember(addConsortiumMember);
@@ -328,7 +328,7 @@ public class MemberResource {
     }
 
     @PreAuthorize("hasRole(\"ROLE_CONSORTIUM_LEAD\")")
-    @PostMapping("/members/remove-consortium-member")
+    @PostMapping("/remove-consortium-member")
     public ResponseEntity<Void> requestRemoveConsortiumMember(
             @RequestBody RemoveConsortiumMember removeConsortiumMember) {
         LOG.debug("REST request to request remove consortium member");

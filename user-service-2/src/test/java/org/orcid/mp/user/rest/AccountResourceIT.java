@@ -17,11 +17,11 @@ import org.orcid.mp.user.dto.PasswordChangeDTO;
 import org.orcid.mp.user.dto.UserDTO;
 import org.orcid.mp.user.mapper.UserMapper;
 import org.orcid.mp.user.repository.UserRepository;
-import org.orcid.mp.user.rest.error.SimpleExceptionHandler;
-import org.orcid.mp.user.rest.vm.KeyAndPasswordVM;
-import org.orcid.mp.user.rest.vm.KeyVM;
-import org.orcid.mp.user.rest.vm.ManagedUserVM;
-import org.orcid.mp.user.rest.vm.PasswordResetResultVM;
+import org.orcid.mp.user.error.SimpleExceptionHandler;
+import org.orcid.mp.user.pojo.KeyAndPassword;
+import org.orcid.mp.user.pojo.Key;
+import org.orcid.mp.user.pojo.ManagedUser;
+import org.orcid.mp.user.pojo.PasswordResetResult;
 import org.orcid.mp.user.security.AuthoritiesConstants;
 import org.orcid.mp.user.service.AuthorityService;
 import org.orcid.mp.user.service.MailService;
@@ -301,7 +301,7 @@ public class AccountResourceIT {
         user.setEmail("change-password-too-small@example.com");
         userRepository.save(user);
 
-        String newPassword = RandomStringUtils.randomAlphanumeric(ManagedUserVM.PASSWORD_MIN_LENGTH - 1);
+        String newPassword = RandomStringUtils.randomAlphanumeric(ManagedUser.PASSWORD_MIN_LENGTH - 1);
 
         restMvc.perform(post("/api/account/change-password").contentType(RestTestUtil.APPLICATION_JSON_UTF8)
                 .content(RestTestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))).andExpect(status().isBadRequest());
@@ -319,7 +319,7 @@ public class AccountResourceIT {
         user.setEmail("change-password-too-long@example.com");
         userRepository.save(user);
 
-        String newPassword = RandomStringUtils.randomAlphanumeric(ManagedUserVM.PASSWORD_MAX_LENGTH + 1);
+        String newPassword = RandomStringUtils.randomAlphanumeric(ManagedUser.PASSWORD_MAX_LENGTH + 1);
 
         restMvc.perform(post("/api/account/change-password").contentType(RestTestUtil.APPLICATION_JSON_UTF8)
                 .content(RestTestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))).andExpect(status().isBadRequest());
@@ -380,7 +380,7 @@ public class AccountResourceIT {
         user.setResetKey("reset key");
         userRepository.save(user);
 
-        KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
+        KeyAndPassword keyAndPassword = new KeyAndPassword();
         keyAndPassword.setKey(user.getResetKey());
         keyAndPassword.setNewPassword("new password");
 
@@ -389,7 +389,7 @@ public class AccountResourceIT {
                         post("/api/account/reset-password/finish").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(keyAndPassword)))
                 .andExpect(status().isOk()).andReturn();
         ObjectMapper mapper = new ObjectMapper();
-        PasswordResetResultVM resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResultVM.class);
+        PasswordResetResult resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResult.class);
         assertThat(resetResult.isSuccess()).isTrue();
         assertThat(resetResult.isInvalidKey()).isFalse();
         assertThat(resetResult.isExpiredKey()).isFalse();
@@ -407,7 +407,7 @@ public class AccountResourceIT {
         user.setResetKey("reset key too small");
         userRepository.save(user);
 
-        KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
+        KeyAndPassword keyAndPassword = new KeyAndPassword();
         keyAndPassword.setKey(user.getResetKey());
         keyAndPassword.setNewPassword("foo");
 
@@ -420,7 +420,7 @@ public class AccountResourceIT {
 
     @Test
     public void testFinishPasswordResetWrongKey() throws Exception {
-        KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
+        KeyAndPassword keyAndPassword = new KeyAndPassword();
         keyAndPassword.setKey("wrong reset key");
         keyAndPassword.setNewPassword("new password");
 
@@ -429,7 +429,7 @@ public class AccountResourceIT {
                         post("/api/account/reset-password/finish").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(keyAndPassword)))
                 .andExpect(status().isOk()).andReturn();
         ObjectMapper mapper = new ObjectMapper();
-        PasswordResetResultVM resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResultVM.class);
+        PasswordResetResult resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResult.class);
         assertThat(resetResult.isSuccess()).isFalse();
         assertThat(resetResult.isInvalidKey()).isTrue();
         assertThat(resetResult.isExpiredKey()).isFalse(); // because key doesn't
@@ -445,7 +445,7 @@ public class AccountResourceIT {
         user.setResetKey("resetkey");
         userRepository.save(user);
 
-        KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
+        KeyAndPassword keyAndPassword = new KeyAndPassword();
         keyAndPassword.setKey("resetkey");
         keyAndPassword.setNewPassword("something");
 
@@ -454,7 +454,7 @@ public class AccountResourceIT {
                         post("/api/account/reset-password/finish").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(keyAndPassword)))
                 .andExpect(status().isOk()).andReturn();
         ObjectMapper mapper = new ObjectMapper();
-        PasswordResetResultVM resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResultVM.class);
+        PasswordResetResult resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResult.class);
         assertThat(resetResult.isSuccess()).isFalse();
         assertThat(resetResult.isInvalidKey()).isFalse();
         assertThat(resetResult.isExpiredKey()).isTrue();
@@ -469,14 +469,14 @@ public class AccountResourceIT {
         user.setResetKey("resetkey");
         userRepository.save(user);
 
-        KeyVM key = new KeyVM();
+        Key key = new Key();
         key.setKey("resetkey");
 
         MvcResult result = restMvc
                 .perform(post("/api/account/reset-password/validate").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(key)))
                 .andExpect(status().isOk()).andReturn();
         ObjectMapper mapper = new ObjectMapper();
-        PasswordResetResultVM resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResultVM.class);
+        PasswordResetResult resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResult.class);
         assertThat(resetResult.isSuccess()).isFalse();
         assertThat(resetResult.isInvalidKey()).isFalse();
         assertThat(resetResult.isExpiredKey()).isTrue();
@@ -484,14 +484,14 @@ public class AccountResourceIT {
 
     @Test
     public void testValidateKey_invalidKey() throws Exception {
-        KeyVM key = new KeyVM();
+        Key key = new Key();
         key.setKey("incorrectValue");
 
         MvcResult result = restMvc
                 .perform(post("/api/account/reset-password/validate").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(key)))
                 .andExpect(status().isOk()).andReturn();
         ObjectMapper mapper = new ObjectMapper();
-        PasswordResetResultVM resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResultVM.class);
+        PasswordResetResult resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResult.class);
         assertThat(resetResult.isSuccess()).isFalse();
         assertThat(resetResult.isInvalidKey()).isTrue();
         assertThat(resetResult.isExpiredKey()).isFalse();
