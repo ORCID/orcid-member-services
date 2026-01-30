@@ -61,10 +61,10 @@ import java.util.UUID;
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 public class SecurityConfig {
 
-    @Value("${application.internal.clientId")
+    @Value("${application.internal.clientId}")
     private String internalClientId;
 
-    @Value("${application.internal.clientSecret")
+    @Value("${application.internal.clientSecret}")
     private String internalClientSecret;
 
     @Bean
@@ -96,7 +96,7 @@ public class SecurityConfig {
                                                           UserDetailsService userDetailsService) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/unprotected", "/api/**", "/.well-known/**").permitAll() // Ensure login is accessible
+                        .requestMatchers("/account/login", "/unprotected", "/api/**", "/.well-known/**").permitAll() // Ensure login is accessible
                         .anyRequest().authenticated())
 
                 .formLogin(form -> form
