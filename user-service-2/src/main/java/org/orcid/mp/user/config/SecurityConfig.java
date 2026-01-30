@@ -101,7 +101,7 @@ public class SecurityConfig {
 
                 .formLogin(form -> form
                         .loginPage("http://localhost:4200/login")
-                        .loginProcessingUrl("/api/login")
+                        .loginProcessingUrl("/account/login")
                         .authenticationDetailsSource(new MfaDetailsSource())
                         .successHandler(new AuthenticationSuccessHandler())
                         .failureHandler(new MfaAuthenticationFailureHandler())
@@ -135,7 +135,7 @@ public class SecurityConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://localhost:4200/login/callback")
+                .redirectUri("http://localhost:4200")
                 .scope(OidcScopes.OPENID)
                 .scope("MP")
                 .tokenSettings(tokenSettings)

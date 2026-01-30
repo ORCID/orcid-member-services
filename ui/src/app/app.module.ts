@@ -33,7 +33,7 @@ import { AuthInterceptor, AuthModule } from 'angular-auth-oidc-client'
     AuthModule.forRoot({
       config: {
         authority: 'http://localhost:9000', // Your Spring Auth Server
-        redirectUrl: window.location.origin + '/login/callback',
+        redirectUrl: window.location.origin,
         postLogoutRedirectUri: window.location.origin,
         clientId: 'mp-ui-client',
         scope: 'openid MP',
