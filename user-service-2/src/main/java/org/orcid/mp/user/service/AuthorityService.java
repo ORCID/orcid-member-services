@@ -1,6 +1,7 @@
 package org.orcid.mp.user.service;
 
 
+import org.orcid.mp.user.client.InternalMemberServiceClient;
 import org.orcid.mp.user.client.MemberServiceClient;
 import org.orcid.mp.user.domain.Member;
 import org.orcid.mp.user.domain.User;
@@ -16,7 +17,7 @@ import java.util.stream.Stream;
 public class AuthorityService {
 
     @Autowired
-    private MemberServiceClient memberServiceClient;
+    private InternalMemberServiceClient internalMemberServiceClient;
 
     public Set<String> getAuthoritiesForUser(User user) {
         Set<String> authorities = Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet());
@@ -25,7 +26,7 @@ public class AuthorityService {
         }
 
         if (!org.apache.commons.lang3.StringUtils.isBlank(user.getSalesforceId())) {
-            Member member = memberServiceClient.getMember(user.getSalesforceId());
+            Member member = internalMemberServiceClient.getMember(user.getSalesforceId());
             if (member != null) {
                 if (member.getAssertionServiceEnabled() != null && member.getAssertionServiceEnabled().booleanValue()) {
                     authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
