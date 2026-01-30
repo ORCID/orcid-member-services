@@ -22,10 +22,8 @@ spring:
             scope: internal
         provider:
           myself:
-            # It calls itself!
-            issuer-uri: http://localhost:9000
-            # If running in Docker/K8s, this might need to be the service name, e.g.:
-            # token-uri: http://user-service:9000/oauth2/token
+            token-uri: http://localhost:9000/oauth2/token
+            authorization-uri: http://localhost:9000/oauth2/authorize
   data:
     mongodb:
       database: userservice
