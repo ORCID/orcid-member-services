@@ -50,13 +50,13 @@ public class CsvReportService {
 
     @Autowired
     private StoredFileService storedFileService;
-    
+
     @Autowired
     private MailService mailService;
-    
+
     @Autowired
     private MessageSource messageSource;
-    
+
     public void storeCsvReportRequest(String userId, String filename, String type) {
         Instant now = Instant.now();
         CsvReport csvReport = new CsvReport();
@@ -67,14 +67,14 @@ public class CsvReportService {
         csvReport.setOriginalFilename(filename);
         csvReportRepository.save(csvReport);
     }
-    
+
     public void processCsvReports() {
         LOG.info("Processing pending CSV reports");
         List<CsvReport> reports = csvReportRepository.findAllUnprocessed();
         reports.forEach(r -> {
             try {
                 processCsvReportRequest(r);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 LOG.warn("Failed to generate CSV report of type {} for user {}", r.getReportType(), r.getOwnerId(), e);
                 StringWriter sw = new StringWriter();
                 PrintWriter pw = new PrintWriter(sw);
@@ -91,7 +91,7 @@ public class CsvReportService {
         AssertionServiceUser user = userService.getUserById(csvReport.getOwnerId());
         String salesforceId = user.getSalesforceId();
         Locale locale = LocaleUtils.getLocale(user.getLangKey());
-        
+
         String subject = null;
         String content = null;
         String report = null;
@@ -120,7 +120,7 @@ public class CsvReportService {
         File reportFile = new File(storedFile.getFileLocation());
         mailService.sendCsvReportMail(reportFile, user, subject, content);
         LOG.info("Report sent to {}", user.getEmail());
-        
+
         storedFileService.markAsProcessed(storedFile);
     }
 
