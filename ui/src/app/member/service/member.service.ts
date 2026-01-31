@@ -51,12 +51,11 @@ export class MemberService {
   private countries = new BehaviorSubject<ISFCountry[] | undefined>(undefined)
 
   find(id: string): Observable<IMember> {
-    return this.http.get<IMember>(`${this.resourceUrl}/members/${id}`).pipe(
-      map((res: IMember) => this.convertDateFromServer(res)),
-      catchError((err) => {
-        return of(err)
-      })
-    )
+    console.log('getting memember')
+
+    return this.http
+      .get<IMember>(`${this.resourceUrl}/members/${id}`)
+      .pipe(map((res: IMember) => this.convertDateFromServer(res)))
   }
 
   create(msMember: IMember): Observable<IMember> {

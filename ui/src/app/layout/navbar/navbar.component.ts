@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import {
   faAddressCard,
   faUniversity,
@@ -13,11 +11,12 @@ import {
   faWrench,
   faLock,
 } from '@fortawesome/free-solid-svg-icons'
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http'
 import { AccountService, LoginService } from '../../account'
 import { MemberService } from 'src/app/member/service/member.service'
 import { IAccount } from 'src/app/account/model/account.model'
 import { IMember } from 'src/app/member/model/member.model'
+import { OidcSecurityService } from 'angular-auth-oidc-client'
+import { filter, switchMap } from 'rxjs/operators'
 
 @Component({
   selector: 'app-navbar',
@@ -49,30 +48,45 @@ export class NavbarComponent implements OnInit {
     private loginService: LoginService,
     private accountService: AccountService,
     private memberService: MemberService,
-    private router: Router
+    private oidcSecurityService: OidcSecurityService
   ) {
     this.isNavbarCollapsed = true
   }
 
   ngOnInit() {
-    this.accountService.getAccountData().subscribe(() => {
-      if (!this.memberCallDone && this.isAuthenticated() && this.hasRoleUser()) {
-        this.memberCallDone = true
-        const salesforceId = this.accountService.getSalesforceId()
-        if (salesforceId) {
-          this.memberService.find(salesforceId).subscribe({
-            next: (res: IMember | null) => {
-              if (res) {
-                this.organizationName = res.clientName
-                this.consortiumLead = res.isConsortiumLead
-                this.consortiumMember = res.parentSalesforceId != null
-              }
-              return this.organizationName
-            },
-          })
+    this.oidcSecurityService.isAuthenticated$
+      .pipe(
+        // 1. Wait until the OIDC library confirms we are logged in
+        filter(({ isAuthenticated }) => isAuthenticated),
+
+        // 2. Once logged in, switch to waiting for the Account Data
+        // (This ensures we don't use a stale/cached ID before the new token is ready)
+        switchMap(() => this.accountService.getAccountData())
+      )
+      .subscribe(() => {
+        // 3. Now we are safe: We have a Token AND User Data
+        if (!this.memberCallDone && this.hasRoleUser()) {
+          this.memberCallDone = true
+
+          const salesforceId = this.accountService.getSalesforceId()
+
+          if (salesforceId) {
+            console.log('Fetching member for ID:', salesforceId)
+            this.memberService.find(salesforceId).subscribe({
+              next: (res: IMember | null) => {
+                if (res) {
+                  this.organizationName = res.clientName
+                  this.consortiumLead = res.isConsortiumLead
+                  this.consortiumMember = res.parentSalesforceId != null
+                }
+              },
+              error: (err) => console.error('Member fetch failed', err),
+            })
+          } else {
+            console.warn('Authenticated, but Salesforce ID is missing!')
+          }
         }
-      }
-    })
+      })
   }
 
   collapseNavbar() {

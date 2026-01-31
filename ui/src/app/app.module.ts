@@ -18,6 +18,8 @@ import { FormsModule } from '@angular/forms'
 import { AuthExpiredInterceptor } from './shared/interceptor/auth-expired.interceptor'
 import { AuthInterceptor, AuthModule } from 'angular-auth-oidc-client'
 
+const origin = window.location.origin
+
 @NgModule({
   declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
   imports: [
@@ -41,7 +43,7 @@ import { AuthInterceptor, AuthModule } from 'angular-auth-oidc-client'
         silentRenew: true,
         useRefreshToken: true,
         logLevel: 1,
-        secureRoutes: ['/userservice/account'],
+        secureRoutes: ['/userservice', '/memberservice'],
       },
     }),
   ],
