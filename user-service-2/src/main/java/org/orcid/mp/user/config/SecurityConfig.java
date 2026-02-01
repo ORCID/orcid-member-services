@@ -99,7 +99,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/account/login", "/unprotected", "/api/**", "/.well-known/**").permitAll() // Ensure login is accessible
+                        .requestMatchers("/account/login", "/unprotected", "/api/**", "/.well-known/**", "/connect/logout").permitAll() // Ensure login is accessible
                         .anyRequest().authenticated())
 
                 .formLogin(form -> form
@@ -139,6 +139,7 @@ public class SecurityConfig {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri("http://localhost:4200")
+                .postLogoutRedirectUri("http://localhost:4200")
                 .scope(OidcScopes.OPENID)
                 .scope("MP")
                 .tokenSettings(tokenSettings)

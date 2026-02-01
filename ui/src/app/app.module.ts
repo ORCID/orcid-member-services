@@ -44,6 +44,7 @@ const origin = window.location.origin
         useRefreshToken: true,
         logLevel: 1,
         secureRoutes: ['/userservice', '/memberservice'],
+        autoUserInfo: false,
       },
     }),
   ],

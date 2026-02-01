@@ -22,9 +22,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, accessToken, errorMessage }) => {
-      console.log('CHECK AUTH RESULT:', isAuthenticated)
+      console.log('App component - checkAuth result:', isAuthenticated)
       if (isAuthenticated) {
-        console.log('OIDC Authentication Successful')
+        console.log('app component fetching account data...')
 
         this.accountService.getAccountData(true).subscribe(() => {
           this.eventService.broadcast(new Event(EventType.LOG_IN_SUCCESS))
