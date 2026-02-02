@@ -31,9 +31,6 @@ public class HttpClientConfig {
     @Value("${application.mail.apiUrl}")
     private String mailApiUrl;
 
-    @Value("${application.orcid.apiUrl}")
-    private String orcidApiUrl;
-
     @Value("${application.userService.apiUrl}")
     private String userServiceApiUrl;
 
@@ -62,10 +59,13 @@ public class HttpClientConfig {
     }
 
     @Bean(name = "orcidRestClient")
-    public RestClient salesforceRestClient() {
+    public RestClient orcidRestClient() {
         CloseableHttpClient httpClient = getCloseableHttpClient();
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-        return RestClient.builder().baseUrl(orcidApiUrl).requestFactory(requestFactory).build();
+        return RestClient.builder()
+                .defaultHeader("Accept","application/json")
+                .defaultHeader("Content-Type", "application/json")
+                .requestFactory(requestFactory).build();
     }
 
     private CloseableHttpClient getCloseableHttpClient() {
