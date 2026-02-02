@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Observable } from 'rxjs'
+import { Observable, take } from 'rxjs'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { ILoginCredentials } from '../model/login.model'
 
@@ -35,7 +35,31 @@ export class AuthServerProvider {
     })
   }
 
-  logout(): Observable<any> {
-    return this.oidcSecurityService.logoff()
+  logout() {
+    // 2. Unwrap the Observable to get the actual string token
+    this.oidcSecurityService
+      .getIdToken()
+      .pipe(take(1))
+      .subscribe((idToken) => {
+        if (idToken) {
+          console.log('Logout: Performing Server log off')
+
+          const authOptions = {
+            customParams: {
+              id_token_hint: idToken,
+              post_logout_redirect_uri: window.location.origin,
+            },
+          }
+
+          this.oidcSecurityService.logoff(undefined, authOptions).subscribe((result) => {
+            console.log('Server logoff initiated', result)
+          })
+        } else {
+          // Fallback: No token found
+          console.warn('Logout: No ID Token found. Local log off only.')
+          this.oidcSecurityService.logoffLocal()
+          window.location.href = '/'
+        }
+      })
   }
 }

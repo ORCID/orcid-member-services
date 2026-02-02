@@ -23,6 +23,6 @@ export class LoginService {
 
   logout() {
     this.accountService.clearAccountData()
-    this.authServerProvider.logout().subscribe()
+    this.authServerProvider.logout()
   }
 }

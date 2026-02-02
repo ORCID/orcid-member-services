@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
-import { Observable, map } from 'rxjs'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Observable } from 'rxjs'
 import { ORCID_BASE_URL } from '../app.constants'
 import { OrcidRecord } from '../shared/model/orcid-record.model'
 

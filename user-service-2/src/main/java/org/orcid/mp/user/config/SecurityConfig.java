@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -30,6 +31,7 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -94,9 +96,10 @@ public class SecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http,
                                                           UserService userService,
                                                           UserDetailsService userDetailsService) throws Exception {
+
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/account/login", "/unprotected", "/api/**", "/.well-known/**").permitAll() // Ensure login is accessible
+                        .requestMatchers("/account/login", "/unprotected", "/api/**", "/.well-known/**", "/connect/logout").permitAll() // Ensure login is accessible
                         .anyRequest().authenticated())
 
                 .formLogin(form -> form
@@ -109,7 +112,7 @@ public class SecurityConfig {
                 )
                 .authenticationProvider(new MfaAuthenticationProvider(userService, passwordEncoder(), userDetailsService))
                 .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("http://localhost:4200/login"))
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )
                 .csrf(csrf -> csrf.disable());
         return http.build();
@@ -136,6 +139,7 @@ public class SecurityConfig {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri("http://localhost:4200")
+                .postLogoutRedirectUri("http://localhost:4200")
                 .scope(OidcScopes.OPENID)
                 .scope("MP")
                 .tokenSettings(tokenSettings)
