@@ -41,16 +41,6 @@ public class User {
 
     private String memberName;
 
-    public String getLoginAs() {
-        return loginAs;
-    }
-
-    public void setLoginAs(String loginAs) {
-        this.loginAs = loginAs;
-    }
-
-    private String loginAs;
-
     public String getId() {
         return id;
     }
