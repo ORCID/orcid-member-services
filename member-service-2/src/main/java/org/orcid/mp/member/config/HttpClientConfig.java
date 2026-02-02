@@ -32,6 +32,9 @@ public class HttpClientConfig {
     @Value("${application.mail.apiUrl}")
     private String mailApiUrl;
 
+    @Value("${application.userService.apiUrl}")
+    private String userServiceApiUrl;
+
     @Bean(name = "mailgunRestClient")
     public RestClient mailgunRestClient() {
         CloseableHttpClient httpClient = getCloseableHttpClient();
@@ -43,7 +46,7 @@ public class HttpClientConfig {
     public RestClient userServiceRestClient() {
         CloseableHttpClient httpClient = getCloseableHttpClient();
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-        return RestClient.builder().requestInterceptor(new BearerTokenInterceptor()).requestFactory(requestFactory).build();
+        return RestClient.builder().baseUrl(userServiceApiUrl).requestInterceptor(new BearerTokenInterceptor()).requestFactory(requestFactory).build();
     }
 
     @Bean(name = "salesforceRestClient")
