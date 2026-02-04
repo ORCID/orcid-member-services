@@ -35,6 +35,7 @@ public class InternalClientConfig {
 
     /**
      * RestClient for making internal requests to the member service with scope 'internal', where no user token is present for authorization.
+     *
      * @param authorizedClientManager
      * @return
      */
