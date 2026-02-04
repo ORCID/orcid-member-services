@@ -105,6 +105,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/internal/**").hasAuthority("SCOPE_internal")
                         .requestMatchers("/account/login", "/unprotected", "/api/**", "/.well-known/**", "/connect/logout").permitAll() // Ensure login is accessible
                         .anyRequest().authenticated())
 
