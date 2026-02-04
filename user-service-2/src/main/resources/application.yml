@@ -60,3 +60,5 @@ application:
   internal:
     clientId: ${APPLICATION_INTERNAL_CLIENT_ID}
     clientSecret: ${APPLICATION_INTERNAL_CLIENT_SECRET}
+    assertionServiceClientId: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_ID}
+    assertionServiceClientSecret: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_CLIENT_SECRET}
