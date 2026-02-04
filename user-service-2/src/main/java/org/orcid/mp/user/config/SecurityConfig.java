@@ -69,10 +69,10 @@ public class SecurityConfig {
     @Value("${application.internal.clientSecret}")
     private String internalClientSecret;
 
-    @Value("${application.internal.clientId}")
+    @Value("${application.internal.assertionServiceClientId}")
     private String internalAssertionServiceClientId;
 
-    @Value("${application.internal.clientSecret}")
+    @Value("${application.internal.assertionServiceClientSecret}")
     private String internalAssertionServiceClientSecret;
 
     @Bean
@@ -178,7 +178,7 @@ public class SecurityConfig {
                         .build())
                 .build();
 
-        return new InMemoryRegisteredClientRepository(oidcClient, userServiceClient);
+        return new InMemoryRegisteredClientRepository(oidcClient, userServiceClient, assertionServiceClient);
     }
 
     @Bean

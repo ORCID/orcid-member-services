@@ -2,6 +2,7 @@ package org.orcid.mp.member.client;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -28,9 +29,11 @@ public class SalesforceClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(SalesforceClient.class);
 
-    private String accessToken;
+    private final AtomicReference<String> accessToken = new AtomicReference<>();
 
-    @Value("${application.salesforce.orcidApiClientId")
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Value("${application.salesforce.orcidApiClientId}")
     private String orcidApiClientId;
 
     @Value("${application.salesforce.orcidApiClientSecret}")
@@ -102,12 +105,12 @@ public class SalesforceClient {
     }
 
     private <T> T get(String path, ParameterizedTypeReference<T> typeReference) {
-        ResponseEntity<T> response = restClient.get().uri(salesforceClientEndpoint + path).headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken)).retrieve().toEntity(typeReference);
+        ResponseEntity<T> response = restClient.get().uri(salesforceClientEndpoint + path).headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get())).retrieve().toEntity(typeReference);
         return processResponse(response, path);
     }
 
     private <T> T put(String path, MemberUpdateData updateData, ParameterizedTypeReference<T> typeReference) {
-        ResponseEntity<T> response = restClient.put().uri(salesforceClientEndpoint + path).body(updateData).headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken)).retrieve().toEntity(typeReference);
+        ResponseEntity<T> response = restClient.put().uri(salesforceClientEndpoint + path).body(updateData).headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get())).retrieve().toEntity(typeReference);
         return processResponse(response, path);
     }
 
@@ -128,20 +131,26 @@ public class SalesforceClient {
             return function.get();
         } catch (Exception e) {
             LOG.info("Refreshing access token");
-            createAccessToken();
+            synchronized(this) {
+                createAccessToken();
+            }
             return function.get();
         }
     }
 
     private void initAccessToken() {
-        if (accessToken == null) {
-            createAccessToken();
+        if (accessToken.get() == null) {
+            synchronized(this) {
+                if (accessToken.get() == null) {
+                    createAccessToken();
+                }
+            }
         }
     }
 
     private void createAccessToken() {
         try {
-            accessToken = getAccessToken();
+            accessToken.set(getAccessToken());
         } catch (Exception e) {
             LOG.error("Failed to create internal access token", e);
             throw new RuntimeException(e);
@@ -162,8 +171,6 @@ public class SalesforceClient {
                     .retrieve().body(String.class);
 
             LOG.info("Access token acquired successfully");
-
-            ObjectMapper objectMapper = new ObjectMapper();
             JsonNode responseJson = objectMapper.readTree(responseString);
             return responseJson.get("access_token").textValue();
         } catch (Exception ex) {

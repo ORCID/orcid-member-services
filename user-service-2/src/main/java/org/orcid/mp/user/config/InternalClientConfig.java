@@ -1,9 +1,12 @@
 package org.orcid.mp.user.config;
 
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.oauth2.client.*;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.web.client.RestClient;
@@ -13,6 +16,9 @@ public class InternalClientConfig {
 
     @Value("${application.memberService.apiUrl}")
     private String memberServiceApiUrl;
+
+    @Autowired
+    private CloseableHttpClient httpClient;
 
     @Bean
     public OAuth2AuthorizedClientManager authorizedClientManager(
@@ -41,6 +47,8 @@ public class InternalClientConfig {
      */
     @Bean("internalMemberServiceRestClient")
     public RestClient internalRestClient(OAuth2AuthorizedClientManager authorizedClientManager) {
+        HttpComponentsClientHttpRequestFactory requestFactory =
+                new HttpComponentsClientHttpRequestFactory(httpClient);
 
         ClientHttpRequestInterceptor interceptor = (request, body, execution) -> {
             // "internal-user-client" MUST match the registration ID in your application.yml
@@ -63,6 +71,7 @@ public class InternalClientConfig {
         return RestClient.builder()
                 // Point this to your MEMBER SERVICE (Resource Server)
                 .baseUrl(memberServiceApiUrl)
+                .requestFactory(requestFactory)
                 .requestInterceptor(interceptor)
                 .build();
     }

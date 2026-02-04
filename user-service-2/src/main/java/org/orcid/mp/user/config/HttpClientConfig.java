@@ -32,27 +32,31 @@ public class HttpClientConfig {
     private String mailApiUrl;
 
     @Bean(name = "mailgunRestClient")
-    public RestClient mailgunRestClient() {
-        CloseableHttpClient httpClient = getCloseableHttpClient();
+    public RestClient mailgunRestClient(CloseableHttpClient httpClient) {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return RestClient.builder().baseUrl(mailApiUrl).defaultHeader("Authorization", "Basic " + getEncodedMailgunCredentials()).requestFactory(requestFactory).build();
     }
 
     @Bean(name = "memberServiceRestClient")
-    public RestClient memberServiceRestClient() {
-        CloseableHttpClient httpClient = getCloseableHttpClient();
+    public RestClient memberServiceRestClient(CloseableHttpClient httpClient) {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return RestClient.builder().requestInterceptor(new BearerTokenInterceptor()).requestFactory(requestFactory).build();
     }
 
-    private CloseableHttpClient getCloseableHttpClient() {
+    @Bean
+    public PoolingHttpClientConnectionManager connectionManager() {
         PoolingHttpClientConnectionManager poolingConnManager = new PoolingHttpClientConnectionManager();
         poolingConnManager.setMaxTotal(maxConnTotal);
         poolingConnManager.setDefaultMaxPerRoute(maxConnPerRoute);
         poolingConnManager.setValidateAfterInactivity(TimeValue.ofMilliseconds(1000));
+        return poolingConnManager;
+    }
 
+    @Bean
+    public CloseableHttpClient getCloseableHttpClient(PoolingHttpClientConnectionManager poolingConnManager) {
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(poolingConnManager)
+                .evictExpiredConnections()
                 .evictIdleConnections(TimeValue.ofSeconds(connectionTimeToLive))
                 .build();
         return httpClient;

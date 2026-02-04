@@ -38,29 +38,25 @@ public class HttpClientConfig {
     private String memberServiceApiUrl;
 
     @Bean(name = "mailgunRestClient")
-    public RestClient mailgunRestClient() {
-        CloseableHttpClient httpClient = getCloseableHttpClient();
+    public RestClient mailgunRestClient(CloseableHttpClient httpClient) {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return RestClient.builder().baseUrl(mailApiUrl).defaultHeader("Authorization", "Basic " + getEncodedMailgunCredentials()).requestFactory(requestFactory).build();
     }
 
     @Bean(name = "userServiceRestClient")
-    public RestClient userServiceRestClient() {
-        CloseableHttpClient httpClient = getCloseableHttpClient();
+    public RestClient userServiceRestClient(CloseableHttpClient httpClient) {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return RestClient.builder().baseUrl(userServiceApiUrl).requestInterceptor(new BearerTokenInterceptor()).requestFactory(requestFactory).build();
     }
 
     @Bean(name = "memberServiceRestClient")
-    public RestClient memberServiceRestClient() {
-        CloseableHttpClient httpClient = getCloseableHttpClient();
+    public RestClient memberServiceRestClient(CloseableHttpClient httpClient) {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return RestClient.builder().baseUrl(memberServiceApiUrl).requestInterceptor(new BearerTokenInterceptor()).requestFactory(requestFactory).build();
     }
 
     @Bean(name = "orcidRestClient")
-    public RestClient orcidRestClient() {
-        CloseableHttpClient httpClient = getCloseableHttpClient();
+    public RestClient orcidRestClient(CloseableHttpClient httpClient) {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return RestClient.builder()
                 .defaultHeader("Accept","application/json")
@@ -68,13 +64,18 @@ public class HttpClientConfig {
                 .requestFactory(requestFactory).build();
     }
 
-    private CloseableHttpClient getCloseableHttpClient() {
+    @Bean
+    PoolingHttpClientConnectionManager getConnectionManager() {
         PoolingHttpClientConnectionManager poolingConnManager = new PoolingHttpClientConnectionManager();
         poolingConnManager.setMaxTotal(maxConnTotal);
         poolingConnManager.setDefaultMaxPerRoute(maxConnPerRoute);
         poolingConnManager.setValidateAfterInactivity(TimeValue.ofMilliseconds(1000));
+        return poolingConnManager;
+    }
 
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(poolingConnManager).evictIdleConnections(TimeValue.ofSeconds(connectionTimeToLive)).build();
+    @Bean
+    public CloseableHttpClient getCloseableHttpClient(PoolingHttpClientConnectionManager poolingConnManager) {
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(poolingConnManager).evictExpiredConnections().evictIdleConnections(TimeValue.ofSeconds(connectionTimeToLive)).build();
         return httpClient;
     }
 

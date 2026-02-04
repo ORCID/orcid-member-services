@@ -1,9 +1,12 @@
 package org.orcid.mp.assertion.config;
 
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.oauth2.client.*;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.web.client.RestClient;
@@ -16,6 +19,9 @@ public class InternalClientConfig {
 
     @Value("${application.userService.apiUrl}")
     private String userServiceApiUrl;
+
+    @Autowired
+    private CloseableHttpClient httpClient;
 
     @Bean
     public OAuth2AuthorizedClientManager authorizedClientManager(
@@ -66,8 +72,10 @@ public class InternalClientConfig {
      */
     @Bean("internalMemberServiceRestClient")
     public RestClient internalMemberServiceRestClient(ClientHttpRequestInterceptor internalSecurityInterceptor) {
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return RestClient.builder()
                 .baseUrl(memberServiceApiUrl)
+                .requestFactory(requestFactory)
                 .requestInterceptor(internalSecurityInterceptor)
                 .build();
     }
@@ -80,8 +88,10 @@ public class InternalClientConfig {
      */
     @Bean("internalUserServiceRestClient")
     public RestClient internalUserServiceRestClient(ClientHttpRequestInterceptor internalSecurityInterceptor) {
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return RestClient.builder()
                 .baseUrl(userServiceApiUrl)
+                .requestFactory(requestFactory)
                 .requestInterceptor(internalSecurityInterceptor)
                 .build();
     }
