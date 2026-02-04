@@ -1,4 +1,4 @@
-package org.orcid.mp.member.domain;
+package org.orcid.mp.assertion.domain;
 
 import java.time.Instant;
 import java.util.Set;

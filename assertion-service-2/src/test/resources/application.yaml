@@ -1,0 +1,24 @@
+application:
+  httpclient:
+    maxConnTotal: 100
+    maxConnPerRoute: 20
+    connectionTimeToLive: 5
+  mail:
+    apiKey: some-key
+    apiUrl: http://mail.com/api
+    fromAddress: mp@orcid.org
+    fromName: member-portal
+    testMode: true
+  userService:
+    apiUrl: http://localhost:9000
+  memberService:
+    apiUrl: http://localhost:9010
+  orcid:
+    apiUrl: https://api.qa.orcid.org/v3/
+    internalApiUrl: https://internal.qa.orcid.org/v3/
+    tokenExchangeUrl: http://qa.orcid.org/oauth/token
+    clientId: APP-SOMETHING
+    clientSecret: client-secret
+    grantType: errmmm
+    subjectTokenType: subjectTokenType
+    requestedTokenType: blah

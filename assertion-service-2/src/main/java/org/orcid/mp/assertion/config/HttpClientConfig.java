@@ -1,5 +1,4 @@
-package org.orcid.mp.member.config;
-
+package org.orcid.mp.assertion.config;
 
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -35,6 +34,9 @@ public class HttpClientConfig {
     @Value("${application.userService.apiUrl}")
     private String userServiceApiUrl;
 
+    @Value("${application.memberService.apiUrl}")
+    private String memberServiceApiUrl;
+
     @Bean(name = "mailgunRestClient")
     public RestClient mailgunRestClient() {
         CloseableHttpClient httpClient = getCloseableHttpClient();
@@ -49,11 +51,21 @@ public class HttpClientConfig {
         return RestClient.builder().baseUrl(userServiceApiUrl).requestInterceptor(new BearerTokenInterceptor()).requestFactory(requestFactory).build();
     }
 
-    @Bean(name = "salesforceRestClient")
-    public RestClient salesforceRestClient() {
+    @Bean(name = "memberServiceRestClient")
+    public RestClient memberServiceRestClient() {
         CloseableHttpClient httpClient = getCloseableHttpClient();
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-        return RestClient.builder().requestFactory(requestFactory).build();
+        return RestClient.builder().baseUrl(memberServiceApiUrl).requestInterceptor(new BearerTokenInterceptor()).requestFactory(requestFactory).build();
+    }
+
+    @Bean(name = "orcidRestClient")
+    public RestClient orcidRestClient() {
+        CloseableHttpClient httpClient = getCloseableHttpClient();
+        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+        return RestClient.builder()
+                .defaultHeader("Accept","application/json")
+                .defaultHeader("Content-Type", "application/json")
+                .requestFactory(requestFactory).build();
     }
 
     private CloseableHttpClient getCloseableHttpClient() {
