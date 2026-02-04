@@ -36,33 +36,35 @@ public class HttpClientConfig {
     private String userServiceApiUrl;
 
     @Bean(name = "mailgunRestClient")
-    public RestClient mailgunRestClient() {
-        CloseableHttpClient httpClient = getCloseableHttpClient();
+    public RestClient mailgunRestClient(CloseableHttpClient httpClient) {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return RestClient.builder().baseUrl(mailApiUrl).defaultHeader("Authorization", "Basic " + getEncodedMailgunCredentials()).requestFactory(requestFactory).build();
     }
 
     @Bean(name = "userServiceRestClient")
-    public RestClient userServiceRestClient() {
-        CloseableHttpClient httpClient = getCloseableHttpClient();
+    public RestClient userServiceRestClient(CloseableHttpClient httpClient) {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return RestClient.builder().baseUrl(userServiceApiUrl).requestInterceptor(new BearerTokenInterceptor()).requestFactory(requestFactory).build();
     }
 
     @Bean(name = "salesforceRestClient")
-    public RestClient salesforceRestClient() {
-        CloseableHttpClient httpClient = getCloseableHttpClient();
+    public RestClient salesforceRestClient(CloseableHttpClient httpClient) {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return RestClient.builder().requestFactory(requestFactory).build();
     }
 
-    private CloseableHttpClient getCloseableHttpClient() {
+    @Bean
+    public PoolingHttpClientConnectionManager getConnectionManager() {
         PoolingHttpClientConnectionManager poolingConnManager = new PoolingHttpClientConnectionManager();
         poolingConnManager.setMaxTotal(maxConnTotal);
         poolingConnManager.setDefaultMaxPerRoute(maxConnPerRoute);
         poolingConnManager.setValidateAfterInactivity(TimeValue.ofMilliseconds(1000));
+        return poolingConnManager;
+    }
 
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(poolingConnManager).evictIdleConnections(TimeValue.ofSeconds(connectionTimeToLive)).build();
+    @Bean
+    public CloseableHttpClient getCloseableHttpClient(PoolingHttpClientConnectionManager poolingConnManager) {
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(poolingConnManager).evictExpiredConnections().evictIdleConnections(TimeValue.ofSeconds(connectionTimeToLive)).build();
         return httpClient;
     }
 

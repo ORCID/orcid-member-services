@@ -10,7 +10,6 @@ import org.codehaus.jettison.json.JSONObject;
 import org.orcid.jaxb.model.v3.release.notification.permission.NotificationPermission;
 import org.orcid.jaxb.model.v3.release.record.Affiliation;
 import org.orcid.mp.assertion.domain.Assertion;
-import org.orcid.mp.assertion.domain.User;
 import org.orcid.mp.assertion.domain.adapter.AffiliationAdapter;
 import org.orcid.mp.assertion.error.DeactivatedException;
 import org.orcid.mp.assertion.error.DeprecatedException;
@@ -26,14 +25,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 @Component
@@ -41,7 +37,9 @@ public class OrcidApiClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrcidApiClient.class);
 
-    private String internalAccessToken;
+    private final AtomicReference<String> internalAccessToken = new AtomicReference<>();
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     @Qualifier("orcidRestClient")
@@ -183,7 +181,7 @@ public class OrcidApiClient {
 
     private boolean checkRegistryForDeactivated(String orcidId) {
         LOG.info("Calling {}/person endpoint to check deactivated status", orcidId);
-        ResponseEntity<String> response = restClient.get().uri(apiUrl+ "/" + orcidId  + "/person").header("Authorization", "Bearer " + internalAccessToken).retrieve().toEntity(String.class);
+        ResponseEntity<String> response = restClient.get().uri(apiUrl + "/" + orcidId + "/person").header("Authorization", "Bearer " + internalAccessToken.get()).retrieve().toEntity(String.class);
         String responseString = response.getBody();
 
         LOG.info("Received status {} from the registry", response.getStatusCode().value());
@@ -200,20 +198,26 @@ public class OrcidApiClient {
             return function.get();
         } catch (Exception e) {
             LOG.info("Refreshing internal access token");
-            createInternalAccessToken();
+            synchronized (this) {
+                createInternalAccessToken();
+            }
             return function.get();
         }
     }
 
     private void initInternalAccessToken() {
         if (internalAccessToken == null) {
-            createInternalAccessToken();
+            synchronized (this) {
+                if (internalAccessToken.get() == null) {
+                    createInternalAccessToken();
+                }
+            }
         }
     }
 
     private void createInternalAccessToken() {
         try {
-            internalAccessToken = getInternalAccessToken();
+            internalAccessToken.set(getInternalAccessToken());
         } catch (Exception e) {
             LOG.error("Failed to create internal access token", e);
             throw new RuntimeException(e);
@@ -239,7 +243,7 @@ public class OrcidApiClient {
     }
 
     private String postNotificationPermission(NotificationPermission notificationPermission, String orcidId) {
-        ResponseEntity<String> response = restClient.post().uri(apiUrl  + orcidId + "/notification-permission").header("Authorization", "Bearer " + internalAccessToken).body(notificationPermission).retrieve().toEntity(String.class);
+        ResponseEntity<String> response = restClient.post().uri(apiUrl + orcidId + "/notification-permission").header("Authorization", "Bearer " + internalAccessToken).body(notificationPermission).retrieve().toEntity(String.class);
         if (!response.getStatusCode().isSameCodeAs(HttpStatus.CREATED)) {
             String responseString = response.getBody();
             LOG.error("Unable to create notification for {}. Status code: {}, error {}", orcidId, response.getStatusCode().value(), responseString);
@@ -251,8 +255,8 @@ public class OrcidApiClient {
     }
 
     private String getOrcidIdFromRegistry(String email) {
-        ResponseEntity<String> response = restClient.get().uri(internalApiUrl+ "orcid/" + Base64.encode(email) + "/email")
-                .header("Authorization", "Bearer " + internalAccessToken)
+        ResponseEntity<String> response = restClient.get().uri(internalApiUrl + "orcid/" + Base64.encode(email) + "/email")
+                .header("Authorization", "Bearer " + internalAccessToken.get())
                 .retrieve().toEntity(String.class);
 
         String responseBody = response.getBody();
