@@ -1,3 +1,21 @@
+spring:
+  messages:
+    basename: i18n/messages
+    encoding: utf-8
+  security:
+    oauth2:
+      client:
+        registration:
+          internal-assertion-client:
+            provider: user-service-provider
+            client-id: client-id
+            client-secret: client-secret
+            authorization-grant-type: client_credentials
+            scope: internal
+        provider:
+          user-service-provider:
+            token-uri: http://localhost:9000/oauth2/token
+            authorization-uri: http://localhost:9000/oauth2/authorize
 application:
   httpclient:
     maxConnTotal: 100

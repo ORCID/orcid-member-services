@@ -69,6 +69,12 @@ public class SecurityConfig {
     @Value("${application.internal.clientSecret}")
     private String internalClientSecret;
 
+    @Value("${application.internal.clientId}")
+    private String internalAssertionServiceClientId;
+
+    @Value("${application.internal.clientSecret}")
+    private String internalAssertionServiceClientSecret;
+
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
@@ -99,6 +105,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/internal/**").hasAuthority("SCOPE_internal")
                         .requestMatchers("/account/login", "/unprotected", "/api/**", "/.well-known/**", "/connect/logout").permitAll() // Ensure login is accessible
                         .anyRequest().authenticated())
 
@@ -152,6 +159,17 @@ public class SecurityConfig {
         RegisteredClient userServiceClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId(internalClientId) // The ID for internal calls
                 .clientSecret(encoder.encode(internalClientSecret)) // The password
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .scope("internal")
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenTimeToLive(Duration.ofMinutes(5)) // Keep internal tokens short-lived
+                        .build())
+                .build();
+
+        RegisteredClient assertionServiceClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId(internalAssertionServiceClientId)
+                .clientSecret(encoder.encode(internalAssertionServiceClientSecret))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .scope("internal")

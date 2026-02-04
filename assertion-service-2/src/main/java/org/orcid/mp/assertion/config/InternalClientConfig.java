@@ -1,4 +1,4 @@
-package org.orcid.mp.user.config;
+package org.orcid.mp.assertion.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +13,9 @@ public class InternalClientConfig {
 
     @Value("${application.memberService.apiUrl}")
     private String memberServiceApiUrl;
+
+    @Value("${application.userService.apiUrl}")
+    private String userServiceApiUrl;
 
     @Bean
     public OAuth2AuthorizedClientManager authorizedClientManager(
@@ -33,20 +36,14 @@ public class InternalClientConfig {
     }
 
 
-    /**
-     * RestClient for making internal requests to the member service with scope 'internal', where no user token is present for authorization.
-     *
-     * @param authorizedClientManager
-     * @return
-     */
-    @Bean("internalMemberServiceRestClient")
-    public RestClient internalRestClient(OAuth2AuthorizedClientManager authorizedClientManager) {
-
-        ClientHttpRequestInterceptor interceptor = (request, body, execution) -> {
-            // "internal-user-client" MUST match the registration ID in your application.yml
+    @Bean
+    public ClientHttpRequestInterceptor internalSecurityInterceptor(
+            OAuth2AuthorizedClientManager authorizedClientManager) {
+        return (request, body, execution) -> {
+            // "assertion-service-client" MUST match the registration-id in your YAML
             OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest
-                    .withClientRegistrationId("internal-user-client")
-                    .principal("user-service") // Arbitrary string identifying who is running this
+                    .withClientRegistrationId("internal-assertion-client")
+                    .principal("assertion-service") // Arbitrary string identifying who is running this
                     .build();
 
             // This performs the magic: checks cache, or calls URL to get fresh token
@@ -59,11 +56,33 @@ public class InternalClientConfig {
 
             return execution.execute(request, body);
         };
+    }
 
+    /**
+     * RestClient for making internal requests to the member service with scope 'internal', where no user token is present for authorization.
+     *
+     * @param internalSecurityInterceptor
+     * @return
+     */
+    @Bean("internalMemberServiceRestClient")
+    public RestClient internalMemberServiceRestClient(ClientHttpRequestInterceptor internalSecurityInterceptor) {
         return RestClient.builder()
-                // Point this to your MEMBER SERVICE (Resource Server)
                 .baseUrl(memberServiceApiUrl)
-                .requestInterceptor(interceptor)
+                .requestInterceptor(internalSecurityInterceptor)
+                .build();
+    }
+
+    /**
+     * RestClient for making internal requests to the member service with scope 'internal', where no user token is present for authorization.
+     *
+     * @param internalSecurityInterceptor
+     * @return
+     */
+    @Bean("internalUserServiceRestClient")
+    public RestClient internalUserServiceRestClient(ClientHttpRequestInterceptor internalSecurityInterceptor) {
+        return RestClient.builder()
+                .baseUrl(userServiceApiUrl)
+                .requestInterceptor(internalSecurityInterceptor)
                 .build();
     }
 

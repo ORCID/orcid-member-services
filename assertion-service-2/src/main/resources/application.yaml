@@ -6,6 +6,21 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:9000
+      client:
+        registration:
+          # This ID is used in your Java RestClient/WebClient code in the Assertion Service
+          internal-assertion-client:
+            provider: user-service-provider
+            client-id: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_ID}
+            client-secret: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_CLIENT_SECRET}
+            authorization-grant-type: client_credentials
+            scope: internal
+        provider:
+          user-service-provider:
+            # The URL of your User Service (Auth Server)
+            token-uri: http://localhost:9000/oauth2/token
+            # (Optional for client_credentials flow, but good to have)
+            authorization-uri: http://localhost:9000/oauth2/authorize
   data:
     mongodb:
       database: assertionservice
@@ -20,3 +35,9 @@ server:
 logging:
   level:
     root: info
+
+application:
+  userService:
+    apiUrl: http://localhost:9000
+  memberService:
+    apiUrl: http://localhost:9010
