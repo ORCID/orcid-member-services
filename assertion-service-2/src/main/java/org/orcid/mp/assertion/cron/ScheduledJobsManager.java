@@ -22,7 +22,7 @@ public class ScheduledJobsManager {
     private static final Logger LOG = LoggerFactory.getLogger(ScheduledJobsManager.class);
 
     @Autowired
-    private AssertionService assertionsService;
+    private AssertionService assertionService;
 
     @Autowired
     private StoredFileService storedFileService;
@@ -33,32 +33,32 @@ public class ScheduledJobsManager {
     @Autowired
     private NotificationService notificationService;
 
-    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.syncAffiliationsDelay}")
+    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.syncAffiliationsDelay}")
     @SchedulerLock(name = "syncAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "2m")
     public void syncAffiliations() throws JAXBException {
         LOG.info("Running cron to sync assertions with registry");
-        assertionsService.postAssertionsToOrcid();
-        assertionsService.putAssertionsInOrcid();
+        assertionService.postAssertionsToOrcid();
+        assertionService.putAssertionsInOrcid();
         LOG.info("Sync complete");
     }
 
-    @Scheduled(cron = "${application.generateMemberAssertionStatsCron}")
+    @Scheduled(cron = "${application.cron.generateMemberAssertionStatsCron}")
     @SchedulerLock(name = "generateMemberAssertionStats", lockAtMostFor = "60m", lockAtLeastFor = "10m")
     public void generateMemberAssertionStats() throws IOException {
         LOG.info("Running cron to generate member assertion stats");
-        assertionsService.generateAndSendMemberAssertionStats();
+        assertionService.generateAndSendMemberAssertionStats();
         LOG.info("Stats generation complete");
     }
 
-    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.processAssertionUploadsDelay}")
+    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.processAssertionUploadsDelay}")
     @SchedulerLock(name = "processAssertionUploads", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void processAssertionUploads() throws IOException  {
         LOG.info("Running cron to process assertion uploads");
-        assertionsService.processAssertionUploads();
+        assertionService.processAssertionUploads();
         LOG.info("Assertion uploads processed");
     }
 
-    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.removeStoredFilesDelay}")
+    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.removeStoredFilesDelay}")
     @SchedulerLock(name = "removeStoredFiles", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void removeStoredFiles() throws IOException  {
         LOG.info("Running cron to remove old files");
@@ -66,7 +66,7 @@ public class ScheduledJobsManager {
         LOG.info("Old files removed");
     }
 
-    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.processCsvReportsDelay}")
+    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.processCsvReportsDelay}")
     @SchedulerLock(name = "processCsvReports", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void sendCSVReports() throws IOException  {
         LOG.info("Running cron to process CSV reports");
@@ -74,7 +74,7 @@ public class ScheduledJobsManager {
         LOG.info("CSV reports processed");
     }
 
-    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.sendPermissionLinkNotificationsDelay}")
+    @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.sendPermissionLinkNotificationsDelay}")
     @SchedulerLock(name = "sendPermissionLinkNotifications", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void sendPermissionLinkNotifications() throws IOException  {
         LOG.info("Running cron to send permission link notifications");
@@ -82,7 +82,7 @@ public class ScheduledJobsManager {
         LOG.info("Permission link notifications sent");
     }
 
-    @Scheduled(cron = "${application.resendNotificationsCron}")
+    @Scheduled(cron = "${application.cron.resendNotificationsCron}")
     @SchedulerLock(name = "resendNotifications", lockAtMostFor = "60m", lockAtLeastFor = "10m")
     public void resendNotifications() throws IOException  {
         LOG.info("Running cron to resend notifications");

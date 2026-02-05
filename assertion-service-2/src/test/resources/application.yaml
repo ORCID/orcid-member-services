@@ -17,6 +17,7 @@ spring:
             token-uri: http://localhost:9000/oauth2/token
             authorization-uri: http://localhost:9000/oauth2/authorize
 application:
+  landingPageUrl: some-landing-page
   httpclient:
     maxConnTotal: 100
     maxConnPerRoute: 20
@@ -27,6 +28,7 @@ application:
     fromAddress: mp@orcid.org
     fromName: member-portal
     testMode: true
+    memberAssertionStatsRecipient: stats@orcid.org
   userService:
     apiUrl: http://localhost:9000
   memberService:
@@ -40,3 +42,18 @@ application:
     grantType: errmmm
     subjectTokenType: subjectTokenType
     requestedTokenType: blah
+  files:
+    storedFileLifespan: 7
+    memberAssertionStatsDirectory: /var/something
+    assertionsCsvUploadDirectory: /var/something-else
+    csvReportsDirectory: /var/csv
+  notifications:
+    resendNotificationDays: 1,3,5
+  cron:
+    processCsvReportsDelay: 3
+    removeStoredFilesDelay: 8
+    processAssertionUploadsDelay: 3
+    generateMemberAssertionStatsCron: '0 30 * * * ?'
+    syncAffiliationsDelay: 3
+    sendPermissionLinkNotificationsDelay: 3
+    resendNotificationsCron: '0 30 * * * ?'

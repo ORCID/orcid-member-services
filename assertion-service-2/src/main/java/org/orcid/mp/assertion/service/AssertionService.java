@@ -3,13 +3,18 @@ package org.orcid.mp.assertion.service;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.orcid.mp.assertion.client.InternalMemberServiceClient;
+import org.orcid.mp.assertion.client.InternalUserServiceClient;
 import org.orcid.mp.assertion.client.OrcidApiClient;
-import org.orcid.mp.assertion.domain.AssertionStatus;
-import org.orcid.mp.assertion.domain.OrcidRecord;
-import org.orcid.mp.assertion.error.DeactivatedException;
-import org.orcid.mp.assertion.error.DeprecatedException;
-import org.orcid.mp.assertion.error.OrcidAPIException;
+import org.orcid.mp.assertion.csv.CsvWriter;
+import org.orcid.mp.assertion.domain.*;
+import org.orcid.mp.assertion.error.*;
+import org.orcid.mp.assertion.normalizer.AssertionNormalizer;
 import org.orcid.mp.assertion.repository.AssertionRepository;
+import org.orcid.mp.assertion.upload.AssertionsCsvReader;
+import org.orcid.mp.assertion.upload.AssertionsUpload;
+import org.orcid.mp.assertion.upload.AssertionsUploadSummary;
+import org.orcid.mp.assertion.util.AssertionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +24,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-
-import org.orcid.mp.assertion.domain.Assertion;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.*;
 
 @Service
 public class AssertionService {
@@ -35,6 +43,9 @@ public class AssertionService {
 
     private final Sort SORT = Sort.by(Sort.Direction.ASC, "email", "status", "created", "modified", "deletedFromORCID");
 
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault())
+            .withZone(ZoneId.systemDefault());
+
     @Autowired
     private AssertionRepository assertionRepository;
 
@@ -43,6 +54,103 @@ public class AssertionService {
 
     @Autowired
     private OrcidApiClient orcidApiClient;
+
+    @Autowired
+    private StoredFileService storedFileService;
+
+    @Autowired
+    private MailService mailService;
+
+    @Autowired
+    private InternalMemberServiceClient internalMemberServiceClient;
+
+    @Autowired
+    private InternalUserServiceClient internalUserServiceClient;
+
+    @Autowired
+    private AssertionsCsvReader assertionsCsvReader;
+
+    @Autowired
+    private AssertionUtils assertionUtils;
+
+    @Autowired
+    private AssertionNormalizer assertionNormalizer;
+
+    public Assertion findById(String id) {
+        Optional<Assertion> optional = assertionRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new IllegalArgumentException("Invalid assertion id");
+        }
+        Assertion assertion = optional.get();
+        setPrettyStatus(assertion);
+        return assertion;
+    }
+
+    public boolean assertionExists(String id) {
+        return assertionRepository.existsById(id);
+    }
+
+    public Assertion createAssertion(Assertion assertion, User owner) {
+        assertion = assertionNormalizer.normalize(assertion);
+
+        Instant now = Instant.now();
+        assertion.setOwnerId(owner.getId());
+        assertion.setCreated(now);
+        assertion.setModified(now);
+        assertion.setLastModifiedBy(owner.getEmail());
+        assertion.setSalesforceId(owner.getSalesforceId());
+        assertion.setStatus(getAssertionStatus(assertion));
+
+        String email = assertion.getEmail();
+
+        Optional<OrcidRecord> optionalRecord = orcidRecordService.findByEmail(email);
+        if (!optionalRecord.isPresent()) {
+            orcidRecordService.createOrcidRecord(email, now, assertion.getSalesforceId());
+        } else {
+            OrcidRecord record = optionalRecord.get();
+            if (record.getTokens() == null || record.getTokens().isEmpty() || !record.tokenExists(assertion.getSalesforceId())) {
+                if (record.getTokens() == null) {
+                    record.setTokens(new ArrayList<>());
+                }
+                record.getTokens().add(new OrcidToken(assertion.getSalesforceId(), null));
+                record.setModified(Instant.now());
+                orcidRecordService.updateOrcidRecord(record);
+            } else {
+                AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
+                if (tokenDeniedStatus == null) {
+                    String activeToken = record.getToken(assertion.getSalesforceId(), false);
+                    if (activeToken != null && !activeToken.isBlank()) {
+                        if (StringUtils.isBlank(record.getOrcid())) {
+                            LOG.warn("Setting empty orcid id '{}' in affiliation {} for email {} when creating assertion", record.getOrcid(), assertion.getId(), email);
+                        }
+                        assertion.setOrcidId(record.getOrcid());
+                    }
+                }
+            }
+        }
+
+        assertion = assertionRepository.insert(assertion);
+        setPrettyStatus(assertion);
+        return assertion;
+    }
+
+    public Assertion updateAssertion(Assertion assertion, User user) {
+        assertion = assertionNormalizer.normalize(assertion);
+
+        Optional<Assertion> optional = assertionRepository.findById(assertion.getId());
+        Assertion existingAssertion = optional.get();
+        if (!user.getSalesforceId().equals(existingAssertion.getSalesforceId())) {
+            throw new BadRequestAlertException("Illegal assertion access");
+        }
+
+        copyFieldsToUpdate(assertion, existingAssertion);
+        existingAssertion.setModified(Instant.now());
+        existingAssertion.setLastModifiedBy(user.getEmail());
+        existingAssertion.setStatus(getAssertionStatus(existingAssertion));
+        assertion = assertionRepository.save(existingAssertion);
+        setPrettyStatus(assertion);
+        return assertion;
+    }
 
     public void postAssertionsToOrcid() throws JAXBException {
         Pageable pageable = getPageableForRegistrySync();
@@ -150,6 +258,161 @@ public class AssertionService {
         }
     }
 
+    public void generateAndSendMemberAssertionStats() throws IOException {
+        List<MemberAssertionStatusCount> counts = assertionRepository.getMemberAssertionStatusCounts();
+        Map<String, MemberAssertionStats> stats = getMemberAssertionStats(counts);
+        String reportCsv = getMemberAssertionStatsCsv(stats);
+        File writtenFile = storedFileService.storeMemberAssertionStatsFile(reportCsv);
+        mailService.sendMemberAssertionStatsMail(writtenFile);
+    }
+
+    public void processAssertionUploads() {
+        List<StoredFile> pendingUploads = storedFileService.getUnprocessedStoredFilesByType(StoredFileService.ASSERTIONS_CSV_FILE_TYPE);
+        pendingUploads.forEach(this::processAssertionsUploadFile);
+    }
+
+    private String getAssertionStatus(Assertion assertion) {
+        Optional<OrcidRecord> optionalRecord = orcidRecordService.findByEmail(assertion.getEmail());
+        AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
+        if (tokenDeniedStatus != null) {
+            return tokenDeniedStatus.name();
+        } else if (AssertionStatus.ERROR_ADDING_TO_ORCID.name().equals(assertion.getStatus())
+                || AssertionStatus.ERROR_UPDATING_TO_ORCID.name().equals(assertion.getStatus())) {
+            return AssertionStatus.PENDING_RETRY.name();
+        } else if (AssertionStatus.ERROR_DELETING_IN_ORCID.name().equals(assertion.getStatus())) {
+            return AssertionStatus.ERROR_DELETING_IN_ORCID.name();
+        } else if (AssertionStatus.PENDING.name().equals(assertion.getStatus())) {
+            return AssertionStatus.PENDING.name();
+        } else if (AssertionStatus.NOTIFICATION_SENT.name().equals(assertion.getStatus())) {
+            return AssertionStatus.NOTIFICATION_SENT.name();
+        } else if (AssertionStatus.NOTIFICATION_REQUESTED.name().equals(assertion.getStatus())) {
+            return AssertionStatus.NOTIFICATION_REQUESTED.name();
+        } else if (AssertionStatus.NOTIFICATION_FAILED.name().equals(assertion.getStatus())) {
+            return AssertionStatus.NOTIFICATION_FAILED.name();
+        } else if (assertion.getAddedToORCID() == null) {
+            return AssertionStatus.PENDING.name();
+        } else {
+            // for IN_ORCID or PENDING_UPDATE switch to PENDING_UPDATE status
+            return AssertionStatus.PENDING_UPDATE.name();
+        }
+    }
+
+    private void processAssertionsUploadFile(StoredFile uploadFile) {
+        File file = new File(uploadFile.getFileLocation());
+        User user = internalUserServiceClient.getUser(uploadFile.getOwnerId());
+
+        try {
+            AssertionsUpload upload = readUpload(file, user);
+            AssertionsUploadSummary summary = processUpload(upload, user);
+            summary.setFilename(uploadFile.getOriginalFilename());
+            summary.setDate(DATE_FORMAT.format(uploadFile.getDateWritten()));
+            mailService.sendAssertionsUploadSummaryMail(summary, user);
+        } catch (Exception e) {
+            LOG.warn("Unexpected error processing assertions CSV upload", e);
+            if (e.getCause() != null) {
+                uploadFile.setError(e.getCause().toString());
+            } else {
+                uploadFile.setError(e.getClass() + ": " + e.getMessage());
+            }
+        }
+
+        storedFileService.markAsProcessed(uploadFile);
+    }
+
+    private AssertionsUploadSummary processUpload(AssertionsUpload upload, User user) {
+        AssertionsUploadSummary summary = new AssertionsUploadSummary();
+
+        if (upload.getErrors().size() > 0) {
+            summary.setErrors(upload.getErrors());
+            return summary;
+        }
+
+        int duplicates = 0;
+        int created = 0;
+        int updated = 0;
+        int deleted = 0;
+
+        List<String> registryDeleteFailures = new ArrayList<>();
+
+        for (Assertion a : upload.getAssertions()) {
+            if (assertionToDelete(a)) {
+                try {
+                    deleteById(a.getId(), user);
+                    deleted++;
+                } catch (RegistryDeleteFailureException e) {
+                    registryDeleteFailures.add(a.getId());
+                }
+            } else {
+                if (!assertionUtils.isDuplicate(a, user.getSalesforceId())) {
+                    if (a.getId() == null || a.getId().isEmpty()) {
+                        createAssertion(a, user);
+                        created++;
+                    } else {
+                        Assertion existingAssertion = findById(a.getId());
+                        if (!user.getSalesforceId().equals(existingAssertion.getSalesforceId())) {
+                            throw new BadRequestAlertException("This affiliation doesn't belong to your organization");
+                        }
+                        updateAssertion(a, user);
+                        updated++;
+                    }
+                } else {
+                    duplicates++;
+                }
+            }
+        }
+
+        summary.setNumAdded(created);
+        summary.setNumUpdated(updated);
+        summary.setNumDuplicates(duplicates);
+        summary.setNumDeleted(deleted);
+        summary.setRegistryDeleteFailures(registryDeleteFailures);
+
+        return summary;
+    }
+
+    private AssertionsUpload readUpload(File file, User user) {
+        InputStream inputStream = null;
+        AssertionsUpload upload = null;
+
+        try {
+            inputStream = new FileInputStream(file);
+            upload = assertionsCsvReader.readAssertionsUpload(inputStream, user);
+        } catch (IOException e) {
+            LOG.warn("Error reading user upload", e);
+            throw new RuntimeException(e);
+        }
+        return upload;
+    }
+
+    private boolean assertionToDelete(Assertion assertion) {
+        return assertion.getId() != null && assertion.getAddedToORCID() == null && assertion.getAffiliationSection() == null && assertion.getCreated() == null
+                && assertion.getDepartmentName() == null && assertion.getDisambiguatedOrgId() == null && assertion.getDisambiguationSource() == null
+                && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null && assertion.getEndYear() == null
+                && assertion.getExternalId() == null && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null
+                && assertion.getLastModifiedBy() == null && assertion.getModified() == null && assertion.getOrcidError() == null && assertion.getOrcidId() == null
+                && assertion.getOrgCity() == null && assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null
+                && assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null && assertion.getRoleTitle() == null
+                && assertion.getSalesforceId() == null && assertion.getStartDay() == null && assertion.getStartMonth() == null && assertion.getStartYear() == null;
+    }
+
+    public void deleteById(String id, User user) throws RegistryDeleteFailureException {
+        Assertion assertion = findById(id);
+        String salesforceId = user.getSalesforceId();
+        checkAssertionAccess(assertion, salesforceId);
+
+        // don't bother trying to delete affiliations for deactivated / deprecated profiles in the registry
+        if (!StringUtils.isEmpty(assertion.getPutCode()) && !AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name().equals(assertion.getStatus())) {
+            LOG.info("Deleting assertion {} in ORCID registry", id);
+            deleteAssertionFromOrcidRegistry(assertion);
+        }
+
+        String email = assertion.getEmail();
+        assertionRepository.deleteById(id);
+        if (assertionRepository.countByEmailAndSalesforceId(email, salesforceId) == 0) {
+            orcidRecordService.deleteOrcidRecordTokenByEmailAndSalesforceId(email, salesforceId);
+        }
+    }
+
     private Pageable getPageableForRegistrySync() {
         return PageRequest.of(0, REGISTRY_SYNC_BATCH_SIZE, Sort.by(Sort.Direction.ASC, "created"));
     }
@@ -182,6 +445,12 @@ public class AssertionService {
             return false;
         }
         return true;
+    }
+
+    private void checkAssertionAccess(Assertion assertion, String salesforceId) {
+        if (!salesforceId.equals(assertion.getSalesforceId())) {
+            throw new BadRequestAlertException("This affiliations doesnt belong to your organization");
+        }
     }
 
     private String postToOrcidRegistry(String orcid, Assertion assertion, String idToken) throws IOException, DeprecatedException, DeactivatedException, JSONException {
@@ -247,5 +516,124 @@ public class AssertionService {
 
         orcidRecordService.deleteOrcidRecordByEmail(assertion.getEmail());
     }
+
+    private String getMemberAssertionStatsCsv(Map<String, MemberAssertionStats> stats) throws IOException {
+        List<List<String>> rows = new ArrayList<>();
+        for (MemberAssertionStats memberStats : stats.values()) {
+            List<String> row = new ArrayList<>();
+            row.add(memberStats.getMemberName());
+            row.add(Integer.toString(memberStats.getTotalAssertions()));
+            row.add(memberStats.getStatusCountsString());
+            rows.add(row);
+        }
+
+        String[] headers = new String[]{"Member name", "Total affiliations", "Statuses"};
+        return new CsvWriter().writeCsv(headers, rows);
+    }
+
+    private Map<String, MemberAssertionStats> getMemberAssertionStats(List<MemberAssertionStatusCount> counts) {
+        Map<String, MemberAssertionStats> stats = new HashMap<>();
+        for (MemberAssertionStatusCount count : counts) {
+            if (!stats.containsKey(count.getSalesforceId())) {
+                MemberAssertionStats memberStats = new MemberAssertionStats();
+                memberStats.setMemberName(getMemberNameWithInternalScope(count.getSalesforceId()));
+                stats.put(count.getSalesforceId(), memberStats);
+            }
+            stats.get(count.getSalesforceId()).setStatusCount(count.getStatus(), count.getStatusCount());
+        }
+        return stats;
+    }
+
+    private String getMemberNameWithInternalScope(String salesforceId) {
+        Member member = internalMemberServiceClient.getMember(salesforceId);
+        if (member != null) {
+            return member.getClientName();
+        }
+        throw new RuntimeException("Member with salesforce id " + salesforceId + " not found");
+    }
+
+    private void setPrettyStatus(Assertion assertion) {
+        if (assertion.getStatus() != null) {
+            assertion.setPrettyStatus(AssertionStatus.valueOf(assertion.getStatus()).getValue());
+        }
+    }
+
+    private void copyFieldsToUpdate(Assertion source, Assertion destination) {
+        destination.setRoleTitle(source.getRoleTitle());
+        destination.setAffiliationSection(source.getAffiliationSection());
+
+        destination.setStartYear(source.getStartYear());
+        destination.setStartMonth(source.getStartMonth());
+        destination.setStartDay(source.getStartDay());
+
+        destination.setEndYear(source.getEndYear());
+        destination.setEndMonth(source.getEndMonth());
+        destination.setEndDay(source.getEndDay());
+
+        destination.setExternalId(source.getExternalId());
+        destination.setExternalIdType(source.getExternalIdType());
+        destination.setExternalIdUrl(source.getExternalIdUrl());
+
+        destination.setOrgCity(source.getOrgCity());
+        destination.setOrgCountry(source.getOrgCountry());
+        destination.setOrgName(source.getOrgName());
+        destination.setOrgRegion(source.getOrgRegion());
+        destination.setDisambiguatedOrgId(source.getDisambiguatedOrgId());
+        destination.setDisambiguationSource(source.getDisambiguationSource());
+
+        destination.setDepartmentName(source.getDepartmentName());
+        destination.setUrl(source.getUrl());
+    }
+
+    private void deleteAssertionFromOrcidRegistry(Assertion assertion) throws RegistryDeleteFailureException {
+        Optional<OrcidRecord> record = orcidRecordService.findByEmail(assertion.getEmail());
+        String orcidId = record.get().getOrcid();
+
+        if (!checkRegistryDeletePreconditions(record, assertion)) {
+            throw new RegistryDeleteFailureException();
+        }
+
+        assertion.setLastSyncAttempt(Instant.now());
+
+        try {
+            LOG.info("Exchanging id token for {}", orcidId);
+            String accessToken = orcidApiClient.exchangeToken(record.get().getToken(assertion.getSalesforceId(), true), orcidId);
+            orcidApiClient.deleteAffiliation(orcidId, accessToken, assertion);
+        } catch (DeactivatedException | DeprecatedException e) {
+            handleDeactivatedOrDeprecated(orcidId, assertion);
+        } catch (OrcidAPIException oae) {
+            if (oae.getStatusCode() != 404 && !AssertionStatus.USER_REVOKED_ACCESS.name().equals(assertion.getStatus())) {
+                storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID);
+                throw new RegistryDeleteFailureException();
+            }
+        } catch (Exception e) {
+            if (!AssertionStatus.USER_REVOKED_ACCESS.name().equals(assertion.getStatus())) {
+                storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_DELETING_IN_ORCID);
+                throw new RegistryDeleteFailureException();
+            }
+        }
+    }
+
+    private boolean checkRegistryDeletePreconditions(Optional<OrcidRecord> record, Assertion assertion) {
+        String error = null;
+        if (!record.isPresent()) {
+            LOG.error("OrcidRecord not available for email {}", assertion.getEmail());
+            error = "Orcid record not available";
+        } else if (StringUtils.isBlank(record.get().getOrcid())) {
+            LOG.info("Orcid ID not available for {}", assertion.getEmail());
+            error = "ORCID iD not available";
+        } else if (record.get().getTokens() == null || record.get().getToken(assertion.getSalesforceId(), true) == null) {
+            LOG.info("Token not available for {}", assertion.getEmail());
+            error = "Token not available";
+        }
+        if (error != null) {
+            assertion.setOrcidError(error);
+            assertion.setStatus(AssertionStatus.ERROR_DELETING_IN_ORCID.name());
+            assertionRepository.save(assertion);
+            return false;
+        }
+        return true;
+    }
+
 
 }

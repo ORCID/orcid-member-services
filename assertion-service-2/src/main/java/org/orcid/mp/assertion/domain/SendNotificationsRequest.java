@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.time.Instant;
 
 @Document(collection = "send_notifications_request")
-public class SendNotificationRequest implements Serializable {
+public class SendNotificationsRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
