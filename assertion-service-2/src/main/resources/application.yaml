@@ -37,7 +37,16 @@ logging:
     root: info
 
 application:
+  landingPageUrl: ${APPLICATION_LANDING_PAGE_URL}
   userService:
     apiUrl: http://localhost:9000
   memberService:
     apiUrl: http://localhost:9010
+  mail:
+    memberAssertionStatsRecipient: ${APPLICATION_MAIL_MEMBER_ASSERTION_STATS_RECIPIENT}
+  files:
+    storedFileLifespan: 7
+  cron:
+    processCsvReportsDelay: 3
+    removeStoredFilesDelay: 8
+    processAssertionUploadsDelay: 3

@@ -48,7 +48,7 @@ jobs:
       with:
         java-version: 21
     - name: Build User service 2
-      run: mvn -B verify --file user-service-2/pom.xml
+      run: mvn -B verify -Dsurefire.useFile=false --file user-service-2/pom.xml
 
   build-assertion-service:
     runs-on: ubuntu-latest
@@ -70,7 +70,7 @@ jobs:
       with:
         java-version: 21
     - name: Build Assertion service 2
-      run: mvn -B verify -Pprod --file assertion-service-2/pom.xml
+      run: mvn -B verify -Pprod -Dsurefire.useFile=false --file assertion-service-2/pom.xml
 
   build-member-service:
     runs-on: ubuntu-latest
@@ -92,7 +92,7 @@ jobs:
       with:
         java-version: 21
     - name: Build Member service 2
-      run: mvn -B verify -Pprod --file member-service-2/pom.xml
+      run: mvn -B verify -Pprod -Dsurefire.useFile=false --file member-service-2/pom.xml
 
   build-discovery-service:
     runs-on: ubuntu-latest
