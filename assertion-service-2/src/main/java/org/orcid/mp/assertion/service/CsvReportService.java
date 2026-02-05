@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
 
@@ -68,6 +69,17 @@ public class CsvReportService {
             }
         });
         LOG.info("CSV reports processed");
+    }
+
+    public void storeCsvReportRequest(String userId, String filename, String type) {
+        Instant now = Instant.now();
+        CsvReport csvReport = new CsvReport();
+        csvReport.setDateRequested(now);
+        csvReport.setOwnerId(userId);
+        csvReport.setReportType(type);
+        csvReport.setStatus(CsvReport.UNPROCESSED_STATUS);
+        csvReport.setOriginalFilename(filename);
+        csvReportRepository.save(csvReport);
     }
 
     private void processCsvReportRequest(CsvReport csvReport) throws IOException {

@@ -15,9 +15,9 @@ public class AssertionsForEditCsvWriter extends CsvDownloadWriter {
 
     private final Sort SORT = Sort.by(Sort.Direction.ASC, "email", "status", "created", "modified", "deletedFromORCID");
 
-    private static final String[] HEADERS = new String[] { "email", "affiliation-section", "department-name", "role-title", "start-date", "end-date", "org-name",
+    private static final String[] HEADERS = new String[]{"email", "affiliation-section", "department-name", "role-title", "start-date", "end-date", "org-name",
             "org-country", "org-city", "org-region", "disambiguation-source", "disambiguated-organization-identifier", "external-id", "external-id-type",
-            "external-id-url", "url", "id" };
+            "external-id-url", "url", "id"};
 
     @Override
     public String writeCsv(String salesforceId) throws IOException {

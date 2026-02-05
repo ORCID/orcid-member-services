@@ -62,11 +62,7 @@ public class OrcidUrlValidator extends UrlValidator {
         }
 
         String extra = authorityMatcher.group(PARSE_AUTHORITY_EXTRA);
-        if (extra != null && extra.trim().length() > 0) {
-            return false;
-        }
-
-        return true;
+        return extra == null || extra.trim().length() <= 0;
     }
 
 }

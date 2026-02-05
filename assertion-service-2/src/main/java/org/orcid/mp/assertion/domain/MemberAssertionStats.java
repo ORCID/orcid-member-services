@@ -9,7 +9,7 @@ public class MemberAssertionStats {
 
     private int totalAssertions = 0;
 
-    private Map<String, Integer> statusCounts = new HashMap<>();
+    private final Map<String, Integer> statusCounts = new HashMap<>();
 
     public String getMemberName() {
         return memberName;

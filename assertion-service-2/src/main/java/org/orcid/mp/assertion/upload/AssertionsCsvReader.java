@@ -49,15 +49,15 @@ public class AssertionsCsvReader {
     private final DateTimeFormatter[] formatters = {
             new DateTimeFormatterBuilder().appendPattern("yyyy").parseDefaulting(ChronoField.MONTH_OF_YEAR, 1).parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
             new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
-            new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd").parseStrict().toFormatter() };
+            new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd").parseStrict().toFormatter()};
 
-    String[] urlValschemes = { "http", "https", "ftp" }; // DEFAULT schemes =
+    String[] urlValschemes = {"http", "https", "ftp"}; // DEFAULT schemes =
     // "http", "https",
     // "ftp"
 
     UrlValidator urlValidator = new OrcidUrlValidator(urlValschemes);
 
-    private EmailValidator emailValidator = EmailValidator.getInstance(false);
+    private final EmailValidator emailValidator = EmailValidator.getInstance(false);
 
     @Autowired
     @Lazy
@@ -291,7 +291,7 @@ public class AssertionsCsvReader {
             return a;
         } else {
             AffiliationSection affiliationSection;
-            if ("INVITED-POSITION".equals(affiliationSectionValue.toUpperCase())) {
+            if ("INVITED-POSITION".equalsIgnoreCase(affiliationSectionValue)) {
                 affiliationSection = AffiliationSection.INVITED_POSITION;
             } else {
                 affiliationSection = AffiliationSection.valueOf(affiliationSectionValue.toUpperCase());
@@ -442,9 +442,7 @@ public class AssertionsCsvReader {
     }
 
     public static boolean isEmpty(String string) {
-        if (string == null || string.trim().isEmpty())
-            return true;
-        return false;
+        return string == null || string.trim().isEmpty();
     }
 
     private String getError(String code, User user) {
@@ -452,6 +450,6 @@ public class AssertionsCsvReader {
     }
 
     private String getError(String code, String arg, User user) {
-        return messageSource.getMessage("assertion.csv.upload.error." + code, arg != null ? new Object[] { arg } : null, Locale.forLanguageTag(user.getLangKey()));
+        return messageSource.getMessage("assertion.csv.upload.error." + code, arg != null ? new Object[]{arg} : null, Locale.forLanguageTag(user.getLangKey()));
     }
 }

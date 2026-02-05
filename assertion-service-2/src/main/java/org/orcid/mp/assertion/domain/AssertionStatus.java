@@ -21,7 +21,7 @@ public enum AssertionStatus {
 
     private final String value;
 
-    private AssertionStatus(String value) {
+    AssertionStatus(String value) {
         this.value = value;
     }
 

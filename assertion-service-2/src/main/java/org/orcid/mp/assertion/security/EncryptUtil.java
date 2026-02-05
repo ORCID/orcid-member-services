@@ -39,7 +39,8 @@ public class EncryptUtil implements InitializingBean {
 
             byte[] encVal = c.doFinal(toEncrypt.getBytes());
             return new String(Base64.encodeBase64URLSafe(encVal));
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | InvalidKeyException |
+                 InvalidAlgorithmParameterException
                  | IllegalBlockSizeException | BadPaddingException n) {
             throw new RuntimeException(n);
         }
@@ -51,7 +52,8 @@ public class EncryptUtil implements InitializingBean {
             Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
             c.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(hex(salt)));
             return new String(c.doFinal(Base64.decodeBase64(toDecrypt)));
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | InvalidKeyException |
+                 InvalidAlgorithmParameterException
                  | IllegalBlockSizeException | BadPaddingException n) {
             throw new RuntimeException(n);
         }

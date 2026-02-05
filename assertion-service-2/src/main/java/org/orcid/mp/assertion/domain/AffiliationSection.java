@@ -6,7 +6,7 @@ public enum AffiliationSection {
 
     private final String value;
 
-    private AffiliationSection(String v) {
+    AffiliationSection(String v) {
         this.value = v;
     }
 

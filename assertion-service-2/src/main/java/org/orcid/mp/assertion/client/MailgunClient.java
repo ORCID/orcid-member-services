@@ -31,7 +31,7 @@ public class MailgunClient {
     @Value("${application.mail.testMode}")
     private boolean testMode;
 
-    private RestClient client;
+    private final RestClient client;
 
     public MailgunClient(@Qualifier("mailgunRestClient") RestClient client) {
         this.client = client;

@@ -76,6 +76,18 @@ public class StoredFileService {
         return storedFileRepository.save(storedFile);
     }
 
+    public void storeAssertionsCsvFile(InputStream inputStream, String filename, User user) throws IOException {
+        File outputFile = writeCsvUploadFile(inputStream);
+        StoredFile storedFile = new StoredFile();
+        storedFile.setOriginalFilename(filename);
+        storedFile.setFileLocation(outputFile.getAbsolutePath());
+        storedFile.setDateWritten(Instant.now());
+        storedFile.setRemovalDate(storedFile.getDateWritten().plus(storedFileLifespan, ChronoUnit.DAYS));
+        storedFile.setOwnerId(user.getId());
+        storedFile.setFileType(ASSERTIONS_CSV_FILE_TYPE);
+        storedFileRepository.save(storedFile);
+    }
+
     private File writeMemberAssertionStatsFile(String content) throws IOException {
         createDir(memberAssertionStatsDirectory);
         return writeStringToFile(content, MEMBER_ASSERTION_STATS_FILE_TYPE, ".csv", new File(memberAssertionStatsDirectory));

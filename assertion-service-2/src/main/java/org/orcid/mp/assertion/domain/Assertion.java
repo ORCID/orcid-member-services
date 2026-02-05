@@ -686,10 +686,7 @@ public class Assertion implements Serializable {
         } else if (!orcidId.equals(other.orcidId))
             return false;
         if (notificationSent == null) {
-            if (other.notificationSent != null)
-                return false;
-        } else if (!notificationSent.equals(other.notificationSent))
-            return false;
-        return true;
+            return other.notificationSent == null;
+        } else return notificationSent.equals(other.notificationSent);
     }
 }

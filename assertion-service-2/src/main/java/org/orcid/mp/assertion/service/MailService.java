@@ -33,7 +33,7 @@ public class MailService {
     @Value("${application.mail.memberAssertionStatsRecipient}")
     private String memberAssertionStatsRecipient;
 
-    private MailgunClient mailgunClient;
+    private final MailgunClient mailgunClient;
 
     public MailService(MessageSource messageSource, SpringTemplateEngine templateEngine, MailgunClient mailgunClient) {
         this.messageSource = messageSource;
@@ -101,7 +101,7 @@ public class MailService {
         context.setVariable("permissionLink", permissionLink);
 
         String content = templateEngine.process("mail/invitation", context);
-        String subject = messageSource.getMessage("email.invitation.title", new Object[] { orgName }, locale);
+        String subject = messageSource.getMessage("email.invitation.title", new Object[]{orgName}, locale);
         try {
             mailgunClient.sendMail(email, subject, content);
         } catch (MailException e) {

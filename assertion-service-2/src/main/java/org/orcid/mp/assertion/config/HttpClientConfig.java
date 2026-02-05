@@ -59,7 +59,7 @@ public class HttpClientConfig {
     public RestClient orcidRestClient(CloseableHttpClient httpClient) {
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return RestClient.builder()
-                .defaultHeader("Accept","application/json")
+                .defaultHeader("Accept", "application/json")
                 .defaultHeader("Content-Type", "application/json")
                 .requestFactory(requestFactory).build();
     }

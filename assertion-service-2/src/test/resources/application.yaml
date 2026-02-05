@@ -4,6 +4,9 @@ spring:
     encoding: utf-8
   security:
     oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://localhost:9000
       client:
         registration:
           internal-assertion-client:
@@ -57,3 +60,5 @@ application:
     syncAffiliationsDelay: 3
     sendPermissionLinkNotificationsDelay: 3
     resendNotificationsCron: '0 30 * * * ?'
+  jwt:
+    signatureUrl: http://some/url

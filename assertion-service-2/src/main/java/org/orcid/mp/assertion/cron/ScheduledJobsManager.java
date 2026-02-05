@@ -52,7 +52,7 @@ public class ScheduledJobsManager {
 
     @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.processAssertionUploadsDelay}")
     @SchedulerLock(name = "processAssertionUploads", lockAtMostFor = "60m", lockAtLeastFor = "2m")
-    public void processAssertionUploads() throws IOException  {
+    public void processAssertionUploads() throws IOException {
         LOG.info("Running cron to process assertion uploads");
         assertionService.processAssertionUploads();
         LOG.info("Assertion uploads processed");
@@ -60,7 +60,7 @@ public class ScheduledJobsManager {
 
     @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.removeStoredFilesDelay}")
     @SchedulerLock(name = "removeStoredFiles", lockAtMostFor = "60m", lockAtLeastFor = "2m")
-    public void removeStoredFiles() throws IOException  {
+    public void removeStoredFiles() throws IOException {
         LOG.info("Running cron to remove old files");
         storedFileService.removeStoredFiles();
         LOG.info("Old files removed");
@@ -68,7 +68,7 @@ public class ScheduledJobsManager {
 
     @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.processCsvReportsDelay}")
     @SchedulerLock(name = "processCsvReports", lockAtMostFor = "60m", lockAtLeastFor = "2m")
-    public void sendCSVReports() throws IOException  {
+    public void sendCSVReports() throws IOException {
         LOG.info("Running cron to process CSV reports");
         csvReportService.processCsvReports();
         LOG.info("CSV reports processed");
@@ -76,7 +76,7 @@ public class ScheduledJobsManager {
 
     @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.sendPermissionLinkNotificationsDelay}")
     @SchedulerLock(name = "sendPermissionLinkNotifications", lockAtMostFor = "60m", lockAtLeastFor = "2m")
-    public void sendPermissionLinkNotifications() throws IOException  {
+    public void sendPermissionLinkNotifications() throws IOException {
         LOG.info("Running cron to send permission link notifications");
         notificationService.sendPermissionLinkNotifications();
         LOG.info("Permission link notifications sent");
@@ -84,7 +84,7 @@ public class ScheduledJobsManager {
 
     @Scheduled(cron = "${application.cron.resendNotificationsCron}")
     @SchedulerLock(name = "resendNotifications", lockAtMostFor = "60m", lockAtLeastFor = "10m")
-    public void resendNotifications() throws IOException  {
+    public void resendNotifications() throws IOException {
         LOG.info("Running cron to resend notifications");
         notificationService.resendNotifications();
         LOG.info("Notifications resent");

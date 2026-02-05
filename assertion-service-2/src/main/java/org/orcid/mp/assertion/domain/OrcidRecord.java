@@ -243,10 +243,7 @@ public class OrcidRecord {
         } else if (!reminderNotificationSentDate.equals(other.reminderNotificationSentDate))
             return false;
         if (revokeNotificationSentDate == null) {
-            if (other.revokeNotificationSentDate != null)
-                return false;
-        } else if (!revokeNotificationSentDate.equals(other.revokeNotificationSentDate))
-            return false;
-        return true;
+            return other.revokeNotificationSentDate == null;
+        } else return revokeNotificationSentDate.equals(other.revokeNotificationSentDate);
     }
 }

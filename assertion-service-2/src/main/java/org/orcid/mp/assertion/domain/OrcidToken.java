@@ -7,10 +7,10 @@ import java.time.Instant;
 public class OrcidToken {
 
     @Field("salesforce_id")
-    private String salesforceId;
+    private final String salesforceId;
 
     @Field("token_id")
-    private String tokenId;
+    private final String tokenId;
 
     @Field("denied_date")
     private Instant deniedDate;

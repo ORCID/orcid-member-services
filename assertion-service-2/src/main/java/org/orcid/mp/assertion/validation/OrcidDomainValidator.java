@@ -11,7 +11,7 @@ import org.xbill.DNS.TextParseException;
  */
 public class OrcidDomainValidator {
 
-    private DomainValidator standardDomainValidator = DomainValidator.getInstance();
+    private final DomainValidator standardDomainValidator = DomainValidator.getInstance();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrcidDomainValidator.class);
 

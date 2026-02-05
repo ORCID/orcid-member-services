@@ -63,6 +63,21 @@ public class NotificationService {
     @Value("${application.notifications.resendNotificationDays}")
     private int[] resendNotificationDays;
 
+    public void createSendNotificationsRequest(String userEmail, String salesforceId) {
+        if (findActiveRequestBySalesforceId(salesforceId) != null) {
+            throw new RuntimeException("Send notifications request already active for " + salesforceId);
+        }
+
+        SendNotificationsRequest request = new SendNotificationsRequest();
+        request.setEmail(userEmail);
+        request.setSalesforceId(salesforceId);
+        request.setDateRequested(Instant.now());
+        sendNotificationsRequestRepository.insert(request);
+    }
+
+    public boolean requestInProgress(String salesforceId) {
+        return findActiveRequestBySalesforceId(salesforceId) != null;
+    }
 
     public void sendPermissionLinkNotifications() {
         List<SendNotificationsRequest> requests = sendNotificationsRequestRepository.findActiveRequests();
@@ -104,6 +119,12 @@ public class NotificationService {
         }
 
         resendNotifications(usersAndSalesforceIds);
+    }
+
+    private SendNotificationsRequest findActiveRequestBySalesforceId(String salesforceId) {
+        List<SendNotificationsRequest> requests = sendNotificationsRequestRepository.findActiveRequestBySalesforceId(salesforceId);
+        assert requests.size() <= 1;
+        return requests.size() == 1 ? requests.get(0) : null;
     }
 
     private void resendNotifications(Map<String, String> usersAndSalesforceIds) {
@@ -200,7 +221,7 @@ public class NotificationService {
         Locale locale = LocaleUtils.getLocale(language);
         NotificationPermission notificationPermission = new NotificationPermission();
         notificationPermission.setNotificationIntro(messageSource.getMessage("assertion.notifications.introduction", null, locale));
-        notificationPermission.setNotificationSubject(messageSource.getMessage("assertion.notifications.subject", new Object[] { orgName }, locale));
+        notificationPermission.setNotificationSubject(messageSource.getMessage("assertion.notifications.subject", new Object[]{orgName}, locale));
         notificationPermission.setNotificationType(NotificationType.PERMISSION);
         notificationPermission.setAuthorizationUrl(new AuthorizationUrl(orcidRecordService.generateLinkForEmailAndSalesforceId(email, salesforceId)));
 

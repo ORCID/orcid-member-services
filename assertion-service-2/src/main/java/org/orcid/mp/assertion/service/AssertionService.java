@@ -6,11 +6,13 @@ import org.codehaus.jettison.json.JSONObject;
 import org.orcid.mp.assertion.client.InternalMemberServiceClient;
 import org.orcid.mp.assertion.client.InternalUserServiceClient;
 import org.orcid.mp.assertion.client.OrcidApiClient;
+import org.orcid.mp.assertion.client.UserServiceClient;
 import org.orcid.mp.assertion.csv.CsvWriter;
 import org.orcid.mp.assertion.domain.*;
 import org.orcid.mp.assertion.error.*;
 import org.orcid.mp.assertion.normalizer.AssertionNormalizer;
 import org.orcid.mp.assertion.repository.AssertionRepository;
+import org.orcid.mp.assertion.security.SecurityUtil;
 import org.orcid.mp.assertion.upload.AssertionsCsvReader;
 import org.orcid.mp.assertion.upload.AssertionsUpload;
 import org.orcid.mp.assertion.upload.AssertionsUploadSummary;
@@ -18,10 +20,12 @@ import org.orcid.mp.assertion.util.AssertionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.xml.bind.JAXBException;
 import java.io.File;
@@ -68,6 +72,9 @@ public class AssertionService {
     private InternalUserServiceClient internalUserServiceClient;
 
     @Autowired
+    private UserServiceClient userServiceClient;
+
+    @Autowired
     private AssertionsCsvReader assertionsCsvReader;
 
     @Autowired
@@ -75,6 +82,9 @@ public class AssertionService {
 
     @Autowired
     private AssertionNormalizer assertionNormalizer;
+
+    @Autowired
+    private CsvReportService csvReportService;
 
     public Assertion findById(String id) {
         Optional<Assertion> optional = assertionRepository.findById(id);
@@ -271,6 +281,11 @@ public class AssertionService {
         pendingUploads.forEach(this::processAssertionsUploadFile);
     }
 
+    public void generateAssertionsReport() throws IOException {
+        String filename = Instant.now() + "_orcid_report.csv";
+        csvReportService.storeCsvReportRequest(getLoggedInUser().getId(), filename, CsvReport.ASSERTIONS_REPORT_TYPE);
+    }
+
     private String getAssertionStatus(Assertion assertion) {
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findByEmail(assertion.getEmail());
         AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
@@ -413,6 +428,65 @@ public class AssertionService {
         }
     }
 
+    public Page<Assertion> findByCurrentSalesforceId(Pageable pageable) {
+        return findBySalesforceId(getLoggedInUser().getSalesforceId(), pageable);
+    }
+
+    public Page<Assertion> findBySalesforceId(Pageable pageable, String filter) {
+        String salesforceId = getLoggedInUser().getSalesforceId();
+        Page<Assertion> assertions = assertionRepository
+                .findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
+                        pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter,
+                        salesforceId, filter);
+        setPrettyStatus(assertions);
+        return assertions;
+    }
+
+    public List<Assertion> findByEmail(String email) {
+        List<Assertion> assertions = assertionRepository.findByEmail(email);
+        setPrettyStatus(assertions);
+        return assertions;
+    }
+
+    public void populatePermissionLink(Assertion assertion) {
+        assertion.setPermissionLink(orcidRecordService.generateLinkForEmail(assertion.getEmail()));
+    }
+
+    public void generatePermissionLinks() {
+        String filename = Instant.now() + "_orcid_permission_links.csv";
+        csvReportService.storeCsvReportRequest(getLoggedInUser().getId(), filename, CsvReport.PERMISSION_LINKS_TYPE);
+    }
+
+    public void markPendingAssertionsAsNotificationRequested(String salesforceId) {
+        assertionRepository.updateStatusPendingToNotificationRequested(salesforceId);
+    }
+
+    public void uploadAssertions(MultipartFile file) throws IOException {
+        User user = getLoggedInUser();
+        storedFileService.storeAssertionsCsvFile(file.getInputStream(), file.getOriginalFilename(), user);
+    }
+
+    public void updateOrcidIdsForEmailAndSalesforceId(String email, String salesforceId) {
+        Optional<OrcidRecord> record = orcidRecordService.findByEmail(email);
+        if (record.isEmpty()) {
+            throw new IllegalArgumentException("Can't find orcid record for email " + email);
+        }
+        final String orcid = record.get().getOrcid();
+        List<Assertion> assertions = assertionRepository.findAllByEmail(email);
+        assertions.stream().filter(a -> a.getOrcidId() == null && salesforceId.equals(a.getSalesforceId())).forEach(a -> {
+            if (StringUtils.isBlank(orcid)) {
+                LOG.warn("Setting empty orcid id '{}' in affiliation {} for email {} after granting permission", orcid, a.getId(), email);
+            }
+            a.setOrcidId(orcid);
+            assertionRepository.save(a);
+        });
+    }
+
+    public void generateAssertionsCSV() {
+        String filename = Instant.now() + "_affiliations.csv";
+        csvReportService.storeCsvReportRequest(getLoggedInUser().getId(), filename, CsvReport.ASSERTIONS_FOR_EDIT_TYPE);
+    }
+
     private Pageable getPageableForRegistrySync() {
         return PageRequest.of(0, REGISTRY_SYNC_BATCH_SIZE, Sort.by(Sort.Direction.ASC, "created"));
     }
@@ -441,10 +515,7 @@ public class AssertionService {
             return false;
         }
 
-        if (StringUtils.isBlank(idToken)) {
-            return false;
-        }
-        return true;
+        return !StringUtils.isBlank(idToken);
     }
 
     private void checkAssertionAccess(Assertion assertion, String salesforceId) {
@@ -635,5 +706,18 @@ public class AssertionService {
         return true;
     }
 
+    private User getLoggedInUser() {
+        String userLogin = SecurityUtil.getCurrentUserLogin().get();
+        return userServiceClient.getUser(userLogin);
+    }
 
+    private Page<Assertion> findBySalesforceId(String salesforceId, Pageable pageable) {
+        Page<Assertion> assertions = assertionRepository.findBySalesforceId(salesforceId, pageable);
+        setPrettyStatus(assertions);
+        return assertions;
+    }
+
+    private void setPrettyStatus(Iterable<Assertion> affiliations) {
+        affiliations.forEach(this::setPrettyStatus);
+    }
 }

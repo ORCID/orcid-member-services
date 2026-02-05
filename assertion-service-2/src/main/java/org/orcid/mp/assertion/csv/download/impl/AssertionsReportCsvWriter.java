@@ -21,9 +21,9 @@ public class AssertionsReportCsvWriter extends CsvDownloadWriter {
 
     private final Sort SORT = Sort.by(Sort.Direction.ASC, "email", "status", "created", "modified", "deletedFromORCID");
 
-    private static final String[] HEADERS = new String[] { "email", "orcid", "status", "putCode", "created", "modified", "affiliation-section", "department-name",
+    private static final String[] HEADERS = new String[]{"email", "orcid", "status", "putCode", "created", "modified", "affiliation-section", "department-name",
             "role-title", "start-date", "end-date", "org-name", "org-country", "org-city", "org-region", "disambiguated-organization-identifier", "disambiguation-source",
-            "external-id", "external-id-type", "external-id-url" };
+            "external-id", "external-id-type", "external-id-url"};
 
     @Autowired
     private OrcidRecordService orcidRecordService;
