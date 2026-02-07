@@ -11,18 +11,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class AssertionUtils {
     private static final String GRID_BASE_URL = "https://www.grid.ac/";
     private static final String GRID_BASE_URL_INSTITUTES = "https://www.grid.ac/institutes/";
     private static final String GRID_BASE_URL_ALT = "https://grid.ac/";
     private static final String GRID_BASE_URL_INSTITUTES_ALT = "https://grid.ac/institutes/";
-
-    @Autowired
-    private AssertionNormalizer assertionNormalizer;
-
-    @Autowired
-    private AssertionRepository assertionRepository;
 
     public String stripGridURL(String gridIdentifier) {
         if (!StringUtils.isBlank(gridIdentifier)) {
@@ -39,18 +32,7 @@ public class AssertionUtils {
         return gridIdentifier;
     }
 
-    public boolean isDuplicate(Assertion assertion, String salesforceId) {
-        Assertion normalized = assertionNormalizer.normalize(assertion);
-        List<Assertion> assertions = assertionRepository.findByEmailAndSalesforceId(assertion.getEmail(), salesforceId);
-        for (Assertion a : assertions) {
-            if (duplicates(a, normalized)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean duplicates(Assertion a, Assertion b) {
+    public static boolean duplicates(Assertion a, Assertion b) {
         if (a.getId() != null && a.getId().equals(b.getId())) {
             return false; // both the same record, not two duplicates
         }
@@ -65,14 +47,14 @@ public class AssertionUtils {
                 && !different(a.getExternalIdUrl(), b.getExternalIdUrl()) && !different(a.getUrl(), b.getUrl());
     }
 
-    private boolean different(AffiliationSection affiliationSectionA, AffiliationSection affiliationSectionB) {
+    private static boolean different(AffiliationSection affiliationSectionA, AffiliationSection affiliationSectionB) {
         if (affiliationSectionA == null && affiliationSectionB == null) {
             return false;
         }
         return !Objects.equal(affiliationSectionA, affiliationSectionB);
     }
 
-    private boolean different(String fieldA, String fieldB) {
+    private static boolean different(String fieldA, String fieldB) {
         if ((fieldA == null || fieldA.isEmpty()) && (fieldB == null || fieldB.isEmpty())) {
             return false;
         }

@@ -78,9 +78,6 @@ public class AssertionService {
     private AssertionsCsvReader assertionsCsvReader;
 
     @Autowired
-    private AssertionUtils assertionUtils;
-
-    @Autowired
     private AssertionNormalizer assertionNormalizer;
 
     @Autowired
@@ -358,7 +355,7 @@ public class AssertionService {
                     registryDeleteFailures.add(a.getId());
                 }
             } else {
-                if (!assertionUtils.isDuplicate(a, user.getSalesforceId())) {
+                if (!isDuplicate(a)) {
                     if (a.getId() == null || a.getId().isEmpty()) {
                         createAssertion(a, user);
                         created++;
@@ -385,29 +382,20 @@ public class AssertionService {
         return summary;
     }
 
-    private AssertionsUpload readUpload(File file, User user) {
-        InputStream inputStream = null;
-        AssertionsUpload upload = null;
-
-        try {
-            inputStream = new FileInputStream(file);
-            upload = assertionsCsvReader.readAssertionsUpload(inputStream, user);
-        } catch (IOException e) {
-            LOG.warn("Error reading user upload", e);
-            throw new RuntimeException(e);
-        }
-        return upload;
+    private AssertionsUpload readUpload(File file, User user) throws IOException {
+        InputStream inputStream = new FileInputStream(file);
+        return assertionsCsvReader.readAssertionsUpload(inputStream, user);
     }
 
-    private boolean assertionToDelete(Assertion assertion) {
-        return assertion.getId() != null && assertion.getAddedToORCID() == null && assertion.getAffiliationSection() == null && assertion.getCreated() == null
-                && assertion.getDepartmentName() == null && assertion.getDisambiguatedOrgId() == null && assertion.getDisambiguationSource() == null
-                && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null && assertion.getEndYear() == null
-                && assertion.getExternalId() == null && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null
-                && assertion.getLastModifiedBy() == null && assertion.getModified() == null && assertion.getOrcidError() == null && assertion.getOrcidId() == null
-                && assertion.getOrgCity() == null && assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null
-                && assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null && assertion.getRoleTitle() == null
-                && assertion.getSalesforceId() == null && assertion.getStartDay() == null && assertion.getStartMonth() == null && assertion.getStartYear() == null;
+    public boolean isDuplicate(Assertion assertion) {
+        Assertion normalized = assertionNormalizer.normalize(assertion);
+        List<Assertion> assertions = assertionRepository.findByEmailAndSalesforceId(assertion.getEmail(), assertion.getSalesforceId());
+        for (Assertion a : assertions) {
+            if (AssertionUtils.duplicates(normalized, a)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void deleteById(String id, User user) throws RegistryDeleteFailureException {
@@ -485,6 +473,17 @@ public class AssertionService {
     public void generateAssertionsCSV() {
         String filename = Instant.now() + "_affiliations.csv";
         csvReportService.storeCsvReportRequest(getLoggedInUser().getId(), filename, CsvReport.ASSERTIONS_FOR_EDIT_TYPE);
+    }
+
+    private boolean assertionToDelete(Assertion assertion) {
+        return assertion.getId() != null && assertion.getAddedToORCID() == null && assertion.getAffiliationSection() == null && assertion.getCreated() == null
+                && assertion.getDepartmentName() == null && assertion.getDisambiguatedOrgId() == null && assertion.getDisambiguationSource() == null
+                && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null && assertion.getEndYear() == null
+                && assertion.getExternalId() == null && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null
+                && assertion.getLastModifiedBy() == null && assertion.getModified() == null && assertion.getOrcidError() == null && assertion.getOrcidId() == null
+                && assertion.getOrgCity() == null && assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null
+                && assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null && assertion.getRoleTitle() == null
+                && assertion.getSalesforceId() == null && assertion.getStartDay() == null && assertion.getStartMonth() == null && assertion.getStartYear() == null;
     }
 
     private Pageable getPageableForRegistrySync() {
