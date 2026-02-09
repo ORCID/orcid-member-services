@@ -69,7 +69,7 @@ public class OrcidApiClient {
     @Value("${application.orcid.requestedTokenType}")
     private String requestedTokenType;
 
-    public String exchangeToken(String idToken, String orcidId) throws IOException, DeactivatedException, JSONException {
+    public String exchangeToken(String idToken, String orcidId) throws IOException, DeactivatedException {
         Map<String, String> params = Map.of("client_id", clientId, "client_secret",
                 clientSecret, "grant_type", grantType, "subject_token_type",
                 subjectTokenType, "requested_token_type", requestedTokenType, "subject_token", idToken);
@@ -88,8 +88,12 @@ public class OrcidApiClient {
             }
         }
 
-        JSONObject json = new JSONObject(responseString);
-        return json.get("access_token").toString();
+        try {
+            JSONObject json = new JSONObject(responseString);
+            return json.get("access_token").toString();
+        } catch (JSONException e) {
+            throw new RuntimeException("Unable to parse response from token exchange", e);
+        }
     }
 
     public String postAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException, IOException {
@@ -206,7 +210,7 @@ public class OrcidApiClient {
     }
 
     private void initInternalAccessToken() {
-        if (internalAccessToken == null) {
+        if (internalAccessToken.get() == null) {
             synchronized (this) {
                 if (internalAccessToken.get() == null) {
                     createInternalAccessToken();

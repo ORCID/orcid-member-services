@@ -75,9 +75,6 @@ public class AssertionsCsvReader {
     @Autowired
     private RorOrgValidator rorValidator;
 
-    @Autowired
-    private AssertionUtils assertionUtils;
-
     public AssertionsUpload readAssertionsUpload(InputStream inputStream, User user) throws IOException {
         AssertionsUpload upload = new AssertionsUpload();
 
@@ -161,7 +158,7 @@ public class AssertionsCsvReader {
             upload.addError(line.getRecordNumber(), getError("missingDisambiguatedOrgId", user));
             return a;
         } else {
-            orgId = assertionUtils.stripGridURL(orgId);
+            orgId = AssertionUtils.stripGridURL(orgId);
 
             String orgSource = getOptionalNullableValue(line, "disambiguation-source");
             if (validateDisambiguatedOrganizationId(orgId, orgSource)) {

@@ -10,7 +10,7 @@ import org.orcid.mp.assertion.domain.AssertionStatus;
 import org.orcid.mp.assertion.domain.Member;
 import org.orcid.mp.assertion.domain.SendNotificationsRequest;
 import org.orcid.mp.assertion.repository.AssertionRepository;
-import org.orcid.mp.assertion.repository.SendNotificationRequestRepository;
+import org.orcid.mp.assertion.repository.SendNotificationsRequestRepository;
 import org.orcid.mp.assertion.util.LocaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class NotificationService {
     private MailService mailService;
 
     @Autowired
-    private SendNotificationRequestRepository sendNotificationsRequestRepository;
+    private SendNotificationsRequestRepository sendNotificationsRequestRepository;
 
     @Autowired
     private InternalUserServiceClient internalUserServiceClient;
@@ -171,8 +171,9 @@ public class NotificationService {
 
     private void processRequest(SendNotificationsRequest request) {
         Iterator<String> emailsWithNotificationsRequested = assertionRepository.findDistinctEmailsWithNotificationRequested(request.getSalesforceId());
-        String orgName = internalMemberServiceClient.getMember(request.getSalesforceId()).getClientName();
-        String language = internalMemberServiceClient.getMember(request.getSalesforceId()).getDefaultLanguage();
+        Member member = internalMemberServiceClient.getMember(request.getSalesforceId());
+        String orgName = member.getClientName();
+        String language = member.getDefaultLanguage();
         emailsWithNotificationsRequested.forEachRemaining(e -> findAssertionsAndAttemptSend(e, orgName, language, request));
     }
 
