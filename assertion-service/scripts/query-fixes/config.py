@@ -23,7 +23,7 @@ class Config:
 
     def _get_mongo_uri(self) -> str:
         return (
-            os.getenv('MONGO_URI') or
+            os.getenv('SPRING_DATA_MONGODB_URI') or
             'mongodb://localhost:27017'
         )
 
