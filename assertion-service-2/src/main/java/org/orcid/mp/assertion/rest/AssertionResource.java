@@ -89,9 +89,6 @@ public class AssertionResource {
     @Autowired
     private MemberServiceClient memberServiceClient;
 
-    @Autowired
-    private AssertionUtils assertionUtils;
-
     private final EmailValidator emailValidator = EmailValidator.getInstance(false);
 
     String[] urlValschemes = {"http", "https", "ftp"}; // DEFAULT schemes =
@@ -363,7 +360,7 @@ public class AssertionResource {
 
         // XXX this isn't validating
         if (org.apache.commons.lang3.StringUtils.equals(assertion.getDisambiguationSource(), GRID_SOURCE_ID)) {
-            assertion.setDisambiguatedOrgId(assertionUtils.stripGridURL(assertion.getDisambiguatedOrgId()));
+            assertion.setDisambiguatedOrgId(AssertionUtils.stripGridURL(assertion.getDisambiguatedOrgId()));
         }
 
         assertion.setUrl(validateUrl(assertion.getUrl()));
