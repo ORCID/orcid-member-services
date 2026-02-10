@@ -30,8 +30,9 @@ public class MailConfiguration {
                 LOG.warn("Retry limit exceeded, email will not be sent");
                 return false;
             }
-            if (exception instanceof java.net.SocketException) {
-                LOG.warn("Detected connection reset - retrying sending email...");
+            if (exception instanceof java.io.IOException) {
+                LOG.warn("Network error detected ({}) on attempt {} - retrying sending email...",
+                    exception.getClass().getName(), executionCount);
                 return true;
             }
             return false;
