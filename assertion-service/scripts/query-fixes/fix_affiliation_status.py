@@ -148,8 +148,6 @@ Environment Variables:
     )
 
     parser.add_argument('--mongo-uri', help='MongoDB URI (overrides env)')
-    parser.add_argument('--database', help='Database name (overrides env)')
-    parser.add_argument('--collection', help='Collection name (overrides env)')
 
     return parser.parse_args()
 
@@ -160,17 +158,17 @@ def main():
     config = Config()
 
     mongo_uri = args.mongo_uri or config.mongo_uri
-    database = args.database or config.mongo_database
+    database_assertionservice = 'assertionservice'
 
     logger.info("="*80)
     logger.info("ORCID Affiliation Status Fix Script")
     logger.info("="*80)
-    logger.info(f"Database: {database}")
+    logger.info(f"Database: {database_assertionservice}")
     logger.info(f"Collection: assertion")
     logger.info(f"MongoDB URI: {mongo_uri[:20]}..." if len(mongo_uri) > 20 else f"MongoDB URI: {mongo_uri}")
     logger.info("="*80 + "\n")
 
-    connection = MongoDBConnection(mongo_uri, database)
+    connection = MongoDBConnection(mongo_uri, database_assertionservice)
 
     try:
         if not connection.connect():

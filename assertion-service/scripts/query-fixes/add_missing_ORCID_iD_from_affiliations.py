@@ -163,14 +163,10 @@ Examples:
 
 Environment Variables:
   MONGO_URI or MONGO_DB       - MongoDB connection string
-  MONGO_DATABASE or DATABASE  - Database name (default: assertionservice)
-  MONGO_COLLECTION or COLLECTION - Collection name (default: assertion)
         """
     )
 
     parser.add_argument('--mongo-uri', help='MongoDB URI (overrides env)')
-    parser.add_argument('--database', help='Database name (overrides env)')
-    parser.add_argument('--collection', help='Collection name (overrides env)')
 
     return parser.parse_args()
 
@@ -181,17 +177,17 @@ def main():
     config = Config()
 
     mongo_uri = args.mongo_uri or config.mongo_uri
-    database = args.database or config.mongo_database
+    database_assertionservice = 'assertionservice'
 
     logger.info("="*80)
     logger.info("Add missing ORCID iD and correct SF iD")
     logger.info("="*80)
-    logger.info(f"Database: {database}")
+    logger.info(f"Database: {database_assertionservice}")
     logger.info(f"Collections: assertion, orcid_record")
     logger.info(f"MongoDB URI: {mongo_uri[:20]}..." if len(mongo_uri) > 20 else f"MongoDB URI: {mongo_uri}")
     logger.info("="*80 + "\n")
 
-    connection = MongoDBConnection(mongo_uri, database)
+    connection = MongoDBConnection(mongo_uri, database_assertionservice)
     collection_assertion = 'assertion'
     collection_orcid_record = 'orcid_record'
 
