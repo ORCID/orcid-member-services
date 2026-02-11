@@ -4,19 +4,21 @@ Script to Update or Merge Organizations
 
 This script accepts the following parameters:
 
-- Primary Salesforce Organization ID (--primary)
+- Target Salesforce Organization ID (--target)
 
-- Salesforce Organization ID to update (--member_to_update)
+- Salesforce Organization ID to update (--source)
 - Delete member flag (--delete)
 
-All references to the organization being updated (including users and assertions) are reassigned to the Primary Salesforce Organization ID.
+All references to the organization being updated (including users and assertions) are reassigned to the Target Salesforce Organization ID.
 
 If the --delete flag is provided, the script deletes the updated (now obsolete) Salesforce Organization record from the member collection after all references have been successfully updated.
+If the --ignore flag is provided, the script ignore if the target salesforce Id exists
+
 
 Related to: https://app.clickup.com/t/9014437828/PD-3781
 
 Usage:
-    python update_organizations.py --primary=0012i00000eiI3CAAU --member_to_update=0012i00000aQxlxAAC
+    python manage_organizations.py --target=0012i00000eiI3CAAU --source=0012i00000aQxlxAAC
 """
 
 import argparse
@@ -36,11 +38,11 @@ logger = setup_logger(__name__, log_file='manage-organizations.log')
 
 class UpdateOrganizationMember:
 
-    def __init__(self, connection_to_db: MongoDBConnection, primary: str, member_to_update: str, delete: bool):
+    def __init__(self, connection_to_db: MongoDBConnection, target: str, source: str, delete: bool):
         self.connection = connection_to_db
         self.collection_member = connection_to_db.get_collection('member')
-        self.primary = primary
-        self.member_to_update = member_to_update
+        self.target = target
+        self.source = source
         self.delete = delete
 
     def find_problematic_members(self):
@@ -51,31 +53,32 @@ class UpdateOrganizationMember:
         try:
             logger.info("Searching for members to update...")
 
-            member_to_update = self.collection_member.find_one(
-                {"salesforce_id": self.member_to_update}
+            source = self.collection_member.find_one(
+                {"salesforce_id": self.source}
             )
 
-            primary_member = self.collection_member.find_one(
-                {"salesforce_id": self.primary}
+            target = self.collection_member.find_one(
+                {"salesforce_id": self.target}
             )
 
-            if not member_to_update:
-                raise ValueError(f"Member to update not found: {self.member_to_update}")
-
-            if not primary_member:
-                raise ValueError(f"Primary member not found: {self.primary}")
+            if not source:
+                raise ValueError(f"Member to update not found: {self.source}")
 
             logger.info(
                 "Found member to update salesforce_id=%s, client_name=%s",
-                member_to_update.get("salesforce_id"),
-                member_to_update.get("client_name"),
+                source.get("salesforce_id"),
+                source.get("client_name"),
             )
 
-            logger.info(
-                "Found primary member salesforce_id=%s, client_name=%s",
-                primary_member.get("salesforce_id"),
-                primary_member.get("client_name"),
-            )
+            if not target:
+                if not self.delete:
+                    raise ValueError(f"Target member not found: {self.source}")
+            else:
+                logger.info(
+                    "Found target member salesforce_id=%s, client_name=%s",
+                    target.get("salesforce_id"),
+                    target.get("client_name"),
+                )
 
         except OperationFailure as e:
             logger.error(f"Failed to query members: {e}")
@@ -86,38 +89,38 @@ class UpdateOrganizationMember:
 
     def update_member(self):
         try:
-            logger.info("Updating member salesforce_id=%s", self.member_to_update)
+            logger.info("Updating member salesforce_id=%s", self.source)
 
             if self.delete:
-                result = self.collection_member.delete_one({"salesforce_id": self.member_to_update})
+                result = self.collection_member.delete_one({"salesforce_id": self.source})
 
                 if result.deleted_count == 1:
                     logger.info(
-                        "Updated member from memberToDelete=%s to primary=%s",
-                        self.member_to_update,
-                        self.primary,
+                        "Updated member from memberToDelete=%s to target=%s",
+                        self.source,
+                        self.target,
                     )
                 else:
                     logger.error(
                         "Failed to update member salesforce_id=%s",
-                        self.member_to_update
+                        self.source
                     )
             else :
                 result = self.collection_member.update_one(
-                    {"salesforce_id": self.member_to_update},
-                    {"$set": {"salesforce_id": self.primary}}
+                    {"salesforce_id": self.source},
+                    {"$set": {"salesforce_id": self.target}}
                 )
 
             if result.modified_count == 1:
                 logger.info(
                     "Updated member salesforce_id from %s to %s",
-                    self.member_to_update,
-                    self.primary
+                    self.source,
+                    self.target
                 )
             else:
                 logger.warning(
                     "Member salesforce_id=%s already up to date",
-                    self.member_to_update
+                    self.source
                 )
 
 
@@ -129,12 +132,12 @@ class UpdateOrganizationMember:
 
 class UpdateOrganizationsAssertionAndOrcidRecords:
 
-    def __init__(self, connection_to_db: MongoDBConnection, primary: str, member_to_update: str):
+    def __init__(self, connection_to_db: MongoDBConnection, target: str, source: str):
         self.connection_to_db = connection_to_db
         self.collection_assertion = connection_to_db.get_collection('assertion')
         self.collection_orcid_record = connection_to_db.get_collection('orcid_record')
-        self.primary = primary
-        self.member_to_update = member_to_update
+        self.target = target
+        self.source = source
 
     def find_problematic_assertions(self) -> List[Dict[str, Any]]:
         """
@@ -146,7 +149,7 @@ class UpdateOrganizationsAssertionAndOrcidRecords:
 
         try:
             logger.info("Searching for assertions to update...")
-            assertions = list(self.collection_assertion.find({ 'salesforce_id': self.member_to_update }))
+            assertions = list(self.collection_assertion.find({ 'salesforce_id': self.source }))
             logger.info(f"Found {len(assertions)} assertions to fix")
             return assertions
         except OperationFailure as e:
@@ -186,7 +189,7 @@ class UpdateOrganizationsAssertionAndOrcidRecords:
                                             {
                                                 '$eq': [
                                                     '$$token.salesforce_id',
-                                                    self.member_to_update
+                                                    self.source
                                                 ]
                                             }
                                         ]
@@ -245,7 +248,7 @@ class UpdateOrganizationsAssertionAndOrcidRecords:
             Number of assertions updated
         """
         if not assertions:
-            logger.info("No orcid records to fix")
+            logger.info("No assertions to fix")
             return 0
 
         logger.info(f"\n Applying fixes to {len(assertions)} assertions...")
@@ -253,8 +256,8 @@ class UpdateOrganizationsAssertionAndOrcidRecords:
         try:
 
             result = self.collection_assertion.update_many(
-                {'salesforce_id': self.member_to_update},
-                {'$set': {'salesforce_id': self.primary}}
+                {'salesforce_id': self.source},
+                {'$set': {'salesforce_id': self.target}}
             )
 
             logger.info(f" Successfully updated {result.modified_count} affiliations")
@@ -291,14 +294,14 @@ class UpdateOrganizationsAssertionAndOrcidRecords:
                 tokens = orcid_record.get("tokens", [])
 
                 for t in tokens:
-                    salesforce_id_update = self.member_to_update
-                    salesforce_id_primary = self.primary
+                    salesforce_id_update = self.source
+                    salesforce_id_target = self.target
                     if salesforce_id_update == t.get("salesforce_id"):
                         result = self.collection_orcid_record.update_one(
                             {"_id": orcid_record["_id"]},
                             {
                                 "$set": {
-                                    "tokens.$[token].salesforce_id": salesforce_id_primary,
+                                    "tokens.$[token].salesforce_id": salesforce_id_target,
                                 }
                             },
                             array_filters=[
@@ -307,7 +310,7 @@ class UpdateOrganizationsAssertionAndOrcidRecords:
                         )
                         modified_count += result.modified_count
                         logger.info(
-                            f"Updated SF iD: member_to_update={salesforce_id_update}, primary={salesforce_id_primary}"
+                            f"Updated SF iD: source={salesforce_id_update}, target={salesforce_id_target}"
                         )
 
             logger.info(f" Successfully updated {modified_count} orcid records")
@@ -321,7 +324,6 @@ class UpdateOrganizationsAssertionAndOrcidRecords:
         except Exception as e:
             logger.error(f" Unexpected error during update: {e}")
             return 0
-
 
     def verify_fixes_assertions(self) -> bool:
         logger.info("\n Verifying fixes assertions...")
@@ -347,11 +349,11 @@ class UpdateOrganizationsAssertionAndOrcidRecords:
 
 class UpdateOrganizationsUser:
 
-    def __init__(self, connection_to_db: MongoDBConnection, collection: str, primary: str, member_to_update: str):
+    def __init__(self, connection_to_db: MongoDBConnection, collection: str, target: str, source: str):
         self.connection_to_db = connection_to_db
         self.collection_users = connection_to_db.get_collection(collection)
-        self.primary = primary
-        self.member_to_update = member_to_update
+        self.target = target
+        self.source = source
 
     def find_problematic_users(self) -> List[Dict[str, Any]]:
         """
@@ -363,7 +365,7 @@ class UpdateOrganizationsUser:
 
         try:
             logger.info("Searching for users to update...")
-            users = list(self.collection_users.find({ 'salesforce_id': self.member_to_update }))
+            users = list(self.collection_users.find({ 'salesforce_id': self.source }))
             logger.info(f"Found {len(users)} users to fix")
             return users
         except OperationFailure as e:
@@ -403,8 +405,8 @@ class UpdateOrganizationsUser:
         try:
 
             result = self.collection_users.update_many(
-                {'salesforce_id': self.member_to_update},
-                {'$set': {'salesforce_id': self.primary}}
+                {'salesforce_id': self.source},
+                {'$set': {'salesforce_id': self.target}}
             )
 
             logger.info(f" Successfully updated {result.modified_count} users")
@@ -447,10 +449,8 @@ Examples:
     )
 
     parser.add_argument('--mongo-uri', help='MongoDB URI (overrides env)')
-    parser.add_argument('--database', help='Database name (overrides env)')
-    parser.add_argument('--collection', help='Collection name (overrides env)')
-    parser.add_argument('--primary', help='Primary organization SF iD')
-    parser.add_argument('--member_to_update', help='Organization SF iD to update')
+    parser.add_argument('--target', help='Target organization SF iD')
+    parser.add_argument('--source', help='Organization SF iD to update')
     parser.add_argument(
         "--delete",
         action="store_true",
@@ -469,8 +469,8 @@ def main():
     database_assertionservice = 'assertionservice'
     database_userservice = 'userservice'
     database_memberservice = 'memberservice'
-    primary = args.primary
-    update = args.member_to_update
+    target = args.target
+    source = args.source
     delete = args.delete
 
     logger.info("="*80)
@@ -479,8 +479,8 @@ def main():
     logger.info(f"Databases: {database_assertionservice}, {database_userservice} and {database_memberservice} ")
     logger.info(f"Collections: assertion, orcid_record, jhi_user and member")
     logger.info(f"MongoDB URI: {mongo_uri[:20]}..." if len(mongo_uri) > 20 else f"MongoDB URI: {mongo_uri}")
-    logger.info(f"Primary SF iD: {primary}")
-    logger.info(f"Update SF iD: {update}")
+    logger.info(f"Target SF iD: {target}")
+    logger.info(f"Source SF iD: {source}")
     logger.info(f"Delete option: {delete}")
     logger.info("="*80 + "\n")
 
@@ -501,11 +501,11 @@ def main():
             logger.error("Failed to connect to memberservice MongoDB. Exiting.")
             return 1
 
-        fixer_memberservice = UpdateOrganizationMember(connection_memberservice, primary, update, delete)
+        fixer_memberservice = UpdateOrganizationMember(connection_memberservice, target, source, delete)
 
         fixer_memberservice.find_problematic_members()
 
-        fixer_assertionservice = UpdateOrganizationsAssertionAndOrcidRecords(connection_assertionservice, primary, update)
+        fixer_assertionservice = UpdateOrganizationsAssertionAndOrcidRecords(connection_assertionservice, target, source)
 
         assertions = fixer_assertionservice.find_problematic_assertions()
 
@@ -515,13 +515,13 @@ def main():
 
         fixer_assertionservice.print_orcid_records_report(orcid_records)
 
-        fixer_userservice = UpdateOrganizationsUser(connection_userservice, 'jhi_user', primary, update)
+        fixer_userservice = UpdateOrganizationsUser(connection_userservice, 'jhi_user', target, source)
 
         users = fixer_userservice.find_problematic_users()
 
         fixer_userservice.print_users_report(users)
 
-        if not assertions and orcid_records and users:
+        if not assertions and not orcid_records and not users:
             logger.info("\n No fixes needed. All assertions, orcid records and users are correct.")
             return 0
 
@@ -530,8 +530,9 @@ def main():
         logger.info(f"  {len(assertions)} assertions will be updated")
         logger.info(f"  {len(orcid_records)} orcid records will be updated")
         logger.info(f"  {len(users)} users will be updated")
+
         if delete:
-            logger.info(f"  Member {update} will be deleted")
+            logger.info(f"  Member {source} will be deleted")
         logger.info("="*80)
 
         try:
@@ -550,7 +551,7 @@ def main():
                 logger.warning("\n Some assertions may still need attention")
                 return 1
 
-        updated_count_orcid_records = fixer_assertionservice.find_orcid_records(assertions)
+        updated_count_orcid_records = fixer_assertionservice.find_orcid_records(orcid_records)
 
         if updated_count_orcid_records > 0:
             if not fixer_assertionservice.verify_fixes_orcid_records():
