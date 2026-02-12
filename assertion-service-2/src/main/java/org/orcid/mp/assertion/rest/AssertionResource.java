@@ -97,7 +97,7 @@ public class AssertionResource {
 
     UrlValidator urlValidator = new OrcidUrlValidator(urlValschemes);
 
-    @GetMapping("/assertions")
+    @GetMapping
     public ResponseEntity<Page<Assertion>> getAssertions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder,
                                                          @RequestParam(required = false, name = "filter") String filter) throws BadRequestAlertException, JSONException {
         LOG.debug("REST request to fetch assertions from user {}", SecurityUtil.getCurrentUserLogin().get());
@@ -110,14 +110,14 @@ public class AssertionResource {
         return ResponseEntity.ok().body(affiliations);
     }
 
-    @GetMapping("/assertions/{email}")
+    @GetMapping("/{email}")
     public ResponseEntity<List<Assertion>> getAssertionsByEmail(@PathVariable String email) throws BadRequestAlertException, JSONException {
         LOG.debug("REST request to fetch assertions for email {}", email);
         List<Assertion> assertions = assertionService.findByEmail(email);
         return ResponseEntity.ok().body(assertions);
     }
 
-    @GetMapping("/assertion/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Assertion> getAssertion(@PathVariable String id) {
         LOG.debug("REST request to fetch assertion {} from user {}", id, SecurityUtil.getCurrentUserLogin().get());
         Assertion assertion = assertionService.findById(id);
@@ -127,7 +127,7 @@ public class AssertionResource {
         return ResponseEntity.ok().body(assertion);
     }
 
-    @PostMapping("/assertion/permission-links")
+    @PostMapping("/permission-links")
     public ResponseEntity<Void> generatePermissionLinks() throws IOException, JSONException {
         String userLogin = SecurityUtil.getCurrentUserLogin().get();
         LOG.info("Permission links requested by {}", userLogin);
@@ -135,7 +135,7 @@ public class AssertionResource {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/assertion/notification-request")
+    @PostMapping("/notification-request")
     public ResponseEntity<Void> sendNotifications(@RequestBody NotificationRequest notificationRequest) {
         User user = getLoggedInUser();
         memberServiceClient.updateMemberDefaultLanguage(user.getSalesforceId(), notificationRequest.getLanguage());
@@ -144,13 +144,13 @@ public class AssertionResource {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/assertion/notification-request")
+    @GetMapping("/notification-request")
     public ResponseEntity<NotificationRequestInProgress> getNotificationRequestInProgress() {
         boolean notificationRequestInProgress = notificationService.requestInProgress(getLoggedInUser().getSalesforceId());
         return ResponseEntity.ok().body(new NotificationRequestInProgress(notificationRequestInProgress));
     }
 
-    @PutMapping("/assertion")
+    @PutMapping
     public ResponseEntity<Assertion> updateAssertion(@javax.validation.Valid @RequestBody Assertion assertion) throws BadRequestAlertException, JSONException {
         validateAssertion(assertion);
         Assertion existingAssertion = assertionService.updateAssertion(assertion, getLoggedInUser());
@@ -158,7 +158,7 @@ public class AssertionResource {
         return ResponseEntity.ok().body(existingAssertion);
     }
 
-    @PostMapping("/assertion")
+    @PostMapping
     public ResponseEntity<Assertion> createAssertion(@javax.validation.Valid @RequestBody Assertion assertion) throws BadRequestAlertException, URISyntaxException {
         LOG.debug("REST request to create assertion : {}", assertion);
         validateAssertion(assertion);
@@ -167,7 +167,7 @@ public class AssertionResource {
         return ResponseEntity.created(new URI("/api/assertion/" + assertion.getId())).body(assertion);
     }
 
-    @PostMapping("/assertion/upload")
+    @PostMapping("/upload")
     public ResponseEntity<Boolean> uploadAssertions(@RequestParam("file") MultipartFile file) {
         LOG.info("Uploading user csv upload for processing");
         try {
@@ -179,7 +179,7 @@ public class AssertionResource {
         }
     }
 
-    @DeleteMapping("/assertion/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<AssertionDeletion> deleteAssertion(@PathVariable String id) throws BadRequestAlertException {
         try {
             assertionService.deleteById(id, getLoggedInUser());
@@ -198,7 +198,7 @@ public class AssertionResource {
      * @throws IOException
      * @throws JSONException
      */
-    @GetMapping("/assertion/owner/{encryptedEmail}")
+    @GetMapping("/owner/{encryptedEmail}")
     public ResponseEntity<String> getOrcidRecordOwnerId(@PathVariable String encryptedEmail) throws IOException, JSONException {
         String email = encryptUtil.decrypt(encryptedEmail);
         Optional<OrcidRecord> record = orcidRecordService.findByEmail(email);
@@ -218,7 +218,7 @@ public class AssertionResource {
      * @throws IOException
      * @throws JSONException
      */
-    @GetMapping("/assertion/record/{state}")
+    @GetMapping("/record/{state}")
     public ResponseEntity<OrcidRecord> getOrcidRecord(@PathVariable String state) throws IOException, JSONException {
         String decryptState = encryptUtil.decrypt(state);
         String[] stateTokens = decryptState.split("&&");
@@ -295,7 +295,7 @@ public class AssertionResource {
         return ResponseEntity.ok().body(responseData.toString());
     }
 
-    @PostMapping(path = "/assertion/report")
+    @PostMapping(path = "/report")
     public ResponseEntity<Void> generateReport() throws IOException {
         String userLogin = SecurityUtil.getCurrentUserLogin().get();
         LOG.info("CSV report requested by {}", userLogin);
@@ -303,7 +303,7 @@ public class AssertionResource {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(path = "/assertion/csv")
+    @PostMapping(path = "/csv")
     public ResponseEntity<Void> generateCsv() throws IOException {
         String userLogin = SecurityUtil.getCurrentUserLogin().get();
         LOG.info("CSV for editing requested by {}", userLogin);
