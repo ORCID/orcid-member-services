@@ -20,7 +20,9 @@ public class RestTestUtil {
 
     private static final ObjectMapper mapper = createObjectMapper();
 
-    /** MediaType for JSON UTF8 */
+    /**
+     * MediaType for JSON UTF8
+     */
     public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON_UTF8;
 
     private static ObjectMapper createObjectMapper() {
@@ -33,8 +35,7 @@ public class RestTestUtil {
     /**
      * Convert an object to JSON byte array.
      *
-     * @param object
-     *            the object to convert.
+     * @param object the object to convert.
      * @return the JSON byte array.
      * @throws IOException
      */
@@ -45,10 +46,8 @@ public class RestTestUtil {
     /**
      * Create a byte array with a specific size filled with specified data.
      *
-     * @param size
-     *            the size of the byte array.
-     * @param data
-     *            the data to put in the byte array.
+     * @param size the size of the byte array.
+     * @param data the data to put in the byte array.
      * @return the JSON byte array.
      */
     public static byte[] createByteArray(int size, String data) {
@@ -96,9 +95,8 @@ public class RestTestUtil {
      * Creates a matcher that matches when the examined string represents the
      * same instant as the reference datetime.
      *
-     * @param date
-     *            the reference datetime against which the examined string is
-     *            checked.
+     * @param date the reference datetime against which the examined string is
+     *             checked.
      */
     public static ZonedDateTimeMatcher sameInstant(ZonedDateTime date) {
         return new ZonedDateTimeMatcher(date);
