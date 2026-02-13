@@ -7,10 +7,10 @@ spring:
   security:
     oauth2:
       authorizationserver:
-        issuer: http://localhost:9000
+        issuer: ${APPLICATION_USER_SERVICE_URL}
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000
+          issuer-uri: ${APPLICATION_USER_SERVICE_URL}
       client:
         registration:
           # This ID is used in your Java RestClient code
@@ -22,8 +22,8 @@ spring:
             scope: internal
         provider:
           myself:
-            token-uri: http://localhost:9000/oauth2/token
-            authorization-uri: http://localhost:9000/oauth2/authorize
+            token-uri: ${APPLICATION_USER_SERVICE_URL}/oauth2/token
+            authorization-uri: ${APPLICATION_USER_SERVICE_URL}/oauth2/authorize
   data:
     mongodb:
       database: userservice
@@ -42,6 +42,9 @@ logging:
     root: info
 
 application:
+  encrypt:
+    salt: ${APPLICATION_ENCRYPT_SALT}
+    key: ${APPLICATION_ENCRYPT_KEY}
   httpclient:
     maxConnTotal: ${APPLICATION_HTTPCLIENT_MAX_CONN_TOTAL:100}
     maxConnPerRoute: ${APPLICATION_HTTPCLIENT_MAX_CONN_PER_ROUTE:20}
@@ -53,7 +56,7 @@ application:
     fromName: ${APPLICATION_MAIL_FROM_NAME}
     testMode: ${APPLICATION_MAIL_TEST_MODE:false}
   memberService:
-    apiUrl: ${APPLICATION_MEMBERSERVICE_API_URL:http://localhost:8080}
+    apiUrl: ${APPLICATION_MEMBERSERVICE_URL:http://localhost:8080}
   baseUrl: ${APPLICATION_BASE_URL}
   sendActivationRemindersDelay: 3600000
   name: Member Portal User Service
