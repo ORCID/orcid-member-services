@@ -5,7 +5,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000
+          issuer-uri: ${APPLICATION_USER_SERVICE_URL}
   data:
     mongodb:
       database: memberservice
@@ -42,7 +42,7 @@ application:
     clientEndpoint: ${APPLICATION_SALESFORCE_CLIENT_ENDPOINT}
     tokenEndpoint: ${APPLICATION_SALESFORCE_TOKEN_ENDPOINT}
   userService:
-    apiUrl: ${APPLICATION_USER_SERVICE_API_URL}
+    apiUrl: ${APPLICATION_USER_SERVICE_URL}
   reports:
     holisticsMemberDashboardUrl: ${APPLICATION_REPORTS_MEMBER_DASHBOARD_URL}
     holisticsMemberDashboardSecret: ${APPLICATION_REPORTS_MEMBER_DASHBOARD_SECRET}
