@@ -114,13 +114,24 @@ describe('Service Tests', () => {
           .subscribe((body) => (result = body))
 
         const req = httpMock.expectOne({ method: 'GET' })
-        const responseHeaders = new HttpHeaders().append('X-Total-Count', '100')
-        req.flush([new User('123')], { headers: responseHeaders })
+
+        req.flush({
+          content: [new User('123')],
+          page: {
+            totalElements: 100,
+            number: 0,
+            size: 20,
+            totalPages: 5,
+          },
+        })
+
         httpMock.verify()
+
         expect(result).toBeTruthy()
-        expect(result.users).toBeTruthy()
-        expect(result.users.length).toEqual(1)
-        expect(result.totalItems).toEqual(100)
+
+        expect(result.content.length).toEqual(1)
+
+        expect(result.page.totalElements).toEqual(100)
       })
     })
 

@@ -11,6 +11,8 @@ import { HttpResponse } from '@angular/common/http'
 import { Member } from 'src/app/member/model/member.model'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { OidcSecurityService } from 'angular-auth-oidc-client'
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent
@@ -31,14 +33,21 @@ describe('NavbarComponent', () => {
       'getImageUrl',
       'getSalesforceId',
     ])
+    const mockOidcSecurityService = {
+      checkAuth: () => of({ isAuthenticated: true, userData: { email: 'test@email.com' } }),
+      userData$: of({ email: 'test@email.com' }),
+      isAuthenticated$: of({ isAuthenticated: true }),
+      logoff: jasmine.createSpy('logoff'),
+    }
 
     TestBed.configureTestingModule({
       declarations: [NavbarComponent, HasAnyAuthorityDirective],
-      imports: [ReactiveFormsModule, RouterTestingModule],
+      imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule],
       providers: [
         { provide: LoginService, useValue: loginServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
+        { provide: OidcSecurityService, useValue: mockOidcSecurityService },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents()
