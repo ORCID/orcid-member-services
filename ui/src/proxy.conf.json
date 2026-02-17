@@ -25,4 +25,12 @@
       "^/memberservice": ""
     }
   },
+    "/assertionservice/*": {
+    "target": "http://localhost:9020",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/assertionservice": ""
+    }
+  }
 }

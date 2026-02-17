@@ -8,7 +8,7 @@ import { createRequestOption } from 'src/app/shared/request-util'
 
 @Injectable({ providedIn: 'root' })
 export class AffiliationService {
-  public resourceUrl = '/services/assertionservice/api/assertion'
+  public resourceUrl = '/assertionservice/assertions'
 
   constructor(protected http: HttpClient) {}
 
