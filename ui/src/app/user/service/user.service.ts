@@ -7,7 +7,6 @@ import { filter, map } from 'rxjs/operators'
 import { User, UserAuthorities } from '../model/user.model'
 import { createRequestOption } from '../../shared/request-util'
 import { UserValidation } from '../model/user-validation.model'
-import { IUserPage, UserPage } from '../model/user-page.model'
 import { Page } from 'src/app/shared/model/page.model'
 
 @Injectable({ providedIn: 'root' })
@@ -86,28 +85,5 @@ export class UserService {
       }
     }
     return res
-  }
-
-  protected convertToUserPage(res: HttpResponse<User[]>): UserPage | null {
-    if (res.body) {
-      res.body.forEach((user: User) => {
-        user.createdDate = user.createdDate != null ? moment(user.createdDate) : null
-        user.lastModifiedDate = user.lastModifiedDate != null ? moment(user.lastModifiedDate) : null
-        user.isAdmin = false
-        if (user.authorities != null) {
-          user.authorities.forEach(function (userRole) {
-            if (userRole === UserAuthorities.ROLE_ADMIN) {
-              user.isAdmin = true
-            }
-          })
-        }
-      })
-      const totalCount: string | null = res.headers.get('X-Total-Count')
-      if (totalCount) {
-        const userPage = new UserPage(res.body, parseInt(totalCount, 10))
-        return userPage
-      }
-    }
-    return null
   }
 }
