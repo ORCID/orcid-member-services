@@ -7,12 +7,11 @@ import { filter, map } from 'rxjs/operators'
 import { User, UserAuthorities } from '../model/user.model'
 import { createRequestOption } from '../../shared/request-util'
 import { UserValidation } from '../model/user-validation.model'
-import { IUserPage, UserPage } from '../model/user-page.model'
+import { Page } from 'src/app/shared/model/page.model'
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  public resourceUrl = '/services/userservice/api/users'
-  private switchResourceUrl = '/services/userservice/api'
+  public resourceUrl = '/userservice/users'
 
   constructor(protected http: HttpClient) {}
 
@@ -49,18 +48,14 @@ export class UserService {
     return this.http.get<boolean>(`${this.resourceUrl}/${salesforceId}/owner`)
   }
 
-  findBySalesForceId(salesforceId: string | null, req?: any): Observable<IUserPage | null> {
+  findBySalesForceId(salesforceId: string | null, req?: any): Observable<Page<User>> {
     const options = createRequestOption(req)
-    return this.http
-      .get<User[]>(`${this.resourceUrl}/salesforce/${salesforceId}/p`, { params: options, observe: 'response' })
-      .pipe(map((res: HttpResponse<User[]>) => this.convertToUserPage(res)))
+    return this.http.get<Page<User>>(`${this.resourceUrl}/salesforce/${salesforceId}/p`, { params: options })
   }
 
-  query(req?: any): Observable<IUserPage | null> {
+  query(req?: any): Observable<Page<User>> {
     const options = createRequestOption(req)
-    return this.http
-      .get<User[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: HttpResponse<User[]>) => this.convertToUserPage(res)))
+    return this.http.get<Page<User>>(this.resourceUrl, { params: options })
   }
 
   delete(id: string): Observable<boolean> {
@@ -90,28 +85,5 @@ export class UserService {
       }
     }
     return res
-  }
-
-  protected convertToUserPage(res: HttpResponse<User[]>): UserPage | null {
-    if (res.body) {
-      res.body.forEach((user: User) => {
-        user.createdDate = user.createdDate != null ? moment(user.createdDate) : null
-        user.lastModifiedDate = user.lastModifiedDate != null ? moment(user.lastModifiedDate) : null
-        user.isAdmin = false
-        if (user.authorities != null) {
-          user.authorities.forEach(function (userRole) {
-            if (userRole === UserAuthorities.ROLE_ADMIN) {
-              user.isAdmin = true
-            }
-          })
-        }
-      })
-      const totalCount: string | null = res.headers.get('X-Total-Count')
-      if (totalCount) {
-        const userPage = new UserPage(res.body, parseInt(totalCount, 10))
-        return userPage
-      }
-    }
-    return null
   }
 }

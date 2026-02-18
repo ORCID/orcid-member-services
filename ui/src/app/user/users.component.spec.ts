@@ -10,7 +10,6 @@ import { HasAnyAuthorityDirective } from 'src/app/shared/directive/has-any-autho
 import { HttpHeaders, HttpResponse } from '@angular/common/http'
 import { Member } from 'src/app/member/model/member.model'
 import { UserService } from './service/user.service'
-import { UserPage } from './model/user-page.model'
 import { User } from './model/user.model'
 import { AlertService } from '../shared/service/alert.service'
 import { EventService } from '../shared/service/event.service'
@@ -64,7 +63,17 @@ describe('UsersComponent', () => {
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>
     alertService = TestBed.inject(AlertService) as jasmine.SpyObj<AlertService>
 
-    userService.query.and.returnValue(of(new UserPage([new User('123')], 1)))
+    userService.query.and.returnValue(
+      of({
+        content: [new User('123')], // Or just { id: '123' } as User if you switched to interfaces
+        page: {
+          totalElements: 1,
+          number: 0,
+          size: 20,
+          totalPages: 1,
+        },
+      })
+    )
 
     accountService.getAccountData.and.returnValue(
       of({

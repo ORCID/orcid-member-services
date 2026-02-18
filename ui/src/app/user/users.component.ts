@@ -1,8 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core'
-import { IUser } from './model/user.model'
+import { IUser, User } from './model/user.model'
 import { Subscription } from 'rxjs'
 import { UserService } from './service/user.service'
-import { IUserPage } from './model/user-page.model'
 import {
   faCheckCircle,
   faPencilAlt,
@@ -20,6 +19,7 @@ import { AccountService } from '../account/service/account.service'
 import { EventService } from '../shared/service/event.service'
 import { IAccount } from '../account/model/account.model'
 import { AlertService } from '../shared/service/alert.service'
+import { Page } from '../shared/model/page.model'
 
 @Component({
   selector: 'app-users',
@@ -220,11 +220,27 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.loadAll()
   }
 
-  protected paginate(data: IUserPage) {
-    this.totalItems = data.totalItems
-    this.users = data.users
-    const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1
-    const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems
+  protected paginate(data: Page<User>) {
+    this.totalItems = data.page.totalElements
+    this.users = data.content
+
+    // 1. Handle the "0 items" edge case
+    if (this.totalItems === 0) {
+      this.itemCount = $localize`:@@global.item-count.string:Showing 0 - 0 of 0 items.`
+      return
+    }
+
+    // 2. Calculate the Start Index
+    // Since page is 0-indexed, we take (0 * 20) + 1 = 1
+    const first = data.page.number * data.page.size + 1
+
+    // 3. Calculate the End Index
+    // We calculate the theoretical end of the page, but cap it at totalItems using Math.min
+    // e.g. Page 0, size 20: (0 + 1) * 20 = 20.
+    // If totalItems is 15, Math.min(20, 15) returns 15.
+    const calculatedEnd = (data.page.number + 1) * data.page.size
+    const second = Math.min(calculatedEnd, data.page.totalElements)
+
     this.itemCount = $localize`:@@global.item-count.string:Showing ${first} - ${second} of ${this.totalItems} items.`
   }
 
