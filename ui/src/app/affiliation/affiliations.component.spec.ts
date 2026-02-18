@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { AffiliationsComponent } from './affiliations.component'
 import { AffiliationService } from './service/affiliation.service'
-import { Affiliation, AffiliationPage } from './model/affiliation.model'
+import { Affiliation } from './model/affiliation.model'
 describe('AffiliationsComponent', () => {
   let component: AffiliationsComponent
   let fixture: ComponentFixture<AffiliationsComponent>
@@ -59,7 +59,17 @@ describe('AffiliationsComponent', () => {
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>
     alertService = TestBed.inject(AlertService) as jasmine.SpyObj<AlertService>
 
-    affiliationService.query.and.returnValue(of(new AffiliationPage([new Affiliation('123')], 1)))
+    affiliationService.query.and.returnValue(
+      of({
+        content: [new Affiliation('123')],
+        page: {
+          totalElements: 1,
+          number: 0,
+          size: 20,
+          totalPages: 1,
+        },
+      })
+    )
 
     accountService.getAccountData.and.returnValue(
       of({
