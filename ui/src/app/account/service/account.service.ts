@@ -64,12 +64,12 @@ export class AccountService {
   }
 
   getMfaSetup(): Observable<{ secret: string; otp: string; qrCode: any }> {
-    return this.http.get<any>('/services/userservice/account/mfa')
+    return this.http.get<any>('/userservice/account/mfa')
   }
 
   save(account: IAccount): Observable<boolean> {
     const headers = { 'Accept-Language': account.langKey }
-    return this.http.post('/services/userservice/account', account, { observe: 'response', headers }).pipe(
+    return this.http.post('/userservice/account', account, { observe: 'response', headers }).pipe(
       map((res: HttpResponse<any>) => this.isSuccess(res)),
       catchError(() => {
         return of(false)
@@ -85,7 +85,7 @@ export class AccountService {
   }
 
   enableMfa(mfaSetup: any): Observable<string[] | null> {
-    return this.http.post('/services/userservice/account/mfa/on', mfaSetup, { observe: 'response' }).pipe(
+    return this.http.post('/userservice/account/mfa/on', mfaSetup, { observe: 'response' }).pipe(
       map((res: HttpResponse<any>) => res.body),
       catchError(() => {
         console.error('error enabling mfa')
@@ -95,7 +95,7 @@ export class AccountService {
   }
 
   disableMfa(userId: string): Observable<boolean> {
-    return this.http.post(`/services/userservice/account/${userId}/mfa/off`, null, { observe: 'response' }).pipe(
+    return this.http.post(`/userservice/account/${userId}/mfa/off`, null, { observe: 'response' }).pipe(
       map((res: HttpResponse<any>) => this.isSuccess(res)),
       catchError(() => {
         return of(false)
