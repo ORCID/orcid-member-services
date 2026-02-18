@@ -39,7 +39,7 @@ server:
 
 logging:
   level:
-    root: info
+    root: INFO
 
 application:
   encrypt:

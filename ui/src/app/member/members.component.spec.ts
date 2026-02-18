@@ -41,7 +41,7 @@ describe('MembersComponent', () => {
 
     memberServiceSpy.query.and.returnValue(
       of({
-        content: [new Member('id')], // Or just { id: '123' } as User if you switched to interfaces
+        content: [new Member('id')],
         page: {
           totalElements: 1,
           number: 0,

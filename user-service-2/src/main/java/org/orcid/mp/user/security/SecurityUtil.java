@@ -1,13 +1,16 @@
-package org.orcid.mp.assertion.security;
+package org.orcid.mp.user.security;
+
+import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.jwt.Jwt; // <--- IMPORT THIS
+import org.springframework.security.oauth2.jwt.Jwt;
 
-import java.util.Optional;
-
+/**
+ * Utility class for Spring Security.
+ */
 public final class SecurityUtil {
 
     public static Optional<String> getCurrentUserLogin() {
@@ -34,4 +37,5 @@ public final class SecurityUtil {
 
         return null;
     }
+
 }

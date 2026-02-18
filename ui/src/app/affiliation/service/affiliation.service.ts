@@ -3,8 +3,9 @@ import { HttpClient, HttpResponse } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import * as moment from 'moment'
 import { map } from 'rxjs/operators'
-import { AffiliationPage, IAffiliation, IAffiliationPage } from '../model/affiliation.model'
+import { IAffiliation } from '../model/affiliation.model'
 import { createRequestOption } from 'src/app/shared/request-util'
+import { Page } from 'src/app/shared/model/page.model'
 
 @Injectable({ providedIn: 'root' })
 export class AffiliationService {
@@ -39,11 +40,9 @@ export class AffiliationService {
       .pipe(map((res: IAffiliation) => this.convertDateFromServer(res)))
   }
 
-  query(req?: any): Observable<IAffiliationPage | null> {
+  query(req?: any): Observable<Page<IAffiliation>> {
     const options = createRequestOption(req)
-    return this.http
-      .get<IAffiliation[]>(this.resourceUrl + 's', { params: options, observe: 'response' })
-      .pipe(map((res: HttpResponse<IAffiliation[]>) => this.convertToAffiliationPage(res)))
+    return this.http.get<Page<IAffiliation>>(this.resourceUrl, { params: options })
   }
 
   delete(id: string): Observable<boolean> {
@@ -87,23 +86,5 @@ export class AffiliationService {
       res.updatedInORCID = res.updatedInORCID ? moment(res.updatedInORCID) : undefined
     }
     return res
-  }
-
-  protected convertToAffiliationPage(res: HttpResponse<IAffiliation[]>): IAffiliationPage | null {
-    if (res.body) {
-      res.body.forEach((affiliation: IAffiliation) => {
-        affiliation.created = affiliation.created ? moment(affiliation.created) : undefined
-        affiliation.modified = affiliation.modified ? moment(affiliation.modified) : undefined
-        affiliation.deletedFromORCID = affiliation.deletedFromORCID ? moment(affiliation.deletedFromORCID) : undefined
-        affiliation.addedToORCID = affiliation.addedToORCID ? moment(affiliation.addedToORCID) : undefined
-        affiliation.updatedInORCID = affiliation.updatedInORCID ? moment(affiliation.updatedInORCID) : undefined
-      })
-      const totalCount: string | null = res.headers.get('X-Total-Count')
-      if (totalCount) {
-        const userPage = new AffiliationPage(res.body, parseInt(totalCount, 10))
-        return userPage
-      }
-    }
-    return null
   }
 }

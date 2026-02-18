@@ -21,7 +21,7 @@ import org.orcid.mp.user.validation.UserValidation;
 import org.orcid.mp.user.validation.UserValidator;
 import org.orcid.mp.user.pojo.ResendActivationResponse;
 import org.orcid.mp.user.security.AuthoritiesConstants;
-import org.orcid.mp.user.security.SecurityUtils;
+import org.orcid.mp.user.security.SecurityUtil;
 import org.orcid.mp.user.service.UserService;
 import org.orcid.mp.user.upload.UserUpload;
 import org.slf4j.Logger;
@@ -240,7 +240,7 @@ public class UserResource {
      */
     @PostMapping("/validate")
     public ResponseEntity<UserValidation> validateUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
-        Optional<User> currentUser = userRepository.findOneByEmailIgnoreCase(SecurityUtils.getCurrentUserLogin().get());
+        Optional<User> currentUser = userRepository.findOneByEmailIgnoreCase(SecurityUtil.getCurrentUserLogin().get());
         UserValidation validation = userValidator.validate(userDTO, currentUser.get().getLangKey());
         return ResponseEntity.ok(validation);
     }
@@ -253,7 +253,7 @@ public class UserResource {
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String userId, @RequestParam(value = "noMainContactCheck", required = false) boolean noMainContactCheck) {
         LOG.debug("REST request to delete user {}", userId);
-        String authUserLogin = SecurityUtils.getCurrentUserLogin().get();
+        String authUserLogin = SecurityUtil.getCurrentUserLogin().get();
         if (StringUtils.equalsIgnoreCase(authUserLogin, userId)) {
             throw new BadRequestAlertException("Cannot delete current authenticated user");
         }
@@ -366,7 +366,7 @@ public class UserResource {
     }
 
     private User getCurrentUser() {
-        return userRepository.findOneByEmailIgnoreCase(SecurityUtils.getCurrentUserLogin().get()).get();
+        return userRepository.findOneByEmailIgnoreCase(SecurityUtil.getCurrentUserLogin().get()).get();
     }
 
     private ResponseEntity<UserDTO> userOrNotFound(Optional<User> user) {

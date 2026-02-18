@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core'
-import { HttpClient, HttpResponse } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
-import * as moment from 'moment'
-import { map } from 'rxjs/operators'
-import { AffiliationPage, IAffiliation, IAffiliationPage } from '../model/affiliation.model'
-import { createRequestOption } from 'src/app/shared/request-util'
 import { AffiliationService } from './affiliation.service'
 
 @Injectable({ providedIn: 'root' })
