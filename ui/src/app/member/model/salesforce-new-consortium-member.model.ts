@@ -39,12 +39,12 @@ export class SFNewConsortiumMember implements ISFNewConsortiumMember {
 }
 
 export interface Option<T extends string> {
-  value: T;
-  description: string;
+  value: T
+  description: string
 }
 
-export type TrademarkLicenseValue = 'Yes' | 'No';
-export type OrganizationTierValue = 'Small' | 'Standard' | 'Large';
+export type TrademarkLicenseValue = 'Yes' | 'No'
+export type OrganizationTierValue = 'Small' | 'Standard' | 'Large'
 
-export type TrademarkLicenseOption = Option<TrademarkLicenseValue>;
-export type OrganizationTierOption = Option<OrganizationTierValue>;
+export type TrademarkLicenseOption = Option<TrademarkLicenseValue>
+export type OrganizationTierOption = Option<OrganizationTierValue>

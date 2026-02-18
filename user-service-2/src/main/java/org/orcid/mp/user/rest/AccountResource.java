@@ -20,6 +20,8 @@ import org.orcid.mp.user.service.MailService;
 import org.orcid.mp.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +43,9 @@ public class AccountResource {
     protected final UserMapper userMapper;
 
     protected final MailService mailService;
+
+    @Value("${application.releaseVersion}")
+    private String releaseVersion;
 
     public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, UserMapper userMapper) {
         this.userRepository = userRepository;
@@ -198,5 +203,11 @@ public class AccountResource {
 
     protected static boolean checkPasswordLength(String password) {
         return !StringUtils.isEmpty(password) && password.length() >= Constants.PASSWORD_MIN_LENGTH && password.length() <= Constants.PASSWORD_MAX_LENGTH;
+    }
+
+    @GetMapping("/releaseVersion")
+    public ResponseEntity<String> getReleaseVersion(
+            @RequestParam(required = false, name = "filter") String filter, Pageable pageable) {
+        return ResponseEntity.ok(releaseVersion);
     }
 }

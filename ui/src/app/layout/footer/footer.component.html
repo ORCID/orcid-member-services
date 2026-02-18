@@ -1,5 +1,5 @@
 <footer class="footer">
-  <div class="container" role="presentation">
+  <div class="container" role="presentation" style="position: relative">
     <div class="row footer-row-container" role="presentation">
       <nav>
         <div class="copyright">
@@ -24,5 +24,11 @@
         </ul>
       </nav>
     </div>
+  </div>
+  <div
+    class="release-version"
+    style="position: absolute; bottom: 5px; right: 0; margin-right: 15px; font-size: 0.7rem; color: #888"
+  >
+    {{ getReleaseVersion() }}
   </div>
 </footer>
