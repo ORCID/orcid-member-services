@@ -110,13 +110,6 @@ public class AssertionResource {
         return ResponseEntity.ok().body(affiliations);
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<List<Assertion>> getAssertionsByEmail(@PathVariable String email) throws BadRequestAlertException, JSONException {
-        LOG.debug("REST request to fetch assertions for email {}", email);
-        List<Assertion> assertions = assertionService.findByEmail(email);
-        return ResponseEntity.ok().body(assertions);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Assertion> getAssertion(@PathVariable String id) {
         LOG.debug("REST request to fetch assertion {} from user {}", id, SecurityUtil.getCurrentUserLogin().get());
