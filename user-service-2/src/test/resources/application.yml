@@ -42,3 +42,8 @@ application:
   logging:
     level:
       org.springframework.web: DEBUG
+  security:
+    jwt:
+      private-key: classpath:devcerts/private_key.pem
+      public-key: classpath:devcerts/public.pem
+      key-id: prod-key-id-v1
