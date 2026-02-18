@@ -67,8 +67,6 @@ application:
     assertionServiceClientSecret: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_CLIENT_SECRET}
   security:
     jwt:
-      # You can use "classpath:" prefix to load from src/main/resources
-      # OR put the raw PEM string here
-      private-key: ${APPLICATION_SECURITY_JWT_PRIVATE_KEY}classpath:certs/private.pem
+      private-key: ${APPLICATION_SECURITY_JWT_PRIVATE_KEY}
       public-key: ${APPLICATION_SECURITY_JWT_PUBLIC_KEY}
-      key-id: ${APPLICATION_SECURITY_JWT_KEY_ID}"prod-key-id-v1"
+      key-id: ${APPLICATION_SECURITY_JWT_KEY_ID}
