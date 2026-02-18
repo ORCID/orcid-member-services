@@ -10,6 +10,7 @@ import org.orcid.mp.member.pojo.AddConsortiumMember;
 import org.orcid.mp.member.pojo.MemberContactUpdate;
 import org.orcid.mp.member.pojo.MemberContactUpdateResponse;
 import org.orcid.mp.member.pojo.RemoveConsortiumMember;
+import org.orcid.mp.member.security.SecurityUtils;
 import org.orcid.mp.member.validation.MemberValidation;
 import org.orcid.mp.member.salesforce.*;
 import org.orcid.mp.member.service.MemberService;

@@ -43,7 +43,7 @@ const origin = window.location.origin
         silentRenew: true,
         useRefreshToken: true,
         logLevel: 1,
-        secureRoutes: ['/userservice', '/memberservice'],
+        secureRoutes: ['/userservice', '/memberservice', '/assertionservice'],
         autoUserInfo: false,
       },
     }),

@@ -39,7 +39,8 @@ server:
 
 logging:
   level:
-    root: info
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
 
 application:
   encrypt:

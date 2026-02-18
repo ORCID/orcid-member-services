@@ -1,8 +1,10 @@
 package org.orcid.mp.member.security;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt; // <--- IMPORT THIS
 
 import java.util.Optional;
 
@@ -10,15 +12,26 @@ public class SecurityUtils {
 
     public static Optional<String> getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication()).map(authentication -> {
-            if (authentication.getPrincipal() instanceof UserDetails) {
-                UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
-                return springSecurityUser.getUsername();
-            } else if (authentication.getPrincipal() instanceof String) {
-                return (String) authentication.getPrincipal();
-            }
-            return null;
-        });
+        return Optional.ofNullable(securityContext.getAuthentication())
+                .map(authentication -> extractPrincipal(authentication));
     }
 
+    private static String extractPrincipal(Authentication authentication) {
+        if (authentication == null) {
+            return null;
+        }
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            UserDetails springSecurityUser = (UserDetails) principal;
+            return springSecurityUser.getUsername();
+        } else if (principal instanceof Jwt) {
+            Jwt jwt = (Jwt) principal;
+            return jwt.getSubject();
+        } else if (principal instanceof String) {
+            return (String) principal;
+        }
+
+        return null;
+    }
 }

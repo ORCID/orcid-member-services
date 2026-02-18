@@ -20,7 +20,7 @@ public class BearerTokenInterceptor implements ClientHttpRequestInterceptor {
             var incomingRequest = attributes.getRequest();
             String authHeader = incomingRequest.getHeader(HttpHeaders.AUTHORIZATION);
             if (authHeader != null) {
-                request.getHeaders().add(HttpHeaders.AUTHORIZATION, authHeader);
+                request.getHeaders().set(HttpHeaders.AUTHORIZATION, authHeader);
             }
         }
         return execution.execute(request, body);

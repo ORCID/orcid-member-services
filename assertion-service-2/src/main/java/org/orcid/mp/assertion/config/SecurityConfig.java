@@ -9,8 +9,14 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Configuration
 @EnableWebSecurity
@@ -35,6 +41,31 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable());
 
         return http.build();
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+
+        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            Collection<GrantedAuthority> authorities = new ArrayList<>();
+
+            // 1. Extract Scopes (Standard behavior for internal clients)
+            // Reads "scope" or "scp" and adds "SCOPE_" prefix
+            JwtGrantedAuthoritiesConverter scopesConverter = new JwtGrantedAuthoritiesConverter();
+            authorities.addAll(scopesConverter.convert(jwt));
+
+            // 2. Extract Roles (Custom behavior for users)
+            // Reads "authorities" and adds no prefix (since DB roles are already ROLE_*)
+            JwtGrantedAuthoritiesConverter rolesConverter = new JwtGrantedAuthoritiesConverter();
+            rolesConverter.setAuthoritiesClaimName("authorities");
+            rolesConverter.setAuthorityPrefix("");
+            authorities.addAll(rolesConverter.convert(jwt));
+
+            return authorities;
+        });
+
+        return converter;
     }
 
 }
