@@ -5,7 +5,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { AccountService } from '../account'
 import { RouterTestingModule } from '@angular/router/testing'
 import { MemberService } from './service/member.service'
-import { MemberPage } from './model/member-page.model'
 import { of } from 'rxjs'
 import { Member } from './model/member.model'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler'
@@ -40,7 +39,18 @@ describe('MembersComponent', () => {
     memberServiceSpy = TestBed.inject(MemberService) as jasmine.SpyObj<MemberService>
     routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>
 
-    memberServiceSpy.query.and.returnValue(of(new MemberPage([new Member('id')], 1)))
+    memberServiceSpy.query.and.returnValue(
+      of({
+        content: [new Member('id')], // Or just { id: '123' } as User if you switched to interfaces
+        page: {
+          totalElements: 1,
+          number: 0,
+          size: 20,
+          totalPages: 1,
+        },
+      })
+    )
+
     accountServiceSpy.getAccountData.and.returnValue(
       of({
         id: 'id',
