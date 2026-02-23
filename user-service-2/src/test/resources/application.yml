@@ -16,6 +16,7 @@ spring:
           myself:
             token-uri: http://localhost:9000/oauth2/token
 application:
+  releaseVersion: 1.2.3
   internal:
     clientId: userservice
     clientSecret: userserviceSecret

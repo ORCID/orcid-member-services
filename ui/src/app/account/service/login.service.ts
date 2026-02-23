@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, Injector } from '@angular/core'
 import { AccountService } from './account.service'
 import { AuthServerProvider } from './auth-jwt.service'
 import { map, Observable } from 'rxjs'
@@ -8,7 +8,7 @@ import { AuthenticatedResult, OidcSecurityService } from 'angular-auth-oidc-clie
 @Injectable({ providedIn: 'root' })
 export class LoginService {
   constructor(
-    private accountService: AccountService,
+    private injector: Injector,
     private authServerProvider: AuthServerProvider,
     private oidcSecurityService: OidcSecurityService
   ) {}
@@ -22,7 +22,9 @@ export class LoginService {
   }
 
   logout() {
-    this.accountService.clearAccountData()
+    // to break cyclic dependency
+    const accountService = this.injector.get(AccountService)
+    accountService.clearAccountData()
     this.authServerProvider.logout()
   }
 }

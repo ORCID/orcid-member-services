@@ -42,6 +42,7 @@ logging:
     root: INFO
 
 application:
+  releaseVersion: ${APPLICATION_RELEASE_VERSION}
   encrypt:
     salt: ${APPLICATION_ENCRYPT_SALT}
     key: ${APPLICATION_ENCRYPT_KEY}

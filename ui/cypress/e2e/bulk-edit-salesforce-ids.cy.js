@@ -1,64 +1,59 @@
 /// <reference types="cypress" />
-import config from '../fixtures/bulk-edit-salesforce-ids-config.json';
+import config from "../fixtures/bulk-edit-salesforce-ids-config.json";
 
-describe('Bulk edit invalid salesforce ids', () => {
-  it('Replace all invalid ids with unused valid ones', () => {
+describe("Bulk edit invalid salesforce ids", () => {
+  it("Replace all invalid ids with unused valid ones", () => {
     cy.request({
       url: config.endpoint,
-      method: 'GET',
+      method: "GET",
       headers: {
-        Authorization: config.token
-      }
-    }).then(res => {
+        Authorization: config.token,
+      },
+    }).then((res) => {
       let totalPages = 0;
       let sfIds = [];
       let mpIds = [];
       let data = res.body;
       data = JSON.parse(data);
       for (const id in data.records) {
-        if (!sfIds.includes(data.records[id]['Id'])) {
-          sfIds.push(data.records[id]['Id']);
+        if (!sfIds.includes(data.records[id]["Id"])) {
+          sfIds.push(data.records[id]["Id"]);
         }
       }
       cy.visit(config.base_url);
-      cy.get('#username')
+      cy.get("#username")
         .clear()
         .type(config.username)
-        .get('#password')
+        .get("#password")
         .type(config.password)
-        .get('button')
+        .get("button")
         .filter('[type="submit"]')
         .click();
-      cy.get('#admin-menu').click();
-      cy.get('a')
-        .filter('[href="/member"]')
-        .click();
+      cy.get("#admin-menu").click();
+      cy.get("a").filter('[href="/member"]').click();
       cy.wait(1000);
-      cy.get('.pagination')
+      cy.get(".pagination")
         .children()
         .eq(-3)
-        .then(e => {
-          totalPages = +e[0].textContent.replace('(current)', '').trim();
+        .then((e) => {
+          totalPages = +e[0].textContent.replace("(current)", "").trim();
           // get list of salesforce ids used in the portal
           for (let i = 0; i < totalPages; i++) {
-            cy.get('tbody')
+            cy.get("tbody")
               .children()
-              .each($e => {
+              .each(($e) => {
                 mpIds.push($e[0].children[0].textContent);
               });
-            cy.get('.pagination')
-              .children()
-              .eq(-2)
-              .click();
-              cy.wait(200);
+            cy.get(".pagination").children().eq(-2).click();
+            cy.wait(200);
           }
         })
         .then(() => {
-          cy.get('tbody')
-              .children()
-              .each($e => {
-                mpIds.push($e[0].children[0].textContent);
-              });
+          cy.get("tbody")
+            .children()
+            .each(($e) => {
+              mpIds.push($e[0].children[0].textContent);
+            });
           // create list of salesforce ids not used in the portal
           let filteredIds = [];
           for (var i = 0; i < sfIds.length; i += 1) {
@@ -67,22 +62,21 @@ describe('Bulk edit invalid salesforce ids', () => {
             }
           }
           // go back to first page
-          cy.get('.pagination')
-            .children()
-            .eq(0)
-            .click();
+          cy.get(".pagination").children().eq(0).click();
           cy.wait(1000);
           for (var i = 0; i < totalPages; i++) {
-            cy.get('.pagination > li.active').then(page => {
+            cy.get(".pagination > li.active").then((page) => {
               // get current page number
-              const pageNumber = +page[0].textContent.replace('(current)', '').trim();
-              cy.get('tbody')
+              const pageNumber = +page[0].textContent
+                .replace("(current)", "")
+                .trim();
+              cy.get("tbody")
                 .children()
-                .each($e => {
-                  if ($e[0].children[0].textContent !== '001G000001AP83e') {
+                .each(($e) => {
+                  if ($e[0].children[0].textContent !== "001G000001AP83e") {
                     if (!sfIds.includes($e[0].children[0].textContent)) {
                       // click on the edit button
-                      cy.get('tbody')
+                      cy.get("tbody")
                         .children()
                         .eq($e[0].sectionRowIndex)
                         .children()
@@ -90,19 +84,16 @@ describe('Bulk edit invalid salesforce ids', () => {
                         .children()
                         .eq(0)
                         .click();
-                        // change id
-                      cy.get('#field_salesforceId')
+                      // change id
+                      cy.get("#field_salesforceId")
                         .clear()
                         .type(filteredIds[0]);
-                      cy.get('#save-entity').click();
-                      filteredIds.shift()
+                      cy.get("#save-entity").click();
+                      filteredIds.shift();
                       // saving the id redirects you to page 1, make sure you return to the relevant page
                       if (pageNumber !== 1) {
                         for (var p = 1; p < pageNumber; p++) {
-                          cy.get('.pagination')
-                            .children()
-                            .eq(-2)
-                            .click();
+                          cy.get(".pagination").children().eq(-2).click();
                         }
                         cy.wait(200);
                       }
@@ -110,10 +101,7 @@ describe('Bulk edit invalid salesforce ids', () => {
                   }
                 });
               // go to the next page
-              cy.get('.pagination')
-                .children()
-                .eq(-2)
-                .click();
+              cy.get(".pagination").children().eq(-2).click();
               cy.wait(250);
             });
           }

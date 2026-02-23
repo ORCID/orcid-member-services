@@ -12,4 +12,8 @@ export class FooterComponent {
   isAuthenticated() {
     return this.accountService.isAuthenticated()
   }
+
+  getReleaseVersion() {
+    return this.accountService.getReleaseVersion()
+  }
 }

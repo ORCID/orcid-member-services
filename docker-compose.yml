@@ -54,6 +54,7 @@ services:
     image: ${DOCKER_REG}/userservice-2:${TAG}
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - APPLICATION_RELEASE_VERSION=${TAG}
       - APPLICATION_MAIL_DOMAIN=${MAIL_DOMAIN}
       - APPLICATION_MAIL_API_KEY=${MAIL_API_KEY}
       - APPLICATION_MAIL_API_URL=${MAIL_API_URL}
