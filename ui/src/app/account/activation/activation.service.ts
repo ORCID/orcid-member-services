@@ -7,7 +7,7 @@ export class ActivationService {
   constructor(private http: HttpClient) {}
 
   get(key: string): Observable<any> {
-    return this.http.get('/services/userservice/api/activate', {
+    return this.http.get('/userservice/api/activate', {
       params: new HttpParams().set('key', key),
     })
   }
