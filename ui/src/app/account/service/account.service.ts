@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, OnInit } from '@angular/core'
 import { SessionStorageService } from 'ngx-webstorage'
 import { HttpClient, HttpResponse } from '@angular/common/http'
 import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil } from 'rxjs'
@@ -11,11 +11,11 @@ import { OidcSecurityService } from 'angular-auth-oidc-client'
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  // TODO: have custom 'unknown' and 'offline' statuses instead of 'undefined' and 'null'
   private accountData = new BehaviorSubject<IAccount | null | undefined>(undefined)
   private isFetchingAccountData = false
   private stopFetchingAccountData = new Subject()
   private authenticated = false
+  private releaseVersion: string | null = null
 
   constructor(
     private languageService: LanguageService,
@@ -24,7 +24,12 @@ export class AccountService {
     private http: HttpClient,
     private memberService: MemberService,
     private oidcSecurityService: OidcSecurityService
-  ) {}
+  ) {
+    this.http.get('/userservice/account/releaseVersion', { responseType: 'text' }).subscribe((version) => {
+      console.log('setting release to ', version)
+      this.releaseVersion = version
+    })
+  }
 
   private fetchAccountData(): Observable<IAccount | null> {
     this.isFetchingAccountData = true
@@ -186,5 +191,9 @@ export class AccountService {
 
   isOrganizationOwner(): boolean | null {
     return this.isIdentityResolved() && this.accountData ? this.accountData.value!.mainContact : false
+  }
+
+  getReleaseVersion(): string | null {
+    return this.releaseVersion
   }
 }

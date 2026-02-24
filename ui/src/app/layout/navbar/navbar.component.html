@@ -26,9 +26,7 @@
 
   <div class="navbar-collapse collapse" id="navbarResponsive">
     <ul class="navbar-nav ml-auto">
-
       <ng-container *ngIf="isAuthenticated()">
-
         <li
           *appHasAnyAuthority="'ROLE_USER'"
           ngbDropdown
@@ -261,8 +259,7 @@
             </li>
           </ul>
         </li>
-
       </ng-container>
-      </ul>
+    </ul>
   </div>
 </nav>

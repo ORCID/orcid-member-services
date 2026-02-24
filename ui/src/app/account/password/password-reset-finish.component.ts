@@ -3,7 +3,6 @@ import { Component, OnInit, AfterViewInit, Renderer2, ElementRef } from '@angula
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 
-
 @Component({
   selector: 'app-password-reset-finish',
   templateUrl: './password-reset-finish.component.html',
@@ -71,8 +70,8 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
         error: () => {
           this.success = undefined
           this.error = 'ERROR'
-        }
-    })
+        },
+      })
     }
   }
 

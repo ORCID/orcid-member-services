@@ -7,7 +7,11 @@ import { AlertType, EMAIL_REGEXP } from '../../app.constants'
 import { ISFCountry } from '../../member/model/salesforce-country.model'
 import { ISFState } from '../../member/model/salesforce-country.model copy'
 import { ISFMemberData } from '../../member/model/salesforce-member-data.model'
-import { ISFNewConsortiumMember, OrganizationTierOption, TrademarkLicenseOption } from '../../member/model/salesforce-new-consortium-member.model'
+import {
+  ISFNewConsortiumMember,
+  OrganizationTierOption,
+  TrademarkLicenseOption,
+} from '../../member/model/salesforce-new-consortium-member.model'
 import { MemberService } from '../../member/service/member.service'
 import { AlertService } from '../../shared/service/alert.service'
 import { DateUtilService } from '../../shared/service/date-util.service'
@@ -58,7 +62,6 @@ export class AddConsortiumMemberComponent implements OnInit {
     { id: 8, selected: false, name: 'Other contact' },
   ]
 
-
   trademarkLicenseOptions: TrademarkLicenseOption[] = [
     {
       value: 'Yes',
@@ -68,7 +71,7 @@ export class AddConsortiumMemberComponent implements OnInit {
       value: 'No',
       description: `ORCID cannot use this organization's trademarked name and logos`,
     },
-  ];
+  ]
 
   organizationTiers: OrganizationTierOption[] = [
     {
@@ -83,7 +86,7 @@ export class AddConsortiumMemberComponent implements OnInit {
       value: 'Large',
       description: `Legal entity's annual operating budget above 1 B USD`,
     },
-  ];
+  ]
 
   constructor(
     private memberService: MemberService,
@@ -93,7 +96,7 @@ export class AddConsortiumMemberComponent implements OnInit {
     private dateUtilService: DateUtilService,
     private accountService: AccountService,
     protected activatedRoute: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.currentMonth = this.dateUtilService.getCurrentMonthNumber()
@@ -120,19 +123,19 @@ export class AddConsortiumMemberComponent implements OnInit {
   }
 
   getControl(name: string): AbstractControl {
-    return this.editForm.get(name)!;
+    return this.editForm.get(name)!
   }
 
   getFormValue(controlName: string): string {
-    return this.getControl(controlName)?.value;
+    return this.getControl(controlName)?.value
   }
 
   trackByValue(_idx: number, tier: OrganizationTierOption | TrademarkLicenseOption): string {
-    return tier.value;
+    return tier.value
   }
 
   createNewConsortiumMemberFromForm(): ISFNewConsortiumMember {
-    const stateValue = this.getFormValue('state');
+    const stateValue = this.getFormValue('state')
     return {
       orgName: this.getFormValue('orgName'),
       trademarkLicense: this.getFormValue('trademarkLicense'),
