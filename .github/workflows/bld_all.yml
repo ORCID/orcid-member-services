@@ -123,3 +123,32 @@ jobs:
       bump: ${{ inputs.bump }}
       ref: ${{ inputs.ref }}
 
+  bld_memberservice_2:
+    uses: ./.github/workflows/bld_docker_backend.yml
+    secrets: inherit # pass all secrets
+    with:
+      context: member-service-2
+      version_tag: ${{ inputs.version_tag }}
+      docker_name: memberservice2
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
+
+  bld_assertionservice_2:
+    uses: ./.github/workflows/bld_docker_backend.yml
+    secrets: inherit # pass all secrets
+    with:
+      context: assertion-service-2
+      version_tag: ${{ inputs.version_tag }}
+      docker_name: assertionservice2
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
+
+  bld_userservice_2:
+    uses: ./.github/workflows/bld_docker_backend.yml
+    secrets: inherit # pass all secrets
+    with:
+      context: user-service-2
+      version_tag: ${{ inputs.version_tag }}
+      docker_name: userservice2
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
