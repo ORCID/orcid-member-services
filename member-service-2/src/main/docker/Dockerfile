@@ -8,7 +8,7 @@ RUN apt-get update && \
 
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
 
-EXPOSE 8092
+EXPOSE 9010
 
 COPY src/main/docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh && sync
