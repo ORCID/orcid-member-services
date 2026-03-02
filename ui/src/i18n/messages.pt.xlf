@@ -1318,10 +1318,6 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.ts</context>
-          <context context-type="linenumber">157</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/members.component.ts</context>
           <context context-type="linenumber">172</context>
         </context-group>
         <context-group purpose="location">
@@ -4871,6 +4867,14 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
           <context context-type="linenumber">196</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.zero-item-count.string" datatype="html">
+        <source>Showing 0 - 0 of 0 items.</source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/members.component.ts</context>
+          <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
     </body>
