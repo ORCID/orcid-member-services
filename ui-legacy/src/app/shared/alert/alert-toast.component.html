@@ -1,0 +1,17 @@
+<div class="alerts" role="alert">
+  <div *ngFor="let alert of alerts">
+    <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="'info'" [dismissible]="false" class="alert-success">
+      <div class="d-flex">
+        <div class="font-size-16 flex-grow-1">{{ alert.msg | localize }}</div>
+        <a
+          (click)="close(alert)"
+          (keyup.esc)="closeOldestAlert()"
+          (keyup.enter)="closeOldestAlert()"
+          tabindex="0"
+          class="close"
+          >×</a
+        >
+      </div>
+    </ngb-alert>
+  </div>
+</div>

@@ -15,17 +15,16 @@ import argparse
 import sys
 from typing import List, Dict, Any
 from pymongo.errors import OperationFailure
+from bson import ObjectId
 
 from logger_config import setup_logger
 from db_connection import MongoDBConnection
 from config import Config
 
-logger = setup_logger(__name__, log_file='affiliation_fix.log')
+logger = setup_logger(__name__, log_file='fix_affiliation_status.log')
 
 
 class AffiliationStatusFixer:
-
-    TARGET_STATUS = 'pending'
 
     def __init__(self, connection: MongoDBConnection, collection_name: str):
         self.connection = connection
@@ -39,8 +38,8 @@ class AffiliationStatusFixer:
             List of problematic affiliation documents
         """
         query = {
-            'added_to_orcid': {'$exists': True},
-            'put_code': {'$exists': True, '$ne': ""}
+            'added_to_orcid': {'$exists': True, '$ne': None},
+            'put_code': {'$exists': False, '$ne': ""},
         }
 
         try:
@@ -74,14 +73,13 @@ class AffiliationStatusFixer:
         for status, count in status_counts.items():
             logger.info(f"  - {status}: {count}")
 
-        logger.info("\nSample affiliations (first 5):")
-        for i, aff in enumerate(affiliations[:5], 1):
+        for i, aff in enumerate(affiliations, 1):
             logger.info(f"\n  {i}. ID: {aff.get('_id')}")
             logger.info(f"     Status: {aff.get('status', 'Unknown')}")
             logger.info(f"     Put Code: {'(missing)' if 'put_code' not in aff else aff.get('put_code')}")
             logger.info(f"     Added to ORCID: {aff.get('added_to_orcid', 'Unknown')}")
-            logger.info(f"     ORCID: {aff.get('orcidId', 'Unknown')}")
-            logger.info(f"     Organization: {aff.get('organizationName', 'Unknown')}")
+            logger.info(f"     ORCID: {aff.get('orcid_id', 'Unknown')}")
+            logger.info(f"     Organization: {aff.get('org_name', 'Unknown')}")
 
         logger.info("\n" + "="*80)
 
@@ -101,9 +99,11 @@ class AffiliationStatusFixer:
         affiliation_ids = [aff['_id'] for aff in affiliations]
 
         try:
+            object_ids = [ObjectId(aid) if not isinstance(aid, ObjectId) else aid for aid in affiliation_ids]
+
             result = self.collection.update_many(
-                {'_id': {'$in': affiliation_ids}},
-                {'$set': {'status': self.TARGET_STATUS}}
+                {'_id': {'$in': object_ids}},
+                {'$set': {'status': 'PENDING', 'added_to_orcid': None}}
             )
 
             logger.info(f" Successfully updated {result.modified_count} affiliations")
@@ -148,8 +148,6 @@ Environment Variables:
     )
 
     parser.add_argument('--mongo-uri', help='MongoDB URI (overrides env)')
-    parser.add_argument('--database', help='Database name (overrides env)')
-    parser.add_argument('--collection', help='Collection name (overrides env)')
 
     return parser.parse_args()
 
@@ -160,17 +158,17 @@ def main():
     config = Config()
 
     mongo_uri = args.mongo_uri or config.mongo_uri
-    database = args.database or config.mongo_database
+    database_assertionservice = 'assertionservice'
 
     logger.info("="*80)
     logger.info("ORCID Affiliation Status Fix Script")
     logger.info("="*80)
-    logger.info(f"Database: {database}")
+    logger.info(f"Database: {database_assertionservice}")
     logger.info(f"Collection: assertion")
     logger.info(f"MongoDB URI: {mongo_uri[:20]}..." if len(mongo_uri) > 20 else f"MongoDB URI: {mongo_uri}")
     logger.info("="*80 + "\n")
 
-    connection = MongoDBConnection(mongo_uri, database)
+    connection = MongoDBConnection(mongo_uri, database_assertionservice)
 
     try:
         if not connection.connect():
@@ -189,7 +187,7 @@ def main():
 
         logger.info("\n" + "="*80)
         logger.info("  WARNING: This will modify the database!")
-        logger.info(f"  {len(affiliations)} affiliations will be updated to status 'pending'")
+        logger.info(f"  {len(affiliations)} affiliations will be updated to status 'PENDING'")
         logger.info("="*80)
 
         try:

@@ -50,6 +50,16 @@ jobs:
       bump: ${{ inputs.bump }}
       ref: ${{ inputs.ref }}
 
+  bld_ui_legacy:
+    uses: ./.github/workflows/bld_docker.yml
+    secrets: inherit # pass all secrets
+    with:
+      docker_name: ui-legacy
+      context: ui-legacy
+      version_tag: ${{ inputs.version_tag }}
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
+
   bld_memberservice:
     uses: ./.github/workflows/bld_docker_jib.yml
     secrets: inherit # pass all secrets

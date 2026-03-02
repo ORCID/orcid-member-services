@@ -26,3 +26,18 @@ jobs:
       - name: Run tests
         working-directory: ui
         run: npm test
+  build-legacy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: 'ui-legacy/package-lock.json'
+      - name: Install dependencies
+        working-directory: ui-legacy
+        run: npm ci
+      - name: Run tests
+        working-directory: ui-legacy
+        run: npm test

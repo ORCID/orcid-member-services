@@ -1,0 +1,61 @@
+@use '../../../content/scss/bootstrap-variables' as global;
+
+input {
+  font-size: 14px;
+  letter-spacing: 0.25px;
+}
+
+input,
+select,
+option {
+  height: 40px;
+}
+
+.ng-invalid:not(form) {
+  border: 1px solid #d32f2f;
+  border-radius: 2px;
+}
+
+label {
+  margin-bottom: 0.25rem;
+}
+
+.required {
+  color: #d32f2f;
+}
+
+.message-box {
+  img {
+    padding: 0 16px 0 8px;
+  }
+  div {
+    font-size: 0.875rem;
+  }
+  border-radius: 4px;
+}
+
+.error-message {
+  border: 2px solid #b71c1c;
+}
+
+.warning-message {
+  border: 2px solid #ff9c00;
+}
+
+.radio {
+  height: 1.125rem;
+  width: 1.125rem;
+  accent-color: global.$info;
+}
+
+.date-dropdown {
+  width: 7.5rem;
+}
+
+.postcode-input-field {
+  max-width: 180px;
+}
+
+.org-name-input-field {
+  max-width: 400px;
+}

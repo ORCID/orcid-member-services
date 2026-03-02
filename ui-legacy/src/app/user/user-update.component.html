@@ -1,0 +1,217 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate [formGroup]="editForm">
+      <h1 id="jhi-ms-user-heading" class="mt-5" i18n="@@gatewayApp.msUserServiceMSUser.home.createOrEditLabel.string">
+        Add or edit user
+      </h1>
+      <div>
+        <app-alert-error></app-alert-error>
+        <div class="alerts top right" role="alert" *ngIf="validation.errors && validation.errors.length > 0">
+          <ngb-alert
+            class="alert alert-danger alert-dismissible"
+            role="alert"
+            ng-reflect-type="danger"
+            [dismissible]="false"
+          >
+            <ul class="validation-errors">
+              <li *ngFor="let error of validation.errors">
+                {{ error }}
+              </li>
+            </ul>
+            <a
+              (click)="validation.errors = null"
+              (keyup.esc)="validation.errors = null"
+              (keyup.enter)="validation.errors = null"
+              tabindex="0"
+              class="close"
+              >×</a
+            >
+          </ngb-alert>
+        </div>
+        <div class="form-group">
+          <label class="form-control-label" i18n="@@gatewayApp.msUserServiceMSUser.email.string" for="field_email"
+            >Email</label
+          >
+          <input type="text" class="form-control" name="email" id="field_email" formControlName="email" />
+        </div>
+        <div class="form-group">
+          <label
+            class="form-control-label"
+            i18n="@@gatewayApp.msUserServiceMSUser.firstName.string"
+            for="field_firstName.string"
+            >First Name</label
+          >
+          <input type="text" class="form-control" name="firstName" id="field_firstName" formControlName="firstName" />
+        </div>
+        <div class="form-group">
+          <label
+            class="form-control-label"
+            i18n="@@gatewayApp.msUserServiceMSUser.lastName.string"
+            for="field_lastName.string"
+            >Last Name</label
+          >
+          <input type="text" class="form-control" name="lastName" id="field_lastName" formControlName="lastName" />
+        </div>
+        <div class="form-group">
+          <input
+            type="checkbox"
+            class="form-control"
+            name="mainContact"
+            id="field_mainContact"
+            formControlName="mainContact"
+            (change)="validateOrgOwners()"
+          />
+          <label
+            class="form-control-label"
+            i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string"
+            for="field_mainContact"
+            >Organization Owner</label
+          >
+        </div>
+        <div class="form-group mb-0">
+          <label
+            class="form-control-label"
+            i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string"
+            for="field_salesforceId.string"
+            >Organization</label
+          >
+          <fieldset [disabled]="isExistentMember">
+            <select
+              *ngIf="memberList.length > 0"
+              class="custom-select"
+              name="salesforceId"
+              id="field_salesforceId"
+              formControlName="salesforceId"
+            >
+              <option *ngFor="let member of memberList" [ngValue]="member.salesforceId">{{ member.clientName }}</option>
+            </select>
+          </fieldset>
+          <fieldset [disabled]="true">
+            <div class="form-group">
+              <input
+                type="checkbox"
+                class="form-control"
+                name="activated"
+                id="field_activated"
+                formControlName="activated"
+              />
+              <label
+                class="form-control-label"
+                i18n="@@gatewayApp.msUserServiceMSUser.activated.string"
+                for="field_activated.string"
+                >Activated</label
+              >
+            </div>
+          </fieldset>
+          <div class="form-group" *ngIf="showIsAdminCheckbox">
+            <input type="checkbox" class="form-control" name="isAdmin" id="field_isAdmin" formControlName="isAdmin" />
+            <label
+              class="form-control-label"
+              i18n="@@gatewayApp.msUserServiceMSUser.isAdmin.string"
+              for="field_isAdmin.string"
+              >Admin</label
+            >
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button type="button" id="cancel-save" class="btn btn-outline-primary mr-2" (click)="navigateToUsersList()">
+          <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
+        </button>
+
+        <button
+          *ngIf="hasOwner"
+          (click)="confirmOwnershipChange()"
+          type="submit"
+          id="save-entity"
+          [disabled]="editForm.invalid || isSaving || memberList.length === 0"
+          class="btn btn-primary"
+        >
+          <fa-icon [icon]="faSave"></fa-icon>&nbsp;<span i18n="@@entity.action.save.string">Save</span>
+        </button>
+        <button
+          *ngIf="!hasOwner"
+          (click)="save()"
+          type="submit"
+          id="save-entity2"
+          [disabled]="editForm.invalid || isSaving || memberList.length === 0"
+          class="btn btn-primary"
+        >
+          <fa-icon [icon]="faSave"></fa-icon>&nbsp;<span i18n="@@entity.action.save.string">Save</span>
+        </button>
+        <button
+          *ngIf="displaySendActivate()"
+          type="button"
+          (click)="sendActivate()"
+          class="btn btn-primary btn-sm ml-1"
+        >
+          <fa-icon [icon]="faCheckCircle"></fa-icon>
+          <span class="d-none d-md-inline" i18n="@@entity.action.activate.string">Resend activation email</span>
+        </button>
+      </div>
+    </form>
+    <form
+      name="mfaForm"
+      role="form"
+      novalidate
+      [formGroup]="mfaForm"
+      *ngIf="existentUser && existentUser.id && hasRoleAdmin()"
+    >
+      <hr class="mb-32 mt-32" />
+      <h2 class="mb-8 font-size-18">
+        <ng-container i18n="@@settings.security.mfa.string">Two-factor authentication</ng-container>&nbsp;<span
+          class="mfaOn"
+          *ngIf="existentUser.mfaEnabled"
+          >(<ng-container i18n="@@settings.security.mfaOn.string">ON</ng-container>)</span
+        >
+        <span class="mfaOff" *ngIf="!existentUser.mfaEnabled"
+          >(<ng-container i18n="@@settings.security.mfaOff.string">OFF</ng-container>)</span
+        >
+      </h2>
+      <div class="font-size-14">
+        <ng-container *ngIf="existentUser.mfaEnabled">
+          <p class="mb-8" i18n="@@settings.security.disableMfaDescription.string">
+            Disable two-factor authentication (2FA) for this user if they are having difficulty signing in to the member
+            portal.
+          </p>
+          <div class="form-group">
+            <input
+              type="checkbox"
+              class="form-control"
+              name="twoFactorAuthentication"
+              id="field_twoFactorAuthentication"
+              formControlName="twoFactorAuthentication"
+            />
+            <label
+              class="form-control-label two-factor-authentication-label"
+              i18n="@@settings.security.mfa.string"
+              for="field_twoFactorAuthentication"
+              >Two-factor authentication</label
+            >
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!existentUser.mfaEnabled">
+          <div class="warning-message d-flex p-16 mb-40 mt-16">
+            <img src="./content/images/warning-sign.svg" alt="Warning sign" class="p-8" />
+            <div class="font-size-14 wide-text line-height-150" i18n="@@settings.security.disabledMfaNotice.string">
+              Users can enable 2FA from their account settings page
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="form-group">
+        <button type="button" id="cancel-save" class="btn btn-outline-primary mr-2" (click)="navigateToUsersList()">
+          <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
+        </button>
+        <button
+          (click)="saveMfa()"
+          type="submit"
+          [disabled]="!disableMfa || isSaving || memberList.length === 0"
+          class="btn btn-primary"
+        >
+          <fa-icon [icon]="faSave"></fa-icon>&nbsp;<span i18n="@@entity.action.save.string">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

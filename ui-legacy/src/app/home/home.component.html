@@ -1,0 +1,9 @@
+<div class="d-flex flex-column h-100">
+  <div class="alert alert-success mt-3" data-cy="signedInMessage" [innerHTML]="loggedInMessage"></div>
+  <div class="h-100 pb-3">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+<app-contact-update-alert></app-contact-update-alert>
+<app-add-consortium-member-alert></app-add-consortium-member-alert>
+<app-remove-consortium-member-alert></app-remove-consortium-member-alert>

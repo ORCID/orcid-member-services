@@ -1,0 +1,11 @@
+{
+  "id": "0000-0002-5941-7893",
+  "email": "qa+mp_csv_populated_record@mailinator.com",
+  "invalidEmail": "@test@email.com",
+  "affiliation": {
+    "id": "624acdc830c49e0008fcf505",
+    "type": "SERVICE",
+    "countryCode": "BH",
+    "country": "Bahrain"
+  }
+}
