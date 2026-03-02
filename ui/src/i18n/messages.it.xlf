@@ -1306,12 +1306,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="global.item-count.string" datatype="html">
-        <source>Showing 0 - 0 of 0 items.</source>
+        <source>Showing <x id="PH" equiv-text="first"/> - <x id="PH_1" equiv-text="second"/> of <x id="PH_2" equiv-text="this.totalItems"/> items.</source>
         <target state="new">Visualizzazione <x id="PH" equiv-text="first"/> - <x id="PH_1" equiv-text="second"/> di <x id="PH_2" equiv-text="this.totalItems"/> elementi. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/affiliation/affiliations.component.ts</context>
-          <context context-type="linenumber">227</context>
-        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.ts</context>
           <context context-type="linenumber">234</context>
@@ -1319,10 +1315,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.ts</context>
           <context context-type="linenumber">172</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/users.component.ts</context>
-          <context context-type="linenumber">229</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.ts</context>
@@ -4873,8 +4865,16 @@
         <source>Showing 0 - 0 of 0 items.</source>
         <target state="new"/>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.ts</context>
+          <context context-type="linenumber">227</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.ts</context>
           <context context-type="linenumber">157</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/users.component.ts</context>
+          <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
     </body>

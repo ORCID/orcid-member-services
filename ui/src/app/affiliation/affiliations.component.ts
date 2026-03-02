@@ -224,7 +224,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
     this.affiliations = data.content
 
     if (this.totalItems === 0) {
-      this.itemCount = $localize`:@@global.item-count.string:Showing 0 - 0 of 0 items.`
+      this.itemCount = $localize`:@@global.zero-item-count.string:Showing 0 - 0 of 0 items.`
       return
     }
 

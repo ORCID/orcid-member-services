@@ -226,7 +226,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
     // 1. Handle the "0 items" edge case
     if (this.totalItems === 0) {
-      this.itemCount = $localize`:@@global.item-count.string:Showing 0 - 0 of 0 items.`
+      this.itemCount = $localize`:@@global.zero-item-count.string:Showing 0 - 0 of 0 items.`
       return
     }
 
