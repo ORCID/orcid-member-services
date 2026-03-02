@@ -40,6 +40,9 @@ server:
 logging:
   level:
     root: INFO
+  structured:
+    format:
+      console: logstash
 
 application:
   releaseVersion: ${APPLICATION_RELEASE_VERSION}

@@ -10,7 +10,7 @@ describe('FooterComponent', () => {
   let accountService: jasmine.SpyObj<AccountService>
 
   beforeEach(() => {
-    const accountServiceSpy = jasmine.createSpyObj('AccountService', ['isAuthenticated'])
+    const accountServiceSpy = jasmine.createSpyObj('AccountService', ['isAuthenticated', 'getReleaseVersion'])
 
     TestBed.configureTestingModule({
       declarations: [FooterComponent],

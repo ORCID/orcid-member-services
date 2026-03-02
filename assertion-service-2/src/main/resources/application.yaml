@@ -35,6 +35,9 @@ server:
 logging:
   level:
     root: info
+  structured:
+    format:
+      console: logstash
 
 application:
   landingPageUrl: ${APPLICATION_LANDING_PAGE_URL}

@@ -17,9 +17,13 @@ spring:
       max-request-size: 30MB
 server:
   port: 9010
+
 logging:
   level:
-    root: info
+    root: INFO
+  structured:
+    format:
+      console: logstash
 
 application:
   encrypt:
