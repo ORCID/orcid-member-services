@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  issuerUrl: (window as any).__env?.issuerUrl || 'http://localhost:9000'
 }
 
 /*
