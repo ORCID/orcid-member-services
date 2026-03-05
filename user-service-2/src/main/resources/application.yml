@@ -45,6 +45,8 @@ logging:
       console: logstash
 
 application:
+  ui:
+    baseUrl: ${APPLICATION_UI_BASE_URL}
   releaseVersion: ${APPLICATION_RELEASE_VERSION}
   encrypt:
     salt: ${APPLICATION_ENCRYPT_SALT}
@@ -61,7 +63,8 @@ application:
     testMode: ${APPLICATION_MAIL_TEST_MODE:false}
   memberService:
     apiUrl: ${APPLICATION_MEMBER_SERVICE_URL:http://localhost:8080}
-  baseUrl: ${APPLICATION_BASE_URL}
+  registry:
+    baseUrl: ${APPLICATION_BASE_URL}
   sendActivationRemindersDelay: 3600000
   name: Member Portal User Service
   internal:
@@ -70,6 +73,7 @@ application:
     assertionServiceClientId: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_ID}
     assertionServiceClientSecret: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_CLIENT_SECRET}
   security:
+    issuerUrl: ${APPLICATION_USER_SERVICE_URL}
     jwt:
       private-key: ${APPLICATION_SECURITY_JWT_PRIVATE_KEY}
       public-key: ${APPLICATION_SECURITY_JWT_PUBLIC_KEY}
