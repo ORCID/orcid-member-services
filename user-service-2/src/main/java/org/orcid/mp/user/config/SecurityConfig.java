@@ -90,6 +90,12 @@ public class SecurityConfig {
     @Value("${application.security.jwt.key-id}")
     private String keyId;
 
+    @Value("${application.ui.baseUrl}")
+    private String uiBaseUrl;
+
+    @Value("${application.security.issuerUrl}")
+    private String issuerUrl;
+
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
@@ -127,7 +133,7 @@ public class SecurityConfig {
                         .jwt(Customizer.withDefaults())
                 )
                 .formLogin(form -> form
-                        .loginPage("http://localhost:4200/login")
+                        .loginPage(uiBaseUrl + "/login")
                         .loginProcessingUrl("/account/login")
                         .authenticationDetailsSource(new MfaDetailsSource())
                         .successHandler(new AuthenticationSuccessHandler())
@@ -162,8 +168,8 @@ public class SecurityConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://localhost:4200")
-                .postLogoutRedirectUri("http://localhost:4200")
+                .redirectUri(uiBaseUrl)
+                .postLogoutRedirectUri(uiBaseUrl)
                 .scope(OidcScopes.OPENID)
                 .scope("MP")
                 .tokenSettings(tokenSettings)
@@ -215,13 +221,13 @@ public class SecurityConfig {
 
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
-        return AuthorizationServerSettings.builder().issuer("http://localhost:9000").build();
+        return AuthorizationServerSettings.builder().issuer(issuerUrl).build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedOrigins(List.of(uiBaseUrl));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true); // Required for cookies/auth headers

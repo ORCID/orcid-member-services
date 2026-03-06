@@ -16,6 +16,8 @@ spring:
           myself:
             token-uri: http://localhost:9000/oauth2/token
 application:
+  ui:
+    baseUrl: http://localhost:4200
   releaseVersion: 1.2.3
   internal:
     clientId: userservice
@@ -37,13 +39,15 @@ application:
     testMode: true
   memberService:
     apiUrl: http://localhost:8080
-  baseUrl: http://memberportal.orcid.org
+  registry:
+    baseUrl: http://memberportal.orcid.org
   sendActivationRemindersDelay: 3600000
   name: Member Portal User Service
   logging:
     level:
       org.springframework.web: DEBUG
   security:
+    issuerUrl: http://localhost:9000
     jwt:
       private-key: classpath:devcerts/private_key.pem
       public-key: classpath:devcerts/public.pem
