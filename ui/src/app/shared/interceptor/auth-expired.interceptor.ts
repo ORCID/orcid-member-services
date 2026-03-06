@@ -22,6 +22,10 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
         error: (err: any) => {
           if (err instanceof HttpErrorResponse) {
             if (err.status === 401) {
+              if (err.error?.error === 'mfa_required' || (err.url && err.url.includes('/account/login'))) {
+                // if it's an mfa required error, take no action here
+                return;
+              }
               const token = this.oidcSecurityService.getAccessToken()
               if (token) {
                 console.warn('Caught 401 with token present. Triggering logout.')
