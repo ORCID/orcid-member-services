@@ -141,7 +141,7 @@ class FindFindShortSfIdsAssertion:
         logger.info("="*80)
 
         for i, rec in enumerate(assertions, 1):
-            logger.info(f" _id: {rec.get('_id')}, Salesforce Id: {rec.get('salesforce_id')}")
+            logger.info(f" email: {rec.get('email')}, Salesforce Id: {rec.get('salesforce_id')}")
 
         logger.info("\n" + "="*80)
 
@@ -155,7 +155,13 @@ class FindFindShortSfIdsAssertion:
         logger.info("="*80)
 
         for i, rec in enumerate(orcid_records, 1):
-            logger.info(f" _id: {rec.get('_id')}, email: {rec.get('email')}")
+            logger.info(f" email: {rec.get('email')}")
+            logger.info(f" Tokens:")
+
+            for j, token in enumerate(rec.get('tokens'), 1):
+                salesforce_id = token.get('salesforce_id')
+                if len(salesforce_id) < 18:
+                    logger.info(f"  Salesforce Id: {salesforce_id}, Revoked date: {token.get('revoked_date')}")
 
         logger.info("\n" + "="*80)
 
@@ -167,9 +173,8 @@ class FindFindShortSfIdsAssertion:
         logger.info("\n" + "="*80)
         logger.info("PROBLEMATIC NOTIFICATIONS REPORT")
         logger.info("="*80)
-
         for i, rec in enumerate(send_notifications_request, 1):
-            logger.info(f" _id: {rec.get('_id')}, Salesforce Id: {rec.get('salesforce_id')}")
+            logger.info(f" email: {rec.get('email')}, Salesforce Id: {rec.get('salesforce_id')}")
 
         logger.info("\n" + "="*80)
 
@@ -207,11 +212,11 @@ class FindShortSfIdsUser:
             return
 
         logger.info("\n" + "="*80)
-        logger.info("PROBLEMATIC USERS REPORT")
+        logger.info("PROBLEMATIC USERS TOKENS REPORT")
         logger.info("="*80)
 
         for i, rec in enumerate(users, 1):
-            logger.info(f" _id: {rec.get('_id')}, email: {rec.get('email')} Salesforce Id: {rec.get('salesforce_id')}")
+            logger.info(f" email: {rec.get('email')} Salesforce Id: {rec.get('salesforce_id')}")
 
         logger.info("\n" + "="*80)
 
@@ -269,13 +274,13 @@ def main():
 
         assertions = fixer_assertionservice.find_problematic_assertions()
 
-        orcid_records = fixer_assertionservice.find_problematic_orcid_records()
-
-        send_notifications_request = fixer_assertionservice.find_problematic_send_notifications_request()
-
         fixer_assertionservice.print_assertions_report(assertions)
 
+        orcid_records = fixer_assertionservice.find_problematic_orcid_records()
+
         fixer_assertionservice.print_orcid_records_report(orcid_records)
+
+        send_notifications_request = fixer_assertionservice.find_problematic_send_notifications_request()
 
         fixer_assertionservice.print_send_notifications_request_report(send_notifications_request)
 
