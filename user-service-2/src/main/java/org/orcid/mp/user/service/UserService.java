@@ -22,13 +22,13 @@ import org.orcid.mp.user.domain.ActivationReminder;
 import org.orcid.mp.user.domain.Member;
 import org.orcid.mp.user.domain.User;
 import org.orcid.mp.user.dto.UserDTO;
+import org.orcid.mp.user.error.*;
 import org.orcid.mp.user.mapper.UserMapper;
 import org.orcid.mp.user.repository.UserRepository;
-import org.orcid.mp.user.rest.error.*;
-import org.orcid.mp.user.rest.vm.MfaSetup;
+import org.orcid.mp.user.pojo.MfaSetup;
 import org.orcid.mp.user.security.AuthoritiesConstants;
 import org.orcid.mp.user.security.EncryptUtil;
-import org.orcid.mp.user.security.SecurityUtils;
+import org.orcid.mp.user.security.SecurityUtil;
 import org.orcid.mp.user.upload.UserCsvReader;
 import org.orcid.mp.user.upload.UserUpload;
 import org.orcid.mp.user.util.RandomUtil;
@@ -40,7 +40,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -219,7 +218,7 @@ public class UserService {
             LOG.warn("Attempt to create user with non existent member {}", userDTO.getSalesforceId());
             throw new BadRequestAlertException("Member does not exist");
         }
-        String createdBy = SecurityUtils.getCurrentUserLogin().get();
+        String createdBy = SecurityUtil.getCurrentUserLogin().get();
 
         // change the auth if the logged in user is org owner and this is set as
         // mainContact
@@ -326,7 +325,7 @@ public class UserService {
 
         if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
             user.setSalesforceId(userDTO.getSalesforceId());
-            user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+            user.setLastModifiedBy(SecurityUtil.getCurrentUserLogin().get());
             user.setLastModifiedDate(Instant.now());
         }
         userRepository.save(user);
@@ -378,7 +377,7 @@ public class UserService {
     }
 
     public void changePassword(String currentClearTextPassword, String newPassword) {
-        SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByEmailIgnoreCase).ifPresent(user -> {
+        SecurityUtil.getCurrentUserLogin().flatMap(userRepository::findOneByEmailIgnoreCase).ifPresent(user -> {
             String currentEncryptedPassword = user.getPassword();
             if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
                 throw new InvalidPasswordException();
@@ -551,14 +550,18 @@ public class UserService {
      * @return
      */
     public User getCurrentUser() {
-        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("Current user login not found"));
+        String login = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("Current user login not found"));
         Optional<User> user = userRepository.findOneByEmailIgnoreCase(login);
-        return user.get();
+
+        if (user.isPresent()) {
+            return user.get();
+        }
+        throw new UserNotLoggedInException();
     }
 
     public MfaSetup getMfaSetup() {
         String secret = Base32.random();
-        String qrCode = String.format("otpauth://totp/%s?secret=%s&issuer=%s", SecurityUtils.getCurrentUserLogin().get(), secret, MFA_QR_CODE_ACCOUNT_NAME);
+        String qrCode = String.format("otpauth://totp/%s?secret=%s&issuer=%s", SecurityUtil.getCurrentUserLogin().get(), secret, MFA_QR_CODE_ACCOUNT_NAME);
         MfaSetup mfaSetup = new MfaSetup();
         mfaSetup.setSecret(secret);
         mfaSetup.setQrCode(QRCode.from(qrCode).withSize(250, 250).stream().toByteArray());

@@ -40,7 +40,7 @@ public class MailService {
 
     private final SpringTemplateEngine templateEngine;
 
-    @Value("${application.baseUrl}")
+    @Value("${application.registry.baseUrl}")
     private String baseUrl;
 
     @Value("${application.mail.fromAddress}")

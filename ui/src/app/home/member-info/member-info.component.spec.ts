@@ -8,6 +8,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { of } from 'rxjs'
 import { IAccount } from 'src/app/account/model/account.model'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { OidcSecurityService } from 'angular-auth-oidc-client'
 
 describe('MemberInfoComponent', () => {
   let component: MemberInfoComponent
@@ -19,11 +21,36 @@ describe('MemberInfoComponent', () => {
   beforeEach(() => {
     const accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
     const memberServiceSpy = jasmine.createSpyObj('MemberService', ['getMemberData', 'setManagedMember'])
+    const mockOidcSecurityService = {
+      checkAuth: () => of({ isAuthenticated: true, userData: { email: 'test@email.com' } }),
+      userData$: of({ email: 'test@email.com' }),
+      isAuthenticated$: of({ isAuthenticated: true }),
+      logoff: jasmine.createSpy('logoff'),
+    }
+    const mockAccount: IAccount = {
+      id: 'test-id',
+      activated: true,
+      authorities: ['ROLE_USER'],
+      email: 'test@email.com',
+      firstName: 'Test',
+      langKey: 'en',
+      lastName: 'User',
+      imageUrl: '',
+      salesforceId: 'test2',
+      loggedAs: false,
+      loginAs: '',
+      mainContact: false,
+      mfaEnabled: false,
+    }
+
+    accountServiceSpy.getAccountData.and.returnValue(of(mockAccount))
+
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [RouterTestingModule.withRoutes([]), HttpClientTestingModule],
       providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
+        { provide: OidcSecurityService, useValue: mockOidcSecurityService },
       ],
       declarations: [MemberInfoComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],

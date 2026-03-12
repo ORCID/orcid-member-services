@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, OnInit } from '@angular/core'
 import { SessionStorageService } from 'ngx-webstorage'
 import { HttpClient, HttpResponse } from '@angular/common/http'
 import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil } from 'rxjs'
@@ -7,38 +7,38 @@ import { IAccount } from '../model/account.model'
 import { LanguageService } from 'src/app/shared/service/language.service'
 import { Router } from '@angular/router'
 import { MemberService } from 'src/app/member/service/member.service'
+import { OidcSecurityService } from 'angular-auth-oidc-client'
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  // TODO: have custom 'unknown' and 'offline' statuses instead of 'undefined' and 'null'
   private accountData = new BehaviorSubject<IAccount | null | undefined>(undefined)
   private isFetchingAccountData = false
   private stopFetchingAccountData = new Subject()
   private authenticated = false
+  private releaseVersion: string | null = null
 
   constructor(
     private languageService: LanguageService,
     private sessionStorage: SessionStorageService,
     private router: Router,
     private http: HttpClient,
-    private memberService: MemberService
-  ) {}
+    private memberService: MemberService,
+    private oidcSecurityService: OidcSecurityService
+  ) {
+    this.http.get('/userservice/account/releaseVersion', { responseType: 'text' }).subscribe((version) => {
+      console.log('setting release to ', version)
+      this.releaseVersion = version
+    })
+  }
 
-  private fetchAccountData() {
+  private fetchAccountData(): Observable<IAccount | null> {
     this.isFetchingAccountData = true
     return this.http
-      .get<IAccount>('/services/userservice/api/account', {
+      .get<IAccount>('/userservice/account', {
         observe: 'response',
       })
       .pipe(
         takeUntil(this.stopFetchingAccountData),
-        catchError(() => {
-          this.authenticated = false
-          this.accountData.next(null)
-          this.memberService.setMemberData(undefined)
-          this.isFetchingAccountData = false
-          return EMPTY
-        }),
         map((response: HttpResponse<IAccount>) => {
           this.isFetchingAccountData = false
           if (response && response.body) {
@@ -48,23 +48,33 @@ export class AccountService {
               this.languageService.updateLanguageCodeInUrl(account.langKey)
             }
             this.accountData.next(account)
+            return account // Return the account for the stream
           } else {
-            this.memberService.setMemberData(undefined)
-            this.accountData.next(null)
-            this.authenticated = false
-            console.error('Invalid response:', response)
+            this.handleError()
+            return null
           }
+        }),
+        catchError(() => {
+          this.handleError()
+          return of(null)
         })
       )
   }
 
+  private handleError() {
+    this.authenticated = false
+    this.accountData.next(null)
+    this.memberService.setMemberData(undefined)
+    this.isFetchingAccountData = false
+  }
+
   getMfaSetup(): Observable<{ secret: string; otp: string; qrCode: any }> {
-    return this.http.get<any>('/services/userservice/api/account/mfa')
+    return this.http.get<any>('/userservice/account/mfa')
   }
 
   save(account: IAccount): Observable<boolean> {
     const headers = { 'Accept-Language': account.langKey }
-    return this.http.post('/services/userservice/api/account', account, { observe: 'response', headers }).pipe(
+    return this.http.post('/userservice/account', account, { observe: 'response', headers }).pipe(
       map((res: HttpResponse<any>) => this.isSuccess(res)),
       catchError(() => {
         return of(false)
@@ -80,7 +90,7 @@ export class AccountService {
   }
 
   enableMfa(mfaSetup: any): Observable<string[] | null> {
-    return this.http.post('/services/userservice/api/account/mfa/on', mfaSetup, { observe: 'response' }).pipe(
+    return this.http.post('/userservice/account/mfa/on', mfaSetup, { observe: 'response' }).pipe(
       map((res: HttpResponse<any>) => res.body),
       catchError(() => {
         console.error('error enabling mfa')
@@ -90,7 +100,7 @@ export class AccountService {
   }
 
   disableMfa(userId: string): Observable<boolean> {
-    return this.http.post(`/services/userservice/api/account/${userId}/mfa/off`, null, { observe: 'response' }).pipe(
+    return this.http.post(`/userservice/account/${userId}/mfa/off`, null, { observe: 'response' }).pipe(
       map((res: HttpResponse<any>) => this.isSuccess(res)),
       catchError(() => {
         return of(false)
@@ -101,6 +111,10 @@ export class AccountService {
     this.accountData.next(null)
     this.authenticated = false
     this.router.navigate(['/login'])
+
+    this.oidcSecurityService.logoff().subscribe(() => {
+      this.router.navigate(['/login'])
+    })
   }
 
   hasAnyAuthority(authorities: string[]): boolean {
@@ -177,5 +191,9 @@ export class AccountService {
 
   isOrganizationOwner(): boolean | null {
     return this.isIdentityResolved() && this.accountData ? this.accountData.value!.mainContact : false
+  }
+
+  getReleaseVersion(): string | null {
+    return this.releaseVersion
   }
 }

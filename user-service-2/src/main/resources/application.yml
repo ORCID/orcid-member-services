@@ -7,10 +7,23 @@ spring:
   security:
     oauth2:
       authorizationserver:
-        issuer: http://localhost:9000
+        issuer: ${APPLICATION_USER_SERVICE_URL}
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000
+          issuer-uri: ${APPLICATION_USER_SERVICE_URL}
+      client:
+        registration:
+          # This ID is used in your Java RestClient code
+          internal-user-client:
+            provider: myself
+            client-id: ${APPLICATION_INTERNAL_CLIENT_ID}
+            client-secret: ${APPLICATION_INTERNAL_CLIENT_SECRET}
+            authorization-grant-type: client_credentials
+            scope: internal
+        provider:
+          myself:
+            token-uri: ${APPLICATION_USER_SERVICE_URL}/oauth2/token
+            authorization-uri: ${APPLICATION_USER_SERVICE_URL}/oauth2/authorize
   data:
     mongodb:
       database: userservice
@@ -26,9 +39,18 @@ server:
 
 logging:
   level:
-    root: info
+    root: INFO
+  structured:
+    format:
+      console: logstash
 
 application:
+  ui:
+    baseUrl: ${APPLICATION_UI_BASE_URL}
+  releaseVersion: ${APPLICATION_RELEASE_VERSION}
+  encrypt:
+    salt: ${APPLICATION_ENCRYPT_SALT}
+    key: ${APPLICATION_ENCRYPT_KEY}
   httpclient:
     maxConnTotal: ${APPLICATION_HTTPCLIENT_MAX_CONN_TOTAL:100}
     maxConnPerRoute: ${APPLICATION_HTTPCLIENT_MAX_CONN_PER_ROUTE:20}
@@ -40,7 +62,19 @@ application:
     fromName: ${APPLICATION_MAIL_FROM_NAME}
     testMode: ${APPLICATION_MAIL_TEST_MODE:false}
   memberService:
-    apiUrl: ${APPLICATION_MEMBERSERVICE_API_URL:http://localhost:8080}
-  baseUrl: ${APPLICATION_BASE_URL}
+    apiUrl: ${APPLICATION_MEMBER_SERVICE_URL:http://localhost:8080}
+  registry:
+    baseUrl: ${APPLICATION_BASE_URL}
   sendActivationRemindersDelay: 3600000
   name: Member Portal User Service
+  internal:
+    clientId: ${APPLICATION_INTERNAL_CLIENT_ID}
+    clientSecret: ${APPLICATION_INTERNAL_CLIENT_SECRET}
+    assertionServiceClientId: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_ID}
+    assertionServiceClientSecret: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_CLIENT_SECRET}
+  security:
+    issuerUrl: ${APPLICATION_USER_SERVICE_URL}
+    jwt:
+      private-key: ${APPLICATION_SECURITY_JWT_PRIVATE_KEY}
+      public-key: ${APPLICATION_SECURITY_JWT_PUBLIC_KEY}
+      key-id: ${APPLICATION_SECURITY_JWT_KEY_ID}

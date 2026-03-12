@@ -21,7 +21,7 @@ public class MemberServiceClient {
     private String memberServiceApiUrl;
 
     public Member getMember(String id) {
-        return restClient.post().uri(memberServiceApiUrl + "/members/" + id).retrieve().toEntity(Member.class).getBody();
+        return restClient.get().uri(memberServiceApiUrl + "/members/" + id).retrieve().toEntity(Member.class).getBody();
     }
 
 }

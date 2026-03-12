@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
-import { Observable, map } from 'rxjs'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Observable } from 'rxjs'
 import { ORCID_BASE_URL } from '../app.constants'
 import { OrcidRecord } from '../shared/model/orcid-record.model'
 
@@ -8,9 +8,9 @@ import { OrcidRecord } from '../shared/model/orcid-record.model'
 export class LandingPageService {
   private headers: HttpHeaders
 
-  idTokenUri = '/services/assertionservice/api/id-token'
-  recordConnectionUri = '/services/assertionservice/api/assertion/record/'
-  memberInfoUri = '/services/memberservice/api/members/authorized/'
+  idTokenUri = '/assertionservice/api/id-token'
+  recordConnectionUri = '/assertionservice/api/assertion/record/'
+  memberInfoUri = '/memberservice/api/members/authorized/'
   userInfoUri = ORCID_BASE_URL + '/oauth/userinfo'
   publicKeyUri = ORCID_BASE_URL + '/oauth/jwks'
 

@@ -14,9 +14,6 @@ RUN \
 # where available (npm@5+)
 COPY package*.json ./
 
-# If you are building your code for production
-# RUN npm install --only=production
-
 RUN \
     npm config list && \
     npm install
@@ -40,5 +37,16 @@ COPY --from=ui-build-stage /app/dist/ /usr/share/nginx/html/
 
 EXPOSE 8090
 
-# Use the underlying ENTRYPOINT and CMD provided by the base NGINX image
-#ENTRYPOINT /var/tmp/entrypoint.sh
+# --- NEW ENTRYPOINT CONFIGURATION ---
+
+# Copy the entrypoint script from your local project into the container
+COPY entrypoint.sh /entrypoint.sh
+
+# Make sure the script is executable
+RUN chmod +x /entrypoint.sh
+
+# Set the script as the main entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Tell the entrypoint to start Nginx when it finishes injecting the URLs
+CMD ["nginx", "-g", "daemon off;"]

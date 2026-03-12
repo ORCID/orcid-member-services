@@ -18,7 +18,6 @@ import { HttpClient, HttpResponse } from '@angular/common/http'
 import { IMember } from '../model/member.model'
 import * as moment from 'moment'
 import { createRequestOption } from 'src/app/shared/request-util'
-import { IMemberPage, MemberPage } from '../model/member-page.model'
 import {
   ISFConsortiumMemberData,
   ISFMemberData,
@@ -37,12 +36,13 @@ import {
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from '../model/salesforce-member-org-id.model'
 import { ISFMemberUpdate } from '../model/salesforce-member-update.model'
 import { ISFNewConsortiumMember } from '../model/salesforce-new-consortium-member.model'
+import { Page } from 'src/app/shared/model/page.model'
 
 @Injectable({ providedIn: 'root' })
 export class MemberService {
   constructor(protected http: HttpClient) {}
 
-  public resourceUrl = '/services/memberservice/api'
+  public resourceUrl = '/memberservice'
   public managedMember = new BehaviorSubject<string | null>(null)
 
   private memberData = new BehaviorSubject<ISFMemberData | undefined | null>(undefined)
@@ -51,12 +51,11 @@ export class MemberService {
   private countries = new BehaviorSubject<ISFCountry[] | undefined>(undefined)
 
   find(id: string): Observable<IMember> {
-    return this.http.get<IMember>(`${this.resourceUrl}/members/${id}`).pipe(
-      map((res: IMember) => this.convertDateFromServer(res)),
-      catchError((err) => {
-        return of(err)
-      })
-    )
+    console.log('getting memember')
+
+    return this.http
+      .get<IMember>(`${this.resourceUrl}/members/${id}`)
+      .pipe(map((res: IMember) => this.convertDateFromServer(res)))
   }
 
   create(msMember: IMember): Observable<IMember> {
@@ -84,11 +83,9 @@ export class MemberService {
       .pipe(map((res: IMember[]) => this.convertMembersArrayFromServer(res)))
   }
 
-  query(req?: any): Observable<IMemberPage | null> {
+  query(req?: any): Observable<Page<IMember>> {
     const options = createRequestOption(req)
-    return this.http
-      .get<IMember[]>(this.resourceUrl + '/members', { params: options, observe: 'response' })
-      .pipe(map((res: HttpResponse<IMember[]>) => this.convertToMemberPage(res)))
+    return this.http.get<Page<IMember>>(this.resourceUrl + '/members', { params: options })
   }
 
   getManagedMember(): Observable<string | null> {
@@ -124,21 +121,6 @@ export class MemberService {
       })
     }
     return members
-  }
-
-  protected convertToMemberPage(res: HttpResponse<IMember[]>): IMemberPage | null {
-    if (res.body) {
-      res.body.forEach((member: IMember) => {
-        member.createdDate = member.createdDate ? moment(member.createdDate) : undefined
-        member.lastModifiedDate = member.lastModifiedDate ? moment(member.lastModifiedDate) : undefined
-      })
-      const totalCount: string | null = res.headers.get('X-Total-Count')
-      if (totalCount) {
-        const userPage = new MemberPage(res.body, parseInt(totalCount, 10))
-        return userPage
-      }
-    }
-    return null
   }
 
   getMemberData(salesforceId?: string, force?: boolean): Observable<ISFMemberData | undefined | null> {

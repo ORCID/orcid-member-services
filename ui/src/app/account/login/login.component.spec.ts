@@ -6,6 +6,8 @@ import { LoginService } from '../service/login.service'
 import { StateStorageService } from '../service/state-storage.service'
 import { AccountService } from '../service/account.service'
 import { of, throwError } from 'rxjs'
+import { OidcSecurityService } from 'angular-auth-oidc-client'
+import { OidcSecurityServiceMock } from 'src/app/shared/service/oidc-security-service-mock'
 
 describe('LoginComponent', () => {
   let component: LoginComponent
@@ -26,6 +28,7 @@ describe('LoginComponent', () => {
         { provide: LoginService, useValue: loginServiceSpy },
         { provide: StateStorageService, useValue: stateStorageServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
+        { provide: OidcSecurityService, useClass: OidcSecurityServiceMock },
       ],
     })
 
@@ -74,8 +77,11 @@ describe('LoginComponent', () => {
   })
 
   it('should handle MFA required', fakeAsync(() => {
-    const mockLoginResult = { mfaRequired: true }
-    loginService.login.and.returnValue(of(mockLoginResult))
+    const mockError = {
+      status: 401,
+      error: { error: 'mfa_required' },
+    }
+    loginService.login.and.returnValue(throwError(() => mockError))
 
     component.loginForm.patchValue({
       username: 'testuser',
@@ -91,8 +97,11 @@ describe('LoginComponent', () => {
   }))
 
   it('should handle MFA code error', fakeAsync(() => {
-    const mockLoginResult = { mfaRequired: true }
-    loginService.login.and.returnValue(of(mockLoginResult))
+    const mockError = {
+      status: 401,
+      error: { error: 'mfa_required' },
+    }
+    loginService.login.and.returnValue(throwError(() => mockError))
 
     component.loginForm.patchValue({
       username: 'testuser',

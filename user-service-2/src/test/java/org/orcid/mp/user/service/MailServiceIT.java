@@ -7,6 +7,7 @@ import org.orcid.mp.user.UserServiceApplication;
 import org.orcid.mp.user.client.MailgunClient;
 import org.orcid.mp.user.config.Constants;
 import org.orcid.mp.user.domain.User;
+import org.orcid.mp.user.error.MailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
@@ -42,7 +43,7 @@ public class MailServiceIT {
     private MailService mailService;
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws MailException {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mailgunClient).sendMail(anyString(), anyString(), anyString());
         mailService = new MailService(messageSource, templateEngine, mailgunClient);

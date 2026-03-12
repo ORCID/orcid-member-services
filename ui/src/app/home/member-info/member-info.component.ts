@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { EMPTY, Subject, Subscription, combineLatest } from 'rxjs'
-import { switchMap, takeUntil } from 'rxjs/operators'
+import { filter, switchMap, takeUntil } from 'rxjs/operators'
 import { AccountService } from 'src/app/account'
 import { IAccount } from 'src/app/account/model/account.model'
 import { ISFMemberData } from 'src/app/member/model/salesforce-member-data.model'
@@ -25,7 +26,8 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
     private memberService: MemberService,
     private accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
-    protected router: Router
+    protected router: Router,
+    private oidcSecurityService: OidcSecurityService
   ) {}
 
   isActive() {
@@ -43,18 +45,23 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    combineLatest([this.activatedRoute.params, this.accountService.getAccountData()])
+    this.oidcSecurityService.isAuthenticated$
       .pipe(
+        filter(({ isAuthenticated }) => isAuthenticated),
+        switchMap(() => combineLatest([this.activatedRoute.params, this.accountService.getAccountData()])),
         switchMap(([params, account]) => {
           if (params['id']) {
             this.managedMember = params['id']
           }
+
           if (account) {
             this.account = account
+
             if (this.managedMember) {
               this.memberService.setManagedMember(params['id'])
               return this.memberService.getMemberData(this.managedMember)
             } else {
+              // This was the line firing too early!
               return this.memberService.getMemberData(account?.salesforceId)
             }
           } else {
@@ -65,6 +72,7 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
       )
       .subscribe((data) => {
         this.memberData = data
+        console.log('Member Data successfully loaded:', data)
       })
   }
 

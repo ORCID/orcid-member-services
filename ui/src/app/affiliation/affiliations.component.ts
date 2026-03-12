@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { IAffiliation, IAffiliationPage } from './model/affiliation.model'
+import { IAffiliation } from './model/affiliation.model'
 import { AFFILIATION_STATUS } from '../shared/constants/orcid-api.constants'
 import { Subscription, delay, tap } from 'rxjs'
 import { AlertType, EventType, ITEMS_PER_PAGE, ORCID_BASE_URL } from '../app.constants'
@@ -22,6 +22,7 @@ import { AlertService } from '../shared/service/alert.service'
 import { ActivatedRoute, Router } from '@angular/router'
 import { EventService } from '../shared/service/event.service'
 import { DateUtilService } from '../shared/service/date-util.service'
+import { Page } from '../shared/model/page.model'
 
 @Component({
   selector: 'app-affiliations',
@@ -218,11 +219,18 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
     this.loadAll()
   }
 
-  protected paginate(res: IAffiliationPage) {
-    this.totalItems = res.totalItems
-    this.affiliations = res.affiliations
-    const first = (this.page - 1) * this.itemsPerPage === 0 ? 1 : (this.page - 1) * this.itemsPerPage + 1
-    const second = this.page * this.itemsPerPage < this.totalItems ? this.page * this.itemsPerPage : this.totalItems
+  protected paginate(data: Page<IAffiliation>) {
+    this.totalItems = data.page.totalElements
+    this.affiliations = data.content
+
+    if (this.totalItems === 0) {
+      this.itemCount = $localize`:@@global.zero-item-count.string:Showing 0 - 0 of 0 items.`
+      return
+    }
+
+    const first = data.page.number * data.page.size + 1
+    const calculatedEnd = (data.page.number + 1) * data.page.size
+    const second = Math.min(calculatedEnd, data.page.totalElements)
     this.itemCount = $localize`:@@global.item-count.string:Showing ${first} - ${second} of ${this.totalItems} items.`
   }
 

@@ -8,7 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MemberInfoEditComponent } from './member-info/member-info-edit.component'
 import { QuillModule } from 'ngx-quill'
 import { ReactiveFormsModule } from '@angular/forms'
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../shared/shared.module'
 import { RemoveConsortiumMemberComponent } from './consortium/remove-consortium-member.component'
 
 @NgModule({

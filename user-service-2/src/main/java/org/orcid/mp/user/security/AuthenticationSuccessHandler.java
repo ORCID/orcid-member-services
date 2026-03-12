@@ -2,6 +2,7 @@ package org.orcid.mp.user.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -10,6 +11,9 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import java.io.IOException;
 
 public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+
+    @Value("${application.ui.baseUrl}")
+    private String uiBaseUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -23,7 +27,7 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
         // we send them to a default landing page
         String targetUrl = (savedRequest != null)
                 ? savedRequest.getRedirectUrl()
-                : "http://localhost:4200/";
+                : uiBaseUrl;
 
         // Send a JSON response so Angular can handle it
         response.setStatus(HttpServletResponse.SC_OK);

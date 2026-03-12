@@ -1,16 +1,36 @@
 {
-  "/auth/*": {
-    "target": "http://localhost:8080",
+  "/userservice/*": {
+    "target": "http://localhost:9000",
     "secure": false,
     "changeOrigin": true,
-    "logLevel": "debug",
-    "cookieDomainRewrite": "localhost"
+    "pathRewrite": {
+      "^/userservice": ""
+    }
   },
-  "/services/*": {
-    "target": "http://localhost:8080",
+  "/oauth2/*": {
+    "target": "http://localhost:9000",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/.well-known/*": {
+    "target": "http://localhost:9000",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/memberservice/*": {
+    "target": "http://localhost:9010",
     "secure": false,
     "changeOrigin": true,
-    "logLevel": "debug",
-    "cookieDomainRewrite": "localhost"
+    "pathRewrite": {
+      "^/memberservice": ""
+    }
+  },
+  "/assertionservice/*": {
+    "target": "http://localhost:9020",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/assertionservice": ""
+    }
   }
 }

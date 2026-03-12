@@ -11,7 +11,7 @@ on:
       - '.github/**'
 
   pull_request:
-    branches: [ main ]
+    branches: [ main, backendServicesUpgrades ]
 
   workflow_call:
   workflow_dispatch:
@@ -48,7 +48,7 @@ jobs:
       with:
         java-version: 21
     - name: Build User service 2
-      run: mvn -B verify --file user-service-2/pom.xml
+      run: mvn -B verify -Dsurefire.useFile=false --file user-service-2/pom.xml
 
   build-assertion-service:
     runs-on: ubuntu-latest
@@ -61,6 +61,17 @@ jobs:
     - name: Build Assertion service
       run: mvn -B verify -Pprod --file assertion-service/pom.xml
       
+  build-assertion-service-2:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 21
+      uses: actions/setup-java@v1
+      with:
+        java-version: 21
+    - name: Build Assertion service 2
+      run: mvn -B verify -Pprod -Dsurefire.useFile=false --file assertion-service-2/pom.xml
+
   build-member-service:
     runs-on: ubuntu-latest
     steps:
@@ -71,7 +82,18 @@ jobs:
         java-version: 11
     - name: Build Member service
       run: mvn -B verify -Pprod --file member-service/pom.xml
-      
+
+  build-member-service-2:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 21
+      uses: actions/setup-java@v1
+      with:
+        java-version: 21
+    - name: Build Member service 2
+      run: mvn -B verify -Pprod -Dsurefire.useFile=false --file member-service-2/pom.xml
+
   build-discovery-service:
     runs-on: ubuntu-latest
     steps:

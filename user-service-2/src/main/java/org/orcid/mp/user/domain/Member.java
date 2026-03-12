@@ -80,5 +80,4 @@ public class Member {
     public void setSuperadminEnabled(Boolean superadminEnabled) {
         this.superadminEnabled = superadminEnabled;
     }
-
 }

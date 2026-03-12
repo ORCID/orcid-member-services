@@ -1,5 +1,5 @@
-<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="en" datatype="plaintext" original="ng2.template" target-language="ja">
+<?xml version="1.0" ?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" target-language="ja" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="login.messages.error.authentication.string" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Failed to sign in!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check your credentials and try again. </source>
@@ -106,7 +106,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn't registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
         <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> Eメールアドレスが登録されていません！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 確認して、もう一度やり直してください</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
@@ -478,7 +478,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaExplain.string" datatype="html">
-        <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you'll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
+        <source> Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you&apos;ll be prompted to enter a six-digit code we send to your preferred authentication application. </source>
         <target> 2段階認証を有効にして、ORCIDメンバーポータルアカウントにさらなるセキュリティ対策を追加しましょう。サインインをするたびに、ご希望の認証アプリケーションに送信される6桁のコードを入力するように要求されます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -491,6 +491,14 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
           <context context-type="linenumber">151</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">162</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaUpdated.string" datatype="html">
@@ -518,7 +526,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="settings.security.mfaCannotScan.one.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Can't scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Can&apos;t scan the QR code?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
         <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> QRコードのスキャンができませんか？<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -610,7 +618,7 @@
         <target>メンバーポータル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.tools.main.string" datatype="html">
@@ -618,7 +626,7 @@
         <target>ツール</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.tools.assertionServiceAffiliationManager.string" datatype="html">
@@ -626,7 +634,7 @@
         <target>Affiliation Manager</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.member.string" datatype="html">
@@ -634,7 +642,7 @@
         <target>メンバーレポート</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.integration.string" datatype="html">
@@ -642,7 +650,7 @@
         <target>統合レポート</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.consortium.string" datatype="html">
@@ -650,7 +658,7 @@
         <target>コンソーシアムレポート</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.affiliation.string" datatype="html">
@@ -658,7 +666,7 @@
         <target>アフィリエーションレポート</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.consortiumMemberAffiliations.string" datatype="html">
@@ -666,7 +674,7 @@
         <target>コンソーシアムメンバーのアフィリエーション</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">115</context>
+          <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.main.string" datatype="html">
@@ -674,7 +682,7 @@
         <target>リソース</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">131</context>
+          <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.accountManagementGuide.string" datatype="html">
@@ -682,7 +690,7 @@
         <target>アカウント管理ガイド</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">142</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.affiliationManagerGuide.string" datatype="html">
@@ -690,7 +698,7 @@
         <target>Affiliation Managerガイド</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">152</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.memberReportingGuide.string" datatype="html">
@@ -698,7 +706,7 @@
         <target>メンバーレポートガイド</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">162</context>
+          <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.applyForAffiliationManagerCreds.string" datatype="html">
@@ -706,7 +714,7 @@
         <target>Affiliation Managerの資格取得を申請する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.adminMenu.main.string" datatype="html">
@@ -714,7 +722,7 @@
         <target>管理者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">194</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.adminMenu.manageUsers.string" datatype="html">
@@ -722,7 +730,7 @@
         <target>ユーザーを管理する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">202</context>
+          <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.adminMenu.manageMembers.string" datatype="html">
@@ -730,7 +738,7 @@
         <target>メンバーを管理する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">220</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.main.string" datatype="html">
@@ -738,7 +746,7 @@
         <target>アカウント</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">230</context>
+          <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.settings.string" datatype="html">
@@ -746,7 +754,7 @@
         <target>設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">240</context>
+          <context context-type="linenumber">245</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.password.string" datatype="html">
@@ -754,7 +762,7 @@
         <target>パスワード</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.logout.string" datatype="html">
@@ -762,7 +770,7 @@
         <target>サインアウト</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">252</context>
+          <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="error.subtitle.string" datatype="html">
@@ -814,7 +822,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="reset.finish.messages.error.string" datatype="html">
-        <source> Your password couldn't be reset. Remember a password request is only valid for 24 hours. </source>
+        <source> Your password couldn&apos;t be reset. Remember a password request is only valid for 24 hours. </source>
         <target>パスワードがリセットできませんでした。パスワードの要求は 24 時間に限り有効であることにご留意ください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-finish.component.html</context>
@@ -910,7 +918,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">150</context>
+          <context context-type="linenumber">149</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
@@ -970,7 +978,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">120</context>
+          <context context-type="linenumber">119</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">204</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.delete.string" datatype="html">
@@ -1034,11 +1046,15 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">131</context>
+          <context context-type="linenumber">130</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">141</context>
+          <context context-type="linenumber">140</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.activated.string" datatype="html">
@@ -1050,7 +1066,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">102</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
@@ -1154,7 +1170,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.lastModifiedDate.string" datatype="html">
@@ -1218,7 +1234,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.sendActivate.error.string" datatype="html">
-        <source>Invite email couldn't be sent.</source>
+        <source>Invite email couldn&apos;t be sent.</source>
         <target>招待Eメールを送信できませんでした。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
@@ -1291,18 +1307,18 @@
       </trans-unit>
       <trans-unit id="global.item-count.string" datatype="html">
         <source>Showing <x id="PH" equiv-text="first"/> - <x id="PH_1" equiv-text="second"/> of <x id="PH_2" equiv-text="this.totalItems"/> items.</source>
-        <target><x id="PH_2" equiv-text="this.totalItems"/>アイテムの<x id="PH" equiv-text="first"/> - <x id="PH_1" equiv-text="second"/>を表示しています。</target>
+        <target state="new"><x id="PH_2" equiv-text="this.totalItems"/>アイテムの<x id="PH" equiv-text="first"/> - <x id="PH_1" equiv-text="second"/>を表示しています。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.ts</context>
-          <context context-type="linenumber">226</context>
+          <context context-type="linenumber">234</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.ts</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">172</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.ts</context>
-          <context context-type="linenumber">228</context>
+          <context context-type="linenumber">244</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.true.string" datatype="html">
@@ -1326,7 +1342,7 @@
         <target> 所有権を本当に移転しますか。こちらの組織アカウントの所有権を移転しようとしています。所有権移転後にも組織の所有者である場合には、ユーザー管理といった管理機能にアクセスすることはもうできなくなります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.ts</context>
-          <context context-type="linenumber">226</context>
+          <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.delete.question.string" datatype="html">
@@ -4406,7 +4422,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.delete.fromPortalAndRegistry.string" datatype="html">
-        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"/>? The affiliation will be deleted from the portal and the user's ORCID record.</source>
+        <source>Are you sure you want to delete this affiliation for <x id="PH" equiv-text="this.affiliation?.email"/>? The affiliation will be deleted from the portal and the user&apos;s ORCID record.</source>
         <target><x id="PH" equiv-text="this.affiliation?.email"/>のこのアフィリエーション を削除しますか？ポータルとユーザーのORCIDレコードからアフィリエーション が削除されます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-delete.component.ts</context>
@@ -4802,7 +4818,7 @@
         <target>あなたは、ユーザー「<x id="PH" equiv-text="account.email"/>」としてログインしています。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/home/home.component.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionStatus.recordDeactivatedOrDeprecated.string" datatype="html">
@@ -4811,6 +4827,54 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.security.mfaOn.string" datatype="html">
+        <source>ON</source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">165</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.security.mfaOff.string" datatype="html">
+        <source>OFF</source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">168</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.security.disableMfaDescription.string" datatype="html">
+        <source> Disable two-factor authentication (2FA) for this user if they are having difficulty signing in to the member portal. </source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">173</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.security.disabledMfaNotice.string" datatype="html">
+        <source> Users can enable 2FA from their account settings page </source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-update.component.html</context>
+          <context context-type="linenumber">196</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="global.zero-item-count.string" datatype="html">
+        <source>Showing 0 - 0 of 0 items.</source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affiliation/affiliations.component.ts</context>
+          <context context-type="linenumber">227</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/members.component.ts</context>
+          <context context-type="linenumber">157</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/users.component.ts</context>
+          <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
     </body>

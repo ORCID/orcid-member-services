@@ -1,0 +1,168 @@
+name: bld_docker_backend
+run-name: ${{ inputs.docker_name }}
+
+permissions:
+  checks: write
+  contents: read
+  issues: read
+  pull-requests: write
+
+on:
+  workflow_call:
+    inputs:
+      docker_name:
+        description: 'Name of the docker image to build'
+        required: false
+        default: "memberservice"
+        type: string
+      context:
+        description: 'Name of the context in the repo'
+        required: false
+        default: "."
+        type: string
+      version_tag:
+        description: 'Name of the tag to build'
+        required: false
+        default: '0.0.1-dev'
+        type: string
+      bump:
+        description: 'whether to bump the version number by a major minor patch amount or none'
+        required: false
+        default: 'patch'
+        type: string
+      ref:
+        description: 'git reference to use with the checkout use default_branch to have that calculated'
+        required: false
+        default: "default"
+        type: string
+      angular_env:
+        description: 'Name of the angular environment to build'
+        required: false
+        default: 'unused'
+        type: string
+  workflow_dispatch:
+    inputs:
+      docker_name:
+        description: 'Name of the docker image to build'
+        required: false
+        default: "memberservice"
+        type: string
+      context:
+        description: 'Name of the context in the repo'
+        required: false
+        default: "."
+        type: string
+      version_tag:
+        description: 'Name of the tag to build'
+        required: false
+        default: '0.0.1-dev'
+        type: string
+      bump:
+        description: |
+          How to optionally bump the semver version ( Major.Minor.Patch ) : git log will be searched for
+          '#major #minor #patch' or feat/ or fix/ branch names to optionally override the bump. Set to none to keep a specific version
+        required: false
+        options:
+          - patch
+          - minor
+          - major
+          - none
+        type: choice
+      ref:
+        description: 'git reference to use with the checkout use default_branch to have that calculated'
+        required: false
+        default: "default"
+        type: string
+      angular_env:
+        description: 'Name of the angular environment to build'
+        required: false
+        default: 'unused'
+        type: string
+
+jobs:
+  bld_docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: git-checkout-ref-action
+        id: ref
+        uses: ORCID/git-checkout-ref-action@main
+        with:
+          default_branch: ${{ github.event.repository.default_branch }}
+          ref: ${{ inputs.ref }}
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.ref.outputs.ref }}
+          # checkout some history so we can scan commits for bump messages
+          # NOTE: history does not include tags!
+          fetch-depth: 100
+
+      # Set up modern Java 21 for the new Spring Boot services
+      - name: Set up Open JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+
+##############################################################################################
+
+      - name: build our project
+        working-directory: ${{ inputs.context }}
+        run: |
+          # 1. Compile Java and build Fat JAR via Maven (removed -Pprod profile)
+          mvn -T 1C --batch-mode -am package -DskipTests -Dangular.env=${angular_env}
+
+          echo "------------------------------------------------------"
+          find target -name '*.jar'
+          echo "------------------------------------------------------"
+
+          # 2. Build the Docker container using our standard Dockerfile.
+          # We dual-tag it here so the conditional push steps below will ALWAYS find a match.
+          docker build -f src/main/docker/Dockerfile \
+            -t ${DOCKER_REG_PRIVATE}/${docker_name}:${tag} \
+            -t ${DOCKER_REG_PRIVATE}/${docker_name}:${tag}-${angular_env} .
+
+          echo "------------------------------------------------------"
+          docker image ls | grep ${docker_name}
+        shell: bash
+        env:
+          DOCKER_REG_PRIVATE: "${{ secrets.DOCKER_REG_PRIVATE }}"
+          tag: "${{ inputs.version_tag }}"
+          angular_env: "${{ inputs.angular_env }}"
+          docker_name: "${{ inputs.docker_name }}"
+
+      - name: Login to private registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.DOCKER_REG_PRIVATE }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+#############################################################################################
+      - name: push our container to the private registry
+        if: inputs.angular_env == 'unused'
+        run: |
+          docker push ${DOCKER_REG_PRIVATE}/${docker_name}:${tag}
+        shell: bash
+        env:
+          DOCKER_REG_PRIVATE: "${{ secrets.DOCKER_REG_PRIVATE }}"
+          docker_name: "${{ inputs.docker_name }}"
+          tag: "${{ inputs.version_tag }}"
+
+      - name: push our container to the private registry using a postpended tag of the angular env
+        if: inputs.angular_env != 'unused'
+        run: |
+          docker push ${DOCKER_REG_PRIVATE}/${docker_name}:${tag}
+        shell: bash
+        env:
+          DOCKER_REG_PRIVATE: "${{ secrets.DOCKER_REG_PRIVATE }}"
+          docker_name: "${{ inputs.docker_name }}"
+          tag: "${{ inputs.version_tag }}-${{ inputs.angular_env }}"
