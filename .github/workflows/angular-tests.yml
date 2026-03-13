@@ -11,7 +11,7 @@ on:
   workflow_call:
   workflow_dispatch:
 jobs:
-  build:
+  build-ui:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,7 +26,8 @@ jobs:
       - name: Run tests
         working-directory: ui
         run: npm test
-  build-legacy:
+
+  build-ui-2:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -34,10 +35,10 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: 'ui-legacy/package-lock.json'
+          cache-dependency-path: 'ui-2/package-lock.json'
       - name: Install dependencies
-        working-directory: ui-legacy
+        working-directory: ui-2
         run: npm ci
       - name: Run tests
-        working-directory: ui-legacy
+        working-directory: ui-2
         run: npm test
