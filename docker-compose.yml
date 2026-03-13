@@ -45,7 +45,7 @@ services:
       - APPLICATION_MAIL_TEST_MODE=${MAIL_TEST_MODE}
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
-      - ${HOST_KEYSTORE_DIR}:/keystores
+      - ${HOST_KEYSTORE_DIR:-./keystores}:/keystores
     depends_on:
       - "jhipster-registry"
 
@@ -82,7 +82,7 @@ services:
       - APPLICATION_INTERNAL_ASSERTION_SERVICE_CLIENT_SECRET=${ASSERTION_SERVICE_INTERNAL_CLIENT_SECRET}
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
-      - ${HOST_KEYSTORE_DIR}:/keystores
+      - ${HOST_KEYSTORE_DIR:-./keystores}:/keystores
 
   assertionservice-app:
     restart: unless-stopped
@@ -123,7 +123,7 @@ services:
       - APPLICATION_RESEND_NOTIFICATION_CRON=${RESEND_NOTIFICATION_CRON}
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
-      - ${MEMBER_ASSERTION_STATS_VOLUME}:/files
+      - ${MEMBER_ASSERTION_STATS_VOLUME:-/files}:/files
     depends_on:
       - "userservice-app"
 
@@ -168,7 +168,7 @@ services:
       - APPLICATION_ENCRYPT_KEY=${ASSERTION_ENCRYPT_KEY}
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
-      - ${MEMBER_ASSERTION_STATS_VOLUME}:/files
+      - ${MEMBER_ASSERTION_STATS_VOLUME:-/files}:/files
 
   memberservice-app:
     restart: unless-stopped

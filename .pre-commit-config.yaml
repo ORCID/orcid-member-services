@@ -27,6 +27,15 @@ repos:
       - id: dclint
         files: ^(docker-)?compose\.ya?ml$
 
+  - repo: local
+    hooks:
+      - id: docker-compose-config
+        name: Validate docker-compose config
+        entry: docker compose config --quiet
+        language: system
+        files: ^(docker-)?compose\.ya?ml$
+        pass_filenames: false
+
   - repo: https://github.com/open-policy-agent/conftest
     rev: v0.66.0
     hooks:
