@@ -129,7 +129,7 @@ services:
 
   assertionservice-2-app:
     restart: unless-stopped
-    image: ${DOCKER_REG}/assertionservice-2:${TAG}
+    image: ${DOCKER_REG}/assertionservice2:${TAG}
     ports:
       - "9020:9020"
     environment:
@@ -216,7 +216,7 @@ services:
 
   memberservice-2-app:
     restart: unless-stopped
-    image: ${DOCKER_REG}/memberservice-2:${TAG}
+    image: ${DOCKER_REG}/memberservice2:${TAG}
     ports:
       - "9010:9010"
     environment:
