@@ -32,6 +32,11 @@ on:
         required: false
         default: 'release-0.0.1'
         type: string
+      bump:
+        description: 'whether to bump the version number by a major minor patch'
+        required: false
+        default: 'patch'
+        type: string
       ref:
         description: 'git reference to use with the checkout. This should be the tag that you want to build'
         required: true
@@ -46,16 +51,6 @@ jobs:
     with:
       docker_name: ui
       context: ui
-      version_tag: ${{ inputs.version_tag }}
-      bump: ${{ inputs.bump }}
-      ref: ${{ inputs.ref }}
-
-  bld_ui_legacy:
-    uses: ./.github/workflows/bld_docker.yml
-    secrets: inherit # pass all secrets
-    with:
-      docker_name: ui-legacy
-      context: ui-legacy
       version_tag: ${{ inputs.version_tag }}
       bump: ${{ inputs.bump }}
       ref: ${{ inputs.ref }}
@@ -130,6 +125,16 @@ jobs:
       version_tag: ${{ inputs.version_tag }}
       docker_name: gateway
       angular_env: prod
+      bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
+
+  bld_ui_2:
+    uses: ./.github/workflows/bld_docker.yml
+    secrets: inherit # pass all secrets
+    with:
+      docker_name: ui-2
+      context: ui-2
+      version_tag: ${{ inputs.version_tag }}
       bump: ${{ inputs.bump }}
       ref: ${{ inputs.ref }}
 
