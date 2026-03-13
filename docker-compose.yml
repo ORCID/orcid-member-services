@@ -300,3 +300,18 @@ services:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     ports:
       - 8090:8090
+
+  ui-2:
+    restart: unless-stopped
+    image: ${DOCKER_REG}/ui:${TAG}
+    image: ${DOCKER_REG}/ui-2:${TAG}
+    environment:
+      - APPLICATION_SECURITY_ISSUER_URL=${USER_SERVICE_URL}
+    volumes:
+      - ${LOG_VOLUME:-/var/tmp/}:/logs
+    ports:
+      - 8091:8091
+
+
+
+

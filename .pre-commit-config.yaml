@@ -21,6 +21,16 @@ repos:
         types: [yaml]
         files: '^.github/workflows/'
 
+  - repo: https://github.com/open-policy-agent/conftest
+    rev: v0.66.0
+    hooks:
+      - id: conftest-test
+        args: [--policy, policy/, --no-color]
+        files: ^docker-compose\.ya?ml$
+      - id: conftest-verify
+        args: [--policy, policy/, --no-color]
+
+
 ##########
 # pre-commit-ci config
 
