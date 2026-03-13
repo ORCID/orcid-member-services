@@ -1,0 +1,15 @@
+# Disable opinionated style rules that don't match our existing conventions.
+# Structural rules (invalid-yaml, invalid-schema) remain enabled to catch
+# issues like duplicate keys that slip past YAML parsers silently.
+rules:
+  # Our services bind to all interfaces by design (deployed behind a reverse proxy)
+  no-unbound-port-interfaces: 0
+  # We still use the version field for compatibility with older tooling
+  no-version-field: 0
+  # Not required for our setup
+  require-project-name-field: 0
+  # Existing port definitions are unquoted throughout; not worth churning
+  require-quotes-in-ports: 0
+  # Key ordering and service ordering are established and not worth reordering
+  service-keys-order: 0
+  services-alphabetical-order: 0

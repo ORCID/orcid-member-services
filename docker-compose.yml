@@ -80,9 +80,6 @@ services:
       - APPLICATION_RELEASE_VERSION=${TAG}
       - APPLICATION_INTERNAL_ASSERTION_SERVICE_ID=assertion-service-internal
       - APPLICATION_INTERNAL_ASSERTION_SERVICE_CLIENT_SECRET=${ASSERTION_SERVICE_INTERNAL_CLIENT_SECRET}
-      - APPLICATION_SECURITY_JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
-      - APPLICATION_SECURITY_JWT_PUBLIC_KEY=${JWT_PUBLIC_KEY}
-      - APPLICATION_SECURITY_JWT_KEY_ID=${JWT_KEY_ID}
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
       - ${HOST_KEYSTORE_DIR}:/keystores
@@ -303,7 +300,6 @@ services:
 
   ui-2:
     restart: unless-stopped
-    image: ${DOCKER_REG}/ui:${TAG}
     image: ${DOCKER_REG}/ui-2:${TAG}
     environment:
       - APPLICATION_SECURITY_ISSUER_URL=${USER_SERVICE_URL}
