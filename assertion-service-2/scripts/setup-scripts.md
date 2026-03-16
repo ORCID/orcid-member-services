@@ -5,11 +5,11 @@
 Run this from **Windows PowerShell / Linux**:
 
 ``` powershell
-scp -r "$HOME\Orcid\orcid-member-services\assertion-service\scripts" <username>@mserv-qa-use2-a1.qa.int.orcid.org:/home/<username>/
+scp -r "$HOME\Orcid\orcid-member-services\assertion-service\scripts" <username>@<server>:/home/<username>/
 ```
 
 ``` unix
-scp -r ~/Orcid/orcid-member-services/assertion-service/scripts <username>@mserv-qa-use2-a1.qa.int.orcid.org:/home/<username>/
+scp -r ~/Orcid/orcid-member-services/assertion-service/scripts <username>@<server>:/home/<username>/
 ```
 ------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ ls /home/<username>/scripts/query-fixes
 ## 3. Copy Scripts Folder into Docker Container
 
 ``` bash
-docker cp /home/<username>/scripts/query-fixes member_services-assertionservice-app-1:/app/scripts
+docker cp /home/<username>/scripts/query-fixes <assertion-docker>:/app/scripts
 ```
 
 ------------------------------------------------------------------------
@@ -37,7 +37,7 @@ docker cp /home/<username>/scripts/query-fixes member_services-assertionservice-
 ## 4. Access Docker Container
 
 ``` bash
-docker exec -it member_services-assertionservice-app-1 /bin/bash
+docker exec -it <assertion-docker> /bin/bash
 ```
 
 Verify scripts inside container:
