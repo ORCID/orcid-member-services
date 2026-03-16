@@ -51,7 +51,7 @@ services:
 
   userservice-2-app:
     restart: unless-stopped
-    image: ${DOCKER_REG}/userservice-2:${TAG}
+    image: ${DOCKER_REG}/userservice2:${TAG}
     ports:
       - "9000:9000"
     environment:
