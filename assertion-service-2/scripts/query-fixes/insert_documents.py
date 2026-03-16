@@ -39,16 +39,17 @@ python insert_documents.py --database <database> --collection <collection> --fil
 
 Examples
 --------
-python insert_documents.py --file_name test/assertions.json
-python insert_documents.py --collection orcid_records --file_name test/orcid_records.json
-python insert_documents.py --database memberservice --collection member --file_name test/members.json
-python insert_documents.py --database usersservice --collection jhi_users --file_name test/users.json
+python3 insert_documents.py --file_name test/assertions.json
+python3 insert_documents.py --collection orcid_record --file_name test/orcid_records.json
+python3 insert_documents.py --database memberservice --collection member --file_name test/members.json
+python3 insert_documents.py --database userservice --collection jhi_user --file_name test/users.json
 """
 
 import argparse
-import json
 import sys
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
+
+from bson import json_util
 from pymongo.errors import OperationFailure
 
 from logger_config import setup_logger
@@ -63,9 +64,9 @@ def remove_mongo_oid(document: Dict[str, Any]) -> Dict[str, Any]:
     cleaned_document = document.copy()
 
     if (
-        "_id" in cleaned_document
-        and isinstance(cleaned_document["_id"], dict)
-        and "$oid" in cleaned_document["_id"]
+            "_id" in cleaned_document
+            and isinstance(cleaned_document["_id"], dict)
+            and "$oid" in cleaned_document["_id"]
     ):
         cleaned_document.pop("_id")
 
@@ -79,7 +80,7 @@ class InsertDocuments:
         self.collection = connection.get_collection(collection_name)
         self.file_name = file_name
 
-    def analyze_documents(self) -> List[Dict[str, Any]] | None:
+    def analyze_documents(self) -> Optional[List[Dict[str, Any]]]:
         """
         Read document data from JSON file.
 
@@ -88,7 +89,7 @@ class InsertDocuments:
         """
         try:
             with open(self.file_name, 'r', encoding='utf-8') as f:
-                documents = json.load(f)
+                documents = json_util.loads(f.read())
 
             if isinstance(documents, dict):
                 cleaned_documents = [remove_mongo_oid(documents)]
@@ -117,7 +118,7 @@ class InsertDocuments:
         except FileNotFoundError:
             logger.error(f"Error: {self.file_name} not found.")
             return None
-        except json.JSONDecodeError as e:
+        except ValueError as e:
             logger.error(f"Error: {self.file_name} contains invalid JSON. {e}")
             return None
 

@@ -5,11 +5,11 @@
 Run this from **Windows PowerShell / Linux**:
 
 ``` powershell
-scp -r "$HOME\Orcid\orcid-member-services\assertion-service\scripts" dpalafox@mserv-prod-use2-a1.prod.int.orcid.org:/home/dpalafox/
+scp -r "$HOME\Orcid\orcid-member-services\assertion-service\scripts" <username>@mserv-qa-use2-a1.qa.int.orcid.org:/home/<username>/
 ```
 
 ``` unix
-scp -r ~/Orcid/orcid-member-services/assertion-service/scripts dpalafox@mserv-prod-use2-a1.prod.int.orcid.org:/home/dpalafox/
+scp -r ~/Orcid/orcid-member-services/assertion-service/scripts <username>@mserv-qa-use2-a1.qa.int.orcid.org:/home/<username>/
 ```
 ------------------------------------------------------------------------
 
@@ -17,11 +17,11 @@ scp -r ~/Orcid/orcid-member-services/assertion-service/scripts dpalafox@mserv-pr
 ## 2. Connect to server & verify Upload on Server
 
 ``` bash
-ssh dpalafox@mserv-prod-use2-a1.prod.int.orcid.org
+ssh <username>@mserv-qa-use2-a1.qa.int.orcid.org
 ```
 
 ``` bash
-ls /home/dpalafox/scripts/query-fixes
+ls /home/<username>/scripts/query-fixes
 ```
 
 ------------------------------------------------------------------------
@@ -29,7 +29,7 @@ ls /home/dpalafox/scripts/query-fixes
 ## 3. Copy Scripts Folder into Docker Container
 
 ``` bash
-docker cp /home/dpalafox/scripts/query-fixes member_services-assertionservice-app-1:/app/scripts
+docker cp /home/<username>/scripts/query-fixes member_services-assertionservice-app-1:/app/scripts
 ```
 
 ------------------------------------------------------------------------
@@ -74,7 +74,7 @@ pip3 install pymongo
 
 ``` bash
 cd /app/scripts/query-fixes
-python3 test_connection.py
+python3 cleanup.py
 ```
 
 ------------------------------------------------------------------------

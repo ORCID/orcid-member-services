@@ -116,21 +116,21 @@ class UpdateOrganizationMember:
                 )
             else:
                 logger.info(
-                    "Source member not found to %s salesforce_id=%s",
+                    "Source member not found %s salesforce_id=%s",
                     action,
                     self.source
                 )
 
             if target:
                 logger.info(
-                    "Found target member to %s salesforce_id=%s, client_name=%s",
+                    "Found target member %s salesforce_id=%s, client_name=%s",
                     action,
                     target.get("salesforce_id"),
                     target.get("client_name"),
                 )
             else:
                 logger.info(
-                    "Target member to %s not found salesforce_id=%s",
+                    "Target member %s not found salesforce_id=%s",
                     action,
                     self.target
                 )
@@ -300,7 +300,7 @@ class UpdateOrganizationsAssertions:
         logger.info("="*80)
 
         for i, rec in enumerate(assertions, 1):
-            logger.info(f" _id: {rec.get('_id')}, Salesforce Id: {rec.get('salesforce_id')}")
+            logger.info(f" Email: {rec.get('email')}, Salesforce Id: {rec.get('salesforce_id')}")
 
         logger.info("\n" + "="*80)
 
@@ -314,7 +314,7 @@ class UpdateOrganizationsAssertions:
         logger.info("="*80)
 
         for i, rec in enumerate(orcid_records, 1):
-            logger.info(f" email: {rec.get('email')} Salesforce Id: {rec.get('salesforce_id')}")
+            logger.info(f" Email: {rec.get('email')} Salesforce Id: {rec.get('salesforce_id')}")
 
         logger.info("\n" + "="*80)
 
@@ -328,7 +328,7 @@ class UpdateOrganizationsAssertions:
         logger.info("="*80)
 
         for i, rec in enumerate(send_notifications_request, 1):
-            logger.info(f" _id: {rec.get('_id')}, email: {rec.get('email')} Salesforce Id: {rec.get('salesforce_id')}")
+            logger.info(f" Email: {rec.get('email')} Salesforce Id: {rec.get('salesforce_id')}")
 
         logger.info("\n" + "="*80)
 

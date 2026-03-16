@@ -70,7 +70,7 @@ class AddMissingORCIDiDFROMAffiliations:
         logger.info("="*80)
 
         for i, rec in enumerate(assertions, 1):
-            logger.info(f" _id: {rec.get('_id')}, Email: {rec.get('email')}, Salesforce ID: {rec.get('salesforce_id')}")
+            logger.info(f" Email: {rec.get('email')}, Salesforce ID: {rec.get('salesforce_id')}")
 
         logger.info("\n" + "="*80)
 
@@ -121,7 +121,7 @@ class AddMissingORCIDiDFROMAffiliations:
                                     modified_count += result.modified_count
 
                                     logger.info(
-                                        f"Assertion updated id:={assertion['_id']}, orcid={orcid}"
+                                        f"Assertion updated Email:={assertion['email']}, orcid={orcid}"
                                     )
                                     break
                                 else:
@@ -153,13 +153,13 @@ class AddMissingORCIDiDFROMAffiliations:
             logger.info(" Verification passed: No problematic salesforce ids found")
             return True
         else:
-            logger.warning(f" Verification failed: {len(remaining)} problematic salesforce ids still exist")
+            logger.warning(f" {len(remaining)} problematic salesforce ids still exist")
             return False
 
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
-        description='Fix ORCID records salesforce ids',
+        description='Add Missing Orcid from affiliations',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -186,7 +186,7 @@ def main():
     database_assertionservice = 'assertionservice'
 
     logger.info("="*80)
-    logger.info("Add missing ORCID iD and correct SF iD")
+    logger.info("Add missing ORCID from affiliations")
     logger.info("="*80)
     logger.info(f"Database: {database_assertionservice}")
     logger.info(f"Collections: assertion, orcid_record")
