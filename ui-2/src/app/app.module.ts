@@ -17,6 +17,7 @@ import { ErrorComponent } from './error/error.component'
 import { FormsModule } from '@angular/forms'
 import { AuthExpiredInterceptor } from './shared/interceptor/auth-expired.interceptor'
 import { AuthInterceptor, AuthModule } from 'angular-auth-oidc-client'
+import { environment } from '../environments/environment'
 
 const origin = window.location.origin
 
@@ -34,7 +35,7 @@ const origin = window.location.origin
     SharedModule.forRoot(),
     AuthModule.forRoot({
       config: {
-        authority: 'http://localhost:9000', // Your Spring Auth Server
+        authority: environment.issuerUrl,
         redirectUrl: window.location.origin,
         postLogoutRedirectUri: window.location.origin,
         clientId: 'mp-ui-client',
