@@ -306,7 +306,7 @@ services:
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     ports:
-      - 8091:8091
+      - 8091:8090
 
 
 
