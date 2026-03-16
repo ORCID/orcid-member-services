@@ -21,6 +21,21 @@ repos:
         types: [yaml]
         files: '^.github/workflows/'
 
+  - repo: https://github.com/docker-compose-linter/pre-commit-dclint
+    rev: v3.0.0
+    hooks:
+      - id: dclint
+        files: ^(docker-)?compose\.ya?ml$
+
+  - repo: local
+    hooks:
+      - id: docker-compose-config
+        name: Validate docker-compose config
+        entry: docker compose config --quiet
+        language: system
+        files: ^(docker-)?compose\.ya?ml$
+        pass_filenames: false
+
   - repo: https://github.com/open-policy-agent/conftest
     rev: v0.66.0
     hooks:

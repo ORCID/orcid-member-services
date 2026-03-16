@@ -1,0 +1,4 @@
+[tools]
+pre-commit = "3.3.2"
+node = "20.19.0"
+"npm:dclint" = "latest"

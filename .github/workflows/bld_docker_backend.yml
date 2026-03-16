@@ -118,7 +118,7 @@ jobs:
         working-directory: ${{ inputs.context }}
         run: |
           # 1. Compile Java and build Fat JAR via Maven (removed -Pprod profile)
-          mvn -T 1C --batch-mode -am package -DskipTests -Dangular.env=${angular_env}
+          mvn -T 1C --batch-mode -am package -DskipTests -Dangular.env="${angular_env}"
 
           echo "------------------------------------------------------"
           find target -name '*.jar'
@@ -127,11 +127,11 @@ jobs:
           # 2. Build the Docker container using our standard Dockerfile.
           # We dual-tag it here so the conditional push steps below will ALWAYS find a match.
           docker build -f src/main/docker/Dockerfile \
-            -t ${DOCKER_REG_PRIVATE}/${docker_name}:${tag} \
-            -t ${DOCKER_REG_PRIVATE}/${docker_name}:${tag}-${angular_env} .
+            -t "${DOCKER_REG_PRIVATE}/${docker_name}:${tag}" \
+            -t "${DOCKER_REG_PRIVATE}/${docker_name}:${tag}-${angular_env}" .
 
           echo "------------------------------------------------------"
-          docker image ls | grep ${docker_name}
+          docker image ls | grep "${docker_name}"
         shell: bash
         env:
           DOCKER_REG_PRIVATE: "${{ secrets.DOCKER_REG_PRIVATE }}"
@@ -150,7 +150,7 @@ jobs:
       - name: push our container to the private registry
         if: inputs.angular_env == 'unused'
         run: |
-          docker push ${DOCKER_REG_PRIVATE}/${docker_name}:${tag}
+          docker push "${DOCKER_REG_PRIVATE}/${docker_name}:${tag}"
         shell: bash
         env:
           DOCKER_REG_PRIVATE: "${{ secrets.DOCKER_REG_PRIVATE }}"
@@ -160,7 +160,7 @@ jobs:
       - name: push our container to the private registry using a postpended tag of the angular env
         if: inputs.angular_env != 'unused'
         run: |
-          docker push ${DOCKER_REG_PRIVATE}/${docker_name}:${tag}
+          docker push "${DOCKER_REG_PRIVATE}/${docker_name}:${tag}"
         shell: bash
         env:
           DOCKER_REG_PRIVATE: "${{ secrets.DOCKER_REG_PRIVATE }}"

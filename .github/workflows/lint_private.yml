@@ -1,0 +1,36 @@
+---
+name: lint_private
+
+# we don't pay for pre-commit-ci yet so need this for private repos
+
+permissions:
+  checks: write
+  # allow pre-commit to write back to this repo
+  contents: write
+  issues: read
+  pull-requests: write
+
+"on":
+  workflow_call:
+  workflow_dispatch:
+jobs:
+
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 1. Install mise and all tools defined in .mise.toml
+      # This handles caching of the tools automatically.
+      # v4
+      - uses: jdx/mise-action@c1ecc8f748cd28cdeabf76dab3cccde4ce692fe4
+        with:
+          cache: true # Enabled by default
+          # install: true (Default) runs 'mise install'
+
+      - name: pre-commit
+        uses: ORCID/pre-commit-bash-action@HEAD
+        with:
+          token: ${{ secrets.github_token }}
