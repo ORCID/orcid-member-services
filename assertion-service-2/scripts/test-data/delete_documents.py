@@ -90,8 +90,6 @@ class DeleteDocuments:
 
         query = {"$or": cleaned_items}
 
-        logger.info(query)
-
         try:
             logger.info(f"Searching for documents in collection '{self.collection.name}' where '{query}'")
             documents = list(self.collection.find(query))

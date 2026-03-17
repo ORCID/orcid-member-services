@@ -5,11 +5,11 @@
 Run this from **Windows PowerShell / Linux**:
 
 ``` powershell
-scp -r "$HOME\Orcid\orcid-member-services\assertion-service\scripts" <username>@<server>:/home/<username>/
+scp -r "$HOME\Orcid\orcid-member-services\assertion-service-2\scripts" <username>@<server>:/home/<username>/
 ```
 
 ``` unix
-scp -r ~/Orcid/orcid-member-services/assertion-service/scripts <username>@<server>:/home/<username>/
+scp -r ~/Orcid/orcid-member-services/assertion-service-2/scripts <username>@<server>:/home/<username>/
 ```
 ------------------------------------------------------------------------
 
