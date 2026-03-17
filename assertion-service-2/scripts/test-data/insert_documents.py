@@ -39,18 +39,25 @@ python insert_documents.py --database <database> --collection <collection> --fil
 
 Examples
 --------
-python3 insert_documents.py --file_name test/assertions.json
-python3 insert_documents.py --collection orcid_record --file_name test/orcid_records.json
-python3 insert_documents.py --database memberservice --collection member --file_name test/members.json
-python3 insert_documents.py --database userservice --collection jhi_user --file_name test/users.json
+python3 insert_documents.py --file_name json/assertions.json
+python3 insert_documents.py --collection orcid_record --file_name json/orcid_records.json
+python3 insert_documents.py --database memberservice --collection member --file_name json/members.json
+python3 insert_documents.py --database userservice --collection jhi_user --file_name json/users.json
 """
 
 import argparse
 import sys
+from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 from bson import json_util
 from pymongo.errors import OperationFailure
+
+CURRENT_DIR = Path(__file__).resolve().parent
+UTILS_DIR = CURRENT_DIR.parent / "utils"
+
+if str(UTILS_DIR) not in sys.path:
+    sys.path.insert(0, str(UTILS_DIR))
 
 from logger_config import setup_logger
 from db_connection import MongoDBConnection
@@ -172,7 +179,7 @@ def parse_arguments():
         epilog="""
 Examples:
   python insert_documents.py
-  python insert_documents.py --database assertionservice --collection assertion --file_name data.json
+  python insert_documents.py --database assertionservice --collection assertion --file_name delete.json
 
 Environment Variables:
   MONGO_URI or MONGO_DB            - MongoDB connection string

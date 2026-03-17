@@ -3,7 +3,7 @@
 MongoDB Data Cleanup Script
 
 This script removes documents from specified MongoDB collections using
-filters defined in a JSON file. It is intended for targeted cleanup of
+filters defined in a JSON file. It is intended for targeted documents of
 invalid, obsolete, or incorrect data.
 
 Related ticket:
@@ -33,29 +33,36 @@ Example JSON format:
 
 Usage
 -----
-python cleanup.py --database <database> --collections <collection1> [collection2 ...] --file_name <file.json>
+python delete_documents.py --database <database> --collections <collection1> [collection2 ...] --file_name <file.json>
 
 Examples
 --------
-python cleanup.py --database assertionservice --collections assertions orcid_record --file_name data.json
+python delete_documents.py --database assertionservice --collections assertions orcid_record --file_name json/delete.json
 """
 
 import argparse
 import json
 import sys
+from pathlib import Path
 from typing import List, Dict, Any
 from pymongo.errors import OperationFailure
 from bson import ObjectId
+
+CURRENT_DIR = Path(__file__).resolve().parent
+UTILS_DIR = CURRENT_DIR.parent / "utils"
+
+if str(UTILS_DIR) not in sys.path:
+    sys.path.insert(0, str(UTILS_DIR))
 
 from logger_config import setup_logger
 from db_connection import MongoDBConnection
 from config import Config
 
 
-logger = setup_logger(__name__, log_file='cleanup.log')
+logger = setup_logger(__name__, log_file='delete_documents.log')
 
 
-class Cleanup:
+class DeleteDocuments:
 
     def __init__(self, connection: MongoDBConnection, collection_name: str, file_name: str):
         self.connection = connection
@@ -181,13 +188,13 @@ def parse_arguments():
         epilog="""
 Examples:
   # Interactive mode
-  python cleanup.py
+  python delete_documents.py
 
 Environment Variables:
   MONGO_URI or MONGO_DB       - MongoDB connection string
   MONGO_DATABASE or DATABASE  - Database name (default: assertionservice)
   MONGO_COLLECTION or COLLECTION - Collection name (default: assertion)
-  FILE_NAME - Collection name (default: data.json)
+  FILE_NAME - Collection name (default: json/delete.json)
         """
     )
 
@@ -210,7 +217,7 @@ def main():
     file_name = args.file_name or config.file_name
 
     logger.info("="*80)
-    logger.info("MongoDB Data Cleanup Script")
+    logger.info("MongoDB Delete Documents Script")
     logger.info("="*80)
     logger.info(f"MongoDB URI: {mongo_uri[:20]}..." if len(mongo_uri) > 20 else f"MongoDB URI: {mongo_uri}")
     logger.info(f"Database: {database}")
@@ -225,7 +232,7 @@ def main():
             logger.error("Failed to connect to MongoDB. Exiting.")
             return 1
 
-        fixer = Cleanup(connection, collections, file_name)
+        fixer = DeleteDocuments(connection, collections, file_name)
 
         documents = fixer.find_problematic_collections()
 

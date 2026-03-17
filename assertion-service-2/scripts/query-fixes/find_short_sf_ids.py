@@ -13,8 +13,15 @@ Usage:
 
 import argparse
 import sys
+from pathlib import Path
 from typing import List, Dict, Any
 from pymongo.errors import OperationFailure
+
+CURRENT_DIR = Path(__file__).resolve().parent
+UTILS_DIR = CURRENT_DIR.parent / "utils"
+
+if str(UTILS_DIR) not in sys.path:
+    sys.path.insert(0, str(UTILS_DIR))
 
 from logger_config import setup_logger
 from db_connection import MongoDBConnection

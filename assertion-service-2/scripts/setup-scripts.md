@@ -17,11 +17,11 @@ scp -r ~/Orcid/orcid-member-services/assertion-service/scripts <username>@<serve
 ## 2. Connect to server & verify Upload on Server
 
 ``` bash
-ssh <username>@mserv-qa-use2-a1.qa.int.orcid.org
+ssh <username>@<server>
 ```
 
 ``` bash
-ls /home/<username>/scripts/query-fixes
+ls /home/<username>/scripts
 ```
 
 ------------------------------------------------------------------------
@@ -29,7 +29,7 @@ ls /home/<username>/scripts/query-fixes
 ## 3. Copy Scripts Folder into Docker Container
 
 ``` bash
-docker cp /home/<username>/scripts/query-fixes <assertion-docker>:/app/scripts
+docker cp /home/<username>/scripts <assertion-docker>:/app/scripts
 ```
 
 ------------------------------------------------------------------------
@@ -72,9 +72,17 @@ pip3 install pymongo
 
 ## 6. Run Script(s)
 
+### Test Connection
+
 ``` bash
-cd /app/scripts/query-fixes
-python3 cleanup.py
+cd /app/scripts
+python3 test_connection.py
+```
+### Delete Documents
+
+``` bash
+cd /app/scripts/test-data
+python3 delete_documents.py
 ```
 
 ------------------------------------------------------------------------

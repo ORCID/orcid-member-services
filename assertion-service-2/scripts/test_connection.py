@@ -8,16 +8,18 @@ Usage:
 """
 
 import argparse
+from pathlib import Path
 import sys
 
+CURRENT_DIR = Path(__file__).resolve().parent
+UTILS_DIR = "utils"
+
+if str(UTILS_DIR) not in sys.path:
+    sys.path.insert(0, str(UTILS_DIR))
+
 # Import shared modules
-from logger_config import setup_logger
 from db_connection import MongoDBConnection
 from config import Config
-
-# Set up logging
-logger = setup_logger(__name__, log_file='test-connection.log')
-
 
 def test_database_connection(uri: str, database_name: str) -> bool:
     """
@@ -53,7 +55,7 @@ def test_database_connection(uri: str, database_name: str) -> bool:
         return True
 
     except Exception as e:
-        logger.error(f"❌ Error: {e}")
+        print(f"❌ Error: {e}")
         return False
     finally:
         connection.disconnect()
