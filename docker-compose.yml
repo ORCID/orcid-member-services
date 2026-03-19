@@ -303,7 +303,7 @@ services:
     restart: unless-stopped
     image: ${DOCKER_REG}/ui-2:${TAG}
     environment:
-      - APPLICATION_SECURITY_ISSUER_URL=${USER_SERVICE_URL}
+      - APPLICATION_SECURITY_ISSUER_URL=${ISSUER_URL}
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     ports:
