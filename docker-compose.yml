@@ -253,7 +253,7 @@ services:
       - APPLICATION_ENCRYPT_SALT=${MEMBER_ENCRYPT_SALT}
       - APPLICATION_ENCRYPT_KEY=${MEMBER_ENCRYPT_KEY}
       - APPLICATION_SECURITY_ISSUER_URL=${ISSUER_URL}
-  volumes:
+    volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
 
   gateway-app:
