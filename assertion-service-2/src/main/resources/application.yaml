@@ -5,7 +5,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${APPLICATION_USER_SERVICE_URL}
+          issuer-uri: ${APPLICATION_SECURITY_ISSUER_URL}
+          jwk-set-uri: ${APPLICATION_USER_SERVICE_URL}/oauth2/jwks
       client:
         registration:
           # This ID is used in your Java RestClient/WebClient code in the Assertion Service

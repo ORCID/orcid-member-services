@@ -7,10 +7,11 @@ spring:
   security:
     oauth2:
       authorizationserver:
-        issuer: ${APPLICATION_USER_SERVICE_URL}
+        issuer: ${APPLICATION_SECURITY_ISSUER_URL}
       resourceserver:
         jwt:
-          issuer-uri: ${APPLICATION_USER_SERVICE_URL}
+          issuer-uri: ${APPLICATION_SECURITY_ISSUER_URL}
+          jwk-set-uri: ${APPLICATION_USER_SERVICE_URL}/oauth2/jwks
       client:
         registration:
           # This ID is used in your Java RestClient code
