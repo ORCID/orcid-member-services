@@ -74,7 +74,7 @@ application:
     assertionServiceClientId: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_ID}
     assertionServiceClientSecret: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_CLIENT_SECRET}
   security:
-    issuerUrl: ${APPLICATION_USER_SERVICE_URL}
+    issuerUrl: ${APPLICATION_SECURITY_ISSUER_URL}
     jwt:
       private-key: ${APPLICATION_SECURITY_JWT_PRIVATE_KEY}
       public-key: ${APPLICATION_SECURITY_JWT_PUBLIC_KEY}
