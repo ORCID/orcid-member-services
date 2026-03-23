@@ -5,11 +5,11 @@
 Run this from **Windows PowerShell / Linux**:
 
 ``` powershell
-scp -r "$HOME\Orcid\orcid-member-services\assertion-service\scripts" dpalafox@mserv-prod-use2-a1.prod.int.orcid.org:/home/dpalafox/
+scp -r "$HOME\Orcid\orcid-member-services\assertion-service-2\scripts" <username>@<server>:/home/<username>/
 ```
 
 ``` unix
-scp -r ~/Orcid/orcid-member-services/assertion-service/scripts dpalafox@mserv-prod-use2-a1.prod.int.orcid.org:/home/dpalafox/
+scp -r ~/Orcid/orcid-member-services/assertion-service-2/scripts <username>@<server>:/home/<username>/
 ```
 ------------------------------------------------------------------------
 
@@ -17,11 +17,11 @@ scp -r ~/Orcid/orcid-member-services/assertion-service/scripts dpalafox@mserv-pr
 ## 2. Connect to server & verify Upload on Server
 
 ``` bash
-ssh dpalafox@mserv-prod-use2-a1.prod.int.orcid.org
+ssh <username>@<server>
 ```
 
 ``` bash
-ls /home/dpalafox/scripts/query-fixes
+ls /home/<username>/scripts
 ```
 
 ------------------------------------------------------------------------
@@ -29,7 +29,7 @@ ls /home/dpalafox/scripts/query-fixes
 ## 3. Copy Scripts Folder into Docker Container
 
 ``` bash
-docker cp /home/dpalafox/scripts/query-fixes member_services-assertionservice-app-1:/app/scripts
+docker cp /home/<username>/scripts <assertion-docker>:/app/scripts
 ```
 
 ------------------------------------------------------------------------
@@ -37,7 +37,7 @@ docker cp /home/dpalafox/scripts/query-fixes member_services-assertionservice-ap
 ## 4. Access Docker Container
 
 ``` bash
-docker exec -it member_services-assertionservice-app-1 /bin/bash
+docker exec -it <assertion-docker> /bin/bash
 ```
 
 Verify scripts inside container:
@@ -72,9 +72,17 @@ pip3 install pymongo
 
 ## 6. Run Script(s)
 
+### Test Connection
+
 ``` bash
-cd /app/scripts/query-fixes
+cd /app/scripts
 python3 test_connection.py
+```
+### Delete Documents
+
+``` bash
+cd /app/scripts/test-data
+python3 delete_documents.py
 ```
 
 ------------------------------------------------------------------------

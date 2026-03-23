@@ -13,8 +13,15 @@ Usage:
 
 import argparse
 import sys
+from pathlib import Path
 from typing import List, Dict, Any
 from pymongo.errors import OperationFailure
+
+CURRENT_DIR = Path(__file__).resolve().parent
+UTILS_DIR = CURRENT_DIR.parent / "utils"
+
+if str(UTILS_DIR) not in sys.path:
+    sys.path.insert(0, str(UTILS_DIR))
 
 from logger_config import setup_logger
 from db_connection import MongoDBConnection
@@ -141,7 +148,7 @@ class FindFindShortSfIdsAssertion:
         logger.info("="*80)
 
         for i, rec in enumerate(assertions, 1):
-            logger.info(f" email: {rec.get('email')}, Salesforce Id: {rec.get('salesforce_id')}")
+            logger.info(f" Email: {rec.get('email')}, Salesforce Id: {rec.get('salesforce_id')}")
 
         logger.info("\n" + "="*80)
 
@@ -155,7 +162,7 @@ class FindFindShortSfIdsAssertion:
         logger.info("="*80)
 
         for i, rec in enumerate(orcid_records, 1):
-            logger.info(f" email: {rec.get('email')}")
+            logger.info(f" Email: {rec.get('email')}")
             logger.info(f" Tokens:")
 
             for j, token in enumerate(rec.get('tokens'), 1):
@@ -174,7 +181,7 @@ class FindFindShortSfIdsAssertion:
         logger.info("PROBLEMATIC NOTIFICATIONS REPORT")
         logger.info("="*80)
         for i, rec in enumerate(send_notifications_request, 1):
-            logger.info(f" email: {rec.get('email')}, Salesforce Id: {rec.get('salesforce_id')}")
+            logger.info(f" Email: {rec.get('email')}, Salesforce Id: {rec.get('salesforce_id')}")
 
         logger.info("\n" + "="*80)
 
