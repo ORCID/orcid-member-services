@@ -33,10 +33,11 @@ logger = setup_logger(__name__, log_file='add-missing-ORCID-iD-from-affiliations
 
 class AddMissingORCIDiDFROMAffiliations:
 
-    def __init__(self, connection: MongoDBConnection, collection_assertion: str, collection_orcid_record: str):
+    def __init__(self, connection: MongoDBConnection, collection_assertion: str, collection_orcid_record: str, full_report: bool):
         self.connection = connection
         self.collection_assertion = connection.get_collection(collection_assertion)
         self.collection_orcid_record = connection.get_collection(collection_orcid_record)
+        self.full_report = full_report
 
     def find_problematic_assertions(self) -> List[Dict[str, Any]]:
         """
@@ -67,19 +68,69 @@ class AddMissingORCIDiDFROMAffiliations:
             logger.error(f"Unexpected error during query: {e}")
             return []
 
-    def print_report(self, assertions: List[Dict[str, Any]]):
+    def print_report(self, assertions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         if not assertions:
             logger.info("No problematic assertions found")
-            return
+            return []
 
         logger.info("\n" + "="*80)
         logger.info("PROBLEMATIC ASSERTIONS REPORT")
         logger.info("="*80)
 
-        for i, rec in enumerate(assertions, 1):
-            logger.info(f" Email: {rec.get('email')}, Salesforce ID: {rec.get('salesforce_id')}")
+        assertions_to_modify: list[dict[str, str]] = []
+        modified_count = 0
+        no_match = 0
 
-        logger.info("\n" + "="*80)
+        try:
+            for assertion in assertions:
+                assertion_salesforce_id = assertion.get('salesforce_id')
+                assertion_email = assertion.get('email')
+                if self.full_report:
+                    logger.info(
+                        f"  Assertion with Salesforce id {assertion_salesforce_id} and email {assertion_email}"
+                    )
+
+                orcid_record = self.collection_orcid_record.find_one({
+                    "email": assertion_email,
+                    "tokens": {
+                        "$exists": True,
+                        "$ne": [],
+                        "$elemMatch": {
+                            "salesforce_id": assertion_salesforce_id,
+                            "revoked_date": {"$exists": False}
+                        }
+                    }
+                })
+
+                if orcid_record:
+                    orcid = orcid_record.get('orcid')
+                    assertions_to_modify.append({
+                        "assertion_id": assertion.get('_id'),
+                        "assertion_email": assertion_email,
+                        "orcid": orcid
+                    })
+                    modified_count += 1
+                    logger.info(f"    Orcid {orcid} will be added to assertion with Salesforce id {assertion_salesforce_id} and email {assertion_email}")
+                else:
+                    no_match += 1
+                    if self.full_report:
+                        logger.info("    No matching ORCID record found")
+
+            logger.info("\n" + "="*80)
+            logger.info(f"  It will modify {modified_count} assertions")
+            if no_match > 0:
+                logger.info(f"  No match for {no_match} assertions")
+            logger.info("\n" + "=" * 80)
+
+            return assertions_to_modify
+
+        except OperationFailure as e:
+            logger.error(f"Failed to build report: {e}")
+            return []
+        except Exception as e:
+            logger.error(f"Unexpected error during report generation: {e}")
+            return []
+
 
     def fix_assertions(self, assertions: List[Dict[str, Any]]) -> int:
         """
@@ -96,50 +147,23 @@ class AddMissingORCIDiDFROMAffiliations:
 
         modified_count = 0
 
-        orcid_records = list(self.collection_orcid_record.find({}))
-
         try:
 
             for assertion in assertions:
-                assertion_salesforce_id = assertion.get('salesforce_id')
-                assertion_email = assertion.get('email')
+                orcid = assertion["orcid"]
+                result = self.collection_assertion.update_one(
+                    {"_id": assertion["assertion_id"]},
+                    {
+                        "$set": {
+                            "orcid_id": orcid
+                        }
+                    }
+                )
+                modified_count += result.modified_count
 
-                for orcid_record in orcid_records:
-                    orcid = orcid_record.get('orcid')
-                    orcid_record_email = orcid_record.get('email')
-
-                    if assertion_email == orcid_record_email:
-                        same_salesforce_id = False
-                        tokens = orcid_record.get("tokens", [])
-
-                        for t in tokens:
-                            orcid_record_salesforce_id = t.get("salesforce_id")
-                            if assertion_salesforce_id == orcid_record_salesforce_id:
-                                same_salesforce_id = True
-                                if "revoked_date" not in t or t["revoked_date"] is None:
-                                    result = self.collection_assertion.update_one(
-                                        {"_id": assertion["_id"]},
-                                        {
-                                            "$set": {
-                                                "orcid_id": orcid
-                                            }
-                                        }
-                                    )
-                                    modified_count += result.modified_count
-
-                                    logger.info(
-                                        f"Assertion updated Email:={assertion['email']}, orcid={orcid}"
-                                    )
-                                    break
-                                else:
-                                    logger.info(
-                                        f"Orcid record revoked orcid:={orcid}"
-                                    )
-
-                        if not same_salesforce_id:
-                            logger.warning(
-                                f"Token mismatch: assertion email matches ORCID record, but Salesforce ID not found in tokens. email={orcid_record_email}, assertion_salesforce_id={assertion_salesforce_id}"
-                            )
+                logger.info(
+                    f"Assertion updated Email:={assertion['assertion_email']}, orcid={orcid}"
+                )
 
             logger.info(f" Successfully updated {modified_count} assertions")
 
@@ -180,7 +204,11 @@ Environment Variables:
     )
 
     parser.add_argument('--mongo-uri', help='MongoDB URI (overrides env)')
-
+    parser.add_argument(
+        "--full_report",
+        action="store_true",
+        help="Print a full, verbose report"
+    )
     return parser.parse_args()
 
 
@@ -190,38 +218,49 @@ def main():
     config = Config()
 
     mongo_uri = args.mongo_uri or config.mongo_uri
-    database_assertionservice = 'assertionservice'
+    database = 'assertionservice'
+    collection_assertion = 'assertion'
+    collection_orcid_record = 'orcid_record'
+    full_report = args.full_report
 
     logger.info("="*80)
     logger.info("Add missing ORCID from affiliations")
     logger.info("="*80)
-    logger.info(f"Database: {database_assertionservice}")
-    logger.info(f"Collections: assertion, orcid_record")
-    logger.info(f"MongoDB URI: {mongo_uri[:20]}..." if len(mongo_uri) > 20 else f"MongoDB URI: {mongo_uri}")
+    logger.info(f"Database: {database}")
+    logger.info("Collections: assertion, orcid_record")
+    logger.info(
+        f"MongoDB URI: {mongo_uri[:20]}..." if len(mongo_uri) > 20 else f"MongoDB URI: {mongo_uri}"
+    )
     logger.info("="*80 + "\n")
 
-    connection = MongoDBConnection(mongo_uri, database_assertionservice)
-    collection_assertion = 'assertion'
-    collection_orcid_record = 'orcid_record'
+    connection = MongoDBConnection(mongo_uri, database)
 
     try:
         if not connection.connect():
             logger.error("Failed to connect to MongoDB. Exiting.")
             return 1
 
-        fixer = AddMissingORCIDiDFROMAffiliations(connection, collection_assertion, collection_orcid_record)
+        fixer = AddMissingORCIDiDFROMAffiliations(
+            connection,
+            collection_assertion,
+            collection_orcid_record,
+            full_report
+        )
 
         assertions = fixer.find_problematic_assertions()
-
-        fixer.print_report(assertions)
 
         if not assertions:
             logger.info("\n No fixes needed. All assertions are correct.")
             return 0
 
-        logger.info("\n" + "="*80)
+        assertions_to_modify = fixer.print_report(assertions)
+
+        if not assertions_to_modify:
+            return 0
+
+        logger.info("\n" + "=" * 80)
         logger.info("  WARNING: This will modify the database!")
-        logger.info(f"  {len(assertions)} assertions will be updated")
+        logger.info(f"  {len(assertions_to_modify)} assertions will be updated")
         logger.info("="*80)
 
         try:
@@ -233,11 +272,11 @@ def main():
             logger.info("\n\n Operation cancelled by user")
             return 1
 
-        updated_count = fixer.fix_assertions(assertions)
+        updated_count = fixer.fix_assertions(assertions_to_modify)
 
         if updated_count > 0:
             if not fixer.verify_fixes():
-                logger.warning("\n Some assertions may still need attention")
+                logger.warning(" Some assertions may still need attention")
                 return 1
 
         logger.info("\n" + "="*80)
