@@ -105,7 +105,7 @@ public class SecurityConfig {
         http
                 .securityMatcher(configurer.getEndpointsMatcher()).cors(Customizer.withDefaults())
                 .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("http://localhost:4200/login"))
+                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(uiBaseUrl + "/login"))
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
 
