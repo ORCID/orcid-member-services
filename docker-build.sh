@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-COMPOSE="docker compose -f docker-compose-v2.yml"
+COMPOSE="docker compose "
 
 echo "Building Java service JARs..."
 mvn -f user-service-2/pom.xml package -DskipTests -q
