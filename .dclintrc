@@ -13,3 +13,5 @@ rules:
   # Key ordering and service ordering are established and not worth reordering
   service-keys-order: 0
   services-alphabetical-order: 0
+  # We intentionally use build + image together to tag built images for our registry
+  no-build-and-image: 0
