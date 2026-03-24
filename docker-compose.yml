@@ -4,9 +4,6 @@ services:
   userservice-2-app:
     restart: unless-stopped
     image: ${DOCKER_REG}/userservice2:${TAG}
-    build:
-      context: user-service-2
-      dockerfile: ./src/main/docker/Dockerfile
     ports:
       - "9000:9000"
     environment:
@@ -44,9 +41,6 @@ services:
   assertionservice-2-app:
     restart: unless-stopped
     image: ${DOCKER_REG}/assertionservice2:${TAG}
-    build:
-      context: assertion-service-2
-      dockerfile: ./src/main/docker/Dockerfile
     ports:
       - "9020:9020"
     environment:
@@ -91,9 +85,6 @@ services:
   memberservice-2-app:
     restart: unless-stopped
     image: ${DOCKER_REG}/memberservice2:${TAG}
-    build:
-      context: member-service-2
-      dockerfile: ./src/main/docker/Dockerfile
     ports:
       - "9010:9010"
     environment:
