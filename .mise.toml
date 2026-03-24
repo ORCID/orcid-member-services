@@ -2,3 +2,4 @@
 pre-commit = "3.3.2"
 node = "20.19.0"
 "npm:dclint" = "latest"
+java = "temurin-21.0.8+9.0.LTS"
