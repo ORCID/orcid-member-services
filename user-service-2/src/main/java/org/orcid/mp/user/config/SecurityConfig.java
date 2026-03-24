@@ -131,7 +131,7 @@ public class SecurityConfig {
                 .authenticationManager(authManager)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/internal/**").hasAuthority("SCOPE_internal")
-                        .requestMatchers("/account/releaseVersion", "/account/login", "/unprotected", "/api/**", "/.well-known/**", "/connect/logout").permitAll() // Ensure login is accessible
+                        .requestMatchers("/account/releaseVersion", "/account/login", "/account/reset-password/**", "/api/**", "/.well-known/**", "/connect/logout").permitAll() // Ensure login is accessible
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
