@@ -1,57 +1,12 @@
-version: '2'
 
 services:
-  jhipster-registry:
-    restart: unless-stopped
-    image: ${DOCKER_REG}/discoveryservice:${TAG}
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod,uaa
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - JHIPSTER_LOGGING_LOGSTASH_ENABLED=false
-      # change the name of UAA server here, if needed
-      - JHIPSTER_SECURITY_CLIENT_AUTHORIZATION_TOKEN_SERVICE_ID=uaa
-      - JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=${JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET}
-      - APPLICATION_VERSION=${TAG}
-    ports:
-      - 8761:8761
-
-  userservice-app:
-    restart: unless-stopped
-    image: ${DOCKER_REG}/userservice:${TAG}
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - 'SPRING_PROFILES_ACTIVE=prod'
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-      - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
-      - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
-      - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
-      - SPRING_DATA_MONGODB_DATABASE=userservice
-      - JHIPSTER_SLEEP=60 # wait for jhipster-registry to start
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - APPLICATION_MAIL_DOMAIN=${MAIL_DOMAIN}
-      - APPLICATION_MAIL_API_KEY=${MAIL_API_KEY}
-      - APPLICATION_MAIL_API_URL=${MAIL_API_URL}
-      - APPLICATION_MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}
-      - APPLICATION_BASE_URL=${BASE_URL}
-      - APPLICATION_MAIL_FROM_NAME=${MAIL_FROM_NAME}
-      - UAA_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
-      - UAA_KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
-      - UAA_KEYSTORE_NAME=${KEYSTORE_LOCATION}
-      - APPLICATION_ENCRYPT_SALT=${ENCRYPT_SALT}
-      - APPLICATION_ENCRYPT_KEY=${ENCRYPT_KEY}
-      - APPLICATION_MAIL_TEST_MODE=${MAIL_TEST_MODE}
-    volumes:
-      - ${LOG_VOLUME:-/var/tmp/}:/logs
-      - ${HOST_KEYSTORE_DIR:-./keystores}:/keystores
-    depends_on:
-      - "jhipster-registry"
 
   userservice-2-app:
     restart: unless-stopped
     image: ${DOCKER_REG}/userservice2:${TAG}
+    build:
+      context: user-service-2
+      dockerfile: ./src/main/docker/Dockerfile
     ports:
       - "9000:9000"
     environment:
@@ -86,52 +41,12 @@ services:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
       - ${HOST_KEYSTORE_DIR:-./keystores}:/keystores
 
-  assertionservice-app:
-    restart: unless-stopped
-    image: ${DOCKER_REG}/assertionservice:${TAG}
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - 'SPRING_PROFILES_ACTIVE=prod'
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-      - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
-      - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
-      - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
-      - SPRING_DATA_MONGODB_DATABASE=assertionservice
-      - JHIPSTER_SLEEP=90 # wait for jhipster-registry and user service to start
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - 'APPLICATION_ORCIDAPIENDPOINT=${ORCID_API_ENDPOINT}'
-      - 'APPLICATION_JWT_SIGNATURE_URL=${JWT_SIGNATURE_URL}'
-      - 'APPLICATION_LANDING_PAGE_URL=${LANDING_PAGE_URL}'
-      - 'APPLICATION_TOKEN_EXCHANGE_ENDPOINT=${TOKEN_EXCHANGE_ENDPOINT}'
-      - 'APPLICATION_TOKEN_EXCHANGE_GRANT_TYPE=${TOKEN_EXCHANGE_GRANT_TYPE}'
-      - 'APPLICATION_TOKEN_EXCHANGE_SUBJECT_TOKEN_TYPE=${TOKEN_EXCHANGE_SUBJECT_TOKEN_TYPE}'
-      - 'APPLICATION_TOKEN_EXCHANGE_REQUESTED_TOKEN_TYPE=${TOKEN_EXCHANGE_REQUESTED_TOKEN_TYPE}'
-      - 'APPLICATION_TOKEN_EXCHANGE_CLIENT_ID=${TOKEN_EXCHANGE_CLIENT_ID}'
-      - 'APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET=${TOKEN_EXCHANGE_CLIENT_SECRET}'
-      - APPLICATION_SYNC_AFFILIATIONS_DELAY=${CRON_SYNC_AFFILIATIONS}
-      - JHIPSTER_MAIL_BASE_URL=${BASE_URL}
-      - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
-      - MEMBER_ASSERTION_STATS_CRON=${CRON_GENERATE_MEMBER_ASSERTION_STATS}
-      - APPLICATION_MAIL_DOMAIN=${MAIL_DOMAIN}
-      - APPLICATION_MAIL_API_KEY=${MAIL_API_KEY}
-      - APPLICATION_MAIL_API_URL=${MAIL_API_URL}
-      - APPLICATION_MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}
-      - APPLICATION_MAIL_FROM_NAME=${MAIL_FROM_NAME}
-      - MEMBER_ASSERTION_STATS_RECIPIENT=${MEMBER_ASSERTION_STATS_RECIPIENT}
-      - STORED_FILE_LIFESPAN=${STORED_FILE_LIFESPAN}
-      - APPLICATION_MAIL_TEST_MODE=${MAIL_TEST_MODE}
-      - APPLICATION_INTERNAL_API_ENDPOINT=${INTERNAL_API_ENDPOINT}
-      - APPLICATION_RESEND_NOTIFICATION_DAYS=${RESEND_NOTIFICATION_DAYS}
-      - APPLICATION_RESEND_NOTIFICATION_CRON=${RESEND_NOTIFICATION_CRON}
-    volumes:
-      - ${LOG_VOLUME:-/var/tmp/}:/logs
-      - ${MEMBER_ASSERTION_STATS_VOLUME:-/files}:/files
-    depends_on:
-      - "userservice-app"
-
   assertionservice-2-app:
     restart: unless-stopped
     image: ${DOCKER_REG}/assertionservice2:${TAG}
+    build:
+      context: assertion-service-2
+      dockerfile: ./src/main/docker/Dockerfile
     ports:
       - "9020:9020"
     environment:
@@ -173,53 +88,12 @@ services:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
       - ${MEMBER_ASSERTION_STATS_VOLUME:-/files}:/files
 
-  memberservice-app:
-    restart: unless-stopped
-    image: ${DOCKER_REG}/memberservice:${TAG}
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - 'SPRING_PROFILES_ACTIVE=prod'
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-      - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
-      - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
-      - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
-      - SPRING_DATA_MONGODB_DATABASE=memberservice
-      - JHIPSTER_SLEEP=90 # wait for jhipster-registry and user service to start
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
-      - 'APPLICATION_ORCIDORGCLIENTID=${ORCID_ORG_CLIENTID}'
-      - 'APPLICATION_ORCIDORGSALESFORCEID=${ORCID_ORG_SALESFORCEID}'
-      - HOLISTICS_MEMBER_URL=${HOLISTICS_MEMBER_DASHBOARD_URL}
-      - HOLISTICS_MEMBER_SECRET=${HOLISTICS_MEMBER_DASHBOARD_SECRET}
-      - HOLISTICS_AFFILIATION_URL=${HOLISTICS_AFFILIATION_DASHBOARD_URL}
-      - HOLISTICS_AFFILIATION_SECRET=${HOLISTICS_AFFILIATION_DASHBOARD_SECRET}
-      - HOLISTICS_INTEGRATION_URL=${HOLISTICS_INTEGRATION_DASHBOARD_URL}
-      - HOLISTICS_INTEGRATION_SECRET=${HOLISTICS_INTEGRATION_DASHBOARD_SECRET}
-      - HOLISTICS_CONSORTIA_URL=${HOLISTICS_CONSORTIA_DASHBOARD_URL}
-      - HOLISTICS_CONSORTIA_SECRET=${HOLISTICS_CONSORTIA_DASHBOARD_SECRET}
-      - HOLISTICS_MEMBERAFFILIATIONS_URL=${HOLISTICS_MEMBERAFFILIATIONS_DASHBOARD_URL}
-      - HOLISTICS_MEMBERAFFILIATIONS_SECRET=${HOLISTICS_MEMBERAFFILIATIONS_DASHBOARD_SECRET}
-      - SALESFORCE_CLIENT_ENDPOINT=${SALESFORCE_ENDPOINT}
-      - 'APPLICATION_TOKEN_EXCHANGE_CLIENT_ID=${TOKEN_EXCHANGE_CLIENT_ID}'
-      - 'APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET=${TOKEN_EXCHANGE_CLIENT_SECRET}'
-      - 'APPLICATION_TOKEN_EXCHANGE_ENDPOINT=${TOKEN_EXCHANGE_ENDPOINT}'
-      - 'APPLICATION_SALESFORCE_REQUEST_TIMEOUT=${SALESFORCE_REQUEST_TIMEOUT}'
-      - 'APPLICATION_CONTACT_UPDATE_RECIPIENT=${CONTACT_UPDATE_RECIPIENT}'
-      - 'APPLICATION_MAIL_TEST_MODE=${MAIL_TEST_MODE}'
-      - 'APPLICATION_MAIL_DOMAIN=${MAIL_DOMAIN}'
-      - 'APPLICATION_MAIL_API_KEY=${MAIL_API_KEY}'
-      - 'APPLICATION_MAIL_API_URL=${MAIL_API_URL}'
-      - 'APPLICATION_MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}'
-      - 'APPLICATION_MAIL_FROM_NAME=${MAIL_FROM_NAME}'
-
-    volumes:
-      - ${LOG_VOLUME:-/var/tmp/}:/logs
-    depends_on:
-      - "userservice-app"
-
   memberservice-2-app:
     restart: unless-stopped
     image: ${DOCKER_REG}/memberservice2:${TAG}
+    build:
+      context: member-service-2
+      dockerfile: ./src/main/docker/Dockerfile
     ports:
       - "9010:9010"
     environment:
@@ -256,28 +130,6 @@ services:
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
 
-  gateway-app:
-    restart: unless-stopped
-    image: ${DOCKER_REG}/gateway:${TAG}-${ENV}
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - 'SPRING_PROFILES_ACTIVE=prod'
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-      - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
-      - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
-      - 'SPRING_DATA_MONGODB_URI=${MONGO_DB}'
-      - SPRING_DATA_MONGODB_DATABASE=gateway
-      - JHIPSTER_SLEEP=90 # wait for jhipster-registry and user service to start
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - BASE_URL=${BASE_URL}
-      - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
-      - GATEWAY_COOKIE_DOMAIN=${COOKIE_DOMAIN}
-    volumes:
-      - ${LOG_VOLUME:-/var/tmp/}:/logs
-    ports:
-      - '8080:8080'
-    depends_on:
-      - "userservice-app"
 
   r7insight_docker:
     restart: unless-stopped
@@ -290,21 +142,11 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-  ui:
-    restart: unless-stopped
-    image: ${DOCKER_REG}/ui:${TAG}
-    environment:
-      - 'SPRING_PROFILES_ACTIVE=prod'
-      - OAUTH2_WEB_CLIENT_CONFIGURATION_SECRET=${WEB_CLIENT_CONFIGURATION_SECRET}
-      - GATEWAY_COOKIE_DOMAIN=${COOKIE_DOMAIN}
-    volumes:
-      - ${LOG_VOLUME:-/var/tmp/}:/logs
-    ports:
-      - 8090:8090
-
   ui-2:
     restart: unless-stopped
     image: ${DOCKER_REG}/ui-2:${TAG}
+    build:
+      context: ui-2
     environment:
       - APPLICATION_SECURITY_ISSUER_URL=${ISSUER_URL}
     volumes:
