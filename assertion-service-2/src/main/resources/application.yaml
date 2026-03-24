@@ -33,6 +33,14 @@ spring:
       max-request-size: 30MB
 server:
   port: 9020
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: /logs
+      prefix: access_log
+      suffix: .log
+      pattern: combined
+      max-days: 7
 logging:
   level:
     root: info
