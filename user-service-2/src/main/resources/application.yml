@@ -37,6 +37,7 @@ spring:
 
 server:
   port: 9000
+  forward-headers-strategy: framework
   tomcat:
     accesslog:
       enabled: true
