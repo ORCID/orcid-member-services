@@ -18,6 +18,7 @@ spring:
       max-request-size: 30MB
 server:
   port: 9010
+  forward-headers-strategy: framework
   tomcat:
     accesslog:
       enabled: true
